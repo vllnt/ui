@@ -1,0 +1,12 @@
+{
+  "extends": "@vllnt/typescript/react.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "baseUrl": "."
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.json", "next-env.d.ts"],
+  "exclude": ["node_modules"]
+}

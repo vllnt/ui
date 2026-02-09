@@ -1,0 +1,22 @@
+<CodeBlock language="tsx" showLanguage={true}>
+{`import { ProfileSection } from '@vllnt/ui'
+
+export function ProfileSectionExample() {
+  return (
+    <ProfileSection
+      dict={{
+        profile: {
+          name: 'John Doe',
+          tagline: 'Full-stack developer',
+        },
+      }}
+      imageAlt="John Doe Profile"
+      imageSource="/avatar.jpg"
+      socialLinks={[
+        { href: 'https://x.com/johndoe', label: 'X (Twitter)' },
+        { href: 'https://github.com/johndoe', label: 'GitHub' },
+      ]}
+    />
+  )
+}`}
+</CodeBlock>

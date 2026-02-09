@@ -1,0 +1,20 @@
+{
+  "name": "@vllnt/ui-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "test": "turbo test",
+    "test:once": "turbo test:once",
+    "clean": "turbo clean",
+    "check:circular": "turbo check:circular",
+    "registry:build": "turbo registry:build"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.4"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "@vllnt/typescript/react.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
+  },
+  "include": ["src", "vitest.config.ts", "playwright-ct.config.ts", "playwright", "scripts", "tailwind.config.ts", "postcss.config.mjs"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,8 @@
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+
+# Keep snapshots (tracked via Git LFS)
+!.snapshots/
+playwright/.cache

@@ -1,0 +1,12 @@
+{
+  "name": "@vllnt/typescript",
+  "private": true,
+  "version": "0.0.0",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "nodejs.json",
+    "node-library.json",
+    "react.json"
+  ]
+}
