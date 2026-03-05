@@ -1,0 +1,1313 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "vllnt",
+  "homepage": "https://ui.vllnt.com",
+  "items": [
+    {
+      "name": "accordion",
+      "type": "registry:component",
+      "title": "Accordion",
+      "description": "Collapsible content sections supporting single or multiple open items.",
+      "files": [
+        {
+          "path": "registry/default/accordion/accordion.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "alert",
+      "type": "registry:component",
+      "title": "Alert",
+      "description": "Displays an alert message to the user.",
+      "files": [
+        {
+          "path": "registry/default/alert/alert.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:component",
+      "title": "Alert Dialog",
+      "description": "Modal dialog for confirming destructive or important actions.",
+      "files": [
+        {
+          "path": "registry/default/alert-dialog/alert-dialog.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "area-chart",
+      "type": "registry:component",
+      "title": "Area Chart",
+      "description": "Renders an area chart for data visualization.",
+      "files": [
+        {
+          "path": "registry/default/area-chart/area-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:component",
+      "title": "Aspect Ratio",
+      "description": "Constrains content to a specified aspect ratio.",
+      "files": [
+        {
+          "path": "registry/default/aspect-ratio/aspect-ratio.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "avatar",
+      "type": "registry:component",
+      "title": "Avatar",
+      "description": "Displays a user avatar image with fallback initials.",
+      "files": [
+        {
+          "path": "registry/default/avatar/avatar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "badge",
+      "type": "registry:component",
+      "title": "Badge",
+      "description": "Small status label with variant styles.",
+      "files": [
+        {
+          "path": "registry/default/badge/badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "bar-chart",
+      "type": "registry:component",
+      "title": "Bar Chart",
+      "description": "Renders a bar chart for data visualization.",
+      "files": [
+        {
+          "path": "registry/default/bar-chart/bar-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "blog-card",
+      "type": "registry:component",
+      "title": "Blog Card",
+      "description": "Card layout for displaying blog post previews.",
+      "files": [
+        {
+          "path": "registry/default/blog-card/blog-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:component",
+      "title": "Breadcrumb",
+      "description": "Navigation breadcrumb trail showing the current page hierarchy.",
+      "files": [
+        {
+          "path": "registry/default/breadcrumb/breadcrumb.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "button",
+      "type": "registry:component",
+      "title": "Button",
+      "description": "Interactive button with multiple variants and sizes.",
+      "files": [
+        {
+          "path": "registry/default/button/button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "calendar",
+      "type": "registry:component",
+      "title": "Calendar",
+      "description": "Date picker calendar for selecting dates.",
+      "files": [
+        {
+          "path": "registry/default/calendar/calendar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "callout",
+      "type": "registry:component",
+      "title": "Callout",
+      "description": "Highlighted content block with variant styles for info, warning, danger, and more.",
+      "files": [
+        {
+          "path": "registry/default/callout/callout.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "card",
+      "type": "registry:component",
+      "title": "Card",
+      "description": "Container with header, content, and footer sections.",
+      "files": [
+        {
+          "path": "registry/default/card/card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "carousel",
+      "type": "registry:component",
+      "title": "Carousel",
+      "description": "Scrollable content carousel with navigation controls.",
+      "files": [
+        {
+          "path": "registry/default/carousel/carousel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "category-filter",
+      "type": "registry:component",
+      "title": "Category Filter",
+      "description": "Filterable category selection for content lists.",
+      "files": [
+        {
+          "path": "registry/default/category-filter/category-filter.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:component",
+      "title": "Checkbox",
+      "description": "Toggle control for boolean input.",
+      "files": [
+        {
+          "path": "registry/default/checkbox/checkbox.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "checklist",
+      "type": "registry:component",
+      "title": "Checklist",
+      "description": "Interactive checklist with progress tracking and toggleable items.",
+      "files": [
+        {
+          "path": "registry/default/checklist/checklist.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "code-block",
+      "type": "registry:component",
+      "title": "Code Block",
+      "description": "Syntax-highlighted code display with copy support.",
+      "files": [
+        {
+          "path": "registry/default/code-block/code-block.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "code-playground",
+      "type": "registry:component",
+      "title": "Code Playground",
+      "description": "Interactive code editor with live preview.",
+      "files": [
+        {
+          "path": "registry/default/code-playground/code-playground.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:component",
+      "title": "Collapsible",
+      "description": "Expandable and collapsible content section.",
+      "files": [
+        {
+          "path": "registry/default/collapsible/collapsible.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "command",
+      "type": "registry:component",
+      "title": "Command",
+      "description": "Command palette with search, groups, and keyboard navigation.",
+      "files": [
+        {
+          "path": "registry/default/command/command.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "comparison",
+      "type": "registry:component",
+      "title": "Comparison",
+      "description": "Side-by-side comparison layout for content or features.",
+      "files": [
+        {
+          "path": "registry/default/comparison/comparison.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "completion-dialog",
+      "type": "registry:component",
+      "title": "Completion Dialog",
+      "description": "Dialog displayed upon completing a task or workflow.",
+      "files": [
+        {
+          "path": "registry/default/completion-dialog/completion-dialog.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "content-intro",
+      "type": "registry:component",
+      "title": "Content Intro",
+      "description": "Introductory section for content pages with title and description.",
+      "files": [
+        {
+          "path": "registry/default/content-intro/content-intro.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "context-menu",
+      "type": "registry:component",
+      "title": "Context Menu",
+      "description": "Right-click context menu with items and submenus.",
+      "files": [
+        {
+          "path": "registry/default/context-menu/context-menu.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "dialog",
+      "type": "registry:component",
+      "title": "Dialog",
+      "description": "Modal dialog overlay for focused content and actions.",
+      "files": [
+        {
+          "path": "registry/default/dialog/dialog.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "Slide-out panel anchored to the screen edge.",
+      "files": [
+        {
+          "path": "registry/default/drawer/drawer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:component",
+      "title": "Dropdown Menu",
+      "description": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus.",
+      "files": [
+        {
+          "path": "registry/default/dropdown-menu/dropdown-menu.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "exercise",
+      "type": "registry:component",
+      "title": "Exercise",
+      "description": "Interactive exercise block for learning content.",
+      "files": [
+        {
+          "path": "registry/default/exercise/exercise.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "faq",
+      "type": "registry:component",
+      "title": "FAQ",
+      "description": "Frequently asked questions section with expandable answers.",
+      "files": [
+        {
+          "path": "registry/default/faq/faq.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "filter-bar",
+      "type": "registry:component",
+      "title": "Filter Bar",
+      "description": "Horizontal bar with filter controls for content lists.",
+      "files": [
+        {
+          "path": "registry/default/filter-bar/filter-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "floating-action-button",
+      "type": "registry:component",
+      "title": "Floating Action Button",
+      "description": "Fixed-position action button for primary actions.",
+      "files": [
+        {
+          "path": "registry/default/floating-action-button/floating-action-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "flow-diagram",
+      "type": "registry:component",
+      "title": "Flow Diagram",
+      "description": "Interactive flow diagram with nodes, edges, and controls.",
+      "files": [
+        {
+          "path": "registry/default/flow-diagram/flow-diagram.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "hover-card",
+      "type": "registry:component",
+      "title": "Hover Card",
+      "description": "Card that appears on hover for previewing content.",
+      "files": [
+        {
+          "path": "registry/default/hover-card/hover-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "inline-input",
+      "type": "registry:component",
+      "title": "Inline Input",
+      "description": "Inline text input with keyboard commit and cancel support.",
+      "files": [
+        {
+          "path": "registry/default/inline-input/inline-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "input",
+      "type": "registry:component",
+      "title": "Input",
+      "description": "Text input field for forms.",
+      "files": [
+        {
+          "path": "registry/default/input/input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:component",
+      "title": "Input OTP",
+      "description": "One-time password input with segmented fields.",
+      "files": [
+        {
+          "path": "registry/default/input-otp/input-otp.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "key-concept",
+      "type": "registry:component",
+      "title": "Key Concept",
+      "description": "Highlighted definition block for key terms and a glossary list.",
+      "files": [
+        {
+          "path": "registry/default/key-concept/key-concept.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "keyboard-shortcuts-help",
+      "type": "registry:component",
+      "title": "Keyboard Shortcuts Help",
+      "description": "Displays available keyboard shortcuts to the user.",
+      "files": [
+        {
+          "path": "registry/default/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "lang-provider",
+      "type": "registry:component",
+      "title": "Lang Provider",
+      "description": "Context provider for language and internationalization.",
+      "files": [
+        {
+          "path": "registry/default/lang-provider/lang-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "learning-objectives",
+      "type": "registry:component",
+      "title": "Learning Objectives",
+      "description": "Lists learning goals for educational content.",
+      "files": [
+        {
+          "path": "registry/default/learning-objectives/learning-objectives.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "line-chart",
+      "type": "registry:component",
+      "title": "Line Chart",
+      "description": "Renders a line chart for data visualization.",
+      "files": [
+        {
+          "path": "registry/default/line-chart/line-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "mdx-content",
+      "type": "registry:component",
+      "title": "MDX Content",
+      "description": "Renders MDX content with component mapping.",
+      "files": [
+        {
+          "path": "registry/default/mdx-content/mdx-content.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "menubar",
+      "type": "registry:component",
+      "title": "Menubar",
+      "description": "Horizontal menu bar with dropdown menus.",
+      "files": [
+        {
+          "path": "registry/default/menubar/menubar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "model-selector",
+      "type": "registry:component",
+      "title": "Model Selector",
+      "description": "Dropdown selector for choosing AI models.",
+      "files": [
+        {
+          "path": "registry/default/model-selector/model-selector.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "navbar-saas",
+      "type": "registry:component",
+      "title": "Navbar SaaS",
+      "description": "SaaS-style navigation bar with branding and links.",
+      "files": [
+        {
+          "path": "registry/default/navbar-saas/navbar-saas.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:component",
+      "title": "Navigation Menu",
+      "description": "Accessible navigation menu with links and sub-navigation.",
+      "files": [
+        {
+          "path": "registry/default/navigation-menu/navigation-menu.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "pagination",
+      "type": "registry:component",
+      "title": "Pagination",
+      "description": "Page navigation controls with previous, next, and page links.",
+      "files": [
+        {
+          "path": "registry/default/pagination/pagination.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "popover",
+      "type": "registry:component",
+      "title": "Popover",
+      "description": "Floating content panel anchored to a trigger element.",
+      "files": [
+        {
+          "path": "registry/default/popover/popover.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "pro-tip",
+      "type": "registry:component",
+      "title": "Pro Tip",
+      "description": "Highlighted tip block with variants for tips, best practices, gotchas, and more.",
+      "files": [
+        {
+          "path": "registry/default/pro-tip/pro-tip.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "profile-section",
+      "type": "registry:component",
+      "title": "Profile Section",
+      "description": "User profile display section with avatar and details.",
+      "files": [
+        {
+          "path": "registry/default/profile-section/profile-section.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "progress-bar",
+      "type": "registry:component",
+      "title": "Progress Bar",
+      "description": "Visual progress indicator with labels and completion state.",
+      "files": [
+        {
+          "path": "registry/default/progress-bar/progress-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "progress-card",
+      "type": "registry:component",
+      "title": "Progress Card",
+      "description": "Card displaying progress metrics and status.",
+      "files": [
+        {
+          "path": "registry/default/progress-card/progress-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "quiz",
+      "type": "registry:component",
+      "title": "Quiz",
+      "description": "Interactive multiple-choice quiz with hints, explanations, and scoring.",
+      "files": [
+        {
+          "path": "registry/default/quiz/quiz.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:component",
+      "title": "Radio Group",
+      "description": "Group of radio buttons for single-selection input.",
+      "files": [
+        {
+          "path": "registry/default/radio-group/radio-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "resizable",
+      "type": "registry:component",
+      "title": "Resizable",
+      "description": "Resizable panel layout with draggable handles.",
+      "files": [
+        {
+          "path": "registry/default/resizable/resizable.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:component",
+      "title": "Scroll Area",
+      "description": "Custom scrollable area with styled scrollbars.",
+      "files": [
+        {
+          "path": "registry/default/scroll-area/scroll-area.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "search-bar",
+      "type": "registry:component",
+      "title": "Search Bar",
+      "description": "Text search input with icon and clear functionality.",
+      "files": [
+        {
+          "path": "registry/default/search-bar/search-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "search-dialog",
+      "type": "registry:component",
+      "title": "Search Dialog",
+      "description": "Full-screen search dialog with keyboard navigation.",
+      "files": [
+        {
+          "path": "registry/default/search-dialog/search-dialog.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "select",
+      "type": "registry:component",
+      "title": "Select",
+      "description": "Dropdown select input for choosing from a list of options.",
+      "files": [
+        {
+          "path": "registry/default/select/select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "separator",
+      "type": "registry:component",
+      "title": "Separator",
+      "description": "Visual divider between content sections.",
+      "files": [
+        {
+          "path": "registry/default/separator/separator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "share-section",
+      "type": "registry:component",
+      "title": "Share Section",
+      "description": "Social sharing buttons and link copy section.",
+      "files": [
+        {
+          "path": "registry/default/share-section/share-section.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "sheet",
+      "type": "registry:component",
+      "title": "Sheet",
+      "description": "Slide-over panel from the edge of the screen.",
+      "files": [
+        {
+          "path": "registry/default/sheet/sheet.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:component",
+      "title": "Sidebar",
+      "description": "Collapsible sidebar navigation layout.",
+      "files": [
+        {
+          "path": "registry/default/sidebar/sidebar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "sidebar-provider",
+      "type": "registry:component",
+      "title": "Sidebar Provider",
+      "description": "Context provider for managing sidebar open/close state.",
+      "files": [
+        {
+          "path": "registry/default/sidebar-provider/sidebar-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "sidebar-toggle",
+      "type": "registry:component",
+      "title": "Sidebar Toggle",
+      "description": "Responsive toggle button for opening and closing the sidebar.",
+      "files": [
+        {
+          "path": "registry/default/sidebar-toggle/sidebar-toggle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:component",
+      "title": "Skeleton",
+      "description": "Placeholder loading animation for content.",
+      "files": [
+        {
+          "path": "registry/default/skeleton/skeleton.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "slider",
+      "type": "registry:component",
+      "title": "Slider",
+      "description": "Range slider input for selecting numeric values.",
+      "files": [
+        {
+          "path": "registry/default/slider/slider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "slideshow",
+      "type": "registry:component",
+      "title": "Slideshow",
+      "description": "Step-through slideshow for presenting content sequentially.",
+      "files": [
+        {
+          "path": "registry/default/slideshow/slideshow.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "spinner",
+      "type": "registry:component",
+      "title": "Spinner",
+      "description": "Animated loading spinner indicator.",
+      "files": [
+        {
+          "path": "registry/default/spinner/spinner.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "step-by-step",
+      "type": "registry:component",
+      "title": "Step By Step",
+      "description": "Numbered step guide with optional interactive completion tracking.",
+      "files": [
+        {
+          "path": "registry/default/step-by-step/step-by-step.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "step-navigation",
+      "type": "registry:component",
+      "title": "Step Navigation",
+      "description": "Navigation controls for stepping through multi-page content.",
+      "files": [
+        {
+          "path": "registry/default/step-navigation/step-navigation.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "Styled data table with header, body, and footer sections.",
+      "files": [
+        {
+          "path": "registry/default/table/table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "table-of-contents",
+      "type": "registry:component",
+      "title": "Table Of Contents",
+      "description": "Auto-generated table of contents from page headings.",
+      "files": [
+        {
+          "path": "registry/default/table-of-contents/table-of-contents.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "table-of-contents-panel",
+      "type": "registry:component",
+      "title": "Table Of Contents Panel",
+      "description": "Side panel rendering a table of contents for page navigation.",
+      "files": [
+        {
+          "path": "registry/default/table-of-contents-panel/table-of-contents-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "Tabbed content panels with keyboard-accessible tab triggers.",
+      "files": [
+        {
+          "path": "registry/default/tabs/tabs.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "terminal",
+      "type": "registry:component",
+      "title": "Terminal",
+      "description": "Terminal-style display for command output.",
+      "files": [
+        {
+          "path": "registry/default/terminal/terminal.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "textarea",
+      "type": "registry:component",
+      "title": "Textarea",
+      "description": "Multi-line text input field.",
+      "files": [
+        {
+          "path": "registry/default/textarea/textarea.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "theme-provider",
+      "type": "registry:component",
+      "title": "Theme Provider",
+      "description": "Context provider for light/dark theme switching.",
+      "files": [
+        {
+          "path": "registry/default/theme-provider/theme-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:component",
+      "title": "Theme Toggle",
+      "description": "Button to toggle between light and dark themes.",
+      "files": [
+        {
+          "path": "registry/default/theme-toggle/theme-toggle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "thinking-block",
+      "type": "registry:component",
+      "title": "Thinking Block",
+      "description": "Collapsible block showing AI thinking/reasoning with streaming support.",
+      "files": [
+        {
+          "path": "registry/default/thinking-block/thinking-block.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ]
+    },
+    {
+      "name": "tldr-section",
+      "type": "registry:component",
+      "title": "TLDR Section",
+      "description": "Summary section for quick content overview.",
+      "files": [
+        {
+          "path": "registry/default/tldr-section/tldr-section.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "toast",
+      "type": "registry:component",
+      "title": "Toast",
+      "description": "Temporary notification messages with action support.",
+      "files": [
+        {
+          "path": "registry/default/toast/toast.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "toggle",
+      "type": "registry:component",
+      "title": "Toggle",
+      "description": "Two-state toggle button.",
+      "files": [
+        {
+          "path": "registry/default/toggle/toggle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:component",
+      "title": "Toggle Group",
+      "description": "Group of toggle buttons for single or multiple selection.",
+      "files": [
+        {
+          "path": "registry/default/toggle-group/toggle-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:component",
+      "title": "Tooltip",
+      "description": "Informational popup displayed on hover or focus.",
+      "files": [
+        {
+          "path": "registry/default/tooltip/tooltip.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tutorial-card",
+      "type": "registry:component",
+      "title": "Tutorial Card",
+      "description": "Card for displaying tutorial previews with metadata.",
+      "files": [
+        {
+          "path": "registry/default/tutorial-card/tutorial-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tutorial-complete",
+      "type": "registry:component",
+      "title": "Tutorial Complete",
+      "description": "Completion screen displayed when a tutorial is finished.",
+      "files": [
+        {
+          "path": "registry/default/tutorial-complete/tutorial-complete.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tutorial-filters",
+      "type": "registry:component",
+      "title": "Tutorial Filters",
+      "description": "Filter controls for browsing tutorials by category or difficulty.",
+      "files": [
+        {
+          "path": "registry/default/tutorial-filters/tutorial-filters.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tutorial-intro-content",
+      "type": "registry:component",
+      "title": "Tutorial Intro Content",
+      "description": "Introduction section for tutorial pages with overview and prerequisites.",
+      "files": [
+        {
+          "path": "registry/default/tutorial-intro-content/tutorial-intro-content.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "tutorial-mdx",
+      "type": "registry:component",
+      "title": "Tutorial MDX",
+      "description": "MDX renderer tailored for tutorial content with custom components.",
+      "files": [
+        {
+          "path": "registry/default/tutorial-mdx/tutorial-mdx.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    },
+    {
+      "name": "video-embed",
+      "type": "registry:component",
+      "title": "Video Embed",
+      "description": "Responsive video embed for YouTube and other providers.",
+      "files": [
+        {
+          "path": "registry/default/video-embed/video-embed.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": []
+    }
+  ]
+}
