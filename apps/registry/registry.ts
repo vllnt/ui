@@ -1,1 +1,1 @@
-export { default as registry } from './registry.json'
+export { default as registry } from "./registry.json";

@@ -1,9 +1,12 @@
-import Link from 'next/link'
+import { Sidebar } from "@vllnt/ui";
+import Link from "next/link";
 
-import { Sidebar } from '@vllnt/ui'
-
-import { ComponentPreview } from '@/components/component-preview/component-preview'
-import { components, getSidebarSections, groupedComponents } from '@/lib/sidebar-sections'
+import { ComponentPreview } from "@/components/component-preview/component-preview";
+import {
+  components,
+  getSidebarSections,
+  groupedComponents,
+} from "@/lib/sidebar-sections";
 
 export default function ComponentsPage() {
   return (
@@ -14,7 +17,8 @@ export default function ComponentsPage() {
           <div className="mb-12">
             <h1 className="text-4xl font-bold mb-4">Components</h1>
             <p className="text-muted-foreground text-lg">
-              Explore all {components.length} components available in the library.
+              Explore all {components.length} components available in the
+              library.
             </p>
           </div>
 
@@ -27,7 +31,10 @@ export default function ComponentsPage() {
                     className="group relative flex flex-col rounded-lg border bg-card hover:border-foreground/20 transition-colors overflow-hidden"
                     key={component.name}
                   >
-                    <Link className="absolute inset-0 z-10" href={`/components/${component.name}`}>
+                    <Link
+                      className="absolute inset-0 z-10"
+                      href={`/components/${component.name}`}
+                    >
                       <span className="sr-only">{component.title}</span>
                     </Link>
                     <div className="flex-1 p-4 bg-muted/30 border-b h-[140px] flex items-center justify-center overflow-hidden">
@@ -48,5 +55,5 @@ export default function ComponentsPage() {
         </div>
       </main>
     </>
-  )
+  );
 }

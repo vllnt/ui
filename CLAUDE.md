@@ -7,9 +7,14 @@ React component library monorepo. Radix UI primitives + Tailwind CSS + CVA varia
 | Package | Path | Published |
 |---------|------|-----------|
 | `@vllnt/ui` | `packages/ui` | GitHub Packages |
-| `@vllnt/eslint` | `packages/eslint-config` | workspace only |
-| `@vllnt/typescript` | `packages/tsconfig` | workspace only |
 | `@vllnt/ui-registry` | `apps/registry` | deployed (Next.js) |
+
+## Shared Configs (npm)
+
+| Package | Usage |
+|---------|-------|
+| `@vllnt/eslint-config` | ESLint flat config (npm `^1.0.0`) |
+| `@vllnt/typescript` | TypeScript configs (npm `^1.0.0`) |
 
 ## Tech Stack
 

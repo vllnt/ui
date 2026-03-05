@@ -1,6 +1,6 @@
-import { MDXContent, Sidebar } from '@vllnt/ui'
+import { MDXContent, Sidebar } from "@vllnt/ui";
 
-import { getSidebarSections } from '@/lib/sidebar-sections'
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 export default async function PhilosophyPage() {
   const philosophy = `# Philosophy
@@ -55,7 +55,7 @@ Beyond aesthetics, VLLNT UI prioritizes:
 ## Getting Started
 
 All components follow these principles. When you use VLLNT UI, you're not just adding components—you're adopting a philosophy of clean, fast, and purposeful design.
-`
+`;
 
   return (
     <>
@@ -77,5 +77,5 @@ All components follow these principles. When you use VLLNT UI, you're not just a
         </div>
       </main>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { nextjs } from '@vllnt/eslint'
+import { nextjs } from '@vllnt/eslint-config'
 
 export default [
   {

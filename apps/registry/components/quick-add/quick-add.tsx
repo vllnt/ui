@@ -1,32 +1,36 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
-import { Check, Copy, ExternalLink } from 'lucide-react'
-
-import { Button } from '@vllnt/ui'
+import { Button } from "@vllnt/ui";
+import { Check, Copy, ExternalLink } from "lucide-react";
 
 type QuickAddProps = {
-  componentName: string
-}
+  componentName: string;
+};
 
 export function QuickAdd({ componentName }: QuickAddProps) {
-  const registryUrl = `https://ui.vllnt.com/r/${componentName}.json`
-  const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`
-  const v0Url = `https://v0.dev/chat?q=add+component+from+${encodeURIComponent(registryUrl)}`
-  const [copied, setCopied] = useState(false)
+  const registryUrl = `https://ui.vllnt.com/r/${componentName}.json`;
+  const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`;
+  const v0Url = `https://v0.dev/chat?q=add+component+from+${encodeURIComponent(registryUrl)}`;
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(installCommand)
-    setCopied(true)
+    await navigator.clipboard.writeText(installCommand);
+    setCopied(true);
     setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Button className="gap-2" onClick={handleCopy} size="sm" variant="outline">
+      <Button
+        className="gap-2"
+        onClick={handleCopy}
+        size="sm"
+        variant="outline"
+      >
         {copied ? (
           <>
             <Check className="h-3 w-3" />
@@ -41,7 +45,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
       </Button>
       <Button
         className="gap-2"
-        onClick={() => window.open(v0Url, '_blank')}
+        onClick={() => window.open(v0Url, "_blank")}
         size="sm"
         variant="outline"
       >
@@ -49,5 +53,5 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         <ExternalLink className="h-3 w-3" />
       </Button>
     </div>
-  )
+  );
 }

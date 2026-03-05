@@ -1,1 +1,1 @@
-export { QuickAdd } from './quick-add'
+export { QuickAdd } from "./quick-add";

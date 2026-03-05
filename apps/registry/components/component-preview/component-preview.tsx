@@ -1,15 +1,6 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-
-import {
-  Bold,
-  ChevronsUpDown,
-  Italic,
-  Plus,
-  Terminal as TerminalIcon,
-  Underline,
-} from 'lucide-react'
+import * as React from "react";
 
 import {
   Accordion,
@@ -187,11 +178,19 @@ import {
   TooltipTrigger,
   TutorialCard,
   VideoEmbed,
-} from '@vllnt/ui'
+} from "@vllnt/ui";
+import {
+  Bold,
+  ChevronsUpDown,
+  Italic,
+  Plus,
+  Terminal as TerminalIcon,
+  Underline,
+} from "lucide-react";
 
 type ComponentPreviewProps = {
-  componentName: string
-}
+  componentName: string;
+};
 
 // Simple text-based preview for components that need complex context
 function SimplePreview({ description }: { description: string }) {
@@ -199,7 +198,7 @@ function SimplePreview({ description }: { description: string }) {
     <div className="text-sm text-muted-foreground p-4 border rounded-lg bg-muted/30">
       <p>{description}</p>
     </div>
-  )
+  );
 }
 
 function ButtonPreview() {
@@ -212,7 +211,7 @@ function ButtonPreview() {
       <Button variant="ghost">Ghost</Button>
       <Button variant="link">Link</Button>
     </div>
-  )
+  );
 }
 
 function BadgePreview() {
@@ -223,7 +222,7 @@ function BadgePreview() {
       <Badge variant="destructive">Destructive</Badge>
       <Badge variant="outline">Outline</Badge>
     </div>
-  )
+  );
 }
 
 function CardPreview() {
@@ -240,7 +239,7 @@ function CardPreview() {
         <Button>Action</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 function InputPreview() {
@@ -249,19 +248,19 @@ function InputPreview() {
       <Input placeholder="Email" type="email" />
       <Input placeholder="Password" type="password" />
     </div>
-  )
+  );
 }
 
 function BreadcrumbPreview() {
   return (
     <Breadcrumb
       items={[
-        { href: '/', label: 'Home' },
-        { href: '/components', label: 'Components' },
-        { label: 'Breadcrumb' },
+        { href: "/", label: "Home" },
+        { href: "/components", label: "Components" },
+        { label: "Breadcrumb" },
       ]}
     />
-  )
+  );
 }
 
 function DropdownMenuPreview() {
@@ -276,7 +275,7 @@ function DropdownMenuPreview() {
         <DropdownMenuItem>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function ToastPreview() {
@@ -287,16 +286,16 @@ function ToastPreview() {
         <ToastDescription>Toast description goes here.</ToastDescription>
       </Toast>
     </div>
-  )
+  );
 }
 
 function TLDRSectionPreview() {
   return (
     <TLDRSection label="TLDR">
-      This is a collapsible section with a loading animation. When you first expand it, you&apos;ll
-      see a shimmer effect before the content appears.
+      This is a collapsible section with a loading animation. When you first
+      expand it, you&apos;ll see a shimmer effect before the content appears.
     </TLDRSection>
-  )
+  );
 }
 
 function DialogPreview() {
@@ -308,7 +307,9 @@ function DialogPreview() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Dialog Example</DialogTitle>
-          <DialogDescription>This is an example dialog component.</DialogDescription>
+          <DialogDescription>
+            This is an example dialog component.
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline">Cancel</Button>
@@ -316,7 +317,7 @@ function DialogPreview() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function CodeBlockPreview() {
@@ -326,56 +327,65 @@ function CodeBlockPreview() {
   return \`Hello, \${name}!\`
 }`}
     </CodeBlock>
-  )
+  );
 }
 
 function ProfileSectionPreview() {
   return (
     <ProfileSection
-      dict={{ profile: { name: 'John Doe', tagline: 'Full-stack developer' } }}
+      dict={{ profile: { name: "John Doe", tagline: "Full-stack developer" } }}
       imageAlt="Profile"
       imageSource="/profile.png"
-      socialLinks={[{ href: 'https://github.com', label: 'GitHub' }]}
+      socialLinks={[{ href: "https://github.com", label: "GitHub" }]}
     />
-  )
+  );
 }
 
 function ThemeTogglePreview() {
   return (
     <ThemeToggle
       dict={{
-        theme: { dark: 'Dark', light: 'Light', system: 'System', toggle_theme: 'Toggle theme' },
+        theme: {
+          dark: "Dark",
+          light: "Light",
+          system: "System",
+          toggle_theme: "Toggle theme",
+        },
       }}
     />
-  )
+  );
 }
 
 function LangProviderPreview() {
   return (
     <div className="space-y-2">
-      <LangProvider defaultLanguage="en" supportedLanguages={['en', 'fr']} />
-      <p className="text-sm text-muted-foreground">Sets the HTML lang attribute.</p>
+      <LangProvider defaultLanguage="en" supportedLanguages={["en", "fr"]} />
+      <p className="text-sm text-muted-foreground">
+        Sets the HTML lang attribute.
+      </p>
     </div>
-  )
+  );
 }
 
 function ThemeProviderPreview() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <div className="rounded-lg border bg-card p-4">
-        <p className="text-sm">Theme Provider wraps your app for theme support.</p>
+        <p className="text-sm">
+          Theme Provider wraps your app for theme support.
+        </p>
       </div>
     </ThemeProvider>
-  )
+  );
 }
 
 function CommandPreview() {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
   return (
     <div className="flex flex-col items-center gap-4">
       <Button
         onClick={() => {
-          setOpen(true)
+          setOpen(true);
         }}
         variant="outline"
       >
@@ -392,7 +402,7 @@ function CommandPreview() {
         </CommandList>
       </CommandDialog>
     </div>
-  )
+  );
 }
 
 function TabsPreview() {
@@ -403,13 +413,17 @@ function TabsPreview() {
         <TabsTrigger value="password">Password</TabsTrigger>
       </TabsList>
       <TabsContent value="account">
-        <p className="text-sm text-muted-foreground">Manage your account here.</p>
+        <p className="text-sm text-muted-foreground">
+          Manage your account here.
+        </p>
       </TabsContent>
       <TabsContent value="password">
-        <p className="text-sm text-muted-foreground">Change your password here.</p>
+        <p className="text-sm text-muted-foreground">
+          Change your password here.
+        </p>
       </TabsContent>
     </Tabs>
-  )
+  );
 }
 
 function CalloutPreview() {
@@ -420,7 +434,7 @@ function CalloutPreview() {
       <Callout variant="tip">This is a helpful tip.</Callout>
       <Callout variant="danger">This is a danger callout.</Callout>
     </div>
-  )
+  );
 }
 
 function CheckboxPreview() {
@@ -439,19 +453,19 @@ function CheckboxPreview() {
         </label>
       </div>
     </div>
-  )
+  );
 }
 
 function TerminalPreview() {
   return (
     <Terminal
       lines={[
-        { content: 'npm install', type: 'command' },
-        { content: 'Installing dependencies...', type: 'output' },
-        { content: 'Done in 2.3s', type: 'output' },
+        { content: "npm install", type: "command" },
+        { content: "Installing dependencies...", type: "output" },
+        { content: "Done in 2.3s", type: "output" },
       ]}
     />
-  )
+  );
 }
 
 // New real previews
@@ -467,31 +481,37 @@ function FAQPreview() {
         <p>Wrap FAQItem components inside the FAQ component.</p>
       </FAQItem>
     </FAQ>
-  )
+  );
 }
 
 function QuizPreview() {
   return (
     <Quiz
-      explanation={<p>Paris has been France&apos;s capital since the 12th century.</p>}
+      explanation={
+        <p>Paris has been France&apos;s capital since the 12th century.</p>
+      }
       hint="It's known as the City of Light"
-      options={[{ label: 'London' }, { correct: true, label: 'Paris' }, { label: 'Berlin' }]}
+      options={[
+        { label: "London" },
+        { correct: true, label: "Paris" },
+        { label: "Berlin" },
+      ]}
       question="What is the capital of France?"
     />
-  )
+  );
 }
 
 function ChecklistPreview() {
   return (
     <Checklist
       items={[
-        { id: 'step1', label: 'Install dependencies' },
-        { id: 'step2', label: 'Configure environment' },
-        { id: 'step3', label: 'Start development server' },
+        { id: "step1", label: "Install dependencies" },
+        { id: "step2", label: "Configure environment" },
+        { id: "step3", label: "Start development server" },
       ]}
       title="Setup Steps"
     />
-  )
+  );
 }
 
 function StepByStepPreview() {
@@ -501,7 +521,7 @@ function StepByStepPreview() {
       <Step title="Configure">Set up your configuration files.</Step>
       <Step title="Build">Build your application for production.</Step>
     </StepByStep>
-  )
+  );
 }
 
 function ProTipPreview() {
@@ -510,20 +530,28 @@ function ProTipPreview() {
       <ProTip variant="tip">
         <p>Use TypeScript for better developer experience.</p>
       </ProTip>
-      <CommonMistake fix={<p>Always add unique keys to list items.</p>} title="Forgetting keys">
+      <CommonMistake
+        fix={<p>Always add unique keys to list items.</p>}
+        title="Forgetting keys"
+      >
         <p>Rendering lists without keys causes issues.</p>
       </CommonMistake>
     </div>
-  )
+  );
 }
 
 function ProgressBarPreview() {
   return (
     <div className="space-y-4 w-full max-w-md">
-      <ProgressBar completedLabel="items" currentLabel="Progress" max={10} value={3} />
+      <ProgressBar
+        completedLabel="items"
+        currentLabel="Progress"
+        max={10}
+        value={3}
+      />
       <ProgressBar currentLabel="Complete!" isComplete max={10} value={10} />
     </div>
-  )
+  );
 }
 
 function KeyConceptPreview() {
@@ -541,7 +569,7 @@ function KeyConceptPreview() {
         </KeyConcept>
       </Glossary>
     </div>
-  )
+  );
 }
 
 function LearningObjectivesPreview() {
@@ -550,30 +578,38 @@ function LearningObjectivesPreview() {
       <LearningObjectives
         estimatedTime="30 min"
         objectives={[
-          'Understand React components',
-          'Learn about props and state',
-          'Build your first component',
+          "Understand React components",
+          "Learn about props and state",
+          "Build your first component",
         ]}
       />
       <Prerequisites
-        items={['Basic JavaScript knowledge', 'HTML/CSS fundamentals']}
+        items={["Basic JavaScript knowledge", "HTML/CSS fundamentals"]}
         level="beginner"
       />
-      <Summary keyTakeaways={['Components are reusable', 'Props flow down']}>
+      <Summary keyTakeaways={["Components are reusable", "Props flow down"]}>
         <p>We covered the basics of React components.</p>
       </Summary>
     </div>
-  )
+  );
 }
 
 function ComparisonPreview() {
   return (
     <Comparison
-      after={{ items: ['Full TypeScript', 'Easy to refactor'], title: 'After', variant: 'good' }}
-      before={{ items: ['No type safety', 'Hard to maintain'], title: 'Before', variant: 'bad' }}
+      after={{
+        items: ["Full TypeScript", "Easy to refactor"],
+        title: "After",
+        variant: "good",
+      }}
+      before={{
+        items: ["No type safety", "Hard to maintain"],
+        title: "Before",
+        variant: "bad",
+      }}
       title="Code Quality"
     />
-  )
+  );
 }
 
 function ExercisePreview() {
@@ -581,27 +617,31 @@ function ExercisePreview() {
     <Exercise
       difficulty="easy"
       hint="Use the useState hook"
-      solution={<pre className="text-xs">const [count, setCount] = useState(0)</pre>}
+      solution={
+        <pre className="text-xs">const [count, setCount] = useState(0)</pre>
+      }
       title="Create a Counter"
     >
       <p>Create a component that displays and increments a number.</p>
     </Exercise>
-  )
+  );
 }
 
 function SidebarTogglePreview() {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
   return (
     <div className="flex items-center gap-4">
       <SidebarToggle
         onToggle={() => {
-          setOpen(!open)
+          setOpen(!open);
         }}
         open={open}
       />
-      <span className="text-sm text-muted-foreground">Sidebar is {open ? 'open' : 'closed'}</span>
+      <span className="text-sm text-muted-foreground">
+        Sidebar is {open ? "open" : "closed"}
+      </span>
     </div>
-  )
+  );
 }
 
 function ThinkingBlockPreview() {
@@ -610,23 +650,23 @@ function ThinkingBlockPreview() {
       isStreaming={false}
       thinking="Analyzing the request... Let me break this down into key concepts."
     />
-  )
+  );
 }
 
 function InlineInputPreview() {
-  const [value, setValue] = React.useState('Click to edit')
+  const [value, setValue] = React.useState("Click to edit");
   return (
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">Click the input to edit:</p>
       <InlineInput
         onChange={setValue}
         onCommit={(v) => {
-          setValue(v)
+          setValue(v);
         }}
         value={value}
       />
     </div>
-  )
+  );
 }
 
 function VideoEmbedPreview() {
@@ -634,7 +674,7 @@ function VideoEmbedPreview() {
     <div className="w-full max-w-md">
       <VideoEmbed src="dQw4w9WgXcQ" title="Example Video" type="youtube" />
     </div>
-  )
+  );
 }
 
 function BlogCardPreview() {
@@ -643,22 +683,24 @@ function BlogCardPreview() {
       href="/blog/getting-started"
       lang="en"
       post={{
-        date: '2024-01-15',
-        description: 'Learn the fundamentals of React development.',
-        slug: 'getting-started',
-        tags: ['React', 'Tutorial'],
-        title: 'Getting Started with React',
+        date: "2024-01-15",
+        description: "Learn the fundamentals of React development.",
+        slug: "getting-started",
+        tags: ["React", "Tutorial"],
+        title: "Getting Started with React",
       }}
     />
-  )
+  );
 }
 
 function CategoryFilterPreview() {
-  return <CategoryFilter categories={['nextjs', 'react', 'typescript']} lang="en" />
+  return (
+    <CategoryFilter categories={["nextjs", "react", "typescript"]} lang="en" />
+  );
 }
 
 function PaginationPreview() {
-  return <Pagination baseUrl="/blog" currentPage={3} totalPages={10} />
+  return <Pagination baseUrl="/blog" currentPage={3} totalPages={10} />;
 }
 
 function SearchBarPreview() {
@@ -673,27 +715,27 @@ function SearchBarPreview() {
     >
       <SearchBar
         onSearch={(q) => {
-          console.info('Search:', q)
+          console.info("Search:", q);
         }}
         placeholder="Search articles..."
       />
     </React.Suspense>
-  )
+  );
 }
 
 function ShareSectionPreview() {
   return (
     <ShareSection
       platforms={[
-        { key: 'x', label: 'X' },
-        { key: 'linkedin', label: 'LinkedIn' },
+        { key: "x", label: "X" },
+        { key: "linkedin", label: "LinkedIn" },
       ]}
       shareOn="Share on"
       shareTitle="Share this article"
       title="My Article"
       url="https://example.com/article"
     />
-  )
+  );
 }
 
 function CodePlaygroundPreview() {
@@ -708,7 +750,7 @@ function CodePlaygroundPreview() {
   return <button>{children}</button>
 }`}
     </CodePlayground>
-  )
+  );
 }
 
 function FloatingActionButtonPreview() {
@@ -717,23 +759,23 @@ function FloatingActionButtonPreview() {
       <FloatingActionButton
         aria-label="Add item"
         onClick={() => {
-          alert('Clicked!')
+          alert("Clicked!");
         }}
         position="bottom-right"
       >
         <Plus className="h-5 w-5" />
       </FloatingActionButton>
     </div>
-  )
+  );
 }
 
 function KeyboardShortcutsHelpPreview() {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <div>
       <Button
         onClick={() => {
-          setIsOpen(true)
+          setIsOpen(true);
         }}
       >
         Show Shortcuts
@@ -741,46 +783,46 @@ function KeyboardShortcutsHelpPreview() {
       <KeyboardShortcutsHelp
         isOpen={isOpen}
         onClose={() => {
-          setIsOpen(false)
+          setIsOpen(false);
         }}
         shortcuts={[
-          { description: 'Open command palette', keys: ['⌘', 'K'] },
-          { description: 'Close dialog', keys: ['Esc'] },
+          { description: "Open command palette", keys: ["⌘", "K"] },
+          { description: "Close dialog", keys: ["Esc"] },
         ]}
       />
     </div>
-  )
+  );
 }
 
 function StepNavigationPreview() {
-  const [step, setStep] = React.useState(2)
+  const [step, setStep] = React.useState(2);
   return (
     <StepNavigation
       canNext={step < 5}
       canPrev={step > 1}
       currentStep={step}
       onNext={() => {
-        setStep(step + 1)
+        setStep(step + 1);
       }}
       onPrev={() => {
-        setStep(step - 1)
+        setStep(step - 1);
       }}
       stepLabel="Step"
       totalSteps={5}
     />
-  )
+  );
 }
 
 function TableOfContentsPreview() {
   return (
     <TableOfContents
       sections={[
-        { id: 'intro', title: 'Introduction' },
-        { id: 'setup', title: 'Setup' },
-        { id: 'usage', title: 'Usage' },
+        { id: "intro", title: "Introduction" },
+        { id: "setup", title: "Setup" },
+        { id: "usage", title: "Usage" },
       ]}
     />
-  )
+  );
 }
 
 function TutorialCardPreview() {
@@ -788,21 +830,25 @@ function TutorialCardPreview() {
     <TutorialCard
       href="/tutorials/react-basics"
       labels={{
-        completed: 'completed',
-        difficulty: { advanced: 'Advanced', beginner: 'Beginner', intermediate: 'Intermediate' },
-        sectionsCount: 'sections',
+        completed: "completed",
+        difficulty: {
+          advanced: "Advanced",
+          beginner: "Beginner",
+          intermediate: "Intermediate",
+        },
+        sectionsCount: "sections",
       }}
       tutorial={{
-        description: 'Learn React fundamentals',
-        difficulty: 'beginner',
-        estimatedTime: '2 hours',
-        id: 'react-basics',
+        description: "Learn React fundamentals",
+        difficulty: "beginner",
+        estimatedTime: "2 hours",
+        id: "react-basics",
         sectionCount: 5,
-        tags: ['react', 'javascript'],
-        title: 'React Basics',
+        tags: ["react", "javascript"],
+        title: "React Basics",
       }}
     />
-  )
+  );
 }
 
 function AreaChartPreview() {
@@ -815,7 +861,10 @@ function AreaChartPreview() {
             <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
           </linearGradient>
         </defs>
-        <path d="M0,60 L40,40 L80,50 L120,20 L160,30 L160,80 L0,80 Z" fill="url(#area-grad)" />
+        <path
+          d="M0,60 L40,40 L80,50 L120,20 L160,30 L160,80 L0,80 Z"
+          fill="url(#area-grad)"
+        />
         <path
           d="M0,60 L40,40 L80,50 L120,20 L160,30"
           fill="none"
@@ -824,18 +873,30 @@ function AreaChartPreview() {
         />
       </svg>
     </div>
-  )
+  );
 }
 
 function BarChartPreview() {
   return (
     <div className="flex items-end justify-center gap-2 h-[80px] w-[160px]">
-      <div className="w-8 bg-current opacity-60 rounded-t" style={{ height: '40%' }} />
-      <div className="w-8 bg-current opacity-60 rounded-t" style={{ height: '60%' }} />
-      <div className="w-8 bg-current opacity-60 rounded-t" style={{ height: '80%' }} />
-      <div className="w-8 bg-current opacity-60 rounded-t" style={{ height: '50%' }} />
+      <div
+        className="w-8 bg-current opacity-60 rounded-t"
+        style={{ height: "40%" }}
+      />
+      <div
+        className="w-8 bg-current opacity-60 rounded-t"
+        style={{ height: "60%" }}
+      />
+      <div
+        className="w-8 bg-current opacity-60 rounded-t"
+        style={{ height: "80%" }}
+      />
+      <div
+        className="w-8 bg-current opacity-60 rounded-t"
+        style={{ height: "50%" }}
+      />
     </div>
-  )
+  );
 }
 
 function LineChartPreview() {
@@ -855,7 +916,7 @@ function LineChartPreview() {
         <circle cx="160" cy="25" fill="currentColor" r="3" />
       </svg>
     </div>
-  )
+  );
 }
 
 function SidebarPreview() {
@@ -865,15 +926,15 @@ function SidebarPreview() {
         sections={[
           {
             items: [
-              { href: '/', title: 'Introduction' },
-              { href: '/install', title: 'Installation' },
+              { href: "/", title: "Introduction" },
+              { href: "/install", title: "Installation" },
             ],
-            title: 'Getting Started',
+            title: "Getting Started",
           },
         ]}
       />
     </div>
-  )
+  );
 }
 
 function SidebarProviderPreview() {
@@ -885,22 +946,30 @@ function SidebarProviderPreview() {
         </p>
       </div>
     </SidebarProvider>
-  )
+  );
 }
 
 function MDXContentPreview() {
-  return <SimplePreview description="A component for rendering MDX content with custom styling." />
+  return (
+    <SimplePreview description="A component for rendering MDX content with custom styling." />
+  );
 }
 
 function AccordionPreview() {
   return (
-    <Accordion className="w-full max-w-[200px]" defaultValue="item-1" type="single">
+    <Accordion
+      className="w-full max-w-[200px]"
+      defaultValue="item-1"
+      type="single"
+    >
       <AccordionItem value="item-1">
         <AccordionTrigger value="item-1">What is this?</AccordionTrigger>
-        <AccordionContent value="item-1">A collapsible section.</AccordionContent>
+        <AccordionContent value="item-1">
+          A collapsible section.
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
-  )
+  );
 }
 
 // New shadcn primitive previews
@@ -910,7 +979,7 @@ function TextareaPreview() {
     <div className="w-full max-w-sm">
       <Textarea placeholder="Type your message here..." />
     </div>
-  )
+  );
 }
 
 function SelectPreview() {
@@ -925,7 +994,7 @@ function SelectPreview() {
         <SelectItem value="orange">Orange</SelectItem>
       </SelectContent>
     </Select>
-  )
+  );
 }
 
 function RadioGroupPreview() {
@@ -944,7 +1013,7 @@ function RadioGroupPreview() {
         </label>
       </div>
     </RadioGroup>
-  )
+  );
 }
 
 function SliderPreview() {
@@ -952,7 +1021,7 @@ function SliderPreview() {
     <div className="w-full max-w-sm">
       <Slider defaultValue={[50]} max={100} step={1} />
     </div>
-  )
+  );
 }
 
 function TogglePreview() {
@@ -968,7 +1037,7 @@ function TogglePreview() {
         <Underline className="h-4 w-4" />
       </Toggle>
     </div>
-  )
+  );
 }
 
 function ToggleGroupPreview() {
@@ -984,7 +1053,7 @@ function ToggleGroupPreview() {
         <Underline className="h-4 w-4" />
       </ToggleGroupItem>
     </ToggleGroup>
-  )
+  );
 }
 
 function InputOTPPreview() {
@@ -999,7 +1068,7 @@ function InputOTPPreview() {
         <InputOTPSlot index={5} />
       </InputOTPGroup>
     </InputOTP>
-  )
+  );
 }
 
 function TooltipPreview() {
@@ -1014,7 +1083,7 @@ function TooltipPreview() {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
+  );
 }
 
 function PopoverPreview() {
@@ -1026,11 +1095,13 @@ function PopoverPreview() {
       <PopoverContent className="w-80">
         <div className="space-y-2">
           <h4 className="font-medium leading-none">Popover Title</h4>
-          <p className="text-sm text-muted-foreground">This is a popover with some content.</p>
+          <p className="text-sm text-muted-foreground">
+            This is a popover with some content.
+          </p>
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 function SheetPreview() {
@@ -1045,7 +1116,9 @@ function SheetPreview() {
           <SheetDescription>This is a sheet component.</SheetDescription>
         </SheetHeader>
         <div className="py-4">
-          <p className="text-sm text-muted-foreground">Sheet content goes here.</p>
+          <p className="text-sm text-muted-foreground">
+            Sheet content goes here.
+          </p>
         </div>
         <SheetFooter>
           <SheetClose asChild>
@@ -1054,7 +1127,7 @@ function SheetPreview() {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 function DrawerPreview() {
@@ -1069,7 +1142,9 @@ function DrawerPreview() {
           <DrawerDescription>This is a drawer component.</DrawerDescription>
         </DrawerHeader>
         <div className="p-4">
-          <p className="text-sm text-muted-foreground">Drawer content goes here.</p>
+          <p className="text-sm text-muted-foreground">
+            Drawer content goes here.
+          </p>
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
@@ -1078,7 +1153,7 @@ function DrawerPreview() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
 function AlertDialogPreview() {
@@ -1091,7 +1166,8 @@ function AlertDialogPreview() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your data.
+            This action cannot be undone. This will permanently delete your
+            data.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -1100,7 +1176,7 @@ function AlertDialogPreview() {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
 
 function HoverCardPreview() {
@@ -1118,7 +1194,7 @@ function HoverCardPreview() {
         </div>
       </HoverCardContent>
     </HoverCard>
-  )
+  );
 }
 
 function ContextMenuPreview() {
@@ -1133,7 +1209,7 @@ function ContextMenuPreview() {
         <ContextMenuItem>Reload</ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
-  )
+  );
 }
 
 function MenubarPreview() {
@@ -1156,7 +1232,7 @@ function MenubarPreview() {
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
-  )
+  );
 }
 
 function NavigationMenuPreview() {
@@ -1167,7 +1243,9 @@ function NavigationMenuPreview() {
           <NavigationMenuTrigger>Getting Started</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="p-4 w-[200px]">
-              <NavigationMenuLink className="text-sm">Introduction</NavigationMenuLink>
+              <NavigationMenuLink className="text-sm">
+                Introduction
+              </NavigationMenuLink>
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -1175,13 +1253,15 @@ function NavigationMenuPreview() {
           <NavigationMenuTrigger>Components</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="p-4 w-[200px]">
-              <NavigationMenuLink className="text-sm">View all</NavigationMenuLink>
+              <NavigationMenuLink className="text-sm">
+                View all
+              </NavigationMenuLink>
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }
 
 function TablePreview() {
@@ -1207,7 +1287,7 @@ function TablePreview() {
         </TableRow>
       </TableBody>
     </Table>
-  )
+  );
 }
 
 function AvatarPreview() {
@@ -1221,7 +1301,7 @@ function AvatarPreview() {
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
     </div>
-  )
+  );
 }
 
 function SkeletonPreview() {
@@ -1233,7 +1313,7 @@ function SkeletonPreview() {
         <Skeleton className="h-4 w-[150px]" />
       </div>
     </div>
-  )
+  );
 }
 
 function SeparatorPreview() {
@@ -1252,7 +1332,7 @@ function SeparatorPreview() {
         <div>Support</div>
       </div>
     </div>
-  )
+  );
 }
 
 function AlertPreview() {
@@ -1261,24 +1341,31 @@ function AlertPreview() {
       <Alert>
         <TerminalIcon className="h-4 w-4" />
         <AlertTitle>Heads up!</AlertTitle>
-        <AlertDescription>You can add components using the CLI.</AlertDescription>
+        <AlertDescription>
+          You can add components using the CLI.
+        </AlertDescription>
       </Alert>
       <Alert variant="destructive">
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>Something went wrong. Please try again.</AlertDescription>
+        <AlertDescription>
+          Something went wrong. Please try again.
+        </AlertDescription>
       </Alert>
     </div>
-  )
+  );
 }
 
 function AspectRatioPreview() {
   return (
     <div className="w-[200px]">
-      <AspectRatio className="bg-muted rounded-md flex items-center justify-center" ratio={16 / 9}>
+      <AspectRatio
+        className="bg-muted rounded-md flex items-center justify-center"
+        ratio={16 / 9}
+      >
         <span className="text-sm text-muted-foreground">16:9</span>
       </AspectRatio>
     </div>
-  )
+  );
 }
 
 function ScrollAreaPreview() {
@@ -1292,7 +1379,7 @@ function ScrollAreaPreview() {
         ))}
       </div>
     </ScrollArea>
-  )
+  );
 }
 
 function ResizablePreview() {
@@ -1310,13 +1397,17 @@ function ResizablePreview() {
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>
-  )
+  );
 }
 
 function CollapsiblePreview() {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <Collapsible className="w-[250px] space-y-2" onOpenChange={setIsOpen} open={isOpen}>
+    <Collapsible
+      className="w-[250px] space-y-2"
+      onOpenChange={setIsOpen}
+      open={isOpen}
+    >
       <div className="flex items-center justify-between space-x-4">
         <h4 className="text-sm font-semibold">Collapsible Section</h4>
         <CollapsibleTrigger asChild>
@@ -1330,7 +1421,7 @@ function CollapsiblePreview() {
         <div className="rounded-md border px-4 py-2 text-sm">Item 2</div>
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }
 
 function CarouselPreview() {
@@ -1352,12 +1443,12 @@ function CarouselPreview() {
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
-  )
+  );
 }
 
 function CalendarPreview() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
-  return <Calendar mode="single" onSelect={setDate} selected={date} />
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  return <Calendar mode="single" onSelect={setDate} selected={date} />;
 }
 
 function SpinnerPreview() {
@@ -1367,207 +1458,223 @@ function SpinnerPreview() {
       <Spinner size="md" />
       <Spinner size="lg" />
     </div>
-  )
+  );
 }
 
 // eslint-disable-next-line max-lines-per-function -- Switch statement mapping all components
 export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
-    case 'accordion':
-      return <AccordionPreview />
-    case 'alert':
-      return <AlertPreview />
-    case 'alert-dialog':
-      return <AlertDialogPreview />
-    case 'area-chart':
-      return <AreaChartPreview />
-    case 'aspect-ratio':
-      return <AspectRatioPreview />
-    case 'avatar':
-      return <AvatarPreview />
-    case 'badge':
-      return <BadgePreview />
-    case 'bar-chart':
-      return <BarChartPreview />
-    case 'blog-card':
-      return <BlogCardPreview />
-    case 'breadcrumb':
-      return <BreadcrumbPreview />
-    case 'button':
-      return <ButtonPreview />
-    case 'callout':
-      return <CalloutPreview />
-    case 'calendar':
-      return <CalendarPreview />
-    case 'card':
-      return <CardPreview />
-    case 'carousel':
-      return <CarouselPreview />
-    case 'category-filter':
-      return <CategoryFilterPreview />
-    case 'checkbox':
-      return <CheckboxPreview />
-    case 'collapsible':
-      return <CollapsiblePreview />
-    case 'checklist':
-      return <ChecklistPreview />
-    case 'code-block':
-      return <CodeBlockPreview />
-    case 'code-playground':
-      return <CodePlaygroundPreview />
-    case 'command':
-      return <CommandPreview />
-    case 'comparison':
-      return <ComparisonPreview />
-    case 'completion-dialog':
+    case "accordion":
+      return <AccordionPreview />;
+    case "alert":
+      return <AlertPreview />;
+    case "alert-dialog":
+      return <AlertDialogPreview />;
+    case "area-chart":
+      return <AreaChartPreview />;
+    case "aspect-ratio":
+      return <AspectRatioPreview />;
+    case "avatar":
+      return <AvatarPreview />;
+    case "badge":
+      return <BadgePreview />;
+    case "bar-chart":
+      return <BarChartPreview />;
+    case "blog-card":
+      return <BlogCardPreview />;
+    case "breadcrumb":
+      return <BreadcrumbPreview />;
+    case "button":
+      return <ButtonPreview />;
+    case "callout":
+      return <CalloutPreview />;
+    case "calendar":
+      return <CalendarPreview />;
+    case "card":
+      return <CardPreview />;
+    case "carousel":
+      return <CarouselPreview />;
+    case "category-filter":
+      return <CategoryFilterPreview />;
+    case "checkbox":
+      return <CheckboxPreview />;
+    case "collapsible":
+      return <CollapsiblePreview />;
+    case "checklist":
+      return <ChecklistPreview />;
+    case "code-block":
+      return <CodeBlockPreview />;
+    case "code-playground":
+      return <CodePlaygroundPreview />;
+    case "command":
+      return <CommandPreview />;
+    case "comparison":
+      return <ComparisonPreview />;
+    case "completion-dialog":
       return (
         <SimplePreview description="A dialog for displaying completion status with confetti animation." />
-      )
-    case 'content-intro':
+      );
+    case "content-intro":
       return (
         <SimplePreview description="An introduction section with progress tracking and action buttons." />
-      )
-    case 'context-menu':
-      return <ContextMenuPreview />
-    case 'dialog':
-      return <DialogPreview />
-    case 'drawer':
-      return <DrawerPreview />
-    case 'dropdown-menu':
-      return <DropdownMenuPreview />
-    case 'exercise':
-      return <ExercisePreview />
-    case 'faq':
-      return <FAQPreview />
-    case 'filter-bar':
-      return <SimplePreview description="A filter bar with search, sort, and filter controls." />
-    case 'floating-action-button':
-      return <FloatingActionButtonPreview />
-    case 'hover-card':
-      return <HoverCardPreview />
-    case 'inline-input':
-      return <InlineInputPreview />
-    case 'input':
-      return <InputPreview />
-    case 'input-otp':
-      return <InputOTPPreview />
-    case 'key-concept':
-      return <KeyConceptPreview />
-    case 'keyboard-shortcuts-help':
-      return <KeyboardShortcutsHelpPreview />
-    case 'lang-provider':
-      return <LangProviderPreview />
-    case 'learning-objectives':
-      return <LearningObjectivesPreview />
-    case 'line-chart':
-      return <LineChartPreview />
-    case 'mdx-content':
-      return <MDXContentPreview />
-    case 'menubar':
-      return <MenubarPreview />
-    case 'model-selector':
+      );
+    case "context-menu":
+      return <ContextMenuPreview />;
+    case "dialog":
+      return <DialogPreview />;
+    case "drawer":
+      return <DrawerPreview />;
+    case "dropdown-menu":
+      return <DropdownMenuPreview />;
+    case "exercise":
+      return <ExercisePreview />;
+    case "faq":
+      return <FAQPreview />;
+    case "filter-bar":
+      return (
+        <SimplePreview description="A filter bar with search, sort, and filter controls." />
+      );
+    case "floating-action-button":
+      return <FloatingActionButtonPreview />;
+    case "hover-card":
+      return <HoverCardPreview />;
+    case "inline-input":
+      return <InlineInputPreview />;
+    case "input":
+      return <InputPreview />;
+    case "input-otp":
+      return <InputOTPPreview />;
+    case "key-concept":
+      return <KeyConceptPreview />;
+    case "keyboard-shortcuts-help":
+      return <KeyboardShortcutsHelpPreview />;
+    case "lang-provider":
+      return <LangProviderPreview />;
+    case "learning-objectives":
+      return <LearningObjectivesPreview />;
+    case "line-chart":
+      return <LineChartPreview />;
+    case "mdx-content":
+      return <MDXContentPreview />;
+    case "menubar":
+      return <MenubarPreview />;
+    case "model-selector":
       return (
         <SimplePreview description="A dialog for selecting AI models with search and filtering." />
-      )
-    case 'navbar-saas':
-      return <SimplePreview description="A responsive navigation bar for SaaS applications." />
-    case 'navigation-menu':
-      return <NavigationMenuPreview />
-    case 'pagination':
-      return <PaginationPreview />
-    case 'popover':
-      return <PopoverPreview />
-    case 'pro-tip':
-      return <ProTipPreview />
-    case 'profile-section':
-      return <ProfileSectionPreview />
-    case 'progress-bar':
-      return <ProgressBarPreview />
-    case 'progress-card':
-      return <SimplePreview description="A card component with progress tracking." />
-    case 'quiz':
-      return <QuizPreview />
-    case 'radio-group':
-      return <RadioGroupPreview />
-    case 'resizable':
-      return <ResizablePreview />
-    case 'scroll-area':
-      return <ScrollAreaPreview />
-    case 'search-bar':
-      return <SearchBarPreview />
-    case 'search-dialog':
-      return <SimplePreview description="A command palette style search dialog." />
-    case 'select':
-      return <SelectPreview />
-    case 'separator':
-      return <SeparatorPreview />
-    case 'share-section':
-      return <ShareSectionPreview />
-    case 'sheet':
-      return <SheetPreview />
-    case 'sidebar':
-      return <SidebarPreview />
-    case 'skeleton':
-      return <SkeletonPreview />
-    case 'slider':
-      return <SliderPreview />
-    case 'spinner':
-      return <SpinnerPreview />
-    case 'sidebar-provider':
-      return <SidebarProviderPreview />
-    case 'sidebar-toggle':
-      return <SidebarTogglePreview />
-    case 'slideshow':
-      return <SimplePreview description="A slideshow with keyboard navigation and progress." />
-    case 'step-by-step':
-      return <StepByStepPreview />
-    case 'step-navigation':
-      return <StepNavigationPreview />
-    case 'table-of-contents':
-      return <TableOfContentsPreview />
-    case 'table-of-contents-panel':
-      return <SimplePreview description="A table of contents panel with progress tracking." />
-    case 'table':
-      return <TablePreview />
-    case 'tabs':
-      return <TabsPreview />
-    case 'terminal':
-      return <TerminalPreview />
-    case 'textarea':
-      return <TextareaPreview />
-    case 'theme-provider':
-      return <ThemeProviderPreview />
-    case 'theme-toggle':
-      return <ThemeTogglePreview />
-    case 'thinking-block':
-      return <ThinkingBlockPreview />
-    case 'tldr-section':
-      return <TLDRSectionPreview />
-    case 'toast':
-      return <ToastPreview />
-    case 'toggle':
-      return <TogglePreview />
-    case 'toggle-group':
-      return <ToggleGroupPreview />
-    case 'tooltip':
-      return <TooltipPreview />
-    case 'tutorial-card':
-      return <TutorialCardPreview />
-    case 'tutorial-complete':
+      );
+    case "navbar-saas":
+      return (
+        <SimplePreview description="A responsive navigation bar for SaaS applications." />
+      );
+    case "navigation-menu":
+      return <NavigationMenuPreview />;
+    case "pagination":
+      return <PaginationPreview />;
+    case "popover":
+      return <PopoverPreview />;
+    case "pro-tip":
+      return <ProTipPreview />;
+    case "profile-section":
+      return <ProfileSectionPreview />;
+    case "progress-bar":
+      return <ProgressBarPreview />;
+    case "progress-card":
+      return (
+        <SimplePreview description="A card component with progress tracking." />
+      );
+    case "quiz":
+      return <QuizPreview />;
+    case "radio-group":
+      return <RadioGroupPreview />;
+    case "resizable":
+      return <ResizablePreview />;
+    case "scroll-area":
+      return <ScrollAreaPreview />;
+    case "search-bar":
+      return <SearchBarPreview />;
+    case "search-dialog":
+      return (
+        <SimplePreview description="A command palette style search dialog." />
+      );
+    case "select":
+      return <SelectPreview />;
+    case "separator":
+      return <SeparatorPreview />;
+    case "share-section":
+      return <ShareSectionPreview />;
+    case "sheet":
+      return <SheetPreview />;
+    case "sidebar":
+      return <SidebarPreview />;
+    case "skeleton":
+      return <SkeletonPreview />;
+    case "slider":
+      return <SliderPreview />;
+    case "spinner":
+      return <SpinnerPreview />;
+    case "sidebar-provider":
+      return <SidebarProviderPreview />;
+    case "sidebar-toggle":
+      return <SidebarTogglePreview />;
+    case "slideshow":
+      return (
+        <SimplePreview description="A slideshow with keyboard navigation and progress." />
+      );
+    case "step-by-step":
+      return <StepByStepPreview />;
+    case "step-navigation":
+      return <StepNavigationPreview />;
+    case "table-of-contents":
+      return <TableOfContentsPreview />;
+    case "table-of-contents-panel":
+      return (
+        <SimplePreview description="A table of contents panel with progress tracking." />
+      );
+    case "table":
+      return <TablePreview />;
+    case "tabs":
+      return <TabsPreview />;
+    case "terminal":
+      return <TerminalPreview />;
+    case "textarea":
+      return <TextareaPreview />;
+    case "theme-provider":
+      return <ThemeProviderPreview />;
+    case "theme-toggle":
+      return <ThemeTogglePreview />;
+    case "thinking-block":
+      return <ThinkingBlockPreview />;
+    case "tldr-section":
+      return <TLDRSectionPreview />;
+    case "toast":
+      return <ToastPreview />;
+    case "toggle":
+      return <TogglePreview />;
+    case "toggle-group":
+      return <ToggleGroupPreview />;
+    case "tooltip":
+      return <TooltipPreview />;
+    case "tutorial-card":
+      return <TutorialCardPreview />;
+    case "tutorial-complete":
       return (
         <SimplePreview description="A completion screen with achievements and related content." />
-      )
-    case 'tutorial-filters':
-      return <SimplePreview description="Filter controls for tutorial listings." />
-    case 'tutorial-intro-content':
+      );
+    case "tutorial-filters":
+      return (
+        <SimplePreview description="Filter controls for tutorial listings." />
+      );
+    case "tutorial-intro-content":
       return (
         <SimplePreview description="An introduction component for tutorials with objectives." />
-      )
-    case 'tutorial-mdx':
-      return <SimplePreview description="MDX components optimized for tutorial content." />
-    case 'video-embed':
-      return <VideoEmbedPreview />
+      );
+    case "tutorial-mdx":
+      return (
+        <SimplePreview description="MDX components optimized for tutorial content." />
+      );
+    case "video-embed":
+      return <VideoEmbedPreview />;
     default:
-      return <div className="text-muted-foreground">Preview not available</div>
+      return <div className="text-muted-foreground">Preview not available</div>;
   }
 }

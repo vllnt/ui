@@ -1,4 +1,4 @@
-import { react } from '@vllnt/eslint'
+import { react } from '@vllnt/eslint-config'
 
 export default [
   {

@@ -1,217 +1,226 @@
-import { readFile } from 'node:fs/promises'
-import path from 'node:path'
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
-import { ExternalLink } from 'lucide-react'
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { CodeBlock, MDXContent, Sidebar, TableOfContents } from "@vllnt/ui";
+import { ExternalLink } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-import { CodeBlock, MDXContent, Sidebar, TableOfContents } from '@vllnt/ui'
-
-import { ComponentPreview } from '@/components/component-preview'
-import { QuickAdd } from '@/components/quick-add'
-import { getCategoryForComponent, getSidebarSections } from '@/lib/sidebar-sections'
-import registryData from '@/registry.json'
-import type { Registry, RegistryComponent } from '@/types/registry'
+import { ComponentPreview } from "@/components/component-preview";
+import { QuickAdd } from "@/components/quick-add";
+import {
+  getCategoryForComponent,
+  getSidebarSections,
+} from "@/lib/sidebar-sections";
+import registryData from "@/registry.json";
+import type { Registry, RegistryComponent } from "@/types/registry";
 
 type Props = {
-  params: Promise<{ slug: string }>
-}
+  params: Promise<{ slug: string }>;
+};
 
-const registry = registryData as Registry
+const registry = registryData as Registry;
 
 export async function generateStaticParams() {
   return registry.items
-    .filter((item): item is RegistryComponent => item.type === 'registry:component')
+    .filter(
+      (item): item is RegistryComponent => item.type === "registry:component",
+    )
     .map((item) => ({
       slug: item.name,
-    }))
+    }));
 }
 
 function getNpmUrl(packageName: string): string {
-  return `https://www.npmjs.com/package/${packageName}`
+  return `https://www.npmjs.com/package/${packageName}`;
 }
 
 function parseFrontmatter(content: string): {
-  content: string
-  metadata: Record<string, string>
+  content: string;
+  metadata: Record<string, string>;
 } {
-  const frontmatterRegex = /^---\s*\n([\S\s]*?)\n---\s*\n([\S\s]*)$/
-  const match = frontmatterRegex.exec(content)
+  const frontmatterRegex = /^---\s*\n([\S\s]*?)\n---\s*\n([\S\s]*)$/;
+  const match = frontmatterRegex.exec(content);
 
   if (!match?.[1] || !match[2]) {
-    return { content, metadata: {} }
+    return { content, metadata: {} };
   }
 
-  const yamlContent = match[1]
-  const bodyContent = match[2]
+  const yamlContent = match[1];
+  const bodyContent = match[2];
 
-  const metadata: Record<string, string> = {}
-  yamlContent.split('\n').forEach((line) => {
-    const colonIndex = line.indexOf(':')
+  const metadata: Record<string, string> = {};
+  yamlContent.split("\n").forEach((line) => {
+    const colonIndex = line.indexOf(":");
     if (colonIndex > 0) {
-      const key = line.slice(0, colonIndex).trim()
+      const key = line.slice(0, colonIndex).trim();
       const value = line
         .slice(colonIndex + 1)
         .trim()
-        .replaceAll(/^["']|["']$/g, '')
-      metadata[key] = value
+        .replaceAll(/^["']|["']$/g, "");
+      metadata[key] = value;
     }
-  })
+  });
 
-  return { content: bodyContent, metadata }
+  return { content: bodyContent, metadata };
 }
 
 function getComponentDirectory(component: RegistryComponent): string {
   if (component.files[0]?.path) {
-    const componentFilePath = path.join(process.cwd(), component.files[0].path)
-    return path.dirname(componentFilePath)
+    const componentFilePath = path.join(process.cwd(), component.files[0].path);
+    return path.dirname(componentFilePath);
   }
-  return path.join(process.cwd(), 'registry', 'default', component.name)
+  return path.join(process.cwd(), "registry", "default", component.name);
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { slug } = await props.params
+  const { slug } = await props.params;
   const component = registry.items.find(
-    (item): item is RegistryComponent => item.name === slug && item.type === 'registry:component',
-  )
+    (item): item is RegistryComponent =>
+      item.name === slug && item.type === "registry:component",
+  );
 
   if (!component) {
-    return {}
+    return {};
   }
 
-  const componentDirectory = getComponentDirectory(component)
-  const headerPath = path.join(componentDirectory, 'header.mdx')
+  const componentDirectory = getComponentDirectory(component);
+  const headerPath = path.join(componentDirectory, "header.mdx");
 
   try {
-    const headerContent = await readFile(headerPath, 'utf8')
-    const { metadata } = parseFrontmatter(headerContent)
+    const headerContent = await readFile(headerPath, "utf8");
+    const { metadata } = parseFrontmatter(headerContent);
 
     return {
       description: metadata.description || component.description,
       openGraph: {
         description: metadata.description || component.description,
         title: metadata.title || component.title,
-        type: 'website',
+        type: "website",
       },
       title: metadata.title || `${component.title} - VLLNT UI`,
       twitter: {
-        card: 'summary_large_image',
+        card: "summary_large_image",
         description: metadata.description || component.description,
         title: metadata.title || component.title,
       },
-    }
+    };
   } catch {
     return {
       description: component.description,
       title: `${component.title} - VLLNT UI`,
-    }
+    };
   }
 }
 
 export default async function ComponentPage(props: Props) {
-  const { slug } = await props.params
+  const { slug } = await props.params;
   const component = registry.items.find(
-    (item): item is RegistryComponent => item.name === slug && item.type === 'registry:component',
-  )
+    (item): item is RegistryComponent =>
+      item.name === slug && item.type === "registry:component",
+  );
 
   if (!component) {
-    notFound()
+    notFound();
   }
 
   // Read component file for code display - use actual source from @vllnt/ui
-  let componentCode = ''
+  let componentCode = "";
   try {
     // Map component name to actual source file path in packages/ui/src/components
     // Chart components are in chart/ subdirectory: packages/ui/src/components/chart/{name}.tsx
-    const isChartComponent = ['area-chart', 'bar-chart', 'line-chart'].includes(component.name)
+    const isChartComponent = ["area-chart", "bar-chart", "line-chart"].includes(
+      component.name,
+    );
 
     if (isChartComponent) {
       const chartPath = path.join(
         process.cwd(),
-        '..',
-        '..',
-        'packages',
-        'ui',
-        'src',
-        'components',
-        'chart',
+        "..",
+        "..",
+        "packages",
+        "ui",
+        "src",
+        "components",
+        "chart",
         `${component.name}.tsx`,
-      )
-      componentCode = await readFile(chartPath, 'utf8')
+      );
+      componentCode = await readFile(chartPath, "utf8");
     } else {
       // Most components are in subdirectories: packages/ui/src/components/{name}/{name}.tsx
       const subdirectoryPath = path.join(
         process.cwd(),
-        '..',
-        '..',
-        'packages',
-        'ui',
-        'src',
-        'components',
+        "..",
+        "..",
+        "packages",
+        "ui",
+        "src",
+        "components",
         component.name,
         `${component.name}.tsx`,
-      )
+      );
 
       // Try reading from subdirectory first (most components)
       try {
-        componentCode = await readFile(subdirectoryPath, 'utf8')
+        componentCode = await readFile(subdirectoryPath, "utf8");
       } catch {
         // Fallback to direct file (e.g., theme-provider.tsx)
         const directPath = path.join(
           process.cwd(),
-          '..',
-          '..',
-          'packages',
-          'ui',
-          'src',
-          'components',
+          "..",
+          "..",
+          "packages",
+          "ui",
+          "src",
+          "components",
           `${component.name}.tsx`,
-        )
-        componentCode = await readFile(directPath, 'utf8')
+        );
+        componentCode = await readFile(directPath, "utf8");
       }
     }
   } catch (error) {
-    console.error('Error reading component source file:', error)
+    console.error("Error reading component source file:", error);
   }
 
-  const componentDirectory = getComponentDirectory(component)
+  const componentDirectory = getComponentDirectory(component);
 
   // Read header.mdx for title, description, and SEO metadata
-  let headerContent = ''
-  let headerMetadata: Record<string, string> = {}
+  let headerContent = "";
+  let headerMetadata: Record<string, string> = {};
   try {
-    const headerPath = path.join(componentDirectory, 'header.mdx')
-    const headerRaw = await readFile(headerPath, 'utf8')
-    const parsed = parseFrontmatter(headerRaw)
-    headerContent = parsed.content
-    headerMetadata = parsed.metadata
+    const headerPath = path.join(componentDirectory, "header.mdx");
+    const headerRaw = await readFile(headerPath, "utf8");
+    const parsed = parseFrontmatter(headerRaw);
+    headerContent = parsed.content;
+    headerMetadata = parsed.metadata;
   } catch {
     // Header file is optional, fallback to registry defaults
   }
 
   // Read example.mdx for usage examples
-  let exampleContent = ''
+  let exampleContent = "";
   try {
-    const examplePath = path.join(componentDirectory, 'example.mdx')
-    exampleContent = await readFile(examplePath, 'utf8')
+    const examplePath = path.join(componentDirectory, "example.mdx");
+    exampleContent = await readFile(examplePath, "utf8");
   } catch {
     // Example file is optional, ignore if it doesn't exist
   }
 
-  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`
+  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
 
   const sections = [
-    { id: 'installation', title: 'Installation' },
-    ...(exampleContent ? [{ id: 'usage', title: 'Usage' }] : []),
-    ...(componentCode ? [{ id: 'code', title: 'Code' }] : []),
+    { id: "installation", title: "Installation" },
+    ...(exampleContent ? [{ id: "usage", title: "Usage" }] : []),
+    ...(componentCode ? [{ id: "code", title: "Code" }] : []),
     ...(component.dependencies && component.dependencies.length > 0
-      ? [{ id: 'dependencies', title: 'Dependencies' }]
+      ? [{ id: "dependencies", title: "Dependencies" }]
       : []),
-  ] as { id: string; title: string }[]
+  ] as { id: string; title: string }[];
 
-  const displayTitle = headerMetadata.title || component.title
-  const displayDescription = headerContent || headerMetadata.description || component.description
+  const displayTitle = headerMetadata.title || component.title;
+  const displayDescription =
+    headerContent || headerMetadata.description || component.description;
 
   return (
     <>
@@ -230,7 +239,9 @@ export default async function ComponentPage(props: Props) {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-muted-foreground text-lg mb-6">{displayDescription}</p>
+                  <p className="text-muted-foreground text-lg mb-6">
+                    {displayDescription}
+                  </p>
                 )}
                 <QuickAdd componentName={component.name} />
               </div>
@@ -277,10 +288,12 @@ export default async function ComponentPage(props: Props) {
                   <div className="rounded-lg border bg-card p-6">
                     <ul className="space-y-2">
                       {component.dependencies.map((dep) => {
-                        const npmUrl = getNpmUrl(dep)
+                        const npmUrl = getNpmUrl(dep);
                         return (
                           <li className="flex items-center gap-2" key={dep}>
-                            <code className="bg-muted px-2 py-1 rounded text-sm">{dep}</code>
+                            <code className="bg-muted px-2 py-1 rounded text-sm">
+                              {dep}
+                            </code>
                             <Link
                               className="text-muted-foreground hover:text-foreground transition-colors"
                               href={npmUrl}
@@ -290,7 +303,7 @@ export default async function ComponentPage(props: Props) {
                               <ExternalLink className="h-3 w-3" />
                             </Link>
                           </li>
-                        )
+                        );
                       })}
                     </ul>
                   </div>
@@ -304,5 +317,5 @@ export default async function ComponentPage(props: Props) {
         </div>
       </main>
     </>
-  )
+  );
 }

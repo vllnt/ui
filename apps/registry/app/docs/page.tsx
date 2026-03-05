@@ -1,6 +1,6 @@
-import { MDXContent, Sidebar } from '@vllnt/ui'
+import { MDXContent, Sidebar } from "@vllnt/ui";
 
-import { getSidebarSections } from '@/lib/sidebar-sections'
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 export default async function DocumentationPage() {
   const gettingStarted = `# Getting Started
@@ -26,7 +26,7 @@ export function MyComponent() {
   return <Button>Click me</Button>
 }
 \`\`\`
-`
+`;
 
   return (
     <>
@@ -48,5 +48,5 @@ export function MyComponent() {
         </div>
       </main>
     </>
-  )
+  );
 }
