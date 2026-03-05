@@ -4,7 +4,7 @@
 /**
  * Difficulty levels for educational content
  */
-export type DifficultyLevel = 'advanced' | 'beginner' | 'intermediate'
+export type DifficultyLevel = "advanced" | "beginner" | "intermediate";
 
 /**
  * Generic content section extracted from MDX/Markdown
@@ -12,69 +12,70 @@ export type DifficultyLevel = 'advanced' | 'beginner' | 'intermediate'
  */
 export type ContentSection = {
   /** Raw markdown/MDX content for this section */
-  content: string
+  content: string;
   /** First paragraph excerpt for previews */
-  description: string
+  description: string;
   /** Line number where section ends (for source mapping) */
-  endLine: number
+  endLine: number;
   /** URL-safe slug identifier */
-  id: string
+  id: string;
   /** 0-based position in content */
-  index: number
+  index: number;
   /** Line number where section starts (for source mapping) */
-  startLine: number
+  startLine: number;
   /** Section heading text */
-  title: string
-}
+  title: string;
+};
 
 /**
  * Minimal section for UI components (no source mapping)
  */
 export type ContentSectionMinimal = {
-  id: string
-  title: string
-}
+  id: string;
+  title: string;
+};
 
 /**
  * Progress tracking for content sections
  */
 export type ContentProgress = {
-  completedCount: number
-  totalSections: number
-}
+  completedCount: number;
+  totalSections: number;
+};
 
 /**
  * Generic content metadata for cards/listings
  */
 export type ContentMeta = {
   /** Cross-language content identifier */
-  contentId: string
+  contentId: string;
   /** Publication date (ISO format) */
-  date: string
+  date: string;
   /** Short description */
-  description: string
+  description: string;
   /** Difficulty level */
-  difficulty: DifficultyLevel
+  difficulty: DifficultyLevel;
   /** Estimated completion time (e.g., "45 min") */
-  estimatedTime: string
+  estimatedTime: string;
   /** Optional excerpt */
-  excerpt?: string
+  excerpt?: string;
   /** Number of sections */
-  sectionCount: number
+  sectionCount: number;
   /** URL slug */
-  slug: string
+  slug: string;
   /** Content tags */
-  tags: string[]
+  tags: string[];
   /** Content title */
-  title: string
-}
+  title: string;
+};
 
 /**
  * Full content with sections
  */
-export type Content<TSection extends ContentSectionMinimal = ContentSection> = ContentMeta & {
-  /** Full MDX/Markdown content */
-  content: string
-  /** Extracted sections */
-  sections: TSection[]
-}
+export type Content<TSection extends ContentSectionMinimal = ContentSection> =
+  ContentMeta & {
+    /** Full MDX/Markdown content */
+    content: string;
+    /** Extracted sections */
+    sections: TSection[];
+  };

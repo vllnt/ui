@@ -1,44 +1,60 @@
-'use client'
+"use client";
 
-import { lazy, memo, Suspense, use, useMemo } from 'react'
+import { lazy, memo, Suspense, use, useMemo } from "react";
 
-import { evaluate } from '@mdx-js/mdx'
-import * as runtime from 'react/jsx-runtime'
-import ReactMarkdown, { type Components } from 'react-markdown'
+import { evaluate } from "@mdx-js/mdx";
+import * as runtime from "react/jsx-runtime";
+import ReactMarkdown, { type Components } from "react-markdown";
 
-import { cn } from '../../lib/utils'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../accordion'
-import { Callout } from '../callout'
-import { Checklist } from '../checklist'
-import { CodePlayground, FileTree } from '../code-playground'
-import { BeforeAfter, Comparison } from '../comparison'
-import { Exercise } from '../exercise'
-import { FAQ, FAQItem } from '../faq'
-import { Glossary, KeyConcept } from '../key-concept'
-import { LearningObjectives, Prerequisites, Summary } from '../learning-objectives'
-import { CommonMistake, ProTip } from '../pro-tip'
-import { Quiz } from '../quiz'
-import { Step, StepByStep } from '../step-by-step'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../tabs'
-import { SimpleTerminal, Terminal } from '../terminal'
-import { VideoEmbed } from '../video-embed'
+import { cn } from "../../lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../accordion";
+import { Callout } from "../callout";
+import { Checklist } from "../checklist";
+import { CodePlayground, FileTree } from "../code-playground";
+import { BeforeAfter, Comparison } from "../comparison";
+import { Exercise } from "../exercise";
+import { FAQ, FAQItem } from "../faq";
+import { Glossary, KeyConcept } from "../key-concept";
+import {
+  LearningObjectives,
+  Prerequisites,
+  Summary,
+} from "../learning-objectives";
+import { CommonMistake, ProTip } from "../pro-tip";
+import { Quiz } from "../quiz";
+import { Step, StepByStep } from "../step-by-step";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
+import { SimpleTerminal, Terminal } from "../terminal";
+import { VideoEmbed } from "../video-embed";
 
 // Lazy load FlowDiagram to avoid loading @xyflow/react (~185KB) on every page
 const LazyFlowDiagram = lazy(() =>
-  import('../flow-diagram').then((module_) => ({ default: module_.FlowDiagram })),
-)
+  import("../flow-diagram").then((module_) => ({
+    default: module_.FlowDiagram,
+  })),
+);
 
 // Wrapper component with Suspense fallback for FlowDiagram
-function FlowDiagramWithSuspense(props: React.ComponentProps<typeof LazyFlowDiagram>) {
+function FlowDiagramWithSuspense(
+  props: React.ComponentProps<typeof LazyFlowDiagram>,
+) {
   return (
     <Suspense
       fallback={
-        <div aria-label="Loading diagram..." className="h-96 bg-muted animate-pulse rounded-lg" />
+        <div
+          aria-label="Loading diagram..."
+          className="h-96 bg-muted animate-pulse rounded-lg"
+        />
       }
     >
       <LazyFlowDiagram {...props} />
     </Suspense>
-  )
+  );
 }
 
 // MDX component map - all available components for tutorials
@@ -74,7 +90,7 @@ const mdxComponents = {
   TabsTrigger,
   Terminal,
   VideoEmbed,
-}
+};
 
 // Base markdown components for styling
 const markdownComponents: Components = {
@@ -96,19 +112,22 @@ const markdownComponents: Components = {
     </blockquote>
   ),
   code: ({ children, className, ...props }) => {
-    const isBlock = className?.includes('language-')
+    const isBlock = className?.includes("language-");
     if (isBlock) {
       return (
-        <code className={cn('font-mono text-sm', className)} {...props}>
+        <code className={cn("font-mono text-sm", className)} {...props}>
           {children}
         </code>
-      )
+      );
     }
     return (
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
+      <code
+        className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono"
+        {...props}
+      >
         {children}
       </code>
-    )
+    );
   },
   h1: ({ children, ...props }) => (
     <h1 className="text-2xl font-bold mt-8 mb-4" {...props}>
@@ -132,7 +151,10 @@ const markdownComponents: Components = {
   ),
   hr: ({ ...props }) => <hr className="my-8 border-border" {...props} />,
   li: ({ children, ...props }) => (
-    <li className="mb-2 leading-relaxed text-muted-foreground text-sm pl-2" {...props}>
+    <li
+      className="mb-2 leading-relaxed text-muted-foreground text-sm pl-2"
+      {...props}
+    >
       {children}
     </li>
   ),
@@ -145,7 +167,10 @@ const markdownComponents: Components = {
     </ol>
   ),
   p: ({ children, ...props }) => (
-    <p className="mb-4 leading-relaxed text-muted-foreground text-sm" {...props}>
+    <p
+      className="mb-4 leading-relaxed text-muted-foreground text-sm"
+      {...props}
+    >
       {children}
     </p>
   ),
@@ -175,7 +200,10 @@ const markdownComponents: Components = {
     </td>
   ),
   th: ({ children, ...props }) => (
-    <th className="border border-border bg-muted p-2 text-left font-medium text-sm" {...props}>
+    <th
+      className="border border-border bg-muted p-2 text-left font-medium text-sm"
+      {...props}
+    >
       {children}
     </th>
   ),
@@ -187,23 +215,23 @@ const markdownComponents: Components = {
       {children}
     </ul>
   ),
-}
+};
 
 // Combine all components
 const allComponents = {
   ...markdownComponents,
   ...mdxComponents,
-}
+};
 
 export type TutorialMDXProps = {
-  className?: string
-  content: string
-}
+  className?: string;
+  content: string;
+};
 
 // Check if content contains JSX components (excluding code blocks)
 function hasJSXComponents(content: string): boolean {
-  const contentWithoutCodeBlocks = content.replaceAll(/```[\S\s]*?```/g, '')
-  return /<[A-Z][A-Za-z]*[\s/>]/.test(contentWithoutCodeBlocks)
+  const contentWithoutCodeBlocks = content.replaceAll(/```[\S\s]*?```/g, "");
+  return /<[A-Z][A-Za-z]*[\s/>]/.test(contentWithoutCodeBlocks);
 }
 
 // Component that renders MDX with Suspense
@@ -215,7 +243,7 @@ function MDXWithSuspense({ className, content }: TutorialMDXProps) {
         baseUrl: import.meta.url,
       }),
     [content],
-  )
+  );
 
   return (
     <div className={className}>
@@ -223,7 +251,7 @@ function MDXWithSuspense({ className, content }: TutorialMDXProps) {
         <MDXContent mdxPromise={mdxPromise} />
       </Suspense>
     </div>
-  )
+  );
 }
 
 // Component that renders plain markdown
@@ -232,35 +260,40 @@ function MarkdownOnly({ className, content }: TutorialMDXProps) {
     <div className={className}>
       <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
     </div>
-  )
+  );
 }
 
 // Component that uses the promise
 function MDXContent({
   mdxPromise,
 }: {
-  mdxPromise: Promise<{ default: React.ComponentType<{ components: typeof allComponents }> }>
+  mdxPromise: Promise<{
+    default: React.ComponentType<{ components: typeof allComponents }>;
+  }>;
 }) {
-  const { default: Component } = use(mdxPromise)
-  return <Component components={allComponents} />
+  const { default: Component } = use(mdxPromise);
+  return <Component components={allComponents} />;
 }
 
 function MDXLoadingFallback() {
-  return <div aria-hidden="true" className="min-h-[100px]" />
+  return <div aria-hidden="true" className="min-h-[100px]" />;
 }
 
 // Main component that decides which renderer to use
-function TutorialMDXImpl({ className, content }: TutorialMDXProps): React.ReactNode {
-  const hasJSX = hasJSXComponents(content)
+function TutorialMDXImpl({
+  className,
+  content,
+}: TutorialMDXProps): React.ReactNode {
+  const hasJSX = hasJSXComponents(content);
 
   if (hasJSX) {
-    return <MDXWithSuspense className={className} content={content} />
+    return <MDXWithSuspense className={className} content={content} />;
   }
 
-  return <MarkdownOnly className={className} content={content} />
+  return <MarkdownOnly className={className} content={content} />;
 }
 
-export const TutorialMDX = memo(TutorialMDXImpl)
-TutorialMDX.displayName = 'TutorialMDX'
+export const TutorialMDX = memo(TutorialMDXImpl);
+TutorialMDX.displayName = "TutorialMDX";
 
-export { mdxComponents }
+export { mdxComponents };

@@ -1,74 +1,78 @@
-'use client'
+"use client";
 
-import { memo } from 'react'
+import { memo } from "react";
 
-import { Check, ChevronRight, RotateCcw } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { Check, ChevronRight, RotateCcw } from "lucide-react";
+import type { ReactNode } from "react";
 
-import { Button } from '../button'
-import { ProfileSection } from '../profile-section'
-import { ShareSection } from '../share-section'
+import { Button } from "../button";
+import { ProfileSection } from "../profile-section";
+import { ShareSection } from "../share-section";
 
 export type TutorialCompleteSection = {
-  id: string
-  title: string
-}
+  id: string;
+  title: string;
+};
 
 export type TutorialCompleteRelatedContent = {
-  href: string
-  title: string
-  type: string
-}
+  href: string;
+  title: string;
+  type: string;
+};
 
 export type TutorialCompleteLabels = {
-  backToTutorials: string
-  profileName: string
-  profileTagline: string
-  relatedContent: string
-  reviewSections: string
-  shareOn: string
-  shareTitle: string
-  startOver: string
-  tutorialComplete: string
-  tutorialFinished: string
-  youveCompletedAll: string
-  youveFinishedWith: string
-}
+  backToTutorials: string;
+  profileName: string;
+  profileTagline: string;
+  relatedContent: string;
+  reviewSections: string;
+  shareOn: string;
+  shareTitle: string;
+  startOver: string;
+  tutorialComplete: string;
+  tutorialFinished: string;
+  youveCompletedAll: string;
+  youveFinishedWith: string;
+};
 
 export type TutorialCompleteProps = {
-  backHref: string
-  completedSections: Set<string>
-  completionPercent: number
-  labels: TutorialCompleteLabels
+  backHref: string;
+  completedSections: Set<string>;
+  completionPercent: number;
+  labels: TutorialCompleteLabels;
   /** Link component (e.g., Next.js Link) */
-  linkComponent?: React.ComponentType<{ children: ReactNode; className?: string; href: string }>
-  onGoToSection: (index: number) => void
-  onRestart: () => void
+  linkComponent?: React.ComponentType<{
+    children: ReactNode;
+    className?: string;
+    href: string;
+  }>;
+  onGoToSection: (index: number) => void;
+  onRestart: () => void;
   /** Profile config */
   profile?: {
-    imageSource: string
-    socialLinks: { href: string; label: string }[]
-  }
-  relatedContent: TutorialCompleteRelatedContent[]
-  sections: TutorialCompleteSection[]
-  shareUrl: string
-  title: string
-}
+    imageSource: string;
+    socialLinks: { href: string; label: string }[];
+  };
+  relatedContent: TutorialCompleteRelatedContent[];
+  sections: TutorialCompleteSection[];
+  shareUrl: string;
+  title: string;
+};
 
 function DefaultLink({
   children,
   className,
   href,
 }: {
-  children: ReactNode
-  className?: string
-  href: string
+  children: ReactNode;
+  className?: string;
+  href: string;
 }): React.ReactNode {
   return (
     <a className={className} href={href}>
       {children}
     </a>
-  )
+  );
 }
 
 // eslint-disable-next-line max-lines-per-function -- Completion UI renders stats, achievements, and related content
@@ -86,7 +90,7 @@ function TutorialCompleteImpl({
   shareUrl,
   title,
 }: TutorialCompleteProps): React.ReactNode {
-  const isFullyComplete = completionPercent === 100
+  const isFullyComplete = completionPercent === 100;
 
   return (
     <div>
@@ -94,11 +98,11 @@ function TutorialCompleteImpl({
       <div className="text-center py-12">
         <div
           className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${
-            isFullyComplete ? 'bg-green-100 dark:bg-green-900/30' : 'bg-muted'
+            isFullyComplete ? "bg-green-100 dark:bg-green-900/30" : "bg-muted"
           }`}
         >
           <Check
-            className={`h-10 w-10 ${isFullyComplete ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground'}`}
+            className={`h-10 w-10 ${isFullyComplete ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}
           />
         </div>
 
@@ -123,27 +127,31 @@ function TutorialCompleteImpl({
         <h3 className="text-lg font-semibold mb-4">{labels.reviewSections}</h3>
         <div className="space-y-2">
           {sections.map((section, index) => {
-            const isCompleted = completedSections.has(section.id)
+            const isCompleted = completedSections.has(section.id);
             return (
               <button
                 className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-left"
                 key={`${section.id}-${index}`}
                 onClick={() => {
-                  onGoToSection(index)
+                  onGoToSection(index);
                 }}
                 type="button"
               >
                 <div
                   className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    isCompleted ? 'bg-foreground border-foreground' : 'border-muted-foreground'
+                    isCompleted
+                      ? "bg-foreground border-foreground"
+                      : "border-muted-foreground"
                   }`}
                 >
-                  {isCompleted ? <Check className="h-3 w-3 text-background" /> : null}
+                  {isCompleted ? (
+                    <Check className="h-3 w-3 text-background" />
+                  ) : null}
                 </div>
                 <span className="flex-1 truncate">{section.title}</span>
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </button>
-            )
+            );
           })}
         </div>
       </div>
@@ -151,7 +159,9 @@ function TutorialCompleteImpl({
       {/* Related Content */}
       {relatedContent.length > 0 ? (
         <div className="max-w-2xl mx-auto mt-12">
-          <h3 className="text-lg font-semibold mb-4">{labels.relatedContent}</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            {labels.relatedContent}
+          </h3>
           <div className="space-y-2">
             {relatedContent.map((item) => (
               <LinkComponent
@@ -208,8 +218,8 @@ function TutorialCompleteImpl({
         </LinkComponent>
       </div>
     </div>
-  )
+  );
 }
 
-export const TutorialComplete = memo(TutorialCompleteImpl)
-TutorialComplete.displayName = 'TutorialComplete'
+export const TutorialComplete = memo(TutorialCompleteImpl);
+TutorialComplete.displayName = "TutorialComplete";

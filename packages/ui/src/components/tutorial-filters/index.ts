@@ -3,4 +3,4 @@ export {
   TutorialFilters,
   type TutorialFiltersLabels,
   type TutorialFiltersProps,
-} from './tutorial-filters'
+} from "./tutorial-filters";

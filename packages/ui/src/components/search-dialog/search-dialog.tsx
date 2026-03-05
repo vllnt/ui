@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-import { Search } from 'lucide-react'
+import { Search } from "lucide-react";
 
-import { cn } from '../../lib/utils'
-import { Button } from '../button'
+import { cn } from "../../lib/utils";
+import { Button } from "../button";
 import {
   CommandDialog,
   CommandEmpty,
@@ -13,85 +13,90 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../command'
+} from "../command";
 
 type SearchItem = {
-  description?: string
-  id: string
-  keywords?: string
-  title: string
-}
+  description?: string;
+  id: string;
+  keywords?: string;
+  title: string;
+};
 
 function useKeyboardShortcut(callback: () => void) {
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
-      if ((event.key === 'k' || event.key === 'K') && (event.metaKey || event.ctrlKey)) {
-        const target = event.target as HTMLElement | null
+      if (
+        (event.key === "k" || event.key === "K") &&
+        (event.metaKey || event.ctrlKey)
+      ) {
+        const target = event.target as HTMLElement | null;
         if (
           target &&
-          (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+          (target.tagName === "INPUT" ||
+            target.tagName === "TEXTAREA" ||
+            target.isContentEditable)
         ) {
-          return
+          return;
         }
 
-        event.preventDefault()
-        event.stopPropagation()
-        event.stopImmediatePropagation()
-        callback()
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        callback();
       }
-    }
+    };
 
-    window.addEventListener('keydown', down, { capture: true, passive: false })
+    window.addEventListener("keydown", down, { capture: true, passive: false });
     return () => {
-      window.removeEventListener('keydown', down, { capture: true })
-    }
-  }, [callback])
+      window.removeEventListener("keydown", down, { capture: true });
+    };
+  }, [callback]);
 }
 
 type SearchDialogProps = {
-  buttonText?: string
-  buttonTextMobile?: string
-  emptyText?: string
-  enableKeyboardShortcut?: boolean
-  groupHeading?: string
-  items: SearchItem[]
-  onSelect: (item: SearchItem) => void
-  searchPlaceholder?: string
-}
+  buttonText?: string;
+  buttonTextMobile?: string;
+  emptyText?: string;
+  enableKeyboardShortcut?: boolean;
+  groupHeading?: string;
+  items: SearchItem[];
+  onSelect: (item: SearchItem) => void;
+  searchPlaceholder?: string;
+};
 
 export function SearchDialog({
-  buttonText = 'Search...',
-  buttonTextMobile = 'Search...',
-  emptyText = 'No results found.',
+  buttonText = "Search...",
+  buttonTextMobile = "Search...",
+  emptyText = "No results found.",
   enableKeyboardShortcut = true,
   groupHeading,
   items,
   onSelect,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder = "Search...",
 }: SearchDialogProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title))
+  const sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title));
 
   useKeyboardShortcut(() => {
     if (enableKeyboardShortcut) {
-      setOpen((previous) => !previous)
+      setOpen((previous) => !previous);
     }
-  })
+  });
 
   const handleSelect = (item: SearchItem) => {
-    setOpen(false)
-    onSelect(item)
-  }
+    setOpen(false);
+    onSelect(item);
+  };
 
   return (
     <>
       <Button
         className={cn(
-          'relative h-9 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64',
+          "relative h-9 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64",
         )}
         onClick={() => {
-          setOpen(true)
+          setOpen(true);
         }}
         variant="outline"
       >
@@ -111,14 +116,16 @@ export function SearchDialog({
               <CommandItem
                 key={item.id}
                 onSelect={() => {
-                  handleSelect(item)
+                  handleSelect(item);
                 }}
-                value={`${item.title} ${item.description || ''} ${item.keywords || ''} ${item.id}`}
+                value={`${item.title} ${item.description || ""} ${item.keywords || ""} ${item.id}`}
               >
                 <div className="flex flex-col">
                   <span className="font-medium">{item.title}</span>
                   {item.description ? (
-                    <span className="text-xs text-muted-foreground">{item.description}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {item.description}
+                    </span>
                   ) : null}
                 </div>
               </CommandItem>
@@ -127,5 +134,5 @@ export function SearchDialog({
         </CommandList>
       </CommandDialog>
     </>
-  )
+  );
 }

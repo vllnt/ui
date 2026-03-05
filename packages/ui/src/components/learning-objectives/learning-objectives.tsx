@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { CheckCircle2, Clock, GraduationCap, Target } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { CheckCircle2, Clock, GraduationCap, Target } from "lucide-react";
+import type { ReactNode } from "react";
 
 export type LearningObjectivesProps = {
-  estimatedTime?: string
-  objectives: string[]
-  title?: string
-}
+  estimatedTime?: string;
+  objectives: string[];
+  title?: string;
+};
 
 export function LearningObjectives({
   estimatedTime,
@@ -37,16 +37,20 @@ export function LearningObjectives({
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 export type PrerequisitesProps = {
-  items: string[]
-  level?: 'advanced' | 'beginner' | 'intermediate'
-  title?: string
-}
+  items: string[];
+  level?: "advanced" | "beginner" | "intermediate";
+  title?: string;
+};
 
-export function Prerequisites({ items, level, title = 'Prerequisites' }: PrerequisitesProps) {
+export function Prerequisites({
+  items,
+  level,
+  title = "Prerequisites",
+}: PrerequisitesProps) {
   return (
     <div className="my-6 rounded-lg border bg-muted/30 p-6">
       <div className="flex items-center justify-between mb-4">
@@ -62,23 +66,30 @@ export function Prerequisites({ items, level, title = 'Prerequisites' }: Prerequ
       </div>
       <ul className="space-y-2">
         {items.map((item, index) => (
-          <li className="flex items-start gap-2 text-sm text-muted-foreground" key={index}>
+          <li
+            className="flex items-start gap-2 text-sm text-muted-foreground"
+            key={index}
+          >
             <span className="text-primary">•</span>
             {item}
           </li>
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 export type SummaryProps = {
-  children: ReactNode
-  keyTakeaways?: string[]
-  title?: string
-}
+  children: ReactNode;
+  keyTakeaways?: string[];
+  title?: string;
+};
 
-export function Summary({ children, keyTakeaways, title = 'Summary' }: SummaryProps) {
+export function Summary({
+  children,
+  keyTakeaways,
+  title = "Summary",
+}: SummaryProps) {
   return (
     <div className="my-6 rounded-lg border bg-muted/30 p-6">
       <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -102,5 +113,5 @@ export function Summary({ children, keyTakeaways, title = 'Summary' }: SummaryPr
         </div>
       ) : null}
     </div>
-  )
+  );
 }

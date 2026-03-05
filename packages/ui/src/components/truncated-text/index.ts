@@ -1,1 +1,1 @@
-export { TruncatedText, type TruncatedTextProps } from './truncated-text'
+export { TruncatedText, type TruncatedTextProps } from "./truncated-text";

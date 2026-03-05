@@ -1,28 +1,28 @@
-'use client'
+"use client";
 
-import { Menu, X } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import type { ReactNode } from 'react'
+import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
 
-import { cn } from '../../lib/utils'
-import { Button } from '../button'
-import { useSidebar } from '../sidebar-provider'
-import { ThemeToggle } from '../theme-toggle'
+import { cn } from "../../lib/utils";
+import { Button } from "../button";
+import { useSidebar } from "../sidebar-provider";
+import { ThemeToggle } from "../theme-toggle";
 
-import { useMobile } from './use-mobile'
+import { useMobile } from "./use-mobile";
 
 export type NavItem = {
-  href: string
-  title: string
-}
+  href: string;
+  title: string;
+};
 
 export type NavbarSaasProps = {
-  brand?: ReactNode
-  navItems?: NavItem[]
-  rightSlot?: ReactNode
-  showMobileMenu?: boolean
-}
+  brand?: ReactNode;
+  navItems?: NavItem[];
+  rightSlot?: ReactNode;
+  showMobileMenu?: boolean;
+};
 
 export function NavbarSaas({
   brand,
@@ -30,9 +30,9 @@ export function NavbarSaas({
   rightSlot,
   showMobileMenu = true,
 }: NavbarSaasProps) {
-  const pathname = usePathname()
-  const { open, setOpen } = useSidebar()
-  const isMobile = useMobile()
+  const pathname = usePathname();
+  const { open, setOpen } = useSidebar();
+  const isMobile = useMobile();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
@@ -43,16 +43,20 @@ export function NavbarSaas({
               <Button
                 className="lg:hidden"
                 onClick={() => {
-                  setOpen(!open)
+                  setOpen(!open);
                 }}
                 size="icon"
                 variant="ghost"
               >
-                {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                {open ? (
+                  <X className="h-4 w-4" />
+                ) : (
+                  <Menu className="h-4 w-4" />
+                )}
               </Button>
             ) : null}
             {brand ? (
-              typeof brand === 'string' ? (
+              typeof brand === "string" ? (
                 <Link className="text-xl font-bold truncate" href="/">
                   {brand}
                 </Link>
@@ -65,8 +69,10 @@ export function NavbarSaas({
                 {navItems.map((item) => (
                   <Link
                     className={cn(
-                      'text-sm font-medium transition-colors hover:text-foreground/80',
-                      pathname === item.href ? 'text-foreground' : 'text-foreground/60',
+                      "text-sm font-medium transition-colors hover:text-foreground/80",
+                      pathname === item.href
+                        ? "text-foreground"
+                        : "text-foreground/60",
                     )}
                     href={item.href}
                     key={item.href}
@@ -82,10 +88,10 @@ export function NavbarSaas({
             <ThemeToggle
               dict={{
                 theme: {
-                  dark: 'Dark',
-                  light: 'Light',
-                  system: 'System',
-                  toggle_theme: 'Toggle theme',
+                  dark: "Dark",
+                  light: "Light",
+                  system: "System",
+                  toggle_theme: "Toggle theme",
                 },
               }}
             />
@@ -93,5 +99,5 @@ export function NavbarSaas({
         </div>
       </div>
     </header>
-  )
+  );
 }

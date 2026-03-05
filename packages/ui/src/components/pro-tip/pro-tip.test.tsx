@@ -1,28 +1,30 @@
-import { render } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-import { ProTip } from './pro-tip'
+import { ProTip } from "./pro-tip";
 
-describe('ProTip', () => {
-  describe('rendering', () => {
-    it('renders correctly', () => {
-      const { container } = render(<ProTip>Test Content</ProTip>)
+describe("ProTip", () => {
+  describe("rendering", () => {
+    it("renders correctly", () => {
+      const { container } = render(<ProTip>Test Content</ProTip>);
 
-      expect(container.firstChild).toBeInTheDocument()
-    })
+      expect(container.firstChild).toBeInTheDocument();
+    });
 
-    it('applies custom className', () => {
-      const { container } = render(<ProTip className="custom-class">Test</ProTip>)
+    it("applies custom className", () => {
+      const { container } = render(
+        <ProTip className="custom-class">Test</ProTip>,
+      );
 
-      expect(container.firstChild).toHaveClass('custom-class')
-    })
-  })
+      expect(container.firstChild).toHaveClass("custom-class");
+    });
+  });
 
-  describe('accessibility', () => {
-    it('is visible when rendered', () => {
-      const { container } = render(<ProTip>Test</ProTip>)
+  describe("accessibility", () => {
+    it("is visible when rendered", () => {
+      const { container } = render(<ProTip>Test</ProTip>);
 
-      expect(container.firstChild).toBeVisible()
-    })
-  })
-})
+      expect(container.firstChild).toBeVisible();
+    });
+  });
+});

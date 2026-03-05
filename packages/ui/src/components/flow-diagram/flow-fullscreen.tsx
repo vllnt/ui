@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import { memo, useEffect } from 'react'
+import { memo, useEffect } from "react";
 
-import { X } from 'lucide-react'
-import { createPortal } from 'react-dom'
+import { X } from "lucide-react";
+import { createPortal } from "react-dom";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
-import type { FlowFullscreenProps } from './types'
+import type { FlowFullscreenProps } from "./types";
 
 export const FlowFullscreen = memo(function FlowFullscreen({
   children,
@@ -16,32 +16,32 @@ export const FlowFullscreen = memo(function FlowFullscreen({
 }: FlowFullscreenProps) {
   // Handle keyboard shortcuts
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose()
+      if (e.key === "Escape") {
+        onClose();
       }
-    }
+    };
 
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, onClose])
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   // Render portal on client side
-  if (typeof document === 'undefined') return null
+  if (typeof document === "undefined") return null;
 
   return createPortal(
     <div
       aria-label="Flow diagram fullscreen view"
       aria-modal="true"
       className={cn(
-        'fixed inset-0 z-[9999] flex flex-col bg-background',
-        'animate-in fade-in duration-200',
+        "fixed inset-0 z-[9999] flex flex-col bg-background",
+        "animate-in fade-in duration-200",
       )}
       role="dialog"
     >
@@ -61,5 +61,5 @@ export const FlowFullscreen = memo(function FlowFullscreen({
       <div className="flex-1 overflow-hidden">{children}</div>
     </div>,
     document.body,
-  )
-})
+  );
+});

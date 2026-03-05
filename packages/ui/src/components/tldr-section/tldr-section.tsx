@@ -1,50 +1,50 @@
-'use client'
+"use client";
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from "react";
 
 type TLDRSectionProps = {
-  children: React.ReactNode
-  label: string
-}
+  children: React.ReactNode;
+  label: string;
+};
 
 // eslint-disable-next-line max-lines-per-function
 export function TLDRSection({ children, label }: TLDRSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [hasBeenOpened, setHasBeenOpened] = useState(false)
-  const timerReference = useRef<NodeJS.Timeout | null>(null)
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasBeenOpened, setHasBeenOpened] = useState(false);
+  const timerReference = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isExpanded && !hasBeenOpened) {
-      setIsLoading(true)
-      setHasBeenOpened(true)
+      setIsLoading(true);
+      setHasBeenOpened(true);
 
       // Clear any existing timer
       if (timerReference.current) {
-        clearTimeout(timerReference.current)
+        clearTimeout(timerReference.current);
       }
 
       // Simulate loading with skeleton
       timerReference.current = setTimeout(() => {
-        setIsLoading(false)
-        timerReference.current = null
-      }, 800)
+        setIsLoading(false);
+        timerReference.current = null;
+      }, 800);
     }
 
     return () => {
       if (timerReference.current) {
-        clearTimeout(timerReference.current)
-        timerReference.current = null
+        clearTimeout(timerReference.current);
+        timerReference.current = null;
       }
-    }
-  }, [isExpanded]) // eslint-disable-line react-hooks/exhaustive-deps
+    };
+  }, [isExpanded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="my-8 rounded-lg border border-border bg-muted/30 overflow-hidden">
       <button
         className="flex items-center justify-between w-full px-4 py-3 hover:bg-muted/50 transition-colors"
         onClick={() => {
-          setIsExpanded(!isExpanded)
+          setIsExpanded(!isExpanded);
         }}
         type="button"
       >
@@ -57,19 +57,27 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M4 6h16M4 12h16M4 18h16"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
           <span className="text-sm font-medium text-foreground">{label}</span>
         </div>
         <svg
-          className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M19 9l-7 7-7-7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
       {isExpanded ? (
@@ -90,10 +98,12 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
               </div>
             </div>
           ) : (
-            <div className="text-sm text-muted-foreground leading-relaxed">{children}</div>
+            <div className="text-sm text-muted-foreground leading-relaxed">
+              {children}
+            </div>
           )}
         </div>
       ) : null}
     </div>
-  )
+  );
 }

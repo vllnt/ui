@@ -10,4 +10,4 @@ export {
   AlertDialogPortal,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from './alert-dialog'
+} from "./alert-dialog";

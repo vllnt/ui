@@ -1,34 +1,40 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
-import { Check, Copy, Terminal as TerminalIcon } from 'lucide-react'
+import { Check, Copy, Terminal as TerminalIcon } from "lucide-react";
 
-import { Button } from '../button'
+import { Button } from "../button";
 
 export type TerminalLine = {
-  content: string
-  type: 'command' | 'comment' | 'output'
-}
+  content: string;
+  type: "command" | "comment" | "output";
+};
 
 export type TerminalProps = {
-  copyable?: boolean
-  lines: TerminalLine[]
-  title?: string
-}
+  copyable?: boolean;
+  lines: TerminalLine[];
+  title?: string;
+};
 
-export function Terminal({ copyable = true, lines, title = 'Terminal' }: TerminalProps) {
-  const [copied, setCopied] = useState(false)
+export function Terminal({
+  copyable = true,
+  lines,
+  title = "Terminal",
+}: TerminalProps) {
+  const [copied, setCopied] = useState(false);
 
-  const commands = lines.filter((l) => l.type === 'command').map((l) => l.content)
+  const commands = lines
+    .filter((l) => l.type === "command")
+    .map((l) => l.content);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(commands.join('\n'))
-    setCopied(true)
+    await navigator.clipboard.writeText(commands.join("\n"));
+    setCopied(true);
     setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <div className="my-6 rounded-lg border bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
@@ -47,14 +53,16 @@ export function Terminal({ copyable = true, lines, title = 'Terminal' }: Termina
         <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
           {lines.map((line, index) => (
             <div className="flex items-start" key={index}>
-              {line.type === 'command' && (
+              {line.type === "command" && (
                 <>
                   <span className="text-green-400 mr-2 select-none">$</span>
                   <span className="text-zinc-100">{line.content}</span>
                 </>
               )}
-              {line.type === 'output' && <span className="text-zinc-400">{line.content}</span>}
-              {line.type === 'comment' && (
+              {line.type === "output" && (
+                <span className="text-zinc-400">{line.content}</span>
+              )}
+              {line.type === "comment" && (
                 <span className="text-zinc-600 italic"># {line.content}</span>
               )}
             </div>
@@ -67,44 +75,53 @@ export function Terminal({ copyable = true, lines, title = 'Terminal' }: Termina
             size="icon"
             variant="ghost"
           >
-            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            {copied ? (
+              <Check className="h-3 w-3" />
+            ) : (
+              <Copy className="h-3 w-3" />
+            )}
           </Button>
         ) : null}
       </div>
     </div>
-  )
+  );
 }
 
 export type SimpleTerminalProps = {
-  children: string
-  title?: string
-}
+  children: string;
+  title?: string;
+};
 
-export function SimpleTerminal({ children, title = 'Terminal' }: SimpleTerminalProps) {
-  const [copied, setCopied] = useState(false)
+export function SimpleTerminal({
+  children,
+  title = "Terminal",
+}: SimpleTerminalProps) {
+  const [copied, setCopied] = useState(false);
 
   const lines = children
     .trim()
-    .split('\n')
+    .split("\n")
     .map((line): TerminalLine => {
-      if (line.startsWith('$ ')) {
-        return { content: line.slice(2), type: 'command' }
+      if (line.startsWith("$ ")) {
+        return { content: line.slice(2), type: "command" };
       }
-      if (line.startsWith('# ')) {
-        return { content: line.slice(2), type: 'comment' }
+      if (line.startsWith("# ")) {
+        return { content: line.slice(2), type: "comment" };
       }
-      return { content: line, type: 'output' }
-    })
+      return { content: line, type: "output" };
+    });
 
-  const commands = lines.filter((l) => l.type === 'command').map((l) => l.content)
+  const commands = lines
+    .filter((l) => l.type === "command")
+    .map((l) => l.content);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(commands.join('\n'))
-    setCopied(true)
+    await navigator.clipboard.writeText(commands.join("\n"));
+    setCopied(true);
     setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <div className="my-6 rounded-lg border bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
@@ -123,14 +140,16 @@ export function SimpleTerminal({ children, title = 'Terminal' }: SimpleTerminalP
         <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
           {lines.map((line, index) => (
             <div className="flex items-start" key={index}>
-              {line.type === 'command' && (
+              {line.type === "command" && (
                 <>
                   <span className="text-green-400 mr-2 select-none">$</span>
                   <span className="text-zinc-100">{line.content}</span>
                 </>
               )}
-              {line.type === 'output' && <span className="text-zinc-400">{line.content}</span>}
-              {line.type === 'comment' && (
+              {line.type === "output" && (
+                <span className="text-zinc-400">{line.content}</span>
+              )}
+              {line.type === "comment" && (
                 <span className="text-zinc-600 italic"># {line.content}</span>
               )}
             </div>
@@ -143,10 +162,14 @@ export function SimpleTerminal({ children, title = 'Terminal' }: SimpleTerminalP
             size="icon"
             variant="ghost"
           >
-            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            {copied ? (
+              <Check className="h-3 w-3" />
+            ) : (
+              <Copy className="h-3 w-3" />
+            )}
           </Button>
         )}
       </div>
     </div>
-  )
+  );
 }

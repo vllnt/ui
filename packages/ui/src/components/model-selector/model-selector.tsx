@@ -1,14 +1,20 @@
-'use client'
+"use client";
 
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from "react";
 
-import { ArrowUpDown, Filter } from 'lucide-react'
+import { ArrowUpDown, Filter } from "lucide-react";
 
-import { cn } from '../../lib/utils'
-import { Badge } from '../badge'
-import { Button } from '../button'
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '../command'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../dialog'
+import { cn } from "../../lib/utils";
+import { Badge } from "../badge";
+import { Button } from "../button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "../command";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,110 +23,115 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../dropdown-menu'
-import { Input } from '../input'
+} from "../dropdown-menu";
+import { Input } from "../input";
 
 /** Model information for the selector. */
 export type ModelInfo = {
-  description?: string
-  id: string
-  name: string
+  description?: string;
+  id: string;
+  name: string;
   pricing?: {
-    input?: number // per 1M tokens
-    output?: number // per 1M tokens
-  }
-}
+    input?: number; // per 1M tokens
+    output?: number; // per 1M tokens
+  };
+};
 
 export type ModelSelectorProps = {
-  models: ModelInfo[]
-  onOpenChange: (open: boolean) => void
-  onSelectModel: (modelId: string) => void
-  open: boolean
-  selectedModelId: string
-}
+  models: ModelInfo[];
+  onOpenChange: (open: boolean) => void;
+  onSelectModel: (modelId: string) => void;
+  open: boolean;
+  selectedModelId: string;
+};
 
-type SortOption = 'name' | 'price-high' | 'price-low' | 'provider'
-type SelectionGuardReference = { current: null | string }
+type SortOption = "name" | "price-high" | "price-low" | "provider";
+type SelectionGuardReference = { current: null | string };
 
 function getProvider(modelId: string): string {
-  const parts = modelId.split('/')
-  return parts[0] || 'unknown'
+  const parts = modelId.split("/");
+  return parts[0] || "unknown";
 }
 
 function getAveragePrice(model: ModelInfo): number {
-  if (!model.pricing) return Number.POSITIVE_INFINITY
-  const inputPrice = model.pricing.input ?? 0
-  const outputPrice = model.pricing.output ?? inputPrice
-  return (inputPrice + outputPrice) / 2
+  if (!model.pricing) return Number.POSITIVE_INFINITY;
+  const inputPrice = model.pricing.input ?? 0;
+  const outputPrice = model.pricing.output ?? inputPrice;
+  return (inputPrice + outputPrice) / 2;
 }
 
 function formatPrice(price?: number): string {
-  if (!price) return 'N/A'
-  return `$${price.toFixed(2)}/1M`
+  if (!price) return "N/A";
+  return `$${price.toFixed(2)}/1M`;
 }
 
 function getProviders(models: ModelInfo[]): string[] {
-  const { providers } = models.reduce<{ providers: string[]; seen: Set<string> }>(
+  const { providers } = models.reduce<{
+    providers: string[];
+    seen: Set<string>;
+  }>(
     (accumulator, model) => {
-      const provider = getProvider(model.id)
+      const provider = getProvider(model.id);
       if (!accumulator.seen.has(provider)) {
-        accumulator.seen.add(provider)
-        accumulator.providers.push(provider)
+        accumulator.seen.add(provider);
+        accumulator.providers.push(provider);
       }
-      return accumulator
+      return accumulator;
     },
     { providers: [], seen: new Set<string>() },
-  )
-  return providers.sort()
+  );
+  return providers.sort();
 }
 
 function applyProviderFilter(models: ModelInfo[], providerFilter: string) {
-  if (providerFilter === 'all') return models
-  return models.filter((model) => getProvider(model.id) === providerFilter)
+  if (providerFilter === "all") return models;
+  return models.filter((model) => getProvider(model.id) === providerFilter);
 }
 
 function applySearchFilter(models: ModelInfo[], modelSearchQuery: string) {
-  if (!modelSearchQuery.trim()) return models
-  const query = modelSearchQuery.toLowerCase()
+  if (!modelSearchQuery.trim()) return models;
+  const query = modelSearchQuery.toLowerCase();
   return models.filter(
     (model) =>
       model.name.toLowerCase().includes(query) ||
       model.id.toLowerCase().includes(query) ||
       model.description?.toLowerCase().includes(query) ||
       getProvider(model.id).toLowerCase().includes(query),
-  )
+  );
 }
 
 function sortModelsBy(models: ModelInfo[], sortBy: SortOption) {
-  const sorted = [...models]
+  const sorted = [...models];
   return sorted.sort((a, b) => {
     switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name)
-      case 'price-low':
-        return getAveragePrice(a) - getAveragePrice(b)
-      case 'price-high':
-        return getAveragePrice(b) - getAveragePrice(a)
-      case 'provider': {
-        const providerA = getProvider(a.id)
-        const providerB = getProvider(b.id)
-        if (providerA !== providerB) return providerA.localeCompare(providerB)
-        return a.name.localeCompare(b.name)
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "price-low":
+        return getAveragePrice(a) - getAveragePrice(b);
+      case "price-high":
+        return getAveragePrice(b) - getAveragePrice(a);
+      case "provider": {
+        const providerA = getProvider(a.id);
+        const providerB = getProvider(b.id);
+        if (providerA !== providerB) return providerA.localeCompare(providerB);
+        return a.name.localeCompare(b.name);
       }
       default:
-        return 0
+        return 0;
     }
-  })
+  });
 }
 
 function promoteSelected(models: ModelInfo[], selectedModelId: string) {
-  const sorted = [...models]
-  const selectedIndex = sorted.findIndex((model) => model.id === selectedModelId)
+  const sorted = [...models];
+  const selectedIndex = sorted.findIndex(
+    (model) => model.id === selectedModelId,
+  );
   if (selectedIndex > 0) {
-    const [selected] = sorted.splice(selectedIndex, 1)
-    if (selected) sorted.unshift(selected)
+    const [selected] = sorted.splice(selectedIndex, 1);
+    if (selected) sorted.unshift(selected);
   }
-  return sorted
+  return sorted;
 }
 
 function resetFilters(
@@ -128,17 +139,17 @@ function resetFilters(
   setProviderFilter: (value: string) => void,
   setSortBy: (value: SortOption) => void,
 ) {
-  setModelSearchQuery('')
-  setProviderFilter('all')
-  setSortBy('name')
+  setModelSearchQuery("");
+  setProviderFilter("all");
+  setSortBy("name");
 }
 
 type HandleModelSelectArguments = {
-  handleClose: (nextOpen: boolean) => void
-  id: string
-  onSelectModel: (id: string) => void
-  selectionGuardReference: SelectionGuardReference
-}
+  handleClose: (nextOpen: boolean) => void;
+  id: string;
+  onSelectModel: (id: string) => void;
+  selectionGuardReference: SelectionGuardReference;
+};
 
 function handleModelSelect({
   handleClose,
@@ -146,22 +157,23 @@ function handleModelSelect({
   onSelectModel,
   selectionGuardReference,
 }: HandleModelSelectArguments) {
-  if (selectionGuardReference.current === id) return
-  selectionGuardReference.current = id
-  onSelectModel(id)
+  if (selectionGuardReference.current === id) return;
+  selectionGuardReference.current = id;
+  onSelectModel(id);
   setTimeout(() => {
-    if (selectionGuardReference.current === id) selectionGuardReference.current = null
-  }, 0)
-  handleClose(false)
+    if (selectionGuardReference.current === id)
+      selectionGuardReference.current = null;
+  }, 0);
+  handleClose(false);
 }
 
 type FilterAndSortArguments = {
-  models: ModelInfo[]
-  modelSearchQuery: string
-  providerFilter: string
-  selectedModelId: string
-  sortBy: SortOption
-}
+  models: ModelInfo[];
+  modelSearchQuery: string;
+  providerFilter: string;
+  selectedModelId: string;
+  sortBy: SortOption;
+};
 
 function filterAndSortModels({
   models,
@@ -170,12 +182,16 @@ function filterAndSortModels({
   selectedModelId,
   sortBy,
 }: FilterAndSortArguments): ModelInfo[] {
-  const filtered = applySearchFilter(applyProviderFilter(models, providerFilter), modelSearchQuery)
-  return promoteSelected(sortModelsBy(filtered, sortBy), selectedModelId)
+  const filtered = applySearchFilter(
+    applyProviderFilter(models, providerFilter),
+    modelSearchQuery,
+  );
+  return promoteSelected(sortModelsBy(filtered, sortBy), selectedModelId);
 }
 
 function useFilteredModels(options: FilterAndSortArguments) {
-  const { models, modelSearchQuery, providerFilter, selectedModelId, sortBy } = options
+  const { models, modelSearchQuery, providerFilter, selectedModelId, sortBy } =
+    options;
   return useMemo(
     () =>
       filterAndSortModels({
@@ -186,21 +202,21 @@ function useFilteredModels(options: FilterAndSortArguments) {
         sortBy,
       }),
     [models, modelSearchQuery, sortBy, providerFilter, selectedModelId],
-  )
+  );
 }
 
 type ModelSelectorState = {
-  filteredAndSortedModels: ModelInfo[]
-  handleClose: (nextOpen: boolean) => void
-  handleSelect: (id: string) => void
-  modelSearchQuery: string
-  providerFilter: string
-  providers: string[]
-  setModelSearchQuery: (value: string) => void
-  setProviderFilter: (value: string) => void
-  setSortBy: (value: SortOption) => void
-  sortBy: SortOption
-}
+  filteredAndSortedModels: ModelInfo[];
+  handleClose: (nextOpen: boolean) => void;
+  handleSelect: (id: string) => void;
+  modelSearchQuery: string;
+  providerFilter: string;
+  providers: string[];
+  setModelSearchQuery: (value: string) => void;
+  setProviderFilter: (value: string) => void;
+  setSortBy: (value: SortOption) => void;
+  sortBy: SortOption;
+};
 
 function useModelSelectorState({
   models,
@@ -208,32 +224,32 @@ function useModelSelectorState({
   onSelectModel,
   selectedModelId,
 }: ModelSelectorProps): ModelSelectorState {
-  const [modelSearchQuery, setModelSearchQuery] = useState('')
-  const [sortBy, setSortBy] = useState<SortOption>('name')
-  const [providerFilter, setProviderFilter] = useState<string>('all')
-  const selectionGuardReference = useRef<null | string>(null)
-  const providers = useMemo(() => getProviders(models), [models])
+  const [modelSearchQuery, setModelSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("name");
+  const [providerFilter, setProviderFilter] = useState<string>("all");
+  const selectionGuardReference = useRef<null | string>(null);
+  const providers = useMemo(() => getProviders(models), [models]);
   const filteredAndSortedModels = useFilteredModels({
     models,
     modelSearchQuery,
     providerFilter,
     selectedModelId,
     sortBy,
-  })
+  });
   const handleClose = (nextOpen: boolean) => {
-    onOpenChange(nextOpen)
+    onOpenChange(nextOpen);
     if (!nextOpen) {
-      resetFilters(setModelSearchQuery, setProviderFilter, setSortBy)
+      resetFilters(setModelSearchQuery, setProviderFilter, setSortBy);
     }
-  }
+  };
   const handleSelect = (id: string) => {
     handleModelSelect({
       handleClose,
       id,
       onSelectModel,
       selectionGuardReference,
-    })
-  }
+    });
+  };
   return {
     filteredAndSortedModels,
     handleClose,
@@ -245,29 +261,35 @@ function useModelSelectorState({
     setProviderFilter,
     setSortBy,
     sortBy,
-  }
+  };
 }
 
 type ProviderFilterMenuProps = {
-  onChange: (value: string) => void
-  providerFilter: string
-  providers: string[]
-}
+  onChange: (value: string) => void;
+  providerFilter: string;
+  providers: string[];
+};
 
-function ProviderFilterMenu({ onChange, providerFilter, providers }: ProviderFilterMenuProps) {
+function ProviderFilterMenu({
+  onChange,
+  providerFilter,
+  providers,
+}: ProviderFilterMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="h-9 gap-2" size="sm" variant="outline">
           <Filter className="h-4 w-4" />
-          {providerFilter === 'all' ? 'All Providers' : providerFilter}
+          {providerFilter === "all" ? "All Providers" : providerFilter}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuLabel>Filter by Provider</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup onValueChange={onChange} value={providerFilter}>
-          <DropdownMenuRadioItem value="all">All Providers</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="all">
+            All Providers
+          </DropdownMenuRadioItem>
           {providers.map((provider) => (
             <DropdownMenuRadioItem key={provider} value={provider}>
               {provider}
@@ -276,13 +298,13 @@ function ProviderFilterMenu({ onChange, providerFilter, providers }: ProviderFil
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 type SortMenuProps = {
-  onChange: (value: SortOption) => void
-  sortBy: SortOption
-}
+  onChange: (value: SortOption) => void;
+  sortBy: SortOption;
+};
 
 function SortMenu({ onChange, sortBy }: SortMenuProps) {
   return (
@@ -298,29 +320,35 @@ function SortMenu({ onChange, sortBy }: SortMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           onValueChange={(value) => {
-            onChange(value as SortOption)
+            onChange(value as SortOption);
           }}
           value={sortBy}
         >
           <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="provider">Provider</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="price-low">Price: Low to High</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="price-high">Price: High to Low</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="provider">
+            Provider
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="price-low">
+            Price: Low to High
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="price-high">
+            Price: High to Low
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 type ModelSelectorFiltersProps = {
-  modelSearchQuery: string
-  onProviderChange: (value: string) => void
-  onSearchChange: (value: string) => void
-  onSortChange: (value: SortOption) => void
-  providerFilter: string
-  providers: string[]
-  sortBy: SortOption
-}
+  modelSearchQuery: string;
+  onProviderChange: (value: string) => void;
+  onSearchChange: (value: string) => void;
+  onSortChange: (value: SortOption) => void;
+  providerFilter: string;
+  providers: string[];
+  sortBy: SortOption;
+};
 
 function ModelSelectorFilters({
   modelSearchQuery,
@@ -337,7 +365,7 @@ function ModelSelectorFilters({
         <Input
           className="h-9"
           onChange={(event) => {
-            onSearchChange(event.target.value)
+            onSearchChange(event.target.value);
           }}
           placeholder="Search models or providers..."
           value={modelSearchQuery}
@@ -350,14 +378,14 @@ function ModelSelectorFilters({
       />
       <SortMenu onChange={onSortChange} sortBy={sortBy} />
     </div>
-  )
+  );
 }
 
 type ModelListProps = {
-  models: ModelInfo[]
-  onSelect: (id: string) => void
-  selectedModelId: string
-}
+  models: ModelInfo[];
+  onSelect: (id: string) => void;
+  selectedModelId: string;
+};
 
 function ModelList({ models, onSelect, selectedModelId }: ModelListProps) {
   return (
@@ -376,40 +404,47 @@ function ModelList({ models, onSelect, selectedModelId }: ModelListProps) {
         </CommandGroup>
       </CommandList>
     </Command>
-  )
+  );
 }
 
 type ModelPricingProps = {
-  pricing?: ModelInfo['pricing']
-}
+  pricing?: ModelInfo["pricing"];
+};
 
 function ModelPricing({ pricing }: ModelPricingProps) {
-  if (!pricing) return null
+  if (!pricing) return null;
 
   return (
     <div className="flex items-center gap-3 text-xs text-muted-foreground pointer-events-none">
       {pricing.input ? <span>In: {formatPrice(pricing.input)}</span> : null}
       {pricing.output ? <span>Out: {formatPrice(pricing.output)}</span> : null}
     </div>
-  )
+  );
 }
 
 type ModelListItemProps = {
-  model: ModelInfo
-  onSelect: (id: string) => void
-  selectedModelId: string
-}
+  model: ModelInfo;
+  onSelect: (id: string) => void;
+  selectedModelId: string;
+};
 
-function ModelListItem({ model, onSelect, selectedModelId }: ModelListItemProps) {
-  const isSelected = selectedModelId === model.id
-  const provider = getProvider(model.id)
+function ModelListItem({
+  model,
+  onSelect,
+  selectedModelId,
+}: ModelListItemProps) {
+  const isSelected = selectedModelId === model.id;
+  const provider = getProvider(model.id);
 
   return (
     <CommandItem
-      className={cn('flex flex-col items-start py-3', isSelected && 'bg-accent')}
+      className={cn(
+        "flex flex-col items-start py-3",
+        isSelected && "bg-accent",
+      )}
       disabled={isSelected}
       onSelect={() => {
-        onSelect(model.id)
+        onSelect(model.id);
       }}
       value={model.id}
     >
@@ -421,7 +456,10 @@ function ModelListItem({ model, onSelect, selectedModelId }: ModelListItemProps)
               Selected
             </Badge>
           ) : null}
-          <Badge className="text-xs font-mono pointer-events-none" variant="outline">
+          <Badge
+            className="text-xs font-mono pointer-events-none"
+            variant="outline"
+          >
             {provider}
           </Badge>
         </div>
@@ -436,7 +474,7 @@ function ModelListItem({ model, onSelect, selectedModelId }: ModelListItemProps)
         {model.id}
       </span>
     </CommandItem>
-  )
+  );
 }
 
 /** Model selector dialog with search, filtering, and sorting. */
@@ -452,7 +490,7 @@ export function ModelSelector(props: ModelSelectorProps) {
     setProviderFilter,
     setSortBy,
     sortBy,
-  } = useModelSelectorState(props)
+  } = useModelSelectorState(props);
 
   return (
     <Dialog onOpenChange={handleClose} open={props.open}>
@@ -476,5 +514,5 @@ export function ModelSelector(props: ModelSelectorProps) {
         />
       </DialogContent>
     </Dialog>
-  )
+  );
 }

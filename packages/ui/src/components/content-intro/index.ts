@@ -3,4 +3,4 @@ export {
   type ContentIntroLabels,
   type ContentIntroProps,
   type ContentIntroSection,
-} from './content-intro'
+} from "./content-intro";

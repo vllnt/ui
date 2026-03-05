@@ -1,2 +1,2 @@
-export { Checkbox } from './checkbox'
-export type { ComponentPropsWithoutRef } from 'react'
+export { Checkbox } from "./checkbox";
+export type { ComponentPropsWithoutRef } from "react";

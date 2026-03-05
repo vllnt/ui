@@ -1,26 +1,34 @@
-'use client'
+"use client";
 
-import { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 type SidebarContextType = {
-  open: boolean
-  setOpen: (open: boolean) => void
-}
+  open: boolean;
+  setOpen: (open: boolean) => void;
+};
 
-const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
+const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function useSidebar() {
-  const context = useContext(SidebarContext)
+  const context = useContext(SidebarContext);
   if (!context) {
-    throw new Error('useSidebar must be used within SidebarProvider')
+    throw new Error("useSidebar must be used within SidebarProvider");
   }
-  return context
+  return context;
 }
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const value = useMemo(() => ({ open, setOpen }), [open])
+  const value = useMemo(() => ({ open, setOpen }), [open]);
 
-  return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
+  return (
+    <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
+  );
 }

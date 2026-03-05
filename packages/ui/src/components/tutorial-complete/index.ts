@@ -4,4 +4,4 @@ export {
   type TutorialCompleteProps,
   type TutorialCompleteRelatedContent,
   type TutorialCompleteSection,
-} from './tutorial-complete'
+} from "./tutorial-complete";

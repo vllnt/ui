@@ -1,100 +1,100 @@
-import type { Edge, FitViewOptions, Node } from '@xyflow/react'
+import type { Edge, FitViewOptions, Node } from "@xyflow/react";
 
 export type FlowDiagramNode = {
   data: {
-    description?: string
-    label: string
-  }
-} & Node
+    description?: string;
+    label: string;
+  };
+} & Node;
 
 export type FlowDiagramEdge = {
-  animated?: boolean
-} & Edge
+  animated?: boolean;
+} & Edge;
 
 export type FlowDiagramProps = {
   /** Enable copy to clipboard button */
-  allowCopy?: boolean
+  allowCopy?: boolean;
   /** Enable fullscreen toggle button */
-  allowFullscreen?: boolean
+  allowFullscreen?: boolean;
   /** CSS class name for container */
-  className?: string
+  className?: string;
   /** Array of edges connecting nodes */
-  edges: FlowDiagramEdge[]
+  edges: FlowDiagramEdge[];
   /** Auto-fit view on mount */
-  fitView?: boolean
+  fitView?: boolean;
   /** Options for fitView behavior */
-  fitViewOptions?: FitViewOptions
+  fitViewOptions?: FitViewOptions;
   /** Container height in pixels or CSS value */
-  height?: number | string
+  height?: number | string;
   /** Array of nodes to render */
-  nodes: FlowDiagramNode[]
+  nodes: FlowDiagramNode[];
   /** Node click handler */
-  onNodeClick?: (node: FlowDiagramNode) => void
+  onNodeClick?: (node: FlowDiagramNode) => void;
   /** Show zoom/pan/center controls */
-  showControls?: boolean
+  showControls?: boolean;
   /** Title displayed above the diagram */
-  title?: string
-}
+  title?: string;
+};
 
 export type FlowControlsProps = {
   /** CSS class name */
-  className?: string
+  className?: string;
   /** Current copy operation status */
-  copyStatus?: CopyStatus
+  copyStatus?: CopyStatus;
   /** Callback to copy diagram as image */
-  onCopy?: () => void
+  onCopy?: () => void;
   /** Callback to fit/center view */
-  onFitView: () => void
+  onFitView: () => void;
   /** Callback to toggle fullscreen */
-  onFullscreen?: () => void
+  onFullscreen?: () => void;
   /** Callback to zoom in */
-  onZoomIn: () => void
+  onZoomIn: () => void;
   /** Callback to zoom out */
-  onZoomOut: () => void
+  onZoomOut: () => void;
   /** Show copy button */
-  showCopy?: boolean
+  showCopy?: boolean;
   /** Show fullscreen button */
-  showFullscreen?: boolean
-}
+  showFullscreen?: boolean;
+};
 
 export type FlowFullscreenProps = {
   /** Children to render in fullscreen */
-  children: React.ReactNode
+  children: React.ReactNode;
   /** Whether fullscreen is active */
-  isOpen: boolean
+  isOpen: boolean;
   /** Callback to close fullscreen */
-  onClose: () => void
-}
+  onClose: () => void;
+};
 
 export type UseFlowDiagramOptions = {
   /** Enable copy capability */
-  allowCopy?: boolean
+  allowCopy?: boolean;
   /** Enable fullscreen capability */
-  allowFullscreen?: boolean
+  allowFullscreen?: boolean;
   /** Initial zoom level */
-  initialZoom?: number
-}
+  initialZoom?: number;
+};
 
 /** Copy operation status */
-export type CopyStatus = 'copying' | 'error' | 'idle' | 'success'
+export type CopyStatus = "copying" | "error" | "idle" | "success";
 
 export type UseFlowDiagramReturn = {
   /** Close fullscreen */
-  closeFullscreen: () => void
+  closeFullscreen: () => void;
   /** Current copy operation status */
-  copyStatus: CopyStatus
+  copyStatus: CopyStatus;
   /** Copy diagram to clipboard as image */
-  copyToClipboard: () => Promise<void>
+  copyToClipboard: () => Promise<void>;
   /** Fit view handler */
-  fitView: () => void
+  fitView: () => void;
   /** Whether fullscreen is active */
-  isFullscreen: boolean
+  isFullscreen: boolean;
   /** Toggle fullscreen */
-  toggleFullscreen: () => void
+  toggleFullscreen: () => void;
   /** Current zoom level */
-  zoom: number
+  zoom: number;
   /** Zoom in handler */
-  zoomIn: () => void
+  zoomIn: () => void;
   /** Zoom out handler */
-  zoomOut: () => void
-}
+  zoomOut: () => void;
+};

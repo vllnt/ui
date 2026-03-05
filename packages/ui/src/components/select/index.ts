@@ -9,4 +9,4 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from './select'
+} from "./select";

@@ -1,121 +1,136 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from "react";
 
 export type SocialFabState = {
-  isExpanded: boolean
-  isMobile: boolean
-  showShareMenu: boolean
-}
+  isExpanded: boolean;
+  isMobile: boolean;
+  showShareMenu: boolean;
+};
 
 export type UseSocialFabOptions = {
-  onAction?: (actionId: string) => void
-  onClose?: (trigger: string) => void
-  onOpen?: (trigger: string, device: string) => void
-}
+  onAction?: (actionId: string) => void;
+  onClose?: (trigger: string) => void;
+  onOpen?: (trigger: string, device: string) => void;
+};
 
 export type SocialFabHandlers = {
-  close: (trigger: string) => void
-  handleMouseEnter: () => void
-  handleMouseLeave: () => void
-  handleShareToggle: () => void
-  handleToggle: () => void
-}
+  close: (trigger: string) => void;
+  handleMouseEnter: () => void;
+  handleMouseLeave: () => void;
+  handleShareToggle: () => void;
+  handleToggle: () => void;
+};
 
 function useMobileDetect() {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const check = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    check()
-    window.addEventListener('resize', check)
+      setIsMobile(window.innerWidth < 768);
+    };
+    check();
+    window.addEventListener("resize", check);
     return () => {
-      window.removeEventListener('resize', check)
-    }
-  }, [])
-  return isMobile
+      window.removeEventListener("resize", check);
+    };
+  }, []);
+  return isMobile;
 }
 
 function useExpansion(options: UseSocialFabOptions, isMobile: boolean) {
-  const { onClose, onOpen } = options
-  const [isExpanded, setIsExpanded] = useState(false)
+  const { onClose, onOpen } = options;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const close = useCallback(
     (trigger: string) => {
-      setIsExpanded(false)
-      onClose?.(trigger)
+      setIsExpanded(false);
+      onClose?.(trigger);
     },
     [onClose],
-  )
+  );
 
   const open = useCallback(
     (trigger: string, device: string) => {
-      setIsExpanded(true)
-      onOpen?.(trigger, device)
+      setIsExpanded(true);
+      onOpen?.(trigger, device);
     },
     [onOpen],
-  )
+  );
 
   const handleToggle = useCallback(() => {
-    const device = isMobile ? 'mobile' : 'desktop'
-    if (isExpanded) close('tap_close')
-    else open('tap', device)
-  }, [isMobile, isExpanded, close, open])
+    const device = isMobile ? "mobile" : "desktop";
+    if (isExpanded) close("tap_close");
+    else open("tap", device);
+  }, [isMobile, isExpanded, close, open]);
 
   const handleMouseEnter = useCallback(() => {
-    if (!isMobile) open('hover', 'desktop')
-  }, [isMobile, open])
+    if (!isMobile) open("hover", "desktop");
+  }, [isMobile, open]);
 
   const handleMouseLeave = useCallback(() => {
-    if (!isMobile) close('hover_leave')
-  }, [isMobile, close])
+    if (!isMobile) close("hover_leave");
+  }, [isMobile, close]);
 
-  return { close, handleMouseEnter, handleMouseLeave, handleToggle, isExpanded }
+  return {
+    close,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleToggle,
+    isExpanded,
+  };
 }
 
-function useShareMenu(onAction?: (actionId: string) => void, isMobile?: boolean) {
-  const [showShareMenu, setShowShareMenu] = useState(false)
+function useShareMenu(
+  onAction?: (actionId: string) => void,
+  isMobile?: boolean,
+) {
+  const [showShareMenu, setShowShareMenu] = useState(false);
 
   const handleShareToggle = useCallback(() => {
     setShowShareMenu((previous) => {
-      if (!previous) onAction?.('share')
-      return !previous
-    })
-  }, [onAction])
+      if (!previous) onAction?.("share");
+      return !previous;
+    });
+  }, [onAction]);
 
   const handleShareHover = useCallback(() => {
     if (!isMobile) {
-      onAction?.('share')
-      setShowShareMenu(true)
+      onAction?.("share");
+      setShowShareMenu(true);
     }
-  }, [isMobile, onAction])
+  }, [isMobile, onAction]);
 
   const handleShareLeave = useCallback(() => {
     if (!isMobile) {
-      setShowShareMenu(false)
+      setShowShareMenu(false);
     }
-  }, [isMobile])
+  }, [isMobile]);
 
   const reset = useCallback(() => {
-    setShowShareMenu(false)
-  }, [])
+    setShowShareMenu(false);
+  }, []);
 
-  return { handleShareHover, handleShareLeave, handleShareToggle, reset, showShareMenu }
+  return {
+    handleShareHover,
+    handleShareLeave,
+    handleShareToggle,
+    reset,
+    showShareMenu,
+  };
 }
 
 export function useSocialFab(options: UseSocialFabOptions = {}) {
-  const isMobile = useMobileDetect()
-  const expansion = useExpansion(options, isMobile)
-  const shareMenu = useShareMenu(options.onAction, isMobile)
+  const isMobile = useMobileDetect();
+  const expansion = useExpansion(options, isMobile);
+  const shareMenu = useShareMenu(options.onAction, isMobile);
 
   const close = useCallback(
     (trigger: string) => {
-      expansion.close(trigger)
-      shareMenu.reset()
+      expansion.close(trigger);
+      shareMenu.reset();
     },
     [expansion, shareMenu],
-  )
+  );
 
   return {
     close,
@@ -125,6 +140,10 @@ export function useSocialFab(options: UseSocialFabOptions = {}) {
     handleShareLeave: shareMenu.handleShareLeave,
     handleShareToggle: shareMenu.handleShareToggle,
     handleToggle: expansion.handleToggle,
-    state: { isExpanded: expansion.isExpanded, isMobile, showShareMenu: shareMenu.showShareMenu },
-  }
+    state: {
+      isExpanded: expansion.isExpanded,
+      isMobile,
+      showShareMenu: shareMenu.showShareMenu,
+    },
+  };
 }

@@ -1,28 +1,28 @@
-'use client'
+"use client";
 
-import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from "react";
 
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { AlertTriangle, RefreshCw } from "lucide-react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 type FlowErrorBoundaryProps = {
   /** Content to render when no error */
-  children: ReactNode
+  children: ReactNode;
   /** CSS class name for error container */
-  className?: string
+  className?: string;
   /** Fallback content when error occurs */
-  fallback?: ReactNode
+  fallback?: ReactNode;
   /** Container height (matches FlowDiagram height prop) */
-  height?: number | string
+  height?: number | string;
   /** Callback when the boundary catches an error */
-  onError?: (error: Error, errorInfo: ErrorInfo) => void
-}
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+};
 
 type FlowErrorBoundaryState = {
-  error: Error | null
-  hasError: boolean
-}
+  error: Error | null;
+  hasError: boolean;
+};
 
 /**
  * Error boundary specifically for FlowDiagram components.
@@ -35,38 +35,41 @@ type FlowErrorBoundaryState = {
  * </FlowErrorBoundary>
  * ```
  */
-export class FlowErrorBoundary extends Component<FlowErrorBoundaryProps, FlowErrorBoundaryState> {
+export class FlowErrorBoundary extends Component<
+  FlowErrorBoundaryProps,
+  FlowErrorBoundaryState
+> {
   constructor(props: FlowErrorBoundaryProps) {
-    super(props)
-    this.state = { error: null, hasError: false }
+    super(props);
+    this.state = { error: null, hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): FlowErrorBoundaryState {
-    return { error, hasError: true }
+    return { error, hasError: true };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('[FlowDiagram] Error caught by boundary:', error, errorInfo)
-    this.props.onError?.(error, errorInfo)
+    console.error("[FlowDiagram] Error caught by boundary:", error, errorInfo);
+    this.props.onError?.(error, errorInfo);
   }
 
   handleRetry = (): void => {
-    this.setState({ error: null, hasError: false })
-  }
+    this.setState({ error: null, hasError: false });
+  };
 
   render(): ReactNode {
-    const { children, className, fallback, height = 400 } = this.props
-    const { error, hasError } = this.state
+    const { children, className, fallback, height = 400 } = this.props;
+    const { error, hasError } = this.state;
 
     if (hasError) {
       if (fallback) {
-        return fallback
+        return fallback;
       }
 
       return (
         <div
           className={cn(
-            'flex flex-col items-center justify-center gap-4 rounded-lg border border-border bg-muted/50 p-8 text-center',
+            "flex flex-col items-center justify-center gap-4 rounded-lg border border-border bg-muted/50 p-8 text-center",
             className,
           )}
           style={{ height }}
@@ -75,9 +78,12 @@ export class FlowErrorBoundary extends Component<FlowErrorBoundaryProps, FlowErr
             <AlertTriangle className="h-6 w-6 text-destructive" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-foreground">Failed to render diagram</h3>
+            <h3 className="text-sm font-medium text-foreground">
+              Failed to render diagram
+            </h3>
             <p className="text-sm text-muted-foreground">
-              {error?.message ?? 'An unexpected error occurred while rendering the flow diagram.'}
+              {error?.message ??
+                "An unexpected error occurred while rendering the flow diagram."}
             </p>
           </div>
           <button
@@ -89,9 +95,9 @@ export class FlowErrorBoundary extends Component<FlowErrorBoundaryProps, FlowErr
             Try again
           </button>
         </div>
-      )
+      );
     }
 
-    return children
+    return children;
   }
 }

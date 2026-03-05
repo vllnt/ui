@@ -1,1 +1,4 @@
-export { FloatingActionButton, type FloatingActionButtonProps } from './floating-action-button'
+export {
+  FloatingActionButton,
+  type FloatingActionButtonProps,
+} from "./floating-action-button";

@@ -1,1 +1,1 @@
-export { ThinkingBlock, type ThinkingBlockProps } from './thinking-block'
+export { ThinkingBlock, type ThinkingBlockProps } from "./thinking-block";

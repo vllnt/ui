@@ -5,4 +5,4 @@ export {
   type PrerequisitesProps,
   Summary,
   type SummaryProps,
-} from './learning-objectives'
+} from "./learning-objectives";

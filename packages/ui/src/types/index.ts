@@ -5,4 +5,4 @@ export type {
   ContentSection,
   ContentSectionMinimal,
   DifficultyLevel,
-} from './content'
+} from "./content";

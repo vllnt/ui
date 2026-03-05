@@ -1,147 +1,147 @@
-'use client'
+"use client";
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from "react";
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { useDebounce } from '../../lib/use-debounce'
-import { Button } from '../button/button'
-import { Input } from '../input/input'
+import { useDebounce } from "../../lib/use-debounce";
+import { Button } from "../button/button";
+import { Input } from "../input/input";
 
 type SearchBarProps = {
-  className?: string
-  onSearch?: (query: string) => void
-  placeholder?: string
-}
+  className?: string;
+  onSearch?: (query: string) => void;
+  placeholder?: string;
+};
 
 // eslint-disable-next-line max-lines-per-function
 export function SearchBar({
   className,
   onSearch,
-  placeholder = 'Search posts...',
+  placeholder = "Search posts...",
 }: SearchBarProps) {
-  const router = useRouter()
-  const searchParameters = useSearchParams()
-  const initialQuery = searchParameters.get('search') ?? ''
-  const [query, setQuery] = useState(initialQuery)
-  const debouncedQuery = useDebounce(query, 300)
-  const isInitialMount = useRef(true)
-  const isUserTyping = useRef(false)
+  const router = useRouter();
+  const searchParameters = useSearchParams();
+  const initialQuery = searchParameters.get("search") ?? "";
+  const [query, setQuery] = useState(initialQuery);
+  const debouncedQuery = useDebounce(query, 300);
+  const isInitialMount = useRef(true);
+  const isUserTyping = useRef(false);
 
-  const typingTimeoutReference = useRef<NodeJS.Timeout | undefined>(undefined)
-  const lastSetSearchParameterReference = useRef<string>('')
-  const lastDebouncedQueryReference = useRef<string>('')
+  const typingTimeoutReference = useRef<NodeJS.Timeout | undefined>(undefined);
+  const lastSetSearchParameterReference = useRef<string>("");
+  const lastDebouncedQueryReference = useRef<string>("");
 
   // Sync query with URL search params (e.g., on browser back/forward)
   // Sync when user is not actively typing and URL changed externally
   useEffect(() => {
-    const searchParameter = searchParameters.get('search') ?? ''
+    const searchParameter = searchParameters.get("search") ?? "";
 
     // Skip if this is the search param we set ourselves
     if (searchParameter === lastSetSearchParameterReference.current) {
-      return
+      return;
     }
 
     // Sync if user is not actively typing and values differ
     if (!isUserTyping.current && query !== searchParameter) {
-      setQuery(searchParameter)
-      lastDebouncedQueryReference.current = searchParameter
+      setQuery(searchParameter);
+      lastDebouncedQueryReference.current = searchParameter;
     }
-  }, [searchParameters, query]) // Include query to properly sync state
+  }, [searchParameters, query]); // Include query to properly sync state
 
   // Update URL when debounced query changes
   useEffect(() => {
     // Skip initial mount to avoid unnecessary URL update
     if (isInitialMount.current) {
-      isInitialMount.current = false
-      const initialTrimmed = debouncedQuery.trim()
-      lastDebouncedQueryReference.current = initialTrimmed
-      lastSetSearchParameterReference.current = initialTrimmed
-      return
+      isInitialMount.current = false;
+      const initialTrimmed = debouncedQuery.trim();
+      lastDebouncedQueryReference.current = initialTrimmed;
+      lastSetSearchParameterReference.current = initialTrimmed;
+      return;
     }
 
-    const trimmedQuery = debouncedQuery.trim()
+    const trimmedQuery = debouncedQuery.trim();
 
     // Skip if this is the same value we already processed
     if (trimmedQuery === lastDebouncedQueryReference.current) {
-      return
+      return;
     }
 
-    lastDebouncedQueryReference.current = trimmedQuery
+    lastDebouncedQueryReference.current = trimmedQuery;
 
     if (onSearch) {
-      onSearch(trimmedQuery)
-      return
+      onSearch(trimmedQuery);
+      return;
     }
 
     // Check current URL to avoid unnecessary updates
-    const currentUrlParameter = searchParameters.get('search') ?? ''
+    const currentUrlParameter = searchParameters.get("search") ?? "";
 
     // Skip if URL already matches the debounced query
     if (trimmedQuery === currentUrlParameter) {
-      lastSetSearchParameterReference.current = trimmedQuery
-      return
+      lastSetSearchParameterReference.current = trimmedQuery;
+      return;
     }
 
-    const parameters = new URLSearchParams(searchParameters)
+    const parameters = new URLSearchParams(searchParameters);
     if (trimmedQuery) {
-      parameters.set('search', trimmedQuery)
+      parameters.set("search", trimmedQuery);
     } else {
-      parameters.delete('search')
+      parameters.delete("search");
     }
-    const newUrl = parameters.toString()
-    lastSetSearchParameterReference.current = trimmedQuery
-    router.replace(`?${newUrl}`)
-  }, [debouncedQuery, router, onSearch, searchParameters])
+    const newUrl = parameters.toString();
+    lastSetSearchParameterReference.current = trimmedQuery;
+    router.replace(`?${newUrl}`);
+  }, [debouncedQuery, router, onSearch, searchParameters]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (typingTimeoutReference.current) {
-        clearTimeout(typingTimeoutReference.current)
+        clearTimeout(typingTimeoutReference.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    isUserTyping.current = true
-    setQuery(event.target.value)
+    isUserTyping.current = true;
+    setQuery(event.target.value);
 
     // Clear existing timeout
     if (typingTimeoutReference.current) {
-      clearTimeout(typingTimeoutReference.current)
+      clearTimeout(typingTimeoutReference.current);
     }
 
     // Reset typing flag after debounce delay + buffer
     typingTimeoutReference.current = setTimeout(() => {
-      isUserTyping.current = false
-    }, 350)
-  }
+      isUserTyping.current = false;
+    }, 350);
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
-    isUserTyping.current = false
+    event.preventDefault();
+    isUserTyping.current = false;
 
     // Clear typing timeout
     if (typingTimeoutReference.current) {
-      clearTimeout(typingTimeoutReference.current)
+      clearTimeout(typingTimeoutReference.current);
     }
 
-    const trimmedQuery = query.trim()
+    const trimmedQuery = query.trim();
     if (onSearch) {
-      onSearch(trimmedQuery)
+      onSearch(trimmedQuery);
     } else {
-      const parameters = new URLSearchParams(searchParameters)
+      const parameters = new URLSearchParams(searchParameters);
       if (trimmedQuery) {
-        parameters.set('search', trimmedQuery)
+        parameters.set("search", trimmedQuery);
       } else {
-        parameters.delete('search')
+        parameters.delete("search");
       }
-      const newUrl = parameters.toString()
-      lastSetSearchParameterReference.current = trimmedQuery
-      router.replace(`?${newUrl}`)
+      const newUrl = parameters.toString();
+      lastSetSearchParameterReference.current = trimmedQuery;
+      router.replace(`?${newUrl}`);
     }
-  }
+  };
 
   return (
     <form className={`flex gap-2 ${className}`} onSubmit={handleSubmit}>
@@ -157,5 +157,5 @@ export function SearchBar({
         Search
       </Button>
     </form>
-  )
+  );
 }

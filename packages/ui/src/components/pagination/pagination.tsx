@@ -1,23 +1,28 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import { Button } from '../button/button'
+import { Button } from "../button/button";
 
 export type PaginationProps = {
-  baseUrl: string
-  className?: string
-  currentPage: number
-  totalPages: number
-}
+  baseUrl: string;
+  className?: string;
+  currentPage: number;
+  totalPages: number;
+};
 
-export function Pagination({ baseUrl, className, currentPage, totalPages }: PaginationProps) {
-  if (totalPages <= 1) return null
+export function Pagination({
+  baseUrl,
+  className,
+  currentPage,
+  totalPages,
+}: PaginationProps) {
+  if (totalPages <= 1) return null;
 
-  const maxVisiblePages = 5
-  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
-  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+  const maxVisiblePages = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
   if (endPage - startPage + 1 < maxVisiblePages) {
-    startPage = Math.max(1, endPage - maxVisiblePages + 1)
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
 
   // Previous button
@@ -29,19 +34,25 @@ export function Pagination({ baseUrl, className, currentPage, totalPages }: Pagi
           <span className="sr-only">Previous</span>
         </Button>
       </Link>
-    ) : null
+    ) : null;
 
   // Page numbers
-  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, index) => {
-    const pageNumber = startPage + index
-    return (
-      <Link href={`${baseUrl}?page=${pageNumber}`} key={pageNumber}>
-        <Button size="sm" variant={pageNumber === currentPage ? 'default' : 'outline'}>
-          {pageNumber}
-        </Button>
-      </Link>
-    )
-  })
+  const pageNumbers = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, index) => {
+      const pageNumber = startPage + index;
+      return (
+        <Link href={`${baseUrl}?page=${pageNumber}`} key={pageNumber}>
+          <Button
+            size="sm"
+            variant={pageNumber === currentPage ? "default" : "outline"}
+          >
+            {pageNumber}
+          </Button>
+        </Link>
+      );
+    },
+  );
 
   // Next button
   const nextButton =
@@ -52,9 +63,13 @@ export function Pagination({ baseUrl, className, currentPage, totalPages }: Pagi
           <span className="text-sm">›</span>
         </Button>
       </Link>
-    ) : null
+    ) : null;
 
-  const pages = [previousButton, ...pageNumbers, nextButton].filter(Boolean)
+  const pages = [previousButton, ...pageNumbers, nextButton].filter(Boolean);
 
-  return <div className={`flex items-center justify-center gap-2 ${className}`}>{pages}</div>
+  return (
+    <div className={`flex items-center justify-center gap-2 ${className}`}>
+      {pages}
+    </div>
+  );
 }

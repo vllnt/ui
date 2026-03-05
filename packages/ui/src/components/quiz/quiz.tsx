@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useState } from "react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 export type QuizOption = {
-  correct?: boolean
-  explanation?: string
-  label: string
-}
+  correct?: boolean;
+  explanation?: string;
+  label: string;
+};
 
 type QuizOptionButtonProps = {
-  index: number
-  onSelect: (index: number) => void
-  option: QuizOption
-  selectedIndex: null | number
-  submitted: boolean
-}
+  index: number;
+  onSelect: (index: number) => void;
+  option: QuizOption;
+  selectedIndex: null | number;
+  submitted: boolean;
+};
 
 // eslint-disable-next-line max-lines-per-function -- Option button showing selected, correct, incorrect states
 function QuizOptionButton({
@@ -26,20 +26,23 @@ function QuizOptionButton({
   selectedIndex,
   submitted,
 }: QuizOptionButtonProps): React.ReactNode {
-  const isSelected = selectedIndex === index
-  const showResult = submitted && isSelected
+  const isSelected = selectedIndex === index;
+  const showResult = submitted && isSelected;
   return (
     <button
       className={cn(
-        'w-full text-left p-3 rounded-md border transition-colors hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary',
-        isSelected && !submitted && 'border-primary bg-primary/10',
-        showResult && option.correct && 'border-green-500 bg-green-500/10',
-        showResult && !option.correct && 'border-red-500 bg-red-500/10',
-        submitted && !isSelected && option.correct && 'border-green-500/50 bg-green-500/5',
+        "w-full text-left p-3 rounded-md border transition-colors hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary",
+        isSelected && !submitted && "border-primary bg-primary/10",
+        showResult && option.correct && "border-green-500 bg-green-500/10",
+        showResult && !option.correct && "border-red-500 bg-red-500/10",
+        submitted &&
+          !isSelected &&
+          option.correct &&
+          "border-green-500/50 bg-green-500/5",
       )}
       disabled={submitted}
       onClick={() => {
-        onSelect(index)
+        onSelect(index);
       }}
       type="button"
     >
@@ -83,64 +86,84 @@ function QuizOptionButton({
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+            <path
+              d="M5 13l4 4L19 7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+            />
           </svg>
         ) : null}
       </div>
       {submitted && option.explanation ? (
-        <p className="text-xs text-muted-foreground mt-2">{option.explanation}</p>
+        <p className="text-xs text-muted-foreground mt-2">
+          {option.explanation}
+        </p>
       ) : null}
     </button>
-  )
+  );
 }
 
 type QuizHintProps = {
-  hint: string
-  onShow: () => void
-  showHint: boolean
-}
+  hint: string;
+  onShow: () => void;
+  showHint: boolean;
+};
 
 function QuizHint({ hint, onShow, showHint }: QuizHintProps): React.ReactNode {
   return (
     <div className="mb-4">
       {showHint ? (
-        <p className="text-sm text-muted-foreground italic bg-muted/50 p-2 rounded">{hint}</p>
+        <p className="text-sm text-muted-foreground italic bg-muted/50 p-2 rounded">
+          {hint}
+        </p>
       ) : (
-        <button className="text-sm text-primary hover:underline" onClick={onShow} type="button">
+        <button
+          className="text-sm text-primary hover:underline"
+          onClick={onShow}
+          type="button"
+        >
           Show hint
         </button>
       )}
     </div>
-  )
+  );
 }
 
 type QuizResultProps = {
-  explanation: ReactNode
-  isCorrect: boolean
-}
+  explanation: ReactNode;
+  isCorrect: boolean;
+};
 
-function QuizResult({ explanation, isCorrect }: QuizResultProps): React.ReactNode {
+function QuizResult({
+  explanation,
+  isCorrect,
+}: QuizResultProps): React.ReactNode {
   return (
     <div
       className={cn(
-        'p-3 rounded-md text-sm mb-4',
-        isCorrect ? 'bg-green-500/10 text-green-700 dark:text-green-300' : 'bg-muted',
+        "p-3 rounded-md text-sm mb-4",
+        isCorrect
+          ? "bg-green-500/10 text-green-700 dark:text-green-300"
+          : "bg-muted",
       )}
     >
-      <p className="font-medium mb-1">{isCorrect ? 'Correct!' : 'Not quite right.'}</p>
+      <p className="font-medium mb-1">
+        {isCorrect ? "Correct!" : "Not quite right."}
+      </p>
       <div className="[&>p]:mb-0">{explanation}</div>
     </div>
-  )
+  );
 }
 
 export type QuizProps = {
-  className?: string
-  explanation?: ReactNode
-  hint?: string
-  onAnswer?: (correct: boolean) => void
-  options: QuizOption[]
-  question: string
-}
+  className?: string;
+  explanation?: ReactNode;
+  hint?: string;
+  onAnswer?: (correct: boolean) => void;
+  options: QuizOption[];
+  question: string;
+};
 
 // eslint-disable-next-line max-lines-per-function -- Interactive quiz with state management
 export function Quiz({
@@ -151,26 +174,26 @@ export function Quiz({
   options,
   question,
 }: QuizProps): React.ReactNode {
-  const [selectedIndex, setSelectedIndex] = useState<null | number>(null)
-  const [showHint, setShowHint] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
+  const [showHint, setShowHint] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleReset = (): void => {
-    setSelectedIndex(null)
-    setSubmitted(false)
-    setShowHint(false)
-  }
+    setSelectedIndex(null);
+    setSubmitted(false);
+    setShowHint(false);
+  };
 
   const handleSubmit = (): void => {
-    setSubmitted(true)
-    const isCorrect = selectedIndex !== null && options[selectedIndex]?.correct
-    onAnswer?.(Boolean(isCorrect))
-  }
+    setSubmitted(true);
+    const isCorrect = selectedIndex !== null && options[selectedIndex]?.correct;
+    onAnswer?.(Boolean(isCorrect));
+  };
 
-  const isCorrect = selectedIndex !== null && options[selectedIndex]?.correct
+  const isCorrect = selectedIndex !== null && options[selectedIndex]?.correct;
 
   return (
-    <div className={cn('my-6 rounded-lg border bg-card p-6', className)}>
+    <div className={cn("my-6 rounded-lg border bg-card p-6", className)}>
       <div className="flex items-start gap-3 mb-4">
         <svg
           className="h-5 w-5 text-primary flex-shrink-0 mt-0.5"
@@ -193,7 +216,7 @@ export function Quiz({
             index={index}
             key={index}
             onSelect={(index_) => {
-              if (!submitted) setSelectedIndex(index_)
+              if (!submitted) setSelectedIndex(index_);
             }}
             option={opt}
             selectedIndex={selectedIndex}
@@ -205,7 +228,7 @@ export function Quiz({
         <QuizHint
           hint={hint}
           onShow={() => {
-            setShowHint(true)
+            setShowHint(true);
           }}
           showHint={showHint}
         />
@@ -234,5 +257,5 @@ export function Quiz({
         )}
       </div>
     </div>
-  )
+  );
 }

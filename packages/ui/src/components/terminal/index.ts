@@ -4,4 +4,4 @@ export {
   Terminal,
   type TerminalLine,
   type TerminalProps,
-} from './terminal'
+} from "./terminal";

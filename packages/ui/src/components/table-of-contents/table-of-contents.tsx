@@ -1,63 +1,63 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 type TableOfContentsProps = {
-  sections: { id: string; title: string }[]
-}
+  sections: { id: string; title: string }[];
+};
 
 function handleClick(id: string) {
-  const element = document.querySelector(`#${id}`)
+  const element = document.querySelector(`#${id}`);
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 }
 
 function useActiveSection(sections: { id: string; title: string }[]) {
-  const [activeSection, setActiveSection] = useState<null | string>(null)
+  const [activeSection, setActiveSection] = useState<null | string>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
+            setActiveSection(entry.target.id);
           }
-        })
+        });
       },
       {
-        rootMargin: '-100px 0px -66% 0px',
+        rootMargin: "-100px 0px -66% 0px",
         threshold: 0,
       },
-    )
+    );
 
     sections.forEach((section) => {
-      const element = document.querySelector(`#${section.id}`)
+      const element = document.querySelector(`#${section.id}`);
       if (element) {
-        observer.observe(element)
+        observer.observe(element);
       }
-    })
+    });
 
     return () => {
       sections.forEach((section) => {
-        const element = document.querySelector(`#${section.id}`)
+        const element = document.querySelector(`#${section.id}`);
         if (element) {
-          observer.unobserve(element)
+          observer.unobserve(element);
         }
-      })
-    }
-  }, [sections])
+      });
+    };
+  }, [sections]);
 
-  return activeSection
+  return activeSection;
 }
 
 export function TableOfContents({ sections }: TableOfContentsProps) {
-  const activeSection = useActiveSection(sections)
+  const activeSection = useActiveSection(sections);
 
   if (sections.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -71,15 +71,15 @@ export function TableOfContents({ sections }: TableOfContentsProps) {
             {sections.map((section) => (
               <button
                 className={cn(
-                  'block text-left text-sm transition-colors',
-                  'hover:text-foreground',
+                  "block text-left text-sm transition-colors",
+                  "hover:text-foreground",
                   activeSection === section.id
-                    ? 'text-foreground font-medium'
-                    : 'text-muted-foreground',
+                    ? "text-foreground font-medium"
+                    : "text-muted-foreground",
                 )}
                 key={section.id}
                 onClick={() => {
-                  handleClick(section.id)
+                  handleClick(section.id);
                 }}
                 type="button"
               >
@@ -90,5 +90,5 @@ export function TableOfContents({ sections }: TableOfContentsProps) {
         </div>
       </div>
     </aside>
-  )
+  );
 }

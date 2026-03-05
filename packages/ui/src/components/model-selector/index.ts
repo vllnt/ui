@@ -1,1 +1,5 @@
-export { type ModelInfo, ModelSelector, type ModelSelectorProps } from './model-selector'
+export {
+  type ModelInfo,
+  ModelSelector,
+  type ModelSelectorProps,
+} from "./model-selector";

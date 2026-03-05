@@ -7,4 +7,4 @@ export {
   type AccordionProps,
   AccordionTrigger,
   type AccordionTriggerProps,
-} from './accordion'
+} from "./accordion";

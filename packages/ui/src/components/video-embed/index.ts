@@ -1,1 +1,1 @@
-export { VideoEmbed, type VideoEmbedProps } from './video-embed'
+export { VideoEmbed, type VideoEmbedProps } from "./video-embed";

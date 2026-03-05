@@ -1,32 +1,32 @@
-'use client'
+"use client";
 
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from "react";
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 export type TOCSection = {
-  id: string
-  title: string
-}
+  id: string;
+  title: string;
+};
 
 export type TableOfContentsPanelProps = {
-  className?: string
-  closeIcon?: ReactNode
-  completedSections: Set<string>
-  completionCount: number
-  currentSectionIndex: number
-  isOpen: boolean
-  onClose: () => void
-  onReset?: () => void
-  onSelectSection: (index: number) => void
-  progressLabel?: string
-  resetLabel?: string
-  sections: TOCSection[]
-  title?: string
-  totalSections: number
-}
+  className?: string;
+  closeIcon?: ReactNode;
+  completedSections: Set<string>;
+  completionCount: number;
+  currentSectionIndex: number;
+  isOpen: boolean;
+  onClose: () => void;
+  onReset?: () => void;
+  onSelectSection: (index: number) => void;
+  progressLabel?: string;
+  resetLabel?: string;
+  sections: TOCSection[];
+  title?: string;
+  totalSections: number;
+};
 
 // eslint-disable-next-line max-lines-per-function -- Complex panel with progress and section list
 function TableOfContentsPanelImpl({
@@ -39,49 +39,54 @@ function TableOfContentsPanelImpl({
   onClose,
   onReset,
   onSelectSection,
-  progressLabel = 'Progress',
-  resetLabel = 'Reset Progress',
+  progressLabel = "Progress",
+  resetLabel = "Reset Progress",
   sections,
-  title = 'Table of Contents',
+  title = "Table of Contents",
   totalSections,
 }: TableOfContentsPanelProps): React.ReactNode {
-  const panelRef = useRef<HTMLDivElement>(null)
-  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   // Focus trap and close on Escape
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
-    closeButtonRef.current?.focus()
+    closeButtonRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') {
-        event.preventDefault()
-        onClose()
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, onClose])
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
 
   // Prevent body scroll when open
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : ''
+    document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   const completionPercent =
-    totalSections > 0 ? Math.round((completionCount / totalSections) * 100) : 0
+    totalSections > 0 ? Math.round((completionCount / totalSections) * 100) : 0;
 
   return (
-    <div aria-labelledby="toc-title" aria-modal="true" className="fixed inset-0 z-50" role="dialog">
+    <div
+      aria-labelledby="toc-title"
+      aria-modal="true"
+      className="fixed inset-0 z-50"
+      role="dialog"
+    >
       {/* Backdrop */}
       <div
         aria-hidden="true"
@@ -92,7 +97,7 @@ function TableOfContentsPanelImpl({
       {/* Panel */}
       <div
         className={cn(
-          'absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl',
+          "absolute right-0 top-0 h-full w-full max-w-md bg-background shadow-xl",
           className,
         )}
         ref={panelRef}
@@ -111,7 +116,12 @@ function TableOfContentsPanelImpl({
               type="button"
             >
               {closeIcon ?? (
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     d="M6 18L18 6M6 6l12 12"
                     strokeLinecap="round"
@@ -140,33 +150,36 @@ function TableOfContentsPanelImpl({
           </div>
 
           {/* Sections List */}
-          <nav aria-label="Sections" className="flex-1 overflow-y-auto px-4 py-3">
+          <nav
+            aria-label="Sections"
+            className="flex-1 overflow-y-auto px-4 py-3"
+          >
             <ol className="space-y-1">
               {sections.map((section, index) => {
-                const isCompleted = completedSections.has(section.id)
-                const isCurrent = index === currentSectionIndex
+                const isCompleted = completedSections.has(section.id);
+                const isCurrent = index === currentSectionIndex;
 
                 return (
                   <li key={`${section.id}-${index}`}>
                     <button
                       className={cn(
-                        'flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors',
+                        "flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors",
                         isCurrent
-                          ? 'bg-primary/10 text-primary font-medium'
-                          : 'hover:bg-muted text-foreground',
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "hover:bg-muted text-foreground",
                       )}
                       onClick={() => {
-                        onSelectSection(index)
-                        onClose()
+                        onSelectSection(index);
+                        onClose();
                       }}
                       type="button"
                     >
                       <span
                         className={cn(
-                          'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border',
+                          "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
                           isCompleted
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-muted-foreground',
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-muted-foreground",
                         )}
                       >
                         {isCompleted ? (
@@ -187,12 +200,14 @@ function TableOfContentsPanelImpl({
                           <span className="text-xs">{index + 1}</span>
                         )}
                       </span>
-                      <span className={isCompleted ? 'line-through opacity-60' : ''}>
+                      <span
+                        className={isCompleted ? "line-through opacity-60" : ""}
+                      >
                         {section.title}
                       </span>
                     </button>
                   </li>
-                )
+                );
               })}
             </ol>
           </nav>
@@ -212,8 +227,8 @@ function TableOfContentsPanelImpl({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export const TableOfContentsPanel = memo(TableOfContentsPanelImpl)
-TableOfContentsPanel.displayName = 'TableOfContentsPanel'
+export const TableOfContentsPanel = memo(TableOfContentsPanelImpl);
+TableOfContentsPanel.displayName = "TableOfContentsPanel";

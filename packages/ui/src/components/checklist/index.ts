@@ -1,1 +1,5 @@
-export { Checklist, type ChecklistItem, type ChecklistProps } from './checklist'
+export {
+  Checklist,
+  type ChecklistItem,
+  type ChecklistProps,
+} from "./checklist";

@@ -1,63 +1,76 @@
-'use client'
+"use client";
 
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useState } from "react";
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
-import { Badge } from '../badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card'
+import { Badge } from "../badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../card";
 
 export type TutorialCardProgress = {
-  completedCount: number
-  totalSections: number
-}
+  completedCount: number;
+  totalSections: number;
+};
 
 export type TutorialCardMeta = {
-  description: string
-  difficulty: 'advanced' | 'beginner' | 'intermediate'
-  estimatedTime: string
-  id: string
-  sectionCount: number
-  tags: string[]
-  title: string
-}
+  description: string;
+  difficulty: "advanced" | "beginner" | "intermediate";
+  estimatedTime: string;
+  id: string;
+  sectionCount: number;
+  tags: string[];
+  title: string;
+};
 
 export type TutorialCardLabels = {
-  completed: string
-  difficulty: Record<string, string>
-  sectionsCount: string
-}
+  completed: string;
+  difficulty: Record<string, string>;
+  sectionsCount: string;
+};
 
 export type TutorialCardProps = {
   /** Function to get progress (for localStorage etc) */
-  getProgress?: (id: string) => null | TutorialCardProgress
-  href: string
-  labels: TutorialCardLabels
+  getProgress?: (id: string) => null | TutorialCardProgress;
+  href: string;
+  labels: TutorialCardLabels;
   /** Link component (e.g., Next.js Link) */
-  linkComponent?: React.ComponentType<{ children: ReactNode; className?: string; href: string }>
-  tutorial: TutorialCardMeta
-}
+  linkComponent?: React.ComponentType<{
+    children: ReactNode;
+    className?: string;
+    href: string;
+  }>;
+  tutorial: TutorialCardMeta;
+};
 
 const DIFFICULTY_VARIANTS = {
-  advanced: 'destructive',
-  beginner: 'secondary',
-  intermediate: 'default',
-} satisfies Record<TutorialCardMeta['difficulty'], 'default' | 'destructive' | 'secondary'>
+  advanced: "destructive",
+  beginner: "secondary",
+  intermediate: "default",
+} satisfies Record<
+  TutorialCardMeta["difficulty"],
+  "default" | "destructive" | "secondary"
+>;
 
 function DefaultLink({
   children,
   className,
   href,
 }: {
-  children: ReactNode
-  className?: string
-  href: string
+  children: ReactNode;
+  className?: string;
+  href: string;
 }): React.ReactNode {
   return (
     <a className={className} href={href}>
       {children}
     </a>
-  )
+  );
 }
 
 function TutorialCardImpl({
@@ -67,20 +80,22 @@ function TutorialCardImpl({
   linkComponent: LinkComponent = DefaultLink,
   tutorial,
 }: TutorialCardProps): React.ReactNode {
-  const [progress, setProgress] = useState<null | TutorialCardProgress>(null)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const [progress, setProgress] = useState<null | TutorialCardProgress>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setIsHydrated(true)
+    setIsHydrated(true);
     if (getProgress) {
-      setProgress(getProgress(tutorial.id))
+      setProgress(getProgress(tutorial.id));
     }
-  }, [getProgress, tutorial.id])
+  }, [getProgress, tutorial.id]);
 
-  const difficultyVariant = DIFFICULTY_VARIANTS[tutorial.difficulty]
+  const difficultyVariant = DIFFICULTY_VARIANTS[tutorial.difficulty];
   // Cap completedCount at sectionCount to handle stale localStorage data
-  const safeCompletedCount = progress ? Math.min(progress.completedCount, tutorial.sectionCount) : 0
-  const showProgress = isHydrated && safeCompletedCount > 0
+  const safeCompletedCount = progress
+    ? Math.min(progress.completedCount, tutorial.sectionCount)
+    : 0;
+  const showProgress = isHydrated && safeCompletedCount > 0;
 
   return (
     <LinkComponent className="block h-full" href={href}>
@@ -97,8 +112,12 @@ function TutorialCardImpl({
             ) : null}
           </div>
 
-          <CardTitle className="line-clamp-2 text-lg">{tutorial.title}</CardTitle>
-          <CardDescription className="line-clamp-3">{tutorial.description}</CardDescription>
+          <CardTitle className="line-clamp-2 text-lg">
+            {tutorial.title}
+          </CardTitle>
+          <CardDescription className="line-clamp-3">
+            {tutorial.description}
+          </CardDescription>
         </CardHeader>
 
         <CardContent className="mt-auto space-y-2">
@@ -122,8 +141,8 @@ function TutorialCardImpl({
         </CardContent>
       </Card>
     </LinkComponent>
-  )
+  );
 }
 
-export const TutorialCard = memo(TutorialCardImpl)
-TutorialCard.displayName = 'TutorialCard'
+export const TutorialCard = memo(TutorialCardImpl);
+TutorialCard.displayName = "TutorialCard";

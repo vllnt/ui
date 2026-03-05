@@ -1,1 +1,1 @@
-export { ProfileSection } from './profile-section'
+export { ProfileSection } from "./profile-section";

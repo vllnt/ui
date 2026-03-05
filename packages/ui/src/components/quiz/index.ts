@@ -1,1 +1,1 @@
-export { Quiz, type QuizOption, type QuizProps } from './quiz'
+export { Quiz, type QuizOption, type QuizProps } from "./quiz";

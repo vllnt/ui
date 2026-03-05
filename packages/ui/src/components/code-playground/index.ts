@@ -3,4 +3,4 @@ export {
   type CodePlaygroundProps,
   FileTree,
   type FileTreeProps,
-} from './code-playground'
+} from "./code-playground";

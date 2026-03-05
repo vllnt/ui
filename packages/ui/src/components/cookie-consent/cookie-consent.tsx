@@ -1,56 +1,56 @@
-'use client'
+"use client";
 
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useState } from "react";
 
-import { cva, type VariantProps } from 'class-variance-authority'
-import { X } from 'lucide-react'
+import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
 
-import { cn } from '../../lib/utils'
-import { Button } from '../button/button'
+import { cn } from "../../lib/utils";
+import { Button } from "../button/button";
 
 const cookieConsentVariants = cva(
   // Base: safe-area-inset for notched devices
   // Desktop: compact single-line layout, height matches button
-  'fixed z-50 rounded-lg border bg-background shadow-lg transition-all duration-300 max-w-[calc(100vw-2rem)] p-4 sm:py-1.5 sm:px-3',
+  "fixed z-50 rounded-lg border bg-background shadow-lg transition-all duration-300 max-w-[calc(100vw-2rem)] p-4 sm:py-1.5 sm:px-3",
   {
     defaultVariants: {
-      position: 'bottom-left',
+      position: "bottom-left",
     },
     variants: {
       position: {
         // Mobile: 16px (1rem) from edges, respects safe area
         // Desktop: 16px from edges
-        'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 mb-safe',
-        'bottom-left': 'bottom-4 left-4 right-4 sm:right-auto mb-safe ml-safe',
-        'bottom-right': 'bottom-4 right-4 left-4 sm:left-auto mb-safe mr-safe',
+        "bottom-center": "bottom-4 left-1/2 -translate-x-1/2 mb-safe",
+        "bottom-left": "bottom-4 left-4 right-4 sm:right-auto mb-safe ml-safe",
+        "bottom-right": "bottom-4 right-4 left-4 sm:left-auto mb-safe mr-safe",
       },
     },
   },
-)
+);
 
 export type CookieConsentProps = {
   /** Text for the accept button */
-  acceptText?: string
+  acceptText?: string;
   /** Text for the decline button (optional, hidden if not provided) */
-  declineText?: string
+  declineText?: string;
   /** Text to display in the banner */
-  message?: string
+  message?: string;
   /** Called when user accepts */
-  onAccept?: () => void
+  onAccept?: () => void;
   /** Called when user declines */
-  onDecline?: () => void
+  onDecline?: () => void;
   /** Called when visibility changes */
-  onOpenChange?: (open: boolean) => void
+  onOpenChange?: (open: boolean) => void;
   /** Whether the banner is visible */
-  open?: boolean
+  open?: boolean;
   /** URL for privacy policy / settings page */
-  settingsHref?: string
+  settingsHref?: string;
   /** Text for the settings/learn more link */
-  settingsText?: string
+  settingsText?: string;
   /** Whether to show the close button */
-  showCloseButton?: boolean
+  showCloseButton?: boolean;
 } & VariantProps<typeof cookieConsentVariants> &
-  Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>
+  Omit<React.HTMLAttributes<HTMLDivElement>, "children">;
 
 /**
  * Cookie consent banner component (Vercel-style)
@@ -61,59 +61,59 @@ export type CookieConsentProps = {
 const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
   (
     {
-      acceptText = 'Accept',
+      acceptText = "Accept",
       className,
       declineText,
-      message = 'This site uses cookies to improve your experience.',
+      message = "This site uses cookies to improve your experience.",
       onAccept,
       onDecline,
       onOpenChange,
       open = true,
       position,
       settingsHref,
-      settingsText = 'Learn more',
+      settingsText = "Learn more",
       showCloseButton = false,
       ...props
     },
     reference,
   ) => {
-    const [isVisible, setIsVisible] = useState(false)
-    const [isAnimatingOut, setIsAnimatingOut] = useState(false)
+    const [isVisible, setIsVisible] = useState(false);
+    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
     // Handle visibility with animation
     useEffect(() => {
       if (open) {
         // Small delay for mount animation
         const timer = setTimeout(() => {
-          setIsVisible(true)
-        }, 50)
+          setIsVisible(true);
+        }, 50);
         return () => {
-          clearTimeout(timer)
-        }
+          clearTimeout(timer);
+        };
       } else {
-        setIsVisible(false)
+        setIsVisible(false);
       }
-    }, [open])
+    }, [open]);
 
     const handleClose = useCallback(() => {
-      setIsAnimatingOut(true)
+      setIsAnimatingOut(true);
       setTimeout(() => {
-        setIsAnimatingOut(false)
-        onOpenChange?.(false)
-      }, 200)
-    }, [onOpenChange])
+        setIsAnimatingOut(false);
+        onOpenChange?.(false);
+      }, 200);
+    }, [onOpenChange]);
 
     const handleAccept = useCallback(() => {
-      onAccept?.()
-      handleClose()
-    }, [onAccept, handleClose])
+      onAccept?.();
+      handleClose();
+    }, [onAccept, handleClose]);
 
     const handleDecline = useCallback(() => {
-      onDecline?.()
-      handleClose()
-    }, [onDecline, handleClose])
+      onDecline?.();
+      handleClose();
+    }, [onDecline, handleClose]);
 
-    if (!open && !isAnimatingOut) return null
+    if (!open && !isAnimatingOut) return null;
 
     return (
       <div
@@ -122,7 +122,9 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
         className={cn(
           cookieConsentVariants({ position }),
           // Animation states
-          isVisible && !isAnimatingOut ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
+          isVisible && !isAnimatingOut
+            ? "translate-y-0 opacity-100"
+            : "translate-y-4 opacity-0",
           className,
         )}
         ref={reference}
@@ -142,11 +144,21 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
               </a>
             ) : null}
             {declineText ? (
-              <Button onClick={handleDecline} size="sm" type="button" variant="ghost">
+              <Button
+                onClick={handleDecline}
+                size="sm"
+                type="button"
+                variant="ghost"
+              >
                 {declineText}
               </Button>
             ) : null}
-            <Button onClick={handleAccept} size="sm" type="button" variant="default">
+            <Button
+              onClick={handleAccept}
+              size="sm"
+              type="button"
+              variant="default"
+            >
               {acceptText}
             </Button>
           </div>
@@ -194,9 +206,9 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
           </button>
         ) : null}
       </div>
-    )
+    );
   },
-)
-CookieConsent.displayName = 'CookieConsent'
+);
+CookieConsent.displayName = "CookieConsent";
 
-export { CookieConsent, cookieConsentVariants }
+export { CookieConsent, cookieConsentVariants };

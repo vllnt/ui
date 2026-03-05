@@ -1,1 +1,1 @@
-export { SidebarToggle, type SidebarToggleProps } from './sidebar-toggle'
+export { SidebarToggle, type SidebarToggleProps } from "./sidebar-toggle";

@@ -1,35 +1,39 @@
-'use client'
+"use client";
 
-import { useCallback, useEffect, useId, useState } from 'react'
+import { useCallback, useEffect, useId, useState } from "react";
 
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronRight } from "lucide-react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 export type ThinkingBlockProps = {
-  className?: string
+  className?: string;
   /** Whether the content is still streaming. */
-  isStreaming?: boolean
+  isStreaming?: boolean;
   /** The thinking text content to display. */
-  thinking: string
-}
+  thinking: string;
+};
 
 /** Collapsible thinking block with streaming support. */
-export function ThinkingBlock({ className, isStreaming = false, thinking }: ThinkingBlockProps) {
-  const [isExpanded, setIsExpanded] = useState(isStreaming)
-  const contentId = useId()
+export function ThinkingBlock({
+  className,
+  isStreaming = false,
+  thinking,
+}: ThinkingBlockProps) {
+  const [isExpanded, setIsExpanded] = useState(isStreaming);
+  const contentId = useId();
 
   // Auto-open when streaming starts
   useEffect(() => {
-    if (isStreaming) setIsExpanded(true)
-  }, [isStreaming])
+    if (isStreaming) setIsExpanded(true);
+  }, [isStreaming]);
 
   const toggleExpanded = useCallback(() => {
-    setIsExpanded((previous) => !previous)
-  }, [])
+    setIsExpanded((previous) => !previous);
+  }, []);
 
   return (
-    <div className={cn('mb-2', className)}>
+    <div className={cn("mb-2", className)}>
       <button
         aria-controls={contentId}
         aria-expanded={isExpanded}
@@ -37,7 +41,11 @@ export function ThinkingBlock({ className, isStreaming = false, thinking }: Thin
         onClick={toggleExpanded}
         type="button"
       >
-        {isExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+        {isExpanded ? (
+          <ChevronDown className="h-3 w-3" />
+        ) : (
+          <ChevronRight className="h-3 w-3" />
+        )}
         <span>
           Thinking
           {isStreaming ? <span className="ml-1 animate-pulse">...</span> : null}
@@ -53,5 +61,5 @@ export function ThinkingBlock({ className, isStreaming = false, thinking }: Thin
         </div>
       ) : null}
     </div>
-  )
+  );
 }

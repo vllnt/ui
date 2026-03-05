@@ -1,1 +1,4 @@
-export { TutorialIntroContent, type TutorialIntroContentProps } from './tutorial-intro-content'
+export {
+  TutorialIntroContent,
+  type TutorialIntroContentProps,
+} from "./tutorial-intro-content";

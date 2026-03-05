@@ -1,1 +1,6 @@
-export { BeforeAfter, type BeforeAfterProps, Comparison, type ComparisonProps } from './comparison'
+export {
+  BeforeAfter,
+  type BeforeAfterProps,
+  Comparison,
+  type ComparisonProps,
+} from "./comparison";

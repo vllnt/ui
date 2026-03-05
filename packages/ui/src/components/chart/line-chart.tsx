@@ -1,56 +1,56 @@
-import * as React from 'react'
+import * as React from "react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 type Datum = {
-  label?: string
-  value: number
-}
+  label?: string;
+  value: number;
+};
 
 export type LineChartProps = {
-  color?: string
-  data: Datum[]
-  gradientId?: string
-  height?: number
-  strokeWidth?: number
-  width?: number
-} & React.HTMLAttributes<HTMLDivElement>
+  color?: string;
+  data: Datum[];
+  gradientId?: string;
+  height?: number;
+  strokeWidth?: number;
+  width?: number;
+} & React.HTMLAttributes<HTMLDivElement>;
 
-const DEFAULT_WIDTH = 320
-const DEFAULT_HEIGHT = 140
-const DEFAULT_STROKE_WIDTH = 2
+const DEFAULT_WIDTH = 320;
+const DEFAULT_HEIGHT = 140;
+const DEFAULT_STROKE_WIDTH = 2;
 
-type ChartDimensions = { height: number; strokeWidth: number; width: number }
+type ChartDimensions = { height: number; strokeWidth: number; width: number };
 
 function buildCoordinates(data: Datum[], dimensions: ChartDimensions) {
-  if (data.length === 0) return []
+  if (data.length === 0) return [];
 
-  const { height, strokeWidth, width } = dimensions
-  const values = data.map((point) => point.value)
-  const minValue = Math.min(...values)
-  const maxValue = Math.max(...values)
-  const range = maxValue - minValue || 1
-  const safeWidth = Math.max(width - strokeWidth * 2, 0)
-  const safeHeight = Math.max(height - strokeWidth * 2, 0)
+  const { height, strokeWidth, width } = dimensions;
+  const values = data.map((point) => point.value);
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+  const range = maxValue - minValue || 1;
+  const safeWidth = Math.max(width - strokeWidth * 2, 0);
+  const safeHeight = Math.max(height - strokeWidth * 2, 0);
 
   return data.map((point, index) => {
     const x =
       data.length === 1
         ? strokeWidth + safeWidth / 2
-        : strokeWidth + (index / (data.length - 1)) * safeWidth
-    const ratio = (point.value - minValue) / range
-    const y = safeHeight - ratio * safeHeight + strokeWidth
-    return { x, y }
-  })
+        : strokeWidth + (index / (data.length - 1)) * safeWidth;
+    const ratio = (point.value - minValue) / range;
+    const y = safeHeight - ratio * safeHeight + strokeWidth;
+    return { x, y };
+  });
 }
 
 export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   (
     {
       className,
-      color = 'currentColor',
+      color = "currentColor",
       data,
-      gradientId = 'line-chart-gradient',
+      gradientId = "line-chart-gradient",
       height = DEFAULT_HEIGHT,
       strokeWidth = DEFAULT_STROKE_WIDTH,
       width = DEFAULT_WIDTH,
@@ -61,24 +61,27 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
     const canvasData = React.useMemo(
       () => buildCoordinates(data, { height, strokeWidth, width }),
       [data, width, height, strokeWidth],
-    )
+    );
 
     if (canvasData.length === 0) {
-      return null
+      return null;
     }
 
     const linePath = canvasData
-      .map((point, index) => `${index === 0 ? 'M' : 'L'}${point.x},${point.y}`)
-      .join(' ')
+      .map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`)
+      .join(" ");
 
     const areaPath =
       canvasData.length === 0
-        ? ''
-        : `M${canvasData[0]?.x ?? 0},${height} ${linePath} L${canvasData.at(-1)?.x ?? 0},${height}Z`
+        ? ""
+        : `M${canvasData[0]?.x ?? 0},${height} ${linePath} L${canvasData.at(-1)?.x ?? 0},${height}Z`;
 
     return (
       <div
-        className={cn('rounded-lg border border-border bg-background/40 p-3', className)}
+        className={cn(
+          "rounded-lg border border-border bg-background/40 p-3",
+          className,
+        )}
         ref={reference}
         {...props}
       >
@@ -113,8 +116,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           />
         </svg>
       </div>
-    )
+    );
   },
-)
+);
 
-LineChart.displayName = 'LineChart'
+LineChart.displayName = "LineChart";

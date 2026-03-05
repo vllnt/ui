@@ -1,1 +1,1 @@
-export { LangProvider } from './lang-provider'
+export { LangProvider } from "./lang-provider";

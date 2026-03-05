@@ -2,4 +2,4 @@ export {
   type KeyboardShortcut,
   KeyboardShortcutsHelp,
   type KeyboardShortcutsHelpProps,
-} from './keyboard-shortcuts-help'
+} from "./keyboard-shortcuts-help";

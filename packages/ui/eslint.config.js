@@ -2,7 +2,7 @@ import { react } from '@vllnt/eslint-config'
 
 export default [
   {
-    ignores: ['node_modules/**', 'eslint.config.js', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts'],
+    ignores: ['node_modules/**', 'dist/**', 'eslint.config.js', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts'],
   },
   ...react,
   {

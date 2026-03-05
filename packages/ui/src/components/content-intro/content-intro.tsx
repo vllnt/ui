@@ -1,51 +1,51 @@
-'use client'
+"use client";
 
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect } from "react";
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
-import { cn } from '../../lib/utils'
-import { Button } from '../button'
+import { cn } from "../../lib/utils";
+import { Button } from "../button";
 
 export type ContentIntroSection = {
-  id: string
-  title: string
-}
+  id: string;
+  title: string;
+};
 
 export type ContentIntroLabels = {
-  continueLabel?: string
-  startLabel?: string
-  tableOfContentsLabel?: string
-}
+  continueLabel?: string;
+  startLabel?: string;
+  tableOfContentsLabel?: string;
+};
 
 export type ContentIntroProps = {
   /** Extra content sections (share, profile, etc.) */
-  additionalContent?: ReactNode
+  additionalContent?: ReactNode;
   /** Completed section IDs */
-  completedSections: Set<string>
+  completedSections: Set<string>;
   /** Estimated time to complete */
-  estimatedTime: string
+  estimatedTime: string;
   /** Is loading progress */
-  isLoading?: boolean
+  isLoading?: boolean;
   /** Labels for i18n */
-  labels?: ContentIntroLabels
+  labels?: ContentIntroLabels;
   /** Callback when navigating to section */
-  onGoToSection: (index: number) => void
+  onGoToSection: (index: number) => void;
   /** Callback when starting */
-  onStart: () => void
+  onStart: () => void;
   /** Render function for intro content */
-  renderIntroContent: () => ReactNode
+  renderIntroContent: () => ReactNode;
   /** Sections for TOC */
-  sections: ContentIntroSection[]
+  sections: ContentIntroSection[];
   /** Intro section title */
-  title: string
-}
+  title: string;
+};
 
 const DEFAULT_LABELS: Required<ContentIntroLabels> = {
-  continueLabel: 'Continue Tutorial',
-  startLabel: 'Start Tutorial',
-  tableOfContentsLabel: 'Table of Contents',
-}
+  continueLabel: "Continue Tutorial",
+  startLabel: "Start Tutorial",
+  tableOfContentsLabel: "Table of Contents",
+};
 
 // eslint-disable-next-line max-lines-per-function -- Complex intro with TOC and sticky button
 function ContentIntroImpl({
@@ -60,25 +60,25 @@ function ContentIntroImpl({
   sections,
   title,
 }: ContentIntroProps): React.ReactNode {
-  const mergedLabels = { ...DEFAULT_LABELS, ...labels }
-  const hasProgress = completedSections.size > 0
+  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+  const hasProgress = completedSections.size > 0;
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        onStart()
+      if (event.key === "Enter") {
+        event.preventDefault();
+        onStart();
       }
     },
     [onStart],
-  )
+  );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [handleKeyDown])
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
     <>
@@ -86,32 +86,37 @@ function ContentIntroImpl({
         {/* Introduction Content */}
         <section className="py-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-6">{title}</h2>
-          <div className={cn('max-w-none', '[&_h2:first-of-type]:hidden')}>
+          <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
             {renderIntroContent()}
           </div>
         </section>
 
         {/* Table of Contents */}
         <section className="mt-8 py-6 border-t border-border">
-          <h3 className="text-lg font-semibold mb-4">{mergedLabels.tableOfContentsLabel}</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            {mergedLabels.tableOfContentsLabel}
+          </h3>
           <ol className="space-y-2">
             {sections.map((section, index) => {
-              const isCompleted = !isLoading && completedSections.has(section.id)
+              const isCompleted =
+                !isLoading && completedSections.has(section.id);
               return (
                 <li key={`${section.id}-${index}`}>
                   <button
                     className="w-full flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-muted/50 transition-colors text-left"
                     onClick={() => {
-                      onGoToSection(index)
+                      onGoToSection(index);
                     }}
                     type="button"
                   >
                     <span
                       className={cn(
-                        'flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors',
-                        isLoading && 'animate-pulse bg-muted',
-                        !isLoading && isCompleted && 'bg-foreground text-background',
-                        !isLoading && !isCompleted && 'bg-muted',
+                        "flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
+                        isLoading && "animate-pulse bg-muted",
+                        !isLoading &&
+                          isCompleted &&
+                          "bg-foreground text-background",
+                        !isLoading && !isCompleted && "bg-muted",
                       )}
                     >
                       {isCompleted ? (
@@ -133,13 +138,16 @@ function ContentIntroImpl({
                       )}
                     </span>
                     <span
-                      className={cn('text-sm', isCompleted && 'line-through text-muted-foreground')}
+                      className={cn(
+                        "text-sm",
+                        isCompleted && "line-through text-muted-foreground",
+                      )}
                     >
                       {section.title}
                     </span>
                   </button>
                 </li>
-              )
+              );
             })}
           </ol>
         </section>
@@ -162,7 +170,12 @@ function ContentIntroImpl({
               onClick={onStart}
               size="lg"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   d="M5 3l14 9-14 9V3z"
                   strokeLinecap="round"
@@ -170,7 +183,11 @@ function ContentIntroImpl({
                   strokeWidth={2}
                 />
               </svg>
-              <span>{hasProgress ? mergedLabels.continueLabel : mergedLabels.startLabel}</span>
+              <span>
+                {hasProgress
+                  ? mergedLabels.continueLabel
+                  : mergedLabels.startLabel}
+              </span>
               <kbd className="hidden md:inline-flex ml-1 px-1.5 py-0.5 text-xs font-mono bg-primary-foreground/20 rounded">
                 ↵
               </kbd>
@@ -179,8 +196,8 @@ function ContentIntroImpl({
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export const ContentIntro = memo(ContentIntroImpl)
-ContentIntro.displayName = 'ContentIntro'
+export const ContentIntro = memo(ContentIntroImpl);
+ContentIntro.displayName = "ContentIntro";

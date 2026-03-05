@@ -1,1 +1,1 @@
-export { InlineInput, type InlineInputProps } from './inline-input'
+export { InlineInput, type InlineInputProps } from "./inline-input";

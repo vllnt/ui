@@ -3,4 +3,4 @@ export {
   type FilterBarLabels,
   type FilterBarProps,
   type FilterOption,
-} from './filter-bar'
+} from "./filter-bar";

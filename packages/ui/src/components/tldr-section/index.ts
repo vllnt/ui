@@ -1,1 +1,1 @@
-export { TLDRSection } from './tldr-section'
+export { TLDRSection } from "./tldr-section";

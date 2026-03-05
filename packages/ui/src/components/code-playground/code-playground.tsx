@@ -1,59 +1,61 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
-import { Check, Code, Copy, FileCode } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { Check, Code, Copy, FileCode } from "lucide-react";
+import type { ReactNode } from "react";
 
-import { cn } from '../../lib/utils'
-import { Button } from '../button'
+import { cn } from "../../lib/utils";
+import { Button } from "../button";
 
 type CodeLineProps = {
-  highlightLines: number[]
-  line: string
-  lineNumber: number
-}
+  highlightLines: number[];
+  line: string;
+  lineNumber: number;
+};
 
 function CodeLine({ highlightLines, line, lineNumber }: CodeLineProps) {
-  const isHighlighted = highlightLines.includes(lineNumber)
+  const isHighlighted = highlightLines.includes(lineNumber);
   return (
-    <div className={cn('flex', isHighlighted && 'bg-primary/10 -mx-4 px-4')}>
-      <span className="select-none w-8 text-right pr-4 text-muted-foreground/50">{lineNumber}</span>
+    <div className={cn("flex", isHighlighted && "bg-primary/10 -mx-4 px-4")}>
+      <span className="select-none w-8 text-right pr-4 text-muted-foreground/50">
+        {lineNumber}
+      </span>
       <span>{line}</span>
     </div>
-  )
+  );
 }
 
 export type CodePlaygroundProps = {
-  children: ReactNode
-  description?: string
-  filename?: string
-  highlightLines?: number[]
-  language?: string
-  showLineNumbers?: boolean
-  title: string
-}
+  children: ReactNode;
+  description?: string;
+  filename?: string;
+  highlightLines?: number[];
+  language?: string;
+  showLineNumbers?: boolean;
+  title: string;
+};
 
 export function CodePlayground({
   children,
   description,
   filename,
   highlightLines = [],
-  language = 'typescript',
+  language = "typescript",
   showLineNumbers = false,
   title,
 }: CodePlaygroundProps) {
-  const [copied, setCopied] = useState(false)
-  const code = typeof children === 'string' ? children : ''
-  const lines = code.split('\n')
+  const [copied, setCopied] = useState(false);
+  const code = typeof children === "string" ? children : "";
+  const lines = code.split("\n");
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
     setTimeout(() => {
-      setCopied(false)
-    }, 2000)
-  }
+      setCopied(false);
+    }, 2000);
+  };
 
   return (
     <div className="my-6 rounded-lg border bg-card overflow-hidden">
@@ -64,7 +66,9 @@ export function CodePlayground({
           </div>
           <div>
             <h4 className="font-semibold text-sm">{title}</h4>
-            {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
+            {description ? (
+              <p className="text-xs text-muted-foreground">{description}</p>
+            ) : null}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -74,8 +78,17 @@ export function CodePlayground({
               <span className="font-mono">{filename}</span>
             </div>
           ) : null}
-          <Button className="h-8 w-8" onClick={handleCopy} size="icon" variant="ghost">
-            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+          <Button
+            className="h-8 w-8"
+            onClick={handleCopy}
+            size="icon"
+            variant="ghost"
+          >
+            {copied ? (
+              <Check className="h-3 w-3" />
+            ) : (
+              <Copy className="h-3 w-3" />
+            )}
           </Button>
         </div>
       </div>
@@ -103,15 +116,18 @@ export function CodePlayground({
         </span>
       </div>
     </div>
-  )
+  );
 }
 
 export type FileTreeProps = {
-  children: ReactNode
-  title?: string
-}
+  children: ReactNode;
+  title?: string;
+};
 
-export function FileTree({ children, title = 'File Structure' }: FileTreeProps) {
+export function FileTree({
+  children,
+  title = "File Structure",
+}: FileTreeProps) {
   return (
     <div className="my-6 rounded-lg border bg-card overflow-hidden">
       <div className="px-4 py-2 border-b bg-muted/30">
@@ -124,5 +140,5 @@ export function FileTree({ children, title = 'File Structure' }: FileTreeProps) 
         {children}
       </div>
     </div>
-  )
+  );
 }

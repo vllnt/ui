@@ -4,4 +4,4 @@ export {
   type TutorialCardMeta,
   type TutorialCardProgress,
   type TutorialCardProps,
-} from './tutorial-card'
+} from "./tutorial-card";

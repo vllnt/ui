@@ -1,1 +1,1 @@
-export { Exercise, type ExerciseProps } from './exercise'
+export { Exercise, type ExerciseProps } from "./exercise";

@@ -3,4 +3,4 @@ export {
   type SlideshowLabels,
   type SlideshowProps,
   type SlideshowSection,
-} from './slideshow'
+} from "./slideshow";

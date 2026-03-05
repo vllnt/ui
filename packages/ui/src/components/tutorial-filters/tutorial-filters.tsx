@@ -1,37 +1,37 @@
-'use client'
+"use client";
 
-import { memo } from 'react'
+import { memo } from "react";
 
-import { Badge } from '../badge'
+import { Badge } from "../badge";
 
 export type TutorialFiltersLabels = {
-  activeFilters: string
-  clear: string
-  clearAll: string
-  difficulty: Record<string, string>
-  difficultyLabel: string
-  searchFilter: string
-  searchLabel: string
-  searchPlaceholder: string
-  tagsLabel: string
-}
+  activeFilters: string;
+  clear: string;
+  clearAll: string;
+  difficulty: Record<string, string>;
+  difficultyLabel: string;
+  searchFilter: string;
+  searchLabel: string;
+  searchPlaceholder: string;
+  tagsLabel: string;
+};
 
 export type FilterUpdates = {
-  difficulty?: string
-  search?: string
-  tags?: string[]
-}
+  difficulty?: string;
+  search?: string;
+  tags?: string[];
+};
 
 export type TutorialFiltersProps = {
-  currentDifficulty: string
-  currentTags: string[]
-  difficultyOptions?: string[]
-  isPending?: boolean
-  labels: TutorialFiltersLabels
-  onFilterChange: (updates: FilterUpdates) => void
-  searchQuery: string
-  tags: string[]
-}
+  currentDifficulty: string;
+  currentTags: string[];
+  difficultyOptions?: string[];
+  isPending?: boolean;
+  labels: TutorialFiltersLabels;
+  onFilterChange: (updates: FilterUpdates) => void;
+  searchQuery: string;
+  tags: string[];
+};
 
 function SearchInput({
   isPending,
@@ -39,10 +39,10 @@ function SearchInput({
   onSearchChange,
   searchQuery,
 }: {
-  isPending: boolean
-  labels: TutorialFiltersLabels
-  onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  searchQuery: string
+  isPending: boolean;
+  labels: TutorialFiltersLabels;
+  onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchQuery: string;
 }): React.ReactNode {
   return (
     <div>
@@ -59,7 +59,7 @@ function SearchInput({
         type="text"
       />
     </div>
-  )
+  );
 }
 
 function DifficultyFilter({
@@ -69,11 +69,11 @@ function DifficultyFilter({
   labels,
   onDifficultyChange,
 }: {
-  activeDifficulty: string
-  difficultyOptions: string[]
-  isPending: boolean
-  labels: TutorialFiltersLabels
-  onDifficultyChange: (difficulty: string) => void
+  activeDifficulty: string;
+  difficultyOptions: string[];
+  isPending: boolean;
+  labels: TutorialFiltersLabels;
+  onDifficultyChange: (difficulty: string) => void;
 }): React.ReactNode {
   return (
     <div>
@@ -82,28 +82,30 @@ function DifficultyFilter({
       </div>
       <div className="flex flex-wrap gap-2">
         {difficultyOptions.map((difficulty) => {
-          const isActive = difficulty === activeDifficulty
+          const isActive = difficulty === activeDifficulty;
           return (
             <button
               className={`px-3 py-1 text-sm rounded-lg border transition-colors ${
                 isActive
-                  ? 'bg-primary text-primary-foreground border-transparent'
-                  : 'bg-background text-foreground border-border hover:bg-muted'
+                  ? "bg-primary text-primary-foreground border-transparent"
+                  : "bg-background text-foreground border-border hover:bg-muted"
               }`}
               disabled={isPending}
               key={difficulty}
               onClick={() => {
-                onDifficultyChange(difficulty)
+                onDifficultyChange(difficulty);
               }}
               type="button"
             >
-              <span className="capitalize">{labels.difficulty[difficulty] || difficulty}</span>
+              <span className="capitalize">
+                {labels.difficulty[difficulty] || difficulty}
+              </span>
             </button>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
 
 function TagFilter({
@@ -113,14 +115,14 @@ function TagFilter({
   onTagToggle,
   tags,
 }: {
-  currentTags: string[]
-  labels: TutorialFiltersLabels
-  onClearTags: () => void
-  onTagToggle: (tag: string) => void
-  tags: string[]
+  currentTags: string[];
+  labels: TutorialFiltersLabels;
+  onClearTags: () => void;
+  onTagToggle: (tag: string) => void;
+  tags: string[];
 }): React.ReactNode {
   if (tags.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -139,27 +141,27 @@ function TagFilter({
       </div>
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => {
-          const isActive = currentTags.includes(tag)
+          const isActive = currentTags.includes(tag);
           return (
             <Badge
               className={`cursor-pointer transition-all ${
                 isActive
-                  ? 'bg-primary text-primary-foreground border-transparent'
-                  : 'hover:bg-muted'
+                  ? "bg-primary text-primary-foreground border-transparent"
+                  : "hover:bg-muted"
               }`}
               key={tag}
               onClick={() => {
-                onTagToggle(tag)
+                onTagToggle(tag);
               }}
-              variant={isActive ? 'default' : 'outline'}
+              variant={isActive ? "default" : "outline"}
             >
               {tag}
             </Badge>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
 
 function ActiveFiltersSummary({
@@ -169,14 +171,14 @@ function ActiveFiltersSummary({
   onClearAll,
   searchQuery,
 }: {
-  currentDifficulty: string
-  currentTags: string[]
-  labels: TutorialFiltersLabels
-  onClearAll: () => void
-  searchQuery: string
+  currentDifficulty: string;
+  currentTags: string[];
+  labels: TutorialFiltersLabels;
+  onClearAll: () => void;
+  searchQuery: string;
 }): React.ReactNode {
   if (!currentDifficulty && currentTags.length === 0 && !searchQuery) {
-    return null
+    return null;
   }
 
   return (
@@ -197,14 +199,23 @@ function ActiveFiltersSummary({
           {labels.searchFilter} &quot;{searchQuery}&quot;
         </Badge>
       ) : null}
-      <button className="text-xs hover:underline" onClick={onClearAll} type="button">
+      <button
+        className="text-xs hover:underline"
+        onClick={onClearAll}
+        type="button"
+      >
         {labels.clearAll}
       </button>
     </div>
-  )
+  );
 }
 
-const DEFAULT_DIFFICULTY_OPTIONS = ['all', 'beginner', 'intermediate', 'advanced']
+const DEFAULT_DIFFICULTY_OPTIONS = [
+  "all",
+  "beginner",
+  "intermediate",
+  "advanced",
+];
 
 function TutorialFiltersImpl({
   currentDifficulty,
@@ -216,28 +227,30 @@ function TutorialFiltersImpl({
   searchQuery,
   tags,
 }: TutorialFiltersProps): React.ReactNode {
-  const activeDifficulty = currentDifficulty || 'all'
+  const activeDifficulty = currentDifficulty || "all";
 
   const handleDifficultyChange = (difficulty: string): void => {
-    onFilterChange({ difficulty })
-  }
+    onFilterChange({ difficulty });
+  };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    onFilterChange({ search: event.target.value })
-  }
+  const handleSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    onFilterChange({ search: event.target.value });
+  };
 
   const handleTagToggle = (tag: string): void => {
     const newTags = currentTags.includes(tag)
       ? currentTags.filter((t) => t !== tag)
-      : [...currentTags, tag]
-    onFilterChange({ tags: newTags })
-  }
+      : [...currentTags, tag];
+    onFilterChange({ tags: newTags });
+  };
 
   const handleClearAll = (): void => {
-    onFilterChange({ difficulty: 'all', search: '', tags: [] })
-    const input = document.querySelector<HTMLInputElement>('#tutorial-search')
-    if (input) input.value = ''
-  }
+    onFilterChange({ difficulty: "all", search: "", tags: [] });
+    const input = document.querySelector<HTMLInputElement>("#tutorial-search");
+    if (input) input.value = "";
+  };
 
   return (
     <div className="space-y-4 mb-8">
@@ -258,7 +271,7 @@ function TutorialFiltersImpl({
         currentTags={currentTags}
         labels={labels}
         onClearTags={() => {
-          onFilterChange({ tags: [] })
+          onFilterChange({ tags: [] });
         }}
         onTagToggle={handleTagToggle}
         tags={tags}
@@ -271,8 +284,8 @@ function TutorialFiltersImpl({
         searchQuery={searchQuery}
       />
     </div>
-  )
+  );
 }
 
-export const TutorialFilters = memo(TutorialFiltersImpl)
-TutorialFilters.displayName = 'TutorialFilters'
+export const TutorialFilters = memo(TutorialFiltersImpl);
+TutorialFilters.displayName = "TutorialFilters";

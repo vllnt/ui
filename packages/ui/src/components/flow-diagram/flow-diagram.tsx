@@ -1,43 +1,58 @@
-'use client'
+"use client";
 
-import '@xyflow/react/dist/style.css'
+import "@xyflow/react/dist/style.css";
 
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect } from "react";
 
-import { type Node, type NodeMouseHandler, ReactFlowProvider } from '@xyflow/react'
+import {
+  type Node,
+  type NodeMouseHandler,
+  ReactFlowProvider,
+} from "@xyflow/react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
-import { FlowCanvas } from './flow-canvas'
-import { FlowErrorBoundary } from './flow-error-boundary'
-import { FlowFullscreen } from './flow-fullscreen'
-import type { FlowDiagramEdge, FlowDiagramNode, FlowDiagramProps } from './types'
-import { useFlowDiagram } from './use-flow-diagram'
+import { FlowCanvas } from "./flow-canvas";
+import { FlowErrorBoundary } from "./flow-error-boundary";
+import { FlowFullscreen } from "./flow-fullscreen";
+import type {
+  FlowDiagramEdge,
+  FlowDiagramNode,
+  FlowDiagramProps,
+} from "./types";
+import { useFlowDiagram } from "./use-flow-diagram";
 
 /**
  * Validates nodes and edges, logging warnings for common issues.
  */
-function validateFlowData(nodes: FlowDiagramNode[], edges: FlowDiagramEdge[]): void {
+function validateFlowData(
+  nodes: FlowDiagramNode[],
+  edges: FlowDiagramEdge[],
+): void {
   if (nodes.length === 0 && edges.length > 0) {
-    console.warn('[FlowDiagram] Edges provided without nodes - edges will not render')
+    console.warn(
+      "[FlowDiagram] Edges provided without nodes - edges will not render",
+    );
   }
 
-  const nodeIds = new Set(nodes.map((n) => n.id))
-  const invalidEdges = edges.filter((e) => !nodeIds.has(e.source) || !nodeIds.has(e.target))
+  const nodeIds = new Set(nodes.map((n) => n.id));
+  const invalidEdges = edges.filter(
+    (e) => !nodeIds.has(e.source) || !nodeIds.has(e.target),
+  );
 
   if (invalidEdges.length > 0) {
     console.warn(
       `[FlowDiagram] ${invalidEdges.length} edge(s) reference non-existent nodes:`,
       invalidEdges.map((e) => `${e.id}: ${e.source} -> ${e.target}`),
-    )
+    );
   }
 
-  const nodesWithoutPosition = nodes.filter((n) => n.position === undefined)
+  const nodesWithoutPosition = nodes.filter((n) => n.position === undefined);
   if (nodesWithoutPosition.length > 0) {
     console.warn(
       `[FlowDiagram] ${nodesWithoutPosition.length} node(s) missing position:`,
       nodesWithoutPosition.map((n) => n.id),
-    )
+    );
   }
 }
 
@@ -56,8 +71,8 @@ const FlowDiagramInner = memo(function FlowDiagramInner({
 }: FlowDiagramProps) {
   // Check input on mount and when data changes
   useEffect(() => {
-    validateFlowData(nodes, edges)
-  }, [nodes, edges])
+    validateFlowData(nodes, edges);
+  }, [nodes, edges]);
 
   const {
     closeFullscreen,
@@ -68,19 +83,19 @@ const FlowDiagramInner = memo(function FlowDiagramInner({
     toggleFullscreen,
     zoomIn,
     zoomOut,
-  } = useFlowDiagram({ allowCopy, allowFullscreen })
+  } = useFlowDiagram({ allowCopy, allowFullscreen });
 
   // Memoize node click handler to prevent unnecessary re-renders
   const handleNodeClick: NodeMouseHandler | undefined = useCallback(
     (_event: React.MouseEvent, node: Node) => {
-      onNodeClick?.(node as FlowDiagramNode)
+      onNodeClick?.(node as FlowDiagramNode);
     },
     [onNodeClick],
-  )
+  );
 
   const handleCopy = useCallback(() => {
-    void copyToClipboard()
-  }, [copyToClipboard])
+    void copyToClipboard();
+  }, [copyToClipboard]);
 
   const canvasProps = {
     allowCopy,
@@ -101,24 +116,27 @@ const FlowDiagramInner = memo(function FlowDiagramInner({
     onZoomOut: zoomOut,
     showControls,
     title,
-  }
+  };
 
   if (isFullscreen) {
     return (
       <>
         <div
-          className={cn('rounded-lg border border-border bg-muted/50', className)}
+          className={cn(
+            "rounded-lg border border-border bg-muted/50",
+            className,
+          )}
           style={{ height }}
         />
         <FlowFullscreen isOpen={isFullscreen} onClose={closeFullscreen}>
           <FlowCanvas {...canvasProps} />
         </FlowFullscreen>
       </>
-    )
+    );
   }
 
-  return <FlowCanvas {...canvasProps} />
-})
+  return <FlowCanvas {...canvasProps} />;
+});
 
 /**
  * FlowDiagram component for rendering interactive flow diagrams.
@@ -144,5 +162,5 @@ export const FlowDiagram = memo(function FlowDiagram(props: FlowDiagramProps) {
         <FlowDiagramInner {...props} />
       </ReactFlowProvider>
     </FlowErrorBoundary>
-  )
-})
+  );
+});

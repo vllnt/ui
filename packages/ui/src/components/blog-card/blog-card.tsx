@@ -1,27 +1,33 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import { Badge } from '../badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card'
+import { Badge } from "../badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../card";
 
 type ContentCardPost = {
-  date?: string
-  description: string
-  slug: string
-  tags?: string[]
-  title: string
-}
+  date?: string;
+  description: string;
+  slug: string;
+  tags?: string[];
+  title: string;
+};
 
 type ContentCardProps = {
-  formatDate?: (date: string, lang: string) => string
-  getDictValue?: (dict: Record<string, unknown>, path: string) => string
-  href: string
-  lang?: string
-  post: ContentCardPost
-  readMoreLabel?: string
-  showBadge?: boolean
-  showDate?: boolean
-  showReadMore?: boolean
-}
+  formatDate?: (date: string, lang: string) => string;
+  getDictValue?: (dict: Record<string, unknown>, path: string) => string;
+  href: string;
+  lang?: string;
+  post: ContentCardPost;
+  readMoreLabel?: string;
+  showBadge?: boolean;
+  showDate?: boolean;
+  showReadMore?: boolean;
+};
 
 export function ContentCard({
   formatDate,
@@ -33,9 +39,9 @@ export function ContentCard({
   showDate = true,
   showReadMore = true,
 }: ContentCardProps) {
-  const shouldShowBadge = showBadge && post.tags && post.tags.length > 0
-  const shouldShowDate = showDate && post.date && formatDate && lang
-  const shouldShowHeaderMeta = shouldShowBadge || shouldShowDate
+  const shouldShowBadge = showBadge && post.tags && post.tags.length > 0;
+  const shouldShowDate = showDate && post.date && formatDate && lang;
+  const shouldShowHeaderMeta = shouldShowBadge || shouldShowDate;
 
   return (
     <Link className="block h-full" href={href}>
@@ -49,12 +55,16 @@ export function ContentCard({
                 </Badge>
               ) : null}
               {shouldShowDate && post.date && lang ? (
-                <span className="text-xs text-muted-foreground">{formatDate(post.date, lang)}</span>
+                <span className="text-xs text-muted-foreground">
+                  {formatDate(post.date, lang)}
+                </span>
               ) : null}
             </div>
           ) : null}
           <CardTitle className="text-lg line-clamp-2">{post.title}</CardTitle>
-          <CardDescription className="line-clamp-3">{post.description}</CardDescription>
+          <CardDescription className="line-clamp-3">
+            {post.description}
+          </CardDescription>
         </CardHeader>
         {showReadMore && readMoreLabel ? (
           <CardContent className="mt-auto">
@@ -65,8 +75,8 @@ export function ContentCard({
         ) : null}
       </Card>
     </Link>
-  )
+  );
 }
 
 // Keep BlogCard as an alias for backward compatibility
-export const BlogCard = ContentCard
+export const BlogCard = ContentCard;

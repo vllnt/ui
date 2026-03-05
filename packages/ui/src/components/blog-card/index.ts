@@ -1,1 +1,1 @@
-export { BlogCard, ContentCard } from './blog-card'
+export { BlogCard, ContentCard } from "./blog-card";

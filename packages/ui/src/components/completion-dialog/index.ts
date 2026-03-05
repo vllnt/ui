@@ -1,1 +1,4 @@
-export { CompletionDialog, type CompletionDialogProps } from './completion-dialog'
+export {
+  CompletionDialog,
+  type CompletionDialogProps,
+} from "./completion-dialog";

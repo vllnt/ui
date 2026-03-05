@@ -1,51 +1,59 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
-import { Play, Video } from 'lucide-react'
+import { Play, Video } from "lucide-react";
 
-import { cn } from '../../lib/utils'
+import { cn } from "../../lib/utils";
 
 export type VideoEmbedProps = {
-  aspectRatio?: '1/1' | '4/3' | '16/9'
-  src: string
-  thumbnail?: string
-  title: string
-  type?: 'custom' | 'vimeo' | 'youtube'
-}
+  aspectRatio?: "1/1" | "4/3" | "16/9";
+  src: string;
+  thumbnail?: string;
+  title: string;
+  type?: "custom" | "vimeo" | "youtube";
+};
 
 function getEmbedUrl(source: string, type: string): string {
-  if (type === 'youtube') {
-    const videoId = /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?]+)/.exec(source)?.[1]
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : source
+  if (type === "youtube") {
+    const videoId =
+      /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?]+)/.exec(
+        source,
+      )?.[1];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : source;
   }
-  if (type === 'vimeo') {
-    const videoId = /vimeo\.com\/(\d+)/.exec(source)?.[1]
-    return videoId ? `https://player.vimeo.com/video/${videoId}` : source
+  if (type === "vimeo") {
+    const videoId = /vimeo\.com\/(\d+)/.exec(source)?.[1];
+    return videoId ? `https://player.vimeo.com/video/${videoId}` : source;
   }
-  return source
+  return source;
 }
 
 export function VideoEmbed({
-  aspectRatio = '16/9',
+  aspectRatio = "16/9",
   src,
   thumbnail,
   title,
-  type = 'youtube',
+  type = "youtube",
 }: VideoEmbedProps) {
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const embedUrl = getEmbedUrl(src, type)
+  const embedUrl = getEmbedUrl(src, type);
   const aspectClass =
-    aspectRatio === '16/9'
-      ? 'aspect-video'
-      : aspectRatio === '4/3'
-        ? 'aspect-[4/3]'
-        : 'aspect-square'
+    aspectRatio === "16/9"
+      ? "aspect-video"
+      : aspectRatio === "4/3"
+        ? "aspect-[4/3]"
+        : "aspect-square";
 
   return (
     <div className="my-6">
-      <div className={cn('relative rounded-lg overflow-hidden bg-muted border', aspectClass)}>
+      <div
+        className={cn(
+          "relative rounded-lg overflow-hidden bg-muted border",
+          aspectClass,
+        )}
+      >
         {isPlaying ? (
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -58,7 +66,7 @@ export function VideoEmbed({
           <button
             className="absolute inset-0 w-full h-full flex items-center justify-center group"
             onClick={() => {
-              setIsPlaying(true)
+              setIsPlaying(true);
             }}
             type="button"
           >
@@ -82,5 +90,5 @@ export function VideoEmbed({
         {title}
       </p>
     </div>
-  )
+  );
 }

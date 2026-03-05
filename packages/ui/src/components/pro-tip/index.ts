@@ -4,4 +4,4 @@ export {
   ProTip,
   type ProTipProps,
   type ProTipVariant,
-} from './pro-tip'
+} from "./pro-tip";

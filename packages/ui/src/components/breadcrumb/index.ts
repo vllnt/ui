@@ -1,1 +1,1 @@
-export { Breadcrumb, type BreadcrumbItem } from './breadcrumb'
+export { Breadcrumb, type BreadcrumbItem } from "./breadcrumb";

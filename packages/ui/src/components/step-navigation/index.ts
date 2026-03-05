@@ -1,1 +1,1 @@
-export { StepNavigation, type StepNavigationProps } from './step-navigation'
+export { StepNavigation, type StepNavigationProps } from "./step-navigation";
