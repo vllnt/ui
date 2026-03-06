@@ -38,7 +38,22 @@ const variantConfig = {
   },
 };
 
-export function Comparison({ after, before, title }: ComparisonProps) {
+export function Comparison({
+  after,
+  before,
+  title,
+  ...rest
+}: ComparisonProps & Record<string, unknown>) {
+  if (!before || !after) {
+    const hint =
+      "left" in rest || "right" in rest
+        ? ' Did you mean "before" / "after" instead of "left" / "right"?'
+        : "";
+    console.error(
+      `[Comparison] Missing required props "before" and "after".${hint}`,
+    );
+    return null;
+  }
   const beforeConfig = variantConfig[before.variant || "bad"];
   const afterConfig = variantConfig[after.variant || "good"];
   const BeforeIcon = beforeConfig.icon;
