@@ -1,6 +1,6 @@
 {
   "name": "@vllnt/ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React component library — 93 components built on Radix UI, Tailwind CSS, and CVA",
   "license": "MIT",
   "author": "vllnt",
