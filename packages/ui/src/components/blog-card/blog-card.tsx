@@ -15,6 +15,7 @@ type ContentCardPost = {
   slug: string;
   tags?: string[];
   title: string;
+  updatedDate?: string;
 };
 
 type ContentCardProps = {
@@ -27,6 +28,7 @@ type ContentCardProps = {
   showBadge?: boolean;
   showDate?: boolean;
   showReadMore?: boolean;
+  updatedLabel?: string;
 };
 
 export function ContentCard({
@@ -38,10 +40,14 @@ export function ContentCard({
   showBadge = true,
   showDate = true,
   showReadMore = true,
+  updatedLabel,
 }: ContentCardProps) {
   const shouldShowBadge = showBadge && post.tags && post.tags.length > 0;
   const shouldShowDate = showDate && post.date && formatDate && lang;
-  const shouldShowHeaderMeta = shouldShowBadge || shouldShowDate;
+  const shouldShowUpdatedDate =
+    showDate && post.updatedDate && formatDate && lang;
+  const shouldShowHeaderMeta =
+    shouldShowBadge || shouldShowDate || shouldShowUpdatedDate;
 
   return (
     <Link className="block h-full" href={href}>
@@ -57,6 +63,12 @@ export function ContentCard({
               {shouldShowDate && post.date && lang ? (
                 <span className="text-xs text-muted-foreground">
                   {formatDate(post.date, lang)}
+                </span>
+              ) : null}
+              {shouldShowUpdatedDate && post.updatedDate && lang ? (
+                <span className="text-xs text-muted-foreground">
+                  {updatedLabel ? `${updatedLabel} ` : ""}
+                  {formatDate(post.updatedDate, lang)}
                 </span>
               ) : null}
             </div>
