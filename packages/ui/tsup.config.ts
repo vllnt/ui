@@ -6,7 +6,7 @@ const prependUseClient = async (): Promise<void> => {
   const distDir = join(import.meta.dirname, 'dist')
   const files = await readdir(distDir)
   const jsFiles = files.filter(
-    (f) => f.endsWith('.js') && f !== 'tailwind-preset.js' && f !== 'index.js',
+    (f) => f.endsWith('.js') && f !== 'tailwind-preset.js',
   )
   await Promise.all(
     jsFiles.map(async (file) => {
