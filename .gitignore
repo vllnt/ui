@@ -30,3 +30,7 @@ playwright-report/
 
 # Generated
 public/r/
+next-env.d.ts
+
+# Local config
+.mcp.json
