@@ -73,7 +73,7 @@ export function CodeBlock({
         className,
       )}
     >
-      <div className="relative overflow-x-auto overflow-y-hidden">
+      <div className="relative overflow-x-auto overflow-y-hidden touch-pan-y">
         <SyntaxHighlighter
           codeTagProps={{
             className: "font-mono text-sm",
