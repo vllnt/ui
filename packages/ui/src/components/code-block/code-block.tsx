@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -58,6 +58,15 @@ export function CodeBlock({
   const codeStyle = isDark ? oneDark : oneLight;
   const code = extractTextFromChildren(children);
 
+  const handleWheel = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.currentTarget.style.overflowX = "hidden";
+      requestAnimationFrame(() => {
+        event.currentTarget.style.overflowX = "auto";
+      });
+    }
+  }, []);
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
     setCopied(true);
@@ -73,7 +82,10 @@ export function CodeBlock({
         className,
       )}
     >
-      <div className="relative overflow-x-auto overflow-y-hidden touch-pan-y">
+      <div
+        className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
+        onWheel={handleWheel}
+      >
         <SyntaxHighlighter
           codeTagProps={{
             className: "font-mono text-sm",
