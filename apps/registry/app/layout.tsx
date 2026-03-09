@@ -31,7 +31,7 @@ export default function RootLayout({
           enableSystem
         >
           <SidebarProvider>
-            <div className="flex h-screen flex-col">
+            <div className="flex h-screen flex-col overflow-hidden">
               <Header />
               <div className="flex flex-1 overflow-hidden">{children}</div>
             </div>
