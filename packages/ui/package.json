@@ -39,6 +39,8 @@
     "./themes/default.css": "./themes/default.css"
   },
   "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
