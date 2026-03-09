@@ -1,6 +1,11 @@
-name: Release
+name: Publish
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/ui/**"
+      - "pnpm-lock.yaml"
   workflow_dispatch:
     inputs:
       bump:
@@ -12,14 +17,83 @@ on:
           - minor
           - major
 
+concurrency:
+  group: publish-${{ github.event_name }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
   id-token: write
 
 jobs:
+  quality:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm -F @vllnt/ui exec tsc --noEmit
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test:once
+
+  canary:
+    name: Publish Canary
+    needs: quality
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish canary
+        working-directory: packages/ui
+        run: |
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
+          CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
+          npm version "$CANARY_VERSION" --no-git-tag-version
+          pnpm publish --tag canary --no-git-checks --provenance --access public
+
   release:
     name: Publish Release
+    needs: quality
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,17 +110,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
-
-      - name: Typecheck
-        run: pnpm -F @vllnt/ui exec tsc --noEmit
-
       - name: Build
         run: pnpm build
-
-      - name: Test
-        run: pnpm test:once
 
       - name: Bump version
         id: version
@@ -104,8 +169,6 @@ jobs:
 
       - name: Publish to npm
         working-directory: packages/ui
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm publish --tag latest --no-git-checks --provenance --access public
 
       - name: Create GitHub Release
