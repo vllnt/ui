@@ -115,6 +115,10 @@ export function CodeBlock({
         <SyntaxHighlighter
           codeTagProps={{
             className: "font-mono text-sm",
+            style: {
+              background: "transparent",
+              display: "block",
+            },
           }}
           customStyle={{
             background: "hsl(var(--background))",

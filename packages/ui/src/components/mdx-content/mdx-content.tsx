@@ -30,11 +30,24 @@ const MDXComponents: Components = {
       {children}
     </blockquote>
   ),
-  code: ({ children, ...props }: React.ComponentProps<"code">) => (
-    <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono" {...props}>
-      {children}
-    </code>
-  ),
+  code: ({ children, className, ...props }: React.ComponentProps<"code">) => {
+    if (typeof className === "string" && className.startsWith("language-")) {
+      const language = className.replace(/^language-/, "");
+      const text =
+        typeof children === "string"
+          ? children.replace(/\n$/, "")
+          : String(children ?? "");
+      return <CodeBlock language={language}>{text}</CodeBlock>;
+    }
+    return (
+      <code
+        className="bg-muted px-1 py-0.5 rounded text-sm font-mono"
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  },
   em: ({ children, ...props }: React.ComponentProps<"em">) => (
     <em className="italic" {...props}>
       {children}
@@ -82,14 +95,7 @@ const MDXComponents: Components = {
       {children}
     </p>
   ),
-  pre: ({ children, ...props }: React.ComponentProps<"pre">) => (
-    <pre
-      className="bg-black text-white p-4 rounded-lg overflow-x-auto my-6 border shadow-lg font-mono text-sm dark:bg-zinc-900"
-      {...props}
-    >
-      {children}
-    </pre>
-  ),
+  pre: ({ children }: React.ComponentProps<"pre">) => <>{children}</>,
   strong: ({ children, ...props }: React.ComponentProps<"strong">) => (
     <strong className="font-semibold" {...props}>
       {children}
