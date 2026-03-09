@@ -43,7 +43,14 @@ function extractTextFromChildren(children: ReactNode): string {
   return String(children ?? "");
 }
 
-// eslint-disable-next-line max-lines-per-function
+function findScrollableParent(
+  element: HTMLElement | null,
+): HTMLElement | undefined {
+  if (!element) return undefined;
+  if (element.scrollHeight > element.clientHeight) return element;
+  return findScrollableParent(element.parentElement);
+}
+
 export function CodeBlock({
   children,
   className,
@@ -61,25 +68,21 @@ export function CodeBlock({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const element = scrollRef.current;
+    if (!element) return;
 
     const onWheel = (event: WheelEvent) => {
       if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      let parent = el.parentElement;
-      while (parent) {
-        if (parent.scrollHeight > parent.clientHeight) {
-          parent.scrollTop += event.deltaY;
-          event.preventDefault();
-          break;
-        }
-        parent = parent.parentElement;
+      const scrollable = findScrollableParent(element);
+      if (scrollable) {
+        scrollable.scrollTop += event.deltaY;
+        event.preventDefault();
       }
     };
 
-    el.addEventListener("wheel", onWheel, { passive: false });
+    element.addEventListener("wheel", onWheel, { passive: false });
     return () => {
-      el.removeEventListener("wheel", onWheel);
+      element.removeEventListener("wheel", onWheel);
     };
   }, []);
 

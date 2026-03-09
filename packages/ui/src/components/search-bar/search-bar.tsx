@@ -14,7 +14,6 @@ type SearchBarProps = {
   placeholder?: string;
 };
 
-// eslint-disable-next-line max-lines-per-function
 export function SearchBar({
   className,
   onSearch,
@@ -44,8 +43,10 @@ export function SearchBar({
 
     // Sync if user is not actively typing and values differ
     if (!isUserTyping.current && query !== searchParameter) {
-      setQuery(searchParameter);
-      lastDebouncedQueryReference.current = searchParameter;
+      requestAnimationFrame(() => {
+        setQuery(searchParameter);
+        lastDebouncedQueryReference.current = searchParameter;
+      });
     }
   }, [searchParameters, query]); // Include query to properly sync state
 
@@ -118,7 +119,7 @@ export function SearchBar({
     }, 350);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     isUserTyping.current = false;
 

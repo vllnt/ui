@@ -22,23 +22,23 @@ function ViewSwitcherInner({
   className,
   defaultKey,
   options,
-  paramName = "view",
+  paramName: parameterName = "view",
 }: ViewSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParameters = useSearchParams();
 
   const resolvedDefault = defaultKey ?? options[0]?.key ?? "";
-  const currentKey = searchParams.get(paramName) ?? resolvedDefault;
+  const currentKey = searchParameters.get(parameterName) ?? resolvedDefault;
 
   function handleSelect(key: string): void {
-    const params = new URLSearchParams(searchParams.toString());
+    const parameters = new URLSearchParams(searchParameters.toString());
     if (key === resolvedDefault) {
-      params.delete(paramName);
+      parameters.delete(parameterName);
     } else {
-      params.set(paramName, key);
+      parameters.set(parameterName, key);
     }
-    const query = params.toString();
+    const query = parameters.toString();
     router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
   }
 
@@ -60,7 +60,9 @@ function ViewSwitcherInner({
               : "text-muted-foreground hover:text-foreground",
           )}
           key={option.key}
-          onClick={() => handleSelect(option.key)}
+          onClick={() => {
+            handleSelect(option.key);
+          }}
           role="tab"
           type="button"
         >

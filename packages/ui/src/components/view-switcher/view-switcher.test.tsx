@@ -3,12 +3,12 @@ import { describe, expect, it, vi } from "vitest";
 
 const mockPush = vi.fn();
 const mockPathname = "/tutorials";
-let mockSearchParams = new URLSearchParams();
+let mockSearchParameters = new URLSearchParams();
 
 vi.mock("next/navigation", () => ({
   usePathname: () => mockPathname,
   useRouter: () => ({ push: mockPush }),
-  useSearchParams: () => mockSearchParams,
+  useSearchParams: () => mockSearchParameters,
 }));
 
 import { ViewSwitcher } from "./view-switcher";
@@ -21,7 +21,7 @@ const defaultOptions = [
 describe("ViewSwitcher", () => {
   beforeEach(() => {
     mockPush.mockClear();
-    mockSearchParams = new URLSearchParams();
+    mockSearchParameters = new URLSearchParams();
   });
 
   describe("rendering", () => {
@@ -52,10 +52,7 @@ describe("ViewSwitcher", () => {
   describe("active state", () => {
     it("marks first option as selected by default", () => {
       render(<ViewSwitcher options={defaultOptions} />);
-      expect(screen.getByText("All")).toHaveAttribute(
-        "aria-selected",
-        "true",
-      );
+      expect(screen.getByText("All")).toHaveAttribute("aria-selected", "true");
       expect(screen.getByText("Series")).toHaveAttribute(
         "aria-selected",
         "false",
@@ -63,7 +60,7 @@ describe("ViewSwitcher", () => {
     });
 
     it("marks option matching URL param as selected", () => {
-      mockSearchParams = new URLSearchParams("view=series");
+      mockSearchParameters = new URLSearchParams("view=series");
       render(<ViewSwitcher options={defaultOptions} />);
       expect(screen.getByText("Series")).toHaveAttribute(
         "aria-selected",
@@ -72,9 +69,7 @@ describe("ViewSwitcher", () => {
     });
 
     it("uses custom defaultKey", () => {
-      render(
-        <ViewSwitcher defaultKey="series" options={defaultOptions} />,
-      );
+      render(<ViewSwitcher defaultKey="series" options={defaultOptions} />);
       expect(screen.getByText("Series")).toHaveAttribute(
         "aria-selected",
         "true",
@@ -92,7 +87,7 @@ describe("ViewSwitcher", () => {
     });
 
     it("removes param when selecting default option", () => {
-      mockSearchParams = new URLSearchParams("view=series");
+      mockSearchParameters = new URLSearchParams("view=series");
       render(<ViewSwitcher options={defaultOptions} />);
       fireEvent.click(screen.getByText("All"));
       expect(mockPush).toHaveBeenCalledWith("/tutorials", { scroll: false });
@@ -107,7 +102,7 @@ describe("ViewSwitcher", () => {
     });
 
     it("preserves other search params", () => {
-      mockSearchParams = new URLSearchParams("category=design");
+      mockSearchParameters = new URLSearchParams("category=design");
       render(<ViewSwitcher options={defaultOptions} />);
       fireEvent.click(screen.getByText("Series"));
       expect(mockPush).toHaveBeenCalledWith(

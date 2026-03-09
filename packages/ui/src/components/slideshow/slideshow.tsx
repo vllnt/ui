@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import { useMounted } from "../../lib/use-mounted";
 import { cn } from "../../lib/utils";
 import { CompletionDialog } from "../completion-dialog";
 
@@ -60,7 +61,6 @@ const DEFAULT_LABELS: Required<SlideshowLabels> = {
   sectionsLabel: "Sections",
 };
 
-// eslint-disable-next-line max-lines-per-function -- Complex slideshow with keyboard navigation
 function SlideshowImpl({
   completedSections,
   completionDialogTitle = "Mark section as complete?",
@@ -80,7 +80,7 @@ function SlideshowImpl({
   >(null);
   const [isCompletionDialogOpen, setIsCompletionDialogOpen] = useState(false);
   const [isTocOpen, setIsTocOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
 
   const currentSection = sections[currentIndex];
   const isCurrentCompleted = currentSection
@@ -90,10 +90,6 @@ function SlideshowImpl({
   const canGoNext = currentIndex < sections.length - 1;
   const canGoPrevious = currentIndex > 0;
   const progress = ((currentIndex + 1) / sections.length) * 100;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";

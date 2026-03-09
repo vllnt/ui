@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from "react";
 
 import type { ReactNode } from "react";
 
+import { useMounted } from "../../lib/use-mounted";
 import { Badge } from "../badge";
 import {
   Card,
@@ -74,13 +75,15 @@ function ContentCardImpl({
   title,
 }: ContentCardProps): React.ReactNode {
   const [progress, setProgress] = useState<ContentCardProgress | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const isHydrated = useMounted();
 
   // Load progress after hydration
   useEffect(() => {
-    setIsHydrated(true);
     if (getProgress) {
-      setProgress(getProgress());
+      const result = getProgress();
+      requestAnimationFrame(() => {
+        setProgress(result);
+      });
     }
   }, [getProgress]);
 

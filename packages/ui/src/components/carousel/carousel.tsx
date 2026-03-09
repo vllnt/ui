@@ -117,12 +117,17 @@ function useCarouselLogic({
       return;
     }
 
-    onSelect(api);
     api.on("reInit", onSelect);
     api.on("select", onSelect);
 
+    const rafId = requestAnimationFrame(() => {
+      onSelect(api);
+    });
+
     return () => {
       api?.off("select", onSelect);
+      api?.off("reInit", onSelect);
+      cancelAnimationFrame(rafId);
     };
   }, [api, onSelect]);
 

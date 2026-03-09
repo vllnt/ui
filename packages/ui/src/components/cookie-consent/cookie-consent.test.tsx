@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function, @typescript-eslint/no-non-null-assertion -- test file */
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- test file */
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

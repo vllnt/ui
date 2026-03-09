@@ -7,7 +7,6 @@ type TLDRSectionProps = {
   label: string;
 };
 
-// eslint-disable-next-line max-lines-per-function
 export function TLDRSection({ children, label }: TLDRSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,19 +15,29 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
 
   useEffect(() => {
     if (isExpanded && !hasBeenOpened) {
-      setIsLoading(true);
-      setHasBeenOpened(true);
-
       // Clear any existing timer
       if (timerReference.current) {
         clearTimeout(timerReference.current);
       }
+
+      const rafId = requestAnimationFrame(() => {
+        setIsLoading(true);
+        setHasBeenOpened(true);
+      });
 
       // Simulate loading with skeleton
       timerReference.current = setTimeout(() => {
         setIsLoading(false);
         timerReference.current = null;
       }, 800);
+
+      return () => {
+        cancelAnimationFrame(rafId);
+        if (timerReference.current) {
+          clearTimeout(timerReference.current);
+          timerReference.current = null;
+        }
+      };
     }
 
     return () => {

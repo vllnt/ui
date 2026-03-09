@@ -24,16 +24,18 @@ type UseHorizontalScrollReturn = {
  * ```
  */
 export function useHorizontalScroll(): UseHorizontalScrollReturn {
-  const scrollRef = useRef<HTMLElement | null>(null);
-  const observerRef = useRef<ResizeObserver | null>(null);
+  const scrollRef = useRef<HTMLElement | undefined>(undefined);
+  const observerRef = useRef<ResizeObserver | undefined>(undefined);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const updateScrollState = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    const element = scrollRef.current;
+    if (!element) return;
+    setCanScrollLeft(element.scrollLeft > 0);
+    setCanScrollRight(
+      element.scrollLeft + element.clientWidth < element.scrollWidth - 1,
+    );
   }, []);
 
   const containerRef = useCallback(
@@ -43,10 +45,10 @@ export function useHorizontalScroll(): UseHorizontalScrollReturn {
       }
       if (observerRef.current) {
         observerRef.current.disconnect();
-        observerRef.current = null;
+        observerRef.current = undefined;
       }
 
-      scrollRef.current = node;
+      scrollRef.current = node ?? undefined;
 
       if (node) {
         node.addEventListener("scroll", updateScrollState, { passive: true });
@@ -72,10 +74,10 @@ export function useHorizontalScroll(): UseHorizontalScrollReturn {
   }, [updateScrollState]);
 
   const scroll = useCallback((direction: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.8;
-    el.scrollBy({
+    const element = scrollRef.current;
+    if (!element) return;
+    const amount = element.clientWidth * 0.8;
+    element.scrollBy({
       behavior: "smooth",
       left: direction === "left" ? -amount : amount,
     });

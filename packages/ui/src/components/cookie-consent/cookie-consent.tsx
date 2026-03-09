@@ -90,9 +90,13 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
         return () => {
           clearTimeout(timer);
         };
-      } else {
-        setIsVisible(false);
       }
+      const rafId = requestAnimationFrame(() => {
+        setIsVisible(false);
+      });
+      return () => {
+        cancelAnimationFrame(rafId);
+      };
     }, [open]);
 
     const handleClose = useCallback(() => {

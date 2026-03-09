@@ -41,7 +41,9 @@ const HorizontalScrollRow = memo(function HorizontalScrollRow({
               aria-label="Scroll left"
               className="h-8 w-8"
               disabled={!canScrollLeft}
-              onClick={() => scroll("left")}
+              onClick={() => {
+                scroll("left");
+              }}
               size="icon"
               variant="outline"
             >
@@ -51,7 +53,9 @@ const HorizontalScrollRow = memo(function HorizontalScrollRow({
               aria-label="Scroll right"
               className="h-8 w-8"
               disabled={!canScrollRight}
-              onClick={() => scroll("right")}
+              onClick={() => {
+                scroll("right");
+              }}
               size="icon"
               variant="outline"
             >

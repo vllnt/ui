@@ -25,7 +25,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Lint
-        continue-on-error: true
         run: pnpm -F @vllnt/ui lint
 
       - name: Typecheck

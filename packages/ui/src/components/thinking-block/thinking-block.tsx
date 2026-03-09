@@ -25,7 +25,11 @@ export function ThinkingBlock({
 
   // Auto-open when streaming starts
   useEffect(() => {
-    if (isStreaming) setIsExpanded(true);
+    if (isStreaming) {
+      requestAnimationFrame(() => {
+        setIsExpanded(true);
+      });
+    }
   }, [isStreaming]);
 
   const toggleExpanded = useCallback(() => {
