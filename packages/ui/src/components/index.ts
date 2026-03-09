@@ -442,6 +442,17 @@ export {
   useSocialFab,
 } from "./social-fab";
 
+// Scroll/View components
+export {
+  HorizontalScrollRow,
+  type HorizontalScrollRowProps,
+} from "./horizontal-scroll-row";
+export {
+  type ViewOption,
+  ViewSwitcher,
+  type ViewSwitcherProps,
+} from "./view-switcher";
+
 // Flow/Diagram components
 export {
   type CopyStatus,

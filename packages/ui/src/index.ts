@@ -18,4 +18,5 @@ export {
   type SupportedLanguage as UISupportedLanguage,
 } from "./lib/types";
 export { useDebounce } from "./lib/use-debounce";
+export { useHorizontalScroll } from "./lib/use-horizontal-scroll";
 export { cn } from "./lib/utils";
