@@ -84,6 +84,7 @@ import {
   FAQItem,
   FloatingActionButton,
   Glossary,
+  HorizontalScrollRow,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -178,6 +179,7 @@ import {
   TooltipTrigger,
   TutorialCard,
   VideoEmbed,
+  ViewSwitcher,
 } from "@vllnt/ui";
 import {
   Bold,
@@ -1179,6 +1181,34 @@ function AlertDialogPreview() {
   );
 }
 
+function HorizontalScrollRowPreview() {
+  return (
+    <HorizontalScrollRow title="Featured" description="Browse our picks">
+      {Array.from({ length: 6 }, (_, i) => (
+        <div
+          className="min-w-[180px] snap-start rounded-lg border bg-card p-4 text-sm"
+          key={i}
+        >
+          Card {i + 1}
+        </div>
+      ))}
+    </HorizontalScrollRow>
+  );
+}
+
+function ViewSwitcherPreview() {
+  return (
+    <ViewSwitcher
+      options={[
+        { key: "list", label: "List" },
+        { key: "grid", label: "Grid" },
+      ]}
+      defaultKey="list"
+      paramName="demo-view"
+    />
+  );
+}
+
 function HoverCardPreview() {
   return (
     <HoverCard>
@@ -1536,6 +1566,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "floating-action-button":
       return <FloatingActionButtonPreview />;
+    case "horizontal-scroll-row":
+      return <HorizontalScrollRowPreview />;
     case "hover-card":
       return <HoverCardPreview />;
     case "inline-input":
@@ -1674,6 +1706,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "video-embed":
       return <VideoEmbedPreview />;
+    case "view-switcher":
+      return <ViewSwitcherPreview />;
     default:
       return <div className="text-muted-foreground">Preview not available</div>;
   }

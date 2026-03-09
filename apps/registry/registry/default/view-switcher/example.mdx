@@ -1,0 +1,17 @@
+<CodeBlock language="tsx" showLanguage={true}>
+{`import { ViewSwitcher } from '@vllnt/ui'
+
+export function ViewSwitcherExample() {
+  return (
+    <ViewSwitcher
+      paramName="view"
+      options={[
+        { key: "list", label: "List" },
+        { key: "grid", label: "Grid" },
+      ]}
+      defaultKey="list"
+    />
+  )
+}`}
+</CodeBlock>
+
