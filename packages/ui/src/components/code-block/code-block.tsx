@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useCallback, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -58,13 +58,29 @@ export function CodeBlock({
   const codeStyle = isDark ? oneDark : oneLight;
   const code = extractTextFromChildren(children);
 
-  const handleWheel = useCallback((event: React.WheelEvent<HTMLDivElement>) => {
-    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
-      event.currentTarget.style.overflowX = "hidden";
-      requestAnimationFrame(() => {
-        event.currentTarget.style.overflowX = "auto";
-      });
-    }
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      let parent = el.parentElement;
+      while (parent) {
+        if (parent.scrollHeight > parent.clientHeight) {
+          parent.scrollTop += event.deltaY;
+          event.preventDefault();
+          break;
+        }
+        parent = parent.parentElement;
+      }
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+    };
   }, []);
 
   const handleCopy = async () => {
@@ -84,7 +100,7 @@ export function CodeBlock({
     >
       <div
         className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
-        onWheel={handleWheel}
+        ref={scrollRef}
       >
         <SyntaxHighlighter
           codeTagProps={{
