@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -58,6 +58,31 @@ export function CodeBlock({
   const codeStyle = isDark ? oneDark : oneLight;
   const code = extractTextFromChildren(children);
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      let parent = el.parentElement;
+      while (parent) {
+        if (parent.scrollHeight > parent.clientHeight) {
+          parent.scrollTop += event.deltaY;
+          event.preventDefault();
+          break;
+        }
+        parent = parent.parentElement;
+      }
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+    };
+  }, []);
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
     setCopied(true);
@@ -73,7 +98,10 @@ export function CodeBlock({
         className,
       )}
     >
-      <div className="relative overflow-x-auto">
+      <div
+        className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
+        ref={scrollRef}
+      >
         <SyntaxHighlighter
           codeTagProps={{
             className: "font-mono text-sm",
@@ -87,6 +115,7 @@ export function CodeBlock({
             fontSize: "0.875rem",
             margin: 0,
             minWidth: "fit-content",
+            overflowY: "hidden",
             padding: "1rem",
           }}
           language={language}

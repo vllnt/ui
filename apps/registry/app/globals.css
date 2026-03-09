@@ -4,7 +4,6 @@
 
 body {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  overflow-x: hidden;
 }
 
 @layer utilities {
@@ -67,6 +66,7 @@ body {
     @apply bg-background text-foreground;
   }
   html {
-    overflow-x: hidden;
+    overflow: hidden;
+    height: 100%;
   }
 }

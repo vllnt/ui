@@ -162,7 +162,7 @@ export function Sidebar({ sections }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:relative top-16 lg:top-0 left-0 z-40 h-full lg:h-full border-r bg-background transition-transform duration-300 ease-in-out",
+          "fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full border-r bg-background transition-transform duration-300 ease-in-out",
           "flex flex-col",
           "overflow-hidden",
           "shrink-0",
