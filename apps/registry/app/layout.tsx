@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="h-screen overflow-hidden">
+      <body className="h-full overflow-hidden">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -31,7 +31,7 @@ export default function RootLayout({
           enableSystem
         >
           <SidebarProvider>
-            <div className="flex h-screen flex-col overflow-hidden">
+            <div className="flex h-full flex-col overflow-hidden">
               <Header />
               <div className="flex flex-1 overflow-hidden">{children}</div>
             </div>
