@@ -77,7 +77,7 @@ export function getSidebarSections(activeCategory?: ComponentCategory) {
       collapsible: true,
       defaultOpen: activeCategory
         ? group.category === activeCategory
-        : group.category === "core",
+        : true,
       items: group.items.map((item) => ({
         href: `/components/${item.name}`,
         title: item.title,

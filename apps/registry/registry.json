@@ -15,7 +15,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "alert",
@@ -29,7 +30,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "alert-dialog",
@@ -43,7 +45,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "area-chart",
@@ -57,7 +60,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "aspect-ratio",
@@ -71,7 +75,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "avatar",
@@ -85,7 +90,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "badge",
@@ -99,7 +105,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "bar-chart",
@@ -113,7 +120,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "blog-card",
@@ -127,7 +135,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "breadcrumb",
@@ -141,7 +150,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "button",
@@ -155,7 +165,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "calendar",
@@ -169,7 +180,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "callout",
@@ -183,7 +195,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "card",
@@ -197,7 +210,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "carousel",
@@ -211,7 +225,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "category-filter",
@@ -225,7 +240,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "checkbox",
@@ -239,7 +255,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "checklist",
@@ -253,7 +270,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "code-block",
@@ -267,7 +285,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "code-playground",
@@ -281,7 +300,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "collapsible",
@@ -295,7 +315,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "command",
@@ -309,7 +330,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "comparison",
@@ -323,7 +345,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "completion-dialog",
@@ -337,7 +360,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "content-intro",
@@ -351,7 +375,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "context-menu",
@@ -365,7 +390,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "dialog",
@@ -379,7 +405,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "drawer",
@@ -393,7 +420,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "dropdown-menu",
@@ -407,7 +435,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "exercise",
@@ -421,7 +450,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "faq",
@@ -435,7 +465,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "filter-bar",
@@ -449,7 +480,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "floating-action-button",
@@ -463,7 +495,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "flow-diagram",
@@ -477,7 +510,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "hover-card",
@@ -491,7 +525,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "inline-input",
@@ -505,7 +540,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "input",
@@ -519,7 +555,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "input-otp",
@@ -533,7 +570,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "key-concept",
@@ -547,7 +585,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "keyboard-shortcuts-help",
@@ -561,7 +600,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "lang-provider",
@@ -575,7 +615,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "learning-objectives",
@@ -589,7 +630,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "line-chart",
@@ -603,7 +645,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "mdx-content",
@@ -617,7 +660,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "menubar",
@@ -631,7 +675,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "model-selector",
@@ -645,7 +690,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "navbar-saas",
@@ -659,7 +705,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "navigation-menu",
@@ -673,7 +720,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "pagination",
@@ -687,7 +735,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "popover",
@@ -701,7 +750,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "pro-tip",
@@ -715,7 +765,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "profile-section",
@@ -729,7 +780,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "progress-bar",
@@ -743,7 +795,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "progress-card",
@@ -757,7 +810,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "quiz",
@@ -771,7 +825,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "radio-group",
@@ -785,7 +840,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "resizable",
@@ -799,7 +855,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "scroll-area",
@@ -813,7 +870,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "search-bar",
@@ -827,7 +885,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "search-dialog",
@@ -841,7 +900,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "select",
@@ -855,7 +915,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "separator",
@@ -869,7 +930,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "share-section",
@@ -883,7 +945,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "sheet",
@@ -897,7 +960,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "sidebar",
@@ -911,7 +975,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "sidebar-provider",
@@ -925,7 +990,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "sidebar-toggle",
@@ -941,7 +1007,8 @@
       "registryDependencies": [],
       "dependencies": [
         "lucide-react"
-      ]
+      ],
+      "category": "navigation"
     },
     {
       "name": "skeleton",
@@ -955,7 +1022,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "slider",
@@ -969,7 +1037,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "slideshow",
@@ -983,7 +1052,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "spinner",
@@ -997,7 +1067,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "step-by-step",
@@ -1011,7 +1082,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "step-navigation",
@@ -1025,7 +1097,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "table",
@@ -1039,7 +1112,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "table-of-contents",
@@ -1053,7 +1127,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "table-of-contents-panel",
@@ -1067,7 +1142,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "tabs",
@@ -1081,7 +1157,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "terminal",
@@ -1095,7 +1172,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "textarea",
@@ -1109,7 +1187,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "theme-provider",
@@ -1123,7 +1202,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "theme-toggle",
@@ -1137,7 +1217,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "thinking-block",
@@ -1153,7 +1234,8 @@
       "registryDependencies": [],
       "dependencies": [
         "lucide-react"
-      ]
+      ],
+      "category": "learning"
     },
     {
       "name": "tldr-section",
@@ -1167,7 +1249,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "toast",
@@ -1181,7 +1264,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "toggle",
@@ -1195,7 +1279,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "toggle-group",
@@ -1209,7 +1294,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "core"
     },
     {
       "name": "tooltip",
@@ -1223,7 +1309,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "overlay"
     },
     {
       "name": "tutorial-card",
@@ -1237,7 +1324,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "tutorial-complete",
@@ -1251,7 +1339,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "tutorial-filters",
@@ -1265,7 +1354,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "tutorial-intro-content",
@@ -1279,7 +1369,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "tutorial-mdx",
@@ -1293,7 +1384,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "video-embed",
@@ -1307,7 +1399,8 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": []
+      "dependencies": [],
+      "category": "content"
     }
   ]
 }
