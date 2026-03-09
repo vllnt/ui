@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, Suspense } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -18,7 +18,7 @@ type ViewSwitcherProps = {
   paramName?: string;
 };
 
-const ViewSwitcher = memo(function ViewSwitcher({
+function ViewSwitcherInner({
   className,
   defaultKey,
   options,
@@ -68,6 +68,49 @@ const ViewSwitcher = memo(function ViewSwitcher({
         </button>
       ))}
     </div>
+  );
+}
+
+function ViewSwitcherFallback({
+  className,
+  defaultKey,
+  options,
+}: ViewSwitcherProps) {
+  const resolvedDefault = defaultKey ?? options[0]?.key ?? "";
+
+  return (
+    <div
+      className={cn(
+        "inline-flex items-center rounded-lg border bg-muted p-1",
+        className,
+      )}
+      role="tablist"
+    >
+      {options.map((option) => (
+        <button
+          aria-selected={resolvedDefault === option.key}
+          className={cn(
+            "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+            resolvedDefault === option.key
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+          key={option.key}
+          role="tab"
+          type="button"
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const ViewSwitcher = memo(function ViewSwitcher(props: ViewSwitcherProps) {
+  return (
+    <Suspense fallback={<ViewSwitcherFallback {...props} />}>
+      <ViewSwitcherInner {...props} />
+    </Suspense>
   );
 });
 

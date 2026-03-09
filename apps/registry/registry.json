@@ -529,6 +529,21 @@
       "category": "overlay"
     },
     {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": ["button"],
+      "dependencies": ["lucide-react"],
+      "category": "navigation"
+    },
+    {
       "name": "inline-input",
       "type": "registry:component",
       "title": "Inline Input",
@@ -1401,6 +1416,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "view-switcher",
+      "type": "registry:component",
+      "title": "View Switcher",
+      "description": "URL param-based toggle between named views with pill/tab styling.",
+      "files": [
+        {
+          "path": "registry/default/view-switcher/view-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
     }
   ]
 }
