@@ -80,8 +80,8 @@ export function CodeBlock({
           className,
         )}
       >
-        <div className="relative overflow-x-auto">
-          <pre className="p-4 text-sm font-mono bg-background">
+        <div className="relative overflow-x-auto overflow-y-hidden">
+          <pre className="p-4 text-sm font-mono bg-background overflow-y-hidden">
             <code>{code}</code>
           </pre>
           <div className="absolute right-2 top-2 flex items-center gap-2">
@@ -111,7 +111,7 @@ export function CodeBlock({
         className,
       )}
     >
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto overflow-y-hidden">
         <SyntaxHighlighter
           codeTagProps={{
             className: "font-mono text-sm",
@@ -121,6 +121,7 @@ export function CodeBlock({
             fontSize: "0.875rem",
             margin: 0,
             minWidth: "fit-content",
+            overflowY: "hidden",
             padding: "1rem",
           }}
           language={language}
