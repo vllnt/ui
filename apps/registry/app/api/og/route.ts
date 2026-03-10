@@ -150,6 +150,19 @@ function renderFooter(footerLabel?: string): React.ReactElement {
   );
 }
 
+const ROOT_STYLE = {
+  alignItems: "flex-start",
+  backgroundColor: "black",
+  color: "white",
+  display: "flex",
+  flexDirection: "column",
+  fontFamily: "system-ui, sans-serif",
+  height: "100%",
+  justifyContent: "space-between",
+  padding: 120,
+  width: "100%",
+} as const;
+
 function renderOGElement(
   parameters: ValidatedParameters,
   templateType: OGTemplateType,
@@ -161,25 +174,15 @@ function renderOGElement(
       ? truncateText(parameters.description, template.descriptionMaxLength)
       : parameters.description;
 
-  return h(
-    "div",
-    {
-      style: {
-        alignItems: "flex-start",
-        backgroundColor: "black",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        fontFamily: "system-ui, sans-serif",
-        height: "100%",
-        justifyContent: "space-between",
-        padding: 120,
-        width: "100%",
-      },
-    },
+  const topSection =
     template.showCategory && parameters.category
       ? renderCategoryBadge(parameters.category)
-      : h("div", { style: { display: "flex" } }),
+      : h("div", { style: { display: "flex" } });
+
+  return h(
+    "div",
+    { style: ROOT_STYLE },
+    topSection,
     renderMainContent(displayTitle, template.titleSize, displayDescription),
     renderFooter(template.footerLabel),
   );
