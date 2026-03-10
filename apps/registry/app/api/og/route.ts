@@ -131,22 +131,13 @@ function renderFooterLabel(label: string): React.ReactElement {
 }
 
 function renderFooter(footerLabel?: string): React.ReactElement {
+  if (!footerLabel) {
+    return h("div", { style: { display: "flex" } });
+  }
   return h(
     "div",
-    {
-      style: {
-        alignItems: "center",
-        display: "flex",
-        justifyContent: "space-between",
-        width: "100%",
-      },
-    },
-    h(
-      "span",
-      { style: { color: "rgba(255, 255, 255, 0.8)", fontSize: 48 } },
-      "ui.vllnt.com",
-    ),
-    footerLabel ? renderFooterLabel(footerLabel) : undefined,
+    { style: { alignItems: "center", display: "flex", justifyContent: "flex-end", width: "100%" } },
+    renderFooterLabel(footerLabel),
   );
 }
 
