@@ -4,7 +4,7 @@ import { components, groupedComponents } from "@/lib/sidebar-sections";
 const STATIC_PAGES = [
   {
     description: "Component Registry built with shadcn/ui",
-    title: "VLLNT UI",
+    title: "ui.vllnt.com",
     type: "home" as const,
   },
   {
