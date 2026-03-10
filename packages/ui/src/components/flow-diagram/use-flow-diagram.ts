@@ -40,8 +40,13 @@ function useZoomControls(reactFlow: ReturnType<typeof useReactFlow>) {
 
   // Sync zoom state with react flow viewport
   useEffect(() => {
-    const viewport = reactFlow.getViewport();
-    setZoom(viewport.zoom);
+    const rafId = requestAnimationFrame(() => {
+      const viewport = reactFlow.getViewport();
+      setZoom(viewport.zoom);
+    });
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
   }, [reactFlow]);
 
   return { fitView, zoom, zoomIn, zoomOut };

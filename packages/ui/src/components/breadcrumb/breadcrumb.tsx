@@ -17,41 +17,26 @@ type BreadcrumbProps = {
   variant?: "default" | "minimal";
 };
 
+const SEPARATOR_CHARS: Record<string, string> = {
+  arrow: "→",
+  chevron: "›",
+  slash: "/",
+};
+
+function SeparatorIcon({ type }: { type: string }) {
+  return (
+    <span aria-hidden="true" className="text-muted-foreground">
+      {SEPARATOR_CHARS[type] ?? "›"}
+    </span>
+  );
+}
+
 export function Breadcrumb({
   className,
   items,
   separator = "chevron",
   variant = "default",
 }: BreadcrumbProps) {
-  const getSeparator = () => {
-    switch (separator) {
-      case "chevron":
-        return (
-          <span aria-hidden="true" className="text-muted-foreground">
-            ›
-          </span>
-        );
-      case "slash":
-        return (
-          <span aria-hidden="true" className="text-muted-foreground">
-            /
-          </span>
-        );
-      case "arrow":
-        return (
-          <span aria-hidden="true" className="text-muted-foreground">
-            →
-          </span>
-        );
-      default:
-        return (
-          <span aria-hidden="true" className="text-muted-foreground">
-            ›
-          </span>
-        );
-    }
-  };
-
   return (
     <nav
       aria-label="Breadcrumb"
@@ -59,7 +44,11 @@ export function Breadcrumb({
     >
       {items.map((item, index) => (
         <div className="flex items-center" key={index}>
-          {index > 0 && <span className="mx-2">{getSeparator()}</span>}
+          {index > 0 && (
+            <span className="mx-2">
+              <SeparatorIcon type={separator} />
+            </span>
+          )}
 
           {item.href ? (
             <Link

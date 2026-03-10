@@ -1,8 +1,10 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useCallback, useRef, useState } from "react";
 
 import { useTheme } from "next-themes";
 
+import { useMounted } from "../../lib/use-mounted";
 import { Button } from "../button/button";
 import {
   DropdownMenu,
@@ -68,10 +70,9 @@ function ThemeMenuItem({
   );
 }
 
-// eslint-disable-next-line max-lines-per-function
 export function ThemeToggle({ dict }: ThemeToggleProps) {
   const { setTheme, theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const [open, setOpen] = useState(false);
   const closeTimerReference = useRef<null | number>(null);
   const isHoveringOverMenuAreaReference = useRef(false);
@@ -95,10 +96,6 @@ export function ThemeToggle({ dict }: ThemeToggleProps) {
       return;
     }
     setOpen(nextOpen);
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
   }, []);
 
   const getThemeIcon = useCallback(() => {

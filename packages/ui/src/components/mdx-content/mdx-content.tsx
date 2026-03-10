@@ -95,7 +95,9 @@ const MDXComponents: Components = {
       {children}
     </p>
   ),
-  pre: ({ children }: React.ComponentProps<"pre">) => <>{children}</>,
+  pre: ({ children }: React.ComponentProps<"pre">) => (
+    <div className="contents">{children}</div>
+  ),
   strong: ({ children, ...props }: React.ComponentProps<"strong">) => (
     <strong className="font-semibold" {...props}>
       {children}
@@ -176,25 +178,32 @@ export async function MDXContent({
   const allComponents = { ...MDXComponents, ...customComponents };
 
   if (enableMDX && hasJSX) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let Component: React.ComponentType<{ components: any }> | undefined;
+
     try {
-      const { default: Component } = await evaluate(processedContent, {
+      const result = await evaluate(processedContent, {
         ...runtime,
         baseUrl: import.meta.url,
       });
+      Component = result.default;
+    } catch (error) {
+      console.error("Error rendering MDX:", error);
+    }
 
+    if (Component) {
       return (
         <div className={proseClasses}>
           <Component components={allComponents} />
         </div>
       );
-    } catch (error) {
-      console.error("Error rendering MDX:", error);
-      return (
-        <div className={proseClasses}>
-          <ReactMarkdown components={allComponents}>{content}</ReactMarkdown>
-        </div>
-      );
     }
+
+    return (
+      <div className={proseClasses}>
+        <ReactMarkdown components={allComponents}>{content}</ReactMarkdown>
+      </div>
+    );
   }
 
   return (

@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from "react";
 
 import type { ReactNode } from "react";
 
+import { useMounted } from "../../lib/use-mounted";
 import { Badge } from "../badge";
 import {
   Card,
@@ -81,12 +82,14 @@ function TutorialCardImpl({
   tutorial,
 }: TutorialCardProps): React.ReactNode {
   const [progress, setProgress] = useState<null | TutorialCardProgress>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const isHydrated = useMounted();
 
   useEffect(() => {
-    setIsHydrated(true);
     if (getProgress) {
-      setProgress(getProgress(tutorial.id));
+      const result = getProgress(tutorial.id);
+      requestAnimationFrame(() => {
+        setProgress(result);
+      });
     }
   }, [getProgress, tutorial.id]);
 
