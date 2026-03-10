@@ -6,6 +6,7 @@ on:
     paths:
       - "packages/ui/**"
       - "pnpm-lock.yaml"
+      - ".github/workflows/publish.yml"
   workflow_dispatch:
     inputs:
       bump:
