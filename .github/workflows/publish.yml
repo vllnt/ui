@@ -78,30 +78,16 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Upgrade npm for OIDC support
-        run: npm install -g npm@latest
-
       - name: Publish canary
         working-directory: packages/ui
         run: |
-          # Debug: show npm version and auth config
-          echo "npm version: $(npm --version)"
-          echo "Node version: $(node --version)"
-
-          # Remove token placeholder so npm uses OIDC for trusted publishers
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
-
-          # Debug: show final npmrc (redacted)
-          echo "--- .npmrc contents ---"
-          cat "$NPM_CONFIG_USERCONFIG" || true
-          echo "--- end .npmrc ---"
-
           BASE_VERSION=$(node -p "require('./package.json').version")
           SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
           CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
           npm version "$CANARY_VERSION" --no-git-tag-version
-          npm publish --tag canary --provenance --access public
+          pnpm publish --tag canary --provenance --access public --no-git-checks
 
   release:
     name: Publish Release
@@ -184,15 +170,12 @@ jobs:
           git tag -a "v${{ steps.version.outputs.version }}" -m "v${{ steps.version.outputs.version }}"
           git push origin main --follow-tags
 
-      - name: Upgrade npm for OIDC support
-        run: npm install -g npm@latest
-
       - name: Publish to npm
         working-directory: packages/ui
         run: |
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
-          npm publish --tag latest --provenance --access public
+          pnpm publish --tag latest --provenance --access public --no-git-checks
 
       - name: Create GitHub Release
         env:
