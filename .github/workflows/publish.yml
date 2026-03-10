@@ -78,6 +78,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
+
       - name: Publish canary
         working-directory: packages/ui
         run: |
@@ -87,7 +90,8 @@ jobs:
           SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
           CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
           npm version "$CANARY_VERSION" --no-git-tag-version
-          pnpm publish --tag canary --provenance --access public --no-git-checks
+          TARBALL=$(pnpm pack --pack-destination /tmp)
+          npm publish "$TARBALL" --tag canary --provenance --access public
 
   release:
     name: Publish Release
@@ -170,12 +174,16 @@ jobs:
           git tag -a "v${{ steps.version.outputs.version }}" -m "v${{ steps.version.outputs.version }}"
           git push origin main --follow-tags
 
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
+
       - name: Publish to npm
         working-directory: packages/ui
         run: |
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
-          pnpm publish --tag latest --provenance --access public --no-git-checks
+          TARBALL=$(pnpm pack --pack-destination /tmp)
+          npm publish "$TARBALL" --tag latest --provenance --access public
 
       - name: Create GitHub Release
         env:
