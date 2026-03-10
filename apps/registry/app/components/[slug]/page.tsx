@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 
 import { ComponentPreview } from "@/components/component-preview";
 import { QuickAdd } from "@/components/quick-add";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   getCategoryForComponent,
   getSidebarSections,
@@ -87,31 +88,33 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const componentDirectory = getComponentDirectory(component);
   const headerPath = path.join(componentDirectory, "header.mdx");
+  const category = getCategoryForComponent(slug);
+
+  let title = `${component.title} - VLLNT UI`;
+  let description = component.description;
 
   try {
     const headerContent = await readFile(headerPath, "utf8");
     const { metadata } = parseFrontmatter(headerContent);
-
-    return {
-      description: metadata.description || component.description,
-      openGraph: {
-        description: metadata.description || component.description,
-        title: metadata.title || component.title,
-        type: "website",
-      },
-      title: metadata.title || `${component.title} - VLLNT UI`,
-      twitter: {
-        card: "summary_large_image",
-        description: metadata.description || component.description,
-        title: metadata.title || component.title,
-      },
-    };
+    title = metadata.title || title;
+    description = metadata.description || description;
   } catch {
-    return {
-      description: component.description,
-      title: `${component.title} - VLLNT UI`,
-    };
+    // header.mdx is optional — use registry.json defaults
   }
+
+  const ogParameters = {
+    category,
+    description,
+    title: component.title,
+    type: "component" as const,
+  };
+
+  return {
+    description,
+    openGraph: generateOGMetadata(ogParameters),
+    title,
+    twitter: generateTwitterMetadata(ogParameters),
+  };
 }
 
 export default async function ComponentPage(props: Props) {

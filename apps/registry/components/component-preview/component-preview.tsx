@@ -1183,13 +1183,13 @@ function AlertDialogPreview() {
 
 function HorizontalScrollRowPreview() {
   return (
-    <HorizontalScrollRow title="Featured" description="Browse our picks">
-      {Array.from({ length: 6 }, (_, i) => (
+    <HorizontalScrollRow description="Browse our picks" title="Featured">
+      {Array.from({ length: 6 }, (_, index) => (
         <div
           className="min-w-[180px] snap-start rounded-lg border bg-card p-4 text-sm"
-          key={i}
+          key={index}
         >
-          Card {i + 1}
+          Card {index + 1}
         </div>
       ))}
     </HorizontalScrollRow>
@@ -1199,11 +1199,11 @@ function HorizontalScrollRowPreview() {
 function ViewSwitcherPreview() {
   return (
     <ViewSwitcher
+      defaultKey="list"
       options={[
         { key: "list", label: "List" },
         { key: "grid", label: "Grid" },
       ]}
-      defaultKey="list"
       paramName="demo-view"
     />
   );

@@ -13,6 +13,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   description: "VLLNT UI Component Registry",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com",
+  ),
   title: "VLLNT UI - Component Registry",
 };
 

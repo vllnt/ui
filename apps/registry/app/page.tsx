@@ -1,32 +1,32 @@
 import { MDXContent, Sidebar } from "@vllnt/ui";
+import type { Metadata } from "next";
 
+import { getPageContent } from "@/lib/content";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
-export default async function HomePage() {
-  const gettingStarted = `# Getting Started
+export async function generateMetadata(): Promise<Metadata> {
+  const { frontmatter } = await getPageContent("home");
+  const og = frontmatter.og;
 
-Welcome to VLLNT UI. This is a component registry built with shadcn/ui.
-
-## Installation
-
-Install components using the shadcn CLI:
-
-\`\`\`bash
-pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[component-name].json
-\`\`\`
-
-## Usage
-
-Import components from \`@vllnt/ui\`:
-
-\`\`\`tsx
-import { Button } from '@vllnt/ui'
-
-export function MyComponent() {
-  return <Button>Click me</Button>
+  return {
+    description: frontmatter.description,
+    openGraph: generateOGMetadata({
+      description: og?.description ?? frontmatter.description,
+      title: og?.title ?? frontmatter.title,
+      type: og?.type ?? frontmatter.type,
+    }),
+    title: frontmatter.title,
+    twitter: generateTwitterMetadata({
+      description: og?.description ?? frontmatter.description,
+      title: og?.title ?? frontmatter.title,
+      type: og?.type ?? frontmatter.type,
+    }),
+  };
 }
-\`\`\`
-`;
+
+export default async function HomePage() {
+  const { content } = await getPageContent("home");
 
   return (
     <>
@@ -42,7 +42,7 @@ export function MyComponent() {
 
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:mt-8 prose-headings:font-semibold prose-headings:text-black prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-3xl prose-h4:text-2xl prose-h5:text-xl prose-h6:text-lg dark:prose-headings:text-white prose-p:leading-7 prose-blockquote:mt-6 prose-blockquote:border-l-2 prose-blockquote:pl-6 prose-blockquote:italic prose-ul:my-6 prose-ul:ml-6 prose-ul:list-disc prose-ol:my-6 prose-ol:ml-6 prose-ol:list-decimal prose-code:relative prose-code:rounded prose-code:bg-muted prose-code:px-[0.3rem] prose-code:py-[0.2rem] prose-code:text-sm  prose-pre:my-6 prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:bg-black prose-pre:py-4  prose-pre:text-sm prose-pre:text-white prose-pre:shadow-lg dark:prose-pre:bg-zinc-900 prose-hr:my-8 prose-hr:border-border prose-table:w-full prose-table:border-collapse prose-table:border prose-table:border-border prose-th:border prose-th:border-border prose-th:bg-muted prose-th:p-2 prose-th:text-left prose-th:font-medium prose-td:border prose-td:border-border prose-td:p-2 prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-lg prose-a:font-medium prose-a:text-primary prose-a:underline prose-a:underline-offset-4 hover:prose-a:text-primary/80 prose-strong:font-semibold prose-em:italic prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground">
-              <MDXContent content={gettingStarted} />
+              <MDXContent content={content} />
             </div>
           </div>
         </div>
