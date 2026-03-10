@@ -181,7 +181,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add packages/ui/package.json
           git commit -m "chore(release): v${{ steps.version.outputs.version }}"
-          git tag "v${{ steps.version.outputs.version }}"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "v${{ steps.version.outputs.version }}"
           git push origin main --follow-tags
 
       - name: Upgrade npm for OIDC support
@@ -198,6 +198,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cat <<'NOTES_EOF' > /tmp/release-notes.md
+          ${{ steps.changelog.outputs.body }}
+          NOTES_EOF
           gh release create "v${{ steps.version.outputs.version }}" \
             --title "v${{ steps.version.outputs.version }}" \
-            --notes "${{ steps.changelog.outputs.body }}"
+            --notes-file /tmp/release-notes.md
