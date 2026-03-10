@@ -80,9 +80,9 @@ jobs:
 
       - name: Publish canary
         working-directory: packages/ui
-        env:
-          NODE_AUTH_TOKEN: ""
         run: |
+          # Remove token placeholder so npm uses OIDC for trusted publishers
+          sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           BASE_VERSION=$(node -p "require('./package.json').version")
           SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
           CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
@@ -172,9 +172,9 @@ jobs:
 
       - name: Publish to npm
         working-directory: packages/ui
-        env:
-          NODE_AUTH_TOKEN: ""
-        run: npm publish --tag latest --provenance --access public
+        run: |
+          sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
+          npm publish --tag latest --provenance --access public
 
       - name: Create GitHub Release
         env:
