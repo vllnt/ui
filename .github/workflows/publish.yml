@@ -71,6 +71,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
 
@@ -79,12 +80,14 @@ jobs:
 
       - name: Publish canary
         working-directory: packages/ui
+        env:
+          NODE_AUTH_TOKEN: ""
         run: |
           BASE_VERSION=$(node -p "require('./package.json').version")
           SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
           CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
           npm version "$CANARY_VERSION" --no-git-tag-version
-          pnpm publish --tag canary --no-git-checks --provenance --access public
+          npm publish --tag canary --provenance --access public
 
   release:
     name: Publish Release
@@ -106,6 +109,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
 
@@ -168,7 +172,9 @@ jobs:
 
       - name: Publish to npm
         working-directory: packages/ui
-        run: pnpm publish --tag latest --no-git-checks --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ""
+        run: npm publish --tag latest --provenance --access public
 
       - name: Create GitHub Release
         env:
