@@ -2,8 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { TutorialFilters } from "./tutorial-filters";
 
-const noop = (): void => undefined;
-
 const meta = {
   args: {
     currentDifficulty: "all",
@@ -24,7 +22,7 @@ const meta = {
       searchPlaceholder: "Search by title or keyword...",
       tagsLabel: "Topics",
     },
-    onFilterChange: noop,
+    onFilterChange: () => {},
     searchQuery: "",
     tags: ["React", "TypeScript", "Tailwind", "Components"],
   },

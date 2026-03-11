@@ -4,7 +4,18 @@ import { Comparison } from "./comparison";
 
 const meta = {
   args: {
-    children: "Comparison",
+    after: {
+      items: ["example"],
+      title: "Example Title",
+    before: {
+      items: ["example"],
+      title: "Example Title",
+    },
+  },
+    before: {
+      items: ["example"],
+      title: "Example Title",
+    },
   },
   component: Comparison,
   title: "Data/Comparison",

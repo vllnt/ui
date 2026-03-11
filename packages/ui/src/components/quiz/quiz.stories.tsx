@@ -4,7 +4,9 @@ import { Quiz } from "./quiz";
 
 const meta = {
   args: {
-    children: "Quiz",
+    options: [{
+        label: "Label",
+      }],
   },
   component: Quiz,
   title: "Learning/Quiz",

@@ -3,6 +3,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ProfileSection } from "./profile-section";
 
 const meta = {
+  args: {
+    dict: {
+      profile: "",
+      name: "name",
+      tagline: "tagline",
+    },
+  },
   component: ProfileSection,
   title: "Learning/ProfileSection",
 } satisfies Meta<typeof ProfileSection>;

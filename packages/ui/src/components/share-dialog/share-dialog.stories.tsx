@@ -3,6 +3,13 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ShareDialog } from "./share-dialog";
 
 const meta = {
+  args: {
+    platforms: [{
+        buildUrl: (pageUrl, pageTitle) => {},
+        key: "key",
+        label: "Label",
+      }],
+  },
   component: ShareDialog,
   title: "Utility/ShareDialog",
 } satisfies Meta<typeof ShareDialog>;

@@ -2,8 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { TutorialComplete } from "./tutorial-complete";
 
-const noop = (): void => undefined;
-
 const meta = {
   args: {
     backHref: "/tutorials",
@@ -23,8 +21,8 @@ const meta = {
       youveCompletedAll: "You've completed all sections of",
       youveFinishedWith: "You've finished with",
     },
-    onGoToSection: noop,
-    onRestart: noop,
+    onGoToSection: () => {},
+    onRestart: () => {},
     relatedContent: [
       { href: "/next-tutorial", title: "Next Steps", type: "Tutorial" },
     ],
@@ -34,6 +32,9 @@ const meta = {
       { id: "advanced", title: "Advanced Concepts" },
     ],
     shareUrl: "https://example.com/tutorial",
+    socialLinks: [
+      { href: "https://twitter.com", label: "Twitter" },
+    ],
     title: "React Fundamentals",
   },
   component: TutorialComplete,

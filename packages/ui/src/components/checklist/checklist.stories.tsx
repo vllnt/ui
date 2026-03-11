@@ -4,7 +4,10 @@ import { Checklist } from "./checklist";
 
 const meta = {
   args: {
-    children: "Checklist",
+    items: [{
+        id: "1",
+        label: "Label",
+      }],
   },
   component: Checklist,
   title: "Learning/Checklist",

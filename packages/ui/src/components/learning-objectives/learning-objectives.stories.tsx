@@ -5,6 +5,7 @@ import { LearningObjectives } from "./learning-objectives";
 const meta = {
   args: {
     children: "LearningObjectives",
+    objectives: ["example"],
   },
   component: LearningObjectives,
   title: "Learning/LearningObjectives",

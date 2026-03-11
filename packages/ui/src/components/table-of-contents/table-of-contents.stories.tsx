@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TableOfContents } from "./table-of-contents";
 
 const meta = {
+  args: {
+    sections: [],
+  },
   component: TableOfContents,
   title: "Utility/TableOfContents",
 } satisfies Meta<typeof TableOfContents>;

@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SidebarToggle } from "./sidebar-toggle";
 
 const meta = {
+  args: {
+    onToggle: () => {},
+  },
   component: SidebarToggle,
   title: "Navigation/SidebarToggle",
 } satisfies Meta<typeof SidebarToggle>;
