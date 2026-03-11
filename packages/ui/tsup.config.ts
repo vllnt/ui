@@ -8,6 +8,7 @@ export default defineConfig([
       'src/**/*.{ts,tsx}',
       '!src/**/*.test.*',
       '!src/**/*.visual.*',
+      '!src/**/*.stories.*',
       '!src/**/__tests__/**',
     ],
     format: ['esm'],

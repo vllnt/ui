@@ -29,6 +29,9 @@ playwright-results/
 playwright-report/
 .snapshots/
 
+# Storybook
+storybook-static/
+
 # Generated
 public/r/
 next-env.d.ts
