@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './profile-section.stories'
 
 <Meta of={Stories} />
@@ -21,15 +21,64 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/profile-section.json
 import { ProfileSection } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+const socialLinks = [
+  {
+    href: "/example",
+    label: "Example item",
+  },
+]
+
+<ProfileSection
+  socialLinks={socialLinks}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `compact` | `boolean` | No | - |
-| `dict` | `ProfileDict` | Yes | - |
+| `compact` | `boolean` | No | `true` or `false` |
+| `dict` | `ProfileDict` | Yes | `ProfileDict` object |
 | `imageAlt` | `string` | No | - |
 | `imageSource` | `string` | No | - |
-| `socialLinks` | `SocialLink[]` | No | - |
+| `socialLinks` | `SocialLink[]` | No | Array of `SocialLink` objects |
+
+## Type Definitions
+
+### ProfileDict
+
+```tsx
+type ProfileDict = {
+  profile: {
+  name: string
+  tagline: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `profile` | `{` | Yes | - |
+| `name` | `string` | Yes | - |
+| `tagline` | `string` | Yes | - |
+
+### SocialLink
+
+```tsx
+type SocialLink = {
+  href: string
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `href` | `string` | Yes | - |
+| `label` | `string` | Yes | - |
 

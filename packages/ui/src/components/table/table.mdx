@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './table.stories'
 
 <Meta of={Stories} />
@@ -18,10 +18,27 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/table.json
 ## Import
 
 ```tsx
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@vllnt/ui'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Table>Table content</Table>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 

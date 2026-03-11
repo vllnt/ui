@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './tutorial-filters.stories'
 
 <Meta of={Stories} />
@@ -21,18 +21,77 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-filters.json
 import { TutorialFilters } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<TutorialFilters
+  currentDifficulty="value"
+  currentTags={currentTags}
+  onFilterChange={(updates) => console.log(updates)}
+  searchQuery="value"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `currentDifficulty` | `string` | Yes | - |
-| `currentTags` | `string[]` | Yes | - |
-| `difficultyOptions` | `string[]` | No | - |
-| `isPending` | `boolean` | No | - |
-| `labels` | `TutorialFiltersLabels` | Yes | - |
-| `onFilterChange` | `(updates: FilterUpdates) =&gt; void` | Yes | - |
+| `currentTags` | `string[]` | Yes | Array of `string` |
+| `difficultyOptions` | `string[]` | No | Array of `string` |
+| `isPending` | `boolean` | No | `true` or `false` |
+| `labels` | `TutorialFiltersLabels` | Yes | `TutorialFiltersLabels` object |
+| `onFilterChange` | `(updates: FilterUpdates) =&gt; void` | Yes | Callback: `(updates: FilterUpdates) => void` |
 | `searchQuery` | `string` | Yes | - |
-| `tags` | `string[]` | Yes | - |
+| `tags` | `string[]` | Yes | Array of `string` |
+
+## Type Definitions
+
+### TutorialFiltersLabels
+
+```tsx
+type TutorialFiltersLabels = {
+  activeFilters: string
+  clear: string
+  clearAll: string
+  difficulty: Record<string, string>
+  difficultyLabel: string
+  searchFilter: string
+  searchLabel: string
+  searchPlaceholder: string
+  tagsLabel: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `activeFilters` | `string` | Yes | - |
+| `clear` | `string` | Yes | - |
+| `clearAll` | `string` | Yes | - |
+| `difficulty` | `Record&lt;string, string&gt;` | Yes | - |
+| `difficultyLabel` | `string` | Yes | - |
+| `searchFilter` | `string` | Yes | - |
+| `searchLabel` | `string` | Yes | - |
+| `searchPlaceholder` | `string` | Yes | - |
+| `tagsLabel` | `string` | Yes | - |
+
+### FilterUpdates
+
+```tsx
+type FilterUpdates = {
+  difficulty?: string
+  search?: string
+  tags?: string[]
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `difficulty` | `string` | No | - |
+| `search` | `string` | No | - |
+| `tags` | `string[]` | No | Array of `string` |
 

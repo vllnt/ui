@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './theme-toggle.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,22 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/theme-toggle.json
 import { ThemeToggle } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<ThemeToggle
+  dark="value"
+  light="value"
+  system="value"
+  toggle_theme="value"
+>
+  ThemeToggle content
+</ThemeToggle>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
@@ -33,4 +48,22 @@ import { ThemeToggle } from '@vllnt/ui'
 | `light` | `string` | Yes | - |
 | `system` | `string` | Yes | - |
 | `toggle_theme` | `string` | Yes | - |
+
+## Type Definitions
+
+### ThemeButtonProps
+
+```tsx
+type ThemeButtonProps = {
+  ariaLabel: string
+  children?: React.ReactNode
+  icon: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `ariaLabel` | `string` | Yes | - |
+| `children` | `React.ReactNode` | No | React content (JSX, string, number, etc.) |
+| `icon` | `string` | Yes | - |
 

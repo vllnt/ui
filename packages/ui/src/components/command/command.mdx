@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './command.stories'
 
 <Meta of={Stories} />
@@ -18,10 +18,32 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/command.json
 ## Import
 
 ```tsx
-import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from '@vllnt/ui'
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Command>
+  <Command.displayName />
+</Command>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
+
+### Command.displayName
 

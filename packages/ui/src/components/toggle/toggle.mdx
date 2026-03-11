@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './toggle.stories'
 
 <Meta of={Stories} />
@@ -21,9 +21,21 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/toggle.json
 import { Toggle } from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Toggle>
+  <Toggle.displayName />
+</Toggle>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
+
+### Toggle.displayName
 
 ## Variants
 
@@ -35,9 +47,9 @@ import { Toggle } from '@vllnt/ui'
 | `lg` | - |
 | `sm` | - |
 
-<Canvas of={Stories.SizeLg} />
+<Canvas of={Stories.SizeLg} sourceState="shown" />
 
-<Canvas of={Stories.SizeSm} />
+<Canvas of={Stories.SizeSm} sourceState="shown" />
 
 ### variant
 
@@ -46,5 +58,5 @@ import { Toggle } from '@vllnt/ui'
 | `default` | Yes |
 | `outline` | - |
 
-<Canvas of={Stories.VariantOutline} />
+<Canvas of={Stories.VariantOutline} sourceState="shown" />
 

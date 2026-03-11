@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './inline-input.stories'
 
 <Meta of={Stories} />
@@ -21,15 +21,26 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/inline-input.json
 import { InlineInput } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<InlineInput
+  onChange={(value) => console.log(value)}
+  onCommit={(value) => console.log(value)}
+  value="value"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
-| `onCancel` | `() =&gt; void` | No | - |
-| `onChange` | `(value: string) =&gt; void` | Yes | - |
-| `onCommit` | `(value: string) =&gt; void` | Yes | - |
+| `onCancel` | `() =&gt; void` | No | Callback function |
+| `onChange` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `onCommit` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
 | `value` | `string` | Yes | - |
 

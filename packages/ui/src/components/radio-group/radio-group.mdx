@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './radio-group.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,19 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/radio-group.json
 import { RadioGroup, RadioGroupItem } from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<RadioGroup>
+  <RadioGroup.displayName />
+</RadioGroup>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
+
+### RadioGroup.displayName
 

@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './content-intro.stories'
 
 <Meta of={Stories} />
@@ -21,20 +21,74 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/content-intro.json
 import { ContentIntro } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+const sections = [
+  {
+    id: "1",
+    title: "Example item",
+  },
+]
+
+<ContentIntro
+  estimatedTime="value"
+  onGoToSection={(index) => console.log(index)}
+  onStart={() => {}}
+  renderIntroContent={() => {}}
+  sections={sections}
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `additionalContent` | `ReactNode` | No | - |
+| `additionalContent` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `completedSections` | `Set&lt;string&gt;` | Yes | - |
 | `estimatedTime` | `string` | Yes | - |
-| `isLoading` | `boolean` | No | - |
-| `labels` | `ContentIntroLabels` | No | - |
-| `onGoToSection` | `(index: number) =&gt; void` | Yes | - |
-| `onStart` | `() =&gt; void` | Yes | - |
-| `renderIntroContent` | `() =&gt; ReactNode` | Yes | - |
-| `sections` | `ContentIntroSection[]` | Yes | - |
+| `isLoading` | `boolean` | No | `true` or `false` |
+| `labels` | `ContentIntroLabels` | No | `ContentIntroLabels` object |
+| `onGoToSection` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
+| `onStart` | `() =&gt; void` | Yes | Callback function |
+| `renderIntroContent` | `() =&gt; ReactNode` | Yes | Callback function |
+| `sections` | `ContentIntroSection[]` | Yes | Array of `ContentIntroSection` objects |
 | `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### ContentIntroSection
+
+```tsx
+type ContentIntroSection = {
+  id: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `id` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+
+### ContentIntroLabels
+
+```tsx
+type ContentIntroLabels = {
+  continueLabel?: string
+  startLabel?: string
+  tableOfContentsLabel?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `continueLabel` | `string` | No | - |
+| `startLabel` | `string` | No | - |
+| `tableOfContentsLabel` | `string` | No | - |
 

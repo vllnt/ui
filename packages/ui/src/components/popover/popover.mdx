@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './popover.stories'
 
 <Meta of={Stories} />
@@ -18,10 +18,23 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/popover.json
 ## Import
 
 ```tsx
-import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from '@vllnt/ui'
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+  PopoverTrigger,
+} from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Popover>Popover content</Popover>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 

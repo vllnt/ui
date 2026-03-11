@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './table-of-contents-panel.stories'
 
 <Meta of={Stories} />
@@ -21,24 +21,61 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/table-of-contents-panel.json
 import { TableOfContentsPanel } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+const sections = [
+  {
+    id: "1",
+    title: "Example item",
+  },
+]
+
+<TableOfContentsPanel
+  completionCount="0"
+  currentSectionIndex="0"
+  onClose={() => {}}
+  onSelectSection={(index) => console.log(index)}
+  sections={sections}
+  totalSections="0"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
-| `closeIcon` | `ReactNode` | No | - |
+| `closeIcon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `completedSections` | `Set&lt;string&gt;` | Yes | - |
 | `completionCount` | `number` | Yes | - |
 | `currentSectionIndex` | `number` | Yes | - |
-| `isOpen` | `boolean` | Yes | - |
-| `onClose` | `() =&gt; void` | Yes | - |
-| `onReset` | `() =&gt; void` | No | - |
-| `onSelectSection` | `(index: number) =&gt; void` | Yes | - |
+| `isOpen` | `boolean` | Yes | `true` or `false` |
+| `onClose` | `() =&gt; void` | Yes | Callback function |
+| `onReset` | `() =&gt; void` | No | Callback function |
+| `onSelectSection` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
 | `progressLabel` | `string` | No | - |
 | `resetLabel` | `string` | No | - |
-| `sections` | `TOCSection[]` | Yes | - |
+| `sections` | `TOCSection[]` | Yes | Array of `TOCSection` objects |
 | `title` | `string` | No | - |
 | `totalSections` | `number` | Yes | - |
+
+## Type Definitions
+
+### TOCSection
+
+```tsx
+type TOCSection = {
+  id: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `id` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
 

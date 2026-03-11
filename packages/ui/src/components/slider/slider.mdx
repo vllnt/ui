@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './slider.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,19 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/slider.json
 import { Slider } from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Slider>
+  <Slider.displayName />
+</Slider>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
+
+### Slider.displayName
 

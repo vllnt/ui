@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './spinner.stories'
 
 <Meta of={Stories} />
@@ -21,11 +21,19 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/spinner.json
 import { Spinner } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<Spinner>Spinner content</Spinner>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `size` | `"lg" \| "md" \| "sm"` | No | - |
+| `size` | `"lg" \| "md" \| "sm"` | No | `lg`, `md`, `sm` |
 

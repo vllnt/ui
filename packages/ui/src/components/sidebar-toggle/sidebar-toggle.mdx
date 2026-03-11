@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './sidebar-toggle.stories'
 
 <Meta of={Stories} />
@@ -21,15 +21,25 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/sidebar-toggle.json
 import { SidebarToggle } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<SidebarToggle
+  onToggle={() => {}}
+  open
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
-| `onToggle` | `() =&gt; void` | Yes | - |
-| `open` | `boolean` | Yes | - |
+| `onToggle` | `() =&gt; void` | Yes | Callback function |
+| `open` | `boolean` | Yes | `true` or `false` |
 
 ## Dependencies
 

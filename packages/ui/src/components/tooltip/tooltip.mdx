@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './tooltip.stories'
 
 <Meta of={Stories} />
@@ -18,10 +18,23 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tooltip.json
 ## Import
 
 ```tsx
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@vllnt/ui'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Tooltip>Hover me</Tooltip>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 

@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './thinking-block.stories'
 
 <Meta of={Stories} />
@@ -21,14 +21,23 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/thinking-block.json
 import { ThinkingBlock } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<ThinkingBlock
+  thinking="value"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
-| `isStreaming` | `boolean` | No | - |
+| `isStreaming` | `boolean` | No | `true` or `false` |
 | `thinking` | `string` | Yes | - |
 
 ## Dependencies

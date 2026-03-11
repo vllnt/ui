@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './key-concept.stories'
 
 <Meta of={Stories} />
@@ -21,15 +21,43 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/key-concept.json
 import { KeyConcept, Glossary } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<KeyConcept
+  term="value"
+>
+  KeyConcept content
+</KeyConcept>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `children` | `ReactNode` | Yes | - |
-| `className` | `string` | No | - |
-| `highlight` | `boolean` | No | - |
-| `icon` | `ReactNode` | No | - |
+| `highlight` | `boolean` | No | `true` or `false` |
+| `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `term` | `string` | Yes | - |
+
+## Type Definitions
+
+### GlossaryProps
+
+```tsx
+type GlossaryProps = {
+  className?: string
+  icon?: ReactNode
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `title` | `string` | No | - |
 

@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './badge.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,15 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/badge.json
 import { Badge } from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Badge>Badge</Badge>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
@@ -36,9 +44,9 @@ import { Badge } from '@vllnt/ui'
 | `outline` | - |
 | `secondary` | - |
 
-<Canvas of={Stories.VariantDestructive} />
+<Canvas of={Stories.VariantDestructive} sourceState="shown" />
 
-<Canvas of={Stories.VariantOutline} />
+<Canvas of={Stories.VariantOutline} sourceState="shown" />
 
-<Canvas of={Stories.VariantSecondary} />
+<Canvas of={Stories.VariantSecondary} sourceState="shown" />
 

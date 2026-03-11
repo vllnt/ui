@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './view-switcher.stories'
 
 <Meta of={Stories} />
@@ -21,14 +21,46 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/view-switcher.json
 import { ViewSwitcher } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+const options = [
+  {
+    key: "value",
+    label: "Example item",
+  },
+]
+
+<ViewSwitcher
+  options={options}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
 | `defaultKey` | `string` | No | - |
-| `options` | `ViewOption[]` | Yes | - |
+| `options` | `ViewOption[]` | Yes | Array of `ViewOption` objects |
 | `paramName` | `string` | No | - |
+
+## Type Definitions
+
+### ViewOption
+
+```tsx
+type ViewOption = {
+  key: string
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `key` | `string` | Yes | - |
+| `label` | `string` | Yes | - |
 

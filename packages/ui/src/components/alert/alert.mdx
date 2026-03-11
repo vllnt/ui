@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './alert.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,15 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/alert.json
 import { Alert, AlertDescription, AlertTitle } from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Alert>This is an alert message.</Alert>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
@@ -34,5 +42,5 @@ import { Alert, AlertDescription, AlertTitle } from '@vllnt/ui'
 | `default` | Yes |
 | `destructive` | - |
 
-<Canvas of={Stories.VariantDestructive} />
+<Canvas of={Stories.VariantDestructive} sourceState="shown" />
 

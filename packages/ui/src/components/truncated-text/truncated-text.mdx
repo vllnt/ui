@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './truncated-text.stories'
 
 <Meta of={Stories} />
@@ -19,14 +19,20 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/truncated-text.json
 import { TruncatedText } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<TruncatedText>TruncatedText content</TruncatedText>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `children` | `string` | Yes | - |
-| `className` | `string` | No | - |
-| `default` | `'calc(100vw - 220px)')` | Yes | - |
 | `maxWidth` | `string` | No | - |
 

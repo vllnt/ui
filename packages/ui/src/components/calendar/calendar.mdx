@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './calendar.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,15 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/calendar.json
 import { Calendar } from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Calendar>Calendar content</Calendar>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 

@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './tldr-section.stories'
 
 <Meta of={Stories} />
@@ -21,12 +21,40 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tldr-section.json
 import { TLDRSection } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<TldrSection
+  label="Label"
+>
+  TldrSection content
+</TldrSection>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `children` | `React.ReactNode` | Yes | - |
+| `children` | `React.ReactNode` | Yes | React content (JSX, string, number, etc.) |
+| `label` | `string` | Yes | - |
+
+## Type Definitions
+
+### TLDRSectionProps
+
+```tsx
+type TLDRSectionProps = {
+  children: React.ReactNode
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `children` | `React.ReactNode` | Yes | React content (JSX, string, number, etc.) |
 | `label` | `string` | Yes | - |
 

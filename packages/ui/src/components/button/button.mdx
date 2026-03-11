@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './button.stories'
 
 <Meta of={Stories} />
@@ -21,13 +21,21 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 import { Button } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<Button>Click me</Button>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `asChild` | `boolean` | No | - |
+| `asChild` | `boolean` | No | `true` or `false` |
 
 ## Variants
 
@@ -40,11 +48,11 @@ import { Button } from '@vllnt/ui'
 | `lg` | - |
 | `sm` | - |
 
-<Canvas of={Stories.SizeIcon} />
+<Canvas of={Stories.SizeIcon} sourceState="shown" />
 
-<Canvas of={Stories.SizeLg} />
+<Canvas of={Stories.SizeLg} sourceState="shown" />
 
-<Canvas of={Stories.SizeSm} />
+<Canvas of={Stories.SizeSm} sourceState="shown" />
 
 ### variant
 
@@ -57,13 +65,13 @@ import { Button } from '@vllnt/ui'
 | `outline` | - |
 | `secondary` | - |
 
-<Canvas of={Stories.VariantDestructive} />
+<Canvas of={Stories.VariantDestructive} sourceState="shown" />
 
-<Canvas of={Stories.VariantGhost} />
+<Canvas of={Stories.VariantGhost} sourceState="shown" />
 
-<Canvas of={Stories.VariantLink} />
+<Canvas of={Stories.VariantLink} sourceState="shown" />
 
-<Canvas of={Stories.VariantOutline} />
+<Canvas of={Stories.VariantOutline} sourceState="shown" />
 
-<Canvas of={Stories.VariantSecondary} />
+<Canvas of={Stories.VariantSecondary} sourceState="shown" />
 

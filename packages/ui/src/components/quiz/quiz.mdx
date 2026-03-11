@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './quiz.stories'
 
 <Meta of={Stories} />
@@ -18,19 +18,87 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/quiz.json
 ## Import
 
 ```tsx
-import { Quiz } from '@vllnt/ui'
+import {
+  Quiz,
+  QuizOptionButton,
+  QuizHint,
+  QuizResult,
+} from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+const options = [
+  {
+    correct: true,
+    explanation: "Explanation text",
+    label: "Example item",
+  },
+]
+
+<Quiz
+  options={options}
+  question="What is React?"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+### Quiz
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
-| `explanation` | `ReactNode` | No | - |
+| `explanation` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `hint` | `string` | No | - |
-| `onAnswer` | `(correct: boolean) =&gt; void` | No | - |
-| `options` | `QuizOption[]` | Yes | - |
+| `onAnswer` | `(correct: boolean) =&gt; void` | No | Callback: `(correct: boolean) => void` |
+| `options` | `QuizOption[]` | Yes | Array of `QuizOption` objects |
 | `question` | `string` | Yes | - |
+
+### QuizOptionButton
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `index` | `number` | Yes | - |
+| `onSelect` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
+| `option` | `QuizOption` | Yes | `QuizOption` object |
+| `selectedIndex` | `null \| number` | Yes | `null` or `number` |
+| `submitted` | `boolean` | Yes | `true` or `false` |
+
+### QuizHint
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `hint` | `string` | Yes | - |
+| `onShow` | `() =&gt; void` | Yes | Callback function |
+| `showHint` | `boolean` | Yes | `true` or `false` |
+
+### QuizResult
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `explanation` | `ReactNode` | Yes | React content (JSX, string, number, etc.) |
+| `isCorrect` | `boolean` | Yes | `true` or `false` |
+
+## Type Definitions
+
+### QuizOption
+
+```tsx
+type QuizOption = {
+  correct?: boolean
+  explanation?: string
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `correct` | `boolean` | No | `true` or `false` |
+| `explanation` | `string` | No | - |
+| `label` | `string` | Yes | - |
 

@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './mdx-content.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,19 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/mdx-content.json
 import { MdxContent } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<MdxContent
+  content="value"
+>
+  MdxContent content
+</MdxContent>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
@@ -29,5 +41,23 @@ import { MdxContent } from '@vllnt/ui'
 | ---- | ---- | -------- | ----------- |
 | `components` | `Record&lt;string, React.ComponentType&lt;any&gt;&gt;` | No | - |
 | `content` | `string` | Yes | - |
-| `enableMDX` | `boolean` | No | - |
+| `enableMDX` | `boolean` | No | `true` or `false` |
+
+## Type Definitions
+
+### MDXContentProps
+
+```tsx
+type MDXContentProps = {
+  components?: Record<string, React.ComponentType<any>>
+  content: string
+  enableMDX?: boolean
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `components` | `Record&lt;string, React.ComponentType&lt;any&gt;&gt;` | No | - |
+| `content` | `string` | Yes | - |
+| `enableMDX` | `boolean` | No | `true` or `false` |
 

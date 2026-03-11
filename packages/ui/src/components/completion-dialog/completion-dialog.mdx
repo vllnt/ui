@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './completion-dialog.stories'
 
 <Meta of={Stories} />
@@ -21,7 +21,21 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/completion-dialog.json
 import { CompletionDialog } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<CompletionDialog
+  isOpen
+  onCancel={() => {}}
+  onClose={() => {}}
+  onConfirm={() => {}}
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
@@ -29,14 +43,13 @@ import { CompletionDialog } from '@vllnt/ui'
 | ---- | ---- | -------- | ----------- |
 | `cancelLabel` | `string` | No | - |
 | `cancelShortcut` | `string` | No | - |
-| `className` | `string` | No | - |
-| `closeIcon` | `ReactNode` | No | - |
+| `closeIcon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `confirmLabel` | `string` | No | - |
 | `confirmShortcut` | `string` | No | - |
-| `description` | `ReactNode` | No | - |
-| `isOpen` | `boolean` | Yes | - |
-| `onCancel` | `() =&gt; void` | Yes | - |
-| `onClose` | `() =&gt; void` | Yes | - |
-| `onConfirm` | `() =&gt; void` | Yes | - |
+| `description` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `isOpen` | `boolean` | Yes | `true` or `false` |
+| `onCancel` | `() =&gt; void` | Yes | Callback function |
+| `onClose` | `() =&gt; void` | Yes | Callback function |
+| `onConfirm` | `() =&gt; void` | Yes | Callback function |
 | `title` | `string` | Yes | - |
 

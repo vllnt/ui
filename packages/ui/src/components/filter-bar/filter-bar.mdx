@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './filter-bar.stories'
 
 <Meta of={Stories} />
@@ -21,19 +21,73 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/filter-bar.json
 import { FilterBar } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<FilterBar
+  currentDifficulty="value"
+  currentTags={currentTags}
+  onFiltersChange={() => {}}
+  searchQuery="value"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
 | `currentDifficulty` | `string` | Yes | - |
-| `currentTags` | `string[]` | Yes | - |
-| `difficultyOptions` | `readonly FilterOption[]` | Yes | - |
-| `labels` | `FilterBarLabels` | No | - |
-| `onFiltersChange` | `(filters: {` | Yes | - |
+| `currentTags` | `string[]` | Yes | Array of `string` |
+| `difficultyOptions` | `readonly FilterOption[]` | Yes | Array of `readonly FilterOption` |
+| `labels` | `FilterBarLabels` | No | `FilterBarLabels` object |
+| `onFiltersChange` | `(filters: {` | Yes | Callback function |
 | `difficulty` | `string` | No | - |
 | `search` | `string` | No | - |
-| `tags` | `string[]` | No | - |
+| `tags` | `string[]` | No | Array of `string` |
+| `searchQuery` | `string` | Yes | - |
+| `tags` | `string[]` | Yes | Array of `string` |
+
+## Type Definitions
+
+### FilterOption
+
+```tsx
+type FilterOption = {
+  label: string
+  value: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `label` | `string` | Yes | - |
+| `value` | `string` | Yes | - |
+
+### FilterBarLabels
+
+```tsx
+type FilterBarLabels = {
+  activeFilters?: string
+  clearAll?: string
+  clearTags?: string
+  difficultyLabel?: string
+  searchLabel?: string
+  searchPlaceholder?: string
+  tagsLabel?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `activeFilters` | `string` | No | - |
+| `clearAll` | `string` | No | - |
+| `clearTags` | `string` | No | - |
+| `difficultyLabel` | `string` | No | - |
+| `searchLabel` | `string` | No | - |
+| `searchPlaceholder` | `string` | No | - |
+| `tagsLabel` | `string` | No | - |
 

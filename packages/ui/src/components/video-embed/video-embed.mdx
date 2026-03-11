@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './video-embed.stories'
 
 <Meta of={Stories} />
@@ -21,15 +21,26 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/video-embed.json
 import { VideoEmbed } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<VideoEmbed
+  src="value"
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `aspectRatio` | `"1/1" \| "4/3" \| "16/9"` | No | - |
+| `aspectRatio` | `"1/1" \| "4/3" \| "16/9"` | No | `1/1`, `4/3`, `16/9` |
 | `src` | `string` | Yes | - |
 | `thumbnail` | `string` | No | - |
 | `title` | `string` | Yes | - |
-| `type` | `"custom" \| "vimeo" \| "youtube"` | No | - |
+| `type` | `"custom" \| "vimeo" \| "youtube"` | No | `custom`, `vimeo`, `youtube` |
 

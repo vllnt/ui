@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './sheet.stories'
 
 <Meta of={Stories} />
@@ -18,10 +18,29 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/sheet.json
 ## Import
 
 ```tsx
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger } from '@vllnt/ui'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger,
+} from '@vllnt/ui'
 ```
 
-## Controls
+## Usage
+
+```tsx
+<Sheet>Sheet content</Sheet>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
@@ -36,13 +55,13 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 | `right` | Yes |
 | `top` | - |
 
-## Stories
+## Examples
 
 ### Left
 
-<Canvas of={Stories.Left} />
+<Canvas of={Stories.Left} sourceState="shown" />
 
 ### Bottom
 
-<Canvas of={Stories.Bottom} />
+<Canvas of={Stories.Bottom} sourceState="shown" />
 

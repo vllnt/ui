@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './floating-action-button.stories'
 
 <Meta of={Stories} />
@@ -21,14 +21,24 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/floating-action-button.json
 import { FloatingActionButton } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<FloatingActionButton
+  onClick={() => {}}
+>
+  Click me
+</FloatingActionButton>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `children` | `ReactNode` | Yes | - |
-| `className` | `string` | No | - |
-| `onClick` | `() =&gt; void` | Yes | - |
-| `position` | `"bottom-left" \| "bottom-right"` | No | - |
+| `onClick` | `() =&gt; void` | Yes | Callback function |
+| `position` | `"bottom-left" \| "bottom-right"` | No | `bottom-left`, `bottom-right` |
 

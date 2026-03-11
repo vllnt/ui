@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './carousel.stories'
 
 <Meta of={Stories} />
@@ -18,17 +18,51 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/carousel.json
 ## Import
 
 ```tsx
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@vllnt/ui'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<Carousel>Carousel content</Carousel>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `opts` | `CarouselOptions` | No | - |
-| `orientation` | `"horizontal" \| "vertical"` | No | - |
+| `orientation` | `"horizontal" \| "vertical"` | No | `horizontal`, `vertical` |
 | `plugins` | `CarouselPlugin` | No | - |
-| `setApi` | `(api: CarouselApi) =&gt; void` | No | - |
+| `setApi` | `(api: CarouselApi) =&gt; void` | No | Callback: `(api: CarouselApi) => void` |
+
+## Type Definitions
+
+### UseCarouselLogicOptions
+
+```tsx
+type UseCarouselLogicOptions = {
+  options: CarouselOptions
+  orientation: "horizontal" | "vertical"
+  plugins: CarouselPlugin
+  setApi?: (api: CarouselApi) => void
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `options` | `CarouselOptions` | Yes | - |
+| `orientation` | `"horizontal" \| "vertical"` | Yes | `horizontal`, `vertical` |
+| `plugins` | `CarouselPlugin` | Yes | - |
+| `setApi` | `(api: CarouselApi) =&gt; void` | No | Callback: `(api: CarouselApi) => void` |
 

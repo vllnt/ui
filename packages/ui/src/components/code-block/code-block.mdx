@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './code-block.stories'
 
 <Meta of={Stories} />
@@ -21,14 +21,20 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/code-block.json
 import { CodeBlock } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<CodeBlock>CodeBlock content</CodeBlock>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `children` | `ReactNode` | Yes | - |
-| `className` | `string` | No | - |
 | `language` | `string` | No | - |
-| `showLanguage` | `boolean` | No | - |
+| `showLanguage` | `boolean` | No | `true` or `false` |
 

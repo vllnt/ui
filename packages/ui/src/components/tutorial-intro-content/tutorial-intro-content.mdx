@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
 import * as Stories from './tutorial-intro-content.stories'
 
 <Meta of={Stories} />
@@ -21,13 +21,25 @@ pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-intro-content.json
 import { TutorialIntroContent } from '@vllnt/ui'
 ```
 
-## Props
+## Usage
+
+```tsx
+<TutorialIntroContent
+  content="value"
+  title="My Title"
+>
+  TutorialIntroContent content
+</TutorialIntroContent>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
 
 <Controls />
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `className` | `string` | No | - |
 | `content` | `string` | Yes | - |
 | `title` | `string` | Yes | - |
 
