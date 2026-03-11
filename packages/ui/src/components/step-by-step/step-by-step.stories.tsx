@@ -1,11 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { StepByStep } from "./step-by-step";
+import { Step, StepByStep } from "./step-by-step";
 
 const meta = {
-  args: {
-    children: "StepByStep",
-  },
   component: StepByStep,
   title: "Learning/StepByStep",
 } satisfies Meta<typeof StepByStep>;
@@ -13,4 +10,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  render: () => (
+    <StepByStep title="Getting Started">
+      <Step title="Install dependencies">Run npm install to get started.</Step>
+      <Step title="Configure settings">Update your config file.</Step>
+      <Step title="Start coding">Begin building your project.</Step>
+    </StepByStep>
+  ),
+};

@@ -41,6 +41,7 @@ export default defineMain({
           'next/link': resolve(__dirname, './next-stubs.ts'),
           'next/image': resolve(__dirname, './next-stubs.ts'),
           'next/navigation': resolve(__dirname, './next-stubs.ts'),
+          'next-themes': resolve(__dirname, './next-themes-stub.ts'),
         },
       },
       css: {
