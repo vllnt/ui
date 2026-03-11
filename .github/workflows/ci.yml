@@ -35,3 +35,13 @@ jobs:
 
       - name: Test
         run: pnpm test:once
+
+      - name: Verify stories
+        working-directory: packages/ui
+        run: |
+          npx tsx scripts/check-story-coverage.ts
+          npx tsx scripts/verify-stories.ts
+
+      - name: Build Storybook
+        working-directory: packages/ui
+        run: pnpm build-storybook
