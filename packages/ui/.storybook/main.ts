@@ -2,6 +2,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { defineMain } from '@storybook/react-vite/node'
+import remarkGfm from 'remark-gfm'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -12,7 +13,16 @@ export default defineMain({
 
   addons: [
     '@storybook/addon-a11y',
-    '@storybook/addon-docs',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
     '@storybook/addon-themes',
     '@storybook/addon-designs',
     '@storybook/addon-mcp',
