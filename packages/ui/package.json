@@ -80,7 +80,7 @@
     "test:generate": "tsx scripts/generate-tests.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test-storybook": "test-storybook --config-dir .storybook",
+    "test-storybook": "test-storybook",
     "storybook:generate": "tsx scripts/generate-stories.ts",
     "storybook:generate-docs": "tsx scripts/generate-docs.ts",
     "storybook:verify": "tsx scripts/verify-stories.ts",

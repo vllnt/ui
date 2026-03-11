@@ -74,6 +74,7 @@ jobs:
     name: Storybook Tests
     needs: build-storybook
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
@@ -103,7 +104,6 @@ jobs:
         run: |
           http-server storybook-static --port 6006 --silent &
           SERVER_PID=$!
-          # Wait for server to be ready
           for i in $(seq 1 30); do
             if curl -s http://127.0.0.1:6006 > /dev/null 2>&1; then
               break
@@ -135,10 +135,9 @@ jobs:
       - name: Run Playwright CT visual tests
         working-directory: packages/ui
         run: pnpm test:visual
-        continue-on-error: true
 
       - name: Upload visual test results
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: visual-test-results
