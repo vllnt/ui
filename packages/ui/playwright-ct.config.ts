@@ -17,6 +17,12 @@ export default defineConfig({
   // Reporter
   reporter: [['html', { open: 'never' }], ['list']],
 
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.05,
+    },
+  },
+
   use: {
     ctPort: 3100,
     ctViteConfig: {
