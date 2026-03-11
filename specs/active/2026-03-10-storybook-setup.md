@@ -26,18 +26,19 @@ This spec covers **Phase 1 only** of issue #83: Storybook 10 initialization, con
 | `packages/ui/.storybook/vite-shared.ts` | CREATE | Shared Vite config (PostCSS + path aliases) reused by both Storybook and Playwright CT |
 | `packages/ui/src/components/**/*.stories.tsx` | CREATE | Story files for 100 components — auto-generated from CVA variants |
 | `scripts/generate-stories.ts` | CREATE | Story generator script (parallel to existing generate-tests.ts), `--force` flag skips files with `// manual` header |
-| `packages/ui/package.json` | MODIFY | Add `storybook`, `build-storybook` scripts + storybook devDeps; add `storybook-static/` to clean script |
-| `turbo.json` | MODIFY | Add `storybook` (persistent, filter: `@vllnt/ui`) and `build-storybook` (filter: `@vllnt/ui`) tasks |
+| `scripts/check-story-coverage.ts` | CREATE | CI script: scans src/components/*/index.ts, fails if any component dir lacks a .stories.tsx file |
+| `packages/ui/package.json` | MODIFY | Add `storybook`, `build-storybook`, `test-storybook` scripts + storybook devDeps; add `storybook-static/` to clean script |
+| `turbo.json` | MODIFY | Add `storybook` (persistent, filter: `@vllnt/ui`), `build-storybook`, and `test-storybook` (filter: `@vllnt/ui`) tasks |
 | `packages/ui/tsup.config.ts` | MODIFY | Exclude `*.stories.tsx` from dist build |
 | `packages/ui/eslint.config.js` | AFFECTED | May need storybook ESLint plugin or story file overrides |
 | `packages/ui/src/components/**/*.visual.tsx` | AFFECTED | Coexist with stories — no changes, kept for Playwright CT |
 | `packages/ui/playwright-ct.config.ts` | AFFECTED | Vite alias + PostCSS config extracted to shared vite-shared.ts |
 | `styles.css` + `themes/default.css` | AFFECTED | Imported by Storybook preview — no changes needed |
 
-**Files:** 7 create | 3 modify | 4 affected
+**Files:** 8 create | 3 modify | 4 affected
 **Reuse:** Playwright CT Vite config extracted to shared module, existing `generate-tests.ts` pattern for story generator, CVA variant definitions for auto-Controls
 **Breaking changes:** None — additive only
-**New dependencies:** `storybook@10`, `@storybook/react-vite@10`, `@storybook/addon-essentials@10`, `@storybook/addon-a11y`, `@storybook/addon-themes` (all devDeps, standard Storybook stack)
+**New dependencies:** `storybook@10`, `@storybook/react-vite@10`, `@storybook/addon-essentials@10`, `@storybook/addon-a11y`, `@storybook/addon-themes`, `@storybook/addon-mcp`, `@storybook/test-runner`, `@storybook/addon-designs` (all devDeps)
 
 ## User Journey (MANDATORY)
 
@@ -130,23 +131,26 @@ EC6. "use client" components: Storybook runs client-side, no SSR issues
 
 ### Should Have (ship without, fix soon)
 
-- [ ] AC-10: GIVEN the `generate-stories.ts` script WHEN developer runs `pnpm storybook:generate` THEN story stubs are created for components missing stories (skips files with `// manual` header)
-- [ ] AC-11: GIVEN compound components beyond top 5 WHEN stories render THEN full composition with sub-components is shown
+- [ ] AC-10: GIVEN a component directory under src/components/ WHEN it exports a component THEN a corresponding .stories.tsx file exists (enforced by CI check)
+- [ ] AC-11: GIVEN the `generate-stories.ts` script WHEN developer runs `pnpm storybook:generate` THEN story stubs are created for components missing stories (skips files with `// manual` header)
+- [ ] AC-12: GIVEN compound components beyond top 5 WHEN stories render THEN full composition with sub-components is shown
 
 ## Scope
 
-- [ ] 0. **GATE**: 1h spike — verify SB10 + React 19 + all addons install cleanly in packages/ui, resolve any peer dep conflicts -> Kill criteria gate
+- [ ] 0. **GATE**: 1h spike — verify SB10 + React 19 + all addons (essentials, a11y, themes, MCP, test-runner, designs) install cleanly in packages/ui, resolve any peer dep conflicts -> Kill criteria gate
 - [ ] 1. Initialize Storybook 10 with React-Vite framework -> AC-1, AC-E1
 - [ ] 2. Create next-stubs.ts with functional mocks (Link→`<a>`, Image→`<img>`, useRouter→mock router, usePathname→`/`, useSearchParams→empty URLSearchParams) -> AC-9
 - [ ] 3. Extract shared Vite config (PostCSS + aliases) from playwright-ct.config.ts to .storybook/vite-shared.ts, update both configs -> DRY
 - [ ] 4. Configure .storybook/preview.tsx with CSS imports + ThemeProvider decorator (mount next-themes + toggle .dark class) -> AC-3, AC-5
-- [ ] 5. Configure .storybook/main.ts with stories glob + addons + next/* Vite aliases -> AC-2, AC-6, AC-9
+- [ ] 5. Configure .storybook/main.ts with stories glob + addons (essentials, a11y, themes, MCP, designs) + next/* Vite aliases -> AC-2, AC-6, AC-9
 - [ ] 6. Exclude *.stories.tsx from tsup build -> AC-7
 - [ ] 7. Add storybook scripts to package.json (incl. storybook-static/ in clean) + turbo.json (filter: @vllnt/ui) -> AC-1, AC-7
-- [ ] 8. Create story generator script (generate-stories.ts) with --force overwrite protection -> AC-10
+- [ ] 8. Create story generator script (generate-stories.ts) with --force overwrite protection -> AC-11
+- [ ] 8b. Create story coverage check script (check-story-coverage.ts) + add `check:stories` to package.json + turbo lint pipeline -> AC-10
 - [ ] 9. Generate stories for all 100 components with CVA variant args -> AC-2, AC-4
 - [ ] 10. Manually refine top 5 compound stories (Dialog, Sheet, DropdownMenu, Sidebar, Toast) with providers -> AC-8
-- [ ] 11. Verify build-storybook produces static output -> AC-7, AC-E3
+- [ ] 11. Add `test-storybook` script + configure @storybook/test-runner -> smoke test all stories
+- [ ] 12. Verify build-storybook produces static output -> AC-7, AC-E3
 
 ### Out of Scope
 
@@ -156,6 +160,9 @@ EC6. "use client" components: Storybook runs client-side, no SSR issues
 - Storybook composition for consumers — Phase 6
 - Converting .visual.tsx to stories — coexist, don't migrate
 - Custom Storybook theme/branding — nice-to-have, not Phase 1
+- @storybook/addon-mcp advanced configuration (custom toolsets, CI integration) — installed + default config only in Phase 1
+- @storybook/addon-designs Figma file linking per story — installed, configure per-component in Phase 2+
+- @storybook/test-runner CI integration (run in GitHub Actions) — installed + local smoke test only in Phase 1
 
 ## Quality Checklist
 
@@ -170,6 +177,7 @@ EC6. "use client" components: Storybook runs client-side, no SSR issues
 - [ ] `pnpm storybook` starts without errors
 - [ ] `pnpm build-storybook` completes without errors
 - [ ] All 100 components appear in Storybook sidebar
+- [ ] `pnpm check:stories` passes (100% story coverage)
 - [ ] Dark/light theme toggle works for all stories
 - [ ] tsup build still excludes stories from dist/
 - [ ] next/* stub components render without errors for all 9 affected components
@@ -323,9 +331,9 @@ Confirmed — spec solves the right problem. The library needs interactive docum
 ### Open Items
 
 - [resolved] 9 components import from `next/` → addressed: tiered functional mocks in next-stubs.ts (scope 2)
-- [resolved] Addon compatibility risk → addressed: spike gate (scope 0)
+- [resolved] Addon compatibility risk → addressed: spike gate (scope 0), includes @storybook/addon-mcp (requires SB >=9.1.16, verify SB10 compat)
 - [resolved] Story overwrite risk → addressed: `// manual` header protection (scope 8)
-- [improvement] CI check that every component has a .stories.tsx -> no action (Phase 2+ concern)
+- [resolved] CI check that every component has a .stories.tsx -> addressed: check-story-coverage.ts (scope 8b)
 - [question] Should story generator reuse component-preview.tsx demo logic or start fresh? -> explore at implementation
 - [question] Full list of provider-dependent components → enumerate during scope 9 story generation
 
@@ -344,9 +352,11 @@ Confirmed — spec solves the right problem. The library needs interactive docum
 | 6 | Exclude stories from tsup | pending | - |
 | 7 | Add scripts + turbo.json (scoped) | pending | - |
 | 8 | Create story generator (--force protection) | pending | - |
+| 8b | Create story coverage check script | pending | - |
 | 9 | Generate all 100 stories | pending | - |
 | 10 | Refine top 5 compound stories | pending | - |
-| 11 | Verify build-storybook | pending | - |
+| 11 | Configure test-runner + smoke tests | pending | - |
+| 12 | Verify build-storybook | pending | - |
 
 ## Timeline
 
