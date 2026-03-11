@@ -1,52 +1,55 @@
-import { render } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-import { Toggle } from './toggle'
+import { Toggle } from "./toggle";
 
-describe('Toggle', () => {
-  describe('rendering', () => {
-    it('renders correctly', () => {
-      const { container } = render(<Toggle></Toggle>)
+describe("Toggle", () => {
+  describe("rendering", () => {
+    it("renders correctly", () => {
+      const { container } = render(<Toggle />);
 
-      expect(container.firstChild).toBeInTheDocument()
-    })
+      expect(container.firstChild).toBeInTheDocument();
+    });
 
-    it('applies custom className', () => {
-      const { container } = render(<Toggle className="custom-class"></Toggle>)
+    it("applies custom className", () => {
+      const { container } = render(<Toggle className="custom-class" />);
 
-      expect(container.firstChild).toHaveClass('custom-class')
-    })
-  })
+      expect(container.firstChild).toHaveClass("custom-class");
+    });
+  });
 
-  describe('size variants', () => {
-    it.each(['default', 'lg', 'sm'] as const)('renders %s size', (size) => {
-      const { container } = render(<Toggle size={size}></Toggle>)
+  describe("size variants", () => {
+    it.each(["default", "lg", "sm"] as const)("renders %s size", (size) => {
+      const { container } = render(<Toggle size={size} />);
 
-      expect(container.firstChild).toBeInTheDocument()
-    })
-  })
+      expect(container.firstChild).toBeInTheDocument();
+    });
+  });
 
-  describe('variant variants', () => {
-    it.each(['default', 'outline'] as const)('renders %s variant', (variant) => {
-      const { container } = render(<Toggle variant={variant}></Toggle>)
+  describe("variant variants", () => {
+    it.each(["default", "outline"] as const)(
+      "renders %s variant",
+      (variant) => {
+        const { container } = render(<Toggle variant={variant} />);
 
-      expect(container.firstChild).toBeInTheDocument()
-    })
-  })
+        expect(container.firstChild).toBeInTheDocument();
+      },
+    );
+  });
 
-  describe('ref forwarding', () => {
-    it('forwards ref to DOM element', () => {
-      const ref = { current: null }
-      render(<Toggle ref={ref}></Toggle>)
+  describe("ref forwarding", () => {
+    it("forwards ref to DOM element", () => {
+      const ref = { current: null };
+      render(<Toggle ref={ref} />);
 
-      expect(ref.current).toBeInstanceOf(HTMLElement)
-    })
-  })
-  describe('accessibility', () => {
-    it('is visible when rendered', () => {
-      const { container } = render(<Toggle></Toggle>)
+      expect(ref.current).toBeInstanceOf(HTMLElement);
+    });
+  });
+  describe("accessibility", () => {
+    it("is visible when rendered", () => {
+      const { container } = render(<Toggle />);
 
-      expect(container.firstChild).toBeVisible()
-    })
-  })
-})
+      expect(container.firstChild).toBeVisible();
+    });
+  });
+});

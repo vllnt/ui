@@ -1,10 +1,10 @@
-import { expect, test } from '@playwright/experimental-ct-react'
+import { expect, test } from "@playwright/experimental-ct-react";
 
-import { Slider } from './slider'
+import { Slider } from "./slider";
 
-test.describe('Slider Visual', () => {
-  test('default', async ({ mount, page }) => {
-    await mount(<Slider></Slider>)
-    await expect(page).toHaveScreenshot('slider-default.png')
-  })
-})
+test.describe("Slider Visual", () => {
+  test("default", async ({ mount, page }) => {
+    await mount(<Slider />);
+    await expect(page).toHaveScreenshot("slider-default.png");
+  });
+});

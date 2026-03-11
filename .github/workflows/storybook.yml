@@ -87,7 +87,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm -F @vllnt/ui exec playwright install --with-deps chromium
 
       - name: Download Storybook artifact
         uses: actions/download-artifact@v4
@@ -100,7 +100,7 @@ jobs:
         run: |
           npx http-server storybook-static --port 6006 --silent &
           sleep 3
-          npx test-storybook --url http://127.0.0.1:6006 --maxWorkers=2
+          pnpm test-storybook --url http://127.0.0.1:6006 --maxWorkers=2
 
   visual-regression:
     name: Visual Regression
@@ -119,7 +119,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm -F @vllnt/ui exec playwright install --with-deps chromium
 
       - name: Run Playwright CT visual tests
         working-directory: packages/ui

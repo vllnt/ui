@@ -1,29 +1,28 @@
-import { render } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-import { Calendar } from './calendar'
+import { Calendar } from "./calendar";
 
-describe('Calendar', () => {
-  describe('rendering', () => {
-    it('renders correctly', () => {
-      const { container } = render(<Calendar></Calendar>)
+describe("Calendar", () => {
+  describe("rendering", () => {
+    it("renders correctly", () => {
+      const { container } = render(<Calendar />);
 
-      expect(container.firstChild).toBeInTheDocument()
-    })
+      expect(container.firstChild).toBeInTheDocument();
+    });
 
-    it('applies custom className', () => {
-      const { container } = render(<Calendar className="custom-class"></Calendar>)
+    it("applies custom className", () => {
+      const { container } = render(<Calendar className="custom-class" />);
 
-      expect(container.firstChild).toHaveClass('custom-class')
-    })
-  })
+      expect(container.firstChild).toHaveClass("custom-class");
+    });
+  });
 
+  describe("accessibility", () => {
+    it("is visible when rendered", () => {
+      const { container } = render(<Calendar />);
 
-  describe('accessibility', () => {
-    it('is visible when rendered', () => {
-      const { container } = render(<Calendar></Calendar>)
-
-      expect(container.firstChild).toBeVisible()
-    })
-  })
-})
+      expect(container.firstChild).toBeVisible();
+    });
+  });
+});

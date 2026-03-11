@@ -1,29 +1,28 @@
-import { render } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
-import { Collapsible } from './collapsible'
+import { Collapsible } from "./collapsible";
 
-describe('Collapsible', () => {
-  describe('rendering', () => {
-    it('renders correctly', () => {
-      const { container } = render(<Collapsible></Collapsible>)
+describe("Collapsible", () => {
+  describe("rendering", () => {
+    it("renders correctly", () => {
+      const { container } = render(<Collapsible />);
 
-      expect(container.firstChild).toBeInTheDocument()
-    })
+      expect(container.firstChild).toBeInTheDocument();
+    });
 
-    it('applies custom className', () => {
-      const { container } = render(<Collapsible className="custom-class"></Collapsible>)
+    it("applies custom className", () => {
+      const { container } = render(<Collapsible className="custom-class" />);
 
-      expect(container.firstChild).toHaveClass('custom-class')
-    })
-  })
+      expect(container.firstChild).toHaveClass("custom-class");
+    });
+  });
 
+  describe("accessibility", () => {
+    it("is visible when rendered", () => {
+      const { container } = render(<Collapsible />);
 
-  describe('accessibility', () => {
-    it('is visible when rendered', () => {
-      const { container } = render(<Collapsible></Collapsible>)
-
-      expect(container.firstChild).toBeVisible()
-    })
-  })
-})
+      expect(container.firstChild).toBeVisible();
+    });
+  });
+});
