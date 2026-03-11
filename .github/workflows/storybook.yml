@@ -95,12 +95,23 @@ jobs:
           name: storybook-static
           path: packages/ui/storybook-static
 
+      - name: Install http-server
+        run: npm install -g http-server
+
       - name: Run Storybook test-runner
         working-directory: packages/ui
         run: |
-          npx http-server storybook-static --port 6006 --silent &
-          sleep 3
+          http-server storybook-static --port 6006 --silent &
+          SERVER_PID=$!
+          # Wait for server to be ready
+          for i in $(seq 1 30); do
+            if curl -s http://127.0.0.1:6006 > /dev/null 2>&1; then
+              break
+            fi
+            sleep 1
+          done
           pnpm test-storybook --url http://127.0.0.1:6006 --maxWorkers=2
+          kill $SERVER_PID 2>/dev/null || true
 
   visual-regression:
     name: Visual Regression

@@ -27,7 +27,6 @@ Thumbs.db
 # Playwright
 playwright-results/
 playwright-report/
-.snapshots/
 
 # Storybook
 storybook-static/
