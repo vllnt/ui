@@ -1,12 +1,14 @@
 import { Renderer, definePreview } from '@storybook/react-vite'
 
+import addonDocs from '@storybook/addon-docs'
 import addonThemes, { withThemeByClassName } from '@storybook/addon-themes'
 
 import '../styles.css'
 import '../themes/default.css'
+import './docs-overrides.css'
 
 export default definePreview({
-  addons: [addonThemes()],
+  addons: [addonDocs(), addonThemes()],
 
   decorators: [
     withThemeByClassName<Renderer>({
