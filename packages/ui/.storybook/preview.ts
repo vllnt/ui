@@ -1,6 +1,6 @@
 import { Renderer, definePreview } from '@storybook/react-vite'
 
-import addonThemes from '@storybook/addon-themes'
+import addonThemes, { withThemeByClassName } from '@storybook/addon-themes'
 
 import '../styles.css'
 import '../themes/default.css'
@@ -9,7 +9,7 @@ export default definePreview({
   addons: [addonThemes()],
 
   decorators: [
-    addonThemes.withThemeByClassName<Renderer>({
+    withThemeByClassName<Renderer>({
       themes: {
         light: '',
         dark: 'dark',

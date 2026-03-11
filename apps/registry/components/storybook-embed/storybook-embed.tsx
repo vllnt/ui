@@ -22,29 +22,44 @@ export function StorybookEmbed({
   height = 400,
   storyId,
 }: StorybookEmbedProps): React.ReactElement {
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [iframeSource, setIframeSource] = React.useState("");
   const resolvedStoryId = storyId ?? toStoryId(componentName);
-  const iframeSource = `${STORYBOOK_URL}/iframe.html?id=${resolvedStoryId}&viewMode=story&shortcuts=false&singleStory=true`;
+
+  React.useEffect(() => {
+    setIframeSource(
+      `${STORYBOOK_URL}/iframe.html?id=${resolvedStoryId}&viewMode=story&shortcuts=false&singleStory=true`,
+    );
+  }, [resolvedStoryId]);
 
   return (
-    <div className={className}>
-      {isLoading ? (
+    <div
+      className={className}
+      style={{ minHeight: height, position: "relative" }}
+    >
+      {isLoaded ? null : (
         <div
           className="flex animate-pulse items-center justify-center rounded-lg bg-muted"
-          style={{ height }}
+          style={{ height, inset: 0, position: "absolute", zIndex: 1 }}
         >
           <p className="text-sm text-muted-foreground">Loading preview...</p>
         </div>
+      )}
+      {iframeSource ? (
+        <iframe
+          className="w-full rounded-lg border-0"
+          onLoad={() => {
+            setIsLoaded(true);
+          }}
+          src={iframeSource}
+          style={{
+            height,
+            opacity: isLoaded ? 1 : 0,
+            transition: "opacity 0.3s ease-in",
+          }}
+          title={`${componentName} preview`}
+        />
       ) : null}
-      <iframe
-        className="w-full rounded-lg border-0"
-        onLoad={() => {
-          setIsLoading(false);
-        }}
-        src={iframeSource}
-        style={{ display: isLoading ? "none" : "block", height }}
-        title={`${componentName} preview`}
-      />
     </div>
   );
 }
