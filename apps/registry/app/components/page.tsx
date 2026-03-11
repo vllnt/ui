@@ -1,7 +1,11 @@
 import { Sidebar } from "@vllnt/ui";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import componentMetadata from "@/lib/component-metadata.json";
+import { ComponentPreview } from "@/components/component-preview/component-preview";
+import { getPageContent } from "@/lib/content";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   components,
   getSidebarSections,
@@ -16,6 +20,26 @@ const metadata_map = componentMetadata as Record<
     title: string;
   }
 >;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { frontmatter } = await getPageContent("components");
+  const og = frontmatter.og;
+
+  return {
+    description: frontmatter.description,
+    openGraph: generateOGMetadata({
+      description: og?.description ?? frontmatter.description,
+      title: og?.title ?? frontmatter.title,
+      type: og?.type ?? frontmatter.type,
+    }),
+    title: frontmatter.title,
+    twitter: generateTwitterMetadata({
+      description: og?.description ?? frontmatter.description,
+      title: og?.title ?? frontmatter.title,
+      type: og?.type ?? frontmatter.type,
+    }),
+  };
+}
 
 export default function ComponentsPage() {
   return (

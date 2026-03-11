@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { QuickAdd } from "@/components/quick-add";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   getCategoryForComponent,
   getSidebarSections,
@@ -63,22 +64,22 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   const meta = metadata_map[slug];
+  const category = getCategoryForComponent(slug);
   const title = meta?.title ?? component.title;
   const description = meta?.description ?? component.description;
 
+  const ogParameters = {
+    category,
+    description,
+    title,
+    type: "component" as const,
+  };
+
   return {
     description,
-    openGraph: {
-      description,
-      title,
-      type: "website",
-    },
+    openGraph: generateOGMetadata(ogParameters),
     title: `${title} - VLLNT UI`,
-    twitter: {
-      card: "summary_large_image",
-      description,
-      title,
-    },
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
