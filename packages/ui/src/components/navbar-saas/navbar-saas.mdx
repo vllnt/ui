@@ -1,0 +1,34 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './navbar-saas.stories'
+
+<Meta of={Stories} />
+
+# Navbar SaaS
+
+SaaS-style navigation bar with branding and links.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/navbar-saas.json
+```
+
+## Import
+
+```tsx
+import { NavbarSaas } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `brand` | `ReactNode` | No | - |
+| `navItems` | `NavItem[]` | No | - |
+| `rightSlot` | `ReactNode` | No | - |
+| `showMobileMenu` | `boolean` | No | - |
+

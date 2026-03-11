@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './step-navigation.stories'
+
+<Meta of={Stories} />
+
+# Step Navigation
+
+Navigation controls for stepping through multi-page content.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/step-navigation.json
+```
+
+## Import
+
+```tsx
+import { StepNavigation } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `canNext` | `boolean` | Yes | - |
+| `canPrev` | `boolean` | Yes | - |
+| `className` | `string` | No | - |
+| `currentStep` | `number` | Yes | - |
+| `nextIcon` | `ReactNode` | No | - |
+| `nextLabel` | `string` | No | - |
+| `onNext` | `() =&gt; void` | Yes | - |
+| `onPrev` | `() =&gt; void` | Yes | - |
+| `previousIcon` | `ReactNode` | No | - |
+| `previousLabel` | `string` | No | - |
+| `stepLabel` | `string` | No | - |
+| `totalSteps` | `number` | Yes | - |
+

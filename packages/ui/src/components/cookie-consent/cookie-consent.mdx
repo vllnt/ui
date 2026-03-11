@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './cookie-consent.stories'
+
+<Meta of={Stories} />
+
+# CookieConsent
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/cookie-consent.json
+```
+
+## Import
+
+```tsx
+import { CookieConsent } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `acceptText` | `string` | No | - |
+| `declineText` | `string` | No | - |
+| `message` | `string` | No | - |
+| `onAccept` | `() =&gt; void` | No | - |
+| `onDecline` | `() =&gt; void` | No | - |
+| `onOpenChange` | `(open: boolean) =&gt; void` | No | - |
+| `open` | `boolean` | No | - |
+| `settingsHref` | `string` | No | - |
+| `settingsText` | `string` | No | - |
+| `showCloseButton` | `boolean` | No | - |
+

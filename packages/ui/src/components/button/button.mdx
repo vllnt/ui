@@ -1,0 +1,69 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './button.stories'
+
+<Meta of={Stories} />
+
+# Button
+
+Interactive button with multiple variants and sizes.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
+```
+
+## Import
+
+```tsx
+import { Button } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `asChild` | `boolean` | No | - |
+
+## Variants
+
+### size
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `icon` | - |
+| `lg` | - |
+| `sm` | - |
+
+<Canvas of={Stories.SizeIcon} />
+
+<Canvas of={Stories.SizeLg} />
+
+<Canvas of={Stories.SizeSm} />
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `destructive` | - |
+| `ghost` | - |
+| `link` | - |
+| `outline` | - |
+| `secondary` | - |
+
+<Canvas of={Stories.VariantDestructive} />
+
+<Canvas of={Stories.VariantGhost} />
+
+<Canvas of={Stories.VariantLink} />
+
+<Canvas of={Stories.VariantOutline} />
+
+<Canvas of={Stories.VariantSecondary} />
+

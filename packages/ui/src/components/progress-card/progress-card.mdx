@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './progress-card.stories'
+
+<Meta of={Stories} />
+
+# Progress Card
+
+Card displaying progress metrics and status.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/progress-card.json
+```
+
+## Import
+
+```tsx
+import { ContentCard } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `badgeLabel` | `string` | Yes | - |
+| `badgeVariant` | `"default" \| "destructive" \| "outline" \| "secondary"` | No | - |
+| `description` | `string` | Yes | - |
+| `getProgress` | `() =&gt; ContentCardProgress \| null` | No | - |
+| `href` | `string` | Yes | - |
+| `linkComponent` | `React.ComponentType&lt;{` | No | - |
+| `children` | `ReactNode` | Yes | - |
+| `className` | `string` | No | - |
+| `href` | `string` | Yes | - |
+

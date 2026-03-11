@@ -1,0 +1,33 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './comparison.stories'
+
+<Meta of={Stories} />
+
+# Comparison
+
+Side-by-side comparison layout for content or features.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/comparison.json
+```
+
+## Import
+
+```tsx
+import { Comparison, BeforeAfter } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `after` | `ComparisonSide` | Yes | - |
+| `before` | `ComparisonSide` | Yes | - |
+| `title` | `string` | No | - |
+

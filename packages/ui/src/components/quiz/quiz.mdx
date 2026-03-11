@@ -1,0 +1,36 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './quiz.stories'
+
+<Meta of={Stories} />
+
+# Quiz
+
+Interactive multiple-choice quiz with hints, explanations, and scoring.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/quiz.json
+```
+
+## Import
+
+```tsx
+import { Quiz } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `explanation` | `ReactNode` | No | - |
+| `hint` | `string` | No | - |
+| `onAnswer` | `(correct: boolean) =&gt; void` | No | - |
+| `options` | `QuizOption[]` | Yes | - |
+| `question` | `string` | Yes | - |
+

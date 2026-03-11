@@ -1,0 +1,33 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './mdx-content.stories'
+
+<Meta of={Stories} />
+
+# MDX Content
+
+Renders MDX content with component mapping.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/mdx-content.json
+```
+
+## Import
+
+```tsx
+import { MdxContent } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `components` | `Record&lt;string, React.ComponentType&lt;any&gt;&gt;` | No | - |
+| `content` | `string` | Yes | - |
+| `enableMDX` | `boolean` | No | - |
+

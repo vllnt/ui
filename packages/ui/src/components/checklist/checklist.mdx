@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './checklist.stories'
+
+<Meta of={Stories} />
+
+# Checklist
+
+Interactive checklist with progress tracking and toggleable items.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/checklist.json
+```
+
+## Import
+
+```tsx
+import { Checklist } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `items` | `ChecklistItem[]` | Yes | - |
+| `onComplete` | `() =&gt; void` | No | - |
+| `persistKey` | `string` | No | - |
+| `title` | `string` | No | - |
+

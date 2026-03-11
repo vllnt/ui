@@ -1,0 +1,36 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './share-section.stories'
+
+<Meta of={Stories} />
+
+# Share Section
+
+Social sharing buttons and link copy section.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/share-section.json
+```
+
+## Import
+
+```tsx
+import { ShareSection } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `buildUrl` | `(platform: SharePlatform, url: string, title: string) =&gt; string` | No | - |
+| `platforms` | `PlatformConfig[]` | No | - |
+| `shareOn` | `string` | Yes | - |
+| `shareTitle` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+| `url` | `string` | Yes | - |
+

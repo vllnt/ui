@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './exercise.stories'
+
+<Meta of={Stories} />
+
+# Exercise
+
+Interactive exercise block for learning content.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/exercise.json
+```
+
+## Import
+
+```tsx
+import { Exercise } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `children` | `ReactNode` | Yes | - |
+| `difficulty` | `"easy" \| "hard" \| "medium"` | No | - |
+| `hint` | `string` | No | - |
+| `solution` | `ReactNode` | No | - |
+| `title` | `string` | Yes | - |
+

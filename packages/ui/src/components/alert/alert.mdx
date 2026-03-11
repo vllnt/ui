@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './alert.stories'
+
+<Meta of={Stories} />
+
+# Alert
+
+Displays an alert message to the user.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/alert.json
+```
+
+## Import
+
+```tsx
+import { Alert, AlertDescription, AlertTitle } from '@vllnt/ui'
+```
+
+## Controls
+
+<Controls />
+
+## Variants
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `destructive` | - |
+
+<Canvas of={Stories.VariantDestructive} />
+

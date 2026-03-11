@@ -1,0 +1,31 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './sidebar.stories'
+
+<Meta of={Stories} />
+
+# Sidebar
+
+Collapsible sidebar navigation layout.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/sidebar.json
+```
+
+## Import
+
+```tsx
+import { Sidebar } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `sections` | `SidebarSection[]` | Yes | - |
+

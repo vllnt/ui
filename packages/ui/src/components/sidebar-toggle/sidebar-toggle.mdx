@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './sidebar-toggle.stories'
+
+<Meta of={Stories} />
+
+# Sidebar Toggle
+
+Responsive toggle button for opening and closing the sidebar.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/sidebar-toggle.json
+```
+
+## Import
+
+```tsx
+import { SidebarToggle } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `onToggle` | `() =&gt; void` | Yes | - |
+| `open` | `boolean` | Yes | - |
+
+## Dependencies
+
+**npm packages:**
+- `lucide-react`
+

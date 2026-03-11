@@ -1,0 +1,32 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './truncated-text.stories'
+
+<Meta of={Stories} />
+
+# TruncatedText
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/truncated-text.json
+```
+
+## Import
+
+```tsx
+import { TruncatedText } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `children` | `string` | Yes | - |
+| `className` | `string` | No | - |
+| `default` | `'calc(100vw - 220px)')` | Yes | - |
+| `maxWidth` | `string` | No | - |
+

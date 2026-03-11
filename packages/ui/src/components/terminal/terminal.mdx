@@ -1,0 +1,33 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './terminal.stories'
+
+<Meta of={Stories} />
+
+# Terminal
+
+Terminal-style display for command output.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/terminal.json
+```
+
+## Import
+
+```tsx
+import { Terminal, SimpleTerminal } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `copyable` | `boolean` | No | - |
+| `lines` | `TerminalLine[]` | Yes | - |
+| `title` | `string` | No | - |
+

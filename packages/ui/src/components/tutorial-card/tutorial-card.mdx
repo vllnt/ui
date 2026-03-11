@@ -1,0 +1,37 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './tutorial-card.stories'
+
+<Meta of={Stories} />
+
+# Tutorial Card
+
+Card for displaying tutorial previews with metadata.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-card.json
+```
+
+## Import
+
+```tsx
+import { TutorialCard } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `getProgress` | `(id: string) =&gt; null \| TutorialCardProgress` | No | - |
+| `href` | `string` | Yes | - |
+| `labels` | `TutorialCardLabels` | Yes | - |
+| `linkComponent` | `React.ComponentType&lt;{` | No | - |
+| `children` | `ReactNode` | Yes | - |
+| `className` | `string` | No | - |
+| `href` | `string` | Yes | - |
+

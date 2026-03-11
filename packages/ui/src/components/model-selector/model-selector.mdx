@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './model-selector.stories'
+
+<Meta of={Stories} />
+
+# Model Selector
+
+Dropdown selector for choosing AI models.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/model-selector.json
+```
+
+## Import
+
+```tsx
+import { ModelSelector } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `models` | `ModelInfo[]` | Yes | - |
+| `onOpenChange` | `(open: boolean) =&gt; void` | Yes | - |
+| `onSelectModel` | `(modelId: string) =&gt; void` | Yes | - |
+| `open` | `boolean` | Yes | - |
+| `selectedModelId` | `string` | Yes | - |
+

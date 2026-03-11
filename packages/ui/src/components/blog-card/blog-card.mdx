@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './blog-card.stories'
+
+<Meta of={Stories} />
+
+# Blog Card
+
+Card layout for displaying blog post previews.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/blog-card.json
+```
+
+## Import
+
+```tsx
+import { ContentCard, BlogCard } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `formatDate` | `(date: string, lang: string) =&gt; string` | No | - |
+| `getDictValue` | `(dict: Record&lt;string, unknown&gt;, path: string) =&gt; string` | No | - |
+| `href` | `string` | Yes | - |
+| `lang` | `string` | No | - |
+| `post` | `ContentCardPost` | Yes | - |
+| `readMoreLabel` | `string` | No | - |
+| `showBadge` | `boolean` | No | - |
+| `showDate` | `boolean` | No | - |
+| `showReadMore` | `boolean` | No | - |
+| `updatedLabel` | `string` | No | - |
+

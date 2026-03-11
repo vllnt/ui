@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './thinking-block.stories'
+
+<Meta of={Stories} />
+
+# Thinking Block
+
+Collapsible block showing AI thinking/reasoning with streaming support.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/thinking-block.json
+```
+
+## Import
+
+```tsx
+import { ThinkingBlock } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `isStreaming` | `boolean` | No | - |
+| `thinking` | `string` | Yes | - |
+
+## Dependencies
+
+**npm packages:**
+- `lucide-react`
+

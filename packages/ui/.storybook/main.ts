@@ -6,15 +6,18 @@ import { defineMain } from '@storybook/react-vite/node'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineMain({
-  stories: ['../src/**/*.stories.@(ts|tsx)'],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
 
   framework: '@storybook/react-vite',
 
   addons: [
     '@storybook/addon-a11y',
+    '@storybook/addon-docs',
     '@storybook/addon-themes',
     '@storybook/addon-designs',
     '@storybook/addon-mcp',
+    '@chromatic-com/storybook',
+    '@github-ui/storybook-addon-performance-panel',
   ],
 
   viteFinal(config) {

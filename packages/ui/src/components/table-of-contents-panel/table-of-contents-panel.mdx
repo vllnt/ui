@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './table-of-contents-panel.stories'
+
+<Meta of={Stories} />
+
+# Table Of Contents Panel
+
+Side panel rendering a table of contents for page navigation.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/table-of-contents-panel.json
+```
+
+## Import
+
+```tsx
+import { TableOfContentsPanel } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `closeIcon` | `ReactNode` | No | - |
+| `completedSections` | `Set&lt;string&gt;` | Yes | - |
+| `completionCount` | `number` | Yes | - |
+| `currentSectionIndex` | `number` | Yes | - |
+| `isOpen` | `boolean` | Yes | - |
+| `onClose` | `() =&gt; void` | Yes | - |
+| `onReset` | `() =&gt; void` | No | - |
+| `onSelectSection` | `(index: number) =&gt; void` | Yes | - |
+| `progressLabel` | `string` | No | - |
+| `resetLabel` | `string` | No | - |
+| `sections` | `TOCSection[]` | Yes | - |
+| `title` | `string` | No | - |
+| `totalSections` | `number` | Yes | - |
+

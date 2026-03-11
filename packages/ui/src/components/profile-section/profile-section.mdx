@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './profile-section.stories'
+
+<Meta of={Stories} />
+
+# Profile Section
+
+User profile display section with avatar and details.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/profile-section.json
+```
+
+## Import
+
+```tsx
+import { ProfileSection } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `compact` | `boolean` | No | - |
+| `dict` | `ProfileDict` | Yes | - |
+| `imageAlt` | `string` | No | - |
+| `imageSource` | `string` | No | - |
+| `socialLinks` | `SocialLink[]` | No | - |
+

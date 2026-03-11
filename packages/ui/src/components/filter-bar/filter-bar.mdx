@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './filter-bar.stories'
+
+<Meta of={Stories} />
+
+# Filter Bar
+
+Horizontal bar with filter controls for content lists.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/filter-bar.json
+```
+
+## Import
+
+```tsx
+import { FilterBar } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `currentDifficulty` | `string` | Yes | - |
+| `currentTags` | `string[]` | Yes | - |
+| `difficultyOptions` | `readonly FilterOption[]` | Yes | - |
+| `labels` | `FilterBarLabels` | No | - |
+| `onFiltersChange` | `(filters: {` | Yes | - |
+| `difficulty` | `string` | No | - |
+| `search` | `string` | No | - |
+| `tags` | `string[]` | No | - |
+

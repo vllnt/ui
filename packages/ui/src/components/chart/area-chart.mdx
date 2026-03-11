@@ -1,0 +1,34 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './area-chart.stories'
+
+<Meta of={Stories} />
+
+# AreaChart
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/chart.json
+```
+
+## Import
+
+```tsx
+import { AreaChart } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `color` | `string` | No | - |
+| `data` | `Datum[]` | Yes | - |
+| `gradientId` | `string` | No | - |
+| `height` | `number` | No | - |
+| `strokeWidth` | `number` | No | - |
+| `width` | `number` | No | - |
+

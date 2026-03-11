@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './breadcrumb.stories'
+
+<Meta of={Stories} />
+
+# Breadcrumb
+
+Navigation breadcrumb trail showing the current page hierarchy.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/breadcrumb.json
+```
+
+## Import
+
+```tsx
+import { Breadcrumb } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `items` | `BreadcrumbItem[]` | Yes | - |
+| `separator` | `"arrow" \| "chevron" \| "slash"` | No | - |
+| `showHomeIcon` | `boolean` | No | - |
+| `variant` | `"default" \| "minimal"` | No | - |
+

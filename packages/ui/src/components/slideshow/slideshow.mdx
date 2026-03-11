@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './slideshow.stories'
+
+<Meta of={Stories} />
+
+# Slideshow
+
+Step-through slideshow for presenting content sequentially.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/slideshow.json
+```
+
+## Import
+
+```tsx
+import { Slideshow } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `completedSections` | `Set&lt;string&gt;` | Yes | - |
+| `completionDialogTitle` | `string` | No | - |
+| `currentIndex` | `number` | Yes | - |
+| `labels` | `SlideshowLabels` | No | - |
+| `onComplete` | `() =&gt; void` | Yes | - |
+| `onExit` | `() =&gt; void` | Yes | - |
+| `onNavigate` | `(index: number) =&gt; void` | Yes | - |
+| `onToggleSection` | `(sectionId: string) =&gt; void` | Yes | - |
+| `renderContent` | `(section: SlideshowSection) =&gt; ReactNode` | Yes | - |
+| `sections` | `SlideshowSection[]` | Yes | - |
+| `title` | `string` | Yes | - |
+

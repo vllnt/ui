@@ -1,0 +1,50 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './toast.stories'
+
+<Meta of={Stories} />
+
+# Toast
+
+Temporary notification messages with action support.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/toast.json
+```
+
+## Import
+
+```tsx
+import { Toast, ToastAction, ToastClose, ToastDescription, ToastTitle } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `variant` | `"default" \| "destructive"` | No | - |
+
+## Variants
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `destructive` | - |
+
+## Stories
+
+### Destructive
+
+<Canvas of={Stories.Destructive} />
+
+### With Action
+
+<Canvas of={Stories.WithAction} />
+

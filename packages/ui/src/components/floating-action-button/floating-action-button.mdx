@@ -1,0 +1,34 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './floating-action-button.stories'
+
+<Meta of={Stories} />
+
+# Floating Action Button
+
+Fixed-position action button for primary actions.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/floating-action-button.json
+```
+
+## Import
+
+```tsx
+import { FloatingActionButton } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `children` | `ReactNode` | Yes | - |
+| `className` | `string` | No | - |
+| `onClick` | `() =&gt; void` | Yes | - |
+| `position` | `"bottom-left" \| "bottom-right"` | No | - |
+

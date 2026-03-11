@@ -1,0 +1,37 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './share-dialog.stories'
+
+<Meta of={Stories} />
+
+# ShareDialog
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/share-dialog.json
+```
+
+## Import
+
+```tsx
+import { ShareDialog } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `buildCopyUrl` | `(url: string) =&gt; string` | No | - |
+| `description` | `string` | No | - |
+| `labels` | `ShareDialogLabels` | No | - |
+| `onCopy` | `() =&gt; void` | No | - |
+| `onOpenChange` | `(open: boolean) =&gt; void` | No | - |
+| `onShare` | `(platformKey: string) =&gt; void` | No | - |
+| `open` | `boolean` | No | - |
+| `platforms` | `SharePlatform[]` | Yes | - |
+| `title` | `string` | No | - |
+

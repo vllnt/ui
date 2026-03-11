@@ -1,0 +1,36 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './theme-toggle.stories'
+
+<Meta of={Stories} />
+
+# Theme Toggle
+
+Button to toggle between light and dark themes.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/theme-toggle.json
+```
+
+## Import
+
+```tsx
+import { ThemeToggle } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `dict` | `{` | Yes | - |
+| `theme` | `{` | Yes | - |
+| `dark` | `string` | Yes | - |
+| `light` | `string` | Yes | - |
+| `system` | `string` | Yes | - |
+| `toggle_theme` | `string` | Yes | - |
+

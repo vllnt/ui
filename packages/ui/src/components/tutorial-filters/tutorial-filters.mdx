@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './tutorial-filters.stories'
+
+<Meta of={Stories} />
+
+# Tutorial Filters
+
+Filter controls for browsing tutorials by category or difficulty.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-filters.json
+```
+
+## Import
+
+```tsx
+import { TutorialFilters } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `currentDifficulty` | `string` | Yes | - |
+| `currentTags` | `string[]` | Yes | - |
+| `difficultyOptions` | `string[]` | No | - |
+| `isPending` | `boolean` | No | - |
+| `labels` | `TutorialFiltersLabels` | Yes | - |
+| `onFilterChange` | `(updates: FilterUpdates) =&gt; void` | Yes | - |
+| `searchQuery` | `string` | Yes | - |
+| `tags` | `string[]` | Yes | - |
+

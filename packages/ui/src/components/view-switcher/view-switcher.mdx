@@ -1,0 +1,34 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './view-switcher.stories'
+
+<Meta of={Stories} />
+
+# View Switcher
+
+URL param-based toggle between named views with pill/tab styling.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/view-switcher.json
+```
+
+## Import
+
+```tsx
+import { ViewSwitcher } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `defaultKey` | `string` | No | - |
+| `options` | `ViewOption[]` | Yes | - |
+| `paramName` | `string` | No | - |
+

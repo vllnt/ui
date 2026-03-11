@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './content-intro.stories'
+
+<Meta of={Stories} />
+
+# Content Intro
+
+Introductory section for content pages with title and description.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/content-intro.json
+```
+
+## Import
+
+```tsx
+import { ContentIntro } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `additionalContent` | `ReactNode` | No | - |
+| `completedSections` | `Set&lt;string&gt;` | Yes | - |
+| `estimatedTime` | `string` | Yes | - |
+| `isLoading` | `boolean` | No | - |
+| `labels` | `ContentIntroLabels` | No | - |
+| `onGoToSection` | `(index: number) =&gt; void` | Yes | - |
+| `onStart` | `() =&gt; void` | Yes | - |
+| `renderIntroContent` | `() =&gt; ReactNode` | Yes | - |
+| `sections` | `ContentIntroSection[]` | Yes | - |
+| `title` | `string` | Yes | - |
+

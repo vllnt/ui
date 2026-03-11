@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './pro-tip.stories'
+
+<Meta of={Stories} />
+
+# Pro Tip
+
+Highlighted tip block with variants for tips, best practices, gotchas, and more.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/pro-tip.json
+```
+
+## Import
+
+```tsx
+import { ProTip, CommonMistake } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `children` | `ReactNode` | Yes | - |
+| `className` | `string` | No | - |
+| `icon` | `ReactNode` | No | - |
+| `title` | `string` | No | - |
+| `variant` | `ProTipVariant` | No | - |
+

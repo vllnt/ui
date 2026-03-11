@@ -1,0 +1,48 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './sheet.stories'
+
+<Meta of={Stories} />
+
+# Sheet
+
+Slide-over panel from the edge of the screen.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/sheet.json
+```
+
+## Import
+
+```tsx
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger } from '@vllnt/ui'
+```
+
+## Controls
+
+<Controls />
+
+## Variants
+
+### side
+
+| Value | Default |
+| ----- | ------- |
+| `bottom` | - |
+| `left` | - |
+| `right` | Yes |
+| `top` | - |
+
+## Stories
+
+### Left
+
+<Canvas of={Stories.Left} />
+
+### Bottom
+
+<Canvas of={Stories.Bottom} />
+

@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './social-fab.stories'
+
+<Meta of={Stories} />
+
+# SocialFab
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/social-fab.json
+```
+
+## Import
+
+```tsx
+import { SocialFAB } from '@vllnt/ui'
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `actions` | `SocialFabActionConfig[]` | Yes | - |
+| `default` | `24) - use higher value to avoid overlapping fixed bars */` | Yes | - |
+| `bottomOffset` | `number` | No | - |
+| `hidden` | `boolean` | No | - |
+| `labels` | `SocialFabLabels` | Yes | - |
+| `default` | `⋯) */` | Yes | - |
+| `mainText` | `string` | No | - |
+| `onAction` | `(actionId: string) =&gt; void` | No | - |
+| `onClose` | `(trigger: string) =&gt; void` | No | - |
+| `onOpen` | `(trigger: string, device: string) =&gt; void` | No | - |
+| `default` | `24) */` | Yes | - |
+| `rightOffset` | `number` | No | - |
+| `sharePlatforms` | `SharePlatformConfig[]` | No | - |
+
