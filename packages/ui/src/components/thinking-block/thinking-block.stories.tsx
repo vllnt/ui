@@ -4,7 +4,7 @@ import { ThinkingBlock } from "./thinking-block";
 
 const meta = {
   component: ThinkingBlock,
-  title: "Components/ThinkingBlock",
+  title: "Learning/ThinkingBlock",
 } satisfies Meta<typeof ThinkingBlock>;
 
 export default meta;

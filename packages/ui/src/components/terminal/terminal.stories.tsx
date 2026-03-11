@@ -4,7 +4,7 @@ import { Terminal } from "./terminal";
 
 const meta = {
   component: Terminal,
-  title: "Components/Terminal",
+  title: "Content/Terminal",
 } satisfies Meta<typeof Terminal>;
 
 export default meta;

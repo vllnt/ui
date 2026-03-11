@@ -4,7 +4,7 @@ import { SocialFAB } from "./social-fab";
 
 const meta = {
   component: SocialFAB,
-  title: "Components/SocialFab",
+  title: "Utility/SocialFab",
 } satisfies Meta<typeof SocialFAB>;
 
 export default meta;

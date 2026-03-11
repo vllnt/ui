@@ -4,7 +4,7 @@ import { ModelSelector } from "./model-selector";
 
 const meta = {
   component: ModelSelector,
-  title: "Components/ModelSelector",
+  title: "Form/ModelSelector",
 } satisfies Meta<typeof ModelSelector>;
 
 export default meta;

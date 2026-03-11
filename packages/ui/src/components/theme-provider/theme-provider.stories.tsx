@@ -4,7 +4,7 @@ import { ThemeProvider } from "./theme-provider";
 
 const meta = {
   component: ThemeProvider,
-  title: "Components/ThemeProvider",
+  title: "Utility/ThemeProvider",
 } satisfies Meta<typeof ThemeProvider>;
 
 export default meta;

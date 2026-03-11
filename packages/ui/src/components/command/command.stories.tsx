@@ -7,7 +7,7 @@ const meta = {
     children: "Command",
   },
   component: Command,
-  title: "Components/Command",
+  title: "Overlay/Command",
 } satisfies Meta<typeof Command>;
 
 export default meta;

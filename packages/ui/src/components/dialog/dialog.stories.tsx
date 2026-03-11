@@ -17,7 +17,7 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-  title: "Components/Dialog",
+  title: "Overlay/Dialog",
 } satisfies Meta<typeof Dialog>;
 
 export default meta;

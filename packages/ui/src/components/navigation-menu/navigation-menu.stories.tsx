@@ -7,7 +7,7 @@ const meta = {
     children: "NavigationMenu",
   },
   component: NavigationMenu,
-  title: "Components/NavigationMenu",
+  title: "Navigation/NavigationMenu",
 } satisfies Meta<typeof NavigationMenu>;
 
 export default meta;

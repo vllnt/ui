@@ -7,7 +7,7 @@ const meta = {
     children: "ProTip",
   },
   component: ProTip,
-  title: "Components/ProTip",
+  title: "Learning/ProTip",
 } satisfies Meta<typeof ProTip>;
 
 export default meta;

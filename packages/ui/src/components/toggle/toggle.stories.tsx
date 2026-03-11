@@ -18,7 +18,7 @@ const meta = {
     },
   },
   component: Toggle,
-  title: "Components/Toggle",
+  title: "Core/Toggle",
 } satisfies Meta<typeof Toggle>;
 
 export default meta;

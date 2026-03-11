@@ -4,7 +4,7 @@ import { Collapsible } from "./collapsible";
 
 const meta = {
   component: Collapsible,
-  title: "Components/Collapsible",
+  title: "Content/Collapsible",
 } satisfies Meta<typeof Collapsible>;
 
 export default meta;

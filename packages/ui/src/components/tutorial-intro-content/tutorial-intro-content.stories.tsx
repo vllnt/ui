@@ -9,7 +9,7 @@ const meta = {
     title: "React Fundamentals",
   },
   component: TutorialIntroContent,
-  title: "Components/TutorialIntroContent",
+  title: "Learning/TutorialIntroContent",
 } satisfies Meta<typeof TutorialIntroContent>;
 
 export default meta;

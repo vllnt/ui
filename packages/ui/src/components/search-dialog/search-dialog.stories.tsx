@@ -4,7 +4,7 @@ import { SearchDialog } from "./search-dialog";
 
 const meta = {
   component: SearchDialog,
-  title: "Components/SearchDialog",
+  title: "Learning/SearchDialog",
 } satisfies Meta<typeof SearchDialog>;
 
 export default meta;

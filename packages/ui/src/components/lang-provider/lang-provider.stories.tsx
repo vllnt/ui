@@ -4,7 +4,7 @@ import { LangProvider } from "./lang-provider";
 
 const meta = {
   component: LangProvider,
-  title: "Components/LangProvider",
+  title: "Utility/LangProvider",
 } satisfies Meta<typeof LangProvider>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { SidebarToggle } from "./sidebar-toggle";
 
 const meta = {
   component: SidebarToggle,
-  title: "Components/SidebarToggle",
+  title: "Navigation/SidebarToggle",
 } satisfies Meta<typeof SidebarToggle>;
 
 export default meta;

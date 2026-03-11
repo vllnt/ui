@@ -4,7 +4,7 @@ import { NavbarSaas } from "./navbar-saas";
 
 const meta = {
   component: NavbarSaas,
-  title: "Components/NavbarSaas",
+  title: "Navigation/NavbarSaas",
 } satisfies Meta<typeof NavbarSaas>;
 
 export default meta;

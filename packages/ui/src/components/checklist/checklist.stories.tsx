@@ -7,7 +7,7 @@ const meta = {
     children: "Checklist",
   },
   component: Checklist,
-  title: "Components/Checklist",
+  title: "Learning/Checklist",
 } satisfies Meta<typeof Checklist>;
 
 export default meta;

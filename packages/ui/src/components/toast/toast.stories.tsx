@@ -23,7 +23,7 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-  title: "Components/Toast",
+  title: "Overlay/Toast",
 } satisfies Meta<typeof Toast>;
 
 export default meta;

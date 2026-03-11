@@ -18,7 +18,7 @@ const meta = {
     },
   },
   component: VideoEmbed,
-  title: "Components/VideoEmbed",
+  title: "Content/VideoEmbed",
 } satisfies Meta<typeof VideoEmbed>;
 
 export default meta;

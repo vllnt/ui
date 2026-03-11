@@ -7,7 +7,7 @@ const meta = {
     children: "Quiz",
   },
   component: Quiz,
-  title: "Components/Quiz",
+  title: "Learning/Quiz",
 } satisfies Meta<typeof Quiz>;
 
 export default meta;

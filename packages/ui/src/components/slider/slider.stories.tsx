@@ -4,7 +4,7 @@ import { Slider } from "./slider";
 
 const meta = {
   component: Slider,
-  title: "Components/Slider",
+  title: "Core/Slider",
 } satisfies Meta<typeof Slider>;
 
 export default meta;

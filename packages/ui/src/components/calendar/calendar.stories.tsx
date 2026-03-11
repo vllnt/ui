@@ -4,7 +4,7 @@ import { Calendar } from "./calendar";
 
 const meta = {
   component: Calendar,
-  title: "Components/Calendar",
+  title: "Form/Calendar",
 } satisfies Meta<typeof Calendar>;
 
 export default meta;

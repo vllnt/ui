@@ -20,7 +20,7 @@ function MDXContentPlaceholder() {
 
 const meta = {
   component: MDXContentPlaceholder,
-  title: "Components/MDXContent",
+  title: "Content/MDXContent",
 } satisfies Meta<typeof MDXContentPlaceholder>;
 
 export default meta;

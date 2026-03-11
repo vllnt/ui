@@ -7,7 +7,7 @@ const meta = {
     children: "ContextMenu",
   },
   component: ContextMenu,
-  title: "Components/ContextMenu",
+  title: "Overlay/ContextMenu",
 } satisfies Meta<typeof ContextMenu>;
 
 export default meta;

@@ -7,7 +7,7 @@ const meta = {
     children: "Popover",
   },
   component: Popover,
-  title: "Components/Popover",
+  title: "Overlay/Popover",
 } satisfies Meta<typeof Popover>;
 
 export default meta;

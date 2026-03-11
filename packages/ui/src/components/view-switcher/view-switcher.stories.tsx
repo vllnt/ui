@@ -12,7 +12,7 @@ const meta = {
     ],
   },
   component: ViewSwitcher,
-  title: "Components/ViewSwitcher",
+  title: "Navigation/ViewSwitcher",
 } satisfies Meta<typeof ViewSwitcher>;
 
 export default meta;

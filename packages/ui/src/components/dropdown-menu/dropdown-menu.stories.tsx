@@ -15,7 +15,7 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-  title: "Components/DropdownMenu",
+  title: "Overlay/DropdownMenu",
 } satisfies Meta<typeof DropdownMenu>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { StepNavigation } from "./step-navigation";
 
 const meta = {
   component: StepNavigation,
-  title: "Components/StepNavigation",
+  title: "Navigation/StepNavigation",
 } satisfies Meta<typeof StepNavigation>;
 
 export default meta;

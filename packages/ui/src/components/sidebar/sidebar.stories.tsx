@@ -50,7 +50,7 @@ const meta = {
   parameters: {
     layout: "fullscreen",
   },
-  title: "Components/Sidebar",
+  title: "Navigation/Sidebar",
 } satisfies Meta<typeof Sidebar>;
 
 export default meta;

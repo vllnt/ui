@@ -7,7 +7,7 @@ const meta = {
     children: "HoverCard",
   },
   component: HoverCard,
-  title: "Components/HoverCard",
+  title: "Overlay/HoverCard",
 } satisfies Meta<typeof HoverCard>;
 
 export default meta;

@@ -7,7 +7,7 @@ const meta = {
     children: "Accordion",
   },
   component: Accordion,
-  title: "Components/Accordion",
+  title: "Content/Accordion",
 } satisfies Meta<typeof Accordion>;
 
 export default meta;

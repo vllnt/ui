@@ -4,7 +4,7 @@ import { RadioGroup } from "./radio-group";
 
 const meta = {
   component: RadioGroup,
-  title: "Components/RadioGroup",
+  title: "Core/RadioGroup",
 } satisfies Meta<typeof RadioGroup>;
 
 export default meta;

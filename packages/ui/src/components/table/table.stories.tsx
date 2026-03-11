@@ -7,7 +7,7 @@ const meta = {
     children: "Table",
   },
   component: Table,
-  title: "Components/Table",
+  title: "Data/Table",
 } satisfies Meta<typeof Table>;
 
 export default meta;

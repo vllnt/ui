@@ -4,7 +4,7 @@ import { ShareDialog } from "./share-dialog";
 
 const meta = {
   component: ShareDialog,
-  title: "Components/ShareDialog",
+  title: "Utility/ShareDialog",
 } satisfies Meta<typeof ShareDialog>;
 
 export default meta;

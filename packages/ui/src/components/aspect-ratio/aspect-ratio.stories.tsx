@@ -4,7 +4,7 @@ import { AspectRatio } from "./aspect-ratio";
 
 const meta = {
   component: AspectRatio,
-  title: "Components/AspectRatio",
+  title: "Utility/AspectRatio",
 } satisfies Meta<typeof AspectRatio>;
 
 export default meta;

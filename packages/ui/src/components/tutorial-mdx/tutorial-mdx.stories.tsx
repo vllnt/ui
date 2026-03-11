@@ -8,7 +8,7 @@ const meta = {
       "# Advanced React Patterns\n\nLearn about compound components, render props, and custom hooks.",
   },
   component: TutorialMDX,
-  title: "Components/TutorialMdx",
+  title: "Learning/TutorialMdx",
 } satisfies Meta<typeof TutorialMDX>;
 
 export default meta;

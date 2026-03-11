@@ -4,7 +4,7 @@ import { SearchBar } from "./search-bar";
 
 const meta = {
   component: SearchBar,
-  title: "Components/SearchBar",
+  title: "Form/SearchBar",
 } satisfies Meta<typeof SearchBar>;
 
 export default meta;

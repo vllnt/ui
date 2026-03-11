@@ -4,7 +4,7 @@ import { Textarea } from "./textarea";
 
 const meta = {
   component: Textarea,
-  title: "Components/Textarea",
+  title: "Core/Textarea",
 } satisfies Meta<typeof Textarea>;
 
 export default meta;

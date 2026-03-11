@@ -7,7 +7,7 @@ const meta = {
     children: "KeyConcept",
   },
   component: KeyConcept,
-  title: "Components/KeyConcept",
+  title: "Learning/KeyConcept",
 } satisfies Meta<typeof KeyConcept>;
 
 export default meta;

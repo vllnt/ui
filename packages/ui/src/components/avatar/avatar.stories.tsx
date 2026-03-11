@@ -4,7 +4,7 @@ import { Avatar } from "./avatar";
 
 const meta = {
   component: Avatar,
-  title: "Components/Avatar",
+  title: "Core/Avatar",
 } satisfies Meta<typeof Avatar>;
 
 export default meta;

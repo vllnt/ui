@@ -4,7 +4,7 @@ import { AreaChart } from "./area-chart";
 
 const meta = {
   component: AreaChart,
-  title: "Components/AreaChart",
+  title: "Data/AreaChart",
 } satisfies Meta<typeof AreaChart>;
 
 export default meta;

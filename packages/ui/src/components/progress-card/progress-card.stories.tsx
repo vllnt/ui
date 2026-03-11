@@ -4,7 +4,7 @@ import { ContentCard } from "./progress-card";
 
 const meta = {
   component: ContentCard,
-  title: "Components/ProgressCard",
+  title: "Data/ProgressCard",
 } satisfies Meta<typeof ContentCard>;
 
 export default meta;

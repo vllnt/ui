@@ -14,7 +14,7 @@ const meta = {
     },
   },
   component: Badge,
-  title: "Components/Badge",
+  title: "Core/Badge",
 } satisfies Meta<typeof Badge>;
 
 export default meta;

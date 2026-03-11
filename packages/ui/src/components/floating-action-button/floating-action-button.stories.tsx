@@ -4,7 +4,7 @@ import { FloatingActionButton } from "./floating-action-button";
 
 const meta = {
   component: FloatingActionButton,
-  title: "Components/FloatingActionButton",
+  title: "Utility/FloatingActionButton",
 } satisfies Meta<typeof FloatingActionButton>;
 
 export default meta;

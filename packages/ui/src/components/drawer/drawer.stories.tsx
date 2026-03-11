@@ -4,7 +4,7 @@ import { Drawer } from "./drawer";
 
 const meta = {
   component: Drawer,
-  title: "Components/Drawer",
+  title: "Overlay/Drawer",
 } satisfies Meta<typeof Drawer>;
 
 export default meta;

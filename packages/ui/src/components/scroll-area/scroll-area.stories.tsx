@@ -7,7 +7,7 @@ const meta = {
     children: "ScrollArea",
   },
   component: ScrollArea,
-  title: "Components/ScrollArea",
+  title: "Utility/ScrollArea",
 } satisfies Meta<typeof ScrollArea>;
 
 export default meta;

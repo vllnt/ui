@@ -4,7 +4,7 @@ import { FlowDiagram } from "./flow-diagram";
 
 const meta = {
   component: FlowDiagram,
-  title: "Components/FlowDiagram",
+  title: "Data/FlowDiagram",
 } satisfies Meta<typeof FlowDiagram>;
 
 export default meta;

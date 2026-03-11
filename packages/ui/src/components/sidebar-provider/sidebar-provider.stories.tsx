@@ -4,7 +4,7 @@ import { SidebarProvider } from "./sidebar-provider";
 
 const meta = {
   component: SidebarProvider,
-  title: "Components/SidebarProvider",
+  title: "Navigation/SidebarProvider",
 } satisfies Meta<typeof SidebarProvider>;
 
 export default meta;

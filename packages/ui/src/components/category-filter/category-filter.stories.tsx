@@ -4,7 +4,7 @@ import { CategoryFilter } from "./category-filter";
 
 const meta = {
   component: CategoryFilter,
-  title: "Components/CategoryFilter",
+  title: "Form/CategoryFilter",
 } satisfies Meta<typeof CategoryFilter>;
 
 export default meta;

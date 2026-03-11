@@ -4,7 +4,7 @@ import { ProgressBar } from "./progress-bar";
 
 const meta = {
   component: ProgressBar,
-  title: "Components/ProgressBar",
+  title: "Data/ProgressBar",
 } satisfies Meta<typeof ProgressBar>;
 
 export default meta;

@@ -7,7 +7,7 @@ const meta = {
     children: "StepByStep",
   },
   component: StepByStep,
-  title: "Components/StepByStep",
+  title: "Learning/StepByStep",
 } satisfies Meta<typeof StepByStep>;
 
 export default meta;

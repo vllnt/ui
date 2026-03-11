@@ -4,7 +4,7 @@ import { Carousel } from "./carousel";
 
 const meta = {
   component: Carousel,
-  title: "Components/Carousel",
+  title: "Content/Carousel",
 } satisfies Meta<typeof Carousel>;
 
 export default meta;

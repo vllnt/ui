@@ -4,7 +4,7 @@ import { Breadcrumb } from "./breadcrumb";
 
 const meta = {
   component: Breadcrumb,
-  title: "Components/Breadcrumb",
+  title: "Navigation/Breadcrumb",
 } satisfies Meta<typeof Breadcrumb>;
 
 export default meta;

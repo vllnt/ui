@@ -4,7 +4,7 @@ import { CompletionDialog } from "./completion-dialog";
 
 const meta = {
   component: CompletionDialog,
-  title: "Components/CompletionDialog",
+  title: "Learning/CompletionDialog",
 } satisfies Meta<typeof CompletionDialog>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { Slideshow } from "./slideshow";
 
 const meta = {
   component: Slideshow,
-  title: "Components/Slideshow",
+  title: "Content/Slideshow",
 } satisfies Meta<typeof Slideshow>;
 
 export default meta;

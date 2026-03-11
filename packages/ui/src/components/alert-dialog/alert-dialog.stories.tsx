@@ -7,7 +7,7 @@ const meta = {
     children: "AlertDialog",
   },
   component: AlertDialog,
-  title: "Components/AlertDialog",
+  title: "Overlay/AlertDialog",
 } satisfies Meta<typeof AlertDialog>;
 
 export default meta;

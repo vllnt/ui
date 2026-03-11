@@ -4,7 +4,7 @@ import { InlineInput } from "./inline-input";
 
 const meta = {
   component: InlineInput,
-  title: "Components/InlineInput",
+  title: "Form/InlineInput",
 } satisfies Meta<typeof InlineInput>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { CookieConsent } from "./cookie-consent";
 
 const meta = {
   component: CookieConsent,
-  title: "Components/CookieConsent",
+  title: "Utility/CookieConsent",
 } satisfies Meta<typeof CookieConsent>;
 
 export default meta;

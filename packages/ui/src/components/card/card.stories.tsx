@@ -7,7 +7,7 @@ const meta = {
     children: "Card",
   },
   component: Card,
-  title: "Components/Card",
+  title: "Content/Card",
 } satisfies Meta<typeof Card>;
 
 export default meta;

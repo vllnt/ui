@@ -4,7 +4,7 @@ import { HorizontalScrollRow } from "./horizontal-scroll-row";
 
 const meta = {
   component: HorizontalScrollRow,
-  title: "Components/HorizontalScrollRow",
+  title: "Navigation/HorizontalScrollRow",
 } satisfies Meta<typeof HorizontalScrollRow>;
 
 export default meta;

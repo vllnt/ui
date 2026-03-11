@@ -29,7 +29,7 @@ const meta = {
     tags: ["React", "TypeScript", "Tailwind", "Components"],
   },
   component: TutorialFilters,
-  title: "Components/TutorialFilters",
+  title: "Learning/TutorialFilters",
 } satisfies Meta<typeof TutorialFilters>;
 
 export default meta;

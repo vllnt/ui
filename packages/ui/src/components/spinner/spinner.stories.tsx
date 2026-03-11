@@ -4,7 +4,7 @@ import { Spinner } from "./spinner";
 
 const meta = {
   component: Spinner,
-  title: "Components/Spinner",
+  title: "Utility/Spinner",
 } satisfies Meta<typeof Spinner>;
 
 export default meta;

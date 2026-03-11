@@ -4,7 +4,7 @@ import { ToggleGroup } from "./toggle-group";
 
 const meta = {
   component: ToggleGroup,
-  title: "Components/ToggleGroup",
+  title: "Core/ToggleGroup",
 } satisfies Meta<typeof ToggleGroup>;
 
 export default meta;

@@ -178,7 +178,10 @@ export default async function ComponentPage(props: Props) {
               {meta?.defaultStoryId ? (
                 <div className="mb-8 scroll-mt-8">
                   <div className="rounded-lg border bg-card overflow-hidden">
-                    <StorybookEmbed componentName={component.name} />
+                    <StorybookEmbed
+                      componentName={component.name}
+                      storyId={meta.defaultStoryId}
+                    />
                   </div>
                 </div>
               ) : null}

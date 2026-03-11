@@ -14,7 +14,7 @@ const meta = {
     },
   },
   component: Alert,
-  title: "Components/Alert",
+  title: "Data/Alert",
 } satisfies Meta<typeof Alert>;
 
 export default meta;

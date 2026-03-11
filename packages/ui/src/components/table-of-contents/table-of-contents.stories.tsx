@@ -4,7 +4,7 @@ import { TableOfContents } from "./table-of-contents";
 
 const meta = {
   component: TableOfContents,
-  title: "Components/TableOfContents",
+  title: "Utility/TableOfContents",
 } satisfies Meta<typeof TableOfContents>;
 
 export default meta;

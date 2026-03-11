@@ -7,7 +7,7 @@ const meta = {
     children: "Comparison",
   },
   component: Comparison,
-  title: "Components/Comparison",
+  title: "Data/Comparison",
 } satisfies Meta<typeof Comparison>;
 
 export default meta;

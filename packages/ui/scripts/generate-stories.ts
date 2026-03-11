@@ -18,6 +18,24 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const COMPONENTS_DIR = join(__dirname, '../src/components')
+const REGISTRY_PATH = join(__dirname, '../../../apps/registry/registry.json')
+
+function loadCategoryMap(): Record<string, string> {
+  try {
+    const raw = JSON.parse(readFileSync(REGISTRY_PATH, 'utf8')) as { items: { name: string; category?: string; type: string }[] }
+    const map: Record<string, string> = {}
+    for (const item of raw.items) {
+      if (item.type === 'registry:component' && item.category) {
+        map[item.name] = item.category.charAt(0).toUpperCase() + item.category.slice(1)
+      }
+    }
+    return map
+  } catch {
+    return {}
+  }
+}
+
+const CATEGORY_MAP = loadCategoryMap()
 
 interface VariantInfo {
   name: string
@@ -125,8 +143,8 @@ function extractExports(source: string): string[] {
   const namedExports = source.matchAll(/export\s*\{\s*([^}]+)\s*\}/g)
   for (const match of namedExports) {
     if (!match[1]) continue
-    const names = match[1].split(',').map((n) => n.trim().split(' ')[0])
-    exports.push(...names.filter((n): n is string => Boolean(n) && /^[A-Z]/.test(n)))
+    const names = match[1].split(',').map((n) => n.trim().split(' ')[0] ?? '')
+    exports.push(...names.filter((n) => n.length > 0 && /^[A-Z]/.test(n)))
   }
 
   const constExports = source.matchAll(/export\s+(?:const|function)\s+([A-Z]\w+)/g)
@@ -216,7 +234,7 @@ function generateStory(component: ComponentInfo): string {
 import { ${primaryExport} } from './${fileName}'
 
 const meta = {
-  title: 'Components/${name}',
+  title: '${CATEGORY_MAP[component.dirName] ?? 'Components'}/${name}',
   component: ${primaryExport},${argTypesBlock}${argsBlock}
 } satisfies Meta<typeof ${primaryExport}>
 

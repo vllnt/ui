@@ -4,7 +4,7 @@ import { ContentIntro } from "./content-intro";
 
 const meta = {
   component: ContentIntro,
-  title: "Components/ContentIntro",
+  title: "Content/ContentIntro",
 } satisfies Meta<typeof ContentIntro>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { Skeleton } from "./skeleton";
 
 const meta = {
   component: Skeleton,
-  title: "Components/Skeleton",
+  title: "Core/Skeleton",
 } satisfies Meta<typeof Skeleton>;
 
 export default meta;

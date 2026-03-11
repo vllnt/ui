@@ -4,7 +4,7 @@ import { KeyboardShortcutsHelp } from "./keyboard-shortcuts-help";
 
 const meta = {
   component: KeyboardShortcutsHelp,
-  title: "Components/KeyboardShortcutsHelp",
+  title: "Learning/KeyboardShortcutsHelp",
 } satisfies Meta<typeof KeyboardShortcutsHelp>;
 
 export default meta;

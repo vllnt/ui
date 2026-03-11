@@ -7,7 +7,7 @@ const meta = {
     children: "Callout",
   },
   component: Callout,
-  title: "Components/Callout",
+  title: "Content/Callout",
 } satisfies Meta<typeof Callout>;
 
 export default meta;

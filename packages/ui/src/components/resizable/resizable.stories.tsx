@@ -4,7 +4,7 @@ import { ResizableHandle } from "./resizable";
 
 const meta = {
   component: ResizableHandle,
-  title: "Components/Resizable",
+  title: "Utility/Resizable",
 } satisfies Meta<typeof ResizableHandle>;
 
 export default meta;

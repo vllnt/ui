@@ -1,12 +1,12 @@
 {
   "accordion": {
     "category": "content",
-    "defaultStoryId": "components-accordion--default",
+    "defaultStoryId": "content-accordion--default",
     "description": "Collapsible content sections supporting single or multiple open items.",
     "name": "accordion",
     "stories": [
       {
-        "id": "components-accordion--default",
+        "id": "content-accordion--default",
         "name": "Default"
       }
     ],
@@ -14,16 +14,16 @@
   },
   "alert": {
     "category": "data",
-    "defaultStoryId": "components-alert--default",
+    "defaultStoryId": "data-alert--default",
     "description": "Displays an alert message to the user.",
     "name": "alert",
     "stories": [
       {
-        "id": "components-alert--default",
+        "id": "data-alert--default",
         "name": "Default"
       },
       {
-        "id": "components-alert--variant-destructive",
+        "id": "data-alert--variant-destructive",
         "name": "Variant Destructive"
       }
     ],
@@ -31,12 +31,12 @@
   },
   "alert-dialog": {
     "category": "overlay",
-    "defaultStoryId": "components-alertdialog--default",
+    "defaultStoryId": "overlay-alertdialog--default",
     "description": "Modal dialog for confirming destructive or important actions.",
     "name": "alert-dialog",
     "stories": [
       {
-        "id": "components-alertdialog--default",
+        "id": "overlay-alertdialog--default",
         "name": "Default"
       }
     ],
@@ -52,12 +52,12 @@
   },
   "aspect-ratio": {
     "category": "utility",
-    "defaultStoryId": "components-aspectratio--default",
+    "defaultStoryId": "utility-aspectratio--default",
     "description": "Constrains content to a specified aspect ratio.",
     "name": "aspect-ratio",
     "stories": [
       {
-        "id": "components-aspectratio--default",
+        "id": "utility-aspectratio--default",
         "name": "Default"
       }
     ],
@@ -65,12 +65,12 @@
   },
   "avatar": {
     "category": "core",
-    "defaultStoryId": "components-avatar--default",
+    "defaultStoryId": "core-avatar--default",
     "description": "Displays a user avatar image with fallback initials.",
     "name": "avatar",
     "stories": [
       {
-        "id": "components-avatar--default",
+        "id": "core-avatar--default",
         "name": "Default"
       }
     ],
@@ -78,24 +78,24 @@
   },
   "badge": {
     "category": "core",
-    "defaultStoryId": "components-badge--default",
+    "defaultStoryId": "core-badge--default",
     "description": "Small status label with variant styles.",
     "name": "badge",
     "stories": [
       {
-        "id": "components-badge--default",
+        "id": "core-badge--default",
         "name": "Default"
       },
       {
-        "id": "components-badge--variant-destructive",
+        "id": "core-badge--variant-destructive",
         "name": "Variant Destructive"
       },
       {
-        "id": "components-badge--variant-outline",
+        "id": "core-badge--variant-outline",
         "name": "Variant Outline"
       },
       {
-        "id": "components-badge--variant-secondary",
+        "id": "core-badge--variant-secondary",
         "name": "Variant Secondary"
       }
     ],
@@ -111,12 +111,12 @@
   },
   "blog-card": {
     "category": "content",
-    "defaultStoryId": "components-blogcard--default",
+    "defaultStoryId": "content-blogcard--default",
     "description": "Card layout for displaying blog post previews.",
     "name": "blog-card",
     "stories": [
       {
-        "id": "components-blogcard--default",
+        "id": "content-blogcard--default",
         "name": "Default"
       }
     ],
@@ -124,12 +124,12 @@
   },
   "breadcrumb": {
     "category": "navigation",
-    "defaultStoryId": "components-breadcrumb--default",
+    "defaultStoryId": "navigation-breadcrumb--default",
     "description": "Navigation breadcrumb trail showing the current page hierarchy.",
     "name": "breadcrumb",
     "stories": [
       {
-        "id": "components-breadcrumb--default",
+        "id": "navigation-breadcrumb--default",
         "name": "Default"
       }
     ],
@@ -137,44 +137,44 @@
   },
   "button": {
     "category": "core",
-    "defaultStoryId": "components-button--default",
+    "defaultStoryId": "core-button--default",
     "description": "Interactive button with multiple variants and sizes.",
     "name": "button",
     "stories": [
       {
-        "id": "components-button--default",
+        "id": "core-button--default",
         "name": "Default"
       },
       {
-        "id": "components-button--size-icon",
+        "id": "core-button--size-icon",
         "name": "Size Icon"
       },
       {
-        "id": "components-button--size-lg",
+        "id": "core-button--size-lg",
         "name": "Size Lg"
       },
       {
-        "id": "components-button--size-sm",
+        "id": "core-button--size-sm",
         "name": "Size Sm"
       },
       {
-        "id": "components-button--variant-destructive",
+        "id": "core-button--variant-destructive",
         "name": "Variant Destructive"
       },
       {
-        "id": "components-button--variant-ghost",
+        "id": "core-button--variant-ghost",
         "name": "Variant Ghost"
       },
       {
-        "id": "components-button--variant-link",
+        "id": "core-button--variant-link",
         "name": "Variant Link"
       },
       {
-        "id": "components-button--variant-outline",
+        "id": "core-button--variant-outline",
         "name": "Variant Outline"
       },
       {
-        "id": "components-button--variant-secondary",
+        "id": "core-button--variant-secondary",
         "name": "Variant Secondary"
       }
     ],
@@ -182,12 +182,12 @@
   },
   "calendar": {
     "category": "form",
-    "defaultStoryId": "components-calendar--default",
+    "defaultStoryId": "form-calendar--default",
     "description": "Date picker calendar for selecting dates.",
     "name": "calendar",
     "stories": [
       {
-        "id": "components-calendar--default",
+        "id": "form-calendar--default",
         "name": "Default"
       }
     ],
@@ -195,12 +195,12 @@
   },
   "callout": {
     "category": "content",
-    "defaultStoryId": "components-callout--default",
+    "defaultStoryId": "content-callout--default",
     "description": "Highlighted content block with variant styles for info, warning, danger, and more.",
     "name": "callout",
     "stories": [
       {
-        "id": "components-callout--default",
+        "id": "content-callout--default",
         "name": "Default"
       }
     ],
@@ -208,12 +208,12 @@
   },
   "card": {
     "category": "content",
-    "defaultStoryId": "components-card--default",
+    "defaultStoryId": "content-card--default",
     "description": "Container with header, content, and footer sections.",
     "name": "card",
     "stories": [
       {
-        "id": "components-card--default",
+        "id": "content-card--default",
         "name": "Default"
       }
     ],
@@ -221,12 +221,12 @@
   },
   "carousel": {
     "category": "content",
-    "defaultStoryId": "components-carousel--default",
+    "defaultStoryId": "content-carousel--default",
     "description": "Scrollable content carousel with navigation controls.",
     "name": "carousel",
     "stories": [
       {
-        "id": "components-carousel--default",
+        "id": "content-carousel--default",
         "name": "Default"
       }
     ],
@@ -234,12 +234,12 @@
   },
   "category-filter": {
     "category": "form",
-    "defaultStoryId": "components-categoryfilter--default",
+    "defaultStoryId": "form-categoryfilter--default",
     "description": "Filterable category selection for content lists.",
     "name": "category-filter",
     "stories": [
       {
-        "id": "components-categoryfilter--default",
+        "id": "form-categoryfilter--default",
         "name": "Default"
       }
     ],
@@ -247,12 +247,12 @@
   },
   "checkbox": {
     "category": "core",
-    "defaultStoryId": "components-checkbox--default",
+    "defaultStoryId": "core-checkbox--default",
     "description": "Toggle control for boolean input.",
     "name": "checkbox",
     "stories": [
       {
-        "id": "components-checkbox--default",
+        "id": "core-checkbox--default",
         "name": "Default"
       }
     ],
@@ -260,12 +260,12 @@
   },
   "checklist": {
     "category": "learning",
-    "defaultStoryId": "components-checklist--default",
+    "defaultStoryId": "learning-checklist--default",
     "description": "Interactive checklist with progress tracking and toggleable items.",
     "name": "checklist",
     "stories": [
       {
-        "id": "components-checklist--default",
+        "id": "learning-checklist--default",
         "name": "Default"
       }
     ],
@@ -273,12 +273,12 @@
   },
   "code-block": {
     "category": "content",
-    "defaultStoryId": "components-codeblock--default",
+    "defaultStoryId": "content-codeblock--default",
     "description": "Syntax-highlighted code display with copy support.",
     "name": "code-block",
     "stories": [
       {
-        "id": "components-codeblock--default",
+        "id": "content-codeblock--default",
         "name": "Default"
       }
     ],
@@ -286,12 +286,12 @@
   },
   "code-playground": {
     "category": "content",
-    "defaultStoryId": "components-codeplayground--default",
+    "defaultStoryId": "content-codeplayground--default",
     "description": "Interactive code editor with live preview.",
     "name": "code-playground",
     "stories": [
       {
-        "id": "components-codeplayground--default",
+        "id": "content-codeplayground--default",
         "name": "Default"
       }
     ],
@@ -299,12 +299,12 @@
   },
   "collapsible": {
     "category": "content",
-    "defaultStoryId": "components-collapsible--default",
+    "defaultStoryId": "content-collapsible--default",
     "description": "Expandable and collapsible content section.",
     "name": "collapsible",
     "stories": [
       {
-        "id": "components-collapsible--default",
+        "id": "content-collapsible--default",
         "name": "Default"
       }
     ],
@@ -312,12 +312,12 @@
   },
   "command": {
     "category": "overlay",
-    "defaultStoryId": "components-command--default",
+    "defaultStoryId": "overlay-command--default",
     "description": "Command palette with search, groups, and keyboard navigation.",
     "name": "command",
     "stories": [
       {
-        "id": "components-command--default",
+        "id": "overlay-command--default",
         "name": "Default"
       }
     ],
@@ -325,12 +325,12 @@
   },
   "comparison": {
     "category": "data",
-    "defaultStoryId": "components-comparison--default",
+    "defaultStoryId": "data-comparison--default",
     "description": "Side-by-side comparison layout for content or features.",
     "name": "comparison",
     "stories": [
       {
-        "id": "components-comparison--default",
+        "id": "data-comparison--default",
         "name": "Default"
       }
     ],
@@ -338,12 +338,12 @@
   },
   "completion-dialog": {
     "category": "learning",
-    "defaultStoryId": "components-completiondialog--default",
+    "defaultStoryId": "learning-completiondialog--default",
     "description": "Dialog displayed upon completing a task or workflow.",
     "name": "completion-dialog",
     "stories": [
       {
-        "id": "components-completiondialog--default",
+        "id": "learning-completiondialog--default",
         "name": "Default"
       }
     ],
@@ -351,12 +351,12 @@
   },
   "content-intro": {
     "category": "content",
-    "defaultStoryId": "components-contentintro--default",
+    "defaultStoryId": "content-contentintro--default",
     "description": "Introductory section for content pages with title and description.",
     "name": "content-intro",
     "stories": [
       {
-        "id": "components-contentintro--default",
+        "id": "content-contentintro--default",
         "name": "Default"
       }
     ],
@@ -364,12 +364,12 @@
   },
   "context-menu": {
     "category": "overlay",
-    "defaultStoryId": "components-contextmenu--default",
+    "defaultStoryId": "overlay-contextmenu--default",
     "description": "Right-click context menu with items and submenus.",
     "name": "context-menu",
     "stories": [
       {
-        "id": "components-contextmenu--default",
+        "id": "overlay-contextmenu--default",
         "name": "Default"
       }
     ],
@@ -377,12 +377,12 @@
   },
   "dialog": {
     "category": "overlay",
-    "defaultStoryId": "components-dialog--default",
+    "defaultStoryId": "overlay-dialog--default",
     "description": "Modal dialog overlay for focused content and actions.",
     "name": "dialog",
     "stories": [
       {
-        "id": "components-dialog--default",
+        "id": "overlay-dialog--default",
         "name": "Default"
       }
     ],
@@ -390,12 +390,12 @@
   },
   "drawer": {
     "category": "overlay",
-    "defaultStoryId": "components-drawer--default",
+    "defaultStoryId": "overlay-drawer--default",
     "description": "Slide-out panel anchored to the screen edge.",
     "name": "drawer",
     "stories": [
       {
-        "id": "components-drawer--default",
+        "id": "overlay-drawer--default",
         "name": "Default"
       }
     ],
@@ -403,12 +403,12 @@
   },
   "dropdown-menu": {
     "category": "overlay",
-    "defaultStoryId": "components-dropdownmenu--default",
+    "defaultStoryId": "overlay-dropdownmenu--default",
     "description": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus.",
     "name": "dropdown-menu",
     "stories": [
       {
-        "id": "components-dropdownmenu--default",
+        "id": "overlay-dropdownmenu--default",
         "name": "Default"
       }
     ],
@@ -416,12 +416,12 @@
   },
   "exercise": {
     "category": "learning",
-    "defaultStoryId": "components-exercise--default",
+    "defaultStoryId": "learning-exercise--default",
     "description": "Interactive exercise block for learning content.",
     "name": "exercise",
     "stories": [
       {
-        "id": "components-exercise--default",
+        "id": "learning-exercise--default",
         "name": "Default"
       }
     ],
@@ -429,12 +429,12 @@
   },
   "faq": {
     "category": "content",
-    "defaultStoryId": "components-faq--default",
+    "defaultStoryId": "content-faq--default",
     "description": "Frequently asked questions section with expandable answers.",
     "name": "faq",
     "stories": [
       {
-        "id": "components-faq--default",
+        "id": "content-faq--default",
         "name": "Default"
       }
     ],
@@ -442,12 +442,12 @@
   },
   "filter-bar": {
     "category": "form",
-    "defaultStoryId": "components-filterbar--default",
+    "defaultStoryId": "form-filterbar--default",
     "description": "Horizontal bar with filter controls for content lists.",
     "name": "filter-bar",
     "stories": [
       {
-        "id": "components-filterbar--default",
+        "id": "form-filterbar--default",
         "name": "Default"
       }
     ],
@@ -455,12 +455,12 @@
   },
   "floating-action-button": {
     "category": "utility",
-    "defaultStoryId": "components-floatingactionbutton--default",
+    "defaultStoryId": "utility-floatingactionbutton--default",
     "description": "Fixed-position action button for primary actions.",
     "name": "floating-action-button",
     "stories": [
       {
-        "id": "components-floatingactionbutton--default",
+        "id": "utility-floatingactionbutton--default",
         "name": "Default"
       }
     ],
@@ -468,12 +468,12 @@
   },
   "flow-diagram": {
     "category": "data",
-    "defaultStoryId": "components-flowdiagram--default",
+    "defaultStoryId": "data-flowdiagram--default",
     "description": "Interactive flow diagram with nodes, edges, and controls.",
     "name": "flow-diagram",
     "stories": [
       {
-        "id": "components-flowdiagram--default",
+        "id": "data-flowdiagram--default",
         "name": "Default"
       }
     ],
@@ -481,12 +481,12 @@
   },
   "hover-card": {
     "category": "overlay",
-    "defaultStoryId": "components-hovercard--default",
+    "defaultStoryId": "overlay-hovercard--default",
     "description": "Card that appears on hover for previewing content.",
     "name": "hover-card",
     "stories": [
       {
-        "id": "components-hovercard--default",
+        "id": "overlay-hovercard--default",
         "name": "Default"
       }
     ],
@@ -494,12 +494,12 @@
   },
   "horizontal-scroll-row": {
     "category": "navigation",
-    "defaultStoryId": "components-horizontalscrollrow--default",
+    "defaultStoryId": "navigation-horizontalscrollrow--default",
     "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
     "name": "horizontal-scroll-row",
     "stories": [
       {
-        "id": "components-horizontalscrollrow--default",
+        "id": "navigation-horizontalscrollrow--default",
         "name": "Default"
       }
     ],
@@ -507,12 +507,12 @@
   },
   "inline-input": {
     "category": "form",
-    "defaultStoryId": "components-inlineinput--default",
+    "defaultStoryId": "form-inlineinput--default",
     "description": "Inline text input with keyboard commit and cancel support.",
     "name": "inline-input",
     "stories": [
       {
-        "id": "components-inlineinput--default",
+        "id": "form-inlineinput--default",
         "name": "Default"
       }
     ],
@@ -520,12 +520,12 @@
   },
   "input": {
     "category": "core",
-    "defaultStoryId": "components-input--default",
+    "defaultStoryId": "core-input--default",
     "description": "Text input field for forms.",
     "name": "input",
     "stories": [
       {
-        "id": "components-input--default",
+        "id": "core-input--default",
         "name": "Default"
       }
     ],
@@ -533,12 +533,12 @@
   },
   "input-otp": {
     "category": "form",
-    "defaultStoryId": "components-inputotp--default",
+    "defaultStoryId": "form-inputotp--default",
     "description": "One-time password input with segmented fields.",
     "name": "input-otp",
     "stories": [
       {
-        "id": "components-inputotp--default",
+        "id": "form-inputotp--default",
         "name": "Default"
       }
     ],
@@ -546,12 +546,12 @@
   },
   "key-concept": {
     "category": "learning",
-    "defaultStoryId": "components-keyconcept--default",
+    "defaultStoryId": "learning-keyconcept--default",
     "description": "Highlighted definition block for key terms and a glossary list.",
     "name": "key-concept",
     "stories": [
       {
-        "id": "components-keyconcept--default",
+        "id": "learning-keyconcept--default",
         "name": "Default"
       }
     ],
@@ -559,12 +559,12 @@
   },
   "keyboard-shortcuts-help": {
     "category": "learning",
-    "defaultStoryId": "components-keyboardshortcutshelp--default",
+    "defaultStoryId": "learning-keyboardshortcutshelp--default",
     "description": "Displays available keyboard shortcuts to the user.",
     "name": "keyboard-shortcuts-help",
     "stories": [
       {
-        "id": "components-keyboardshortcutshelp--default",
+        "id": "learning-keyboardshortcutshelp--default",
         "name": "Default"
       }
     ],
@@ -572,12 +572,12 @@
   },
   "lang-provider": {
     "category": "utility",
-    "defaultStoryId": "components-langprovider--default",
+    "defaultStoryId": "utility-langprovider--default",
     "description": "Context provider for language and internationalization.",
     "name": "lang-provider",
     "stories": [
       {
-        "id": "components-langprovider--default",
+        "id": "utility-langprovider--default",
         "name": "Default"
       }
     ],
@@ -585,12 +585,12 @@
   },
   "learning-objectives": {
     "category": "learning",
-    "defaultStoryId": "components-learningobjectives--default",
+    "defaultStoryId": "learning-learningobjectives--default",
     "description": "Lists learning goals for educational content.",
     "name": "learning-objectives",
     "stories": [
       {
-        "id": "components-learningobjectives--default",
+        "id": "learning-learningobjectives--default",
         "name": "Default"
       }
     ],
@@ -606,12 +606,12 @@
   },
   "mdx-content": {
     "category": "content",
-    "defaultStoryId": "components-mdxcontent--default",
+    "defaultStoryId": "content-mdxcontent--default",
     "description": "Renders MDX content with component mapping.",
     "name": "mdx-content",
     "stories": [
       {
-        "id": "components-mdxcontent--default",
+        "id": "content-mdxcontent--default",
         "name": "Default"
       }
     ],
@@ -619,12 +619,12 @@
   },
   "menubar": {
     "category": "navigation",
-    "defaultStoryId": "components-menubar--default",
+    "defaultStoryId": "navigation-menubar--default",
     "description": "Horizontal menu bar with dropdown menus.",
     "name": "menubar",
     "stories": [
       {
-        "id": "components-menubar--default",
+        "id": "navigation-menubar--default",
         "name": "Default"
       }
     ],
@@ -632,12 +632,12 @@
   },
   "model-selector": {
     "category": "form",
-    "defaultStoryId": "components-modelselector--default",
+    "defaultStoryId": "form-modelselector--default",
     "description": "Dropdown selector for choosing AI models.",
     "name": "model-selector",
     "stories": [
       {
-        "id": "components-modelselector--default",
+        "id": "form-modelselector--default",
         "name": "Default"
       }
     ],
@@ -645,12 +645,12 @@
   },
   "navbar-saas": {
     "category": "navigation",
-    "defaultStoryId": "components-navbarsaas--default",
+    "defaultStoryId": "navigation-navbarsaas--default",
     "description": "SaaS-style navigation bar with branding and links.",
     "name": "navbar-saas",
     "stories": [
       {
-        "id": "components-navbarsaas--default",
+        "id": "navigation-navbarsaas--default",
         "name": "Default"
       }
     ],
@@ -658,12 +658,12 @@
   },
   "navigation-menu": {
     "category": "navigation",
-    "defaultStoryId": "components-navigationmenu--default",
+    "defaultStoryId": "navigation-navigationmenu--default",
     "description": "Accessible navigation menu with links and sub-navigation.",
     "name": "navigation-menu",
     "stories": [
       {
-        "id": "components-navigationmenu--default",
+        "id": "navigation-navigationmenu--default",
         "name": "Default"
       }
     ],
@@ -671,12 +671,12 @@
   },
   "pagination": {
     "category": "navigation",
-    "defaultStoryId": "components-pagination--default",
+    "defaultStoryId": "navigation-pagination--default",
     "description": "Page navigation controls with previous, next, and page links.",
     "name": "pagination",
     "stories": [
       {
-        "id": "components-pagination--default",
+        "id": "navigation-pagination--default",
         "name": "Default"
       }
     ],
@@ -684,12 +684,12 @@
   },
   "popover": {
     "category": "overlay",
-    "defaultStoryId": "components-popover--default",
+    "defaultStoryId": "overlay-popover--default",
     "description": "Floating content panel anchored to a trigger element.",
     "name": "popover",
     "stories": [
       {
-        "id": "components-popover--default",
+        "id": "overlay-popover--default",
         "name": "Default"
       }
     ],
@@ -697,12 +697,12 @@
   },
   "pro-tip": {
     "category": "learning",
-    "defaultStoryId": "components-protip--default",
+    "defaultStoryId": "learning-protip--default",
     "description": "Highlighted tip block with variants for tips, best practices, gotchas, and more.",
     "name": "pro-tip",
     "stories": [
       {
-        "id": "components-protip--default",
+        "id": "learning-protip--default",
         "name": "Default"
       }
     ],
@@ -710,12 +710,12 @@
   },
   "profile-section": {
     "category": "learning",
-    "defaultStoryId": "components-profilesection--default",
+    "defaultStoryId": "learning-profilesection--default",
     "description": "User profile display section with avatar and details.",
     "name": "profile-section",
     "stories": [
       {
-        "id": "components-profilesection--default",
+        "id": "learning-profilesection--default",
         "name": "Default"
       }
     ],
@@ -723,12 +723,12 @@
   },
   "progress-bar": {
     "category": "data",
-    "defaultStoryId": "components-progressbar--default",
+    "defaultStoryId": "data-progressbar--default",
     "description": "Visual progress indicator with labels and completion state.",
     "name": "progress-bar",
     "stories": [
       {
-        "id": "components-progressbar--default",
+        "id": "data-progressbar--default",
         "name": "Default"
       }
     ],
@@ -736,12 +736,12 @@
   },
   "progress-card": {
     "category": "data",
-    "defaultStoryId": "components-progresscard--default",
+    "defaultStoryId": "data-progresscard--default",
     "description": "Card displaying progress metrics and status.",
     "name": "progress-card",
     "stories": [
       {
-        "id": "components-progresscard--default",
+        "id": "data-progresscard--default",
         "name": "Default"
       }
     ],
@@ -749,12 +749,12 @@
   },
   "quiz": {
     "category": "learning",
-    "defaultStoryId": "components-quiz--default",
+    "defaultStoryId": "learning-quiz--default",
     "description": "Interactive multiple-choice quiz with hints, explanations, and scoring.",
     "name": "quiz",
     "stories": [
       {
-        "id": "components-quiz--default",
+        "id": "learning-quiz--default",
         "name": "Default"
       }
     ],
@@ -762,12 +762,12 @@
   },
   "radio-group": {
     "category": "core",
-    "defaultStoryId": "components-radiogroup--default",
+    "defaultStoryId": "core-radiogroup--default",
     "description": "Group of radio buttons for single-selection input.",
     "name": "radio-group",
     "stories": [
       {
-        "id": "components-radiogroup--default",
+        "id": "core-radiogroup--default",
         "name": "Default"
       }
     ],
@@ -775,12 +775,12 @@
   },
   "resizable": {
     "category": "utility",
-    "defaultStoryId": "components-resizable--default",
+    "defaultStoryId": "utility-resizable--default",
     "description": "Resizable panel layout with draggable handles.",
     "name": "resizable",
     "stories": [
       {
-        "id": "components-resizable--default",
+        "id": "utility-resizable--default",
         "name": "Default"
       }
     ],
@@ -788,12 +788,12 @@
   },
   "scroll-area": {
     "category": "utility",
-    "defaultStoryId": "components-scrollarea--default",
+    "defaultStoryId": "utility-scrollarea--default",
     "description": "Custom scrollable area with styled scrollbars.",
     "name": "scroll-area",
     "stories": [
       {
-        "id": "components-scrollarea--default",
+        "id": "utility-scrollarea--default",
         "name": "Default"
       }
     ],
@@ -801,12 +801,12 @@
   },
   "search-bar": {
     "category": "form",
-    "defaultStoryId": "components-searchbar--default",
+    "defaultStoryId": "form-searchbar--default",
     "description": "Text search input with icon and clear functionality.",
     "name": "search-bar",
     "stories": [
       {
-        "id": "components-searchbar--default",
+        "id": "form-searchbar--default",
         "name": "Default"
       }
     ],
@@ -814,12 +814,12 @@
   },
   "search-dialog": {
     "category": "learning",
-    "defaultStoryId": "components-searchdialog--default",
+    "defaultStoryId": "learning-searchdialog--default",
     "description": "Full-screen search dialog with keyboard navigation.",
     "name": "search-dialog",
     "stories": [
       {
-        "id": "components-searchdialog--default",
+        "id": "learning-searchdialog--default",
         "name": "Default"
       }
     ],
@@ -827,12 +827,12 @@
   },
   "select": {
     "category": "form",
-    "defaultStoryId": "components-select--default",
+    "defaultStoryId": "form-select--default",
     "description": "Dropdown select input for choosing from a list of options.",
     "name": "select",
     "stories": [
       {
-        "id": "components-select--default",
+        "id": "form-select--default",
         "name": "Default"
       }
     ],
@@ -840,12 +840,12 @@
   },
   "separator": {
     "category": "core",
-    "defaultStoryId": "components-separator--default",
+    "defaultStoryId": "core-separator--default",
     "description": "Visual divider between content sections.",
     "name": "separator",
     "stories": [
       {
-        "id": "components-separator--default",
+        "id": "core-separator--default",
         "name": "Default"
       }
     ],
@@ -853,12 +853,12 @@
   },
   "share-section": {
     "category": "content",
-    "defaultStoryId": "components-sharesection--default",
+    "defaultStoryId": "content-sharesection--default",
     "description": "Social sharing buttons and link copy section.",
     "name": "share-section",
     "stories": [
       {
-        "id": "components-sharesection--default",
+        "id": "content-sharesection--default",
         "name": "Default"
       }
     ],
@@ -866,20 +866,20 @@
   },
   "sheet": {
     "category": "overlay",
-    "defaultStoryId": "components-sheet--default",
+    "defaultStoryId": "overlay-sheet--default",
     "description": "Slide-over panel from the edge of the screen.",
     "name": "sheet",
     "stories": [
       {
-        "id": "components-sheet--default",
+        "id": "overlay-sheet--default",
         "name": "Default"
       },
       {
-        "id": "components-sheet--left",
+        "id": "overlay-sheet--left",
         "name": "Left"
       },
       {
-        "id": "components-sheet--bottom",
+        "id": "overlay-sheet--bottom",
         "name": "Bottom"
       }
     ],
@@ -887,12 +887,12 @@
   },
   "sidebar": {
     "category": "navigation",
-    "defaultStoryId": "components-sidebar--default",
+    "defaultStoryId": "navigation-sidebar--default",
     "description": "Collapsible sidebar navigation layout.",
     "name": "sidebar",
     "stories": [
       {
-        "id": "components-sidebar--default",
+        "id": "navigation-sidebar--default",
         "name": "Default"
       }
     ],
@@ -900,12 +900,12 @@
   },
   "sidebar-provider": {
     "category": "navigation",
-    "defaultStoryId": "components-sidebarprovider--default",
+    "defaultStoryId": "navigation-sidebarprovider--default",
     "description": "Context provider for managing sidebar open/close state.",
     "name": "sidebar-provider",
     "stories": [
       {
-        "id": "components-sidebarprovider--default",
+        "id": "navigation-sidebarprovider--default",
         "name": "Default"
       }
     ],
@@ -913,12 +913,12 @@
   },
   "sidebar-toggle": {
     "category": "navigation",
-    "defaultStoryId": "components-sidebartoggle--default",
+    "defaultStoryId": "navigation-sidebartoggle--default",
     "description": "Responsive toggle button for opening and closing the sidebar.",
     "name": "sidebar-toggle",
     "stories": [
       {
-        "id": "components-sidebartoggle--default",
+        "id": "navigation-sidebartoggle--default",
         "name": "Default"
       }
     ],
@@ -926,12 +926,12 @@
   },
   "skeleton": {
     "category": "core",
-    "defaultStoryId": "components-skeleton--default",
+    "defaultStoryId": "core-skeleton--default",
     "description": "Placeholder loading animation for content.",
     "name": "skeleton",
     "stories": [
       {
-        "id": "components-skeleton--default",
+        "id": "core-skeleton--default",
         "name": "Default"
       }
     ],
@@ -939,12 +939,12 @@
   },
   "slider": {
     "category": "core",
-    "defaultStoryId": "components-slider--default",
+    "defaultStoryId": "core-slider--default",
     "description": "Range slider input for selecting numeric values.",
     "name": "slider",
     "stories": [
       {
-        "id": "components-slider--default",
+        "id": "core-slider--default",
         "name": "Default"
       }
     ],
@@ -952,12 +952,12 @@
   },
   "slideshow": {
     "category": "content",
-    "defaultStoryId": "components-slideshow--default",
+    "defaultStoryId": "content-slideshow--default",
     "description": "Step-through slideshow for presenting content sequentially.",
     "name": "slideshow",
     "stories": [
       {
-        "id": "components-slideshow--default",
+        "id": "content-slideshow--default",
         "name": "Default"
       }
     ],
@@ -965,12 +965,12 @@
   },
   "spinner": {
     "category": "utility",
-    "defaultStoryId": "components-spinner--default",
+    "defaultStoryId": "utility-spinner--default",
     "description": "Animated loading spinner indicator.",
     "name": "spinner",
     "stories": [
       {
-        "id": "components-spinner--default",
+        "id": "utility-spinner--default",
         "name": "Default"
       }
     ],
@@ -978,12 +978,12 @@
   },
   "step-by-step": {
     "category": "learning",
-    "defaultStoryId": "components-stepbystep--default",
+    "defaultStoryId": "learning-stepbystep--default",
     "description": "Numbered step guide with optional interactive completion tracking.",
     "name": "step-by-step",
     "stories": [
       {
-        "id": "components-stepbystep--default",
+        "id": "learning-stepbystep--default",
         "name": "Default"
       }
     ],
@@ -991,12 +991,12 @@
   },
   "step-navigation": {
     "category": "navigation",
-    "defaultStoryId": "components-stepnavigation--default",
+    "defaultStoryId": "navigation-stepnavigation--default",
     "description": "Navigation controls for stepping through multi-page content.",
     "name": "step-navigation",
     "stories": [
       {
-        "id": "components-stepnavigation--default",
+        "id": "navigation-stepnavigation--default",
         "name": "Default"
       }
     ],
@@ -1004,12 +1004,12 @@
   },
   "table": {
     "category": "data",
-    "defaultStoryId": "components-table--default",
+    "defaultStoryId": "data-table--default",
     "description": "Styled data table with header, body, and footer sections.",
     "name": "table",
     "stories": [
       {
-        "id": "components-table--default",
+        "id": "data-table--default",
         "name": "Default"
       }
     ],
@@ -1017,12 +1017,12 @@
   },
   "table-of-contents": {
     "category": "utility",
-    "defaultStoryId": "components-tableofcontents--default",
+    "defaultStoryId": "utility-tableofcontents--default",
     "description": "Auto-generated table of contents from page headings.",
     "name": "table-of-contents",
     "stories": [
       {
-        "id": "components-tableofcontents--default",
+        "id": "utility-tableofcontents--default",
         "name": "Default"
       }
     ],
@@ -1030,12 +1030,12 @@
   },
   "table-of-contents-panel": {
     "category": "utility",
-    "defaultStoryId": "components-tableofcontentspanel--default",
+    "defaultStoryId": "utility-tableofcontentspanel--default",
     "description": "Side panel rendering a table of contents for page navigation.",
     "name": "table-of-contents-panel",
     "stories": [
       {
-        "id": "components-tableofcontentspanel--default",
+        "id": "utility-tableofcontentspanel--default",
         "name": "Default"
       }
     ],
@@ -1043,12 +1043,12 @@
   },
   "tabs": {
     "category": "navigation",
-    "defaultStoryId": "components-tabs--default",
+    "defaultStoryId": "navigation-tabs--default",
     "description": "Tabbed content panels with keyboard-accessible tab triggers.",
     "name": "tabs",
     "stories": [
       {
-        "id": "components-tabs--default",
+        "id": "navigation-tabs--default",
         "name": "Default"
       }
     ],
@@ -1056,12 +1056,12 @@
   },
   "terminal": {
     "category": "content",
-    "defaultStoryId": "components-terminal--default",
+    "defaultStoryId": "content-terminal--default",
     "description": "Terminal-style display for command output.",
     "name": "terminal",
     "stories": [
       {
-        "id": "components-terminal--default",
+        "id": "content-terminal--default",
         "name": "Default"
       }
     ],
@@ -1069,12 +1069,12 @@
   },
   "textarea": {
     "category": "core",
-    "defaultStoryId": "components-textarea--default",
+    "defaultStoryId": "core-textarea--default",
     "description": "Multi-line text input field.",
     "name": "textarea",
     "stories": [
       {
-        "id": "components-textarea--default",
+        "id": "core-textarea--default",
         "name": "Default"
       }
     ],
@@ -1082,12 +1082,12 @@
   },
   "theme-provider": {
     "category": "utility",
-    "defaultStoryId": "components-themeprovider--default",
+    "defaultStoryId": "utility-themeprovider--default",
     "description": "Context provider for light/dark theme switching.",
     "name": "theme-provider",
     "stories": [
       {
-        "id": "components-themeprovider--default",
+        "id": "utility-themeprovider--default",
         "name": "Default"
       }
     ],
@@ -1095,12 +1095,12 @@
   },
   "theme-toggle": {
     "category": "utility",
-    "defaultStoryId": "components-themetoggle--default",
+    "defaultStoryId": "utility-themetoggle--default",
     "description": "Button to toggle between light and dark themes.",
     "name": "theme-toggle",
     "stories": [
       {
-        "id": "components-themetoggle--default",
+        "id": "utility-themetoggle--default",
         "name": "Default"
       }
     ],
@@ -1108,12 +1108,12 @@
   },
   "thinking-block": {
     "category": "learning",
-    "defaultStoryId": "components-thinkingblock--default",
+    "defaultStoryId": "learning-thinkingblock--default",
     "description": "Collapsible block showing AI thinking/reasoning with streaming support.",
     "name": "thinking-block",
     "stories": [
       {
-        "id": "components-thinkingblock--default",
+        "id": "learning-thinkingblock--default",
         "name": "Default"
       }
     ],
@@ -1121,12 +1121,12 @@
   },
   "tldr-section": {
     "category": "content",
-    "defaultStoryId": "components-tldrsection--default",
+    "defaultStoryId": "content-tldrsection--default",
     "description": "Summary section for quick content overview.",
     "name": "tldr-section",
     "stories": [
       {
-        "id": "components-tldrsection--default",
+        "id": "content-tldrsection--default",
         "name": "Default"
       }
     ],
@@ -1134,20 +1134,20 @@
   },
   "toast": {
     "category": "overlay",
-    "defaultStoryId": "components-toast--default",
+    "defaultStoryId": "overlay-toast--default",
     "description": "Temporary notification messages with action support.",
     "name": "toast",
     "stories": [
       {
-        "id": "components-toast--default",
+        "id": "overlay-toast--default",
         "name": "Default"
       },
       {
-        "id": "components-toast--destructive",
+        "id": "overlay-toast--destructive",
         "name": "Destructive"
       },
       {
-        "id": "components-toast--with-action",
+        "id": "overlay-toast--with-action",
         "name": "With Action"
       }
     ],
@@ -1155,24 +1155,24 @@
   },
   "toggle": {
     "category": "core",
-    "defaultStoryId": "components-toggle--default",
+    "defaultStoryId": "core-toggle--default",
     "description": "Two-state toggle button.",
     "name": "toggle",
     "stories": [
       {
-        "id": "components-toggle--default",
+        "id": "core-toggle--default",
         "name": "Default"
       },
       {
-        "id": "components-toggle--size-lg",
+        "id": "core-toggle--size-lg",
         "name": "Size Lg"
       },
       {
-        "id": "components-toggle--size-sm",
+        "id": "core-toggle--size-sm",
         "name": "Size Sm"
       },
       {
-        "id": "components-toggle--variant-outline",
+        "id": "core-toggle--variant-outline",
         "name": "Variant Outline"
       }
     ],
@@ -1180,12 +1180,12 @@
   },
   "toggle-group": {
     "category": "core",
-    "defaultStoryId": "components-togglegroup--default",
+    "defaultStoryId": "core-togglegroup--default",
     "description": "Group of toggle buttons for single or multiple selection.",
     "name": "toggle-group",
     "stories": [
       {
-        "id": "components-togglegroup--default",
+        "id": "core-togglegroup--default",
         "name": "Default"
       }
     ],
@@ -1193,12 +1193,12 @@
   },
   "tooltip": {
     "category": "overlay",
-    "defaultStoryId": "components-tooltip--default",
+    "defaultStoryId": "overlay-tooltip--default",
     "description": "Informational popup displayed on hover or focus.",
     "name": "tooltip",
     "stories": [
       {
-        "id": "components-tooltip--default",
+        "id": "overlay-tooltip--default",
         "name": "Default"
       }
     ],
@@ -1206,12 +1206,12 @@
   },
   "tutorial-card": {
     "category": "learning",
-    "defaultStoryId": "components-tutorialcard--default",
+    "defaultStoryId": "learning-tutorialcard--default",
     "description": "Card for displaying tutorial previews with metadata.",
     "name": "tutorial-card",
     "stories": [
       {
-        "id": "components-tutorialcard--default",
+        "id": "learning-tutorialcard--default",
         "name": "Default"
       }
     ],
@@ -1219,12 +1219,12 @@
   },
   "tutorial-complete": {
     "category": "learning",
-    "defaultStoryId": "components-tutorialcomplete--default",
+    "defaultStoryId": "learning-tutorialcomplete--default",
     "description": "Completion screen displayed when a tutorial is finished.",
     "name": "tutorial-complete",
     "stories": [
       {
-        "id": "components-tutorialcomplete--default",
+        "id": "learning-tutorialcomplete--default",
         "name": "Default"
       }
     ],
@@ -1232,12 +1232,12 @@
   },
   "tutorial-filters": {
     "category": "learning",
-    "defaultStoryId": "components-tutorialfilters--default",
+    "defaultStoryId": "learning-tutorialfilters--default",
     "description": "Filter controls for browsing tutorials by category or difficulty.",
     "name": "tutorial-filters",
     "stories": [
       {
-        "id": "components-tutorialfilters--default",
+        "id": "learning-tutorialfilters--default",
         "name": "Default"
       }
     ],
@@ -1245,12 +1245,12 @@
   },
   "tutorial-intro-content": {
     "category": "learning",
-    "defaultStoryId": "components-tutorialintrocontent--default",
+    "defaultStoryId": "learning-tutorialintrocontent--default",
     "description": "Introduction section for tutorial pages with overview and prerequisites.",
     "name": "tutorial-intro-content",
     "stories": [
       {
-        "id": "components-tutorialintrocontent--default",
+        "id": "learning-tutorialintrocontent--default",
         "name": "Default"
       }
     ],
@@ -1258,12 +1258,12 @@
   },
   "tutorial-mdx": {
     "category": "learning",
-    "defaultStoryId": "components-tutorialmdx--default",
+    "defaultStoryId": "learning-tutorialmdx--default",
     "description": "MDX renderer tailored for tutorial content with custom components.",
     "name": "tutorial-mdx",
     "stories": [
       {
-        "id": "components-tutorialmdx--default",
+        "id": "learning-tutorialmdx--default",
         "name": "Default"
       }
     ],
@@ -1271,12 +1271,12 @@
   },
   "video-embed": {
     "category": "content",
-    "defaultStoryId": "components-videoembed--default",
+    "defaultStoryId": "content-videoembed--default",
     "description": "Responsive video embed for YouTube and other providers.",
     "name": "video-embed",
     "stories": [
       {
-        "id": "components-videoembed--default",
+        "id": "content-videoembed--default",
         "name": "Default"
       }
     ],
@@ -1284,12 +1284,12 @@
   },
   "view-switcher": {
     "category": "navigation",
-    "defaultStoryId": "components-viewswitcher--default",
+    "defaultStoryId": "navigation-viewswitcher--default",
     "description": "URL param-based toggle between named views with pill/tab styling.",
     "name": "view-switcher",
     "stories": [
       {
-        "id": "components-viewswitcher--default",
+        "id": "navigation-viewswitcher--default",
         "name": "Default"
       }
     ],

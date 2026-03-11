@@ -15,7 +15,7 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-  title: "Components/Sheet",
+  title: "Overlay/Sheet",
 } satisfies Meta<typeof Sheet>;
 
 export default meta;

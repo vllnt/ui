@@ -7,7 +7,7 @@ const meta = {
     children: "Tooltip",
   },
   component: Tooltip,
-  title: "Components/Tooltip",
+  title: "Overlay/Tooltip",
 } satisfies Meta<typeof Tooltip>;
 
 export default meta;

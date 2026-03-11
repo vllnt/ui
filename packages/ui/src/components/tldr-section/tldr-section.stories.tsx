@@ -7,7 +7,7 @@ const meta = {
     children: "TldrSection",
   },
   component: TLDRSection,
-  title: "Components/TldrSection",
+  title: "Content/TldrSection",
 } satisfies Meta<typeof TLDRSection>;
 
 export default meta;

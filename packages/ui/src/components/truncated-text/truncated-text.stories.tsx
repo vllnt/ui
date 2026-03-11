@@ -4,7 +4,7 @@ import { TruncatedText } from "./truncated-text";
 
 const meta = {
   component: TruncatedText,
-  title: "Components/TruncatedText",
+  title: "Utility/TruncatedText",
 } satisfies Meta<typeof TruncatedText>;
 
 export default meta;

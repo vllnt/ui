@@ -4,7 +4,7 @@ import { InputOTP } from "./input-otp";
 
 const meta = {
   component: InputOTP,
-  title: "Components/InputOtp",
+  title: "Form/InputOtp",
 } satisfies Meta<typeof InputOTP>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { ProfileSection } from "./profile-section";
 
 const meta = {
   component: ProfileSection,
-  title: "Components/ProfileSection",
+  title: "Learning/ProfileSection",
 } satisfies Meta<typeof ProfileSection>;
 
 export default meta;

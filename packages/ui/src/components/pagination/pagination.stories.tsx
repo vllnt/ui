@@ -4,7 +4,7 @@ import { Pagination } from "./pagination";
 
 const meta = {
   component: Pagination,
-  title: "Components/Pagination",
+  title: "Navigation/Pagination",
 } satisfies Meta<typeof Pagination>;
 
 export default meta;

@@ -4,7 +4,7 @@ import { TutorialCard } from "./tutorial-card";
 
 const meta = {
   component: TutorialCard,
-  title: "Components/TutorialCard",
+  title: "Learning/TutorialCard",
 } satisfies Meta<typeof TutorialCard>;
 
 export default meta;

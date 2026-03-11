@@ -4,7 +4,7 @@ import { Separator } from "./separator";
 
 const meta = {
   component: Separator,
-  title: "Components/Separator",
+  title: "Core/Separator",
 } satisfies Meta<typeof Separator>;
 
 export default meta;

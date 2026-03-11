@@ -7,7 +7,7 @@ const meta = {
     children: "Menubar",
   },
   component: Menubar,
-  title: "Components/Menubar",
+  title: "Navigation/Menubar",
 } satisfies Meta<typeof Menubar>;
 
 export default meta;

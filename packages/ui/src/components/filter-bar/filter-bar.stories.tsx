@@ -4,7 +4,7 @@ import { FilterBar } from "./filter-bar";
 
 const meta = {
   component: FilterBar,
-  title: "Components/FilterBar",
+  title: "Form/FilterBar",
 } satisfies Meta<typeof FilterBar>;
 
 export default meta;

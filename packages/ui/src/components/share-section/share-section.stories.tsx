@@ -4,7 +4,7 @@ import { ShareSection } from "./share-section";
 
 const meta = {
   component: ShareSection,
-  title: "Components/ShareSection",
+  title: "Content/ShareSection",
 } satisfies Meta<typeof ShareSection>;
 
 export default meta;

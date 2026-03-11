@@ -4,7 +4,7 @@ import { BlogCard } from "./blog-card";
 
 const meta = {
   component: BlogCard,
-  title: "Components/BlogCard",
+  title: "Content/BlogCard",
 } satisfies Meta<typeof BlogCard>;
 
 export default meta;

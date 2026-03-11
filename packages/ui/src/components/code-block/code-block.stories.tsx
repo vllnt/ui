@@ -4,7 +4,7 @@ import { CodeBlock } from "./code-block";
 
 const meta = {
   component: CodeBlock,
-  title: "Components/CodeBlock",
+  title: "Content/CodeBlock",
 } satisfies Meta<typeof CodeBlock>;
 
 export default meta;
