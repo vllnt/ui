@@ -1,5 +1,5 @@
 /** @type {import('@storybook/test-runner').TestRunnerConfig} */
-module.exports = {
+const config = {
   async postVisit(page, context) {
     const consoleErrors = await page.evaluate(() => {
       const errors = [];
@@ -13,3 +13,5 @@ module.exports = {
     }
   },
 };
+
+export default config;
