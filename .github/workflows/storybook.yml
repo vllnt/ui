@@ -74,7 +74,6 @@ jobs:
     name: Storybook Tests
     needs: build-storybook
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
