@@ -53,6 +53,14 @@ function Image({
 }
 
 /* ---------- next/navigation ---------- */
+
+/** Set via `setMockPathname()` to test active-link states on non-root routes. */
+let _mockPathname = '/'
+
+function setMockPathname(path: string): void {
+  _mockPathname = path
+}
+
 function useRouter() {
   return {
     push: (url: string) => console.log('[storybook] router.push:', url),
@@ -65,7 +73,7 @@ function useRouter() {
 }
 
 function usePathname(): string {
-  return '/'
+  return _mockPathname
 }
 
 function useSearchParams(): URLSearchParams {
@@ -74,4 +82,4 @@ function useSearchParams(): URLSearchParams {
 
 /* ---------- exports ---------- */
 export default Link
-export { Link, Image, useRouter, usePathname, useSearchParams }
+export { Link, Image, useRouter, usePathname, useSearchParams, setMockPathname }
