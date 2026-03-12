@@ -19,7 +19,7 @@ export default defineConfig({
 
   expect: {
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.05,
+      maxDiffPixelRatio: 0.01,
     },
   },
 
@@ -29,6 +29,9 @@ export default defineConfig({
       resolve: {
         alias: {
           '@': resolve(__dirname, './src'),
+          'next/link': resolve(__dirname, './.storybook/next-stubs.ts'),
+          'next/navigation': resolve(__dirname, './.storybook/next-stubs.ts'),
+          'next-themes': resolve(__dirname, './.storybook/next-themes-stub.ts'),
         },
       },
       css: {

@@ -134,7 +134,6 @@ jobs:
       - name: Run Playwright CT visual tests
         working-directory: packages/ui
         run: pnpm test:visual
-        continue-on-error: true
 
       - name: Upload visual test results
         if: always()

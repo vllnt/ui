@@ -4,9 +4,13 @@ import { Quiz } from "./quiz";
 
 const meta = {
   args: {
-    options: [{
-        label: "Label",
-      }],
+    options: [
+      { correct: true, label: "Paris" },
+      { label: "London" },
+      { label: "Berlin" },
+      { label: "Madrid" },
+    ],
+    question: "What is the capital of France?",
   },
   component: Quiz,
   title: "Learning/Quiz",
