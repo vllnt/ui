@@ -24,7 +24,9 @@ export function StorybookEmbed({
 }: StorybookEmbedProps): React.ReactElement {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [iframeSource, setIframeSource] = React.useState("");
-  const resolvedStoryId = storyId ?? toStoryId(componentName);
+  const resolvedStoryId = encodeURIComponent(
+    storyId ?? toStoryId(componentName),
+  );
 
   React.useEffect(() => {
     setIframeSource(
@@ -51,6 +53,7 @@ export function StorybookEmbed({
           onLoad={() => {
             setIsLoaded(true);
           }}
+          sandbox="allow-scripts allow-same-origin"
           src={iframeSource}
           style={{
             height,

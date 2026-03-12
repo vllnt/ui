@@ -6,18 +6,14 @@ const meta = {
   args: {
     models: [
       {
-        contextWindow: "200K",
         description: "Most capable model",
-        id: "claude-opus-4-6",
+        id: "anthropic/claude-opus-4-6",
         name: "Claude Opus 4.6",
-        provider: "Anthropic",
       },
       {
-        contextWindow: "200K",
         description: "Balanced performance",
-        id: "claude-sonnet-4-6",
+        id: "anthropic/claude-sonnet-4-6",
         name: "Claude Sonnet 4.6",
-        provider: "Anthropic",
       },
     ],
     onOpenChange: () => {},

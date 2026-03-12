@@ -1,0 +1,2 @@
+2026-03-11 | shipped | storybook-setup | 4h→8h | 2d | Storybook 10 with 99 stories, MDX docs, visual regression, E2E test-runner, CI workflows
+2026-03-11 | shipped | registry-storybook-embed | 1h→2h | 1d | Registry app Storybook embed integration

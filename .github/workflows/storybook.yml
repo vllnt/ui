@@ -38,11 +38,11 @@ jobs:
 
       - name: Check story coverage
         working-directory: packages/ui
-        run: npx tsx scripts/check-story-coverage.ts
+        run: pnpm exec tsx scripts/check-story-coverage.ts
 
       - name: Verify story props
         working-directory: packages/ui
-        run: npx tsx scripts/verify-stories.ts
+        run: pnpm exec tsx scripts/verify-stories.ts
 
   build-storybook:
     name: Build Storybook
@@ -96,7 +96,7 @@ jobs:
           path: packages/ui/storybook-static
 
       - name: Install http-server
-        run: npm install -g http-server
+        run: npm install -g http-server@14.1.1
 
       - name: Run Storybook test-runner
         working-directory: packages/ui

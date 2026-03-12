@@ -90,7 +90,7 @@ function extractRequiredProps(source: string, componentName: string): PropInfo[]
 
 function extractArgsBlock(source: string): string {
   const argsMatch = source.match(/\bargs\s*:\s*\{/)
-  if (!argsMatch?.index) return ''
+  if (!argsMatch || argsMatch.index === undefined) return ''
   const start = argsMatch.index + argsMatch[0].length
   let depth = 1
   for (let i = start; i < source.length; i++) {

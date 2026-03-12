@@ -127,7 +127,9 @@ function generateValue(prop: PropInfo, allTypes: TypeDef[], indent: number): str
   if (typeDef) return generateObjectValue(typeDef, allTypes, indent)
 
   if (/^[A-Z]/.test(t)) {
-    return `{} as ${t}`
+    const typeDef = allTypes.find((td) => td.name === t)
+    if (typeDef) return generateObjectValue(typeDef, allTypes, indent)
+    return '{}'
   }
 
   return '""'
@@ -189,11 +191,33 @@ function extractRequiredProps(source: string, componentName: string): PropInfo[]
 
 function extractStoryArgs(storySource: string): Set<string> {
   const args = new Set<string>()
-  const metaArgs = storySource.match(/(?:^|\n)\s*args\s*:\s*\{([^}]*)\}/s)
-  if (metaArgs?.[1]) {
-    for (const k of metaArgs[1].matchAll(/(\w+)\s*:/g)) {
-      if (k[1]) args.add(k[1])
+  const argsMatch = storySource.match(/(?:^|\n)\s*args\s*:\s*\{/)
+  if (!argsMatch || argsMatch.index === undefined) return args
+  const start = argsMatch.index + argsMatch[0].length
+  let depth = 1
+  let end = start
+  for (let i = start; i < storySource.length; i++) {
+    if (storySource[i] === '{') depth++
+    if (storySource[i] === '}') {
+      depth--
+      if (depth === 0) { end = i; break }
     }
+  }
+  const block = storySource.slice(start, end)
+  let innerDepth = 0
+  let pos = 0
+  while (pos < block.length) {
+    if (block[pos] === '{' || block[pos] === '[' || block[pos] === '(') { innerDepth++; pos++; continue }
+    if (block[pos] === '}' || block[pos] === ']' || block[pos] === ')') { innerDepth--; pos++; continue }
+    if (innerDepth === 0) {
+      const m = block.slice(pos).match(/^(\w+)\s*:/)
+      if (m?.[1]) {
+        args.add(m[1])
+        pos += m[0].length
+        continue
+      }
+    }
+    pos++
   }
   return args
 }
