@@ -1,0 +1,70 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './accordion.stories'
+
+<Meta of={Stories} />
+
+# Accordion
+
+Collapsible content sections supporting single or multiple open items.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/accordion.json
+```
+
+## Import
+
+```tsx
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Accordion>
+  <Accordion.Item value="item-1" />
+  <Accordion.Trigger value="item-1" />
+  <Accordion.Content value="item-1" />
+</Accordion>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+### Accordion
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `defaultValue` | `string \| string[]` | No | `string` or `string[]` |
+| `type` | `"multiple" \| "single"` | No | `multiple`, `single` |
+
+### Accordion.Item
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `value` | `string` | Yes | - |
+
+### Accordion.Trigger
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `value` | `string` | Yes | - |
+
+### Accordion.Content
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `value` | `string` | Yes | - |
+

@@ -17,12 +17,21 @@ export default defineConfig({
   // Reporter
   reporter: [['html', { open: 'never' }], ['list']],
 
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.02,
+    },
+  },
+
   use: {
     ctPort: 3100,
     ctViteConfig: {
       resolve: {
         alias: {
           '@': resolve(__dirname, './src'),
+          'next/link': resolve(__dirname, './.storybook/next-stubs.ts'),
+          'next/navigation': resolve(__dirname, './.storybook/next-stubs.ts'),
+          'next-themes': resolve(__dirname, './.storybook/next-themes-stub.ts'),
         },
       },
       css: {

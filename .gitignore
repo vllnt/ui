@@ -27,7 +27,13 @@ Thumbs.db
 # Playwright
 playwright-results/
 playwright-report/
-.snapshots/
+test-results/
+
+# Visual test snapshots (platform-specific, generated in CI)
+packages/ui/.snapshots/
+
+# Storybook
+storybook-static/
 
 # Generated
 public/r/

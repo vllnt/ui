@@ -1,0 +1,79 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './area-chart.stories'
+
+<Meta of={Stories} />
+
+# AreaChart
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/chart.json
+```
+
+## Import
+
+```tsx
+import { AreaChart } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const data = [
+  {
+    label: "Example item",
+    value: 0,
+  },
+]
+
+<AreaChart
+  data={data}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `color` | `string` | No | - |
+| `data` | `Datum[]` | Yes | Array of `Datum` objects |
+| `gradientId` | `string` | No | - |
+| `height` | `number` | No | - |
+| `strokeWidth` | `number` | No | - |
+| `width` | `number` | No | - |
+
+## Type Definitions
+
+### Datum
+
+```tsx
+type Datum = {
+  label?: string
+  value: number
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `label` | `string` | No | - |
+| `value` | `number` | Yes | - |
+
+### ChartDimensions
+
+```tsx
+type ChartDimensions = {
+  height: number; strokeWidth: number; width: number
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `height` | `number; strokeWidth: number; width: number` | Yes | - |
+

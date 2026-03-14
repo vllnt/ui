@@ -1,0 +1,154 @@
+name: Storybook
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/ui/src/**"
+      - "packages/ui/.storybook/**"
+      - "packages/ui/scripts/**"
+      - "packages/ui/styles.css"
+      - "packages/ui/themes/**"
+      - ".github/workflows/storybook.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/ui/src/**"
+      - "packages/ui/.storybook/**"
+
+concurrency:
+  group: storybook-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-stories:
+    name: Verify Stories
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check story coverage
+        working-directory: packages/ui
+        run: pnpm exec tsx scripts/check-story-coverage.ts
+
+      - name: Verify story props
+        working-directory: packages/ui
+        run: pnpm exec tsx scripts/verify-stories.ts
+
+  build-storybook:
+    name: Build Storybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build Storybook
+        working-directory: packages/ui
+        run: pnpm build-storybook
+
+      - name: Upload Storybook artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: packages/ui/storybook-static
+          retention-days: 7
+
+  test-storybook:
+    name: Storybook Tests
+    needs: build-storybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm -F @vllnt/ui exec playwright install --with-deps chromium
+
+      - name: Download Storybook artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: storybook-static
+          path: packages/ui/storybook-static
+
+      - name: Install http-server
+        run: npm install -g http-server@14.1.1
+
+      - name: Run Storybook test-runner
+        working-directory: packages/ui
+        run: |
+          http-server storybook-static --port 6006 --silent &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            if curl -s http://127.0.0.1:6006 > /dev/null 2>&1; then
+              break
+            fi
+            sleep 1
+          done
+          pnpm test-storybook --url http://127.0.0.1:6006 --maxWorkers=2
+          kill $SERVER_PID 2>/dev/null || true
+
+  visual-regression:
+    name: Visual Regression
+    needs: build-storybook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm -F @vllnt/ui exec playwright install --with-deps chromium
+
+      - name: Run Playwright CT visual tests
+        working-directory: packages/ui
+        run: pnpm test:visual --update-snapshots
+
+      - name: Upload visual snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-snapshots
+          path: packages/ui/.snapshots
+          retention-days: 30
+
+      - name: Upload visual test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: |
+            packages/ui/playwright-report
+            packages/ui/test-results
+          retention-days: 7

@@ -1,0 +1,52 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './badge.stories'
+
+<Meta of={Stories} />
+
+# Badge
+
+Small status label with variant styles.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/badge.json
+```
+
+## Import
+
+```tsx
+import { Badge } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Badge>Badge</Badge>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Variants
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `destructive` | - |
+| `outline` | - |
+| `secondary` | - |
+
+<Canvas of={Stories.VariantDestructive} sourceState="shown" />
+
+<Canvas of={Stories.VariantOutline} sourceState="shown" />
+
+<Canvas of={Stories.VariantSecondary} sourceState="shown" />
+

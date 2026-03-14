@@ -1,0 +1,107 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './slideshow.stories'
+
+<Meta of={Stories} />
+
+# Slideshow
+
+Step-through slideshow for presenting content sequentially.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/slideshow.json
+```
+
+## Import
+
+```tsx
+import { Slideshow } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const sections = [
+  {
+    id: "1",
+    title: "Example item",
+  },
+]
+
+<Slideshow
+  currentIndex="0"
+  onComplete={() => {}}
+  onExit={() => {}}
+  onNavigate={(index) => console.log(index)}
+  onToggleSection={(sectionId) => console.log(sectionId)}
+  renderContent={(section) => console.log(section)}
+  sections={sections}
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `completedSections` | `Set&lt;string&gt;` | Yes | - |
+| `completionDialogTitle` | `string` | No | - |
+| `currentIndex` | `number` | Yes | - |
+| `labels` | `SlideshowLabels` | No | `SlideshowLabels` object |
+| `onComplete` | `() =&gt; void` | Yes | Callback function |
+| `onExit` | `() =&gt; void` | Yes | Callback function |
+| `onNavigate` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
+| `onToggleSection` | `(sectionId: string) =&gt; void` | Yes | Callback: `(sectionId: string) => void` |
+| `renderContent` | `(section: SlideshowSection) =&gt; ReactNode` | Yes | Callback: `(section: SlideshowSection) => ReactNode` |
+| `sections` | `SlideshowSection[]` | Yes | Array of `SlideshowSection` objects |
+| `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### SlideshowSection
+
+```tsx
+type SlideshowSection = {
+  id: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `id` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+
+### SlideshowLabels
+
+```tsx
+type SlideshowLabels = {
+  closeLabel?: string
+  closeTocLabel?: string
+  exitLabel?: string
+  finishLabel?: string
+  nextLabel?: string
+  openTocLabel?: string
+  prevLabel?: string
+  sectionsLabel?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `closeLabel` | `string` | No | - |
+| `closeTocLabel` | `string` | No | - |
+| `exitLabel` | `string` | No | - |
+| `finishLabel` | `string` | No | - |
+| `nextLabel` | `string` | No | - |
+| `openTocLabel` | `string` | No | - |
+| `prevLabel` | `string` | No | - |
+| `sectionsLabel` | `string` | No | - |
+

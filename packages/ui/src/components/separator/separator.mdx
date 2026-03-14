@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './separator.stories'
+
+<Meta of={Stories} />
+
+# Separator
+
+Visual divider between content sections.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/separator.json
+```
+
+## Import
+
+```tsx
+import { Separator } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Separator>
+  <Separator.displayName />
+</Separator>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### Separator.displayName
+

@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tutorial-intro-content.stories'
+
+<Meta of={Stories} />
+
+# Tutorial Intro Content
+
+Introduction section for tutorial pages with overview and prerequisites.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-intro-content.json
+```
+
+## Import
+
+```tsx
+import { TutorialIntroContent } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TutorialIntroContent
+  content="value"
+  title="My Title"
+>
+  TutorialIntroContent content
+</TutorialIntroContent>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `content` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+

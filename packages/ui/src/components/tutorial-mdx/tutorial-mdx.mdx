@@ -1,0 +1,59 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tutorial-mdx.stories'
+
+<Meta of={Stories} />
+
+# Tutorial MDX
+
+MDX renderer tailored for tutorial content with custom components.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-mdx.json
+```
+
+## Import
+
+```tsx
+import { TutorialMDX } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TutorialMdx
+  content="value"
+>
+  TutorialMdx content
+</TutorialMdx>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `content` | `string` | Yes | - |
+
+## Type Definitions
+
+### TutorialMDXProps
+
+```tsx
+type TutorialMDXProps = {
+  className?: string
+  content: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `content` | `string` | Yes | - |
+

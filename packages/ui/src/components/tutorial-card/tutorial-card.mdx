@@ -1,0 +1,105 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tutorial-card.stories'
+
+<Meta of={Stories} />
+
+# Tutorial Card
+
+Card for displaying tutorial previews with metadata.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-card.json
+```
+
+## Import
+
+```tsx
+import { TutorialCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TutorialCard
+  href="/example"
+  href="/example"
+>
+  ...
+</TutorialCard>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `getProgress` | `(id: string) =&gt; null \| TutorialCardProgress` | No | Callback: `(id: string) => null | TutorialCardProgress` |
+| `href` | `string` | Yes | - |
+| `labels` | `TutorialCardLabels` | Yes | `TutorialCardLabels` object |
+| `linkComponent` | `React.ComponentType&lt;{` | No | - |
+| `href` | `string` | Yes | - |
+| `tutorial` | `TutorialCardMeta` | Yes | `TutorialCardMeta` object |
+
+## Type Definitions
+
+### TutorialCardProgress
+
+```tsx
+type TutorialCardProgress = {
+  completedCount: number
+  totalSections: number
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `completedCount` | `number` | Yes | - |
+| `totalSections` | `number` | Yes | - |
+
+### TutorialCardMeta
+
+```tsx
+type TutorialCardMeta = {
+  description: string
+  difficulty: "advanced" | "beginner" | "intermediate"
+  estimatedTime: string
+  id: string
+  sectionCount: number
+  tags: string[]
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `description` | `string` | Yes | - |
+| `difficulty` | `"advanced" \| "beginner" \| "intermediate"` | Yes | `advanced`, `beginner`, `intermediate` |
+| `estimatedTime` | `string` | Yes | - |
+| `id` | `string` | Yes | - |
+| `sectionCount` | `number` | Yes | - |
+| `tags` | `string[]` | Yes | Array of `string` |
+| `title` | `string` | Yes | - |
+
+### TutorialCardLabels
+
+```tsx
+type TutorialCardLabels = {
+  completed: string
+  difficulty: Record<string, string>
+  sectionsCount: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `completed` | `string` | Yes | - |
+| `difficulty` | `Record&lt;string, string&gt;` | Yes | - |
+| `sectionsCount` | `string` | Yes | - |
+

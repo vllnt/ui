@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './table.stories'
+
+<Meta of={Stories} />
+
+# Table
+
+Styled data table with header, body, and footer sections.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/table.json
+```
+
+## Import
+
+```tsx
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Table>Table content</Table>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

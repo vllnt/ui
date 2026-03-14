@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './navbar-saas.stories'
+
+<Meta of={Stories} />
+
+# Navbar SaaS
+
+SaaS-style navigation bar with branding and links.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/navbar-saas.json
+```
+
+## Import
+
+```tsx
+import { NavbarSaas } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const navItems = [
+  {
+    href: "/example",
+    title: "Example item",
+  },
+]
+
+<NavbarSaas
+  navItems={navItems}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `brand` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `navItems` | `NavItem[]` | No | Array of `NavItem` objects |
+| `rightSlot` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `showMobileMenu` | `boolean` | No | `true` or `false` |
+
+## Type Definitions
+
+### NavItem
+
+```tsx
+type NavItem = {
+  href: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `href` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+

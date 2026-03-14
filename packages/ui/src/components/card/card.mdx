@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './card.stories'
+
+<Meta of={Stories} />
+
+# Card
+
+Container with header, content, and footer sections.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/card.json
+```
+
+## Import
+
+```tsx
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Card>...</Card>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

@@ -36,6 +36,23 @@
     "registry:build": {
       "dependsOn": ["^build"],
       "outputs": ["public/r/**"]
+    },
+    "storybook": {
+      "persistent": true,
+      "cache": false
+    },
+    "build-storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
+    },
+    "test-storybook": {
+      "cache": false
+    },
+    "check:stories": {
+      "cache": false
+    },
+    "sync-storybook": {
+      "cache": false
     }
   }
 }
