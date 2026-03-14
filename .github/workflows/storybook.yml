@@ -133,7 +133,15 @@ jobs:
 
       - name: Run Playwright CT visual tests
         working-directory: packages/ui
-        run: pnpm test:visual
+        run: pnpm test:visual --update-snapshots
+
+      - name: Upload visual snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-snapshots
+          path: packages/ui/.snapshots
+          retention-days: 30
 
       - name: Upload visual test results
         if: always()
