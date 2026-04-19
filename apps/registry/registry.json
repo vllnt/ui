@@ -94,6 +94,21 @@
       "category": "core"
     },
     {
+      "name": "avatar-group",
+      "type": "registry:component",
+      "title": "Avatar Group",
+      "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+      "files": [
+        {
+          "path": "registry/default/avatar-group/avatar-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "title": "Badge",
@@ -212,6 +227,38 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "data-list",
+      "type": "registry:component",
+      "title": "Data List",
+      "description": "Semantic key-value metadata layout for displaying labels with values.",
+      "files": [
+        {
+          "path": "registry/default/data-list/data-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+      "files": [
+        {
+          "path": "registry/default/data-table/data-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@tanstack/react-table"
+      ],
+      "category": "data"
     },
     {
       "name": "carousel",
@@ -1084,6 +1131,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "stat-card",
+      "type": "registry:component",
+      "title": "Stat Card",
+      "description": "Headline KPI card for metrics, trends, and supporting context.",
+      "files": [
+        {
+          "path": "registry/default/stat-card/stat-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:component",
+      "title": "Status Indicator",
+      "description": "Compact status label with tone, variant, and activity dot options.",
+      "files": [
+        {
+          "path": "registry/default/status-indicator/status-indicator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "step-by-step",

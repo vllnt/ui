@@ -22,6 +22,7 @@ import {
   AspectRatio,
   Avatar,
   AvatarFallback,
+  AvatarGroup,
   AvatarImage,
   Badge,
   Breadcrumb,
@@ -60,6 +61,11 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  DataList,
+  DataListItem,
+  DataListLabel,
+  DataListValue,
+  DataTable,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -146,6 +152,8 @@ import {
   Skeleton,
   Slider,
   Spinner,
+  StatCard,
+  StatusIndicator,
   Step,
   StepByStep,
   StepNavigation,
@@ -1334,6 +1342,100 @@ function AvatarPreview() {
   );
 }
 
+function AvatarGroupPreview() {
+  return (
+    <AvatarGroup
+      items={[
+        { alt: "Ada Lovelace", fallback: "AL" },
+        { alt: "Grace Hopper", fallback: "GH" },
+        { alt: "Margaret Hamilton", fallback: "MH" },
+        { alt: "Katherine Johnson", fallback: "KJ" },
+      ]}
+      max={3}
+    />
+  );
+}
+
+function DataListPreview() {
+  return (
+    <div className="w-full max-w-2xl">
+      <DataList>
+        <DataListItem>
+          <DataListLabel>Environment</DataListLabel>
+          <DataListValue>Production</DataListValue>
+        </DataListItem>
+        <DataListItem>
+          <DataListLabel>Owner</DataListLabel>
+          <DataListValue>Platform engineering</DataListValue>
+        </DataListItem>
+        <DataListItem>
+          <DataListLabel>Deploy window</DataListLabel>
+          <DataListValue>Tuesday / Thursday · 09:00 UTC</DataListValue>
+        </DataListItem>
+      </DataList>
+    </div>
+  );
+}
+
+function StatusIndicatorPreview() {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <StatusIndicator tone="success">Operational</StatusIndicator>
+      <StatusIndicator tone="warning">Pending</StatusIndicator>
+      <StatusIndicator tone="danger">Incident</StatusIndicator>
+      <StatusIndicator tone="info">Queued</StatusIndicator>
+    </div>
+  );
+}
+
+function StatCardPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <StatCard
+        change="+8.2%"
+        description="Monthly recurring revenue"
+        label="MRR"
+        meta="vs last month"
+        tone="success"
+        trend="up"
+        value="$42.8k"
+      />
+    </div>
+  );
+}
+
+function DataTablePreview() {
+  return (
+    <div className="w-full max-w-4xl">
+      <DataTable
+        columns={[
+          { accessorKey: "workspace", header: "Workspace" },
+          { accessorKey: "status", header: "Status" },
+          { accessorKey: "seats", header: "Seats" },
+        ]}
+        data={[
+          { seats: 142, status: "active", workspace: "Northstar" },
+          { seats: 28, status: "trial", workspace: "Signal" },
+          { seats: 11, status: "paused", workspace: "Helix" },
+        ]}
+        enableSelection={true}
+        filterableColumns={[
+          {
+            columnId: "status",
+            label: "status",
+            options: [
+              { label: "Active", value: "active" },
+              { label: "Trial", value: "trial" },
+              { label: "Paused", value: "paused" },
+            ],
+          },
+        ]}
+        searchPlaceholder="Search workspaces"
+      />
+    </div>
+  );
+}
+
 function SkeletonPreview() {
   return (
     <div className="flex items-center space-x-4">
@@ -1506,6 +1608,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <AspectRatioPreview />;
     case "avatar":
       return <AvatarPreview />;
+    case "avatar-group":
+      return <AvatarGroupPreview />;
     case "badge":
       return <BadgePreview />;
     case "bar-chart":
@@ -1522,6 +1626,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <CalendarPreview />;
     case "card":
       return <CardPreview />;
+    case "data-list":
+      return <DataListPreview />;
+    case "data-table":
+      return <DataTablePreview />;
     case "carousel":
       return <CarouselPreview />;
     case "category-filter":
@@ -1644,6 +1752,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SliderPreview />;
     case "spinner":
       return <SpinnerPreview />;
+    case "stat-card":
+      return <StatCardPreview />;
     case "sidebar-provider":
       return <SidebarProviderPreview />;
     case "sidebar-toggle":
@@ -1656,6 +1766,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <StepByStepPreview />;
     case "step-navigation":
       return <StepNavigationPreview />;
+    case "status-indicator":
+      return <StatusIndicatorPreview />;
     case "table-of-contents":
       return <TableOfContentsPreview />;
     case "table-of-contents-panel":
