@@ -49,6 +49,90 @@
       "category": "overlay"
     },
     {
+      "name": "ai-chat-input",
+      "type": "registry:component",
+      "title": "AI Chat Input",
+      "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+      "files": [
+        {
+          "path": "registry/default/ai-chat-input/ai-chat-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "learning"
+    },
+    {
+      "name": "ai-message-bubble",
+      "type": "registry:component",
+      "title": "AI Message Bubble",
+      "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+      "files": [
+        {
+          "path": "registry/default/ai-message-bubble/ai-message-bubble.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "category": "learning"
+    },
+    {
+      "name": "ai-source-citation",
+      "type": "registry:component",
+      "title": "AI Source Citation",
+      "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+      "files": [
+        {
+          "path": "registry/default/ai-source-citation/ai-source-citation.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "learning"
+    },
+    {
+      "name": "ai-streaming-text",
+      "type": "registry:component",
+      "title": "AI Streaming Text",
+      "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+      "files": [
+        {
+          "path": "registry/default/ai-streaming-text/ai-streaming-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
+      "name": "ai-tool-call-display",
+      "type": "registry:component",
+      "title": "AI Tool Call Display",
+      "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+      "files": [
+        {
+          "path": "registry/default/ai-tool-call-display/ai-tool-call-display.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "category": "learning"
+    },
+    {
       "name": "area-chart",
       "type": "registry:component",
       "title": "Area Chart",
@@ -539,8 +623,12 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
       "category": "navigation"
     },
     {

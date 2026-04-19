@@ -7,6 +7,11 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  AIChatInput,
+  AIMessageBubble,
+  AISourceCitation,
+  AIStreamingText,
+  AIToolCallDisplay,
   Alert,
   AlertDescription,
   AlertDialog,
@@ -652,6 +657,80 @@ function ThinkingBlockPreview() {
       isStreaming={false}
       thinking="Analyzing the request... Let me break this down into key concepts."
     />
+  );
+}
+
+function AIChatInputPreview() {
+  const [value, setValue] = React.useState(
+    "Summarize the diff and call out any risky changes.",
+  );
+
+  return (
+    <div className="w-full max-w-2xl">
+      <AIChatInput
+        helperText="Shift + Enter adds a new line"
+        onSubmit={(event) => {
+          event.preventDefault();
+        }}
+        onValueChange={setValue}
+        status="Workspace context attached"
+        toolbar={<Badge variant="secondary">Repository context</Badge>}
+        value={value}
+      />
+    </div>
+  );
+}
+
+function AIMessageBubblePreview() {
+  return (
+    <div className="w-full max-w-3xl space-y-4">
+      <AIMessageBubble author="Assistant" timestamp="Just now">
+        I found the failing background job and narrowed it down to a missing
+        registry export.
+      </AIMessageBubble>
+      <AIMessageBubble author="You" messageRole="user" timestamp="1m ago">
+        Please show the exact file that needs to change.
+      </AIMessageBubble>
+    </div>
+  );
+}
+
+function AIStreamingTextPreview() {
+  return (
+    <div className="w-full max-w-xl rounded-xl border border-border/60 bg-card p-4">
+      <AIStreamingText
+        isStreaming={true}
+        text="I checked the latest build logs and found the slow step in the asset pipeline"
+      />
+    </div>
+  );
+}
+
+function AIToolCallDisplayPreview() {
+  return (
+    <div className="w-full max-w-2xl">
+      <AIToolCallDisplay
+        description="Searched the repository for component preview wiring."
+        duration="0.4s"
+        input='{"pattern":"component-preview"}'
+        output='{"matches":5}'
+        status="complete"
+        toolName="search_files"
+      />
+    </div>
+  );
+}
+
+function AISourceCitationPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <AISourceCitation
+        href="https://example.com/research/agent-patterns"
+        snippet="A compact citation chip keeps sources readable without breaking the conversational layout."
+        source="Research memo"
+        title="Compact citation chips for AI answers"
+      />
+    </div>
   );
 }
 
@@ -1494,6 +1573,16 @@ function SpinnerPreview() {
 // eslint-disable-next-line max-lines-per-function -- Switch statement mapping all components
 export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
+    case "ai-chat-input":
+      return <AIChatInputPreview />;
+    case "ai-message-bubble":
+      return <AIMessageBubblePreview />;
+    case "ai-source-citation":
+      return <AISourceCitationPreview />;
+    case "ai-streaming-text":
+      return <AIStreamingTextPreview />;
+    case "ai-tool-call-display":
+      return <AIToolCallDisplayPreview />;
     case "accordion":
       return <AccordionPreview />;
     case "alert":

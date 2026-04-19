@@ -70,6 +70,26 @@ export {
   ToastTitle,
 } from "./toast";
 
+// AI components
+export { AIChatInput, type AIChatInputProps } from "./ai-chat-input";
+export {
+  AIMessageBubble,
+  type AIMessageBubbleProps,
+} from "./ai-message-bubble";
+export {
+  AISourceCitation,
+  type AISourceCitationProps,
+} from "./ai-source-citation";
+export {
+  AIStreamingText,
+  type AIStreamingTextProps,
+} from "./ai-streaming-text";
+export {
+  AIToolCallDisplay,
+  type AIToolCallDisplayProps,
+  type AIToolCallStatus,
+} from "./ai-tool-call-display";
+
 // New shadcn primitives - Form
 export { Textarea, type TextareaProps } from "./textarea";
 export {
