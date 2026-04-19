@@ -26,6 +26,8 @@ export {
   CommandSeparator,
   CommandShortcut,
 } from "./command";
+export { Combobox, type ComboboxOption, type ComboboxProps } from "./combobox";
+export { DatePicker, type DatePickerProps } from "./date-picker";
 export {
   Dialog,
   DialogClose,
@@ -57,7 +59,10 @@ export {
 } from "./dropdown-menu";
 export { Input } from "./input";
 export { Checkbox } from "./checkbox";
+export { FileUpload, type FileUploadProps } from "./file-upload";
 export { Label } from "./label";
+export { NumberInput, type NumberInputProps } from "./number-input";
+export { PasswordInput, type PasswordInputProps } from "./password-input";
 export { Switch } from "./switch";
 export {
   toast,
