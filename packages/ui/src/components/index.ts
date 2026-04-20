@@ -75,6 +75,26 @@ export {
   ToastTitle,
 } from "./toast";
 
+// AI components
+export { AIChatInput, type AIChatInputProps } from "./ai-chat-input";
+export {
+  AIMessageBubble,
+  type AIMessageBubbleProps,
+} from "./ai-message-bubble";
+export {
+  AISourceCitation,
+  type AISourceCitationProps,
+} from "./ai-source-citation";
+export {
+  AIStreamingText,
+  type AIStreamingTextProps,
+} from "./ai-streaming-text";
+export {
+  AIToolCallDisplay,
+  type AIToolCallDisplayProps,
+  type AIToolCallStatus,
+} from "./ai-tool-call-display";
+
 // New shadcn primitives - Form
 export { Textarea, type TextareaProps } from "./textarea";
 export {
@@ -335,8 +355,60 @@ export { ThemeProvider } from "./theme-provider";
 export { ThemeToggle } from "./theme-toggle";
 
 // Feature components
+export {
+  CandlestickChart,
+  type CandlestickChartProps,
+  type CandlestickDatum,
+} from "./candlestick-chart";
+export {
+  CreditBadge,
+  type CreditBadgeProps,
+  type CreditBadgeStatus,
+} from "./credit-badge";
+export {
+  MarketTreemap,
+  type MarketTreemapItem,
+  type MarketTreemapProps,
+} from "./market-treemap";
+export {
+  OrderBook,
+  type OrderBookLevel,
+  type OrderBookProps,
+} from "./order-book";
 export { ProfileSection } from "./profile-section";
+export {
+  PlanBadge,
+  type PlanBadgeProps,
+  type PlanBadgeState,
+  type PlanBadgeTier,
+} from "./plan-badge";
+export {
+  RoleBadge,
+  type RoleBadgeProps,
+  type RoleBadgeRole,
+} from "./role-badge";
+export {
+  SparklineGrid,
+  type SparklineGridItem,
+  type SparklineGridProps,
+} from "./sparkline-grid";
+export {
+  SubscriptionCard,
+  type SubscriptionCardProps,
+  type SubscriptionCardStatus,
+} from "./subscription-card";
 export { TLDRSection } from "./tldr-section";
+export {
+  TickerTape,
+  type TickerTapeItem,
+  type TickerTapeProps,
+} from "./ticker-tape";
+export { WalletCard, type WalletCardProps } from "./wallet-card";
+export {
+  Watchlist,
+  type WatchlistItem,
+  type WatchlistProps,
+} from "./watchlist";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 export { LiveFeed, type LiveFeedEvent, type LiveFeedProps } from "./live-feed";
@@ -374,6 +446,12 @@ export {
 } from "./accordion";
 export { Callout, type CalloutProps, type CalloutVariant } from "./callout";
 export {
+  Annotation,
+  type AnnotationProps,
+  Highlight,
+  type HighlightProps,
+} from "./annotation";
+export {
   Checklist,
   type ChecklistItem,
   type ChecklistProps,
@@ -392,6 +470,7 @@ export {
 } from "./comparison";
 export { Exercise, type ExerciseProps } from "./exercise";
 export { FAQ, FAQItem, type FAQItemProps, type FAQProps } from "./faq";
+export { Flashcard, type FlashcardProps } from "./flashcard";
 export {
   Glossary,
   type GlossaryProps,
@@ -415,12 +494,14 @@ export {
   type ProTipVariant,
 } from "./pro-tip";
 export { Quiz, type QuizOption, type QuizProps } from "./quiz";
+export { Rating, type RatingProps } from "./rating";
 export {
   Step,
   StepByStep,
   type StepByStepProps,
   type StepProps,
 } from "./step-by-step";
+export { Stepper, type StepperProps, type StepperStep } from "./stepper";
 export {
   Tabs,
   TabsContent,
@@ -468,6 +549,7 @@ export {
   TutorialMDX,
   type TutorialMDXProps,
 } from "./tutorial-mdx";
+export { Tour, type TourProps, type TourStep } from "./tour";
 
 // Tutorial/Interactive components
 export {

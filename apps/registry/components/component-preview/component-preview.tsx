@@ -65,6 +65,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
   CountdownTimer,
+  CreditBadge,
   DataList,
   DataListItem,
   DataListLabel,
@@ -94,6 +95,7 @@ import {
   FAQ,
   FAQItem,
   FileUpload,
+  Flashcard,
   FloatingActionButton,
   Glossary,
   HorizontalScrollRow,
@@ -110,6 +112,7 @@ import {
   LangProvider,
   LearningObjectives,
   LiveFeed,
+  MarketTreemap,
   Menubar,
   MenubarContent,
   MenubarItem,
@@ -124,6 +127,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NumberInput,
+  OrderBook,
   Pagination,
   PasswordInput,
   Popover,
@@ -202,6 +206,8 @@ import {
   UsageBreakdown,
   VideoEmbed,
   ViewSwitcher,
+  WalletCard,
+  Watchlist,
   WorldClockBar,
 } from "@vllnt/ui";
 import {
@@ -1792,6 +1798,107 @@ function CountdownTimerPreview() {
   );
 }
 
+function CreditBadgePreview() {
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <CreditBadge amount="420 credits" status="healthy" />
+      <CreditBadge amount="24 credits" status="low" />
+      <CreditBadge amount="0 credits" status="depleted" />
+    </div>
+  );
+}
+
+function FlashcardPreview() {
+  return (
+    <Flashcard
+      answer="A hypothesis is a testable explanation for an observation."
+      category="Science"
+      question="What is a hypothesis?"
+      title="Key vocabulary"
+    />
+  );
+}
+
+function MarketTreemapPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <MarketTreemap
+        items={[
+          { change: 2.6, label: "NVDA", sector: "Semis", value: 980 },
+          { change: 1.4, label: "MSFT", sector: "Software", value: 760 },
+          { change: -1.4, label: "XOM", sector: "Energy", value: 520 },
+          { change: 0.8, label: "JPM", sector: "Financials", value: 440 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function OrderBookPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <OrderBook
+        asks={[
+          { price: 185.24, size: 4.2 },
+          { price: 185.31, size: 6.8 },
+          { price: 185.39, size: 8.1 },
+        ]}
+        bids={[
+          { price: 185.18, size: 5.4 },
+          { price: 185.11, size: 7.1 },
+          { price: 185.03, size: 9.2 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function WalletCardPreview() {
+  return (
+    <WalletCard
+      availableLabel="96 credits"
+      balanceLabel="128 credits"
+      note="Set up auto-refill to keep automations running through the month."
+      pendingLabel="32 credits"
+      primaryActionLabel="Buy credits"
+      renewsLabel="Refreshes on May 1, 2026"
+      secondaryActionLabel="Billing history"
+      status="healthy"
+    />
+  );
+}
+
+function WatchlistPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <Watchlist
+        items={[
+          {
+            change: 1.42,
+            name: "Apple Inc.",
+            price: 182.33,
+            starred: true,
+            symbol: "AAPL",
+          },
+          {
+            change: -0.64,
+            name: "Microsoft",
+            price: 431.8,
+            symbol: "MSFT",
+          },
+          {
+            change: 3.08,
+            name: "NVIDIA",
+            price: 512.9,
+            starred: true,
+            symbol: "NVDA",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
 function MetricGaugePreview() {
   return (
     <div className="w-full max-w-sm">
@@ -1982,6 +2089,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ContextMenuPreview />;
     case "countdown-timer":
       return <CountdownTimerPreview />;
+    case "credit-badge":
+      return <CreditBadgePreview />;
     case "dialog":
       return <DialogPreview />;
     case "drawer":
@@ -1992,6 +2101,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ExercisePreview />;
     case "faq":
       return <FAQPreview />;
+    case "flashcard":
+      return <FlashcardPreview />;
     case "file-upload":
       return <FileUploadPreview />;
     case "filter-bar":
@@ -2024,6 +2135,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <LineChartPreview />;
     case "live-feed":
       return <LiveFeedPreview />;
+    case "market-treemap":
+      return <MarketTreemapPreview />;
     case "mdx-content":
       return <MDXContentPreview />;
     case "menubar":
@@ -2042,6 +2155,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <NavigationMenuPreview />;
     case "number-input":
       return <NumberInputPreview />;
+    case "order-book":
+      return <OrderBookPreview />;
     case "pagination":
       return <PaginationPreview />;
     case "password-input":
@@ -2164,6 +2279,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "wallet-card":
+      return <WalletCardPreview />;
+    case "watchlist":
+      return <WatchlistPreview />;
     case "world-clock-bar":
       return <WorldClockBarPreview />;
     default:
