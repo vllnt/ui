@@ -21,12 +21,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertTitle,
+  AnimatedText,
   AspectRatio,
   Avatar,
   AvatarFallback,
   AvatarGroup,
   AvatarImage,
   Badge,
+  BorderBeam,
   Breadcrumb,
   Button,
   Calendar,
@@ -113,6 +115,7 @@ import {
   LearningObjectives,
   LiveFeed,
   MarketTreemap,
+  Marquee,
   Menubar,
   MenubarContent,
   MenubarItem,
@@ -127,6 +130,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NumberInput,
+  NumberTicker,
   OrderBook,
   Pagination,
   PasswordInput,
@@ -2006,6 +2010,57 @@ function CalendarPreview() {
   return <Calendar mode="single" onSelect={setDate} selected={date} />;
 }
 
+function AnimatedTextPreview() {
+  return (
+    <div className="max-w-xl">
+      <AnimatedText
+        className="text-2xl font-semibold"
+        text="Ship motion that still feels like the current system."
+      />
+    </div>
+  );
+}
+
+function BorderBeamPreview() {
+  return (
+    <div className="relative w-full max-w-sm rounded-xl border bg-card p-6">
+      <BorderBeam />
+      <div className="space-y-1">
+        <div className="text-sm text-muted-foreground">Status</div>
+        <div className="text-lg font-semibold">Live preview</div>
+      </div>
+    </div>
+  );
+}
+
+function MarqueePreview() {
+  return (
+    <div className="w-full max-w-lg rounded-lg border p-4">
+      <Marquee>
+        <span className="rounded-md border bg-muted px-3 py-2 text-sm">
+          Alpha
+        </span>
+        <span className="rounded-md border bg-muted px-3 py-2 text-sm">
+          Beta
+        </span>
+        <span className="rounded-md border bg-muted px-3 py-2 text-sm">
+          Gamma
+        </span>
+      </Marquee>
+    </div>
+  );
+}
+
+function NumberTickerPreview() {
+  return (
+    <NumberTicker
+      className="text-4xl font-semibold"
+      duration={0}
+      value={12_840}
+    />
+  );
+}
+
 function SpinnerPreview() {
   return (
     <div className="flex gap-4 items-center">
@@ -2029,6 +2084,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <AlertPreview />;
     case "alert-dialog":
       return <AlertDialogPreview />;
+    case "animated-text":
+      return <AnimatedTextPreview />;
     case "area-chart":
       return <AreaChartPreview />;
     case "aspect-ratio":
@@ -2037,6 +2094,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <AvatarPreview />;
     case "avatar-group":
       return <AvatarGroupPreview />;
+    case "border-beam":
+      return <BorderBeamPreview />;
     case "badge":
       return <BadgePreview />;
     case "bar-chart":
@@ -2133,6 +2192,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <LearningObjectivesPreview />;
     case "line-chart":
       return <LineChartPreview />;
+    case "marquee":
+      return <MarqueePreview />;
     case "live-feed":
       return <LiveFeedPreview />;
     case "market-treemap":
@@ -2155,6 +2216,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <NavigationMenuPreview />;
     case "number-input":
       return <NumberInputPreview />;
+    case "number-ticker":
+      return <NumberTickerPreview />;
     case "order-book":
       return <OrderBookPreview />;
     case "pagination":

@@ -287,6 +287,7 @@ export {
 } from "./carousel";
 
 // New shadcn primitives - Utilities
+export { BorderBeam, type BorderBeamProps } from "./border-beam";
 export {
   ActivityHeatmap,
   type ActivityHeatmapItem,
@@ -294,7 +295,15 @@ export {
 } from "./activity-heatmap";
 export { Calendar, type CalendarProps } from "./calendar";
 export { CountdownTimer, type CountdownTimerProps } from "./countdown-timer";
-export { Spinner, type SpinnerProps } from "./spinner";
+export { Marquee, type MarqueeProps } from "./marquee";
+export { NumberTicker, type NumberTickerProps } from "./number-ticker";
+export {
+  Spinner,
+  type SpinnerProps,
+  UnicodeSpinner,
+  type UnicodeSpinnerAnimation,
+  type UnicodeSpinnerProps,
+} from "./spinner";
 export {
   WorldClockBar,
   type WorldClockBarProps,
@@ -431,6 +440,7 @@ export {
 } from "./status-board";
 
 // Text components
+export { AnimatedText, type AnimatedTextProps } from "./animated-text";
 export { TruncatedText, type TruncatedTextProps } from "./truncated-text";
 
 // Tutorial/Educational MDX components

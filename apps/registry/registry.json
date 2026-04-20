@@ -163,6 +163,21 @@
       "category": "overlay"
     },
     {
+      "name": "animated-text",
+      "type": "registry:component",
+      "title": "Animated Text",
+      "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
+      "files": [
+        {
+          "path": "registry/default/animated-text/animated-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "annotation",
       "type": "registry:component",
       "title": "Annotation",
@@ -281,6 +296,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "border-beam",
+      "type": "registry:component",
+      "title": "Border Beam",
+      "description": "Animated accent beam that travels around the border of a highlighted surface.",
+      "files": [
+        {
+          "path": "registry/default/border-beam/border-beam.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "breadcrumb",
@@ -949,6 +979,21 @@
       "category": "data"
     },
     {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+      "files": [
+        {
+          "path": "registry/default/marquee/marquee.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "live-feed",
       "type": "registry:component",
       "title": "Live Feed",
@@ -1082,6 +1127,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "form"
+    },
+    {
+      "name": "number-ticker",
+      "type": "registry:component",
+      "title": "Number Ticker",
+      "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
+      "files": [
+        {
+          "path": "registry/default/number-ticker/number-ticker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "order-book",
