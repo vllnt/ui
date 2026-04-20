@@ -135,7 +135,7 @@ function LiveFeedRow({
       <div className="pt-1">
         <SeverityBadge
           level={event.severity}
-          pulse={isLatest ? event.severity === "critical" : null}
+          pulse={isLatest ? event.severity === "critical" : undefined}
           tone="soft"
         />
       </div>
