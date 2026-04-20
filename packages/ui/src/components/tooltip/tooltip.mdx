@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tooltip.stories'
+
+<Meta of={Stories} />
+
+# Tooltip
+
+Informational popup displayed on hover or focus.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tooltip.json
+```
+
+## Import
+
+```tsx
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Tooltip>Hover me</Tooltip>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

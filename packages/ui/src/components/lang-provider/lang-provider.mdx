@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './lang-provider.stories'
+
+<Meta of={Stories} />
+
+# Lang Provider
+
+Context provider for language and internationalization.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/lang-provider.json
+```
+
+## Import
+
+```tsx
+import { LangProvider } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<LangProvider
+  supportedLanguages={supportedLanguages}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `defaultLanguage` | `SupportedLanguage` | No | - |
+| `supportedLanguages` | `SupportedLanguage[]` | No | Array of `SupportedLanguage` |
+

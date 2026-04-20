@@ -1,0 +1,87 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './share-dialog.stories'
+
+<Meta of={Stories} />
+
+# ShareDialog
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/share-dialog.json
+```
+
+## Import
+
+```tsx
+import { ShareDialog } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const platforms = [
+  {
+    buildUrl: "value",
+    key: "value",
+    label: "Example item",
+  },
+]
+
+<ShareDialog
+  platforms={platforms}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `buildCopyUrl` | `(url: string) =&gt; string` | No | Callback: `(url: string) => string` |
+| `description` | `string` | No | - |
+| `labels` | `ShareDialogLabels` | No | `ShareDialogLabels` object |
+| `onCopy` | `() =&gt; void` | No | Callback function |
+| `onOpenChange` | `(open: boolean) =&gt; void` | No | Callback: `(open: boolean) => void` |
+| `onShare` | `(platformKey: string) =&gt; void` | No | Callback: `(platformKey: string) => void` |
+| `open` | `boolean` | No | `true` or `false` |
+| `platforms` | `SharePlatform[]` | Yes | Array of `SharePlatform` objects |
+| `title` | `string` | No | - |
+
+## Type Definitions
+
+### SharePlatform
+
+```tsx
+type SharePlatform = {
+  buildUrl: (pageUrl: string, pageTitle: string) => string
+  key: string
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `buildUrl` | `(pageUrl: string, pageTitle: string) =&gt; string` | Yes | Callback: `(pageUrl: string, pageTitle: string) => string` |
+| `key` | `string` | Yes | - |
+| `label` | `string` | Yes | - |
+
+### ShareDialogLabels
+
+```tsx
+type ShareDialogLabels = {
+  copied: string
+  copyLink: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `copied` | `string` | Yes | - |
+| `copyLink` | `string` | Yes | - |
+

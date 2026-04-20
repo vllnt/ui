@@ -1,0 +1,78 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './search-dialog.stories'
+
+<Meta of={Stories} />
+
+# Search Dialog
+
+Full-screen search dialog with keyboard navigation.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/search-dialog.json
+```
+
+## Import
+
+```tsx
+import { SearchDialog } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const items = [
+  {
+    description: "A description",
+    id: "1",
+    keywords: "value",
+    title: "Example item",
+  },
+]
+
+<SearchDialog
+  items={items}
+  onSelect={(item) => console.log(item)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `buttonText` | `string` | No | - |
+| `buttonTextMobile` | `string` | No | - |
+| `emptyText` | `string` | No | - |
+| `enableKeyboardShortcut` | `boolean` | No | `true` or `false` |
+| `groupHeading` | `string` | No | - |
+| `items` | `SearchItem[]` | Yes | Array of `SearchItem` objects |
+| `onSelect` | `(item: SearchItem) =&gt; void` | Yes | Callback: `(item: SearchItem) => void` |
+| `searchPlaceholder` | `string` | No | - |
+
+## Type Definitions
+
+### SearchItem
+
+```tsx
+type SearchItem = {
+  description?: string
+  id: string
+  keywords?: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `description` | `string` | No | - |
+| `id` | `string` | Yes | - |
+| `keywords` | `string` | No | - |
+| `title` | `string` | Yes | - |
+

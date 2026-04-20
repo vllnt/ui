@@ -1,0 +1,80 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './terminal.stories'
+
+<Meta of={Stories} />
+
+# Terminal
+
+Terminal-style display for command output.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/terminal.json
+```
+
+## Import
+
+```tsx
+import { Terminal, SimpleTerminal } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const lines = [
+  {
+    content: "value",
+    type: "value",
+  },
+]
+
+<Terminal
+  lines={lines}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `copyable` | `boolean` | No | `true` or `false` |
+| `lines` | `TerminalLine[]` | Yes | Array of `TerminalLine` objects |
+| `title` | `string` | No | - |
+
+## Type Definitions
+
+### TerminalLine
+
+```tsx
+type TerminalLine = {
+  content: string
+  type: "command" | "comment" | "output"
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `content` | `string` | Yes | - |
+| `type` | `"command" \| "comment" \| "output"` | Yes | `command`, `comment`, `output` |
+
+### SimpleTerminalProps
+
+```tsx
+type SimpleTerminalProps = {
+  children: string
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `children` | `string` | Yes | - |
+| `title` | `string` | No | - |
+

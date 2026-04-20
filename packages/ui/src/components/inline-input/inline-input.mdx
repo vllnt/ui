@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './inline-input.stories'
+
+<Meta of={Stories} />
+
+# Inline Input
+
+Inline text input with keyboard commit and cancel support.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/inline-input.json
+```
+
+## Import
+
+```tsx
+import { InlineInput } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<InlineInput
+  onChange={(value) => console.log(value)}
+  onCommit={(value) => console.log(value)}
+  value="value"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `onCancel` | `() =&gt; void` | No | Callback function |
+| `onChange` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `onCommit` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `value` | `string` | Yes | - |
+

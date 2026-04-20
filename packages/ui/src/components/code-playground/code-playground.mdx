@@ -1,0 +1,77 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './code-playground.stories'
+
+<Meta of={Stories} />
+
+# Code Playground
+
+Interactive code editor with live preview.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/code-playground.json
+```
+
+## Import
+
+```tsx
+import { CodePlayground, FileTree } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CodePlayground
+  highlightLines={highlightLines}
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `description` | `string` | No | - |
+| `filename` | `string` | No | - |
+| `highlightLines` | `number[]` | No | Array of `number` |
+| `language` | `string` | No | - |
+| `showLineNumbers` | `boolean` | No | `true` or `false` |
+| `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### CodeLineProps
+
+```tsx
+type CodeLineProps = {
+  highlightLines: number[]
+  line: string
+  lineNumber: number
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `highlightLines` | `number[]` | Yes | Array of `number` |
+| `line` | `string` | Yes | - |
+| `lineNumber` | `number` | Yes | - |
+
+### FileTreeProps
+
+```tsx
+type FileTreeProps = {
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `title` | `string` | No | - |
+

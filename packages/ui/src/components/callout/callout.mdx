@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './callout.stories'
+
+<Meta of={Stories} />
+
+# Callout
+
+Highlighted content block with variant styles for info, warning, danger, and more.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/callout.json
+```
+
+## Import
+
+```tsx
+import { Callout } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Callout>Callout content</Callout>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `title` | `string` | No | - |
+| `variant` | `CalloutVariant` | No | - |
+

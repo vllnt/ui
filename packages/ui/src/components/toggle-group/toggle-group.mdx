@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './toggle-group.stories'
+
+<Meta of={Stories} />
+
+# Toggle Group
+
+Group of toggle buttons for single or multiple selection.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/toggle-group.json
+```
+
+## Import
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ToggleGroup>
+  <ToggleGroup.displayName />
+</ToggleGroup>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### ToggleGroup.displayName
+

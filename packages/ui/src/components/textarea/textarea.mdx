@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './textarea.stories'
+
+<Meta of={Stories} />
+
+# Textarea
+
+Multi-line text input field.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/textarea.json
+```
+
+## Import
+
+```tsx
+import { Textarea } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Textarea>Textarea content</Textarea>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

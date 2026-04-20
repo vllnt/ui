@@ -1,0 +1,129 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tutorial-complete.stories'
+
+<Meta of={Stories} />
+
+# Tutorial Complete
+
+Completion screen displayed when a tutorial is finished.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tutorial-complete.json
+```
+
+## Import
+
+```tsx
+import { TutorialComplete } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TutorialComplete
+  backHref="value"
+  completionPercent="0"
+  href="/example"
+  onGoToSection={(index) => console.log(index)}
+  onRestart={() => {}}
+  imageSource="value"
+  socialLinks={socialLinks}
+  shareUrl="/example"
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `backHref` | `string` | Yes | - |
+| `completedSections` | `Set&lt;string&gt;` | Yes | - |
+| `completionPercent` | `number` | Yes | - |
+| `labels` | `TutorialCompleteLabels` | Yes | `TutorialCompleteLabels` object |
+| `linkComponent` | `React.ComponentType&lt;{` | No | - |
+| `href` | `string` | Yes | - |
+| `onGoToSection` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
+| `onRestart` | `() =&gt; void` | Yes | Callback function |
+| `profile` | `{` | No | - |
+| `imageSource` | `string` | Yes | - |
+| `socialLinks` | `{ href: string; label: string }[]` | Yes | Array of `{ href: string; label: string }` |
+| `relatedContent` | `TutorialCompleteRelatedContent[]` | Yes | Array of `TutorialCompleteRelatedContent` objects |
+| `sections` | `TutorialCompleteSection[]` | Yes | Array of `TutorialCompleteSection` objects |
+| `shareUrl` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### TutorialCompleteSection
+
+```tsx
+type TutorialCompleteSection = {
+  id: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `id` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+
+### TutorialCompleteRelatedContent
+
+```tsx
+type TutorialCompleteRelatedContent = {
+  href: string
+  title: string
+  type: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `href` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+| `type` | `string` | Yes | - |
+
+### TutorialCompleteLabels
+
+```tsx
+type TutorialCompleteLabels = {
+  backToTutorials: string
+  profileName: string
+  profileTagline: string
+  relatedContent: string
+  reviewSections: string
+  shareOn: string
+  shareTitle: string
+  startOver: string
+  tutorialComplete: string
+  tutorialFinished: string
+  youveCompletedAll: string
+  youveFinishedWith: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `backToTutorials` | `string` | Yes | - |
+| `profileName` | `string` | Yes | - |
+| `profileTagline` | `string` | Yes | - |
+| `relatedContent` | `string` | Yes | - |
+| `reviewSections` | `string` | Yes | - |
+| `shareOn` | `string` | Yes | - |
+| `shareTitle` | `string` | Yes | - |
+| `startOver` | `string` | Yes | - |
+| `tutorialComplete` | `string` | Yes | - |
+| `tutorialFinished` | `string` | Yes | - |
+| `youveCompletedAll` | `string` | Yes | - |
+| `youveFinishedWith` | `string` | Yes | - |
+

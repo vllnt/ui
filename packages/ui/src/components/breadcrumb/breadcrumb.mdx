@@ -1,0 +1,70 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './breadcrumb.stories'
+
+<Meta of={Stories} />
+
+# Breadcrumb
+
+Navigation breadcrumb trail showing the current page hierarchy.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/breadcrumb.json
+```
+
+## Import
+
+```tsx
+import { Breadcrumb } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const items = [
+  {
+    href: "/example",
+    icon: "Content",
+    label: "Example item",
+  },
+]
+
+<Breadcrumb
+  items={items}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `items` | `BreadcrumbItem[]` | Yes | Array of `BreadcrumbItem` objects |
+| `separator` | `"arrow" \| "chevron" \| "slash"` | No | `arrow`, `chevron`, `slash` |
+| `showHomeIcon` | `boolean` | No | `true` or `false` |
+| `variant` | `"default" \| "minimal"` | No | `default`, `minimal` |
+
+## Type Definitions
+
+### BreadcrumbItem
+
+```tsx
+type BreadcrumbItem = {
+  href?: string
+  icon?: React.ReactNode
+  label: React.ReactNode
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `href` | `string` | No | - |
+| `icon` | `React.ReactNode` | No | React content (JSX, string, number, etc.) |
+| `label` | `React.ReactNode` | Yes | React content (JSX, string, number, etc.) |
+

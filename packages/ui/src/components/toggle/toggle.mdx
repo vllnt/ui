@@ -1,0 +1,62 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './toggle.stories'
+
+<Meta of={Stories} />
+
+# Toggle
+
+Two-state toggle button.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/toggle.json
+```
+
+## Import
+
+```tsx
+import { Toggle } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Toggle>
+  <Toggle.displayName />
+</Toggle>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### Toggle.displayName
+
+## Variants
+
+### size
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `lg` | - |
+| `sm` | - |
+
+<Canvas of={Stories.SizeLg} sourceState="shown" />
+
+<Canvas of={Stories.SizeSm} sourceState="shown" />
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `default` | Yes |
+| `outline` | - |
+
+<Canvas of={Stories.VariantOutline} sourceState="shown" />
+

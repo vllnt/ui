@@ -1,0 +1,72 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './faq.stories'
+
+<Meta of={Stories} />
+
+# FAQ
+
+Frequently asked questions section with expandable answers.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/faq.json
+```
+
+## Import
+
+```tsx
+import { FAQ, FAQItem } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Faq
+  question="What is React?"
+>
+  Faq content
+</Faq>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `defaultOpen` | `boolean` | No | `true` or `false` |
+| `question` | `string` | Yes | - |
+
+## Type Definitions
+
+### FAQItemProps
+
+```tsx
+type FAQItemProps = {
+  defaultOpen?: boolean
+  question: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `defaultOpen` | `boolean` | No | `true` or `false` |
+| `question` | `string` | Yes | - |
+
+### FAQProps
+
+```tsx
+type FAQProps = {
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `title` | `string` | No | - |
+

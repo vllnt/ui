@@ -1,0 +1,73 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './share-section.stories'
+
+<Meta of={Stories} />
+
+# Share Section
+
+Social sharing buttons and link copy section.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/share-section.json
+```
+
+## Import
+
+```tsx
+import { ShareSection } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const platforms = [
+  {
+    key: "value",
+    label: "Example item",
+  },
+]
+
+<ShareSection
+  platforms={platforms}
+  shareOn="value"
+  shareTitle="My Title"
+  title="My Title"
+  url="/example"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `buildUrl` | `(platform: SharePlatform, url: string, title: string) =&gt; string` | No | Callback: `(platform: SharePlatform, url: string, title: string) => string` |
+| `platforms` | `PlatformConfig[]` | No | Array of `PlatformConfig` objects |
+| `shareOn` | `string` | Yes | - |
+| `shareTitle` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+| `url` | `string` | Yes | - |
+
+## Type Definitions
+
+### PlatformConfig
+
+```tsx
+type PlatformConfig = {
+  key: SharePlatform
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `key` | `SharePlatform` | Yes | - |
+| `label` | `string` | Yes | - |
+

@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './scroll-area.stories'
+
+<Meta of={Stories} />
+
+# Scroll Area
+
+Custom scrollable area with styled scrollbars.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/scroll-area.json
+```
+
+## Import
+
+```tsx
+import { ScrollArea, ScrollBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ScrollArea>
+  <ScrollArea.displayName />
+</ScrollArea>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### ScrollArea.displayName
+

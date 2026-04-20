@@ -1,0 +1,104 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './social-fab.stories'
+
+<Meta of={Stories} />
+
+# SocialFab
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/social-fab.json
+```
+
+## Import
+
+```tsx
+import { SocialFAB } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const actions = [
+  {
+    id: "1",
+    label: "Example item",
+    onClick: "value",
+  },
+]
+
+<SocialFab
+  actions={actions}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `actions` | `SocialFabActionConfig[]` | Yes | Array of `SocialFabActionConfig` objects |
+| `bottomOffset` | `number` | No | - |
+| `hidden` | `boolean` | No | `true` or `false` |
+| `labels` | `SocialFabLabels` | Yes | `SocialFabLabels` object |
+| `mainText` | `string` | No | - |
+| `onAction` | `(actionId: string) =&gt; void` | No | Callback: `(actionId: string) => void` |
+| `onClose` | `(trigger: string) =&gt; void` | No | Callback: `(trigger: string) => void` |
+| `onOpen` | `(trigger: string, device: string) =&gt; void` | No | Callback: `(trigger: string, device: string) => void` |
+| `rightOffset` | `number` | No | - |
+| `sharePlatforms` | `SharePlatformConfig[]` | No | Array of `SharePlatformConfig` objects |
+
+## Type Definitions
+
+### SharePlatformConfig
+
+```tsx
+type SharePlatformConfig = {
+  buildUrl: (pageUrl: string, pageTitle: string) => string
+  key: string
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `buildUrl` | `(pageUrl: string, pageTitle: string) =&gt; string` | Yes | Callback: `(pageUrl: string, pageTitle: string) => string` |
+| `key` | `string` | Yes | - |
+| `label` | `string` | Yes | - |
+
+### SocialFabActionConfig
+
+```tsx
+type SocialFabActionConfig = {
+  id: string
+  label: string
+  onClick: () => void
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `id` | `string` | Yes | - |
+| `label` | `string` | Yes | - |
+| `onClick` | `() =&gt; void` | Yes | Callback function |
+
+### SocialFabLabels
+
+```tsx
+type SocialFabLabels = {
+  close: string
+  share: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `close` | `string` | Yes | - |
+| `share` | `string` | Yes | - |
+

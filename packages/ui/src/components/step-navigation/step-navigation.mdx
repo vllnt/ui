@@ -1,0 +1,56 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './step-navigation.stories'
+
+<Meta of={Stories} />
+
+# Step Navigation
+
+Navigation controls for stepping through multi-page content.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/step-navigation.json
+```
+
+## Import
+
+```tsx
+import { StepNavigation } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<StepNavigation
+  canNext
+  canPrev
+  currentStep="0"
+  onNext={() => {}}
+  onPrev={() => {}}
+  totalSteps="0"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `canNext` | `boolean` | Yes | `true` or `false` |
+| `canPrev` | `boolean` | Yes | `true` or `false` |
+| `currentStep` | `number` | Yes | - |
+| `nextIcon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `nextLabel` | `string` | No | - |
+| `onNext` | `() =&gt; void` | Yes | Callback function |
+| `onPrev` | `() =&gt; void` | Yes | Callback function |
+| `previousIcon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `previousLabel` | `string` | No | - |
+| `stepLabel` | `string` | No | - |
+| `totalSteps` | `number` | Yes | - |
+
