@@ -236,7 +236,13 @@ export { BorderBeam, type BorderBeamProps } from "./border-beam";
 export { Calendar, type CalendarProps } from "./calendar";
 export { Marquee, type MarqueeProps } from "./marquee";
 export { NumberTicker, type NumberTickerProps } from "./number-ticker";
-export { Spinner, type SpinnerProps } from "./spinner";
+export {
+  Spinner,
+  type SpinnerProps,
+  UnicodeSpinner,
+  type UnicodeSpinnerAnimation,
+  type UnicodeSpinnerProps,
+} from "./spinner";
 
 // Content components
 export { CodeBlock } from "./code-block";

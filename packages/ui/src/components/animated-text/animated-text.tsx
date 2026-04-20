@@ -25,22 +25,11 @@ export const ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS = {
 
 const DEFAULT_RANDOM_CHARACTERS = ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS.matrix;
 
-const UNICODE_SCANLINE_FRAMES = [
-  "⠉⠉⠉",
-  "⠓⠓⠓",
-  "⠦⠦⠦",
-  "⣄⣄⣄",
-  "⠦⠦⠦",
-  "⠓⠓⠓",
-] as const;
-const UNICODE_SCANLINE_INTERVAL = 120;
-
 type AnimatedTextSplit = "character" | "word";
 export type AnimatedTextVariant =
   | "decipher"
   | "matrix"
   | "reveal"
-  | "scanline"
   | "terminal"
   | "typewriter";
 export type AnimatedTextDirection = "center-out" | "end" | "random" | "start";
@@ -105,9 +94,7 @@ function getResolvedRandomCharacters(
 }
 
 function getCursorToneClass(variant: AnimatedTextVariant): string {
-  return variant === "matrix" ||
-    variant === "decipher" ||
-    variant === "scanline"
+  return variant === "matrix" || variant === "decipher"
     ? "text-primary"
     : "text-foreground";
 }
@@ -256,42 +243,11 @@ function useMatrixFrame({
   return matrixFrame;
 }
 
-function useScanlineFrame(active: boolean, length: number): string[] {
-  const [frameIndex, setFrameIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!active) {
-      setFrameIndex(0);
-      return;
-    }
-
-    const spinnerInterval = window.setInterval(() => {
-      setFrameIndex(
-        (current) => (current + 1) % UNICODE_SCANLINE_FRAMES.length,
-      );
-    }, UNICODE_SCANLINE_INTERVAL);
-
-    return () => {
-      window.clearInterval(spinnerInterval);
-    };
-  }, [active]);
-
-  return React.useMemo(() => {
-    const frameGlyphs = getGlyphs(UNICODE_SCANLINE_FRAMES[frameIndex] ?? "⠉");
-
-    return Array.from(
-      { length },
-      (_, index) => frameGlyphs[index % frameGlyphs.length] ?? "⠉",
-    );
-  }, [frameIndex, length]);
-}
-
 function buildOldSchoolFrames({
   matrixFrame,
   progress,
   randomCharacters,
   revealPlan,
-  scanlineFrame,
   segments,
   variant,
 }: {
@@ -299,7 +255,6 @@ function buildOldSchoolFrames({
   progress: number;
   randomCharacters: string;
   revealPlan: number[];
-  scanlineFrame: string[];
   segments: string[];
   variant: Exclude<AnimatedTextVariant, "reveal">;
 }): SegmentFrame[] {
@@ -315,12 +270,6 @@ function buildOldSchoolFrames({
         : isRevealed
           ? segment
           : (matrixFrame[index] ?? getRandomMatrixGlyph(randomCharacters));
-    } else if (variant === "scanline") {
-      content = isWhitespace
-        ? segment
-        : isRevealed
-          ? segment
-          : (scanlineFrame[index] ?? "⠉");
     } else if (isRevealed) {
       content = segment;
     }
@@ -364,10 +313,6 @@ function useAnimatedTextFrames({
     revealPlan,
     segments,
   });
-  const scanlineFrame = useScanlineFrame(
-    variant === "scanline",
-    segments.length,
-  );
 
   return React.useMemo(() => {
     if (!isOldSchool) {
@@ -379,7 +324,6 @@ function useAnimatedTextFrames({
       progress,
       randomCharacters,
       revealPlan,
-      scanlineFrame,
       segments,
       variant,
     });
@@ -389,7 +333,6 @@ function useAnimatedTextFrames({
     progress,
     randomCharacters,
     revealPlan,
-    scanlineFrame,
     segments,
     stagger,
     variant,
@@ -404,11 +347,7 @@ function getSegmentClasses(
     return "inline-block whitespace-pre opacity-0 [animation-duration:var(--vllnt-animated-text-duration)] [animation-fill-mode:forwards] [animation-name:vllnt-animated-text-reveal] [animation-timing-function:cubic-bezier(0.16,1,0.3,1)]";
   }
 
-  if (
-    variant === "matrix" ||
-    variant === "decipher" ||
-    variant === "scanline"
-  ) {
+  if (variant === "matrix" || variant === "decipher") {
     return cn(
       "inline-block whitespace-pre font-mono tracking-[0.08em] transition-colors duration-150",
       isRevealed ? "text-foreground" : "text-primary/75",
@@ -419,11 +358,7 @@ function getSegmentClasses(
 }
 
 function getContainerClasses(variant: AnimatedTextVariant): string {
-  if (
-    variant === "matrix" ||
-    variant === "decipher" ||
-    variant === "scanline"
-  ) {
+  if (variant === "matrix" || variant === "decipher") {
     return "flex flex-wrap font-mono leading-relaxed tracking-[0.08em]";
   }
 
