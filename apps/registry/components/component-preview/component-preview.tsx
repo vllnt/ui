@@ -7,6 +7,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  ActivityHeatmap,
   ActivityLog,
   Alert,
   AlertDescription,
@@ -65,6 +66,8 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  CountdownTimer,
+  CreditBadge,
   DataList,
   DataListItem,
   DataListLabel,
@@ -94,6 +97,7 @@ import {
   FAQ,
   FAQItem,
   FileUpload,
+  Flashcard,
   FloatingActionButton,
   Glossary,
   HorizontalScrollRow,
@@ -109,6 +113,8 @@ import {
   KeyConcept,
   LangProvider,
   LearningObjectives,
+  LiveFeed,
+  MarketTreemap,
   Marquee,
   Menubar,
   MenubarContent,
@@ -116,6 +122,7 @@ import {
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
+  MetricGauge,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -124,6 +131,7 @@ import {
   NavigationMenuTrigger,
   NumberInput,
   NumberTicker,
+  OrderBook,
   Pagination,
   PasswordInput,
   Popover,
@@ -148,6 +156,7 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  SeverityBadge,
   ShareSection,
   Sheet,
   SheetClose,
@@ -164,6 +173,7 @@ import {
   Slider,
   Spinner,
   StatCard,
+  StatusBoard,
   StatusIndicator,
   Step,
   StepByStep,
@@ -200,6 +210,9 @@ import {
   UsageBreakdown,
   VideoEmbed,
   ViewSwitcher,
+  WalletCard,
+  Watchlist,
+  WorldClockBar,
 } from "@vllnt/ui";
 import {
   Bold,
@@ -1757,6 +1770,241 @@ function CarouselPreview() {
   );
 }
 
+function ActivityHeatmapPreview() {
+  return (
+    <ActivityHeatmap
+      data={[
+        { count: 1, date: "2026-03-01" },
+        { count: 3, date: "2026-03-02" },
+        { count: 6, date: "2026-03-03" },
+        { count: 4, date: "2026-03-05" },
+        { count: 9, date: "2026-03-08" },
+        { count: 7, date: "2026-03-11" },
+        { count: 2, date: "2026-03-13" },
+      ]}
+      endDate="2026-03-14T00:00:00.000Z"
+      title="Deployment activity"
+      weeks={2}
+    />
+  );
+}
+
+function CountdownTimerPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <CountdownTimer
+        deadline="2026-03-15T10:30:00.000Z"
+        now="2026-03-15T10:00:00.000Z"
+        startedAt="2026-03-15T09:00:00.000Z"
+        title="SLA timer"
+      />
+    </div>
+  );
+}
+
+function CreditBadgePreview() {
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <CreditBadge amount="420 credits" status="healthy" />
+      <CreditBadge amount="24 credits" status="low" />
+      <CreditBadge amount="0 credits" status="depleted" />
+    </div>
+  );
+}
+
+function FlashcardPreview() {
+  return (
+    <Flashcard
+      answer="A hypothesis is a testable explanation for an observation."
+      category="Science"
+      question="What is a hypothesis?"
+      title="Key vocabulary"
+    />
+  );
+}
+
+function MarketTreemapPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <MarketTreemap
+        items={[
+          { change: 2.6, label: "NVDA", sector: "Semis", value: 980 },
+          { change: 1.4, label: "MSFT", sector: "Software", value: 760 },
+          { change: -1.4, label: "XOM", sector: "Energy", value: 520 },
+          { change: 0.8, label: "JPM", sector: "Financials", value: 440 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function OrderBookPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <OrderBook
+        asks={[
+          { price: 185.24, size: 4.2 },
+          { price: 185.31, size: 6.8 },
+          { price: 185.39, size: 8.1 },
+        ]}
+        bids={[
+          { price: 185.18, size: 5.4 },
+          { price: 185.11, size: 7.1 },
+          { price: 185.03, size: 9.2 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function WalletCardPreview() {
+  return (
+    <WalletCard
+      availableLabel="96 credits"
+      balanceLabel="128 credits"
+      note="Set up auto-refill to keep automations running through the month."
+      pendingLabel="32 credits"
+      primaryActionLabel="Buy credits"
+      renewsLabel="Refreshes on May 1, 2026"
+      secondaryActionLabel="Billing history"
+      status="healthy"
+    />
+  );
+}
+
+function WatchlistPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <Watchlist
+        items={[
+          {
+            change: 1.42,
+            name: "Apple Inc.",
+            price: 182.33,
+            starred: true,
+            symbol: "AAPL",
+          },
+          {
+            change: -0.64,
+            name: "Microsoft",
+            price: 431.8,
+            symbol: "MSFT",
+          },
+          {
+            change: 3.08,
+            name: "NVIDIA",
+            price: 512.9,
+            starred: true,
+            symbol: "NVDA",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
+function MetricGaugePreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <MetricGauge label="CPU load" max={100} unit="%" value={72} />
+    </div>
+  );
+}
+
+function LiveFeedPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <LiveFeed
+        events={[
+          {
+            id: "1",
+            message: "Auth gateway p95 latency above 400ms for 5m.",
+            severity: "critical",
+            source: "pagerduty",
+            timestamp: "2026-03-15T11:59:30.000Z",
+            title: "Latency breach on gateway",
+          },
+          {
+            id: "2",
+            message: "Auto-scaler added 2 nodes to worker pool.",
+            severity: "medium",
+            source: "platform",
+            timestamp: "2026-03-15T11:55:00.000Z",
+            title: "Worker pool scaled up",
+          },
+          {
+            id: "3",
+            message: "Revert complete. SLA within target.",
+            severity: "low",
+            source: "deploy-bot",
+            timestamp: "2026-03-15T11:40:00.000Z",
+            title: "Rollback of v7.1.2 succeeded",
+          },
+        ]}
+        now="2026-03-15T12:00:00.000Z"
+        title="Incident feed"
+      />
+    </div>
+  );
+}
+
+function SeverityBadgePreview() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <SeverityBadge level="critical" />
+      <SeverityBadge level="high" />
+      <SeverityBadge level="medium" />
+      <SeverityBadge level="low" />
+      <SeverityBadge level="info" />
+    </div>
+  );
+}
+
+function StatusBoardPreview() {
+  return (
+    <StatusBoard
+      items={[
+        {
+          description: "Traffic and auth requests are stable.",
+          label: "Gateway",
+          meta: "1m ago",
+          status: "healthy",
+          value: "99.98%",
+        },
+        {
+          description: "Queue depth is trending upward.",
+          label: "Worker pool",
+          meta: "4 delayed jobs",
+          status: "warning",
+          value: "82%",
+        },
+        {
+          description: "Fallback region currently disabled.",
+          label: "Edge POP",
+          meta: "Planned maintenance",
+          status: "maintenance",
+          value: "2/3 online",
+        },
+      ]}
+      title="Service health"
+    />
+  );
+}
+
+function WorldClockBarPreview() {
+  return (
+    <WorldClockBar
+      now="2026-03-15T12:00:00.000Z"
+      zones={[
+        { city: "San Francisco", timeZone: "America/Los_Angeles" },
+        { city: "New York", timeZone: "America/New_York" },
+        { city: "London", timeZone: "Europe/London" },
+        { city: "Singapore", timeZone: "Asia/Singapore" },
+      ]}
+    />
+  );
+}
+
 function CalendarPreview() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return <Calendar mode="single" onSelect={setDate} selected={date} />;
@@ -1828,6 +2076,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
     case "accordion":
       return <AccordionPreview />;
+    case "activity-heatmap":
+      return <ActivityHeatmapPreview />;
     case "activity-log":
       return <ActivityLogPreview />;
     case "alert":
@@ -1896,6 +2146,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "context-menu":
       return <ContextMenuPreview />;
+    case "countdown-timer":
+      return <CountdownTimerPreview />;
+    case "credit-badge":
+      return <CreditBadgePreview />;
     case "dialog":
       return <DialogPreview />;
     case "drawer":
@@ -1906,6 +2160,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ExercisePreview />;
     case "faq":
       return <FAQPreview />;
+    case "flashcard":
+      return <FlashcardPreview />;
     case "file-upload":
       return <FileUploadPreview />;
     case "filter-bar":
@@ -1938,10 +2194,16 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <LineChartPreview />;
     case "marquee":
       return <MarqueePreview />;
+    case "live-feed":
+      return <LiveFeedPreview />;
+    case "market-treemap":
+      return <MarketTreemapPreview />;
     case "mdx-content":
       return <MDXContentPreview />;
     case "menubar":
       return <MenubarPreview />;
+    case "metric-gauge":
+      return <MetricGaugePreview />;
     case "model-selector":
       return (
         <SimplePreview description="A dialog for selecting AI models with search and filtering." />
@@ -1956,6 +2218,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <NumberInputPreview />;
     case "number-ticker":
       return <NumberTickerPreview />;
+    case "order-book":
+      return <OrderBookPreview />;
     case "pagination":
       return <PaginationPreview />;
     case "password-input":
@@ -1992,6 +2256,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SelectPreview />;
     case "separator":
       return <SeparatorPreview />;
+    case "severity-badge":
+      return <SeverityBadgePreview />;
     case "share-section":
       return <ShareSectionPreview />;
     case "sheet":
@@ -2006,6 +2272,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SpinnerPreview />;
     case "stat-card":
       return <StatCardPreview />;
+    case "status-board":
+      return <StatusBoardPreview />;
     case "sidebar-provider":
       return <SidebarProviderPreview />;
     case "sidebar-toggle":
@@ -2074,6 +2342,12 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "wallet-card":
+      return <WalletCardPreview />;
+    case "watchlist":
+      return <WatchlistPreview />;
+    case "world-clock-bar":
+      return <WorldClockBarPreview />;
     default:
       return <div className="text-muted-foreground">Preview not available</div>;
   }

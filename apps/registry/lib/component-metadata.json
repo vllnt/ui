@@ -12,6 +12,125 @@
     ],
     "title": "Accordion"
   },
+  "activity-heatmap": {
+    "category": "data",
+    "defaultStoryId": "data-activityheatmap--default",
+    "description": "Contribution-style grid for visualizing operational activity over time.",
+    "name": "activity-heatmap",
+    "stories": [
+      {
+        "id": "data-activityheatmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-activityheatmap--two-weeks",
+        "name": "Two Weeks"
+      }
+    ],
+    "title": "Activity Heatmap"
+  },
+  "activity-log": {
+    "category": "data",
+    "defaultStoryId": "analytics-activitylog--default",
+    "description": "Paginated activity feed for audit history and analytics changes.",
+    "name": "activity-log",
+    "stories": [
+      {
+        "id": "analytics-activitylog--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-activitylog--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Activity Log"
+  },
+  "ai-chat-input": {
+    "category": "learning",
+    "defaultStoryId": "ai-chatinput--default",
+    "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+    "name": "ai-chat-input",
+    "stories": [
+      {
+        "id": "ai-chatinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chatinput--submitting",
+        "name": "Submitting"
+      }
+    ],
+    "title": "AI Chat Input"
+  },
+  "ai-message-bubble": {
+    "category": "learning",
+    "defaultStoryId": "ai-messagebubble--default",
+    "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+    "name": "ai-message-bubble",
+    "stories": [
+      {
+        "id": "ai-messagebubble--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-messagebubble--user",
+        "name": "User"
+      },
+      {
+        "id": "ai-messagebubble--tool",
+        "name": "Tool"
+      }
+    ],
+    "title": "AI Message Bubble"
+  },
+  "ai-source-citation": {
+    "category": "learning",
+    "defaultStoryId": "ai-sourcecitation--default",
+    "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+    "name": "ai-source-citation",
+    "stories": [
+      {
+        "id": "ai-sourcecitation--default",
+        "name": "Default"
+      }
+    ],
+    "title": "AI Source Citation"
+  },
+  "ai-streaming-text": {
+    "category": "learning",
+    "defaultStoryId": "ai-streamingtext--default",
+    "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+    "name": "ai-streaming-text",
+    "stories": [
+      {
+        "id": "ai-streamingtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-streamingtext--streaming",
+        "name": "Streaming"
+      }
+    ],
+    "title": "AI Streaming Text"
+  },
+  "ai-tool-call-display": {
+    "category": "learning",
+    "defaultStoryId": "ai-toolcalldisplay--default",
+    "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+    "name": "ai-tool-call-display",
+    "stories": [
+      {
+        "id": "ai-toolcalldisplay--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-toolcalldisplay--error-state",
+        "name": "Error State"
+      }
+    ],
+    "title": "AI Tool Call Display"
+  },
   "alert": {
     "category": "data",
     "defaultStoryId": "data-alert--default",
@@ -58,6 +177,23 @@
       }
     ],
     "title": "Animated Text"
+  },
+  "annotation": {
+    "category": "learning",
+    "defaultStoryId": "learning-annotation--default",
+    "description": "Inline highlight with an attached contextual note.",
+    "name": "annotation",
+    "stories": [
+      {
+        "id": "learning-annotation--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-annotation--highlight-only",
+        "name": "Highlight Only"
+      }
+    ],
+    "title": "Annotation"
   },
   "area-chart": {
     "category": "data",
@@ -257,6 +393,23 @@
     ],
     "title": "Callout"
   },
+  "candlestick-chart": {
+    "category": "data",
+    "defaultStoryId": "data-candlestickchart--default",
+    "description": "OHLC financial chart for session-by-session price action.",
+    "name": "candlestick-chart",
+    "stories": [
+      {
+        "id": "data-candlestickchart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-candlestickchart--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Candlestick Chart"
+  },
   "card": {
     "category": "content",
     "defaultStoryId": "content-card--default",
@@ -443,6 +596,40 @@
     ],
     "title": "Context Menu"
   },
+  "countdown-timer": {
+    "category": "data",
+    "defaultStoryId": "data-countdowntimer--default",
+    "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+    "name": "countdown-timer",
+    "stories": [
+      {
+        "id": "data-countdowntimer--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-countdowntimer--breached",
+        "name": "Breached"
+      }
+    ],
+    "title": "Countdown Timer"
+  },
+  "credit-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-creditbadge--default",
+    "description": "Balance status pill for credits, wallet states, and billing health.",
+    "name": "credit-badge",
+    "stories": [
+      {
+        "id": "account-billing-creditbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-creditbadge--states",
+        "name": "States"
+      }
+    ],
+    "title": "Credit Badge"
+  },
   "data-list": {
     "category": "data",
     "defaultStoryId": "data-datalist--default",
@@ -580,6 +767,19 @@
       }
     ],
     "title": "Filter Bar"
+  },
+  "flashcard": {
+    "category": "learning",
+    "defaultStoryId": "learning-flashcard--default",
+    "description": "Study card for active recall with prompt and answer states.",
+    "name": "flashcard",
+    "stories": [
+      {
+        "id": "learning-flashcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Flashcard"
   },
   "floating-action-button": {
     "category": "utility",
@@ -749,6 +949,36 @@
     ],
     "title": "Marquee"
   },
+  "live-feed": {
+    "category": "data",
+    "defaultStoryId": "data-livefeed--default",
+    "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+    "name": "live-feed",
+    "stories": [
+      {
+        "id": "data-livefeed--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-livefeed--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Live Feed"
+  },
+  "market-treemap": {
+    "category": "data",
+    "defaultStoryId": "data-markettreemap--default",
+    "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+    "name": "market-treemap",
+    "stories": [
+      {
+        "id": "data-markettreemap--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Market Treemap"
+  },
   "mdx-content": {
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
@@ -774,6 +1004,23 @@
       }
     ],
     "title": "Menubar"
+  },
+  "metric-gauge": {
+    "category": "data",
+    "defaultStoryId": "data-metricgauge--default",
+    "description": "Real-time arc and dial display for monitored percentages and utilization.",
+    "name": "metric-gauge",
+    "stories": [
+      {
+        "id": "data-metricgauge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-metricgauge--critical",
+        "name": "Critical"
+      }
+    ],
+    "title": "Metric Gauge"
   },
   "model-selector": {
     "category": "form",
@@ -844,6 +1091,23 @@
     ],
     "title": "Number Ticker"
   },
+  "order-book": {
+    "category": "data",
+    "defaultStoryId": "data-orderbook--default",
+    "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+    "name": "order-book",
+    "stories": [
+      {
+        "id": "data-orderbook--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-orderbook--tight-spread",
+        "name": "Tight Spread"
+      }
+    ],
+    "title": "Order Book"
+  },
   "pagination": {
     "category": "navigation",
     "defaultStoryId": "navigation-pagination--default",
@@ -869,6 +1133,27 @@
       }
     ],
     "title": "Password Input"
+  },
+  "plan-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-planbadge--default",
+    "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+    "name": "plan-badge",
+    "stories": [
+      {
+        "id": "account-billing-planbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-planbadge--all-tiers",
+        "name": "All Tiers"
+      },
+      {
+        "id": "account-billing-planbadge--trial",
+        "name": "Trial"
+      }
+    ],
+    "title": "Plan Badge"
   },
   "popover": {
     "category": "overlay",
@@ -961,6 +1246,23 @@
     ],
     "title": "Radio Group"
   },
+  "rating": {
+    "category": "learning",
+    "defaultStoryId": "learning-rating--default",
+    "description": "Inline star rating for lightweight learner feedback.",
+    "name": "rating",
+    "stories": [
+      {
+        "id": "learning-rating--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-rating--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "Rating"
+  },
   "resizable": {
     "category": "utility",
     "defaultStoryId": "utility-resizable--default",
@@ -973,6 +1275,40 @@
       }
     ],
     "title": "Resizable"
+  },
+  "role-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-rolebadge--default",
+    "description": "Account role indicator for owners, admins, members, and billing contacts.",
+    "name": "role-badge",
+    "stories": [
+      {
+        "id": "account-billing-rolebadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-rolebadge--team-roles",
+        "name": "Team Roles"
+      }
+    ],
+    "title": "Role Badge"
+  },
+  "scope-selector": {
+    "category": "form",
+    "defaultStoryId": "analytics-scopeselector--default",
+    "description": "Multi-level scope picker for nested environments, teams, and targets.",
+    "name": "scope-selector",
+    "stories": [
+      {
+        "id": "analytics-scopeselector--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-scopeselector--with-default-selection",
+        "name": "With Default Selection"
+      }
+    ],
+    "title": "Scope Selector"
   },
   "scroll-area": {
     "category": "utility",
@@ -1038,6 +1374,35 @@
       }
     ],
     "title": "Separator"
+  },
+  "severity-badge": {
+    "category": "data",
+    "defaultStoryId": "data-severitybadge--default",
+    "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+    "name": "severity-badge",
+    "stories": [
+      {
+        "id": "data-severitybadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-severitybadge--levels",
+        "name": "Levels"
+      },
+      {
+        "id": "data-severitybadge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "data-severitybadge--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "data-severitybadge--custom-label",
+        "name": "Custom Label"
+      }
+    ],
+    "title": "Severity Badge"
   },
   "share-section": {
     "category": "content",
@@ -1151,6 +1516,23 @@
     ],
     "title": "Slideshow"
   },
+  "sparkline-grid": {
+    "category": "data",
+    "defaultStoryId": "data-sparklinegrid--default",
+    "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+    "name": "sparkline-grid",
+    "stories": [
+      {
+        "id": "data-sparklinegrid--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-sparklinegrid--four-columns",
+        "name": "Four Columns"
+      }
+    ],
+    "title": "Sparkline Grid"
+  },
   "spinner": {
     "category": "utility",
     "defaultStoryId": "utility-spinner--default",
@@ -1180,6 +1562,23 @@
       }
     ],
     "title": "Stat Card"
+  },
+  "status-board": {
+    "category": "data",
+    "defaultStoryId": "data-statusboard--default",
+    "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+    "name": "status-board",
+    "stories": [
+      {
+        "id": "data-statusboard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusboard--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Status Board"
   },
   "status-indicator": {
     "category": "data",
@@ -1223,6 +1622,40 @@
       }
     ],
     "title": "Step Navigation"
+  },
+  "stepper": {
+    "category": "learning",
+    "defaultStoryId": "learning-stepper--default",
+    "description": "Sequenced steps with complete, current, and upcoming states.",
+    "name": "stepper",
+    "stories": [
+      {
+        "id": "learning-stepper--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-stepper--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Stepper"
+  },
+  "subscription-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-subscriptioncard--default",
+    "description": "Subscription status and management card for plan, renewal, and usage details.",
+    "name": "subscription-card",
+    "stories": [
+      {
+        "id": "account-billing-subscriptioncard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-subscriptioncard--trialing",
+        "name": "Trialing"
+      }
+    ],
+    "title": "Subscription Card"
   },
   "table": {
     "category": "data",
@@ -1341,6 +1774,23 @@
     ],
     "title": "Thinking Block"
   },
+  "ticker-tape": {
+    "category": "data",
+    "defaultStoryId": "data-tickertape--default",
+    "description": "Marquee-style scrolling symbol tape with price and change badges.",
+    "name": "ticker-tape",
+    "stories": [
+      {
+        "id": "data-tickertape--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-tickertape--fast",
+        "name": "Fast"
+      }
+    ],
+    "title": "Ticker Tape"
+  },
   "tldr-section": {
     "category": "content",
     "defaultStoryId": "content-tldrsection--default",
@@ -1426,6 +1876,19 @@
     ],
     "title": "Tooltip"
   },
+  "tour": {
+    "category": "learning",
+    "defaultStoryId": "learning-tour--default",
+    "description": "Guided onboarding flow for introducing content or interface patterns.",
+    "name": "tour",
+    "stories": [
+      {
+        "id": "learning-tour--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tour"
+  },
   "tutorial-card": {
     "category": "learning",
     "defaultStoryId": "learning-tutorialcard--default",
@@ -1491,6 +1954,27 @@
     ],
     "title": "Tutorial MDX"
   },
+  "usage-breakdown": {
+    "category": "data",
+    "defaultStoryId": "analytics-usagebreakdown--default",
+    "description": "Ranked resource consumption list with relative share and trend cues.",
+    "name": "usage-breakdown",
+    "stories": [
+      {
+        "id": "analytics-usagebreakdown--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-usagebreakdown--top-two-only",
+        "name": "Top Two Only"
+      },
+      {
+        "id": "analytics-usagebreakdown--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Usage Breakdown"
+  },
   "video-embed": {
     "category": "content",
     "defaultStoryId": "content-videoembed--default",
@@ -1516,5 +2000,56 @@
       }
     ],
     "title": "View Switcher"
+  },
+  "wallet-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-walletcard--default",
+    "description": "Credit balance display card for available, pending, and refresh details.",
+    "name": "wallet-card",
+    "stories": [
+      {
+        "id": "account-billing-walletcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-walletcard--depleted",
+        "name": "Depleted"
+      }
+    ],
+    "title": "Wallet Card"
+  },
+  "watchlist": {
+    "category": "data",
+    "defaultStoryId": "data-watchlist--default",
+    "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+    "name": "watchlist",
+    "stories": [
+      {
+        "id": "data-watchlist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-watchlist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Watchlist"
+  },
+  "world-clock-bar": {
+    "category": "data",
+    "defaultStoryId": "data-worldclockbar--default",
+    "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+    "name": "world-clock-bar",
+    "stories": [
+      {
+        "id": "data-worldclockbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-worldclockbar--time-only",
+        "name": "Time Only"
+      }
+    ],
+    "title": "World Clock Bar"
   }
 }
