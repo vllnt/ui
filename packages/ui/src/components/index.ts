@@ -271,8 +271,38 @@ export { ThemeProvider } from "./theme-provider";
 export { ThemeToggle } from "./theme-toggle";
 
 // Feature components
+export {
+  CandlestickChart,
+  type CandlestickChartProps,
+  type CandlestickDatum,
+} from "./candlestick-chart";
+export {
+  MarketTreemap,
+  type MarketTreemapItem,
+  type MarketTreemapProps,
+} from "./market-treemap";
+export {
+  OrderBook,
+  type OrderBookLevel,
+  type OrderBookProps,
+} from "./order-book";
 export { ProfileSection } from "./profile-section";
+export {
+  SparklineGrid,
+  type SparklineGridItem,
+  type SparklineGridProps,
+} from "./sparkline-grid";
 export { TLDRSection } from "./tldr-section";
+export {
+  TickerTape,
+  type TickerTapeItem,
+  type TickerTapeProps,
+} from "./ticker-tape";
+export {
+  Watchlist,
+  type WatchlistItem,
+  type WatchlistProps,
+} from "./watchlist";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 

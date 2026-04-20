@@ -193,6 +193,23 @@
     ],
     "title": "Calendar"
   },
+  "candlestick-chart": {
+    "category": "data",
+    "defaultStoryId": "data-candlestickchart--default",
+    "description": "OHLC financial chart for session-by-session price action.",
+    "name": "candlestick-chart",
+    "stories": [
+      {
+        "id": "data-candlestickchart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-candlestickchart--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Candlestick Chart"
+  },
   "callout": {
     "category": "content",
     "defaultStoryId": "content-callout--default",
@@ -604,6 +621,19 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "market-treemap": {
+    "category": "data",
+    "defaultStoryId": "data-markettreemap--default",
+    "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+    "name": "market-treemap",
+    "stories": [
+      {
+        "id": "data-markettreemap--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Market Treemap"
+  },
   "mdx-content": {
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
@@ -668,6 +698,23 @@
       }
     ],
     "title": "Navigation Menu"
+  },
+  "order-book": {
+    "category": "data",
+    "defaultStoryId": "data-orderbook--default",
+    "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+    "name": "order-book",
+    "stories": [
+      {
+        "id": "data-orderbook--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-orderbook--tight-spread",
+        "name": "Tight Spread"
+      }
+    ],
+    "title": "Order Book"
   },
   "pagination": {
     "category": "navigation",
@@ -963,6 +1010,23 @@
     ],
     "title": "Slideshow"
   },
+  "sparkline-grid": {
+    "category": "data",
+    "defaultStoryId": "data-sparklinegrid--default",
+    "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+    "name": "sparkline-grid",
+    "stories": [
+      {
+        "id": "data-sparklinegrid--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-sparklinegrid--four-columns",
+        "name": "Four Columns"
+      }
+    ],
+    "title": "Sparkline Grid"
+  },
   "spinner": {
     "category": "utility",
     "defaultStoryId": "utility-spinner--default",
@@ -1066,6 +1130,23 @@
       }
     ],
     "title": "Terminal"
+  },
+  "ticker-tape": {
+    "category": "data",
+    "defaultStoryId": "data-tickertape--default",
+    "description": "Marquee-style scrolling symbol tape with price and change badges.",
+    "name": "ticker-tape",
+    "stories": [
+      {
+        "id": "data-tickertape--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-tickertape--fast",
+        "name": "Fast"
+      }
+    ],
+    "title": "Ticker Tape"
   },
   "textarea": {
     "category": "core",
@@ -1294,5 +1375,22 @@
       }
     ],
     "title": "View Switcher"
+  },
+  "watchlist": {
+    "category": "data",
+    "defaultStoryId": "data-watchlist--default",
+    "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+    "name": "watchlist",
+    "stories": [
+      {
+        "id": "data-watchlist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-watchlist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Watchlist"
   }
 }

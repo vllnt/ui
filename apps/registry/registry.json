@@ -184,6 +184,21 @@
       "category": "form"
     },
     {
+      "name": "candlestick-chart",
+      "type": "registry:component",
+      "title": "Candlestick Chart",
+      "description": "OHLC financial chart for session-by-session price action.",
+      "files": [
+        {
+          "path": "registry/default/candlestick-chart/candlestick-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "callout",
       "type": "registry:component",
       "title": "Callout",
@@ -664,6 +679,21 @@
       "category": "data"
     },
     {
+      "name": "market-treemap",
+      "type": "registry:component",
+      "title": "Market Treemap",
+      "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+      "files": [
+        {
+          "path": "registry/default/market-treemap/market-treemap.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "mdx-content",
       "type": "registry:component",
       "title": "MDX Content",
@@ -737,6 +767,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "order-book",
+      "type": "registry:component",
+      "title": "Order Book",
+      "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+      "files": [
+        {
+          "path": "registry/default/order-book/order-book.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "pagination",
@@ -1071,6 +1116,21 @@
       "category": "content"
     },
     {
+      "name": "sparkline-grid",
+      "type": "registry:component",
+      "title": "Sparkline Grid",
+      "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+      "files": [
+        {
+          "path": "registry/default/sparkline-grid/sparkline-grid.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "spinner",
       "type": "registry:component",
       "title": "Spinner",
@@ -1189,6 +1249,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "ticker-tape",
+      "type": "registry:component",
+      "title": "Ticker Tape",
+      "description": "Marquee-style scrolling symbol tape with price and change badges.",
+      "files": [
+        {
+          "path": "registry/default/ticker-tape/ticker-tape.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "textarea",
@@ -1431,6 +1506,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "watchlist",
+      "type": "registry:component",
+      "title": "Watchlist",
+      "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+      "files": [
+        {
+          "path": "registry/default/watchlist/watchlist.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     }
   ]
 }
