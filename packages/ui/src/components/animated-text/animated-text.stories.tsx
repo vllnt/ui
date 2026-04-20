@@ -23,6 +23,36 @@ export const Matrix: Story = {
   },
 };
 
+export const Decipher: Story = {
+  args: {
+    direction: "start",
+    randomness: 0.75,
+    stagger: 40,
+    text: "FOLLOW THE WHITE RABBIT",
+    variant: "decipher",
+  },
+};
+
+export const DecipherReverse: Story = {
+  args: {
+    direction: "end",
+    randomness: 0.5,
+    stagger: 35,
+    text: "WAKE UP NEO",
+    variant: "decipher",
+  },
+};
+
+export const DecipherRandom: Story = {
+  args: {
+    direction: "random",
+    randomness: 1,
+    stagger: 30,
+    text: "THE MATRIX HAS YOU",
+    variant: "decipher",
+  },
+};
+
 export const Typewriter: Story = {
   args: {
     stagger: 45,

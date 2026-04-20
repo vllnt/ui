@@ -29,4 +29,17 @@ describe("AnimatedText", () => {
 
     expect(screen.getByLabelText("ABC")).toBeVisible();
   });
+
+  it("supports decipher mode", () => {
+    render(
+      <AnimatedText
+        direction="random"
+        randomness={1}
+        text="DECRYPT"
+        variant="decipher"
+      />,
+    );
+
+    expect(screen.getByLabelText("DECRYPT")).toBeVisible();
+  });
 });
