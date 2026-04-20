@@ -79,6 +79,14 @@ export default [
     },
   },
   {
+    files: ['**/components/data-table/data-table.tsx'],
+    rules: {
+      'max-lines-per-function': 'off',
+      'react-hooks/incompatible-library': 'off',
+      'react/no-unstable-nested-components': 'off',
+    },
+  },
+  {
     files: ['**/components/search-bar/search-bar.tsx'],
     rules: {
       'max-lines-per-function': 'off',

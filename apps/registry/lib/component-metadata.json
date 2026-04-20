@@ -12,6 +12,23 @@
     ],
     "title": "Accordion"
   },
+  "activity-log": {
+    "category": "data",
+    "defaultStoryId": "analytics-activitylog--default",
+    "description": "Paginated activity feed for audit history and analytics changes.",
+    "name": "activity-log",
+    "stories": [
+      {
+        "id": "analytics-activitylog--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-activitylog--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Activity Log"
+  },
   "alert": {
     "category": "data",
     "defaultStoryId": "data-alert--default",
@@ -41,6 +58,23 @@
       }
     ],
     "title": "Alert Dialog"
+  },
+  "annotation": {
+    "category": "learning",
+    "defaultStoryId": "learning-annotation--default",
+    "description": "Inline highlight with an attached contextual note.",
+    "name": "annotation",
+    "stories": [
+      {
+        "id": "learning-annotation--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-annotation--highlight-only",
+        "name": "Highlight Only"
+      }
+    ],
+    "title": "Annotation"
   },
   "area-chart": {
     "category": "data",
@@ -75,6 +109,23 @@
       }
     ],
     "title": "Avatar"
+  },
+  "avatar-group": {
+    "category": "data",
+    "defaultStoryId": "data-avatargroup--default",
+    "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+    "name": "avatar-group",
+    "stories": [
+      {
+        "id": "data-avatargroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-avatargroup--sizes",
+        "name": "Sizes"
+      }
+    ],
+    "title": "Avatar Group"
   },
   "badge": {
     "category": "core",
@@ -219,6 +270,36 @@
     ],
     "title": "Card"
   },
+  "data-list": {
+    "category": "data",
+    "defaultStoryId": "data-datalist--default",
+    "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "name": "data-list",
+    "stories": [
+      {
+        "id": "data-datalist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-datalist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Data List"
+  },
+  "data-table": {
+    "category": "data",
+    "defaultStoryId": "data-datatable--default",
+    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "name": "data-table",
+    "stories": [
+      {
+        "id": "data-datatable--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Data Table"
+  },
   "carousel": {
     "category": "content",
     "defaultStoryId": "content-carousel--default",
@@ -310,6 +391,23 @@
     ],
     "title": "Collapsible"
   },
+  "combobox": {
+    "category": "form",
+    "defaultStoryId": "form-combobox--default",
+    "description": "Searchable select input for choosing from a list of options.",
+    "name": "combobox",
+    "stories": [
+      {
+        "id": "form-combobox--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-combobox--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Combobox"
+  },
   "command": {
     "category": "overlay",
     "defaultStoryId": "overlay-command--default",
@@ -374,6 +472,23 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "date-picker": {
+    "category": "form",
+    "defaultStoryId": "form-datepicker--default",
+    "description": "Single-date picker built with the shared calendar and popover primitives.",
+    "name": "date-picker",
+    "stories": [
+      {
+        "id": "form-datepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Picker"
   },
   "dialog": {
     "category": "overlay",
@@ -440,6 +555,19 @@
     ],
     "title": "FAQ"
   },
+  "file-upload": {
+    "category": "form",
+    "defaultStoryId": "form-fileupload--default",
+    "description": "Dropzone-style file picker with previews for selected files.",
+    "name": "file-upload",
+    "stories": [
+      {
+        "id": "form-fileupload--default",
+        "name": "Default"
+      }
+    ],
+    "title": "File Upload"
+  },
   "filter-bar": {
     "category": "form",
     "defaultStoryId": "form-filterbar--default",
@@ -452,6 +580,19 @@
       }
     ],
     "title": "Filter Bar"
+  },
+  "flashcard": {
+    "category": "learning",
+    "defaultStoryId": "learning-flashcard--default",
+    "description": "Study card for active recall with prompt and answer states.",
+    "name": "flashcard",
+    "stories": [
+      {
+        "id": "learning-flashcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Flashcard"
   },
   "floating-action-button": {
     "category": "utility",
@@ -479,19 +620,6 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
-    "stories": [
-      {
-        "id": "overlay-hovercard--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Hover Card"
-  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -504,6 +632,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -669,6 +810,19 @@
     ],
     "title": "Navigation Menu"
   },
+  "number-input": {
+    "category": "form",
+    "defaultStoryId": "form-numberinput--default",
+    "description": "Numeric input with increment and decrement controls.",
+    "name": "number-input",
+    "stories": [
+      {
+        "id": "form-numberinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Number Input"
+  },
   "pagination": {
     "category": "navigation",
     "defaultStoryId": "navigation-pagination--default",
@@ -681,6 +835,19 @@
       }
     ],
     "title": "Pagination"
+  },
+  "password-input": {
+    "category": "form",
+    "defaultStoryId": "form-passwordinput--default",
+    "description": "Password field with a built-in visibility toggle.",
+    "name": "password-input",
+    "stories": [
+      {
+        "id": "form-passwordinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Password Input"
   },
   "popover": {
     "category": "overlay",
@@ -773,6 +940,23 @@
     ],
     "title": "Radio Group"
   },
+  "rating": {
+    "category": "learning",
+    "defaultStoryId": "learning-rating--default",
+    "description": "Inline star rating for lightweight learner feedback.",
+    "name": "rating",
+    "stories": [
+      {
+        "id": "learning-rating--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-rating--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "Rating"
+  },
   "resizable": {
     "category": "utility",
     "defaultStoryId": "utility-resizable--default",
@@ -785,6 +969,23 @@
       }
     ],
     "title": "Resizable"
+  },
+  "scope-selector": {
+    "category": "form",
+    "defaultStoryId": "analytics-scopeselector--default",
+    "description": "Multi-level scope picker for nested environments, teams, and targets.",
+    "name": "scope-selector",
+    "stories": [
+      {
+        "id": "analytics-scopeselector--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-scopeselector--with-default-selection",
+        "name": "With Default Selection"
+      }
+    ],
+    "title": "Scope Selector"
   },
   "scroll-area": {
     "category": "utility",
@@ -976,6 +1177,40 @@
     ],
     "title": "Spinner"
   },
+  "stat-card": {
+    "category": "data",
+    "defaultStoryId": "data-statcard--default",
+    "description": "Headline KPI card for metrics, trends, and supporting context.",
+    "name": "stat-card",
+    "stories": [
+      {
+        "id": "data-statcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statcard--grid",
+        "name": "Grid"
+      }
+    ],
+    "title": "Stat Card"
+  },
+  "status-indicator": {
+    "category": "data",
+    "defaultStoryId": "data-statusindicator--default",
+    "description": "Compact status label with tone, variant, and activity dot options.",
+    "name": "status-indicator",
+    "stories": [
+      {
+        "id": "data-statusindicator--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusindicator--variants",
+        "name": "Variants"
+      }
+    ],
+    "title": "Status Indicator"
+  },
   "step-by-step": {
     "category": "learning",
     "defaultStoryId": "learning-stepbystep--default",
@@ -1001,6 +1236,23 @@
       }
     ],
     "title": "Step Navigation"
+  },
+  "stepper": {
+    "category": "learning",
+    "defaultStoryId": "learning-stepper--default",
+    "description": "Sequenced steps with complete, current, and upcoming states.",
+    "name": "stepper",
+    "stories": [
+      {
+        "id": "learning-stepper--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-stepper--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Stepper"
   },
   "table": {
     "category": "data",
@@ -1204,6 +1456,19 @@
     ],
     "title": "Tooltip"
   },
+  "tour": {
+    "category": "learning",
+    "defaultStoryId": "learning-tour--default",
+    "description": "Guided onboarding flow for introducing content or interface patterns.",
+    "name": "tour",
+    "stories": [
+      {
+        "id": "learning-tour--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tour"
+  },
   "tutorial-card": {
     "category": "learning",
     "defaultStoryId": "learning-tutorialcard--default",
@@ -1268,6 +1533,27 @@
       }
     ],
     "title": "Tutorial MDX"
+  },
+  "usage-breakdown": {
+    "category": "data",
+    "defaultStoryId": "analytics-usagebreakdown--default",
+    "description": "Ranked resource consumption list with relative share and trend cues.",
+    "name": "usage-breakdown",
+    "stories": [
+      {
+        "id": "analytics-usagebreakdown--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-usagebreakdown--top-two-only",
+        "name": "Top Two Only"
+      },
+      {
+        "id": "analytics-usagebreakdown--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Usage Breakdown"
   },
   "video-embed": {
     "category": "content",

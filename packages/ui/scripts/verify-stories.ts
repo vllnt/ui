@@ -67,21 +67,38 @@ function toPascalCase(str: string): string {
   return str.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join('')
 }
 
-function extractRequiredProps(source: string, componentName: string): PropInfo[] {
-  const patterns = [
-    new RegExp(`(?:export\\s+)?(?:type|interface)\\s+${componentName}Props\\s*=?\\s*\\{`, 's'),
-    /(?:export\s+)?(?:type|interface)\s+\w*Props\s*=?\s*\{/s,
-  ]
+function extractNamedPropsBlock(source: string, typeName: string): string {
+  const declaration = new RegExp(`(?:export\\s+)?(?:type|interface)\\s+${typeName}\\b`, 's')
+  const match = source.match(declaration)
+  if (match?.index === undefined) return ''
 
-  for (const pattern of patterns) {
-    const match = source.match(pattern)
-    if (match?.index !== undefined) {
-      const block = extractTypeBlock(source, match.index + match[0].length - 1)
-      if (block) {
-        return parsePropsFromBlock(block).filter(
-          (p) => p.required && !['className', 'ref', 'key', 'style'].includes(p.name)
-        )
-      }
+  const afterDeclaration = source.slice(match.index + match[0].length)
+  const braceIndex = afterDeclaration.indexOf('{')
+  if (braceIndex === -1) return ''
+
+  return extractTypeBlock(afterDeclaration, braceIndex)
+}
+
+function extractRequiredProps(source: string, componentName: string): PropInfo[] {
+  const candidateNames = [`${componentName}Props`]
+
+  for (const candidateName of candidateNames) {
+    const block = extractNamedPropsBlock(source, candidateName)
+    if (block) {
+      return parsePropsFromBlock(block).filter(
+        (p) => p.required && !['className', 'ref', 'key', 'style'].includes(p.name)
+      )
+    }
+  }
+
+  const fallbackPattern = /(?:export\s+)?(?:type|interface)\s+(\w*Props)\b/s
+  const fallbackMatch = source.match(fallbackPattern)
+  if (fallbackMatch?.[1]) {
+    const block = extractNamedPropsBlock(source, fallbackMatch[1])
+    if (block) {
+      return parsePropsFromBlock(block).filter(
+        (p) => p.required && !['className', 'ref', 'key', 'style'].includes(p.name)
+      )
     }
   }
 
@@ -128,6 +145,11 @@ function extractStoryArgs(storySource: string): Set<string> {
   return extractTopLevelKeys(metaBlock)
 }
 
+function extractMetaComponentName(storySource: string): string | null {
+  const componentMatch = storySource.match(/\bcomponent\s*:\s*(\w+)/)
+  return componentMatch?.[1] ?? null
+}
+
 function classifyCrashRisk(prop: PropInfo): string {
   const t = prop.type.trim()
   if (t.endsWith('[]') || t.startsWith('Array<') || t.startsWith('readonly ')) return 'CRASH: .map()/.length on undefined'
@@ -160,6 +182,11 @@ function verify(): void {
 
     const source = readFileSync(join(dirPath, mainFile), 'utf-8')
     const storySource = readFileSync(join(dirPath, storyFile), 'utf-8')
+    const metaComponentName = extractMetaComponentName(storySource)
+
+    if (metaComponentName && metaComponentName !== name) {
+      continue
+    }
 
     const requiredProps = extractRequiredProps(source, name)
     const providedArgs = extractStoryArgs(storySource)

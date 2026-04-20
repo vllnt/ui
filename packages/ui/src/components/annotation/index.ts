@@ -1,6 +1,6 @@
 export {
   Annotation,
-  Highlight,
   type AnnotationProps,
+  Highlight,
   type HighlightProps,
 } from "./annotation";
