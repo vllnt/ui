@@ -287,10 +287,28 @@ export { SidebarProvider, useSidebar } from "./sidebar-provider";
 export { TableOfContents } from "./table-of-contents";
 
 // Blog components
+export {
+  ActivityLog,
+  type ActivityLogItem,
+  type ActivityLogProps,
+  type ActivityLogTone,
+} from "./activity-log";
 export { BlogCard, ContentCard } from "./blog-card";
 export { CategoryFilter } from "./category-filter";
 export { Pagination, type PaginationProps } from "./pagination";
 export { SearchBar } from "./search-bar";
+export {
+  ScopeSelector,
+  type ScopeSelectorNode,
+  type ScopeSelectorProps,
+  type ScopeSelectorSelection,
+} from "./scope-selector";
+export {
+  UsageBreakdown,
+  type UsageBreakdownItem,
+  type UsageBreakdownProps,
+  type UsageBreakdownTone,
+} from "./usage-breakdown";
 export {
   type PlatformConfig,
   type SharePlatform,
