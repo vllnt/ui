@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@property --vllnt-border-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 90deg;
+}
+
 /* Default theme variables */
 @layer base {
   :root {
@@ -89,12 +95,12 @@
     }
   }
 
-  @keyframes vllnt-border-beam-rotate {
+  @keyframes vllnt-border-beam-angle {
     from {
-      transform: rotate(0deg);
+      --vllnt-border-beam-angle: 90deg;
     }
     to {
-      transform: rotate(360deg);
+      --vllnt-border-beam-angle: 450deg;
     }
   }
 
