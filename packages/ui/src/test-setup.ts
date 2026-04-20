@@ -6,13 +6,21 @@ import { expect } from "vitest";
 expect.extend(matchers);
 
 class MockResizeObserver {
-  observe() {}
+  observe() {
+    return;
+  }
 
-  unobserve() {}
+  unobserve() {
+    return;
+  }
 
-  disconnect() {}
+  disconnect() {
+    return;
+  }
 }
 
 globalThis.ResizeObserver = MockResizeObserver;
 
-HTMLElement.prototype.scrollIntoView = () => {};
+HTMLElement.prototype.scrollIntoView = function scrollIntoView() {
+  return;
+};

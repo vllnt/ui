@@ -1,10 +1,10 @@
 export {
   DataList,
   DataListItem,
-  DataListLabel,
-  DataListValue,
   type DataListItemProps,
-  type DataListProps,
   dataListItemVariants,
+  DataListLabel,
+  type DataListProps,
+  DataListValue,
   dataListVariants,
 } from "./data-list";
