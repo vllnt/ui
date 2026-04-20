@@ -244,38 +244,6 @@
       "category": "content"
     },
     {
-      "name": "data-list",
-      "type": "registry:component",
-      "title": "Data List",
-      "description": "Semantic key-value metadata layout for displaying labels with values.",
-      "files": [
-        {
-          "path": "registry/default/data-list/data-list.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
-    },
-    {
-      "name": "data-table",
-      "type": "registry:component",
-      "title": "Data Table",
-      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
-      "files": [
-        {
-          "path": "registry/default/data-table/data-table.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [
-        "@tanstack/react-table"
-      ],
-      "category": "data"
-    },
-    {
       "name": "carousel",
       "type": "registry:component",
       "title": "Carousel",
@@ -469,6 +437,53 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
+    },
+    {
+      "name": "credit-badge",
+      "type": "registry:component",
+      "title": "Credit Badge",
+      "description": "Balance status pill for credits, wallet states, and billing health.",
+      "files": [
+        {
+          "path": "registry/default/credit-badge/credit-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "data-list",
+      "type": "registry:component",
+      "title": "Data List",
+      "description": "Semantic key-value metadata layout for displaying labels with values.",
+      "files": [
+        {
+          "path": "registry/default/data-list/data-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+      "files": [
+        {
+          "path": "registry/default/data-table/data-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@tanstack/react-table"
+      ],
+      "category": "data"
     },
     {
       "name": "date-picker",
@@ -895,6 +910,21 @@
       "category": "form"
     },
     {
+      "name": "plan-badge",
+      "type": "registry:component",
+      "title": "Plan Badge",
+      "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+      "files": [
+        {
+          "path": "registry/default/plan-badge/plan-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "title": "Popover",
@@ -1013,6 +1043,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "role-badge",
+      "type": "registry:component",
+      "title": "Role Badge",
+      "description": "Account role indicator for owners, admins, members, and billing contacts.",
+      "files": [
+        {
+          "path": "registry/default/role-badge/role-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "scope-selector",
@@ -1300,6 +1345,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "subscription-card",
+      "type": "registry:component",
+      "title": "Subscription Card",
+      "description": "Subscription status and management card for plan, renewal, and usage details.",
+      "files": [
+        {
+          "path": "registry/default/subscription-card/subscription-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "table",
@@ -1632,6 +1692,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "wallet-card",
+      "type": "registry:component",
+      "title": "Wallet Card",
+      "description": "Credit balance display card for available, pending, and refresh details.",
+      "files": [
+        {
+          "path": "registry/default/wallet-card/wallet-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     }
   ]
 }

@@ -324,8 +324,30 @@ export { ThemeProvider } from "./theme-provider";
 export { ThemeToggle } from "./theme-toggle";
 
 // Feature components
+export {
+  CreditBadge,
+  type CreditBadgeProps,
+  type CreditBadgeStatus,
+} from "./credit-badge";
 export { ProfileSection } from "./profile-section";
+export {
+  PlanBadge,
+  type PlanBadgeProps,
+  type PlanBadgeState,
+  type PlanBadgeTier,
+} from "./plan-badge";
+export {
+  RoleBadge,
+  type RoleBadgeProps,
+  type RoleBadgeRole,
+} from "./role-badge";
+export {
+  SubscriptionCard,
+  type SubscriptionCardProps,
+  type SubscriptionCardStatus,
+} from "./subscription-card";
 export { TLDRSection } from "./tldr-section";
+export { WalletCard, type WalletCardProps } from "./wallet-card";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 
