@@ -7,6 +7,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  ActivityLog,
   Alert,
   AlertDescription,
   AlertDialog,
@@ -22,6 +23,7 @@ import {
   AspectRatio,
   Avatar,
   AvatarFallback,
+  AvatarGroup,
   AvatarImage,
   Badge,
   Breadcrumb,
@@ -47,6 +49,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  Combobox,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -61,6 +64,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
   CreditBadge,
+  DataList,
+  DataListItem,
+  DataListLabel,
+  DataListValue,
+  DataTable,
+  DatePicker,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -83,6 +92,7 @@ import {
   Exercise,
   FAQ,
   FAQItem,
+  FileUpload,
   FloatingActionButton,
   Glossary,
   HorizontalScrollRow,
@@ -110,7 +120,9 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  NumberInput,
   Pagination,
+  PasswordInput,
   PlanBadge,
   Popover,
   PopoverContent,
@@ -126,6 +138,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
   RoleBadge,
+  ScopeSelector,
   ScrollArea,
   SearchBar,
   Select,
@@ -149,6 +162,8 @@ import {
   Skeleton,
   Slider,
   Spinner,
+  StatCard,
+  StatusIndicator,
   Step,
   StepByStep,
   StepNavigation,
@@ -182,6 +197,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   TutorialCard,
+  UsageBreakdown,
   VideoEmbed,
   ViewSwitcher,
   WalletCard,
@@ -317,6 +333,58 @@ function InputPreview() {
     <div className="w-full max-w-sm space-y-2">
       <Input placeholder="Email" type="email" />
       <Input placeholder="Password" type="password" />
+    </div>
+  );
+}
+
+function ComboboxPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <Combobox
+        options={[
+          { label: "Next.js", value: "next.js" },
+          { label: "React", value: "react" },
+          { label: "SvelteKit", value: "sveltekit" },
+        ]}
+        value="react"
+      />
+    </div>
+  );
+}
+
+function DatePickerPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <DatePicker value={new Date("2026-04-19T00:00:00.000Z")} />
+    </div>
+  );
+}
+
+function FileUploadPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <FileUpload
+        files={[
+          new File(["contract"], "contract.pdf", { type: "application/pdf" }),
+        ]}
+        helperText="PNG, JPG, or PDF up to 10MB."
+      />
+    </div>
+  );
+}
+
+function NumberInputPreview() {
+  return (
+    <div className="w-full max-w-xs">
+      <NumberInput defaultValue={2} min={0} />
+    </div>
+  );
+}
+
+function PasswordInputPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <PasswordInput placeholder="Enter password" value="super-secret" />
     </div>
   );
 }
@@ -771,6 +839,83 @@ function CategoryFilterPreview() {
 
 function PaginationPreview() {
   return <Pagination baseUrl="/blog" currentPage={3} totalPages={10} />;
+}
+
+function UsageBreakdownPreview() {
+  return (
+    <UsageBreakdown
+      description="Ranked resource consumption across the current workspace."
+      items={[
+        {
+          id: "tokens",
+          label: "Tokens",
+          meta: "LLM",
+          trend: { direction: "up", label: "+14%" },
+          value: 420,
+          valueLabel: "420k",
+        },
+        {
+          id: "storage",
+          label: "Storage",
+          meta: "Vector DB",
+          trend: { direction: "down", label: "-6%" },
+          value: 260,
+          valueLabel: "260 GB",
+        },
+        {
+          id: "events",
+          label: "Events",
+          meta: "Tracking",
+          value: 180,
+          valueLabel: "180k",
+        },
+      ]}
+      title="Usage breakdown"
+    />
+  );
+}
+
+function ActivityLogPreview() {
+  return (
+    <ActivityLog
+      description="Recent analytics changes across your org."
+      items={[
+        {
+          action: "updated",
+          actor: "Alex Morgan",
+          description: "Raised ingestion retention from 30 to 45 days.",
+          id: "1",
+          scope: "Workspace",
+          target: "Analytics policy",
+          timestamp: "2m ago",
+          tone: "success",
+        },
+        {
+          action: "paused",
+          actor: "Riley Chen",
+          description: "Temporarily disabled streaming exports after an alert.",
+          id: "2",
+          scope: "Project",
+          target: "Billing pipeline",
+          timestamp: "11m ago",
+          tone: "warning",
+        },
+        {
+          action: "revoked",
+          actor: "Sam Patel",
+          description:
+            "Removed an expired API credential from production scope.",
+          id: "3",
+          scope: "Environment",
+          target: "Collector token",
+          timestamp: "24m ago",
+          tone: "danger",
+        },
+      ]}
+      pageSize={3}
+      title="Activity log"
+    />
+  );
 }
 
 function SearchBarPreview() {
@@ -1277,6 +1422,44 @@ function ViewSwitcherPreview() {
   );
 }
 
+function ScopeSelectorPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <ScopeSelector
+        nodes={[
+          {
+            children: [
+              {
+                children: [
+                  { id: "prod-us", label: "US East" },
+                  { id: "prod-eu", label: "EU West" },
+                ],
+                id: "production",
+                label: "Production",
+              },
+              {
+                children: [{ id: "staging-us", label: "US East" }],
+                id: "staging",
+                label: "Staging",
+              },
+            ],
+            id: "environments",
+            label: "Environments",
+          },
+          {
+            children: [
+              { id: "team-growth", label: "Growth" },
+              { id: "team-data", label: "Data" },
+            ],
+            id: "teams",
+            label: "Teams",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
 function HoverCardPreview() {
   return (
     <HoverCard>
@@ -1398,6 +1581,100 @@ function AvatarPreview() {
       <Avatar>
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
+    </div>
+  );
+}
+
+function AvatarGroupPreview() {
+  return (
+    <AvatarGroup
+      items={[
+        { alt: "Ada Lovelace", fallback: "AL" },
+        { alt: "Grace Hopper", fallback: "GH" },
+        { alt: "Margaret Hamilton", fallback: "MH" },
+        { alt: "Katherine Johnson", fallback: "KJ" },
+      ]}
+      max={3}
+    />
+  );
+}
+
+function DataListPreview() {
+  return (
+    <div className="w-full max-w-2xl">
+      <DataList>
+        <DataListItem>
+          <DataListLabel>Environment</DataListLabel>
+          <DataListValue>Production</DataListValue>
+        </DataListItem>
+        <DataListItem>
+          <DataListLabel>Owner</DataListLabel>
+          <DataListValue>Platform engineering</DataListValue>
+        </DataListItem>
+        <DataListItem>
+          <DataListLabel>Deploy window</DataListLabel>
+          <DataListValue>Tuesday / Thursday · 09:00 UTC</DataListValue>
+        </DataListItem>
+      </DataList>
+    </div>
+  );
+}
+
+function StatusIndicatorPreview() {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <StatusIndicator tone="success">Operational</StatusIndicator>
+      <StatusIndicator tone="warning">Pending</StatusIndicator>
+      <StatusIndicator tone="danger">Incident</StatusIndicator>
+      <StatusIndicator tone="info">Queued</StatusIndicator>
+    </div>
+  );
+}
+
+function StatCardPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <StatCard
+        change="+8.2%"
+        description="Monthly recurring revenue"
+        label="MRR"
+        meta="vs last month"
+        tone="success"
+        trend="up"
+        value="$42.8k"
+      />
+    </div>
+  );
+}
+
+function DataTablePreview() {
+  return (
+    <div className="w-full max-w-4xl">
+      <DataTable
+        columns={[
+          { accessorKey: "workspace", header: "Workspace" },
+          { accessorKey: "status", header: "Status" },
+          { accessorKey: "seats", header: "Seats" },
+        ]}
+        data={[
+          { seats: 142, status: "active", workspace: "Northstar" },
+          { seats: 28, status: "trial", workspace: "Signal" },
+          { seats: 11, status: "paused", workspace: "Helix" },
+        ]}
+        enableSelection={true}
+        filterableColumns={[
+          {
+            columnId: "status",
+            label: "status",
+            options: [
+              { label: "Active", value: "active" },
+              { label: "Trial", value: "trial" },
+              { label: "Paused", value: "paused" },
+            ],
+          },
+        ]}
+        searchPlaceholder="Search workspaces"
+      />
     </div>
   );
 }
@@ -1564,6 +1841,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
     case "accordion":
       return <AccordionPreview />;
+    case "activity-log":
+      return <ActivityLogPreview />;
     case "alert":
       return <AlertPreview />;
     case "alert-dialog":
@@ -1574,6 +1853,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <AspectRatioPreview />;
     case "avatar":
       return <AvatarPreview />;
+    case "avatar-group":
+      return <AvatarGroupPreview />;
     case "badge":
       return <BadgePreview />;
     case "bar-chart":
@@ -1588,8 +1869,14 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <CalloutPreview />;
     case "calendar":
       return <CalendarPreview />;
+    case "combobox":
+      return <ComboboxPreview />;
     case "card":
       return <CardPreview />;
+    case "data-list":
+      return <DataListPreview />;
+    case "data-table":
+      return <DataTablePreview />;
     case "carousel":
       return <CarouselPreview />;
     case "category-filter":
@@ -1628,6 +1915,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ExercisePreview />;
     case "faq":
       return <FAQPreview />;
+    case "file-upload":
+      return <FileUploadPreview />;
     case "filter-bar":
       return (
         <SimplePreview description="A filter bar with search, sort, and filter controls." />
@@ -1644,6 +1933,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <InputPreview />;
     case "input-otp":
       return <InputOTPPreview />;
+    case "date-picker":
+      return <DatePickerPreview />;
     case "key-concept":
       return <KeyConceptPreview />;
     case "keyboard-shortcuts-help":
@@ -1668,10 +1959,14 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "navigation-menu":
       return <NavigationMenuPreview />;
+    case "number-input":
+      return <NumberInputPreview />;
     case "pagination":
       return <PaginationPreview />;
     case "plan-badge":
       return <PlanBadgePreview />;
+    case "password-input":
+      return <PasswordInputPreview />;
     case "popover":
       return <PopoverPreview />;
     case "pro-tip":
@@ -1700,6 +1995,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="A command palette style search dialog." />
       );
+    case "scope-selector":
+      return <ScopeSelectorPreview />;
     case "select":
       return <SelectPreview />;
     case "separator":
@@ -1718,6 +2015,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SliderPreview />;
     case "spinner":
       return <SpinnerPreview />;
+    case "stat-card":
+      return <StatCardPreview />;
     case "sidebar-provider":
       return <SidebarProviderPreview />;
     case "sidebar-toggle":
@@ -1732,6 +2031,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <StepNavigationPreview />;
     case "subscription-card":
       return <SubscriptionCardPreview />;
+    case "status-indicator":
+      return <StatusIndicatorPreview />;
     case "table-of-contents":
       return <TableOfContentsPreview />;
     case "table-of-contents-panel":
@@ -1780,6 +2081,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="MDX components optimized for tutorial content." />
       );
+    case "usage-breakdown":
+      return <UsageBreakdownPreview />;
     case "video-embed":
       return <VideoEmbedPreview />;
     case "view-switcher":

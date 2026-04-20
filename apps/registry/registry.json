@@ -19,6 +19,21 @@
       "category": "content"
     },
     {
+      "name": "activity-log",
+      "type": "registry:component",
+      "title": "Activity Log",
+      "description": "Paginated activity feed for audit history and analytics changes.",
+      "files": [
+        {
+          "path": "registry/default/activity-log/activity-log.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "alert",
       "type": "registry:component",
       "title": "Alert",
@@ -92,6 +107,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "core"
+    },
+    {
+      "name": "avatar-group",
+      "type": "registry:component",
+      "title": "Avatar Group",
+      "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+      "files": [
+        {
+          "path": "registry/default/avatar-group/avatar-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "badge",
@@ -319,6 +349,21 @@
       "category": "content"
     },
     {
+      "name": "combobox",
+      "type": "registry:component",
+      "title": "Combobox",
+      "description": "Searchable select input for choosing from a list of options.",
+      "files": [
+        {
+          "path": "registry/default/combobox/combobox.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "command",
       "type": "registry:component",
       "title": "Command",
@@ -409,6 +454,53 @@
       "category": "content"
     },
     {
+      "name": "data-list",
+      "type": "registry:component",
+      "title": "Data List",
+      "description": "Semantic key-value metadata layout for displaying labels with values.",
+      "files": [
+        {
+          "path": "registry/default/data-list/data-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+      "files": [
+        {
+          "path": "registry/default/data-table/data-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@tanstack/react-table"
+      ],
+      "category": "data"
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:component",
+      "title": "Date Picker",
+      "description": "Single-date picker built with the shared calendar and popover primitives.",
+      "files": [
+        {
+          "path": "registry/default/date-picker/date-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "dialog",
       "type": "registry:component",
       "title": "Dialog",
@@ -484,6 +576,21 @@
       "category": "content"
     },
     {
+      "name": "file-upload",
+      "type": "registry:component",
+      "title": "File Upload",
+      "description": "Dropzone-style file picker with previews for selected files.",
+      "files": [
+        {
+          "path": "registry/default/file-upload/file-upload.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "filter-bar",
       "type": "registry:component",
       "title": "Filter Bar",
@@ -529,6 +636,25 @@
       "category": "data"
     },
     {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "navigation"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -542,21 +668,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
-      "category": "navigation"
     },
     {
       "name": "inline-input",
@@ -754,6 +865,21 @@
       "category": "navigation"
     },
     {
+      "name": "number-input",
+      "type": "registry:component",
+      "title": "Number Input",
+      "description": "Numeric input with increment and decrement controls.",
+      "files": [
+        {
+          "path": "registry/default/number-input/number-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "pagination",
       "type": "registry:component",
       "title": "Pagination",
@@ -767,6 +893,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "password-input",
+      "type": "registry:component",
+      "title": "Password Input",
+      "description": "Password field with a built-in visibility toggle.",
+      "files": [
+        {
+          "path": "registry/default/password-input/password-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "plan-badge",
@@ -917,6 +1058,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "scope-selector",
+      "type": "registry:component",
+      "title": "Scope Selector",
+      "description": "Multi-level scope picker for nested environments, teams, and targets.",
+      "files": [
+        {
+          "path": "registry/default/scope-selector/scope-selector.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "scroll-area",
@@ -1131,19 +1287,34 @@
       "category": "utility"
     },
     {
-      "name": "subscription-card",
+      "name": "stat-card",
       "type": "registry:component",
-      "title": "Subscription Card",
-      "description": "Subscription status and management card for plan, renewal, and usage details.",
+      "title": "Stat Card",
+      "description": "Headline KPI card for metrics, trends, and supporting context.",
       "files": [
         {
-          "path": "registry/default/subscription-card/subscription-card.tsx",
+          "path": "registry/default/stat-card/stat-card.tsx",
           "type": "registry:component"
         }
       ],
       "registryDependencies": [],
       "dependencies": [],
-      "category": "content"
+      "category": "data"
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:component",
+      "title": "Status Indicator",
+      "description": "Compact status label with tone, variant, and activity dot options.",
+      "files": [
+        {
+          "path": "registry/default/status-indicator/status-indicator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "step-by-step",
@@ -1174,6 +1345,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "subscription-card",
+      "type": "registry:component",
+      "title": "Subscription Card",
+      "description": "Subscription status and management card for plan, renewal, and usage details.",
+      "files": [
+        {
+          "path": "registry/default/subscription-card/subscription-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "table",
@@ -1461,6 +1647,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "learning"
+    },
+    {
+      "name": "usage-breakdown",
+      "type": "registry:component",
+      "title": "Usage Breakdown",
+      "description": "Ranked resource consumption list with relative share and trend cues.",
+      "files": [
+        {
+          "path": "registry/default/usage-breakdown/usage-breakdown.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "video-embed",
