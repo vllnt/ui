@@ -366,6 +366,21 @@
       "category": "content"
     },
     {
+      "name": "combobox",
+      "type": "registry:component",
+      "title": "Combobox",
+      "description": "Searchable select input for choosing from a list of options.",
+      "files": [
+        {
+          "path": "registry/default/combobox/combobox.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "command",
       "type": "registry:component",
       "title": "Command",
@@ -439,6 +454,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:component",
+      "title": "Date Picker",
+      "description": "Single-date picker built with the shared calendar and popover primitives.",
+      "files": [
+        {
+          "path": "registry/default/date-picker/date-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "dialog",
@@ -516,6 +546,21 @@
       "category": "content"
     },
     {
+      "name": "file-upload",
+      "type": "registry:component",
+      "title": "File Upload",
+      "description": "Dropzone-style file picker with previews for selected files.",
+      "files": [
+        {
+          "path": "registry/default/file-upload/file-upload.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "filter-bar",
       "type": "registry:component",
       "title": "Filter Bar",
@@ -561,6 +606,25 @@
       "category": "data"
     },
     {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "navigation"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -574,21 +638,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
-      "category": "navigation"
     },
     {
       "name": "inline-input",
@@ -786,6 +835,21 @@
       "category": "navigation"
     },
     {
+      "name": "number-input",
+      "type": "registry:component",
+      "title": "Number Input",
+      "description": "Numeric input with increment and decrement controls.",
+      "files": [
+        {
+          "path": "registry/default/number-input/number-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "pagination",
       "type": "registry:component",
       "title": "Pagination",
@@ -799,6 +863,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "password-input",
+      "type": "registry:component",
+      "title": "Password Input",
+      "description": "Password field with a built-in visibility toggle.",
+      "files": [
+        {
+          "path": "registry/default/password-input/password-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "popover",

@@ -357,6 +357,23 @@
     ],
     "title": "Collapsible"
   },
+  "combobox": {
+    "category": "form",
+    "defaultStoryId": "form-combobox--default",
+    "description": "Searchable select input for choosing from a list of options.",
+    "name": "combobox",
+    "stories": [
+      {
+        "id": "form-combobox--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-combobox--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Combobox"
+  },
   "command": {
     "category": "overlay",
     "defaultStoryId": "overlay-command--default",
@@ -421,6 +438,23 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "date-picker": {
+    "category": "form",
+    "defaultStoryId": "form-datepicker--default",
+    "description": "Single-date picker built with the shared calendar and popover primitives.",
+    "name": "date-picker",
+    "stories": [
+      {
+        "id": "form-datepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Picker"
   },
   "dialog": {
     "category": "overlay",
@@ -487,6 +521,19 @@
     ],
     "title": "FAQ"
   },
+  "file-upload": {
+    "category": "form",
+    "defaultStoryId": "form-fileupload--default",
+    "description": "Dropzone-style file picker with previews for selected files.",
+    "name": "file-upload",
+    "stories": [
+      {
+        "id": "form-fileupload--default",
+        "name": "Default"
+      }
+    ],
+    "title": "File Upload"
+  },
   "filter-bar": {
     "category": "form",
     "defaultStoryId": "form-filterbar--default",
@@ -526,19 +573,6 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
-    "stories": [
-      {
-        "id": "overlay-hovercard--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Hover Card"
-  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -551,6 +585,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -716,6 +763,19 @@
     ],
     "title": "Navigation Menu"
   },
+  "number-input": {
+    "category": "form",
+    "defaultStoryId": "form-numberinput--default",
+    "description": "Numeric input with increment and decrement controls.",
+    "name": "number-input",
+    "stories": [
+      {
+        "id": "form-numberinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Number Input"
+  },
   "pagination": {
     "category": "navigation",
     "defaultStoryId": "navigation-pagination--default",
@@ -728,6 +788,19 @@
       }
     ],
     "title": "Pagination"
+  },
+  "password-input": {
+    "category": "form",
+    "defaultStoryId": "form-passwordinput--default",
+    "description": "Password field with a built-in visibility toggle.",
+    "name": "password-input",
+    "stories": [
+      {
+        "id": "form-passwordinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Password Input"
   },
   "popover": {
     "category": "overlay",

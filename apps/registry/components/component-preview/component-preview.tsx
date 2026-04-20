@@ -54,6 +54,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  Combobox,
   CommonMistake,
   Comparison,
   ContentCard,
@@ -74,6 +75,7 @@ import {
   DialogTitle,
   DialogTrigger,
   Drawer,
+  FileUpload,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
@@ -99,6 +101,7 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
+  DatePicker,
   KeyboardShortcutsHelp,
   KeyConcept,
   LangProvider,
@@ -109,6 +112,7 @@ import {
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
+  NumberInput,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -116,6 +120,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   Pagination,
+  PasswordInput,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -257,6 +262,58 @@ function InputPreview() {
     <div className="w-full max-w-sm space-y-2">
       <Input placeholder="Email" type="email" />
       <Input placeholder="Password" type="password" />
+    </div>
+  );
+}
+
+function ComboboxPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <Combobox
+        options={[
+          { label: "Next.js", value: "next.js" },
+          { label: "React", value: "react" },
+          { label: "SvelteKit", value: "sveltekit" },
+        ]}
+        value="react"
+      />
+    </div>
+  );
+}
+
+function DatePickerPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <DatePicker value={new Date("2026-04-19T00:00:00.000Z")} />
+    </div>
+  );
+}
+
+function FileUploadPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <FileUpload
+        files={[
+          new File(["contract"], "contract.pdf", { type: "application/pdf" }),
+        ]}
+        helperText="PNG, JPG, or PDF up to 10MB."
+      />
+    </div>
+  );
+}
+
+function NumberInputPreview() {
+  return (
+    <div className="w-full max-w-xs">
+      <NumberInput defaultValue={2} min={0} />
+    </div>
+  );
+}
+
+function PasswordInputPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <PasswordInput placeholder="Enter password" value="super-secret" />
     </div>
   );
 }
@@ -1624,6 +1681,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <CalloutPreview />;
     case "calendar":
       return <CalendarPreview />;
+    case "combobox":
+      return <ComboboxPreview />;
     case "card":
       return <CardPreview />;
     case "data-list":
@@ -1668,6 +1727,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ExercisePreview />;
     case "faq":
       return <FAQPreview />;
+    case "file-upload":
+      return <FileUploadPreview />;
     case "filter-bar":
       return (
         <SimplePreview description="A filter bar with search, sort, and filter controls." />
@@ -1684,6 +1745,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <InputPreview />;
     case "input-otp":
       return <InputOTPPreview />;
+    case "date-picker":
+      return <DatePickerPreview />;
     case "key-concept":
       return <KeyConceptPreview />;
     case "keyboard-shortcuts-help":
@@ -1708,8 +1771,12 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "navigation-menu":
       return <NavigationMenuPreview />;
+    case "number-input":
+      return <NumberInputPreview />;
     case "pagination":
       return <PaginationPreview />;
+    case "password-input":
+      return <PasswordInputPreview />;
     case "popover":
       return <PopoverPreview />;
     case "pro-tip":
