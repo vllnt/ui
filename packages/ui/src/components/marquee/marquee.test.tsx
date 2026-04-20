@@ -43,4 +43,14 @@ describe("Marquee", () => {
 
     expect(container.firstChild).toHaveClass("custom-class");
   });
+
+  it("supports speed presets", () => {
+    const { container } = render(
+      <Marquee speed="fast">
+        <span>Fast</span>
+      </Marquee>,
+    );
+
+    expect(container.querySelector("[style*='10s']")).toBeTruthy();
+  });
 });

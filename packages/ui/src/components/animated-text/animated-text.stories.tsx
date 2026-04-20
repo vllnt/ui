@@ -4,7 +4,7 @@ import { AnimatedText } from "./animated-text";
 
 const meta = {
   args: {
-    text: "Ship motion that still feels like the current system.",
+    text: "BOOTING VLLNT INTERFACE...",
   },
   component: AnimatedText,
   title: "Utility/AnimatedText",
@@ -13,12 +13,29 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Terminal: Story = {};
 
-export const Characters: Story = {
+export const Matrix: Story = {
   args: {
-    splitBy: "character",
-    stagger: 30,
-    text: "Animate every letter.",
+    stagger: 35,
+    text: "ACCESSING VECTOR MEMORY GRID",
+    variant: "matrix",
+  },
+};
+
+export const Typewriter: Story = {
+  args: {
+    stagger: 45,
+    text: "LOAD PROGRAM // READY",
+    variant: "typewriter",
+  },
+};
+
+export const Reveal: Story = {
+  args: {
+    splitBy: "word",
+    stagger: 70,
+    text: "Ship motion that still feels like the current system.",
+    variant: "reveal",
   },
 };

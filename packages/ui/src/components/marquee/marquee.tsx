@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { cn } from "../../lib/utils";
 
+export type MarqueeSpeed = "fast" | "normal" | "slow";
+
 export type MarqueeProps = React.ComponentPropsWithoutRef<"div"> & {
   duration?: number;
   fade?: boolean;
@@ -9,6 +11,7 @@ export type MarqueeProps = React.ComponentPropsWithoutRef<"div"> & {
   pauseOnHover?: boolean;
   repeat?: number;
   reverse?: boolean;
+  speed?: MarqueeSpeed;
   vertical?: boolean;
 };
 
@@ -37,17 +40,36 @@ function getTrackItems(
   ).flat();
 }
 
+function getDuration(
+  duration: number | undefined,
+  speed: MarqueeSpeed,
+): number {
+  if (duration !== undefined) {
+    return duration;
+  }
+
+  switch (speed) {
+    case "fast":
+      return 10;
+    case "normal":
+      return 20;
+    case "slow":
+      return 32;
+  }
+}
+
 export const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
   (
     {
       children,
       className,
-      duration = 20,
+      duration,
       fade = true,
       gap = "1rem",
       pauseOnHover = false,
       repeat = 1,
       reverse = false,
+      speed = "normal",
       style,
       vertical = false,
       ...props
@@ -55,11 +77,12 @@ export const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
     ref,
   ) => {
     const resolvedGap = getGapValue(gap);
+    const resolvedDuration = getDuration(duration, speed);
     const trackItems = getTrackItems(children, repeat);
 
     const animationStyle: React.CSSProperties = {
       animationDirection: reverse ? "reverse" : "normal",
-      animationDuration: `${duration}s`,
+      animationDuration: `${resolvedDuration}s`,
       animationIterationCount: "infinite",
       animationName: vertical ? "vllnt-marquee-y" : "vllnt-marquee-x",
       animationTimingFunction: "linear",
