@@ -1,6 +1,8 @@
 # @vllnt/ui
 
-React component library — 93 components built on Radix UI primitives, Tailwind CSS, and CVA.
+React component library — 144 components built on Radix UI primitives, Tailwind CSS, and CVA.
+
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
 ## Install
 
@@ -271,6 +273,109 @@ import {
 | `CodePlayground` | `{ CodePlayground, FileTree }` | Code editor with file tree |
 | `Terminal` | `{ Terminal, SimpleTerminal }` | Terminal emulator UI |
 | `VideoEmbed` | `{ VideoEmbed }` | Responsive video embed |
+| `Flashcard` | `{ Flashcard }` | Flip-card for spaced repetition |
+| `Stepper` | `{ Stepper }` | Linear progress stepper |
+| `Tour` | `{ Tour }` | Guided product tour |
+| `Annotation` | `{ Annotation }` | Inline annotation / highlight |
+| `CompletionDialog` | `{ CompletionDialog }` | End-of-flow celebration dialog |
+| `TruncatedText` | `{ TruncatedText }` | Expand-on-overflow text block |
+| `TableOfContentsPanel` | `{ TableOfContentsPanel }` | Sidebar TOC panel |
+| `ThinkingBlock` | `{ ThinkingBlock }` | Collapsible reasoning block |
+
+### AI
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `AiChatInput` | `{ AiChatInput }` | Chat composer with submit + attachments |
+| `AiMessageBubble` | `{ AiMessageBubble }` | User/assistant message bubble |
+| `AiStreamingText` | `{ AiStreamingText }` | Token-stream renderer |
+| `AiToolCallDisplay` | `{ AiToolCallDisplay }` | Tool-use invocation render |
+| `AiSourceCitation` | `{ AiSourceCitation }` | Inline citation reference |
+| `ModelSelector` | `{ ModelSelector }` | Model picker (provider-agnostic) |
+
+### Financial
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `CandlestickChart` | `{ CandlestickChart }` | OHLC candlestick chart |
+| `MarketTreemap` | `{ MarketTreemap }` | Market-cap treemap |
+| `OrderBook` | `{ OrderBook }` | Bid/ask depth book |
+| `TickerTape` | `{ TickerTape }` | Horizontal ticker marquee |
+| `SparklineGrid` | `{ SparklineGrid }` | Grid of inline sparklines |
+| `WalletCard` | `{ WalletCard }` | Balance / portfolio card |
+| `Watchlist` | `{ Watchlist }` | Tracked-symbol list |
+
+### Ops / Status
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `StatusBoard` | `{ StatusBoard }` | Grid of service statuses |
+| `StatusIndicator` | `{ StatusIndicator }` | Inline dot + label |
+| `LiveFeed` | `{ LiveFeed }` | Append-only event feed |
+| `WorldClockBar` | `{ WorldClockBar }` | Multi-timezone clock bar |
+| `SeverityBadge` | `{ SeverityBadge }` | Severity-level badge |
+| `RoleBadge` | `{ RoleBadge }` | User-role badge |
+| `ScopeSelector` | `{ ScopeSelector }` | Scope / environment picker |
+
+### Billing & Plans
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `SubscriptionCard` | `{ SubscriptionCard }` | Plan pricing / feature card |
+| `PlanBadge` | `{ PlanBadge }` | Tier indicator |
+| `CreditBadge` | `{ CreditBadge }` | Remaining-credit pill |
+| `UsageBreakdown` | `{ UsageBreakdown }` | Usage-by-category breakdown |
+
+### Animation
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `AnimatedText` | `{ AnimatedText }` | Text enter-animations |
+| `BorderBeam` | `{ BorderBeam }` | Animated gradient border |
+| `Marquee` | `{ Marquee }` | Infinite scroll marquee |
+| `NumberTicker` | `{ NumberTicker }` | Animated number counter |
+| `Spinner` | `{ Spinner }` | Rich loading-spinner library |
+
+### Form Additions
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `DatePicker` | `{ DatePicker }` | Composed `Calendar` + `Popover` |
+| `FileUpload` | `{ FileUpload }` | Drag-drop file input |
+| `NumberInput` | `{ NumberInput }` | Numeric input w/ steppers |
+| `PasswordInput` | `{ PasswordInput }` | Input w/ show-password toggle |
+| `InlineInput` | `{ InlineInput }` | Click-to-edit inline input |
+| `Combobox` | `{ Combobox }` | Typeahead select |
+| `Rating` | `{ Rating }` | Star rating input |
+
+### Data & Metrics
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `DataTable` | `{ DataTable }` | High-level table w/ sort/filter (TanStack) |
+| `DataList` | `{ DataList }` | Label/value list |
+| `StatCard` | `{ StatCard }` | KPI tile |
+| `MetricGauge` | `{ MetricGauge }` | Gauge chart |
+| `ActivityHeatmap` | `{ ActivityHeatmap }` | GitHub-style contribution grid |
+| `ActivityLog` | `{ ActivityLog }` | Audit-trail feed |
+| `TableOfContents` | `{ TableOfContents }` | Inline TOC |
+
+### App Shell (extended)
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `CategoryFilter` | `{ CategoryFilter }` | Chip-based category filter |
+| `FilterBar` | `{ FilterBar }` | Multi-facet filter row |
+| `CookieConsent` | `{ CookieConsent }` | Cookie-consent banner |
+| `Slideshow` | `{ Slideshow }` | Hero slideshow |
+| `CountdownTimer` | `{ CountdownTimer }` | Event countdown |
+| `AvatarGroup` | `{ AvatarGroup }` | Stacked avatar group |
+| `FloatingActionButton` | `{ FloatingActionButton }` | Anchored FAB |
+| `SocialFab` | `{ SocialFab }` | Social-links FAB |
+| `KeyboardShortcutsHelp` | `{ KeyboardShortcutsHelp }` | Cmd-? shortcut dialog |
+| `ShareDialog` | `{ ShareDialog }` | Shareable-link dialog |
+| `HorizontalScrollRow` | `{ HorizontalScrollRow }` | Scroll-snap row |
+| `ViewSwitcher` | `{ ViewSwitcher }` | Grid/list toggle |
 
 ## Utilities
 

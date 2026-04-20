@@ -60,7 +60,9 @@
   "files": [
     "dist",
     "styles.css",
-    "themes"
+    "themes",
+    "CHANGELOG.md",
+    "README.md"
   ],
   "sideEffects": [
     "*.css"
