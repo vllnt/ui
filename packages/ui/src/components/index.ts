@@ -232,7 +232,10 @@ export {
 } from "./carousel";
 
 // New shadcn primitives - Utilities
+export { BorderBeam, type BorderBeamProps } from "./border-beam";
 export { Calendar, type CalendarProps } from "./calendar";
+export { Marquee, type MarqueeProps } from "./marquee";
+export { NumberTicker, type NumberTickerProps } from "./number-ticker";
 export { Spinner, type SpinnerProps } from "./spinner";
 
 // Content components
@@ -277,6 +280,7 @@ export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 
 // Text components
+export { AnimatedText, type AnimatedTextProps } from "./animated-text";
 export { TruncatedText, type TruncatedTextProps } from "./truncated-text";
 
 // Tutorial/Educational MDX components

@@ -42,6 +42,23 @@
     ],
     "title": "Alert Dialog"
   },
+  "animated-text": {
+    "category": "utility",
+    "defaultStoryId": "utility-animatedtext--default",
+    "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
+    "name": "animated-text",
+    "stories": [
+      {
+        "id": "utility-animatedtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-animatedtext--characters",
+        "name": "Characters"
+      }
+    ],
+    "title": "Animated Text"
+  },
   "area-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -121,6 +138,23 @@
       }
     ],
     "title": "Blog Card"
+  },
+  "border-beam": {
+    "category": "utility",
+    "defaultStoryId": "utility-borderbeam--default",
+    "description": "Animated accent beam that travels around the border of a highlighted surface.",
+    "name": "border-beam",
+    "stories": [
+      {
+        "id": "utility-borderbeam--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-borderbeam--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Border Beam"
   },
   "breadcrumb": {
     "category": "navigation",
@@ -479,19 +513,6 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
-    "stories": [
-      {
-        "id": "overlay-hovercard--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Hover Card"
-  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -504,6 +525,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -604,6 +638,23 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "marquee": {
+    "category": "utility",
+    "defaultStoryId": "utility-marquee--default",
+    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "name": "marquee",
+    "stories": [
+      {
+        "id": "utility-marquee--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-marquee--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Marquee"
+  },
   "mdx-content": {
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
@@ -668,6 +719,23 @@
       }
     ],
     "title": "Navigation Menu"
+  },
+  "number-ticker": {
+    "category": "utility",
+    "defaultStoryId": "utility-numberticker--default",
+    "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
+    "name": "number-ticker",
+    "stories": [
+      {
+        "id": "utility-numberticker--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-numberticker--decimal-value",
+        "name": "Decimal Value"
+      }
+    ],
+    "title": "Number Ticker"
   },
   "pagination": {
     "category": "navigation",
