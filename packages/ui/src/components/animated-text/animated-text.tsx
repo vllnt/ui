@@ -2,7 +2,28 @@ import * as React from "react";
 
 import { cn } from "../../lib/utils";
 
-const MATRIX_GLYPHS = "01<>/*+=-_[]{}#@$%";
+const GLYPH_SEGMENTER = new Intl.Segmenter(undefined, {
+  granularity: "grapheme",
+});
+
+const ASCII_RANDOM_CHARACTERS = Array.from({ length: 94 }, (_, index) =>
+  String.fromCodePoint(index + 33),
+).join("");
+const TERMINAL_RANDOM_CHARACTERS = "│┃─━┄┅┈┉┌┐└┘├┤┬┴┼╭╮╯╰╱╲╳";
+const BLOCK_RANDOM_CHARACTERS = "░▒▓█▌▐▀▄■□▪▫▖▗▘▙▚▛▜▝▞▟";
+const UNICODE_SYMBOL_RANDOM_CHARACTERS = "◆◇◈○●◎◉◌◍◐◑◒◓◔◕◢◣◤◥◦※✦✧✱✶✷✹";
+const MATRIX_RANDOM_CHARACTERS = `${ASCII_RANDOM_CHARACTERS}${TERMINAL_RANDOM_CHARACTERS}${BLOCK_RANDOM_CHARACTERS}${UNICODE_SYMBOL_RANDOM_CHARACTERS}`;
+
+export const ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS = {
+  ascii: ASCII_RANDOM_CHARACTERS,
+  binary: "01",
+  blocks: BLOCK_RANDOM_CHARACTERS,
+  matrix: MATRIX_RANDOM_CHARACTERS,
+  symbols: UNICODE_SYMBOL_RANDOM_CHARACTERS,
+  terminal: TERMINAL_RANDOM_CHARACTERS,
+} as const;
+
+const DEFAULT_RANDOM_CHARACTERS = ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS.matrix;
 
 type AnimatedTextSplit = "character" | "word";
 export type AnimatedTextVariant =
@@ -12,6 +33,8 @@ export type AnimatedTextVariant =
   | "terminal"
   | "typewriter";
 export type AnimatedTextDirection = "center-out" | "end" | "random" | "start";
+export type AnimatedTextRandomCharacterPreset =
+  keyof typeof ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS;
 
 type SegmentFrame = {
   content: string;
@@ -25,6 +48,8 @@ export type AnimatedTextProps = React.ComponentPropsWithoutRef<"p"> & {
   cursorChar?: string;
   direction?: AnimatedTextDirection;
   duration?: number;
+  randomCharacters?: string;
+  randomCharactersPreset?: AnimatedTextRandomCharacterPreset;
   randomness?: number;
   splitBy?: AnimatedTextSplit;
   stagger?: number;
@@ -44,8 +69,34 @@ function getSegments(text: string, splitBy: AnimatedTextSplit): string[] {
   return text.match(/\S+\s*/g) ?? [];
 }
 
-function getRandomMatrixGlyph(): string {
-  return MATRIX_GLYPHS[Math.floor(Math.random() * MATRIX_GLYPHS.length)] ?? "0";
+function getGlyphs(text: string): string[] {
+  return Array.from(GLYPH_SEGMENTER.segment(text), ({ segment }) => segment);
+}
+
+function getRandomMatrixGlyph(randomCharacters: string): string {
+  const glyphs = getGlyphs(randomCharacters);
+
+  return glyphs[Math.floor(Math.random() * glyphs.length)] ?? glyphs[0] ?? "0";
+}
+
+function getResolvedRandomCharacters(
+  randomCharacters: string | undefined,
+  randomCharactersPreset: AnimatedTextRandomCharacterPreset,
+): string {
+  if (randomCharacters && randomCharacters.length > 0) {
+    return randomCharacters;
+  }
+
+  return (
+    ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS[randomCharactersPreset] ??
+    DEFAULT_RANDOM_CHARACTERS
+  );
+}
+
+function getCursorToneClass(variant: AnimatedTextVariant): string {
+  return variant === "matrix" || variant === "decipher"
+    ? "text-primary"
+    : "text-foreground";
 }
 
 function buildRevealFrames(
@@ -148,16 +199,18 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
 function useMatrixFrame({
   active,
   progress,
+  randomCharacters,
   revealPlan,
   segments,
 }: {
   active: boolean;
   progress: number;
+  randomCharacters: string;
   revealPlan: number[];
   segments: string[];
 }) {
   const [matrixFrame, setMatrixFrame] = React.useState(() =>
-    segments.map(() => getRandomMatrixGlyph()),
+    segments.map(() => getRandomMatrixGlyph(randomCharacters)),
   );
 
   React.useEffect(() => {
@@ -165,7 +218,7 @@ function useMatrixFrame({
       return;
     }
 
-    setMatrixFrame(segments.map(() => getRandomMatrixGlyph()));
+    setMatrixFrame(segments.map(() => getRandomMatrixGlyph(randomCharacters)));
 
     const scrambleInterval = window.setInterval(() => {
       setMatrixFrame((current) =>
@@ -177,7 +230,7 @@ function useMatrixFrame({
             return glyph;
           }
 
-          return getRandomMatrixGlyph();
+          return getRandomMatrixGlyph(randomCharacters);
         }),
       );
     }, 48);
@@ -185,7 +238,7 @@ function useMatrixFrame({
     return () => {
       window.clearInterval(scrambleInterval);
     };
-  }, [active, progress, revealPlan, segments]);
+  }, [active, progress, randomCharacters, revealPlan, segments]);
 
   return matrixFrame;
 }
@@ -193,12 +246,14 @@ function useMatrixFrame({
 function buildOldSchoolFrames({
   matrixFrame,
   progress,
+  randomCharacters,
   revealPlan,
   segments,
   variant,
 }: {
   matrixFrame: string[];
   progress: number;
+  randomCharacters: string;
   revealPlan: number[];
   segments: string[];
   variant: Exclude<AnimatedTextVariant, "reveal">;
@@ -214,7 +269,7 @@ function buildOldSchoolFrames({
         ? segment
         : isRevealed
           ? segment
-          : (matrixFrame[index] ?? getRandomMatrixGlyph());
+          : (matrixFrame[index] ?? getRandomMatrixGlyph(randomCharacters));
     } else if (isRevealed) {
       content = segment;
     }
@@ -229,12 +284,14 @@ function buildOldSchoolFrames({
 
 function useAnimatedTextFrames({
   direction,
+  randomCharacters,
   randomness,
   segments,
   stagger,
   variant,
 }: {
   direction: AnimatedTextDirection;
+  randomCharacters: string;
   randomness: number;
   segments: string[];
   stagger: number;
@@ -252,6 +309,7 @@ function useAnimatedTextFrames({
   const matrixFrame = useMatrixFrame({
     active: variant === "matrix" || variant === "decipher",
     progress,
+    randomCharacters,
     revealPlan,
     segments,
   });
@@ -264,6 +322,7 @@ function useAnimatedTextFrames({
     return buildOldSchoolFrames({
       matrixFrame,
       progress,
+      randomCharacters,
       revealPlan,
       segments,
       variant,
@@ -272,6 +331,7 @@ function useAnimatedTextFrames({
     isOldSchool,
     matrixFrame,
     progress,
+    randomCharacters,
     revealPlan,
     segments,
     stagger,
@@ -309,6 +369,26 @@ function getContainerClasses(variant: AnimatedTextVariant): string {
   return "flex flex-wrap leading-relaxed";
 }
 
+function AnimatedTextCursor({
+  cursorChar,
+  cursorToneClass,
+}: {
+  cursorChar: string;
+  cursorToneClass: string;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "ml-0.5 inline-block whitespace-pre font-mono [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite]",
+        cursorToneClass,
+      )}
+    >
+      {cursorChar}
+    </span>
+  );
+}
+
 export const AnimatedText = React.forwardRef<
   HTMLParagraphElement,
   AnimatedTextProps
@@ -320,6 +400,8 @@ export const AnimatedText = React.forwardRef<
       cursorChar = "█",
       direction = "start",
       duration = 600,
+      randomCharacters,
+      randomCharactersPreset = "matrix",
       randomness = 0,
       splitBy = "word",
       stagger = 70,
@@ -329,6 +411,10 @@ export const AnimatedText = React.forwardRef<
     },
     ref,
   ) => {
+    const resolvedRandomCharacters = getResolvedRandomCharacters(
+      randomCharacters,
+      randomCharactersPreset,
+    );
     const resolvedSplitBy = variant === "reveal" ? splitBy : "character";
     const segments = React.useMemo(
       () => getSegments(text, resolvedSplitBy),
@@ -336,6 +422,7 @@ export const AnimatedText = React.forwardRef<
     );
     const segmentFrames = useAnimatedTextFrames({
       direction,
+      randomCharacters: resolvedRandomCharacters,
       randomness,
       segments,
       stagger,
@@ -345,10 +432,7 @@ export const AnimatedText = React.forwardRef<
       cursor &&
       variant !== "reveal" &&
       segmentFrames.some((frame) => !frame.isRevealed);
-    const cursorToneClass =
-      variant === "matrix" || variant === "decipher"
-        ? "text-primary"
-        : "text-foreground";
+    const cursorToneClass = getCursorToneClass(variant);
 
     return (
       <p
@@ -371,15 +455,10 @@ export const AnimatedText = React.forwardRef<
           </span>
         ))}
         {showCursor ? (
-          <span
-            aria-hidden="true"
-            className={cn(
-              "ml-0.5 inline-block whitespace-pre font-mono [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite]",
-              cursorToneClass,
-            )}
-          >
-            {cursorChar}
-          </span>
+          <AnimatedTextCursor
+            cursorChar={cursorChar}
+            cursorToneClass={cursorToneClass}
+          />
         ) : null}
       </p>
     );

@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { AnimatedText } from "./animated-text";
+import {
+  ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS,
+  AnimatedText,
+} from "./animated-text";
 
 describe("AnimatedText", () => {
   it("renders the full accessible label", () => {
@@ -34,6 +37,7 @@ describe("AnimatedText", () => {
     render(
       <AnimatedText
         direction="random"
+        randomCharacters="01"
         randomness={1}
         text="DECRYPT"
         variant="decipher"
@@ -41,5 +45,29 @@ describe("AnimatedText", () => {
     );
 
     expect(screen.getByLabelText("DECRYPT")).toBeVisible();
+  });
+
+  it("supports terminal pseudo-graphic presets", () => {
+    render(
+      <AnimatedText
+        randomCharactersPreset="terminal"
+        text="CRT GRID"
+        variant="matrix"
+      />,
+    );
+
+    expect(screen.getByLabelText("CRT GRID")).toBeVisible();
+  });
+
+  it("preserves multi-byte unicode glyphs in custom random pools", () => {
+    render(
+      <AnimatedText
+        randomCharacters={`${ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS.blocks}◢◣◤◥`}
+        text="GLYPH"
+        variant="decipher"
+      />,
+    );
+
+    expect(screen.getByLabelText("GLYPH")).toBeVisible();
   });
 });
