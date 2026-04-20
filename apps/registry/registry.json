@@ -19,6 +19,21 @@
       "category": "content"
     },
     {
+      "name": "activity-heatmap",
+      "type": "registry:component",
+      "title": "Activity Heatmap",
+      "description": "Contribution-style grid for visualizing operational activity over time.",
+      "files": [
+        {
+          "path": "registry/default/activity-heatmap/activity-heatmap.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "alert",
       "type": "registry:component",
       "title": "Alert",
@@ -394,6 +409,21 @@
       "category": "overlay"
     },
     {
+      "name": "countdown-timer",
+      "type": "registry:component",
+      "title": "Countdown Timer",
+      "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+      "files": [
+        {
+          "path": "registry/default/countdown-timer/countdown-timer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "dialog",
       "type": "registry:component",
       "title": "Dialog",
@@ -514,6 +544,25 @@
       "category": "data"
     },
     {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "navigation"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -527,21 +576,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
-      "category": "navigation"
     },
     {
       "name": "inline-input",
@@ -664,6 +698,21 @@
       "category": "data"
     },
     {
+      "name": "live-feed",
+      "type": "registry:component",
+      "title": "Live Feed",
+      "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+      "files": [
+        {
+          "path": "registry/default/live-feed/live-feed.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "mdx-content",
       "type": "registry:component",
       "title": "MDX Content",
@@ -692,6 +741,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "metric-gauge",
+      "type": "registry:component",
+      "title": "Metric Gauge",
+      "description": "Real-time arc and dial display for monitored percentages and utilization.",
+      "files": [
+        {
+          "path": "registry/default/metric-gauge/metric-gauge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "model-selector",
@@ -949,6 +1013,21 @@
       "category": "core"
     },
     {
+      "name": "severity-badge",
+      "type": "registry:component",
+      "title": "Severity Badge",
+      "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+      "files": [
+        {
+          "path": "registry/default/severity-badge/severity-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "share-section",
       "type": "registry:component",
       "title": "Share Section",
@@ -1084,6 +1163,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "status-board",
+      "type": "registry:component",
+      "title": "Status Board",
+      "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+      "files": [
+        {
+          "path": "registry/default/status-board/status-board.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "step-by-step",
@@ -1431,6 +1525,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "world-clock-bar",
+      "type": "registry:component",
+      "title": "World Clock Bar",
+      "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+      "files": [
+        {
+          "path": "registry/default/world-clock-bar/world-clock-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     }
   ]
 }

@@ -7,6 +7,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  ActivityHeatmap,
   Alert,
   AlertDescription,
   AlertDialog,
@@ -60,6 +61,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  CountdownTimer,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -97,12 +99,14 @@ import {
   KeyConcept,
   LangProvider,
   LearningObjectives,
+  LiveFeed,
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
+  MetricGauge,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -131,6 +135,7 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  SeverityBadge,
   ShareSection,
   Sheet,
   SheetClose,
@@ -146,6 +151,7 @@ import {
   Skeleton,
   Slider,
   Spinner,
+  StatusBoard,
   Step,
   StepByStep,
   StepNavigation,
@@ -180,6 +186,7 @@ import {
   TutorialCard,
   VideoEmbed,
   ViewSwitcher,
+  WorldClockBar,
 } from "@vllnt/ui";
 import {
   Bold,
@@ -1476,6 +1483,140 @@ function CarouselPreview() {
   );
 }
 
+function ActivityHeatmapPreview() {
+  return (
+    <ActivityHeatmap
+      data={[
+        { count: 1, date: "2026-03-01" },
+        { count: 3, date: "2026-03-02" },
+        { count: 6, date: "2026-03-03" },
+        { count: 4, date: "2026-03-05" },
+        { count: 9, date: "2026-03-08" },
+        { count: 7, date: "2026-03-11" },
+        { count: 2, date: "2026-03-13" },
+      ]}
+      endDate="2026-03-14T00:00:00.000Z"
+      title="Deployment activity"
+      weeks={2}
+    />
+  );
+}
+
+function CountdownTimerPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <CountdownTimer
+        deadline="2026-03-15T10:30:00.000Z"
+        now="2026-03-15T10:00:00.000Z"
+        startedAt="2026-03-15T09:00:00.000Z"
+        title="SLA timer"
+      />
+    </div>
+  );
+}
+
+function MetricGaugePreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <MetricGauge label="CPU load" max={100} unit="%" value={72} />
+    </div>
+  );
+}
+
+function LiveFeedPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <LiveFeed
+        events={[
+          {
+            id: "1",
+            message: "Auth gateway p95 latency above 400ms for 5m.",
+            severity: "critical",
+            source: "pagerduty",
+            timestamp: "2026-03-15T11:59:30.000Z",
+            title: "Latency breach on gateway",
+          },
+          {
+            id: "2",
+            message: "Auto-scaler added 2 nodes to worker pool.",
+            severity: "medium",
+            source: "platform",
+            timestamp: "2026-03-15T11:55:00.000Z",
+            title: "Worker pool scaled up",
+          },
+          {
+            id: "3",
+            message: "Revert complete. SLA within target.",
+            severity: "low",
+            source: "deploy-bot",
+            timestamp: "2026-03-15T11:40:00.000Z",
+            title: "Rollback of v7.1.2 succeeded",
+          },
+        ]}
+        now="2026-03-15T12:00:00.000Z"
+        title="Incident feed"
+      />
+    </div>
+  );
+}
+
+function SeverityBadgePreview() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <SeverityBadge level="critical" />
+      <SeverityBadge level="high" />
+      <SeverityBadge level="medium" />
+      <SeverityBadge level="low" />
+      <SeverityBadge level="info" />
+    </div>
+  );
+}
+
+function StatusBoardPreview() {
+  return (
+    <StatusBoard
+      items={[
+        {
+          description: "Traffic and auth requests are stable.",
+          label: "Gateway",
+          meta: "1m ago",
+          status: "healthy",
+          value: "99.98%",
+        },
+        {
+          description: "Queue depth is trending upward.",
+          label: "Worker pool",
+          meta: "4 delayed jobs",
+          status: "warning",
+          value: "82%",
+        },
+        {
+          description: "Fallback region currently disabled.",
+          label: "Edge POP",
+          meta: "Planned maintenance",
+          status: "maintenance",
+          value: "2/3 online",
+        },
+      ]}
+      title="Service health"
+    />
+  );
+}
+
+function WorldClockBarPreview() {
+  return (
+    <WorldClockBar
+      now="2026-03-15T12:00:00.000Z"
+      zones={[
+        { city: "San Francisco", timeZone: "America/Los_Angeles" },
+        { city: "New York", timeZone: "America/New_York" },
+        { city: "London", timeZone: "Europe/London" },
+        { city: "Singapore", timeZone: "Asia/Singapore" },
+      ]}
+    />
+  );
+}
+
 function CalendarPreview() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return <Calendar mode="single" onSelect={setDate} selected={date} />;
@@ -1496,6 +1637,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
     case "accordion":
       return <AccordionPreview />;
+    case "activity-heatmap":
+      return <ActivityHeatmapPreview />;
     case "alert":
       return <AlertPreview />;
     case "alert-dialog":
@@ -1550,6 +1693,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "context-menu":
       return <ContextMenuPreview />;
+    case "countdown-timer":
+      return <CountdownTimerPreview />;
     case "dialog":
       return <DialogPreview />;
     case "drawer":
@@ -1586,10 +1731,14 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <LearningObjectivesPreview />;
     case "line-chart":
       return <LineChartPreview />;
+    case "live-feed":
+      return <LiveFeedPreview />;
     case "mdx-content":
       return <MDXContentPreview />;
     case "menubar":
       return <MenubarPreview />;
+    case "metric-gauge":
+      return <MetricGaugePreview />;
     case "model-selector":
       return (
         <SimplePreview description="A dialog for selecting AI models with search and filtering." />
@@ -1632,6 +1781,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SelectPreview />;
     case "separator":
       return <SeparatorPreview />;
+    case "severity-badge":
+      return <SeverityBadgePreview />;
     case "share-section":
       return <ShareSectionPreview />;
     case "sheet":
@@ -1644,6 +1795,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SliderPreview />;
     case "spinner":
       return <SpinnerPreview />;
+    case "status-board":
+      return <StatusBoardPreview />;
     case "sidebar-provider":
       return <SidebarProviderPreview />;
     case "sidebar-toggle":
@@ -1708,6 +1861,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "world-clock-bar":
+      return <WorldClockBarPreview />;
     default:
       return <div className="text-muted-foreground">Preview not available</div>;
   }

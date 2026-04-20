@@ -12,6 +12,23 @@
     ],
     "title": "Accordion"
   },
+  "activity-heatmap": {
+    "category": "data",
+    "defaultStoryId": "data-activityheatmap--default",
+    "description": "Contribution-style grid for visualizing operational activity over time.",
+    "name": "activity-heatmap",
+    "stories": [
+      {
+        "id": "data-activityheatmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-activityheatmap--two-weeks",
+        "name": "Two Weeks"
+      }
+    ],
+    "title": "Activity Heatmap"
+  },
   "alert": {
     "category": "data",
     "defaultStoryId": "data-alert--default",
@@ -375,6 +392,23 @@
     ],
     "title": "Context Menu"
   },
+  "countdown-timer": {
+    "category": "data",
+    "defaultStoryId": "data-countdowntimer--default",
+    "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+    "name": "countdown-timer",
+    "stories": [
+      {
+        "id": "data-countdowntimer--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-countdowntimer--breached",
+        "name": "Breached"
+      }
+    ],
+    "title": "Countdown Timer"
+  },
   "dialog": {
     "category": "overlay",
     "defaultStoryId": "overlay-dialog--default",
@@ -479,19 +513,6 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
-    "stories": [
-      {
-        "id": "overlay-hovercard--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Hover Card"
-  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -504,6 +525,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -604,6 +638,23 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "live-feed": {
+    "category": "data",
+    "defaultStoryId": "data-livefeed--default",
+    "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+    "name": "live-feed",
+    "stories": [
+      {
+        "id": "data-livefeed--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-livefeed--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Live Feed"
+  },
   "mdx-content": {
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
@@ -629,6 +680,23 @@
       }
     ],
     "title": "Menubar"
+  },
+  "metric-gauge": {
+    "category": "data",
+    "defaultStoryId": "data-metricgauge--default",
+    "description": "Real-time arc and dial display for monitored percentages and utilization.",
+    "name": "metric-gauge",
+    "stories": [
+      {
+        "id": "data-metricgauge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-metricgauge--critical",
+        "name": "Critical"
+      }
+    ],
+    "title": "Metric Gauge"
   },
   "model-selector": {
     "category": "form",
@@ -851,6 +919,35 @@
     ],
     "title": "Separator"
   },
+  "severity-badge": {
+    "category": "data",
+    "defaultStoryId": "data-severitybadge--default",
+    "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+    "name": "severity-badge",
+    "stories": [
+      {
+        "id": "data-severitybadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-severitybadge--levels",
+        "name": "Levels"
+      },
+      {
+        "id": "data-severitybadge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "data-severitybadge--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "data-severitybadge--custom-label",
+        "name": "Custom Label"
+      }
+    ],
+    "title": "Severity Badge"
+  },
   "share-section": {
     "category": "content",
     "defaultStoryId": "content-sharesection--default",
@@ -975,6 +1072,23 @@
       }
     ],
     "title": "Spinner"
+  },
+  "status-board": {
+    "category": "data",
+    "defaultStoryId": "data-statusboard--default",
+    "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+    "name": "status-board",
+    "stories": [
+      {
+        "id": "data-statusboard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusboard--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Status Board"
   },
   "step-by-step": {
     "category": "learning",
@@ -1294,5 +1408,22 @@
       }
     ],
     "title": "View Switcher"
+  },
+  "world-clock-bar": {
+    "category": "data",
+    "defaultStoryId": "data-worldclockbar--default",
+    "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+    "name": "world-clock-bar",
+    "stories": [
+      {
+        "id": "data-worldclockbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-worldclockbar--time-only",
+        "name": "Time Only"
+      }
+    ],
+    "title": "World Clock Bar"
   }
 }

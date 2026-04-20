@@ -232,8 +232,19 @@ export {
 } from "./carousel";
 
 // New shadcn primitives - Utilities
+export {
+  ActivityHeatmap,
+  type ActivityHeatmapItem,
+  type ActivityHeatmapProps,
+} from "./activity-heatmap";
 export { Calendar, type CalendarProps } from "./calendar";
+export { CountdownTimer, type CountdownTimerProps } from "./countdown-timer";
 export { Spinner, type SpinnerProps } from "./spinner";
+export {
+  WorldClockBar,
+  type WorldClockBarProps,
+  type WorldClockBarZone,
+} from "./world-clock-bar";
 
 // Content components
 export { CodeBlock } from "./code-block";
@@ -275,6 +286,24 @@ export { ProfileSection } from "./profile-section";
 export { TLDRSection } from "./tldr-section";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
+export { LiveFeed, type LiveFeedEvent, type LiveFeedProps } from "./live-feed";
+export {
+  MetricGauge,
+  type MetricGaugeProps,
+  type MetricGaugeThreshold,
+} from "./metric-gauge";
+export {
+  SeverityBadge,
+  type SeverityBadgeLevel,
+  type SeverityBadgeProps,
+  severityBadgeVariants,
+} from "./severity-badge";
+export {
+  StatusBoard,
+  type StatusBoardItem,
+  type StatusBoardProps,
+  type StatusBoardStatus,
+} from "./status-board";
 
 // Text components
 export { TruncatedText, type TruncatedTextProps } from "./truncated-text";
