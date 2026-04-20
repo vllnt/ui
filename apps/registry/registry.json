@@ -19,6 +19,21 @@
       "category": "content"
     },
     {
+      "name": "activity-log",
+      "type": "registry:component",
+      "title": "Activity Log",
+      "description": "Paginated activity feed for audit history and analytics changes.",
+      "files": [
+        {
+          "path": "registry/default/activity-log/activity-log.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "alert",
       "type": "registry:component",
       "title": "Alert",
@@ -514,6 +529,25 @@
       "category": "data"
     },
     {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "navigation"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -527,21 +561,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
-      "category": "navigation"
     },
     {
       "name": "inline-input",
@@ -872,6 +891,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "scope-selector",
+      "type": "registry:component",
+      "title": "Scope Selector",
+      "description": "Multi-level scope picker for nested environments, teams, and targets.",
+      "files": [
+        {
+          "path": "registry/default/scope-selector/scope-selector.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "scroll-area",
@@ -1401,6 +1435,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "learning"
+    },
+    {
+      "name": "usage-breakdown",
+      "type": "registry:component",
+      "title": "Usage Breakdown",
+      "description": "Ranked resource consumption list with relative share and trend cues.",
+      "files": [
+        {
+          "path": "registry/default/usage-breakdown/usage-breakdown.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "video-embed",

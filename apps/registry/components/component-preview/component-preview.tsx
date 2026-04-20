@@ -7,6 +7,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  ActivityLog,
   Alert,
   AlertDescription,
   AlertDialog,
@@ -123,6 +124,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
+  ScopeSelector,
   ScrollArea,
   SearchBar,
   Select,
@@ -178,6 +180,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
   TutorialCard,
+  UsageBreakdown,
   VideoEmbed,
   ViewSwitcher,
 } from "@vllnt/ui";
@@ -705,6 +708,83 @@ function PaginationPreview() {
   return <Pagination baseUrl="/blog" currentPage={3} totalPages={10} />;
 }
 
+function UsageBreakdownPreview() {
+  return (
+    <UsageBreakdown
+      description="Ranked resource consumption across the current workspace."
+      items={[
+        {
+          id: "tokens",
+          label: "Tokens",
+          meta: "LLM",
+          trend: { direction: "up", label: "+14%" },
+          value: 420,
+          valueLabel: "420k",
+        },
+        {
+          id: "storage",
+          label: "Storage",
+          meta: "Vector DB",
+          trend: { direction: "down", label: "-6%" },
+          value: 260,
+          valueLabel: "260 GB",
+        },
+        {
+          id: "events",
+          label: "Events",
+          meta: "Tracking",
+          value: 180,
+          valueLabel: "180k",
+        },
+      ]}
+      title="Usage breakdown"
+    />
+  );
+}
+
+function ActivityLogPreview() {
+  return (
+    <ActivityLog
+      description="Recent analytics changes across your org."
+      items={[
+        {
+          action: "updated",
+          actor: "Alex Morgan",
+          description: "Raised ingestion retention from 30 to 45 days.",
+          id: "1",
+          scope: "Workspace",
+          target: "Analytics policy",
+          timestamp: "2m ago",
+          tone: "success",
+        },
+        {
+          action: "paused",
+          actor: "Riley Chen",
+          description: "Temporarily disabled streaming exports after an alert.",
+          id: "2",
+          scope: "Project",
+          target: "Billing pipeline",
+          timestamp: "11m ago",
+          tone: "warning",
+        },
+        {
+          action: "revoked",
+          actor: "Sam Patel",
+          description:
+            "Removed an expired API credential from production scope.",
+          id: "3",
+          scope: "Environment",
+          target: "Collector token",
+          timestamp: "24m ago",
+          tone: "danger",
+        },
+      ]}
+      pageSize={3}
+      title="Activity log"
+    />
+  );
+}
+
 function SearchBarPreview() {
   return (
     <React.Suspense
@@ -1209,6 +1289,44 @@ function ViewSwitcherPreview() {
   );
 }
 
+function ScopeSelectorPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <ScopeSelector
+        nodes={[
+          {
+            children: [
+              {
+                children: [
+                  { id: "prod-us", label: "US East" },
+                  { id: "prod-eu", label: "EU West" },
+                ],
+                id: "production",
+                label: "Production",
+              },
+              {
+                children: [{ id: "staging-us", label: "US East" }],
+                id: "staging",
+                label: "Staging",
+              },
+            ],
+            id: "environments",
+            label: "Environments",
+          },
+          {
+            children: [
+              { id: "team-growth", label: "Growth" },
+              { id: "team-data", label: "Data" },
+            ],
+            id: "teams",
+            label: "Teams",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
 function HoverCardPreview() {
   return (
     <HoverCard>
@@ -1496,6 +1614,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
     case "accordion":
       return <AccordionPreview />;
+    case "activity-log":
+      return <ActivityLogPreview />;
     case "alert":
       return <AlertPreview />;
     case "alert-dialog":
@@ -1628,6 +1748,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="A command palette style search dialog." />
       );
+    case "scope-selector":
+      return <ScopeSelectorPreview />;
     case "select":
       return <SelectPreview />;
     case "separator":
@@ -1704,6 +1826,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="MDX components optimized for tutorial content." />
       );
+    case "usage-breakdown":
+      return <UsageBreakdownPreview />;
     case "video-embed":
       return <VideoEmbedPreview />;
     case "view-switcher":
