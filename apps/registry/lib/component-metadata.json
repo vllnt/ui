@@ -76,6 +76,23 @@
     ],
     "title": "Avatar"
   },
+  "avatar-group": {
+    "category": "data",
+    "defaultStoryId": "data-avatargroup--default",
+    "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+    "name": "avatar-group",
+    "stories": [
+      {
+        "id": "data-avatargroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-avatargroup--sizes",
+        "name": "Sizes"
+      }
+    ],
+    "title": "Avatar Group"
+  },
   "badge": {
     "category": "core",
     "defaultStoryId": "core-badge--default",
@@ -218,6 +235,36 @@
       }
     ],
     "title": "Card"
+  },
+  "data-list": {
+    "category": "data",
+    "defaultStoryId": "data-datalist--default",
+    "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "name": "data-list",
+    "stories": [
+      {
+        "id": "data-datalist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-datalist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Data List"
+  },
+  "data-table": {
+    "category": "data",
+    "defaultStoryId": "data-datatable--default",
+    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "name": "data-table",
+    "stories": [
+      {
+        "id": "data-datatable--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Data Table"
   },
   "carousel": {
     "category": "content",
@@ -975,6 +1022,40 @@
       }
     ],
     "title": "Spinner"
+  },
+  "stat-card": {
+    "category": "data",
+    "defaultStoryId": "data-statcard--default",
+    "description": "Headline KPI card for metrics, trends, and supporting context.",
+    "name": "stat-card",
+    "stories": [
+      {
+        "id": "data-statcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statcard--grid",
+        "name": "Grid"
+      }
+    ],
+    "title": "Stat Card"
+  },
+  "status-indicator": {
+    "category": "data",
+    "defaultStoryId": "data-statusindicator--default",
+    "description": "Compact status label with tone, variant, and activity dot options.",
+    "name": "status-indicator",
+    "stories": [
+      {
+        "id": "data-statusindicator--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusindicator--variants",
+        "name": "Variants"
+      }
+    ],
+    "title": "Status Indicator"
   },
   "step-by-step": {
     "category": "learning",

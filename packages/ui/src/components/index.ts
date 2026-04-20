@@ -195,6 +195,22 @@ export {
 
 // New shadcn primitives - Data Display
 export {
+  DataTable,
+  type DataTableFilter,
+  type DataTableFilterOption,
+  type DataTableProps,
+} from "./data-table";
+export {
+  DataList,
+  DataListItem,
+  type DataListItemProps,
+  dataListItemVariants,
+  DataListLabel,
+  type DataListProps,
+  DataListValue,
+  dataListVariants,
+} from "./data-list";
+export {
   Table,
   TableBody,
   TableCaption,
@@ -205,9 +221,23 @@ export {
   TableRow,
 } from "./table";
 export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+export {
+  AvatarGroup,
+  type AvatarGroupItem,
+  type AvatarGroupProps,
+  avatarGroupVariants,
+  avatarItemVariants,
+} from "./avatar-group";
 export { Skeleton } from "./skeleton";
 export { Separator } from "./separator";
 export { Alert, AlertDescription, AlertTitle, alertVariants } from "./alert";
+export { StatCard, type StatCardProps, statCardVariants } from "./stat-card";
+export {
+  dotVariants,
+  StatusIndicator,
+  type StatusIndicatorProps,
+  statusIndicatorVariants,
+} from "./status-indicator";
 
 // New shadcn primitives - Layout
 export { AspectRatio } from "./aspect-ratio";
