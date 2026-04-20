@@ -5,7 +5,7 @@ import { UNICODE_SPINNER_ANIMATIONS, UnicodeSpinner } from "./unicode-spinner";
 
 describe("UnicodeSpinner", () => {
   it("exposes the full upstream animation set", () => {
-    expect(UNICODE_SPINNER_ANIMATIONS).toHaveLength(18);
+    expect(UNICODE_SPINNER_ANIMATIONS).toHaveLength(59);
     expect(UNICODE_SPINNER_ANIMATIONS).toEqual(
       expect.arrayContaining([
         "braillewave",
@@ -22,6 +22,13 @@ describe("UnicodeSpinner", () => {
         "snake",
         "sparkle",
         "waverows",
+        "weather",
+        "arrow",
+        "braille",
+        "braillewave",
+        "moon",
+        "rolling-line",
+        "scanline",
       ]),
     );
   });
