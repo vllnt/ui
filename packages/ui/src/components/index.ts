@@ -26,6 +26,8 @@ export {
   CommandSeparator,
   CommandShortcut,
 } from "./command";
+export { Combobox, type ComboboxOption, type ComboboxProps } from "./combobox";
+export { DatePicker, type DatePickerProps } from "./date-picker";
 export {
   Dialog,
   DialogClose,
@@ -57,7 +59,10 @@ export {
 } from "./dropdown-menu";
 export { Input } from "./input";
 export { Checkbox } from "./checkbox";
+export { FileUpload, type FileUploadProps } from "./file-upload";
 export { Label } from "./label";
+export { NumberInput, type NumberInputProps } from "./number-input";
+export { PasswordInput, type PasswordInputProps } from "./password-input";
 export { Switch } from "./switch";
 export {
   toast,
@@ -195,6 +200,22 @@ export {
 
 // New shadcn primitives - Data Display
 export {
+  DataTable,
+  type DataTableFilter,
+  type DataTableFilterOption,
+  type DataTableProps,
+} from "./data-table";
+export {
+  DataList,
+  DataListItem,
+  type DataListItemProps,
+  dataListItemVariants,
+  DataListLabel,
+  type DataListProps,
+  DataListValue,
+  dataListVariants,
+} from "./data-list";
+export {
   Table,
   TableBody,
   TableCaption,
@@ -205,9 +226,23 @@ export {
   TableRow,
 } from "./table";
 export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+export {
+  AvatarGroup,
+  type AvatarGroupItem,
+  type AvatarGroupProps,
+  avatarGroupVariants,
+  avatarItemVariants,
+} from "./avatar-group";
 export { Skeleton } from "./skeleton";
 export { Separator } from "./separator";
 export { Alert, AlertDescription, AlertTitle, alertVariants } from "./alert";
+export { StatCard, type StatCardProps, statCardVariants } from "./stat-card";
+export {
+  dotVariants,
+  StatusIndicator,
+  type StatusIndicatorProps,
+  statusIndicatorVariants,
+} from "./status-indicator";
 
 // New shadcn primitives - Layout
 export { AspectRatio } from "./aspect-ratio";
@@ -261,10 +296,28 @@ export { SidebarProvider, useSidebar } from "./sidebar-provider";
 export { TableOfContents } from "./table-of-contents";
 
 // Blog components
+export {
+  ActivityLog,
+  type ActivityLogItem,
+  type ActivityLogProps,
+  type ActivityLogTone,
+} from "./activity-log";
 export { BlogCard, ContentCard } from "./blog-card";
 export { CategoryFilter } from "./category-filter";
 export { Pagination, type PaginationProps } from "./pagination";
 export { SearchBar } from "./search-bar";
+export {
+  ScopeSelector,
+  type ScopeSelectorNode,
+  type ScopeSelectorProps,
+  type ScopeSelectorSelection,
+} from "./scope-selector";
+export {
+  UsageBreakdown,
+  type UsageBreakdownItem,
+  type UsageBreakdownProps,
+  type UsageBreakdownTone,
+} from "./usage-breakdown";
 export {
   type PlatformConfig,
   type SharePlatform,
