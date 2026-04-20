@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertTitle,
+  Annotation,
   AspectRatio,
   Avatar,
   AvatarFallback,
@@ -93,6 +94,7 @@ import {
   FAQ,
   FAQItem,
   FileUpload,
+  Flashcard,
   FloatingActionButton,
   Glossary,
   HorizontalScrollRow,
@@ -134,6 +136,7 @@ import {
   Quiz,
   RadioGroup,
   RadioGroupItem,
+  Rating,
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
@@ -167,6 +170,7 @@ import {
   Step,
   StepByStep,
   StepNavigation,
+  Stepper,
   SubscriptionCard,
   Summary,
   Table,
@@ -196,6 +200,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  Tour,
   TutorialCard,
   UsageBreakdown,
   VideoEmbed,
@@ -652,6 +657,33 @@ function ChecklistPreview() {
   );
 }
 
+function AnnotationPreview() {
+  return (
+    <p className="max-w-2xl text-sm leading-7 text-foreground">
+      Use{" "}
+      <Annotation annotation="An annotation reveals extra context without interrupting the main reading flow.">
+        inline notes
+      </Annotation>{" "}
+      to unpack a key idea at the exact moment a learner needs it.
+    </p>
+  );
+}
+
+function FlashcardPreview() {
+  return (
+    <Flashcard
+      answer="A hypothesis is a testable explanation for an observation."
+      category="Science"
+      question="What is a hypothesis?"
+      title="Key vocabulary"
+    />
+  );
+}
+
+function RatingPreview() {
+  return <Rating defaultValue={4} label="Lesson rating" showValue />;
+}
+
 function StepByStepPreview() {
   return (
     <StepByStep title="Getting Started">
@@ -659,6 +691,31 @@ function StepByStepPreview() {
       <Step title="Configure">Set up your configuration files.</Step>
       <Step title="Build">Build your application for production.</Step>
     </StepByStep>
+  );
+}
+
+function StepperPreview() {
+  return (
+    <Stepper
+      currentStep={2}
+      steps={[
+        {
+          description: "Introduce the concept.",
+          id: "introduce",
+          title: "Introduce",
+        },
+        {
+          description: "Work a guided example.",
+          id: "guided",
+          title: "Guided example",
+        },
+        {
+          description: "Check for understanding.",
+          id: "check",
+          title: "Check",
+        },
+      ]}
+    />
   );
 }
 
@@ -689,6 +746,30 @@ function ProgressBarPreview() {
       />
       <ProgressBar currentLabel="Complete!" isComplete max={10} value={10} />
     </div>
+  );
+}
+
+function TourPreview() {
+  return (
+    <Tour
+      steps={[
+        {
+          description: "Start with the lesson goals and pacing.",
+          id: "goals",
+          title: "Goals",
+        },
+        {
+          description: "Use examples and annotations to model the process.",
+          id: "examples",
+          title: "Examples",
+        },
+        {
+          description: "Finish with a quick reflection prompt.",
+          id: "reflect",
+          title: "Reflect",
+        },
+      ]}
+    />
   );
 }
 
@@ -1847,6 +1928,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <AlertPreview />;
     case "alert-dialog":
       return <AlertDialogPreview />;
+    case "annotation":
+      return <AnnotationPreview />;
     case "area-chart":
       return <AreaChartPreview />;
     case "aspect-ratio":
@@ -1917,6 +2000,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <FAQPreview />;
     case "file-upload":
       return <FileUploadPreview />;
+    case "flashcard":
+      return <FlashcardPreview />;
     case "filter-bar":
       return (
         <SimplePreview description="A filter bar with search, sort, and filter controls." />
@@ -1983,6 +2068,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <CreditBadgePreview />;
     case "quiz":
       return <QuizPreview />;
+    case "rating":
+      return <RatingPreview />;
     case "radio-group":
       return <RadioGroupPreview />;
     case "resizable":
@@ -2029,6 +2116,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <StepByStepPreview />;
     case "step-navigation":
       return <StepNavigationPreview />;
+    case "stepper":
+      return <StepperPreview />;
     case "subscription-card":
       return <SubscriptionCardPreview />;
     case "status-indicator":
@@ -2063,6 +2152,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ToggleGroupPreview />;
     case "tooltip":
       return <TooltipPreview />;
+    case "tour":
+      return <TourPreview />;
     case "tutorial-card":
       return <TutorialCardPreview />;
     case "tutorial-complete":

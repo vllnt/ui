@@ -64,6 +64,21 @@
       "category": "overlay"
     },
     {
+      "name": "annotation",
+      "type": "registry:component",
+      "title": "Annotation",
+      "description": "Inline highlight with an attached contextual note.",
+      "files": [
+        {
+          "path": "registry/default/annotation/annotation.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "area-chart",
       "type": "registry:component",
       "title": "Area Chart",
@@ -606,6 +621,21 @@
       "category": "form"
     },
     {
+      "name": "flashcard",
+      "type": "registry:component",
+      "title": "Flashcard",
+      "description": "Study card for active recall with prompt and answer states.",
+      "files": [
+        {
+          "path": "registry/default/flashcard/flashcard.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "floating-action-button",
       "type": "registry:component",
       "title": "Floating Action Button",
@@ -1030,6 +1060,21 @@
       "category": "core"
     },
     {
+      "name": "rating",
+      "type": "registry:component",
+      "title": "Rating",
+      "description": "Inline star rating for lightweight learner feedback.",
+      "files": [
+        {
+          "path": "registry/default/rating/rating.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "resizable",
       "type": "registry:component",
       "title": "Resizable",
@@ -1347,6 +1392,21 @@
       "category": "navigation"
     },
     {
+      "name": "stepper",
+      "type": "registry:component",
+      "title": "Stepper",
+      "description": "Sequenced steps with complete, current, and upcoming states.",
+      "files": [
+        {
+          "path": "registry/default/stepper/stepper.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "subscription-card",
       "type": "registry:component",
       "title": "Subscription Card",
@@ -1572,6 +1632,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
+    },
+    {
+      "name": "tour",
+      "type": "registry:component",
+      "title": "Tour",
+      "description": "Guided onboarding flow for introducing content or interface patterns.",
+      "files": [
+        {
+          "path": "registry/default/tour/tour.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "tutorial-card",

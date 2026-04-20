@@ -12,6 +12,23 @@
     ],
     "title": "Accordion"
   },
+  "activity-log": {
+    "category": "data",
+    "defaultStoryId": "analytics-activitylog--default",
+    "description": "Paginated activity feed for audit history and analytics changes.",
+    "name": "activity-log",
+    "stories": [
+      {
+        "id": "analytics-activitylog--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-activitylog--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Activity Log"
+  },
   "alert": {
     "category": "data",
     "defaultStoryId": "data-alert--default",
@@ -41,6 +58,23 @@
       }
     ],
     "title": "Alert Dialog"
+  },
+  "annotation": {
+    "category": "learning",
+    "defaultStoryId": "learning-annotation--default",
+    "description": "Inline highlight with an attached contextual note.",
+    "name": "annotation",
+    "stories": [
+      {
+        "id": "learning-annotation--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-annotation--highlight-only",
+        "name": "Highlight Only"
+      }
+    ],
+    "title": "Annotation"
   },
   "area-chart": {
     "category": "data",
@@ -564,6 +598,19 @@
     ],
     "title": "Filter Bar"
   },
+  "flashcard": {
+    "category": "learning",
+    "defaultStoryId": "learning-flashcard--default",
+    "description": "Study card for active recall with prompt and answer states.",
+    "name": "flashcard",
+    "stories": [
+      {
+        "id": "learning-flashcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Flashcard"
+  },
   "floating-action-button": {
     "category": "utility",
     "defaultStoryId": "utility-floatingactionbutton--default",
@@ -931,6 +978,23 @@
     ],
     "title": "Radio Group"
   },
+  "rating": {
+    "category": "learning",
+    "defaultStoryId": "learning-rating--default",
+    "description": "Inline star rating for lightweight learner feedback.",
+    "name": "rating",
+    "stories": [
+      {
+        "id": "learning-rating--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-rating--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "Rating"
+  },
   "resizable": {
     "category": "utility",
     "defaultStoryId": "utility-resizable--default",
@@ -960,6 +1024,23 @@
       }
     ],
     "title": "Role Badge"
+  },
+  "scope-selector": {
+    "category": "form",
+    "defaultStoryId": "analytics-scopeselector--default",
+    "description": "Multi-level scope picker for nested environments, teams, and targets.",
+    "name": "scope-selector",
+    "stories": [
+      {
+        "id": "analytics-scopeselector--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-scopeselector--with-default-selection",
+        "name": "With Default Selection"
+      }
+    ],
+    "title": "Scope Selector"
   },
   "scroll-area": {
     "category": "utility",
@@ -1211,6 +1292,23 @@
     ],
     "title": "Step Navigation"
   },
+  "stepper": {
+    "category": "learning",
+    "defaultStoryId": "learning-stepper--default",
+    "description": "Sequenced steps with complete, current, and upcoming states.",
+    "name": "stepper",
+    "stories": [
+      {
+        "id": "learning-stepper--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-stepper--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Stepper"
+  },
   "subscription-card": {
     "category": "content",
     "defaultStoryId": "account-billing-subscriptioncard--default",
@@ -1430,6 +1528,19 @@
     ],
     "title": "Tooltip"
   },
+  "tour": {
+    "category": "learning",
+    "defaultStoryId": "learning-tour--default",
+    "description": "Guided onboarding flow for introducing content or interface patterns.",
+    "name": "tour",
+    "stories": [
+      {
+        "id": "learning-tour--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tour"
+  },
   "tutorial-card": {
     "category": "learning",
     "defaultStoryId": "learning-tutorialcard--default",
@@ -1494,6 +1605,27 @@
       }
     ],
     "title": "Tutorial MDX"
+  },
+  "usage-breakdown": {
+    "category": "data",
+    "defaultStoryId": "analytics-usagebreakdown--default",
+    "description": "Ranked resource consumption list with relative share and trend cues.",
+    "name": "usage-breakdown",
+    "stories": [
+      {
+        "id": "analytics-usagebreakdown--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-usagebreakdown--top-two-only",
+        "name": "Top Two Only"
+      },
+      {
+        "id": "analytics-usagebreakdown--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Usage Breakdown"
   },
   "video-embed": {
     "category": "content",
