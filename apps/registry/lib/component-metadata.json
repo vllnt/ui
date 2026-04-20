@@ -29,6 +29,91 @@
     ],
     "title": "Activity Log"
   },
+  "ai-chat-input": {
+    "category": "learning",
+    "defaultStoryId": "ai-chatinput--default",
+    "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+    "name": "ai-chat-input",
+    "stories": [
+      {
+        "id": "ai-chatinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chatinput--submitting",
+        "name": "Submitting"
+      }
+    ],
+    "title": "AI Chat Input"
+  },
+  "ai-message-bubble": {
+    "category": "learning",
+    "defaultStoryId": "ai-messagebubble--default",
+    "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+    "name": "ai-message-bubble",
+    "stories": [
+      {
+        "id": "ai-messagebubble--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-messagebubble--user",
+        "name": "User"
+      },
+      {
+        "id": "ai-messagebubble--tool",
+        "name": "Tool"
+      }
+    ],
+    "title": "AI Message Bubble"
+  },
+  "ai-source-citation": {
+    "category": "learning",
+    "defaultStoryId": "ai-sourcecitation--default",
+    "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+    "name": "ai-source-citation",
+    "stories": [
+      {
+        "id": "ai-sourcecitation--default",
+        "name": "Default"
+      }
+    ],
+    "title": "AI Source Citation"
+  },
+  "ai-streaming-text": {
+    "category": "learning",
+    "defaultStoryId": "ai-streamingtext--default",
+    "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+    "name": "ai-streaming-text",
+    "stories": [
+      {
+        "id": "ai-streamingtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-streamingtext--streaming",
+        "name": "Streaming"
+      }
+    ],
+    "title": "AI Streaming Text"
+  },
+  "ai-tool-call-display": {
+    "category": "learning",
+    "defaultStoryId": "ai-toolcalldisplay--default",
+    "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+    "name": "ai-tool-call-display",
+    "stories": [
+      {
+        "id": "ai-toolcalldisplay--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-toolcalldisplay--error-state",
+        "name": "Error State"
+      }
+    ],
+    "title": "AI Tool Call Display"
+  },
   "alert": {
     "category": "data",
     "defaultStoryId": "data-alert--default",
