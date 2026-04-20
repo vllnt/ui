@@ -12,6 +12,23 @@
     ],
     "title": "Accordion"
   },
+  "activity-heatmap": {
+    "category": "data",
+    "defaultStoryId": "data-activityheatmap--default",
+    "description": "Contribution-style grid for visualizing operational activity over time.",
+    "name": "activity-heatmap",
+    "stories": [
+      {
+        "id": "data-activityheatmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-activityheatmap--two-weeks",
+        "name": "Two Weeks"
+      }
+    ],
+    "title": "Activity Heatmap"
+  },
   "activity-log": {
     "category": "data",
     "defaultStoryId": "analytics-activitylog--default",
@@ -342,6 +359,23 @@
     ],
     "title": "Callout"
   },
+  "candlestick-chart": {
+    "category": "data",
+    "defaultStoryId": "data-candlestickchart--default",
+    "description": "OHLC financial chart for session-by-session price action.",
+    "name": "candlestick-chart",
+    "stories": [
+      {
+        "id": "data-candlestickchart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-candlestickchart--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Candlestick Chart"
+  },
   "card": {
     "category": "content",
     "defaultStoryId": "content-card--default",
@@ -527,6 +561,23 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "countdown-timer": {
+    "category": "data",
+    "defaultStoryId": "data-countdowntimer--default",
+    "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+    "name": "countdown-timer",
+    "stories": [
+      {
+        "id": "data-countdowntimer--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-countdowntimer--breached",
+        "name": "Breached"
+      }
+    ],
+    "title": "Countdown Timer"
   },
   "credit-badge": {
     "category": "content",
@@ -847,6 +898,36 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "live-feed": {
+    "category": "data",
+    "defaultStoryId": "data-livefeed--default",
+    "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+    "name": "live-feed",
+    "stories": [
+      {
+        "id": "data-livefeed--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-livefeed--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Live Feed"
+  },
+  "market-treemap": {
+    "category": "data",
+    "defaultStoryId": "data-markettreemap--default",
+    "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+    "name": "market-treemap",
+    "stories": [
+      {
+        "id": "data-markettreemap--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Market Treemap"
+  },
   "mdx-content": {
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
@@ -872,6 +953,23 @@
       }
     ],
     "title": "Menubar"
+  },
+  "metric-gauge": {
+    "category": "data",
+    "defaultStoryId": "data-metricgauge--default",
+    "description": "Real-time arc and dial display for monitored percentages and utilization.",
+    "name": "metric-gauge",
+    "stories": [
+      {
+        "id": "data-metricgauge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-metricgauge--critical",
+        "name": "Critical"
+      }
+    ],
+    "title": "Metric Gauge"
   },
   "model-selector": {
     "category": "form",
@@ -924,6 +1022,23 @@
       }
     ],
     "title": "Number Input"
+  },
+  "order-book": {
+    "category": "data",
+    "defaultStoryId": "data-orderbook--default",
+    "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+    "name": "order-book",
+    "stories": [
+      {
+        "id": "data-orderbook--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-orderbook--tight-spread",
+        "name": "Tight Spread"
+      }
+    ],
+    "title": "Order Book"
   },
   "pagination": {
     "category": "navigation",
@@ -1192,6 +1307,35 @@
     ],
     "title": "Separator"
   },
+  "severity-badge": {
+    "category": "data",
+    "defaultStoryId": "data-severitybadge--default",
+    "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+    "name": "severity-badge",
+    "stories": [
+      {
+        "id": "data-severitybadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-severitybadge--levels",
+        "name": "Levels"
+      },
+      {
+        "id": "data-severitybadge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "data-severitybadge--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "data-severitybadge--custom-label",
+        "name": "Custom Label"
+      }
+    ],
+    "title": "Severity Badge"
+  },
   "share-section": {
     "category": "content",
     "defaultStoryId": "content-sharesection--default",
@@ -1304,6 +1448,23 @@
     ],
     "title": "Slideshow"
   },
+  "sparkline-grid": {
+    "category": "data",
+    "defaultStoryId": "data-sparklinegrid--default",
+    "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+    "name": "sparkline-grid",
+    "stories": [
+      {
+        "id": "data-sparklinegrid--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-sparklinegrid--four-columns",
+        "name": "Four Columns"
+      }
+    ],
+    "title": "Sparkline Grid"
+  },
   "spinner": {
     "category": "utility",
     "defaultStoryId": "utility-spinner--default",
@@ -1333,6 +1494,23 @@
       }
     ],
     "title": "Stat Card"
+  },
+  "status-board": {
+    "category": "data",
+    "defaultStoryId": "data-statusboard--default",
+    "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+    "name": "status-board",
+    "stories": [
+      {
+        "id": "data-statusboard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusboard--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Status Board"
   },
   "status-indicator": {
     "category": "data",
@@ -1527,6 +1705,23 @@
       }
     ],
     "title": "Thinking Block"
+  },
+  "ticker-tape": {
+    "category": "data",
+    "defaultStoryId": "data-tickertape--default",
+    "description": "Marquee-style scrolling symbol tape with price and change badges.",
+    "name": "ticker-tape",
+    "stories": [
+      {
+        "id": "data-tickertape--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-tickertape--fast",
+        "name": "Fast"
+      }
+    ],
+    "title": "Ticker Tape"
   },
   "tldr-section": {
     "category": "content",
@@ -1738,86 +1933,22 @@
     ],
     "title": "View Switcher"
   },
-  "candlestick-chart": {
-    "category": "data",
-    "defaultStoryId": "data-candlestickchart--default",
-    "description": "OHLC financial chart for session-by-session price action.",
-    "name": "candlestick-chart",
+  "wallet-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-walletcard--default",
+    "description": "Credit balance display card for available, pending, and refresh details.",
+    "name": "wallet-card",
     "stories": [
       {
-        "id": "data-candlestickchart--default",
+        "id": "account-billing-walletcard--default",
         "name": "Default"
       },
       {
-        "id": "data-candlestickchart--compact",
-        "name": "Compact"
+        "id": "account-billing-walletcard--depleted",
+        "name": "Depleted"
       }
     ],
-    "title": "Candlestick Chart"
-  },
-  "market-treemap": {
-    "category": "data",
-    "defaultStoryId": "data-markettreemap--default",
-    "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
-    "name": "market-treemap",
-    "stories": [
-      {
-        "id": "data-markettreemap--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Market Treemap"
-  },
-  "order-book": {
-    "category": "data",
-    "defaultStoryId": "data-orderbook--default",
-    "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
-    "name": "order-book",
-    "stories": [
-      {
-        "id": "data-orderbook--default",
-        "name": "Default"
-      },
-      {
-        "id": "data-orderbook--tight-spread",
-        "name": "Tight Spread"
-      }
-    ],
-    "title": "Order Book"
-  },
-  "sparkline-grid": {
-    "category": "data",
-    "defaultStoryId": "data-sparklinegrid--default",
-    "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
-    "name": "sparkline-grid",
-    "stories": [
-      {
-        "id": "data-sparklinegrid--default",
-        "name": "Default"
-      },
-      {
-        "id": "data-sparklinegrid--four-columns",
-        "name": "Four Columns"
-      }
-    ],
-    "title": "Sparkline Grid"
-  },
-  "ticker-tape": {
-    "category": "data",
-    "defaultStoryId": "data-tickertape--default",
-    "description": "Marquee-style scrolling symbol tape with price and change badges.",
-    "name": "ticker-tape",
-    "stories": [
-      {
-        "id": "data-tickertape--default",
-        "name": "Default"
-      },
-      {
-        "id": "data-tickertape--fast",
-        "name": "Fast"
-      }
-    ],
-    "title": "Ticker Tape"
+    "title": "Wallet Card"
   },
   "watchlist": {
     "category": "data",
@@ -1836,21 +1967,21 @@
     ],
     "title": "Watchlist"
   },
-  "wallet-card": {
-    "category": "content",
-    "defaultStoryId": "account-billing-walletcard--default",
-    "description": "Credit balance display card for available, pending, and refresh details.",
-    "name": "wallet-card",
+  "world-clock-bar": {
+    "category": "data",
+    "defaultStoryId": "data-worldclockbar--default",
+    "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+    "name": "world-clock-bar",
     "stories": [
       {
-        "id": "account-billing-walletcard--default",
+        "id": "data-worldclockbar--default",
         "name": "Default"
       },
       {
-        "id": "account-billing-walletcard--depleted",
-        "name": "Depleted"
+        "id": "data-worldclockbar--time-only",
+        "name": "Time Only"
       }
     ],
-    "title": "Wallet Card"
+    "title": "World Clock Bar"
   }
 }
