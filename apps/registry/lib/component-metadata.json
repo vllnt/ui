@@ -12,36 +12,6 @@
     ],
     "title": "Accordion"
   },
-  "alert": {
-    "category": "data",
-    "defaultStoryId": "data-alert--default",
-    "description": "Displays an alert message to the user.",
-    "name": "alert",
-    "stories": [
-      {
-        "id": "data-alert--default",
-        "name": "Default"
-      },
-      {
-        "id": "data-alert--variant-destructive",
-        "name": "Variant Destructive"
-      }
-    ],
-    "title": "Alert"
-  },
-  "alert-dialog": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-alertdialog--default",
-    "description": "Modal dialog for confirming destructive or important actions.",
-    "name": "alert-dialog",
-    "stories": [
-      {
-        "id": "overlay-alertdialog--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Alert Dialog"
-  },
   "ai-chat-input": {
     "category": "learning",
     "defaultStoryId": "ai-chatinput--default",
@@ -127,6 +97,36 @@
     ],
     "title": "AI Tool Call Display"
   },
+  "alert": {
+    "category": "data",
+    "defaultStoryId": "data-alert--default",
+    "description": "Displays an alert message to the user.",
+    "name": "alert",
+    "stories": [
+      {
+        "id": "data-alert--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-alert--variant-destructive",
+        "name": "Variant Destructive"
+      }
+    ],
+    "title": "Alert"
+  },
+  "alert-dialog": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-alertdialog--default",
+    "description": "Modal dialog for confirming destructive or important actions.",
+    "name": "alert-dialog",
+    "stories": [
+      {
+        "id": "overlay-alertdialog--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Alert Dialog"
+  },
   "area-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -160,6 +160,23 @@
       }
     ],
     "title": "Avatar"
+  },
+  "avatar-group": {
+    "category": "data",
+    "defaultStoryId": "data-avatargroup--default",
+    "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+    "name": "avatar-group",
+    "stories": [
+      {
+        "id": "data-avatargroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-avatargroup--sizes",
+        "name": "Sizes"
+      }
+    ],
+    "title": "Avatar Group"
   },
   "badge": {
     "category": "core",
@@ -395,6 +412,23 @@
     ],
     "title": "Collapsible"
   },
+  "combobox": {
+    "category": "form",
+    "defaultStoryId": "form-combobox--default",
+    "description": "Searchable select input for choosing from a list of options.",
+    "name": "combobox",
+    "stories": [
+      {
+        "id": "form-combobox--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-combobox--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Combobox"
+  },
   "command": {
     "category": "overlay",
     "defaultStoryId": "overlay-command--default",
@@ -459,6 +493,53 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "data-list": {
+    "category": "data",
+    "defaultStoryId": "data-datalist--default",
+    "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "name": "data-list",
+    "stories": [
+      {
+        "id": "data-datalist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-datalist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Data List"
+  },
+  "data-table": {
+    "category": "data",
+    "defaultStoryId": "data-datatable--default",
+    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "name": "data-table",
+    "stories": [
+      {
+        "id": "data-datatable--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Data Table"
+  },
+  "date-picker": {
+    "category": "form",
+    "defaultStoryId": "form-datepicker--default",
+    "description": "Single-date picker built with the shared calendar and popover primitives.",
+    "name": "date-picker",
+    "stories": [
+      {
+        "id": "form-datepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Picker"
   },
   "dialog": {
     "category": "overlay",
@@ -525,6 +606,19 @@
     ],
     "title": "FAQ"
   },
+  "file-upload": {
+    "category": "form",
+    "defaultStoryId": "form-fileupload--default",
+    "description": "Dropzone-style file picker with previews for selected files.",
+    "name": "file-upload",
+    "stories": [
+      {
+        "id": "form-fileupload--default",
+        "name": "Default"
+      }
+    ],
+    "title": "File Upload"
+  },
   "filter-bar": {
     "category": "form",
     "defaultStoryId": "form-filterbar--default",
@@ -564,19 +658,6 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
-    "stories": [
-      {
-        "id": "overlay-hovercard--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Hover Card"
-  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -589,6 +670,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -754,6 +848,19 @@
     ],
     "title": "Navigation Menu"
   },
+  "number-input": {
+    "category": "form",
+    "defaultStoryId": "form-numberinput--default",
+    "description": "Numeric input with increment and decrement controls.",
+    "name": "number-input",
+    "stories": [
+      {
+        "id": "form-numberinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Number Input"
+  },
   "pagination": {
     "category": "navigation",
     "defaultStoryId": "navigation-pagination--default",
@@ -766,6 +873,19 @@
       }
     ],
     "title": "Pagination"
+  },
+  "password-input": {
+    "category": "form",
+    "defaultStoryId": "form-passwordinput--default",
+    "description": "Password field with a built-in visibility toggle.",
+    "name": "password-input",
+    "stories": [
+      {
+        "id": "form-passwordinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Password Input"
   },
   "popover": {
     "category": "overlay",
@@ -1060,6 +1180,40 @@
       }
     ],
     "title": "Spinner"
+  },
+  "stat-card": {
+    "category": "data",
+    "defaultStoryId": "data-statcard--default",
+    "description": "Headline KPI card for metrics, trends, and supporting context.",
+    "name": "stat-card",
+    "stories": [
+      {
+        "id": "data-statcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statcard--grid",
+        "name": "Grid"
+      }
+    ],
+    "title": "Stat Card"
+  },
+  "status-indicator": {
+    "category": "data",
+    "defaultStoryId": "data-statusindicator--default",
+    "description": "Compact status label with tone, variant, and activity dot options.",
+    "name": "status-indicator",
+    "stories": [
+      {
+        "id": "data-statusindicator--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusindicator--variants",
+        "name": "Variants"
+      }
+    ],
+    "title": "Status Indicator"
   },
   "step-by-step": {
     "category": "learning",
