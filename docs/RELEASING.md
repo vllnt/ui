@@ -14,19 +14,31 @@ Consume the latest canary locally:
 pnpm add @vllnt/ui@canary
 ```
 
-## Stable release (manual `workflow_dispatch`)
+## Stable release (PR-driven, no PAT)
 
-1. Go to **Actions → Publish → Run workflow**.
-2. Pick a bump level:
-   - `patch` — bug fixes only
-   - `minor` — new components, new variants, new exports (non-breaking)
-   - `major` — breaking changes to existing exports
-3. Confirm. CI will:
-   - Run quality gates.
-   - Bump `packages/ui/package.json` and push a `chore(release): v{x.y.z}` commit + annotated `v{x.y.z}` tag to `main`.
-   - Generate release notes grouped by `feat` / `fix` / other, aggregating commit subjects since the previous tag.
-   - `pnpm pack` and `npx --yes npm@latest publish --tag latest --provenance --access public`.
-   - Create the matching GitHub Release.
+The release workflow does not push commits to `main`. Version bumps land via normal PRs so branch protection stays in effect and no PAT / bypass is required.
+
+### 1. Bump the version in a PR
+
+Open a PR that:
+
+- Updates `packages/ui/package.json` `"version"` to the new target (follow SemVer — see below).
+- Moves the matching entry in `packages/ui/CHANGELOG.md` from `[Unreleased]` to a dated `[x.y.z]` section.
+
+Merge the PR normally. The canary workflow on `main` will immediately publish `@vllnt/ui@{x.y.z}-canary.{sha}` — a dress-rehearsal of the release tarball.
+
+### 2. Dispatch the release
+
+Go to **Actions → Publish → Run workflow** on `main`. No inputs.
+
+CI will:
+
+- Run quality gates (lint / typecheck / build / test).
+- Read the version from `packages/ui/package.json`. **Fails fast** if a matching `v{x.y.z}` tag already exists — catches dispatches against stale main.
+- Generate release notes grouped by `feat` / `fix` / other, aggregating commit subjects since the previous tag.
+- Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
+- `pnpm pack` and `npx --yes npm@latest publish --tag latest --provenance --access public`. OIDC trusted publishing signs the provenance attestation.
+- Create the GitHub Release for the new tag.
 
 ## Versioning policy
 
