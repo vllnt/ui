@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { UnicodeSpinner } from "./unicode-spinner";
+import {
+  UnicodeSpinner,
+  UNICODE_SPINNER_ANIMATIONS,
+} from "./unicode-spinner";
 
 const meta = {
   args: {
@@ -34,4 +37,22 @@ export const Cascade: Story = {
     animation: "cascade",
     label: "Loading assets",
   },
+};
+
+export const AllAnimations: Story = {
+  render: () => (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {UNICODE_SPINNER_ANIMATIONS.map((animation) => (
+        <div
+          className="flex items-center justify-between rounded-md border border-border bg-background p-3"
+          key={animation}
+        >
+          <span className="text-sm font-medium capitalize text-foreground">
+            {animation}
+          </span>
+          <UnicodeSpinner animation={animation} paused />
+        </div>
+      ))}
+    </div>
+  ),
 };

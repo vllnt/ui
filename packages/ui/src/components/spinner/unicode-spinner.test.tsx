@@ -1,9 +1,31 @@
 import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { UnicodeSpinner } from "./unicode-spinner";
+import { UNICODE_SPINNER_ANIMATIONS, UnicodeSpinner } from "./unicode-spinner";
 
 describe("UnicodeSpinner", () => {
+  it("exposes the full upstream animation set", () => {
+    expect(UNICODE_SPINNER_ANIMATIONS).toHaveLength(18);
+    expect(UNICODE_SPINNER_ANIMATIONS).toEqual(
+      expect.arrayContaining([
+        "braillewave",
+        "checkerboard",
+        "columns",
+        "diagswipe",
+        "dna",
+        "fillsweep",
+        "orbit",
+        "pulse",
+        "rain",
+        "scan",
+        "scanline",
+        "snake",
+        "sparkle",
+        "waverows",
+      ]),
+    );
+  });
+
   it("renders with an accessible loading label", () => {
     render(<UnicodeSpinner />);
 
@@ -20,6 +42,12 @@ describe("UnicodeSpinner", () => {
     expect(
       screen.getByText("Loading Syncing feed", { selector: ".sr-only" }),
     ).toBeInTheDocument();
+  });
+
+  it("supports additional upstream presets like orbit", () => {
+    render(<UnicodeSpinner animation="orbit" />);
+
+    expect(screen.getByRole("status")).toBeVisible();
   });
 
   it("advances frames over time", () => {
