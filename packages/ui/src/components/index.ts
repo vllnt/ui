@@ -344,8 +344,30 @@ export { ThemeProvider } from "./theme-provider";
 export { ThemeToggle } from "./theme-toggle";
 
 // Feature components
+export {
+  CreditBadge,
+  type CreditBadgeProps,
+  type CreditBadgeStatus,
+} from "./credit-badge";
 export { ProfileSection } from "./profile-section";
+export {
+  PlanBadge,
+  type PlanBadgeProps,
+  type PlanBadgeState,
+  type PlanBadgeTier,
+} from "./plan-badge";
+export {
+  RoleBadge,
+  type RoleBadgeProps,
+  type RoleBadgeRole,
+} from "./role-badge";
+export {
+  SubscriptionCard,
+  type SubscriptionCardProps,
+  type SubscriptionCardStatus,
+} from "./subscription-card";
 export { TLDRSection } from "./tldr-section";
+export { WalletCard, type WalletCardProps } from "./wallet-card";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 
@@ -365,6 +387,12 @@ export {
 } from "./accordion";
 export { Callout, type CalloutProps, type CalloutVariant } from "./callout";
 export {
+  Annotation,
+  type AnnotationProps,
+  Highlight,
+  type HighlightProps,
+} from "./annotation";
+export {
   Checklist,
   type ChecklistItem,
   type ChecklistProps,
@@ -383,6 +411,7 @@ export {
 } from "./comparison";
 export { Exercise, type ExerciseProps } from "./exercise";
 export { FAQ, FAQItem, type FAQItemProps, type FAQProps } from "./faq";
+export { Flashcard, type FlashcardProps } from "./flashcard";
 export {
   Glossary,
   type GlossaryProps,
@@ -406,12 +435,14 @@ export {
   type ProTipVariant,
 } from "./pro-tip";
 export { Quiz, type QuizOption, type QuizProps } from "./quiz";
+export { Rating, type RatingProps } from "./rating";
 export {
   Step,
   StepByStep,
   type StepByStepProps,
   type StepProps,
 } from "./step-by-step";
+export { Stepper, type StepperProps, type StepperStep } from "./stepper";
 export {
   Tabs,
   TabsContent,
@@ -459,6 +490,7 @@ export {
   TutorialMDX,
   type TutorialMDXProps,
 } from "./tutorial-mdx";
+export { Tour, type TourProps, type TourStep } from "./tour";
 
 // Tutorial/Interactive components
 export {

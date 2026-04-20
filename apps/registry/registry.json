@@ -64,6 +64,21 @@
       "category": "overlay"
     },
     {
+      "name": "annotation",
+      "type": "registry:component",
+      "title": "Annotation",
+      "description": "Inline highlight with an attached contextual note.",
+      "files": [
+        {
+          "path": "registry/default/annotation/annotation.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "area-chart",
       "type": "registry:component",
       "title": "Area Chart",
@@ -242,38 +257,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
-    },
-    {
-      "name": "data-list",
-      "type": "registry:component",
-      "title": "Data List",
-      "description": "Semantic key-value metadata layout for displaying labels with values.",
-      "files": [
-        {
-          "path": "registry/default/data-list/data-list.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
-    },
-    {
-      "name": "data-table",
-      "type": "registry:component",
-      "title": "Data Table",
-      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
-      "files": [
-        {
-          "path": "registry/default/data-table/data-table.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [
-        "@tanstack/react-table"
-      ],
-      "category": "data"
     },
     {
       "name": "carousel",
@@ -471,6 +454,53 @@
       "category": "overlay"
     },
     {
+      "name": "credit-badge",
+      "type": "registry:component",
+      "title": "Credit Badge",
+      "description": "Balance status pill for credits, wallet states, and billing health.",
+      "files": [
+        {
+          "path": "registry/default/credit-badge/credit-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "data-list",
+      "type": "registry:component",
+      "title": "Data List",
+      "description": "Semantic key-value metadata layout for displaying labels with values.",
+      "files": [
+        {
+          "path": "registry/default/data-list/data-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+      "files": [
+        {
+          "path": "registry/default/data-table/data-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@tanstack/react-table"
+      ],
+      "category": "data"
+    },
+    {
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date Picker",
@@ -589,6 +619,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "form"
+    },
+    {
+      "name": "flashcard",
+      "type": "registry:component",
+      "title": "Flashcard",
+      "description": "Study card for active recall with prompt and answer states.",
+      "files": [
+        {
+          "path": "registry/default/flashcard/flashcard.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "floating-action-button",
@@ -895,6 +940,21 @@
       "category": "form"
     },
     {
+      "name": "plan-badge",
+      "type": "registry:component",
+      "title": "Plan Badge",
+      "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+      "files": [
+        {
+          "path": "registry/default/plan-badge/plan-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "title": "Popover",
@@ -1000,6 +1060,21 @@
       "category": "core"
     },
     {
+      "name": "rating",
+      "type": "registry:component",
+      "title": "Rating",
+      "description": "Inline star rating for lightweight learner feedback.",
+      "files": [
+        {
+          "path": "registry/default/rating/rating.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "resizable",
       "type": "registry:component",
       "title": "Resizable",
@@ -1013,6 +1088,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "role-badge",
+      "type": "registry:component",
+      "title": "Role Badge",
+      "description": "Account role indicator for owners, admins, members, and billing contacts.",
+      "files": [
+        {
+          "path": "registry/default/role-badge/role-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "scope-selector",
@@ -1302,6 +1392,36 @@
       "category": "navigation"
     },
     {
+      "name": "stepper",
+      "type": "registry:component",
+      "title": "Stepper",
+      "description": "Sequenced steps with complete, current, and upcoming states.",
+      "files": [
+        {
+          "path": "registry/default/stepper/stepper.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
+      "name": "subscription-card",
+      "type": "registry:component",
+      "title": "Subscription Card",
+      "description": "Subscription status and management card for plan, renewal, and usage details.",
+      "files": [
+        {
+          "path": "registry/default/subscription-card/subscription-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "table",
       "type": "registry:component",
       "title": "Table",
@@ -1514,6 +1634,21 @@
       "category": "overlay"
     },
     {
+      "name": "tour",
+      "type": "registry:component",
+      "title": "Tour",
+      "description": "Guided onboarding flow for introducing content or interface patterns.",
+      "files": [
+        {
+          "path": "registry/default/tour/tour.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "tutorial-card",
       "type": "registry:component",
       "title": "Tutorial Card",
@@ -1716,6 +1851,21 @@
         "lucide-react"
       ],
       "category": "learning"
+    },
+    {
+      "name": "wallet-card",
+      "type": "registry:component",
+      "title": "Wallet Card",
+      "description": "Credit balance display card for available, pending, and refresh details.",
+      "files": [
+        {
+          "path": "registry/default/wallet-card/wallet-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     }
   ]
 }
