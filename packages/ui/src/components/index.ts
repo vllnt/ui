@@ -345,10 +345,25 @@ export { ThemeToggle } from "./theme-toggle";
 
 // Feature components
 export {
+  CandlestickChart,
+  type CandlestickChartProps,
+  type CandlestickDatum,
+} from "./candlestick-chart";
+export {
   CreditBadge,
   type CreditBadgeProps,
   type CreditBadgeStatus,
 } from "./credit-badge";
+export {
+  MarketTreemap,
+  type MarketTreemapItem,
+  type MarketTreemapProps,
+} from "./market-treemap";
+export {
+  OrderBook,
+  type OrderBookLevel,
+  type OrderBookProps,
+} from "./order-book";
 export { ProfileSection } from "./profile-section";
 export {
   PlanBadge,
@@ -362,12 +377,27 @@ export {
   type RoleBadgeRole,
 } from "./role-badge";
 export {
+  SparklineGrid,
+  type SparklineGridItem,
+  type SparklineGridProps,
+} from "./sparkline-grid";
+export {
   SubscriptionCard,
   type SubscriptionCardProps,
   type SubscriptionCardStatus,
 } from "./subscription-card";
 export { TLDRSection } from "./tldr-section";
+export {
+  TickerTape,
+  type TickerTapeItem,
+  type TickerTapeProps,
+} from "./ticker-tape";
 export { WalletCard, type WalletCardProps } from "./wallet-card";
+export {
+  Watchlist,
+  type WatchlistItem,
+  type WatchlistProps,
+} from "./watchlist";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 

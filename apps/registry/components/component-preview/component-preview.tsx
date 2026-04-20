@@ -36,6 +36,7 @@ import {
   Button,
   Calendar,
   Callout,
+  CandlestickChart,
   Card,
   CardContent,
   CardDescription,
@@ -115,6 +116,7 @@ import {
   KeyConcept,
   LangProvider,
   LearningObjectives,
+  MarketTreemap,
   Menubar,
   MenubarContent,
   MenubarItem,
@@ -128,6 +130,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NumberInput,
+  OrderBook,
   Pagination,
   PasswordInput,
   PlanBadge,
@@ -169,6 +172,7 @@ import {
   SidebarToggle,
   Skeleton,
   Slider,
+  SparklineGrid,
   Spinner,
   StatCard,
   StatusIndicator,
@@ -194,6 +198,7 @@ import {
   ThemeProvider,
   ThemeToggle,
   ThinkingBlock,
+  TickerTape,
   TLDRSection,
   Toast,
   ToastDescription,
@@ -211,6 +216,7 @@ import {
   VideoEmbed,
   ViewSwitcher,
   WalletCard,
+  Watchlist,
 } from "@vllnt/ui";
 import {
   Bold,
@@ -1294,6 +1300,94 @@ function LineChartPreview() {
   );
 }
 
+function CandlestickChartPreview() {
+  return (
+    <div className="w-full max-w-[220px]">
+      <CandlestickChart
+        data={[
+          { close: 189.8, high: 191.2, label: "Mon", low: 182.4, open: 184.6 },
+          { close: 186.1, high: 193.5, label: "Tue", low: 184.8, open: 190.3 },
+          { close: 194.6, high: 196.8, label: "Wed", low: 185.9, open: 186.5 },
+        ]}
+        height={120}
+        width={220}
+      />
+    </div>
+  );
+}
+
+function TickerTapePreview() {
+  return (
+    <div className="w-full max-w-[260px]">
+      <TickerTape
+        items={[
+          { change: 1.42, price: 182.33, symbol: "AAPL" },
+          { change: -0.64, price: 431.8, symbol: "MSFT" },
+          { change: 3.08, price: 512.9, symbol: "NVDA" },
+        ]}
+        speedSeconds={20}
+      />
+    </div>
+  );
+}
+
+function SparklineGridPreview() {
+  return (
+    <div className="w-full max-w-[260px]">
+      <SparklineGrid
+        items={[
+          {
+            change: 2.14,
+            data: [14, 16, 17, 15, 19, 22],
+            label: "Momentum",
+            value: "$12.8M",
+          },
+          {
+            change: -1.08,
+            data: [9, 8, 7, 8, 6, 5],
+            label: "Breadth",
+            value: "$8.4M",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
+function OrderBookPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <OrderBook
+        asks={[
+          { price: 185.24, size: 4.2 },
+          { price: 185.31, size: 6.8 },
+          { price: 185.39, size: 8.1 },
+        ]}
+        bids={[
+          { price: 185.18, size: 5.4 },
+          { price: 185.11, size: 7.1 },
+          { price: 185.03, size: 9.2 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function MarketTreemapPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <MarketTreemap
+        items={[
+          { change: 2.6, label: "NVDA", sector: "Semis", value: 980 },
+          { change: 1.4, label: "MSFT", sector: "Software", value: 760 },
+          { change: -1.4, label: "XOM", sector: "Energy", value: 520 },
+          { change: 0.8, label: "JPM", sector: "Financials", value: 440 },
+        ]}
+      />
+    </div>
+  );
+}
+
 function SidebarPreview() {
   return (
     <div className="w-64 border rounded-lg overflow-hidden">
@@ -1579,6 +1673,37 @@ function ViewSwitcherPreview() {
       ]}
       paramName="demo-view"
     />
+  );
+}
+
+function WatchlistPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <Watchlist
+        items={[
+          {
+            change: 1.42,
+            name: "Apple Inc.",
+            price: 182.33,
+            starred: true,
+            symbol: "AAPL",
+          },
+          {
+            change: -0.64,
+            name: "Microsoft",
+            price: 431.8,
+            symbol: "MSFT",
+          },
+          {
+            change: 3.08,
+            name: "NVIDIA",
+            price: 512.9,
+            starred: true,
+            symbol: "NVDA",
+          },
+        ]}
+      />
+    </div>
   );
 }
 
@@ -2041,6 +2166,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <CalloutPreview />;
     case "calendar":
       return <CalendarPreview />;
+    case "candlestick-chart":
+      return <CandlestickChartPreview />;
     case "combobox":
       return <ComboboxPreview />;
     case "card":
@@ -2119,6 +2246,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <LearningObjectivesPreview />;
     case "line-chart":
       return <LineChartPreview />;
+    case "market-treemap":
+      return <MarketTreemapPreview />;
     case "mdx-content":
       return <MDXContentPreview />;
     case "menubar":
@@ -2133,6 +2262,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "navigation-menu":
       return <NavigationMenuPreview />;
+    case "order-book":
+      return <OrderBookPreview />;
     case "number-input":
       return <NumberInputPreview />;
     case "pagination":
@@ -2189,6 +2320,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SkeletonPreview />;
     case "slider":
       return <SliderPreview />;
+    case "sparkline-grid":
+      return <SparklineGridPreview />;
     case "spinner":
       return <SpinnerPreview />;
     case "stat-card":
@@ -2225,6 +2358,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <TerminalPreview />;
     case "textarea":
       return <TextareaPreview />;
+    case "ticker-tape":
+      return <TickerTapePreview />;
     case "theme-provider":
       return <ThemeProviderPreview />;
     case "theme-toggle":
@@ -2267,6 +2402,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "watchlist":
+      return <WatchlistPreview />;
     case "wallet-card":
       return <WalletCardPreview />;
     default:
