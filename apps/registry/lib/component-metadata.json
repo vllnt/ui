@@ -270,36 +270,6 @@
     ],
     "title": "Card"
   },
-  "data-list": {
-    "category": "data",
-    "defaultStoryId": "data-datalist--default",
-    "description": "Semantic key-value metadata layout for displaying labels with values.",
-    "name": "data-list",
-    "stories": [
-      {
-        "id": "data-datalist--default",
-        "name": "Default"
-      },
-      {
-        "id": "data-datalist--compact",
-        "name": "Compact"
-      }
-    ],
-    "title": "Data List"
-  },
-  "data-table": {
-    "category": "data",
-    "defaultStoryId": "data-datatable--default",
-    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
-    "name": "data-table",
-    "stories": [
-      {
-        "id": "data-datatable--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Data Table"
-  },
   "carousel": {
     "category": "content",
     "defaultStoryId": "content-carousel--default",
@@ -472,6 +442,53 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "credit-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-creditbadge--default",
+    "description": "Balance status pill for credits, wallet states, and billing health.",
+    "name": "credit-badge",
+    "stories": [
+      {
+        "id": "account-billing-creditbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-creditbadge--states",
+        "name": "States"
+      }
+    ],
+    "title": "Credit Badge"
+  },
+  "data-list": {
+    "category": "data",
+    "defaultStoryId": "data-datalist--default",
+    "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "name": "data-list",
+    "stories": [
+      {
+        "id": "data-datalist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-datalist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Data List"
+  },
+  "data-table": {
+    "category": "data",
+    "defaultStoryId": "data-datatable--default",
+    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "name": "data-table",
+    "stories": [
+      {
+        "id": "data-datatable--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Data Table"
   },
   "date-picker": {
     "category": "form",
@@ -849,6 +866,27 @@
     ],
     "title": "Password Input"
   },
+  "plan-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-planbadge--default",
+    "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+    "name": "plan-badge",
+    "stories": [
+      {
+        "id": "account-billing-planbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-planbadge--all-tiers",
+        "name": "All Tiers"
+      },
+      {
+        "id": "account-billing-planbadge--trial",
+        "name": "Trial"
+      }
+    ],
+    "title": "Plan Badge"
+  },
   "popover": {
     "category": "overlay",
     "defaultStoryId": "overlay-popover--default",
@@ -969,6 +1007,23 @@
       }
     ],
     "title": "Resizable"
+  },
+  "role-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-rolebadge--default",
+    "description": "Account role indicator for owners, admins, members, and billing contacts.",
+    "name": "role-badge",
+    "stories": [
+      {
+        "id": "account-billing-rolebadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-rolebadge--team-roles",
+        "name": "Team Roles"
+      }
+    ],
+    "title": "Role Badge"
   },
   "scope-selector": {
     "category": "form",
@@ -1253,6 +1308,23 @@
       }
     ],
     "title": "Stepper"
+  },
+  "subscription-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-subscriptioncard--default",
+    "description": "Subscription status and management card for plan, renewal, and usage details.",
+    "name": "subscription-card",
+    "stories": [
+      {
+        "id": "account-billing-subscriptioncard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-subscriptioncard--trialing",
+        "name": "Trialing"
+      }
+    ],
+    "title": "Subscription Card"
   },
   "table": {
     "category": "data",
@@ -1580,5 +1652,22 @@
       }
     ],
     "title": "View Switcher"
+  },
+  "wallet-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-walletcard--default",
+    "description": "Credit balance display card for available, pending, and refresh details.",
+    "name": "wallet-card",
+    "stories": [
+      {
+        "id": "account-billing-walletcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-walletcard--depleted",
+        "name": "Depleted"
+      }
+    ],
+    "title": "Wallet Card"
   }
 }

@@ -64,6 +64,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  CreditBadge,
   DataList,
   DataListItem,
   DataListLabel,
@@ -124,6 +125,7 @@ import {
   NumberInput,
   Pagination,
   PasswordInput,
+  PlanBadge,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -138,6 +140,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
+  RoleBadge,
   ScopeSelector,
   ScrollArea,
   SearchBar,
@@ -168,6 +171,7 @@ import {
   StepByStep,
   StepNavigation,
   Stepper,
+  SubscriptionCard,
   Summary,
   Table,
   TableBody,
@@ -201,6 +205,7 @@ import {
   UsageBreakdown,
   VideoEmbed,
   ViewSwitcher,
+  WalletCard,
 } from "@vllnt/ui";
 import {
   Bold,
@@ -262,6 +267,69 @@ function CardPreview() {
         <Button>Action</Button>
       </CardFooter>
     </Card>
+  );
+}
+
+function PlanBadgePreview() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <PlanBadge tier="free" />
+      <PlanBadge tier="starter" />
+      <PlanBadge tier="growth" />
+      <PlanBadge tier="enterprise" />
+    </div>
+  );
+}
+
+function CreditBadgePreview() {
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <CreditBadge amount="420 credits" status="healthy" />
+      <CreditBadge amount="24 credits" status="low" />
+      <CreditBadge amount="0 credits" status="depleted" />
+    </div>
+  );
+}
+
+function RoleBadgePreview() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <RoleBadge accountRole="owner" />
+      <RoleBadge accountRole="admin" />
+      <RoleBadge accountRole="member" />
+      <RoleBadge accountRole="billing" />
+    </div>
+  );
+}
+
+function SubscriptionCardPreview() {
+  return (
+    <SubscriptionCard
+      note="Your annual discount is locked in until the next renewal date."
+      plan="growth"
+      priceLabel="$49/mo"
+      primaryActionLabel="Manage plan"
+      renewalLabel="Renews on May 1, 2026"
+      seatsLabel="12 seats"
+      secondaryActionLabel="View invoices"
+      status="active"
+      usageLabel="4.2M tokens used"
+    />
+  );
+}
+
+function WalletCardPreview() {
+  return (
+    <WalletCard
+      availableLabel="96 credits"
+      balanceLabel="128 credits"
+      note="Set up auto-refill to keep automations running through the month."
+      pendingLabel="32 credits"
+      primaryActionLabel="Buy credits"
+      renewsLabel="Refreshes on May 1, 2026"
+      secondaryActionLabel="Billing history"
+      status="healthy"
+    />
   );
 }
 
@@ -1980,6 +2048,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <NumberInputPreview />;
     case "pagination":
       return <PaginationPreview />;
+    case "plan-badge":
+      return <PlanBadgePreview />;
     case "password-input":
       return <PasswordInputPreview />;
     case "popover":
@@ -1994,6 +2064,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="A card component with progress tracking." />
       );
+    case "credit-badge":
+      return <CreditBadgePreview />;
     case "quiz":
       return <QuizPreview />;
     case "rating":
@@ -2022,6 +2094,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SheetPreview />;
     case "sidebar":
       return <SidebarPreview />;
+    case "role-badge":
+      return <RoleBadgePreview />;
     case "skeleton":
       return <SkeletonPreview />;
     case "slider":
@@ -2044,6 +2118,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <StepNavigationPreview />;
     case "stepper":
       return <StepperPreview />;
+    case "subscription-card":
+      return <SubscriptionCardPreview />;
     case "status-indicator":
       return <StatusIndicatorPreview />;
     case "table-of-contents":
@@ -2102,6 +2178,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "wallet-card":
+      return <WalletCardPreview />;
     default:
       return <div className="text-muted-foreground">Preview not available</div>;
   }
