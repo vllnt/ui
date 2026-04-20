@@ -32,6 +32,14 @@ export const MatrixTerminalGrid: Story = {
   },
 };
 
+export const Scanline: Story = {
+  args: {
+    stagger: 55,
+    text: "SYNCING BRAILLE SCANLINE",
+    variant: "scanline",
+  },
+};
+
 export const Decipher: Story = {
   args: {
     direction: "start",

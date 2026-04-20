@@ -33,6 +33,12 @@ describe("AnimatedText", () => {
     expect(screen.getByLabelText("ABC")).toBeVisible();
   });
 
+  it("supports the unicode scanline variant", () => {
+    render(<AnimatedText text="ABC" variant="scanline" />);
+
+    expect(screen.getByLabelText("ABC")).toBeVisible();
+  });
+
   it("supports decipher mode", () => {
     render(
       <AnimatedText
