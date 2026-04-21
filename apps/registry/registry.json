@@ -199,6 +199,36 @@
       "category": "content"
     },
     {
+      "name": "canvas-shell",
+      "type": "registry:component",
+      "title": "Canvas Shell",
+      "description": "Composed workspace shell for top bar, left rail, canvas viewport, and right dock regions.",
+      "files": [
+        {
+          "path": "registry/default/canvas-shell/canvas-shell.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "canvas-view",
+      "type": "registry:component",
+      "title": "Canvas View",
+      "description": "Viewport surface with calm spatial defaults for panning and zooming around AI objects.",
+      "files": [
+        {
+          "path": "registry/default/canvas-view/canvas-view.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "card",
       "type": "registry:component",
       "title": "Card",
@@ -514,6 +544,25 @@
       "category": "data"
     },
     {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "navigation"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -527,21 +576,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
-      "category": "navigation"
     },
     {
       "name": "inline-input",
@@ -649,6 +683,21 @@
       "category": "learning"
     },
     {
+      "name": "left-rail",
+      "type": "registry:component",
+      "title": "Left Rail",
+      "description": "Narrow navigation rail for primary canvas modes and tool affordances.",
+      "files": [
+        {
+          "path": "registry/default/left-rail/left-rail.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "line-chart",
       "type": "registry:component",
       "title": "Line Chart",
@@ -692,6 +741,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "mini-map-panel",
+      "type": "registry:component",
+      "title": "Mini Map Panel",
+      "description": "Compact overview panel showing viewport position inside a larger workspace field.",
+      "files": [
+        {
+          "path": "registry/default/mini-map-panel/mini-map-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "model-selector",
@@ -872,6 +936,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "right-dock",
+      "type": "registry:component",
+      "title": "Right Dock",
+      "description": "Context dock for inspection panels, run details, and secondary operator surfaces.",
+      "files": [
+        {
+          "path": "registry/default/right-dock/right-dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
     },
     {
       "name": "scroll-area",
@@ -1328,6 +1407,21 @@
       "category": "overlay"
     },
     {
+      "name": "top-bar",
+      "type": "registry:component",
+      "title": "Top Bar",
+      "description": "Compact operator bar with calm title, workspace, and action slots.",
+      "files": [
+        {
+          "path": "registry/default/top-bar/top-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "tutorial-card",
       "type": "registry:component",
       "title": "Tutorial Card",
@@ -1431,6 +1525,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "workspace-switcher",
+      "type": "registry:component",
+      "title": "Workspace Switcher",
+      "description": "Pill switcher for named workspaces and view modes in the operator shell.",
+      "files": [
+        {
+          "path": "registry/default/workspace-switcher/workspace-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
+      "name": "zoom-hud",
+      "type": "registry:component",
+      "title": "Zoom HUD",
+      "description": "Floating zoom readout and controls for the canvas viewport.",
+      "files": [
+        {
+          "path": "registry/default/zoom-hud/zoom-hud.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "overlay"
     }
   ]
 }

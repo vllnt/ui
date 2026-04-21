@@ -240,16 +240,32 @@ export { CodeBlock } from "./code-block";
 export { MDXContent } from "./mdx-content";
 
 // Layout components
+export { CanvasShell, type CanvasShellProps } from "./canvas-shell";
+export {
+  CanvasView,
+  type CanvasViewHandle,
+  type CanvasViewport,
+  type CanvasViewProps,
+} from "./canvas-view";
+export { LeftRail, type LeftRailProps } from "./left-rail";
+export {
+  type MiniMapMarker,
+  MiniMapPanel,
+  type MiniMapPanelProps,
+} from "./mini-map-panel";
 export {
   NavbarSaas,
   type NavbarSaasProps,
   type NavItem,
   useMobile,
 } from "./navbar-saas";
+export { RightDock, type RightDockProps } from "./right-dock";
 export { Sidebar } from "./sidebar";
 export type { SidebarItem, SidebarSection } from "./sidebar";
 export { SidebarProvider, useSidebar } from "./sidebar-provider";
 export { TableOfContents } from "./table-of-contents";
+export { TopBar, type TopBarProps } from "./top-bar";
+export { ZoomHUD, type ZoomHUDProps } from "./zoom-hud";
 
 // Blog components
 export { BlogCard, ContentCard } from "./blog-card";
@@ -452,6 +468,11 @@ export {
   ViewSwitcher,
   type ViewSwitcherProps,
 } from "./view-switcher";
+export {
+  type WorkspaceOption,
+  WorkspaceSwitcher,
+  type WorkspaceSwitcherProps,
+} from "./workspace-switcher";
 
 // Flow/Diagram components
 export {
