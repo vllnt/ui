@@ -50,6 +50,14 @@ describe("CanvasView", () => {
     });
   });
 
+  it("prevents text selection on the interaction layer", () => {
+    render(<CanvasView />);
+
+    expect(
+      screen.getByRole("button", { name: "Canvas workspace" }),
+    ).toHaveClass("select-none");
+  });
+
   it("resets the viewport with the zero key", () => {
     const onViewportChange = vi.fn();
 

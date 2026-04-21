@@ -309,6 +309,25 @@ function useCanvasPointerInteractions({
   return { handlePointerDown, handlePointerMove, handlePointerUp, isDragging };
 }
 
+function usePreventBodySelection(disabled: boolean) {
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return;
+    }
+
+    const { body } = document;
+    const previousUserSelect = body.style.userSelect;
+
+    if (disabled) {
+      body.style.userSelect = "none";
+    }
+
+    return () => {
+      body.style.userSelect = previousUserSelect;
+    };
+  }, [disabled]);
+}
+
 type CanvasInteractionLayerProps = {
   instructionsId: string;
   isDragging: boolean;
@@ -344,7 +363,7 @@ function CanvasInteractionLayer({
         aria-describedby={instructionsId}
         aria-label="Canvas workspace"
         className={cn(
-          "absolute inset-0 z-10 h-full w-full appearance-none border-0 bg-transparent outline-none",
+          "absolute inset-0 z-10 h-full w-full appearance-none border-0 bg-transparent outline-none select-none touch-none",
           isDragging || isSpacePressed
             ? "cursor-grab active:cursor-grabbing"
             : "cursor-default",
@@ -424,6 +443,8 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
       setViewport: viewportState.setViewport,
       viewportRef: viewportState.viewportRef,
     });
+
+    usePreventBodySelection(pointer.isDragging);
 
     useImperativeHandle(
       ref,
