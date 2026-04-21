@@ -18,7 +18,7 @@ const TopBar = forwardRef<HTMLElement, TopBarProps>(
   ) => (
     <header
       className={cn(
-        "flex min-h-14 items-center justify-between gap-3 border-b border-border/60 bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70",
+        "flex min-h-14 items-center justify-between gap-3 border-b border-border bg-background px-4 font-mono",
         className,
       )}
       ref={ref}
@@ -31,12 +31,12 @@ const TopBar = forwardRef<HTMLElement, TopBarProps>(
         {title || subtitle ? (
           <div className="min-w-0">
             {title ? (
-              <div className="truncate text-sm font-medium text-foreground">
+              <div className="truncate text-sm font-medium uppercase tracking-[0.18em] text-foreground">
                 {title}
               </div>
             ) : null}
             {subtitle ? (
-              <div className="truncate text-xs text-muted-foreground">
+              <div className="truncate text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                 {subtitle}
               </div>
             ) : null}

@@ -458,7 +458,7 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
     return (
       <div
         className={cn(
-          "relative h-full min-h-[32rem] overflow-hidden rounded-[1.5rem] bg-[radial-gradient(circle_at_top,hsl(var(--primary)/0.07),transparent_38%),linear-gradient(hsl(var(--border)/0.45)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.45)_1px,transparent_1px)] bg-[size:auto,32px_32px,32px_32px] bg-center",
+          "relative h-full min-h-[32rem] overflow-hidden rounded-sm border border-border bg-background",
           className,
         )}
         {...props}

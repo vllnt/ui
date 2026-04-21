@@ -44,7 +44,7 @@ const MiniMapPanel = forwardRef<HTMLDivElement, MiniMapPanelProps>(
     return (
       <div
         className={cn(
-          "w-52 rounded-2xl border border-border/70 bg-background/90 p-3 shadow-sm backdrop-blur",
+          "w-52 rounded-sm border border-border bg-background p-3 font-mono",
           className,
         )}
         ref={ref}
@@ -60,10 +60,10 @@ const MiniMapPanel = forwardRef<HTMLDivElement, MiniMapPanelProps>(
             </div>
           </div>
         </div>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border/60 bg-[radial-gradient(circle_at_center,hsl(var(--muted))_0,transparent_68%),linear-gradient(hsl(var(--border)/0.4)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.4)_1px,transparent_1px)] bg-[size:auto,18px_18px,18px_18px] bg-center">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border bg-background">
           {markers.map((marker) => (
             <div
-              className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary shadow-sm"
+              className="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 bg-foreground"
               key={marker.id}
               style={{
                 left: `${(marker.x / world.width) * 100}%`,
@@ -73,7 +73,7 @@ const MiniMapPanel = forwardRef<HTMLDivElement, MiniMapPanelProps>(
             />
           ))}
           <div
-            className="absolute rounded-lg border border-primary/80 bg-primary/10 shadow-[0_0_0_1px_hsl(var(--background)/0.65)]"
+            className="absolute border border-foreground/80 bg-transparent"
             style={{
               height: `${viewportHeight}%`,
               left: `${viewportLeft}%`,

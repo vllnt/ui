@@ -18,14 +18,14 @@ const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>(
   ) => (
     <section
       className={cn(
-        "flex min-h-[720px] w-full flex-col overflow-hidden rounded-[1.75rem] border border-border/60 bg-background shadow-[0_20px_80px_hsl(var(--foreground)/0.08)]",
+        "flex min-h-[720px] w-full flex-col overflow-hidden rounded-md border border-border bg-background",
         className,
       )}
       ref={ref}
       {...props}
     >
       {topBar}
-      <div className="grid min-h-0 flex-1 grid-cols-[auto_minmax(0,1fr)_auto] overflow-hidden bg-[linear-gradient(180deg,hsl(var(--background)),hsl(var(--muted)/0.25))]">
+      <div className="grid min-h-0 flex-1 grid-cols-[auto_minmax(0,1fr)_auto] overflow-hidden bg-background">
         {leftRail ?? <div />}
         <div className="relative min-h-0 min-w-0 overflow-hidden">
           {children}
@@ -33,7 +33,7 @@ const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>(
         {rightDock ?? <div />}
       </div>
       {bottomSlot ? (
-        <div className="border-t border-border/60 bg-background/80 px-4 py-2">
+        <div className="border-t border-border bg-background px-4 py-2">
           {bottomSlot}
         </div>
       ) : null}

@@ -13,7 +13,7 @@ const LeftRail = forwardRef<HTMLElement, LeftRailProps>(
   ({ children, className, footer, title, ...props }, ref) => (
     <aside
       className={cn(
-        "flex h-full w-[4.5rem] shrink-0 flex-col items-center gap-3 border-r border-border/60 bg-muted/30 px-2 py-3",
+        "flex h-full w-[4.5rem] shrink-0 flex-col items-center gap-3 border-r border-border bg-background px-2 py-3",
         className,
       )}
       ref={ref}

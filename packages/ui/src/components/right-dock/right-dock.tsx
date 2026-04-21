@@ -14,7 +14,7 @@ const RightDock = forwardRef<HTMLElement, RightDockProps>(
   ({ children, className, footer, header, title, ...props }, ref) => (
     <aside
       className={cn(
-        "flex h-full min-w-[18rem] max-w-[24rem] shrink-0 flex-col border-l border-border/60 bg-background/95",
+        "flex h-full min-w-[18rem] max-w-[24rem] shrink-0 flex-col border-l border-border bg-background",
         className,
       )}
       ref={ref}
