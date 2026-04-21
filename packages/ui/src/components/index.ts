@@ -497,6 +497,11 @@ export {
 } from "./learning-objectives";
 export { ProgressBar, type ProgressBarProps } from "./progress-bar";
 export {
+  ProgressCard,
+  type ProgressCardProgress,
+  type ProgressCardProps,
+} from "./progress-card";
+export {
   CommonMistake,
   type CommonMistakeProps,
   ProTip,

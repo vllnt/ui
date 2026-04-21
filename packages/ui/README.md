@@ -286,11 +286,11 @@ import {
 
 | Component | Import | Notes |
 |-----------|--------|-------|
-| `AiChatInput` | `{ AiChatInput }` | Chat composer with submit + attachments |
-| `AiMessageBubble` | `{ AiMessageBubble }` | User/assistant message bubble |
-| `AiStreamingText` | `{ AiStreamingText }` | Token-stream renderer |
-| `AiToolCallDisplay` | `{ AiToolCallDisplay }` | Tool-use invocation render |
-| `AiSourceCitation` | `{ AiSourceCitation }` | Inline citation reference |
+| `AIChatInput` | `{ AIChatInput }` | Chat composer with submit + attachments |
+| `AIMessageBubble` | `{ AIMessageBubble }` | User/assistant message bubble |
+| `AIStreamingText` | `{ AIStreamingText }` | Token-stream renderer |
+| `AIToolCallDisplay` | `{ AIToolCallDisplay }` | Tool-use invocation render |
+| `AISourceCitation` | `{ AISourceCitation }` | Inline citation reference |
 | `ModelSelector` | `{ ModelSelector }` | Model picker (provider-agnostic) |
 
 ### Financial
@@ -371,7 +371,7 @@ import {
 | `CountdownTimer` | `{ CountdownTimer }` | Event countdown |
 | `AvatarGroup` | `{ AvatarGroup }` | Stacked avatar group |
 | `FloatingActionButton` | `{ FloatingActionButton }` | Anchored FAB |
-| `SocialFab` | `{ SocialFab }` | Social-links FAB |
+| `SocialFAB` | `{ SocialFab }` | Social-links FAB |
 | `KeyboardShortcutsHelp` | `{ KeyboardShortcutsHelp }` | Cmd-? shortcut dialog |
 | `ShareDialog` | `{ ShareDialog }` | Shareable-link dialog |
 | `HorizontalScrollRow` | `{ HorizontalScrollRow }` | Scroll-snap row |

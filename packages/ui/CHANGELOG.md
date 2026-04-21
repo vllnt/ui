@@ -4,11 +4,21 @@ All notable changes to `@vllnt/ui` are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-04-21
+
+### Fixed
+
+- **Public API:** `ProgressCard` now re-exported from `@vllnt/ui` — it shipped in `0.2.0`'s tarball but was missing from the barrel, so `import { ProgressCard } from "@vllnt/ui"` resolved to `undefined`.
+
+### Docs
+
+- Correct casing for the AI family (`AIChatInput`, `AIMessageBubble`, `AISourceCitation`, `AIStreamingText`, `AIToolCallDisplay`) and `SocialFAB` across README, package README, CHANGELOG, and `llms-full.txt`.
+
 ## [0.2.0] - 2026-04-21
 
 ### Added
 
-- **AI family** — `AiChatInput`, `AiMessageBubble`, `AiSourceCitation`, `AiStreamingText`, `AiToolCallDisplay`, `ThinkingBlock`, `ModelSelector`.
+- **AI family** — `AIChatInput`, `AIMessageBubble`, `AISourceCitation`, `AIStreamingText`, `AIToolCallDisplay`, `ThinkingBlock`, `ModelSelector`.
 - **Financial family** — `CandlestickChart`, `MarketTreemap`, `OrderBook`, `TickerTape`, `SparklineGrid`, `WalletCard`, `Watchlist`.
 - **Ops / Status family** — `StatusBoard`, `StatusIndicator`, `LiveFeed`, `WorldClockBar`, `SeverityBadge`, `RoleBadge`, `ScopeSelector`.
 - **Billing & Plans family** — `SubscriptionCard`, `PlanBadge`, `CreditBadge`, `UsageBreakdown`.
@@ -96,6 +106,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Initial public publish to the public npm registry.
 
+[0.2.1]: https://github.com/vllnt/ui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/vllnt/ui/releases/tag/v0.2.0
 [0.1.11]: https://github.com/vllnt/ui/releases/tag/v0.1.11
 [0.1.10]: https://github.com/vllnt/ui/releases/tag/v0.1.10
