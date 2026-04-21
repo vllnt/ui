@@ -514,6 +514,21 @@
       "category": "data"
     },
     {
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
+      "files": [
+        {
+          "path": "registry/default/form/form.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": ["input", "label"],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -722,6 +737,51 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:component",
+      "title": "Multi Select",
+      "description": "Popover-based multi-selection input with selected-value badges and optional search.",
+      "files": [
+        {
+          "path": "registry/default/multi-select/multi-select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": ["badge", "button", "command", "popover"],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:component",
+      "title": "Segmented Control",
+      "description": "Single-choice segmented selector for switching modes, views, or filters.",
+      "files": [
+        {
+          "path": "registry/default/segmented-control/segmented-control.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": ["toggle-group"],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "tags-input",
+      "type": "registry:component",
+      "title": "Tags Input",
+      "description": "Keyboard-friendly tag editor for adding and removing string values.",
+      "files": [
+        {
+          "path": "registry/default/tags-input/tags-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": ["badge"],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "navigation-menu",

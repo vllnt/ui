@@ -83,8 +83,18 @@ import {
   FAQ,
   FAQItem,
   FloatingActionButton,
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
   Glossary,
+  MultiSelect,
   HorizontalScrollRow,
+  SegmentedControl,
+  TagsInput,
+  SegmentedControlItem,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -454,6 +464,63 @@ function CheckboxPreview() {
           Receive emails
         </label>
       </div>
+    </div>
+  );
+}
+
+function FormPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input placeholder="name@company.com" type="email" />
+          </FormControl>
+          <FormDescription>Use your work email address.</FormDescription>
+          <FormMessage>Please enter a valid email.</FormMessage>
+        </FormItem>
+      </Form>
+    </div>
+  );
+}
+
+function MultiSelectPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <MultiSelect
+        defaultValue={["react", "vue"]}
+        options={[
+          { label: "React", value: "react" },
+          { label: "Vue", value: "vue" },
+          { label: "Svelte", value: "svelte" },
+        ]}
+        searchable
+      />
+    </div>
+  );
+}
+
+function TagsInputPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <TagsInput
+        aria-label="Framework tags"
+        defaultValue={["React", "Vue"]}
+        placeholder="Add a framework"
+      />
+    </div>
+  );
+}
+
+function SegmentedControlPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <SegmentedControl aria-label="Project view" defaultValue="board">
+        <SegmentedControlItem value="board">Board</SegmentedControlItem>
+        <SegmentedControlItem value="list">List</SegmentedControlItem>
+        <SegmentedControlItem value="timeline">Timeline</SegmentedControlItem>
+      </SegmentedControl>
     </div>
   );
 }
@@ -1566,6 +1633,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "floating-action-button":
       return <FloatingActionButtonPreview />;
+    case "form":
+      return <FormPreview />;
     case "horizontal-scroll-row":
       return <HorizontalScrollRowPreview />;
     case "hover-card":
@@ -1594,6 +1663,12 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="A dialog for selecting AI models with search and filtering." />
       );
+    case "multi-select":
+      return <MultiSelectPreview />;
+    case "tags-input":
+      return <TagsInputPreview />;
+    case "segmented-control":
+      return <SegmentedControlPreview />;
     case "navbar-saas":
       return (
         <SimplePreview description="A responsive navigation bar for SaaS applications." />
