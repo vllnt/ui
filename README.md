@@ -108,7 +108,7 @@ Override CSS variables after importing styles:
 | **Feedback** | Alert, Badge, Callout, Skeleton, Spinner, Toast, Tour |
 | **Navigation** | Breadcrumb, Pagination, Sidebar, Sidebar Provider, Sidebar Toggle, Search Bar, Search Dialog, Keyboard Shortcuts Help, Floating Action Button, Social FAB |
 | **Data / Charts** | Area Chart, Bar Chart, Line Chart, Candlestick Chart, Sparkline Grid, Market Treemap, Order Book, Ticker Tape, Metric Gauge, Activity Heatmap, Activity Log, Table, Data Table, Data List, Stat Card, Number Ticker |
-| **AI** | AI Chat Input, AI Message Bubble, AI Source Citation, AI Streaming Text, AI Tool Call Display, Thinking Block |
+| **AI** | AIChatInput, AIMessageBubble, AISourceCitation, AIStreamingText, AIToolCallDisplay, ThinkingBlock |
 | **Financial** | Candlestick Chart, Market Treemap, Order Book, Ticker Tape, Wallet Card, Watchlist, Sparkline Grid |
 | **Ops / Status** | Status Board, Status Indicator, Live Feed, World Clock Bar, Severity Badge, Role Badge, Scope Selector |
 | **Billing / Plans** | Subscription Card, Plan Badge, Credit Badge, Usage Breakdown |

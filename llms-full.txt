@@ -96,7 +96,7 @@ Alert, Badge, Callout, Skeleton, Spinner, Toast, Tour.
 
 ### Navigation
 
-Breadcrumb, Pagination, Sidebar, SidebarProvider, SidebarToggle, SearchBar, SearchDialog, KeyboardShortcutsHelp, FloatingActionButton, SocialFab.
+Breadcrumb, Pagination, Sidebar, SidebarProvider, SidebarToggle, SearchBar, SearchDialog, KeyboardShortcutsHelp, FloatingActionButton, SocialFAB.
 
 ### Data / Charts
 
@@ -104,7 +104,7 @@ AreaChart, BarChart, LineChart, CandlestickChart, SparklineGrid, MarketTreemap, 
 
 ### AI
 
-AiChatInput, AiMessageBubble, AiSourceCitation, AiStreamingText, AiToolCallDisplay, ThinkingBlock, ModelSelector.
+AIChatInput, AIMessageBubble, AISourceCitation, AIStreamingText, AIToolCallDisplay, ThinkingBlock, ModelSelector.
 
 ### Financial
 
