@@ -206,6 +206,32 @@
     ],
     "title": "Callout"
   },
+  "canvas-shell": {
+    "category": "utility",
+    "defaultStoryId": "layout-canvasshell--default",
+    "description": "Composed workspace shell for top bar, left rail, canvas viewport, and right dock regions.",
+    "name": "canvas-shell",
+    "stories": [
+      {
+        "id": "layout-canvasshell--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Canvas Shell"
+  },
+  "canvas-view": {
+    "category": "utility",
+    "defaultStoryId": "layout-canvasview--default",
+    "description": "Viewport surface with calm spatial defaults for panning and zooming around AI objects.",
+    "name": "canvas-view",
+    "stories": [
+      {
+        "id": "layout-canvasview--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Canvas View"
+  },
   "card": {
     "category": "content",
     "defaultStoryId": "content-card--default",
@@ -479,19 +505,6 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
-    "stories": [
-      {
-        "id": "overlay-hovercard--default",
-        "name": "Default"
-      }
-    ],
-    "title": "Hover Card"
-  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -504,6 +517,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -596,6 +622,19 @@
     ],
     "title": "Learning Objectives"
   },
+  "left-rail": {
+    "category": "navigation",
+    "defaultStoryId": "layout-leftrail--default",
+    "description": "Narrow navigation rail for primary canvas modes and tool affordances.",
+    "name": "left-rail",
+    "stories": [
+      {
+        "id": "layout-leftrail--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Left Rail"
+  },
   "line-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -629,6 +668,19 @@
       }
     ],
     "title": "Menubar"
+  },
+  "mini-map-panel": {
+    "category": "utility",
+    "defaultStoryId": "panels-minimappanel--default",
+    "description": "Compact overview panel showing viewport position inside a larger workspace field.",
+    "name": "mini-map-panel",
+    "stories": [
+      {
+        "id": "panels-minimappanel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Mini Map Panel"
   },
   "model-selector": {
     "category": "form",
@@ -785,6 +837,19 @@
       }
     ],
     "title": "Resizable"
+  },
+  "right-dock": {
+    "category": "navigation",
+    "defaultStoryId": "layout-rightdock--default",
+    "description": "Context dock for inspection panels, run details, and secondary operator surfaces.",
+    "name": "right-dock",
+    "stories": [
+      {
+        "id": "layout-rightdock--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Right Dock"
   },
   "scroll-area": {
     "category": "utility",
@@ -1204,6 +1269,19 @@
     ],
     "title": "Tooltip"
   },
+  "top-bar": {
+    "category": "navigation",
+    "defaultStoryId": "layout-topbar--default",
+    "description": "Compact operator bar with calm title, workspace, and action slots.",
+    "name": "top-bar",
+    "stories": [
+      {
+        "id": "layout-topbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Top Bar"
+  },
   "tutorial-card": {
     "category": "learning",
     "defaultStoryId": "learning-tutorialcard--default",
@@ -1294,5 +1372,31 @@
       }
     ],
     "title": "View Switcher"
+  },
+  "workspace-switcher": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-workspaceswitcher--default",
+    "description": "Pill switcher for named workspaces and view modes in the operator shell.",
+    "name": "workspace-switcher",
+    "stories": [
+      {
+        "id": "navigation-workspaceswitcher--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Workspace Switcher"
+  },
+  "zoom-hud": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-zoomhud--default",
+    "description": "Floating zoom readout and controls for the canvas viewport.",
+    "name": "zoom-hud",
+    "stories": [
+      {
+        "id": "overlay-zoomhud--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Zoom HUD"
   }
 }
