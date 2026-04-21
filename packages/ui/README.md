@@ -218,7 +218,7 @@ import {
 | `Alert` | `{ Alert, AlertTitle, AlertDescription, alertVariants }` | Static alert banner |
 | `Badge` | `{ Badge, badgeVariants }` | Inline status label. Variants: default, secondary, destructive, outline |
 | `Skeleton` | `{ Skeleton }` | Loading placeholder |
-| `Spinner` | `{ Spinner }` | Loading spinner |
+| `Spinner` | `{ Spinner, UnicodeSpinner }` | Styled spinner + ASCII-art `UnicodeSpinner` for terminals / code blocks |
 
 ### Navigation
 
@@ -242,7 +242,7 @@ import {
 | `BarChart` | `{ BarChart }` | Chart component |
 | `LineChart` | `{ LineChart }` | Chart component |
 | `CodeBlock` | `{ CodeBlock }` | Syntax-highlighted code via `react-syntax-highlighter` |
-| `FlowDiagram` | `{ FlowDiagram }` | Flow diagram via `@xyflow/react` |
+| `FlowDiagram` | `{ FlowDiagram, FlowControls, FlowFullscreen, FlowErrorBoundary, useFlowDiagram }` | Flow diagram via `@xyflow/react`. Extras: custom controls, fullscreen wrapper, error boundary, and the `useFlowDiagram` hook for imperative access. |
 | `TableOfContents` | `{ TableOfContents }` | Page table of contents |
 
 ### App Components
@@ -276,7 +276,10 @@ import {
 | `Flashcard` | `{ Flashcard }` | Flip-card for spaced repetition |
 | `Stepper` | `{ Stepper }` | Linear progress stepper |
 | `Tour` | `{ Tour }` | Guided product tour |
-| `Annotation` | `{ Annotation }` | Inline annotation / highlight |
+| `Annotation` | `{ Annotation, Highlight }` | Inline annotation block + inline `Highlight` span for in-prose emphasis |
+| `LearningObjectives` | `{ LearningObjectives, Prerequisites, Summary }` | Objectives list plus companion `Prerequisites` and `Summary` blocks |
+| `KeyConcept` | `{ KeyConcept, Glossary }` | Concept callout + `Glossary` term list |
+| `Comparison` | `{ Comparison, BeforeAfter }` | Side-by-side compare block + `BeforeAfter` slider |
 | `CompletionDialog` | `{ CompletionDialog }` | End-of-flow celebration dialog |
 | `TruncatedText` | `{ TruncatedText }` | Expand-on-overflow text block |
 | `TableOfContentsPanel` | `{ TableOfContentsPanel }` | Sidebar TOC panel |
@@ -334,7 +337,7 @@ import {
 | `BorderBeam` | `{ BorderBeam }` | Animated gradient border |
 | `Marquee` | `{ Marquee }` | Infinite scroll marquee |
 | `NumberTicker` | `{ NumberTicker }` | Animated number counter |
-| `Spinner` | `{ Spinner }` | Rich loading-spinner library |
+| `Spinner` | `{ Spinner, UnicodeSpinner }` | Styled spinner + ASCII-art `UnicodeSpinner` for terminals / code blocks |
 
 ### Form Additions
 
@@ -386,10 +389,22 @@ import { cn } from "@vllnt/ui";
 <div className={cn("p-4 bg-primary", isActive && "bg-accent", className)} />
 ```
 
-```tsx
-import { useDebounce } from "@vllnt/ui";
+### Hooks
 
-const debouncedValue = useDebounce(searchTerm, 300);
+| Hook | Purpose |
+|------|---------|
+| `useDebounce(value, delayMs)` | Returns the value after `delayMs` of idle — ideal for search inputs. |
+| `useHorizontalScroll(ref)` | Drives the behavior used by `HorizontalScrollRow` — wheel → horizontal scroll, scroll-snap helpers. |
+| `useMobile(breakpoint?)` | Boolean for "viewport is below breakpoint" (default `768`). SSR-safe. |
+| `useSidebar()` | Reads `SidebarProvider` state — `{ open, setOpen, toggle }`. Throws outside a provider. |
+| `useFlowDiagram(options)` | Imperative controller for `FlowDiagram` — fit view, zoom, export to PNG. |
+| `useSocialFab()` | Drives the open/close state of `SocialFab`. |
+
+```tsx
+import { useDebounce, useMobile } from "@vllnt/ui";
+
+const query = useDebounce(input, 300);
+const isMobile = useMobile();
 ```
 
 ## Types

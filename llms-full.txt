@@ -120,15 +120,15 @@ SubscriptionCard, PlanBadge, CreditBadge, UsageBreakdown.
 
 ### Animation
 
-AnimatedText, BorderBeam, Marquee, NumberTicker, Spinner.
+AnimatedText, BorderBeam, Marquee, NumberTicker, Spinner, UnicodeSpinner.
 
 ### Content
 
-BlogCard, ProTip, Callout, CodeBlock, CodePlayground, Comparison, Faq, FlowDiagram, MdxContent, ProfileSection, Terminal, VideoEmbed, TldrSection, ShareSection, ShareDialog.
+BlogCard, ProTip, Callout, CodeBlock, CodePlayground, Comparison (+ BeforeAfter), FAQ, FlowDiagram (+ FlowControls, FlowFullscreen, FlowErrorBoundary, hook `useFlowDiagram`), MDXContent, ProfileSection, Terminal, VideoEmbed, TLDRSection, ShareSection, ShareDialog.
 
 ### Tutorial / Educational
 
-ContentIntro, Exercise, Flashcard, KeyConcept, LearningObjectives, ProgressBar, ProgressCard, Quiz, StepByStep, StepNavigation, Stepper, TutorialCard, TutorialComplete, TutorialFilters, TutorialIntroContent, TutorialMdx, Checklist, Annotation, CompletionDialog, TruncatedText, TableOfContents, TableOfContentsPanel.
+ContentIntro, Exercise, Flashcard, KeyConcept (+ Glossary), LearningObjectives (+ Prerequisites, Summary), ProgressBar, ProgressCard, Quiz, StepByStep, StepNavigation, Stepper, TutorialCard, TutorialComplete, TutorialFilters, TutorialIntroContent, TutorialMDX, Checklist, Annotation (+ Highlight), CompletionDialog, TruncatedText, TableOfContents, TableOfContentsPanel.
 
 ### App shell
 
@@ -163,8 +163,19 @@ Variants are typed exports from each component module.
 ### Utilities
 
 ```tsx
-import { cn, useDebounce } from "@vllnt/ui";
+import { cn } from "@vllnt/ui";
 ```
+
+### Hooks
+
+| Hook | Purpose |
+|------|---------|
+| `useDebounce(value, delayMs)` | Debounce a value — idle-settled state for search inputs. |
+| `useHorizontalScroll(ref)` | Wheel-to-horizontal + scroll-snap helpers used by `HorizontalScrollRow`. |
+| `useMobile(breakpoint?)` | `true` below the given breakpoint (default 768). SSR-safe. |
+| `useSidebar()` | Read `SidebarProvider` state: `{ open, setOpen, toggle }`. |
+| `useFlowDiagram(options)` | Imperative handle for `FlowDiagram`: fit view, zoom, PNG export. |
+| `useSocialFab()` | Open/close state for `SocialFab`. |
 
 ## Requirements
 
