@@ -42,6 +42,19 @@
     ],
     "title": "Alert Dialog"
   },
+  "anchor-port": {
+    "category": "utility",
+    "defaultStoryId": "canvas-anchorport--default",
+    "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+    "name": "anchor-port",
+    "stories": [
+      {
+        "id": "canvas-anchorport--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Anchor Port"
+  },
   "area-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -349,6 +362,19 @@
     ],
     "title": "Completion Dialog"
   },
+  "connector-edge": {
+    "category": "utility",
+    "defaultStoryId": "canvas-connectoredge--default",
+    "description": "Curved edge between canvas objects with optional inline label state.",
+    "name": "connector-edge",
+    "stories": [
+      {
+        "id": "canvas-connectoredge--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Connector Edge"
+  },
   "content-intro": {
     "category": "content",
     "defaultStoryId": "content-contentintro--default",
@@ -413,6 +439,19 @@
       }
     ],
     "title": "Dropdown Menu"
+  },
+  "edge-label": {
+    "category": "overlay",
+    "defaultStoryId": "canvas-edgelabel--default",
+    "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+    "name": "edge-label",
+    "stories": [
+      {
+        "id": "canvas-edgelabel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Edge Label"
   },
   "exercise": {
     "category": "learning",
@@ -479,18 +518,18 @@
     ],
     "title": "Flow Diagram"
   },
-  "hover-card": {
-    "category": "overlay",
-    "defaultStoryId": "overlay-hovercard--default",
-    "description": "Card that appears on hover for previewing content.",
-    "name": "hover-card",
+  "group-hull": {
+    "category": "utility",
+    "defaultStoryId": "canvas-grouphull--default",
+    "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+    "name": "group-hull",
     "stories": [
       {
-        "id": "overlay-hovercard--default",
+        "id": "canvas-grouphull--default",
         "name": "Default"
       }
     ],
-    "title": "Hover Card"
+    "title": "Group Hull"
   },
   "horizontal-scroll-row": {
     "category": "navigation",
@@ -504,6 +543,19 @@
       }
     ],
     "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
   },
   "inline-input": {
     "category": "form",
@@ -668,6 +720,32 @@
       }
     ],
     "title": "Navigation Menu"
+  },
+  "object-card": {
+    "category": "content",
+    "defaultStoryId": "canvas-objectcard--default",
+    "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+    "name": "object-card",
+    "stories": [
+      {
+        "id": "canvas-objectcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Object Card"
+  },
+  "object-handle": {
+    "category": "utility",
+    "defaultStoryId": "canvas-objecthandle--default",
+    "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+    "name": "object-handle",
+    "stories": [
+      {
+        "id": "canvas-objecthandle--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Object Handle"
   },
   "pagination": {
     "category": "navigation",
