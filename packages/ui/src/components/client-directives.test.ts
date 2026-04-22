@@ -5,14 +5,22 @@ import { describe, expect, it } from "vitest";
 
 const COMPONENTS_ROOT = join(__dirname);
 const CLIENT_HOOKS = [
-  "useState",
+  "useActionState",
+  "useCallback",
+  "useContext",
+  "useDeferredValue",
   "useEffect",
+  "useId",
+  "useImperativeHandle",
+  "useInsertionEffect",
   "useLayoutEffect",
   "useMemo",
-  "useCallback",
+  "useOptimistic",
   "useReducer",
   "useRef",
-  "useImperativeHandle",
+  "useState",
+  "useSyncExternalStore",
+  "useTransition",
 ] as const;
 const SKIPPED_SUFFIXES = [".stories.tsx", ".test.tsx", ".visual.tsx"] as const;
 
@@ -30,7 +38,9 @@ function listTypeScriptFiles(directory: string): string[] {
 }
 
 function usesClientHooks(source: string): boolean {
-  return CLIENT_HOOKS.some((hook) => source.includes(hook));
+  return CLIENT_HOOKS.some((hook) =>
+    new RegExp(`\\b${hook}\\b`, "u").test(source),
+  );
 }
 
 function hasUseClientDirective(source: string): boolean {
