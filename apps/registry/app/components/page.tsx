@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import componentMetadata from "@/lib/component-metadata.json";
-import { ComponentPreview } from "@/components/component-preview/component-preview";
 import { getPageContent } from "@/lib/content";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
