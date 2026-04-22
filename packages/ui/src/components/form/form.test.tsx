@@ -57,6 +57,26 @@ describe("Form", () => {
     expect(message).toHaveTextContent("Please enter a valid email.");
   });
 
+  it("propagates disabled and required state to native controls", () => {
+    render(
+      <Form disabled required>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+
+    expect(input).toBeDisabled();
+    expect(input).toBeRequired();
+    expect(input).toHaveAttribute("aria-disabled", "true");
+    expect(input).toHaveAttribute("aria-required", "true");
+  });
+
   it("keeps helper text in aria-describedby without linking a valid message", () => {
     render(
       <Form>

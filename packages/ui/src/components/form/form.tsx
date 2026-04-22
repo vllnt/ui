@@ -197,10 +197,15 @@ const FormControl = React.forwardRef<
     descriptionId,
     invalid ? messageId : undefined,
   );
+  const nativeConstraintProps: Record<string, boolean | undefined> = {
+    disabled: disabled || undefined,
+    required: required || undefined,
+  };
 
   return (
     <Slot
       {...props}
+      {...nativeConstraintProps}
       aria-describedby={describedBy}
       aria-disabled={props["aria-disabled"] ?? (disabled || undefined)}
       aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
