@@ -1,6 +1,8 @@
 # @vllnt/ui
 
-React component library — 93 components built on Radix UI primitives, Tailwind CSS, and CVA.
+React component library — 144 components built on Radix UI primitives, Tailwind CSS, and CVA.
+
+See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
 ## Install
 
@@ -216,7 +218,7 @@ import {
 | `Alert` | `{ Alert, AlertTitle, AlertDescription, alertVariants }` | Static alert banner |
 | `Badge` | `{ Badge, badgeVariants }` | Inline status label. Variants: default, secondary, destructive, outline |
 | `Skeleton` | `{ Skeleton }` | Loading placeholder |
-| `Spinner` | `{ Spinner }` | Loading spinner |
+| `Spinner` | `{ Spinner, UnicodeSpinner }` | Styled spinner + ASCII-art `UnicodeSpinner` for terminals / code blocks |
 
 ### Navigation
 
@@ -240,7 +242,7 @@ import {
 | `BarChart` | `{ BarChart }` | Chart component |
 | `LineChart` | `{ LineChart }` | Chart component |
 | `CodeBlock` | `{ CodeBlock }` | Syntax-highlighted code via `react-syntax-highlighter` |
-| `FlowDiagram` | `{ FlowDiagram }` | Flow diagram via `@xyflow/react` |
+| `FlowDiagram` | `{ FlowDiagram, FlowControls, FlowFullscreen, FlowErrorBoundary, useFlowDiagram }` | Flow diagram via `@xyflow/react`. Extras: custom controls, fullscreen wrapper, error boundary, and the `useFlowDiagram` hook for imperative access. |
 | `TableOfContents` | `{ TableOfContents }` | Page table of contents |
 
 ### App Components
@@ -271,6 +273,112 @@ import {
 | `CodePlayground` | `{ CodePlayground, FileTree }` | Code editor with file tree |
 | `Terminal` | `{ Terminal, SimpleTerminal }` | Terminal emulator UI |
 | `VideoEmbed` | `{ VideoEmbed }` | Responsive video embed |
+| `Flashcard` | `{ Flashcard }` | Flip-card for spaced repetition |
+| `Stepper` | `{ Stepper }` | Linear progress stepper |
+| `Tour` | `{ Tour }` | Guided product tour |
+| `Annotation` | `{ Annotation, Highlight }` | Inline annotation block + inline `Highlight` span for in-prose emphasis |
+| `LearningObjectives` | `{ LearningObjectives, Prerequisites, Summary }` | Objectives list plus companion `Prerequisites` and `Summary` blocks |
+| `KeyConcept` | `{ KeyConcept, Glossary }` | Concept callout + `Glossary` term list |
+| `Comparison` | `{ Comparison, BeforeAfter }` | Side-by-side compare block + `BeforeAfter` slider |
+| `CompletionDialog` | `{ CompletionDialog }` | End-of-flow celebration dialog |
+| `TruncatedText` | `{ TruncatedText }` | Expand-on-overflow text block |
+| `TableOfContentsPanel` | `{ TableOfContentsPanel }` | Sidebar TOC panel |
+| `ThinkingBlock` | `{ ThinkingBlock }` | Collapsible reasoning block |
+
+### AI
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `AIChatInput` | `{ AIChatInput }` | Chat composer with submit + attachments |
+| `AIMessageBubble` | `{ AIMessageBubble }` | User/assistant message bubble |
+| `AIStreamingText` | `{ AIStreamingText }` | Token-stream renderer |
+| `AIToolCallDisplay` | `{ AIToolCallDisplay }` | Tool-use invocation render |
+| `AISourceCitation` | `{ AISourceCitation }` | Inline citation reference |
+| `ModelSelector` | `{ ModelSelector }` | Model picker (provider-agnostic) |
+
+### Financial
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `CandlestickChart` | `{ CandlestickChart }` | OHLC candlestick chart |
+| `MarketTreemap` | `{ MarketTreemap }` | Market-cap treemap |
+| `OrderBook` | `{ OrderBook }` | Bid/ask depth book |
+| `TickerTape` | `{ TickerTape }` | Horizontal ticker marquee |
+| `SparklineGrid` | `{ SparklineGrid }` | Grid of inline sparklines |
+| `WalletCard` | `{ WalletCard }` | Balance / portfolio card |
+| `Watchlist` | `{ Watchlist }` | Tracked-symbol list |
+
+### Ops / Status
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `StatusBoard` | `{ StatusBoard }` | Grid of service statuses |
+| `StatusIndicator` | `{ StatusIndicator }` | Inline dot + label |
+| `LiveFeed` | `{ LiveFeed }` | Append-only event feed |
+| `WorldClockBar` | `{ WorldClockBar }` | Multi-timezone clock bar |
+| `SeverityBadge` | `{ SeverityBadge }` | Severity-level badge |
+| `RoleBadge` | `{ RoleBadge }` | User-role badge |
+| `ScopeSelector` | `{ ScopeSelector }` | Scope / environment picker |
+
+### Billing & Plans
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `SubscriptionCard` | `{ SubscriptionCard }` | Plan pricing / feature card |
+| `PlanBadge` | `{ PlanBadge }` | Tier indicator |
+| `CreditBadge` | `{ CreditBadge }` | Remaining-credit pill |
+| `UsageBreakdown` | `{ UsageBreakdown }` | Usage-by-category breakdown |
+
+### Animation
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `AnimatedText` | `{ AnimatedText }` | Text enter-animations |
+| `BorderBeam` | `{ BorderBeam }` | Animated gradient border |
+| `Marquee` | `{ Marquee }` | Infinite scroll marquee |
+| `NumberTicker` | `{ NumberTicker }` | Animated number counter |
+| `Spinner` | `{ Spinner, UnicodeSpinner }` | Styled spinner + ASCII-art `UnicodeSpinner` for terminals / code blocks |
+
+### Form Additions
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `DatePicker` | `{ DatePicker }` | Composed `Calendar` + `Popover` |
+| `FileUpload` | `{ FileUpload }` | Drag-drop file input |
+| `NumberInput` | `{ NumberInput }` | Numeric input w/ steppers |
+| `PasswordInput` | `{ PasswordInput }` | Input w/ show-password toggle |
+| `InlineInput` | `{ InlineInput }` | Click-to-edit inline input |
+| `Combobox` | `{ Combobox }` | Typeahead select |
+| `Rating` | `{ Rating }` | Star rating input |
+
+### Data & Metrics
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `DataTable` | `{ DataTable }` | High-level table w/ sort/filter (TanStack) |
+| `DataList` | `{ DataList }` | Label/value list |
+| `StatCard` | `{ StatCard }` | KPI tile |
+| `MetricGauge` | `{ MetricGauge }` | Gauge chart |
+| `ActivityHeatmap` | `{ ActivityHeatmap }` | GitHub-style contribution grid |
+| `ActivityLog` | `{ ActivityLog }` | Audit-trail feed |
+| `TableOfContents` | `{ TableOfContents }` | Inline TOC |
+
+### App Shell (extended)
+
+| Component | Import | Notes |
+|-----------|--------|-------|
+| `CategoryFilter` | `{ CategoryFilter }` | Chip-based category filter |
+| `FilterBar` | `{ FilterBar }` | Multi-facet filter row |
+| `CookieConsent` | `{ CookieConsent }` | Cookie-consent banner |
+| `Slideshow` | `{ Slideshow }` | Hero slideshow |
+| `CountdownTimer` | `{ CountdownTimer }` | Event countdown |
+| `AvatarGroup` | `{ AvatarGroup }` | Stacked avatar group |
+| `FloatingActionButton` | `{ FloatingActionButton }` | Anchored FAB |
+| `SocialFAB` | `{ SocialFab }` | Social-links FAB |
+| `KeyboardShortcutsHelp` | `{ KeyboardShortcutsHelp }` | Cmd-? shortcut dialog |
+| `ShareDialog` | `{ ShareDialog }` | Shareable-link dialog |
+| `HorizontalScrollRow` | `{ HorizontalScrollRow }` | Scroll-snap row |
+| `ViewSwitcher` | `{ ViewSwitcher }` | Grid/list toggle |
 
 ## Utilities
 
@@ -281,10 +389,22 @@ import { cn } from "@vllnt/ui";
 <div className={cn("p-4 bg-primary", isActive && "bg-accent", className)} />
 ```
 
-```tsx
-import { useDebounce } from "@vllnt/ui";
+### Hooks
 
-const debouncedValue = useDebounce(searchTerm, 300);
+| Hook | Purpose |
+|------|---------|
+| `useDebounce(value, delayMs)` | Returns the value after `delayMs` of idle — ideal for search inputs. |
+| `useHorizontalScroll(ref)` | Drives the behavior used by `HorizontalScrollRow` — wheel → horizontal scroll, scroll-snap helpers. |
+| `useMobile(breakpoint?)` | Boolean for "viewport is below breakpoint" (default `768`). SSR-safe. |
+| `useSidebar()` | Reads `SidebarProvider` state — `{ open, setOpen, toggle }`. Throws outside a provider. |
+| `useFlowDiagram(options)` | Imperative controller for `FlowDiagram` — fit view, zoom, export to PNG. |
+| `useSocialFab()` | Drives the open/close state of `SocialFab`. |
+
+```tsx
+import { useDebounce, useMobile } from "@vllnt/ui";
+
+const query = useDebounce(input, 300);
+const isMobile = useMobile();
 ```
 
 ## Types
