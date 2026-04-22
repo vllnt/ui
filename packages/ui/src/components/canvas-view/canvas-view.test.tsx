@@ -58,6 +58,22 @@ describe("CanvasView", () => {
     ).toHaveClass("select-none");
   });
 
+  it("preserves pointer access to canvas children", () => {
+    const onClick = vi.fn();
+
+    render(
+      <CanvasView>
+        <button onClick={onClick} type="button">
+          node action
+        </button>
+      </CanvasView>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "node action" }));
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it("resets the viewport with the zero key", () => {
     const onViewportChange = vi.fn();
 
