@@ -159,9 +159,57 @@ function DemoBottomBar() {
 function DemoCanvasObjects() {
   return (
     <div className="relative h-[1200px] w-[1600px] overflow-hidden rounded-[28px] border border-border/12 bg-[radial-gradient(circle_at_top,hsl(var(--primary)/0.07),transparent_38%),linear-gradient(180deg,hsl(var(--background)/0.18),hsl(var(--background)/0.04))]">
-      <div className="absolute left-[14%] top-[24%] h-32 w-56 rounded-[28px] border border-border/18 bg-background/12 backdrop-blur-sm" />
-      <div className="absolute right-[16%] top-[18%] h-24 w-48 rounded-[28px] border border-border/18 bg-background/10 backdrop-blur-sm" />
-      <div className="absolute bottom-[18%] left-[20%] h-28 w-52 rounded-[28px] border border-border/18 bg-background/10 backdrop-blur-sm" />
+      <div className="absolute left-[14%] top-[22%] w-72 rounded-[2rem] border border-border/18 bg-background/18 p-5 shadow-[0_22px_80px_hsl(var(--foreground)/0.05)] backdrop-blur-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <Layers3 className="size-5" />
+          </div>
+          <div className="h-2 w-2 rounded-full bg-primary/50" />
+        </div>
+        <div className="mt-5 space-y-3">
+          <div className="h-3 w-24 rounded-full bg-foreground/10" />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="h-20 rounded-[1.5rem] border border-border/18 bg-background/35" />
+            <div className="h-20 rounded-[1.5rem] border border-border/18 bg-background/28" />
+          </div>
+          <div className="h-10 rounded-[1.25rem] border border-border/18 bg-background/30" />
+        </div>
+      </div>
+
+      <div className="absolute right-[15%] top-[18%] w-56 rounded-[1.75rem] border border-border/18 bg-background/14 p-4 shadow-[0_18px_60px_hsl(var(--foreground)/0.04)] backdrop-blur-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex size-10 items-center justify-center rounded-2xl bg-background/60 text-foreground/70">
+            <Activity className="size-4" />
+          </div>
+          <div className="flex gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-foreground/10" />
+            <div className="h-2 w-2 rounded-full bg-foreground/10" />
+            <div className="h-2 w-2 rounded-full bg-primary/45" />
+          </div>
+        </div>
+        <div className="mt-4 space-y-3">
+          <div className="h-3 w-20 rounded-full bg-foreground/10" />
+          <div className="space-y-2">
+            <div className="h-11 rounded-[1rem] border border-border/18 bg-background/32" />
+            <div className="h-11 rounded-[1rem] border border-border/18 bg-background/24" />
+            <div className="h-11 rounded-[1rem] border border-border/18 bg-background/18" />
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-[18%] left-[22%] w-64 rounded-[1.75rem] border border-border/18 bg-background/12 p-4 shadow-[0_18px_60px_hsl(var(--foreground)/0.04)] backdrop-blur-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex size-10 items-center justify-center rounded-2xl bg-background/55 text-foreground/70">
+            <Sparkles className="size-4" />
+          </div>
+          <div className="h-7 w-16 rounded-full border border-border/18 bg-background/38" />
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="h-16 rounded-[1rem] border border-border/18 bg-background/26" />
+          <div className="h-16 rounded-[1rem] border border-border/18 bg-background/20" />
+          <div className="h-16 rounded-[1rem] border border-border/18 bg-background/14" />
+        </div>
+      </div>
     </div>
   );
 }
