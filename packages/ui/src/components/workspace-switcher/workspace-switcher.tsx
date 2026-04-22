@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useState } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -29,11 +29,6 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
     const [internalValue, setInternalValue] = useState(fallbackValue);
     const currentValue = value ?? internalValue;
 
-    const currentWorkspace = useMemo(
-      () => workspaces.find((workspace) => workspace.id === currentValue),
-      [currentValue, workspaces],
-    );
-
     function handleSelect(nextValue: string) {
       if (value === undefined) {
         setInternalValue(nextValue);
@@ -44,7 +39,7 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
     return (
       <div
         className={cn(
-          "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-muted/50 p-1",
+          "inline-flex min-w-0 items-center gap-1 rounded-md border border-border bg-background p-1",
           className,
         )}
         ref={ref}
@@ -57,10 +52,10 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
             <button
               aria-selected={isActive}
               className={cn(
-                "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
+                "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
+                  ? "bg-muted text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               key={workspace.id}
               onClick={() => {
@@ -74,11 +69,6 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
             </button>
           );
         })}
-        {currentWorkspace?.description ? (
-          <span className="hidden pl-2 pr-1 text-xs text-muted-foreground md:inline">
-            {currentWorkspace.description}
-          </span>
-        ) : null}
       </div>
     );
   },

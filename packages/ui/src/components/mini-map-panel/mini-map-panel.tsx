@@ -44,7 +44,7 @@ const MiniMapPanel = forwardRef<HTMLDivElement, MiniMapPanelProps>(
     return (
       <div
         className={cn(
-          "w-52 rounded-sm border border-border bg-background p-3 font-mono",
+          "w-52 rounded-md border border-border bg-background p-3 font-mono",
           className,
         )}
         ref={ref}
@@ -60,7 +60,7 @@ const MiniMapPanel = forwardRef<HTMLDivElement, MiniMapPanelProps>(
             </div>
           </div>
         </div>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-sm border border-border bg-background">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-border bg-background">
           {markers.map((marker) => (
             <div
               className="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 bg-foreground"

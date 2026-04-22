@@ -458,7 +458,7 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
     return (
       <div
         className={cn(
-          "relative h-full min-h-[32rem] overflow-hidden rounded-sm border border-border bg-background",
+          "relative h-full min-h-[32rem] overflow-hidden rounded-md border border-border bg-background",
           className,
         )}
         {...props}
