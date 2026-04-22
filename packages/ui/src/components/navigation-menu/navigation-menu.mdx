@@ -1,0 +1,48 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './navigation-menu.stories'
+
+<Meta of={Stories} />
+
+# Navigation Menu
+
+Accessible navigation menu with links and sub-navigation.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/navigation-menu.json
+```
+
+## Import
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<NavigationMenu>
+  <NavigationMenu.displayName />
+</NavigationMenu>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### NavigationMenu.displayName
+

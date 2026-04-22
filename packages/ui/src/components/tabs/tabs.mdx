@@ -1,0 +1,65 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tabs.stories'
+
+<Meta of={Stories} />
+
+# Tabs
+
+Tabbed content panels with keyboard-accessible tab triggers.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/tabs.json
+```
+
+## Import
+
+```tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Tabs defaultValue="value">
+  <Tabs.List />
+  <Tabs.Trigger value="item-1" />
+  <Tabs.Content value="item-1" />
+</Tabs>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+### Tabs
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `defaultValue` | `string` | Yes | - |
+| `onValueChange` | `(value: string) =&gt; void` | No | Callback: `(value: string) => void` |
+
+### Tabs.List
+
+### Tabs.Trigger
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `value` | `string` | Yes | - |
+
+### Tabs.Content
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `value` | `string` | Yes | - |
+

@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './keyboard-shortcuts-help.stories'
+
+<Meta of={Stories} />
+
+# Keyboard Shortcuts Help
+
+Displays available keyboard shortcuts to the user.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/keyboard-shortcuts-help.json
+```
+
+## Import
+
+```tsx
+import { KeyboardShortcutsHelp } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<KeyboardShortcutsHelp
+  onClose={() => {}}
+  shortcuts={shortcuts}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `closeIcon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `footer` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `isOpen` | `boolean` | Yes | `true` or `false` |
+| `onClose` | `() =&gt; void` | Yes | Callback function |
+| `shortcuts` | `readonly KeyboardShortcut[]` | Yes | Array of `readonly KeyboardShortcut` |
+| `title` | `string` | No | - |
+
+## Type Definitions
+
+### KeyboardShortcut
+
+```tsx
+type KeyboardShortcut = {
+  description: string
+  keys: readonly string[]
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `description` | `string` | Yes | - |
+| `keys` | `readonly string[]` | Yes | Array of `readonly string` |
+

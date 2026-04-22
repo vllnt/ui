@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './slider.stories'
+
+<Meta of={Stories} />
+
+# Slider
+
+Range slider input for selecting numeric values.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/slider.json
+```
+
+## Import
+
+```tsx
+import { Slider } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Slider>
+  <Slider.displayName />
+</Slider>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### Slider.displayName
+

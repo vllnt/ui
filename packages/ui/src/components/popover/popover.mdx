@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './popover.stories'
+
+<Meta of={Stories} />
+
+# Popover
+
+Floating content panel anchored to a trigger element.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/popover.json
+```
+
+## Import
+
+```tsx
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+  PopoverTrigger,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Popover>Popover content</Popover>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

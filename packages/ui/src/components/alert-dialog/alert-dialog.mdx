@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './alert-dialog.stories'
+
+<Meta of={Stories} />
+
+# Alert Dialog
+
+Modal dialog for confirming destructive or important actions.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/alert-dialog.json
+```
+
+## Import
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  AlertDialogPortal,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AlertDialog>This is an alert message.</AlertDialog>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

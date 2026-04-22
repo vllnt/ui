@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './floating-action-button.stories'
+
+<Meta of={Stories} />
+
+# Floating Action Button
+
+Fixed-position action button for primary actions.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/floating-action-button.json
+```
+
+## Import
+
+```tsx
+import { FloatingActionButton } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<FloatingActionButton
+  onClick={() => {}}
+>
+  Click me
+</FloatingActionButton>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `onClick` | `() =&gt; void` | Yes | Callback function |
+| `position` | `"bottom-left" \| "bottom-right"` | No | `bottom-left`, `bottom-right` |
+

@@ -1,0 +1,251 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './model-selector.stories'
+
+<Meta of={Stories} />
+
+# Model Selector
+
+Dropdown selector for choosing AI models.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/model-selector.json
+```
+
+## Import
+
+```tsx
+import { ModelSelector, ModelSelectorFilters } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const models = [
+  {
+    description: "A description",
+    id: "1",
+    name: "value",
+    pricing: "value",
+    input: "value",
+    output: "value",
+  },
+]
+
+<ModelSelector
+  models={models}
+  onOpenChange={(open) => console.log(open)}
+  onSelectModel={(modelId) => console.log(modelId)}
+  selectedModelId="unique-id"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+### ModelSelector
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `models` | `ModelInfo[]` | Yes | Array of `ModelInfo` objects |
+| `onOpenChange` | `(open: boolean) =&gt; void` | Yes | Callback: `(open: boolean) => void` |
+| `onSelectModel` | `(modelId: string) =&gt; void` | Yes | Callback: `(modelId: string) => void` |
+| `open` | `boolean` | Yes | `true` or `false` |
+| `selectedModelId` | `string` | Yes | - |
+
+### ModelSelectorFilters
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `modelSearchQuery` | `string` | Yes | - |
+| `onProviderChange` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `onSearchChange` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `onSortChange` | `(value: SortOption) =&gt; void` | Yes | Callback: `(value: SortOption) => void` |
+| `providerFilter` | `string` | Yes | - |
+| `providers` | `string[]` | Yes | Array of `string` |
+| `sortBy` | `SortOption` | Yes | - |
+
+## Type Definitions
+
+### ModelInfo
+
+```tsx
+type ModelInfo = {
+  description?: string
+  id: string
+  name: string
+  pricing?: {
+  input?: number; // per 1M tokens
+  output?: number; // per 1M tokens
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `description` | `string` | No | - |
+| `id` | `string` | Yes | - |
+| `name` | `string` | Yes | - |
+| `pricing` | `{` | No | - |
+| `input` | `number; // per 1M tokens` | No | - |
+| `output` | `number; // per 1M tokens` | No | - |
+
+### SelectionGuardReference
+
+```tsx
+type SelectionGuardReference = {
+  current: null | string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `current` | `null \| string` | Yes | `null` or `string` |
+
+### HandleModelSelectArguments
+
+```tsx
+type HandleModelSelectArguments = {
+  handleClose: (nextOpen: boolean) => void
+  id: string
+  onSelectModel: (id: string) => void
+  selectionGuardReference: SelectionGuardReference
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `handleClose` | `(nextOpen: boolean) =&gt; void` | Yes | Callback: `(nextOpen: boolean) => void` |
+| `id` | `string` | Yes | - |
+| `onSelectModel` | `(id: string) =&gt; void` | Yes | Callback: `(id: string) => void` |
+| `selectionGuardReference` | `SelectionGuardReference` | Yes | `SelectionGuardReference` object |
+
+### FilterAndSortArguments
+
+```tsx
+type FilterAndSortArguments = {
+  models: ModelInfo[]
+  modelSearchQuery: string
+  providerFilter: string
+  selectedModelId: string
+  sortBy: SortOption
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `models` | `ModelInfo[]` | Yes | Array of `ModelInfo` objects |
+| `modelSearchQuery` | `string` | Yes | - |
+| `providerFilter` | `string` | Yes | - |
+| `selectedModelId` | `string` | Yes | - |
+| `sortBy` | `SortOption` | Yes | - |
+
+### ModelSelectorState
+
+```tsx
+type ModelSelectorState = {
+  filteredAndSortedModels: ModelInfo[]
+  handleClose: (nextOpen: boolean) => void
+  handleSelect: (id: string) => void
+  modelSearchQuery: string
+  providerFilter: string
+  providers: string[]
+  setModelSearchQuery: (value: string) => void
+  setProviderFilter: (value: string) => void
+  setSortBy: (value: SortOption) => void
+  sortBy: SortOption
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `filteredAndSortedModels` | `ModelInfo[]` | Yes | Array of `ModelInfo` objects |
+| `handleClose` | `(nextOpen: boolean) =&gt; void` | Yes | Callback: `(nextOpen: boolean) => void` |
+| `handleSelect` | `(id: string) =&gt; void` | Yes | Callback: `(id: string) => void` |
+| `modelSearchQuery` | `string` | Yes | - |
+| `providerFilter` | `string` | Yes | - |
+| `providers` | `string[]` | Yes | Array of `string` |
+| `setModelSearchQuery` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `setProviderFilter` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `setSortBy` | `(value: SortOption) =&gt; void` | Yes | Callback: `(value: SortOption) => void` |
+| `sortBy` | `SortOption` | Yes | - |
+
+### ProviderFilterMenuProps
+
+```tsx
+type ProviderFilterMenuProps = {
+  onChange: (value: string) => void
+  providerFilter: string
+  providers: string[]
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `onChange` | `(value: string) =&gt; void` | Yes | Callback: `(value: string) => void` |
+| `providerFilter` | `string` | Yes | - |
+| `providers` | `string[]` | Yes | Array of `string` |
+
+### SortMenuProps
+
+```tsx
+type SortMenuProps = {
+  onChange: (value: SortOption) => void
+  sortBy: SortOption
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `onChange` | `(value: SortOption) =&gt; void` | Yes | Callback: `(value: SortOption) => void` |
+| `sortBy` | `SortOption` | Yes | - |
+
+### ModelListProps
+
+```tsx
+type ModelListProps = {
+  models: ModelInfo[]
+  onSelect: (id: string) => void
+  selectedModelId: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `models` | `ModelInfo[]` | Yes | Array of `ModelInfo` objects |
+| `onSelect` | `(id: string) =&gt; void` | Yes | Callback: `(id: string) => void` |
+| `selectedModelId` | `string` | Yes | - |
+
+### ModelPricingProps
+
+```tsx
+type ModelPricingProps = {
+  pricing?: ModelInfo["pricing"]
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `pricing` | `ModelInfo["pricing"]` | No | - |
+
+### ModelListItemProps
+
+```tsx
+type ModelListItemProps = {
+  model: ModelInfo
+  onSelect: (id: string) => void
+  selectedModelId: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `model` | `ModelInfo` | Yes | `ModelInfo` object |
+| `onSelect` | `(id: string) =&gt; void` | Yes | Callback: `(id: string) => void` |
+| `selectedModelId` | `string` | Yes | - |
+

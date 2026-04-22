@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './sidebar-provider.stories'
+
+<Meta of={Stories} />
+
+# Sidebar Provider
+
+Context provider for managing sidebar open/close state.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/sidebar-provider.json
+```
+
+## Import
+
+```tsx
+import { SidebarProvider } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SidebarProvider>SidebarProvider content</SidebarProvider>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

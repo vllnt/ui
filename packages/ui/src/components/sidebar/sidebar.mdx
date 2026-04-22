@@ -1,0 +1,102 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './sidebar.stories'
+
+<Meta of={Stories} />
+
+# Sidebar
+
+Collapsible sidebar navigation layout.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/sidebar.json
+```
+
+## Import
+
+```tsx
+import { Sidebar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const sections = [
+  {
+    collapsible: false,
+    defaultOpen: false,
+    items: [],
+    title: "Example item",
+  },
+]
+
+<Sidebar
+  sections={sections}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `sections` | `SidebarSection[]` | Yes | Array of `SidebarSection` objects |
+
+## Type Definitions
+
+### SidebarItem
+
+```tsx
+type SidebarItem = {
+  href: string
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `href` | `string` | Yes | - |
+| `title` | `string` | Yes | - |
+
+### SidebarSection
+
+```tsx
+type SidebarSection = {
+  collapsible?: boolean
+  defaultOpen?: boolean
+  items: SidebarItem[]
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `collapsible` | `boolean` | No | `true` or `false` |
+| `defaultOpen` | `boolean` | No | `true` or `false` |
+| `items` | `SidebarItem[]` | Yes | Array of `SidebarItem` objects |
+| `title` | `string` | No | - |
+
+### CollapsibleSectionProps
+
+```tsx
+type CollapsibleSectionProps = {
+  children: React.ReactNode
+  collapsible?: boolean
+  defaultOpen?: boolean
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `children` | `React.ReactNode` | Yes | React content (JSX, string, number, etc.) |
+| `collapsible` | `boolean` | No | `true` or `false` |
+| `defaultOpen` | `boolean` | No | `true` or `false` |
+| `title` | `string` | Yes | - |
+

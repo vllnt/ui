@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './code-block.stories'
+
+<Meta of={Stories} />
+
+# Code Block
+
+Syntax-highlighted code display with copy support.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/code-block.json
+```
+
+## Import
+
+```tsx
+import { CodeBlock } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CodeBlock>CodeBlock content</CodeBlock>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `language` | `string` | No | - |
+| `showLanguage` | `boolean` | No | `true` or `false` |
+

@@ -14,7 +14,13 @@ import {
   CommandItem,
   CommandList,
 } from "../command";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -497,6 +503,9 @@ export function ModelSelector(props: ModelSelectorProps) {
       <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Select Model</DialogTitle>
+          <DialogDescription className="sr-only">
+            Search, filter, and select an AI model
+          </DialogDescription>
         </DialogHeader>
         <ModelSelectorFilters
           modelSearchQuery={modelSearchQuery}

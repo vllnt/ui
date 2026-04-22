@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './category-filter.stories'
+
+<Meta of={Stories} />
+
+# Category Filter
+
+Filterable category selection for content lists.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/category-filter.json
+```
+
+## Import
+
+```tsx
+import { CategoryFilter } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CategoryFilter
+  categories={categories}
+  lang="value"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `categories` | `string[]` | Yes | Array of `string` |
+| `lang` | `string` | Yes | - |
+

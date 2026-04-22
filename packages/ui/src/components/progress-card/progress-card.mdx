@@ -1,0 +1,106 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './progress-card.stories'
+
+<Meta of={Stories} />
+
+# Progress Card
+
+Card displaying progress metrics and status.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/progress-card.json
+```
+
+## Import
+
+```tsx
+import { ContentCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ProgressCard
+  badgeLabel="Label"
+  description="A short description"
+  href="/example"
+  href="/example"
+  metadata={metadata}
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `badgeLabel` | `string` | Yes | - |
+| `badgeVariant` | `"default" \| "destructive" \| "outline" \| "secondary"` | No | `default`, `destructive`, `outline`, `secondary` |
+| `description` | `string` | Yes | - |
+| `getProgress` | `() =&gt; ContentCardProgress \| null` | No | Callback function |
+| `href` | `string` | Yes | - |
+| `linkComponent` | `React.ComponentType&lt;{` | No | - |
+| `href` | `string` | Yes | - |
+| `metadata` | `string[]` | No | Array of `string` |
+| `progressLabel` | `string` | No | - |
+| `tags` | `string[]` | No | Array of `string` |
+| `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### ContentCardProgress
+
+```tsx
+type ContentCardProgress = {
+  completedCount: number
+  totalSections: number
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `completedCount` | `number` | Yes | - |
+| `totalSections` | `number` | Yes | - |
+
+### ContentCardProps
+
+```tsx
+type ContentCardProps = {
+  badgeLabel: string
+  badgeVariant?: "default" | "destructive" | "outline" | "secondary"
+  description: string
+  getProgress?: () => ContentCardProgress | null
+  href: string
+  linkComponent?: React.ComponentType<{
+  className?: string
+  href: string
+  metadata?: string[]
+  progressLabel?: string
+  tags?: string[]
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `badgeLabel` | `string` | Yes | - |
+| `badgeVariant` | `"default" \| "destructive" \| "outline" \| "secondary"` | No | `default`, `destructive`, `outline`, `secondary` |
+| `description` | `string` | Yes | - |
+| `getProgress` | `() =&gt; ContentCardProgress \| null` | No | Callback function |
+| `href` | `string` | Yes | - |
+| `linkComponent` | `React.ComponentType&lt;{` | No | - |
+| `className` | `string` | No | - |
+| `href` | `string` | Yes | - |
+| `metadata` | `string[]` | No | Array of `string` |
+| `progressLabel` | `string` | No | - |
+| `tags` | `string[]` | No | Array of `string` |
+| `title` | `string` | Yes | - |
+

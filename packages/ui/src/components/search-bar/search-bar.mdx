@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './search-bar.stories'
+
+<Meta of={Stories} />
+
+# Search Bar
+
+Text search input with icon and clear functionality.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/search-bar.json
+```
+
+## Import
+
+```tsx
+import { SearchBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SearchBar />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `onSearch` | `(query: string) =&gt; void` | No | Callback: `(query: string) => void` |
+| `placeholder` | `string` | No | - |
+

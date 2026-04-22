@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './aspect-ratio.stories'
+
+<Meta of={Stories} />
+
+# Aspect Ratio
+
+Constrains content to a specified aspect ratio.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/aspect-ratio.json
+```
+
+## Import
+
+```tsx
+import { AspectRatio } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AspectRatio />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

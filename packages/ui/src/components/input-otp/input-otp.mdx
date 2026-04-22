@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './input-otp.stories'
+
+<Meta of={Stories} />
+
+# Input OTP
+
+One-time password input with segmented fields.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/input-otp.json
+```
+
+## Import
+
+```tsx
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<InputOtp>InputOtp content</InputOtp>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

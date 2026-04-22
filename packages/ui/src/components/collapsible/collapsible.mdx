@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './collapsible.stories'
+
+<Meta of={Stories} />
+
+# Collapsible
+
+Expandable and collapsible content section.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/collapsible.json
+```
+
+## Import
+
+```tsx
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Collapsible />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

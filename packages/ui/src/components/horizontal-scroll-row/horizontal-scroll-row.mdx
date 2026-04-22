@@ -1,0 +1,52 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './horizontal-scroll-row.stories'
+
+<Meta of={Stories} />
+
+# Horizontal Scroll Row
+
+Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/horizontal-scroll-row.json
+```
+
+## Import
+
+```tsx
+import { HorizontalScrollRow } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<HorizontalScrollRow
+  title="My Title"
+>
+  HorizontalScrollRow content
+</HorizontalScrollRow>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `description` | `string` | No | - |
+| `title` | `string` | Yes | - |
+
+## Dependencies
+
+**npm packages:**
+- `lucide-react`
+
+**Registry components:**
+- `button`
+

@@ -1,0 +1,48 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './progress-bar.stories'
+
+<Meta of={Stories} />
+
+# Progress Bar
+
+Visual progress indicator with labels and completion state.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/progress-bar.json
+```
+
+## Import
+
+```tsx
+import { ProgressBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ProgressBar
+  max="0"
+  value="0"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `completedLabel` | `string` | No | - |
+| `currentLabel` | `string` | No | - |
+| `isComplete` | `boolean` | No | `true` or `false` |
+| `isLoading` | `boolean` | No | `true` or `false` |
+| `max` | `number` | Yes | - |
+| `showLabels` | `boolean` | No | `true` or `false` |
+| `value` | `number` | Yes | - |
+

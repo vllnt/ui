@@ -1,0 +1,73 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './step-by-step.stories'
+
+<Meta of={Stories} />
+
+# Step By Step
+
+Numbered step guide with optional interactive completion tracking.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/step-by-step.json
+```
+
+## Import
+
+```tsx
+import { Step, StepByStep } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<StepByStep>
+  <StepByStep.Step title="My Title" />
+</StepByStep>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+### StepByStep
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `interactive` | `boolean` | No | `true` or `false` |
+| `title` | `string` | No | - |
+
+### StepByStep.Step
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `number` | `number` | No | - |
+| `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### InteractiveStepProps
+
+```tsx
+type InteractiveStepProps = {
+  isCompleted: boolean
+  isLast: boolean
+  onToggle: () => void
+  stepNumber: number
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `isCompleted` | `boolean` | Yes | `true` or `false` |
+| `isLast` | `boolean` | Yes | `true` or `false` |
+| `onToggle` | `() =&gt; void` | Yes | Callback function |
+| `stepNumber` | `number` | Yes | - |
+| `title` | `string` | Yes | - |
+

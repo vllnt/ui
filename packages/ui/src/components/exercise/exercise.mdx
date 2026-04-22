@@ -1,0 +1,94 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './exercise.stories'
+
+<Meta of={Stories} />
+
+# Exercise
+
+Interactive exercise block for learning content.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/exercise.json
+```
+
+## Import
+
+```tsx
+import { Exercise } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Exercise
+  title="My Title"
+>
+  Exercise content
+</Exercise>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `difficulty` | `"easy" \| "hard" \| "medium"` | No | `easy`, `hard`, `medium` |
+| `hint` | `string` | No | - |
+| `solution` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `title` | `string` | Yes | - |
+
+## Type Definitions
+
+### HeaderProps
+
+```tsx
+type HeaderProps = {
+  completed: boolean
+  config: { className: string; label: string }
+  onToggle: () => void
+  title: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `completed` | `boolean` | Yes | `true` or `false` |
+| `config` | `{ className: string; label: string }` | Yes | - |
+| `onToggle` | `() =&gt; void` | Yes | Callback function |
+| `title` | `string` | Yes | - |
+
+### HintProps
+
+```tsx
+type HintProps = {
+  hint: string; onShow: () => void; showHint: boolean
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `hint` | `string; onShow: () =&gt; void; showHint: boolean` | Yes | Callback function |
+
+### SolutionProps
+
+```tsx
+type SolutionProps = {
+  onToggle: () => void
+  showSolution: boolean
+  solution: ReactNode
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `onToggle` | `() =&gt; void` | Yes | Callback function |
+| `showSolution` | `boolean` | Yes | `true` or `false` |
+| `solution` | `ReactNode` | Yes | React content (JSX, string, number, etc.) |
+

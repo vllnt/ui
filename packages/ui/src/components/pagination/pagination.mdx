@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './pagination.stories'
+
+<Meta of={Stories} />
+
+# Pagination
+
+Page navigation controls with previous, next, and page links.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/pagination.json
+```
+
+## Import
+
+```tsx
+import { Pagination } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Pagination
+  baseUrl="/example"
+  currentPage="0"
+  totalPages="0"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `baseUrl` | `string` | Yes | - |
+| `currentPage` | `number` | Yes | - |
+| `totalPages` | `number` | Yes | - |
+

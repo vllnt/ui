@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './cookie-consent.stories'
+
+<Meta of={Stories} />
+
+# CookieConsent
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/cookie-consent.json
+```
+
+## Import
+
+```tsx
+import { CookieConsent } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CookieConsent>CookieConsent content</CookieConsent>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `acceptText` | `string` | No | - |
+| `declineText` | `string` | No | - |
+| `message` | `string` | No | - |
+| `onAccept` | `() =&gt; void` | No | Callback function |
+| `onDecline` | `() =&gt; void` | No | Callback function |
+| `onOpenChange` | `(open: boolean) =&gt; void` | No | Callback: `(open: boolean) => void` |
+| `open` | `boolean` | No | `true` or `false` |
+| `settingsHref` | `string` | No | - |
+| `settingsText` | `string` | No | - |
+| `showCloseButton` | `boolean` | No | `true` or `false` |
+

@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './pro-tip.stories'
+
+<Meta of={Stories} />
+
+# Pro Tip
+
+Highlighted tip block with variants for tips, best practices, gotchas, and more.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/pro-tip.json
+```
+
+## Import
+
+```tsx
+import { ProTip, CommonMistake } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ProTip>ProTip content</ProTip>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `title` | `string` | No | - |
+| `variant` | `ProTipVariant` | No | - |
+
+## Type Definitions
+
+### CommonMistakeProps
+
+```tsx
+type CommonMistakeProps = {
+  className?: string
+  fix?: ReactNode
+  fixIcon?: ReactNode
+  icon?: ReactNode
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `className` | `string` | No | - |
+| `fix` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `fixIcon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
+| `title` | `string` | No | - |
+

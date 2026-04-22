@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './video-embed.stories'
+
+<Meta of={Stories} />
+
+# Video Embed
+
+Responsive video embed for YouTube and other providers.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/video-embed.json
+```
+
+## Import
+
+```tsx
+import { VideoEmbed } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<VideoEmbed
+  src="value"
+  title="My Title"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `aspectRatio` | `"1/1" \| "4/3" \| "16/9"` | No | `1/1`, `4/3`, `16/9` |
+| `src` | `string` | Yes | - |
+| `thumbnail` | `string` | No | - |
+| `title` | `string` | Yes | - |
+| `type` | `"custom" \| "vimeo" \| "youtube"` | No | `custom`, `vimeo`, `youtube` |
+

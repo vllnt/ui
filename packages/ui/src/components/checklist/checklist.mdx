@@ -1,0 +1,89 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './checklist.stories'
+
+<Meta of={Stories} />
+
+# Checklist
+
+Interactive checklist with progress tracking and toggleable items.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/checklist.json
+```
+
+## Import
+
+```tsx
+import { Checklist, ChecklistItemRow, ChecklistHeader } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const items = [
+  {
+    description: "A description",
+    id: "1",
+    label: "Example item",
+  },
+]
+
+<Checklist
+  items={items}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+### Checklist
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `items` | `ChecklistItem[]` | Yes | Array of `ChecklistItem` objects |
+| `onComplete` | `() =&gt; void` | No | Callback function |
+| `persistKey` | `string` | No | - |
+| `title` | `string` | No | - |
+
+### ChecklistItemRow
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `isChecked` | `boolean` | Yes | `true` or `false` |
+| `item` | `ChecklistItem` | Yes | `ChecklistItem` object |
+| `onToggle` | `() =&gt; void` | Yes | Callback function |
+
+### ChecklistHeader
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `checked` | `number` | Yes | - |
+| `progress` | `number` | Yes | - |
+| `title` | `string` | No | - |
+| `total` | `number` | Yes | - |
+
+## Type Definitions
+
+### ChecklistItem
+
+```tsx
+type ChecklistItem = {
+  description?: string
+  id: string
+  label: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `description` | `string` | No | - |
+| `id` | `string` | Yes | - |
+| `label` | `string` | Yes | - |
+

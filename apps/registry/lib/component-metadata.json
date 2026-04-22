@@ -1,0 +1,2055 @@
+{
+  "accordion": {
+    "category": "content",
+    "defaultStoryId": "content-accordion--default",
+    "description": "Collapsible content sections supporting single or multiple open items.",
+    "name": "accordion",
+    "stories": [
+      {
+        "id": "content-accordion--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Accordion"
+  },
+  "activity-heatmap": {
+    "category": "data",
+    "defaultStoryId": "data-activityheatmap--default",
+    "description": "Contribution-style grid for visualizing operational activity over time.",
+    "name": "activity-heatmap",
+    "stories": [
+      {
+        "id": "data-activityheatmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-activityheatmap--two-weeks",
+        "name": "Two Weeks"
+      }
+    ],
+    "title": "Activity Heatmap"
+  },
+  "activity-log": {
+    "category": "data",
+    "defaultStoryId": "analytics-activitylog--default",
+    "description": "Paginated activity feed for audit history and analytics changes.",
+    "name": "activity-log",
+    "stories": [
+      {
+        "id": "analytics-activitylog--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-activitylog--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Activity Log"
+  },
+  "ai-chat-input": {
+    "category": "learning",
+    "defaultStoryId": "ai-chatinput--default",
+    "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+    "name": "ai-chat-input",
+    "stories": [
+      {
+        "id": "ai-chatinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chatinput--submitting",
+        "name": "Submitting"
+      }
+    ],
+    "title": "AI Chat Input"
+  },
+  "ai-message-bubble": {
+    "category": "learning",
+    "defaultStoryId": "ai-messagebubble--default",
+    "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+    "name": "ai-message-bubble",
+    "stories": [
+      {
+        "id": "ai-messagebubble--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-messagebubble--user",
+        "name": "User"
+      },
+      {
+        "id": "ai-messagebubble--tool",
+        "name": "Tool"
+      }
+    ],
+    "title": "AI Message Bubble"
+  },
+  "ai-source-citation": {
+    "category": "learning",
+    "defaultStoryId": "ai-sourcecitation--default",
+    "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+    "name": "ai-source-citation",
+    "stories": [
+      {
+        "id": "ai-sourcecitation--default",
+        "name": "Default"
+      }
+    ],
+    "title": "AI Source Citation"
+  },
+  "ai-streaming-text": {
+    "category": "learning",
+    "defaultStoryId": "ai-streamingtext--default",
+    "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+    "name": "ai-streaming-text",
+    "stories": [
+      {
+        "id": "ai-streamingtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-streamingtext--streaming",
+        "name": "Streaming"
+      }
+    ],
+    "title": "AI Streaming Text"
+  },
+  "ai-tool-call-display": {
+    "category": "learning",
+    "defaultStoryId": "ai-toolcalldisplay--default",
+    "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+    "name": "ai-tool-call-display",
+    "stories": [
+      {
+        "id": "ai-toolcalldisplay--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-toolcalldisplay--error-state",
+        "name": "Error State"
+      }
+    ],
+    "title": "AI Tool Call Display"
+  },
+  "alert": {
+    "category": "data",
+    "defaultStoryId": "data-alert--default",
+    "description": "Displays an alert message to the user.",
+    "name": "alert",
+    "stories": [
+      {
+        "id": "data-alert--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-alert--variant-destructive",
+        "name": "Variant Destructive"
+      }
+    ],
+    "title": "Alert"
+  },
+  "alert-dialog": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-alertdialog--default",
+    "description": "Modal dialog for confirming destructive or important actions.",
+    "name": "alert-dialog",
+    "stories": [
+      {
+        "id": "overlay-alertdialog--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Alert Dialog"
+  },
+  "animated-text": {
+    "category": "utility",
+    "defaultStoryId": "utility-animatedtext--default",
+    "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
+    "name": "animated-text",
+    "stories": [
+      {
+        "id": "utility-animatedtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-animatedtext--characters",
+        "name": "Characters"
+      }
+    ],
+    "title": "Animated Text"
+  },
+  "annotation": {
+    "category": "learning",
+    "defaultStoryId": "learning-annotation--default",
+    "description": "Inline highlight with an attached contextual note.",
+    "name": "annotation",
+    "stories": [
+      {
+        "id": "learning-annotation--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-annotation--highlight-only",
+        "name": "Highlight Only"
+      }
+    ],
+    "title": "Annotation"
+  },
+  "area-chart": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Renders an area chart for data visualization.",
+    "name": "area-chart",
+    "stories": [],
+    "title": "Area Chart"
+  },
+  "aspect-ratio": {
+    "category": "utility",
+    "defaultStoryId": "utility-aspectratio--default",
+    "description": "Constrains content to a specified aspect ratio.",
+    "name": "aspect-ratio",
+    "stories": [
+      {
+        "id": "utility-aspectratio--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Aspect Ratio"
+  },
+  "avatar": {
+    "category": "core",
+    "defaultStoryId": "core-avatar--default",
+    "description": "Displays a user avatar image with fallback initials.",
+    "name": "avatar",
+    "stories": [
+      {
+        "id": "core-avatar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Avatar"
+  },
+  "avatar-group": {
+    "category": "data",
+    "defaultStoryId": "data-avatargroup--default",
+    "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+    "name": "avatar-group",
+    "stories": [
+      {
+        "id": "data-avatargroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-avatargroup--sizes",
+        "name": "Sizes"
+      }
+    ],
+    "title": "Avatar Group"
+  },
+  "badge": {
+    "category": "core",
+    "defaultStoryId": "core-badge--default",
+    "description": "Small status label with variant styles.",
+    "name": "badge",
+    "stories": [
+      {
+        "id": "core-badge--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-badge--variant-destructive",
+        "name": "Variant Destructive"
+      },
+      {
+        "id": "core-badge--variant-outline",
+        "name": "Variant Outline"
+      },
+      {
+        "id": "core-badge--variant-secondary",
+        "name": "Variant Secondary"
+      }
+    ],
+    "title": "Badge"
+  },
+  "bar-chart": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Renders a bar chart for data visualization.",
+    "name": "bar-chart",
+    "stories": [],
+    "title": "Bar Chart"
+  },
+  "blog-card": {
+    "category": "content",
+    "defaultStoryId": "content-blogcard--default",
+    "description": "Card layout for displaying blog post previews.",
+    "name": "blog-card",
+    "stories": [
+      {
+        "id": "content-blogcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Blog Card"
+  },
+  "border-beam": {
+    "category": "utility",
+    "defaultStoryId": "utility-borderbeam--default",
+    "description": "Animated accent beam that travels around the border of a highlighted surface.",
+    "name": "border-beam",
+    "stories": [
+      {
+        "id": "utility-borderbeam--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-borderbeam--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Border Beam"
+  },
+  "breadcrumb": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-breadcrumb--default",
+    "description": "Navigation breadcrumb trail showing the current page hierarchy.",
+    "name": "breadcrumb",
+    "stories": [
+      {
+        "id": "navigation-breadcrumb--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Breadcrumb"
+  },
+  "button": {
+    "category": "core",
+    "defaultStoryId": "core-button--default",
+    "description": "Interactive button with multiple variants and sizes.",
+    "name": "button",
+    "stories": [
+      {
+        "id": "core-button--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-button--size-icon",
+        "name": "Size Icon"
+      },
+      {
+        "id": "core-button--size-lg",
+        "name": "Size Lg"
+      },
+      {
+        "id": "core-button--size-sm",
+        "name": "Size Sm"
+      },
+      {
+        "id": "core-button--variant-destructive",
+        "name": "Variant Destructive"
+      },
+      {
+        "id": "core-button--variant-ghost",
+        "name": "Variant Ghost"
+      },
+      {
+        "id": "core-button--variant-link",
+        "name": "Variant Link"
+      },
+      {
+        "id": "core-button--variant-outline",
+        "name": "Variant Outline"
+      },
+      {
+        "id": "core-button--variant-secondary",
+        "name": "Variant Secondary"
+      }
+    ],
+    "title": "Button"
+  },
+  "calendar": {
+    "category": "form",
+    "defaultStoryId": "form-calendar--default",
+    "description": "Date picker calendar for selecting dates.",
+    "name": "calendar",
+    "stories": [
+      {
+        "id": "form-calendar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Calendar"
+  },
+  "callout": {
+    "category": "content",
+    "defaultStoryId": "content-callout--default",
+    "description": "Highlighted content block with variant styles for info, warning, danger, and more.",
+    "name": "callout",
+    "stories": [
+      {
+        "id": "content-callout--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Callout"
+  },
+  "candlestick-chart": {
+    "category": "data",
+    "defaultStoryId": "data-candlestickchart--default",
+    "description": "OHLC financial chart for session-by-session price action.",
+    "name": "candlestick-chart",
+    "stories": [
+      {
+        "id": "data-candlestickchart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-candlestickchart--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Candlestick Chart"
+  },
+  "card": {
+    "category": "content",
+    "defaultStoryId": "content-card--default",
+    "description": "Container with header, content, and footer sections.",
+    "name": "card",
+    "stories": [
+      {
+        "id": "content-card--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Card"
+  },
+  "carousel": {
+    "category": "content",
+    "defaultStoryId": "content-carousel--default",
+    "description": "Scrollable content carousel with navigation controls.",
+    "name": "carousel",
+    "stories": [
+      {
+        "id": "content-carousel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Carousel"
+  },
+  "category-filter": {
+    "category": "form",
+    "defaultStoryId": "form-categoryfilter--default",
+    "description": "Filterable category selection for content lists.",
+    "name": "category-filter",
+    "stories": [
+      {
+        "id": "form-categoryfilter--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Category Filter"
+  },
+  "checkbox": {
+    "category": "core",
+    "defaultStoryId": "core-checkbox--default",
+    "description": "Toggle control for boolean input.",
+    "name": "checkbox",
+    "stories": [
+      {
+        "id": "core-checkbox--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Checkbox"
+  },
+  "checklist": {
+    "category": "learning",
+    "defaultStoryId": "learning-checklist--default",
+    "description": "Interactive checklist with progress tracking and toggleable items.",
+    "name": "checklist",
+    "stories": [
+      {
+        "id": "learning-checklist--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Checklist"
+  },
+  "code-block": {
+    "category": "content",
+    "defaultStoryId": "content-codeblock--default",
+    "description": "Syntax-highlighted code display with copy support.",
+    "name": "code-block",
+    "stories": [
+      {
+        "id": "content-codeblock--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Code Block"
+  },
+  "code-playground": {
+    "category": "content",
+    "defaultStoryId": "content-codeplayground--default",
+    "description": "Interactive code editor with live preview.",
+    "name": "code-playground",
+    "stories": [
+      {
+        "id": "content-codeplayground--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Code Playground"
+  },
+  "collapsible": {
+    "category": "content",
+    "defaultStoryId": "content-collapsible--default",
+    "description": "Expandable and collapsible content section.",
+    "name": "collapsible",
+    "stories": [
+      {
+        "id": "content-collapsible--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Collapsible"
+  },
+  "combobox": {
+    "category": "form",
+    "defaultStoryId": "form-combobox--default",
+    "description": "Searchable select input for choosing from a list of options.",
+    "name": "combobox",
+    "stories": [
+      {
+        "id": "form-combobox--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-combobox--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Combobox"
+  },
+  "command": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-command--default",
+    "description": "Command palette with search, groups, and keyboard navigation.",
+    "name": "command",
+    "stories": [
+      {
+        "id": "overlay-command--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Command"
+  },
+  "comparison": {
+    "category": "data",
+    "defaultStoryId": "data-comparison--default",
+    "description": "Side-by-side comparison layout for content or features.",
+    "name": "comparison",
+    "stories": [
+      {
+        "id": "data-comparison--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Comparison"
+  },
+  "completion-dialog": {
+    "category": "learning",
+    "defaultStoryId": "learning-completiondialog--default",
+    "description": "Dialog displayed upon completing a task or workflow.",
+    "name": "completion-dialog",
+    "stories": [
+      {
+        "id": "learning-completiondialog--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Completion Dialog"
+  },
+  "content-intro": {
+    "category": "content",
+    "defaultStoryId": "content-contentintro--default",
+    "description": "Introductory section for content pages with title and description.",
+    "name": "content-intro",
+    "stories": [
+      {
+        "id": "content-contentintro--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Content Intro"
+  },
+  "context-menu": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-contextmenu--default",
+    "description": "Right-click context menu with items and submenus.",
+    "name": "context-menu",
+    "stories": [
+      {
+        "id": "overlay-contextmenu--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Context Menu"
+  },
+  "countdown-timer": {
+    "category": "data",
+    "defaultStoryId": "data-countdowntimer--default",
+    "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+    "name": "countdown-timer",
+    "stories": [
+      {
+        "id": "data-countdowntimer--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-countdowntimer--breached",
+        "name": "Breached"
+      }
+    ],
+    "title": "Countdown Timer"
+  },
+  "credit-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-creditbadge--default",
+    "description": "Balance status pill for credits, wallet states, and billing health.",
+    "name": "credit-badge",
+    "stories": [
+      {
+        "id": "account-billing-creditbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-creditbadge--states",
+        "name": "States"
+      }
+    ],
+    "title": "Credit Badge"
+  },
+  "data-list": {
+    "category": "data",
+    "defaultStoryId": "data-datalist--default",
+    "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "name": "data-list",
+    "stories": [
+      {
+        "id": "data-datalist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-datalist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Data List"
+  },
+  "data-table": {
+    "category": "data",
+    "defaultStoryId": "data-datatable--default",
+    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "name": "data-table",
+    "stories": [
+      {
+        "id": "data-datatable--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Data Table"
+  },
+  "date-picker": {
+    "category": "form",
+    "defaultStoryId": "form-datepicker--default",
+    "description": "Single-date picker built with the shared calendar and popover primitives.",
+    "name": "date-picker",
+    "stories": [
+      {
+        "id": "form-datepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Picker"
+  },
+  "dialog": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-dialog--default",
+    "description": "Modal dialog overlay for focused content and actions.",
+    "name": "dialog",
+    "stories": [
+      {
+        "id": "overlay-dialog--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Dialog"
+  },
+  "drawer": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-drawer--default",
+    "description": "Slide-out panel anchored to the screen edge.",
+    "name": "drawer",
+    "stories": [
+      {
+        "id": "overlay-drawer--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Drawer"
+  },
+  "dropdown-menu": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-dropdownmenu--default",
+    "description": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus.",
+    "name": "dropdown-menu",
+    "stories": [
+      {
+        "id": "overlay-dropdownmenu--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Dropdown Menu"
+  },
+  "exercise": {
+    "category": "learning",
+    "defaultStoryId": "learning-exercise--default",
+    "description": "Interactive exercise block for learning content.",
+    "name": "exercise",
+    "stories": [
+      {
+        "id": "learning-exercise--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Exercise"
+  },
+  "faq": {
+    "category": "content",
+    "defaultStoryId": "content-faq--default",
+    "description": "Frequently asked questions section with expandable answers.",
+    "name": "faq",
+    "stories": [
+      {
+        "id": "content-faq--default",
+        "name": "Default"
+      }
+    ],
+    "title": "FAQ"
+  },
+  "file-upload": {
+    "category": "form",
+    "defaultStoryId": "form-fileupload--default",
+    "description": "Dropzone-style file picker with previews for selected files.",
+    "name": "file-upload",
+    "stories": [
+      {
+        "id": "form-fileupload--default",
+        "name": "Default"
+      }
+    ],
+    "title": "File Upload"
+  },
+  "filter-bar": {
+    "category": "form",
+    "defaultStoryId": "form-filterbar--default",
+    "description": "Horizontal bar with filter controls for content lists.",
+    "name": "filter-bar",
+    "stories": [
+      {
+        "id": "form-filterbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Filter Bar"
+  },
+  "flashcard": {
+    "category": "learning",
+    "defaultStoryId": "learning-flashcard--default",
+    "description": "Study card for active recall with prompt and answer states.",
+    "name": "flashcard",
+    "stories": [
+      {
+        "id": "learning-flashcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Flashcard"
+  },
+  "floating-action-button": {
+    "category": "utility",
+    "defaultStoryId": "utility-floatingactionbutton--default",
+    "description": "Fixed-position action button for primary actions.",
+    "name": "floating-action-button",
+    "stories": [
+      {
+        "id": "utility-floatingactionbutton--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Floating Action Button"
+  },
+  "flow-diagram": {
+    "category": "data",
+    "defaultStoryId": "data-flowdiagram--default",
+    "description": "Interactive flow diagram with nodes, edges, and controls.",
+    "name": "flow-diagram",
+    "stories": [
+      {
+        "id": "data-flowdiagram--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Flow Diagram"
+  },
+  "horizontal-scroll-row": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-horizontalscrollrow--default",
+    "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+    "name": "horizontal-scroll-row",
+    "stories": [
+      {
+        "id": "navigation-horizontalscrollrow--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Horizontal Scroll Row"
+  },
+  "hover-card": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-hovercard--default",
+    "description": "Card that appears on hover for previewing content.",
+    "name": "hover-card",
+    "stories": [
+      {
+        "id": "overlay-hovercard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Hover Card"
+  },
+  "inline-input": {
+    "category": "form",
+    "defaultStoryId": "form-inlineinput--default",
+    "description": "Inline text input with keyboard commit and cancel support.",
+    "name": "inline-input",
+    "stories": [
+      {
+        "id": "form-inlineinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Inline Input"
+  },
+  "input": {
+    "category": "core",
+    "defaultStoryId": "core-input--default",
+    "description": "Text input field for forms.",
+    "name": "input",
+    "stories": [
+      {
+        "id": "core-input--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Input"
+  },
+  "input-otp": {
+    "category": "form",
+    "defaultStoryId": "form-inputotp--default",
+    "description": "One-time password input with segmented fields.",
+    "name": "input-otp",
+    "stories": [
+      {
+        "id": "form-inputotp--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Input OTP"
+  },
+  "key-concept": {
+    "category": "learning",
+    "defaultStoryId": "learning-keyconcept--default",
+    "description": "Highlighted definition block for key terms and a glossary list.",
+    "name": "key-concept",
+    "stories": [
+      {
+        "id": "learning-keyconcept--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Key Concept"
+  },
+  "keyboard-shortcuts-help": {
+    "category": "learning",
+    "defaultStoryId": "learning-keyboardshortcutshelp--default",
+    "description": "Displays available keyboard shortcuts to the user.",
+    "name": "keyboard-shortcuts-help",
+    "stories": [
+      {
+        "id": "learning-keyboardshortcutshelp--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Keyboard Shortcuts Help"
+  },
+  "lang-provider": {
+    "category": "utility",
+    "defaultStoryId": "utility-langprovider--default",
+    "description": "Context provider for language and internationalization.",
+    "name": "lang-provider",
+    "stories": [
+      {
+        "id": "utility-langprovider--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Lang Provider"
+  },
+  "learning-objectives": {
+    "category": "learning",
+    "defaultStoryId": "learning-learningobjectives--default",
+    "description": "Lists learning goals for educational content.",
+    "name": "learning-objectives",
+    "stories": [
+      {
+        "id": "learning-learningobjectives--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Learning Objectives"
+  },
+  "line-chart": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Renders a line chart for data visualization.",
+    "name": "line-chart",
+    "stories": [],
+    "title": "Line Chart"
+  },
+  "marquee": {
+    "category": "utility",
+    "defaultStoryId": "utility-marquee--default",
+    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "name": "marquee",
+    "stories": [
+      {
+        "id": "utility-marquee--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-marquee--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Marquee"
+  },
+  "live-feed": {
+    "category": "data",
+    "defaultStoryId": "data-livefeed--default",
+    "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+    "name": "live-feed",
+    "stories": [
+      {
+        "id": "data-livefeed--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-livefeed--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Live Feed"
+  },
+  "market-treemap": {
+    "category": "data",
+    "defaultStoryId": "data-markettreemap--default",
+    "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+    "name": "market-treemap",
+    "stories": [
+      {
+        "id": "data-markettreemap--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Market Treemap"
+  },
+  "mdx-content": {
+    "category": "content",
+    "defaultStoryId": "content-mdxcontent--default",
+    "description": "Renders MDX content with component mapping.",
+    "name": "mdx-content",
+    "stories": [
+      {
+        "id": "content-mdxcontent--default",
+        "name": "Default"
+      }
+    ],
+    "title": "MDX Content"
+  },
+  "menubar": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-menubar--default",
+    "description": "Horizontal menu bar with dropdown menus.",
+    "name": "menubar",
+    "stories": [
+      {
+        "id": "navigation-menubar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Menubar"
+  },
+  "metric-gauge": {
+    "category": "data",
+    "defaultStoryId": "data-metricgauge--default",
+    "description": "Real-time arc and dial display for monitored percentages and utilization.",
+    "name": "metric-gauge",
+    "stories": [
+      {
+        "id": "data-metricgauge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-metricgauge--critical",
+        "name": "Critical"
+      }
+    ],
+    "title": "Metric Gauge"
+  },
+  "model-selector": {
+    "category": "form",
+    "defaultStoryId": "form-modelselector--default",
+    "description": "Dropdown selector for choosing AI models.",
+    "name": "model-selector",
+    "stories": [
+      {
+        "id": "form-modelselector--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Model Selector"
+  },
+  "navbar-saas": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-navbarsaas--default",
+    "description": "SaaS-style navigation bar with branding and links.",
+    "name": "navbar-saas",
+    "stories": [
+      {
+        "id": "navigation-navbarsaas--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Navbar SaaS"
+  },
+  "navigation-menu": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-navigationmenu--default",
+    "description": "Accessible navigation menu with links and sub-navigation.",
+    "name": "navigation-menu",
+    "stories": [
+      {
+        "id": "navigation-navigationmenu--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Navigation Menu"
+  },
+  "number-input": {
+    "category": "form",
+    "defaultStoryId": "form-numberinput--default",
+    "description": "Numeric input with increment and decrement controls.",
+    "name": "number-input",
+    "stories": [
+      {
+        "id": "form-numberinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Number Input"
+  },
+  "number-ticker": {
+    "category": "utility",
+    "defaultStoryId": "utility-numberticker--default",
+    "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
+    "name": "number-ticker",
+    "stories": [
+      {
+        "id": "utility-numberticker--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-numberticker--decimal-value",
+        "name": "Decimal Value"
+      }
+    ],
+    "title": "Number Ticker"
+  },
+  "order-book": {
+    "category": "data",
+    "defaultStoryId": "data-orderbook--default",
+    "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+    "name": "order-book",
+    "stories": [
+      {
+        "id": "data-orderbook--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-orderbook--tight-spread",
+        "name": "Tight Spread"
+      }
+    ],
+    "title": "Order Book"
+  },
+  "pagination": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-pagination--default",
+    "description": "Page navigation controls with previous, next, and page links.",
+    "name": "pagination",
+    "stories": [
+      {
+        "id": "navigation-pagination--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Pagination"
+  },
+  "password-input": {
+    "category": "form",
+    "defaultStoryId": "form-passwordinput--default",
+    "description": "Password field with a built-in visibility toggle.",
+    "name": "password-input",
+    "stories": [
+      {
+        "id": "form-passwordinput--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Password Input"
+  },
+  "plan-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-planbadge--default",
+    "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+    "name": "plan-badge",
+    "stories": [
+      {
+        "id": "account-billing-planbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-planbadge--all-tiers",
+        "name": "All Tiers"
+      },
+      {
+        "id": "account-billing-planbadge--trial",
+        "name": "Trial"
+      }
+    ],
+    "title": "Plan Badge"
+  },
+  "popover": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-popover--default",
+    "description": "Floating content panel anchored to a trigger element.",
+    "name": "popover",
+    "stories": [
+      {
+        "id": "overlay-popover--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Popover"
+  },
+  "pro-tip": {
+    "category": "learning",
+    "defaultStoryId": "learning-protip--default",
+    "description": "Highlighted tip block with variants for tips, best practices, gotchas, and more.",
+    "name": "pro-tip",
+    "stories": [
+      {
+        "id": "learning-protip--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Pro Tip"
+  },
+  "profile-section": {
+    "category": "learning",
+    "defaultStoryId": "learning-profilesection--default",
+    "description": "User profile display section with avatar and details.",
+    "name": "profile-section",
+    "stories": [
+      {
+        "id": "learning-profilesection--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Profile Section"
+  },
+  "progress-bar": {
+    "category": "data",
+    "defaultStoryId": "data-progressbar--default",
+    "description": "Visual progress indicator with labels and completion state.",
+    "name": "progress-bar",
+    "stories": [
+      {
+        "id": "data-progressbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Progress Bar"
+  },
+  "progress-card": {
+    "category": "data",
+    "defaultStoryId": "data-progresscard--default",
+    "description": "Card displaying progress metrics and status.",
+    "name": "progress-card",
+    "stories": [
+      {
+        "id": "data-progresscard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Progress Card"
+  },
+  "quiz": {
+    "category": "learning",
+    "defaultStoryId": "learning-quiz--default",
+    "description": "Interactive multiple-choice quiz with hints, explanations, and scoring.",
+    "name": "quiz",
+    "stories": [
+      {
+        "id": "learning-quiz--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Quiz"
+  },
+  "radio-group": {
+    "category": "core",
+    "defaultStoryId": "core-radiogroup--default",
+    "description": "Group of radio buttons for single-selection input.",
+    "name": "radio-group",
+    "stories": [
+      {
+        "id": "core-radiogroup--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Radio Group"
+  },
+  "rating": {
+    "category": "learning",
+    "defaultStoryId": "learning-rating--default",
+    "description": "Inline star rating for lightweight learner feedback.",
+    "name": "rating",
+    "stories": [
+      {
+        "id": "learning-rating--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-rating--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "Rating"
+  },
+  "resizable": {
+    "category": "utility",
+    "defaultStoryId": "utility-resizable--default",
+    "description": "Resizable panel layout with draggable handles.",
+    "name": "resizable",
+    "stories": [
+      {
+        "id": "utility-resizable--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Resizable"
+  },
+  "role-badge": {
+    "category": "content",
+    "defaultStoryId": "account-billing-rolebadge--default",
+    "description": "Account role indicator for owners, admins, members, and billing contacts.",
+    "name": "role-badge",
+    "stories": [
+      {
+        "id": "account-billing-rolebadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-rolebadge--team-roles",
+        "name": "Team Roles"
+      }
+    ],
+    "title": "Role Badge"
+  },
+  "scope-selector": {
+    "category": "form",
+    "defaultStoryId": "analytics-scopeselector--default",
+    "description": "Multi-level scope picker for nested environments, teams, and targets.",
+    "name": "scope-selector",
+    "stories": [
+      {
+        "id": "analytics-scopeselector--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-scopeselector--with-default-selection",
+        "name": "With Default Selection"
+      }
+    ],
+    "title": "Scope Selector"
+  },
+  "scroll-area": {
+    "category": "utility",
+    "defaultStoryId": "utility-scrollarea--default",
+    "description": "Custom scrollable area with styled scrollbars.",
+    "name": "scroll-area",
+    "stories": [
+      {
+        "id": "utility-scrollarea--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Scroll Area"
+  },
+  "search-bar": {
+    "category": "form",
+    "defaultStoryId": "form-searchbar--default",
+    "description": "Text search input with icon and clear functionality.",
+    "name": "search-bar",
+    "stories": [
+      {
+        "id": "form-searchbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Search Bar"
+  },
+  "search-dialog": {
+    "category": "learning",
+    "defaultStoryId": "learning-searchdialog--default",
+    "description": "Full-screen search dialog with keyboard navigation.",
+    "name": "search-dialog",
+    "stories": [
+      {
+        "id": "learning-searchdialog--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Search Dialog"
+  },
+  "select": {
+    "category": "form",
+    "defaultStoryId": "form-select--default",
+    "description": "Dropdown select input for choosing from a list of options.",
+    "name": "select",
+    "stories": [
+      {
+        "id": "form-select--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Select"
+  },
+  "separator": {
+    "category": "core",
+    "defaultStoryId": "core-separator--default",
+    "description": "Visual divider between content sections.",
+    "name": "separator",
+    "stories": [
+      {
+        "id": "core-separator--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Separator"
+  },
+  "severity-badge": {
+    "category": "data",
+    "defaultStoryId": "data-severitybadge--default",
+    "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+    "name": "severity-badge",
+    "stories": [
+      {
+        "id": "data-severitybadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-severitybadge--levels",
+        "name": "Levels"
+      },
+      {
+        "id": "data-severitybadge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "data-severitybadge--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "data-severitybadge--custom-label",
+        "name": "Custom Label"
+      }
+    ],
+    "title": "Severity Badge"
+  },
+  "share-section": {
+    "category": "content",
+    "defaultStoryId": "content-sharesection--default",
+    "description": "Social sharing buttons and link copy section.",
+    "name": "share-section",
+    "stories": [
+      {
+        "id": "content-sharesection--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Share Section"
+  },
+  "sheet": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-sheet--default",
+    "description": "Slide-over panel from the edge of the screen.",
+    "name": "sheet",
+    "stories": [
+      {
+        "id": "overlay-sheet--default",
+        "name": "Default"
+      },
+      {
+        "id": "overlay-sheet--left",
+        "name": "Left"
+      },
+      {
+        "id": "overlay-sheet--bottom",
+        "name": "Bottom"
+      }
+    ],
+    "title": "Sheet"
+  },
+  "sidebar": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-sidebar--default",
+    "description": "Collapsible sidebar navigation layout.",
+    "name": "sidebar",
+    "stories": [
+      {
+        "id": "navigation-sidebar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Sidebar"
+  },
+  "sidebar-provider": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-sidebarprovider--default",
+    "description": "Context provider for managing sidebar open/close state.",
+    "name": "sidebar-provider",
+    "stories": [
+      {
+        "id": "navigation-sidebarprovider--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Sidebar Provider"
+  },
+  "sidebar-toggle": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-sidebartoggle--default",
+    "description": "Responsive toggle button for opening and closing the sidebar.",
+    "name": "sidebar-toggle",
+    "stories": [
+      {
+        "id": "navigation-sidebartoggle--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Sidebar Toggle"
+  },
+  "skeleton": {
+    "category": "core",
+    "defaultStoryId": "core-skeleton--default",
+    "description": "Placeholder loading animation for content.",
+    "name": "skeleton",
+    "stories": [
+      {
+        "id": "core-skeleton--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Skeleton"
+  },
+  "slider": {
+    "category": "core",
+    "defaultStoryId": "core-slider--default",
+    "description": "Range slider input for selecting numeric values.",
+    "name": "slider",
+    "stories": [
+      {
+        "id": "core-slider--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Slider"
+  },
+  "slideshow": {
+    "category": "content",
+    "defaultStoryId": "content-slideshow--default",
+    "description": "Step-through slideshow for presenting content sequentially.",
+    "name": "slideshow",
+    "stories": [
+      {
+        "id": "content-slideshow--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Slideshow"
+  },
+  "sparkline-grid": {
+    "category": "data",
+    "defaultStoryId": "data-sparklinegrid--default",
+    "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+    "name": "sparkline-grid",
+    "stories": [
+      {
+        "id": "data-sparklinegrid--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-sparklinegrid--four-columns",
+        "name": "Four Columns"
+      }
+    ],
+    "title": "Sparkline Grid"
+  },
+  "spinner": {
+    "category": "utility",
+    "defaultStoryId": "utility-spinner--default",
+    "description": "Animated loading spinner indicator.",
+    "name": "spinner",
+    "stories": [
+      {
+        "id": "utility-spinner--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Spinner"
+  },
+  "stat-card": {
+    "category": "data",
+    "defaultStoryId": "data-statcard--default",
+    "description": "Headline KPI card for metrics, trends, and supporting context.",
+    "name": "stat-card",
+    "stories": [
+      {
+        "id": "data-statcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statcard--grid",
+        "name": "Grid"
+      }
+    ],
+    "title": "Stat Card"
+  },
+  "status-board": {
+    "category": "data",
+    "defaultStoryId": "data-statusboard--default",
+    "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+    "name": "status-board",
+    "stories": [
+      {
+        "id": "data-statusboard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusboard--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Status Board"
+  },
+  "status-indicator": {
+    "category": "data",
+    "defaultStoryId": "data-statusindicator--default",
+    "description": "Compact status label with tone, variant, and activity dot options.",
+    "name": "status-indicator",
+    "stories": [
+      {
+        "id": "data-statusindicator--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusindicator--variants",
+        "name": "Variants"
+      }
+    ],
+    "title": "Status Indicator"
+  },
+  "step-by-step": {
+    "category": "learning",
+    "defaultStoryId": "learning-stepbystep--default",
+    "description": "Numbered step guide with optional interactive completion tracking.",
+    "name": "step-by-step",
+    "stories": [
+      {
+        "id": "learning-stepbystep--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Step By Step"
+  },
+  "step-navigation": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-stepnavigation--default",
+    "description": "Navigation controls for stepping through multi-page content.",
+    "name": "step-navigation",
+    "stories": [
+      {
+        "id": "navigation-stepnavigation--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Step Navigation"
+  },
+  "stepper": {
+    "category": "learning",
+    "defaultStoryId": "learning-stepper--default",
+    "description": "Sequenced steps with complete, current, and upcoming states.",
+    "name": "stepper",
+    "stories": [
+      {
+        "id": "learning-stepper--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-stepper--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Stepper"
+  },
+  "subscription-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-subscriptioncard--default",
+    "description": "Subscription status and management card for plan, renewal, and usage details.",
+    "name": "subscription-card",
+    "stories": [
+      {
+        "id": "account-billing-subscriptioncard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-subscriptioncard--trialing",
+        "name": "Trialing"
+      }
+    ],
+    "title": "Subscription Card"
+  },
+  "table": {
+    "category": "data",
+    "defaultStoryId": "data-table--default",
+    "description": "Styled data table with header, body, and footer sections.",
+    "name": "table",
+    "stories": [
+      {
+        "id": "data-table--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Table"
+  },
+  "table-of-contents": {
+    "category": "utility",
+    "defaultStoryId": "utility-tableofcontents--default",
+    "description": "Auto-generated table of contents from page headings.",
+    "name": "table-of-contents",
+    "stories": [
+      {
+        "id": "utility-tableofcontents--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Table Of Contents"
+  },
+  "table-of-contents-panel": {
+    "category": "utility",
+    "defaultStoryId": "utility-tableofcontentspanel--default",
+    "description": "Side panel rendering a table of contents for page navigation.",
+    "name": "table-of-contents-panel",
+    "stories": [
+      {
+        "id": "utility-tableofcontentspanel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Table Of Contents Panel"
+  },
+  "tabs": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-tabs--default",
+    "description": "Tabbed content panels with keyboard-accessible tab triggers.",
+    "name": "tabs",
+    "stories": [
+      {
+        "id": "navigation-tabs--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tabs"
+  },
+  "terminal": {
+    "category": "content",
+    "defaultStoryId": "content-terminal--default",
+    "description": "Terminal-style display for command output.",
+    "name": "terminal",
+    "stories": [
+      {
+        "id": "content-terminal--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Terminal"
+  },
+  "textarea": {
+    "category": "core",
+    "defaultStoryId": "core-textarea--default",
+    "description": "Multi-line text input field.",
+    "name": "textarea",
+    "stories": [
+      {
+        "id": "core-textarea--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Textarea"
+  },
+  "theme-provider": {
+    "category": "utility",
+    "defaultStoryId": "utility-themeprovider--default",
+    "description": "Context provider for light/dark theme switching.",
+    "name": "theme-provider",
+    "stories": [
+      {
+        "id": "utility-themeprovider--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Theme Provider"
+  },
+  "theme-toggle": {
+    "category": "utility",
+    "defaultStoryId": "utility-themetoggle--default",
+    "description": "Button to toggle between light and dark themes.",
+    "name": "theme-toggle",
+    "stories": [
+      {
+        "id": "utility-themetoggle--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Theme Toggle"
+  },
+  "thinking-block": {
+    "category": "learning",
+    "defaultStoryId": "learning-thinkingblock--default",
+    "description": "Collapsible block showing AI thinking/reasoning with streaming support.",
+    "name": "thinking-block",
+    "stories": [
+      {
+        "id": "learning-thinkingblock--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Thinking Block"
+  },
+  "ticker-tape": {
+    "category": "data",
+    "defaultStoryId": "data-tickertape--default",
+    "description": "Marquee-style scrolling symbol tape with price and change badges.",
+    "name": "ticker-tape",
+    "stories": [
+      {
+        "id": "data-tickertape--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-tickertape--fast",
+        "name": "Fast"
+      }
+    ],
+    "title": "Ticker Tape"
+  },
+  "tldr-section": {
+    "category": "content",
+    "defaultStoryId": "content-tldrsection--default",
+    "description": "Summary section for quick content overview.",
+    "name": "tldr-section",
+    "stories": [
+      {
+        "id": "content-tldrsection--default",
+        "name": "Default"
+      }
+    ],
+    "title": "TLDR Section"
+  },
+  "toast": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-toast--default",
+    "description": "Temporary notification messages with action support.",
+    "name": "toast",
+    "stories": [
+      {
+        "id": "overlay-toast--default",
+        "name": "Default"
+      },
+      {
+        "id": "overlay-toast--destructive",
+        "name": "Destructive"
+      },
+      {
+        "id": "overlay-toast--with-action",
+        "name": "With Action"
+      }
+    ],
+    "title": "Toast"
+  },
+  "toggle": {
+    "category": "core",
+    "defaultStoryId": "core-toggle--default",
+    "description": "Two-state toggle button.",
+    "name": "toggle",
+    "stories": [
+      {
+        "id": "core-toggle--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-toggle--size-lg",
+        "name": "Size Lg"
+      },
+      {
+        "id": "core-toggle--size-sm",
+        "name": "Size Sm"
+      },
+      {
+        "id": "core-toggle--variant-outline",
+        "name": "Variant Outline"
+      }
+    ],
+    "title": "Toggle"
+  },
+  "toggle-group": {
+    "category": "core",
+    "defaultStoryId": "core-togglegroup--default",
+    "description": "Group of toggle buttons for single or multiple selection.",
+    "name": "toggle-group",
+    "stories": [
+      {
+        "id": "core-togglegroup--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Toggle Group"
+  },
+  "tooltip": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-tooltip--default",
+    "description": "Informational popup displayed on hover or focus.",
+    "name": "tooltip",
+    "stories": [
+      {
+        "id": "overlay-tooltip--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tooltip"
+  },
+  "tour": {
+    "category": "learning",
+    "defaultStoryId": "learning-tour--default",
+    "description": "Guided onboarding flow for introducing content or interface patterns.",
+    "name": "tour",
+    "stories": [
+      {
+        "id": "learning-tour--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tour"
+  },
+  "tutorial-card": {
+    "category": "learning",
+    "defaultStoryId": "learning-tutorialcard--default",
+    "description": "Card for displaying tutorial previews with metadata.",
+    "name": "tutorial-card",
+    "stories": [
+      {
+        "id": "learning-tutorialcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tutorial Card"
+  },
+  "tutorial-complete": {
+    "category": "learning",
+    "defaultStoryId": "learning-tutorialcomplete--default",
+    "description": "Completion screen displayed when a tutorial is finished.",
+    "name": "tutorial-complete",
+    "stories": [
+      {
+        "id": "learning-tutorialcomplete--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tutorial Complete"
+  },
+  "tutorial-filters": {
+    "category": "learning",
+    "defaultStoryId": "learning-tutorialfilters--default",
+    "description": "Filter controls for browsing tutorials by category or difficulty.",
+    "name": "tutorial-filters",
+    "stories": [
+      {
+        "id": "learning-tutorialfilters--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tutorial Filters"
+  },
+  "tutorial-intro-content": {
+    "category": "learning",
+    "defaultStoryId": "learning-tutorialintrocontent--default",
+    "description": "Introduction section for tutorial pages with overview and prerequisites.",
+    "name": "tutorial-intro-content",
+    "stories": [
+      {
+        "id": "learning-tutorialintrocontent--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tutorial Intro Content"
+  },
+  "tutorial-mdx": {
+    "category": "learning",
+    "defaultStoryId": "learning-tutorialmdx--default",
+    "description": "MDX renderer tailored for tutorial content with custom components.",
+    "name": "tutorial-mdx",
+    "stories": [
+      {
+        "id": "learning-tutorialmdx--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tutorial MDX"
+  },
+  "usage-breakdown": {
+    "category": "data",
+    "defaultStoryId": "analytics-usagebreakdown--default",
+    "description": "Ranked resource consumption list with relative share and trend cues.",
+    "name": "usage-breakdown",
+    "stories": [
+      {
+        "id": "analytics-usagebreakdown--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-usagebreakdown--top-two-only",
+        "name": "Top Two Only"
+      },
+      {
+        "id": "analytics-usagebreakdown--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Usage Breakdown"
+  },
+  "video-embed": {
+    "category": "content",
+    "defaultStoryId": "content-videoembed--default",
+    "description": "Responsive video embed for YouTube and other providers.",
+    "name": "video-embed",
+    "stories": [
+      {
+        "id": "content-videoembed--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Video Embed"
+  },
+  "view-switcher": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-viewswitcher--default",
+    "description": "URL param-based toggle between named views with pill/tab styling.",
+    "name": "view-switcher",
+    "stories": [
+      {
+        "id": "navigation-viewswitcher--default",
+        "name": "Default"
+      }
+    ],
+    "title": "View Switcher"
+  },
+  "wallet-card": {
+    "category": "content",
+    "defaultStoryId": "account-billing-walletcard--default",
+    "description": "Credit balance display card for available, pending, and refresh details.",
+    "name": "wallet-card",
+    "stories": [
+      {
+        "id": "account-billing-walletcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-walletcard--depleted",
+        "name": "Depleted"
+      }
+    ],
+    "title": "Wallet Card"
+  },
+  "watchlist": {
+    "category": "data",
+    "defaultStoryId": "data-watchlist--default",
+    "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+    "name": "watchlist",
+    "stories": [
+      {
+        "id": "data-watchlist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-watchlist--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Watchlist"
+  },
+  "world-clock-bar": {
+    "category": "data",
+    "defaultStoryId": "data-worldclockbar--default",
+    "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+    "name": "world-clock-bar",
+    "stories": [
+      {
+        "id": "data-worldclockbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-worldclockbar--time-only",
+        "name": "Time Only"
+      }
+    ],
+    "title": "World Clock Bar"
+  }
+}

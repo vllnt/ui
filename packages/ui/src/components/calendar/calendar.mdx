@@ -1,0 +1,35 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './calendar.stories'
+
+<Meta of={Stories} />
+
+# Calendar
+
+Date picker calendar for selecting dates.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/calendar.json
+```
+
+## Import
+
+```tsx
+import { Calendar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Calendar>Calendar content</Calendar>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+

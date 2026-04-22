@@ -1,0 +1,104 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './blog-card.stories'
+
+<Meta of={Stories} />
+
+# Blog Card
+
+Card layout for displaying blog post previews.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/blog-card.json
+```
+
+## Import
+
+```tsx
+import { ContentCard, BlogCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<BlogCard
+  href="/example"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `formatDate` | `(date: string, lang: string) =&gt; string` | No | Callback: `(date: string, lang: string) => string` |
+| `getDictValue` | `(dict: Record&lt;string, unknown&gt;, path: string) =&gt; string` | No | Callback: `(dict: Record<string, unknown>, path: string) => string` |
+| `href` | `string` | Yes | - |
+| `lang` | `string` | No | - |
+| `post` | `ContentCardPost` | Yes | `ContentCardPost` object |
+| `readMoreLabel` | `string` | No | - |
+| `showBadge` | `boolean` | No | `true` or `false` |
+| `showDate` | `boolean` | No | `true` or `false` |
+| `showReadMore` | `boolean` | No | `true` or `false` |
+| `updatedLabel` | `string` | No | - |
+
+## Type Definitions
+
+### ContentCardPost
+
+```tsx
+type ContentCardPost = {
+  date?: string
+  description: string
+  slug: string
+  tags?: string[]
+  title: string
+  updatedDate?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `date` | `string` | No | - |
+| `description` | `string` | Yes | - |
+| `slug` | `string` | Yes | - |
+| `tags` | `string[]` | No | Array of `string` |
+| `title` | `string` | Yes | - |
+| `updatedDate` | `string` | No | - |
+
+### ContentCardProps
+
+```tsx
+type ContentCardProps = {
+  formatDate?: (date: string, lang: string) => string
+  getDictValue?: (dict: Record<string, unknown>, path: string) => string
+  href: string
+  lang?: string
+  post: ContentCardPost
+  readMoreLabel?: string
+  showBadge?: boolean
+  showDate?: boolean
+  showReadMore?: boolean
+  updatedLabel?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `formatDate` | `(date: string, lang: string) =&gt; string` | No | Callback: `(date: string, lang: string) => string` |
+| `getDictValue` | `(dict: Record&lt;string, unknown&gt;, path: string) =&gt; string` | No | Callback: `(dict: Record<string, unknown>, path: string) => string` |
+| `href` | `string` | Yes | - |
+| `lang` | `string` | No | - |
+| `post` | `ContentCardPost` | Yes | `ContentCardPost` object |
+| `readMoreLabel` | `string` | No | - |
+| `showBadge` | `boolean` | No | `true` or `false` |
+| `showDate` | `boolean` | No | `true` or `false` |
+| `showReadMore` | `boolean` | No | `true` or `false` |
+| `updatedLabel` | `string` | No | - |
+

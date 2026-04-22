@@ -1,0 +1,75 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './learning-objectives.stories'
+
+<Meta of={Stories} />
+
+# Learning Objectives
+
+Lists learning goals for educational content.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/learning-objectives.json
+```
+
+## Import
+
+```tsx
+import { LearningObjectives, Prerequisites, Summary } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<LearningObjectives
+  objectives={objectives}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `estimatedTime` | `string` | No | - |
+| `objectives` | `string[]` | Yes | Array of `string` |
+| `title` | `string` | No | - |
+
+## Type Definitions
+
+### PrerequisitesProps
+
+```tsx
+type PrerequisitesProps = {
+  items: string[]
+  level?: "advanced" | "beginner" | "intermediate"
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `items` | `string[]` | Yes | Array of `string` |
+| `level` | `"advanced" \| "beginner" \| "intermediate"` | No | `advanced`, `beginner`, `intermediate` |
+| `title` | `string` | No | - |
+
+### SummaryProps
+
+```tsx
+type SummaryProps = {
+  keyTakeaways?: string[]
+  title?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `keyTakeaways` | `string[]` | No | Array of `string` |
+| `title` | `string` | No | - |
+

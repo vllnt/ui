@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './table-of-contents.stories'
+
+<Meta of={Stories} />
+
+# Table Of Contents
+
+Auto-generated table of contents from page headings.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/table-of-contents.json
+```
+
+## Import
+
+```tsx
+import { TableOfContents } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TableOfContents
+  sections={sections}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `sections` | `{ id: string; title: string }[]` | Yes | Array of `{ id: string; title: string }` |
+

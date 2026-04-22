@@ -1,0 +1,56 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './menubar.stories'
+
+<Meta of={Stories} />
+
+# Menubar
+
+Horizontal menu bar with dropdown menus.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/menubar.json
+```
+
+## Import
+
+```tsx
+import {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarGroup,
+  MenubarItem,
+  MenubarLabel,
+  MenubarMenu,
+  MenubarPortal,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Menubar>
+  <Menubar.displayName />
+</Menubar>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+### Menubar.displayName
+
