@@ -136,7 +136,14 @@ function renderFooter(footerLabel?: string): React.ReactElement {
   }
   return h(
     "div",
-    { style: { alignItems: "center", display: "flex", justifyContent: "flex-end", width: "100%" } },
+    {
+      style: {
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "flex-end",
+        width: "100%",
+      },
+    },
     renderFooterLabel(footerLabel),
   );
 }
