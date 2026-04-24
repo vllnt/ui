@@ -12,6 +12,10 @@ const options = [
 ];
 
 const meta = {
+  args: {
+    options: options,
+    placeholder: "Select frameworks",
+  },
   component: MultiSelect,
   title: "Form/MultiSelect",
 } satisfies Meta<typeof MultiSelect>;
@@ -19,28 +23,24 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    options,
-    placeholder: "Select frameworks",
-  },
-};
+export const Default: Story = {};
 
 export const Searchable: Story = {
   args: {
-    options,
-    placeholder: "Select frameworks",
     searchable: true,
   },
 };
 
 export const Controlled: Story = {
-  render: () => {
+  args: {
+    searchable: true,
+  },
+  render: (args) => {
     const [value, setValue] = React.useState(["react", "vue"]);
 
     return (
       <div className="w-full max-w-sm">
-        <MultiSelect onValueChange={setValue} options={options} searchable value={value} />
+        <MultiSelect {...args} onValueChange={setValue} value={value} />
       </div>
     );
   },
