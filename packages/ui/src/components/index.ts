@@ -338,19 +338,6 @@ export { CodeBlock } from "./code-block";
 export { MDXContent } from "./mdx-content";
 
 // Layout components
-export { CanvasShell, type CanvasShellProps } from "./canvas-shell";
-export {
-  CanvasView,
-  type CanvasViewHandle,
-  type CanvasViewport,
-  type CanvasViewProps,
-} from "./canvas-view";
-export { LeftRail, type LeftRailProps } from "./left-rail";
-export {
-  type MiniMapMarker,
-  MiniMapPanel,
-  type MiniMapPanelProps,
-} from "./mini-map-panel";
 export {
   CanvasShell,
   type CanvasShellInsets,
