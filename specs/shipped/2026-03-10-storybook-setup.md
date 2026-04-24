@@ -154,7 +154,7 @@ EC6. "use client" components: Storybook runs client-side, no SSR issues
 
 ### Out of Scope
 
-- Storybook deployment (storybook.vllnt.com) — Phase 3
+- Storybook deployment (storybook.vllnt.ai) — Phase 3
 - Chromatic visual testing — Phase 4
 - Registry iframe embedding — Phase 5
 - Storybook composition for consumers — Phase 6

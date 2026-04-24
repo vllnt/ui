@@ -1,0 +1,77 @@
+name: Bug report
+description: Report a broken behavior in @vllnt/ui
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. The more reproducible this is, the faster we can fix it.
+
+  - type: input
+    id: version
+    attributes:
+      label: "@vllnt/ui version"
+      description: Output of `pnpm why @vllnt/ui` or the version in your lockfile.
+      placeholder: "0.2.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Next.js (app router)
+        - Next.js (pages router)
+        - Vite + React
+        - Remix
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal repo / code sandbox / stackblitz link, or copy-pasteable snippet.
+      placeholder: |
+        https://stackblitz.com/edit/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include console errors or screenshots if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: env-details
+    attributes:
+      label: System details
+      description: OS, browser, Node/pnpm versions.
+      placeholder: |
+        - OS: macOS 14.5
+        - Browser: Chrome 125
+        - Node: 22.x
+        - pnpm: 9.x
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues before filing.
+          required: true
+        - label: I am on the latest published version.
+          required: false

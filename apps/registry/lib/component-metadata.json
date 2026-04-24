@@ -12,6 +12,62 @@
     ],
     "title": "Accordion"
   },
+  "activity-heatmap": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Contribution-style grid for visualizing operational activity over time.",
+    "name": "activity-heatmap",
+    "stories": [],
+    "title": "Activity Heatmap"
+  },
+  "activity-log": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Paginated activity feed for audit history and analytics changes.",
+    "name": "activity-log",
+    "stories": [],
+    "title": "Activity Log"
+  },
+  "ai-chat-input": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+    "name": "ai-chat-input",
+    "stories": [],
+    "title": "AI Chat Input"
+  },
+  "ai-message-bubble": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+    "name": "ai-message-bubble",
+    "stories": [],
+    "title": "AI Message Bubble"
+  },
+  "ai-source-citation": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+    "name": "ai-source-citation",
+    "stories": [],
+    "title": "AI Source Citation"
+  },
+  "ai-streaming-text": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+    "name": "ai-streaming-text",
+    "stories": [],
+    "title": "AI Streaming Text"
+  },
+  "ai-tool-call-display": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+    "name": "ai-tool-call-display",
+    "stories": [],
+    "title": "AI Tool Call Display"
+  },
   "alert": {
     "category": "data",
     "defaultStoryId": "data-alert--default",
@@ -55,6 +111,22 @@
     ],
     "title": "Anchor Port"
   },
+  "animated-text": {
+    "category": "utility",
+    "defaultStoryId": "",
+    "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
+    "name": "animated-text",
+    "stories": [],
+    "title": "Animated Text"
+  },
+  "annotation": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Inline highlight with an attached contextual note.",
+    "name": "annotation",
+    "stories": [],
+    "title": "Annotation"
+  },
   "area-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -88,6 +160,14 @@
       }
     ],
     "title": "Avatar"
+  },
+  "avatar-group": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+    "name": "avatar-group",
+    "stories": [],
+    "title": "Avatar Group"
   },
   "badge": {
     "category": "core",
@@ -134,6 +214,14 @@
       }
     ],
     "title": "Blog Card"
+  },
+  "border-beam": {
+    "category": "utility",
+    "defaultStoryId": "",
+    "description": "Animated accent beam that travels around the border of a highlighted surface.",
+    "name": "border-beam",
+    "stories": [],
+    "title": "Border Beam"
   },
   "breadcrumb": {
     "category": "navigation",
@@ -218,6 +306,14 @@
       }
     ],
     "title": "Callout"
+  },
+  "candlestick-chart": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "OHLC financial chart for session-by-session price action.",
+    "name": "candlestick-chart",
+    "stories": [],
+    "title": "Candlestick Chart"
   },
   "card": {
     "category": "content",
@@ -323,6 +419,14 @@
     ],
     "title": "Collapsible"
   },
+  "combobox": {
+    "category": "form",
+    "defaultStoryId": "",
+    "description": "Searchable select input for choosing from a list of options.",
+    "name": "combobox",
+    "stories": [],
+    "title": "Combobox"
+  },
   "command": {
     "category": "overlay",
     "defaultStoryId": "overlay-command--default",
@@ -400,6 +504,46 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "countdown-timer": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+    "name": "countdown-timer",
+    "stories": [],
+    "title": "Countdown Timer"
+  },
+  "credit-badge": {
+    "category": "content",
+    "defaultStoryId": "",
+    "description": "Balance status pill for credits, wallet states, and billing health.",
+    "name": "credit-badge",
+    "stories": [],
+    "title": "Credit Badge"
+  },
+  "data-list": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "name": "data-list",
+    "stories": [],
+    "title": "Data List"
+  },
+  "data-table": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "name": "data-table",
+    "stories": [],
+    "title": "Data Table"
+  },
+  "date-picker": {
+    "category": "form",
+    "defaultStoryId": "",
+    "description": "Single-date picker built with the shared calendar and popover primitives.",
+    "name": "date-picker",
+    "stories": [],
+    "title": "Date Picker"
   },
   "dialog": {
     "category": "overlay",
@@ -479,6 +623,14 @@
     ],
     "title": "FAQ"
   },
+  "file-upload": {
+    "category": "form",
+    "defaultStoryId": "",
+    "description": "Dropzone-style file picker with previews for selected files.",
+    "name": "file-upload",
+    "stories": [],
+    "title": "File Upload"
+  },
   "filter-bar": {
     "category": "form",
     "defaultStoryId": "form-filterbar--default",
@@ -491,6 +643,14 @@
       }
     ],
     "title": "Filter Bar"
+  },
+  "flashcard": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Study card for active recall with prompt and answer states.",
+    "name": "flashcard",
+    "stories": [],
+    "title": "Flashcard"
   },
   "floating-action-button": {
     "category": "utility",
@@ -656,6 +816,30 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "live-feed": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+    "name": "live-feed",
+    "stories": [],
+    "title": "Live Feed"
+  },
+  "market-treemap": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+    "name": "market-treemap",
+    "stories": [],
+    "title": "Market Treemap"
+  },
+  "marquee": {
+    "category": "utility",
+    "defaultStoryId": "",
+    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "name": "marquee",
+    "stories": [],
+    "title": "Marquee"
+  },
   "mdx-content": {
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
@@ -681,6 +865,14 @@
       }
     ],
     "title": "Menubar"
+  },
+  "metric-gauge": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Real-time arc and dial display for monitored percentages and utilization.",
+    "name": "metric-gauge",
+    "stories": [],
+    "title": "Metric Gauge"
   },
   "model-selector": {
     "category": "form",
@@ -721,6 +913,22 @@
     ],
     "title": "Navigation Menu"
   },
+  "number-input": {
+    "category": "form",
+    "defaultStoryId": "",
+    "description": "Numeric input with increment and decrement controls.",
+    "name": "number-input",
+    "stories": [],
+    "title": "Number Input"
+  },
+  "number-ticker": {
+    "category": "utility",
+    "defaultStoryId": "",
+    "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
+    "name": "number-ticker",
+    "stories": [],
+    "title": "Number Ticker"
+  },
   "object-card": {
     "category": "content",
     "defaultStoryId": "canvas-objectcard--default",
@@ -747,6 +955,14 @@
     ],
     "title": "Object Handle"
   },
+  "order-book": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+    "name": "order-book",
+    "stories": [],
+    "title": "Order Book"
+  },
   "pagination": {
     "category": "navigation",
     "defaultStoryId": "navigation-pagination--default",
@@ -759,6 +975,22 @@
       }
     ],
     "title": "Pagination"
+  },
+  "password-input": {
+    "category": "form",
+    "defaultStoryId": "",
+    "description": "Password field with a built-in visibility toggle.",
+    "name": "password-input",
+    "stories": [],
+    "title": "Password Input"
+  },
+  "plan-badge": {
+    "category": "content",
+    "defaultStoryId": "",
+    "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+    "name": "plan-badge",
+    "stories": [],
+    "title": "Plan Badge"
   },
   "popover": {
     "category": "overlay",
@@ -851,6 +1083,14 @@
     ],
     "title": "Radio Group"
   },
+  "rating": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Inline star rating for lightweight learner feedback.",
+    "name": "rating",
+    "stories": [],
+    "title": "Rating"
+  },
   "resizable": {
     "category": "utility",
     "defaultStoryId": "utility-resizable--default",
@@ -863,6 +1103,22 @@
       }
     ],
     "title": "Resizable"
+  },
+  "role-badge": {
+    "category": "content",
+    "defaultStoryId": "",
+    "description": "Account role indicator for owners, admins, members, and billing contacts.",
+    "name": "role-badge",
+    "stories": [],
+    "title": "Role Badge"
+  },
+  "scope-selector": {
+    "category": "form",
+    "defaultStoryId": "",
+    "description": "Multi-level scope picker for nested environments, teams, and targets.",
+    "name": "scope-selector",
+    "stories": [],
+    "title": "Scope Selector"
   },
   "scroll-area": {
     "category": "utility",
@@ -928,6 +1184,14 @@
       }
     ],
     "title": "Separator"
+  },
+  "severity-badge": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+    "name": "severity-badge",
+    "stories": [],
+    "title": "Severity Badge"
   },
   "share-section": {
     "category": "content",
@@ -1041,6 +1305,14 @@
     ],
     "title": "Slideshow"
   },
+  "sparkline-grid": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+    "name": "sparkline-grid",
+    "stories": [],
+    "title": "Sparkline Grid"
+  },
   "spinner": {
     "category": "utility",
     "defaultStoryId": "utility-spinner--default",
@@ -1053,6 +1325,30 @@
       }
     ],
     "title": "Spinner"
+  },
+  "stat-card": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Headline KPI card for metrics, trends, and supporting context.",
+    "name": "stat-card",
+    "stories": [],
+    "title": "Stat Card"
+  },
+  "status-board": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+    "name": "status-board",
+    "stories": [],
+    "title": "Status Board"
+  },
+  "status-indicator": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Compact status label with tone, variant, and activity dot options.",
+    "name": "status-indicator",
+    "stories": [],
+    "title": "Status Indicator"
   },
   "step-by-step": {
     "category": "learning",
@@ -1079,6 +1375,22 @@
       }
     ],
     "title": "Step Navigation"
+  },
+  "stepper": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Sequenced steps with complete, current, and upcoming states.",
+    "name": "stepper",
+    "stories": [],
+    "title": "Stepper"
+  },
+  "subscription-card": {
+    "category": "content",
+    "defaultStoryId": "",
+    "description": "Subscription status and management card for plan, renewal, and usage details.",
+    "name": "subscription-card",
+    "stories": [],
+    "title": "Subscription Card"
   },
   "table": {
     "category": "data",
@@ -1197,6 +1509,14 @@
     ],
     "title": "Thinking Block"
   },
+  "ticker-tape": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Marquee-style scrolling symbol tape with price and change badges.",
+    "name": "ticker-tape",
+    "stories": [],
+    "title": "Ticker Tape"
+  },
   "tldr-section": {
     "category": "content",
     "defaultStoryId": "content-tldrsection--default",
@@ -1282,6 +1602,14 @@
     ],
     "title": "Tooltip"
   },
+  "tour": {
+    "category": "learning",
+    "defaultStoryId": "",
+    "description": "Guided onboarding flow for introducing content or interface patterns.",
+    "name": "tour",
+    "stories": [],
+    "title": "Tour"
+  },
   "tutorial-card": {
     "category": "learning",
     "defaultStoryId": "learning-tutorialcard--default",
@@ -1347,6 +1675,14 @@
     ],
     "title": "Tutorial MDX"
   },
+  "usage-breakdown": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Ranked resource consumption list with relative share and trend cues.",
+    "name": "usage-breakdown",
+    "stories": [],
+    "title": "Usage Breakdown"
+  },
   "video-embed": {
     "category": "content",
     "defaultStoryId": "content-videoembed--default",
@@ -1372,5 +1708,29 @@
       }
     ],
     "title": "View Switcher"
+  },
+  "wallet-card": {
+    "category": "content",
+    "defaultStoryId": "",
+    "description": "Credit balance display card for available, pending, and refresh details.",
+    "name": "wallet-card",
+    "stories": [],
+    "title": "Wallet Card"
+  },
+  "watchlist": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+    "name": "watchlist",
+    "stories": [],
+    "title": "Watchlist"
+  },
+  "world-clock-bar": {
+    "category": "data",
+    "defaultStoryId": "",
+    "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+    "name": "world-clock-bar",
+    "stories": [],
+    "title": "World Clock Bar"
   }
 }

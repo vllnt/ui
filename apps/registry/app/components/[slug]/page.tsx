@@ -148,7 +148,7 @@ export default async function ComponentPage(props: Props) {
     // Source file not found — skip code section
   }
 
-  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
+  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/${component.name}.json`;
 
   const sections = [
     { id: "installation", title: "Installation" },
