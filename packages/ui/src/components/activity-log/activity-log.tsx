@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useMemo, useState } from "react";
 
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
