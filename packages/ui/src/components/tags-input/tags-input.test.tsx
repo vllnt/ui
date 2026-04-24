@@ -72,7 +72,7 @@ describe("TagsInput", () => {
     expect(screen.getByText("React")).toBeInTheDocument();
   });
 
-  it("renders tags as a list with accessible remove buttons", () => {
+  it("renders tags as bordered list items with accessible remove buttons", () => {
     render(
       <TagsInput aria-label="A11y tags" defaultValue={["React", "Vue"]} />,
     );
@@ -82,6 +82,8 @@ describe("TagsInput", () => {
 
     expect(list).toBeInTheDocument();
     expect(items).toHaveLength(2);
+    expect(items[0]).toHaveClass("rounded-md", "border", "bg-muted");
+    expect(items[0]).not.toHaveClass("rounded-full");
     expect(
       screen.getByRole("button", { name: "Remove React" }),
     ).toBeInTheDocument();

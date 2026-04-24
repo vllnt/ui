@@ -5,7 +5,6 @@ import * as React from "react";
 import { X } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
 
 function normalizeTag(tag: string) {
   return tag.trim();
@@ -137,25 +136,23 @@ function TagList({ disabled, onRemove, tags }: TagListProps) {
   return (
     <ul className="flex flex-wrap items-center gap-2">
       {tags.map((tag) => (
-        <li key={tag}>
-          <Badge
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-sm"
-            variant="secondary"
+        <li
+          className="flex items-center gap-1 rounded-md border bg-muted px-2 py-1 text-sm text-foreground"
+          key={tag}
+        >
+          <span>{tag}</span>
+          <button
+            aria-label={`Remove ${tag}`}
+            className="rounded-sm text-muted-foreground outline-none ring-offset-background transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            disabled={disabled}
+            onClick={(event) => {
+              event.stopPropagation();
+              onRemove(tag);
+            }}
+            type="button"
           >
-            <span>{tag}</span>
-            <button
-              aria-label={`Remove ${tag}`}
-              className="rounded-sm outline-none ring-offset-background transition-opacity hover:opacity-70 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              disabled={disabled}
-              onClick={(event) => {
-                event.stopPropagation();
-                onRemove(tag);
-              }}
-              type="button"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </Badge>
+            <X className="h-3.5 w-3.5" />
+          </button>
         </li>
       ))}
     </ul>
