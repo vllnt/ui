@@ -693,6 +693,23 @@ export {
   type UseFlowDiagramReturn,
 } from "./flow-diagram";
 
+// Canvas/Object components
+export { AnchorPort, type AnchorPortProps } from "./anchor-port";
+export {
+  ConnectorEdge,
+  type ConnectorEdgePoint,
+  type ConnectorEdgeProps,
+} from "./connector-edge";
+export { EdgeLabel, type EdgeLabelProps } from "./edge-label";
+export { GroupHull, type GroupHullProps } from "./group-hull";
+export {
+  ObjectCard,
+  type ObjectCardAction,
+  type ObjectCardMetric,
+  type ObjectCardProps,
+} from "./object-card";
+export { ObjectHandle, type ObjectHandleProps } from "./object-handle";
+
 // AI/Chat components
 export { InlineInput, type InlineInputProps } from "./inline-input";
 export {

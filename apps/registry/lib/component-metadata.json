@@ -161,6 +161,19 @@
     ],
     "title": "Alert Dialog"
   },
+  "anchor-port": {
+    "category": "utility",
+    "defaultStoryId": "canvas-anchorport--default",
+    "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+    "name": "anchor-port",
+    "stories": [
+      {
+        "id": "canvas-anchorport--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Anchor Port"
+  },
   "animated-text": {
     "category": "utility",
     "defaultStoryId": "utility-animatedtext--terminal",
@@ -610,6 +623,19 @@
     ],
     "title": "Completion Dialog"
   },
+  "connector-edge": {
+    "category": "utility",
+    "defaultStoryId": "canvas-connectoredge--default",
+    "description": "Curved edge between canvas objects with optional inline label state.",
+    "name": "connector-edge",
+    "stories": [
+      {
+        "id": "canvas-connectoredge--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Connector Edge"
+  },
   "content-intro": {
     "category": "content",
     "defaultStoryId": "content-contentintro--default",
@@ -756,6 +782,19 @@
     ],
     "title": "Dropdown Menu"
   },
+  "edge-label": {
+    "category": "overlay",
+    "defaultStoryId": "canvas-edgelabel--default",
+    "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+    "name": "edge-label",
+    "stories": [
+      {
+        "id": "canvas-edgelabel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Edge Label"
+  },
   "exercise": {
     "category": "learning",
     "defaultStoryId": "learning-exercise--default",
@@ -863,6 +902,19 @@
       }
     ],
     "title": "Form"
+  },
+  "group-hull": {
+    "category": "utility",
+    "defaultStoryId": "canvas-grouphull--default",
+    "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+    "name": "group-hull",
+    "stories": [
+      {
+        "id": "canvas-grouphull--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Group Hull"
   },
   "horizontal-scroll-row": {
     "category": "navigation",
@@ -1059,6 +1111,18 @@
         "name": "Default"
       },
       {
+        "id": "utility-marquee--slow",
+        "name": "Slow"
+      },
+      {
+        "id": "utility-marquee--fast",
+        "name": "Fast"
+      },
+      {
+        "id": "utility-marquee--custom-duration",
+        "name": "Custom Duration"
+      },
+      {
         "id": "utility-marquee--reverse",
         "name": "Reverse"
       }
@@ -1197,6 +1261,32 @@
       }
     ],
     "title": "Number Ticker"
+  },
+  "object-card": {
+    "category": "content",
+    "defaultStoryId": "canvas-objectcard--default",
+    "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+    "name": "object-card",
+    "stories": [
+      {
+        "id": "canvas-objectcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Object Card"
+  },
+  "object-handle": {
+    "category": "utility",
+    "defaultStoryId": "canvas-objecthandle--default",
+    "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+    "name": "object-handle",
+    "stories": [
+      {
+        "id": "canvas-objecthandle--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Object Handle"
   },
   "order-book": {
     "category": "data",

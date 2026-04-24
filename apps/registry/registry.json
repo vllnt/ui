@@ -163,6 +163,21 @@
       "category": "overlay"
     },
     {
+      "name": "anchor-port",
+      "type": "registry:component",
+      "title": "Anchor Port",
+      "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+      "files": [
+        {
+          "path": "registry/default/anchor-port/anchor-port.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "animated-text",
       "type": "registry:component",
       "title": "Animated Text",
@@ -568,6 +583,21 @@
       "category": "learning"
     },
     {
+      "name": "connector-edge",
+      "type": "registry:component",
+      "title": "Connector Edge",
+      "description": "Curved edge between canvas objects with optional inline label state.",
+      "files": [
+        {
+          "path": "registry/default/connector-edge/connector-edge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "content-intro",
       "type": "registry:component",
       "title": "Content Intro",
@@ -720,6 +750,21 @@
       "category": "overlay"
     },
     {
+      "name": "edge-label",
+      "type": "registry:component",
+      "title": "Edge Label",
+      "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+      "files": [
+        {
+          "path": "registry/default/edge-label/edge-label.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "overlay"
+    },
+    {
       "name": "exercise",
       "type": "registry:component",
       "title": "Exercise",
@@ -841,6 +886,21 @@
       ],
       "dependencies": [],
       "category": "form"
+    },
+    {
+      "name": "group-hull",
+      "type": "registry:component",
+      "title": "Group Hull",
+      "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+      "files": [
+        {
+          "path": "registry/default/group-hull/group-hull.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "horizontal-scroll-row",
@@ -1174,6 +1234,36 @@
       "files": [
         {
           "path": "registry/default/number-ticker/number-ticker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "object-card",
+      "type": "registry:component",
+      "title": "Object Card",
+      "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+      "files": [
+        {
+          "path": "registry/default/object-card/object-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "object-handle",
+      "type": "registry:component",
+      "title": "Object Handle",
+      "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+      "files": [
+        {
+          "path": "registry/default/object-handle/object-handle.tsx",
           "type": "registry:component"
         }
       ],
