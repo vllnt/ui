@@ -14,58 +14,121 @@
   },
   "activity-heatmap": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-activityheatmap--default",
     "description": "Contribution-style grid for visualizing operational activity over time.",
     "name": "activity-heatmap",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-activityheatmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-activityheatmap--two-weeks",
+        "name": "Two Weeks"
+      }
+    ],
     "title": "Activity Heatmap"
   },
   "activity-log": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "analytics-activitylog--default",
     "description": "Paginated activity feed for audit history and analytics changes.",
     "name": "activity-log",
-    "stories": [],
+    "stories": [
+      {
+        "id": "analytics-activitylog--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-activitylog--empty",
+        "name": "Empty"
+      }
+    ],
     "title": "Activity Log"
   },
   "ai-chat-input": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "ai-chatinput--default",
     "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
     "name": "ai-chat-input",
-    "stories": [],
+    "stories": [
+      {
+        "id": "ai-chatinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chatinput--submitting",
+        "name": "Submitting"
+      }
+    ],
     "title": "AI Chat Input"
   },
   "ai-message-bubble": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "ai-messagebubble--default",
     "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
     "name": "ai-message-bubble",
-    "stories": [],
+    "stories": [
+      {
+        "id": "ai-messagebubble--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-messagebubble--user",
+        "name": "User"
+      },
+      {
+        "id": "ai-messagebubble--tool",
+        "name": "Tool"
+      }
+    ],
     "title": "AI Message Bubble"
   },
   "ai-source-citation": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "ai-sourcecitation--default",
     "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
     "name": "ai-source-citation",
-    "stories": [],
+    "stories": [
+      {
+        "id": "ai-sourcecitation--default",
+        "name": "Default"
+      }
+    ],
     "title": "AI Source Citation"
   },
   "ai-streaming-text": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "ai-streamingtext--default",
     "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
     "name": "ai-streaming-text",
-    "stories": [],
+    "stories": [
+      {
+        "id": "ai-streamingtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-streamingtext--streaming",
+        "name": "Streaming"
+      }
+    ],
     "title": "AI Streaming Text"
   },
   "ai-tool-call-display": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "ai-toolcalldisplay--default",
     "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
     "name": "ai-tool-call-display",
-    "stories": [],
+    "stories": [
+      {
+        "id": "ai-toolcalldisplay--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-toolcalldisplay--error-state",
+        "name": "Error State"
+      }
+    ],
     "title": "AI Tool Call Display"
   },
   "alert": {
@@ -113,18 +176,76 @@
   },
   "animated-text": {
     "category": "utility",
-    "defaultStoryId": "",
+    "defaultStoryId": "utility-animatedtext--terminal",
     "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
     "name": "animated-text",
-    "stories": [],
+    "stories": [
+      {
+        "id": "utility-animatedtext--terminal",
+        "name": "Terminal"
+      },
+      {
+        "id": "utility-animatedtext--matrix",
+        "name": "Matrix"
+      },
+      {
+        "id": "utility-animatedtext--matrix-terminal-grid",
+        "name": "Matrix Terminal Grid"
+      },
+      {
+        "id": "utility-animatedtext--decipher",
+        "name": "Decipher"
+      },
+      {
+        "id": "utility-animatedtext--decipher-reverse",
+        "name": "Decipher Reverse"
+      },
+      {
+        "id": "utility-animatedtext--decipher-random",
+        "name": "Decipher Random"
+      },
+      {
+        "id": "utility-animatedtext--decipher-ascii-digits",
+        "name": "Decipher Ascii Digits"
+      },
+      {
+        "id": "utility-animatedtext--decipher-terminal-boxes",
+        "name": "Decipher Terminal Boxes"
+      },
+      {
+        "id": "utility-animatedtext--decipher-block-noise",
+        "name": "Decipher Block Noise"
+      },
+      {
+        "id": "utility-animatedtext--decipher-unicode-sigils",
+        "name": "Decipher Unicode Sigils"
+      },
+      {
+        "id": "utility-animatedtext--typewriter",
+        "name": "Typewriter"
+      },
+      {
+        "id": "utility-animatedtext--reveal",
+        "name": "Reveal"
+      }
+    ],
     "title": "Animated Text"
   },
   "annotation": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "learning-annotation--default",
     "description": "Inline highlight with an attached contextual note.",
     "name": "annotation",
-    "stories": [],
+    "stories": [
+      {
+        "id": "learning-annotation--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-annotation--highlight-only",
+        "name": "Highlight Only"
+      }
+    ],
     "title": "Annotation"
   },
   "area-chart": {
@@ -163,10 +284,19 @@
   },
   "avatar-group": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-avatargroup--default",
     "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
     "name": "avatar-group",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-avatargroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-avatargroup--sizes",
+        "name": "Sizes"
+      }
+    ],
     "title": "Avatar Group"
   },
   "badge": {
@@ -217,10 +347,19 @@
   },
   "border-beam": {
     "category": "utility",
-    "defaultStoryId": "",
+    "defaultStoryId": "utility-borderbeam--default",
     "description": "Animated accent beam that travels around the border of a highlighted surface.",
     "name": "border-beam",
-    "stories": [],
+    "stories": [
+      {
+        "id": "utility-borderbeam--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-borderbeam--reverse",
+        "name": "Reverse"
+      }
+    ],
     "title": "Border Beam"
   },
   "breadcrumb": {
@@ -309,10 +448,19 @@
   },
   "candlestick-chart": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-candlestickchart--default",
     "description": "OHLC financial chart for session-by-session price action.",
     "name": "candlestick-chart",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-candlestickchart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-candlestickchart--compact",
+        "name": "Compact"
+      }
+    ],
     "title": "Candlestick Chart"
   },
   "card": {
@@ -421,10 +569,19 @@
   },
   "combobox": {
     "category": "form",
-    "defaultStoryId": "",
+    "defaultStoryId": "form-combobox--default",
     "description": "Searchable select input for choosing from a list of options.",
     "name": "combobox",
-    "stories": [],
+    "stories": [
+      {
+        "id": "form-combobox--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-combobox--with-value",
+        "name": "With Value"
+      }
+    ],
     "title": "Combobox"
   },
   "command": {
@@ -507,42 +664,83 @@
   },
   "countdown-timer": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-countdowntimer--default",
     "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
     "name": "countdown-timer",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-countdowntimer--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-countdowntimer--breached",
+        "name": "Breached"
+      }
+    ],
     "title": "Countdown Timer"
   },
   "credit-badge": {
     "category": "content",
-    "defaultStoryId": "",
+    "defaultStoryId": "account-billing-creditbadge--default",
     "description": "Balance status pill for credits, wallet states, and billing health.",
     "name": "credit-badge",
-    "stories": [],
+    "stories": [
+      {
+        "id": "account-billing-creditbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-creditbadge--states",
+        "name": "States"
+      }
+    ],
     "title": "Credit Badge"
   },
   "data-list": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-datalist--default",
     "description": "Semantic key-value metadata layout for displaying labels with values.",
     "name": "data-list",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-datalist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-datalist--compact",
+        "name": "Compact"
+      }
+    ],
     "title": "Data List"
   },
   "data-table": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-datatable--default",
     "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
     "name": "data-table",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-datatable--default",
+        "name": "Default"
+      }
+    ],
     "title": "Data Table"
   },
   "date-picker": {
     "category": "form",
-    "defaultStoryId": "",
+    "defaultStoryId": "form-datepicker--default",
     "description": "Single-date picker built with the shared calendar and popover primitives.",
     "name": "date-picker",
-    "stories": [],
+    "stories": [
+      {
+        "id": "form-datepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datepicker--with-value",
+        "name": "With Value"
+      }
+    ],
     "title": "Date Picker"
   },
   "dialog": {
@@ -625,10 +823,15 @@
   },
   "file-upload": {
     "category": "form",
-    "defaultStoryId": "",
+    "defaultStoryId": "form-fileupload--default",
     "description": "Dropzone-style file picker with previews for selected files.",
     "name": "file-upload",
-    "stories": [],
+    "stories": [
+      {
+        "id": "form-fileupload--default",
+        "name": "Default"
+      }
+    ],
     "title": "File Upload"
   },
   "filter-bar": {
@@ -646,10 +849,15 @@
   },
   "flashcard": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "learning-flashcard--default",
     "description": "Study card for active recall with prompt and answer states.",
     "name": "flashcard",
-    "stories": [],
+    "stories": [
+      {
+        "id": "learning-flashcard--default",
+        "name": "Default"
+      }
+    ],
     "title": "Flashcard"
   },
   "floating-action-button": {
@@ -818,26 +1026,61 @@
   },
   "live-feed": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-livefeed--default",
     "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
     "name": "live-feed",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-livefeed--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-livefeed--empty",
+        "name": "Empty"
+      }
+    ],
     "title": "Live Feed"
   },
   "market-treemap": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-markettreemap--default",
     "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
     "name": "market-treemap",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-markettreemap--default",
+        "name": "Default"
+      }
+    ],
     "title": "Market Treemap"
   },
   "marquee": {
     "category": "utility",
-    "defaultStoryId": "",
+    "defaultStoryId": "utility-marquee--default",
     "description": "Continuously scrolling content lane for badges, logos, and status chips.",
     "name": "marquee",
-    "stories": [],
+    "stories": [
+      {
+        "id": "utility-marquee--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-marquee--slow",
+        "name": "Slow"
+      },
+      {
+        "id": "utility-marquee--fast",
+        "name": "Fast"
+      },
+      {
+        "id": "utility-marquee--custom-duration",
+        "name": "Custom Duration"
+      },
+      {
+        "id": "utility-marquee--reverse",
+        "name": "Reverse"
+      }
+    ],
     "title": "Marquee"
   },
   "mdx-content": {
@@ -868,10 +1111,19 @@
   },
   "metric-gauge": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-metricgauge--default",
     "description": "Real-time arc and dial display for monitored percentages and utilization.",
     "name": "metric-gauge",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-metricgauge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-metricgauge--critical",
+        "name": "Critical"
+      }
+    ],
     "title": "Metric Gauge"
   },
   "model-selector": {
@@ -915,18 +1167,32 @@
   },
   "number-input": {
     "category": "form",
-    "defaultStoryId": "",
+    "defaultStoryId": "form-numberinput--default",
     "description": "Numeric input with increment and decrement controls.",
     "name": "number-input",
-    "stories": [],
+    "stories": [
+      {
+        "id": "form-numberinput--default",
+        "name": "Default"
+      }
+    ],
     "title": "Number Input"
   },
   "number-ticker": {
     "category": "utility",
-    "defaultStoryId": "",
+    "defaultStoryId": "utility-numberticker--default",
     "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
     "name": "number-ticker",
-    "stories": [],
+    "stories": [
+      {
+        "id": "utility-numberticker--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-numberticker--decimal-value",
+        "name": "Decimal Value"
+      }
+    ],
     "title": "Number Ticker"
   },
   "object-card": {
@@ -957,10 +1223,19 @@
   },
   "order-book": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-orderbook--default",
     "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
     "name": "order-book",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-orderbook--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-orderbook--tight-spread",
+        "name": "Tight Spread"
+      }
+    ],
     "title": "Order Book"
   },
   "pagination": {
@@ -978,18 +1253,36 @@
   },
   "password-input": {
     "category": "form",
-    "defaultStoryId": "",
+    "defaultStoryId": "form-passwordinput--default",
     "description": "Password field with a built-in visibility toggle.",
     "name": "password-input",
-    "stories": [],
+    "stories": [
+      {
+        "id": "form-passwordinput--default",
+        "name": "Default"
+      }
+    ],
     "title": "Password Input"
   },
   "plan-badge": {
     "category": "content",
-    "defaultStoryId": "",
+    "defaultStoryId": "account-billing-planbadge--default",
     "description": "Subscription tier indicator for pricing, billing, and account summaries.",
     "name": "plan-badge",
-    "stories": [],
+    "stories": [
+      {
+        "id": "account-billing-planbadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-planbadge--all-tiers",
+        "name": "All Tiers"
+      },
+      {
+        "id": "account-billing-planbadge--trial",
+        "name": "Trial"
+      }
+    ],
     "title": "Plan Badge"
   },
   "popover": {
@@ -1085,10 +1378,19 @@
   },
   "rating": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "learning-rating--default",
     "description": "Inline star rating for lightweight learner feedback.",
     "name": "rating",
-    "stories": [],
+    "stories": [
+      {
+        "id": "learning-rating--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-rating--read-only",
+        "name": "Read Only"
+      }
+    ],
     "title": "Rating"
   },
   "resizable": {
@@ -1106,18 +1408,36 @@
   },
   "role-badge": {
     "category": "content",
-    "defaultStoryId": "",
+    "defaultStoryId": "account-billing-rolebadge--default",
     "description": "Account role indicator for owners, admins, members, and billing contacts.",
     "name": "role-badge",
-    "stories": [],
+    "stories": [
+      {
+        "id": "account-billing-rolebadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-rolebadge--team-roles",
+        "name": "Team Roles"
+      }
+    ],
     "title": "Role Badge"
   },
   "scope-selector": {
     "category": "form",
-    "defaultStoryId": "",
+    "defaultStoryId": "analytics-scopeselector--default",
     "description": "Multi-level scope picker for nested environments, teams, and targets.",
     "name": "scope-selector",
-    "stories": [],
+    "stories": [
+      {
+        "id": "analytics-scopeselector--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-scopeselector--with-default-selection",
+        "name": "With Default Selection"
+      }
+    ],
     "title": "Scope Selector"
   },
   "scroll-area": {
@@ -1187,10 +1507,31 @@
   },
   "severity-badge": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-severitybadge--default",
     "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
     "name": "severity-badge",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-severitybadge--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-severitybadge--levels",
+        "name": "Levels"
+      },
+      {
+        "id": "data-severitybadge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "data-severitybadge--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "data-severitybadge--custom-label",
+        "name": "Custom Label"
+      }
+    ],
     "title": "Severity Badge"
   },
   "share-section": {
@@ -1307,10 +1648,19 @@
   },
   "sparkline-grid": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-sparklinegrid--default",
     "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
     "name": "sparkline-grid",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-sparklinegrid--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-sparklinegrid--four-columns",
+        "name": "Four Columns"
+      }
+    ],
     "title": "Sparkline Grid"
   },
   "spinner": {
@@ -1322,32 +1672,299 @@
       {
         "id": "utility-spinner--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-unicodespinner--all-animations",
+        "name": "All Animations"
+      },
+      {
+        "id": "utility-unicodespinner--arc",
+        "name": "Arc"
+      },
+      {
+        "id": "utility-unicodespinner--arrow",
+        "name": "Arrow"
+      },
+      {
+        "id": "utility-unicodespinner--balloon",
+        "name": "Balloon"
+      },
+      {
+        "id": "utility-unicodespinner--bounce",
+        "name": "Bounce"
+      },
+      {
+        "id": "utility-unicodespinner--braille",
+        "name": "Braille"
+      },
+      {
+        "id": "utility-unicodespinner--braillewave",
+        "name": "Braillewave"
+      },
+      {
+        "id": "utility-unicodespinner--breathe",
+        "name": "Breathe"
+      },
+      {
+        "id": "utility-unicodespinner--cascade",
+        "name": "Cascade"
+      },
+      {
+        "id": "utility-unicodespinner--checkerboard",
+        "name": "Checkerboard"
+      },
+      {
+        "id": "utility-unicodespinner--circle-halves",
+        "name": "Circle Halves"
+      },
+      {
+        "id": "utility-unicodespinner--circle-quarters",
+        "name": "Circle Quarters"
+      },
+      {
+        "id": "utility-unicodespinner--clock",
+        "name": "Clock"
+      },
+      {
+        "id": "utility-unicodespinner--columns",
+        "name": "Columns"
+      },
+      {
+        "id": "utility-unicodespinner--diagswipe",
+        "name": "Diagswipe"
+      },
+      {
+        "id": "utility-unicodespinner--dna",
+        "name": "Dna"
+      },
+      {
+        "id": "utility-unicodespinner--dots",
+        "name": "Dots"
+      },
+      {
+        "id": "utility-unicodespinner--dots-2",
+        "name": "Dots 2"
+      },
+      {
+        "id": "utility-unicodespinner--dots-3",
+        "name": "Dots 3"
+      },
+      {
+        "id": "utility-unicodespinner--dots-4",
+        "name": "Dots 4"
+      },
+      {
+        "id": "utility-unicodespinner--dots-5",
+        "name": "Dots 5"
+      },
+      {
+        "id": "utility-unicodespinner--dots-6",
+        "name": "Dots 6"
+      },
+      {
+        "id": "utility-unicodespinner--dots-7",
+        "name": "Dots 7"
+      },
+      {
+        "id": "utility-unicodespinner--dots-8",
+        "name": "Dots 8"
+      },
+      {
+        "id": "utility-unicodespinner--dots-9",
+        "name": "Dots 9"
+      },
+      {
+        "id": "utility-unicodespinner--dots-10",
+        "name": "Dots 10"
+      },
+      {
+        "id": "utility-unicodespinner--dots-11",
+        "name": "Dots 11"
+      },
+      {
+        "id": "utility-unicodespinner--dots-12",
+        "name": "Dots 12"
+      },
+      {
+        "id": "utility-unicodespinner--dots-13",
+        "name": "Dots 13"
+      },
+      {
+        "id": "utility-unicodespinner--dots-14",
+        "name": "Dots 14"
+      },
+      {
+        "id": "utility-unicodespinner--dots-circle",
+        "name": "Dots Circle"
+      },
+      {
+        "id": "utility-unicodespinner--double-arrow",
+        "name": "Double Arrow"
+      },
+      {
+        "id": "utility-unicodespinner--dqpb",
+        "name": "Dqpb"
+      },
+      {
+        "id": "utility-unicodespinner--earth",
+        "name": "Earth"
+      },
+      {
+        "id": "utility-unicodespinner--fillsweep",
+        "name": "Fillsweep"
+      },
+      {
+        "id": "utility-unicodespinner--grow-horizontal",
+        "name": "Grow Horizontal"
+      },
+      {
+        "id": "utility-unicodespinner--grow-vertical",
+        "name": "Grow Vertical"
+      },
+      {
+        "id": "utility-unicodespinner--hearts",
+        "name": "Hearts"
+      },
+      {
+        "id": "utility-unicodespinner--helix",
+        "name": "Helix"
+      },
+      {
+        "id": "utility-unicodespinner--moon",
+        "name": "Moon"
+      },
+      {
+        "id": "utility-unicodespinner--noise",
+        "name": "Noise"
+      },
+      {
+        "id": "utility-unicodespinner--orbit",
+        "name": "Orbit"
+      },
+      {
+        "id": "utility-unicodespinner--point",
+        "name": "Point"
+      },
+      {
+        "id": "utility-unicodespinner--pulse",
+        "name": "Pulse"
+      },
+      {
+        "id": "utility-unicodespinner--rain",
+        "name": "Rain"
+      },
+      {
+        "id": "utility-unicodespinner--rolling-line",
+        "name": "Rolling Line"
+      },
+      {
+        "id": "utility-unicodespinner--sand",
+        "name": "Sand"
+      },
+      {
+        "id": "utility-unicodespinner--scan",
+        "name": "Scan"
+      },
+      {
+        "id": "utility-unicodespinner--scanline",
+        "name": "Scanline"
+      },
+      {
+        "id": "utility-unicodespinner--simple-dots",
+        "name": "Simple Dots"
+      },
+      {
+        "id": "utility-unicodespinner--simple-dots-scrolling",
+        "name": "Simple Dots Scrolling"
+      },
+      {
+        "id": "utility-unicodespinner--snake",
+        "name": "Snake"
+      },
+      {
+        "id": "utility-unicodespinner--sparkle",
+        "name": "Sparkle"
+      },
+      {
+        "id": "utility-unicodespinner--speaker",
+        "name": "Speaker"
+      },
+      {
+        "id": "utility-unicodespinner--square-corners",
+        "name": "Square Corners"
+      },
+      {
+        "id": "utility-unicodespinner--toggle",
+        "name": "Toggle"
+      },
+      {
+        "id": "utility-unicodespinner--triangle",
+        "name": "Triangle"
+      },
+      {
+        "id": "utility-unicodespinner--wave",
+        "name": "Wave"
+      },
+      {
+        "id": "utility-unicodespinner--waverows",
+        "name": "Waverows"
+      },
+      {
+        "id": "utility-unicodespinner--weather",
+        "name": "Weather"
       }
     ],
     "title": "Spinner"
   },
   "stat-card": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-statcard--default",
     "description": "Headline KPI card for metrics, trends, and supporting context.",
     "name": "stat-card",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-statcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statcard--grid",
+        "name": "Grid"
+      }
+    ],
     "title": "Stat Card"
   },
   "status-board": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-statusboard--default",
     "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
     "name": "status-board",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-statusboard--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusboard--compact",
+        "name": "Compact"
+      }
+    ],
     "title": "Status Board"
   },
   "status-indicator": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-statusindicator--default",
     "description": "Compact status label with tone, variant, and activity dot options.",
     "name": "status-indicator",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-statusindicator--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-statusindicator--variants",
+        "name": "Variants"
+      }
+    ],
     "title": "Status Indicator"
   },
   "step-by-step": {
@@ -1378,18 +1995,36 @@
   },
   "stepper": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "learning-stepper--default",
     "description": "Sequenced steps with complete, current, and upcoming states.",
     "name": "stepper",
-    "stories": [],
+    "stories": [
+      {
+        "id": "learning-stepper--default",
+        "name": "Default"
+      },
+      {
+        "id": "learning-stepper--vertical",
+        "name": "Vertical"
+      }
+    ],
     "title": "Stepper"
   },
   "subscription-card": {
     "category": "content",
-    "defaultStoryId": "",
+    "defaultStoryId": "account-billing-subscriptioncard--default",
     "description": "Subscription status and management card for plan, renewal, and usage details.",
     "name": "subscription-card",
-    "stories": [],
+    "stories": [
+      {
+        "id": "account-billing-subscriptioncard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-subscriptioncard--trialing",
+        "name": "Trialing"
+      }
+    ],
     "title": "Subscription Card"
   },
   "table": {
@@ -1511,10 +2146,19 @@
   },
   "ticker-tape": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-tickertape--default",
     "description": "Marquee-style scrolling symbol tape with price and change badges.",
     "name": "ticker-tape",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-tickertape--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-tickertape--fast",
+        "name": "Fast"
+      }
+    ],
     "title": "Ticker Tape"
   },
   "tldr-section": {
@@ -1604,10 +2248,15 @@
   },
   "tour": {
     "category": "learning",
-    "defaultStoryId": "",
+    "defaultStoryId": "learning-tour--default",
     "description": "Guided onboarding flow for introducing content or interface patterns.",
     "name": "tour",
-    "stories": [],
+    "stories": [
+      {
+        "id": "learning-tour--default",
+        "name": "Default"
+      }
+    ],
     "title": "Tour"
   },
   "tutorial-card": {
@@ -1677,10 +2326,23 @@
   },
   "usage-breakdown": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "analytics-usagebreakdown--default",
     "description": "Ranked resource consumption list with relative share and trend cues.",
     "name": "usage-breakdown",
-    "stories": [],
+    "stories": [
+      {
+        "id": "analytics-usagebreakdown--default",
+        "name": "Default"
+      },
+      {
+        "id": "analytics-usagebreakdown--top-two-only",
+        "name": "Top Two Only"
+      },
+      {
+        "id": "analytics-usagebreakdown--empty",
+        "name": "Empty"
+      }
+    ],
     "title": "Usage Breakdown"
   },
   "video-embed": {
@@ -1711,26 +2373,53 @@
   },
   "wallet-card": {
     "category": "content",
-    "defaultStoryId": "",
+    "defaultStoryId": "account-billing-walletcard--default",
     "description": "Credit balance display card for available, pending, and refresh details.",
     "name": "wallet-card",
-    "stories": [],
+    "stories": [
+      {
+        "id": "account-billing-walletcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-walletcard--depleted",
+        "name": "Depleted"
+      }
+    ],
     "title": "Wallet Card"
   },
   "watchlist": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-watchlist--default",
     "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
     "name": "watchlist",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-watchlist--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-watchlist--compact",
+        "name": "Compact"
+      }
+    ],
     "title": "Watchlist"
   },
   "world-clock-bar": {
     "category": "data",
-    "defaultStoryId": "",
+    "defaultStoryId": "data-worldclockbar--default",
     "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
     "name": "world-clock-bar",
-    "stories": [],
+    "stories": [
+      {
+        "id": "data-worldclockbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-worldclockbar--time-only",
+        "name": "Time Only"
+      }
+    ],
     "title": "World Clock Bar"
   }
 }
