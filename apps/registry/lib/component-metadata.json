@@ -807,6 +807,23 @@
     ],
     "title": "Flow Diagram"
   },
+  "form": {
+    "category": "form",
+    "defaultStoryId": "core-form--default",
+    "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
+    "name": "form",
+    "stories": [
+      {
+        "id": "core-form--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-form--invalid",
+        "name": "Invalid"
+      }
+    ],
+    "title": "Form"
+  },
   "horizontal-scroll-row": {
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
@@ -932,23 +949,6 @@
     "stories": [],
     "title": "Line Chart"
   },
-  "marquee": {
-    "category": "utility",
-    "defaultStoryId": "utility-marquee--default",
-    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
-    "name": "marquee",
-    "stories": [
-      {
-        "id": "utility-marquee--default",
-        "name": "Default"
-      },
-      {
-        "id": "utility-marquee--reverse",
-        "name": "Reverse"
-      }
-    ],
-    "title": "Marquee"
-  },
   "live-feed": {
     "category": "data",
     "defaultStoryId": "data-livefeed--default",
@@ -978,6 +978,23 @@
       }
     ],
     "title": "Market Treemap"
+  },
+  "marquee": {
+    "category": "utility",
+    "defaultStoryId": "utility-marquee--default",
+    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "name": "marquee",
+    "stories": [
+      {
+        "id": "utility-marquee--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-marquee--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Marquee"
   },
   "mdx-content": {
     "category": "content",
@@ -1034,6 +1051,27 @@
       }
     ],
     "title": "Model Selector"
+  },
+  "multi-select": {
+    "category": "form",
+    "defaultStoryId": "form-multiselect--default",
+    "description": "Popover-based multi-selection input with selected-value badges and optional search.",
+    "name": "multi-select",
+    "stories": [
+      {
+        "id": "form-multiselect--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-multiselect--searchable",
+        "name": "Searchable"
+      },
+      {
+        "id": "form-multiselect--controlled",
+        "name": "Controlled"
+      }
+    ],
+    "title": "Multi Select"
   },
   "navbar-saas": {
     "category": "navigation",
@@ -1348,6 +1386,27 @@
       }
     ],
     "title": "Search Dialog"
+  },
+  "segmented-control": {
+    "category": "form",
+    "defaultStoryId": "form-segmentedcontrol--default",
+    "description": "Single-choice segmented selector for switching modes, views, or filters.",
+    "name": "segmented-control",
+    "stories": [
+      {
+        "id": "form-segmentedcontrol--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-segmentedcontrol--disabled",
+        "name": "Disabled"
+      },
+      {
+        "id": "form-segmentedcontrol--controlled",
+        "name": "Controlled"
+      }
+    ],
+    "title": "Segmented Control"
   },
   "select": {
     "category": "form",
@@ -1708,6 +1767,27 @@
       }
     ],
     "title": "Tabs"
+  },
+  "tags-input": {
+    "category": "form",
+    "defaultStoryId": "form-tagsinput--default",
+    "description": "Keyboard-friendly tag editor for adding and removing string values.",
+    "name": "tags-input",
+    "stories": [
+      {
+        "id": "form-tagsinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-tagsinput--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "form-tagsinput--controlled",
+        "name": "Controlled"
+      }
+    ],
+    "title": "Tags Input"
   },
   "terminal": {
     "category": "content",
