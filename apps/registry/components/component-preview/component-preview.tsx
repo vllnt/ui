@@ -7,6 +7,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  ActivityHeatmap,
+  ActivityLog,
   Alert,
   AlertDescription,
   AlertDialog,
@@ -19,11 +21,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertTitle,
+  AnimatedText,
   AspectRatio,
   Avatar,
   AvatarFallback,
+  AvatarGroup,
   AvatarImage,
   Badge,
+  BorderBeam,
   Breadcrumb,
   Button,
   Calendar,
@@ -47,6 +52,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
+  Combobox,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -60,6 +66,14 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  CountdownTimer,
+  CreditBadge,
+  DataList,
+  DataListItem,
+  DataListLabel,
+  DataListValue,
+  DataTable,
+  DatePicker,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -82,6 +96,8 @@ import {
   Exercise,
   FAQ,
   FAQItem,
+  FileUpload,
+  Flashcard,
   FloatingActionButton,
   Form,
   FormControl,
@@ -107,19 +123,27 @@ import {
   KeyConcept,
   LangProvider,
   LearningObjectives,
+  LiveFeed,
+  MarketTreemap,
+  Marquee,
   Menubar,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
   MenubarTrigger,
+  MetricGauge,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  NumberInput,
+  NumberTicker,
+  OrderBook,
   Pagination,
+  PasswordInput,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -133,6 +157,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
+  ScopeSelector,
   ScrollArea,
   SearchBar,
   Select,
@@ -141,6 +166,7 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  SeverityBadge,
   ShareSection,
   Sheet,
   SheetClose,
@@ -156,6 +182,9 @@ import {
   Skeleton,
   Slider,
   Spinner,
+  StatCard,
+  StatusBoard,
+  StatusIndicator,
   Step,
   StepByStep,
   StepNavigation,
@@ -188,8 +217,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
   TutorialCard,
+  UsageBreakdown,
   VideoEmbed,
   ViewSwitcher,
+  WalletCard,
+  Watchlist,
+  WorldClockBar,
 } from "@vllnt/ui";
 import {
   Bold,
@@ -259,6 +292,58 @@ function InputPreview() {
     <div className="w-full max-w-sm space-y-2">
       <Input placeholder="Email" type="email" />
       <Input placeholder="Password" type="password" />
+    </div>
+  );
+}
+
+function ComboboxPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <Combobox
+        options={[
+          { label: "Next.js", value: "next.js" },
+          { label: "React", value: "react" },
+          { label: "SvelteKit", value: "sveltekit" },
+        ]}
+        value="react"
+      />
+    </div>
+  );
+}
+
+function DatePickerPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <DatePicker value={new Date("2026-04-19T00:00:00.000Z")} />
+    </div>
+  );
+}
+
+function FileUploadPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <FileUpload
+        files={[
+          new File(["contract"], "contract.pdf", { type: "application/pdf" }),
+        ]}
+        helperText="PNG, JPG, or PDF up to 10MB."
+      />
+    </div>
+  );
+}
+
+function NumberInputPreview() {
+  return (
+    <div className="w-full max-w-xs">
+      <NumberInput defaultValue={2} min={0} />
+    </div>
+  );
+}
+
+function PasswordInputPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <PasswordInput placeholder="Enter password" value="super-secret" />
     </div>
   );
 }
@@ -772,6 +857,83 @@ function PaginationPreview() {
   return <Pagination baseUrl="/blog" currentPage={3} totalPages={10} />;
 }
 
+function UsageBreakdownPreview() {
+  return (
+    <UsageBreakdown
+      description="Ranked resource consumption across the current workspace."
+      items={[
+        {
+          id: "tokens",
+          label: "Tokens",
+          meta: "LLM",
+          trend: { direction: "up", label: "+14%" },
+          value: 420,
+          valueLabel: "420k",
+        },
+        {
+          id: "storage",
+          label: "Storage",
+          meta: "Vector DB",
+          trend: { direction: "down", label: "-6%" },
+          value: 260,
+          valueLabel: "260 GB",
+        },
+        {
+          id: "events",
+          label: "Events",
+          meta: "Tracking",
+          value: 180,
+          valueLabel: "180k",
+        },
+      ]}
+      title="Usage breakdown"
+    />
+  );
+}
+
+function ActivityLogPreview() {
+  return (
+    <ActivityLog
+      description="Recent analytics changes across your org."
+      items={[
+        {
+          action: "updated",
+          actor: "Alex Morgan",
+          description: "Raised ingestion retention from 30 to 45 days.",
+          id: "1",
+          scope: "Workspace",
+          target: "Analytics policy",
+          timestamp: "2m ago",
+          tone: "success",
+        },
+        {
+          action: "paused",
+          actor: "Riley Chen",
+          description: "Temporarily disabled streaming exports after an alert.",
+          id: "2",
+          scope: "Project",
+          target: "Billing pipeline",
+          timestamp: "11m ago",
+          tone: "warning",
+        },
+        {
+          action: "revoked",
+          actor: "Sam Patel",
+          description:
+            "Removed an expired API credential from production scope.",
+          id: "3",
+          scope: "Environment",
+          target: "Collector token",
+          timestamp: "24m ago",
+          tone: "danger",
+        },
+      ]}
+      pageSize={3}
+      title="Activity log"
+    />
+  );
+}
+
 function SearchBarPreview() {
   return (
     <React.Suspense
@@ -1276,6 +1438,44 @@ function ViewSwitcherPreview() {
   );
 }
 
+function ScopeSelectorPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <ScopeSelector
+        nodes={[
+          {
+            children: [
+              {
+                children: [
+                  { id: "prod-us", label: "US East" },
+                  { id: "prod-eu", label: "EU West" },
+                ],
+                id: "production",
+                label: "Production",
+              },
+              {
+                children: [{ id: "staging-us", label: "US East" }],
+                id: "staging",
+                label: "Staging",
+              },
+            ],
+            id: "environments",
+            label: "Environments",
+          },
+          {
+            children: [
+              { id: "team-growth", label: "Growth" },
+              { id: "team-data", label: "Data" },
+            ],
+            id: "teams",
+            label: "Teams",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
 function HoverCardPreview() {
   return (
     <HoverCard>
@@ -1397,6 +1597,100 @@ function AvatarPreview() {
       <Avatar>
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
+    </div>
+  );
+}
+
+function AvatarGroupPreview() {
+  return (
+    <AvatarGroup
+      items={[
+        { alt: "Ada Lovelace", fallback: "AL" },
+        { alt: "Grace Hopper", fallback: "GH" },
+        { alt: "Margaret Hamilton", fallback: "MH" },
+        { alt: "Katherine Johnson", fallback: "KJ" },
+      ]}
+      max={3}
+    />
+  );
+}
+
+function DataListPreview() {
+  return (
+    <div className="w-full max-w-2xl">
+      <DataList>
+        <DataListItem>
+          <DataListLabel>Environment</DataListLabel>
+          <DataListValue>Production</DataListValue>
+        </DataListItem>
+        <DataListItem>
+          <DataListLabel>Owner</DataListLabel>
+          <DataListValue>Platform engineering</DataListValue>
+        </DataListItem>
+        <DataListItem>
+          <DataListLabel>Deploy window</DataListLabel>
+          <DataListValue>Tuesday / Thursday · 09:00 UTC</DataListValue>
+        </DataListItem>
+      </DataList>
+    </div>
+  );
+}
+
+function StatusIndicatorPreview() {
+  return (
+    <div className="flex flex-wrap gap-3">
+      <StatusIndicator tone="success">Operational</StatusIndicator>
+      <StatusIndicator tone="warning">Pending</StatusIndicator>
+      <StatusIndicator tone="danger">Incident</StatusIndicator>
+      <StatusIndicator tone="info">Queued</StatusIndicator>
+    </div>
+  );
+}
+
+function StatCardPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <StatCard
+        change="+8.2%"
+        description="Monthly recurring revenue"
+        label="MRR"
+        meta="vs last month"
+        tone="success"
+        trend="up"
+        value="$42.8k"
+      />
+    </div>
+  );
+}
+
+function DataTablePreview() {
+  return (
+    <div className="w-full max-w-4xl">
+      <DataTable
+        columns={[
+          { accessorKey: "workspace", header: "Workspace" },
+          { accessorKey: "status", header: "Status" },
+          { accessorKey: "seats", header: "Seats" },
+        ]}
+        data={[
+          { seats: 142, status: "active", workspace: "Northstar" },
+          { seats: 28, status: "trial", workspace: "Signal" },
+          { seats: 11, status: "paused", workspace: "Helix" },
+        ]}
+        enableSelection={true}
+        filterableColumns={[
+          {
+            columnId: "status",
+            label: "status",
+            options: [
+              { label: "Active", value: "active" },
+              { label: "Trial", value: "trial" },
+              { label: "Paused", value: "paused" },
+            ],
+          },
+        ]}
+        searchPlaceholder="Search workspaces"
+      />
     </div>
   );
 }
@@ -1543,9 +1837,295 @@ function CarouselPreview() {
   );
 }
 
+function ActivityHeatmapPreview() {
+  return (
+    <ActivityHeatmap
+      data={[
+        { count: 1, date: "2026-03-01" },
+        { count: 3, date: "2026-03-02" },
+        { count: 6, date: "2026-03-03" },
+        { count: 4, date: "2026-03-05" },
+        { count: 9, date: "2026-03-08" },
+        { count: 7, date: "2026-03-11" },
+        { count: 2, date: "2026-03-13" },
+      ]}
+      endDate="2026-03-14T00:00:00.000Z"
+      title="Deployment activity"
+      weeks={2}
+    />
+  );
+}
+
+function CountdownTimerPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <CountdownTimer
+        deadline="2026-03-15T10:30:00.000Z"
+        now="2026-03-15T10:00:00.000Z"
+        startedAt="2026-03-15T09:00:00.000Z"
+        title="SLA timer"
+      />
+    </div>
+  );
+}
+
+function CreditBadgePreview() {
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <CreditBadge amount="420 credits" status="healthy" />
+      <CreditBadge amount="24 credits" status="low" />
+      <CreditBadge amount="0 credits" status="depleted" />
+    </div>
+  );
+}
+
+function FlashcardPreview() {
+  return (
+    <Flashcard
+      answer="A hypothesis is a testable explanation for an observation."
+      category="Science"
+      question="What is a hypothesis?"
+      title="Key vocabulary"
+    />
+  );
+}
+
+function MarketTreemapPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <MarketTreemap
+        items={[
+          { change: 2.6, label: "NVDA", sector: "Semis", value: 980 },
+          { change: 1.4, label: "MSFT", sector: "Software", value: 760 },
+          { change: -1.4, label: "XOM", sector: "Energy", value: 520 },
+          { change: 0.8, label: "JPM", sector: "Financials", value: 440 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function OrderBookPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <OrderBook
+        asks={[
+          { price: 185.24, size: 4.2 },
+          { price: 185.31, size: 6.8 },
+          { price: 185.39, size: 8.1 },
+        ]}
+        bids={[
+          { price: 185.18, size: 5.4 },
+          { price: 185.11, size: 7.1 },
+          { price: 185.03, size: 9.2 },
+        ]}
+      />
+    </div>
+  );
+}
+
+function WalletCardPreview() {
+  return (
+    <WalletCard
+      availableLabel="96 credits"
+      balanceLabel="128 credits"
+      note="Set up auto-refill to keep automations running through the month."
+      pendingLabel="32 credits"
+      primaryActionLabel="Buy credits"
+      renewsLabel="Refreshes on May 1, 2026"
+      secondaryActionLabel="Billing history"
+      status="healthy"
+    />
+  );
+}
+
+function WatchlistPreview() {
+  return (
+    <div className="w-full max-w-[320px]">
+      <Watchlist
+        items={[
+          {
+            change: 1.42,
+            name: "Apple Inc.",
+            price: 182.33,
+            starred: true,
+            symbol: "AAPL",
+          },
+          {
+            change: -0.64,
+            name: "Microsoft",
+            price: 431.8,
+            symbol: "MSFT",
+          },
+          {
+            change: 3.08,
+            name: "NVIDIA",
+            price: 512.9,
+            starred: true,
+            symbol: "NVDA",
+          },
+        ]}
+      />
+    </div>
+  );
+}
+
+function MetricGaugePreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <MetricGauge label="CPU load" max={100} unit="%" value={72} />
+    </div>
+  );
+}
+
+function LiveFeedPreview() {
+  return (
+    <div className="w-full max-w-md">
+      <LiveFeed
+        events={[
+          {
+            id: "1",
+            message: "Auth gateway p95 latency above 400ms for 5m.",
+            severity: "critical",
+            source: "pagerduty",
+            timestamp: "2026-03-15T11:59:30.000Z",
+            title: "Latency breach on gateway",
+          },
+          {
+            id: "2",
+            message: "Auto-scaler added 2 nodes to worker pool.",
+            severity: "medium",
+            source: "platform",
+            timestamp: "2026-03-15T11:55:00.000Z",
+            title: "Worker pool scaled up",
+          },
+          {
+            id: "3",
+            message: "Revert complete. SLA within target.",
+            severity: "low",
+            source: "deploy-bot",
+            timestamp: "2026-03-15T11:40:00.000Z",
+            title: "Rollback of v7.1.2 succeeded",
+          },
+        ]}
+        now="2026-03-15T12:00:00.000Z"
+        title="Incident feed"
+      />
+    </div>
+  );
+}
+
+function SeverityBadgePreview() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <SeverityBadge level="critical" />
+      <SeverityBadge level="high" />
+      <SeverityBadge level="medium" />
+      <SeverityBadge level="low" />
+      <SeverityBadge level="info" />
+    </div>
+  );
+}
+
+function StatusBoardPreview() {
+  return (
+    <StatusBoard
+      items={[
+        {
+          description: "Traffic and auth requests are stable.",
+          label: "Gateway",
+          meta: "1m ago",
+          status: "healthy",
+          value: "99.98%",
+        },
+        {
+          description: "Queue depth is trending upward.",
+          label: "Worker pool",
+          meta: "4 delayed jobs",
+          status: "warning",
+          value: "82%",
+        },
+        {
+          description: "Fallback region currently disabled.",
+          label: "Edge POP",
+          meta: "Planned maintenance",
+          status: "maintenance",
+          value: "2/3 online",
+        },
+      ]}
+      title="Service health"
+    />
+  );
+}
+
+function WorldClockBarPreview() {
+  return (
+    <WorldClockBar
+      now="2026-03-15T12:00:00.000Z"
+      zones={[
+        { city: "San Francisco", timeZone: "America/Los_Angeles" },
+        { city: "New York", timeZone: "America/New_York" },
+        { city: "London", timeZone: "Europe/London" },
+        { city: "Singapore", timeZone: "Asia/Singapore" },
+      ]}
+    />
+  );
+}
+
 function CalendarPreview() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return <Calendar mode="single" onSelect={setDate} selected={date} />;
+}
+
+function AnimatedTextPreview() {
+  return (
+    <div className="max-w-xl">
+      <AnimatedText
+        className="text-2xl font-semibold"
+        text="Ship motion that still feels like the current system."
+      />
+    </div>
+  );
+}
+
+function BorderBeamPreview() {
+  return (
+    <div className="relative w-full max-w-sm rounded-xl border bg-card p-6">
+      <BorderBeam />
+      <div className="space-y-1">
+        <div className="text-sm text-muted-foreground">Status</div>
+        <div className="text-lg font-semibold">Live preview</div>
+      </div>
+    </div>
+  );
+}
+
+function MarqueePreview() {
+  return (
+    <div className="w-full max-w-lg rounded-lg border p-4">
+      <Marquee>
+        <span className="rounded-md border bg-muted px-3 py-2 text-sm">
+          Alpha
+        </span>
+        <span className="rounded-md border bg-muted px-3 py-2 text-sm">
+          Beta
+        </span>
+        <span className="rounded-md border bg-muted px-3 py-2 text-sm">
+          Gamma
+        </span>
+      </Marquee>
+    </div>
+  );
+}
+
+function NumberTickerPreview() {
+  return (
+    <NumberTicker
+      className="text-4xl font-semibold"
+      duration={0}
+      value={12_840}
+    />
+  );
 }
 
 function SpinnerPreview() {
@@ -1563,16 +2143,26 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
   switch (componentName) {
     case "accordion":
       return <AccordionPreview />;
+    case "activity-heatmap":
+      return <ActivityHeatmapPreview />;
+    case "activity-log":
+      return <ActivityLogPreview />;
     case "alert":
       return <AlertPreview />;
     case "alert-dialog":
       return <AlertDialogPreview />;
+    case "animated-text":
+      return <AnimatedTextPreview />;
     case "area-chart":
       return <AreaChartPreview />;
     case "aspect-ratio":
       return <AspectRatioPreview />;
     case "avatar":
       return <AvatarPreview />;
+    case "avatar-group":
+      return <AvatarGroupPreview />;
+    case "border-beam":
+      return <BorderBeamPreview />;
     case "badge":
       return <BadgePreview />;
     case "bar-chart":
@@ -1587,8 +2177,14 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <CalloutPreview />;
     case "calendar":
       return <CalendarPreview />;
+    case "combobox":
+      return <ComboboxPreview />;
     case "card":
       return <CardPreview />;
+    case "data-list":
+      return <DataListPreview />;
+    case "data-table":
+      return <DataTablePreview />;
     case "carousel":
       return <CarouselPreview />;
     case "category-filter":
@@ -1617,6 +2213,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "context-menu":
       return <ContextMenuPreview />;
+    case "countdown-timer":
+      return <CountdownTimerPreview />;
+    case "credit-badge":
+      return <CreditBadgePreview />;
     case "dialog":
       return <DialogPreview />;
     case "drawer":
@@ -1627,6 +2227,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <ExercisePreview />;
     case "faq":
       return <FAQPreview />;
+    case "flashcard":
+      return <FlashcardPreview />;
+    case "file-upload":
+      return <FileUploadPreview />;
     case "filter-bar":
       return (
         <SimplePreview description="A filter bar with search, sort, and filter controls." />
@@ -1645,6 +2249,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <InputPreview />;
     case "input-otp":
       return <InputOTPPreview />;
+    case "date-picker":
+      return <DatePickerPreview />;
     case "key-concept":
       return <KeyConceptPreview />;
     case "keyboard-shortcuts-help":
@@ -1655,10 +2261,18 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <LearningObjectivesPreview />;
     case "line-chart":
       return <LineChartPreview />;
+    case "marquee":
+      return <MarqueePreview />;
+    case "live-feed":
+      return <LiveFeedPreview />;
+    case "market-treemap":
+      return <MarketTreemapPreview />;
     case "mdx-content":
       return <MDXContentPreview />;
     case "menubar":
       return <MenubarPreview />;
+    case "metric-gauge":
+      return <MetricGaugePreview />;
     case "model-selector":
       return (
         <SimplePreview description="A dialog for selecting AI models with search and filtering." />
@@ -1675,8 +2289,16 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "navigation-menu":
       return <NavigationMenuPreview />;
+    case "number-input":
+      return <NumberInputPreview />;
+    case "number-ticker":
+      return <NumberTickerPreview />;
+    case "order-book":
+      return <OrderBookPreview />;
     case "pagination":
       return <PaginationPreview />;
+    case "password-input":
+      return <PasswordInputPreview />;
     case "popover":
       return <PopoverPreview />;
     case "pro-tip":
@@ -1703,10 +2325,14 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="A command palette style search dialog." />
       );
+    case "scope-selector":
+      return <ScopeSelectorPreview />;
     case "select":
       return <SelectPreview />;
     case "separator":
       return <SeparatorPreview />;
+    case "severity-badge":
+      return <SeverityBadgePreview />;
     case "share-section":
       return <ShareSectionPreview />;
     case "sheet":
@@ -1719,6 +2345,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <SliderPreview />;
     case "spinner":
       return <SpinnerPreview />;
+    case "stat-card":
+      return <StatCardPreview />;
+    case "status-board":
+      return <StatusBoardPreview />;
     case "sidebar-provider":
       return <SidebarProviderPreview />;
     case "sidebar-toggle":
@@ -1731,6 +2361,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <StepByStepPreview />;
     case "step-navigation":
       return <StepNavigationPreview />;
+    case "status-indicator":
+      return <StatusIndicatorPreview />;
     case "table-of-contents":
       return <TableOfContentsPreview />;
     case "table-of-contents-panel":
@@ -1779,10 +2411,18 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="MDX components optimized for tutorial content." />
       );
+    case "usage-breakdown":
+      return <UsageBreakdownPreview />;
     case "video-embed":
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "wallet-card":
+      return <WalletCardPreview />;
+    case "watchlist":
+      return <WatchlistPreview />;
+    case "world-clock-bar":
+      return <WorldClockBarPreview />;
     default:
       return <div className="text-muted-foreground">Preview not available</div>;
   }

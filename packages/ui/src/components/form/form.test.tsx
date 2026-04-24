@@ -133,11 +133,18 @@ describe("Form", () => {
     const lastInput = screen.getByRole("textbox", { name: "Last name" });
     const firstDescription = screen.getByText("Given name");
     const lastDescription = screen.getByText("Family name");
-    const messages = screen.getAllByText("Required");
+    const [firstMessage, secondMessage] = screen.getAllByText("Required");
+
+    expect(firstMessage).toBeDefined();
+    expect(secondMessage).toBeDefined();
+
+    if (!firstMessage || !secondMessage) {
+      throw new Error("Expected both required messages to be rendered.");
+    }
 
     expect(firstInput.id).not.toBe(lastInput.id);
     expect(firstDescription.id).not.toBe(lastDescription.id);
-    expect(messages[0].id).not.toBe(messages[1].id);
+    expect(firstMessage.id).not.toBe(secondMessage.id);
     expect(firstInput).toHaveAttribute("aria-describedby", firstDescription.id);
     expect(lastInput).toHaveAttribute("aria-describedby", lastDescription.id);
   });
@@ -172,15 +179,22 @@ describe("Form", () => {
     const backupInput = screen.getByRole("textbox", { name: "Backup email" });
     const primaryDescription = screen.getByText("Primary contact");
     const backupDescription = screen.getByText("Secondary contact");
-    const messages = screen.getAllByText("Required");
+    const [primaryMessage, backupMessage] = screen.getAllByText("Required");
+
+    expect(primaryMessage).toBeDefined();
+    expect(backupMessage).toBeDefined();
+
+    if (!primaryMessage || !backupMessage) {
+      throw new Error("Expected both required messages to be rendered.");
+    }
 
     expect(primaryInput.id).toMatch(/^field-/);
     expect(backupInput.id).toMatch(/^field-/);
     expect(primaryInput.id).not.toBe(backupInput.id);
     expect(primaryDescription.id).toMatch(/^field-description-/);
     expect(backupDescription.id).toMatch(/^field-description-/);
-    expect(messages[0].id).toMatch(/^field-message-/);
-    expect(messages[1].id).toMatch(/^field-message-/);
-    expect(messages[0].id).not.toBe(messages[1].id);
+    expect(primaryMessage.id).toMatch(/^field-message-/);
+    expect(backupMessage.id).toMatch(/^field-message-/);
+    expect(primaryMessage.id).not.toBe(backupMessage.id);
   });
 });
