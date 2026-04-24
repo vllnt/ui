@@ -163,17 +163,57 @@
   },
   "animated-text": {
     "category": "utility",
-    "defaultStoryId": "utility-animatedtext--default",
+    "defaultStoryId": "utility-animatedtext--terminal",
     "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
     "name": "animated-text",
     "stories": [
       {
-        "id": "utility-animatedtext--default",
-        "name": "Default"
+        "id": "utility-animatedtext--terminal",
+        "name": "Terminal"
       },
       {
-        "id": "utility-animatedtext--characters",
-        "name": "Characters"
+        "id": "utility-animatedtext--matrix",
+        "name": "Matrix"
+      },
+      {
+        "id": "utility-animatedtext--matrix-terminal-grid",
+        "name": "Matrix Terminal Grid"
+      },
+      {
+        "id": "utility-animatedtext--decipher",
+        "name": "Decipher"
+      },
+      {
+        "id": "utility-animatedtext--decipher-reverse",
+        "name": "Decipher Reverse"
+      },
+      {
+        "id": "utility-animatedtext--decipher-random",
+        "name": "Decipher Random"
+      },
+      {
+        "id": "utility-animatedtext--decipher-ascii-digits",
+        "name": "Decipher Ascii Digits"
+      },
+      {
+        "id": "utility-animatedtext--decipher-terminal-boxes",
+        "name": "Decipher Terminal Boxes"
+      },
+      {
+        "id": "utility-animatedtext--decipher-block-noise",
+        "name": "Decipher Block Noise"
+      },
+      {
+        "id": "utility-animatedtext--decipher-unicode-sigils",
+        "name": "Decipher Unicode Sigils"
+      },
+      {
+        "id": "utility-animatedtext--typewriter",
+        "name": "Typewriter"
+      },
+      {
+        "id": "utility-animatedtext--reveal",
+        "name": "Reveal"
       }
     ],
     "title": "Animated Text"
@@ -949,6 +989,35 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "marquee": {
+    "category": "utility",
+    "defaultStoryId": "utility-marquee--default",
+    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "name": "marquee",
+    "stories": [
+      {
+        "id": "utility-marquee--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-marquee--slow",
+        "name": "Slow"
+      },
+      {
+        "id": "utility-marquee--fast",
+        "name": "Fast"
+      },
+      {
+        "id": "utility-marquee--custom-duration",
+        "name": "Custom Duration"
+      },
+      {
+        "id": "utility-marquee--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Marquee"
+  },
   "live-feed": {
     "category": "data",
     "defaultStoryId": "data-livefeed--default",
@@ -1601,6 +1670,246 @@
       {
         "id": "utility-spinner--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-unicodespinner--all-animations",
+        "name": "All Animations"
+      },
+      {
+        "id": "utility-unicodespinner--arc",
+        "name": "Arc"
+      },
+      {
+        "id": "utility-unicodespinner--arrow",
+        "name": "Arrow"
+      },
+      {
+        "id": "utility-unicodespinner--balloon",
+        "name": "Balloon"
+      },
+      {
+        "id": "utility-unicodespinner--bounce",
+        "name": "Bounce"
+      },
+      {
+        "id": "utility-unicodespinner--braille",
+        "name": "Braille"
+      },
+      {
+        "id": "utility-unicodespinner--braillewave",
+        "name": "Braillewave"
+      },
+      {
+        "id": "utility-unicodespinner--breathe",
+        "name": "Breathe"
+      },
+      {
+        "id": "utility-unicodespinner--cascade",
+        "name": "Cascade"
+      },
+      {
+        "id": "utility-unicodespinner--checkerboard",
+        "name": "Checkerboard"
+      },
+      {
+        "id": "utility-unicodespinner--circle-halves",
+        "name": "Circle Halves"
+      },
+      {
+        "id": "utility-unicodespinner--circle-quarters",
+        "name": "Circle Quarters"
+      },
+      {
+        "id": "utility-unicodespinner--clock",
+        "name": "Clock"
+      },
+      {
+        "id": "utility-unicodespinner--columns",
+        "name": "Columns"
+      },
+      {
+        "id": "utility-unicodespinner--diagswipe",
+        "name": "Diagswipe"
+      },
+      {
+        "id": "utility-unicodespinner--dna",
+        "name": "Dna"
+      },
+      {
+        "id": "utility-unicodespinner--dots",
+        "name": "Dots"
+      },
+      {
+        "id": "utility-unicodespinner--dots-2",
+        "name": "Dots 2"
+      },
+      {
+        "id": "utility-unicodespinner--dots-3",
+        "name": "Dots 3"
+      },
+      {
+        "id": "utility-unicodespinner--dots-4",
+        "name": "Dots 4"
+      },
+      {
+        "id": "utility-unicodespinner--dots-5",
+        "name": "Dots 5"
+      },
+      {
+        "id": "utility-unicodespinner--dots-6",
+        "name": "Dots 6"
+      },
+      {
+        "id": "utility-unicodespinner--dots-7",
+        "name": "Dots 7"
+      },
+      {
+        "id": "utility-unicodespinner--dots-8",
+        "name": "Dots 8"
+      },
+      {
+        "id": "utility-unicodespinner--dots-9",
+        "name": "Dots 9"
+      },
+      {
+        "id": "utility-unicodespinner--dots-10",
+        "name": "Dots 10"
+      },
+      {
+        "id": "utility-unicodespinner--dots-11",
+        "name": "Dots 11"
+      },
+      {
+        "id": "utility-unicodespinner--dots-12",
+        "name": "Dots 12"
+      },
+      {
+        "id": "utility-unicodespinner--dots-13",
+        "name": "Dots 13"
+      },
+      {
+        "id": "utility-unicodespinner--dots-14",
+        "name": "Dots 14"
+      },
+      {
+        "id": "utility-unicodespinner--dots-circle",
+        "name": "Dots Circle"
+      },
+      {
+        "id": "utility-unicodespinner--double-arrow",
+        "name": "Double Arrow"
+      },
+      {
+        "id": "utility-unicodespinner--dqpb",
+        "name": "Dqpb"
+      },
+      {
+        "id": "utility-unicodespinner--earth",
+        "name": "Earth"
+      },
+      {
+        "id": "utility-unicodespinner--fillsweep",
+        "name": "Fillsweep"
+      },
+      {
+        "id": "utility-unicodespinner--grow-horizontal",
+        "name": "Grow Horizontal"
+      },
+      {
+        "id": "utility-unicodespinner--grow-vertical",
+        "name": "Grow Vertical"
+      },
+      {
+        "id": "utility-unicodespinner--hearts",
+        "name": "Hearts"
+      },
+      {
+        "id": "utility-unicodespinner--helix",
+        "name": "Helix"
+      },
+      {
+        "id": "utility-unicodespinner--moon",
+        "name": "Moon"
+      },
+      {
+        "id": "utility-unicodespinner--noise",
+        "name": "Noise"
+      },
+      {
+        "id": "utility-unicodespinner--orbit",
+        "name": "Orbit"
+      },
+      {
+        "id": "utility-unicodespinner--point",
+        "name": "Point"
+      },
+      {
+        "id": "utility-unicodespinner--pulse",
+        "name": "Pulse"
+      },
+      {
+        "id": "utility-unicodespinner--rain",
+        "name": "Rain"
+      },
+      {
+        "id": "utility-unicodespinner--rolling-line",
+        "name": "Rolling Line"
+      },
+      {
+        "id": "utility-unicodespinner--sand",
+        "name": "Sand"
+      },
+      {
+        "id": "utility-unicodespinner--scan",
+        "name": "Scan"
+      },
+      {
+        "id": "utility-unicodespinner--scanline",
+        "name": "Scanline"
+      },
+      {
+        "id": "utility-unicodespinner--simple-dots",
+        "name": "Simple Dots"
+      },
+      {
+        "id": "utility-unicodespinner--simple-dots-scrolling",
+        "name": "Simple Dots Scrolling"
+      },
+      {
+        "id": "utility-unicodespinner--snake",
+        "name": "Snake"
+      },
+      {
+        "id": "utility-unicodespinner--sparkle",
+        "name": "Sparkle"
+      },
+      {
+        "id": "utility-unicodespinner--speaker",
+        "name": "Speaker"
+      },
+      {
+        "id": "utility-unicodespinner--square-corners",
+        "name": "Square Corners"
+      },
+      {
+        "id": "utility-unicodespinner--toggle",
+        "name": "Toggle"
+      },
+      {
+        "id": "utility-unicodespinner--triangle",
+        "name": "Triangle"
+      },
+      {
+        "id": "utility-unicodespinner--wave",
+        "name": "Wave"
+      },
+      {
+        "id": "utility-unicodespinner--waverows",
+        "name": "Waverows"
+      },
+      {
+        "id": "utility-unicodespinner--weather",
+        "name": "Weather"
       }
     ],
     "title": "Spinner"
