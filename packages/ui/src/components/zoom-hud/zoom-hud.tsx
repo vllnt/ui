@@ -16,7 +16,7 @@ const ZoomHUD = forwardRef<HTMLDivElement, ZoomHUDProps>(
   ({ className, onReset, onZoomIn, onZoomOut, zoom, ...props }, ref) => (
     <div
       className={cn(
-        "inline-flex items-center gap-1 rounded-md border border-border bg-background p-1 font-mono",
+        "inline-flex items-center gap-1 rounded-sm border border-border bg-background p-1 font-mono",
         className,
       )}
       ref={ref}

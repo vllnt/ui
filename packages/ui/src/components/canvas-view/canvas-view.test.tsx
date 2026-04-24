@@ -96,4 +96,52 @@ describe("CanvasView", () => {
       zoom: 1.2,
     });
   });
+
+  it("does not steal wheel events from nested scroll containers", () => {
+    const onViewportChange = vi.fn();
+
+    render(
+      <CanvasView onViewportChange={onViewportChange}>
+        <div
+          data-testid="nested-scroll"
+          style={{ maxHeight: 80, overflowY: "auto" }}
+        >
+          <div style={{ height: 240 }}>Scrollable canvas node</div>
+        </div>
+      </CanvasView>,
+    );
+
+    const nestedScroll = screen.getByTestId("nested-scroll");
+    Object.defineProperty(nestedScroll, "clientHeight", {
+      configurable: true,
+      value: 80,
+    });
+    Object.defineProperty(nestedScroll, "scrollHeight", {
+      configurable: true,
+      value: 240,
+    });
+
+    fireEvent.wheel(nestedScroll, { deltaY: 40 });
+
+    expect(onViewportChange).not.toHaveBeenCalled();
+  });
+
+  it("does not steal keyboard input from nested form controls", () => {
+    const onViewportChange = vi.fn();
+
+    render(
+      <CanvasView onViewportChange={onViewportChange}>
+        <input aria-label="Node title" />
+      </CanvasView>,
+    );
+
+    const input = screen.getByRole("textbox", { name: "Node title" });
+    input.focus();
+
+    fireEvent.keyDown(input, { key: "ArrowRight" });
+    fireEvent.keyDown(input, { key: "0" });
+    fireEvent.keyDown(input, { key: "+" });
+
+    expect(onViewportChange).not.toHaveBeenCalled();
+  });
 });

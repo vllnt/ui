@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -28,6 +28,11 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
     const fallbackValue = defaultValue ?? workspaces[0]?.id ?? "";
     const [internalValue, setInternalValue] = useState(fallbackValue);
     const currentValue = value ?? internalValue;
+
+    const currentWorkspace = useMemo(
+      () => workspaces.find((workspace) => workspace.id === currentValue),
+      [currentValue, workspaces],
+    );
 
     function handleSelect(nextValue: string) {
       if (value === undefined) {
@@ -69,6 +74,11 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
             </button>
           );
         })}
+        {currentWorkspace?.description ? (
+          <span className="hidden pl-2 pr-1 text-xs text-muted-foreground md:inline">
+            {currentWorkspace.description}
+          </span>
+        ) : null}
       </div>
     );
   },

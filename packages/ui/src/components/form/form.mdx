@@ -1,0 +1,56 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as Stories from './form.stories'
+
+<Meta of={Stories} />
+
+# Form
+
+A lightweight validation wrapper for composing labels, descriptions, controls, and messages with consistent ARIA wiring.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/form.json
+```
+
+## Import
+
+```tsx
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Form invalid>
+  <FormItem>
+    <FormLabel>Email</FormLabel>
+    <FormControl>
+      <Input type="email" />
+    </FormControl>
+    <FormDescription>Use your work email address.</FormDescription>
+    <FormMessage>Please enter a valid email.</FormMessage>
+  </FormItem>
+</Form>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Validation state
+
+Set `invalid` on `Form` to add `aria-invalid`, append the message id to `aria-describedby`, and expose the message as an alert.
+
+<Canvas of={Stories.Invalid} sourceState="shown" />
+
+## API Reference
+
+<Controls />

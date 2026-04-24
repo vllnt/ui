@@ -74,10 +74,10 @@ This builds the Next.js app and generates registry JSON files to `public/r/` usi
 
 ```bash
 # Install a component
-pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
 
 # Or use the component name directly
-pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
 ```
 
 ## Adding Components
@@ -158,7 +158,7 @@ The registry follows the shadcn/ui registry schema:
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "vllnt",
-  "homepage": "https://ui.vllnt.com",
+  "homepage": "https://ui.vllnt.ai",
   "items": [
     {
       "name": "component-name",

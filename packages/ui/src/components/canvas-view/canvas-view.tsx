@@ -53,8 +53,114 @@ type ViewportReference = {
 
 const DEFAULT_VIEWPORT: CanvasViewport = { x: 0, y: 0, zoom: 1 };
 
+const INTERACTIVE_ELEMENT_SELECTOR = [
+  "a[href]",
+  "button",
+  'input:not([type="hidden"])',
+  "select",
+  "textarea",
+  "summary",
+  '[contenteditable=""]',
+  '[contenteditable="true"]',
+  '[role="button"]',
+  '[role="checkbox"]',
+  '[role="link"]',
+  '[role="menuitem"]',
+  '[role="option"]',
+  '[role="radio"]',
+  '[role="slider"]',
+  '[role="spinbutton"]',
+  '[role="switch"]',
+  '[role="tab"]',
+  '[role="textbox"]',
+].join(", ");
+
 function clampZoom(value: number, minZoom: number, maxZoom: number) {
   return Math.min(maxZoom, Math.max(minZoom, Number(value.toFixed(2))));
+}
+
+function isHtmlElement(target: EventTarget | null): target is HTMLElement {
+  return target instanceof HTMLElement;
+}
+
+function isInteractiveDescendant(
+  element: HTMLElement,
+  container: HTMLDivElement,
+) {
+  const interactiveAncestor = element.closest(INTERACTIVE_ELEMENT_SELECTOR);
+
+  return (
+    interactiveAncestor !== null && container.contains(interactiveAncestor)
+  );
+}
+
+function supportsScrollableOverflow(value: string) {
+  return value === "auto" || value === "overlay" || value === "scroll";
+}
+
+function hasScrollableAxis(element: HTMLElement, axis: "x" | "y") {
+  const style = window.getComputedStyle(element);
+
+  if (axis === "x") {
+    return (
+      supportsScrollableOverflow(style.overflowX) &&
+      element.scrollWidth > element.clientWidth
+    );
+  }
+
+  return (
+    supportsScrollableOverflow(style.overflowY) &&
+    element.scrollHeight > element.clientHeight
+  );
+}
+
+function hasScrollableAncestor(
+  element: HTMLElement,
+  container: HTMLDivElement,
+  delta: { x: number; y: number },
+): boolean {
+  if (!container.contains(element) || element === container) {
+    return false;
+  }
+
+  if (
+    (delta.x !== 0 && hasScrollableAxis(element, "x")) ||
+    (delta.y !== 0 && hasScrollableAxis(element, "y"))
+  ) {
+    return true;
+  }
+
+  return element.parentElement === null
+    ? false
+    : hasScrollableAncestor(element.parentElement, container, delta);
+}
+
+function shouldHandleCanvasKeyboardEvent(
+  event: ReactKeyboardEvent<HTMLDivElement>,
+) {
+  if (
+    isHtmlElement(event.target) &&
+    event.target !== event.currentTarget &&
+    isInteractiveDescendant(event.target, event.currentTarget)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function shouldHandleCanvasWheelEvent(event: ReactWheelEvent<HTMLDivElement>) {
+  if (
+    isHtmlElement(event.target) &&
+    hasScrollableAncestor(event.target, event.currentTarget, {
+      x: event.deltaX,
+      y: event.deltaY,
+    })
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 function isPanGesture(
@@ -203,8 +309,8 @@ function useCanvasKeyboardInteractions({
 
   const handleWheel = useCallback(
     (event: ReactWheelEvent<HTMLDivElement>) => {
-      event.preventDefault();
       if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
         setViewport({
           ...viewportRef.current,
           zoom:
@@ -214,6 +320,11 @@ function useCanvasKeyboardInteractions({
         return;
       }
 
+      if (!shouldHandleCanvasWheelEvent(event)) {
+        return;
+      }
+
+      event.preventDefault();
       nudgeViewport(-event.deltaX, -event.deltaY);
     },
     [nudgeViewport, setViewport, viewportRef, zoomStep],
@@ -221,6 +332,10 @@ function useCanvasKeyboardInteractions({
 
   const handleKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLDivElement>) => {
+      if (!shouldHandleCanvasKeyboardEvent(event)) {
+        return;
+      }
+
       if (event.key === " ") {
         event.preventDefault();
         setIsSpacePressed(true);
@@ -240,6 +355,10 @@ function useCanvasKeyboardInteractions({
 
   const handleKeyUp = useCallback(
     (event: ReactKeyboardEvent<HTMLDivElement>) => {
+      if (!shouldHandleCanvasKeyboardEvent(event)) {
+        return;
+      }
+
       if (event.key === " ") {
         setIsSpacePressed(false);
       }
@@ -469,7 +588,7 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
     return (
       <div
         className={cn(
-          "relative h-full min-h-[32rem] overflow-hidden rounded-md border border-border bg-background",
+          "relative h-full min-h-[32rem] overflow-hidden rounded-sm border border-border bg-background",
           className,
         )}
         {...props}
