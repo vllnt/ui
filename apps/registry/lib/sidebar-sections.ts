@@ -64,7 +64,7 @@ function groupComponentsByCategory(
 
 const groupedComponents = groupComponentsByCategory(components);
 
-export function getSidebarSections(activeCategory?: ComponentCategory) {
+export function getSidebarSections(_activeCategory?: ComponentCategory) {
   return [
     {
       items: [
