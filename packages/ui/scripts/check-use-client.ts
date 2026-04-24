@@ -20,8 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const PACKAGE_ROOT = join(__dirname, '..')
 const COMPONENTS_DIR = join(PACKAGE_ROOT, 'src/components')
 
-const REACT_HOOK_PATTERN =
-  /\b(?:useState|useEffect|useRef|useLayoutEffect|useCallback|useMemo|useReducer|useContext|useImperativeHandle|useId|useTransition|useDeferredValue|useSyncExternalStore|useInsertionEffect)\b/
+const REACT_HOOK_PATTERN = /\buse[A-Z][A-Za-z0-9_]*\s*\(/;
 
 const USE_CLIENT_PATTERN = /^['"]use client['"];?\s*$/
 
