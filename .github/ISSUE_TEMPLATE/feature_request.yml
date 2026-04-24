@@ -1,0 +1,56 @@
+name: Feature request
+description: Propose a new component, variant, or API addition
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the user-facing need, not the implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Component name, API sketch, or rough design. Prior art is welcome (shadcn, Radix, etc.).
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds you've already tried, or existing components that almost do this.
+
+  - type: dropdown
+    id: family
+    attributes:
+      label: Component family
+      options:
+        - Primitive / Layout
+        - Form
+        - Feedback
+        - Navigation
+        - Data / Chart
+        - AI
+        - Financial
+        - Ops / Status
+        - Billing & Plans
+        - Animation
+        - Content
+        - Educational
+        - App shell
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues and the component registry.
+          required: true
