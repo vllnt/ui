@@ -1,0 +1,50 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as Stories from './segmented-control.stories'
+
+<Meta of={Stories} />
+
+# SegmentedControl
+
+A single-choice segmented selector built on the existing toggle-group primitive for compact view, filter, and mode switching.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/segmented-control.json
+```
+
+## Import
+
+```tsx
+import { SegmentedControl, SegmentedControlItem } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SegmentedControl aria-label="Project view" defaultValue="board">
+  <SegmentedControlItem value="board">Board</SegmentedControlItem>
+  <SegmentedControlItem value="list">List</SegmentedControlItem>
+  <SegmentedControlItem value="timeline">Timeline</SegmentedControlItem>
+</SegmentedControl>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Controlled selection
+
+Pass `value` and `onValueChange` to drive the selected segment from parent state.
+
+<Canvas of={Stories.Controlled} sourceState="shown" />
+
+## Disabled state
+
+Set `disabled` on the root to disable the full control, or on an individual item to disable a single option.
+
+<Canvas of={Stories.Disabled} sourceState="shown" />
+
+## API Reference
+
+<Controls />

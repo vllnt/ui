@@ -65,6 +65,29 @@ export { NumberInput, type NumberInputProps } from "./number-input";
 export { PasswordInput, type PasswordInputProps } from "./password-input";
 export { Switch } from "./switch";
 export {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  type FormProps,
+} from "./form";
+export {
+  MultiSelect,
+  type MultiSelectOption,
+  type MultiSelectProps,
+} from "./multi-select";
+export { TagsInput, type TagsInputProps } from "./tags-input";
+export {
+  SegmentedControl,
+  SegmentedControlItem,
+  type SegmentedControlItemProps,
+  segmentedControlItemVariants,
+  type SegmentedControlProps,
+  segmentedControlVariants,
+} from "./segmented-control";
+export {
   toast,
   Toast,
   ToastAction,
