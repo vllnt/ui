@@ -36,6 +36,10 @@ jobs:
       - name: Test
         run: pnpm test:once
 
+      - name: Check "use client" directives
+        working-directory: packages/ui
+        run: npx tsx scripts/check-use-client.ts
+
       - name: Verify stories
         working-directory: packages/ui
         run: |
