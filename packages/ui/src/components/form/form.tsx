@@ -230,44 +230,52 @@ FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
   HTMLElement,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ id: _id, ...props }, ref) => {
-  const {
-    controlId,
-    descriptionId,
-    disabled,
-    hasDescription,
-    hasMessage,
-    invalid,
-    messageId,
-    required,
-  } = useFormItemContext("FormControl");
+  React.ComponentPropsWithoutRef<typeof Slot> & {
+    disabled?: boolean;
+    required?: boolean;
+  }
+>(
+  (
+    { disabled: controlDisabled, id: _id, required: controlRequired, ...props },
+    ref,
+  ) => {
+    const {
+      controlId,
+      descriptionId,
+      disabled,
+      hasDescription,
+      hasMessage,
+      invalid,
+      messageId,
+      required,
+    } = useFormItemContext("FormControl");
 
-  const describedBy = composeIds(
-    props["aria-describedby"],
-    hasDescription ? descriptionId : undefined,
-    invalid && hasMessage ? messageId : undefined,
-  );
-  const nativeConstraintProps: Record<string, boolean | undefined> = {
-    disabled: disabled || undefined,
-    required: required || undefined,
-  };
+    const describedBy = composeIds(
+      props["aria-describedby"],
+      hasDescription ? descriptionId : undefined,
+      invalid && hasMessage ? messageId : undefined,
+    );
+    const nativeConstraintProps: Record<string, boolean | undefined> = {
+      disabled: controlDisabled ?? (disabled || undefined),
+      required: controlRequired ?? (required || undefined),
+    };
 
-  return (
-    <Slot
-      {...props}
-      {...nativeConstraintProps}
-      aria-describedby={describedBy}
-      aria-disabled={props["aria-disabled"] ?? (disabled || undefined)}
-      aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
-      aria-required={props["aria-required"] ?? (required || undefined)}
-      data-disabled={disabled ? "true" : undefined}
-      data-invalid={invalid ? "true" : undefined}
-      id={controlId}
-      ref={ref}
-    />
-  );
-});
+    return (
+      <Slot
+        {...props}
+        {...nativeConstraintProps}
+        aria-describedby={describedBy}
+        aria-disabled={props["aria-disabled"] ?? (disabled || undefined)}
+        aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
+        aria-required={props["aria-required"] ?? (required || undefined)}
+        data-disabled={disabled ? "true" : undefined}
+        data-invalid={invalid ? "true" : undefined}
+        id={controlId}
+        ref={ref}
+      />
+    );
+  },
+);
 FormControl.displayName = "FormControl";
 
 const FormDescription = React.forwardRef<

@@ -238,6 +238,24 @@ describe("Form", () => {
     expect(input).toHaveAttribute("aria-required", "true");
   });
 
+  it("preserves control-level disabled and required props when the form is not flagged", () => {
+    render(
+      <Form>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl disabled required>
+            <Input type="email" />
+          </FormControl>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+
+    expect(input).toBeDisabled();
+    expect(input).toBeRequired();
+  });
+
   it("keeps helper text in aria-describedby without linking a valid message", () => {
     render(
       <Form>
