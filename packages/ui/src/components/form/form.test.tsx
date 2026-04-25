@@ -106,6 +106,24 @@ describe("Form", () => {
     expect(input).toHaveAttribute("aria-describedby", description.id);
   });
 
+  it("does not render or link empty message content", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormMessage>{null}</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    expect(input).not.toHaveAttribute("aria-describedby");
+    expect(screen.queryByRole("alert")).toBeNull();
+  });
+
   it("does not link the description id when no FormDescription is rendered", () => {
     render(
       <Form invalid>
@@ -292,6 +310,35 @@ describe("Form", () => {
     expect(primaryMessage).not.toHaveAttribute("role", "alert");
     expect(backupInput).toHaveAttribute("aria-invalid", "true");
     expect(backupMessage).toHaveTextContent("Required");
+  });
+
+  it("links wrapped description and message content", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <div>
+            <FormDescription>Wrapped help</FormDescription>
+          </div>
+          <div>
+            <FormMessage>Wrapped error</FormMessage>
+          </div>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    const description = screen.getByText("Wrapped help");
+    const message = screen.getByRole("alert");
+
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.id} ${message.id}`,
+    );
+    expect(message).toHaveTextContent("Wrapped error");
   });
 
   it("keeps helper text in aria-describedby without linking a valid message", () => {

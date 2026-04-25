@@ -89,20 +89,48 @@ function isNamedFormChild(
   return "displayName" in type && type.displayName === name;
 }
 
-function hasRenderedFormChild(
-  children: React.ReactNode,
-  name: "FormDescription" | "FormMessage",
-) {
+function hasVisibleContent(children: React.ReactNode): boolean {
   return React.Children.toArray(children).some((child) => {
-    if (!isNamedFormChild(child, name)) {
+    if (child === null || child === undefined || typeof child === "boolean") {
       return false;
     }
 
-    if (name === "FormMessage") {
-      return React.Children.count(child.props.children) > 0;
+    if (typeof child === "string") {
+      return child.length > 0;
+    }
+
+    if (typeof child === "number") {
+      return true;
+    }
+
+    if (React.isValidElement<{ children?: React.ReactNode }>(child)) {
+      const nestedChildren = child.props.children;
+
+      return nestedChildren === undefined
+        ? true
+        : hasVisibleContent(nestedChildren);
     }
 
     return true;
+  });
+}
+
+function hasRenderedFormChild(
+  children: React.ReactNode,
+  name: "FormDescription" | "FormMessage",
+): boolean {
+  return React.Children.toArray(children).some((child) => {
+    if (isNamedFormChild(child, name)) {
+      return name === "FormMessage"
+        ? hasVisibleContent(child.props.children)
+        : true;
+    }
+
+    if (React.isValidElement<{ children?: React.ReactNode }>(child)) {
+      return hasRenderedFormChild(child.props.children, name);
+    }
+
+    return false;
   });
 }
 
