@@ -80,7 +80,7 @@ describe("CanvasShell", () => {
     );
   });
 
-  it("defaults floating safe-area spacing to the chrome inset instead of magic values", () => {
+  it("reserves default chrome footprint in floating mode instead of only the inset", () => {
     const { container } = render(
       <CanvasShell
         bottomBar={<div>bottom host</div>}
@@ -95,10 +95,18 @@ describe("CanvasShell", () => {
     const { shell } = getShellElements(container);
     const shellStyle = shell.getAttribute("style");
 
-    expect(shellStyle).toContain("--canvas-shell-safe-top: 16px");
-    expect(shellStyle).toContain("--canvas-shell-safe-right: 16px");
-    expect(shellStyle).toContain("--canvas-shell-safe-bottom: 16px");
-    expect(shellStyle).toContain("--canvas-shell-safe-left: 16px");
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-top: calc(16px + 3.5rem)",
+    );
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-right: calc(16px + 18rem)",
+    );
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-bottom: calc(16px + 3.5rem)",
+    );
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-left: calc(16px + 4.5rem)",
+    );
     expect(shellStyle).not.toContain("112px");
     expect(shellStyle).not.toContain("392px");
   });
@@ -138,6 +146,21 @@ describe("CanvasShell", () => {
         rightBar={null}
         topBar={<div>Legacy top</div>}
       >
+        <div>Legacy main</div>
+      </CanvasShell>,
+    );
+
+    const shell = getElement(container.firstElementChild, "legacy shell");
+
+    expect(shell.className).toContain("flex-col");
+    expect(shell.className).not.toContain("relative isolate");
+    expect(screen.getByText("Legacy top")).toBeInTheDocument();
+    expect(screen.getByText("Legacy main")).toBeInTheDocument();
+  });
+
+  it("keeps an explicit undefined chromeInset on the legacy layout path", () => {
+    const { container } = render(
+      <CanvasShell chromeInset={undefined} topBar={<div>Legacy top</div>}>
         <div>Legacy main</div>
       </CanvasShell>,
     );
@@ -226,8 +249,19 @@ describe("CanvasShell", () => {
     );
 
     const { shell } = getShellElements(container);
+    const shellStyle = shell.getAttribute("style");
 
     expect(shell.className).toContain("relative isolate flex");
+    expect(shellStyle).toContain("--canvas-shell-safe-top: 24px");
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-left: calc(16px + 4.5rem)",
+    );
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-right: calc(16px + 18rem)",
+    );
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-bottom: calc(16px + 3.5rem)",
+    );
     expect(screen.getByText("legacy top")).toBeInTheDocument();
     expect(screen.getByText("legacy left")).toBeInTheDocument();
     expect(screen.getByText("legacy right")).toBeInTheDocument();

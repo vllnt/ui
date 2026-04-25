@@ -42,20 +42,61 @@ function toInsetValue(value: number | string | undefined) {
   return value;
 }
 
+const FLOATING_BOTTOM_BAR_FOOTPRINT = "3.5rem";
+const FLOATING_LEFT_BAR_FOOTPRINT = "4.5rem";
+const FLOATING_RIGHT_BAR_FOOTPRINT = "18rem";
+const FLOATING_TOP_BAR_FOOTPRINT = "3.5rem";
+
+function getReservedInset(
+  inset: string,
+  footprint: string,
+  override: number | string | undefined,
+) {
+  return toInsetValue(override) ?? `calc(${inset} + ${footprint})`;
+}
+
 function getSafeAreaInsets({
   chromeInset,
   contentPadding,
+  hasBottomBar,
+  hasLeftBar,
+  hasRightBar,
+  hasTopBar,
 }: {
   chromeInset: number | string;
   contentPadding?: CanvasShellInsets;
+  hasBottomBar: boolean;
+  hasLeftBar: boolean;
+  hasRightBar: boolean;
+  hasTopBar: boolean;
 }) {
   const inset = toInsetValue(chromeInset) ?? "16px";
 
   return {
-    bottom: toInsetValue(contentPadding?.bottom) ?? inset,
-    left: toInsetValue(contentPadding?.left) ?? inset,
-    right: toInsetValue(contentPadding?.right) ?? inset,
-    top: toInsetValue(contentPadding?.top) ?? inset,
+    bottom: hasBottomBar
+      ? getReservedInset(
+          inset,
+          FLOATING_BOTTOM_BAR_FOOTPRINT,
+          contentPadding?.bottom,
+        )
+      : (toInsetValue(contentPadding?.bottom) ?? inset),
+    left: hasLeftBar
+      ? getReservedInset(
+          inset,
+          FLOATING_LEFT_BAR_FOOTPRINT,
+          contentPadding?.left,
+        )
+      : (toInsetValue(contentPadding?.left) ?? inset),
+    right: hasRightBar
+      ? getReservedInset(
+          inset,
+          FLOATING_RIGHT_BAR_FOOTPRINT,
+          contentPadding?.right,
+        )
+      : (toInsetValue(contentPadding?.right) ?? inset),
+    top: hasTopBar
+      ? getReservedInset(inset, FLOATING_TOP_BAR_FOOTPRINT, contentPadding?.top)
+      : (toInsetValue(contentPadding?.top) ?? inset),
   };
 }
 
@@ -230,9 +271,21 @@ function renderFloatingCanvasShell(
   ref: React.ForwardedRef<HTMLElement>,
 ) {
   const inset = toInsetValue(chromeInset) ?? "16px";
+  const resolvedBottomBar = bottomBar ?? bottomSlot;
+  const resolvedLeftBar = leftBar ?? leftRail;
+  const resolvedRightBar = rightBar ?? rightDock;
+
+  const hasTopBar = hasChromeContent(topBar);
+  const hasLeftBar = hasChromeContent(resolvedLeftBar);
+  const hasRightBar = hasChromeContent(resolvedRightBar);
+  const hasBottomBar = hasChromeContent(resolvedBottomBar);
   const safeAreaInsets = getSafeAreaInsets({
     chromeInset,
     contentPadding,
+    hasBottomBar,
+    hasLeftBar,
+    hasRightBar,
+    hasTopBar,
   });
   const mergedStyle = {
     ...getSafeAreaStyle(safeAreaInsets),
@@ -244,14 +297,6 @@ function renderFloatingCanvasShell(
     paddingRight: "var(--canvas-shell-safe-right)",
     paddingTop: "var(--canvas-shell-safe-top)",
   } satisfies CSSProperties;
-  const resolvedBottomBar = bottomBar ?? bottomSlot;
-  const resolvedLeftBar = leftBar ?? leftRail;
-  const resolvedRightBar = rightBar ?? rightDock;
-
-  const hasTopBar = hasChromeContent(topBar);
-  const hasLeftBar = hasChromeContent(resolvedLeftBar);
-  const hasRightBar = hasChromeContent(resolvedRightBar);
-  const hasBottomBar = hasChromeContent(resolvedBottomBar);
 
   return (
     <section
@@ -280,13 +325,7 @@ function renderFloatingCanvasShell(
 }
 
 const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
-  const {
-    bottomBar,
-    chromeInset = 16,
-    contentPadding,
-    leftBar,
-    rightBar,
-  } = props;
+  const { bottomBar, chromeInset, contentPadding, leftBar, rightBar } = props;
   const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
     props,
     "chromeInset",
