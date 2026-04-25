@@ -4,12 +4,7 @@ import type { CSSProperties, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
-export type CanvasShellInsets = {
-  bottom?: number | string;
-  left?: number | string;
-  right?: number | string;
-  top?: number | string;
-};
+import type { CanvasShellInsets } from "./canvas-shell-route-config";
 
 export type CanvasShellProps = React.ComponentPropsWithoutRef<"section"> & {
   bottomBar?: ReactNode;
