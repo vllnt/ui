@@ -101,6 +101,13 @@ function useModuleProgress(id: string): ModuleProgress {
   return { completed, moduleCtx, progressPct, total };
 }
 
+function statusLabel(status: LessonStatus): string {
+  if (status === "completed") return "Completed";
+  if (status === "in-progress") return "In progress";
+  if (status === "locked") return "Locked";
+  return "Available";
+}
+
 function statusIcon(status: LessonStatus): ReactNode {
   if (status === "completed") {
     return <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-500" />;
@@ -223,15 +230,15 @@ function ModuleTrigger({
       aria-controls={`module-content-${id}`}
       aria-expanded={isExpanded}
       className={cn(
-        "w-full flex items-start justify-between gap-3 px-6 py-4 text-left transition-colors",
-        "hover:bg-muted/50",
+        "w-full flex items-start justify-between gap-3 rounded-md px-6 py-4 text-left transition-colors",
+        "hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         isExpanded && "bg-muted/30",
       )}
       onClick={toggle}
       type="button"
     >
       <div className="flex min-w-0 flex-col gap-1">
-        <span className="text-sm font-medium">{title}</span>
+        <h3 className="text-sm font-medium">{title}</h3>
         {description ? (
           <span className="line-clamp-1 text-xs text-muted-foreground">
             {description}
@@ -366,7 +373,7 @@ function CurriculumModule({
           aria-hidden={!isExpanded}
           className={cn(
             "overflow-hidden transition-all duration-200",
-            isExpanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0",
+            isExpanded ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0",
           )}
           hidden={!isExpanded}
           id={`module-content-${id}`}
@@ -428,6 +435,7 @@ function CurriculumLesson({
       )}
     >
       {statusIcon(status)}
+      <span className="sr-only">{statusLabel(status)}</span>
       <span
         className={cn(
           "min-w-0 flex-1 truncate",
@@ -448,7 +456,10 @@ function CurriculumLesson({
 
   if (href && !isLocked) {
     return (
-      <a className="block" href={href}>
+      <a
+        className="block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        href={href}
+      >
         {inner}
       </a>
     );

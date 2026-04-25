@@ -1,4 +1,5 @@
 import { fireEvent, render } from "@testing-library/react";
+import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
 import { Curriculum, CurriculumLesson, CurriculumModule } from "./curriculum";
@@ -55,7 +56,7 @@ describe("Curriculum", () => {
 });
 
 describe("CurriculumModule", () => {
-  const wrapper = (children: React.ReactNode) => (
+  const wrapper = (children: ReactNode) => (
     <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
       {children}
     </Curriculum>
@@ -113,7 +114,9 @@ describe("CurriculumModule", () => {
 
     fireEvent.click(getByRole("button", { name: /module 1/i }));
 
-    expect(getByRole("link", { name: "HTML Basics" })).toBeInTheDocument();
+    expect(
+      getByRole("link", { name: "Available HTML Basics" }),
+    ).toBeInTheDocument();
   });
 
   it("removes lesson progress when a lesson unmounts", () => {
@@ -167,7 +170,7 @@ describe("CurriculumModule", () => {
 });
 
 describe("CurriculumLesson", () => {
-  const wrapper = (children: React.ReactNode) => (
+  const wrapper = (children: ReactNode) => (
     <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
       <CurriculumModule id="mod-1" title="Module 1">
         {children}
@@ -222,7 +225,10 @@ describe("CurriculumLesson", () => {
       ),
     );
     expect(container.querySelector("a")).not.toBeInTheDocument();
-    expect(getByText(/locked/i)).toBeInTheDocument();
+    expect(getByText("Locked")).toBeInTheDocument();
+    expect(
+      getByText((_, element) => element?.textContent === " (Locked)"),
+    ).toBeInTheDocument();
   });
 
   it("applies completed style when status is completed", () => {
