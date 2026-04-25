@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
@@ -24,6 +25,10 @@ const emailSchema = z.object({
 
 type EmailValues = z.infer<typeof emailSchema>;
 
+type NativeSubmitEvent = Parameters<
+  NonNullable<React.ComponentPropsWithoutRef<"form">["onSubmit"]>
+>[0];
+
 describe("Form", () => {
   it("renders a native form element and forwards props, ref, and submit", async () => {
     const handleSubmit = vi.fn();
@@ -33,9 +38,7 @@ describe("Form", () => {
         className="custom-form"
         data-testid="login-form"
         name="login"
-        onSubmit={() => {
-          handleSubmit();
-        }}
+        onSubmit={handleSubmit}
         ref={ref}
       >
         <FormItem>
@@ -52,7 +55,7 @@ describe("Form", () => {
     expect(form).not.toBeNull();
     expect(form).toBe(ref.current);
     expect(form).toHaveClass("custom-form");
-    expect(form).toHaveClass("space-y-6");
+    expect(form).toHaveClass("space-y-2");
     expect(form).toHaveAttribute("data-testid", "login-form");
     expect(form).toHaveAttribute("name", "login");
 
@@ -64,6 +67,53 @@ describe("Form", () => {
     await waitFor(() => {
       expect(handleSubmit).toHaveBeenCalledTimes(1);
     });
+    const submittedEvent = handleSubmit.mock.calls[0]?.[0] as
+      | NativeSubmitEvent
+      | undefined;
+    expect(submittedEvent).toBeTruthy();
+    expect(submittedEvent?.target).toBe(form);
+  });
+
+  it("skips validated submission when the native submit handler prevents default", async () => {
+    const nativeSubmit = vi.fn((event: NativeSubmitEvent) => {
+      event.preventDefault();
+    });
+    const validSubmit = vi.fn();
+
+    render(
+      <Form<EmailValues>
+        defaultValues={{ email: "person@example.com" }}
+        onSubmit={nativeSubmit}
+        onValidSubmit={validSubmit}
+        schema={emailSchema}
+      >
+        {(form) => (
+          <>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </>
+        )}
+      </Form>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    await waitFor(() => {
+      expect(nativeSubmit).toHaveBeenCalledTimes(1);
+    });
+    expect(validSubmit).not.toHaveBeenCalled();
   });
 
   it("omits aria-describedby when no description or message is rendered", () => {
@@ -154,7 +204,7 @@ describe("Form", () => {
 
   it("renders description and message ids in server markup on the first pass", () => {
     const markup = renderToStaticMarkup(
-      <Form invalid onSubmit={() => undefined}>
+      <Form invalid onSubmit={vi.fn()}>
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
@@ -179,7 +229,9 @@ describe("Form", () => {
           <FormControl id="custom-control-id">
             <Input type="email" />
           </FormControl>
-          <FormDescription id="custom-description-id">Help text</FormDescription>
+          <FormDescription id="custom-description-id">
+            Help text
+          </FormDescription>
           <FormMessage id="custom-message-id">Required</FormMessage>
         </FormItem>
       </Form>,
@@ -206,7 +258,7 @@ describe("Form", () => {
     render(
       <Form<EmailValues>
         defaultValues={{ email: "" }}
-        onSubmit={handleSubmit}
+        onValidSubmit={handleSubmit}
         schema={emailSchema}
       >
         {(form) => (
@@ -283,7 +335,7 @@ describe("Form", () => {
     render(
       <Form<EmailValues>
         defaultValues={{ email: "person@example.com" }}
-        onSubmit={async (_values, form) => {
+        onValidSubmit={async (_values, form) => {
           form.setError("email", {
             message: "This email is already in use.",
             type: "server",
@@ -322,6 +374,57 @@ describe("Form", () => {
     );
   });
 
+  it("omits form message ids from aria-describedby when an error has no visible message", async () => {
+    function FormHarness() {
+      const form = useForm<EmailValues>({
+        defaultValues: { email: "person@example.com" },
+      });
+
+      return (
+        <Form form={form}>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormDescription>
+                  We will send invitations here.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            onClick={() => {
+              form.setError("email", { type: "server" });
+            }}
+            type="button"
+          >
+            Trigger silent error
+          </Button>
+        </Form>
+      );
+    }
+
+    render(<FormHarness />);
+
+    const input = screen.getByRole("textbox", { name: "Email" });
+    const description = screen.getByText("We will send invitations here.");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Trigger silent error" }),
+    );
+
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-describedby", description.id);
+      expect(screen.queryByRole("alert")).toBeNull();
+    });
+  });
+
   it("exposes submitting state to children and disables controls while pending", async () => {
     let resolveSubmit: (() => void) | undefined;
     const handlePendingSubmit = () =>
@@ -332,7 +435,7 @@ describe("Form", () => {
     render(
       <Form<EmailValues>
         defaultValues={{ email: "person@example.com" }}
-        onSubmit={handlePendingSubmit}
+        onValidSubmit={handlePendingSubmit}
         schema={emailSchema}
       >
         {(form) => (
@@ -565,11 +668,17 @@ describe("Form", () => {
     const lastInput = screen.getByRole("textbox", { name: "Last name" });
     const firstDescription = screen.getByText("Given name");
     const lastDescription = screen.getByText("Family name");
-    const [firstMessage, secondMessage] = screen.getAllByText("Required");
+    const messages = screen.getAllByText("Required");
+    expect(messages).toHaveLength(2);
+    const [firstMessage, secondMessage] = messages;
+
+    if (!firstMessage || !secondMessage) {
+      throw new Error("Expected two message elements.");
+    }
 
     expect(firstInput.id).not.toBe(lastInput.id);
     expect(firstDescription.id).not.toBe(lastDescription.id);
-    expect(firstMessage?.id).not.toBe(secondMessage?.id);
+    expect(firstMessage.id).not.toBe(secondMessage.id);
     expect(firstInput).toHaveAttribute("aria-describedby", firstDescription.id);
     expect(lastInput).toHaveAttribute("aria-describedby", lastDescription.id);
   });
@@ -605,16 +714,22 @@ describe("Form", () => {
     const backupInput = screen.getByRole("textbox", { name: "Backup email" });
     const primaryDescription = screen.getByText("Primary contact");
     const backupDescription = screen.getByText("Secondary contact");
-    const [primaryMessage, backupMessage] = screen.getAllByText("Required");
+    const messages = screen.getAllByText("Required");
+    expect(messages).toHaveLength(2);
+    const [primaryMessage, backupMessage] = messages;
+
+    if (!primaryMessage || !backupMessage) {
+      throw new Error("Expected two message elements.");
+    }
 
     expect(primaryInput.id).toMatch(/^field-control-/);
     expect(backupInput.id).toMatch(/^field-control-/);
     expect(primaryInput.id).not.toBe(backupInput.id);
     expect(primaryDescription.id).toMatch(/^field-description-/);
     expect(backupDescription.id).toMatch(/^field-description-/);
-    expect(primaryMessage?.id).toMatch(/^field-message-/);
-    expect(backupMessage?.id).toMatch(/^field-message-/);
-    expect(primaryMessage?.id).not.toBe(backupMessage?.id);
+    expect(primaryMessage.id).toMatch(/^field-message-/);
+    expect(backupMessage.id).toMatch(/^field-message-/);
+    expect(primaryMessage.id).not.toBe(backupMessage.id);
   });
 
   it("keeps partial custom id overrides scoped to their role", () => {

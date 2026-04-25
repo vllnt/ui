@@ -34,7 +34,7 @@ function ProfileFormExample({
     <Form<ProfileValues>
       className="w-full max-w-md rounded-lg border border-border bg-card p-6"
       defaultValues={{ email: "", name: "" }}
-      onSubmit={async (values, form) => {
+      onValidSubmit={async (values, form) => {
         setSubmitted(null);
         await Promise.resolve();
 

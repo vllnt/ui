@@ -17,7 +17,6 @@ import {
   useFormContext,
   type UseFormReturn,
 } from "react-hook-form";
-
 import { cn } from "../../lib/utils";
 import { Label } from "../label";
 
@@ -43,16 +42,16 @@ type FormErrorHandler<TFieldValues extends FieldValues> = (
 
 type BaseFormProps<TFieldValues extends FieldValues> = Omit<
   React.ComponentPropsWithoutRef<"form">,
-  "children" | "onSubmit"
+  "children"
 > & {
-  children: FormRenderChildren<TFieldValues>;
+  children?: FormRenderChildren<TFieldValues>;
   controlId?: string;
   descriptionId?: string;
   disabled?: boolean;
   invalid?: boolean;
   messageId?: string;
   onError?: FormErrorHandler<TFieldValues>;
-  onSubmit?: FormSubmitHandler<TFieldValues>;
+  onValidSubmit?: FormSubmitHandler<TFieldValues>;
   required?: boolean;
 };
 
@@ -76,6 +75,8 @@ export type FormProps<TFieldValues extends FieldValues = FieldValues> =
   BaseFormProps<TFieldValues> &
     (ManagedFormProps<TFieldValues> | ProvidedFormProps<TFieldValues>);
 
+type FormNativeSubmitHandler =
+  React.ComponentPropsWithoutRef<"form">["onSubmit"];
 
 type FormRootContextValue = {
   controlId?: string;
@@ -233,6 +234,44 @@ function hasRenderedFormChild(
   });
 }
 
+function createManagedSubmitHandler<TFieldValues extends FieldValues>(
+  form: FormInstance<TFieldValues>,
+  onValidSubmit: FormSubmitHandler<TFieldValues> | undefined,
+  onError: FormErrorHandler<TFieldValues> | undefined,
+): ReturnType<FormInstance<TFieldValues>["handleSubmit"]> | undefined {
+  if (onValidSubmit === undefined && onError === undefined) {
+    return undefined;
+  }
+
+  return form.handleSubmit(
+    async (submittedValues) => {
+      if (onValidSubmit !== undefined) {
+        await onValidSubmit(submittedValues, form);
+      }
+    },
+    async (errors) => {
+      if (onError !== undefined) {
+        await onError(errors, form);
+      }
+    },
+  );
+}
+
+function createSubmitHandler(
+  nativeSubmit: FormNativeSubmitHandler,
+  handleValidatedSubmit:
+    | ((event?: React.BaseSyntheticEvent) => Promise<void>)
+    | undefined,
+): FormNativeSubmitHandler {
+  return async (event) => {
+    nativeSubmit?.(event);
+
+    if (handleValidatedSubmit && !event.defaultPrevented) {
+      await handleValidatedSubmit(event);
+    }
+  };
+}
+
 function FormInner<TFieldValues extends FieldValues = FieldValues>(
   {
     children,
@@ -246,6 +285,7 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
     messageId,
     onError,
     onSubmit,
+    onValidSubmit,
     required = false,
     resolver,
     schema,
@@ -264,7 +304,6 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
   });
   const form: FormInstance<TFieldValues> = providedForm ?? internalForm;
   const submitting = disabled || form.formState.isSubmitting;
-  const content = typeof children === "function" ? children(form) : children;
   const rootContextValue = React.useMemo<FormRootContextValue>(
     () => ({
       controlId,
@@ -276,26 +315,21 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
     }),
     [controlId, descriptionId, disabled, invalid, messageId, required],
   );
-
+  const handleValidatedSubmit = createManagedSubmitHandler(
+    form,
+    onValidSubmit,
+    onError,
+  );
   const submitHandler =
-    onSubmit === undefined
+    onSubmit === undefined && handleValidatedSubmit === undefined
       ? undefined
-      : form.handleSubmit(
-          async (submittedValues) => {
-            await onSubmit(submittedValues, form);
-          },
-          async (errors) => {
-            if (onError !== undefined) {
-              await onError(errors, form);
-            }
-          },
-        );
+      : createSubmitHandler(onSubmit, handleValidatedSubmit);
 
   return (
     <FormRootContext.Provider value={rootContextValue}>
       <FormProvider {...form}>
         <form
-          className={cn("space-y-6", className)}
+          className={cn("space-y-2", className)}
           data-disabled={submitting ? "true" : undefined}
           data-invalid={invalid ? "true" : undefined}
           data-submitting={form.formState.isSubmitting ? "true" : undefined}
@@ -303,7 +337,7 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
           ref={ref}
           {...props}
         >
-          {content}
+          {typeof children === "function" ? children(form) : children}
         </form>
       </FormProvider>
     </FormRootContext.Provider>
@@ -460,14 +494,14 @@ FormItem.displayName = "FormItem";
 const FormLabel = React.forwardRef<
   React.ComponentRef<typeof Label>,
   React.ComponentPropsWithoutRef<typeof Label>
->(({ className, ...props }, ref) => {
+>(({ className, htmlFor, ...props }, ref) => {
   const { formItemId, invalid } = useFormField();
 
   return (
     <Label
       className={cn(invalid && "text-destructive", className)}
       data-invalid={invalid ? "true" : undefined}
-      htmlFor={props.htmlFor ?? formItemId}
+      htmlFor={htmlFor ?? formItemId}
       ref={ref}
       {...props}
     />
@@ -498,18 +532,20 @@ const FormControl = React.forwardRef<HTMLElement, FormControlProps>(
       required,
     } = useFormField();
     const { formState } = useFormContext();
+    const hasErrorMessage = hasVisibleContent(error?.message);
     const describedBy = composeIds(
       props["aria-describedby"],
       hasDescription ? formDescriptionId : undefined,
-      error !== undefined
-        ? hasMessageSlot
+      error === undefined
+        ? hasMessage && invalid
           ? formMessageId
           : undefined
-        : invalid && hasMessage
+        : hasMessageSlot && hasErrorMessage
           ? formMessageId
           : undefined,
     );
-    const effectiveDisabled = controlDisabled ?? (disabled || formState.isSubmitting);
+    const effectiveDisabled =
+      controlDisabled ?? (disabled || formState.isSubmitting);
     const effectiveRequired = controlRequired ?? required;
     const nativeConstraintProps: {
       disabled?: boolean;

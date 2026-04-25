@@ -44,7 +44,7 @@ const schema = z.object({
 
 <Form
   defaultValues={{ email: '' }}
-  onSubmit={async (values, form) => {
+  onValidSubmit={async (values, form) => {
     await save(values)
     form.reset(values)
   }}
@@ -73,7 +73,7 @@ const schema = z.object({
 
 ## Server-side errors
 
-Call `form.setError()` in `onSubmit` when the API rejects a field. `FormMessage` automatically renders the latest field error.
+Call `form.setError()` in `onValidSubmit` when the API rejects a field. `FormMessage` automatically renders the latest field error.
 
 <Canvas of={Stories.ServerError} sourceState="shown" />
 

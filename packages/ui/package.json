@@ -90,33 +90,22 @@
     "check:stories": "tsx scripts/check-story-coverage.ts"
   },
   "peerDependencies": {
-    "@hookform/resolvers": ">=5.0.0",
     "next": ">=14.0.0",
     "next-themes": ">=0.4.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
-    "react-hook-form": ">=7.55.0",
-    "tailwindcss": ">=3.0.0",
-    "zod": ">=4.0.0"
+    "tailwindcss": ">=3.0.0"
   },
   "peerDependenciesMeta": {
-    "@hookform/resolvers": {
-      "optional": true
-    },
     "next": {
       "optional": true
     },
     "next-themes": {
       "optional": true
-    },
-    "react-hook-form": {
-      "optional": true
-    },
-    "zod": {
-      "optional": true
     }
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@mdx-js/mdx": "^3.1.1",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
@@ -153,10 +142,12 @@
     "react-day-picker": "^9.13.0",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^4.3.3",
+    "react-hook-form": "^7.73.1",
     "react-syntax-highlighter": "^16.1.1",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.5.5",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",
@@ -183,7 +174,6 @@
     "jsdom": "^26.1.0",
     "playwright": "^1.57.0",
     "postcss": "^8.5.6",
-    "react-hook-form": "^7.73.1",
     "remark-gfm": "^4.0.1",
     "storybook": "^10.2.17",
     "tailwindcss": "^3.4.17",
@@ -191,8 +181,6 @@
     "tsup": "^8.5.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16",
-    "zod": "^4.3.6",
-    "@hookform/resolvers": "^5.2.2"
+    "vitest": "^4.0.16"
   }
 }

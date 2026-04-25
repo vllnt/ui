@@ -26,7 +26,7 @@ export function FormInvalidEmailPreview() {
     <Form<VisualValues>
       className="w-80 rounded-lg border border-border bg-card p-6"
       defaultValues={{ email: "" }}
-      onSubmit={async () => {
+      onValidSubmit={async () => {
         await Promise.resolve();
       }}
       schema={visualSchema}
