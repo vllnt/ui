@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { fireEvent, render, screen } from "@testing-library/react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
 import { Input } from "../input";
@@ -121,6 +122,56 @@ describe("Form", () => {
     const input = screen.getByRole("textbox");
     const message = screen.getByRole("alert");
     expect(input).toHaveAttribute("aria-describedby", message.id);
+  });
+
+  it("renders description and message ids in server markup on the first pass", () => {
+    const markup = renderToStaticMarkup(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormDescription>Help text</FormDescription>
+          <FormMessage>Required</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    expect(markup).toContain("aria-describedby=");
+    expect(markup).toContain("-description");
+    expect(markup).toContain("-message");
+  });
+
+  it("ignores native id overrides that would break form associations", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl id="custom-control-id">
+            <Input type="email" />
+          </FormControl>
+          <FormDescription id="custom-description-id">
+            Help text
+          </FormDescription>
+          <FormMessage id="custom-message-id">Required</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    const label = screen.getByText("Email");
+    const description = screen.getByText("Help text");
+    const message = screen.getByRole("alert");
+
+    expect(input.id).not.toBe("custom-control-id");
+    expect(description.id).not.toBe("custom-description-id");
+    expect(message.id).not.toBe("custom-message-id");
+    expect(label).toHaveAttribute("for", input.id);
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.id} ${message.id}`,
+    );
   });
 
   it("wires the label to the generated control id", () => {
