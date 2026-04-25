@@ -16,7 +16,7 @@ function getElement(node: Element | null, label: string) {
 function getShellElements(container: HTMLElement) {
   const shell = getElement(container.firstElementChild, "CanvasShell shell");
   const contentHost = getElement(
-    shell.children.item(1),
+    shell.querySelector('[data-slot="canvas-shell-content"]'),
     "CanvasShell content host",
   );
 
@@ -164,6 +164,41 @@ describe("CanvasShell", () => {
       "--canvas-shell-safe-top: 16px",
     );
     expect(screen.getByText("Inset main")).toBeInTheDocument();
+  });
+
+  it("keeps falsey chrome props on the legacy layout path", () => {
+    const { container } = render(
+      <CanvasShell bottomBar={false} leftBar={false} rightBar={false}>
+        <div>Falsey main</div>
+      </CanvasShell>,
+    );
+
+    const shell = getElement(container.firstElementChild, "legacy shell");
+
+    expect(shell.className).toContain("flex-col");
+    expect(shell.className).not.toContain("relative isolate");
+    expect(screen.getByText("Falsey main")).toBeInTheDocument();
+  });
+
+  it("keeps floating chrome before main content in document order", () => {
+    render(
+      <CanvasShell
+        bottomBar={<button type="button">Bottom action</button>}
+        leftBar={<button type="button">Left action</button>}
+        rightBar={<button type="button">Right action</button>}
+        topBar={<button type="button">Top action</button>}
+      >
+        <button type="button">Main action</button>
+      </CanvasShell>,
+    );
+
+    const topAction = screen.getByRole("button", { name: "Top action" });
+    const mainAction = screen.getByRole("button", { name: "Main action" });
+
+    expect(
+      topAction.compareDocumentPosition(mainAction) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 
   it("preserves deprecated side slots during floating migrations", () => {

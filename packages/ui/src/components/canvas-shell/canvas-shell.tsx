@@ -9,7 +9,7 @@ import type { CanvasShellInsets } from "./canvas-shell-route-config";
 export type CanvasShellProps = React.ComponentPropsWithoutRef<"section"> & {
   bottomBar?: ReactNode;
   bottomSlot?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   chromeInset?: number | string;
   contentPadding?: CanvasShellInsets;
   leftBar?: ReactNode;
@@ -70,6 +70,10 @@ function getSafeAreaStyle(
   } satisfies CanvasShellSafeAreaStyle;
 }
 
+function hasChromeContent(node: ReactNode) {
+  return node !== undefined && node !== null && node !== false;
+}
+
 function CanvasShellChrome({
   bottomBar,
   inset,
@@ -79,7 +83,7 @@ function CanvasShellChrome({
 }: CanvasShellChromeProps) {
   return (
     <div className="pointer-events-none absolute inset-0 z-20">
-      {topBar ? (
+      {hasChromeContent(topBar) ? (
         <div
           className="pointer-events-auto absolute inset-x-0 z-30"
           style={{ top: inset }}
@@ -92,7 +96,7 @@ function CanvasShellChrome({
           </div>
         </div>
       ) : null}
-      {leftBar ? (
+      {hasChromeContent(leftBar) ? (
         <div
           className="pointer-events-auto absolute left-0 z-30 flex"
           style={{
@@ -104,7 +108,7 @@ function CanvasShellChrome({
           {leftBar}
         </div>
       ) : null}
-      {rightBar ? (
+      {hasChromeContent(rightBar) ? (
         <div
           className="pointer-events-auto absolute right-0 z-30 flex"
           style={{
@@ -116,7 +120,7 @@ function CanvasShellChrome({
           {rightBar}
         </div>
       ) : null}
-      {bottomBar ? (
+      {hasChromeContent(bottomBar) ? (
         <div
           className="pointer-events-auto absolute inset-x-0 bottom-0 z-30"
           style={{ bottom: inset }}
@@ -215,6 +219,11 @@ function renderFloatingCanvasShell(
   const resolvedLeftBar = leftBar ?? leftRail;
   const resolvedRightBar = rightBar ?? rightDock;
 
+  const hasTopBar = hasChromeContent(topBar);
+  const hasLeftBar = hasChromeContent(resolvedLeftBar);
+  const hasRightBar = hasChromeContent(resolvedRightBar);
+  const hasBottomBar = hasChromeContent(resolvedBottomBar);
+
   return (
     <section
       className={cn(
@@ -226,21 +235,22 @@ function renderFloatingCanvasShell(
       {...props}
     >
       <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)/0.94),hsl(var(--background)/0.8))]" />
+      <CanvasShellChrome
+        bottomBar={hasBottomBar ? resolvedBottomBar : undefined}
+        inset={inset}
+        leftBar={hasLeftBar ? resolvedLeftBar : undefined}
+        rightBar={hasRightBar ? resolvedRightBar : undefined}
+        topBar={hasTopBar ? topBar : undefined}
+      />
       <div
         className="relative z-0 h-full w-full min-h-0 min-w-0"
+        data-slot="canvas-shell-content"
         style={contentStyle}
       >
         <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
           {children}
         </div>
       </div>
-      <CanvasShellChrome
-        bottomBar={resolvedBottomBar}
-        inset={inset}
-        leftBar={resolvedLeftBar}
-        rightBar={resolvedRightBar}
-        topBar={topBar}
-      />
     </section>
   );
 }
@@ -248,33 +258,21 @@ function renderFloatingCanvasShell(
 const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
   const {
     bottomBar,
-    bottomSlot,
     chromeInset = 16,
     contentPadding,
     leftBar,
-    leftRail,
     rightBar,
-    rightDock,
   } = props;
   const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
     props,
     "chromeInset",
   );
   const usesFloatingChrome =
-    bottomBar != null ||
-    leftBar != null ||
-    rightBar != null ||
+    hasChromeContent(bottomBar) ||
+    hasChromeContent(leftBar) ||
+    hasChromeContent(rightBar) ||
     contentPadding !== undefined ||
-    (hasExplicitChromeInset && chromeInset !== undefined) ||
-    (bottomBar === undefined &&
-      bottomSlot != null &&
-      contentPadding !== undefined) ||
-    (leftBar === undefined &&
-      leftRail != null &&
-      contentPadding !== undefined) ||
-    (rightBar === undefined &&
-      rightDock != null &&
-      contentPadding !== undefined);
+    (hasExplicitChromeInset && chromeInset !== undefined);
 
   if (!usesFloatingChrome) {
     return renderLegacyCanvasShell(props, ref);
