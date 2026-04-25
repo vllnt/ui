@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useState,
 } from "react";
@@ -44,6 +45,7 @@ function useCurriculumContext(): CurriculumContextValue {
 type ModuleContextValue = {
   moduleId: string;
   registerLesson: (id: string, status: LessonStatus) => void;
+  unregisterLesson: (id: string) => void;
 };
 
 const ModuleContext = createContext<ModuleContextValue | null>(null);
@@ -76,9 +78,18 @@ function useModuleProgress(id: string): ModuleProgress {
     [],
   );
 
+  const unregisterLesson = useCallback((lessonId: string) => {
+    setLessonStatuses((previous) => {
+      if (!previous.has(lessonId)) return previous;
+      const next = new Map(previous);
+      next.delete(lessonId);
+      return next;
+    });
+  }, []);
+
   const moduleCtx = useMemo(
-    () => ({ moduleId: id, registerLesson }),
-    [id, registerLesson],
+    () => ({ moduleId: id, registerLesson, unregisterLesson }),
+    [id, registerLesson, unregisterLesson],
   );
 
   const total = lessonStatuses.size;
@@ -149,14 +160,19 @@ function LessonMeta({
   duration,
   prerequisites,
 }: LessonMetaProps): React.ReactNode {
+  const prerequisitesLabel = prerequisites?.length
+    ? `Requires: ${prerequisites.join(", ")}`
+    : null;
+
   return (
     <div className="flex flex-shrink-0 items-center gap-2">
-      {prerequisites && prerequisites.length > 0 ? (
+      {prerequisitesLabel ? (
         <span
+          aria-label={prerequisitesLabel}
           className="flex items-center gap-1 text-xs text-muted-foreground"
-          title={`Requires: ${prerequisites.join(", ")}`}
+          title={prerequisitesLabel}
         >
-          <Link2 className="h-3 w-3" />
+          <Link2 aria-hidden="true" className="h-3 w-3" />
         </span>
       ) : null}
       {difficulty ? (
@@ -205,6 +221,7 @@ function ModuleTrigger({
   return (
     <button
       aria-controls={`module-content-${id}`}
+      aria-expanded={isExpanded}
       className={cn(
         "w-full flex items-start justify-between gap-3 px-6 py-4 text-left transition-colors",
         "hover:bg-muted/50",
@@ -252,7 +269,7 @@ export type CurriculumProps = {
   totalHours?: number;
 };
 
-function Curriculum({
+function CurriculumRoot({
   children,
   className,
   defaultExpandedModules,
@@ -300,7 +317,7 @@ function Curriculum({
             </div>
           )}
         </div>
-        <div aria-label={title} className="divide-y" role="tree">
+        <div aria-label={title} className="divide-y">
           {children}
         </div>
       </div>
@@ -331,12 +348,7 @@ function CurriculumModule({
 
   return (
     <ModuleContext.Provider value={moduleCtx}>
-      <div
-        aria-expanded={isExpanded}
-        aria-selected={false}
-        className={cn("", className)}
-        role="treeitem"
-      >
+      <section className={className}>
         <ModuleTrigger
           completed={completed}
           description={description}
@@ -351,16 +363,17 @@ function CurriculumModule({
           total={total}
         />
         <div
+          aria-hidden={!isExpanded}
           className={cn(
             "overflow-hidden transition-all duration-200",
             isExpanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0",
           )}
+          hidden={!isExpanded}
           id={`module-content-${id}`}
-          role="group"
         >
           <div className="divide-y divide-border/50 pb-2">{children}</div>
         </div>
-      </div>
+      </section>
     </ModuleContext.Provider>
   );
 }
@@ -387,26 +400,32 @@ function CurriculumLesson({
   title,
 }: CurriculumLessonProps): React.ReactNode {
   const moduleCtx = useModuleContext();
-  const lessonId = id ?? title;
+  const fallbackId = useId();
+  const lessonId = id ?? fallbackId;
 
   useEffect(() => {
-    if (moduleCtx) {
-      moduleCtx.registerLesson(lessonId, status);
+    if (!moduleCtx) {
+      return;
     }
+
+    moduleCtx.registerLesson(lessonId, status);
+
+    return () => {
+      moduleCtx.unregisterLesson(lessonId);
+    };
   }, [lessonId, moduleCtx, status]);
 
   const isLocked = status === "locked";
 
   const inner = (
     <div
-      aria-selected={status === "in-progress"}
+      aria-disabled={isLocked || undefined}
       className={cn(
         "flex items-center gap-3 px-6 py-3 pl-10 text-sm transition-colors",
         isLocked ? "cursor-not-allowed opacity-60" : "",
         !isLocked && href ? "cursor-pointer hover:bg-muted/40" : "",
         className,
       )}
-      role="treeitem"
     >
       {statusIcon(status)}
       <span
@@ -417,6 +436,7 @@ function CurriculumLesson({
         )}
       >
         {title}
+        {isLocked ? <span className="sr-only"> (Locked)</span> : null}
       </span>
       <LessonMeta
         difficulty={difficulty}
@@ -428,7 +448,7 @@ function CurriculumLesson({
 
   if (href && !isLocked) {
     return (
-      <a className="block" href={href} tabIndex={0}>
+      <a className="block" href={href}>
         {inner}
       </a>
     );
@@ -437,7 +457,14 @@ function CurriculumLesson({
   return inner;
 }
 
-Curriculum.Module = CurriculumModule;
-Curriculum.Lesson = CurriculumLesson;
+type CurriculumComponent = ((props: CurriculumProps) => React.ReactNode) & {
+  Lesson: typeof CurriculumLesson;
+  Module: typeof CurriculumModule;
+};
+
+const Curriculum = Object.assign(CurriculumRoot, {
+  Lesson: CurriculumLesson,
+  Module: CurriculumModule,
+}) as CurriculumComponent;
 
 export { Curriculum, CurriculumLesson, CurriculumModule };
