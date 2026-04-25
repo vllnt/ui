@@ -1,0 +1,217 @@
+# @vllnt/ui — full reference for AI consumption
+
+> React component library — 144 accessible components built on Radix UI primitives, Tailwind CSS, and CVA. Distributed via the public npm registry with OIDC-signed provenance, and via a shadcn-compatible registry at https://ui.vllnt.ai/r.
+
+---
+
+## Package
+
+- **Name:** `@vllnt/ui`
+- **Version:** `0.2.0`
+- **License:** MIT
+- **Language:** TypeScript (strict)
+- **Package manager:** pnpm (workspaces + Turborepo)
+- **Runtime targets:** React 18+, Tailwind CSS 3+
+- **Distribution:**
+  - Public npm: https://www.npmjs.com/package/@vllnt/ui
+  - shadcn registry: https://ui.vllnt.ai/r
+  - Docs: https://ui.vllnt.ai
+  - Storybook: https://storybook.vllnt.ai
+
+## Install
+
+```bash
+pnpm add @vllnt/ui
+```
+
+### Peer dependencies
+
+Required: `react`, `react-dom`, `tailwindcss`.
+Optional (only for `ThemeProvider`, `NavbarSaas`, `LangProvider`): `next`, `next-themes`.
+
+## Setup
+
+1. Apply the Tailwind preset:
+
+   ```ts
+   // tailwind.config.ts
+   import uiPreset from "@vllnt/ui/tailwind-preset";
+
+   export default {
+     presets: [uiPreset],
+     content: ["./src/**/*.{ts,tsx}"],
+   };
+   ```
+
+2. Import styles once (e.g. in `app/layout.tsx`):
+
+   ```ts
+   import "@vllnt/ui/styles.css";
+   ```
+
+3. Import and render components:
+
+   ```tsx
+   import { Button, Card, Badge } from "@vllnt/ui";
+   ```
+
+## Exports
+
+| Path | Purpose |
+|------|---------|
+| `@vllnt/ui` | All components, hooks, types, and `cn()` utility |
+| `@vllnt/ui/tailwind-preset` | Tailwind preset config |
+| `@vllnt/ui/styles.css` | Tailwind base + default theme + safe-area utilities |
+| `@vllnt/ui/themes/default.css` | CSS variables only (no Tailwind base) |
+
+## Conventions
+
+Every component:
+
+- Uses `React.forwardRef` + `React.ComponentPropsWithoutRef` on the shipped surface.
+- Uses `cn()` from `src/lib/utils.ts` to merge Tailwind classes (clsx + tailwind-merge).
+- Uses CVA (`class-variance-authority`) for variant props where variants exist.
+- Wraps Radix primitives for accessible behavior (focus, keyboard, ARIA) where applicable.
+- Supports `asChild` via `@radix-ui/react-slot` when composable rendering is useful.
+
+Theming is driven by HSL CSS variables on `:root` (light) and `.dark` (dark mode). See `packages/ui/README.md` for the full variable list.
+
+## Component families (144 components)
+
+### Primitives (Radix)
+
+Accordion, AlertDialog, AspectRatio, Avatar, Checkbox, Collapsible, ContextMenu, Dialog, DropdownMenu, HoverCard, Label, Menubar, NavigationMenu, Popover, RadioGroup, ScrollArea, Select, Separator, Slider, Switch, Tabs, Toggle, ToggleGroup, Tooltip.
+
+### Layout
+
+Card, Carousel, Resizable, Sheet, Drawer, HorizontalScrollRow, ViewSwitcher.
+
+### Forms
+
+Button, Input, InputOtp, InlineInput, NumberInput, PasswordInput, Textarea, DatePicker, FileUpload, Combobox, Command, Rating, Calendar.
+
+### Feedback
+
+Alert, Badge, Callout, Skeleton, Spinner, Toast, Tour.
+
+### Navigation
+
+Breadcrumb, Pagination, Sidebar, SidebarProvider, SidebarToggle, SearchBar, SearchDialog, KeyboardShortcutsHelp, FloatingActionButton, SocialFAB.
+
+### Data / Charts
+
+AreaChart, BarChart, LineChart, CandlestickChart, SparklineGrid, MarketTreemap, OrderBook, TickerTape, MetricGauge, ActivityHeatmap, ActivityLog, Table, DataTable, DataList, StatCard, NumberTicker.
+
+### AI
+
+AIChatInput, AIMessageBubble, AISourceCitation, AIStreamingText, AIToolCallDisplay, ThinkingBlock, ModelSelector.
+
+### Financial
+
+CandlestickChart, MarketTreemap, OrderBook, TickerTape, SparklineGrid, WalletCard, Watchlist.
+
+### Ops / Status
+
+StatusBoard, StatusIndicator, LiveFeed, WorldClockBar, SeverityBadge, RoleBadge, ScopeSelector.
+
+### Billing & Plans
+
+SubscriptionCard, PlanBadge, CreditBadge, UsageBreakdown.
+
+### Animation
+
+AnimatedText, BorderBeam, Marquee, NumberTicker, Spinner, UnicodeSpinner.
+
+### Content
+
+BlogCard, ProTip, Callout, CodeBlock, CodePlayground, Comparison (+ BeforeAfter), FAQ, FlowDiagram (+ FlowControls, FlowFullscreen, FlowErrorBoundary, hook `useFlowDiagram`), MDXContent, ProfileSection, Terminal, VideoEmbed, TLDRSection, ShareSection, ShareDialog.
+
+### Tutorial / Educational
+
+ContentIntro, Exercise, Flashcard, KeyConcept (+ Glossary), LearningObjectives (+ Prerequisites, Summary), ProgressBar, ProgressCard, Quiz, StepByStep, StepNavigation, Stepper, TutorialCard, TutorialComplete, TutorialFilters, TutorialIntroContent, TutorialMDX, Checklist, Annotation (+ Highlight), CompletionDialog, TruncatedText, TableOfContents, TableOfContentsPanel.
+
+### App shell
+
+NavbarSaas, ThemeProvider, ThemeToggle, LangProvider, CategoryFilter, FilterBar, CookieConsent, Slideshow, CountdownTimer, AvatarGroup.
+
+## Patterns
+
+### Variant components
+
+```tsx
+<Button variant="outline" size="sm">Small Outline</Button>
+```
+
+Variants are typed exports from each component module.
+
+### Composition
+
+```tsx
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Title</DialogTitle>
+      <DialogDescription>…</DialogDescription>
+    </DialogHeader>
+  </DialogContent>
+</Dialog>
+```
+
+### Utilities
+
+```tsx
+import { cn } from "@vllnt/ui";
+```
+
+### Hooks
+
+| Hook | Purpose |
+|------|---------|
+| `useDebounce(value, delayMs)` | Debounce a value — idle-settled state for search inputs. |
+| `useHorizontalScroll(ref)` | Wheel-to-horizontal + scroll-snap helpers used by `HorizontalScrollRow`. |
+| `useMobile(breakpoint?)` | `true` below the given breakpoint (default 768). SSR-safe. |
+| `useSidebar()` | Read `SidebarProvider` state: `{ open, setOpen, toggle }`. |
+| `useFlowDiagram(options)` | Imperative handle for `FlowDiagram`: fit view, zoom, PNG export. |
+| `useSocialFab()` | Open/close state for `SocialFab`. |
+
+## Requirements
+
+- React ≥ 18
+- Tailwind CSS ≥ 3
+- Next.js ≥ 14 (optional — only for Next-specific components)
+- `next-themes` ≥ 0.4 (optional — for `ThemeProvider`, `ThemeToggle`)
+
+## Publishing & Provenance
+
+- Releases are cut via `workflow_dispatch` on `.github/workflows/publish.yml` (pick patch/minor/major).
+- Every push to `main` publishes a canary build tagged `canary` (e.g. `@vllnt/ui@0.2.0-canary.<sha>`).
+- All published artifacts carry a signed sigstore provenance attestation tied to the GitHub Actions run that produced them.
+
+## Repository layout
+
+```
+vllnt/ui/
+  packages/ui/                # @vllnt/ui source
+  apps/registry/              # Next.js registry at ui.vllnt.ai
+  .github/workflows/          # CI, publish, storybook
+  AGENTS.md                   # canonical agent instructions
+  CONTRIBUTING.md             # contributor guide
+  SECURITY.md                 # vulnerability reporting
+  CODE_OF_CONDUCT.md          # community standards
+```
+
+## Support
+
+- Bugs / feature requests: https://github.com/vllnt/ui/issues
+- Security: https://github.com/vllnt/ui/security/advisories/new
+
+## References
+
+- Project homepage — https://ui.vllnt.ai
+- Storybook — https://storybook.vllnt.ai
+- Changelog — https://github.com/vllnt/ui/blob/main/packages/ui/CHANGELOG.md
+- Contributing — https://github.com/vllnt/ui/blob/main/CONTRIBUTING.md
+- Agent guide — https://github.com/vllnt/ui/blob/main/AGENTS.md

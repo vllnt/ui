@@ -10,7 +10,7 @@ type QuickAddProps = {
 };
 
 export function QuickAdd({ componentName }: QuickAddProps) {
-  const registryUrl = `https://ui.vllnt.com/r/${componentName}.json`;
+  const registryUrl = `https://ui.vllnt.ai/r/${componentName}.json`;
   const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`;
   const v0Url = `https://v0.dev/chat?q=add+component+from+${encodeURIComponent(registryUrl)}`;
   const [copied, setCopied] = useState(false);

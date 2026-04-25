@@ -1,0 +1,65 @@
+# @vllnt/ui
+
+> React component library — 144 accessible components built on Radix UI primitives, Tailwind CSS, and CVA.
+> Distributed via the public npm registry and a shadcn-compatible registry at https://ui.vllnt.ai/r.
+
+## Package
+
+- npm: https://www.npmjs.com/package/@vllnt/ui
+- Source: https://github.com/vllnt/ui/tree/main/packages/ui
+- Docs: https://ui.vllnt.ai
+- Storybook: https://storybook.vllnt.ai
+
+## Install
+
+```bash
+pnpm add @vllnt/ui
+```
+
+## Quick start
+
+```tsx
+import "@vllnt/ui/styles.css";
+import { Button } from "@vllnt/ui";
+```
+
+## Exports
+
+- `@vllnt/ui` — all components, hooks, and types
+- `@vllnt/ui/tailwind-preset` — Tailwind preset config
+- `@vllnt/ui/styles.css` — base styles + default theme
+- `@vllnt/ui/themes/default.css` — theme variables only
+
+## Key docs
+
+- [Root README](https://github.com/vllnt/ui/blob/main/README.md) — overview + component index
+- [Package README](https://github.com/vllnt/ui/blob/main/packages/ui/README.md) — setup, theming, full component tables
+- [CHANGELOG](https://github.com/vllnt/ui/blob/main/packages/ui/CHANGELOG.md) — version history
+- [CONTRIBUTING](https://github.com/vllnt/ui/blob/main/CONTRIBUTING.md) — dev + PR workflow
+- [AGENTS](https://github.com/vllnt/ui/blob/main/AGENTS.md) — conventions for AI coding agents
+- [llms-full.txt](https://github.com/vllnt/ui/blob/main/llms-full.txt) — full detail for AI consumption
+
+## Component families (144 total)
+
+- Primitives (Radix)
+- Layout
+- Forms
+- Feedback
+- Navigation
+- Data / Charts
+- AI
+- Financial
+- Ops / Status
+- Billing & Plans
+- Animation
+- Content
+- Tutorial / Educational
+- App Shell
+
+## Registry (shadcn-compatible)
+
+Install a single component:
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/{component}.json
+```
