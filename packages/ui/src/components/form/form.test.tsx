@@ -479,13 +479,38 @@ describe("Form", () => {
       throw new Error("Expected both required messages to be rendered.");
     }
 
-    expect(primaryInput.id).toMatch(/^field-/);
-    expect(backupInput.id).toMatch(/^field-/);
+    expect(primaryInput.id).toMatch(/^field-control-/);
+    expect(backupInput.id).toMatch(/^field-control-/);
     expect(primaryInput.id).not.toBe(backupInput.id);
     expect(primaryDescription.id).toMatch(/^field-description-/);
     expect(backupDescription.id).toMatch(/^field-description-/);
     expect(primaryMessage.id).toMatch(/^field-message-/);
     expect(backupMessage.id).toMatch(/^field-message-/);
     expect(primaryMessage.id).not.toBe(backupMessage.id);
+  });
+
+  it("keeps partial custom id overrides scoped to their role", () => {
+    render(
+      <Form controlId="field">
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormDescription>Scoped description</FormDescription>
+          <FormMessage>Scoped message</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    const description = screen.getByText("Scoped description");
+    const message = screen.getByText("Scoped message");
+
+    expect(input.id).toMatch(/^field-control-/);
+    expect(description.id).toMatch(/-description$/);
+    expect(message.id).toMatch(/-message$/);
+    expect(description.id).not.toBe(input.id);
+    expect(message.id).not.toBe(input.id);
   });
 });

@@ -70,7 +70,9 @@ function resolveItemId(
     return `${generatedId}-${suffix}`;
   }
 
-  return `${baseId}-${generatedId}`;
+  return baseId.endsWith(`-${suffix}`)
+    ? `${baseId}-${generatedId}`
+    : `${baseId}-${suffix}-${generatedId}`;
 }
 
 function isNamedFormChild(
