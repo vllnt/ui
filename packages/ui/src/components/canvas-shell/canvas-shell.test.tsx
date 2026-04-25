@@ -32,7 +32,8 @@ describe("CanvasShell", () => {
       </CanvasShell>,
     );
 
-    const shell = container.firstElementChild;
+    const shell = container.firstElementChild as HTMLElement | null;
+    const contentHost = shell?.children.item(1) as HTMLElement | null;
 
     expect(shell).not.toBeNull();
     expect(shell?.getAttribute("style")).toContain(
@@ -46,6 +47,18 @@ describe("CanvasShell", () => {
     );
     expect(shell?.getAttribute("style")).toContain(
       "--canvas-shell-safe-left: 44px",
+    );
+    expect(contentHost?.getAttribute("style")).toContain(
+      "padding-top: var(--canvas-shell-safe-top)",
+    );
+    expect(contentHost?.getAttribute("style")).toContain(
+      "padding-right: var(--canvas-shell-safe-right)",
+    );
+    expect(contentHost?.getAttribute("style")).toContain(
+      "padding-bottom: var(--canvas-shell-safe-bottom)",
+    );
+    expect(contentHost?.getAttribute("style")).toContain(
+      "padding-left: var(--canvas-shell-safe-left)",
     );
   });
 

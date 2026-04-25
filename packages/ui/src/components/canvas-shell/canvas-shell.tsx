@@ -164,6 +164,12 @@ const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>(
       ...canvasSafeAreaStyle,
       ...style,
     };
+    const contentStyle = {
+      paddingBottom: "var(--canvas-shell-safe-bottom)",
+      paddingLeft: "var(--canvas-shell-safe-left)",
+      paddingRight: "var(--canvas-shell-safe-right)",
+      paddingTop: "var(--canvas-shell-safe-top)",
+    } satisfies CSSProperties;
 
     return (
       <section
@@ -176,7 +182,14 @@ const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>(
         {...props}
       >
         <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)/0.94),hsl(var(--background)/0.8))]" />
-        <div className="relative z-0 h-full w-full">{children}</div>
+        <div
+          className="relative z-0 h-full w-full min-w-0 min-h-0"
+          style={contentStyle}
+        >
+          <div className="h-full w-full min-w-0 min-h-0 overflow-hidden">
+            {children}
+          </div>
+        </div>
         <CanvasShellChrome
           bottomBar={resolvedBottomBar}
           inset={inset}
