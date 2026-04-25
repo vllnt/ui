@@ -254,6 +254,44 @@ describe("Form", () => {
 
     expect(input).toBeDisabled();
     expect(input).toBeRequired();
+    expect(input).toHaveAttribute("aria-disabled", "true");
+    expect(input).toHaveAttribute("aria-required", "true");
+  });
+
+  it("allows a form item to override invalid state independently", () => {
+    render(
+      <Form invalid>
+        <FormItem invalid={false}>
+          <FormLabel>Primary email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormDescription>Looks good</FormDescription>
+          <FormMessage>All set</FormMessage>
+        </FormItem>
+        <FormItem>
+          <FormLabel>Backup email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormMessage>Required</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    const primaryInput = screen.getByRole("textbox", { name: "Primary email" });
+    const backupInput = screen.getByRole("textbox", { name: "Backup email" });
+    const primaryMessage = screen.getByText("All set");
+    const backupMessage = screen.getByRole("alert");
+
+    expect(primaryInput).not.toHaveAttribute("aria-invalid", "true");
+    expect(primaryInput).toHaveAttribute(
+      "aria-describedby",
+      screen.getByText("Looks good").id,
+    );
+    expect(primaryMessage).not.toHaveAttribute("role", "alert");
+    expect(backupInput).toHaveAttribute("aria-invalid", "true");
+    expect(backupMessage).toHaveTextContent("Required");
   });
 
   it("keeps helper text in aria-describedby without linking a valid message", () => {

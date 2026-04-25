@@ -158,56 +158,76 @@ Form.displayName = "Form";
 
 const FormItem = React.forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ children, className, ...props }, ref) => {
-  const {
-    controlId: controlIdBase,
-    descriptionId: descriptionIdBase,
-    disabled,
-    invalid,
-    messageId: messageIdBase,
-    required,
-  } = useFormRootContext("FormItem");
-  const generatedId = React.useId();
-  const hasDescription = hasRenderedFormChild(children, "FormDescription");
-  const hasMessage = hasRenderedFormChild(children, "FormMessage");
+  React.ComponentPropsWithoutRef<"div"> & {
+    disabled?: boolean;
+    invalid?: boolean;
+    required?: boolean;
+  }
+>(
+  (
+    {
+      children,
+      className,
+      disabled: itemDisabled,
+      invalid: itemInvalid,
+      required: itemRequired,
+      ...props
+    },
+    ref,
+  ) => {
+    const {
+      controlId: controlIdBase,
+      descriptionId: descriptionIdBase,
+      disabled,
+      invalid,
+      messageId: messageIdBase,
+      required,
+    } = useFormRootContext("FormItem");
+    const generatedId = React.useId();
+    const hasDescription = hasRenderedFormChild(children, "FormDescription");
+    const hasMessage = hasRenderedFormChild(children, "FormMessage");
 
-  const value = React.useMemo<FormItemContextValue>(
-    () => ({
-      controlId: resolveItemId(controlIdBase, generatedId, "control"),
-      descriptionId: resolveItemId(
+    const effectiveDisabled = itemDisabled ?? disabled;
+    const effectiveInvalid = itemInvalid ?? invalid;
+    const effectiveRequired = itemRequired ?? required;
+
+    const value = React.useMemo<FormItemContextValue>(
+      () => ({
+        controlId: resolveItemId(controlIdBase, generatedId, "control"),
+        descriptionId: resolveItemId(
+          descriptionIdBase,
+          generatedId,
+          "description",
+        ),
+        disabled: effectiveDisabled,
+        hasDescription,
+        hasMessage,
+        invalid: effectiveInvalid,
+        messageId: resolveItemId(messageIdBase, generatedId, "message"),
+        required: effectiveRequired,
+      }),
+      [
+        controlIdBase,
         descriptionIdBase,
+        effectiveDisabled,
+        effectiveInvalid,
+        effectiveRequired,
         generatedId,
-        "description",
-      ),
-      disabled,
-      hasDescription,
-      hasMessage,
-      invalid,
-      messageId: resolveItemId(messageIdBase, generatedId, "message"),
-      required,
-    }),
-    [
-      controlIdBase,
-      descriptionIdBase,
-      disabled,
-      generatedId,
-      hasDescription,
-      hasMessage,
-      invalid,
-      messageIdBase,
-      required,
-    ],
-  );
+        hasDescription,
+        hasMessage,
+        messageIdBase,
+      ],
+    );
 
-  return (
-    <FormItemContext.Provider value={value}>
-      <div className={cn("space-y-2", className)} ref={ref} {...props}>
-        {children}
-      </div>
-    </FormItemContext.Provider>
-  );
-});
+    return (
+      <FormItemContext.Provider value={value}>
+        <div className={cn("space-y-2", className)} ref={ref} {...props}>
+          {children}
+        </div>
+      </FormItemContext.Provider>
+    );
+  },
+);
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
@@ -255,9 +275,14 @@ const FormControl = React.forwardRef<
       hasDescription ? descriptionId : undefined,
       invalid && hasMessage ? messageId : undefined,
     );
-    const nativeConstraintProps: Record<string, boolean | undefined> = {
-      disabled: controlDisabled ?? (disabled || undefined),
-      required: controlRequired ?? (required || undefined),
+    const effectiveDisabled = controlDisabled ?? disabled;
+    const effectiveRequired = controlRequired ?? required;
+    const nativeConstraintProps: {
+      disabled?: boolean;
+      required?: boolean;
+    } = {
+      disabled: effectiveDisabled || undefined,
+      required: effectiveRequired || undefined,
     };
 
     return (
@@ -265,10 +290,14 @@ const FormControl = React.forwardRef<
         {...props}
         {...nativeConstraintProps}
         aria-describedby={describedBy}
-        aria-disabled={props["aria-disabled"] ?? (disabled || undefined)}
+        aria-disabled={
+          props["aria-disabled"] ?? (effectiveDisabled || undefined)
+        }
         aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
-        aria-required={props["aria-required"] ?? (required || undefined)}
-        data-disabled={disabled ? "true" : undefined}
+        aria-required={
+          props["aria-required"] ?? (effectiveRequired || undefined)
+        }
+        data-disabled={effectiveDisabled ? "true" : undefined}
         data-invalid={invalid ? "true" : undefined}
         id={controlId}
         ref={ref}
