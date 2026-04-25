@@ -1,5 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
 import type { ReactNode } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { Curriculum, CurriculumLesson, CurriculumModule } from "./curriculum";
@@ -156,6 +157,19 @@ describe("CurriculumModule", () => {
     );
 
     expect(getByText("2/2")).toBeInTheDocument();
+  });
+
+  it("renders module progress during server render", () => {
+    const html = renderToStaticMarkup(
+      <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
+        <CurriculumModule id="mod-1" title="Module 1">
+          <CurriculumLesson status="completed" title="Completed lesson" />
+          <CurriculumLesson status="available" title="Available lesson" />
+        </CurriculumModule>
+      </Curriculum>,
+    );
+
+    expect(html).toContain("1/2");
   });
 
   it("throws when used outside Curriculum", () => {

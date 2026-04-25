@@ -1,11 +1,11 @@
 "use client";
 
 import {
+  Children,
   createContext,
+  isValidElement,
   useCallback,
   useContext,
-  useEffect,
-  useId,
   useMemo,
   useState,
 } from "react";
@@ -42,63 +42,39 @@ function useCurriculumContext(): CurriculumContextValue {
   return ctx;
 }
 
-type ModuleContextValue = {
-  moduleId: string;
-  registerLesson: (id: string, status: LessonStatus) => void;
-  unregisterLesson: (id: string) => void;
-};
-
-const ModuleContext = createContext<ModuleContextValue | null>(null);
-
-function useModuleContext(): ModuleContextValue | null {
-  return useContext(ModuleContext);
-}
-
-type ModuleProgress = {
+type LessonProgressSummary = {
   completed: number;
-  moduleCtx: ModuleContextValue;
-  progressPct: number;
   total: number;
 };
 
-function useModuleProgress(id: string): ModuleProgress {
-  const [lessonStatuses, setLessonStatuses] = useState<
-    Map<string, LessonStatus>
-  >(() => new Map());
+type LessonElementProps = {
+  children?: ReactNode;
+  status?: LessonStatus;
+};
 
-  const registerLesson = useCallback(
-    (lessonId: string, status: LessonStatus) => {
-      setLessonStatuses((previous) => {
-        if (previous.get(lessonId) === status) return previous;
-        const next = new Map(previous);
-        next.set(lessonId, status);
-        return next;
-      });
-    },
-    [],
-  );
+function summarizeLessonProgress(children: ReactNode): LessonProgressSummary {
+  let completed = 0;
+  let total = 0;
 
-  const unregisterLesson = useCallback((lessonId: string) => {
-    setLessonStatuses((previous) => {
-      if (!previous.has(lessonId)) return previous;
-      const next = new Map(previous);
-      next.delete(lessonId);
-      return next;
-    });
-  }, []);
+  Children.forEach(children, (child) => {
+    if (!isValidElement<LessonElementProps>(child)) {
+      return;
+    }
 
-  const moduleCtx = useMemo(
-    () => ({ moduleId: id, registerLesson, unregisterLesson }),
-    [id, registerLesson, unregisterLesson],
-  );
+    if (child.type === CurriculumLesson) {
+      total += 1;
+      if (child.props.status === "completed") {
+        completed += 1;
+      }
+      return;
+    }
 
-  const total = lessonStatuses.size;
-  const completed = [...lessonStatuses.values()].filter(
-    (s) => s === "completed",
-  ).length;
-  const progressPct = total > 0 ? Math.round((completed / total) * 100) : 0;
+    const nested = summarizeLessonProgress(child.props.children);
+    total += nested.total;
+    completed += nested.completed;
+  });
 
-  return { completed, moduleCtx, progressPct, total };
+  return { completed, total };
 }
 
 function statusLabel(status: LessonStatus): string {
@@ -351,37 +327,39 @@ function CurriculumModule({
 }: CurriculumModuleProps): React.ReactNode {
   const { expandedModules, toggleModule } = useCurriculumContext();
   const isExpanded = expandedModules.has(id);
-  const { completed, moduleCtx, progressPct, total } = useModuleProgress(id);
+  const { completed, total } = useMemo(
+    () => summarizeLessonProgress(children),
+    [children],
+  );
+  const progressPct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   return (
-    <ModuleContext.Provider value={moduleCtx}>
-      <section className={className}>
-        <ModuleTrigger
-          completed={completed}
-          description={description}
-          estimatedHours={estimatedHours}
-          id={id}
-          isExpanded={isExpanded}
-          progressPct={progressPct}
-          title={title}
-          toggle={() => {
-            toggleModule(id);
-          }}
-          total={total}
-        />
-        <div
-          aria-hidden={!isExpanded}
-          className={cn(
-            "overflow-hidden transition-all duration-200",
-            isExpanded ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0",
-          )}
-          hidden={!isExpanded}
-          id={`module-content-${id}`}
-        >
-          <div className="divide-y divide-border/50 pb-2">{children}</div>
-        </div>
-      </section>
-    </ModuleContext.Provider>
+    <section className={className}>
+      <ModuleTrigger
+        completed={completed}
+        description={description}
+        estimatedHours={estimatedHours}
+        id={id}
+        isExpanded={isExpanded}
+        progressPct={progressPct}
+        title={title}
+        toggle={() => {
+          toggleModule(id);
+        }}
+        total={total}
+      />
+      <div
+        aria-hidden={!isExpanded}
+        className={cn(
+          "overflow-hidden transition-all duration-200",
+          isExpanded ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0",
+        )}
+        hidden={!isExpanded}
+        id={`module-content-${id}`}
+      >
+        <div className="divide-y divide-border/50 pb-2">{children}</div>
+      </div>
+    </section>
   );
 }
 
@@ -401,27 +379,10 @@ function CurriculumLesson({
   difficulty,
   duration,
   href,
-  id,
   prerequisites,
   status = "available",
   title,
 }: CurriculumLessonProps): React.ReactNode {
-  const moduleCtx = useModuleContext();
-  const fallbackId = useId();
-  const lessonId = id ?? fallbackId;
-
-  useEffect(() => {
-    if (!moduleCtx) {
-      return;
-    }
-
-    moduleCtx.registerLesson(lessonId, status);
-
-    return () => {
-      moduleCtx.unregisterLesson(lessonId);
-    };
-  }, [lessonId, moduleCtx, status]);
-
   const isLocked = status === "locked";
 
   const inner = (
