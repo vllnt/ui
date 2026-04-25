@@ -100,10 +100,19 @@
     "zod": ">=4.0.0"
   },
   "peerDependenciesMeta": {
+    "@hookform/resolvers": {
+      "optional": true
+    },
     "next": {
       "optional": true
     },
     "next-themes": {
+      "optional": true
+    },
+    "react-hook-form": {
+      "optional": true
+    },
+    "zod": {
       "optional": true
     }
   },

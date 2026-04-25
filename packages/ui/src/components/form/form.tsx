@@ -41,25 +41,41 @@ type FormErrorHandler<TFieldValues extends FieldValues> = (
   form: FormInstance<TFieldValues>,
 ) => Promise<void> | void;
 
-export type FormProps<TFieldValues extends FieldValues = FieldValues> = Omit<
+type BaseFormProps<TFieldValues extends FieldValues> = Omit<
   React.ComponentPropsWithoutRef<"form">,
   "children" | "onSubmit"
 > & {
   children: FormRenderChildren<TFieldValues>;
   controlId?: string;
-  defaultValues?: DefaultValues<TFieldValues>;
   descriptionId?: string;
   disabled?: boolean;
-  form?: FormInstance<TFieldValues>;
   invalid?: boolean;
   messageId?: string;
   onError?: FormErrorHandler<TFieldValues>;
-  onSubmit: FormSubmitHandler<TFieldValues>;
+  onSubmit?: FormSubmitHandler<TFieldValues>;
   required?: boolean;
+};
+
+type ManagedFormProps<TFieldValues extends FieldValues> = {
+  defaultValues?: DefaultValues<TFieldValues>;
+  form?: undefined;
   resolver?: Resolver<TFieldValues>;
   schema?: Parameters<typeof zodResolver>[0];
   values?: TFieldValues;
 };
+
+type ProvidedFormProps<TFieldValues extends FieldValues> = {
+  defaultValues?: never;
+  form: FormInstance<TFieldValues>;
+  resolver?: never;
+  schema?: never;
+  values?: never;
+};
+
+export type FormProps<TFieldValues extends FieldValues = FieldValues> =
+  BaseFormProps<TFieldValues> &
+    (ManagedFormProps<TFieldValues> | ProvidedFormProps<TFieldValues>);
+
 
 type FormRootContextValue = {
   controlId?: string;
@@ -261,6 +277,20 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
     [controlId, descriptionId, disabled, invalid, messageId, required],
   );
 
+  const submitHandler =
+    onSubmit === undefined
+      ? undefined
+      : form.handleSubmit(
+          async (submittedValues) => {
+            await onSubmit(submittedValues, form);
+          },
+          async (errors) => {
+            if (onError !== undefined) {
+              await onError(errors, form);
+            }
+          },
+        );
+
   return (
     <FormRootContext.Provider value={rootContextValue}>
       <FormProvider {...form}>
@@ -269,16 +299,7 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
           data-disabled={submitting ? "true" : undefined}
           data-invalid={invalid ? "true" : undefined}
           data-submitting={form.formState.isSubmitting ? "true" : undefined}
-          onSubmit={form.handleSubmit(
-            async (submittedValues) => {
-              await onSubmit(submittedValues, form);
-            },
-            async (errors) => {
-              if (onError !== undefined) {
-                await onError(errors, form);
-              }
-            },
-          )}
+          onSubmit={submitHandler}
           ref={ref}
           {...props}
         >
