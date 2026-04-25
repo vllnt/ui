@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
+
+import { CHECKLIST_PROGRESS_EVENT } from "../checklist";
 
 import {
   ProgressTracker,
@@ -60,11 +62,17 @@ describe("ProgressTracker", () => {
   });
 
   it("renders modules with progress semantics and status labels", () => {
+    const [firstModule, secondModule] = modules;
+
+    if (!firstModule || !secondModule) {
+      throw new Error("Expected seeded modules for this test");
+    }
+
     render(
       <ProgressTracker modules={modules} overallProgress={65} streak={7}>
         <ProgressTrackerModules>
-          <ProgressTrackerModule {...modules[0]} />
-          <ProgressTrackerModule {...modules[1]} />
+          <ProgressTrackerModule {...firstModule} />
+          <ProgressTrackerModule {...secondModule} />
         </ProgressTrackerModules>
       </ProgressTracker>,
     );
@@ -127,5 +135,94 @@ describe("ProgressTracker", () => {
     expect(screen.getByText("Time Spent")).toBeVisible();
     expect(screen.getByText("24h")).toBeVisible();
     expect(screen.getByText("Consistency")).toBeVisible();
+  });
+
+  it("keeps locked modules non-interactive even when href is provided", () => {
+    render(
+      <ProgressTracker modules={modules} overallProgress={65} streak={7}>
+        <ProgressTrackerModules>
+          <ProgressTrackerModule
+            href="/learning/locked"
+            lessons={4}
+            progress={0}
+            status="locked"
+            title="Locked module"
+          />
+        </ProgressTrackerModules>
+      </ProgressTracker>,
+    );
+
+    expect(
+      screen.queryByRole("link", { name: /locked module/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Locked module")).toBeVisible();
+  });
+
+  it("updates overview totals and module progress from same-tab checklist persistence events", () => {
+    render(
+      <ProgressTracker
+        modules={[
+          {
+            checklistItems: [
+              { id: "intro", label: "Intro" },
+              { id: "components", label: "Components" },
+              { id: "hooks", label: "Hooks" },
+              { id: "state", label: "State" },
+            ],
+            completedExercises: 2,
+            completedLessons: 0,
+            exercises: 4,
+            lessons: 4,
+            persistKey: "react-fundamentals",
+            progress: 0,
+            status: "in-progress",
+            title: "Checklist-backed module",
+          },
+        ]}
+        overallProgress={65}
+        streak={7}
+      >
+        <ProgressTrackerOverview />
+        <ProgressTrackerModules>
+          <ProgressTrackerModule
+            checklistItems={[
+              { id: "intro", label: "Intro" },
+              { id: "components", label: "Components" },
+              { id: "hooks", label: "Hooks" },
+              { id: "state", label: "State" },
+            ]}
+            completedExercises={2}
+            completedLessons={0}
+            exercises={4}
+            lessons={4}
+            persistKey="react-fundamentals"
+            progress={0}
+            status="in-progress"
+            title="Checklist-backed module"
+          />
+        </ProgressTrackerModules>
+      </ProgressTracker>,
+    );
+
+    expect(screen.getAllByText("0/4")).toHaveLength(2);
+
+    act(() => {
+      localStorage.setItem(
+        "checklist:react-fundamentals",
+        JSON.stringify(["intro", "components", "hooks"]),
+      );
+      window.dispatchEvent(
+        new CustomEvent(CHECKLIST_PROGRESS_EVENT, {
+          detail: { persistKey: "react-fundamentals" },
+        }),
+      );
+    });
+
+    expect(screen.getAllByText("3/4")).toHaveLength(2);
+    expect(
+      screen.getByRole("progressbar", {
+        name: /checklist-backed module progress/i,
+      }),
+    ).toHaveAttribute("aria-valuenow", "75");
   });
 });

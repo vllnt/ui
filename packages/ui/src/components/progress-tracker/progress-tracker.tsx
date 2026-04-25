@@ -13,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../card";
-import type { ChecklistItem } from "../checklist";
+import { CHECKLIST_PROGRESS_EVENT, type ChecklistItem } from "../checklist";
 import { ProgressBar } from "../progress-bar";
 
 export type ProgressTrackerModuleStatus =
@@ -102,6 +102,44 @@ function readPersistedChecklistItems(persistKey?: string): string[] {
   }
 }
 
+function areStringArraysEqual(left: string[], right: string[]): boolean {
+  if (left.length !== right.length) return false;
+
+  return left.every((value, index) => value === right[index]);
+}
+
+function getChecklistPersistKey(event?: Event): null | string {
+  if (!(event instanceof CustomEvent)) return null;
+
+  const detail: unknown = event.detail;
+  if (typeof detail !== "object" || detail === null) return null;
+  if (!("persistKey" in detail)) return null;
+
+  const { persistKey } = detail;
+  return typeof persistKey === "string" ? persistKey : null;
+}
+
+function getResolvedLessonProgress(module: ProgressTrackerModuleItem): {
+  completedLessons: number;
+  totalLessons: number;
+} {
+  if (!module.persistKey || !module.checklistItems?.length) {
+    return {
+      completedLessons: module.completedLessons ?? 0,
+      totalLessons: module.lessons,
+    };
+  }
+
+  const validIds = new Set(module.checklistItems.map((item) => item.id));
+  const persistedIds = readPersistedChecklistItems(module.persistKey);
+  const completedLessons = persistedIds.filter((id) => validIds.has(id)).length;
+
+  return {
+    completedLessons,
+    totalLessons: module.checklistItems.length,
+  };
+}
+
 function useChecklistProgress(
   checklistItems: ChecklistItem[] = [],
   persistKey?: string,
@@ -110,28 +148,39 @@ function useChecklistProgress(
   const [persistedIds, setPersistedIds] = React.useState<string[]>(() =>
     readPersistedChecklistItems(persistKey),
   );
+  const setPersistedIdsIfChanged = React.useCallback((nextIds: string[]) => {
+    setPersistedIds((currentIds) =>
+      areStringArraysEqual(currentIds, nextIds) ? currentIds : nextIds,
+    );
+  }, []);
 
   React.useEffect(() => {
-    setPersistedIds(readPersistedChecklistItems(persistKey));
-  }, [persistKey]);
+    setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
+  }, [persistKey, setPersistedIdsIfChanged]);
 
   React.useEffect(() => {
     if (!persistKey || typeof window === "undefined") return;
 
-    const sync = (): void => {
-      setPersistedIds(readPersistedChecklistItems(persistKey));
+    const sync = (event?: Event): void => {
+      const eventPersistKey = getChecklistPersistKey(event);
+      if (eventPersistKey && eventPersistKey !== persistKey) return;
+
+      setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
+    };
+    const syncEventListener: EventListener = (event) => {
+      sync(event);
     };
 
-    const intervalId = window.setInterval(sync, 1000);
     window.addEventListener("storage", sync);
     window.addEventListener("focus", sync);
+    window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
 
     return () => {
-      window.clearInterval(intervalId);
       window.removeEventListener("storage", sync);
       window.removeEventListener("focus", sync);
+      window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
     };
-  }, [persistKey]);
+  }, [persistKey, setPersistedIdsIfChanged]);
 
   if (!persistKey || total === 0) return null;
 
@@ -204,17 +253,59 @@ function ProgressTrackerOverview({
 }: ProgressTrackerOverviewProps): React.ReactNode {
   const { modules, overallProgress, streak, title } =
     useProgressTrackerContext();
+  const trackedPersistKeys = React.useMemo(
+    () => modules.map((module) => module.persistKey).filter(Boolean),
+    [modules],
+  );
+  const [, forceChecklistRefresh] = React.useState(0);
+
+  React.useEffect(() => {
+    if (trackedPersistKeys.length === 0 || typeof window === "undefined") {
+      return;
+    }
+
+    const trackedKeys = new Set(trackedPersistKeys);
+    const sync = (event?: Event): void => {
+      const eventPersistKey = getChecklistPersistKey(event);
+      if (eventPersistKey && !trackedKeys.has(eventPersistKey)) return;
+
+      forceChecklistRefresh((version) => version + 1);
+    };
+    const syncEventListener: EventListener = (event) => {
+      sync(event);
+    };
+
+    window.addEventListener("storage", sync);
+    window.addEventListener("focus", sync);
+    window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
+
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("focus", sync);
+      window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
+    };
+  }, [trackedPersistKeys]);
+
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (overallProgress / 100) * circumference;
   const completedModules = modules.filter(
     (module) => module.status === "completed",
   ).length;
-  const totalLessons = modules.reduce((sum, module) => sum + module.lessons, 0);
-  const completedLessons = modules.reduce(
-    (sum, module) => sum + (module.completedLessons ?? 0),
-    0,
+  const lessonTotals = modules.reduce(
+    (totals, module) => {
+      const resolvedProgress = getResolvedLessonProgress(module);
+
+      return {
+        completedLessons:
+          totals.completedLessons + resolvedProgress.completedLessons,
+        totalLessons: totals.totalLessons + resolvedProgress.totalLessons,
+      };
+    },
+    { completedLessons: 0, totalLessons: 0 },
   );
+  const totalLessons = lessonTotals.totalLessons;
+  const completedLessons = lessonTotals.completedLessons;
   const totalExercises = modules.reduce(
     (sum, module) => sum + (module.exercises ?? 0),
     0,
@@ -452,11 +543,10 @@ function ProgressTrackerModule({
     </Card>
   );
 
-  if (!href) return card;
+  if (!href || status === "locked") return card;
 
   return (
     <a
-      aria-disabled={status === "locked"}
       className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       href={href}
     >
