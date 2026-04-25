@@ -1,0 +1,49 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as Stories from './progress-tracker.stories'
+
+<Meta of={Stories} />
+
+# Progress Tracker
+
+Curriculum-level learning dashboard for modules, lessons, exercises, streaks, and earned skills.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/progress-tracker.json
+```
+
+## Import
+
+```tsx
+import { ProgressTracker } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ProgressTracker modules={modules} overallProgress={0.65} streak={7}>
+  <ProgressTracker.Overview />
+  <ProgressTracker.Stats>
+    <ProgressTracker.Stat label="Streak" value="7 days" />
+    <ProgressTracker.Stat label="Time Spent" value="24h" />
+  </ProgressTracker.Stats>
+  <ProgressTracker.Modules>
+    <ProgressTracker.Module
+      title="React Fundamentals"
+      progress={0.4}
+      status="in-progress"
+      lessons={8}
+      completedLessons={3}
+    />
+  </ProgressTracker.Modules>
+</ProgressTracker>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />

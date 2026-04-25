@@ -326,6 +326,25 @@ export {
 } from "./learning-objectives";
 export { ProgressBar, type ProgressBarProps } from "./progress-bar";
 export {
+  ProgressTracker,
+  ProgressTrackerBadge,
+  type ProgressTrackerBadgeProps,
+  ProgressTrackerModule,
+  type ProgressTrackerModuleItem,
+  type ProgressTrackerModuleProps,
+  ProgressTrackerModules,
+  type ProgressTrackerModulesProps,
+  type ProgressTrackerModuleStatus,
+  ProgressTrackerOverview,
+  type ProgressTrackerOverviewProps,
+  type ProgressTrackerProps,
+  ProgressTrackerStat,
+  type ProgressTrackerStatProps,
+  ProgressTrackerStats,
+  type ProgressTrackerStatsProps,
+  useProgressTrackerContext,
+} from "./progress-tracker";
+export {
   CommonMistake,
   type CommonMistakeProps,
   ProTip,
