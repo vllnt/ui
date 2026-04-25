@@ -248,17 +248,33 @@ function renderFloatingCanvasShell(
 const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
   const {
     bottomBar,
+    bottomSlot,
     chromeInset = 16,
     contentPadding,
     leftBar,
+    leftRail,
     rightBar,
+    rightDock,
   } = props;
+  const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
+    props,
+    "chromeInset",
+  );
   const usesFloatingChrome =
-    bottomBar !== undefined ||
-    leftBar !== undefined ||
-    rightBar !== undefined ||
+    bottomBar != null ||
+    leftBar != null ||
+    rightBar != null ||
     contentPadding !== undefined ||
-    chromeInset !== 16;
+    (hasExplicitChromeInset && chromeInset !== undefined) ||
+    (bottomBar === undefined &&
+      bottomSlot != null &&
+      contentPadding !== undefined) ||
+    (leftBar === undefined &&
+      leftRail != null &&
+      contentPadding !== undefined) ||
+    (rightBar === undefined &&
+      rightDock != null &&
+      contentPadding !== undefined);
 
   if (!usesFloatingChrome) {
     return renderLegacyCanvasShell(props, ref);

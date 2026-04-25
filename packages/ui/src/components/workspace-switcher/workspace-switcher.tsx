@@ -44,7 +44,7 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
     return (
       <div
         className={cn(
-          "inline-flex min-w-0 items-center gap-1 rounded-md border border-border bg-background p-1",
+          "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-muted/50 p-1",
           className,
         )}
         ref={ref}
@@ -57,10 +57,10 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
             <button
               aria-checked={isActive}
               className={cn(
-                "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-muted text-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
               key={workspace.id}
               onClick={() => {

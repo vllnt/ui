@@ -130,6 +130,42 @@ describe("CanvasShell", () => {
     expect(screen.getByText("Legacy main")).toBeInTheDocument();
   });
 
+  it("keeps the legacy layout when new chrome props are null", () => {
+    const { container } = render(
+      <CanvasShell
+        bottomBar={null}
+        leftBar={null}
+        rightBar={null}
+        topBar={<div>Legacy top</div>}
+      >
+        <div>Legacy main</div>
+      </CanvasShell>,
+    );
+
+    const shell = getElement(container.firstElementChild, "legacy shell");
+
+    expect(shell.className).toContain("flex-col");
+    expect(shell.className).not.toContain("relative isolate");
+    expect(screen.getByText("Legacy top")).toBeInTheDocument();
+    expect(screen.getByText("Legacy main")).toBeInTheDocument();
+  });
+
+  it("treats an explicit chromeInset as floating-mode intent", () => {
+    const { container } = render(
+      <CanvasShell chromeInset={16}>
+        <div>Inset main</div>
+      </CanvasShell>,
+    );
+
+    const { shell } = getShellElements(container);
+
+    expect(shell.className).toContain("relative isolate flex");
+    expect(shell.getAttribute("style")).toContain(
+      "--canvas-shell-safe-top: 16px",
+    );
+    expect(screen.getByText("Inset main")).toBeInTheDocument();
+  });
+
   it("preserves deprecated side slots during floating migrations", () => {
     const { container } = render(
       <CanvasShell
