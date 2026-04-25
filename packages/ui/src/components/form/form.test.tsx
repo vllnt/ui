@@ -341,6 +341,33 @@ describe("Form", () => {
     expect(message).toHaveTextContent("Wrapped error");
   });
 
+  it("supports fragment-wrapped helper content", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <>
+            <FormDescription>Fragment help</FormDescription>
+            <FormMessage>Fragment error</FormMessage>
+          </>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    const description = screen.getByText("Fragment help");
+    const message = screen.getByRole("alert");
+
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.id} ${message.id}`,
+    );
+    expect(message).toHaveTextContent("Fragment error");
+  });
+
   it("keeps helper text in aria-describedby without linking a valid message", () => {
     render(
       <Form>

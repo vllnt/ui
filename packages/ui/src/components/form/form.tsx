@@ -82,7 +82,7 @@ function isNamedFormChild(
   }
 
   const { type } = child;
-  if (typeof type === "string") {
+  if (typeof type === "string" || typeof type === "symbol") {
     return false;
   }
 
@@ -357,7 +357,7 @@ const FormMessage = React.forwardRef<
   React.ComponentPropsWithoutRef<"p">
 >(({ children, className, id: _id, ...props }, ref) => {
   const { invalid, messageId } = useFormItemContext("FormMessage");
-  const hasChildren = React.Children.count(children) > 0;
+  const hasChildren = hasVisibleContent(children);
 
   if (!hasChildren) {
     return null;
