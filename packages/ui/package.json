@@ -90,11 +90,14 @@
     "check:stories": "tsx scripts/check-story-coverage.ts"
   },
   "peerDependencies": {
+    "@hookform/resolvers": ">=5.0.0",
     "next": ">=14.0.0",
     "next-themes": ">=0.4.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
-    "tailwindcss": ">=3.0.0"
+    "react-hook-form": ">=7.55.0",
+    "tailwindcss": ">=3.0.0",
+    "zod": ">=4.0.0"
   },
   "peerDependenciesMeta": {
     "next": {
@@ -171,6 +174,7 @@
     "jsdom": "^26.1.0",
     "playwright": "^1.57.0",
     "postcss": "^8.5.6",
+    "react-hook-form": "^7.73.1",
     "remark-gfm": "^4.0.1",
     "storybook": "^10.2.17",
     "tailwindcss": "^3.4.17",
@@ -178,6 +182,8 @@
     "tsup": "^8.5.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "zod": "^4.3.6",
+    "@hookform/resolvers": "^5.2.2"
   }
 }
