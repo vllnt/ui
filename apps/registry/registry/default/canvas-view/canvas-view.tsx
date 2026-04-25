@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { CanvasView, type CanvasViewProps } from '@vllnt/ui'

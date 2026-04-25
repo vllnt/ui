@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { ZoomHUD, type ZoomHUDProps } from '@vllnt/ui'

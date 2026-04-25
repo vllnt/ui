@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { EdgeLabel, type EdgeLabelProps } from '@vllnt/ui'

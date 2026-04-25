@@ -369,6 +369,18 @@ function useCanvasKeyboardInteractions({
   return { handleKeyDown, handleKeyUp, handleWheel, isSpacePressed };
 }
 
+function endCanvasDrag(
+  event: ReactPointerEvent<HTMLDivElement>,
+  dragOriginRef: React.RefObject<DragOrigin | null>,
+  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  dragOriginRef.current = null;
+  setIsDragging(false);
+  if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+}
+
 function useCanvasPointerInteractions({
   isSpacePressed,
   setViewport,
@@ -385,6 +397,10 @@ function useCanvasPointerInteractions({
     (event: ReactPointerEvent<HTMLDivElement>) => {
       if (!isPanGesture(event, isSpacePressed)) {
         return;
+      }
+
+      if (event.button === 1) {
+        event.preventDefault();
       }
 
       dragOriginRef.current = {
@@ -414,18 +430,27 @@ function useCanvasPointerInteractions({
     [setViewport],
   );
 
-  const handlePointerUp = useCallback(
+  const handlePointerCancel = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
-      dragOriginRef.current = null;
-      setIsDragging(false);
-      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId);
-      }
+      endCanvasDrag(event, dragOriginRef, setIsDragging);
     },
     [],
   );
 
-  return { handlePointerDown, handlePointerMove, handlePointerUp, isDragging };
+  const handlePointerUp = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      endCanvasDrag(event, dragOriginRef, setIsDragging);
+    },
+    [],
+  );
+
+  return {
+    handlePointerCancel,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    isDragging,
+  };
 }
 
 function usePreventBodySelection(disabled: boolean) {
@@ -471,6 +496,7 @@ type CanvasInteractionLayerProps = {
   isSpacePressed: boolean;
   onKeyDown: (event: ReactKeyboardEvent<HTMLDivElement>) => void;
   onKeyUp: (event: ReactKeyboardEvent<HTMLDivElement>) => void;
+  onPointerCancel: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerUp: (event: ReactPointerEvent<HTMLDivElement>) => void;
@@ -485,6 +511,7 @@ function CanvasInteractionLayer({
   isSpacePressed,
   onKeyDown,
   onKeyUp,
+  onPointerCancel,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -495,6 +522,7 @@ function CanvasInteractionLayer({
     <div
       aria-describedby={instructionsId}
       aria-label="Canvas workspace"
+      aria-roledescription="canvas"
       className={cn(
         "relative h-full w-full select-none touch-none outline-none",
         isDragging || isSpacePressed
@@ -504,6 +532,7 @@ function CanvasInteractionLayer({
       data-viewport={JSON.stringify(viewport)}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
+      onPointerCancel={onPointerCancel}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -599,6 +628,7 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
           isSpacePressed={keyboard.isSpacePressed}
           onKeyDown={keyboard.handleKeyDown}
           onKeyUp={keyboard.handleKeyUp}
+          onPointerCancel={pointer.handlePointerCancel}
           onPointerDown={pointer.handlePointerDown}
           onPointerMove={pointer.handlePointerMove}
           onPointerUp={pointer.handlePointerUp}

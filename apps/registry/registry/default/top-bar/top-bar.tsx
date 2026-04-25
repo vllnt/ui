@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { TopBar, type TopBarProps } from '@vllnt/ui'

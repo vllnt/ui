@@ -41,6 +41,7 @@ const AnchorPort = forwardRef<HTMLSpanElement, AnchorPortProps>(
     ref,
   ) => (
     <span
+      aria-label={props["aria-label"] ?? `${tone} ${side} port ${state}`}
       className={cn(
         "inline-flex size-7 items-center justify-center rounded-full border shadow-sm",
         toneClasses[tone],
@@ -52,7 +53,7 @@ const AnchorPort = forwardRef<HTMLSpanElement, AnchorPortProps>(
       data-state={state}
       data-tone={tone}
       ref={ref}
-      role="status"
+      role="img"
       {...props}
     >
       <span className="size-2.5 rounded-full bg-current" />

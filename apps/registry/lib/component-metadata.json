@@ -466,7 +466,7 @@
   "canvas-shell": {
     "category": "utility",
     "defaultStoryId": "layout-canvasshell--default",
-    "description": "Composed workspace shell for top bar, left rail, canvas viewport, and right dock regions.",
+    "description": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions.",
     "name": "canvas-shell",
     "stories": [
       {
@@ -479,7 +479,7 @@
   "canvas-view": {
     "category": "utility",
     "defaultStoryId": "layout-canvasview--default",
-    "description": "Viewport surface with calm spatial defaults for panning and zooming around AI objects.",
+    "description": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support.",
     "name": "canvas-view",
     "stories": [
       {
@@ -1062,7 +1062,7 @@
   "left-rail": {
     "category": "navigation",
     "defaultStoryId": "layout-leftrail--default",
-    "description": "Narrow navigation rail for primary canvas modes and tool affordances.",
+    "description": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls.",
     "name": "left-rail",
     "stories": [
       {
@@ -1183,9 +1183,9 @@
     "title": "Metric Gauge"
   },
   "mini-map-panel": {
-    "category": "utility",
+    "category": "data",
     "defaultStoryId": "panels-minimappanel--default",
-    "description": "Compact overview panel showing viewport position inside a larger workspace field.",
+    "description": "Viewport overview panel showing canvas bounds, markers, and the current zoom window.",
     "name": "mini-map-panel",
     "stories": [
       {
@@ -1499,7 +1499,7 @@
   "right-dock": {
     "category": "navigation",
     "defaultStoryId": "layout-rightdock--default",
-    "description": "Context dock for inspection panels, run details, and secondary operator surfaces.",
+    "description": "Context dock for inspectors, summaries, and secondary canvas panels.",
     "name": "right-dock",
     "stories": [
       {
@@ -2394,7 +2394,7 @@
   "top-bar": {
     "category": "navigation",
     "defaultStoryId": "layout-topbar--default",
-    "description": "Compact operator bar with calm title, workspace, and action slots.",
+    "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
     "name": "top-bar",
     "stories": [
       {
@@ -2566,7 +2566,7 @@
   "workspace-switcher": {
     "category": "navigation",
     "defaultStoryId": "navigation-workspaceswitcher--default",
-    "description": "Pill switcher for named workspaces and view modes in the operator shell.",
+    "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
     "name": "workspace-switcher",
     "stories": [
       {
@@ -2596,7 +2596,7 @@
   "zoom-hud": {
     "category": "overlay",
     "defaultStoryId": "overlay-zoomhud--default",
-    "description": "Floating zoom readout and controls for the canvas viewport.",
+    "description": "Zoom controls with current percentage, increment buttons, and reset action for canvas views.",
     "name": "zoom-hud",
     "stories": [
       {

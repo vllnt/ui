@@ -48,14 +48,14 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
           className,
         )}
         ref={ref}
-        role="tablist"
+        role="radiogroup"
         {...props}
       >
         {workspaces.map((workspace) => {
           const isActive = workspace.id === currentValue;
           return (
             <button
-              aria-selected={isActive}
+              aria-checked={isActive}
               className={cn(
                 "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                 isActive
@@ -66,7 +66,7 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
               onClick={() => {
                 handleSelect(workspace.id);
               }}
-              role="tab"
+              role="radio"
               title={workspace.description}
               type="button"
             >

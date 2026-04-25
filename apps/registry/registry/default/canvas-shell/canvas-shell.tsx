@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { CanvasShell, type CanvasShellProps } from '@vllnt/ui'

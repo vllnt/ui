@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { ConnectorEdge, type ConnectorEdgeProps } from '@vllnt/ui'

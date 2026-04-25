@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { LeftRail, type LeftRailProps } from '@vllnt/ui'

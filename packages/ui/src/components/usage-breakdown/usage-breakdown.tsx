@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ReactNode, useMemo } from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";

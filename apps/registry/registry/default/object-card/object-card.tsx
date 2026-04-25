@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { ObjectCard, type ObjectCardProps } from '@vllnt/ui'

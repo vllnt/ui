@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { MiniMapPanel, type MiniMapPanelProps } from '@vllnt/ui'
