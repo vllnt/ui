@@ -81,10 +81,15 @@ function CanvasShellChrome({
     <div className="pointer-events-none absolute inset-0 z-20">
       {topBar ? (
         <div
-          className="pointer-events-auto absolute left-1/2 z-30 w-[min(960px,calc(100%-32px))] -translate-x-1/2"
+          className="pointer-events-auto absolute inset-x-0 z-30"
           style={{ top: inset }}
         >
-          {topBar}
+          <div
+            className="mx-auto w-full max-w-[960px] px-4"
+            style={{ paddingLeft: inset, paddingRight: inset }}
+          >
+            {topBar}
+          </div>
         </div>
       ) : null}
       {leftBar ? (
@@ -113,10 +118,15 @@ function CanvasShellChrome({
       ) : null}
       {bottomBar ? (
         <div
-          className="pointer-events-auto absolute bottom-0 left-1/2 z-30 w-[min(960px,calc(100%-32px))] -translate-x-1/2"
+          className="pointer-events-auto absolute inset-x-0 bottom-0 z-30"
           style={{ bottom: inset }}
         >
-          {bottomBar}
+          <div
+            className="mx-auto w-full max-w-[960px] px-4"
+            style={{ paddingLeft: inset, paddingRight: inset }}
+          >
+            {bottomBar}
+          </div>
         </div>
       ) : null}
     </div>
@@ -125,10 +135,15 @@ function CanvasShellChrome({
 
 function renderLegacyCanvasShell(
   {
+    bottomBar: _bottomBar,
     bottomSlot,
     children,
+    chromeInset: _chromeInset = 16,
     className,
+    contentPadding: _contentPadding,
+    leftBar: _leftBar,
     leftRail,
+    rightBar: _rightBar,
     rightDock,
     style,
     topBar,

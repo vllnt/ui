@@ -103,6 +103,33 @@ describe("CanvasShell", () => {
     expect(shellStyle).not.toContain("392px");
   });
 
+  it("keeps legacy slot props on the legacy layout path", () => {
+    const { container } = render(
+      <CanvasShell
+        bottomSlot={<div>Legacy bottom</div>}
+        leftRail={<div>Legacy left</div>}
+        rightDock={<div>Legacy right</div>}
+        topBar={<div>Legacy top</div>}
+      >
+        <div>Legacy main</div>
+      </CanvasShell>,
+    );
+
+    const shell = getElement(container.firstElementChild, "legacy shell");
+    const grid = getElement(shell.children.item(1), "legacy grid");
+    const bottomHost = getElement(shell.children.item(2), "legacy bottom host");
+
+    expect(shell.className).toContain("flex-col");
+    expect(shell.className).not.toContain("relative isolate");
+    expect(grid.className).toContain("grid-cols-[auto_minmax(0,1fr)_auto]");
+    expect(bottomHost.className).toContain("border-t");
+    expect(screen.getByText("Legacy top")).toBeInTheDocument();
+    expect(screen.getByText("Legacy left")).toBeInTheDocument();
+    expect(screen.getByText("Legacy right")).toBeInTheDocument();
+    expect(screen.getByText("Legacy bottom")).toBeInTheDocument();
+    expect(screen.getByText("Legacy main")).toBeInTheDocument();
+  });
+
   it("preserves deprecated side slots during floating migrations", () => {
     const { container } = render(
       <CanvasShell
