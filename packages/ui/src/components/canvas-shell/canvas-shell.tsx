@@ -27,6 +27,13 @@ type CanvasShellChromeProps = {
   topBar?: ReactNode;
 };
 
+type CanvasShellSafeAreaStyle = CSSProperties & {
+  "--canvas-shell-safe-bottom": string;
+  "--canvas-shell-safe-left": string;
+  "--canvas-shell-safe-right": string;
+  "--canvas-shell-safe-top": string;
+};
+
 function toInsetValue(value: number | string | undefined) {
   if (typeof value === "number") {
     return `${value}px`;
@@ -52,24 +59,15 @@ function getSafeAreaInsets({
   };
 }
 
-type CanvasShellSafeAreaStyle = CSSProperties & {
-  "--canvas-shell-safe-bottom": string;
-  "--canvas-shell-safe-left": string;
-  "--canvas-shell-safe-right": string;
-  "--canvas-shell-safe-top": string;
-};
-
 function getSafeAreaStyle(
   insets: ReturnType<typeof getSafeAreaInsets>,
 ): CanvasShellSafeAreaStyle {
-  const safeAreaStyle = {
+  return {
     "--canvas-shell-safe-bottom": insets.bottom,
     "--canvas-shell-safe-left": insets.left,
     "--canvas-shell-safe-right": insets.right,
     "--canvas-shell-safe-top": insets.top,
   } satisfies CanvasShellSafeAreaStyle;
-
-  return safeAreaStyle;
 }
 
 function CanvasShellChrome({
@@ -168,12 +166,15 @@ function renderLegacyCanvasShell(
 function renderFloatingCanvasShell(
   {
     bottomBar,
+    bottomSlot,
     children,
     chromeInset = 16,
     className,
     contentPadding,
     leftBar,
+    leftRail,
     rightBar,
+    rightDock,
     style,
     topBar,
     ...props
@@ -185,9 +186,8 @@ function renderFloatingCanvasShell(
     chromeInset,
     contentPadding,
   });
-  const canvasSafeAreaStyle = getSafeAreaStyle(safeAreaInsets);
   const mergedStyle = {
-    ...canvasSafeAreaStyle,
+    ...getSafeAreaStyle(safeAreaInsets),
     ...style,
   } satisfies CSSProperties;
   const contentStyle = {
@@ -196,6 +196,9 @@ function renderFloatingCanvasShell(
     paddingRight: "var(--canvas-shell-safe-right)",
     paddingTop: "var(--canvas-shell-safe-top)",
   } satisfies CSSProperties;
+  const resolvedBottomBar = bottomBar ?? bottomSlot;
+  const resolvedLeftBar = leftBar ?? leftRail;
+  const resolvedRightBar = rightBar ?? rightDock;
 
   return (
     <section
@@ -209,18 +212,18 @@ function renderFloatingCanvasShell(
     >
       <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)/0.94),hsl(var(--background)/0.8))]" />
       <div
-        className="relative z-0 h-full w-full min-w-0 min-h-0"
+        className="relative z-0 h-full w-full min-h-0 min-w-0"
         style={contentStyle}
       >
-        <div className="h-full w-full min-w-0 min-h-0 overflow-hidden">
+        <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
           {children}
         </div>
       </div>
       <CanvasShellChrome
-        bottomBar={bottomBar}
+        bottomBar={resolvedBottomBar}
         inset={inset}
-        leftBar={leftBar}
-        rightBar={rightBar}
+        leftBar={resolvedLeftBar}
+        rightBar={resolvedRightBar}
         topBar={topBar}
       />
     </section>

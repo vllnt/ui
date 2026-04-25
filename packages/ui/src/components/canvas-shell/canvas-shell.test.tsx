@@ -103,10 +103,11 @@ describe("CanvasShell", () => {
     expect(shellStyle).not.toContain("392px");
   });
 
-  it("keeps legacy slot props working with the original frame layout", () => {
+  it("preserves deprecated side slots during floating migrations", () => {
     const { container } = render(
       <CanvasShell
         bottomSlot={<div>legacy bottom</div>}
+        contentPadding={{ top: 24 }}
         leftRail={<div>legacy left</div>}
         rightDock={<div>legacy right</div>}
         topBar={<div>legacy top</div>}
@@ -115,13 +116,9 @@ describe("CanvasShell", () => {
       </CanvasShell>,
     );
 
-    const shell = getElement(container.firstElementChild, "legacy shell");
-    const grid = getElement(shell.children.item(1), "legacy grid");
-    const bottomHost = getElement(shell.children.item(2), "legacy bottom host");
+    const { shell } = getShellElements(container);
 
-    expect(shell.className).toContain("flex-col");
-    expect(grid.className).toContain("grid-cols-[auto_minmax(0,1fr)_auto]");
-    expect(bottomHost.className).toContain("border-t");
+    expect(shell.className).toContain("relative isolate flex");
     expect(screen.getByText("legacy top")).toBeInTheDocument();
     expect(screen.getByText("legacy left")).toBeInTheDocument();
     expect(screen.getByText("legacy right")).toBeInTheDocument();
