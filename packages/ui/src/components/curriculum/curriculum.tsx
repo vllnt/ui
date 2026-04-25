@@ -238,7 +238,7 @@ function ModuleTrigger({
       type="button"
     >
       <div className="flex min-w-0 flex-col gap-1">
-        <h3 className="text-sm font-medium">{title}</h3>
+        <span className="text-sm font-medium">{title}</span>
         {description ? (
           <span className="line-clamp-1 text-xs text-muted-foreground">
             {description}
