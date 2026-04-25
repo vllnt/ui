@@ -237,10 +237,15 @@ function hasRenderedFormChild(
 
 function createManagedSubmitHandler<TFieldValues extends FieldValues>(
   form: FormInstance<TFieldValues>,
-  onValidSubmit: FormSubmitHandler<TFieldValues> | undefined,
-  onError: FormErrorHandler<TFieldValues> | undefined,
+  options: {
+    onError?: FormErrorHandler<TFieldValues>;
+    onValidSubmit?: FormSubmitHandler<TFieldValues>;
+    shouldValidate: boolean;
+  },
 ): ReturnType<FormInstance<TFieldValues>["handleSubmit"]> | undefined {
-  if (onValidSubmit === undefined && onError === undefined) {
+  const { onError, onValidSubmit, shouldValidate } = options;
+
+  if (!shouldValidate) {
     return undefined;
   }
 
@@ -271,6 +276,80 @@ function createSubmitHandler(
       await handleValidatedSubmit(event);
     }
   };
+}
+
+function useFormRootContextValue(
+  value: FormRootContextValue,
+): FormRootContextValue {
+  const { controlId, descriptionId, disabled, invalid, messageId, required } =
+    value;
+
+  return React.useMemo(
+    () => ({
+      controlId,
+      descriptionId,
+      disabled,
+      invalid,
+      messageId,
+      required,
+    }),
+    [controlId, descriptionId, disabled, invalid, messageId, required],
+  );
+}
+
+type FormMarkupProps<TFieldValues extends FieldValues> = {
+  children: FormProps<TFieldValues>["children"];
+  className?: string;
+  disabled: boolean;
+  form: FormInstance<TFieldValues>;
+  formProps: Omit<
+    React.ComponentPropsWithoutRef<"form">,
+    "children" | "className" | "onSubmit"
+  >;
+  formRef: React.ForwardedRef<HTMLFormElement>;
+  handleValidatedSubmit?: ReturnType<
+    FormInstance<TFieldValues>["handleSubmit"]
+  >;
+  invalid: boolean;
+  onSubmit: FormNativeSubmitHandler;
+  rootContextValue: FormRootContextValue;
+};
+
+function FormMarkup<TFieldValues extends FieldValues>({
+  children,
+  className,
+  disabled,
+  form,
+  formProps,
+  formRef,
+  handleValidatedSubmit,
+  invalid,
+  onSubmit,
+  rootContextValue,
+}: FormMarkupProps<TFieldValues>) {
+  return (
+    <FormRootContext.Provider value={rootContextValue}>
+      <FormProvider {...form}>
+        <form
+          className={cn("space-y-2", className)}
+          data-disabled={
+            disabled || form.formState.isSubmitting ? "true" : undefined
+          }
+          data-invalid={invalid ? "true" : undefined}
+          data-submitting={form.formState.isSubmitting ? "true" : undefined}
+          onSubmit={
+            onSubmit === undefined && handleValidatedSubmit === undefined
+              ? undefined
+              : createSubmitHandler(onSubmit, handleValidatedSubmit)
+          }
+          ref={formRef}
+          {...formProps}
+        >
+          {typeof children === "function" ? children(form) : children}
+        </form>
+      </FormProvider>
+    </FormRootContext.Provider>
+  );
 }
 
 function FormInner<TFieldValues extends FieldValues = FieldValues>(
@@ -304,44 +383,39 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>(
     values,
   });
   const form: FormInstance<TFieldValues> = providedForm ?? internalForm;
-  const submitting = disabled || form.formState.isSubmitting;
-  const rootContextValue = React.useMemo<FormRootContextValue>(
-    () => ({
-      controlId,
-      descriptionId,
-      disabled,
-      invalid,
-      messageId,
-      required,
-    }),
-    [controlId, descriptionId, disabled, invalid, messageId, required],
-  );
-  const handleValidatedSubmit = createManagedSubmitHandler(
-    form,
-    onValidSubmit,
+  const isManagedForm =
+    providedForm !== undefined ||
+    resolver !== undefined ||
+    schema !== undefined;
+  const rootContextValue = useFormRootContextValue({
+    controlId,
+    descriptionId,
+    disabled,
+    invalid,
+    messageId,
+    required,
+  });
+  const handleValidatedSubmit = createManagedSubmitHandler(form, {
     onError,
-  );
-  const submitHandler =
-    onSubmit === undefined && handleValidatedSubmit === undefined
-      ? undefined
-      : createSubmitHandler(onSubmit, handleValidatedSubmit);
+    onValidSubmit,
+    shouldValidate:
+      isManagedForm || onValidSubmit !== undefined || onError !== undefined,
+  });
 
   return (
-    <FormRootContext.Provider value={rootContextValue}>
-      <FormProvider {...form}>
-        <form
-          className={cn("space-y-2", className)}
-          data-disabled={submitting ? "true" : undefined}
-          data-invalid={invalid ? "true" : undefined}
-          data-submitting={form.formState.isSubmitting ? "true" : undefined}
-          onSubmit={submitHandler}
-          ref={ref}
-          {...props}
-        >
-          {typeof children === "function" ? children(form) : children}
-        </form>
-      </FormProvider>
-    </FormRootContext.Provider>
+    <FormMarkup
+      className={className}
+      disabled={disabled}
+      form={form}
+      formProps={props}
+      formRef={ref}
+      handleValidatedSubmit={handleValidatedSubmit}
+      invalid={invalid}
+      onSubmit={onSubmit}
+      rootContextValue={rootContextValue}
+    >
+      {children}
+    </FormMarkup>
   );
 }
 

@@ -305,6 +305,48 @@ describe("Form", () => {
     expect(handleSubmit).not.toHaveBeenCalled();
   });
 
+  it("runs schema validation even without explicit submit callbacks", async () => {
+    render(
+      <Form<EmailValues> defaultValues={{ email: "" }} schema={emailSchema}>
+        {(form) => (
+          <>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Use your work email address.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </>
+        )}
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox", { name: "Email" });
+    const description = screen.getByText("Use your work email address.");
+
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+
+    const message = await screen.findByRole("alert");
+
+    expect(message).toHaveTextContent("Enter a valid email address.");
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.id} ${message.id}`,
+    );
+  });
+
   it("supports legacy invalid layouts without FormField context", () => {
     render(
       <Form invalid onSubmit={vi.fn()}>
