@@ -4,6 +4,8 @@ import { useState } from "react";
 
 import { cn } from "../../lib/utils";
 
+export const CHECKLIST_PROGRESS_EVENT = "vllnt:checklist-progress-change";
+
 export type ChecklistItem = {
   description?: string;
   id: string;
@@ -158,6 +160,11 @@ export function Checklist({
         localStorage.setItem(
           `checklist:${persistKey}`,
           JSON.stringify([...newChecked]),
+        );
+        window.dispatchEvent(
+          new CustomEvent(CHECKLIST_PROGRESS_EVENT, {
+            detail: { persistKey },
+          }),
         );
       } catch {
         /* skip */
