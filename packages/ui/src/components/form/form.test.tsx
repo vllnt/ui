@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import * as React from "react";
+
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { Input } from "../input";
 
@@ -13,6 +15,114 @@ import {
 } from "./form";
 
 describe("Form", () => {
+  it("renders a native form element and forwards props, ref, and submit", () => {
+    const handleSubmit = vi.fn();
+    const ref = React.createRef<HTMLFormElement>();
+    const { container } = render(
+      <Form
+        className="custom-form"
+        data-testid="login-form"
+        name="login"
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit(event.currentTarget);
+        }}
+        ref={ref}
+      >
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+        </FormItem>
+        <button type="submit">Submit</button>
+      </Form>,
+    );
+
+    const form = container.querySelector("form");
+    expect(form).not.toBeNull();
+    expect(form).toBe(ref.current);
+    expect(form).toHaveClass("custom-form");
+    expect(form).toHaveClass("space-y-2");
+    expect(form).toHaveAttribute("data-testid", "login-form");
+    expect(form).toHaveAttribute("name", "login");
+
+    if (!form) {
+      throw new Error("Expected form element to be rendered.");
+    }
+
+    fireEvent.submit(form);
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it("omits aria-describedby when no description or message is rendered", () => {
+    render(
+      <Form>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    expect(input).not.toHaveAttribute("aria-describedby");
+  });
+
+  it("preserves caller aria-describedby when description and message are absent", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl aria-describedby="external-help">
+            <Input type="email" />
+          </FormControl>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    expect(input).toHaveAttribute("aria-describedby", "external-help");
+  });
+
+  it("does not link the message id when invalid but no FormMessage is rendered", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormDescription>Help text</FormDescription>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    const description = screen.getByText("Help text");
+    expect(input).toHaveAttribute("aria-describedby", description.id);
+  });
+
+  it("does not link the description id when no FormDescription is rendered", () => {
+    render(
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="email" />
+          </FormControl>
+          <FormMessage>Required</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox");
+    const message = screen.getByRole("alert");
+    expect(input).toHaveAttribute("aria-describedby", message.id);
+  });
+
   it("wires the label to the generated control id", () => {
     render(
       <Form>

@@ -20,8 +20,12 @@ type FormItemContextValue = {
   controlId: string;
   descriptionId: string;
   disabled: boolean;
+  hasDescription: boolean;
+  hasMessage: boolean;
   invalid: boolean;
   messageId: string;
+  registerDescription: (present: boolean) => void;
+  registerMessage: (present: boolean) => void;
   required: boolean;
 };
 
@@ -71,7 +75,7 @@ function resolveItemId(
   return `${baseId}-${generatedId}`;
 }
 
-export type FormProps = React.ComponentPropsWithoutRef<"div"> & {
+export type FormProps = React.ComponentPropsWithoutRef<"form"> & {
   controlId?: string;
   descriptionId?: string;
   disabled?: boolean;
@@ -80,7 +84,7 @@ export type FormProps = React.ComponentPropsWithoutRef<"div"> & {
   required?: boolean;
 };
 
-const Form = React.forwardRef<HTMLDivElement, FormProps>(
+const Form = React.forwardRef<HTMLFormElement, FormProps>(
   (
     {
       className,
@@ -108,7 +112,7 @@ const Form = React.forwardRef<HTMLDivElement, FormProps>(
 
     return (
       <FormRootContext.Provider value={value}>
-        <div
+        <form
           className={cn("space-y-2", className)}
           data-disabled={disabled ? "true" : undefined}
           data-invalid={invalid ? "true" : undefined}
@@ -134,6 +138,14 @@ const FormItem = React.forwardRef<
     required,
   } = useFormRootContext("FormItem");
   const generatedId = React.useId();
+  const [hasDescription, setHasDescription] = React.useState(false);
+  const [hasMessage, setHasMessage] = React.useState(false);
+  const registerDescription = React.useCallback((present: boolean) => {
+    setHasDescription(present);
+  }, []);
+  const registerMessage = React.useCallback((present: boolean) => {
+    setHasMessage(present);
+  }, []);
 
   const value = React.useMemo<FormItemContextValue>(
     () => ({
@@ -144,8 +156,12 @@ const FormItem = React.forwardRef<
         "description",
       ),
       disabled,
+      hasDescription,
+      hasMessage,
       invalid,
       messageId: resolveItemId(messageIdBase, generatedId, "message"),
+      registerDescription,
+      registerMessage,
       required,
     }),
     [
@@ -153,8 +169,12 @@ const FormItem = React.forwardRef<
       descriptionIdBase,
       disabled,
       generatedId,
+      hasDescription,
+      hasMessage,
       invalid,
       messageIdBase,
+      registerDescription,
+      registerMessage,
       required,
     ],
   );
@@ -189,13 +209,21 @@ const FormControl = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { controlId, descriptionId, disabled, invalid, messageId, required } =
-    useFormItemContext("FormControl");
+  const {
+    controlId,
+    descriptionId,
+    disabled,
+    hasDescription,
+    hasMessage,
+    invalid,
+    messageId,
+    required,
+  } = useFormItemContext("FormControl");
 
   const describedBy = composeIds(
     props["aria-describedby"],
-    descriptionId,
-    invalid ? messageId : undefined,
+    hasDescription ? descriptionId : undefined,
+    invalid && hasMessage ? messageId : undefined,
   );
   const nativeConstraintProps: Record<string, boolean | undefined> = {
     disabled: disabled || undefined,
@@ -223,7 +251,15 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.ComponentPropsWithoutRef<"p">
 >(({ className, ...props }, ref) => {
-  const { descriptionId } = useFormItemContext("FormDescription");
+  const { descriptionId, registerDescription } =
+    useFormItemContext("FormDescription");
+
+  React.useEffect(() => {
+    registerDescription(true);
+    return () => {
+      registerDescription(false);
+    };
+  }, [registerDescription]);
 
   return (
     <p
@@ -240,9 +276,21 @@ const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.ComponentPropsWithoutRef<"p">
 >(({ children, className, ...props }, ref) => {
-  const { invalid, messageId } = useFormItemContext("FormMessage");
+  const { invalid, messageId, registerMessage } =
+    useFormItemContext("FormMessage");
+  const hasChildren = React.Children.count(children) > 0;
 
-  if (React.Children.count(children) === 0) {
+  React.useEffect(() => {
+    if (!hasChildren) {
+      return;
+    }
+    registerMessage(true);
+    return () => {
+      registerMessage(false);
+    };
+  }, [hasChildren, registerMessage]);
+
+  if (!hasChildren) {
     return null;
   }
 
