@@ -75,6 +75,32 @@ describe("Form", () => {
     expect(handleSubmit).not.toHaveBeenCalled();
   });
 
+  it("supports legacy invalid layouts without FormField context", async () => {
+    render(
+      <Form invalid onSubmit={vi.fn()}>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input placeholder="name@company.com" type="email" />
+          </FormControl>
+          <FormDescription>Use your work email address.</FormDescription>
+          <FormMessage>Please enter a valid email.</FormMessage>
+        </FormItem>
+      </Form>,
+    );
+
+    const input = screen.getByRole("textbox", { name: "Email" });
+    const description = screen.getByText("Use your work email address.");
+    const message = screen.getByText("Please enter a valid email.");
+
+    expect(input).toHaveAttribute(
+      "aria-describedby",
+      `${description.id} ${message.id}`,
+    );
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(message).toHaveAttribute("role", "alert");
+  });
+
   it("supports server-side field errors via setError", async () => {
     render(
       <Form<EmailValues>

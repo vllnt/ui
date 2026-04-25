@@ -49,11 +49,16 @@ export type FormProps<TFieldValues extends FieldValues = FieldValues> = Omit<
   defaultValues?: DefaultValues<TFieldValues>;
   disabled?: boolean;
   form?: FormInstance<TFieldValues>;
+  invalid?: boolean;
   onError?: FormErrorHandler<TFieldValues>;
   onSubmit: FormSubmitHandler<TFieldValues>;
   resolver?: Resolver<TFieldValues>;
   schema?: Parameters<typeof zodResolver>[0];
   values?: TFieldValues;
+};
+
+type FormRootContextValue = {
+  invalid: boolean;
 };
 
 type FormFieldContextValue = {
@@ -62,7 +67,12 @@ type FormFieldContextValue = {
 
 type FormItemContextValue = {
   id: string;
+  invalid: boolean;
 };
+
+const FormRootContext = React.createContext<FormRootContextValue | undefined>(
+  undefined,
+);
 
 const FormFieldContext = React.createContext<FormFieldContextValue | undefined>(
   undefined,
@@ -72,14 +82,14 @@ const FormItemContext = React.createContext<FormItemContextValue | undefined>(
   undefined,
 );
 
-function useFormFieldContext(componentName: string) {
-  const fieldContext = React.useContext(FormFieldContext);
+function useFormRootContext(componentName: string) {
+  const rootContext = React.useContext(FormRootContext);
 
-  if (fieldContext === undefined) {
-    throw new Error(`${componentName} must be used within FormField.`);
+  if (rootContext === undefined) {
+    throw new Error(`${componentName} must be used within Form.`);
   }
 
-  return fieldContext;
+  return rootContext;
 }
 
 function useFormItemContext(componentName: string) {
@@ -104,6 +114,7 @@ function Form<TFieldValues extends FieldValues = FieldValues>({
   defaultValues,
   disabled = false,
   form: providedForm,
+  invalid = false,
   onError,
   onSubmit,
   resolver,
@@ -122,28 +133,35 @@ function Form<TFieldValues extends FieldValues = FieldValues>({
   const form: FormInstance<TFieldValues> = providedForm ?? internalForm;
   const submitting = disabled || form.formState.isSubmitting;
   const content = typeof children === "function" ? children(form) : children;
+  const rootContextValue = React.useMemo(
+    () => ({ invalid }),
+    [invalid],
+  );
 
   return (
-    <FormProvider {...form}>
-      <form
-        className={cn("space-y-6", className)}
-        data-disabled={submitting ? "true" : undefined}
-        data-submitting={form.formState.isSubmitting ? "true" : undefined}
-        onSubmit={form.handleSubmit(
-          async (values) => {
-            await onSubmit(values, form);
-          },
-          async (errors) => {
-            if (onError !== undefined) {
-              await onError(errors, form);
-            }
-          },
-        )}
-        {...props}
-      >
-        {content}
-      </form>
-    </FormProvider>
+    <FormRootContext.Provider value={rootContextValue}>
+      <FormProvider {...form}>
+        <form
+          className={cn("space-y-6", className)}
+          data-disabled={submitting ? "true" : undefined}
+          data-invalid={invalid ? "true" : undefined}
+          data-submitting={form.formState.isSubmitting ? "true" : undefined}
+          onSubmit={form.handleSubmit(
+            async (values) => {
+              await onSubmit(values, form);
+            },
+            async (errors) => {
+              if (onError !== undefined) {
+                await onError(errors, form);
+              }
+            },
+          )}
+          {...props}
+        >
+          {content}
+        </form>
+      </FormProvider>
+    </FormRootContext.Provider>
   );
 }
 
@@ -164,13 +182,30 @@ function FormField<
 }
 
 function useFormField() {
-  const fieldContext = useFormFieldContext("useFormField");
+  const fieldContext = React.useContext(FormFieldContext);
   const itemContext = useFormItemContext("useFormField");
+  const { invalid: rootInvalid } = useFormRootContext("useFormField");
   const { formState, getFieldState } = useFormContext();
-  const fieldState = getFieldState(fieldContext.name, formState);
   const formItemId = `${itemContext.id}-form-item`;
   const formDescriptionId = `${itemContext.id}-form-item-description`;
   const formMessageId = `${itemContext.id}-form-item-message`;
+
+  if (fieldContext === undefined) {
+    return {
+      error: undefined,
+      formDescriptionId,
+      formItemId,
+      formMessageId,
+      id: itemContext.id,
+      invalid: itemContext.invalid || rootInvalid,
+      isDirty: false,
+      isTouched: false,
+      isValidating: false,
+      name: "",
+    };
+  }
+
+  const fieldState = getFieldState(fieldContext.name, formState);
 
   return {
     error: fieldState.error,
@@ -191,7 +226,8 @@ const FormItem = React.forwardRef<
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => {
   const id = React.useId();
-  const itemContextValue = React.useMemo(() => ({ id }), [id]);
+  const { invalid } = useFormRootContext("FormItem");
+  const itemContextValue = React.useMemo(() => ({ id, invalid }), [id, invalid]);
 
   return (
     <FormItemContext.Provider value={itemContextValue}>
@@ -231,7 +267,7 @@ const FormControl = React.forwardRef<HTMLElement, FormControlProps>(
     const describedBy = composeIds(
       props["aria-describedby"],
       formDescriptionId,
-      invalid || error !== undefined ? formMessageId : undefined,
+      (invalid || error !== undefined) ? formMessageId : undefined,
     );
     const disabled = props.disabled ?? formState.isSubmitting;
 

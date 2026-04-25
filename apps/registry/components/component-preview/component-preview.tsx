@@ -556,7 +556,7 @@ function CheckboxPreview() {
 function FormPreview() {
   return (
     <div className="w-full max-w-sm">
-      <Form invalid>
+      <Form invalid onSubmit={async () => {}}>
         <FormItem>
           <FormLabel>Email</FormLabel>
           <FormControl>
