@@ -324,6 +324,16 @@ export {
   Summary,
   type SummaryProps,
 } from "./learning-objectives";
+export {
+  Curriculum,
+  CurriculumLesson,
+  type CurriculumLessonProps,
+  CurriculumModule,
+  type CurriculumModuleProps,
+  type CurriculumProps,
+  type LessonDifficulty,
+  type LessonStatus,
+} from "./curriculum";
 export { ProgressBar, type ProgressBarProps } from "./progress-bar";
 export {
   CommonMistake,
