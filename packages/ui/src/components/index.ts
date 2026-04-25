@@ -340,19 +340,39 @@ export { CodeBlock } from "./code-block";
 export { MDXContent } from "./mdx-content";
 
 // Layout components
-export { CanvasShell, type CanvasShellProps } from "./canvas-shell";
+export {
+  CanvasShell,
+  type CanvasShellInsets,
+  type CanvasShellProps,
+  type CanvasShellRouteConfig,
+} from "./canvas-shell";
 export {
   CanvasView,
   type CanvasViewHandle,
   type CanvasViewport,
   type CanvasViewProps,
 } from "./canvas-view";
+export { BottomBar, type BottomBarProps } from "./bottom-bar";
+export {
+  type ChatDockMessage,
+  ChatDockSection,
+  type ChatDockSectionProps,
+} from "./chat-dock-section";
+export { GlassPanel, type GlassPanelProps } from "./glass-panel";
 export { LeftRail, type LeftRailProps } from "./left-rail";
 export {
   type MiniMapMarker,
   MiniMapPanel,
   type MiniMapPanelProps,
 } from "./mini-map-panel";
+export {
+  OverviewBoard,
+  type OverviewBoardItem,
+  type OverviewBoardProps,
+  OverviewCard,
+  type OverviewCardProps,
+  type OverviewCardTone,
+} from "./overview-board";
 export {
   NavbarSaas,
   type NavbarSaasProps,
