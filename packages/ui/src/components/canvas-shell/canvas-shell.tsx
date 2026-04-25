@@ -70,26 +70,27 @@ function getSafeAreaStyle(
   } satisfies CanvasShellSafeAreaStyle;
 }
 
-function hasChromeContent(node: ReactNode) {
-  return node !== undefined && node !== null && node !== false;
-}
+const hasChromeContent = Boolean;
 
-function CanvasShellChrome({
-  bottomBar,
+type CanvasShellChromeAfterProps = Pick<
+  CanvasShellChromeProps,
+  "bottomBar" | "inset" | "rightBar"
+>;
+
+function CanvasShellChromeBefore({
   inset,
   leftBar,
-  rightBar,
   topBar,
-}: CanvasShellChromeProps) {
+}: Pick<CanvasShellChromeProps, "inset" | "leftBar" | "topBar">) {
   return (
-    <div className="pointer-events-none absolute inset-0 z-20">
+    <>
       {hasChromeContent(topBar) ? (
         <div
-          className="pointer-events-auto absolute inset-x-0 z-30"
+          className="pointer-events-none absolute inset-x-0 z-30"
           style={{ top: inset }}
         >
           <div
-            className="mx-auto w-full max-w-[960px] px-4"
+            className="pointer-events-auto mx-auto w-full max-w-[960px]"
             style={{ paddingLeft: inset, paddingRight: inset }}
           >
             {topBar}
@@ -98,42 +99,53 @@ function CanvasShellChrome({
       ) : null}
       {hasChromeContent(leftBar) ? (
         <div
-          className="pointer-events-auto absolute left-0 z-30 flex"
+          className="pointer-events-none absolute left-0 z-30 flex"
           style={{
             bottom: "var(--canvas-shell-safe-bottom)",
             left: inset,
             top: "var(--canvas-shell-safe-top)",
           }}
         >
-          {leftBar}
+          <div className="pointer-events-auto flex">{leftBar}</div>
         </div>
       ) : null}
+    </>
+  );
+}
+
+function CanvasShellChromeAfter({
+  bottomBar,
+  inset,
+  rightBar,
+}: CanvasShellChromeAfterProps) {
+  return (
+    <>
       {hasChromeContent(rightBar) ? (
         <div
-          className="pointer-events-auto absolute right-0 z-30 flex"
+          className="pointer-events-none absolute right-0 z-30 flex"
           style={{
             bottom: "var(--canvas-shell-safe-bottom)",
             right: inset,
             top: "var(--canvas-shell-safe-top)",
           }}
         >
-          {rightBar}
+          <div className="pointer-events-auto flex">{rightBar}</div>
         </div>
       ) : null}
       {hasChromeContent(bottomBar) ? (
         <div
-          className="pointer-events-auto absolute inset-x-0 bottom-0 z-30"
+          className="pointer-events-none absolute inset-x-0 z-30"
           style={{ bottom: inset }}
         >
           <div
-            className="mx-auto w-full max-w-[960px] px-4"
+            className="pointer-events-auto mx-auto w-full max-w-[960px]"
             style={{ paddingLeft: inset, paddingRight: inset }}
           >
             {bottomBar}
           </div>
         </div>
       ) : null}
-    </div>
+    </>
   );
 }
 
@@ -179,6 +191,23 @@ function renderLegacyCanvasShell(
         </div>
       ) : null}
     </section>
+  );
+}
+
+function renderFloatingContent(
+  children: ReactNode,
+  contentStyle: CSSProperties,
+) {
+  return (
+    <div
+      className="relative z-0 h-full w-full min-h-0 min-w-0"
+      data-slot="canvas-shell-content"
+      style={contentStyle}
+    >
+      <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -235,22 +264,17 @@ function renderFloatingCanvasShell(
       {...props}
     >
       <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)/0.94),hsl(var(--background)/0.8))]" />
-      <CanvasShellChrome
-        bottomBar={hasBottomBar ? resolvedBottomBar : undefined}
+      <CanvasShellChromeBefore
         inset={inset}
         leftBar={hasLeftBar ? resolvedLeftBar : undefined}
-        rightBar={hasRightBar ? resolvedRightBar : undefined}
         topBar={hasTopBar ? topBar : undefined}
       />
-      <div
-        className="relative z-0 h-full w-full min-h-0 min-w-0"
-        data-slot="canvas-shell-content"
-        style={contentStyle}
-      >
-        <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
-          {children}
-        </div>
-      </div>
+      {renderFloatingContent(children, contentStyle)}
+      <CanvasShellChromeAfter
+        bottomBar={hasBottomBar ? resolvedBottomBar : undefined}
+        inset={inset}
+        rightBar={hasRightBar ? resolvedRightBar : undefined}
+      />
     </section>
   );
 }

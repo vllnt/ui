@@ -168,7 +168,7 @@ describe("CanvasShell", () => {
 
   it("keeps falsey chrome props on the legacy layout path", () => {
     const { container } = render(
-      <CanvasShell bottomBar={false} leftBar={false} rightBar={false}>
+      <CanvasShell bottomBar={false} leftBar={0} rightBar="">
         <div>Falsey main</div>
       </CanvasShell>,
     );
@@ -178,9 +178,10 @@ describe("CanvasShell", () => {
     expect(shell.className).toContain("flex-col");
     expect(shell.className).not.toContain("relative isolate");
     expect(screen.getByText("Falsey main")).toBeInTheDocument();
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
   });
 
-  it("keeps floating chrome before main content in document order", () => {
+  it("keeps floating chrome aligned with legacy document order", () => {
     render(
       <CanvasShell
         bottomBar={<button type="button">Bottom action</button>}
@@ -194,9 +195,19 @@ describe("CanvasShell", () => {
 
     const topAction = screen.getByRole("button", { name: "Top action" });
     const mainAction = screen.getByRole("button", { name: "Main action" });
+    const rightAction = screen.getByRole("button", { name: "Right action" });
+    const bottomAction = screen.getByRole("button", { name: "Bottom action" });
 
     expect(
       topAction.compareDocumentPosition(mainAction) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      mainAction.compareDocumentPosition(rightAction) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      mainAction.compareDocumentPosition(bottomAction) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   });
