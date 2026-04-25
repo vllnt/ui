@@ -99,6 +99,12 @@ import {
   FileUpload,
   Flashcard,
   FloatingActionButton,
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
   Glossary,
   HorizontalScrollRow,
   HoverCard,
@@ -123,6 +129,7 @@ import {
   MenubarSeparator,
   MenubarTrigger,
   MetricGauge,
+  MultiSelect,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -150,6 +157,8 @@ import {
   ScopeSelector,
   ScrollArea,
   SearchBar,
+  SegmentedControl,
+  SegmentedControlItem,
   Select,
   SelectContent,
   SelectItem,
@@ -190,6 +199,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  TagsInput,
   Terminal,
   Textarea,
   ThemeProvider,
@@ -539,6 +549,63 @@ function CheckboxPreview() {
           Receive emails
         </label>
       </div>
+    </div>
+  );
+}
+
+function FormPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <Form invalid>
+        <FormItem>
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input placeholder="name@company.com" type="email" />
+          </FormControl>
+          <FormDescription>Use your work email address.</FormDescription>
+          <FormMessage>Please enter a valid email.</FormMessage>
+        </FormItem>
+      </Form>
+    </div>
+  );
+}
+
+function MultiSelectPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <MultiSelect
+        defaultValue={["react", "vue"]}
+        options={[
+          { label: "React", value: "react" },
+          { label: "Vue", value: "vue" },
+          { label: "Svelte", value: "svelte" },
+        ]}
+        searchable
+      />
+    </div>
+  );
+}
+
+function TagsInputPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <TagsInput
+        aria-label="Framework tags"
+        defaultValue={["React", "Vue"]}
+        placeholder="Add a framework"
+      />
+    </div>
+  );
+}
+
+function SegmentedControlPreview() {
+  return (
+    <div className="w-full max-w-sm">
+      <SegmentedControl aria-label="Project view" defaultValue="board">
+        <SegmentedControlItem value="board">Board</SegmentedControlItem>
+        <SegmentedControlItem value="list">List</SegmentedControlItem>
+        <SegmentedControlItem value="timeline">Timeline</SegmentedControlItem>
+      </SegmentedControl>
     </div>
   );
 }
@@ -2106,6 +2173,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <BreadcrumbPreview />;
     case "button":
       return <ButtonPreview />;
+    case "anchor-port":
+      return (
+        <SimplePreview description="Connection port primitive for object graph cards and edges." />
+      );
     case "callout":
       return <CalloutPreview />;
     case "calendar":
@@ -2120,6 +2191,18 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <DataTablePreview />;
     case "carousel":
       return <CarouselPreview />;
+    case "canvas-shell":
+      return (
+        <SimplePreview description="Overlay shell for infinite-canvas workspaces with floating chrome regions." />
+      );
+    case "canvas-view":
+      return (
+        <SimplePreview description="Pan-and-zoom canvas surface with keyboard and modified-wheel controls." />
+      );
+    case "connector-edge":
+      return (
+        <SimplePreview description="Curved connector edge for linking spatial objects on the canvas." />
+      );
     case "category-filter":
       return <CategoryFilterPreview />;
     case "checkbox":
@@ -2162,6 +2245,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <FAQPreview />;
     case "flashcard":
       return <FlashcardPreview />;
+    case "edge-label":
+      return (
+        <SimplePreview description="Compact edge annotation badge used inside connector paths." />
+      );
     case "file-upload":
       return <FileUploadPreview />;
     case "filter-bar":
@@ -2170,6 +2257,12 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       );
     case "floating-action-button":
       return <FloatingActionButtonPreview />;
+    case "form":
+      return <FormPreview />;
+    case "group-hull":
+      return (
+        <SimplePreview description="Dashed grouping surface for related spatial objects." />
+      );
     case "horizontal-scroll-row":
       return <HorizontalScrollRowPreview />;
     case "hover-card":
@@ -2186,6 +2279,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <KeyConceptPreview />;
     case "keyboard-shortcuts-help":
       return <KeyboardShortcutsHelpPreview />;
+    case "left-rail":
+      return (
+        <SimplePreview description="Primary left-side rail for workspace navigation and context controls." />
+      );
     case "lang-provider":
       return <LangProviderPreview />;
     case "learning-objectives":
@@ -2202,12 +2299,22 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <MDXContentPreview />;
     case "menubar":
       return <MenubarPreview />;
+    case "mini-map-panel":
+      return (
+        <SimplePreview description="Viewport overview panel showing camera position within the world surface." />
+      );
     case "metric-gauge":
       return <MetricGaugePreview />;
     case "model-selector":
       return (
         <SimplePreview description="A dialog for selecting AI models with search and filtering." />
       );
+    case "multi-select":
+      return <MultiSelectPreview />;
+    case "tags-input":
+      return <TagsInputPreview />;
+    case "segmented-control":
+      return <SegmentedControlPreview />;
     case "navbar-saas":
       return (
         <SimplePreview description="A responsive navigation bar for SaaS applications." />
@@ -2218,6 +2325,14 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <NumberInputPreview />;
     case "number-ticker":
       return <NumberTickerPreview />;
+    case "object-card":
+      return (
+        <SimplePreview description="Object card primitive for spatial entities with metrics, actions, and ports." />
+      );
+    case "object-handle":
+      return (
+        <SimplePreview description="Drag/move handle affordance for manipulating canvas objects." />
+      );
     case "order-book":
       return <OrderBookPreview />;
     case "pagination":
@@ -2242,6 +2357,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <RadioGroupPreview />;
     case "resizable":
       return <ResizablePreview />;
+    case "right-dock":
+      return (
+        <SimplePreview description="Right-side dock for inspector, agent, or activity panels in the workspace shell." />
+      );
     case "scroll-area":
       return <ScrollAreaPreview />;
     case "search-bar":
@@ -2294,6 +2413,10 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return (
         <SimplePreview description="A table of contents panel with progress tracking." />
       );
+    case "top-bar":
+      return (
+        <SimplePreview description="Top workspace bar combining title, subtitle, and command surfaces." />
+      );
     case "table":
       return <TablePreview />;
     case "tabs":
@@ -2342,10 +2465,18 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
       return <VideoEmbedPreview />;
     case "view-switcher":
       return <ViewSwitcherPreview />;
+    case "workspace-switcher":
+      return (
+        <SimplePreview description="Workspace selector for moving between orchestration views and object neighborhoods." />
+      );
     case "wallet-card":
       return <WalletCardPreview />;
     case "watchlist":
       return <WatchlistPreview />;
+    case "zoom-hud":
+      return (
+        <SimplePreview description="Heads-up zoom control for resetting and stepping canvas magnification." />
+      );
     case "world-clock-bar":
       return <WorldClockBarPreview />;
     default:

@@ -65,6 +65,29 @@ export { NumberInput, type NumberInputProps } from "./number-input";
 export { PasswordInput, type PasswordInputProps } from "./password-input";
 export { Switch } from "./switch";
 export {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  type FormProps,
+} from "./form";
+export {
+  MultiSelect,
+  type MultiSelectOption,
+  type MultiSelectProps,
+} from "./multi-select";
+export { TagsInput, type TagsInputProps } from "./tags-input";
+export {
+  SegmentedControl,
+  SegmentedControlItem,
+  type SegmentedControlItemProps,
+  segmentedControlItemVariants,
+  type SegmentedControlProps,
+  segmentedControlVariants,
+} from "./segmented-control";
+export {
   toast,
   Toast,
   ToastAction,
@@ -316,15 +339,51 @@ export { MDXContent } from "./mdx-content";
 
 // Layout components
 export {
+  CanvasShell,
+  type CanvasShellInsets,
+  type CanvasShellProps,
+  type CanvasShellRouteConfig,
+} from "./canvas-shell";
+export {
+  CanvasView,
+  type CanvasViewHandle,
+  type CanvasViewport,
+  type CanvasViewProps,
+} from "./canvas-view";
+export { BottomBar, type BottomBarProps } from "./bottom-bar";
+export {
+  type ChatDockMessage,
+  ChatDockSection,
+  type ChatDockSectionProps,
+} from "./chat-dock-section";
+export { GlassPanel, type GlassPanelProps } from "./glass-panel";
+export { LeftRail, type LeftRailProps } from "./left-rail";
+export {
+  type MiniMapMarker,
+  MiniMapPanel,
+  type MiniMapPanelProps,
+} from "./mini-map-panel";
+export {
+  OverviewBoard,
+  type OverviewBoardItem,
+  type OverviewBoardProps,
+  OverviewCard,
+  type OverviewCardProps,
+  type OverviewCardTone,
+} from "./overview-board";
+export {
   NavbarSaas,
   type NavbarSaasProps,
   type NavItem,
   useMobile,
 } from "./navbar-saas";
+export { RightDock, type RightDockProps } from "./right-dock";
 export { Sidebar } from "./sidebar";
 export type { SidebarItem, SidebarSection } from "./sidebar";
 export { SidebarProvider, useSidebar } from "./sidebar-provider";
 export { TableOfContents } from "./table-of-contents";
+export { TopBar, type TopBarProps } from "./top-bar";
+export { ZoomHUD, type ZoomHUDProps } from "./zoom-hud";
 
 // Blog components
 export {
@@ -631,6 +690,11 @@ export {
   ViewSwitcher,
   type ViewSwitcherProps,
 } from "./view-switcher";
+export {
+  type WorkspaceOption,
+  WorkspaceSwitcher,
+  type WorkspaceSwitcherProps,
+} from "./workspace-switcher";
 
 // Flow/Diagram components
 export {
@@ -648,6 +712,23 @@ export {
   type UseFlowDiagramOptions,
   type UseFlowDiagramReturn,
 } from "./flow-diagram";
+
+// Canvas/Object components
+export { AnchorPort, type AnchorPortProps } from "./anchor-port";
+export {
+  ConnectorEdge,
+  type ConnectorEdgePoint,
+  type ConnectorEdgeProps,
+} from "./connector-edge";
+export { EdgeLabel, type EdgeLabelProps } from "./edge-label";
+export { GroupHull, type GroupHullProps } from "./group-hull";
+export {
+  ObjectCard,
+  type ObjectCardAction,
+  type ObjectCardMetric,
+  type ObjectCardProps,
+} from "./object-card";
+export { ObjectHandle, type ObjectHandleProps } from "./object-handle";
 
 // AI/Chat components
 export { InlineInput, type InlineInputProps } from "./inline-input";

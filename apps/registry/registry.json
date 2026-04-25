@@ -163,6 +163,21 @@
       "category": "overlay"
     },
     {
+      "name": "anchor-port",
+      "type": "registry:component",
+      "title": "Anchor Port",
+      "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+      "files": [
+        {
+          "path": "registry/default/anchor-port/anchor-port.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "animated-text",
       "type": "registry:component",
       "title": "Animated Text",
@@ -388,6 +403,36 @@
       "category": "data"
     },
     {
+      "name": "canvas-shell",
+      "type": "registry:component",
+      "title": "Canvas Shell",
+      "description": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions.",
+      "files": [
+        {
+          "path": "registry/default/canvas-shell/canvas-shell.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "canvas-view",
+      "type": "registry:component",
+      "title": "Canvas View",
+      "description": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support.",
+      "files": [
+        {
+          "path": "registry/default/canvas-view/canvas-view.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "card",
       "type": "registry:component",
       "title": "Card",
@@ -568,6 +613,21 @@
       "category": "learning"
     },
     {
+      "name": "connector-edge",
+      "type": "registry:component",
+      "title": "Connector Edge",
+      "description": "Curved edge between canvas objects with optional inline label state.",
+      "files": [
+        {
+          "path": "registry/default/connector-edge/connector-edge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "content-intro",
       "type": "registry:component",
       "title": "Content Intro",
@@ -720,6 +780,21 @@
       "category": "overlay"
     },
     {
+      "name": "edge-label",
+      "type": "registry:component",
+      "title": "Edge Label",
+      "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+      "files": [
+        {
+          "path": "registry/default/edge-label/edge-label.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "overlay"
+    },
+    {
       "name": "exercise",
       "type": "registry:component",
       "title": "Exercise",
@@ -823,6 +898,39 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
+      "files": [
+        {
+          "path": "registry/default/form/form.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "group-hull",
+      "type": "registry:component",
+      "title": "Group Hull",
+      "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+      "files": [
+        {
+          "path": "registry/default/group-hull/group-hull.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "horizontal-scroll-row",
@@ -964,6 +1072,21 @@
       "category": "learning"
     },
     {
+      "name": "left-rail",
+      "type": "registry:component",
+      "title": "Left Rail",
+      "description": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls.",
+      "files": [
+        {
+          "path": "registry/default/left-rail/left-rail.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "line-chart",
       "type": "registry:component",
       "title": "Line Chart",
@@ -977,21 +1100,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
-    },
-    {
-      "name": "marquee",
-      "type": "registry:component",
-      "title": "Marquee",
-      "description": "Continuously scrolling content lane for badges, logos, and status chips.",
-      "files": [
-        {
-          "path": "registry/default/marquee/marquee.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "utility"
     },
     {
       "name": "live-feed",
@@ -1022,6 +1130,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+      "files": [
+        {
+          "path": "registry/default/marquee/marquee.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "mdx-content",
@@ -1069,6 +1192,21 @@
       "category": "data"
     },
     {
+      "name": "mini-map-panel",
+      "type": "registry:component",
+      "title": "Mini Map Panel",
+      "description": "Viewport overview panel showing canvas bounds, markers, and the current zoom window.",
+      "files": [
+        {
+          "path": "registry/default/mini-map-panel/mini-map-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "model-selector",
       "type": "registry:component",
       "title": "Model Selector",
@@ -1080,6 +1218,26 @@
         }
       ],
       "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:component",
+      "title": "Multi Select",
+      "description": "Popover-based multi-selection input with selected-value badges and optional search.",
+      "files": [
+        {
+          "path": "registry/default/multi-select/multi-select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "command",
+        "popover"
+      ],
       "dependencies": [],
       "category": "form"
     },
@@ -1136,6 +1294,36 @@
       "files": [
         {
           "path": "registry/default/number-ticker/number-ticker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "object-card",
+      "type": "registry:component",
+      "title": "Object Card",
+      "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+      "files": [
+        {
+          "path": "registry/default/object-card/object-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "object-handle",
+      "type": "registry:component",
+      "title": "Object Handle",
+      "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+      "files": [
+        {
+          "path": "registry/default/object-handle/object-handle.tsx",
           "type": "registry:component"
         }
       ],
@@ -1339,6 +1527,21 @@
       "category": "utility"
     },
     {
+      "name": "right-dock",
+      "type": "registry:component",
+      "title": "Right Dock",
+      "description": "Context dock for inspectors, summaries, and secondary canvas panels.",
+      "files": [
+        {
+          "path": "registry/default/right-dock/right-dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "role-badge",
       "type": "registry:component",
       "title": "Role Badge",
@@ -1412,6 +1615,23 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "learning"
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:component",
+      "title": "Segmented Control",
+      "description": "Single-choice segmented selector for switching modes, views, or filters.",
+      "files": [
+        {
+          "path": "registry/default/segmented-control/segmented-control.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "select",
@@ -1776,6 +1996,23 @@
       "category": "navigation"
     },
     {
+      "name": "tags-input",
+      "type": "registry:component",
+      "title": "Tags Input",
+      "description": "Keyboard-friendly tag editor for adding and removing string values.",
+      "files": [
+        {
+          "path": "registry/default/tags-input/tags-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge"
+      ],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "terminal",
       "type": "registry:component",
       "title": "Terminal",
@@ -1943,6 +2180,21 @@
       "category": "overlay"
     },
     {
+      "name": "top-bar",
+      "type": "registry:component",
+      "title": "Top Bar",
+      "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
+      "files": [
+        {
+          "path": "registry/default/top-bar/top-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "tour",
       "type": "registry:component",
       "title": "Tour",
@@ -2108,6 +2360,21 @@
       "category": "data"
     },
     {
+      "name": "workspace-switcher",
+      "type": "registry:component",
+      "title": "Workspace Switcher",
+      "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
+      "files": [
+        {
+          "path": "registry/default/workspace-switcher/workspace-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "world-clock-bar",
       "type": "registry:component",
       "title": "World Clock Bar",
@@ -2121,6 +2388,23 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "zoom-hud",
+      "type": "registry:component",
+      "title": "Zoom HUD",
+      "description": "Zoom controls with current percentage, increment buttons, and reset action for canvas views.",
+      "files": [
+        {
+          "path": "registry/default/zoom-hud/zoom-hud.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "overlay"
     }
   ]
 }
