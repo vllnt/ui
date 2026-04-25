@@ -30,8 +30,14 @@ const MiniMapPanel = forwardRef<HTMLDivElement, MiniMapPanelProps>(
     { className, markers = [], title = "Overview", viewport, world, ...props },
     ref,
   ) => {
-    const viewportWidth = Math.max((viewport.width / world.width) * 100, 8);
-    const viewportHeight = Math.max((viewport.height / world.height) * 100, 8);
+    const viewportWidth = Math.max(
+      (viewport.width / viewport.zoom / world.width) * 100,
+      8,
+    );
+    const viewportHeight = Math.max(
+      (viewport.height / viewport.zoom / world.height) * 100,
+      8,
+    );
     const viewportLeft = Math.min(
       Math.max((viewport.x / world.width) * 100, 0),
       100 - viewportWidth,

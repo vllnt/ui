@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { RightDock, type RightDockProps } from '@vllnt/ui'

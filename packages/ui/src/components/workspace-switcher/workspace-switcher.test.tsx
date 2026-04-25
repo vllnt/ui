@@ -13,8 +13,8 @@ describe("WorkspaceSwitcher", () => {
   it("selects the first workspace by default", () => {
     render(<WorkspaceSwitcher workspaces={workspaces} />);
 
-    expect(screen.getByRole("tab", { name: "Orchestrate" })).toHaveAttribute(
-      "aria-selected",
+    expect(screen.getByRole("radio", { name: "Orchestrate" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
   });
@@ -22,10 +22,10 @@ describe("WorkspaceSwitcher", () => {
   it("updates internal state when uncontrolled", () => {
     render(<WorkspaceSwitcher workspaces={workspaces} />);
 
-    fireEvent.click(screen.getByRole("tab", { name: "Objects" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Objects" }));
 
-    expect(screen.getByRole("tab", { name: "Objects" })).toHaveAttribute(
-      "aria-selected",
+    expect(screen.getByRole("radio", { name: "Objects" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
   });
@@ -40,7 +40,7 @@ describe("WorkspaceSwitcher", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("tab", { name: "Signals" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Signals" }));
 
     expect(onValueChange).toHaveBeenCalledWith("signals");
   });
@@ -48,8 +48,8 @@ describe("WorkspaceSwitcher", () => {
   it("respects a controlled value", () => {
     render(<WorkspaceSwitcher value="objects" workspaces={workspaces} />);
 
-    expect(screen.getByRole("tab", { name: "Objects" })).toHaveAttribute(
-      "aria-selected",
+    expect(screen.getByRole("radio", { name: "Objects" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
   });

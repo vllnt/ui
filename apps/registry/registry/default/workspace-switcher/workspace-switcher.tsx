@@ -1,1 +1,1 @@
-export * from '@vllnt/ui'
+export { WorkspaceSwitcher, type WorkspaceSwitcherProps } from '@vllnt/ui'
