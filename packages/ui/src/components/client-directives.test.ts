@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -5,6 +8,22 @@ import {
   hasUseClientDirective,
   stripNonCode,
 } from "../../scripts/check-use-client";
+
+const COMPONENTS_ROOT = join(__dirname);
+const SKIPPED_SUFFIXES = [".stories.tsx", ".test.tsx", ".visual.tsx"] as const;
+
+function listTypeScriptFiles(directory: string): string[] {
+  return readdirSync(directory).flatMap((entry) => {
+    const path = join(directory, entry);
+    const stats = statSync(path);
+
+    if (stats.isDirectory()) {
+      return listTypeScriptFiles(path);
+    }
+
+    return path.endsWith(".tsx") ? [path] : [];
+  });
+}
 
 describe("stripNonCode", () => {
   it("removes single-line comments", () => {
@@ -232,5 +251,23 @@ describe("hasUseClientDirective", () => {
         false,
       );
     });
+  });
+});
+
+describe("client directives", () => {
+  it("marks hook-based shipped components as client components", () => {
+    const missingDirectiveFiles = listTypeScriptFiles(COMPONENTS_ROOT)
+      .filter((filePath) =>
+        SKIPPED_SUFFIXES.every((suffix) => !filePath.endsWith(suffix)),
+      )
+      .filter((filePath) => {
+        const source = readFileSync(filePath, "utf8");
+        return fileUsesHooks(source) && !hasUseClientDirective(source);
+      })
+      .map((filePath) =>
+        filePath.replace(`${COMPONENTS_ROOT}/`, "components/"),
+      );
+
+    expect(missingDirectiveFiles).toEqual([]);
   });
 });

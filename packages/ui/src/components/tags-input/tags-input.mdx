@@ -1,0 +1,46 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as Stories from './tags-input.stories'
+
+<Meta of={Stories} />
+
+# TagsInput
+
+A compact tag editor for adding and removing string values from the keyboard without leaving the input field.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/tags-input.json
+```
+
+## Import
+
+```tsx
+import { TagsInput } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TagsInput aria-label="Framework tags" defaultValue={['React', 'Vue']} placeholder="Add a framework" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Keyboard flows
+
+Press `Enter` or `,` to commit the current input as a tag. Press `Backspace` when the text field is empty to remove the last tag.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Controlled values
+
+Pass `value` and `onValueChange` when tags should be driven from parent state.
+
+<Canvas of={Stories.Controlled} sourceState="shown" />
+
+## API Reference
+
+<Controls />
