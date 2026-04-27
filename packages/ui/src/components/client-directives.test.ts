@@ -137,6 +137,21 @@ export function useCounter() {
       ).toBe(false);
     });
 
+    it("ignores hook definitions whose opening brace appears on a later line", () => {
+      expect(
+        fileUsesHooks(`
+export function useCounter(
+  initialValue: number,
+  step = 1,
+)
+{
+  const [count] = useState(initialValue);
+  return { count, step };
+}
+`),
+      ).toBe(false);
+    });
+
     it("ignores arrow hook definition body calling useMemo and useRef", () => {
       expect(
         fileUsesHooks(`

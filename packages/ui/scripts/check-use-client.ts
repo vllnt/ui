@@ -82,6 +82,7 @@ export function fileUsesHooks(source: string): boolean {
   const stripped = stripNonCode(source)
   let depth = 0
   let hookBodyDepth = -1
+  let pendingHookDef = false
 
   for (const line of stripped.split(/\r?\n/)) {
     const opens = (line.match(/\{/g) ?? []).length
@@ -93,8 +94,23 @@ export function fileUsesHooks(source: string): boolean {
       continue
     }
 
+    if (pendingHookDef) {
+      if (opens > closes) {
+        hookBodyDepth = depth
+        pendingHookDef = false
+        depth += opens - closes
+      } else {
+        depth += opens - closes
+      }
+      continue
+    }
+
     if (HOOK_DEF_LINE_PATTERN.test(line)) {
-      if (opens > closes) hookBodyDepth = depth
+      if (opens > closes) {
+        hookBodyDepth = depth
+      } else {
+        pendingHookDef = true
+      }
       depth += opens - closes
       continue
     }
