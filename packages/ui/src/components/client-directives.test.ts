@@ -126,6 +126,29 @@ const useLocalStore = () => {
       ).toBe(false);
     });
 
+    it("ignores multi-line function hook definition body calling useState", () => {
+      expect(
+        fileUsesHooks(`
+export function useCounter() {
+  const [count] = useState(0);
+  return { count };
+}
+`),
+      ).toBe(false);
+    });
+
+    it("ignores arrow hook definition body calling useMemo and useRef", () => {
+      expect(
+        fileUsesHooks(`
+const useLayout = () => {
+  const val = useMemo(() => 0, []);
+  const ref = useRef(null);
+  return { val, ref };
+};
+`),
+      ).toBe(false);
+    });
+
     it("ignores hook name in single-line comment", () => {
       expect(fileUsesHooks("// call useTheme() to get the theme")).toBe(false);
     });

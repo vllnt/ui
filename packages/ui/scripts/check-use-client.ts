@@ -65,17 +65,46 @@ export function stripNonCode(source: string): string {
 }
 
 /**
+ * Matches lines that *start* a custom hook definition (function declaration,
+ * arrow function, or function expression) so their bodies can be skipped.
+ * Deliberately excludes `const useX = someHookCall(...)` assignments where
+ * the RHS is a call expression rather than a function literal.
+ */
+const HOOK_DEF_LINE_PATTERN =
+  /(?:function\s+use[A-Z][A-Za-z0-9_]*|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*\s*=\s*(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)\s*=>|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*\s*=\s*(?:async\s+)?function)/
+
+/**
  * Returns true when the source file contains actual React hook *calls*,
  * excluding hook function/variable *definitions* and text in
  * comments or string literals.
  */
 export function fileUsesHooks(source: string): boolean {
   const stripped = stripNonCode(source)
+  let depth = 0
+  let hookBodyDepth = -1
+
   for (const line of stripped.split(/\r?\n/)) {
+    const opens = (line.match(/\{/g) ?? []).length
+    const closes = (line.match(/\}/g) ?? []).length
+
+    if (hookBodyDepth >= 0) {
+      depth += opens - closes
+      if (depth <= hookBodyDepth) hookBodyDepth = -1
+      continue
+    }
+
+    if (HOOK_DEF_LINE_PATTERN.test(line)) {
+      if (opens > closes) hookBodyDepth = depth
+      depth += opens - closes
+      continue
+    }
+
+    depth += opens - closes
     const defMatch = /(?:function|const|let|var)\s+use[A-Z][A-Za-z0-9_]*/.exec(line)
     const checkLine = defMatch ? line.slice(defMatch.index + defMatch[0].length) : line
     if (REACT_HOOK_PATTERN.test(checkLine)) return true
   }
+
   return false
 }
 
