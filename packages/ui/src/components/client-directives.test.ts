@@ -186,6 +186,20 @@ export function Comp() {
       );
     });
 
+    it("detects hook calls with function-type generic arguments", () => {
+      expect(
+        fileUsesHooks("const [value] = useState<(() => void) | null>(null)"),
+      ).toBe(true);
+    });
+
+    it("detects multiline hook calls with function-type generic arguments", () => {
+      expect(
+        fileUsesHooks(
+          "const [value] = useState<\n  (() => void) | null\n>(null)",
+        ),
+      ).toBe(true);
+    });
+
     it("detects a hook call inside a template literal expression", () => {
       expect(fileUsesHooks("const label = `count: ${useState(0)}`")).toBe(true);
     });
@@ -304,6 +318,17 @@ const useFoo =
     const [count] = useState(0)
     return count
   }
+`),
+      ).toBe(false);
+    });
+
+    it("ignores multiline implicit-return hook definitions with ternary bodies", () => {
+      expect(
+        fileUsesHooks(`
+const useFoo = () =>
+  cond
+    ? useBar()
+    : useBaz()
 `),
       ).toBe(false);
     });

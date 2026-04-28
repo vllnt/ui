@@ -21,7 +21,7 @@ const PACKAGE_ROOT = join(__dirname, '..')
 const COMPONENTS_DIR = join(PACKAGE_ROOT, 'src/components')
 
 const REACT_HOOK_PATTERN =
-  /\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*(?:\s*<[^\n(]*>)?\s*\(/
+  /\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*(?:\s*<[^\n]*>)?\s*\(/
 
 const USE_CLIENT_PATTERN = /^['"]use client['"];?$/
 
@@ -124,25 +124,70 @@ const SPLIT_HOOK_ASSIGNMENT_PATTERN =
   /(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*$/
 const HOOK_DEF_CONTINUATION_PATTERN =
   /^(?:async\s+)?(?:<[^>]*>\s*)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|^(?:async\s+)?function\b/
+const TOP_LEVEL_STATEMENT_START_PATTERN =
+  /^(?:export\s+)?(?:async\s+)?(?:function|const|let|var|class|import|type|interface|enum)\b/
 
 /**
  * Collapses newlines inside the type-argument list of a hook call (e.g.
  * `useState<\n  "left" | "right" | null\n>(null)`) onto a single line so
  * the per-line scanner can match it via `REACT_HOOK_PATTERN`. Preserves
  * total newline count by appending the elided newlines after the call so
- * downstream depth tracking and line numbers remain consistent. The
- * `[^()]` inner class purposefully excludes parens so only the type-arg
- * span is collapsed; surrounding code is untouched.
+ * downstream depth tracking and line numbers remain consistent. This uses a
+ * small angle-bracket scanner so function-type generics like
+ * `useState<(() => void) | null>(null)` are preserved and still detected.
  */
 export function collapseMultilineGenericHookCalls(source: string): string {
-  return source.replace(
-    /(\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*\s*<)([^()]*?)(>\s*\()/g,
-    (match, prefix: string, inner: string, suffix: string) => {
-      if (!inner.includes('\n')) return match
-      const newlines = inner.match(/\n/g)?.length ?? 0
-      return prefix + inner.replace(/\n/g, ' ') + suffix + '\n'.repeat(newlines)
-    },
-  )
+  const hookStartPattern =
+    /\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*\s*</g
+
+  let result = ''
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  while ((match = hookStartPattern.exec(source)) !== null) {
+    const start = match.index
+    const typeArgsStart = hookStartPattern.lastIndex
+    let angleDepth = 1
+    let cursor = typeArgsStart
+
+    while (cursor < source.length && angleDepth > 0) {
+      const ch = source[cursor]
+      if (ch === '<') angleDepth++
+      else if (ch === '>' && source[cursor - 1] !== '=') angleDepth--
+      cursor++
+    }
+
+    if (angleDepth !== 0) continue
+
+    let suffixCursor = cursor
+    while (suffixCursor < source.length && /\s/.test(source[suffixCursor])) {
+      suffixCursor++
+    }
+
+    if (source[suffixCursor] !== '(') continue
+
+    const inner = source.slice(typeArgsStart, cursor - 1)
+    const gap = source.slice(cursor, suffixCursor)
+    result += source.slice(lastIndex, start)
+
+    if (inner.includes('\n') || gap.includes('\n')) {
+      const newlines = (inner.match(/\n/g)?.length ?? 0) + (gap.match(/\n/g)?.length ?? 0)
+      result +=
+        source.slice(start, typeArgsStart) +
+        inner.replace(/\n/g, ' ') +
+        source.slice(cursor - 1, cursor) +
+        '(' +
+        '\n'.repeat(newlines)
+    } else {
+      result += source.slice(start, suffixCursor + 1)
+    }
+
+    lastIndex = suffixCursor + 1
+    hookStartPattern.lastIndex = suffixCursor + 1
+  }
+
+  result += source.slice(lastIndex)
+  return result
 }
 
 /**
@@ -179,22 +224,27 @@ export function fileUsesHooks(source: string): boolean {
     }
 
     if (pendingHookDef) {
-      if (opens > closes) {
+      if (
+        pendingArrowHookDef &&
+        trimmed.length > 0 &&
+        TOP_LEVEL_STATEMENT_START_PATTERN.test(trimmed)
+      ) {
+        pendingHookDef = false
+        pendingArrowHookDef = false
+      } else if (opens > closes) {
         hookBodyDepth = depth
         pendingHookDef = false
         pendingArrowHookDef = false
         depth += opens - closes
+        continue
       } else {
         depth += opens - closes
         if (opens > 0 && opens === closes && trimmed.length > 0) {
           pendingHookDef = false
           pendingArrowHookDef = false
-        } else if (pendingArrowHookDef && trimmed.length > 0) {
-          pendingHookDef = false
-          pendingArrowHookDef = false
         }
+        continue
       }
-      continue
     }
 
     if (HOOK_DEF_LINE_PATTERN.test(line)) {
