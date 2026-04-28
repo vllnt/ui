@@ -130,6 +130,7 @@ export function fileUsesHooks(source: string): boolean {
   let depth = 0
   let hookBodyDepth = -1
   let pendingHookDef = false
+  let pendingArrowHookDef = false
 
   for (const line of stripped.split(/\r?\n/)) {
     const opens = (line.match(/\{/g) ?? []).length
@@ -145,20 +146,27 @@ export function fileUsesHooks(source: string): boolean {
       if (opens > closes) {
         hookBodyDepth = depth
         pendingHookDef = false
+        pendingArrowHookDef = false
         depth += opens - closes
       } else {
         depth += opens - closes
+        if (pendingArrowHookDef && line.trim().length > 0) {
+          pendingHookDef = false
+          pendingArrowHookDef = false
+        }
       }
       continue
     }
 
     if (HOOK_DEF_LINE_PATTERN.test(line)) {
       const inlineBody = ARROW_INLINE_BODY_PATTERN.test(line)
+      const isArrowHookDef = line.includes("=>")
       const balancedBraces = opens > 0 && opens === closes
       if (opens > closes) {
         hookBodyDepth = depth
       } else if (!inlineBody && !balancedBraces) {
         pendingHookDef = true
+        pendingArrowHookDef = isArrowHookDef
       }
       depth += opens - closes
       continue

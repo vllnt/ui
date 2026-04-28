@@ -110,6 +110,19 @@ const { ref } = useHorizontalScroll();
       expect(fileUsesHooks("const useData = useQuery(someArg)")).toBe(true);
     });
 
+    it("detects a real hook call after a multiline implicit-return custom hook arrow definition", () => {
+      expect(
+        fileUsesHooks(`
+const useFoo = () =>
+  useBar()
+export function Comp() {
+  const [x] = useState(0)
+  return null
+}
+`),
+      ).toBe(true);
+    });
+
     it("detects a real hook call after a one-line custom hook arrow definition", () => {
       expect(
         fileUsesHooks(`
