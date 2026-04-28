@@ -47,14 +47,54 @@ function collectTsxFiles(dir: string, acc: string[] = []): string[] {
 }
 
 /**
+ * Replaces a matched template literal with its `${...}` expression contents,
+ * blanking the literal text portions while preserving newlines so line
+ * counting is unaffected. Hook calls embedded inside expressions remain
+ * detectable by downstream scanning.
+ */
+function stripTemplateLiteral(literal: string): string {
+  let out = ''
+  let i = 0
+  while (i < literal.length) {
+    const ch = literal[i]
+    if (ch === '\\' && i + 1 < literal.length) {
+      out += literal[i + 1] === '\n' ? ' \n' : '  '
+      i += 2
+      continue
+    }
+    if (ch === '$' && literal[i + 1] === '{') {
+      let depth = 1
+      let j = i + 2
+      while (j < literal.length && depth > 0) {
+        const c = literal[j]
+        if (c === '{') depth++
+        else if (c === '}') {
+          depth--
+          if (depth === 0) break
+        }
+        j++
+      }
+      out += '  ' + literal.slice(i + 2, j) + ' '
+      i = j + 1
+      continue
+    }
+    out += ch === '\n' ? '\n' : ' '
+    i++
+  }
+  return out
+}
+
+/**
  * Removes string literals, block comments, and line comments from source so
  * that hook-like text inside those constructs does not trigger false positives.
- * Order: strings first (prevents `"/* ..."` from being eaten by block-comment
- * regex), then block comments, then line comments.
+ * Template literals retain their `${...}` expression contents because hook
+ * calls inside interpolations are real code. Order: strings first (prevents
+ * `"/* ..."` from being eaten by block-comment regex), then block comments,
+ * then line comments.
  */
 export function stripNonCode(source: string): string {
   let result = source
-  result = result.replace(/`(?:[^`\\]|\\.)*`/g, '``')
+  result = result.replace(/`(?:[^`\\]|\\.)*`/g, stripTemplateLiteral)
   result = result.replace(/"(?:[^"\\]|\\.)*"/g, '""')
   result = result.replace(/'(?:[^'\\]|\\.)*'/g, "''")
   result = result.replace(/\/\*[\s\S]*?\*\//g, (m) =>
@@ -72,6 +112,13 @@ export function stripNonCode(source: string): string {
  */
 const HOOK_DEF_LINE_PATTERN =
   /(?:function\s+use[A-Z][A-Za-z0-9_]*|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*\s*=\s*(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)\s*=>|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*\s*=\s*(?:async\s+)?function)/
+
+/**
+ * Matches arrow hook definitions whose expression body is on the same line
+ * (e.g. `const useFoo = () => useBar()`). Used to avoid leaving the parser
+ * in a "waiting for body" state after a complete one-line definition.
+ */
+const ARROW_INLINE_BODY_PATTERN = /=>\s*[^\s{]/
 
 /**
  * Returns true when the source file contains actual React hook *calls*,
@@ -106,9 +153,11 @@ export function fileUsesHooks(source: string): boolean {
     }
 
     if (HOOK_DEF_LINE_PATTERN.test(line)) {
+      const inlineBody = ARROW_INLINE_BODY_PATTERN.test(line)
+      const balancedBraces = opens > 0 && opens === closes
       if (opens > closes) {
         hookBodyDepth = depth
-      } else {
+      } else if (!inlineBody && !balancedBraces) {
         pendingHookDef = true
       }
       depth += opens - closes

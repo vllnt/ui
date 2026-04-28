@@ -46,6 +46,12 @@ describe("stripNonCode", () => {
     expect(stripNonCode("`call useTheme() here`")).not.toMatch(/useTheme/);
   });
 
+  it("preserves hook calls inside template literal expressions", () => {
+    expect(stripNonCode("`prefix ${useState(0)} suffix`")).toMatch(
+      /useState\(/,
+    );
+  });
+
   it("preserves actual hook call code", () => {
     expect(stripNonCode("const theme = useTheme()")).toMatch(/useTheme/);
   });
@@ -102,6 +108,22 @@ const { ref } = useHorizontalScroll();
 
     it("detects hook call in a one-liner hook variable definition (const useX = useY(...))", () => {
       expect(fileUsesHooks("const useData = useQuery(someArg)")).toBe(true);
+    });
+
+    it("detects a real hook call after a one-line custom hook arrow definition", () => {
+      expect(
+        fileUsesHooks(`
+const useFoo = () => useBar()
+export function Comp() {
+  const [x] = useState(0)
+  return null
+}
+`),
+      ).toBe(true);
+    });
+
+    it("detects a hook call inside a template literal expression", () => {
+      expect(fileUsesHooks("const label = `count: ${useState(0)}`")).toBe(true);
     });
   });
 
