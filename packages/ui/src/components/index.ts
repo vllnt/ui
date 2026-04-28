@@ -471,6 +471,26 @@ export {
 } from "./flow-diagram";
 
 // AI/Chat components
+export {
+  ConversationEmpty,
+  type ConversationEmptyProps,
+  ConversationHeader,
+  type ConversationHeaderProps,
+  ConversationLoading,
+  type ConversationLoadingProps,
+  type ConversationMessage,
+  ConversationMessages,
+  type ConversationMessagesProps,
+  ConversationScrollButton,
+  type ConversationScrollButtonProps,
+  ConversationSuggestions,
+  type ConversationSuggestionsProps,
+  ConversationThread,
+  type ConversationThreadProps,
+  ConversationTitle,
+  type ConversationTitleProps,
+  type ToolCall,
+} from "./conversation-thread";
 export { InlineInput, type InlineInputProps } from "./inline-input";
 export {
   type ModelInfo,
