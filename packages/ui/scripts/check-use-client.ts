@@ -22,7 +22,7 @@ const COMPONENTS_DIR = join(PACKAGE_ROOT, 'src/components')
 
 const REACT_HOOK_PATTERN = /\buse[A-Z][A-Za-z0-9_]*\s*\(/
 
-const USE_CLIENT_PATTERN = /^['"]use client['"];?\s*$/
+const USE_CLIENT_PATTERN = /^['"]use client['"];?$/
 
 const EXCLUDED_SUFFIXES = [
   '.stories.tsx',
@@ -111,7 +111,7 @@ export function stripNonCode(source: string): string {
  * the RHS is a call expression rather than a function literal.
  */
 const HOOK_DEF_LINE_PATTERN =
-  /(?:function\s+use[A-Z][A-Za-z0-9_]*|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*\s*=\s*(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)\s*=>|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*\s*=\s*(?:async\s+)?function)/
+  /(?:function\s+use[A-Z][A-Za-z0-9_]*|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*(?:async\s+)?function)/
 
 /**
  * Matches arrow hook definitions whose expression body is on the same line
@@ -150,7 +150,10 @@ export function fileUsesHooks(source: string): boolean {
         depth += opens - closes
       } else {
         depth += opens - closes
-        if (pendingArrowHookDef && line.trim().length > 0) {
+        if (opens > 0 && opens === closes && line.trim().length > 0) {
+          pendingHookDef = false
+          pendingArrowHookDef = false
+        } else if (pendingArrowHookDef && line.trim().length > 0) {
           pendingHookDef = false
           pendingArrowHookDef = false
         }
@@ -191,6 +194,10 @@ export function hasUseClientDirective(source: string): boolean {
   let inBlockComment = false
   for (const raw of source.split(/\r?\n/)) {
     const trimmed = raw.trim()
+    const directiveCandidate = trimmed
+      .replace(/\s*\/\/.*$/, '')
+      .replace(/\s*\/\*.*\*\/\s*$/, '')
+      .trim()
     if (trimmed.length === 0) continue
     if (inBlockComment) {
       if (trimmed.includes('*/')) inBlockComment = false
@@ -201,7 +208,7 @@ export function hasUseClientDirective(source: string): boolean {
       if (!trimmed.includes('*/')) inBlockComment = true
       continue
     }
-    return USE_CLIENT_PATTERN.test(trimmed)
+    return USE_CLIENT_PATTERN.test(directiveCandidate)
   }
   return false
 }

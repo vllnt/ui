@@ -10,7 +10,12 @@ import {
 } from "../../scripts/check-use-client";
 
 const COMPONENTS_ROOT = join(__dirname);
-const SKIPPED_SUFFIXES = [".stories.tsx", ".test.tsx", ".visual.tsx"] as const;
+const SKIPPED_SUFFIXES = [
+  ".stories.tsx",
+  ".test.tsx",
+  ".visual.tsx",
+  ".spec.tsx",
+] as const;
 
 function listTypeScriptFiles(directory: string): string[] {
   return readdirSync(directory).flatMap((entry) => {
@@ -135,6 +140,20 @@ export function Comp() {
       ).toBe(true);
     });
 
+    it("detects a real hook call after a multiline hook definition whose body opens and closes on one line", () => {
+      expect(
+        fileUsesHooks(`
+export function useCounter(
+  initialValue: number,
+) { return useMemo(() => initialValue, [initialValue]) }
+export function Comp() {
+  const [count] = useState(0)
+  return count
+}
+`),
+      ).toBe(true);
+    });
+
     it("detects a hook call inside a template literal expression", () => {
       expect(fileUsesHooks("const label = `count: ${useState(0)}`")).toBe(true);
     });
@@ -195,6 +214,28 @@ const useLayout = () => {
   const ref = useRef(null);
   return { val, ref };
 };
+`),
+      ).toBe(false);
+    });
+
+    it("ignores typed arrow hook definitions with an explicit return type", () => {
+      expect(
+        fileUsesHooks(`
+const useCounter = (): { count: number } => {
+  const [count] = useState(0)
+  return { count }
+}
+`),
+      ).toBe(false);
+    });
+
+    it("ignores typed hook variable definitions assigned to arrow functions", () => {
+      expect(
+        fileUsesHooks(`
+const useCounter: UseCounter = () => {
+  const [count] = useState(0)
+  return { count }
+}
 `),
       ).toBe(false);
     });
@@ -294,6 +335,14 @@ describe("hasUseClientDirective", () => {
     it("detects directive without trailing semicolon", () => {
       expect(
         hasUseClientDirective("'use client'\nimport React from 'react'"),
+      ).toBe(true);
+    });
+
+    it("detects directive with a trailing inline comment", () => {
+      expect(
+        hasUseClientDirective(
+          '"use client"; // required for hook usage\nimport React from "react"',
+        ),
       ).toBe(true);
     });
   });
