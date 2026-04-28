@@ -154,6 +154,38 @@ export function Comp() {
       ).toBe(true);
     });
 
+    it("detects generic hook calls", () => {
+      expect(fileUsesHooks("const [count] = useState<number>(0)")).toBe(true);
+    });
+
+    it("detects namespaced generic hook calls", () => {
+      expect(
+        fileUsesHooks("const ref = React.useRef<HTMLDivElement>(null)"),
+      ).toBe(true);
+    });
+
+    it("detects hook calls with nested generic type arguments", () => {
+      expect(
+        fileUsesHooks(
+          "const [checked, setChecked] = useState<Set<string>>(() => new Set())",
+        ),
+      ).toBe(true);
+    });
+
+    it("detects namespaced hook calls with nested generic type arguments", () => {
+      expect(
+        fileUsesHooks(
+          "const selectionColumn = React.useMemo<ColumnDef<TData>>(() => ({}))",
+        ),
+      ).toBe(true);
+    });
+
+    it("detects hook calls with nested generic type arguments containing multiple type params", () => {
+      expect(fileUsesHooks("const m = useState<Map<string, number>>(0)")).toBe(
+        true,
+      );
+    });
+
     it("detects a hook call inside a template literal expression", () => {
       expect(fileUsesHooks("const label = `count: ${useState(0)}`")).toBe(true);
     });
@@ -236,6 +268,18 @@ const useCounter: UseCounter = () => {
   const [count] = useState(0)
   return { count }
 }
+`),
+      ).toBe(false);
+    });
+
+    it("ignores hook definitions whose assignment and arrow body start on separate lines", () => {
+      expect(
+        fileUsesHooks(`
+const useFoo =
+  () => {
+    const [count] = useState(0)
+    return count
+  }
 `),
       ).toBe(false);
     });
@@ -342,6 +386,14 @@ describe("hasUseClientDirective", () => {
       expect(
         hasUseClientDirective(
           '"use client"; // required for hook usage\nimport React from "react"',
+        ),
+      ).toBe(true);
+    });
+
+    it("detects directive after a same-line block comment", () => {
+      expect(
+        hasUseClientDirective(
+          '/* header */ "use client";\nimport React from "react"',
         ),
       ).toBe(true);
     });

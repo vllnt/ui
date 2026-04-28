@@ -20,7 +20,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const PACKAGE_ROOT = join(__dirname, '..')
 const COMPONENTS_DIR = join(PACKAGE_ROOT, 'src/components')
 
-const REACT_HOOK_PATTERN = /\buse[A-Z][A-Za-z0-9_]*\s*\(/
+const REACT_HOOK_PATTERN =
+  /\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*(?:\s*<[^\n(]*>)?\s*\(/
 
 const USE_CLIENT_PATTERN = /^['"]use client['"];?$/
 
@@ -119,6 +120,10 @@ const HOOK_DEF_LINE_PATTERN =
  * in a "waiting for body" state after a complete one-line definition.
  */
 const ARROW_INLINE_BODY_PATTERN = /=>\s*[^\s{]/
+const SPLIT_HOOK_ASSIGNMENT_PATTERN =
+  /(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*$/
+const HOOK_DEF_CONTINUATION_PATTERN =
+  /^(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|^(?:async\s+)?function\b/
 
 /**
  * Returns true when the source file contains actual React hook *calls*,
@@ -131,8 +136,10 @@ export function fileUsesHooks(source: string): boolean {
   let hookBodyDepth = -1
   let pendingHookDef = false
   let pendingArrowHookDef = false
+  let pendingHookAssignment = false
 
   for (const line of stripped.split(/\r?\n/)) {
+    const trimmed = line.trim()
     const opens = (line.match(/\{/g) ?? []).length
     const closes = (line.match(/\}/g) ?? []).length
 
@@ -140,6 +147,15 @@ export function fileUsesHooks(source: string): boolean {
       depth += opens - closes
       if (depth <= hookBodyDepth) hookBodyDepth = -1
       continue
+    }
+
+    if (pendingHookAssignment) {
+      if (trimmed.length === 0) continue
+      pendingHookAssignment = false
+      if (HOOK_DEF_CONTINUATION_PATTERN.test(trimmed)) {
+        pendingHookDef = true
+        pendingArrowHookDef = trimmed.includes('=>')
+      }
     }
 
     if (pendingHookDef) {
@@ -150,10 +166,10 @@ export function fileUsesHooks(source: string): boolean {
         depth += opens - closes
       } else {
         depth += opens - closes
-        if (opens > 0 && opens === closes && line.trim().length > 0) {
+        if (opens > 0 && opens === closes && trimmed.length > 0) {
           pendingHookDef = false
           pendingArrowHookDef = false
-        } else if (pendingArrowHookDef && line.trim().length > 0) {
+        } else if (pendingArrowHookDef && trimmed.length > 0) {
           pendingHookDef = false
           pendingArrowHookDef = false
         }
@@ -163,7 +179,7 @@ export function fileUsesHooks(source: string): boolean {
 
     if (HOOK_DEF_LINE_PATTERN.test(line)) {
       const inlineBody = ARROW_INLINE_BODY_PATTERN.test(line)
-      const isArrowHookDef = line.includes("=>")
+      const isArrowHookDef = line.includes('=>')
       const balancedBraces = opens > 0 && opens === closes
       if (opens > closes) {
         hookBodyDepth = depth
@@ -171,6 +187,12 @@ export function fileUsesHooks(source: string): boolean {
         pendingHookDef = true
         pendingArrowHookDef = isArrowHookDef
       }
+      depth += opens - closes
+      continue
+    }
+
+    if (SPLIT_HOOK_ASSIGNMENT_PATTERN.test(trimmed)) {
+      pendingHookAssignment = true
       depth += opens - closes
       continue
     }
@@ -193,21 +215,36 @@ export function fileUsesHooks(source: string): boolean {
 export function hasUseClientDirective(source: string): boolean {
   let inBlockComment = false
   for (const raw of source.split(/\r?\n/)) {
-    const trimmed = raw.trim()
+    let trimmed = raw.trim()
+    if (trimmed.length === 0) continue
+
+    if (inBlockComment) {
+      const blockEnd = trimmed.indexOf('*/')
+      if (blockEnd === -1) continue
+      inBlockComment = false
+      trimmed = trimmed.slice(blockEnd + 2).trim()
+      if (trimmed.length === 0) continue
+    }
+
+    if (trimmed.startsWith('//')) continue
+
+    while (trimmed.startsWith('/*')) {
+      const blockEnd = trimmed.indexOf('*/')
+      if (blockEnd === -1) {
+        inBlockComment = true
+        trimmed = ''
+        break
+      }
+      trimmed = trimmed.slice(blockEnd + 2).trim()
+      if (trimmed.length === 0) break
+    }
+
+    if (trimmed.length === 0) continue
+
     const directiveCandidate = trimmed
       .replace(/\s*\/\/.*$/, '')
       .replace(/\s*\/\*.*\*\/\s*$/, '')
       .trim()
-    if (trimmed.length === 0) continue
-    if (inBlockComment) {
-      if (trimmed.includes('*/')) inBlockComment = false
-      continue
-    }
-    if (trimmed.startsWith('//')) continue
-    if (trimmed.startsWith('/*')) {
-      if (!trimmed.includes('*/')) inBlockComment = true
-      continue
-    }
     return USE_CLIENT_PATTERN.test(directiveCandidate)
   }
   return false
