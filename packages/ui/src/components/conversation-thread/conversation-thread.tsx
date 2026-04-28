@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  forwardRef,
   type ReactNode,
   type RefObject,
   useCallback,
@@ -281,101 +282,119 @@ function useConversationScroll(
  * </ConversationThread>
  * ```
  */
-export function ConversationThread({
-  children,
-  className,
-  isStreaming = false,
-  messages,
-  onFeedback,
-  onRetry,
-  onSend,
-}: ConversationThreadProps) {
-  const {
-    handleScroll,
-    isAtBottom,
-    messagesEndRef,
-    scrollContainerRef,
-    scrollToBottom,
-  } = useConversationScroll(messages, isStreaming);
-
-  const contextValue = useMemo<ConversationThreadContextValue>(
-    () => ({
-      handleScroll,
-      isAtBottom,
-      isStreaming,
+export const ConversationThread = forwardRef<
+  HTMLDivElement,
+  ConversationThreadProps
+>(
+  (
+    {
+      children,
+      className,
+      isStreaming = false,
       messages,
-      messagesEndRef,
       onFeedback,
       onRetry,
       onSend,
-      scrollContainerRef,
-      scrollToBottom,
-    }),
-    [
+    },
+    reference,
+  ) => {
+    const {
       handleScroll,
       isAtBottom,
-      isStreaming,
-      messages,
       messagesEndRef,
-      onFeedback,
-      onRetry,
-      onSend,
       scrollContainerRef,
       scrollToBottom,
-    ],
-  );
+    } = useConversationScroll(messages, isStreaming);
 
-  return (
-    <ConversationThreadContext.Provider value={contextValue}>
-      <div className={cn("flex h-full flex-col overflow-hidden", className)}>
-        {children}
-      </div>
-    </ConversationThreadContext.Provider>
-  );
-}
+    const contextValue = useMemo<ConversationThreadContextValue>(
+      () => ({
+        handleScroll,
+        isAtBottom,
+        isStreaming,
+        messages,
+        messagesEndRef,
+        onFeedback,
+        onRetry,
+        onSend,
+        scrollContainerRef,
+        scrollToBottom,
+      }),
+      [
+        handleScroll,
+        isAtBottom,
+        isStreaming,
+        messages,
+        messagesEndRef,
+        onFeedback,
+        onRetry,
+        onSend,
+        scrollContainerRef,
+        scrollToBottom,
+      ],
+    );
+
+    return (
+      <ConversationThreadContext.Provider value={contextValue}>
+        <div
+          className={cn("flex h-full flex-col overflow-hidden", className)}
+          ref={reference}
+        >
+          {children}
+        </div>
+      </ConversationThreadContext.Provider>
+    );
+  },
+);
+ConversationThread.displayName = "ConversationThread";
 
 // ---- Compound components ----
 
 /** Optional header slot, rendered above the message list. */
-export function ConversationHeader({
-  children,
-  className,
-}: ConversationHeaderProps) {
+export const ConversationHeader = forwardRef<
+  HTMLDivElement,
+  ConversationHeaderProps
+>(({ children, className }, reference) => {
   return (
     <div
       className={cn("flex shrink-0 items-center border-b px-4 py-3", className)}
+      ref={reference}
     >
       {children}
     </div>
   );
-}
+});
+ConversationHeader.displayName = "ConversationHeader";
 
 /** Title text for use inside ConversationHeader. */
-export function ConversationTitle({
-  children,
-  className,
-}: ConversationTitleProps) {
+export const ConversationTitle = forwardRef<
+  HTMLHeadingElement,
+  ConversationTitleProps
+>(({ children, className }, reference) => {
   return (
-    <h2 className={cn("text-sm font-semibold leading-none", className)}>
+    <h2
+      className={cn("text-sm font-semibold leading-none", className)}
+      ref={reference}
+    >
       {children}
     </h2>
   );
-}
+});
+ConversationTitle.displayName = "ConversationTitle";
 
 /**
  * Scrollable message list container. Renders messages from context.
  * Pass ConversationEmpty, ConversationScrollButton, and ConversationLoading as children —
  * the component renders these as absolute overlays that read state from context.
  */
-export function ConversationMessages({
-  children,
-  className,
-}: ConversationMessagesProps) {
+export const ConversationMessages = forwardRef<
+  HTMLDivElement,
+  ConversationMessagesProps
+>(({ children, className }, reference) => {
   const { handleScroll, messages, messagesEndRef, scrollContainerRef } =
     useConversationThreadContext();
 
   return (
-    <div className={cn("relative min-h-0 flex-1", className)}>
+    <div className={cn("relative min-h-0 flex-1", className)} ref={reference}>
       <div
         aria-label="Conversation messages"
         aria-live="polite"
@@ -394,16 +413,17 @@ export function ConversationMessages({
       {children}
     </div>
   );
-}
+});
+ConversationMessages.displayName = "ConversationMessages";
 
 /**
  * Shown when the message list is empty. Hides automatically once messages exist.
  * Renders as a centered overlay — pass ConversationSuggestions or custom content as children.
  */
-export function ConversationEmpty({
-  children,
-  className,
-}: ConversationEmptyProps) {
+export const ConversationEmpty = forwardRef<
+  HTMLDivElement,
+  ConversationEmptyProps
+>(({ children, className }, reference) => {
   const { messages } = useConversationThreadContext();
 
   if (messages.length > 0) return null;
@@ -414,23 +434,28 @@ export function ConversationEmpty({
         "pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 p-8",
         className,
       )}
+      ref={reference}
     >
       <div className="pointer-events-auto flex flex-col items-center gap-4">
         {children}
       </div>
     </div>
   );
-}
+});
+ConversationEmpty.displayName = "ConversationEmpty";
 
 /** Suggested prompt chips displayed in the empty state. Calls onSend when clicked. */
-export function ConversationSuggestions({
-  className,
-  suggestions = [],
-}: ConversationSuggestionsProps) {
+export const ConversationSuggestions = forwardRef<
+  HTMLDivElement,
+  ConversationSuggestionsProps
+>(({ className, suggestions = [] }, reference) => {
   const { onSend } = useConversationThreadContext();
 
   return (
-    <div className={cn("flex flex-wrap justify-center gap-2", className)}>
+    <div
+      className={cn("flex flex-wrap justify-center gap-2", className)}
+      ref={reference}
+    >
       {suggestions.map((suggestion) => (
         <button
           className="rounded-full border bg-background px-4 py-2 text-sm transition-colors hover:bg-muted"
@@ -443,12 +468,14 @@ export function ConversationSuggestions({
       ))}
     </div>
   );
-}
+});
+ConversationSuggestions.displayName = "ConversationSuggestions";
 
 /** Floating button that appears when the user scrolls up, to jump back to the bottom. */
-export function ConversationScrollButton({
-  className,
-}: ConversationScrollButtonProps) {
+export const ConversationScrollButton = forwardRef<
+  HTMLButtonElement,
+  ConversationScrollButtonProps
+>(({ className }, reference) => {
   const { isAtBottom, scrollToBottom } = useConversationThreadContext();
 
   if (isAtBottom) return null;
@@ -461,18 +488,23 @@ export function ConversationScrollButton({
         className,
       )}
       onClick={scrollToBottom}
+      ref={reference}
       type="button"
     >
       <ArrowDown className="h-4 w-4" />
     </button>
   );
-}
+});
+ConversationScrollButton.displayName = "ConversationScrollButton";
 
 /**
  * Typing indicator shown while the assistant is streaming a response.
  * Visible when isStreaming is true and the last message role is "assistant".
  */
-export function ConversationLoading({ className }: ConversationLoadingProps) {
+export const ConversationLoading = forwardRef<
+  HTMLDivElement,
+  ConversationLoadingProps
+>(({ className }, reference) => {
   const { isStreaming, messages } = useConversationThreadContext();
   const lastMessage = messages.at(-1);
 
@@ -485,6 +517,7 @@ export function ConversationLoading({ className }: ConversationLoadingProps) {
         "absolute bottom-4 left-4 flex items-center gap-1",
         className,
       )}
+      ref={reference}
       role="status"
     >
       <span
@@ -498,4 +531,5 @@ export function ConversationLoading({ className }: ConversationLoadingProps) {
       <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" />
     </div>
   );
-}
+});
+ConversationLoading.displayName = "ConversationLoading";
