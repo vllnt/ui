@@ -112,7 +112,7 @@ export function stripNonCode(source: string): string {
  * the RHS is a call expression rather than a function literal.
  */
 const HOOK_DEF_LINE_PATTERN =
-  /(?:function\s+use[A-Z][A-Za-z0-9_]*|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*(?:async\s+)?function)/
+  /(?:function\s+use[A-Z][A-Za-z0-9_]*|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*(?:async\s+)?(?:<[^>]*>\s*)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*(?:async\s+)?function)/
 
 /**
  * Matches arrow hook definitions whose expression body is on the same line
@@ -123,7 +123,27 @@ const ARROW_INLINE_BODY_PATTERN = /=>\s*[^\s{]/
 const SPLIT_HOOK_ASSIGNMENT_PATTERN =
   /(?:const|let|var)\s+use[A-Z][A-Za-z0-9_]*(?:\s*:\s*[^=]+?)?\s*=\s*$/
 const HOOK_DEF_CONTINUATION_PATTERN =
-  /^(?:async\s+)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|^(?:async\s+)?function\b/
+  /^(?:async\s+)?(?:<[^>]*>\s*)?(?:\([^)]*\)|[A-Za-z_$][A-Za-z0-9_$]*)(?:\s*:\s*[^=]+?)?\s*=>|^(?:async\s+)?function\b/
+
+/**
+ * Collapses newlines inside the type-argument list of a hook call (e.g.
+ * `useState<\n  "left" | "right" | null\n>(null)`) onto a single line so
+ * the per-line scanner can match it via `REACT_HOOK_PATTERN`. Preserves
+ * total newline count by appending the elided newlines after the call so
+ * downstream depth tracking and line numbers remain consistent. The
+ * `[^()]` inner class purposefully excludes parens so only the type-arg
+ * span is collapsed; surrounding code is untouched.
+ */
+export function collapseMultilineGenericHookCalls(source: string): string {
+  return source.replace(
+    /(\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*\s*<)([^()]*?)(>\s*\()/g,
+    (match, prefix: string, inner: string, suffix: string) => {
+      if (!inner.includes('\n')) return match
+      const newlines = inner.match(/\n/g)?.length ?? 0
+      return prefix + inner.replace(/\n/g, ' ') + suffix + '\n'.repeat(newlines)
+    },
+  )
+}
 
 /**
  * Returns true when the source file contains actual React hook *calls*,
@@ -131,7 +151,7 @@ const HOOK_DEF_CONTINUATION_PATTERN =
  * comments or string literals.
  */
 export function fileUsesHooks(source: string): boolean {
-  const stripped = stripNonCode(source)
+  const stripped = collapseMultilineGenericHookCalls(stripNonCode(source))
   let depth = 0
   let hookBodyDepth = -1
   let pendingHookDef = false

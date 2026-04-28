@@ -189,6 +189,22 @@ export function Comp() {
     it("detects a hook call inside a template literal expression", () => {
       expect(fileUsesHooks("const label = `count: ${useState(0)}`")).toBe(true);
     });
+
+    it("detects multiline generic hook calls (slideshow.tsx shape)", () => {
+      expect(
+        fileUsesHooks(
+          'const [animationDirection, setAnimationDirection] = useState<\n  "left" | "right" | null\n>(null);',
+        ),
+      ).toBe(true);
+    });
+
+    it("detects multiline namespaced generic hook calls", () => {
+      expect(
+        fileUsesHooks(
+          "const ref = React.useRef<\n  HTMLDivElement | null\n>(null);",
+        ),
+      ).toBe(true);
+    });
   });
 
   describe("false positives — must NOT be flagged", () => {
@@ -269,6 +285,14 @@ const useCounter: UseCounter = () => {
   return { count }
 }
 `),
+      ).toBe(false);
+    });
+
+    it("ignores generic arrow hook definitions: const useFoo = <T,>(value: T) => { ... }", () => {
+      expect(
+        fileUsesHooks(
+          "const useFoo = <T,>(value: T) => { const [count] = useState(0); return { value, count }; }",
+        ),
       ).toBe(false);
     });
 
