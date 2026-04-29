@@ -1,0 +1,116 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+
+# ConversationThread
+
+Compound component family for AI chat UIs. Orchestrates auto-scroll, streaming indicators, empty states, and message rendering.
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/conversation-thread.json
+```
+
+## Import
+
+```tsx
+import {
+  ConversationThread,
+  ConversationHeader,
+  ConversationTitle,
+  ConversationMessages,
+  ConversationEmpty,
+  ConversationSuggestions,
+  ConversationScrollButton,
+  ConversationLoading,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ConversationThread
+  messages={messages}
+  isStreaming={isStreaming}
+  onSend={handleSend}
+  onRetry={handleRetry}
+  onFeedback={handleFeedback}
+  className="h-screen"
+>
+  <ConversationHeader>
+    <ConversationTitle>AI Assistant</ConversationTitle>
+  </ConversationHeader>
+  <ConversationMessages>
+    <ConversationEmpty>
+      <p className="text-muted-foreground">How can I help you today?</p>
+      <ConversationSuggestions
+        suggestions={[
+          "Explain quantum computing",
+          "Write a haiku about TypeScript",
+        ]}
+      />
+    </ConversationEmpty>
+    <ConversationScrollButton />
+    <ConversationLoading />
+  </ConversationMessages>
+  {/* Pass your ChatInput here as a child */}
+</ConversationThread>
+```
+
+## Behavior
+
+- **Auto-scroll**: scrolls to the bottom when new messages arrive or during streaming, unless the user has scrolled up.
+- **Scroll button**: `ConversationScrollButton` appears when the user scrolls above the threshold (100px from bottom) and jumps back to the bottom on click.
+- **Empty state**: `ConversationEmpty` renders only when `messages` is empty; hides automatically once messages arrive.
+- **Typing indicator**: `ConversationLoading` shows animated dots when `isStreaming` is `true` and the last message role is `"assistant"`.
+- **Thinking blocks**: assistant messages with a `thinking` field render a collapsible `ThinkingBlock`.
+- **Keyboard**: the component does not own the input — pass your `ChatInput` as a child of `ConversationThread`. Ctrl+Enter submission is the responsibility of the input component.
+
+## ARIA
+
+| Element | Role | Attribute |
+|---------|------|-----------|
+| Message list | `log` | `aria-live="polite"`, `aria-label="Conversation messages"` |
+| Typing indicator | `status` | `aria-label="Assistant is typing"` |
+| Scroll button | `button` | `aria-label="Scroll to bottom"` |
+| Retry button | `button` | `aria-label="Retry message"` |
+| Feedback buttons | `button` | `aria-label="Positive/Negative feedback"` |
+
+## API Reference
+
+### ConversationThread
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `messages` | `ConversationMessage[]` | Yes | Array of messages to display |
+| `isStreaming` | `boolean` | No | Whether the assistant is currently generating |
+| `onSend` | `(message: string) => void` | No | Called when a suggestion chip is clicked |
+| `onRetry` | `(messageId: string) => void` | No | Called when the retry button is clicked |
+| `onFeedback` | `(messageId: string, feedback: "positive" \| "negative") => void` | No | Called when a feedback button is clicked |
+| `className` | `string` | No | Class applied to the root element |
+| `children` | `ReactNode` | No | Header, message list, input slot |
+
+### ConversationMessage
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `id` | `string` | Yes | Unique identifier |
+| `role` | `"user" \| "assistant"` | Yes | Message author |
+| `content` | `string` | Yes | Message text |
+| `thinking` | `string` | No | AI reasoning; renders as a ThinkingBlock |
+| `toolCalls` | `ToolCall[]` | No | Tool calls made during generation |
+| `isStreaming` | `boolean` | No | Whether this message is still being written |
+
+### ConversationSuggestions
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `suggestions` | `string[]` | No | Array of prompt suggestion strings |
+| `className` | `string` | No | |
+
+## Dependencies
+
+**npm packages:**
+- `lucide-react`
+
+**Internal:**
+- `ThinkingBlock` (from `../thinking-block`)
