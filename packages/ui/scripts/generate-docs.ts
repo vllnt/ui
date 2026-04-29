@@ -755,7 +755,7 @@ function generateMdx(component: ComponentMeta): string {
   lines.push(`## Installation`)
   lines.push('')
   lines.push('```bash')
-  lines.push(`pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${dirName}.json`)
+  lines.push(`pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/${dirName}.json`)
   lines.push('```')
   lines.push('')
 
