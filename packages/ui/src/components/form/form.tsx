@@ -20,6 +20,8 @@ type FormItemContextValue = {
   controlId: string;
   descriptionId: string;
   disabled: boolean;
+  hasDescription: boolean;
+  hasMessage: boolean;
   invalid: boolean;
   messageId: string;
   required: boolean;
@@ -68,10 +70,73 @@ function resolveItemId(
     return `${generatedId}-${suffix}`;
   }
 
-  return `${baseId}-${generatedId}`;
+  return baseId.endsWith(`-${suffix}`)
+    ? `${baseId}-${generatedId}`
+    : `${baseId}-${suffix}-${generatedId}`;
 }
 
-export type FormProps = React.ComponentPropsWithoutRef<"div"> & {
+function isNamedFormChild(
+  child: React.ReactNode,
+  name: "FormDescription" | "FormMessage",
+): child is React.ReactElement<{ children?: React.ReactNode }> {
+  if (!React.isValidElement<{ children?: React.ReactNode }>(child)) {
+    return false;
+  }
+
+  const { type } = child;
+  if (typeof type === "string" || typeof type === "symbol") {
+    return false;
+  }
+
+  return "displayName" in type && type.displayName === name;
+}
+
+function hasVisibleContent(children: React.ReactNode): boolean {
+  return React.Children.toArray(children).some((child) => {
+    if (child === null || child === undefined || typeof child === "boolean") {
+      return false;
+    }
+
+    if (typeof child === "string") {
+      return child.length > 0;
+    }
+
+    if (typeof child === "number") {
+      return true;
+    }
+
+    if (React.isValidElement<{ children?: React.ReactNode }>(child)) {
+      const nestedChildren = child.props.children;
+
+      return nestedChildren === undefined
+        ? true
+        : hasVisibleContent(nestedChildren);
+    }
+
+    return true;
+  });
+}
+
+function hasRenderedFormChild(
+  children: React.ReactNode,
+  name: "FormDescription" | "FormMessage",
+): boolean {
+  return React.Children.toArray(children).some((child) => {
+    if (isNamedFormChild(child, name)) {
+      return name === "FormMessage"
+        ? hasVisibleContent(child.props.children)
+        : true;
+    }
+
+    if (React.isValidElement<{ children?: React.ReactNode }>(child)) {
+      return hasRenderedFormChild(child.props.children, name);
+    }
+
+    return false;
+  });
+}
+
+export type FormProps = React.ComponentPropsWithoutRef<"form"> & {
   controlId?: string;
   descriptionId?: string;
   disabled?: boolean;
@@ -80,7 +145,7 @@ export type FormProps = React.ComponentPropsWithoutRef<"div"> & {
   required?: boolean;
 };
 
-const Form = React.forwardRef<HTMLDivElement, FormProps>(
+const Form = React.forwardRef<HTMLFormElement, FormProps>(
   (
     {
       className,
@@ -108,7 +173,7 @@ const Form = React.forwardRef<HTMLDivElement, FormProps>(
 
     return (
       <FormRootContext.Provider value={value}>
-        <div
+        <form
           className={cn("space-y-2", className)}
           data-disabled={disabled ? "true" : undefined}
           data-invalid={invalid ? "true" : undefined}
@@ -123,48 +188,76 @@ Form.displayName = "Form";
 
 const FormItem = React.forwardRef<
   HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => {
-  const {
-    controlId: controlIdBase,
-    descriptionId: descriptionIdBase,
-    disabled,
-    invalid,
-    messageId: messageIdBase,
-    required,
-  } = useFormRootContext("FormItem");
-  const generatedId = React.useId();
+  React.ComponentPropsWithoutRef<"div"> & {
+    disabled?: boolean;
+    invalid?: boolean;
+    required?: boolean;
+  }
+>(
+  (
+    {
+      children,
+      className,
+      disabled: itemDisabled,
+      invalid: itemInvalid,
+      required: itemRequired,
+      ...props
+    },
+    ref,
+  ) => {
+    const {
+      controlId: controlIdBase,
+      descriptionId: descriptionIdBase,
+      disabled,
+      invalid,
+      messageId: messageIdBase,
+      required,
+    } = useFormRootContext("FormItem");
+    const generatedId = React.useId();
+    const hasDescription = hasRenderedFormChild(children, "FormDescription");
+    const hasMessage = hasRenderedFormChild(children, "FormMessage");
 
-  const value = React.useMemo<FormItemContextValue>(
-    () => ({
-      controlId: resolveItemId(controlIdBase, generatedId, "control"),
-      descriptionId: resolveItemId(
+    const effectiveDisabled = itemDisabled ?? disabled;
+    const effectiveInvalid = itemInvalid ?? invalid;
+    const effectiveRequired = itemRequired ?? required;
+
+    const value = React.useMemo<FormItemContextValue>(
+      () => ({
+        controlId: resolveItemId(controlIdBase, generatedId, "control"),
+        descriptionId: resolveItemId(
+          descriptionIdBase,
+          generatedId,
+          "description",
+        ),
+        disabled: effectiveDisabled,
+        hasDescription,
+        hasMessage,
+        invalid: effectiveInvalid,
+        messageId: resolveItemId(messageIdBase, generatedId, "message"),
+        required: effectiveRequired,
+      }),
+      [
+        controlIdBase,
         descriptionIdBase,
+        effectiveDisabled,
+        effectiveInvalid,
+        effectiveRequired,
         generatedId,
-        "description",
-      ),
-      disabled,
-      invalid,
-      messageId: resolveItemId(messageIdBase, generatedId, "message"),
-      required,
-    }),
-    [
-      controlIdBase,
-      descriptionIdBase,
-      disabled,
-      generatedId,
-      invalid,
-      messageIdBase,
-      required,
-    ],
-  );
+        hasDescription,
+        hasMessage,
+        messageIdBase,
+      ],
+    );
 
-  return (
-    <FormItemContext.Provider value={value}>
-      <div className={cn("space-y-2", className)} ref={ref} {...props} />
-    </FormItemContext.Provider>
-  );
-});
+    return (
+      <FormItemContext.Provider value={value}>
+        <div className={cn("space-y-2", className)} ref={ref} {...props}>
+          {children}
+        </div>
+      </FormItemContext.Provider>
+    );
+  },
+);
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
@@ -187,50 +280,75 @@ FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<
   HTMLElement,
-  React.ComponentPropsWithoutRef<typeof Slot>
->(({ ...props }, ref) => {
-  const { controlId, descriptionId, disabled, invalid, messageId, required } =
-    useFormItemContext("FormControl");
+  React.ComponentPropsWithoutRef<typeof Slot> & {
+    disabled?: boolean;
+    required?: boolean;
+  }
+>(
+  (
+    { disabled: controlDisabled, id: _id, required: controlRequired, ...props },
+    ref,
+  ) => {
+    const {
+      controlId,
+      descriptionId,
+      disabled,
+      hasDescription,
+      hasMessage,
+      invalid,
+      messageId,
+      required,
+    } = useFormItemContext("FormControl");
 
-  const describedBy = composeIds(
-    props["aria-describedby"],
-    descriptionId,
-    invalid ? messageId : undefined,
-  );
-  const nativeConstraintProps: Record<string, boolean | undefined> = {
-    disabled: disabled || undefined,
-    required: required || undefined,
-  };
+    const describedBy = composeIds(
+      props["aria-describedby"],
+      hasDescription ? descriptionId : undefined,
+      invalid && hasMessage ? messageId : undefined,
+    );
+    const effectiveDisabled = controlDisabled ?? disabled;
+    const effectiveRequired = controlRequired ?? required;
+    const nativeConstraintProps: {
+      disabled?: boolean;
+      required?: boolean;
+    } = {
+      disabled: effectiveDisabled || undefined,
+      required: effectiveRequired || undefined,
+    };
 
-  return (
-    <Slot
-      {...props}
-      {...nativeConstraintProps}
-      aria-describedby={describedBy}
-      aria-disabled={props["aria-disabled"] ?? (disabled || undefined)}
-      aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
-      aria-required={props["aria-required"] ?? (required || undefined)}
-      data-disabled={disabled ? "true" : undefined}
-      data-invalid={invalid ? "true" : undefined}
-      id={props.id ?? controlId}
-      ref={ref}
-    />
-  );
-});
+    return (
+      <Slot
+        {...props}
+        {...nativeConstraintProps}
+        aria-describedby={describedBy}
+        aria-disabled={
+          props["aria-disabled"] ?? (effectiveDisabled || undefined)
+        }
+        aria-invalid={props["aria-invalid"] ?? (invalid || undefined)}
+        aria-required={
+          props["aria-required"] ?? (effectiveRequired || undefined)
+        }
+        data-disabled={effectiveDisabled ? "true" : undefined}
+        data-invalid={invalid ? "true" : undefined}
+        id={controlId}
+        ref={ref}
+      />
+    );
+  },
+);
 FormControl.displayName = "FormControl";
 
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.ComponentPropsWithoutRef<"p">
->(({ className, ...props }, ref) => {
+>(({ className, id: _id, ...props }, ref) => {
   const { descriptionId } = useFormItemContext("FormDescription");
 
   return (
     <p
+      {...props}
       className={cn("text-sm text-muted-foreground", className)}
       id={descriptionId}
       ref={ref}
-      {...props}
     />
   );
 });
@@ -239,16 +357,17 @@ FormDescription.displayName = "FormDescription";
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.ComponentPropsWithoutRef<"p">
->(({ children, className, ...props }, ref) => {
+>(({ children, className, id: _id, ...props }, ref) => {
   const { invalid, messageId } = useFormItemContext("FormMessage");
+  const hasChildren = hasVisibleContent(children);
 
-  if (React.Children.count(children) === 0) {
+  if (!hasChildren) {
     return null;
   }
 
   return (
     <p
-      aria-live={invalid ? "polite" : undefined}
+      {...props}
       className={cn(
         "text-sm font-medium",
         invalid ? "text-destructive" : "text-foreground",
@@ -257,7 +376,6 @@ const FormMessage = React.forwardRef<
       id={messageId}
       ref={ref}
       role={invalid ? "alert" : undefined}
-      {...props}
     >
       {children}
     </p>
