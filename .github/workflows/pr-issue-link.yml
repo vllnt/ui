@@ -1,0 +1,40 @@
+name: PR Issue Link
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: pr-issue-link-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  enforce-issue-link:
+    name: Enforce issue-linked PRs
+    runs-on: ubuntu-latest
+    env:
+      PR_BODY: ${{ github.event.pull_request.body || '' }}
+    steps:
+      - name: Validate PR body links a GitHub issue
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pattern='(Closes|Fixes|Resolves|Part of|Related to)[[:space:]]+([[:alnum:]_.-]+/[[:alnum:]_.-]+)?#[0-9]+'
+
+          if [[ "$PR_BODY" =~ $pattern ]]; then
+            echo "Issue link found in PR body."
+            exit 0
+          fi
+
+          echo "PR body must link a GitHub issue using one of: Closes #123, Fixes #123, Resolves #123, Part of #123, Related to #123." >&2
+          exit 1

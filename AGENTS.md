@@ -81,7 +81,7 @@ Patterns every component follows:
 
 - Branch naming: `feat/`, `fix/`, `chore/`, `docs/`, `ci/`.
 - Conventional commit messages (`feat:`, `fix:`, `chore:`, etc.). The release workflow groups them into notes.
-- PR body covers: summary (why), evidence (CI run IDs, screenshots, numbers), test plan.
+- PR body covers: linked issue (`Closes #...`, `Fixes #...`, `Resolves #...`, `Part of #...`, or `Related to #...`), summary (why), evidence (CI run IDs, screenshots, numbers), test plan.
 - Never force-push `main`. Never skip hooks (`--no-verify`).
 - Automatic CI monitoring is expected after `gh pr create` — watch the run and report its outcome back into the PR.
 
