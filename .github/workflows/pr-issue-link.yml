@@ -28,13 +28,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          shopt -s nocasematch
 
-          pattern='(Closes|Fixes|Resolves|Part of|Related to)[[:space:]]+([[:alnum:]_.-]+/[[:alnum:]_.-]+)?#[0-9]+'
+          pattern='(close[sd]?|fix(es|ed)?|resolve[sd]?|part of|related to):?[[:space:]]+([[:alnum:]_.-]+/[[:alnum:]_.-]+)?#[0-9]+'
 
           if [[ "$PR_BODY" =~ $pattern ]]; then
             echo "Issue link found in PR body."
             exit 0
           fi
 
-          echo "PR body must link a GitHub issue using one of: Closes #123, Fixes #123, Resolves #123, Part of #123, Related to #123." >&2
+          echo "PR body must link a GitHub issue. Accepted (case-insensitive, optional colon): close/closes/closed, fix/fixes/fixed, resolve/resolves/resolved, Part of, Related to -- followed by #123 or owner/repo#123." >&2
           exit 1
