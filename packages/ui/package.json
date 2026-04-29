@@ -87,7 +87,8 @@
     "storybook:generate-docs": "tsx scripts/generate-docs.ts",
     "storybook:verify": "tsx scripts/verify-stories.ts",
     "storybook:fix-stories": "tsx scripts/fix-stories.ts",
-    "check:stories": "tsx scripts/check-story-coverage.ts"
+    "check:stories": "tsx scripts/check-story-coverage.ts",
+    "check:use-client": "tsx scripts/check-use-client.ts"
   },
   "peerDependencies": {
     "next": ">=14.0.0",
