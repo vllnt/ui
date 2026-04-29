@@ -30,7 +30,7 @@ jobs:
           set -euo pipefail
           shopt -s nocasematch
 
-          pattern='(close[sd]?|fix(es|ed)?|resolve[sd]?|part of|related to):?[[:space:]]+([[:alnum:]_.-]+/[[:alnum:]_.-]+)?#[0-9]+'
+          pattern='(^|[^[:alnum:]])(close[sd]?|fix(es|ed)?|resolve[sd]?|part of|related to):?[[:space:]]+([[:alnum:]_.-]+/[[:alnum:]_.-]+)?#[0-9]+($|[^[:alnum:]])'
 
           if [[ "$PR_BODY" =~ $pattern ]]; then
             echo "Issue link found in PR body."
