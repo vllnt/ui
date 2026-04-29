@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "vllnt",
-  "homepage": "https://ui.vllnt.com",
+  "homepage": "https://ui.vllnt.ai",
   "items": [
     {
       "name": "accordion",
@@ -17,6 +17,120 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "activity-heatmap",
+      "type": "registry:component",
+      "title": "Activity Heatmap",
+      "description": "Contribution-style grid for visualizing operational activity over time.",
+      "files": [
+        {
+          "path": "registry/default/activity-heatmap/activity-heatmap.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "activity-log",
+      "type": "registry:component",
+      "title": "Activity Log",
+      "description": "Paginated activity feed for audit history and analytics changes.",
+      "files": [
+        {
+          "path": "registry/default/activity-log/activity-log.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "ai-chat-input",
+      "type": "registry:component",
+      "title": "AI Chat Input",
+      "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+      "files": [
+        {
+          "path": "registry/default/ai-chat-input/ai-chat-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "learning"
+    },
+    {
+      "name": "ai-message-bubble",
+      "type": "registry:component",
+      "title": "AI Message Bubble",
+      "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+      "files": [
+        {
+          "path": "registry/default/ai-message-bubble/ai-message-bubble.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "category": "learning"
+    },
+    {
+      "name": "ai-source-citation",
+      "type": "registry:component",
+      "title": "AI Source Citation",
+      "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+      "files": [
+        {
+          "path": "registry/default/ai-source-citation/ai-source-citation.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "learning"
+    },
+    {
+      "name": "ai-streaming-text",
+      "type": "registry:component",
+      "title": "AI Streaming Text",
+      "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+      "files": [
+        {
+          "path": "registry/default/ai-streaming-text/ai-streaming-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
+      "name": "ai-tool-call-display",
+      "type": "registry:component",
+      "title": "AI Tool Call Display",
+      "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+      "files": [
+        {
+          "path": "registry/default/ai-tool-call-display/ai-tool-call-display.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "category": "learning"
     },
     {
       "name": "alert",
@@ -47,6 +161,51 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
+    },
+    {
+      "name": "anchor-port",
+      "type": "registry:component",
+      "title": "Anchor Port",
+      "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+      "files": [
+        {
+          "path": "registry/default/anchor-port/anchor-port.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "animated-text",
+      "type": "registry:component",
+      "title": "Animated Text",
+      "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
+      "files": [
+        {
+          "path": "registry/default/animated-text/animated-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "annotation",
+      "type": "registry:component",
+      "title": "Annotation",
+      "description": "Inline highlight with an attached contextual note.",
+      "files": [
+        {
+          "path": "registry/default/annotation/annotation.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "area-chart",
@@ -94,6 +253,21 @@
       "category": "core"
     },
     {
+      "name": "avatar-group",
+      "type": "registry:component",
+      "title": "Avatar Group",
+      "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+      "files": [
+        {
+          "path": "registry/default/avatar-group/avatar-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "title": "Badge",
@@ -137,6 +311,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "border-beam",
+      "type": "registry:component",
+      "title": "Border Beam",
+      "description": "Animated accent beam that travels around the border of a highlighted surface.",
+      "files": [
+        {
+          "path": "registry/default/border-beam/border-beam.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "breadcrumb",
@@ -197,6 +386,51 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "content"
+    },
+    {
+      "name": "candlestick-chart",
+      "type": "registry:component",
+      "title": "Candlestick Chart",
+      "description": "OHLC financial chart for session-by-session price action.",
+      "files": [
+        {
+          "path": "registry/default/candlestick-chart/candlestick-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "canvas-shell",
+      "type": "registry:component",
+      "title": "Canvas Shell",
+      "description": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions.",
+      "files": [
+        {
+          "path": "registry/default/canvas-shell/canvas-shell.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "canvas-view",
+      "type": "registry:component",
+      "title": "Canvas View",
+      "description": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support.",
+      "files": [
+        {
+          "path": "registry/default/canvas-view/canvas-view.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "card",
@@ -319,6 +553,21 @@
       "category": "content"
     },
     {
+      "name": "combobox",
+      "type": "registry:component",
+      "title": "Combobox",
+      "description": "Searchable select input for choosing from a list of options.",
+      "files": [
+        {
+          "path": "registry/default/combobox/combobox.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "command",
       "type": "registry:component",
       "title": "Command",
@@ -364,6 +613,21 @@
       "category": "learning"
     },
     {
+      "name": "connector-edge",
+      "type": "registry:component",
+      "title": "Connector Edge",
+      "description": "Curved edge between canvas objects with optional inline label state.",
+      "files": [
+        {
+          "path": "registry/default/connector-edge/connector-edge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "content-intro",
       "type": "registry:component",
       "title": "Content Intro",
@@ -392,6 +656,83 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
+    },
+    {
+      "name": "countdown-timer",
+      "type": "registry:component",
+      "title": "Countdown Timer",
+      "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+      "files": [
+        {
+          "path": "registry/default/countdown-timer/countdown-timer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "credit-badge",
+      "type": "registry:component",
+      "title": "Credit Badge",
+      "description": "Balance status pill for credits, wallet states, and billing health.",
+      "files": [
+        {
+          "path": "registry/default/credit-badge/credit-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "data-list",
+      "type": "registry:component",
+      "title": "Data List",
+      "description": "Semantic key-value metadata layout for displaying labels with values.",
+      "files": [
+        {
+          "path": "registry/default/data-list/data-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data Table",
+      "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+      "files": [
+        {
+          "path": "registry/default/data-table/data-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@tanstack/react-table"
+      ],
+      "category": "data"
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:component",
+      "title": "Date Picker",
+      "description": "Single-date picker built with the shared calendar and popover primitives.",
+      "files": [
+        {
+          "path": "registry/default/date-picker/date-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "dialog",
@@ -439,6 +780,21 @@
       "category": "overlay"
     },
     {
+      "name": "edge-label",
+      "type": "registry:component",
+      "title": "Edge Label",
+      "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+      "files": [
+        {
+          "path": "registry/default/edge-label/edge-label.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "overlay"
+    },
+    {
       "name": "exercise",
       "type": "registry:component",
       "title": "Exercise",
@@ -469,6 +825,21 @@
       "category": "content"
     },
     {
+      "name": "file-upload",
+      "type": "registry:component",
+      "title": "File Upload",
+      "description": "Dropzone-style file picker with previews for selected files.",
+      "files": [
+        {
+          "path": "registry/default/file-upload/file-upload.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "filter-bar",
       "type": "registry:component",
       "title": "Filter Bar",
@@ -482,6 +853,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "form"
+    },
+    {
+      "name": "flashcard",
+      "type": "registry:component",
+      "title": "Flashcard",
+      "description": "Study card for active recall with prompt and answer states.",
+      "files": [
+        {
+          "path": "registry/default/flashcard/flashcard.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "floating-action-button",
@@ -514,6 +900,58 @@
       "category": "data"
     },
     {
+      "name": "form",
+      "type": "registry:component",
+      "title": "Form",
+      "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
+      "files": [
+        {
+          "path": "registry/default/form/form.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "group-hull",
+      "type": "registry:component",
+      "title": "Group Hull",
+      "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+      "files": [
+        {
+          "path": "registry/default/group-hull/group-hull.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "navigation"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
@@ -527,21 +965,6 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": ["button"],
-      "dependencies": ["lucide-react"],
-      "category": "navigation"
     },
     {
       "name": "inline-input",
@@ -649,6 +1072,21 @@
       "category": "learning"
     },
     {
+      "name": "left-rail",
+      "type": "registry:component",
+      "title": "Left Rail",
+      "description": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls.",
+      "files": [
+        {
+          "path": "registry/default/left-rail/left-rail.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "line-chart",
       "type": "registry:component",
       "title": "Line Chart",
@@ -662,6 +1100,51 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "live-feed",
+      "type": "registry:component",
+      "title": "Live Feed",
+      "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+      "files": [
+        {
+          "path": "registry/default/live-feed/live-feed.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "market-treemap",
+      "type": "registry:component",
+      "title": "Market Treemap",
+      "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+      "files": [
+        {
+          "path": "registry/default/market-treemap/market-treemap.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+      "files": [
+        {
+          "path": "registry/default/marquee/marquee.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "mdx-content",
@@ -694,6 +1177,36 @@
       "category": "navigation"
     },
     {
+      "name": "metric-gauge",
+      "type": "registry:component",
+      "title": "Metric Gauge",
+      "description": "Real-time arc and dial display for monitored percentages and utilization.",
+      "files": [
+        {
+          "path": "registry/default/metric-gauge/metric-gauge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "mini-map-panel",
+      "type": "registry:component",
+      "title": "Mini Map Panel",
+      "description": "Viewport overview panel showing canvas bounds, markers, and the current zoom window.",
+      "files": [
+        {
+          "path": "registry/default/mini-map-panel/mini-map-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "model-selector",
       "type": "registry:component",
       "title": "Model Selector",
@@ -705,6 +1218,26 @@
         }
       ],
       "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:component",
+      "title": "Multi Select",
+      "description": "Popover-based multi-selection input with selected-value badges and optional search.",
+      "files": [
+        {
+          "path": "registry/default/multi-select/multi-select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "command",
+        "popover"
+      ],
       "dependencies": [],
       "category": "form"
     },
@@ -739,6 +1272,81 @@
       "category": "navigation"
     },
     {
+      "name": "number-input",
+      "type": "registry:component",
+      "title": "Number Input",
+      "description": "Numeric input with increment and decrement controls.",
+      "files": [
+        {
+          "path": "registry/default/number-input/number-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "number-ticker",
+      "type": "registry:component",
+      "title": "Number Ticker",
+      "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
+      "files": [
+        {
+          "path": "registry/default/number-ticker/number-ticker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "object-card",
+      "type": "registry:component",
+      "title": "Object Card",
+      "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+      "files": [
+        {
+          "path": "registry/default/object-card/object-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "object-handle",
+      "type": "registry:component",
+      "title": "Object Handle",
+      "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+      "files": [
+        {
+          "path": "registry/default/object-handle/object-handle.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
+      "name": "order-book",
+      "type": "registry:component",
+      "title": "Order Book",
+      "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+      "files": [
+        {
+          "path": "registry/default/order-book/order-book.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "pagination",
       "type": "registry:component",
       "title": "Pagination",
@@ -752,6 +1360,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "password-input",
+      "type": "registry:component",
+      "title": "Password Input",
+      "description": "Password field with a built-in visibility toggle.",
+      "files": [
+        {
+          "path": "registry/default/password-input/password-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
+      "name": "plan-badge",
+      "type": "registry:component",
+      "title": "Plan Badge",
+      "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+      "files": [
+        {
+          "path": "registry/default/plan-badge/plan-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "popover",
@@ -859,6 +1497,21 @@
       "category": "core"
     },
     {
+      "name": "rating",
+      "type": "registry:component",
+      "title": "Rating",
+      "description": "Inline star rating for lightweight learner feedback.",
+      "files": [
+        {
+          "path": "registry/default/rating/rating.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
       "name": "resizable",
       "type": "registry:component",
       "title": "Resizable",
@@ -872,6 +1525,51 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "right-dock",
+      "type": "registry:component",
+      "title": "Right Dock",
+      "description": "Context dock for inspectors, summaries, and secondary canvas panels.",
+      "files": [
+        {
+          "path": "registry/default/right-dock/right-dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
+      "name": "role-badge",
+      "type": "registry:component",
+      "title": "Role Badge",
+      "description": "Account role indicator for owners, admins, members, and billing contacts.",
+      "files": [
+        {
+          "path": "registry/default/role-badge/role-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "scope-selector",
+      "type": "registry:component",
+      "title": "Scope Selector",
+      "description": "Multi-level scope picker for nested environments, teams, and targets.",
+      "files": [
+        {
+          "path": "registry/default/scope-selector/scope-selector.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "scroll-area",
@@ -919,6 +1617,23 @@
       "category": "learning"
     },
     {
+      "name": "segmented-control",
+      "type": "registry:component",
+      "title": "Segmented Control",
+      "description": "Single-choice segmented selector for switching modes, views, or filters.",
+      "files": [
+        {
+          "path": "registry/default/segmented-control/segmented-control.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "dependencies": [],
+      "category": "form"
+    },
+    {
       "name": "select",
       "type": "registry:component",
       "title": "Select",
@@ -947,6 +1662,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "core"
+    },
+    {
+      "name": "severity-badge",
+      "type": "registry:component",
+      "title": "Severity Badge",
+      "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+      "files": [
+        {
+          "path": "registry/default/severity-badge/severity-badge.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "share-section",
@@ -1071,6 +1801,21 @@
       "category": "content"
     },
     {
+      "name": "sparkline-grid",
+      "type": "registry:component",
+      "title": "Sparkline Grid",
+      "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+      "files": [
+        {
+          "path": "registry/default/sparkline-grid/sparkline-grid.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "spinner",
       "type": "registry:component",
       "title": "Spinner",
@@ -1084,6 +1829,51 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "stat-card",
+      "type": "registry:component",
+      "title": "Stat Card",
+      "description": "Headline KPI card for metrics, trends, and supporting context.",
+      "files": [
+        {
+          "path": "registry/default/stat-card/stat-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "status-board",
+      "type": "registry:component",
+      "title": "Status Board",
+      "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+      "files": [
+        {
+          "path": "registry/default/status-board/status-board.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "status-indicator",
+      "type": "registry:component",
+      "title": "Status Indicator",
+      "description": "Compact status label with tone, variant, and activity dot options.",
+      "files": [
+        {
+          "path": "registry/default/status-indicator/status-indicator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "step-by-step",
@@ -1114,6 +1904,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "stepper",
+      "type": "registry:component",
+      "title": "Stepper",
+      "description": "Sequenced steps with complete, current, and upcoming states.",
+      "files": [
+        {
+          "path": "registry/default/stepper/stepper.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
+    },
+    {
+      "name": "subscription-card",
+      "type": "registry:component",
+      "title": "Subscription Card",
+      "description": "Subscription status and management card for plan, renewal, and usage details.",
+      "files": [
+        {
+          "path": "registry/default/subscription-card/subscription-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "table",
@@ -1174,6 +1994,23 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "tags-input",
+      "type": "registry:component",
+      "title": "Tags Input",
+      "description": "Keyboard-friendly tag editor for adding and removing string values.",
+      "files": [
+        {
+          "path": "registry/default/tags-input/tags-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge"
+      ],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "terminal",
@@ -1253,6 +2090,21 @@
       "category": "learning"
     },
     {
+      "name": "ticker-tape",
+      "type": "registry:component",
+      "title": "Ticker Tape",
+      "description": "Marquee-style scrolling symbol tape with price and change badges.",
+      "files": [
+        {
+          "path": "registry/default/ticker-tape/ticker-tape.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "tldr-section",
       "type": "registry:component",
       "title": "TLDR Section",
@@ -1326,6 +2178,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "overlay"
+    },
+    {
+      "name": "top-bar",
+      "type": "registry:component",
+      "title": "Top Bar",
+      "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
+      "files": [
+        {
+          "path": "registry/default/top-bar/top-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
+      "name": "tour",
+      "type": "registry:component",
+      "title": "Tour",
+      "description": "Guided onboarding flow for introducing content or interface patterns.",
+      "files": [
+        {
+          "path": "registry/default/tour/tour.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "learning"
     },
     {
       "name": "tutorial-card",
@@ -1403,6 +2285,21 @@
       "category": "learning"
     },
     {
+      "name": "usage-breakdown",
+      "type": "registry:component",
+      "title": "Usage Breakdown",
+      "description": "Ranked resource consumption list with relative share and trend cues.",
+      "files": [
+        {
+          "path": "registry/default/usage-breakdown/usage-breakdown.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "video-embed",
       "type": "registry:component",
       "title": "Video Embed",
@@ -1431,6 +2328,83 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "wallet-card",
+      "type": "registry:component",
+      "title": "Wallet Card",
+      "description": "Credit balance display card for available, pending, and refresh details.",
+      "files": [
+        {
+          "path": "registry/default/wallet-card/wallet-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
+      "name": "watchlist",
+      "type": "registry:component",
+      "title": "Watchlist",
+      "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+      "files": [
+        {
+          "path": "registry/default/watchlist/watchlist.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "workspace-switcher",
+      "type": "registry:component",
+      "title": "Workspace Switcher",
+      "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
+      "files": [
+        {
+          "path": "registry/default/workspace-switcher/workspace-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
+      "name": "world-clock-bar",
+      "type": "registry:component",
+      "title": "World Clock Bar",
+      "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+      "files": [
+        {
+          "path": "registry/default/world-clock-bar/world-clock-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "zoom-hud",
+      "type": "registry:component",
+      "title": "Zoom HUD",
+      "description": "Zoom controls with current percentage, increment buttons, and reset action for canvas views.",
+      "files": [
+        {
+          "path": "registry/default/zoom-hud/zoom-hud.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "overlay"
     }
   ]
 }
