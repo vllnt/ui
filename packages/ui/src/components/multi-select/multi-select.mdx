@@ -1,0 +1,53 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as Stories from './multi-select.stories'
+
+<Meta of={Stories} />
+
+# MultiSelect
+
+A form control for choosing multiple options from a popover-backed list using existing button, popover, and command primitives.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/multi-select.json
+```
+
+## Import
+
+```tsx
+import { MultiSelect } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<MultiSelect
+  options={[
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Svelte', value: 'svelte' },
+  ]}
+  placeholder="Select frameworks"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Searchable options
+
+Enable `searchable` to add a command input for filtering larger option sets.
+
+<Canvas of={Stories.Searchable} sourceState="shown" />
+
+## Controlled selection
+
+Pass `value` and `onValueChange` when the selected values should be driven by parent state.
+
+<Canvas of={Stories.Controlled} sourceState="shown" />
+
+## API Reference
+
+<Controls />

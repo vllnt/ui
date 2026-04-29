@@ -161,19 +161,72 @@
     ],
     "title": "Alert Dialog"
   },
+  "anchor-port": {
+    "category": "utility",
+    "defaultStoryId": "canvas-anchorport--default",
+    "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+    "name": "anchor-port",
+    "stories": [
+      {
+        "id": "canvas-anchorport--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Anchor Port"
+  },
   "animated-text": {
     "category": "utility",
-    "defaultStoryId": "utility-animatedtext--default",
+    "defaultStoryId": "utility-animatedtext--terminal",
     "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
     "name": "animated-text",
     "stories": [
       {
-        "id": "utility-animatedtext--default",
-        "name": "Default"
+        "id": "utility-animatedtext--terminal",
+        "name": "Terminal"
       },
       {
-        "id": "utility-animatedtext--characters",
-        "name": "Characters"
+        "id": "utility-animatedtext--matrix",
+        "name": "Matrix"
+      },
+      {
+        "id": "utility-animatedtext--matrix-terminal-grid",
+        "name": "Matrix Terminal Grid"
+      },
+      {
+        "id": "utility-animatedtext--decipher",
+        "name": "Decipher"
+      },
+      {
+        "id": "utility-animatedtext--decipher-reverse",
+        "name": "Decipher Reverse"
+      },
+      {
+        "id": "utility-animatedtext--decipher-random",
+        "name": "Decipher Random"
+      },
+      {
+        "id": "utility-animatedtext--decipher-ascii-digits",
+        "name": "Decipher Ascii Digits"
+      },
+      {
+        "id": "utility-animatedtext--decipher-terminal-boxes",
+        "name": "Decipher Terminal Boxes"
+      },
+      {
+        "id": "utility-animatedtext--decipher-block-noise",
+        "name": "Decipher Block Noise"
+      },
+      {
+        "id": "utility-animatedtext--decipher-unicode-sigils",
+        "name": "Decipher Unicode Sigils"
+      },
+      {
+        "id": "utility-animatedtext--typewriter",
+        "name": "Typewriter"
+      },
+      {
+        "id": "utility-animatedtext--reveal",
+        "name": "Reveal"
       }
     ],
     "title": "Animated Text"
@@ -410,6 +463,32 @@
     ],
     "title": "Candlestick Chart"
   },
+  "canvas-shell": {
+    "category": "utility",
+    "defaultStoryId": "layout-canvasshell--default",
+    "description": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions.",
+    "name": "canvas-shell",
+    "stories": [
+      {
+        "id": "layout-canvasshell--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Canvas Shell"
+  },
+  "canvas-view": {
+    "category": "utility",
+    "defaultStoryId": "layout-canvasview--default",
+    "description": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support.",
+    "name": "canvas-view",
+    "stories": [
+      {
+        "id": "layout-canvasview--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Canvas View"
+  },
   "card": {
     "category": "content",
     "defaultStoryId": "content-card--default",
@@ -570,6 +649,19 @@
     ],
     "title": "Completion Dialog"
   },
+  "connector-edge": {
+    "category": "utility",
+    "defaultStoryId": "canvas-connectoredge--default",
+    "description": "Curved edge between canvas objects with optional inline label state.",
+    "name": "connector-edge",
+    "stories": [
+      {
+        "id": "canvas-connectoredge--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Connector Edge"
+  },
   "content-intro": {
     "category": "content",
     "defaultStoryId": "content-contentintro--default",
@@ -716,6 +808,19 @@
     ],
     "title": "Dropdown Menu"
   },
+  "edge-label": {
+    "category": "overlay",
+    "defaultStoryId": "canvas-edgelabel--default",
+    "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+    "name": "edge-label",
+    "stories": [
+      {
+        "id": "canvas-edgelabel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Edge Label"
+  },
   "exercise": {
     "category": "learning",
     "defaultStoryId": "learning-exercise--default",
@@ -806,6 +911,36 @@
       }
     ],
     "title": "Flow Diagram"
+  },
+  "form": {
+    "category": "form",
+    "defaultStoryId": "core-form--default",
+    "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
+    "name": "form",
+    "stories": [
+      {
+        "id": "core-form--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-form--invalid",
+        "name": "Invalid"
+      }
+    ],
+    "title": "Form"
+  },
+  "group-hull": {
+    "category": "utility",
+    "defaultStoryId": "canvas-grouphull--default",
+    "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+    "name": "group-hull",
+    "stories": [
+      {
+        "id": "canvas-grouphull--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Group Hull"
   },
   "horizontal-scroll-row": {
     "category": "navigation",
@@ -924,6 +1059,19 @@
     ],
     "title": "Learning Objectives"
   },
+  "left-rail": {
+    "category": "navigation",
+    "defaultStoryId": "layout-leftrail--default",
+    "description": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls.",
+    "name": "left-rail",
+    "stories": [
+      {
+        "id": "layout-leftrail--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Left Rail"
+  },
   "line-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -931,23 +1079,6 @@
     "name": "line-chart",
     "stories": [],
     "title": "Line Chart"
-  },
-  "marquee": {
-    "category": "utility",
-    "defaultStoryId": "utility-marquee--default",
-    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
-    "name": "marquee",
-    "stories": [
-      {
-        "id": "utility-marquee--default",
-        "name": "Default"
-      },
-      {
-        "id": "utility-marquee--reverse",
-        "name": "Reverse"
-      }
-    ],
-    "title": "Marquee"
   },
   "live-feed": {
     "category": "data",
@@ -978,6 +1109,35 @@
       }
     ],
     "title": "Market Treemap"
+  },
+  "marquee": {
+    "category": "utility",
+    "defaultStoryId": "utility-marquee--default",
+    "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "name": "marquee",
+    "stories": [
+      {
+        "id": "utility-marquee--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-marquee--slow",
+        "name": "Slow"
+      },
+      {
+        "id": "utility-marquee--fast",
+        "name": "Fast"
+      },
+      {
+        "id": "utility-marquee--custom-duration",
+        "name": "Custom Duration"
+      },
+      {
+        "id": "utility-marquee--reverse",
+        "name": "Reverse"
+      }
+    ],
+    "title": "Marquee"
   },
   "mdx-content": {
     "category": "content",
@@ -1022,6 +1182,19 @@
     ],
     "title": "Metric Gauge"
   },
+  "mini-map-panel": {
+    "category": "data",
+    "defaultStoryId": "panels-minimappanel--default",
+    "description": "Viewport overview panel showing canvas bounds, markers, and the current zoom window.",
+    "name": "mini-map-panel",
+    "stories": [
+      {
+        "id": "panels-minimappanel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Mini Map Panel"
+  },
   "model-selector": {
     "category": "form",
     "defaultStoryId": "form-modelselector--default",
@@ -1034,6 +1207,27 @@
       }
     ],
     "title": "Model Selector"
+  },
+  "multi-select": {
+    "category": "form",
+    "defaultStoryId": "form-multiselect--default",
+    "description": "Popover-based multi-selection input with selected-value badges and optional search.",
+    "name": "multi-select",
+    "stories": [
+      {
+        "id": "form-multiselect--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-multiselect--searchable",
+        "name": "Searchable"
+      },
+      {
+        "id": "form-multiselect--controlled",
+        "name": "Controlled"
+      }
+    ],
+    "title": "Multi Select"
   },
   "navbar-saas": {
     "category": "navigation",
@@ -1090,6 +1284,32 @@
       }
     ],
     "title": "Number Ticker"
+  },
+  "object-card": {
+    "category": "content",
+    "defaultStoryId": "canvas-objectcard--default",
+    "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+    "name": "object-card",
+    "stories": [
+      {
+        "id": "canvas-objectcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Object Card"
+  },
+  "object-handle": {
+    "category": "utility",
+    "defaultStoryId": "canvas-objecthandle--default",
+    "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+    "name": "object-handle",
+    "stories": [
+      {
+        "id": "canvas-objecthandle--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Object Handle"
   },
   "order-book": {
     "category": "data",
@@ -1276,6 +1496,19 @@
     ],
     "title": "Resizable"
   },
+  "right-dock": {
+    "category": "navigation",
+    "defaultStoryId": "layout-rightdock--default",
+    "description": "Context dock for inspectors, summaries, and secondary canvas panels.",
+    "name": "right-dock",
+    "stories": [
+      {
+        "id": "layout-rightdock--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Right Dock"
+  },
   "role-badge": {
     "category": "content",
     "defaultStoryId": "account-billing-rolebadge--default",
@@ -1348,6 +1581,27 @@
       }
     ],
     "title": "Search Dialog"
+  },
+  "segmented-control": {
+    "category": "form",
+    "defaultStoryId": "form-segmentedcontrol--default",
+    "description": "Single-choice segmented selector for switching modes, views, or filters.",
+    "name": "segmented-control",
+    "stories": [
+      {
+        "id": "form-segmentedcontrol--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-segmentedcontrol--disabled",
+        "name": "Disabled"
+      },
+      {
+        "id": "form-segmentedcontrol--controlled",
+        "name": "Controlled"
+      }
+    ],
+    "title": "Segmented Control"
   },
   "select": {
     "category": "form",
@@ -1542,6 +1796,246 @@
       {
         "id": "utility-spinner--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-unicodespinner--all-animations",
+        "name": "All Animations"
+      },
+      {
+        "id": "utility-unicodespinner--arc",
+        "name": "Arc"
+      },
+      {
+        "id": "utility-unicodespinner--arrow",
+        "name": "Arrow"
+      },
+      {
+        "id": "utility-unicodespinner--balloon",
+        "name": "Balloon"
+      },
+      {
+        "id": "utility-unicodespinner--bounce",
+        "name": "Bounce"
+      },
+      {
+        "id": "utility-unicodespinner--braille",
+        "name": "Braille"
+      },
+      {
+        "id": "utility-unicodespinner--braillewave",
+        "name": "Braillewave"
+      },
+      {
+        "id": "utility-unicodespinner--breathe",
+        "name": "Breathe"
+      },
+      {
+        "id": "utility-unicodespinner--cascade",
+        "name": "Cascade"
+      },
+      {
+        "id": "utility-unicodespinner--checkerboard",
+        "name": "Checkerboard"
+      },
+      {
+        "id": "utility-unicodespinner--circle-halves",
+        "name": "Circle Halves"
+      },
+      {
+        "id": "utility-unicodespinner--circle-quarters",
+        "name": "Circle Quarters"
+      },
+      {
+        "id": "utility-unicodespinner--clock",
+        "name": "Clock"
+      },
+      {
+        "id": "utility-unicodespinner--columns",
+        "name": "Columns"
+      },
+      {
+        "id": "utility-unicodespinner--diagswipe",
+        "name": "Diagswipe"
+      },
+      {
+        "id": "utility-unicodespinner--dna",
+        "name": "Dna"
+      },
+      {
+        "id": "utility-unicodespinner--dots",
+        "name": "Dots"
+      },
+      {
+        "id": "utility-unicodespinner--dots-2",
+        "name": "Dots 2"
+      },
+      {
+        "id": "utility-unicodespinner--dots-3",
+        "name": "Dots 3"
+      },
+      {
+        "id": "utility-unicodespinner--dots-4",
+        "name": "Dots 4"
+      },
+      {
+        "id": "utility-unicodespinner--dots-5",
+        "name": "Dots 5"
+      },
+      {
+        "id": "utility-unicodespinner--dots-6",
+        "name": "Dots 6"
+      },
+      {
+        "id": "utility-unicodespinner--dots-7",
+        "name": "Dots 7"
+      },
+      {
+        "id": "utility-unicodespinner--dots-8",
+        "name": "Dots 8"
+      },
+      {
+        "id": "utility-unicodespinner--dots-9",
+        "name": "Dots 9"
+      },
+      {
+        "id": "utility-unicodespinner--dots-10",
+        "name": "Dots 10"
+      },
+      {
+        "id": "utility-unicodespinner--dots-11",
+        "name": "Dots 11"
+      },
+      {
+        "id": "utility-unicodespinner--dots-12",
+        "name": "Dots 12"
+      },
+      {
+        "id": "utility-unicodespinner--dots-13",
+        "name": "Dots 13"
+      },
+      {
+        "id": "utility-unicodespinner--dots-14",
+        "name": "Dots 14"
+      },
+      {
+        "id": "utility-unicodespinner--dots-circle",
+        "name": "Dots Circle"
+      },
+      {
+        "id": "utility-unicodespinner--double-arrow",
+        "name": "Double Arrow"
+      },
+      {
+        "id": "utility-unicodespinner--dqpb",
+        "name": "Dqpb"
+      },
+      {
+        "id": "utility-unicodespinner--earth",
+        "name": "Earth"
+      },
+      {
+        "id": "utility-unicodespinner--fillsweep",
+        "name": "Fillsweep"
+      },
+      {
+        "id": "utility-unicodespinner--grow-horizontal",
+        "name": "Grow Horizontal"
+      },
+      {
+        "id": "utility-unicodespinner--grow-vertical",
+        "name": "Grow Vertical"
+      },
+      {
+        "id": "utility-unicodespinner--hearts",
+        "name": "Hearts"
+      },
+      {
+        "id": "utility-unicodespinner--helix",
+        "name": "Helix"
+      },
+      {
+        "id": "utility-unicodespinner--moon",
+        "name": "Moon"
+      },
+      {
+        "id": "utility-unicodespinner--noise",
+        "name": "Noise"
+      },
+      {
+        "id": "utility-unicodespinner--orbit",
+        "name": "Orbit"
+      },
+      {
+        "id": "utility-unicodespinner--point",
+        "name": "Point"
+      },
+      {
+        "id": "utility-unicodespinner--pulse",
+        "name": "Pulse"
+      },
+      {
+        "id": "utility-unicodespinner--rain",
+        "name": "Rain"
+      },
+      {
+        "id": "utility-unicodespinner--rolling-line",
+        "name": "Rolling Line"
+      },
+      {
+        "id": "utility-unicodespinner--sand",
+        "name": "Sand"
+      },
+      {
+        "id": "utility-unicodespinner--scan",
+        "name": "Scan"
+      },
+      {
+        "id": "utility-unicodespinner--scanline",
+        "name": "Scanline"
+      },
+      {
+        "id": "utility-unicodespinner--simple-dots",
+        "name": "Simple Dots"
+      },
+      {
+        "id": "utility-unicodespinner--simple-dots-scrolling",
+        "name": "Simple Dots Scrolling"
+      },
+      {
+        "id": "utility-unicodespinner--snake",
+        "name": "Snake"
+      },
+      {
+        "id": "utility-unicodespinner--sparkle",
+        "name": "Sparkle"
+      },
+      {
+        "id": "utility-unicodespinner--speaker",
+        "name": "Speaker"
+      },
+      {
+        "id": "utility-unicodespinner--square-corners",
+        "name": "Square Corners"
+      },
+      {
+        "id": "utility-unicodespinner--toggle",
+        "name": "Toggle"
+      },
+      {
+        "id": "utility-unicodespinner--triangle",
+        "name": "Triangle"
+      },
+      {
+        "id": "utility-unicodespinner--wave",
+        "name": "Wave"
+      },
+      {
+        "id": "utility-unicodespinner--waverows",
+        "name": "Waverows"
+      },
+      {
+        "id": "utility-unicodespinner--weather",
+        "name": "Weather"
       }
     ],
     "title": "Spinner"
@@ -1708,6 +2202,27 @@
       }
     ],
     "title": "Tabs"
+  },
+  "tags-input": {
+    "category": "form",
+    "defaultStoryId": "form-tagsinput--default",
+    "description": "Keyboard-friendly tag editor for adding and removing string values.",
+    "name": "tags-input",
+    "stories": [
+      {
+        "id": "form-tagsinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-tagsinput--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "form-tagsinput--controlled",
+        "name": "Controlled"
+      }
+    ],
+    "title": "Tags Input"
   },
   "terminal": {
     "category": "content",
@@ -1876,6 +2391,19 @@
     ],
     "title": "Tooltip"
   },
+  "top-bar": {
+    "category": "navigation",
+    "defaultStoryId": "layout-topbar--default",
+    "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
+    "name": "top-bar",
+    "stories": [
+      {
+        "id": "layout-topbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Top Bar"
+  },
   "tour": {
     "category": "learning",
     "defaultStoryId": "learning-tour--default",
@@ -2035,6 +2563,19 @@
     ],
     "title": "Watchlist"
   },
+  "workspace-switcher": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-workspaceswitcher--default",
+    "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
+    "name": "workspace-switcher",
+    "stories": [
+      {
+        "id": "navigation-workspaceswitcher--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Workspace Switcher"
+  },
   "world-clock-bar": {
     "category": "data",
     "defaultStoryId": "data-worldclockbar--default",
@@ -2051,5 +2592,18 @@
       }
     ],
     "title": "World Clock Bar"
+  },
+  "zoom-hud": {
+    "category": "overlay",
+    "defaultStoryId": "overlay-zoomhud--default",
+    "description": "Zoom controls with current percentage, increment buttons, and reset action for canvas views.",
+    "name": "zoom-hud",
+    "stories": [
+      {
+        "id": "overlay-zoomhud--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Zoom HUD"
   }
 }
