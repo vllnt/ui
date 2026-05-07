@@ -135,6 +135,25 @@
       "category": "learning"
     },
     {
+      "name": "ai-sidebar",
+      "type": "registry:component",
+      "title": "AI Sidebar",
+      "description": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger.",
+      "files": [
+        {
+          "path": "registry/default/ai-sidebar/ai-sidebar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "ai"
+    },
+    {
       "name": "ai-tool-call-display",
       "type": "registry:component",
       "title": "AI Tool Call Display",

@@ -1,0 +1,16 @@
+export {
+  AISidebar,
+  AISidebarClose,
+  AISidebarContent,
+  AISidebarFooter,
+  AISidebarHeader,
+  type AISidebarLabels,
+  type AISidebarPosition,
+  type AISidebarProps,
+  AISidebarProvider,
+  type AISidebarProviderProps,
+  AISidebarTitle,
+  AISidebarTrigger,
+  type AISidebarTriggerProps,
+  useAISidebar,
+} from "./ai-sidebar";
