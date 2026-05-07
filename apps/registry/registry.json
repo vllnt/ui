@@ -996,6 +996,23 @@
       "category": "overlay"
     },
     {
+      "name": "empty-state",
+      "type": "registry:component",
+      "title": "Empty State",
+      "description": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes.",
+      "files": [
+        {
+          "path": "registry/default/empty-state/empty-state.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "category": "core"
+    },
+    {
       "name": "era-comparison",
       "type": "registry:component",
       "title": "Era Comparison",
