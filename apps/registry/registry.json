@@ -949,6 +949,23 @@
       "category": "overlay"
     },
     {
+      "name": "document-sibling-nav",
+      "type": "registry:component",
+      "title": "Document Sibling Nav",
+      "description": "Newer/older navigator: links to the previous and next item in an ordered series.",
+      "files": [
+        {
+          "path": "registry/default/document-sibling-nav/document-sibling-nav.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "category": "content"
+    },
+    {
       "name": "dropdown-menu",
       "type": "registry:component",
       "title": "Dropdown Menu",
