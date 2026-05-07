@@ -1747,6 +1747,26 @@
       "category": "navigation"
     },
     {
+      "name": "newsletter-signup",
+      "type": "registry:component",
+      "title": "Newsletter Signup",
+      "description": "Email-capture form with idle/sending/sent/error state machine, custom validators, and overridable labels.",
+      "files": [
+        {
+          "path": "registry/default/newsletter-signup/newsletter-signup.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "form"
+    },
+    {
       "name": "number-input",
       "type": "registry:component",
       "title": "Number Input",
