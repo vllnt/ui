@@ -2031,6 +2031,25 @@
       "category": "data"
     },
     {
+      "name": "pricing-table",
+      "type": "registry:component",
+      "title": "Pricing Table",
+      "description": "Plan comparison with feature checklist, tier highlighting, CTA, and an optional monthly/annual toggle.",
+      "files": [
+        {
+          "path": "registry/default/pricing-table/pricing-table.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "billing"
+    },
+    {
       "name": "pro-tip",
       "type": "registry:component",
       "title": "Pro Tip",

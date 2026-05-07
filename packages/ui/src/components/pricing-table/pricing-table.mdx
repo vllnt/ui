@@ -1,0 +1,80 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './pricing-table.stories'
+
+<Meta of={Stories} />
+
+# PricingTable
+
+Plan comparison table with feature checklist, tier highlighting, and CTA buttons. Composes `PricingPlan` columns side-by-side on desktop and stacks them on mobile.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/pricing-table.json
+```
+
+## Import
+
+```tsx
+import { PricingTable, PricingPlan } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PricingTable>
+  <PricingPlan
+    name="Free"
+    price="$0"
+    period="/month"
+    description="For individuals"
+    features={[
+      { label: '5 projects', included: true },
+      { label: 'API access', included: false },
+    ]}
+    cta={{ label: 'Get started' }}
+  />
+  <PricingPlan
+    name="Pro"
+    price="$29"
+    period="/month"
+    highlighted
+    badge="Most Popular"
+    features={[
+      { label: 'Unlimited projects', included: true },
+      { label: 'Storage', included: '100 GB' },
+    ]}
+    cta={{ label: 'Start trial' }}
+  />
+</PricingTable>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Period toggle
+
+Pass `showPeriodToggle` to render a built-in monthly/annual radio group. Use the `period` / `onPeriodChange` props to control the value externally and swap prices.
+
+<Canvas of={Stories.WithPeriodToggle} sourceState="shown" />
+
+## Feature values
+
+`PricingFeature.included` accepts:
+
+| Value | Indicator |
+| ----- | --------- |
+| `true` | Check icon, normal label |
+| `false` | X icon, strike-through label |
+| `"5 users"` (string) | Check pill, label with the value in parens |
+
+## Two-column layout
+
+Cards stretch to fill the grid; on `lg` viewports the table renders three columns, two on `md`, one on mobile.
+
+<Canvas of={Stories.TwoColumn} sourceState="shown" />
