@@ -645,6 +645,13 @@ export {
 } from "./order-book";
 export { ProfileSection } from "./profile-section";
 export {
+  type PromptTemplate,
+  type PromptTemplateCategory,
+  PromptTemplates,
+  type PromptTemplatesLabels,
+  type PromptTemplatesProps,
+} from "./prompt-templates";
+export {
   PlanBadge,
   type PlanBadgeProps,
   type PlanBadgeState,

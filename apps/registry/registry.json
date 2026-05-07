@@ -2012,6 +2012,27 @@
       "category": "data"
     },
     {
+      "name": "prompt-templates",
+      "type": "registry:component",
+      "title": "Prompt Templates",
+      "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
+      "files": [
+        {
+          "path": "registry/default/prompt-templates/prompt-templates.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "input"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "ai"
+    },
+    {
       "name": "progress-card",
       "type": "registry:component",
       "title": "Progress Card",
