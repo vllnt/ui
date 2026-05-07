@@ -58,6 +58,7 @@ export {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 export { Input } from "./input";
+export { Kbd, type KbdProps, kbdVariants } from "./kbd";
 export { Checkbox } from "./checkbox";
 export { FileUpload, type FileUploadProps } from "./file-upload";
 export { Label } from "./label";
