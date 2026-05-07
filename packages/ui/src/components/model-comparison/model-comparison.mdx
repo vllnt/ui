@@ -1,0 +1,79 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './model-comparison.stories'
+
+<Meta of={Stories} />
+
+# ModelComparison
+
+Side-by-side comparison of multiple AI model responses to the same prompt. For A/B testing, evaluation, and educational comparison of AI capabilities.
+
+A compound component family:
+
+- `ModelComparison` — root container with optional prompt header and blind-mode toggle
+- `ModelComparisonColumn` — one column per model (label, model id, badge, content)
+- `ModelComparisonMeta` — stats row (tokens, latency, cost)
+- `ModelComparisonVote` — three-way vote (left / tie / right)
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/model-comparison.json
+```
+
+## Import
+
+```tsx
+import {
+  ModelComparison,
+  ModelComparisonColumn,
+  ModelComparisonMeta,
+  ModelComparisonVote,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ModelComparison prompt="Explain closures in JavaScript">
+  <ModelComparisonColumn model="claude-sonnet-4-6" label="Sonnet">
+    <p>{sonnetResponse}</p>
+    <ModelComparisonMeta tokens={320} latency="0.8s" cost="$0.003" />
+  </ModelComparisonColumn>
+  <ModelComparisonColumn model="gpt-4o" label="GPT-4o">
+    <p>{gptResponse}</p>
+    <ModelComparisonMeta tokens={410} latency="1.1s" cost="$0.005" />
+  </ModelComparisonColumn>
+  <ModelComparisonVote onVote={(vote) => recordVote(vote)} />
+</ModelComparison>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Blind mode
+
+`blindDefault` starts the comparison anonymized; the user reveals labels via the built-in toggle. `hideBlindToggle` opts out of the toggle entirely. Use this for unbiased evaluation flows.
+
+<Canvas of={Stories.Blind} sourceState="shown" />
+
+## With vote bar
+
+`ModelComparisonVote` emits one of `"left" | "tie" | "right"`.
+
+<Canvas of={Stories.WithVote} sourceState="shown" />
+
+## Three columns
+
+The grid stretches to two columns on `md` viewports and three on `xl`.
+
+<Canvas of={Stories.ThreeColumns} sourceState="shown" />
+
+## Notes
+
+- Streaming, diff highlighting, synchronized scrolling, and share permalinks are intentionally **out of scope** — drive them from the consumer code with the existing component slots.
+- Each column emits `data-model="<id>"` (omitted in blind mode) so consumers can drive analytics off the DOM.
