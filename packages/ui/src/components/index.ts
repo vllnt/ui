@@ -517,6 +517,14 @@ export {
 
 // Content components
 export { CodeBlock } from "./code-block";
+export {
+  CopyButton,
+  type CopyButtonProps,
+  type CopyButtonVariant,
+  useCopyToClipboard,
+  type UseCopyToClipboardOptions,
+  type UseCopyToClipboardResult,
+} from "./copy-button";
 export { MDXContent } from "./mdx-content";
 
 // Layout components
