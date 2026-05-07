@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './banner.stories'
+
+<Meta of={Stories} />
+
+# Banner
+
+Full-width announcement bar for trial warnings, maintenance notices, and upgrade prompts. Maps the `warning` and `destructive` variants to `role="alert"` and other variants to `role="status"`.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/banner.json
+```
+
+## Import
+
+```tsx
+import { Banner, BannerAction } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Banner variant="warning" dismissible>
+  Your trial expires in 3 days.
+  <BannerAction>Upgrade now</BannerAction>
+</Banner>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Variants
+
+### variant
+
+| Value | Default | ARIA role |
+| ----- | ------- | --------- |
+| `info` | Yes | `status` |
+| `success` | - | `status` |
+| `warning` | - | `alert` |
+| `destructive` | - | `alert` |
+
+<Canvas of={Stories.Warning} sourceState="shown" />
+
+<Canvas of={Stories.Success} sourceState="shown" />
+
+<Canvas of={Stories.Destructive} sourceState="shown" />
+
+### Dismissible
+
+Set `dismissible` to render an X control. Pair with `id` and `persistDismissal` to remember the user's choice across reloads via `localStorage`.
+
+<Canvas of={Stories.Dismissible} sourceState="shown" />
+
+### With action
+
+Compose `BannerAction` for primary CTAs. Use `asChild` to render onto a link or framework-specific element.
+
+<Canvas of={Stories.WithAction} sourceState="shown" />

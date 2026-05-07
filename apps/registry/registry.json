@@ -373,6 +373,25 @@
       "category": "core"
     },
     {
+      "name": "banner",
+      "type": "registry:component",
+      "title": "Banner",
+      "description": "Full-width announcement bar with variants, dismissal, and an optional action slot.",
+      "files": [
+        {
+          "path": "registry/default/banner/banner.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react",
+        "class-variance-authority",
+        "@radix-ui/react-slot"
+      ],
+      "category": "core"
+    },
+    {
       "name": "bar-chart",
       "type": "registry:component",
       "title": "Bar Chart",

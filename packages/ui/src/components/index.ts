@@ -1,5 +1,13 @@
 // Core UI primitives
 export { Badge, type BadgeProps, badgeVariants } from "./badge";
+export {
+  Banner,
+  BannerAction,
+  type BannerActionProps,
+  type BannerProps,
+  type BannerVariant,
+  bannerVariants,
+} from "./banner";
 export { Breadcrumb, type BreadcrumbItem } from "./breadcrumb";
 export { Button, type ButtonProps, buttonVariants } from "./button";
 export {
