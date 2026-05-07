@@ -643,6 +643,25 @@
       "category": "data-display"
     },
     {
+      "name": "civilization-card",
+      "type": "registry:component",
+      "title": "Civilization Card",
+      "description": "Civilization overview with hero band, BCE/CE era timeline, key stats, achievements, and notable leaders.",
+      "files": [
+        {
+          "path": "registry/default/civilization-card/civilization-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "educational"
+    },
+    {
       "name": "code-block",
       "type": "registry:component",
       "title": "Code Block",
