@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ai-source-citation.stories'
+
+<Meta of={Stories} />
+
+# AISourceCitation
+
+Inline citation chip linking to the source the AI used for a claim. Renders as a small numbered or labelled anchor that the user can hover for a preview and click to open the source. Pure presentation; the host computes the citation list from the model's tool / retrieval output.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ai-source-citation.json
+```
+
+## Import
+
+```tsx
+import { AISourceCitation } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<p>
+  …observed a p95 regression of 220 ms
+  <AISourceCitation index={1} href="/runs/research-2025#metrics">
+    research-2025 metrics
+  </AISourceCitation>
+  during the rollout.
+</p>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The chip is rooted in a native anchor element so it inherits keyboard activation, right-click → open in new tab, and screen-reader semantics for free.
+- Pair with \`AIMessageBubble\` to render assistant answers with footnote-style citations.
