@@ -109,7 +109,7 @@ const RowBody = (props: { bookmark: ViewportBookmark }): React.ReactElement => {
       <span
         aria-hidden="true"
         className="h-1.5 w-1.5 rounded-full"
-        style={{ backgroundColor: bookmark.color ?? "var(--foreground)" }}
+        style={{ backgroundColor: bookmark.color ?? "hsl(var(--foreground))" }}
       />
       <span className="flex flex-1 flex-col text-left">
         <span className="truncate font-medium">{bookmark.label}</span>
