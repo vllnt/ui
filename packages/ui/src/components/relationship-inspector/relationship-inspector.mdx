@@ -1,0 +1,64 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './relationship-inspector.stories'
+
+<Meta of={Stories} />
+
+# RelationshipInspector
+
+Inspector panel listing inbound + outbound edges of the focused object on a spatial canvas. Each row shows direction arrow, target id, optional sublabel, and the relation kind chip. Pure presentation; the host computes edges from the runtime graph and supplies an optional click handler to jump to the related object.
+
+Pairs with \`ObjectInspector\` and \`PropertySection\` to form the right-dock detail view.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/relationship-inspector.json
+```
+
+## Import
+
+```tsx
+import { RelationshipInspector } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<RelationshipInspector
+  edges={[
+    { id: "1", direction: "inbound",  target: "research-2025", relation: "spawned-by" },
+    { id: "2", direction: "outbound", target: "summary.md",    relation: "emits", onActivate: jumpTo },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty state
+
+When the focused object has no relationships, the panel renders a calm empty placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Inbound only
+
+Groups with zero edges are omitted entirely — only the populated direction renders.
+
+<Canvas of={Stories.InboundOnly} sourceState="shown" />
+
+## Non-interactive
+
+Omit \`onActivate\` and rows render as plain divs (no hover, no button semantics). Useful for read-only debug views.
+
+<Canvas of={Stories.NonInteractive} sourceState="shown" />
+
+## Notes
+
+- Direction glyphs: inbound = \`←\`, outbound = \`→\`.
+- Each row emits \`data-relationship-row\` and \`data-relationship-direction\`; each group emits \`data-relationship-group\`. Use these for analytics + CSS hooks.
