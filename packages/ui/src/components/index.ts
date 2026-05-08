@@ -321,6 +321,20 @@ export {
 export { Calendar, type CalendarProps } from "./calendar";
 export { CountdownTimer, type CountdownTimerProps } from "./countdown-timer";
 export { Marquee, type MarqueeProps } from "./marquee";
+export {
+  MapTimeline,
+  type MapTimelineColor,
+  MapTimelineControls,
+  MapTimelineEvent,
+  type MapTimelineEventProps,
+  type MapTimelineGeometry,
+  type MapTimelineLabels,
+  MapTimelineLayer,
+  type MapTimelineLayerProps,
+  MapTimelinePlayButton,
+  type MapTimelineProps,
+  MapTimelineSlider,
+} from "./map-timeline";
 export { NumberTicker, type NumberTickerProps } from "./number-ticker";
 export {
   Spinner,
