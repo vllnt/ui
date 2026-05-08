@@ -1,0 +1,50 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './canvas-view.stories'
+
+<Meta of={Stories} />
+
+# CanvasView
+
+Pannable / zoomable viewport for the spatial workspace. Owns the viewport transform (pan + zoom) and exposes an imperative handle for the host to programmatically jump or animate the camera. Children render in canvas pixel coordinate space.
+
+Pair with \`InfinitePlane\` for the dotted backdrop, \`MiniMapPanel\` for the overview, and \`ZoomHUD\` for the zoom affordance. Distinct from \`FlowDiagram\` (generic node-edge graph): \`CanvasView\` is the product-canvas viewport.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/canvas-view.json
+```
+
+## Import
+
+```tsx
+import { CanvasView } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const ref = useRef<CanvasViewHandle>(null)
+
+<CanvasView
+  ref={ref}
+  initialViewport={{ x: 0, y: 0, zoom: 1 }}
+  onViewportChange={setViewport}
+>
+  <ObjectCard …/>
+  <ObjectCard …/>
+</CanvasView>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The handle exposes \`panTo\`, \`zoomTo\`, and \`fit\` so the host can wire \`ViewportBookmarks\` and \`WorldBreadcrumbs\` to camera transitions.
+- Pointer + wheel + keyboard interactions are scoped to the viewport so nested children keep their own scroll / focus.

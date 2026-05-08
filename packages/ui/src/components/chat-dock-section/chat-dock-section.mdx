@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './chat-dock-section.stories'
+
+<Meta of={Stories} />
+
+# ChatDockSection
+
+Sidebar section that hosts a compact chat thread — typically slotted into the right dock or left rail of \`CanvasShell\` to keep an AI assistant alongside the spatial workspace. Pure presentation; the host owns the message list + composer.
+
+Distinct from full chat surfaces — \`ChatDockSection\` is intentionally narrow + scrollable for long threads in a side dock.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/chat-dock-section.json
+```
+
+## Import
+
+```tsx
+import { ChatDockSection } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ChatDockSection
+  title="Assistant"
+  messages={messages}
+  composer={<AIChatInput …/>}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`AIMessageBubble\` to render the messages list and \`AIChatInput\` for the composer.
+- The section is scrollable on its own so the surrounding dock layout stays calm.

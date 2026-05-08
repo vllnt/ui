@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './bottom-bar.stories'
+
+<Meta of={Stories} />
+
+# BottomBar
+
+Slim chrome strip pinned to the bottom of \`CanvasShell\` — calm host for activity strips, status pills, and ambient indicators. Pure presentation; the host slots whatever runtime surfaces belong here.
+
+Pair with \`BottomActivityStrip\` for the live event chips, \`PresenceSyncIndicator\` for the connection pill, and \`ZoomHUD\` for the zoom affordance.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/bottom-bar.json
+```
+
+## Import
+
+```tsx
+import { BottomBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<BottomBar>
+  <PresenceSyncIndicator state="live" />
+  <BottomActivityStrip events={recent} />
+  <ZoomHUD …/>
+</BottomBar>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The bar stays full-width and quiet by default — let slotted children carry the visual weight.
+- Distinct from \`Toast\` / \`Alert\` (transient notifications): \`BottomBar\` is durable chrome.

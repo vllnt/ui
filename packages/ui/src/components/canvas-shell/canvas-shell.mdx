@@ -1,0 +1,48 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './canvas-shell.stories'
+
+<Meta of={Stories} />
+
+# CanvasShell
+
+Top-level layout shell for the spatial workspace — slots for the top bar, left rail, right dock, bottom bar, and the central canvas viewport, with sane insets for fixed chrome. Pure presentation; the host fills each slot and supplies the route configuration.
+
+Pair with \`TopBar\`, \`LeftRail\`, \`RightDock\`, \`BottomBar\`, and \`CanvasView\` to assemble the full operator surface. Distinct from \`Sidebar\` / \`NavbarSaas\`: those are document / marketing chrome; \`CanvasShell\` is the spatial control plane.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/canvas-shell.json
+```
+
+## Import
+
+```tsx
+import { CanvasShell } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CanvasShell
+  topBar={<TopBar …/>}
+  leftRail={<LeftRail …/>}
+  rightDock={<RightDock …/>}
+  bottomBar={<BottomBar …/>}
+>
+  <CanvasView …/>
+</CanvasShell>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The shell handles fixed-chrome insets so the central viewport fills the remaining space.
+- Drop any slot you don't need (e.g. omit \`bottomBar\` for surfaces without an activity strip).
