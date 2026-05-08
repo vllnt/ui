@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './connector-edge.stories'
+
+<Meta of={Stories} />
+
+# ConnectorEdge
+
+Edge connecting two canvas objects — a curved or straight SVG path between two points, with optional directionality and tone. Pure presentation; the host computes the from / to coordinates from the connected objects' anchor ports.
+
+Distinct from \`FlowDiagram\` (generic node-edge graph primitive): this edge is the canvas's first-class relationship between durable runtime objects. Pair with \`AnchorPort\` for connection points and \`EdgeLabel\` for inline metadata.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/connector-edge.json
+```
+
+## Import
+
+```tsx
+import { ConnectorEdge } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ConnectorEdge
+  from={{ x: 120, y: 80 }}
+  to={{ x: 320, y: 220 }}
+  tone="primary"
+  directional
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The edge SVG is \`pointer-events: none\` by default — host gestures pass through.
+- Render inside a \`position: relative\` parent that shares the canvas pixel coordinate space with the connected objects.
+- Pair the edge with an \`EdgeLabel\` for relation metadata (e.g. \`"emits"\`, \`"depends-on"\`, throughput numbers).

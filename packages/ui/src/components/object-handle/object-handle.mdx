@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './object-handle.stories'
+
+<Meta of={Stories} />
+
+# ObjectHandle
+
+Drag affordance for an \`ObjectCard\` — a calm grab target that signals "this object can be repositioned" without competing with the card body. Pure presentation; the host wires the pointer events to its drag controller.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/object-handle.json
+```
+
+## Import
+
+```tsx
+import { ObjectHandle } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ObjectCard …>
+  <ObjectHandle onPointerDown={beginDrag} />
+  …
+</ObjectCard>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The handle does not own drag state — the host's pointer controller resolves moves into transform updates.
+- The handle should sit inside the card's header so users don't lose it when the card body is full.
