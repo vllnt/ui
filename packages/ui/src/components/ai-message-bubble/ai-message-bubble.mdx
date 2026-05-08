@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ai-message-bubble.stories'
+
+<Meta of={Stories} />
+
+# AIMessageBubble
+
+Single chat message bubble — \`user\` / \`assistant\` / \`system\` roles, timestamp slot, optional tool-call slot. Pure presentation; the host owns the message store and renders bubbles in order.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ai-message-bubble.json
+```
+
+## Import
+
+```tsx
+import { AIMessageBubble } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AIMessageBubble role="user" timestamp="12s">
+  Why is p95 spiking on the primary handler?
+</AIMessageBubble>
+<AIMessageBubble role="assistant" timestamp="9s">
+  …
+</AIMessageBubble>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Roles map: \`user\` (right-aligned, accent fill) · \`assistant\` (left-aligned, muted fill) · \`system\` (muted, full-width).
+- Pair with \`AIStreamingText\` for the actively-streaming assistant answer, and with \`AIToolCallDisplay\` to render tool invocations inline.

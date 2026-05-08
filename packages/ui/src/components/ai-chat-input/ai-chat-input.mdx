@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ai-chat-input.stories'
+
+<Meta of={Stories} />
+
+# AIChatInput
+
+Composer for AI chat surfaces — multi-line text area with submit affordance, optional model selector slot, and submission state. Pure presentation; the host owns the model state, submit handler, and any attachment / tool-selection UI.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ai-chat-input.json
+```
+
+## Import
+
+```tsx
+import { AIChatInput } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AIChatInput
+  value={draft}
+  onValueChange={setDraft}
+  onSubmit={post}
+  placeholder="Ask anything…"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The composer is rooted in a native form element so Enter-to-submit + native form events work out of the box.
+- Pair with \`AIMessageBubble\` (the rendered conversation) and \`AIStreamingText\` (the live answer) to form a complete chat surface.

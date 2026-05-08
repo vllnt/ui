@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ai-streaming-text.stories'
+
+<Meta of={Stories} />
+
+# AIStreamingText
+
+Live-streaming text container with a calm caret affordance for the actively-typing AI response. Pure presentation; the host owns the token stream and writes into the slot as deltas arrive.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ai-streaming-text.json
+```
+
+## Import
+
+```tsx
+import { AIStreamingText } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AIStreamingText streaming={isStreaming}>
+  {currentBuffer}
+</AIStreamingText>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The caret renders only while \`streaming\` is true so completed messages stay calm.
+- Pair with \`AIMessageBubble\` to host the streaming answer inside the assistant turn.
