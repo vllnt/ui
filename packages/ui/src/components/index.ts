@@ -493,6 +493,15 @@ export {
   type SparklineGridProps,
 } from "./sparkline-grid";
 export {
+  StoryMap,
+  StoryMapChapter,
+  type StoryMapChapterProps,
+  type StoryMapColor,
+  type StoryMapLabels,
+  type StoryMapMedia,
+  type StoryMapProps,
+} from "./story-map";
+export {
   SubscriptionCard,
   type SubscriptionCardProps,
   type SubscriptionCardStatus,
