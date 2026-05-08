@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './combobox.stories'
+
+<Meta of={Stories} />
+
+# Combobox
+
+Searchable single-select input — text field with a popover of filtered options. Pure presentation; the host owns the option list and the selected value.
+
+Distinct from \`Select\` (native dropdown) and \`MultiSelect\` (multi-value picker): \`Combobox\` is single-select with built-in search.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/combobox.json
+```
+
+## Import
+
+```tsx
+import { Combobox } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Combobox
+  value={value}
+  onValueChange={setValue}
+  options={options}
+  placeholder="Pick a model"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`MultiSelect\` for multi-value selection or \`ScopeSelector\` for nested-scope pickers.

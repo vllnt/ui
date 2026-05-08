@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './date-picker.stories'
+
+<Meta of={Stories} />
+
+# DatePicker
+
+Calendar-popover date input — text field with a calendar grid for picking a single date. Pure presentation; the host owns the date value and supplies the optional min / max bounds.
+
+Pair with \`Calendar\` (the underlying month grid) for embedded calendar UI without the popover.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/date-picker.json
+```
+
+## Import
+
+```tsx
+import { DatePicker } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<DatePicker
+  value={date}
+  onValueChange={setDate}
+  min={today}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The date input is locale-aware via the underlying \`Calendar\` primitive.
+- Pair with \`Form\` and \`Label\` for accessible form composition.
