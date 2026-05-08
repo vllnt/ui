@@ -923,8 +923,8 @@
         "name": "Default"
       },
       {
-        "id": "core-form--invalid",
-        "name": "Invalid"
+        "id": "core-form--server-error",
+        "name": "Server Error"
       }
     ],
     "title": "Form"
@@ -967,6 +967,31 @@
       }
     ],
     "title": "Hover Card"
+  },
+  "infinite-plane": {
+    "category": "utility",
+    "defaultStoryId": "canvas-infiniteplane--dot",
+    "description": "Tiled pannable backdrop for the canvas with dot or grid pattern that drifts with the viewport.",
+    "name": "infinite-plane",
+    "stories": [
+      {
+        "id": "canvas-infiniteplane--dot",
+        "name": "Dot"
+      },
+      {
+        "id": "canvas-infiniteplane--grid",
+        "name": "Grid"
+      },
+      {
+        "id": "canvas-infiniteplane--blank",
+        "name": "Blank"
+      },
+      {
+        "id": "canvas-infiniteplane--zoomed-and-panned",
+        "name": "Zoomed And Panned"
+      }
+    ],
+    "title": "Infinite Plane"
   },
   "inline-input": {
     "category": "form",
@@ -2529,6 +2554,31 @@
     ],
     "title": "View Switcher"
   },
+  "viewport-bookmarks": {
+    "category": "navigation",
+    "defaultStoryId": "canvas-viewportbookmarks--default",
+    "description": "Saved-view list for the canvas — pinned spatial locations with optional active state.",
+    "name": "viewport-bookmarks",
+    "stories": [
+      {
+        "id": "canvas-viewportbookmarks--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-viewportbookmarks--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-viewportbookmarks--no-active",
+        "name": "No Active"
+      },
+      {
+        "id": "canvas-viewportbookmarks--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "Viewport Bookmarks"
+  },
   "wallet-card": {
     "category": "content",
     "defaultStoryId": "account-billing-walletcard--default",
@@ -2575,6 +2625,31 @@
       }
     ],
     "title": "Workspace Switcher"
+  },
+  "world-breadcrumbs": {
+    "category": "navigation",
+    "defaultStoryId": "canvas-worldbreadcrumbs--default",
+    "description": "Spatial trail showing the canvas's current location in a hierarchy of worlds, groups, and runs.",
+    "name": "world-breadcrumbs",
+    "stories": [
+      {
+        "id": "canvas-worldbreadcrumbs--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-worldbreadcrumbs--shallow",
+        "name": "Shallow"
+      },
+      {
+        "id": "canvas-worldbreadcrumbs--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-worldbreadcrumbs--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "World Breadcrumbs"
   },
   "world-clock-bar": {
     "category": "data",
