@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './watchlist.stories'
+
+<Meta of={Stories} />
+
+# Watchlist
+
+Compact list of pinned symbols / objects — one row per item with a leading glyph, a primary label, a value, and a change badge. Pure presentation; the host computes the row data.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/watchlist.json
+```
+
+## Import
+
+```tsx
+import { Watchlist } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Watchlist items={pinned} onSelect={openSymbol} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`TickerTape\` for the horizontal price strip and \`SparklineGrid\` for per-row mini-charts.
+- The list keeps its rows compact so it fits inside a sidebar without dominating the layout.

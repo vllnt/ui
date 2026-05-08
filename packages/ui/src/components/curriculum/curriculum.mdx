@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './curriculum.stories'
+
+<Meta of={Stories} />
+
+# Curriculum
+
+Course-layout container for a sequence of lessons or modules — title, progress, optional intro, and a stack of lesson rows. Pure presentation; the host owns the lesson list and the active step.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/curriculum.json
+```
+
+## Import
+
+```tsx
+import { Curriculum } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Curriculum
+  title="Spatial workspace 101"
+  lessons={lessons}
+  activeLessonId={current}
+  onLessonSelect={openLesson}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`Flashcard\` for in-lesson review and \`StepByStep\` for tutorial-style walkthroughs.
+- Drop \`onLessonSelect\` for read-only catalog views.
