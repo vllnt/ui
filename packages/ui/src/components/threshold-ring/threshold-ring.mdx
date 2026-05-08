@@ -1,0 +1,60 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './threshold-ring.stories'
+
+<Meta of={Stories} />
+
+# ThresholdRing
+
+Compact ring gauge expressing how close a value is to a threshold. Pure presentation; the host supplies the value, threshold, and tone. Use to overlay budget / quota / SLA indicators on canvas objects without consuming card real-estate.
+
+Distinct from \`MetricGauge\`: this primitive is small, headless, and meant to attach to a runtime object — not a dashboard tile.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/threshold-ring.json
+```
+
+## Import
+
+```tsx
+import { ThresholdRing } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ThresholdRing value={0.82} threshold={0.7} tone="warn" centerLabel="82%" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Healthy budget
+
+Value below threshold + \`success\` tone.
+
+<Canvas of={Stories.HealthyBudget} sourceState="shown" />
+
+## Over threshold
+
+Value past threshold + \`danger\` tone — the threshold tick stays at its position so the user can see exactly how far past.
+
+<Canvas of={Stories.OverThreshold} sourceState="shown" />
+
+## No threshold
+
+Drop \`threshold\` to render a plain ratio ring.
+
+<Canvas of={Stories.NoThreshold} sourceState="shown" />
+
+## Notes
+
+- Tones map: \`neutral\` (foreground) · \`success\` (emerald) · \`warn\` (amber) · \`danger\` (red).
+- Value clamps to \`0..max\`; \`max\` floors at \`1\` when given a non-positive value.
+- Each render emits \`data-threshold-ring\` plus \`data-threshold-tone\`. The active arc emits \`data-threshold-ring-arc\`; the tick emits \`data-threshold-ring-tick\`; the center label emits \`data-threshold-ring-label\`.

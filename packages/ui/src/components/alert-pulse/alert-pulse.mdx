@@ -1,0 +1,57 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './alert-pulse.stories'
+
+<Meta of={Stories} />
+
+# AlertPulse
+
+Pulsing ring overlay drawn around an alerting canvas object. The outer ring expands and fades to communicate "attention here"; the inner ring stays put so the object remains anchored. Pure presentation; the host computes the center + severity from the runtime alert stream.
+
+Render inside a \`position: relative\` parent that shares the canvas pixel coordinate space; the SVG is \`pointer-events: none\` so host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/alert-pulse.json
+```
+
+## Import
+
+```tsx
+import { AlertPulse } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <AlertPulse cx={480} cy={320} severity="error" />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Severity tones
+
+\`info\` (blue) · \`warn\` (amber, default) · \`error\` (red).
+
+<Canvas of={Stories.Info} sourceState="shown" />
+<Canvas of={Stories.Error} sourceState="shown" />
+
+## Reduced motion
+
+Pass \`reducedMotion\` to skip the \`animate-ping\` class — useful for visual snapshots and accessibility-conscious surfaces.
+
+<Canvas of={Stories.ReducedMotion} sourceState="shown" />
+
+## Notes
+
+- Radius floors at \`6\` so the pulse never collapses into invisibility.
+- Each render emits \`data-alert-pulse\` plus \`data-alert-severity\`. The animated ring emits \`data-alert-pulse-ring\` for analytics + CSS hooks.

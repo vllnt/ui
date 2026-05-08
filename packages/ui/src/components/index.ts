@@ -764,6 +764,12 @@ export {
 } from "./flow-diagram";
 
 // Canvas/Object components
+export {
+  AlertPulse,
+  type AlertPulseLabels,
+  type AlertPulseProps,
+  type AlertPulseSeverity,
+} from "./alert-pulse";
 export { AnchorPort, type AnchorPortProps } from "./anchor-port";
 export {
   type ActivityEvent,
@@ -852,11 +858,24 @@ export {
   type StateBadgeState,
 } from "./state-badge-overlay";
 export {
+  StickyMetric,
+  type StickyMetricAnchor,
+  type StickyMetricLabels,
+  type StickyMetricProps,
+  type StickyMetricTone,
+} from "./sticky-metric";
+export {
   ThreadBubble,
   type ThreadBubbleLabels,
   type ThreadBubbleProps,
   type ThreadMessage,
 } from "./thread-bubble";
+export {
+  ThresholdRing,
+  type ThresholdRingLabels,
+  type ThresholdRingProps,
+  type ThresholdRingTone,
+} from "./threshold-ring";
 export {
   TimelineScrubber,
   type TimelineScrubberLabels,

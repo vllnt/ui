@@ -163,6 +163,21 @@
       "category": "overlay"
     },
     {
+      "name": "alert-pulse",
+      "type": "registry:component",
+      "title": "Alert Pulse",
+      "description": "Pulsing ring overlay for alerting canvas objects, with severity tones.",
+      "files": [
+        {
+          "path": "registry/default/alert-pulse/alert-pulse.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "anchor-port",
       "type": "registry:component",
       "title": "Anchor Port",
@@ -2101,6 +2116,21 @@
       "category": "learning"
     },
     {
+      "name": "sticky-metric",
+      "type": "registry:component",
+      "title": "Sticky Metric",
+      "description": "Pinned metric pill that sticks to a canvas object's corner.",
+      "files": [
+        {
+          "path": "registry/default/sticky-metric/sticky-metric.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "subscription-card",
       "type": "registry:component",
       "title": "Subscription Card",
@@ -2283,6 +2313,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "threshold-ring",
+      "type": "registry:component",
+      "title": "Threshold Ring",
+      "description": "Compact ring gauge expressing how close a value is to a threshold.",
+      "files": [
+        {
+          "path": "registry/default/threshold-ring/threshold-ring.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "ticker-tape",
