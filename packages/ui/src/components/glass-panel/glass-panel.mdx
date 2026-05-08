@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './glass-panel.stories'
+
+<Meta of={Stories} />
+
+# GlassPanel
+
+Frosted-glass surface for floating chrome that sits on top of the canvas — dock panels, hovering toolbars, transient overlays. Translucent background with a soft border, optional rounded radius. Pure presentation; the host slots whatever content belongs above the canvas.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/glass-panel.json
+```
+
+## Import
+
+```tsx
+import { GlassPanel } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<GlassPanel className="absolute right-4 top-4 p-3">
+  <ObjectInspector …/>
+</GlassPanel>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The panel keeps its own background so it reads as a discrete surface even when the canvas behind it is busy.
+- Stack with \`backdrop-blur\` parents sparingly — too many overlapping frosted layers reduce readability.
