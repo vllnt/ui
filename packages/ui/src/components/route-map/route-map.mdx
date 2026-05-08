@@ -1,0 +1,76 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './route-map.stories'
+
+<Meta of={Stories} />
+
+# RouteMap
+
+Map for animated route paths, waypoints, and journey progression. Use for trade routes, military campaigns, exploration voyages, migration paths, and delivery tracking. Standalone SVG — no external map library required. Drop in a backdrop image (Natural Earth SVG, terrain raster) to add geographic context.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/route-map.json
+```
+
+## Import
+
+```tsx
+import { RouteMap } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<RouteMap
+  animated
+  showProgressIndicator
+  color="red"
+  waypoints={[
+    { id: "chang", label: "Chang'an", position: [108.94, 34.34] },
+    { id: "kashgar", label: "Kashgar", position: [75.99, 39.47] },
+    { id: "samarkand", label: "Samarkand", position: [66.97, 39.65] },
+    { id: "constantinople", label: "Constantinople", position: [28.98, 41.01] },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Animation
+
+Set `animated` to draw the route line progressively from start to end. `animationDurationSeconds` controls speed (default: 4 seconds). Add `showProgressIndicator` to render a moving dot that travels along the path on a continuous loop.
+
+<Canvas of={Stories.Animated} sourceState="shown" />
+
+## Line styles
+
+`lineStyle="solid"` (default), `"dashed"`, or `"dotted"`. Dashed reads well for trade routes and historical journeys; solid reads well for delivery / current paths.
+
+<Canvas of={Stories.Dotted} sourceState="shown" />
+
+## Waypoint ordering
+
+Each waypoint exposes a 1-based `data-waypoint-ordinal` attribute. By default it follows array index; pass an explicit `order` to override (useful when stitching multiple data sets together).
+
+## Info panel
+
+Pass `children` to render an optional bottom-left info panel. Common content: route name, total distance, duration estimates, current waypoint highlight.
+
+<Canvas of={Stories.WithInfoPanel} sourceState="shown" />
+
+## Accessibility
+
+The component renders a hidden ordered list of waypoint coordinates alongside the SVG. Screen readers can read the route in order without losing fidelity.
+
+## Notes
+
+- Coordinates use a simple equirectangular projection (matches `Map2D` and `ChoroplethMap`). Coordinates outside `[-180, 180] / [-90, 90]` are clipped by the viewBox.
+- Out of scope for the MVP: multiple routes per canvas, elevation profile, playback controls, click-waypoint detail popups, route-info panels with live distance computations. Wire those externally — this primitive stays focused on rendering.
+- Each waypoint emits `data-waypoint-id` and `data-waypoint-ordinal`. The route line emits `data-route-line`; the progress indicator emits `data-route-progress`.
