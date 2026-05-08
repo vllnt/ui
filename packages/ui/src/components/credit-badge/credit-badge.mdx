@@ -1,0 +1,38 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './credit-badge.stories'
+
+<Meta of={Stories} />
+
+# CreditBadge
+
+Compact pill that surfaces a user's available / pending credit balance. Pure presentation; the host computes the numeric balance and renders the badge alongside other account chips.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/credit-badge.json
+```
+
+## Import
+
+```tsx
+import { CreditBadge } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CreditBadge available={1240} pending={80} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`PlanBadge\`, \`RoleBadge\`, and \`WalletCard\` for billing-context surfaces.

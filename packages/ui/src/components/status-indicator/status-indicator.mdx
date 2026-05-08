@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './status-indicator.stories'
+
+<Meta of={Stories} />
+
+# StatusIndicator
+
+Live system-state dot + label — \`operational\` / \`degraded\` / \`outage\` / \`maintenance\`. Pure presentation; the host computes the status from the health-check pipeline.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/status-indicator.json
+```
+
+## Import
+
+```tsx
+import { StatusIndicator } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<StatusIndicator status="operational" label="API" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatusBoard\` for the full health grid and \`LiveFeed\` for the rolling event stream.
+- Distinct from \`SeverityBadge\` (one-shot incident severity): \`StatusIndicator\` reads as a live dot.

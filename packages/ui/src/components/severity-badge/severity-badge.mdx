@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './severity-badge.stories'
+
+<Meta of={Stories} />
+
+# SeverityBadge
+
+Incident-severity pill — \`info\` / \`warn\` / \`error\` / \`critical\`. Used in incident lists, alert panels, and audit rows. Pure presentation.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/severity-badge.json
+```
+
+## Import
+
+```tsx
+import { SeverityBadge } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SeverityBadge severity="error" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatusBoard\` and \`LiveFeed\` for incident surfaces.
+- Distinct from \`StatusIndicator\` (live system state): \`SeverityBadge\` describes a discrete event's severity, not a long-lived status.
