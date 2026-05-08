@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './right-dock.stories'
+
+<Meta of={Stories} />
+
+# RightDock
+
+Vertical chrome dock pinned to the right of \`CanvasShell\` — host for inspector panels, runtime overviews, routing / policy sections, and ambient secondary surfaces. Pure presentation; the host slots whatever inspector or panel belongs here.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/right-dock.json
+```
+
+## Import
+
+```tsx
+import { RightDock } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<RightDock>
+  <RuntimeOverviewPanel …/>
+  <ObjectInspector …/>
+  <PolicyDeliveryPanel …/>
+</RightDock>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`ObjectInspector\`, \`PropertySection\`, \`RelationshipInspector\`, \`RuntimeOverviewPanel\`, \`RoutingAssignmentPanel\`, and \`PolicyDeliveryPanel\` to fill the dock.

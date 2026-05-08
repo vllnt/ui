@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './top-bar.stories'
+
+<Meta of={Stories} />
+
+# TopBar
+
+Top chrome bar pinned to the top of \`CanvasShell\` — host for breadcrumbs, viewport bookmarks, presence stack, command-palette trigger, and account chips. Pure presentation; the host slots its chrome.
+
+Distinct from \`NavbarSaas\` (marketing nav) and \`Sidebar\` (document chrome): \`TopBar\` is the operator-shell top strip.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/top-bar.json
+```
+
+## Import
+
+```tsx
+import { TopBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TopBar>
+  <WorldBreadcrumbs …/>
+  <ViewportBookmarks …/>
+  <PresenceStack …/>
+  <PresenceSyncIndicator …/>
+</TopBar>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`WorldBreadcrumbs\` for spatial location, \`ViewportBookmarks\` for saved views, and \`PresenceStack\` for live collaboration.
