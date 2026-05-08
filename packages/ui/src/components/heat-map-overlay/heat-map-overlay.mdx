@@ -1,0 +1,86 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './heat-map-overlay.stories'
+
+<Meta of={Stories} />
+
+# HeatMapOverlay
+
+Standalone SVG heat-map overlay for geographic density / intensity data. Plot heat points by `[lng, lat]` with optional `weight`. Each point renders as a radial-gradient blob; the layer is Gaussian-blurred so neighbours merge into smooth heat clouds. No external map library required.
+
+Use for troop concentrations, population density, event / incident hotspots, archaeological site density, environmental pollution maps.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/heat-map-overlay.json
+```
+
+## Import
+
+```tsx
+import { HeatMapOverlay } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<HeatMapOverlay
+  data={[
+    { id: 'ny', lat: 40.7, lng: -74, weight: 0.9 },
+    { id: 'ldn', lat: 51.5, lng: -0.13, weight: 0.6 },
+    { id: 'tok', lat: 35.7, lng: 139.7, weight: 0.4 },
+  ]}
+  radius={40}
+  blur={18}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Tight radius / less blur
+
+Pull `radius` down for distinct hotspots that don't bleed into each other.
+
+<Canvas of={Stories.TightRadius} sourceState="shown" />
+
+## Custom gradient
+
+Pass a `gradient` map of `0..1` stops to CSS colors. The default ramp is blue → green → orange → red.
+
+```tsx
+<HeatMapOverlay
+  gradient={{
+    0.3: 'rgba(59, 130, 246, 0.6)',
+    0.7: 'rgba(168, 85, 247, 0.85)',
+    1:   'rgba(236, 72, 153, 0.95)',
+  }}
+  data={…}
+/>
+```
+
+<Canvas of={Stories.CustomGradient} sourceState="shown" />
+
+## Higher opacity
+
+`opacity` controls the entire heat layer (default `0.7`). Push to `1` to show every blob at full strength when overlaying a darker basemap.
+
+<Canvas of={Stories.HighOpacity} sourceState="shown" />
+
+## With info panel
+
+Render any markup as `children` to surface a bottom-left summary panel.
+
+<Canvas of={Stories.WithInfoPanel} sourceState="shown" />
+
+## Notes
+
+- Coordinates use a simple equirectangular projection (matches `Map2D`, `ChoroplethMap`, `RouteMap`). Coordinates outside `[-180, 180] / [-90, 90]` are clipped by the viewBox.
+- Per-point radius scales linearly with `weight` between `0.4 × radius` (weight `0`) and `radius` (weight `1`). Weights outside `0..1` are clamped.
+- Out of scope for the MVP: dynamic-update animations, zoom-responsive radius, WebGL-backed rendering for 50k+ points. The SVG implementation handles up to ~2k blobs comfortably; for larger sets switch to a canvas / WebGL renderer.
+- Each heat blob emits `data-point-id` and `data-weight`. The layer wrapper emits `data-heat-layer`. The component renders an `<sr-only>` summary listing every point + weight for screen readers.

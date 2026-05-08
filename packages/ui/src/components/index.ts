@@ -811,6 +811,13 @@ export {
   type HandoffBeaconProps,
 } from "./handoff-beacon";
 export {
+  type HeatGradient,
+  HeatMapOverlay,
+  type HeatMapOverlayLabels,
+  type HeatMapOverlayProps,
+  type HeatMapPoint,
+} from "./heat-map-overlay";
+export {
   type ViewOption,
   ViewSwitcher,
   type ViewSwitcherProps,
