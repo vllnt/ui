@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './zoom-hud.stories'
+
+<Meta of={Stories} />
+
+# ZoomHUD
+
+Compact zoom affordance for \`CanvasView\` — current zoom percentage with +, −, and fit / reset buttons. Pure presentation; the host wires the buttons to the viewport's imperative camera handle.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/zoom-hud.json
+```
+
+## Import
+
+```tsx
+import { ZoomHUD } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ZoomHUD
+  zoom={zoom}
+  onZoomIn={() => view.zoomTo(zoom * 1.2)}
+  onZoomOut={() => view.zoomTo(zoom / 1.2)}
+  onFit={() => view.fit()}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`CanvasView\` for the viewport, \`MiniMapPanel\` for the overview, and \`ViewportBookmarks\` for saved views.
+- The HUD displays the zoom as a percentage — keep the host's zoom factor consistent (e.g. \`1.0\` reads as \`100 %\`).

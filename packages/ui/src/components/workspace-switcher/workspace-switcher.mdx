@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './workspace-switcher.stories'
+
+<Meta of={Stories} />
+
+# WorkspaceSwitcher
+
+Segmented workspace picker for switching between canvas views and operational contexts (e.g. development / staging / production, project A / project B). Pure presentation; the host owns the workspace list and the active id.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/workspace-switcher.json
+```
+
+## Import
+
+```tsx
+import { WorkspaceSwitcher } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<WorkspaceSwitcher
+  workspaces={workspaces}
+  activeId={active}
+  onSelect={setActive}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`LeftRail\` (typically slotted at the top) or \`TopBar\` to anchor workspace switching.
+- For nested or hierarchical scopes, prefer \`ScopeSelector\` instead.

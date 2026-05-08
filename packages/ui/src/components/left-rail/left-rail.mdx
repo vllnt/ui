@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './left-rail.stories'
+
+<Meta of={Stories} />
+
+# LeftRail
+
+Vertical chrome rail pinned to the left of \`CanvasShell\` — narrow column for primary navigation, workspace pivots, and key affordances. Pure presentation; the host slots whatever items belong here.
+
+Distinct from \`Sidebar\` (document chrome) and \`NavbarSaas\` (marketing chrome): \`LeftRail\` is the operator-shell rail.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/left-rail.json
+```
+
+## Import
+
+```tsx
+import { LeftRail } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<LeftRail>
+  <WorkspaceSwitcher …/>
+  <NavItem icon="canvas" label="Canvas" />
+  <NavItem icon="runs"   label="Runs" />
+  <NavItem icon="alerts" label="Alerts" />
+</LeftRail>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`TopBar\`, \`RightDock\`, \`BottomBar\` and \`CanvasView\` to assemble the full operator surface via \`CanvasShell\`.
