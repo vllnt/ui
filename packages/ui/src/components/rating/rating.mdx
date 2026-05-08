@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './rating.stories'
+
+<Meta of={Stories} />
+
+# Rating
+
+Inline star rating — display-only or interactive (read-only summary or live input). Pure presentation; the host owns the rating value.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/rating.json
+```
+
+## Import
+
+```tsx
+import { Rating } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Rating
+  value={rating}
+  onValueChange={setRating}
+  max={5}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Drop \`onValueChange\` for a read-only summary — the stars render but no longer respond to clicks.
+- Pair with \`Form\` for labelled feedback surveys.
