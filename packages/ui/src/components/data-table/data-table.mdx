@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './data-table.stories'
+
+<Meta of={Stories} />
+
+# DataTable
+
+Sortable, filterable, paginated table for record collections — runs, jobs, transactions, audit rows. Pure presentation for the visual layer; the host owns the data store and resolves sort / filter / page state.
+
+Distinct from \`Table\` (the unstyled HTML primitive): \`DataTable\` adds the canonical column / sort / pagination affordances on top.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/data-table.json
+```
+
+## Import
+
+```tsx
+import { DataTable } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<DataTable
+  columns={columns}
+  data={rows}
+  pagination={{ page, pageSize, total, onPageChange: setPage }}
+  sort={{ key, direction, onChange: setSort }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`FilterBar\` for filter chips and \`Pagination\` for the page controls if the table doesn't slot them inline.
+- The table is column-driven — pass column definitions with \`accessor\`, \`header\`, \`cell\`, and optional \`sortable\` flags.

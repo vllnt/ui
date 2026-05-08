@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './candlestick-chart.stories'
+
+<Meta of={Stories} />
+
+# CandlestickChart
+
+OHLC candlestick chart — open / high / low / close per period, color-coded by direction (up / down). Pure presentation; the host computes the candle list from the time-series store.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/candlestick-chart.json
+```
+
+## Import
+
+```tsx
+import { CandlestickChart } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CandlestickChart
+  candles={ohlc}
+  width={640}
+  height={240}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`TickerTape\` for a horizontal price strip and \`OrderBook\` for the depth ladder.
+- The chart is SVG-based — render at the size you want; it does not auto-resize.

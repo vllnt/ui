@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './activity-heatmap.stories'
+
+<Meta of={Stories} />
+
+# ActivityHeatmap
+
+Calendar-style grid showing activity intensity per day — a contribution-graph-style surface for run frequency, deploy cadence, error volume, or any per-day metric. Pure presentation; the host computes the per-day buckets.
+
+Distinct from \`HeatOverlay\` (free-form canvas heatmap): this primitive is a fixed calendar grid suited to dashboard tiles.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/activity-heatmap.json
+```
+
+## Import
+
+```tsx
+import { ActivityHeatmap } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ActivityHeatmap
+  days={buckets}
+  start={start}
+  end={end}
+  formatTooltip={(day) => `${day.count} runs on ${day.date}`}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Colors scale by count — pass a custom \`scale\` if your domain has different intensity buckets.
+- Pair with \`StatCard\` or \`OverviewCard\` to anchor the heatmap with a headline metric.
