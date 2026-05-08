@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './world-clock-bar.stories'
+
+<Meta of={Stories} />
+
+# WorldClockBar
+
+Multi-timezone display strip for follow-the-sun teams and operational handoffs. Pure presentation; the host computes the city / timezone list.
+
+Distinct from \`WorldBreadcrumbs\` (spatial canvas trail): this primitive is a chrome strip showing remote-team time, not a spatial location.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/world-clock-bar.json
+```
+
+## Import
+
+```tsx
+import { WorldClockBar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<WorldClockBar
+  zones={[
+    { id: "sf",   label: "SF",   tz: "America/Los_Angeles" },
+    { id: "nyc",  label: "NYC",  tz: "America/New_York" },
+    { id: "lon",  label: "LON",  tz: "Europe/London" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`PresenceStack\` and \`PresenceSyncIndicator\` for collaborative shells where remote-team presence matters.
+- The strip updates on a per-minute cadence — it does not need second-level precision.

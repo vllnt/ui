@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './marquee.stories'
+
+<Meta of={Stories} />
+
+# Marquee
+
+Continuous-scroll horizontal strip — wraps any children and loops them across the viewport. Pure presentation; the host slots the items and configures the cadence.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/marquee.json
+```
+
+## Import
+
+```tsx
+import { Marquee } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Marquee speed={40}>
+  <Logo />
+  <Logo />
+  <Logo />
+</Marquee>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`TickerTape\` for the financial-symbol variant — \`Marquee\` is the generic primitive.
+- The marquee respects \`prefers-reduced-motion\` so users with motion sensitivity see a static row.

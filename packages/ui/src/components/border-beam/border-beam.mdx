@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './border-beam.stories'
+
+<Meta of={Stories} />
+
+# BorderBeam
+
+Animated accent beam that travels around the border of a highlighted surface — used to draw the eye to a primary CTA, a freshly-saved card, or an interactive demo target. Pure presentation; the host wraps the target.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/border-beam.json
+```
+
+## Import
+
+```tsx
+import { BorderBeam } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative">
+  <BorderBeam />
+  <Card>Highlighted content</Card>
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair sparingly — too many simultaneous beams reduce the attention-grabbing effect.
+- Animation respects \`prefers-reduced-motion\` so users with motion sensitivity see a static border.
