@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './status-board.stories'
+
+<Meta of={Stories} />
+
+# StatusBoard
+
+Service-health grid surfacing infrastructure state, queue pressure, and incidents — one row per service with a live status, optional sub-services, and incident summary. Pure presentation; the host owns the health-check pipeline.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/status-board.json
+```
+
+## Import
+
+```tsx
+import { StatusBoard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<StatusBoard
+  services={services}
+  incidents={openIncidents}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatusIndicator\` for individual service rows and \`SeverityBadge\` for incident chips.
+- The board defaults to a calm read so widespread \`operational\` rows feel like the baseline rather than the celebration.

@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './overview-board.stories'
+
+<Meta of={Stories} />
+
+# OverviewBoard
+
+Grid of \`OverviewCard\` cells for at-a-glance dashboards — typically a row of headline metrics with consistent spacing and tone. Pure presentation; the host computes the cell list.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/overview-board.json
+```
+
+## Import
+
+```tsx
+import { OverviewBoard, OverviewCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<OverviewBoard
+  items={[
+    { id: "runs",  label: "Active runs",  value: "240", tone: "success" },
+    { id: "errs",  label: "Errors / hr",  value: "0",   tone: "neutral" },
+    { id: "p95",   label: "p95 latency",  value: "180ms", tone: "warn" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatCard\` for hero-tile variants and \`StatusBoard\` for service-health surfaces.
+- The grid auto-flows to fit the available width.
