@@ -483,6 +483,23 @@ export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 export { LiveFeed, type LiveFeedEvent, type LiveFeedProps } from "./live-feed";
 export {
+  LiveCursor,
+  type LiveCursorColor,
+  type LiveCursorProps,
+} from "./live-cursor";
+export {
+  type PresenceMember,
+  PresenceStack,
+  type PresenceStackLabels,
+  type PresenceStackProps,
+} from "./presence-stack";
+export {
+  PresenceSyncIndicator,
+  type PresenceSyncIndicatorLabels,
+  type PresenceSyncIndicatorProps,
+  type SyncStatus,
+} from "./presence-sync-indicator";
+export {
   MetricGauge,
   type MetricGaugeProps,
   type MetricGaugeThreshold,

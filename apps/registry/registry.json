@@ -1102,6 +1102,21 @@
       "category": "data"
     },
     {
+      "name": "live-cursor",
+      "type": "registry:component",
+      "title": "Live Cursor",
+      "description": "Remote cursor for multi-user canvases — pure presentation, position from x/y props.",
+      "files": [
+        {
+          "path": "registry/default/live-cursor/live-cursor.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "live-feed",
       "type": "registry:component",
       "title": "Live Feed",
@@ -1435,6 +1450,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "learning"
+    },
+    {
+      "name": "presence-stack",
+      "type": "registry:component",
+      "title": "Presence Stack",
+      "description": "Compact overlapping avatar stack with live presence status (active / away / idle) for multi-user canvases.",
+      "files": [
+        {
+          "path": "registry/default/presence-stack/presence-stack.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
+      "name": "presence-sync-indicator",
+      "type": "registry:component",
+      "title": "Presence Sync Indicator",
+      "description": "Calm chip indicator for sync health — connected / syncing / reconnecting / offline.",
+      "files": [
+        {
+          "path": "registry/default/presence-sync-indicator/presence-sync-indicator.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
     },
     {
       "name": "progress-bar",

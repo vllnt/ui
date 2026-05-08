@@ -1,0 +1,57 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './presence-sync-indicator.stories'
+
+<Meta of={Stories} />
+
+# PresenceSyncIndicator
+
+Calm sync-health indicator for collaborative canvases. Surfaces connection state in a single chip without alerting on every transient blip — the indicator just renders the current status; debounce / animate transitions externally if you want to suppress flicker.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/presence-sync-indicator.json
+```
+
+## Import
+
+```tsx
+import { PresenceSyncIndicator } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PresenceSyncIndicator status="connected" detail="42 ms" />
+<PresenceSyncIndicator status="reconnecting" detail="Retrying…" />
+<PresenceSyncIndicator status="offline" iconOnly />
+```
+
+<Canvas of={Stories.Connected} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Status states
+
+`connected` (emerald) → `syncing` / `reconnecting` (animated dot) → `offline` (red).
+
+<Canvas of={Stories.Syncing} sourceState="shown" />
+
+<Canvas of={Stories.Reconnecting} sourceState="shown" />
+
+<Canvas of={Stories.Offline} sourceState="shown" />
+
+## Icon-only
+
+Drop the visible label for tight chrome surfaces. Screen readers still announce the status via an `sr-only` span.
+
+<Canvas of={Stories.IconOnly} sourceState="shown" />
+
+## Notes
+
+- The wrapper emits `data-sync-status` for analytics + CSS hooks.
+- Reuse this primitive in canvas chrome (top bar / bottom strip / dock corner). Keep one indicator per surface to stay calm.

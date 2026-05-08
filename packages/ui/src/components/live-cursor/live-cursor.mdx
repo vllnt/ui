@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './live-cursor.stories'
+
+<Meta of={Stories} />
+
+# LiveCursor
+
+Live remote cursor for a multi-user canvas. Pure presentation — position is set absolutely from `x` / `y` props. Pair with a presence channel (Liveblocks, Yjs, your own websocket) to drive the coordinates.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/live-cursor.json
+```
+
+## Import
+
+```tsx
+import { LiveCursor } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<LiveCursor x={remote.x} y={remote.y} label="Sam" color="emerald" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Cluster
+
+Render one cursor per remote participant.
+
+<Canvas of={Stories.Cluster} sourceState="shown" />
+
+## Notes
+
+- The component is pointer-event-transparent (\`pointer-events-none\`) so it never blocks the local pointer.
+- Absolute positioning is relative to the nearest positioned ancestor — wrap in a \`relative\` container.
+- The wrapper emits \`data-cursor-color\` for analytics + CSS hooks.

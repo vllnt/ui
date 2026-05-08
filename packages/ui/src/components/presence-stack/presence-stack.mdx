@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './presence-stack.stories'
+
+<Meta of={Stories} />
+
+# PresenceStack
+
+Compact stack of overlapping avatar chips for live participants on a canvas. Reach for this over a generic `AvatarGroup` when the surface needs **live presence status** (active / away / idle) and **click-to-focus** per member.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/presence-stack.json
+```
+
+## Import
+
+```tsx
+import { PresenceStack } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PresenceStack
+  members={[
+    { id: 'sam', name: 'Sam', color: 'emerald' },
+    { id: 'riley', name: 'Riley', status: 'idle' },
+    { id: 'wei', name: 'Wei', color: 'rose' },
+  ]}
+  max={4}
+  onSelect={(member) => focusOn(member.id)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Few members
+
+`max` collapses the tail into a `+N` chip when exceeded; with fewer members no overflow appears.
+
+<Canvas of={Stories.FewMembers} sourceState="shown" />
+
+## High overflow
+
+Tighter `max` produces a larger `+N` chip — useful when chrome real estate is scarce.
+
+<Canvas of={Stories.HighOverflow} sourceState="shown" />
+
+## Notes
+
+- Status dot maps to color: `active` → emerald, `away` → amber, `idle` → muted.
+- Initials are derived from the first two whitespace-separated parts of \`name\`.
+- Pass \`color\` to override the deterministic palette stop; otherwise a stable hash of \`id\` picks one of the 6 stops.
+- Each chip emits \`data-member-id\` and \`data-presence-status\`; the wrapper emits \`data-presence-count\`. The overflow chip emits \`data-overflow\`.
