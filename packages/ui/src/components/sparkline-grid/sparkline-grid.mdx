@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './sparkline-grid.stories'
+
+<Meta of={Stories} />
+
+# SparklineGrid
+
+Grid of compact sparkline charts — one mini line chart per row showing recent trend at a glance. Pure presentation; the host computes the per-row series.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/sparkline-grid.json
+```
+
+## Import
+
+```tsx
+import { SparklineGrid } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SparklineGrid rows={rows} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`MarketTreemap\` and \`OrderBook\` for a complete market overview.
+- Each row renders a name, the current value, the change, and the sparkline — keep the row count modest so the grid stays scannable.
