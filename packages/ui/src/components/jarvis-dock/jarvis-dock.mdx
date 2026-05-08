@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './jarvis-dock.stories'
+
+<Meta of={Stories} />
+
+# JarvisDock
+
+Floating bottom dock for the spatial canvas. Renders a compact row of agent / quick-action buttons plus a trailing command-palette trigger (⌘). Pure presentation; the host wires \`onActivate\` per action and \`onOpenPalette\` for the palette button.
+
+Pairs with the right-dock inspector primitives (\`ObjectInspector\`, \`PropertySection\`, \`RelationshipInspector\`, \`RuntimeOverviewPanel\`, \`RoutingAssignmentPanel\`, \`PolicyDeliveryPanel\`) to form the full canvas chrome.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/jarvis-dock.json
+```
+
+## Import
+
+```tsx
+import { JarvisDock } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<JarvisDock
+  actions={[
+    { id: "summon", glyph: "+", label: "Summon", tone: "primary",
+      onActivate: () => spawnAgent() },
+    { id: "review", glyph: "✓", label: "Review", tone: "success",
+      onActivate: () => openReview() },
+  ]}
+  onOpenPalette={() => openCommandPalette()}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## No palette
+
+Drop \`onOpenPalette\` to render the dock without the trailing ⌘ trigger.
+
+<Canvas of={Stories.NoPalette} sourceState="shown" />
+
+## With badges
+
+Each action accepts an optional \`badge\` slot — a count, dot, or short label rendered top-right.
+
+<Canvas of={Stories.WithBadges} sourceState="shown" />
+
+## Notes
+
+- Tone classes map: \`neutral\` (foreground) · \`primary\` (blue) · \`success\` (emerald) · \`danger\` (red).
+- Each action button emits \`data-jarvis-action\` (= id) + \`data-jarvis-tone\`. The wrapper emits \`data-jarvis-dock\`. Badges emit \`data-jarvis-badge\`. The palette trigger emits \`data-jarvis-palette-trigger\`.

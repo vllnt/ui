@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './context-lens.stories'
+
+<Meta of={Stories} />
+
+# ContextLens
+
+Vignette overlay that dims the canvas outside a circular focus region. Use to draw the eye to a selection, run, or recently-changed object. Pure presentation; the host computes the focus center + radii from the active selection's bounding box.
+
+The lens is \`pointer-events: none\` — host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/context-lens.json
+```
+
+## Import
+
+```tsx
+import { ContextLens } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <ContextLens focus={{ cx: 480, cy: 320, inner: 90, outer: 180 }} />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Tight focus
+
+Smaller \`inner\` + \`outer\` and higher \`opacity\` produce a sharp spotlight.
+
+<Canvas of={Stories.Tight} sourceState="shown" />
+
+## Soft focus
+
+Larger radii + lower \`opacity\` produce a gentle vignette that hints rather than commands attention.
+
+<Canvas of={Stories.Soft} sourceState="shown" />
+
+## Hidden
+
+\`focus={null}\` returns nothing — pass selection state directly without conditional wrapping.
+
+<Canvas of={Stories.Hidden} sourceState="shown" />
+
+## Notes
+
+- Negative or inverted radii are clamped: \`inner\` floors at \`0\`, \`outer\` floors at \`inner\`.
+- \`opacity\` is clamped into \`0..1\`.
+- Each render emits \`data-context-lens\` plus \`data-context-lens-dim\` and \`data-context-lens-gradient\` for analytics + CSS hooks.
