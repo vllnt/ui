@@ -760,6 +760,24 @@ export {
   type ObjectCardProps,
 } from "./object-card";
 export { ObjectHandle, type ObjectHandleProps } from "./object-handle";
+export {
+  PresenceStack,
+  type PresenceStackLabels,
+  type PresenceStackProps,
+  type PresenceStatus,
+  type PresenceUser,
+} from "./presence-stack";
+export {
+  SelectionPresence,
+  type SelectionPresenceLabels,
+  type SelectionPresenceProps,
+} from "./selection-presence";
+export {
+  ThreadBubble,
+  type ThreadBubbleLabels,
+  type ThreadBubbleProps,
+  type ThreadMessage,
+} from "./thread-bubble";
 
 // AI/Chat components
 export {
