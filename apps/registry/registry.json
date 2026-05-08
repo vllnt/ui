@@ -967,6 +967,21 @@
       "category": "overlay"
     },
     {
+      "name": "infinite-plane",
+      "type": "registry:component",
+      "title": "Infinite Plane",
+      "description": "Tiled pannable backdrop for the canvas with dot or grid pattern that drifts with the viewport.",
+      "files": [
+        {
+          "path": "registry/default/infinite-plane/infinite-plane.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "inline-input",
       "type": "registry:component",
       "title": "Inline Input",
@@ -2330,6 +2345,21 @@
       "category": "navigation"
     },
     {
+      "name": "viewport-bookmarks",
+      "type": "registry:component",
+      "title": "Viewport Bookmarks",
+      "description": "Saved-view list for the canvas — pinned spatial locations with optional active state.",
+      "files": [
+        {
+          "path": "registry/default/viewport-bookmarks/viewport-bookmarks.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "wallet-card",
       "type": "registry:component",
       "title": "Wallet Card",
@@ -2367,6 +2397,21 @@
       "files": [
         {
           "path": "registry/default/workspace-switcher/workspace-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
+      "name": "world-breadcrumbs",
+      "type": "registry:component",
+      "title": "World Breadcrumbs",
+      "description": "Spatial trail showing the canvas's current location in a hierarchy of worlds, groups, and runs.",
+      "files": [
+        {
+          "path": "registry/default/world-breadcrumbs/world-breadcrumbs.tsx",
           "type": "registry:component"
         }
       ],

@@ -359,6 +359,12 @@ export {
   type ChatDockSectionProps,
 } from "./chat-dock-section";
 export { GlassPanel, type GlassPanelProps } from "./glass-panel";
+export {
+  InfinitePlane,
+  type InfinitePlaneLabels,
+  type InfinitePlanePattern,
+  type InfinitePlaneProps,
+} from "./infinite-plane";
 export { LeftRail, type LeftRailProps } from "./left-rail";
 export {
   type MiniMapMarker,
@@ -385,6 +391,19 @@ export type { SidebarItem, SidebarSection } from "./sidebar";
 export { SidebarProvider, useSidebar } from "./sidebar-provider";
 export { TableOfContents } from "./table-of-contents";
 export { TopBar, type TopBarProps } from "./top-bar";
+export {
+  type ViewportBookmark,
+  ViewportBookmarks,
+  type ViewportBookmarksLabels,
+  type ViewportBookmarksProps,
+} from "./viewport-bookmarks";
+export {
+  WorldBreadcrumbs,
+  type WorldBreadcrumbsLabels,
+  type WorldBreadcrumbsProps,
+  type WorldCrumb,
+  type WorldCrumbKind,
+} from "./world-breadcrumbs";
 export { ZoomHUD, type ZoomHUDProps } from "./zoom-hud";
 
 // Blog components

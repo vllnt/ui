@@ -1,0 +1,62 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './infinite-plane.stories'
+
+<Meta of={Stories} />
+
+# InfinitePlane
+
+Tiled pannable backdrop for the canvas. Renders a \`dot\` or \`grid\` pattern that drifts with the viewport translate and scales with the zoom, plus a slot for spatial children that share its coordinate space.
+
+Pure presentation; the host owns the viewport transform and supplies \`translate\` + \`zoom\` from its pan / zoom controller.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/infinite-plane.json
+```
+
+## Import
+
+```tsx
+import { InfinitePlane } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<InfinitePlane translate={{ x: pan.x, y: pan.y }} zoom={zoom}>
+  <ObjectCard …/>
+  <ObjectCard …/>
+</InfinitePlane>
+```
+
+<Canvas of={Stories.Dot} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Grid pattern
+
+Switch the backdrop to a thin line grid for surfaces that prefer rectilinear cues.
+
+<Canvas of={Stories.Grid} sourceState="shown" />
+
+## Blank
+
+Drop the pattern entirely for a clean surface — the slot still positions children in the same coordinate space.
+
+<Canvas of={Stories.Blank} sourceState="shown" />
+
+## Zoomed and panned
+
+The plane scales the pattern by \`zoom\` and offsets it by \`translate\` so the dots / lines feel anchored to the world rather than the screen.
+
+<Canvas of={Stories.ZoomedAndPanned} sourceState="shown" />
+
+## Notes
+
+- Spacing floors at 4 px; zoom clamps to the 0.1 .. 10 range.
+- Each render emits \`data-infinite-plane\` + \`data-infinite-plane-pattern\` for analytics + CSS hooks.

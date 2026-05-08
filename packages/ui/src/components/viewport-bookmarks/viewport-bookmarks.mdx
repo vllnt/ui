@@ -1,0 +1,64 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './viewport-bookmarks.stories'
+
+<Meta of={Stories} />
+
+# ViewportBookmarks
+
+Saved-view list for the canvas — the spatial equivalent of a tab bar's pinned tabs. Each bookmark stores a viewport target the host resolves to a pan / zoom transition. Pure presentation; the host owns the bookmark store and the camera animation.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/viewport-bookmarks.json
+```
+
+## Import
+
+```tsx
+import { ViewportBookmarks } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ViewportBookmarks
+  activeId={active}
+  bookmarks={[
+    { id: "home",      label: "Home base", color: "#5b8def" },
+    { id: "incidents", label: "Incidents", detail: "5 open", color: "#ef4444" },
+  ]}
+  onSelect={jumpTo}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty
+
+When the host has no saved views yet, the panel renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## No active
+
+Drop \`activeId\` for a list with no row in the selected state.
+
+<Canvas of={Stories.NoActive} sourceState="shown" />
+
+## Read-only
+
+Drop \`onSelect\` and rows render as plain spans (no hover, no button semantics).
+
+<Canvas of={Stories.ReadOnly} sourceState="shown" />
+
+## Notes
+
+- \`color\` accepts any CSS color value (hex / oklch / var). Defaults to \`var(--foreground)\`.
+- Each row emits \`data-viewport-bookmark\` set to the bookmark id, plus \`data-viewport-bookmark-active\`. The optional detail line emits \`data-viewport-bookmark-detail\`. The wrapper emits \`data-viewport-bookmarks\`.
