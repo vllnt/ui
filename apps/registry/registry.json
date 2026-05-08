@@ -1038,6 +1038,21 @@
       "category": "form"
     },
     {
+      "name": "gantt-chart",
+      "type": "registry:component",
+      "title": "Gantt Chart",
+      "description": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales.",
+      "files": [
+        {
+          "path": "registry/default/gantt-chart/gantt-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "geography-quiz-map",
       "type": "registry:component",
       "title": "Geography Quiz Map",
