@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './runtime-overview-panel.stories'
+
+<Meta of={Stories} />
+
+# RuntimeOverviewPanel
+
+Top-of-dock summary for the runtime when nothing on the canvas is selected. Renders a compact 2-column grid of metric tiles — active runs, throughput, error rate, latency. Pure presentation; the host computes the metric list from the runtime stream.
+
+Pairs with \`ObjectInspector\`: when a canvas object becomes the focus, swap to \`ObjectInspector\`; when selection clears, fall back to \`RuntimeOverviewPanel\`.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/runtime-overview-panel.json
+```
+
+## Import
+
+```tsx
+import { RuntimeOverviewPanel } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<RuntimeOverviewPanel
+  metrics={[
+    { id: "runs", label: "Active runs", value: 3, tone: "success" },
+    { id: "errs", label: "Errors / hr", value: 0, tone: "neutral", trend: "flat" },
+    { id: "tps",  label: "Throughput",  value: "120 / s", tone: "success", trend: "up" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty state
+
+When the metric list is empty, the panel renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## All healthy
+
+\`tone: "success"\` across the grid renders a uniformly green dot row.
+
+<Canvas of={Stories.AllHealthy} sourceState="shown" />
+
+## Degraded
+
+Mixed tones (\`warn\`, \`danger\`) communicate degradation without shouting.
+
+<Canvas of={Stories.Degraded} sourceState="shown" />
+
+## Notes
+
+- Tone dots map: \`neutral\` (muted) · \`success\` (emerald) · \`warn\` (amber) · \`danger\` (red).
+- Trend glyphs map: \`up\` ↑ · \`flat\` · · \`down\` ↓.
+- Each tile emits \`data-runtime-metric\` (= id) + \`data-runtime-tone\` for analytics + CSS hooks. The grid emits \`data-runtime-grid\`.

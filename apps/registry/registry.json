@@ -1557,6 +1557,21 @@
       "category": "utility"
     },
     {
+      "name": "policy-delivery-panel",
+      "type": "registry:component",
+      "title": "Policy Delivery Panel",
+      "description": "Right-dock panel listing policies / guardrails active for the route or run.",
+      "files": [
+        {
+          "path": "registry/default/policy-delivery-panel/policy-delivery-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "title": "Popover",
@@ -1752,6 +1767,21 @@
       "category": "content"
     },
     {
+      "name": "routing-assignment-panel",
+      "type": "registry:component",
+      "title": "Routing Assignment Panel",
+      "description": "Right-dock panel listing the agent slots an active route dispatches to.",
+      "files": [
+        {
+          "path": "registry/default/routing-assignment-panel/routing-assignment-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "run-timeline",
       "type": "registry:component",
       "title": "Run Timeline",
@@ -1765,6 +1795,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "runtime-overview-panel",
+      "type": "registry:component",
+      "title": "Runtime Overview Panel",
+      "description": "Top-of-dock summary tile grid for runtime health when no canvas object is selected.",
+      "files": [
+        {
+          "path": "registry/default/runtime-overview-panel/runtime-overview-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "scope-selector",
