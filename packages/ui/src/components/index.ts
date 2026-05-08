@@ -287,6 +287,17 @@ export {
   TableHeader,
   TableRow,
 } from "./table";
+export {
+  Timeline,
+  type TimelineColor,
+  TimelineItem,
+  type TimelineItemProps,
+  type TimelineItemStatus,
+  type TimelineOrientation,
+  type TimelineProps,
+  timelineVariants,
+  useTimelineOrientation,
+} from "./timeline";
 export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 export {
   AvatarGroup,

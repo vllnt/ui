@@ -1,0 +1,81 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './timeline.stories'
+
+<Meta of={Stories} />
+
+# Timeline
+
+Vertical or horizontal timeline of sequential events. Renders an ordered list (`<ol>`), so the order matters semantically.
+
+A small compound family:
+
+- `Timeline` — root container; orientation drives the layout and the connector direction.
+- `TimelineItem` — one row; status (`completed` / `active` / `upcoming`) drives the marker fill and the connector style (solid for completed/active, dashed for upcoming). Set `isLast` on the trailing item to suppress its connector.
+- `useTimelineOrientation` — hook for any custom child that needs to adapt its layout to the surrounding orientation.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/timeline.json
+```
+
+## Import
+
+```tsx
+import { Timeline, TimelineItem } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Timeline>
+  <TimelineItem
+    title="Project started"
+    date="Jan 2026"
+    status="completed"
+    description="Initial planning and team formation."
+  />
+  <TimelineItem
+    title="V2 release"
+    date="Jul 2026"
+    status="active"
+    description="Major redesign with new features."
+  />
+  <TimelineItem
+    title="Public release"
+    date="Q4 2026"
+    isLast
+    status="upcoming"
+  />
+</Timeline>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Horizontal
+
+<Canvas of={Stories.Horizontal} sourceState="shown" />
+
+## Rich content
+
+Pass children to a `TimelineItem` for rich content (lists, code blocks, embedded components).
+
+<Canvas of={Stories.WithRichContent} sourceState="shown" />
+
+## Color overrides
+
+`color` overrides the marker fill independent of `status` for cases where the status palette is not granular enough.
+
+<Canvas of={Stories.ColorOverrides} sourceState="shown" />
+
+## Notes
+
+- Set `isLast` on the trailing item to drop the connector line below / right of the marker.
+- Connectors render solid for `completed` / `active` and dashed for `upcoming` — this matches the prevailing pattern in Mantine and Chakra.
+- Alternating sides, collapsible content, and responsive horizontal → vertical reflow are intentionally **out of scope** — drive them from consumer CSS.
