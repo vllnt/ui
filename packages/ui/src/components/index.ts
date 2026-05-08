@@ -139,6 +139,13 @@ export { Slider } from "./slider";
 export { Toggle, toggleVariants } from "./toggle";
 export { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 export {
+  type TreeNode,
+  TreeView,
+  type TreeViewLabels,
+  type TreeViewProps,
+  type TreeViewSelectionMode,
+} from "./tree-view";
+export {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
