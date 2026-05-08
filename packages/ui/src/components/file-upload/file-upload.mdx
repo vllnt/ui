@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './file-upload.stories'
+
+<Meta of={Stories} />
+
+# FileUpload
+
+Drag-and-drop or click-to-browse file input with preview thumbnails and per-file progress / status. Pure presentation; the host wires the actual upload pipeline.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/file-upload.json
+```
+
+## Import
+
+```tsx
+import { FileUpload } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<FileUpload
+  accept="image/*"
+  multiple
+  onFiles={uploadFiles}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`Progress\` for per-file upload progress and \`Toast\` for success / error feedback.
+- The host controls retry / cancel — the component surfaces the affordances but does not own the network.

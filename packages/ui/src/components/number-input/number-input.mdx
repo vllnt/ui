@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './number-input.stories'
+
+<Meta of={Stories} />
+
+# NumberInput
+
+Numeric input with increment / decrement buttons, min / max clamping, and optional step. Pure presentation; the host owns the value.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/number-input.json
+```
+
+## Import
+
+```tsx
+import { NumberInput } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<NumberInput
+  value={count}
+  onValueChange={setCount}
+  min={0}
+  max={10}
+  step={1}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The component clamps the value to the \`min\` / \`max\` range and respects \`step\` for the buttons.
+- Pair with \`Form\` for labelled and validated numeric fields.
