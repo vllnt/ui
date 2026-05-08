@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './annotation.stories'
+
+<Meta of={Stories} />
+
+# Annotation
+
+Inline annotation overlay — short note anchored to a target element with optional pointer arrow. Use to highlight a value, explain a glyph, or call out an interactive element. Pure presentation; the host owns the anchor + visibility state.
+
+Distinct from \`Tooltip\` (transient hover) and \`CommentPin\` (canvas-anchored thread): \`Annotation\` is durable inline copy attached to layout, not a thread.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/annotation.json
+```
+
+## Import
+
+```tsx
+import { Annotation } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Annotation
+  anchor="top-right"
+  text="Tap any tile to drill in"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`Tour\` for guided sequences and \`KeyboardShortcutsHelp\` for accessory hints.

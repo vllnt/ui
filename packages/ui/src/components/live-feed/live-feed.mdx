@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './live-feed.stories'
+
+<Meta of={Stories} />
+
+# LiveFeed
+
+Rolling activity stream for surfacing incidents, deploys, and operational signals in real time. Pure presentation; the host owns the websocket / event source.
+
+Distinct from \`ActivityLog\` (durable persistent list) and \`BottomActivityStrip\` (slim canvas chrome): \`LiveFeed\` is the full-height stream typically pinned in a side panel.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/live-feed.json
+```
+
+## Import
+
+```tsx
+import { LiveFeed } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<LiveFeed events={events} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`SeverityBadge\` for incident chips and \`StatusBoard\` for the service-health grid.
+- The feed scrolls within its own container so the surrounding layout stays calm.

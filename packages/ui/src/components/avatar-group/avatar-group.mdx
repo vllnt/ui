@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './avatar-group.stories'
+
+<Meta of={Stories} />
+
+# AvatarGroup
+
+Static stacked avatar group — overlapping circular avatars with a sane overflow chip. Pure presentation; the host computes the participant list.
+
+Distinct from \`PresenceStack\` (live status + colors): \`AvatarGroup\` is the durable participant grouping with no live presence semantics.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/avatar-group.json
+```
+
+## Import
+
+```tsx
+import { AvatarGroup } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AvatarGroup
+  max={4}
+  members={members}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`RoleBadge\` for member-row chips and \`PresenceStack\` for live presence variants.

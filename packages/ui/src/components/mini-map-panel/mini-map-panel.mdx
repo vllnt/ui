@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './mini-map-panel.stories'
+
+<Meta of={Stories} />
+
+# MiniMapPanel
+
+Birdseye overview of a \`CanvasView\` — a scaled rendering of the world with a viewport rectangle that the host syncs to the live camera. Pure presentation; the host computes the world extent and viewport rect.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/mini-map-panel.json
+```
+
+## Import
+
+```tsx
+import { MiniMapPanel } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<MiniMapPanel
+  world={worldExtent}
+  viewport={viewportRect}
+  markers={objectMarkers}
+  onJumpTo={(x, y) => view.panTo({ x, y })}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`CanvasView\`, \`ZoomHUD\`, and \`ViewportBookmarks\` to round out the navigation chrome.
+- Drop \`onJumpTo\` to render the minimap as a passive overview without click-to-navigate.
