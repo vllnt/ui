@@ -1147,6 +1147,21 @@
       "category": "navigation"
     },
     {
+      "name": "historic-timeline",
+      "type": "registry:component",
+      "title": "Historic Timeline",
+      "description": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers.",
+      "files": [
+        {
+          "path": "registry/default/historic-timeline/historic-timeline.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "hover-card",
       "type": "registry:component",
       "title": "Hover Card",
