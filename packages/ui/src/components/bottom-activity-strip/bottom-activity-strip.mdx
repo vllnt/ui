@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './bottom-activity-strip.stories'
+
+<Meta of={Stories} />
+
+# BottomActivityStrip
+
+Slim bottom strip showing a horizontally-scrolling row of recent canvas events. The lowest-noise live execution surface — keep \`ObjectCard\`, panels, and overlays for high-value surfaces; let the strip carry the steady drip of activity.
+
+Pure presentation; the host computes the event list (newest first) and supplies an optional \`onActivate\` per event to jump to the related object.
+
+Distinct from \`ActivityLog\` (vertical, persistent) and \`LiveFeed\` (full-height feed): this primitive is a single horizontal row that lives at the bottom of the canvas.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/bottom-activity-strip.json
+```
+
+## Import
+
+```tsx
+import { BottomActivityStrip } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<BottomActivityStrip
+  events={[
+    { id: "1", label: "deploy ok",   ts: "12s", tone: "success" },
+    { id: "2", label: "queue spike", ts: "1m",  tone: "warn" },
+  ]}
+  maxEvents={20}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty
+
+When the event list is empty, the strip renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Capped
+
+\`maxEvents\` caps the rendered chips and drops the tail silently — the host can keep its full event log without bloating the strip.
+
+<Canvas of={Stories.Capped} sourceState="shown" />
+
+## Non-interactive
+
+Drop \`onActivate\` and chips render as plain spans (no hover, no button semantics).
+
+<Canvas of={Stories.NonInteractive} sourceState="shown" />
+
+## Notes
+
+- Tones map: \`neutral\` (muted) · \`info\` (blue) · \`success\` (emerald) · \`warn\` (amber) · \`danger\` (red).
+- Each chip emits \`data-strip-event\` (= id) + \`data-strip-event-tone\`. The wrapper emits \`data-bottom-activity-strip\`. The empty placeholder emits \`data-strip-state="empty"\`.

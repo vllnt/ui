@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './timeline-scrubber.stories'
+
+<Meta of={Stories} />
+
+# TimelineScrubber
+
+Range slider for scrubbing through canvas state playback. Renders a thin track with optional milestone ticks plus the current value cursor; the underlying native range input keeps keyboard + pointer + screen-reader semantics for free.
+
+Pure presentation; the host owns the value + drives playback in its own loop. Pair with \`PlaybackGhost\` to fade the canvas back to historical state as the user scrubs.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/timeline-scrubber.json
+```
+
+## Import
+
+```tsx
+import { TimelineScrubber } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TimelineScrubber
+  start={0} end={3600}
+  value={cursor}
+  onValueChange={setCursor}
+  ticks={milestones}
+  formatValue={(v) => formatDuration(v)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## No ticks
+
+Drop \`ticks\` to render a clean track with just start / cursor / end labels.
+
+<Canvas of={Stories.NoTicks} sourceState="shown" />
+
+## Warning tone
+
+\`tone="warn"\` shifts the filled track + cursor toward amber — useful when scrubbing into a degraded window.
+
+<Canvas of={Stories.Warning} sourceState="shown" />
+
+## Raw values
+
+Drop \`formatValue\` to fall back to plain numeric labels.
+
+<Canvas of={Stories.RawValues} sourceState="shown" />
+
+## Notes
+
+- Tones map: \`neutral\` (foreground) · \`primary\` (blue, default) · \`success\` (emerald) · \`warn\` (amber) · \`danger\` (red).
+- Value clamps to the \`start..end\` range; when \`end\` is not greater than \`start\`, the component falls back to a 1-unit span so the slider remains operable.
+- Each render emits \`data-timeline-scrubber\` + \`data-timeline-tone\`. The cursor / endpoints emit \`data-timeline-scrubber-cursor\`, \`data-timeline-scrubber-start\`, \`data-timeline-scrubber-end\`. Ticks emit \`data-scrubber-tick\` set to the tick id + \`data-scrubber-tick-tone\`.
