@@ -1119,6 +1119,21 @@ export {
 } from "./conversation-thread";
 export { InlineInput, type InlineInputProps } from "./inline-input";
 export {
+  InteractiveTimeline,
+  type InteractiveTimelineCategory,
+  type InteractiveTimelineColor,
+  type InteractiveTimelineEvent,
+  InteractiveTimelineFilter,
+  type InteractiveTimelineFilterProps,
+  type InteractiveTimelineLabels,
+  type InteractiveTimelineProps,
+  InteractiveTimelineToday,
+  InteractiveTimelineToolbar,
+  type InteractiveTimelineTrack,
+  InteractiveTimelineZoomIn,
+  InteractiveTimelineZoomOut,
+} from "./interactive-timeline";
+export {
   type ModelInfo,
   ModelSelector,
   type ModelSelectorProps,

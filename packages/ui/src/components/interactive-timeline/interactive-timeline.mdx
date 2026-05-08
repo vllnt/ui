@@ -1,0 +1,114 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './interactive-timeline.stories'
+
+<Meta of={Stories} />
+
+# InteractiveTimeline
+
+Zoomable, pannable, multi-track timeline for data-rich domains — release feeds, incident logs, project roadmaps, activity histories. Drag to pan, click an event to select it, use the toolbar buttons to zoom or jump to today. A category filter chip row toggles event visibility.
+
+Compound family: `InteractiveTimeline` + `InteractiveTimelineToolbar`, `InteractiveTimelineZoomIn`, `InteractiveTimelineZoomOut`, `InteractiveTimelineToday`, `InteractiveTimelineFilter`.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/interactive-timeline.json
+```
+
+## Import
+
+```tsx
+import {
+  InteractiveTimeline,
+  InteractiveTimelineFilter,
+  InteractiveTimelineToday,
+  InteractiveTimelineToolbar,
+  InteractiveTimelineZoomIn,
+  InteractiveTimelineZoomOut,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const tracks = [
+  { id: 'release', label: 'Releases', color: 'blue' },
+  { id: 'incident', label: 'Incidents', color: 'red' },
+]
+
+const events = [
+  {
+    id: 'v1',
+    title: 'v1.0',
+    startDate: new Date('2024-06-01'),
+    track: 'release',
+    category: 'release',
+  },
+  {
+    id: 'incident-1',
+    title: 'Outage',
+    startDate: new Date('2024-08-10'),
+    endDate: new Date('2024-08-12'),
+    track: 'incident',
+    category: 'incident',
+  },
+]
+
+const categories = [
+  { id: 'release', label: 'Release', color: 'blue' },
+  { id: 'incident', label: 'Incident', color: 'red' },
+]
+
+<InteractiveTimeline
+  startDate={new Date('2024-01-01')}
+  endDate={new Date('2025-01-01')}
+  tracks={tracks}
+  events={events}
+  categories={categories}
+  onEventClick={(event) => console.info(event.id)}
+>
+  <InteractiveTimelineToolbar>
+    <InteractiveTimelineZoomIn />
+    <InteractiveTimelineZoomOut />
+    <InteractiveTimelineToday />
+    <InteractiveTimelineFilter categories={categories} />
+  </InteractiveTimelineToolbar>
+</InteractiveTimeline>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Tracks group events into lanes
+
+Each event has an optional `track` matching a `tracks[].id`. Events without a track land in the first track. Track color drives the dot/bar color when no `category` or per-event `color` overrides it.
+
+## Categories drive the filter
+
+Pass `categories` and render `<InteractiveTimelineFilter categories={…} />` inside the toolbar. Each chip toggles visibility of events with the matching `category` id.
+
+## Point vs duration events
+
+Provide an `endDate` to render an event as a horizontal bar; omit it for a point dot.
+
+## Single track
+
+<Canvas of={Stories.SingleTrack} sourceState="shown" />
+
+## Tight window
+
+Narrow `startDate` / `endDate` to focus the lanes on a sub-range.
+
+<Canvas of={Stories.TightWindow} sourceState="shown" />
+
+## Notes
+
+- Drag horizontally inside the timeline to pan; the buttons drive zoom in discrete `2×` / `0.5×` steps with a `1×–32×` range.
+- The today marker renders if `Date.now()` is inside the `startDate` / `endDate` window. The today button centers the scroller on `Date.now()`.
+- Out of scope for the MVP: minimap, virtual rendering for 10k+ events, image export, pinch-to-zoom. Pan + button zoom + filter cover the data-rich case for the first cut.
+- Event markers emit `data-event-id`, `data-event-track`, and (when selected) `data-selected="true"` for analytics; filter chips emit `data-category-id`; track rows emit `data-track-id`.
