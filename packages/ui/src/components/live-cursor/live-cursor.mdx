@@ -1,0 +1,56 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './live-cursor.stories'
+
+<Meta of={Stories} />
+
+# LiveCursor
+
+Remote user's cursor rendered at canvas coordinates with an optional name + status chip. Pure presentation; the host owns the websocket stream + maps user ids to colors.
+
+The wrapper is \`pointer-events: none\` so host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/live-cursor.json
+```
+
+## Import
+
+```tsx
+import { LiveCursor } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <LiveCursor x={420} y={180} name="Bea" color="#5b8def" />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## With status
+
+Pass \`status\` to render a secondary line in the chip — e.g. \`"editing"\`, \`"idle"\`, role / object id.
+
+<Canvas of={Stories.WithStatus} sourceState="shown" />
+
+## Chip hidden
+
+Pass \`name={null}\` for a pure pointer (useful when the chip would clutter dense canvases or duplicate \`PresenceStack\`).
+
+<Canvas of={Stories.ChipHidden} sourceState="shown" />
+
+## Notes
+
+- \`color\` accepts any CSS color value (hex, \`oklch(...)\`, \`var(--my-color)\`). Defaults to \`var(--foreground)\`.
+- Each render emits \`data-live-cursor\`. The pointer emits \`data-live-cursor-pointer\`; the chip emits \`data-live-cursor-chip\`; the optional status line emits \`data-live-cursor-status\`.

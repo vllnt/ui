@@ -1,0 +1,60 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './presence-sync-indicator.stories'
+
+<Meta of={Stories} />
+
+# PresenceSyncIndicator
+
+Compact pill that surfaces live connection + sync health for the canvas. Stays calm: a single dot + one-line label, with a subtle pulse for transient \`syncing\` / \`reconnecting\` states.
+
+Pure presentation; the host owns the websocket / CRDT loop and maps its diagnostics into one of five canonical states.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/presence-sync-indicator.json
+```
+
+## Import
+
+```tsx
+import { PresenceSyncIndicator } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PresenceSyncIndicator state="live" status="3 peers" />
+<PresenceSyncIndicator state="reconnecting" status="retry 2/5" />
+```
+
+<Canvas of={Stories.Live} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Syncing
+
+Transient state during diff propagation — the dot pulses blue.
+
+<Canvas of={Stories.Syncing} sourceState="shown" />
+
+## Reconnecting
+
+The dot pulses amber while the host attempts to restore the websocket — pair with a retry counter in \`status\` so users know progress is happening.
+
+<Canvas of={Stories.Reconnecting} sourceState="shown" />
+
+## Offline
+
+Calm muted dot. The host should pair this with a small banner if write actions need to queue locally.
+
+<Canvas of={Stories.Offline} sourceState="shown" />
+
+## Notes
+
+- States map: \`live\` (emerald) · \`syncing\` (blue, pulsing) · \`reconnecting\` (amber, pulsing) · \`offline\` (muted) · \`error\` (red).
+- Each render emits \`data-presence-sync\` + \`data-presence-state\`. The dot emits \`data-presence-sync-dot\`; the optional secondary line emits \`data-presence-sync-status\`.

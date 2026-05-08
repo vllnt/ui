@@ -1,0 +1,69 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './comment-pin.stories'
+
+<Meta of={Stories} />
+
+# CommentPin
+
+Anchored discussion pin rendered at canvas coordinates. Use to mark an object-anchored comment thread; click to expand into a \`ThreadBubble\` (or whatever the host wires up).
+
+Pure presentation; the host owns the thread store + supplies the unread count and resolution state.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/comment-pin.json
+```
+
+## Import
+
+```tsx
+import { CommentPin } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <CommentPin
+    x={420} y={180}
+    authorInitial="B"
+    unread={3}
+    onActivate={() => openThread("c-1")}
+  />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Resolved
+
+A resolved thread renders in muted tones — present on the canvas for context, but quiet.
+
+<Canvas of={Stories.Resolved} sourceState="shown" />
+
+## No unread
+
+When the unread count is zero or omitted, no badge renders.
+
+<Canvas of={Stories.NoUnread} sourceState="shown" />
+
+## Non-interactive
+
+Drop \`onActivate\` and the pin renders as a plain span (no button semantics, no focus ring).
+
+<Canvas of={Stories.NonInteractive} sourceState="shown" />
+
+## Notes
+
+- States map: \`open\` (foreground / accent fill) · \`resolved\` (muted).
+- \`color\` overrides the open-state fill for author / theme color coding.
+- Pin centers on \`(x, y)\` via translate \`-50% / -50%\`.
+- Each render emits \`data-comment-pin\` + \`data-comment-pin-state\`. The body emits \`data-comment-pin-body\`; the unread badge emits \`data-comment-pin-unread\`; the click trigger emits \`data-comment-pin-trigger\`.

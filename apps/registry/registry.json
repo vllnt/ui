@@ -583,6 +583,21 @@
       "category": "overlay"
     },
     {
+      "name": "comment-pin",
+      "type": "registry:component",
+      "title": "Comment Pin",
+      "description": "Anchored discussion pin rendered at canvas coordinates with author + unread badge.",
+      "files": [
+        {
+          "path": "registry/default/comment-pin/comment-pin.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "comparison",
       "type": "registry:component",
       "title": "Comparison",
@@ -1117,6 +1132,21 @@
       "category": "data"
     },
     {
+      "name": "live-cursor",
+      "type": "registry:component",
+      "title": "Live Cursor",
+      "description": "Remote user's cursor rendered at canvas coordinates with name + status chip.",
+      "files": [
+        {
+          "path": "registry/default/live-cursor/live-cursor.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "live-feed",
       "type": "registry:component",
       "title": "Live Feed",
@@ -1429,6 +1459,21 @@
       "files": [
         {
           "path": "registry/default/presence-stack/presence-stack.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
+      "name": "presence-sync-indicator",
+      "type": "registry:component",
+      "title": "Presence Sync Indicator",
+      "description": "Compact pill that surfaces live connection + sync health for a collaborative canvas.",
+      "files": [
+        {
+          "path": "registry/default/presence-sync-indicator/presence-sync-indicator.tsx",
           "type": "registry:component"
         }
       ],
