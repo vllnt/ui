@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './flashcard.stories'
+
+<Meta of={Stories} />
+
+# Flashcard
+
+Two-sided card for spaced-repetition review — front holds the prompt, back holds the answer, click / tap or keyboard space to flip. Pure presentation; the host owns the deck and the current card index.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/flashcard.json
+```
+
+## Import
+
+```tsx
+import { Flashcard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Flashcard
+  front="What does \`pointer-events: none\` do?"
+  back="Lets host gestures pass through the element."
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`Curriculum\` for course-context decks and \`Quiz\` for graded review.
+- The flip animation respects \`prefers-reduced-motion\` so users with motion sensitivity see an instant flip.
