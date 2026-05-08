@@ -358,6 +358,17 @@ export {
   ChatDockSection,
   type ChatDockSectionProps,
 } from "./chat-dock-section";
+export {
+  Globe3D,
+  type Globe3DLabels,
+  type Globe3DProps,
+  GlobeArc,
+  type GlobeArcProps,
+  type GlobeColor,
+  type GlobeCoord,
+  GlobeMarker,
+  type GlobeMarkerProps,
+} from "./globe-3d";
 export { GlassPanel, type GlassPanelProps } from "./glass-panel";
 export {
   InfinitePlane,
