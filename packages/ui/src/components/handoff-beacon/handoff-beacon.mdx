@@ -1,0 +1,64 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './handoff-beacon.stories'
+
+<Meta of={Stories} />
+
+# HandoffBeacon
+
+Attention-routing beacon. Drop a beacon at the position a remote participant wants to redirect attention to — the local user sees a pulsing ring + optional message at that coordinate. Pure presentation; the host pipes the request through your realtime channel and unmounts the beacon on dismiss.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/handoff-beacon.json
+```
+
+## Import
+
+```tsx
+import { HandoffBeacon } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<HandoffBeacon
+  x={120}
+  y={80}
+  level="urgent"
+  source="Sam"
+  message="Take this — schema mismatch"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Levels
+
+`info` (blue), `request` (amber), `urgent` (red, pulsing).
+
+<Canvas of={Stories.Pulsing} sourceState="shown" />
+
+## Cluster
+
+Render one beacon per active handoff request.
+
+<Canvas of={Stories.Cluster} sourceState="shown" />
+
+## Anonymous
+
+Drop `source` to render a message-only card.
+
+<Canvas of={Stories.Anonymous} sourceState="shown" />
+
+## Notes
+
+- The wrapper is pointer-event-transparent so it never blocks the local pointer; the inner card is `pointer-events-auto` so it can be clicked / dismissed.
+- The wrapper emits `data-handoff-level`. The card emits `data-handoff-card` for analytics + CSS hooks.
+- Absolute positioning is relative to the nearest positioned ancestor — wrap in a `relative` container.

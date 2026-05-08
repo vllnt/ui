@@ -754,6 +754,18 @@ export {
   type HorizontalScrollRowProps,
 } from "./horizontal-scroll-row";
 export {
+  FollowMode,
+  type FollowModeColor,
+  type FollowModeLabels,
+  type FollowModeProps,
+} from "./follow-mode";
+export {
+  HandoffBeacon,
+  type HandoffBeaconLabels,
+  type HandoffBeaconLevel,
+  type HandoffBeaconProps,
+} from "./handoff-beacon";
+export {
   type ViewOption,
   ViewSwitcher,
   type ViewSwitcherProps,
