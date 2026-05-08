@@ -836,10 +836,10 @@ export {
   type ThreadMessage,
 } from "./thread-bubble";
 export {
+  TimelineScrubber,
   type TimelineScrubberLabels,
   type TimelineScrubberProps,
   type TimelineScrubberTone,
-  TimelineScrubber,
   type TimelineTick,
 } from "./timeline-scrubber";
 
