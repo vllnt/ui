@@ -337,6 +337,13 @@ export {
   ChoroplethTooltip,
   type ChoroplethTooltipProps,
 } from "./choropleth-map";
+export {
+  ChronoEvent,
+  type ChronoEventProps,
+  ChronologicalTimeline,
+  type ChronologicalTimelineProps,
+  type ChronoMedia,
+} from "./chronological-timeline";
 export { CountdownTimer, type CountdownTimerProps } from "./countdown-timer";
 export {
   type GeoJSONPolygon,

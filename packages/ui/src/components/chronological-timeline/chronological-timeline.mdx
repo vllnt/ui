@@ -1,0 +1,96 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './chronological-timeline.stories'
+
+<Meta of={Stories} />
+
+# ChronologicalTimeline
+
+Media-rich chronological timeline for storytelling — biographies, project histories, course "journey" pages, museum exhibits. Vertical column on mobile, alternating left/right cards on desktop. Each `ChronoEvent` accepts an image, video, or audio payload plus narrative children (paragraphs, blockquotes, lists).
+
+The active event is tracked via `IntersectionObserver`; the progress strip at the top reflects how far the reader has scrolled.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/chronological-timeline.json
+```
+
+## Import
+
+```tsx
+import { ChronologicalTimeline, ChronoEvent } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ChronologicalTimeline title="The Space Race">
+  <ChronoEvent
+    date="October 4, 1957"
+    id="sputnik"
+    title="Sputnik 1"
+    subtitle="First artificial satellite"
+    media={{
+      type: 'image',
+      src: '/sputnik.jpg',
+      alt: 'Sputnik satellite',
+      credit: 'NASA',
+    }}
+  >
+    <p>The Soviet Union launched Sputnik 1, kicking off the space age.</p>
+    <blockquote>That ball in the sky changed everything.</blockquote>
+  </ChronoEvent>
+
+  <ChronoEvent
+    date="July 20, 1969"
+    id="apollo"
+    title="Apollo 11"
+    subtitle="First crewed Moon landing"
+    featured
+    media={{
+      type: 'video',
+      src: 'https://example.test/embed/apollo',
+      title: 'Apollo 11 footage',
+    }}
+  >
+    <p>Neil Armstrong and Buzz Aldrin walked on the Moon...</p>
+  </ChronoEvent>
+</ChronologicalTimeline>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## With image media
+
+`media.type === 'image'` requires an `alt` attribute. `caption` and `credit` are optional and render in a figcaption strip beneath the image.
+
+<Canvas of={Stories.WithImageMedia} sourceState="shown" />
+
+## Featured events
+
+Pass `featured` to bump the card size and emphasis ring — useful for pivot points in the narrative.
+
+## Compact (no media or copy)
+
+A bare-bones run with date and title only.
+
+<Canvas of={Stories.Compact} sourceState="shown" />
+
+## Untitled
+
+Drop the `title` prop for embeds inside an outer page header.
+
+<Canvas of={Stories.Untitled} sourceState="shown" />
+
+## Notes
+
+- Stable, human-readable `id`s on each `ChronoEvent` enable deep links — drop the prop to fall back to a generated id.
+- Alternating sides are driven by even/odd index — odd children render on the right via the `data-side="right"` attribute on the `<li>` wrapper.
+- Out of scope for the MVP: fullscreen-per-event mode, share / deep-link UI, jump-to-event keyboard shortcuts, and print-only export. Hosting frameworks can wire those on top of the rendered DOM.
+- Event cards emit `data-event-id` (and `data-featured="true"` when applicable). The list wrapper emits `data-side="left"|"right"` and `data-active="true"` on whichever event is currently in view.
