@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './usage-breakdown.stories'
+
+<Meta of={Stories} />
+
+# UsageBreakdown
+
+Stacked horizontal bar showing how a usage budget breaks down across categories — included quota, on-demand consumption, projected overage. Pure presentation; the host computes the segments.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/usage-breakdown.json
+```
+
+## Import
+
+```tsx
+import { UsageBreakdown } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<UsageBreakdown
+  total={1_000_000}
+  segments={[
+    { id: "included", label: "Included",  value: 600_000 },
+    { id: "ondemand", label: "On-demand", value: 250_000 },
+    { id: "overage",  label: "Overage",   value: 50_000, tone: "warn" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`SubscriptionCard\` or \`WalletCard\` for the billing context tile.
+- Segments render in declared order — pass them in the order the user should read.

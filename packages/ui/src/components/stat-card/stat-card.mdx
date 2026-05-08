@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './stat-card.stories'
+
+<Meta of={Stories} />
+
+# StatCard
+
+Headline KPI tile — a single metric value with label, optional trend delta, and optional supporting context (sparkline slot, footer note). Pure presentation; the host computes the metric from the data store.
+
+Distinct from \`ObjectCard\` (canvas runtime object) and \`OverviewCard\` (overview-board cell): \`StatCard\` is the dashboard-style hero tile.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/stat-card.json
+```
+
+## Import
+
+```tsx
+import { StatCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<StatCard
+  label="Active runs"
+  value="240"
+  delta={{ value: "+12 %", direction: "up" }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`SparklineGrid\` or a slotted sparkline for a quick trend cue.
+- Use \`OverviewBoard\` to lay out a row of stat cards with consistent spacing.

@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './metric-gauge.stories'
+
+<Meta of={Stories} />
+
+# MetricGauge
+
+Real-time arc / dial display for a single percentage or utilization metric. Pure presentation; the host owns the live value and tone.
+
+Distinct from \`ThresholdRing\` (compact canvas overlay): \`MetricGauge\` is a dashboard-tile-scale gauge with a center value + optional label.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/metric-gauge.json
+```
+
+## Import
+
+```tsx
+import { MetricGauge } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<MetricGauge
+  value={0.82}
+  label="Capacity"
+  centerLabel="82 %"
+  tone="warn"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatCard\` and \`OverviewBoard\` to anchor the gauge inside a metric tile.
+- The host should clamp the value to \`0..1\` (the gauge clamps too, but staying explicit keeps intent clear).
