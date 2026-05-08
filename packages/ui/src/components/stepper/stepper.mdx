@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './stepper.stories'
+
+<Meta of={Stories} />
+
+# Stepper
+
+Sequenced step indicator — complete / current / upcoming states with optional labels and connector lines. Pure presentation; the host owns the step list and the active step.
+
+Distinct from \`StepNavigation\` (free-form step list) and \`StepByStep\` (tutorial-style stepper): \`Stepper\` is the lightweight sequential indicator suited to wizards and onboarding.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/stepper.json
+```
+
+## Import
+
+```tsx
+import { Stepper } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Stepper
+  steps={steps}
+  activeStep={activeIndex}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`Tour\` for fully-guided sequences and \`Form\` for multi-step form wizards.
