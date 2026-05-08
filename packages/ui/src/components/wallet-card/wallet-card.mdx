@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './wallet-card.stories'
+
+<Meta of={Stories} />
+
+# WalletCard
+
+Credit-balance tile showing available, pending, and last-refreshed details for a usage-based account. Pure presentation; the host computes the balances and refresh state.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/wallet-card.json
+```
+
+## Import
+
+```tsx
+import { WalletCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<WalletCard
+  available={1240}
+  pending={80}
+  refreshedAt="3m ago"
+  onTopUp={openTopUp}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`CreditBadge\` for the inline pill and \`UsageBreakdown\` for the budget bar.

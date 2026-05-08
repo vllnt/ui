@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tour.stories'
+
+<Meta of={Stories} />
+
+# Tour
+
+Guided product tour — sequence of anchored tooltips highlighting key UI elements with progress + skip / next controls. Pure presentation; the host owns the step list and the active step.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/tour.json
+```
+
+## Import
+
+```tsx
+import { Tour } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Tour
+  steps={steps}
+  activeStep={step}
+  onStepChange={setStep}
+  onComplete={dismissTour}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`KeyboardShortcutsHelp\` for the keyboard map and \`TutorialCard\` for inline learn-by-doing surfaces.
+- The host stores tour-completion state — the component does not assume a persistence layer.

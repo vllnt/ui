@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './subscription-card.stories'
+
+<Meta of={Stories} />
+
+# SubscriptionCard
+
+Subscription summary tile — current plan, renewal date, billing cycle, and a primary upgrade or manage action. Pure presentation; the host computes the values from the billing store.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/subscription-card.json
+```
+
+## Import
+
+```tsx
+import { SubscriptionCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SubscriptionCard
+  plan="Pro"
+  status="active"
+  renewsAt="2026-06-01"
+  onManage={openBilling}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`PlanBadge\`, \`UsageBreakdown\`, and \`WalletCard\` for the full billing surface.

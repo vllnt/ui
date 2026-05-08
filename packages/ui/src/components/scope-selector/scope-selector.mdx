@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './scope-selector.stories'
+
+<Meta of={Stories} />
+
+# ScopeSelector
+
+Multi-level scope picker for nested environments, teams, or targets. Renders as a chain of dropdowns or a single popover with a hierarchical tree. Pure presentation; the host owns the scope tree and the selected path.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/scope-selector.json
+```
+
+## Import
+
+```tsx
+import { ScopeSelector } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ScopeSelector
+  tree={tree}
+  path={selectedPath}
+  onPathChange={setPath}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`WorkspaceSwitcher\` for the top-level workspace switch and \`Combobox\` for free-text scope entry.
