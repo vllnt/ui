@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './activity-log.stories'
+
+<Meta of={Stories} />
+
+# ActivityLog
+
+Vertical persistent activity log — a chronological list of events with author, timestamp, and message. Pure presentation; the host computes the entries from the audit / event store.
+
+Distinct from \`LiveFeed\` (full-height live event stream) and \`BottomActivityStrip\` (slim canvas event row): \`ActivityLog\` is the durable list, typically paginated and persisted.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/activity-log.json
+```
+
+## Import
+
+```tsx
+import { ActivityLog } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ActivityLog
+  items={entries}
+  formatTimestamp={(ts) => formatRelative(ts)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Each entry slots a leading actor avatar, an icon for the event type, and the message body.
+- Pair with \`Pagination\` for long histories or \`Skeleton\` rows for the loading state.

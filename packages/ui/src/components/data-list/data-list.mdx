@@ -1,0 +1,46 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './data-list.stories'
+
+<Meta of={Stories} />
+
+# DataList
+
+Compact key / value list — definition-list-style layout for record metadata, audit details, settings summaries. Pure presentation; the host supplies the entries.
+
+Distinct from \`PropertySection\` (canvas inspector): \`DataList\` is the dashboard-style list; \`PropertySection\` is a slot inside the canvas inspector.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/data-list.json
+```
+
+## Import
+
+```tsx
+import { DataList } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<DataList
+  items={[
+    { id: "id",     label: "Run id", value: "research-2025-04-15" },
+    { id: "model",  label: "Model",  value: "claude-3.7" },
+    { id: "owner",  label: "Owner",  value: "bv" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The list pairs well with \`Card\` or \`StatCard\` to bundle a record's headline metric with its supporting details.
