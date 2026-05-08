@@ -1707,6 +1707,21 @@
       "category": "navigation"
     },
     {
+      "name": "parallel-timeline",
+      "type": "registry:component",
+      "title": "Parallel Timeline",
+      "description": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history.",
+      "files": [
+        {
+          "path": "registry/default/parallel-timeline/parallel-timeline.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "educational"
+    },
+    {
       "name": "password-input",
       "type": "registry:component",
       "title": "Password Input",
