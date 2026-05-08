@@ -1797,6 +1797,21 @@
       "category": "learning"
     },
     {
+      "name": "primary-source-viewer",
+      "type": "registry:component",
+      "title": "Primary Source Viewer",
+      "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
+      "files": [
+        {
+          "path": "registry/default/primary-source-viewer/primary-source-viewer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "progress-bar",
       "type": "registry:component",
       "title": "Progress Bar",

@@ -666,6 +666,25 @@ export {
   type LessonDifficulty,
   type LessonStatus,
 } from "./curriculum";
+export {
+  type AnnotationColor,
+  type AnnotationRegion,
+  type PrimarySource,
+  PrimarySourceAnnotation,
+  type PrimarySourceAnnotationProps,
+  PrimarySourceAnnotations,
+  PrimarySourceContext,
+  PrimarySourceMetadata,
+  PrimarySourceQuestions,
+  PrimarySourceRotate,
+  PrimarySourceToolbar,
+  PrimarySourceTranscription,
+  PrimarySourceViewer,
+  type PrimarySourceViewerLabels,
+  type PrimarySourceViewerProps,
+  PrimarySourceZoomIn,
+  PrimarySourceZoomOut,
+} from "./primary-source-viewer";
 export { ProgressBar, type ProgressBarProps } from "./progress-bar";
 export {
   ProgressCard,

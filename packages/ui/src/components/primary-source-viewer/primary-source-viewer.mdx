@@ -1,0 +1,114 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './primary-source-viewer.stories'
+
+<Meta of={Stories} />
+
+# PrimarySourceViewer
+
+Document viewer for historical primary sources — manuscripts, charters, artworks, artifacts. Compose a toolbar (zoom + rotate), an annotation overlay (region rectangles with hover tooltips), an optional transcription side panel, and a footer with metadata + discussion questions.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/primary-source-viewer.json
+```
+
+## Import
+
+```tsx
+import {
+  PrimarySourceViewer,
+  PrimarySourceToolbar,
+  PrimarySourceZoomIn,
+  PrimarySourceZoomOut,
+  PrimarySourceRotate,
+  PrimarySourceAnnotations,
+  PrimarySourceAnnotation,
+  PrimarySourceTranscription,
+  PrimarySourceContext,
+  PrimarySourceMetadata,
+  PrimarySourceQuestions,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PrimarySourceViewer
+  title="Magna Carta (1215)"
+  period="Medieval"
+  origin="England"
+  source={{ type: 'image', src: '/magna-carta.jpg', alt: 'Magna Carta manuscript' }}
+>
+  <PrimarySourceToolbar>
+    <PrimarySourceZoomIn />
+    <PrimarySourceZoomOut />
+    <PrimarySourceRotate />
+  </PrimarySourceToolbar>
+
+  <PrimarySourceAnnotations>
+    <PrimarySourceAnnotation
+      region={{ x: 12, y: 8, width: 22, height: 6 }}
+      category="Artifact"
+      note="Royal seal of King John"
+    />
+  </PrimarySourceAnnotations>
+
+  <PrimarySourceTranscription>
+    <p>John, by the grace of God, King of England...</p>
+  </PrimarySourceTranscription>
+
+  <PrimarySourceContext>
+    <PrimarySourceMetadata>
+      <dt>Date</dt>
+      <dd>June 15, 1215</dd>
+      <dt>Location</dt>
+      <dd>Runnymede, England</dd>
+    </PrimarySourceMetadata>
+    <PrimarySourceQuestions>
+      <p>What rights does this document establish?</p>
+    </PrimarySourceQuestions>
+  </PrimarySourceContext>
+</PrimarySourceViewer>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Annotation regions
+
+`PrimarySourceAnnotation.region` is expressed as **percentages** of the source dimensions (`x`, `y`, `width`, `height` — each 0–100). Percentage coordinates stay valid across zoom + rotation since they live in the source coordinate space.
+
+```tsx
+<PrimarySourceAnnotation
+  region={{ x: 14, y: 60, width: 28, height: 12 }}
+  category="Artifact"
+  color="amber"
+  note="Royal seal of King John"
+/>
+```
+
+Color options: `amber` (default), `blue`, `emerald`, `purple`, `red`, `rose`.
+
+## Minimal
+
+Provide just the source + zoom toolbar to keep the surface area small.
+
+<Canvas of={Stories.Minimal} sourceState="shown" />
+
+## Without transcription
+
+Skip the side panel and let the image span the full width.
+
+<Canvas of={Stories.NoTranscription} sourceState="shown" />
+
+## Notes
+
+- Out of scope for the MVP: explicit fullscreen mode, multi-page document navigation, side-by-side comparison mode, and IIIF tile loading. Wire those externally — feed pages by re-rendering the root with a different `source`.
+- The stage emits `data-zoom` (current factor) and `data-rotation` (degrees) on its scrolling container; annotations emit `data-annotation-id` for analytics + CSS hooks.
+- The component throws if you render a sub-component (e.g. `PrimarySourceZoomIn`) outside the root.
