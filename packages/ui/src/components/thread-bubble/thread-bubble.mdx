@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './thread-bubble.stories'
+
+<Meta of={Stories} />
+
+# ThreadBubble
+
+Expanded discussion bubble for an anchored canvas comment thread. Renders a stacked message list plus an optional reply slot via \`footer\`. Pair with \`CommentPin\`: pin marks the location, bubble holds the conversation.
+
+Pure presentation; the host owns the message store + supplies the resolve handler when threading is enabled.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/thread-bubble.json
+```
+
+## Import
+
+```tsx
+import { ThreadBubble } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ThreadBubble
+  title="research-2025"
+  messages={[
+    { id: "1", author: "Bea", authorColor: "#5b8def", body: "Why fallback?", ts: "12s" },
+    { id: "2", author: "Lior", authorColor: "#10b981", body: "p95 spike — see graph", ts: "9s" },
+  ]}
+  footer={<ReplyInput onSubmit={post} />}
+  onResolve={resolve}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty
+
+A thread with no messages yet — useful when a pin is created before the first reply lands.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## With footer
+
+Slot any reply input via \`footer\`. The bubble doesn't own input state — the host wires it up.
+
+<Canvas of={Stories.WithFooter} sourceState="shown" />
+
+## Read only
+
+Drop \`onResolve\` and the resolve button hides — useful for archived or read-only views.
+
+<Canvas of={Stories.ReadOnly} sourceState="shown" />
+
+## Notes
+
+- Each message emits \`data-thread-bubble-message\` (= id). Author / timestamp / body emit \`data-thread-bubble-author\`, \`data-thread-bubble-ts\`, \`data-thread-bubble-body\`.
+- The wrapper emits \`data-thread-bubble\`; the message list emits \`data-thread-bubble-list\`; the optional title emits \`data-thread-bubble-title\`; the resolve button emits \`data-thread-bubble-resolve\`; the footer emits \`data-thread-bubble-footer\`.

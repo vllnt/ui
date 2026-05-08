@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './selection-presence.stories'
+
+<Meta of={Stories} />
+
+# SelectionPresence
+
+Overlay marking what another user has selected on the canvas. The dashed border + soft fill stay calm so they communicate "someone-else's-selection" without blocking primary content. Pure presentation; the host computes the rect from the remote user's viewport and supplies an accent color per user.
+
+The wrapper is \`pointer-events: none\` so host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/selection-presence.json
+```
+
+## Import
+
+```tsx
+import { SelectionPresence } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <SelectionPresence
+    x={120} y={80} width={240} height={120}
+    color="#5b8def"
+    name="Bea"
+  />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Warm tone
+
+Switch to a warm accent for a different user — same calm dashed border, different color signal.
+
+<Canvas of={Stories.Warm} sourceState="shown" />
+
+## Chip hidden
+
+Pass \`name={null}\` to hide the corner chip when the canvas already shows the user via \`PresenceStack\` or \`LiveCursor\`.
+
+<Canvas of={Stories.ChipHidden} sourceState="shown" />
+
+## Tall
+
+Selections of any aspect ratio render the same way.
+
+<Canvas of={Stories.Tall} sourceState="shown" />
+
+## Notes
+
+- Fill is computed with a \`color-mix\` call that blends the resolved accent color at 10 % into transparent, so the rectangle keeps the accent without darkening the canvas.
+- \`color\` accepts any CSS color value (hex / oklch / var). Defaults to \`var(--foreground)\`.
+- Each render emits \`data-selection-presence\`. The optional chip emits \`data-selection-presence-chip\`.

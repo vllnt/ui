@@ -1,0 +1,68 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './presence-stack.stories'
+
+<Meta of={Stories} />
+
+# PresenceStack
+
+Overlapping live-presence avatars showing who is currently inhabiting the canvas. Each avatar carries an accent color, an initial, and a status dot. Distinct from \`AvatarGroup\` (a static participant grouping): this primitive is built around live status + a sane overflow + interactive expansion.
+
+Pure presentation; the host owns the websocket roster + maps user ids to colors.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/presence-stack.json
+```
+
+## Import
+
+```tsx
+import { PresenceStack } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PresenceStack
+  max={4}
+  users={[
+    { id: "1", initial: "B", color: "#5b8def", name: "Bea" },
+    { id: "2", initial: "L", color: "#10b981", name: "Lior", status: "away" },
+    { id: "3", initial: "S", color: "#f59e0b", name: "Sam", status: "idle" },
+  ]}
+  onOverflowActivate={() => openRoster()}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Solo
+
+A single user renders without overflow.
+
+<Canvas of={Stories.Solo} sourceState="shown" />
+
+## No overflow
+
+Raise \`max\` past the user count for a no-overflow stack. Drop \`onOverflowActivate\` and the chip (when it does render) becomes a plain span.
+
+<Canvas of={Stories.NoOverflow} sourceState="shown" />
+
+## All away
+
+Mixed away / idle / offline statuses render their corner dots accordingly while keeping the avatar palette.
+
+<Canvas of={Stories.AllAway} sourceState="shown" />
+
+## Notes
+
+- Statuses map: \`active\` (emerald) · \`away\` (amber) · \`idle\` (muted) · \`offline\` (faint muted).
+- \`color\` accepts any CSS color value (hex / oklch / var). Falls back to \`var(--foreground)\`.
+- Each avatar emits \`data-presence-stack-user\` (= id) + \`data-presence-stack-status\`. The corner dot emits \`data-presence-stack-dot\`. The overflow chip emits \`data-presence-stack-overflow\`.
