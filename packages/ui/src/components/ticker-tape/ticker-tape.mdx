@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ticker-tape.stories'
+
+<Meta of={Stories} />
+
+# TickerTape
+
+Marquee-style scrolling symbol tape with price + change badges. Pure presentation; the host computes the symbol list and scroll cadence.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ticker-tape.json
+```
+
+## Import
+
+```tsx
+import { TickerTape } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TickerTape symbols={symbols} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`MarketTreemap\` and \`CandlestickChart\` for a full market surface.
+- The marquee respects \`prefers-reduced-motion\` so users with motion sensitivity see a static row.

@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './number-ticker.stories'
+
+<Meta of={Stories} />
+
+# NumberTicker
+
+Animated numeric value that rolls between updates — useful for live counters (active users, revenue, errors). Pure presentation; the host owns the value.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/number-ticker.json
+```
+
+## Import
+
+```tsx
+import { NumberTicker } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<NumberTicker value={liveValue} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatCard\` and \`OverviewCard\` for headline metric tiles.
+- Animation respects \`prefers-reduced-motion\` so users with motion sensitivity see the value snap rather than roll.

@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './order-book.stories'
+
+<Meta of={Stories} />
+
+# OrderBook
+
+Level-II bid / ask depth ladder with cumulative size bars and a spread readout. Pure presentation; the host computes the bid + ask levels.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/order-book.json
+```
+
+## Import
+
+```tsx
+import { OrderBook } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<OrderBook
+  bids={bids}
+  asks={asks}
+  precision={2}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`CandlestickChart\` for price action and \`TickerTape\` for the spot strip.
+- The bars represent cumulative size relative to the largest level so the visual stays readable across a wide range of book sizes.
