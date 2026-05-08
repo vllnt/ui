@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './countdown-timer.stories'
+
+<Meta of={Stories} />
+
+# CountdownTimer
+
+Live countdown to a target timestamp — renders days / hours / minutes / seconds with a calm reset when the target passes. Pure presentation; the host owns the target time.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/countdown-timer.json
+```
+
+## Import
+
+```tsx
+import { CountdownTimer } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CountdownTimer target="2026-12-31T00:00:00Z" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`StatCard\` to anchor the countdown alongside the launch metric or with \`AnnotatedText\` for inline campaign copy.
+- The timer recomputes on a \`requestAnimationFrame\` cadence so it stays in sync with the page even after a tab regains focus.

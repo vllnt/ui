@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './animated-text.stories'
+
+<Meta of={Stories} />
+
+# AnimatedText
+
+Animated text container that types in characters, fades in words, or rolls between strings. Pure presentation; the host owns the source string and the trigger to start.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/animated-text.json
+```
+
+## Import
+
+```tsx
+import { AnimatedText } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AnimatedText text="Welcome to the spatial workspace" mode="type" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Pair with \`Spinner\` and \`Skeleton\` for staged loading states.
+- Animation respects \`prefers-reduced-motion\` so users with motion sensitivity see the final string immediately.
