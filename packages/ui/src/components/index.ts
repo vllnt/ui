@@ -319,6 +319,17 @@ export {
   type ActivityHeatmapProps,
 } from "./activity-heatmap";
 export { Calendar, type CalendarProps } from "./calendar";
+export {
+  type ChoroplethColorScale,
+  ChoroplethLegend,
+  type ChoroplethLegendProps,
+  ChoroplethMap,
+  type ChoroplethMapLabels,
+  type ChoroplethMapProps,
+  type ChoroplethRegion,
+  ChoroplethTooltip,
+  type ChoroplethTooltipProps,
+} from "./choropleth-map";
 export { CountdownTimer, type CountdownTimerProps } from "./countdown-timer";
 export { Marquee, type MarqueeProps } from "./marquee";
 export {
