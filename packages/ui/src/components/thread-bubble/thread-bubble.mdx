@@ -1,0 +1,59 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './thread-bubble.stories'
+
+<Meta of={Stories} />
+
+# ThreadBubble
+
+Floating thread bubble for an anchored comment. Pair with `CommentPin` — surface the bubble while a pin is active. Pure presentation; the host wires reply state and submission.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/thread-bubble.json
+```
+
+## Import
+
+```tsx
+import { ThreadBubble } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ThreadBubble
+  title="Trade-off summary"
+  replies={[
+    { id: '1', user: 'Sam', body: 'We should reword this.', timestamp: '2026-05-08T09:00:00Z' },
+    { id: '2', user: 'Wei', body: 'Agreed — drafting.', timestamp: '2026-05-08T09:05:00Z' },
+  ]}
+  composeSlot={<textarea placeholder="Reply…" />}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Resolved
+
+Pass `resolved` to surface a calm pill in the header.
+
+<Canvas of={Stories.Resolved} sourceState="shown" />
+
+## Custom compose slot
+
+Drop in your own composer (markdown editor, mention picker, attach button row).
+
+<Canvas of={Stories.CustomCompose} sourceState="shown" />
+
+## Notes
+
+- Reply rows render `user · timestamp · body`. Timestamps are formatted via `Intl.DateTimeFormat` so locale changes are respected.
+- The bubble emits `data-thread-replies` (count). Each reply emits `data-thread-reply-id`. The Resolved pill emits `data-thread-resolved`.
+- Out of scope for the MVP: reactions, mentions, attachments, threading nested replies. Wire those externally in the compose slot or by transforming the `replies` shape.

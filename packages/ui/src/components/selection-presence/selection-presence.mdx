@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './selection-presence.stories'
+
+<Meta of={Stories} />
+
+# SelectionPresence
+
+Selection halo for a remote participant. Wrap any selected element to outline it with the participant's color and surface a name chip above the corner. Pure presentation — visibility is driven by the host (mount when remote selection exists, unmount when cleared).
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/selection-presence.json
+```
+
+## Import
+
+```tsx
+import { SelectionPresence } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SelectionPresence color="emerald" name="Sam">
+  <ObjectCard … />
+</SelectionPresence>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Without name
+
+Drop the chip when the host already surfaces the participant elsewhere.
+
+<Canvas of={Stories.NoName} sourceState="shown" />
+
+## Notes
+
+- The wrapper applies `ring-2 ring-offset-2` plus the participant's color. The name chip is positioned at the top-left corner.
+- The wrapper emits `data-selection-color`. The chip emits `data-selection-chip` for analytics + CSS hooks.

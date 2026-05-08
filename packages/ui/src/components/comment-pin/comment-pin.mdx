@@ -1,0 +1,52 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './comment-pin.stories'
+
+<Meta of={Stories} />
+
+# CommentPin
+
+Anchored comment marker for spatial canvases. Pure presentation — position is set absolutely from `x` / `y` props. Pair with `ThreadBubble` to surface the conversation when the pin is active.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/comment-pin.json
+```
+
+## Import
+
+```tsx
+import { CommentPin } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CommentPin x={120} y={80} count={3} status="unread" onSelect={open} />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Cluster
+
+Render one pin per anchored thread. Status colors: `open` (blue), `unread` (amber), `resolved` (emerald).
+
+<Canvas of={Stories.Cluster} sourceState="shown" />
+
+## Initials only
+
+Pass `initials` to label the pin with the author instead of the reply count.
+
+<Canvas of={Stories.InitialsOnly} sourceState="shown" />
+
+## Notes
+
+- The pin emits `data-comment-status` for analytics + CSS hooks.
+- Absolute positioning is relative to the nearest positioned ancestor — wrap in a `relative` container.
+- The aria-label includes the status + count or initials so screen readers can distinguish pins.

@@ -583,6 +583,21 @@
       "category": "overlay"
     },
     {
+      "name": "comment-pin",
+      "type": "registry:component",
+      "title": "Comment Pin",
+      "description": "Anchored comment marker for spatial canvases — pure presentation with status colors and reply count.",
+      "files": [
+        {
+          "path": "registry/default/comment-pin/comment-pin.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "comparison",
       "type": "registry:component",
       "title": "Comparison",
@@ -1557,6 +1572,21 @@
       "category": "content"
     },
     {
+      "name": "selection-presence",
+      "type": "registry:component",
+      "title": "Selection Presence",
+      "description": "Selection halo + name chip for a remote participant's active selection on a multi-user canvas.",
+      "files": [
+        {
+          "path": "registry/default/selection-presence/selection-presence.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "scope-selector",
       "type": "registry:component",
       "title": "Scope Selector",
@@ -2056,6 +2086,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "thread-bubble",
+      "type": "registry:component",
+      "title": "Thread Bubble",
+      "description": "Floating thread bubble for an anchored comment — replies, optional title, Resolved pill, and a compose slot.",
+      "files": [
+        {
+          "path": "registry/default/thread-bubble/thread-bubble.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
     },
     {
       "name": "theme-toggle",

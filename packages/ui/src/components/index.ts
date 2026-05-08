@@ -483,6 +483,22 @@ export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
 export { LiveFeed, type LiveFeedEvent, type LiveFeedProps } from "./live-feed";
 export {
+  CommentPin,
+  type CommentPinProps,
+  type CommentPinStatus,
+} from "./comment-pin";
+export {
+  SelectionPresence,
+  type SelectionPresenceColor,
+  type SelectionPresenceProps,
+} from "./selection-presence";
+export {
+  ThreadBubble,
+  type ThreadBubbleLabels,
+  type ThreadBubbleProps,
+  type ThreadReply,
+} from "./thread-bubble";
+export {
   MetricGauge,
   type MetricGaugeProps,
   type MetricGaugeThreshold,
