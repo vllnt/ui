@@ -1,0 +1,97 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './map-2d.stories'
+
+<Meta of={Stories} />
+
+# Map2D
+
+Lightweight 2D map primitive. Renders an SVG canvas with an **equirectangular projection** so children placed by `[lng, lat]` land in the right spot. Compose markers, popups, polygon layers, and zoom controls. An optional backdrop image (Natural Earth SVG, terrain raster, hand-drawn world art) renders behind the overlays.
+
+No external map library required — the component is self-contained and ships with the rest of the registry. Drag to pan, click the toolbar buttons to zoom.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/map-2d.json
+```
+
+## Import
+
+```tsx
+import {
+  Map2D,
+  MapMarker,
+  MapPopup,
+  MapLayer,
+  MapControls,
+  MapZoomIn,
+  MapZoomOut,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Map2D center={[2.3522, 48.8566]} zoom={4}>
+  <MapMarker position={[2.3522, 48.8566]} popup="Paris" />
+  <MapMarker position={[-0.1276, 51.5074]} popup="London" />
+  <MapControls>
+    <MapZoomIn />
+    <MapZoomOut />
+  </MapControls>
+</Map2D>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Coordinate space
+
+Pass `[longitude, latitude]` (lng then lat). Positive longitudes are east of the prime meridian; positive latitudes are north of the equator. The component projects with a simple **equirectangular** mapping, which is fine for educational use cases up to country / continent scale. For globe-accurate work, swap to a tile-backed map (out of scope for this primitive).
+
+## Backdrop image
+
+Drop a static raster or SVG behind the overlay layer to give the user something to look at. Natural Earth's free shaded-relief SVG is a good starting point. The image fills the full lng/lat range (`[-180, -90]` → `[180, 90]`) and is clipped to the visible viewBox.
+
+<Canvas of={Stories.WithBackdrop} sourceState="shown" />
+
+## Standalone popups
+
+Use `MapPopup` when you need a popup that lives outside the marker hover lifecycle (e.g., a selection driven by external state). The marker tooltip remains a hover/focus affordance.
+
+<Canvas of={Stories.WithStandalonePopup} sourceState="shown" />
+
+## GeoJSON polygon overlays
+
+Pass an array of `{ id, type: 'polygon', coordinates }` to `MapLayer`. Coordinates are an array of `[lng, lat]` positions; close the ring by repeating the first point. Multi-polygons / lines / points are not part of the MVP — extend by adding more layer kinds.
+
+```tsx
+const FRANCE = {
+  id: 'france-bbox',
+  type: 'polygon',
+  coordinates: [
+    [-5, 51], [10, 51], [10, 41], [-5, 41], [-5, 51],
+  ],
+}
+
+<Map2D center={[2, 48]}>
+  <MapLayer data={[FRANCE]} fill="rgba(59,130,246,0.15)" stroke="#3b82f6" />
+</Map2D>
+```
+
+## Without controls
+
+Skip `MapControls` for a static map.
+
+<Canvas of={Stories.NoControls} sourceState="shown" />
+
+## Notes
+
+- Out of scope for the MVP: live map tiles (no Mapbox / MapLibre runtime), marker clustering, fullscreen + scale + compass controls, fit-bounds, lines / multi-polygon GeoJSON, custom basemap styles. Wire those externally — you can already swap the backdrop to change the basemap.
+- The SVG canvas emits `data-zoom`, `data-pan-x`, `data-pan-y` for analytics / CSS hooks. Markers emit `data-marker-id`; polygons emit `data-shape-id`.
+- The component throws if you render a sub-component (e.g. `MapZoomIn`) outside the root.

@@ -331,6 +331,23 @@ export {
   type ChoroplethTooltipProps,
 } from "./choropleth-map";
 export { CountdownTimer, type CountdownTimerProps } from "./countdown-timer";
+export {
+  type GeoJSONPolygon,
+  type GeoPosition,
+  Map2D,
+  type Map2DLabels,
+  type Map2DProps,
+  MapControls,
+  MapLayer,
+  type MapLayerProps,
+  MapMarker,
+  MapMarkerIcon,
+  type MapMarkerProps,
+  MapPopup,
+  type MapPopupProps,
+  MapZoomIn,
+  MapZoomOut,
+} from "./map-2d";
 export { Marquee, type MarqueeProps } from "./marquee";
 export {
   MapTimeline,
