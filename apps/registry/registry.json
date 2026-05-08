@@ -1008,6 +1008,21 @@
       "category": "form"
     },
     {
+      "name": "geography-quiz-map",
+      "type": "registry:component",
+      "title": "Geography Quiz Map",
+      "description": "Interactive identify-mode map quiz — click the correct region per prompt with visual feedback, score, and results panel.",
+      "files": [
+        {
+          "path": "registry/default/geography-quiz-map/geography-quiz-map.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "globe-3d",
       "type": "registry:component",
       "title": "Globe 3D",

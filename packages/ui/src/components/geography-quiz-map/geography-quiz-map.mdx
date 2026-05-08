@@ -1,0 +1,93 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './geography-quiz-map.stories'
+
+<Meta of={Stories} />
+
+# GeographyQuizMap
+
+Interactive map quiz. Identify-mode: each question asks the user to click the region matching the prompt. Correct clicks flash green, incorrect clicks flash red and reveal the correct region. After the final question the results panel renders the per-question outcome list and `onComplete` fires.
+
+Standalone SVG primitive — no external map library required.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/geography-quiz-map.json
+```
+
+## Import
+
+```tsx
+import {
+  GeographyQuizMap,
+  GeographyQuizMapPrompt,
+  GeographyQuizMapScore,
+  GeographyQuizMapResults,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const REGIONS = [
+  { id: 'FR', name: 'France', coordinates: [[-5, 51], [10, 51], [10, 41], [-5, 41], [-5, 51]] },
+  { id: 'DE', name: 'Germany', coordinates: [[5, 55], [15, 55], [15, 47], [5, 47], [5, 55]] },
+]
+
+const QUESTIONS = [
+  { id: 'q1', prompt: 'Click on France', answerRegionId: 'FR' },
+  { id: 'q2', prompt: 'Click on Germany', answerRegionId: 'DE' },
+]
+
+<GeographyQuizMap
+  regions={REGIONS}
+  questions={QUESTIONS}
+  onComplete={(answers) => console.info(answers)}
+>
+  <GeographyQuizMapPrompt />
+  <GeographyQuizMapScore />
+  <GeographyQuizMapResults />
+</GeographyQuizMap>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Slots
+
+- **`GeographyQuizMapPrompt`** — top-center bar that renders the current question prompt. Hidden once the quiz completes.
+- **`GeographyQuizMapScore`** — top-right pill: `correct / total · accuracy%`.
+- **`GeographyQuizMapResults`** — full-overlay summary that renders only after every question is answered. Lists each question with a green or red row.
+
+```tsx
+<GeographyQuizMap regions={…} questions={…}>
+  <GeographyQuizMapPrompt />
+  <GeographyQuizMapScore />
+  <GeographyQuizMapResults />
+</GeographyQuizMap>
+```
+
+## Feedback timing
+
+After a click, the selected region flashes for ~800ms. Correct clicks turn the selected region green; incorrect clicks turn the selected region red and softly highlight the correct region in green so the user can see what they should have clicked. The component then advances to the next question.
+
+## Coordinate space
+
+Region polygons use `[lng, lat]` with the same equirectangular projection as `Map2D`, `ChoroplethMap`, `RouteMap`, and `HeatMapOverlay`.
+
+## Accessibility
+
+- Each region path is keyboard-focusable; `Enter` / `Space` activates a region.
+- A hidden landmark labels the section as a "Geography quiz map".
+- Region paths carry `role="button"` and an `aria-label` derived from their `name`.
+
+## Notes
+
+- Out of scope for the MVP: locate-mode (point proximity scoring), match-mode (drag labels to regions), countdown timer, hint system (zoom-to-region), streak tracking, randomized question order, difficulty levels. Wire those externally — pass a pre-randomised `questions` array, render an external timer, or trigger your own zoom UI on top.
+- Each region path emits `data-region-id` and `data-state` (`"correct"`, `"incorrect"`, or `"answer"` for the revealed correct region after a wrong click).
+- Each results row emits `data-answer-id` and `data-answer-correct`. The slots emit `data-quiz-prompt`, `data-quiz-score`, and `data-quiz-results`.

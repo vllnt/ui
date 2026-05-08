@@ -385,6 +385,17 @@ export {
 } from "./globe-3d";
 export { GlassPanel, type GlassPanelProps } from "./glass-panel";
 export {
+  GeographyQuizMap,
+  type GeographyQuizMapLabels,
+  GeographyQuizMapPrompt,
+  type GeographyQuizMapProps,
+  GeographyQuizMapResults,
+  GeographyQuizMapScore,
+  type QuizAnswer,
+  type QuizQuestion,
+  type QuizRegion,
+} from "./geography-quiz-map";
+export {
   InfinitePlane,
   type InfinitePlaneLabels,
   type InfinitePlanePattern,
