@@ -1,0 +1,75 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './auto-reload.stories'
+
+<Meta of={Stories} />
+
+# AutoReload
+
+Toggle + collapsible configuration form for automatic credit reloading. When enabled, reveals a threshold input and a reload-amount input. Composes `Switch`, `Input`, and `Button`.
+
+Values flow through in **minor units** (cents). The inputs display the corresponding currency unit; the consumer receives the cents value via `onSave`.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/auto-reload.json
+```
+
+## Import
+
+```tsx
+import { AutoReload } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AutoReload
+  enabled={settings.autoReloadEnabled}
+  thresholdCents={settings.thresholdCents}
+  reloadAmountCents={settings.reloadAmountCents}
+  currency="EUR"
+  onToggle={handleToggle}
+  onSave={handleSave}
+  isSaving={isSaving}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Enabled
+
+The form expands when the toggle is on. The same component handles both controlled and uncontrolled state — pass `enabled` (controlled) or `defaultEnabled` (uncontrolled).
+
+<Canvas of={Stories.Enabled} sourceState="shown" />
+
+## Localized currency
+
+Pass `currency` (ISO 4217) and `locale` (BCP-47). The component derives the symbol via `Intl.NumberFormat`. Use `currencySymbol` to override the derived value.
+
+<Canvas of={Stories.Euro} sourceState="shown" />
+
+## Saving state
+
+Set `isSaving` to render the save button as loading + disabled.
+
+<Canvas of={Stories.Saving} sourceState="shown" />
+
+## Disabled (no access)
+
+Set `disabled` to render a banner instead of the form. Useful before the user has subscribed or completed onboarding.
+
+<Canvas of={Stories.DisabledForUnsubscribed} sourceState="shown" />
+
+## Notes
+
+- Values are accepted in minor units (cents) — pass an integer, the component handles the divide-by-100 + currency formatting in the inputs.
+- `minAmountCents` defaults to 100 (one currency unit). Set `maxAmountCents` to enforce a ceiling.
+- Persistence (HTTP write, optimistic update, error toast) is intentionally out of scope — drive it from the consumer's `onSave`.
+- The component does not currently throttle saves. Pass a debounced handler if your write path needs it.
