@@ -49,6 +49,26 @@
       "category": "data"
     },
     {
+      "name": "ai-artifact",
+      "type": "registry:component",
+      "title": "AI Artifact",
+      "description": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips.",
+      "files": [
+        {
+          "path": "registry/default/ai-artifact/ai-artifact.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge",
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "ai"
+    },
+    {
       "name": "ai-chat-input",
       "type": "registry:component",
       "title": "AI Chat Input",

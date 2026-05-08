@@ -1,0 +1,16 @@
+export {
+  AIArtifact,
+  AIArtifactContent,
+  AIArtifactCopyButton,
+  AIArtifactDownloadButton,
+  AIArtifactEditButton,
+  AIArtifactFullscreenButton,
+  type AIArtifactLabels,
+  type AIArtifactProps,
+  AIArtifactToolbar,
+  type AIArtifactType,
+  AIArtifactVersion,
+  type AIArtifactVersionProps,
+  AIArtifactVersions,
+  useAIArtifact,
+} from "./ai-artifact";
