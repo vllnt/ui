@@ -1012,6 +1012,21 @@
       "category": "form"
     },
     {
+      "name": "infinite-plane",
+      "type": "registry:component",
+      "title": "Infinite Plane",
+      "description": "Pannable, zoomable substrate for spatial canvases. Drag to pan; ctrl/meta+wheel to zoom.",
+      "files": [
+        {
+          "path": "registry/default/infinite-plane/infinite-plane.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "key-concept",
       "type": "registry:component",
       "title": "Key Concept",
@@ -2330,6 +2345,21 @@
       "category": "navigation"
     },
     {
+      "name": "viewport-bookmarks",
+      "type": "registry:component",
+      "title": "Viewport Bookmarks",
+      "description": "Compact chip row of saved viewport positions for jumping between named canvas scenes.",
+      "files": [
+        {
+          "path": "registry/default/viewport-bookmarks/viewport-bookmarks.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "wallet-card",
       "type": "registry:component",
       "title": "Wallet Card",
@@ -2367,6 +2397,21 @@
       "files": [
         {
           "path": "registry/default/workspace-switcher/workspace-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
+      "name": "world-breadcrumbs",
+      "type": "registry:component",
+      "title": "World Breadcrumbs",
+      "description": "Hierarchical breadcrumbs for spatial canvases (workspace → project → board → view).",
+      "files": [
+        {
+          "path": "registry/default/world-breadcrumbs/world-breadcrumbs.tsx",
           "type": "registry:component"
         }
       ],

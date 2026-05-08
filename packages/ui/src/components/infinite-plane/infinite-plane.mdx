@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './infinite-plane.stories'
+
+<Meta of={Stories} />
+
+# InfinitePlane
+
+Pannable, zoomable infinite-plane substrate for spatial canvases. Drag to pan; **Ctrl / Meta + wheel** to zoom. Children render inside a transformed wrapper so they keep their pixel-positioned coordinates while the plane moves.
+
+Pair with `CanvasShell`, `CanvasView`, `MiniMapPanel`, and `ZoomHUD` to assemble a full operator surface — `InfinitePlane` is the substrate underneath.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/infinite-plane.json
+```
+
+## Import
+
+```tsx
+import { InfinitePlane } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<InfinitePlane initialView={{ x: 60, y: 40, zoom: 1.2 }}>
+  <div style={{ position: 'absolute', left: 40, top: 20 }}>Object A</div>
+  <div style={{ position: 'absolute', left: 280, top: 120 }}>Object B</div>
+</InfinitePlane>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Children should be absolutely positioned in unzoomed plane coordinates. The wrapper applies the live `translate(x, y) scale(zoom)` transform.
+- The dotted-grid backdrop scales with zoom; pass `withoutGrid` to drop it for a clean surface.
+- Wheel zoom requires \`Ctrl\` or \`Meta\` to avoid hijacking page scroll. Range is `0.25×–4×`.
+- Out of scope for the MVP: pinch zoom, momentum scrolling, snap-to-grid, content virtualization. The substrate stays small.
+- The drag stage emits \`data-pan-x\` / \`data-pan-y\` / \`data-zoom\` for analytics + CSS hooks. The transformed content wrapper emits \`data-infinite-plane-content\`.

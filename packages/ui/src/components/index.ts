@@ -726,6 +726,23 @@ export {
   WorkspaceSwitcher,
   type WorkspaceSwitcherProps,
 } from "./workspace-switcher";
+export {
+  InfinitePlane,
+  type InfinitePlaneLabels,
+  type InfinitePlaneProps,
+} from "./infinite-plane";
+export {
+  type ViewportBookmark,
+  ViewportBookmarks,
+  type ViewportBookmarksLabels,
+  type ViewportBookmarksProps,
+} from "./viewport-bookmarks";
+export {
+  WorldBreadcrumbs,
+  type WorldBreadcrumbsLabels,
+  type WorldBreadcrumbsProps,
+  type WorldCrumb,
+} from "./world-breadcrumbs";
 
 // Flow/Diagram components
 export {

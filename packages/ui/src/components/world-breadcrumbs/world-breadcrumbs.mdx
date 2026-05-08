@@ -1,0 +1,65 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './world-breadcrumbs.stories'
+
+<Meta of={Stories} />
+
+# WorldBreadcrumbs
+
+Hierarchical breadcrumbs for spatial canvases. Renders the path (workspace → project → board → view) with the leaf as the current location. Distinct from the generic `Breadcrumb` primitive: every crumb in the world hierarchy stays addressable, the separator fits canvas chrome, and the trailing crumb is plain text (no link).
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/world-breadcrumbs.json
+```
+
+## Import
+
+```tsx
+import { WorldBreadcrumbs } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<WorldBreadcrumbs
+  crumbs={[
+    { id: 'ws', label: 'Acme' },
+    { id: 'proj', label: 'Q4 launch' },
+    { id: 'view', label: 'Release timeline' },
+  ]}
+  onNavigate={(crumb) => navigateTo(crumb.id)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## With meta badges
+
+Add `meta` to a crumb for compact `v2` / `draft` markers next to the label.
+
+<Canvas of={Stories.WithMeta} sourceState="shown" />
+
+## Custom separator
+
+Pass any node as `separator` (chevron, dot, custom icon).
+
+<Canvas of={Stories.Chevron} sourceState="shown" />
+
+## Anchor crumbs
+
+Provide `href` on a crumb to render it as an anchor — keeps `cmd / ctrl / shift + click` as native open-in-new-tab. Plain clicks fire `onNavigate`.
+
+<Canvas of={Stories.Anchors} sourceState="shown" />
+
+## Notes
+
+- The trailing crumb renders as a `<span aria-current="location">` and emits `data-crumb-current="true"`. Earlier crumbs render as buttons (or anchors) and emit `data-crumb-id`.
+- The wrapper emits `data-crumbs-depth` for analytics.
+- Out of scope for the MVP: collapsing intermediate crumbs into `…` for very deep hierarchies, drag-to-rearrange, hover-preview popovers. Wire those in your hosting surface.

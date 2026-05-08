@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './viewport-bookmarks.stories'
+
+<Meta of={Stories} />
+
+# ViewportBookmarks
+
+Compact chip row of saved viewport positions. Drop into a canvas chrome surface so the operator can jump between named scenes — overview, release, incidents, audit — without losing the named context.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/viewport-bookmarks.json
+```
+
+## Import
+
+```tsx
+import { ViewportBookmarks } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const bookmarks = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'release', label: 'Release', meta: 'Today' },
+]
+
+<ViewportBookmarks
+  bookmarks={bookmarks}
+  activeId={current}
+  onSelect={(bookmark) => restore(bookmark.id)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Active state
+
+Pass \`activeId\` to highlight the current bookmark.
+
+<Canvas of={Stories.Active} sourceState="shown" />
+
+## Empty state
+
+Renders an inline placeholder when no bookmarks are saved.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Notes
+
+- The component is presentation-only — it does not store or restore viewport state. Wire \`onSelect\` to your own pan/zoom manager (see \`InfinitePlane\`).
+- Each chip emits \`data-bookmark-id\` and (when active) \`data-active="true"\`. The wrapper emits \`data-bookmarks-count\`.
+- Out of scope for the MVP: drag-to-reorder, in-place rename, capture-on-click. Pass an updated \`bookmarks\` array to drive any of those externally.
