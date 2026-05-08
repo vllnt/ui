@@ -1,0 +1,69 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './metric-cluster.stories'
+
+<Meta of={Stories} />
+
+# MetricCluster
+
+Compact stack of related metrics pinned to a canvas object's corner. Use when a single \`StickyMetric\` doesn't carry enough signal — for runs whose throughput, latency, and error rate must all be visible at once. Pure presentation; the host supplies the anchor coords + the metric list.
+
+The wrapper is \`pointer-events: none\` — host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/metric-cluster.json
+```
+
+## Import
+
+```tsx
+import { MetricCluster } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<MetricCluster
+  x={420} y={180}
+  anchor="top-right"
+  title="research-2025"
+  metrics={[
+    { id: "qps",  label: "qps",   value: "240", tone: "success" },
+    { id: "errs", label: "errs",  value: "14",  tone: "danger" },
+    { id: "p95",  label: "p95",   value: "180ms" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Untitled
+
+Drop \`title\` for an even tighter ambient overlay.
+
+<Canvas of={Stories.Untitled} sourceState="shown" />
+
+## Bottom-left anchor
+
+The cluster translates so the chosen corner sits exactly on the anchor pixel.
+
+<Canvas of={Stories.BottomLeft} sourceState="shown" />
+
+## Healthy stack
+
+A row of \`success\` tones reads as a calm green column.
+
+<Canvas of={Stories.Healthy} sourceState="shown" />
+
+## Notes
+
+- Anchors map: \`top-right\` (default) · \`top-left\` · \`bottom-right\` · \`bottom-left\`. The anchor pixel is always the meeting corner.
+- Tones map: \`neutral\` (muted) · \`success\` (emerald) · \`warn\` (amber) · \`danger\` (red).
+- Each row emits \`data-metric-cluster-row\` (= id) + \`data-metric-cluster-tone\`. The wrapper emits \`data-metric-cluster\` + \`data-metric-cluster-anchor\`. The optional title emits \`data-metric-cluster-title\`.

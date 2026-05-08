@@ -1,0 +1,70 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './heat-overlay.stories'
+
+<Meta of={Stories} />
+
+# HeatOverlay
+
+Heatmap-style overlay drawn on top of a canvas. Each sample renders as a soft radial blob whose radius + opacity scale with its weight. Pure presentation; the host computes the point list from the activity stream.
+
+Render inside a \`position: relative\` parent that shares the canvas pixel coordinate space; the SVG is \`pointer-events: none\` so host gestures pass through.
+
+Distinct from \`ActivityHeatmap\`: that primitive is a calendar-style fixed grid; this one floats over a free-form canvas.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/heat-overlay.json
+```
+
+## Import
+
+```tsx
+import { HeatOverlay } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <HeatOverlay
+    points={[
+      { id: "a", x: 120, y: 80,  weight: 1.0, tone: "danger" },
+      { id: "b", x: 320, y: 220, weight: 0.4 },
+    ]}
+  />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty
+
+Empty point list returns nothing — pass live state directly without conditional wrapping.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Cool tone
+
+\`defaultTone="cool"\` shifts the gradient toward blue — useful for ambient activity rather than incidents.
+
+<Canvas of={Stories.Cool} sourceState="shown" />
+
+## High intensity
+
+Larger \`intensity\` widens the blobs; weight still scales them within that envelope.
+
+<Canvas of={Stories.HighIntensity} sourceState="shown" />
+
+## Notes
+
+- Tones map: \`neutral\` (foreground) · \`warn\` (amber, default) · \`danger\` (red) · \`cool\` (blue).
+- Weight clamps to \`0..1\`; radius floors at \`8\` so points never collapse to invisibility.
+- Each blob emits \`data-heat-point\` (= id) + \`data-heat-tone\`. The wrapper emits \`data-heat-overlay\`.
