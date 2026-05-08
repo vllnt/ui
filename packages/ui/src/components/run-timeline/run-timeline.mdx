@@ -1,0 +1,74 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './run-timeline.stories'
+
+<Meta of={Stories} />
+
+# RunTimeline
+
+Multi-lane execution timeline showing run phases over time. Each phase renders as a colored bar positioned by its start / end and routed to a lane by \`laneId\`. Optional cursor draws a thin vertical line for the current playback position.
+
+Pure presentation; the host computes the phase list from the run's execution history. Pair with \`TimelineScrubber\` to drive the cursor.
+
+Distinct from \`MapTimeline\` (geo-aware), \`Stepper\` (sequential steps), and the timeline family issues \`#32\`–\`#35\`: this primitive is specifically the run history surface inside the canvas.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/run-timeline.json
+```
+
+## Import
+
+```tsx
+import { RunTimeline } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<RunTimeline
+  start={0} end={3600}
+  cursor={1800}
+  lanes={[
+    { id: "ingest", label: "Ingest" },
+    { id: "rank",   label: "Rank" },
+  ]}
+  phases={[
+    { id: "1", laneId: "ingest", start: 0,    end: 600,  state: "complete", label: "load" },
+    { id: "2", laneId: "rank",   start: 600,  end: 2400, state: "running",  label: "score" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Single lane
+
+Drop \`lanes\` to fall back to single-lane mode — phases route to the implicit \`"default"\` lane labelled \`"Run"\`.
+
+<Canvas of={Stories.SingleLane} sourceState="shown" />
+
+## No cursor
+
+Omit \`cursor\` for a static history view (e.g. post-run audit).
+
+<Canvas of={Stories.NoCursor} sourceState="shown" />
+
+## Empty
+
+When the phase list is empty, the timeline renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Notes
+
+- Phase states map: \`queued\` (amber) · \`running\` (blue) · \`complete\` (emerald) · \`failed\` (red) · \`stopped\` (muted).
+- When \`end\` is not greater than \`start\`, the timeline falls back to a 1-unit span so phases still render.
+- Phases whose \`laneId\` doesn't match any provided lane are skipped silently.
+- Each render emits \`data-run-timeline\`. Lanes emit \`data-run-timeline-lane\` set to the lane id; phases emit \`data-run-phase\` + \`data-run-phase-state\`. The cursor emits \`data-run-timeline-cursor\`.

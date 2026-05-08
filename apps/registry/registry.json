@@ -1632,6 +1632,21 @@
       "category": "content"
     },
     {
+      "name": "run-timeline",
+      "type": "registry:component",
+      "title": "Run Timeline",
+      "description": "Multi-lane execution timeline showing run phases over time, with optional cursor.",
+      "files": [
+        {
+          "path": "registry/default/run-timeline/run-timeline.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "scope-selector",
       "type": "registry:component",
       "title": "Scope Selector",
