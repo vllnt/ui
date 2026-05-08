@@ -697,6 +697,24 @@ export {
   type FloatingActionButtonProps,
 } from "./floating-action-button";
 export {
+  FloatingToolbar,
+  type FloatingToolbarAction,
+  type FloatingToolbarLabels,
+  type FloatingToolbarProps,
+} from "./floating-toolbar";
+export {
+  type SelectionBounds,
+  SelectionHalo,
+  type SelectionHaloLabels,
+  type SelectionHaloProps,
+} from "./selection-halo";
+export {
+  type SnapGuide,
+  SnapGuides,
+  type SnapGuidesLabels,
+  type SnapGuidesProps,
+} from "./snap-guides";
+export {
   type KeyboardShortcut,
   KeyboardShortcutsHelp,
   type KeyboardShortcutsHelpProps,

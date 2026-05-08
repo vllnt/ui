@@ -1,0 +1,51 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './snap-guides.stories'
+
+<Meta of={Stories} />
+
+# SnapGuides
+
+Alignment guide overlay for a canvas. Renders dashed lines at the `x` / `y` coordinates supplied by the host snapper. Pure presentation — the host computes which guides are active during a drag and unmounts them on release.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/snap-guides.json
+```
+
+## Import
+
+```tsx
+import { SnapGuides } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SnapGuides
+  guides={[
+    { id: 'x-200', orientation: 'vertical', x: 200 },
+    { id: 'y-160', orientation: 'horizontal', y: 160 },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Single guide
+
+Drop to a single line for the simplest case.
+
+<Canvas of={Stories.SingleVertical} sourceState="shown" />
+
+## Notes
+
+- The overlay is `pointer-events-none` so it never blocks the local pointer.
+- Vertical guides span the full height; horizontal guides span the full width.
+- Each line emits `data-snap-guide-id` + `data-snap-orientation`. The wrapper emits `data-snap-guide-count` so analytics can count how often a snap fires.
