@@ -1,0 +1,83 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './era-comparison.stories'
+
+<Meta of={Stories} />
+
+# EraComparison
+
+Side-by-side comparison of historical eras showing parallel developments across domains (Art, Science, Politics, Technology). Composes `Badge`.
+
+A compound family:
+
+- `EraComparison` — responsive grid container (1 col → 2 col on `md` → 3 col on `xl`).
+- `EraColumn` — single era; renders the header (name + period chip + region) and supplies a color theme via context.
+- `EraDomain` — domain row (`Art`, `Science`, …). Pass the same `name` in each column for visually aligned parallel rows. Emits `data-domain="<name>"` for analytics.
+- `EraHighlight` — single-line achievement note tinted by the surrounding column color.
+- `EraFigure` — pill-shaped reference to a notable figure. Renders as `<span>` by default; pass `href` to render as `<a>` and `anchorProps` to forward `rel` / `target`.
+- `useEraColumnColor` — hook for custom children that need to match the column accent.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/era-comparison.json
+```
+
+## Import
+
+```tsx
+import {
+  EraColumn,
+  EraComparison,
+  EraDomain,
+  EraFigure,
+  EraHighlight,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<EraComparison>
+  <EraColumn name="Renaissance" period="1400–1600" color="amber">
+    <EraDomain name="Art">
+      <EraHighlight>Perspective painting, humanism</EraHighlight>
+      <EraFigure name="Leonardo da Vinci" />
+    </EraDomain>
+    <EraDomain name="Science">
+      <EraHighlight>Heliocentrism, anatomy</EraHighlight>
+      <EraFigure name="Copernicus" />
+    </EraDomain>
+  </EraColumn>
+  <EraColumn name="Islamic Golden Age" period="800–1400" color="emerald">
+    <EraDomain name="Science">
+      <EraHighlight>Algebra, optics, astronomy</EraHighlight>
+      <EraFigure name="Al-Khwarizmi" />
+    </EraDomain>
+  </EraColumn>
+</EraComparison>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Two columns
+
+The grid honors the actual number of children — fewer columns mean the cards stretch.
+
+<Canvas of={Stories.TwoColumn} sourceState="shown" />
+
+## Linked figures
+
+Pass an `href` (and optional `anchorProps`) on `EraFigure` to make each name a link to the figure's full profile (e.g. a `HistoricalFigureCard` route).
+
+<Canvas of={Stories.WithFigureLinks} sourceState="shown" />
+
+## Notes
+
+- Timeline overlap visualization, mobile-tab fallback, and printable layouts are intentionally **out of scope** — drive them from consumer code via the slot APIs and CSS.
+- Color themes — `amber` / `blue` / `emerald` / `neutral` / `purple` / `red` / `rose` — read from the column context, so any custom child rendered inside `EraColumn` can call `useEraColumnColor()` to match the accent.

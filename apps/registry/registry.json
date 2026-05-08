@@ -904,6 +904,21 @@
       "category": "overlay"
     },
     {
+      "name": "era-comparison",
+      "type": "registry:component",
+      "title": "Era Comparison",
+      "description": "Side-by-side comparison of historical eras with domain rows, color-themed columns, highlights, and figure chips.",
+      "files": [
+        {
+          "path": "registry/default/era-comparison/era-comparison.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "educational"
+    },
+    {
       "name": "exercise",
       "type": "registry:component",
       "title": "Exercise",
