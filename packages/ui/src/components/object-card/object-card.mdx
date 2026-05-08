@@ -1,0 +1,54 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './object-card.stories'
+
+<Meta of={Stories} />
+
+# ObjectCard
+
+Durable on-canvas representation of a runtime object — agents, runs, artifacts, tasks, inputs, and outputs. Renders kind chip + status dot + title + optional metric strip + optional action row in a compact, scannable card. Pure presentation; the host computes props from the runtime stream.
+
+Distinct from \`Card\` (generic content card) and \`StatCard\` (KPI tile): this primitive is the canvas's first-class spatial object. Pair with \`ConnectorEdge\` for relationships, \`AnchorPort\` for input / output ports, \`GroupHull\` for ownership grouping, and \`ObjectHandle\` for drag affordance.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/object-card.json
+```
+
+## Import
+
+```tsx
+import { ObjectCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ObjectCard
+  kind="run"
+  status="running"
+  title="research-2025-04-15"
+  subtitle="claude-3.7"
+  metrics={[
+    { id: "qps",  label: "qps",  value: "240" },
+    { id: "p95",  label: "p95",  value: "180ms" },
+  ]}
+  actions={[
+    { id: "open", label: "Open", onActivate: openRun },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Kinds map: \`agent\` ◇ · \`run\` ▶ · \`task\` ▢ · \`artifact\` ◌ · \`input\` ↘ · \`output\` ↗.
+- Status dots map: \`idle\` (muted) · \`queued\` (amber) · \`running\` (blue, pulsing) · \`complete\` (emerald) · \`failed\` (red).
+- The card centers on a positioned canvas — render inside a \`position: relative\` container that supplies its coordinate space.

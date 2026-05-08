@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './anchor-port.stories'
+
+<Meta of={Stories} />
+
+# AnchorPort
+
+Connection-point marker rendered on the edge of an \`ObjectCard\` for inputs, outputs, or bidirectional links. Renders as a small circular handle with optional tone. Pure presentation; the host owns drag-to-connect logic and supplies the screen-pixel position.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/anchor-port.json
+```
+
+## Import
+
+```tsx
+import { AnchorPort } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AnchorPort
+  x={cardRight}
+  y={cardMid}
+  direction="output"
+  tone="primary"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The port is small by design — keep it visible but quiet so cards stay primary.
+- Pair with \`ConnectorEdge\` to draw the relationship between two ports.
+- Render inside a \`position: relative\` parent that shares the canvas pixel coordinate space with the connected card.

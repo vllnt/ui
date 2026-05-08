@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './group-hull.stories'
+
+<Meta of={Stories} />
+
+# GroupHull
+
+Durable boundary wrapper for a related set of canvas objects sharing context, ownership, or a workspace lane. Renders a soft rounded outline around its slot with an optional title chip. Pure presentation; the host positions the hull around its members.
+
+Distinct from \`ContextLens\` (transient focus vignette) and \`SelectionPresence\` (remote-user selection): \`GroupHull\` is the durable grouping that survives across selection state.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/group-hull.json
+```
+
+## Import
+
+```tsx
+import { GroupHull } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<GroupHull title="Ingest cluster" tone="primary">
+  <ObjectCard …/>
+  <ObjectCard …/>
+  <ObjectCard …/>
+</GroupHull>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The hull does not lay out its children — wrap an absolutely-positioned slot inside a parent that supplies the canvas coordinate space.
+- The title chip is optional — drop it when the surrounding canvas already names the group via \`WorldBreadcrumbs\` or \`ObjectInspector\`.

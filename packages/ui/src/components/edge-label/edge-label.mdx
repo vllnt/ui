@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './edge-label.stories'
+
+<Meta of={Stories} />
+
+# EdgeLabel
+
+Inline label rendered along a \`ConnectorEdge\` to communicate relation type, throughput, or status. Anchored at canvas pixel coordinates; renders as a small chip with optional tone. Pure presentation; the host computes the position from the edge midpoint.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/edge-label.json
+```
+
+## Import
+
+```tsx
+import { EdgeLabel } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<EdgeLabel x={midX} y={midY} tone="primary">
+  emits · 240 / s
+</EdgeLabel>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- The label sits on top of the edge — render it after the \`ConnectorEdge\` so it lays above the path.
+- Render inside a \`position: relative\` parent that shares the canvas pixel coordinate space with the edge.
+- Pair with \`ConnectorEdge\` for visible relationships between \`ObjectCard\` instances.
