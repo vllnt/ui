@@ -2765,6 +2765,21 @@
       "category": "core"
     },
     {
+      "name": "tree-view",
+      "type": "registry:component",
+      "title": "Tree View",
+      "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
+      "files": [
+        {
+          "path": "registry/default/tree-view/tree-view.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "tooltip",
       "type": "registry:component",
       "title": "Tooltip",

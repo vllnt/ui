@@ -1,0 +1,78 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './tree-view.stories'
+
+<Meta of={Stories} />
+
+# TreeView
+
+Hierarchical tree component for nested data — file systems, categories, taxonomies, org charts. Data-driven via the `nodes` prop. Supports controlled and uncontrolled expand/select state, single or multi-select, and full keyboard navigation (arrow keys, enter, space).
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/tree-view.json
+```
+
+## Import
+
+```tsx
+import { TreeView } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const nodes = [
+  {
+    id: 'src',
+    label: 'src/',
+    nodes: [
+      { id: 'components', label: 'components/' },
+      { id: 'utils', label: 'utils/' },
+    ],
+  },
+  { id: 'package', label: 'package.json' },
+]
+
+<TreeView
+  nodes={nodes}
+  defaultExpanded={['src']}
+  onSelect={(ids) => console.info(ids)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Selection modes
+
+`selectionMode="single"` (default) replaces the selection on each click. `selectionMode="multiple"` toggles the clicked id in/out of the set; the resulting array is delivered to `onSelect`.
+
+<Canvas of={Stories.MultiSelect} sourceState="shown" />
+
+## Controlled state
+
+Pass `expanded` + `onExpandedChange` to drive expand/collapse from a parent store. Pass `selected` + `onSelect` for the selection set.
+
+```tsx
+const [expanded, setExpanded] = useState<string[]>([])
+<TreeView nodes={nodes} expanded={expanded} onExpandedChange={setExpanded} />
+```
+
+## Keyboard
+
+- `ArrowDown` / `ArrowUp` — move active row.
+- `ArrowRight` — expand the active branch (or move into it if already expanded).
+- `ArrowLeft` — collapse the active branch (or move to its parent if collapsed).
+- `Enter` / `Space` — expand a branch or select a leaf.
+
+## Notes
+
+- Out of scope for the MVP: explicit checkbox-mode UI, search/filter, lazy loading, drag-and-drop reordering, indent guides. Wire those on top by deriving filtered `nodes` and controlling `expanded` externally.
+- Each row emits `data-node-id`, `data-depth`, and (when current) `data-active="true"` / `data-selected="true"` for analytics and CSS hooks.
+- `disabled` nodes still render but are not clickable and announce `aria-disabled="true"`.
