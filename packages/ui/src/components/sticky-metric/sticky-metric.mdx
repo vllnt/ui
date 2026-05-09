@@ -1,0 +1,69 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './sticky-metric.stories'
+
+<Meta of={Stories} />
+
+# StickyMetric
+
+Pinned metric pill that sticks to a canvas object's corner. Use to overlay a single live value (errors / min, p95 latency, queue depth) on a runtime object without consuming card real-estate. Pure presentation; the host computes the anchor coords from the object's bounding box and the value from the runtime stream.
+
+The wrapper is \`pointer-events: none\` — host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/sticky-metric.json
+```
+
+## Import
+
+```tsx
+import { StickyMetric } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <StickyMetric
+    x={420} y={180}
+    anchor="top-right"
+    label="errs / min"
+    value="14"
+    tone="danger"
+  />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Danger tone
+
+Pair \`tone="danger"\` with a short label + value when an SLO is breached.
+
+<Canvas of={Stories.Danger} sourceState="shown" />
+
+## Bottom-left anchor
+
+The metric translates so the chosen corner sits exactly on the anchor pixel.
+
+<Canvas of={Stories.BottomLeft} sourceState="shown" />
+
+## Plain
+
+Drop \`detail\` and use \`tone="neutral"\` for a quiet ambient overlay.
+
+<Canvas of={Stories.Plain} sourceState="shown" />
+
+## Notes
+
+- Anchors map: \`top-right\` (default) · \`top-left\` · \`bottom-right\` · \`bottom-left\`. The anchor pixel is always the meeting corner.
+- Tones map: \`neutral\` (muted) · \`success\` (emerald) · \`warn\` (amber) · \`danger\` (red).
+- Each render emits \`data-sticky-metric\` + \`data-sticky-tone\` + \`data-sticky-anchor\`. The leading dot emits \`data-sticky-metric-dot\`; the optional detail emits \`data-sticky-metric-detail\`.
