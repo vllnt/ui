@@ -362,6 +362,24 @@ export {
 export { Skeleton } from "./skeleton";
 export { Separator } from "./separator";
 export { Alert, AlertDescription, AlertTitle, alertVariants } from "./alert";
+export {
+  AgentActivity,
+  type AgentActivityLabels,
+  type AgentActivityProps,
+  type AgentActivityStatus,
+  AgentStep,
+  AgentStepDetail,
+  type AgentStepDetailProps,
+  AgentStepDuration,
+  type AgentStepDurationProps,
+  AgentStepProgress,
+  type AgentStepProgressProps,
+  type AgentStepProps,
+  type AgentStepStatus,
+  AgentStepTitle,
+  type AgentStepTitleProps,
+  useAgentStepStatus,
+} from "./agent-activity";
 export { StatCard, type StatCardProps, statCardVariants } from "./stat-card";
 export {
   dotVariants,

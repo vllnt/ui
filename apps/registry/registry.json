@@ -49,6 +49,23 @@
       "category": "data"
     },
     {
+      "name": "agent-activity",
+      "type": "registry:component",
+      "title": "Agent Activity",
+      "description": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress.",
+      "files": [
+        {
+          "path": "registry/default/agent-activity/agent-activity.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "ai"
+    },
+    {
       "name": "ai-artifact",
       "type": "registry:component",
       "title": "AI Artifact",

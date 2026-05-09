@@ -1,0 +1,98 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './agent-activity.stories'
+
+<Meta of={Stories} />
+
+# AgentActivity
+
+Visual display of an AI agent's execution chain — steps taken, tools called, decisions made, and current progress. Suitable for Claude Code-style activity panels, multi-step task views, and pipeline progress.
+
+A compound component family:
+
+- `AgentActivity` — root container, optional `elapsed` time, switches the live region between `aria-live="polite"` (running) and `aria-live="off"` (idle / completed / error)
+- `AgentStep` — one step row, status drives color + default icon, children split between an always-visible header and a collapsible body
+- `AgentStepTitle` / `AgentStepDuration` / `AgentStepProgress` — header slots
+- `AgentStepDetail` — body slot, can repeat. The toggle appears only when at least one detail exists.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/agent-activity.json
+```
+
+## Import
+
+```tsx
+import {
+  AgentActivity,
+  AgentStep,
+  AgentStepTitle,
+  AgentStepDetail,
+  AgentStepDuration,
+  AgentStepProgress,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AgentActivity status="running" elapsed="3.2s">
+  <AgentStep status="completed" icon={<SearchIcon />}>
+    <AgentStepTitle>Searching codebase</AgentStepTitle>
+    <AgentStepDuration>1.2s</AgentStepDuration>
+    <AgentStepDetail>Found 12 files matching "auth".</AgentStepDetail>
+  </AgentStep>
+  <AgentStep status="running" icon={<CodeIcon />}>
+    <AgentStepTitle>Writing fix</AgentStepTitle>
+    <AgentStepProgress value={60} />
+  </AgentStep>
+</AgentActivity>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Status states
+
+| Status | Default icon | Color treatment |
+| ------ | ------------ | --------------- |
+| `pending` | `Circle` | muted |
+| `running` | `Loader2` (spinner) | primary |
+| `completed` | `CheckCircle2` | emerald |
+| `error` | `AlertTriangle` | destructive |
+| `skipped` | `MinusCircle` | muted/60 |
+
+Pass an `icon` prop to override the default per-step.
+
+## Completed
+
+<Canvas of={Stories.Completed} sourceState="shown" />
+
+## Error state
+
+The agent's overall status is independent of any one step's status — pass `status="error"` on the root when an error halts the chain, then mark each step accordingly.
+
+<Canvas of={Stories.ErrorState} sourceState="shown" />
+
+## Collapsed details
+
+Set `defaultOpen={false}` per step to render the toggle in the collapsed position.
+
+<Canvas of={Stories.CollapsedDetails} sourceState="shown" />
+
+## Accessibility
+
+- Root has `aria-live="polite"` while running — assistive tech announces new steps without focus-stealing
+- Each step exposes `data-status="<status>"` for analytics
+- Toggle uses `aria-expanded` + `aria-controls`
+- `AgentStepProgress` is a `role="progressbar"` with `aria-valuenow/min/max`
+
+## Notes
+
+- Nested sub-tasks, retry actions, and tool-output streaming are intentionally **out of scope** — drive them from consumer code via the `AgentStepDetail` slot.
+- `useAgentStepStatus` is exported for custom child components that need to react to the surrounding step's status (e.g. tinted code blocks).
