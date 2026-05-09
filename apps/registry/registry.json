@@ -696,6 +696,26 @@
       "category": "content"
     },
     {
+      "name": "copy-button",
+      "type": "registry:component",
+      "title": "Copy Button",
+      "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
+      "files": [
+        {
+          "path": "registry/default/copy-button/copy-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "tooltip"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "core"
+    },
+    {
       "name": "code-playground",
       "type": "registry:component",
       "title": "Code Playground",

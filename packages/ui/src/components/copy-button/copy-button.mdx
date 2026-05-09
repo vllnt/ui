@@ -1,0 +1,72 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './copy-button.stories'
+
+<Meta of={Stories} />
+
+# CopyButton
+
+Click-to-copy utility with confirmation feedback. Copies `value` to the clipboard via the async Clipboard API and announces success to assistive tech.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/copy-button.json
+```
+
+## Import
+
+```tsx
+import { CopyButton, useCopyToClipboard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CopyButton value="EXAMPLE_API_KEY" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Variants
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `icon` | Yes |
+| `inline` | - |
+| `button` | - |
+
+### Inline
+
+Compact form sized to sit alongside short inline text.
+
+<Canvas of={Stories.Inline} sourceState="shown" />
+
+### Button
+
+Full button with a text label. Useful when copy is the primary action.
+
+<Canvas of={Stories.ButtonVariant} sourceState="shown" />
+
+### Custom labels
+
+Override the default `Copy` / `Copied!` strings via `label` and `copiedLabel`.
+
+<Canvas of={Stories.CustomLabels} sourceState="shown" />
+
+## Hook
+
+`useCopyToClipboard` exposes the same clipboard write + transient `copied` flag that powers the component, for cases where the rendered button is not appropriate.
+
+```tsx
+const { copied, copy, reset } = useCopyToClipboard({ timeout: 2000 })
+
+await copy('hello')
+```
