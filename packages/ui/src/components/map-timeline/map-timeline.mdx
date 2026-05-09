@@ -1,0 +1,103 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './map-timeline.stories'
+
+<Meta of={Stories} />
+
+# MapTimeline
+
+Combined map + time slider. Pass `MapTimelineLayer` (era polygons) and `MapTimelineEvent` (year-pinned markers) as children. The slider scrubs the current year; layers and events appear / disappear as the year crosses their windows. The play button auto-advances the slider on `requestAnimationFrame`.
+
+Standalone SVG primitive — no external map library required.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/map-timeline.json
+```
+
+## Import
+
+```tsx
+import {
+  MapTimeline,
+  MapTimelineLayer,
+  MapTimelineEvent,
+  MapTimelineControls,
+  MapTimelineSlider,
+  MapTimelinePlayButton,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<MapTimeline startYear={-500} endYear={2025} initialYear={1}>
+  <MapTimelineLayer
+    startYear={-27}
+    endYear={476}
+    color="red"
+    label="Roman Empire"
+    geometry={{ type: 'polygon', polygon: romanRing }}
+  />
+  <MapTimelineEvent
+    year={79}
+    position={[14.48, 40.75]}
+    title="Vesuvius"
+    description="Pompeii destroyed"
+  />
+  <MapTimelineControls>
+    <MapTimelinePlayButton />
+    <MapTimelineSlider />
+  </MapTimelineControls>
+</MapTimeline>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Layers
+
+A `MapTimelineLayer` renders only when `startYear ≤ currentYear ≤ endYear`. Pass `geometry={{ type: 'polygon', polygon: [...] }}` for a single ring or `{ type: 'multipolygon', polygons: [[...], [...]] }` for multi-island geometries.
+
+The 6-color palette (`amber`, `blue`, `emerald`, `purple`, `red`, `rose`) drives both the polygon fill and the centroid label color.
+
+## Events
+
+A `MapTimelineEvent` renders when `|currentYear - year| ≤ toleranceYears` (default `0` — exact match). Boost `toleranceYears` to keep the marker on screen for a few years around the event so it's easier to spot during slider drags.
+
+## Playback
+
+The play button auto-advances the year on `requestAnimationFrame`. `speed` controls years-per-second (default `25`). Playback pauses automatically when the year reaches `endYear`.
+
+```tsx
+<MapTimeline startYear={-500} endYear={2025} speed={50}>
+  …
+  <MapTimelineControls>
+    <MapTimelinePlayButton />
+    <MapTimelineSlider />
+  </MapTimelineControls>
+</MapTimeline>
+```
+
+## Roman era
+
+Tighter window for a focused stretch of history.
+
+<Canvas of={Stories.RomanEra} sourceState="shown" />
+
+## Without controls
+
+Drop the controls slot for embeds that drive the year externally.
+
+<Canvas of={Stories.NoControls} sourceState="shown" />
+
+## Notes
+
+- Coordinates use the same equirectangular projection as `Map2D`, `ChoroplethMap`, `RouteMap`, `HeatMapOverlay`, and `GeographyQuizMap`. Coordinates outside `[-180, 180] / [-90, 90]` are clipped by the viewBox.
+- Out of scope for the MVP: era selector buttons, info-panel slot beyond children, multi-page narrative, Globe3D composition.
+- Layer wrappers emit `data-layer-id` and `data-state="visible"` while in window. Event wrappers emit `data-event-id` and `data-event-year`. The slider exposes `data-current-year`. The play button exposes `data-playing="true"` while playing.
