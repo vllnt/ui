@@ -1,0 +1,87 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './gantt-chart.stories'
+
+<Meta of={Stories} />
+
+# GanttChart
+
+Pure-CSS Gantt chart for project planning. Renders task bars with progress overlays, milestone diamonds, and a today indicator across a configurable time scale (`day` / `week` / `month` / `quarter`). The left column shows group headers and task names; the right column is the timeline.
+
+Pass data as a `groups: GanttGroup[]` array. The component handles layout, scaling, today positioning, and milestone clipping. Drag-to-edit, dependency arrows, critical-path highlighting, and virtualization for large datasets are intentionally **out of scope** — drive them from consumer code.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/gantt-chart.json
+```
+
+## Import
+
+```tsx
+import { GanttChart, type GanttGroup } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<GanttChart
+  startDate="2026-01-01"
+  endDate="2026-12-31"
+  scale="month"
+  groups={[
+    {
+      id: 'phase-1',
+      name: 'Phase 1',
+      tasks: [
+        {
+          id: 'design',
+          title: 'Design system',
+          start: '2026-01-15',
+          end: '2026-02-28',
+          progress: 100,
+          color: 'blue',
+        },
+      ],
+    },
+  ]}
+  milestones={[
+    { id: 'v1', date: '2026-04-15', title: 'v1.0' },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Scales
+
+`scale` selects the tick interval and axis label format:
+
+| Scale | Interval | Format |
+| ----- | -------- | ------ |
+| `day` | 1 day | `15 Jan` |
+| `week` | 7 days | `15 Jan` |
+| `month` | ~30 days | `Jan 2026` |
+| `quarter` | ~91 days | `Q1 2026` |
+
+<Canvas of={Stories.QuarterScale} sourceState="shown" />
+
+## Single group
+
+<Canvas of={Stories.SingleGroup} sourceState="shown" />
+
+## Without milestones
+
+<Canvas of={Stories.NoMilestones} sourceState="shown" />
+
+## Notes
+
+- Task `start` / `end` accept ISO strings or `Date` instances. End dates are inclusive.
+- `progress` is clamped to `[0, 100]`. Each bar emits `role="progressbar"` with `aria-valuenow`.
+- Task bars and milestones outside the `startDate`–`endDate` window are clipped or hidden automatically.
+- The timeline column scrolls horizontally on narrow viewports. The left task column is sticky in the source order — wrap the chart in your own scroll container if you need a different layout.
