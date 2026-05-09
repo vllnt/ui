@@ -1,0 +1,91 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './newsletter-signup.stories'
+
+<Meta of={Stories} />
+
+# NewsletterSignup
+
+Email-capture compound with a built-in state machine for the universal "drop your email" pattern. Composes `Input` and `Button`.
+
+The consumer owns the submission promise — works with any provider (Resend, ConvertKit, Beehiiv, custom backend). The component handles loading, success, and error states uniformly so each landing page does not have to reinvent them.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/newsletter-signup.json
+```
+
+## Import
+
+```tsx
+import { NewsletterSignup } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<NewsletterSignup
+  onSubmit={async (email) => {
+    await subscribe(email)
+  }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## State machine
+
+```
+idle → sending → sent
+              ↘ error → sending  (user retries)
+                     ↘ idle      (user edits the input)
+```
+
+- `idle` — input visible, button enabled, no message
+- `sending` — input + button disabled, button shows the spinner
+- `sent` — form replaced with a success panel (`role="status"`, `aria-live="polite"`)
+- `error` — input visible, button reads "Try again", validation message under the input (`role="alert"`)
+
+`onStatusChange` reports every transition for callers driving external UI off the same machine.
+
+## Variants
+
+### Inline (default)
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+### Stacked
+
+<Canvas of={Stories.Stacked} sourceState="shown" />
+
+## Error handling
+
+Throw from `onSubmit` to surface an error. `Error` instances use their `message`, thrown strings render verbatim, and any other rejection falls back to `labels.errorFallback`.
+
+<Canvas of={Stories.ErrorState} sourceState="shown" />
+
+## Custom labels
+
+All strings are overridable for i18n.
+
+<Canvas of={Stories.CustomLabels} sourceState="shown" />
+
+## Custom validation
+
+Pass a `validate` prop to enforce rules beyond the default email regex. Return `true` to accept, or a string to render under the input.
+
+<Canvas of={Stories.CorporateOnly} sourceState="shown" />
+
+## Accessibility
+
+- `aria-busy` on the form during submission
+- Error message uses `role="alert"` and `aria-live="polite"`
+- Input flips to `aria-invalid="true"` and `aria-describedby` references the error id
+- Success panel uses `role="status"` so assistive tech announces the outcome without focus-stealing
+- Focus returns to the input after a validation or submission error
