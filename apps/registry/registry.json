@@ -1357,6 +1357,21 @@
       "category": "data"
     },
     {
+      "name": "map-2d",
+      "type": "registry:component",
+      "title": "Map 2D",
+      "description": "Lightweight 2D map primitive — SVG canvas with equirectangular projection, markers, popups, GeoJSON polygon layers, zoom controls, and an optional backdrop image.",
+      "files": [
+        {
+          "path": "registry/default/map-2d/map-2d.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "marquee",
       "type": "registry:component",
       "title": "Marquee",
