@@ -1,0 +1,71 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './document-sibling-nav.stories'
+
+<Meta of={Stories} />
+
+# DocumentSiblingNav
+
+Sibling-document navigator: links to the previous and next item in an ordered series (e.g. newer/older blog post, prev/next doc page). Pairs naturally with `BlogCard`, `MDXContent`, `TableOfContents`.
+
+This is **not** `Pagination` — `Pagination` handles page numbers for paginated lists, while `DocumentSiblingNav` handles per-item navigation with item titles.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/document-sibling-nav.json
+```
+
+## Import
+
+```tsx
+import { DocumentSiblingNav } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<DocumentSiblingNav
+  previous={{ href: '/posts/foo', title: 'Foo post' }}
+  next={{ href: '/posts/bar', title: 'Bar post' }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Edge cases
+
+Either side may be omitted (first / last item). When **both** are absent, the component renders `null`.
+
+<Canvas of={Stories.OnlyPrevious} sourceState="shown" />
+
+<Canvas of={Stories.OnlyNext} sourceState="shown" />
+
+## Variants
+
+### compact
+
+Single-line caption and arrow only — useful in dense layouts.
+
+<Canvas of={Stories.Compact} sourceState="shown" />
+
+### with-meta
+
+Adds an optional secondary line per side (date, author, reading time).
+
+<Canvas of={Stories.WithMeta} sourceState="shown" />
+
+## i18n
+
+Pass `labels` to localize the captions and the wrapping nav's `aria-label`.
+
+<Canvas of={Stories.Localized} sourceState="shown" />
+
+## Server rendering
+
+No client hooks. Safe to render on the server with no hydration penalty.
