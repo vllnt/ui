@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './civilization-card.stories'
+
+<Meta of={Stories} />
+
+# CivilizationCard
+
+Overview card for historical civilizations: hero band with optional image + color theme, era timeline with BCE / CE / `present` formatting, key stats (region, capital, peak population, computed duration), achievement chips, notable leaders, and an optional follow-up link. Pairs with `CivilizationComparison` for side-by-side layouts.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/civilization-card.json
+```
+
+## Import
+
+```tsx
+import { CivilizationCard, CivilizationComparison } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CivilizationCard
+  name="Roman Empire"
+  era={{ start: -27, end: 476 }}
+  region="Mediterranean"
+  capital="Rome"
+  peakPopulation="70 million"
+  color="red"
+  achievements={['Aqueducts', 'Roads', 'Law']}
+  leaders={['Augustus', 'Trajan', 'Marcus Aurelius']}
+  actionHref="/civilizations/rome"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Era format
+
+`era.start` and `era.end` accept positive integers for CE / negative integers for BCE. Omit `end` for extant civilizations — the card prints `"present"` and computes the duration against the current year.
+
+<Canvas of={Stories.Extant} sourceState="shown" />
+
+## Action link
+
+<Canvas of={Stories.WithAction} sourceState="shown" />
+
+## Comparison
+
+Wrap multiple cards in `CivilizationComparison` for a responsive comparison grid.
+
+<Canvas of={Stories.Comparison} sourceState="shown" />
+
+## Minimal
+
+Every prop except `name` is optional — sections drop out when empty.
+
+<Canvas of={Stories.Minimal} sourceState="shown" />

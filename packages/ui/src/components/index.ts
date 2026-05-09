@@ -770,6 +770,15 @@ export {
   type ChecklistProps,
 } from "./checklist";
 export {
+  CivilizationCard,
+  type CivilizationCardColor,
+  type CivilizationCardEra,
+  type CivilizationCardLabels,
+  type CivilizationCardProps,
+  CivilizationComparison,
+  type CivilizationComparisonProps,
+} from "./civilization-card";
+export {
   CodePlayground,
   type CodePlaygroundProps,
   FileTree,
