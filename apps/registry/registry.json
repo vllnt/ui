@@ -253,6 +253,25 @@
       "category": "utility"
     },
     {
+      "name": "auto-reload",
+      "type": "registry:component",
+      "title": "Auto Reload",
+      "description": "Toggle + collapsible threshold/amount form for automatic credit reloading with locale-aware currency.",
+      "files": [
+        {
+          "path": "registry/default/auto-reload/auto-reload.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "switch"
+      ],
+      "dependencies": [],
+      "category": "billing"
+    },
+    {
       "name": "avatar",
       "type": "registry:component",
       "title": "Avatar",
