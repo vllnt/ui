@@ -1068,6 +1068,21 @@
       "category": "data-display"
     },
     {
+      "name": "heat-map-overlay",
+      "type": "registry:component",
+      "title": "Heat Map Overlay",
+      "description": "Standalone SVG geographic heat map — radial-gradient blobs with configurable radius, blur, gradient, and opacity.",
+      "files": [
+        {
+          "path": "registry/default/heat-map-overlay/heat-map-overlay.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "heat-overlay",
       "type": "registry:component",
       "title": "Heat Overlay",
