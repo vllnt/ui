@@ -135,6 +135,22 @@ export {
   type AIToolCallDisplayProps,
   type AIToolCallStatus,
 } from "./ai-tool-call-display";
+export {
+  AISidebar,
+  AISidebarClose,
+  AISidebarContent,
+  AISidebarFooter,
+  AISidebarHeader,
+  type AISidebarLabels,
+  type AISidebarPosition,
+  type AISidebarProps,
+  AISidebarProvider,
+  type AISidebarProviderProps,
+  AISidebarTitle,
+  AISidebarTrigger,
+  type AISidebarTriggerProps,
+  useAISidebar,
+} from "./ai-sidebar";
 
 // New shadcn primitives - Form
 export { Textarea, type TextareaProps } from "./textarea";

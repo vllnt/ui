@@ -1,0 +1,108 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ai-sidebar.stories'
+
+<Meta of={Stories} />
+
+# AISidebar
+
+Slide-out AI assistant panel anchored to the left or right edge — Copilot Chat / Cursor / Notion AI shape. Composes Button.
+
+A compound family driven by `AISidebarProvider`:
+
+- `AISidebarProvider` — owns the open/closed state (controlled or uncontrolled), default position, default width, and labels. Wrap your app shell.
+- `AISidebar` — the panel itself. `aside role="complementary"` with `aria-hidden` toggling on close.
+- `AISidebarHeader` / `AISidebarTitle` / `AISidebarClose` — header slots.
+- `AISidebarContent` — scrollable middle section.
+- `AISidebarFooter` — bottom slot, typically the composer.
+- `AISidebarTrigger` — standalone open/toggle control.
+- `useAISidebar` — hook for any custom child that needs the open state, position, or width.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ai-sidebar.json
+```
+
+## Import
+
+```tsx
+import {
+  AISidebar,
+  AISidebarClose,
+  AISidebarContent,
+  AISidebarFooter,
+  AISidebarHeader,
+  AISidebarProvider,
+  AISidebarTitle,
+  AISidebarTrigger,
+  useAISidebar,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AISidebarProvider defaultOpen={false}>
+  <AISidebar>
+    <AISidebarHeader>
+      <AISidebarTitle>AI Assistant</AISidebarTitle>
+      <ModelSelector models={models} />
+      <AISidebarClose />
+    </AISidebarHeader>
+    <AISidebarContent>
+      <ConversationThread messages={messages} />
+    </AISidebarContent>
+    <AISidebarFooter>
+      <ChatInput onSubmit={handleSend} />
+    </AISidebarFooter>
+  </AISidebar>
+
+  <AISidebarTrigger />
+  <main>{children}</main>
+</AISidebarProvider>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Position
+
+`defaultPosition` selects the anchor edge — `"right"` (default) or `"left"`. The panel slides in from that edge.
+
+<Canvas of={Stories.LeftSide} sourceState="shown" />
+
+## Closed by default
+
+<Canvas of={Stories.Closed} sourceState="shown" />
+
+## State
+
+`AISidebarProvider` accepts both controlled (`open` + `onOpenChange`) and uncontrolled (`defaultOpen` + `onOpenChange`) shapes.
+
+```tsx
+const [open, setOpen] = useState(false)
+
+<AISidebarProvider open={open} onOpenChange={setOpen}>
+  ...
+</AISidebarProvider>
+```
+
+The `useAISidebar` hook exposes `{ openState, open, close, toggle, position, width, labels }` for any custom child.
+
+## Accessibility
+
+- `<aside role="complementary">` with `aria-label` from `labels.defaultTitle`
+- `aria-hidden` toggled with the open state so assistive tech skips the panel when closed
+- Escape closes the sidebar by default; opt out per panel with `closeOnEscape={false}`
+- The trigger emits `aria-expanded` so screen readers announce the disclosure state
+
+## Notes
+
+- The panel uses `position: fixed` by default. Override the wrapper class to anchor it inside an absolute container (the stories use `className="!absolute"` for the demo frame).
+- Drag-resize, persistence, focus trap, mobile overlay, and keyboard shortcuts beyond Escape are intentionally **out of scope** — drive them from consumer code via `useAISidebar` and the provider's controlled API.
+- Width is clamped between 280 and 720 px to keep the layout sensible on common viewports.
