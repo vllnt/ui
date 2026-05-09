@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './follow-mode.stories'
+
+<Meta of={Stories} />
+
+# FollowMode
+
+Follow-mode chrome. Wrap any region (typically the whole canvas) to outline it with the followed participant's color and surface a pinned chip + stop-following button. Pure presentation — the host drives viewport sync and toggles the wrapper on / off.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/follow-mode.json
+```
+
+## Import
+
+```tsx
+import { FollowMode } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<FollowMode color="emerald" name="Sam" onStop={stop}>
+  <CanvasView … />
+</FollowMode>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Without stop
+
+Drop \`onStop\` to render the chip alone — useful when the host surfaces the stop affordance elsewhere.
+
+<Canvas of={Stories.NoStop} sourceState="shown" />
+
+## Notes
+
+- The wrapper applies `ring-2 ring-inset` in the participant's color so the pinned chip stays inside the canvas surface.
+- The wrapper emits `data-follow-color`. The chip emits `data-follow-chip` for analytics + CSS hooks.

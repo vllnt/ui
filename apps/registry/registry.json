@@ -975,6 +975,21 @@
       "category": "data"
     },
     {
+      "name": "follow-mode",
+      "type": "registry:component",
+      "title": "Follow Mode",
+      "description": "Follow-mode chrome — outlines a region with a participant's color and surfaces a stop-following chip.",
+      "files": [
+        {
+          "path": "registry/default/follow-mode/follow-mode.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "form",
       "type": "registry:component",
       "title": "Form",
@@ -1006,6 +1021,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "utility"
+    },
+    {
+      "name": "handoff-beacon",
+      "type": "registry:component",
+      "title": "Handoff Beacon",
+      "description": "Attention-routing beacon with pulsing ring and optional source / message card for live canvases.",
+      "files": [
+        {
+          "path": "registry/default/handoff-beacon/handoff-beacon.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
     },
     {
       "name": "heat-overlay",
