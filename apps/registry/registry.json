@@ -1008,6 +1008,21 @@
       "category": "form"
     },
     {
+      "name": "globe-3d",
+      "type": "registry:component",
+      "title": "Globe 3D",
+      "description": "Standalone SVG pseudo-3D globe — orthographic projection with auto-rotation, drag interaction, lat/lng markers, and great-circle arcs.",
+      "files": [
+        {
+          "path": "registry/default/globe-3d/globe-3d.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "group-hull",
       "type": "registry:component",
       "title": "Group Hull",

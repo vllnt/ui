@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './globe-3d.stories'
+
+<Meta of={Stories} />
+
+# Globe3D
+
+Standalone SVG pseudo-3D globe. Renders a unit sphere with orthographic projection, a graticule (lat/lng lines), and any `GlobeMarker` / `GlobeArc` children. Auto-rotates around the Y axis; drag to rotate manually (auto-rotation pauses while dragging). No external 3D library — pure SVG + React state, so it stays small enough to drop into any project.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/globe-3d.json
+```
+
+## Import
+
+```tsx
+import { Globe3D, GlobeMarker, GlobeArc } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Globe3D autoRotate>
+  <GlobeMarker lat={48.85} lng={2.35} label="Paris" color="blue" />
+  <GlobeMarker lat={40.71} lng={-74} label="New York" color="red" />
+  <GlobeArc
+    from={{ lat: 48.85, lng: 2.35 }}
+    to={{ lat: 40.71, lng: -74 }}
+    color="cyan"
+  />
+</Globe3D>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Auto-rotation
+
+`autoRotate` (default `true`) drives the globe around the Y axis on `requestAnimationFrame`. `rotationSpeed` is degrees per second (default `8`). Auto-rotation pauses while the user drags and resumes when the pointer is released.
+
+<Canvas of={Stories.SlowRotation} sourceState="shown" />
+
+## Static
+
+Set `autoRotate={false}` for a fixed view. The user can still drag to rotate.
+
+<Canvas of={Stories.Static} sourceState="shown" />
+
+## Visible-hemisphere culling
+
+Markers and arc segments on the far side of the globe are hidden — the projection's `z` coordinate determines visibility. Drag to bring back-side content into view.
+
+## Accessibility
+
+The component renders a hidden `<sr-only>` summary listing every marker (lat / lng / label) alongside the SVG. Screen readers can read the data without losing fidelity.
+
+## Notes
+
+- Out of scope for the MVP: WebGL / Three.js renderer, Earth texture, country / region polygons, heatmap layers, zoom controls, click-to-rotate interaction model. Composes well with a project-level Three.js wrapper if you want to upgrade later.
+- The SVG sphere emits `data-globe-sphere`. The graticule emits `data-globe-graticule`. The drag stage emits `data-globe-stage`. Markers emit `data-marker-id` + `data-marker-visible="true"`. Arcs emit `data-arc-id`. Rotation values are exposed on the SVG via `data-rotation-lat` / `data-rotation-lng`.
