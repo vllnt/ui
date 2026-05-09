@@ -674,6 +674,15 @@ export {
   type PlanBadgeTier,
 } from "./plan-badge";
 export {
+  type PricingFeature,
+  type PricingPeriod,
+  PricingPlan,
+  type PricingPlanCta,
+  type PricingPlanProps,
+  PricingTable,
+  type PricingTableProps,
+} from "./pricing-table";
+export {
   RoleBadge,
   type RoleBadgeProps,
   type RoleBadgeRole,
