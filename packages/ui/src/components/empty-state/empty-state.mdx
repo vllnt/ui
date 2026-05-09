@@ -1,0 +1,56 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './empty-state.stories'
+
+<Meta of={Stories} />
+
+# EmptyState
+
+Placeholder for empty lists, tables, and search results. Composes a centered icon, title, description, and an action slot. Announces itself via `role="status"` so assistive tech can pick up state changes when filters clear results.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/empty-state.json
+```
+
+## Import
+
+```tsx
+import { EmptyState } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<EmptyState
+  icon={<InboxIcon />}
+  title="No results found"
+  description="Try adjusting your search or filters."
+>
+  <Button variant="outline" onClick={clearFilters}>Clear filters</Button>
+</EmptyState>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Sizes
+
+| Value | Default | Use case |
+| ----- | ------- | -------- |
+| `sm` | - | Inline placeholders inside cards or compact lists |
+| `md` | Yes | Section-level placeholders |
+| `lg` | - | Full-page placeholders, onboarding screens |
+
+<Canvas of={Stories.SizeSm} sourceState="shown" />
+
+<Canvas of={Stories.SizeLg} sourceState="shown" />
+
+## With action
+
+<Canvas of={Stories.WithAction} sourceState="shown" />

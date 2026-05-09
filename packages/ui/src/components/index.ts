@@ -815,6 +815,12 @@ export {
   type ComparisonProps,
 } from "./comparison";
 export {
+  EmptyState,
+  type EmptyStateProps,
+  type EmptyStateSize,
+  emptyStateVariants,
+} from "./empty-state";
+export {
   type EraColor,
   EraColumn,
   type EraColumnProps,
