@@ -1,0 +1,85 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './prompt-templates.stories'
+
+<Meta of={Stories} />
+
+# PromptTemplates
+
+Library / gallery of saved prompt templates with search, category filter, and a built-in fill-in form for `{{variable}}` placeholders. Composes existing `Input`, `Button`, and `Badge` primitives.
+
+The component is data-driven — pass a `templates` array. Variables in the template body (`{{name}}`) are detected automatically (or pass an explicit `variables` array). Templates with variables expand into an inline form on click; templates without variables fire `onSelect` immediately.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/prompt-templates.json
+```
+
+## Import
+
+```tsx
+import { PromptTemplates } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PromptTemplates
+  templates={[
+    {
+      id: 'code-review',
+      title: 'Code Review',
+      description: 'Review code for bugs and improvements',
+      template: 'Review this {{language}} code:\n\n{{code}}',
+      category: 'Code',
+    },
+  ]}
+  categories={[{ name: 'Code' }, { name: 'Writing' }]}
+  onSelect={(resolved, template) => insertIntoComposer(resolved)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Variable placeholders
+
+Placeholders use `{{name}}` syntax. They are detected automatically; pass an explicit `variables` array on a template entry when the same placeholder appears more than once or when you want to override the detection order.
+
+When the user activates a template with variables, the card expands into an inline form. Submitting the form fires `onSelect` with the resolved string and the original template entry.
+
+```tsx
+{
+  id: 'code-review',
+  title: 'Code Review',
+  template: 'Review this {{language}} code:\n\n{{code}}',
+  // optional: lock the order / dedupe a placeholder used multiple times
+  variables: ['language', 'code'],
+}
+```
+
+## Without categories
+
+Pass no `categories` prop to skip the filter row.
+
+<Canvas of={Stories.NoCategories} sourceState="shown" />
+
+## Empty state
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Custom labels
+
+All strings are overridable for i18n.
+
+<Canvas of={Stories.CustomLabels} sourceState="shown" />
+
+## Notes
+
+- Pinning / favorites and user-created prompts are intentionally **out of scope** — drive them from the consumer code by filtering or augmenting the `templates` array.
+- Each card emits `data-template-id="<id>"` so consumers can drive analytics off the DOM.
