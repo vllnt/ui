@@ -1,0 +1,99 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './ai-artifact.stories'
+
+<Meta of={Stories} />
+
+# AIArtifact
+
+Rendered output area for AI-generated content — code previews, documents, diagrams, interactive widgets. Think Claude Artifacts or ChatGPT Canvas. Composes `Badge` + `Button`.
+
+A compound family driven by an internal context:
+
+- `AIArtifact` — root container; owns the copy state, fullscreen state, derived filename, and the consumer-supplied `onEdit` handler. Sets `data-fullscreen` and `data-type` on the section.
+- `AIArtifactToolbar` — wraps the action row (`role="toolbar"`).
+- `AIArtifactCopyButton` / `AIArtifactDownloadButton` — wired to `value` + `filename` automatically. Copy flips to a check after a successful clipboard write; download creates a Blob with the auto-derived (or overridden) filename.
+- `AIArtifactEditButton` — fires `onEdit`. Renders **nothing** when no `onEdit` handler is provided so consumers do not have to conditionally hide it.
+- `AIArtifactFullscreenButton` — toggles `data-fullscreen` on the root. Drive layout changes via CSS or via `useAIArtifact`.
+- `AIArtifactContent` — scrollable body slot for the actual payload (code block, MDX, mermaid output, sandboxed iframe, image, etc.).
+- `AIArtifactVersions` / `AIArtifactVersion` — version navigator chips at the bottom; each chip emits `onClick` so consumers drive the selected version externally.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/ai-artifact.json
+```
+
+## Import
+
+```tsx
+import {
+  AIArtifact,
+  AIArtifactContent,
+  AIArtifactCopyButton,
+  AIArtifactDownloadButton,
+  AIArtifactEditButton,
+  AIArtifactFullscreenButton,
+  AIArtifactToolbar,
+  AIArtifactVersion,
+  AIArtifactVersions,
+  useAIArtifact,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AIArtifact
+  type="code"
+  title="UserProfile.tsx"
+  language="tsx"
+  value={generatedCode}
+  onEdit={openEditor}
+>
+  <AIArtifactToolbar>
+    <AIArtifactCopyButton />
+    <AIArtifactEditButton />
+    <AIArtifactDownloadButton />
+    <AIArtifactFullscreenButton />
+  </AIArtifactToolbar>
+  <AIArtifactContent>
+    <CodeBlock language="tsx">{generatedCode}</CodeBlock>
+  </AIArtifactContent>
+  <AIArtifactVersions>
+    <AIArtifactVersion label="v1" onClick={() => setVersion('v1')} />
+    <AIArtifactVersion active label="v2" onClick={() => setVersion('v2')} />
+  </AIArtifactVersions>
+</AIArtifact>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Read-only
+
+Omit `onEdit` to hide the edit control without conditionally rendering it.
+
+<Canvas of={Stories.ReadOnly} sourceState="shown" />
+
+## Document type
+
+`type` drives the badge and the default download extension when no `language` is provided. Supported values: `code` / `document` / `diagram` / `table` / `html` / `image` / `custom`.
+
+<Canvas of={Stories.Document} sourceState="shown" />
+
+## Minimal
+
+Every prop except `value` (used for copy/download) is optional. The component still renders the type badge and a content slot ready for any payload.
+
+<Canvas of={Stories.Minimal} sourceState="shown" />
+
+## Notes
+
+- Type-aware payload rendering (code → CodeBlock, document → MDX, diagram → mermaid output, html → sandboxed iframe, etc.) is intentionally **out of scope** — pass the appropriate component or markup as the body of `AIArtifactContent`.
+- Streaming, side-by-side resize against the chat, mobile tab UI, and edit-in-place are kept out of scope. Use `useAIArtifact` and the consumer's own state if you need them.
+- The download flow uses a temporary `Blob` + anchor and falls back to a no-op when `document` is undefined (SSR-safe).
