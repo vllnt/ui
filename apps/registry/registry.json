@@ -945,6 +945,21 @@
       "category": "utility"
     },
     {
+      "name": "floating-toolbar",
+      "type": "registry:component",
+      "title": "Floating Toolbar",
+      "description": "Compact action bar that floats above a selection — primary / ghost / destructive variants.",
+      "files": [
+        {
+          "path": "registry/default/floating-toolbar/floating-toolbar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "flow-diagram",
       "type": "registry:component",
       "title": "Flow Diagram",
@@ -1870,6 +1885,36 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "form"
+    },
+    {
+      "name": "selection-halo",
+      "type": "registry:component",
+      "title": "Selection Halo",
+      "description": "Local-user selection halo with corner handles + label slot for spatial canvases.",
+      "files": [
+        {
+          "path": "registry/default/selection-halo/selection-halo.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
+      "name": "snap-guides",
+      "type": "registry:component",
+      "title": "Snap Guides",
+      "description": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag.",
+      "files": [
+        {
+          "path": "registry/default/snap-guides/snap-guides.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
     },
     {
       "name": "scroll-area",

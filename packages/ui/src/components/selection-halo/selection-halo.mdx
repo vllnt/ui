@@ -1,0 +1,50 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './selection-halo.stories'
+
+<Meta of={Stories} />
+
+# SelectionHalo
+
+Local-user selection halo for a canvas. Outlines a rectangular region with a primary ring + handles at every corner. Pure presentation — the host computes bounds (single object, group bounding box, lasso result) and toggles the wrapper.
+
+Distinct from `SelectionPresence`: this halo represents the **local** user's selection (with corner handles + label slot), while `SelectionPresence` shows a remote participant's selection.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/selection-halo.json
+```
+
+## Import
+
+```tsx
+import { SelectionHalo } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SelectionHalo
+  bounds={{ x: 80, y: 60, width: 200, height: 120 }}
+  label="3 selected"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Pulsing
+
+Set `pulsing` while a multi-step transition is in flight (e.g. waiting for a server-side rename).
+
+<Canvas of={Stories.Pulsing} sourceState="shown" />
+
+## Notes
+
+- The wrapper is `pointer-events-none` so it never blocks the local pointer; the corner handles render as visual cues only — the host wires actual resize handles separately.
+- The wrapper emits `data-selection-halo` and (when pulsing) `data-pulsing="true"`. Each handle emits `data-handle-corner`. The label chip emits `data-selection-label`.

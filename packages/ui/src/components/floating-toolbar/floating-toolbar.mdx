@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './floating-toolbar.stories'
+
+<Meta of={Stories} />
+
+# FloatingToolbar
+
+Compact action bar that floats above a selection. Pair with `SelectionHalo` — surface the toolbar at the halo's top edge so the user sees the available actions for the current selection.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/floating-toolbar.json
+```
+
+## Import
+
+```tsx
+import { FloatingToolbar } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<FloatingToolbar
+  x={120}
+  y={80}
+  actions={[
+    { id: 'rename', label: 'Rename', onActivate: rename, variant: 'primary' },
+    { id: 'duplicate', label: 'Duplicate', onActivate: duplicate },
+    { id: 'delete', label: 'Delete', onActivate: remove, variant: 'destructive' },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Variants
+
+`ghost` (default), `primary`, `destructive`. Use `primary` for the dominant action and `destructive` for irreversible deletes.
+
+## Disabled actions
+
+Set `disabled` on individual actions; the button renders dimmed and clicks are no-ops.
+
+<Canvas of={Stories.Disabled} sourceState="shown" />
+
+## Compact
+
+Drop to a smaller set when only a couple of actions apply.
+
+<Canvas of={Stories.Compact} sourceState="shown" />
+
+## Notes
+
+- The toolbar applies `translateY(-100%)` so the `y` coordinate is the **bottom** edge of the bar — pass the top of the selection halo and the toolbar floats just above it.
+- Each button emits `data-action-id` + `data-variant`. The toolbar wrapper emits `data-floating-toolbar` and `role="toolbar"`.
