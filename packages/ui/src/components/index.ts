@@ -704,6 +704,20 @@ export {
   Comparison,
   type ComparisonProps,
 } from "./comparison";
+export {
+  type EraColor,
+  EraColumn,
+  type EraColumnProps,
+  EraComparison,
+  type EraComparisonProps,
+  EraDomain,
+  type EraDomainProps,
+  EraFigure,
+  type EraFigureProps,
+  EraHighlight,
+  type EraHighlightProps,
+  useEraColumnColor,
+} from "./era-comparison";
 export { Exercise, type ExerciseProps } from "./exercise";
 export { FAQ, FAQItem, type FAQItemProps, type FAQProps } from "./faq";
 export { Flashcard, type FlashcardProps } from "./flashcard";
