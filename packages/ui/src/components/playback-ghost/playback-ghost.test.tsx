@@ -7,10 +7,13 @@ describe("PlaybackGhost", () => {
   it("centers the ghost on the cx/cy point", () => {
     const { container } = render(<PlaybackGhost size={50} x={120} y={80} />);
 
-    expect(container.querySelector("[data-playback-ghost]")).toHaveStyle({
-      left: `${120 - 50 / 2}px`,
-      top: `${80 - 50 / 2}px`,
+    const ghost = container.querySelector("[data-playback-ghost]");
+    expect(ghost).toHaveStyle({
+      left: "120px",
+      top: "80px",
     });
+    expect(ghost?.className).toMatch(/-translate-x-1\/2/);
+    expect(ghost?.className).toMatch(/-translate-y-1\/2/);
   });
 
   it("renders the kind glyph + label", () => {

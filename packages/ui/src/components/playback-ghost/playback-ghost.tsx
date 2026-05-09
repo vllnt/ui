@@ -128,7 +128,7 @@ export const PlaybackGhost = forwardRef<HTMLDivElement, PlaybackGhostProps>(
       <div
         aria-label={ariaLabel}
         className={cn(
-          "pointer-events-none absolute z-10 inline-flex items-center gap-1.5 rounded-md border border-dashed border-border/70 bg-background/40 px-2 py-1 text-xs text-foreground backdrop-blur-sm",
+          "pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-md border border-dashed border-border/70 bg-background/40 px-2 py-1 text-xs text-foreground backdrop-blur-sm",
           className,
         )}
         data-playback-ghost
@@ -136,11 +136,11 @@ export const PlaybackGhost = forwardRef<HTMLDivElement, PlaybackGhostProps>(
         ref={ref}
         role="img"
         style={{
-          left: x - safeSize / 2,
+          left: x,
           minHeight: safeSize,
           minWidth: safeSize,
           opacity: safeOpacity,
-          top: y - safeSize / 2,
+          top: y,
         }}
         {...rest}
       >
