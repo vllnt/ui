@@ -2836,6 +2836,23 @@
       "category": "form"
     },
     {
+      "name": "transaction-list",
+      "type": "registry:component",
+      "title": "Transaction List",
+      "description": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row.",
+      "files": [
+        {
+          "path": "registry/default/transaction-list/transaction-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge"
+      ],
+      "dependencies": [],
+      "category": "billing"
+    },
+    {
       "name": "tldr-section",
       "type": "registry:component",
       "title": "TLDR Section",

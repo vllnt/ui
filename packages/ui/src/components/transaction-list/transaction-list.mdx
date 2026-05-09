@@ -1,0 +1,112 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './transaction-list.stories'
+
+<Meta of={Stories} />
+
+# TransactionList
+
+Chronological list of financial transactions with credit / debit color coding, locale-aware currency + date formatting, and an optional pinned section for the active subscription. Composes `Badge`.
+
+A compound family:
+
+- `TransactionList` — root container; renders pinned children first, then the transactions array. Falls back to `emptyMessage` when both are empty.
+- `TransactionList.Pinned` — wrapper for the pinned section (typically the active subscription row).
+- `TransactionList.SubscriptionRow` — green-border card with plan name, status badge, amount per interval, and an optional renewal date. Status drives both the badge variant and the border treatment.
+
+The component also exports two helper functions for callers that want to format amounts / dates outside the component (e.g. inside CSV exports or PDF receipts):
+
+- `formatTransactionAmount(cents, { currency?, locale? })`
+- `formatTransactionDate(timestampMs, locale?)`
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/transaction-list.json
+```
+
+## Import
+
+```tsx
+import {
+  type Transaction,
+  TransactionList,
+  formatTransactionAmount,
+  formatTransactionDate,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<TransactionList
+  currency="USD"
+  locale="en-US"
+  emptyMessage="No transactions yet"
+  transactions={[
+    {
+      id: '1',
+      type: 'credit',
+      description: 'Credit reload',
+      amountCents: 2000,
+      createdAt: 1710547200000,
+    },
+    {
+      id: '2',
+      type: 'debit',
+      description: 'API usage',
+      amountCents: 150,
+      createdAt: 1710460800000,
+    },
+  ]}
+>
+  <TransactionList.Pinned>
+    <TransactionList.SubscriptionRow
+      plan="AI OS Pro"
+      status="active"
+      amountCents={1200}
+      interval="month"
+      renewsAt={1713139200000}
+      meta="VAT incl."
+    />
+  </TransactionList.Pinned>
+</TransactionList>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Transaction types
+
+| Type | Sign | Color |
+| ---- | ---- | ----- |
+| `credit` | `+` | emerald |
+| `initial` | `+` | emerald |
+| `refund` | `+` | emerald |
+| `debit` | `−` | destructive |
+
+## With subscription
+
+Pass `TransactionList.SubscriptionRow` inside `TransactionList.Pinned` to render the active subscription above the history.
+
+<Canvas of={Stories.WithSubscription} sourceState="shown" />
+
+## Trial + past-due
+
+Subscription `status` accepts `active` / `trialing` / `past_due` / `canceled`. The badge variant and the row border treatment follow.
+
+<Canvas of={Stories.TrialAndPastDue} sourceState="shown" />
+
+## Empty state
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Notes
+
+- Amounts are accepted in **minor units** (cents) — pass an integer; the component handles the divide-by-100 + currency formatting.
+- Sorting is the consumer's responsibility — pass the array in display order.
+- Pagination, server-driven filtering, and CSV export are intentionally **out of scope** — drive them from the consumer's data layer and pass the resulting slice as `transactions`.
