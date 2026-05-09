@@ -1301,6 +1301,26 @@
       "category": "overlay"
     },
     {
+      "name": "historical-figure-card",
+      "type": "registry:component",
+      "title": "Historical Figure Card",
+      "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
+      "files": [
+        {
+          "path": "registry/default/historical-figure-card/historical-figure-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "educational"
+    },
+    {
       "name": "infinite-plane",
       "type": "registry:component",
       "title": "Infinite Plane",

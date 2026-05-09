@@ -1,0 +1,68 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './historical-figure-card.stories'
+
+<Meta of={Stories} />
+
+# HistoricalFigureCard
+
+Profile card for historical figures with portrait, lifespan timeline, fields / works / connections, optional pull-quote, and an expandable biography section. Pairs naturally with timeline and map components for biography-focused educational content.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/historical-figure-card.json
+```
+
+## Import
+
+```tsx
+import { HistoricalFigureCard } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<HistoricalFigureCard
+  name="Leonardo da Vinci"
+  title="Polymath"
+  era="Renaissance"
+  birth={{ year: 1452, place: 'Vinci, Italy' }}
+  death={{ year: 1519, place: 'Amboise, France' }}
+  fields={['Art', 'Science', 'Engineering', 'Anatomy']}
+  works={['Mona Lisa', 'The Last Supper', 'Vitruvian Man']}
+  quote={{ text: 'Learning never exhausts the mind.', source: 'Notebooks' }}
+  profileHref="/figures/da-vinci"
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## With connections
+
+Pass `connections` to surface relationships to other figures. Set `href` per connection to render as a link to their profile.
+
+<Canvas of={Stories.WithConnections} sourceState="shown" />
+
+## With biography
+
+Set `biography` to render an expandable section with a localizable toggle.
+
+<Canvas of={Stories.WithBiography} sourceState="shown" />
+
+## Antiquity
+
+Pass negative integers for `year` to render BC dates with the suffix.
+
+<Canvas of={Stories.Antiquity} sourceState="shown" />
+
+## Minimal
+
+Every prop except `name` is optional — every section is omitted gracefully when empty.
+
+<Canvas of={Stories.Minimal} sourceState="shown" />

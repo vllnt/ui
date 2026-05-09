@@ -254,6 +254,14 @@ export {
 } from "./historic-timeline";
 export { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 export {
+  HistoricalFigureCard,
+  type HistoricalFigureCardConnection,
+  type HistoricalFigureCardLabels,
+  type HistoricalFigureCardLifeEvent,
+  type HistoricalFigureCardProps,
+  type HistoricalFigureCardQuote,
+} from "./historical-figure-card";
+export {
   ContextMenu,
   ContextMenuCheckboxItem,
   ContextMenuContent,
