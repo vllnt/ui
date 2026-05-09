@@ -1,0 +1,82 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './choropleth-map.stories'
+
+<Meta of={Stories} />
+
+# ChoroplethMap
+
+Region-colored data map. Standalone SVG primitive — no external map library or tile provider required. Pass region polygons (in `[lng, lat]`) and a `data` map (region id → numeric value); the component renders a quantized choropleth with hover tooltips, click selection, and an accessible data-table fallback.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/choropleth-map.json
+```
+
+## Import
+
+```tsx
+import {
+  ChoroplethMap,
+  ChoroplethLegend,
+  ChoroplethTooltip,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const regions = [
+  { id: 'FR', name: 'France', coordinates: [[-5,51],[10,51],[10,41],[-5,41],[-5,51]] },
+  { id: 'DE', name: 'Germany', coordinates: [[5,55],[15,55],[15,47],[5,47],[5,55]] },
+]
+
+<ChoroplethMap
+  regions={regions}
+  data={{ FR: 2937, DE: 4082 }}
+  colorScale={['#f1f5f9', '#1d4ed8']}
+>
+  <ChoroplethTooltip />
+  <ChoroplethLegend title="GDP (B USD)" />
+</ChoroplethMap>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Color scales
+
+Pass two stops for a sequential ramp, three for a diverging ramp. Values map linearly between adjacent stops.
+
+```tsx
+<ChoroplethMap colorScale={['#1d4ed8', '#f8fafc', '#dc2626']} domain={[-15, 15]} … />
+```
+
+<Canvas of={Stories.DivergingScale} sourceState="shown" />
+
+## Missing data
+
+Regions whose id is not a key in `data` render with `missingColor` (defaults to a neutral gray).
+
+<Canvas of={Stories.MissingData} sourceState="shown" />
+
+## Custom tooltip
+
+Pass a render-prop as the `ChoroplethTooltip` child for full control of the tooltip body.
+
+<Canvas of={Stories.CustomTooltip} sourceState="shown" />
+
+## Accessibility
+
+The component renders a hidden `<table>` summarising every region + value alongside the SVG. Screen readers can read the data without losing fidelity. Each region path is keyboard-focusable; focus drives the tooltip the same way mouse hover does.
+
+## Notes
+
+- Coordinates use the same equirectangular projection as `Map2D`. Coordinates outside `[-180, 180] / [-90, 90]` are clipped by the viewBox.
+- Out of scope for the MVP: zoom-to-region animations, multi-data-set toggle, animated transitions, polygon holes, lines, points, bundled GeoJSON for common geographies. Hosting projects can wire those externally.
+- Each region path emits `data-region-id`, `data-value`, and (when selected) `data-selected="true"`. The legend wrapper emits `data-legend`. The tooltip wrapper emits `data-tooltip-region-id`.
