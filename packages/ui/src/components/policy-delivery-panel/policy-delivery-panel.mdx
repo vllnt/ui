@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './policy-delivery-panel.stories'
+
+<Meta of={Stories} />
+
+# PolicyDeliveryPanel
+
+Right-dock panel listing the policies / guardrails that apply to the active route or run. Each row shows the policy name, enforcement status chip, and optional rationale. Pure presentation; the host computes the list from the live config and supplies an optional toggle handler for admin views.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/policy-delivery-panel.json
+```
+
+## Import
+
+```tsx
+import { PolicyDeliveryPanel } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PolicyDeliveryPanel
+  policies={[
+    { id: "pii",  name: "PII redaction", status: "enforced" },
+    { id: "rate", name: "Rate limiting", status: "advisory", description: "60 / s soft cap" },
+    { id: "exp",  name: "Experiment B",  status: "disabled" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty state
+
+When no policies are provided, the panel renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## All enforced
+
+A fully-locked-down route renders as a uniformly green chip column.
+
+<Canvas of={Stories.AllEnforced} sourceState="shown" />
+
+## Non-interactive
+
+Omit \`onToggle\` and rows render as plain divs (no hover, no button semantics). Useful for read-only audit views.
+
+<Canvas of={Stories.NonInteractive} sourceState="shown" />
+
+## Notes
+
+- Status chips map: \`enforced\` (emerald) · \`advisory\` (amber) · \`disabled\` (muted).
+- Each row emits \`data-policy-row\` (= id) + \`data-policy-status\`. The wrapper emits \`data-policy-delivery-panel\`.

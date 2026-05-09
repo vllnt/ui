@@ -1,0 +1,64 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './routing-assignment-panel.stories'
+
+<Meta of={Stories} />
+
+# RoutingAssignmentPanel
+
+Right-dock panel listing the agent slots the active route dispatches to: primary handler + fallbacks + shadow probes. Each row shows the agent name, role chip, and optional load bar. Pure presentation; the host computes the assignments from the routing config + observed traffic.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/routing-assignment-panel.json
+```
+
+## Import
+
+```tsx
+import { RoutingAssignmentPanel } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<RoutingAssignmentPanel
+  assignments={[
+    { id: "1", agent: "researcher",      role: "primary",  load: 0.82 },
+    { id: "2", agent: "researcher-mini", role: "fallback", load: 0.04 },
+    { id: "3", agent: "shadow-eval",     role: "shadow" },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty state
+
+When no assignments are provided, the panel renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Primary only
+
+Routes with no fallbacks render as a single row.
+
+<Canvas of={Stories.PrimaryOnly} sourceState="shown" />
+
+## Non-interactive
+
+Omit \`onActivate\` and rows render as plain divs (no hover, no button semantics). Useful for read-only debug views.
+
+<Canvas of={Stories.NonInteractive} sourceState="shown" />
+
+## Notes
+
+- Role chips map: \`primary\` (emerald) · \`fallback\` (amber) · \`shadow\` (muted).
+- Load bar accepts \`0..1\` and clamps out-of-range values.
+- Each row emits \`data-routing-assignment\` (= id) + \`data-routing-role\`. The wrapper emits \`data-routing-assignment-panel\`.
