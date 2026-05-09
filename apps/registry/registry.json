@@ -1482,6 +1482,21 @@
       "category": "utility"
     },
     {
+      "name": "object-inspector",
+      "type": "registry:component",
+      "title": "Object Inspector",
+      "description": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots.",
+      "files": [
+        {
+          "path": "registry/default/object-inspector/object-inspector.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "order-book",
       "type": "registry:component",
       "title": "Order Book",
@@ -1677,6 +1692,21 @@
       "category": "data"
     },
     {
+      "name": "property-section",
+      "type": "registry:component",
+      "title": "Property Section",
+      "description": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse.",
+      "files": [
+        {
+          "path": "registry/default/property-section/property-section.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
+    },
+    {
       "name": "quiz",
       "type": "registry:component",
       "title": "Quiz",
@@ -1720,6 +1750,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "learning"
+    },
+    {
+      "name": "relationship-inspector",
+      "type": "registry:component",
+      "title": "Relationship Inspector",
+      "description": "Right-dock panel listing inbound + outbound edges of the focused canvas object.",
+      "files": [
+        {
+          "path": "registry/default/relationship-inspector/relationship-inspector.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "content"
     },
     {
       "name": "resizable",

@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './object-inspector.stories'
+
+<Meta of={Stories} />
+
+# ObjectInspector
+
+Inspector header for the right dock of a spatial canvas. Renders kind chip + live status dot + title + subtitle, then any children below (typically a stack of `PropertySection` blocks). Pure presentation; the host derives props from the current selection and slots the property sections.
+
+Distinct from `ObjectCard`: \`ObjectCard\` is the **on-canvas** representation of a runtime object; \`ObjectInspector\` is the **off-canvas** detail view in the right dock. The two share kind / status semantics but live in different surfaces.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/object-inspector.json
+```
+
+## Import
+
+```tsx
+import { ObjectInspector } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ObjectInspector
+  kind="run"
+  status="running"
+  title="research-2025-04-15"
+  subtitle="claude-3.7"
+>
+  <PropertySection title="Layout" entries={…} />
+  <PropertySection title="State" entries={…} />
+</ObjectInspector>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Empty state
+
+When no object is selected, drop \`kind\` (and / or \`title\`). The inspector renders a calm empty placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Failed status
+
+\`status="failed"\` renders the dot in red. Pair the inspector subtitle with the failure reason so the user has immediate context.
+
+<Canvas of={Stories.Failed} sourceState="shown" />
+
+## Notes
+
+- Status dot maps: \`idle\` (muted) · \`queued\` (amber) · \`running\` (blue, pulsing) · \`complete\` (emerald) · \`failed\` (red).
+- The wrapper emits \`data-object-inspector\` plus \`data-object-kind\` + \`data-object-status\` (or \`data-object-state="empty"\` in the empty state) for analytics + CSS hooks.

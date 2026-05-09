@@ -838,6 +838,13 @@ export {
 } from "./object-card";
 export { ObjectHandle, type ObjectHandleProps } from "./object-handle";
 export {
+  ObjectInspector,
+  type ObjectInspectorKind,
+  type ObjectInspectorLabels,
+  type ObjectInspectorProps,
+  type ObjectInspectorStatus,
+} from "./object-inspector";
+export {
   PlaybackGhost,
   type PlaybackGhostKind,
   type PlaybackGhostLabels,
@@ -863,6 +870,19 @@ export {
   type PresenceSyncIndicatorProps,
   type PresenceSyncState,
 } from "./presence-sync-indicator";
+export {
+  type PropertyEntry,
+  PropertySection,
+  type PropertySectionLabels,
+  type PropertySectionProps,
+} from "./property-section";
+export {
+  type RelationshipDirection,
+  type RelationshipEdge,
+  RelationshipInspector,
+  type RelationshipInspectorLabels,
+  type RelationshipInspectorProps,
+} from "./relationship-inspector";
 export {
   type RoutingAssignment,
   RoutingAssignmentPanel,

@@ -1,0 +1,58 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './property-section.stories'
+
+<Meta of={Stories} />
+
+# PropertySection
+
+Compact key / value grid for an inspector panel. Use one `PropertySection` per logical group (Identity, Layout, State, …) so the right dock stays scannable. Pure presentation — the host computes the entries from the current selection.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/property-section.json
+```
+
+## Import
+
+```tsx
+import { PropertySection } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PropertySection
+  title="Layout"
+  entries={[
+    { id: 'x', label: 'X', value: '120' },
+    { id: 'y', label: 'Y', value: '80' },
+    { id: 'size', label: 'Size', value: '240 × 120' },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## With sublabels
+
+Add `sublabel` to surface a unit (`px`, `ms`, `kg`) or other small qualifier under the main label.
+
+<Canvas of={Stories.WithSublabels} sourceState="shown" />
+
+## Collapsible
+
+Use a `<details>` summary header — the section starts open and folds on click. Useful when an inspector lists 5+ groups.
+
+<Canvas of={Stories.Collapsible} sourceState="shown" />
+
+## Notes
+
+- The grid uses `grid-cols-[max-content_1fr]` so labels share a left column and values right-align in the remaining space.
+- Each row emits `data-property-id`. The wrapper emits `data-property-section` and either `data-property-header` (default) or `data-property-summary` (collapsible).
