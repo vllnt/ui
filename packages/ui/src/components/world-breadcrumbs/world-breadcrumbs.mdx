@@ -1,0 +1,67 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './world-breadcrumbs.stories'
+
+<Meta of={Stories} />
+
+# WorldBreadcrumbs
+
+Spatial trail showing where the viewport currently is in a hierarchy of worlds / groups / runs / agents. Distinct from \`Breadcrumb\` (route-based, document-tree style) — this primitive describes the canvas's spatial location and supports per-kind glyphs.
+
+Pure presentation; the host computes the trail from the active viewport target and the world graph, and resolves \`onSelect\` to a camera transition.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/world-breadcrumbs.json
+```
+
+## Import
+
+```tsx
+import { WorldBreadcrumbs } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<WorldBreadcrumbs
+  crumbs={[
+    { id: "world", kind: "world", label: "Production" },
+    { id: "group", kind: "group", label: "Ingest cluster" },
+    { id: "run",   kind: "run",   label: "research-2025" },
+  ]}
+  onSelect={jumpTo}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Shallow trail
+
+A two-crumb trail still renders its separators and last-crumb emphasis.
+
+<Canvas of={Stories.Shallow} sourceState="shown" />
+
+## Empty
+
+When the host has no active spatial location, the nav renders a calm placeholder.
+
+<Canvas of={Stories.Empty} sourceState="shown" />
+
+## Read-only
+
+Drop \`onSelect\` and crumbs render as plain spans (no hover, no button semantics).
+
+<Canvas of={Stories.ReadOnly} sourceState="shown" />
+
+## Notes
+
+- Kinds map: \`world\` ✦ · \`group\` ▤ · \`run\` ▶ · \`task\` ▢ · \`agent\` ◇ · \`artifact\` ◌.
+- The last crumb always renders as the active location and never invokes \`onSelect\`.
+- Each crumb emits \`data-world-breadcrumb\` set to the crumb id, plus \`data-world-breadcrumb-active\`. Separators emit \`data-world-breadcrumb-sep\`. The wrapper emits \`data-world-breadcrumbs\`.
