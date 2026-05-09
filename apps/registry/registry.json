@@ -963,6 +963,21 @@
       "category": "utility"
     },
     {
+      "name": "heat-overlay",
+      "type": "registry:component",
+      "title": "Heat Overlay",
+      "description": "Heatmap-style overlay drawing soft radial blobs for canvas activity samples.",
+      "files": [
+        {
+          "path": "registry/default/heat-overlay/heat-overlay.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "horizontal-scroll-row",
       "type": "registry:component",
       "title": "Horizontal Scroll Row",
@@ -1235,6 +1250,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "navigation"
+    },
+    {
+      "name": "metric-cluster",
+      "type": "registry:component",
+      "title": "Metric Cluster",
+      "description": "Compact stack of related metrics pinned to a canvas object's corner.",
+      "files": [
+        {
+          "path": "registry/default/metric-cluster/metric-cluster.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
     },
     {
       "name": "metric-gauge",
@@ -1979,6 +2009,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "state-badge-overlay",
+      "type": "registry:component",
+      "title": "State Badge Overlay",
+      "description": "State chip pinned to a canvas object's corner — idle, queued, running, complete, failed, stopped.",
+      "files": [
+        {
+          "path": "registry/default/state-badge-overlay/state-badge-overlay.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "status-board",

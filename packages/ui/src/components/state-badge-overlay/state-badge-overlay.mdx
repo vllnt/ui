@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './state-badge-overlay.stories'
+
+<Meta of={Stories} />
+
+# StateBadgeOverlay
+
+State chip pinned to a canvas object's corner. Use when a single-letter glyph in \`ObjectCard\` doesn't carry enough signal — for runs that just transitioned, jobs that failed, agents idling. Pure presentation; the host computes the anchor from the object's bounding box.
+
+The wrapper is \`pointer-events: none\` — host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/state-badge-overlay.json
+```
+
+## Import
+
+```tsx
+import { StateBadgeOverlay } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <StateBadgeOverlay state="running" x={420} y={180} anchor="top-right" />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Failed state
+
+\`failed\` renders the chip in red so the user can spot the problem object across a busy canvas.
+
+<Canvas of={Stories.Failed} sourceState="shown" />
+
+## Complete state
+
+\`complete\` is a calm emerald chip — visible but not loud, since complete is the default eventual state.
+
+<Canvas of={Stories.Complete} sourceState="shown" />
+
+## Custom label
+
+Pass \`label\` to override the humanized state name (e.g. domain-specific verbs).
+
+<Canvas of={Stories.CustomLabel} sourceState="shown" />
+
+## Notes
+
+- States map: \`idle\` (muted) · \`queued\` (amber) · \`running\` (blue, pulsing dot) · \`complete\` (emerald) · \`failed\` (red) · \`stopped\` (foreground).
+- Anchors map: \`top-right\` (default) · \`top-left\` · \`bottom-right\` · \`bottom-left\`. The anchor pixel is always the meeting corner.
+- Each render emits \`data-state-badge-overlay\` + \`data-state-name\` + \`data-state-anchor\`. The leading dot emits \`data-state-badge-dot\`.

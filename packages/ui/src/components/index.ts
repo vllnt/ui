@@ -786,10 +786,25 @@ export {
 export { EdgeLabel, type EdgeLabelProps } from "./edge-label";
 export { GroupHull, type GroupHullProps } from "./group-hull";
 export {
+  HeatOverlay,
+  type HeatOverlayLabels,
+  type HeatOverlayProps,
+  type HeatOverlayTone,
+  type HeatPoint,
+} from "./heat-overlay";
+export {
   LiveCursor,
   type LiveCursorLabels,
   type LiveCursorProps,
 } from "./live-cursor";
+export {
+  MetricCluster,
+  type MetricClusterAnchor,
+  type MetricClusterEntry,
+  type MetricClusterLabels,
+  type MetricClusterProps,
+  type MetricClusterTone,
+} from "./metric-cluster";
 export {
   ObjectCard,
   type ObjectCardAction,
@@ -829,6 +844,13 @@ export {
   type SelectionPresenceLabels,
   type SelectionPresenceProps,
 } from "./selection-presence";
+export {
+  type StateBadgeAnchor,
+  StateBadgeOverlay,
+  type StateBadgeOverlayLabels,
+  type StateBadgeOverlayProps,
+  type StateBadgeState,
+} from "./state-badge-overlay";
 export {
   ThreadBubble,
   type ThreadBubbleLabels,
