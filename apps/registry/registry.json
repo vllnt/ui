@@ -1647,6 +1647,26 @@
       "category": "data"
     },
     {
+      "name": "model-comparison",
+      "type": "registry:component",
+      "title": "Model Comparison",
+      "description": "Side-by-side comparison of AI model responses with optional blind mode, metadata stats, and a vote bar.",
+      "files": [
+        {
+          "path": "registry/default/model-comparison/model-comparison.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "badge",
+        "button"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "ai"
+    },
+    {
       "name": "model-selector",
       "type": "registry:component",
       "title": "Model Selector",
