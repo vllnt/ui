@@ -513,6 +513,14 @@ export {
   type RoleBadgeRole,
 } from "./role-badge";
 export {
+  type RouteColor,
+  type RouteLineStyle,
+  RouteMap,
+  type RouteMapLabels,
+  type RouteMapProps,
+  type RouteWaypoint,
+} from "./route-map";
+export {
   SparklineGrid,
   type SparklineGridItem,
   type SparklineGridProps,

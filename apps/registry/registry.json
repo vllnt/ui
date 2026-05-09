@@ -1917,6 +1917,21 @@
       "category": "content"
     },
     {
+      "name": "route-map",
+      "type": "registry:component",
+      "title": "Route Map",
+      "description": "Standalone SVG map with animated route paths, waypoints, and progress indicator. For trade routes, voyages, migrations, delivery tracking.",
+      "files": [
+        {
+          "path": "registry/default/route-map/route-map.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "routing-assignment-panel",
       "type": "registry:component",
       "title": "Routing Assignment Panel",
