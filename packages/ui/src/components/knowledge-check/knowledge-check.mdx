@@ -1,0 +1,91 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './knowledge-check.stories'
+
+<Meta of={Stories} />
+
+# KnowledgeCheck
+
+Inline knowledge check for embedding within content. Supports three question types — `multiple-choice`, `true-false`, and `fill-blank` — with per-question feedback (correct / incorrect + optional `explanation`) and a final score summary with retry. Composes `Input` and `Button`.
+
+Question state lives inside the component. Drive analytics or persistence from the `onAnswer` and `onComplete` callbacks.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/knowledge-check.json
+```
+
+## Import
+
+```tsx
+import { KnowledgeCheck, type KnowledgeCheckQuestion } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const questions: KnowledgeCheckQuestion[] = [
+  {
+    id: 'react-purpose',
+    type: 'multiple-choice',
+    question: 'What is React?',
+    options: [
+      { value: 'ui', label: 'A UI library', correct: true },
+      { value: 'db', label: 'A database' },
+    ],
+  },
+  {
+    id: 'react-framework',
+    type: 'true-false',
+    question: 'React is a framework.',
+    answer: false,
+  },
+  {
+    id: 'state-hook',
+    type: 'fill-blank',
+    question: 'The React hook for component state is ___',
+    answer: 'useState',
+  },
+]
+
+<KnowledgeCheck
+  title="Check your understanding"
+  questions={questions}
+  onAnswer={(answer) => track('kc:answer', answer)}
+  onComplete={(score) => track('kc:complete', score)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Question types
+
+| Type | Required props |
+| ---- | -------------- |
+| `multiple-choice` | `options: KnowledgeCheckOption[]` (mark the correct option(s) with `correct: true`) |
+| `true-false` | `answer: boolean` |
+| `fill-blank` | `answer: string` (case-insensitive by default; pass `caseSensitive: true` to opt in) |
+
+Every question accepts an optional `explanation` shown beneath the correct/incorrect feedback.
+
+## Single question
+
+The component handles the trivial single-question case the same way — the score summary still renders on completion.
+
+<Canvas of={Stories.SingleQuestion} sourceState="shown" />
+
+## Multiple-choice only
+
+<Canvas of={Stories.MultipleChoiceOnly} sourceState="shown" />
+
+## Notes
+
+- `code` and `matching` question types from the original spec are intentionally **out of scope** — drive code-completion checks via the existing `CodeBlock` + a custom validator and pass the result via `fill-blank` if a string match suffices, or wait for a future iteration.
+- Shuffling, adaptive hints, and per-question retries are also out of scope — the consumer can reorder or augment the `questions` array externally.
+- Analytics, persistence, and certificate emission live downstream of the `onAnswer` / `onComplete` callbacks.

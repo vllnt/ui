@@ -1312,6 +1312,26 @@
       "category": "learning"
     },
     {
+      "name": "knowledge-check",
+      "type": "registry:component",
+      "title": "Knowledge Check",
+      "description": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary.",
+      "files": [
+        {
+          "path": "registry/default/knowledge-check/knowledge-check.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "category": "educational"
+    },
+    {
       "name": "lang-provider",
       "type": "registry:component",
       "title": "Lang Provider",
