@@ -766,6 +766,13 @@ export {
 // Canvas/Object components
 export { AnchorPort, type AnchorPortProps } from "./anchor-port";
 export {
+  type ActivityEvent,
+  type ActivityStripTone,
+  BottomActivityStrip,
+  type BottomActivityStripLabels,
+  type BottomActivityStripProps,
+} from "./bottom-activity-strip";
+export {
   CommentPin,
   type CommentPinLabels,
   type CommentPinProps,
@@ -790,6 +797,12 @@ export {
   type ObjectCardProps,
 } from "./object-card";
 export { ObjectHandle, type ObjectHandleProps } from "./object-handle";
+export {
+  PlaybackGhost,
+  type PlaybackGhostKind,
+  type PlaybackGhostLabels,
+  type PlaybackGhostProps,
+} from "./playback-ghost";
 export {
   PresenceStack,
   type PresenceStackLabels,
@@ -822,6 +835,13 @@ export {
   type ThreadBubbleProps,
   type ThreadMessage,
 } from "./thread-bubble";
+export {
+  TimelineScrubber,
+  type TimelineScrubberLabels,
+  type TimelineScrubberProps,
+  type TimelineScrubberTone,
+  type TimelineTick,
+} from "./timeline-scrubber";
 
 // AI/Chat components
 export {

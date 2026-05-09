@@ -328,6 +328,21 @@
       "category": "utility"
     },
     {
+      "name": "bottom-activity-strip",
+      "type": "registry:component",
+      "title": "Bottom Activity Strip",
+      "description": "Slim horizontally-scrolling row of recent canvas events for low-noise live activity.",
+      "files": [
+        {
+          "path": "registry/default/bottom-activity-strip/bottom-activity-strip.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data"
+    },
+    {
       "name": "breadcrumb",
       "type": "registry:component",
       "title": "Breadcrumb",
@@ -1437,6 +1452,21 @@
       "category": "content"
     },
     {
+      "name": "playback-ghost",
+      "type": "registry:component",
+      "title": "Playback Ghost",
+      "description": "Translucent overlay marking where a canvas object was at a previous timestamp during playback.",
+      "files": [
+        {
+          "path": "registry/default/playback-ghost/playback-ghost.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "popover",
       "type": "registry:component",
       "title": "Popover",
@@ -2223,6 +2253,21 @@
       "registryDependencies": [],
       "dependencies": [],
       "category": "data"
+    },
+    {
+      "name": "timeline-scrubber",
+      "type": "registry:component",
+      "title": "Timeline Scrubber",
+      "description": "Range slider for scrubbing through canvas state playback, with optional milestone ticks.",
+      "files": [
+        {
+          "path": "registry/default/timeline-scrubber/timeline-scrubber.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "form"
     },
     {
       "name": "tldr-section",

@@ -1,0 +1,65 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './playback-ghost.stories'
+
+<Meta of={Stories} />
+
+# PlaybackGhost
+
+Translucent overlay marking where a canvas object was at a previous timestamp during state playback. Renders a kind glyph (and optional label) at the historical position so the user can compare the present canvas against earlier state without losing context.
+
+Pure presentation; the host computes the historical position from the scrubbed timestamp. Pair with \`TimelineScrubber\` to drive the cursor.
+
+The wrapper is \`pointer-events: none\` so host gestures pass through.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/playback-ghost.json
+```
+
+## Import
+
+```tsx
+import { PlaybackGhost } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen">
+  <Canvas />
+  <PlaybackGhost x={420} y={180} kind="run" label="research-2025" />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Faint
+
+Lower \`opacity\` produces a quieter ghost — good for far-back history.
+
+<Canvas of={Stories.Faint} sourceState="shown" />
+
+## Bold
+
+Higher \`opacity\` keeps the ghost legible against busy canvases.
+
+<Canvas of={Stories.Bold} sourceState="shown" />
+
+## Glyphless
+
+Drop \`kind\` to render a label-only ghost (still emits \`data-playback-kind="unknown"\`).
+
+<Canvas of={Stories.Glyphless} sourceState="shown" />
+
+## Notes
+
+- Kinds map: \`agent\` ◇ · \`run\` ▶ · \`task\` ▢ · \`artifact\` ◌ · \`input\` ↘ · \`output\` ↗.
+- Opacity clamps to \`0..1\`; size floors at \`16\` px.
+- Each render emits \`data-playback-ghost\` + \`data-playback-kind\`. The optional label emits \`data-playback-ghost-label\`.
