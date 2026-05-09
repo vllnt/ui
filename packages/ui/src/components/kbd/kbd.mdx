@@ -1,0 +1,79 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './kbd.stories'
+
+<Meta of={Stories} />
+
+# Kbd
+
+Keyboard key indicator for displaying shortcuts. Pass a single child for one key, or use the `shortcut` prop with a `+`-delimited string for platform-aware multi-key combos.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/kbd.json
+```
+
+## Import
+
+```tsx
+import { Kbd } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<Kbd>K</Kbd>
+
+{/* Composed manually */}
+Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
+
+{/* Auto-expanded via the shortcut prop */}
+<Kbd shortcut="mod+k" />
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Sizes
+
+| Value | Default |
+| ----- | ------- |
+| `sm` | - |
+| `md` | Yes |
+| `lg` | - |
+
+<Canvas of={Stories.SizeSm} sourceState="shown" />
+
+<Canvas of={Stories.SizeLg} sourceState="shown" />
+
+## Shortcut prop
+
+The `shortcut` prop expands a `+`-delimited token list. Special tokens:
+
+| Token | Mac | Other |
+| ----- | --- | ----- |
+| `mod` | `⌘` | `Ctrl` |
+| `meta` | `⌘` | `Win` |
+| `ctrl` | `⌃` | `Ctrl` |
+| `alt` | `⌥` | `Alt` |
+| `shift` | `⇧` | `Shift` |
+| `enter` / `return` | `↵` | `↵` |
+| `escape` | `Esc` | `Esc` |
+| `tab` | `⇥` | `⇥` |
+| `space` | `Space` | `Space` |
+| `backspace` | `⌫` | `⌫` |
+| `delete` | `⌦` | `⌦` |
+| `arrowup` / `arrowdown` / `arrowleft` / `arrowright` | `↑` / `↓` / `←` / `→` | same |
+
+<Canvas of={Stories.Shortcut} sourceState="shown" />
+
+<Canvas of={Stories.ModShortcut} sourceState="shown" />
+
+## Composed
+
+<Canvas of={Stories.Composed} sourceState="shown" />

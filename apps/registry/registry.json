@@ -1445,6 +1445,23 @@
       "category": "navigation"
     },
     {
+      "name": "kbd",
+      "type": "registry:component",
+      "title": "Kbd",
+      "description": "Keyboard key indicator with platform-aware modifier expansion via the shortcut prop.",
+      "files": [
+        {
+          "path": "registry/default/kbd/kbd.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "category": "core"
+    },
+    {
       "name": "key-concept",
       "type": "registry:component",
       "title": "Key Concept",
