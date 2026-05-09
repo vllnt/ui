@@ -515,6 +515,15 @@ export {
 export { BlogCard, ContentCard } from "./blog-card";
 export { CategoryFilter } from "./category-filter";
 export { Pagination, type PaginationProps } from "./pagination";
+export {
+  ParallelTimeline,
+  type ParallelTimelineColor,
+  type ParallelTimelineEra,
+  type ParallelTimelineEvent,
+  type ParallelTimelineLabels,
+  type ParallelTimelineProps,
+  type ParallelTimelineTrack,
+} from "./parallel-timeline";
 export { SearchBar } from "./search-bar";
 export {
   ScopeSelector,

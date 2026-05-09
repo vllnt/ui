@@ -1,0 +1,86 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './parallel-timeline.stories'
+
+<Meta of={Stories} />
+
+# ParallelTimeline
+
+Multi-track timeline with a shared time axis for comparing concurrent events across different tracks (civilizations, regions, domains). Renders each track as a horizontal lane with event markers positioned by year. Negative years render as `BCE`, positive as `CE`. Optional background era bands span every track.
+
+Data-driven — pass `tracks: ParallelTimelineTrack[]` and the visible window via `startYear` / `endYear`.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/parallel-timeline.json
+```
+
+## Import
+
+```tsx
+import {
+  ParallelTimeline,
+  type ParallelTimelineTrack,
+} from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ParallelTimeline
+  startYear={-500}
+  endYear={500}
+  tracks={[
+    {
+      id: 'rome',
+      name: 'Rome',
+      color: 'red',
+      events: [
+        { id: 'augustus', year: -27, title: 'Augustus becomes Emperor' },
+        { id: 'fall', year: 476, title: 'Fall of Western Rome' },
+      ],
+    },
+    {
+      id: 'china',
+      name: 'China',
+      color: 'amber',
+      events: [
+        { id: 'qin', year: -221, title: 'Qin unifies China' },
+        { id: 'han-end', year: 220, title: 'End of Han Dynasty' },
+      ],
+    },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## With era band
+
+`eras` paints background bands behind every track. Use them for shared periods (Antiquity, Renaissance, Cold War, …).
+
+<Canvas of={Stories.WithEra} sourceState="shown" />
+
+## Two tracks
+
+The grid honours the actual number of tracks — fewer tracks mean taller lanes by default.
+
+<Canvas of={Stories.TwoTracks} sourceState="shown" />
+
+## Tight window
+
+Narrow `startYear` / `endYear` to focus on a sub-period. Events outside the window are clipped automatically.
+
+<Canvas of={Stories.TightWindow} sourceState="shown" />
+
+## Notes
+
+- Years use the proleptic calendar — pass negative integers for BCE, positive for CE.
+- Cross-track connectors, synchronized pan/zoom, collapsible tracks, and click-to-compare are intentionally **out of scope** — drive them from consumer code via the data slots.
+- Each track emits `data-track-id="<id>"` and each event emits `data-event-id="<id>"` + `data-event-year` for analytics.
