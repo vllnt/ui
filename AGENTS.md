@@ -1,25 +1,29 @@
 # Agent Instructions
 
 Canonical instructions for AI coding agents working in this repository.
-Harness-specific aliases (`CLAUDE.md`, `.cursorrules`, `codex.md`, etc.) should reference this file.
+Harness-specific aliases (`CLAUDE.md`, `.cursorrules`, `codex.md`, etc.) reference this file.
+
+This file is the **index**. Detailed rules live in [`docs/agents/`](./docs/agents/).
+
+---
 
 ## Repository at a glance
 
-- **Project:** `@vllnt/ui` — 144-component React library (Radix primitives + Tailwind + CVA).
+- **Project:** `@vllnt/ui` — accessible React component library (Radix primitives + Tailwind + CVA).
 - **Language:** TypeScript (strict mode via `@vllnt/typescript`).
-- **Package manager:** pnpm (lockfile: `pnpm-lock.yaml`). Never use `npm` / `yarn` / `bun`.
-- **Monorepo tool:** Turborepo via `turbo.json`.
-- **Primary branch:** `main`. Never commit to `main` — push branches, open PRs.
+- **Package manager:** pnpm. Lockfile: `pnpm-lock.yaml`. Never use `npm` / `yarn` / `bun`.
+- **Monorepo tool:** Turborepo (`turbo.json`).
+- **Primary branch:** `main`. Never commit directly to `main` — push branches, open PRs.
 
 ## Package map
 
-| Path | Purpose | Published? |
-|------|---------|------------|
+| Path | Purpose | Published |
+|------|---------|-----------|
 | `packages/ui/` | `@vllnt/ui` component library | npm (public) |
-| `apps/registry/` | `ui.vllnt.ai` — Next.js registry + docs site | deployed, not a package |
-| `.github/workflows/` | CI: `ci.yml`, `publish.yml`, `storybook.yml` | — |
+| `apps/registry/` | `ui.vllnt.ai` — Next.js registry + docs site | deployed (Vercel) |
+| `.github/workflows/` | CI: `ci.yml`, `publish.yml`, `storybook.yml`, `pr-issue-link.yml` | — |
 
-External shared configs (published to npm separately): `@vllnt/eslint-config`, `@vllnt/typescript`.
+External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt/typescript`.
 
 ## Commands (run from repo root)
 
@@ -33,69 +37,41 @@ External shared configs (published to npm separately): `@vllnt/eslint-config`, `
 | `pnpm -F @vllnt/ui test:coverage` | Vitest with coverage |
 | `pnpm check:circular` | Fail on circular imports |
 
-## Component conventions
+---
 
-Every component lives at `packages/ui/src/components/{name}/`:
+## Agent rule index
 
-```
-{name}/
-  {name}.tsx         # implementation — React.forwardRef + CVA + cn()
-  {name}.test.tsx    # Vitest unit
-  {name}.visual.tsx  # Playwright CT story
-  {name}.mdx         # registry docs (auto-generated where possible)
-  index.ts           # barrel export
-```
+Read these in order. Each is BLOCKING — violations keep a PR in draft.
 
-Patterns every component follows:
+| File | What |
+|------|------|
+| [`docs/agents/RULES.md`](./docs/agents/RULES.md) | The 15 BLOCKING rules — process + code quality. **Read first.** |
+| [`docs/agents/PR_PLAYBOOK.md`](./docs/agents/PR_PLAYBOOK.md) | Ship checklist: diff sanity → gates → evidence → body refresh → ready |
+| [`docs/agents/COMPONENTS.md`](./docs/agents/COMPONENTS.md) | Component patterns: forwardRef, semantic root, ARIA, events, props |
+| [`docs/agents/BRANCHING.md`](./docs/agents/BRANCHING.md) | Branch hygiene: zero-diff, supersede, reconcile, worktrees |
 
-- `React.forwardRef` + `React.ComponentPropsWithoutRef`.
-- `cn()` from `src/lib/utils.ts` (clsx + tailwind-merge).
-- CVA (`class-variance-authority`) for variant props.
-- Radix primitives for accessible behavior (focus, keyboard, ARIA).
-- `asChild` prop via `@radix-ui/react-slot` for render delegation where composable.
+Repository-wide docs (audience = contributors, not just agents):
 
-## Code rules (non-negotiable)
+| File | What |
+|------|------|
+| [`README.md`](./README.md) | Public README + component catalog |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | Contributor onramp |
+| [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | Monorepo layout, build graph, theming |
+| [`docs/RELEASING.md`](./docs/RELEASING.md) | Release + canary flow |
+| [`SECURITY.md`](./SECURITY.md) | Security policy (don't modify without authorization) |
 
-- TypeScript strict. **No** `any`, `as`, `@ts-ignore`, `@ts-expect-error`, `eslint-disable`.
-- Zod at boundaries (not inside components).
-- Inline `//` comments forbidden in shipped code — prefer TSDoc on exports, or refactor.
-- Additive architecture: new feature → new file. Never edit hub files (`index.ts`, `routes.ts`, global configs) reflexively.
-- Follow existing codebase patterns. If a pattern exists in 3+ files, use it.
+---
 
-## Testing expectations
+## Quick reference
 
-- Unit tests run under Vitest + Testing Library (`*.test.tsx`).
-- Visual regression: Playwright Component Testing (`*.visual.tsx`) — real browser, no jsdom.
-- For UI changes, run both unit and visual, or explicitly note which were skipped and why.
-- For bug fixes, add a regression test that fails before the fix and passes after.
+The two most-violated rules in PR review history:
 
-## Quality gates before marking a task done
-
-1. `pnpm lint` — clean on changed files.
-2. `pnpm exec tsc --noEmit` in the touched package — clean.
-3. `pnpm build` — full build succeeds.
-4. `pnpm test:once` — relevant tests pass.
-5. If UI routes / components changed: `pnpm -F @vllnt/ui test:visual`.
-
-## Git & PR workflow
-
-- Branch naming: `feat/`, `fix/`, `chore/`, `docs/`, `ci/`.
-- Conventional commit messages (`feat:`, `fix:`, `chore:`, etc.). The release workflow groups them into notes.
-- PR body covers: summary (why), evidence (CI run IDs, screenshots, numbers), test plan.
-- Never force-push `main`. Never skip hooks (`--no-verify`).
-- Automatic CI monitoring is expected after `gh pr create` — watch the run and report its outcome back into the PR.
-
-## Release
-
-Releases are cut via `workflow_dispatch` on `.github/workflows/publish.yml`:
-
-1. Pick `patch` / `minor` / `major`.
-2. CI bumps `packages/ui/package.json`, regenerates notes from commits, pushes tag, publishes to the public npm registry with OIDC-signed provenance, and creates the GitHub Release.
-
-Canary builds ship automatically on every push to `main`.
+1. **Workspace gates green at HEAD** ([R6](./docs/agents/RULES.md#r6--workspace-gates-green-at-head)). Touched-file passes alone are not ship-OK. Run `pnpm -F @vllnt/ui lint && pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json && pnpm build && pnpm test:once` — all must be green.
+2. **PR body matches HEAD** ([R3](./docs/agents/RULES.md#r3--pr-body-matches-head)). After every push, rewrite the body to match the current head. Stale claims block ship.
 
 ## Out of scope for agents
 
-- Do not modify `LICENSE`, `CODE_OF_CONDUCT.md`, or `SECURITY.md` without explicit human authorization.
-- Do not add new dependencies without explaining the tradeoff (bundle size, security surface, maintenance).
-- Do not publish, push to `main`, or merge PRs without explicit authorization.
+- Don't modify `LICENSE`, `CODE_OF_CONDUCT.md`, or `SECURITY.md` without explicit human authorization.
+- Don't add new dependencies without explaining the tradeoff (bundle size, maintenance, security surface).
+- Don't publish, push to `main`, or merge PRs without explicit authorization.
+- Don't hand-edit generated files (`apps/registry/lib/component-metadata.json`, `dist/`). Regenerate via the documented script.
