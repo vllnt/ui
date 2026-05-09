@@ -2356,6 +2356,21 @@
       "category": "data"
     },
     {
+      "name": "story-map",
+      "type": "registry:component",
+      "title": "Story Map",
+      "description": "Standalone SVG scroll-driven narrative map — IntersectionObserver tracks the active chapter and the map shifts to its center + zoom.",
+      "files": [
+        {
+          "path": "registry/default/story-map/story-map.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "data-display"
+    },
+    {
       "name": "subscription-card",
       "type": "registry:component",
       "title": "Subscription Card",

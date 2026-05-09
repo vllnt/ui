@@ -1,0 +1,78 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './story-map.stories'
+
+<Meta of={Stories} />
+
+# StoryMap
+
+Scroll-driven narrative map. Place `StoryMapChapter` children in the narrative column; an `IntersectionObserver` tracks which chapter is in view and the SVG map shifts to center on its `[lng, lat]` and `zoom`. Standalone SVG — no external map library required.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/story-map.json
+```
+
+## Import
+
+```tsx
+import { StoryMap, StoryMapChapter } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<StoryMap>
+  <StoryMapChapter
+    center={[12.49, 41.89]}
+    zoom={4}
+    title="The Fall of Rome"
+  >
+    <p>In 476 AD, the last Western Roman Emperor was deposed...</p>
+  </StoryMapChapter>
+
+  <StoryMapChapter
+    center={[28.98, 41.01]}
+    zoom={4}
+    title="Constantinople Endures"
+    color="purple"
+  >
+    <p>While Rome fell, Constantinople thrived...</p>
+  </StoryMapChapter>
+</StoryMap>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Layout
+
+- **Desktop** (≥ md): two-column. The map sticks to the top-left of the viewport while the narrative scrolls on the right.
+- **Mobile**: stacked. The narrative occupies the full width; the map renders beneath it as a fixed-height strip.
+
+## Chapter zoom
+
+`zoom` is a multiplier of the underlying viewBox: `1` shows the full world, `2` zooms in 2×, `8` zooms in tight on a city. Mid-range values (`3` – `4`) read well for country-scale narratives.
+
+## With media
+
+Pass `media={{ type: 'image', src, alt, caption? }}` to attach a thumbnail to the chapter card.
+
+<Canvas of={Stories.WithMedia} sourceState="shown" />
+
+## Single chapter
+
+The component still works with a single chapter — the map centers on its position with no scroll-driven transitions.
+
+<Canvas of={Stories.SingleChapter} sourceState="shown" />
+
+## Notes
+
+- Coordinates use a simple equirectangular projection (matches `Map2D`, `ChoroplethMap`, `RouteMap`, `HeatMapOverlay`, `MapTimeline`, `GeographyQuizMap`).
+- Out of scope for the MVP: route drawing between chapters, video media, fullscreen mode, chapter-navigation sidebar, smooth tweened transitions (the map snaps via CSS to the new viewBox). Wire those externally on top of the rendered DOM.
+- Chapter cards emit `data-chapter-id`. SVG markers emit `data-marker-id` and (when active) `data-marker-active="true"`. Each map stage emits `data-story-map-stage` (desktop) or `data-story-map-stage-mobile`. The active SVG carries `data-active-chapter-id` and `data-active-zoom`.
