@@ -1,0 +1,92 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './historic-timeline.stories'
+
+<Meta of={Stories} />
+
+# HistoricTimeline
+
+Specialized timeline for historical events spanning centuries or millennia. Renders era bands as a background layer, period bars in a lane, and point events as markers. Negative years format as `BCE`, positive as `CE`.
+
+Data-driven — pass `eras`, `periods`, `events`, and an optional `categories` legend.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/historic-timeline.json
+```
+
+## Import
+
+```tsx
+import { HistoricTimeline } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<HistoricTimeline
+  startYear={-3000}
+  endYear={2025}
+  eras={[
+    { id: 'ancient', name: 'Ancient', startYear: -3000, endYear: 476, color: 'amber' },
+    { id: 'medieval', name: 'Medieval', startYear: 476, endYear: 1453, color: 'emerald' },
+    { id: 'modern', name: 'Modern', startYear: 1453, endYear: 2025, color: 'blue' },
+  ]}
+  periods={[
+    { id: '100yr', title: "Hundred Years' War", startYear: 1337, endYear: 1453, category: 'conflict' },
+  ]}
+  events={[
+    { id: 'olympics', year: -776, title: 'First Olympic Games', category: 'culture' },
+    { id: 'moon', year: 1969, title: 'Moon landing', category: 'science' },
+  ]}
+  categories={[
+    { id: 'culture', label: 'Culture', color: 'amber' },
+    { id: 'science', label: 'Science', color: 'blue' },
+    { id: 'conflict', label: 'Conflict', color: 'red' },
+  ]}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Categories drive colors + a legend
+
+Pass `categories` to assign each event/period a color and surface a labeled chip row beneath the timeline. Match category ids on `HistoricEvent.category` and `HistoricPeriod.category`.
+
+```tsx
+const categories = [
+  { id: 'culture', label: 'Culture', color: 'amber' },
+  { id: 'science', label: 'Science', color: 'blue' },
+]
+```
+
+## Tight window
+
+Narrow `startYear` / `endYear` to focus on a sub-range. Events outside the window are clipped automatically.
+
+<Canvas of={Stories.TightWindow} sourceState="shown" />
+
+## Without categories
+
+Skip the legend by leaving `categories` empty.
+
+<Canvas of={Stories.NoCategories} sourceState="shown" />
+
+## Periods only
+
+Render period spans without point events.
+
+<Canvas of={Stories.PeriodsOnly} sourceState="shown" />
+
+## Notes
+
+- Years use the proleptic calendar — pass negative integers for BCE, positive for CE.
+- Events outside the `startYear` / `endYear` window are hidden; eras and periods are clipped to the visible range.
+- Event markers emit `data-event-id="<id>"` and `data-event-year="<year>"` for analytics; period bars emit `data-period-id="<id>"`; era bands emit `data-era-id="<id>"`.
+- Zoom, pan, search, minimap, event clustering, click-to-detail, and print mode are intentionally **out of scope** — the component is a presentation primitive over a fixed window. Drive zoom by re-rendering with a narrower `startYear` / `endYear`.

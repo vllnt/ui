@@ -202,6 +202,16 @@ export {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./alert-dialog";
+export {
+  type HistoricCategory,
+  type HistoricColor,
+  type HistoricEra,
+  type HistoricEvent,
+  type HistoricPeriod,
+  HistoricTimeline,
+  type HistoricTimelineLabels,
+  type HistoricTimelineProps,
+} from "./historic-timeline";
 export { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 export {
   ContextMenu,
