@@ -766,12 +766,23 @@ export {
 // Canvas/Object components
 export { AnchorPort, type AnchorPortProps } from "./anchor-port";
 export {
+  CommentPin,
+  type CommentPinLabels,
+  type CommentPinProps,
+  type CommentPinState,
+} from "./comment-pin";
+export {
   ConnectorEdge,
   type ConnectorEdgePoint,
   type ConnectorEdgeProps,
 } from "./connector-edge";
 export { EdgeLabel, type EdgeLabelProps } from "./edge-label";
 export { GroupHull, type GroupHullProps } from "./group-hull";
+export {
+  LiveCursor,
+  type LiveCursorLabels,
+  type LiveCursorProps,
+} from "./live-cursor";
 export {
   ObjectCard,
   type ObjectCardAction,
@@ -786,6 +797,12 @@ export {
   type PresenceStatus,
   type PresenceUser,
 } from "./presence-stack";
+export {
+  PresenceSyncIndicator,
+  type PresenceSyncIndicatorLabels,
+  type PresenceSyncIndicatorProps,
+  type PresenceSyncState,
+} from "./presence-sync-indicator";
 export {
   SelectionPresence,
   type SelectionPresenceLabels,
