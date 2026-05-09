@@ -789,6 +789,12 @@ export {
   type ConnectorEdgePoint,
   type ConnectorEdgeProps,
 } from "./connector-edge";
+export {
+  ContextLens,
+  type ContextLensFocus,
+  type ContextLensLabels,
+  type ContextLensProps,
+} from "./context-lens";
 export { EdgeLabel, type EdgeLabelProps } from "./edge-label";
 export { GroupHull, type GroupHullProps } from "./group-hull";
 export {
@@ -798,6 +804,13 @@ export {
   type HeatOverlayTone,
   type HeatPoint,
 } from "./heat-overlay";
+export {
+  JarvisDock,
+  type JarvisDockAction,
+  type JarvisDockLabels,
+  type JarvisDockProps,
+  type JarvisDockTone,
+} from "./jarvis-dock";
 export {
   LiveCursor,
   type LiveCursorLabels,
@@ -811,6 +824,12 @@ export {
   type MetricClusterProps,
   type MetricClusterTone,
 } from "./metric-cluster";
+export {
+  type LassoRect,
+  MultiSelectLasso,
+  type MultiSelectLassoLabels,
+  type MultiSelectLassoProps,
+} from "./multi-select-lasso";
 export {
   ObjectCard,
   type ObjectCardAction,

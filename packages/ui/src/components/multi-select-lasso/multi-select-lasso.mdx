@@ -1,0 +1,62 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './multi-select-lasso.stories'
+
+<Meta of={Stories} />
+
+# MultiSelectLasso
+
+Selection rectangle for canvas multi-select. Render as a sibling of the canvas with a \`position: relative\` parent so the \`rect\` coordinates land in the same pixel space. Pure presentation; the host owns the pointer-down / move / up lifecycle and produces the rect (or \`null\` to hide the lasso).
+
+Negative-direction drags are normalized automatically — pass the raw delta and the lasso flips into the right quadrant.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/multi-select-lasso.json
+```
+
+## Import
+
+```tsx
+import { MultiSelectLasso } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative h-screen w-screen" onPointerDown={…}>
+  <Canvas />
+  <MultiSelectLasso rect={lassoRect} count={hoveredIds.length} />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## No count
+
+Omit \`count\` and \`hint\` to render a quiet rectangle without badges.
+
+<Canvas of={Stories.NoCount} sourceState="shown" />
+
+## Single item
+
+Count \`1\` uses the singular noun automatically (defaults to \`"item"\`).
+
+<Canvas of={Stories.SingleItem} sourceState="shown" />
+
+## Hidden
+
+\`rect={null}\` (or zero-area rect) returns nothing, so the host can pass the live drag state directly without conditional wrapping.
+
+<Canvas of={Stories.Hidden} sourceState="shown" />
+
+## Notes
+
+- The wrapper is \`pointer-events-none\` — the lasso never intercepts host events.
+- Each render emits \`data-multi-select-lasso\`. Badges emit \`data-multi-select-hint\` and \`data-multi-select-count\`.

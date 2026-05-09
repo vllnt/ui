@@ -688,6 +688,21 @@
       "category": "content"
     },
     {
+      "name": "context-lens",
+      "type": "registry:component",
+      "title": "Context Lens",
+      "description": "Vignette overlay that dims the canvas outside a circular focus region.",
+      "files": [
+        {
+          "path": "registry/default/context-lens/context-lens.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
+    },
+    {
       "name": "context-menu",
       "type": "registry:component",
       "title": "Context Menu",
@@ -1087,6 +1102,21 @@
       "category": "form"
     },
     {
+      "name": "jarvis-dock",
+      "type": "registry:component",
+      "title": "Jarvis Dock",
+      "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
+      "files": [
+        {
+          "path": "registry/default/jarvis-dock/jarvis-dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "navigation"
+    },
+    {
       "name": "key-concept",
       "type": "registry:component",
       "title": "Key Concept",
@@ -1345,6 +1375,21 @@
       ],
       "dependencies": [],
       "category": "form"
+    },
+    {
+      "name": "multi-select-lasso",
+      "type": "registry:component",
+      "title": "Multi Select Lasso",
+      "description": "Selection rectangle overlay for canvas multi-select gestures.",
+      "files": [
+        {
+          "path": "registry/default/multi-select-lasso/multi-select-lasso.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [],
+      "category": "utility"
     },
     {
       "name": "navbar-saas",
