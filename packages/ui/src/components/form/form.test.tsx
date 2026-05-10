@@ -47,7 +47,7 @@ describe("Form", () => {
             <Input type="email" />
           </FormControl>
         </FormItem>
-        <button type="submit">Submit</button>
+        <button type="submit">Save changes</button>
       </Form>,
     );
 
@@ -102,13 +102,13 @@ describe("Form", () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Save changes</Button>
           </>
         )}
       </Form>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
     await waitFor(() => {
       expect(nativeSubmit).toHaveBeenCalledTimes(1);
@@ -279,7 +279,7 @@ describe("Form", () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Save changes</Button>
           </>
         )}
       </Form>,
@@ -292,7 +292,7 @@ describe("Form", () => {
     expect(label).toHaveAttribute("for", input.id);
     expect(input).toHaveAttribute("aria-describedby", description.id);
 
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
     const message = await screen.findByRole("alert");
 
@@ -326,7 +326,7 @@ describe("Form", () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Save changes</Button>
           </>
         )}
       </Form>,
@@ -335,7 +335,7 @@ describe("Form", () => {
     const input = screen.getByRole("textbox", { name: "Email" });
     const description = screen.getByText("Use your work email address.");
 
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
     const message = await screen.findByRole("alert");
 
@@ -403,13 +403,13 @@ describe("Form", () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Save changes</Button>
           </>
         )}
       </Form>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "This email is already in use.",
@@ -503,7 +503,7 @@ describe("Form", () => {
       </Form>,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "Saving…" })).toBeDisabled();
@@ -517,7 +517,7 @@ describe("Form", () => {
     resolveSubmit();
 
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Submit" })).toBeEnabled();
+      expect(screen.getByRole("button", { name: "Save changes" })).toBeEnabled();
       expect(screen.getByRole("textbox", { name: "Email" })).toBeEnabled();
     });
   });

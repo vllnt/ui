@@ -51,7 +51,7 @@ export function FormInvalidEmailPreview() {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Save changes</Button>
         </>
       )}
     </Form>
