@@ -160,7 +160,7 @@ function TableOfContentsPanelImpl({
                 const isCurrent = index === currentSectionIndex;
 
                 return (
-                  <li key={`${section.id}-${index}`}>
+                  <li key={section.id}>
                     <button
                       className={cn(
                         "flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors",

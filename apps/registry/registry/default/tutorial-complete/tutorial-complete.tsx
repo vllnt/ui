@@ -131,7 +131,7 @@ function TutorialCompleteImpl({
             return (
               <button
                 className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-left"
-                key={`${section.id}-${index}`}
+                key={section.id}
                 onClick={() => {
                   onGoToSection(index);
                 }}

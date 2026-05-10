@@ -119,7 +119,7 @@ function ContentCardImpl({
           {metadata.length > 0 ? (
             <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
               {metadata.map((item, index) => (
-                <span key={`${item}-${index}`}>
+                <span key={item}>
                   {index > 0 ? <span className="mr-2">•</span> : null}
                   {item}
                 </span>

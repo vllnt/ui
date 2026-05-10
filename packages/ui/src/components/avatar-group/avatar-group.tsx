@@ -77,7 +77,7 @@ const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
         {visibleItems.map((item, index) => (
           <Avatar
             className={avatarItemVariants({ size })}
-            key={`${item.alt}-${index}`}
+            key={item.src ?? item.alt}
             style={{ zIndex: visibleItems.length - index }}
           >
             {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}
