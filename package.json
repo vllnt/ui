@@ -20,7 +20,14 @@
     "test:once": "turbo test:once",
     "clean": "turbo clean",
     "check:circular": "turbo check:circular",
-    "registry:build": "turbo registry:build"
+    "registry:build": "turbo registry:build",
+    "doctor": "npx --yes react-doctor . --offline",
+    "doctor:full": "npx --yes react-doctor . --offline --full --verbose",
+    "doctor:json": "npx --yes react-doctor . --offline --json > .react-doctor.json",
+    "doctor:errors": "npx --yes react-doctor . --offline --fail-on error",
+    "doctor:diff": "npx --yes react-doctor . --offline --diff origin/main",
+    "doctor:staged": "npx --yes react-doctor . --offline --staged --fail-on error",
+    "doctor:score": "npx --yes react-doctor . --offline --score"
   },
   "devDependencies": {
     "turbo": "^2.4.4"
