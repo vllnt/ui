@@ -10,6 +10,11 @@ import { notFound } from "next/navigation";
 import { QuickAdd } from "@/components/quick-add";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
+import {
+  breadcrumbLd,
+  jsonLdScript,
+  softwareSourceCodeLd,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
 import {
@@ -161,8 +166,31 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
+  const SITE_URL =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+
   return (
     <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: jsonLdScript([
+            softwareSourceCodeLd({
+              description: displayDescription,
+              name: component.name,
+              title: displayTitle,
+            }),
+            breadcrumbLd([
+              { name: "Home", url: SITE_URL },
+              { name: "Components", url: `${SITE_URL}/components` },
+              {
+                name: displayTitle,
+                url: `${SITE_URL}/components/${component.name}`,
+              },
+            ]),
+          ]),
+        }}
+        type="application/ld+json"
+      />
       <Sidebar sections={getSidebarSections(getCategoryForComponent(slug))} />
       <main className="flex-1 overflow-y-auto bg-background overflow-x-hidden">
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
