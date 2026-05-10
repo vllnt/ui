@@ -22,7 +22,7 @@ const dataListVariants = cva(
 );
 
 const dataListItemVariants = cva(
-  "grid gap-1 px-4 py-4 sm:grid-cols-[minmax(0,12rem)_1fr] sm:gap-4 sm:px-5",
+  "grid gap-1 p-4 sm:grid-cols-[minmax(0,12rem)_1fr] sm:gap-4 sm:px-5",
   {
     defaultVariants: {
       density: "default",

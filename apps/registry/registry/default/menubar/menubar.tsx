@@ -195,7 +195,7 @@ const MenubarSeparator = forwardRef<
   React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <MenubarPrimitive.Separator
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
+    className={cn("-m-1 h-px bg-muted", className)}
     ref={ref}
     {...props}
   />

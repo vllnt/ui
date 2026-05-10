@@ -300,7 +300,7 @@ function TrackRow({ endYear, startYear, track }: TrackRowProps): ReactNode {
   const palette = COLOR_CLASSES[color];
   return (
     <div className="relative flex items-stretch gap-3 border-t border-border first:border-t-0">
-      <div className="flex w-32 shrink-0 flex-col gap-1 border-r border-border bg-muted/20 px-3 py-3">
+      <div className="flex w-32 shrink-0 flex-col gap-1 border-r border-border bg-muted/20 p-3">
         <span
           aria-hidden="true"
           className={cn("h-1 w-8 rounded-full", palette.accent)}
