@@ -61,11 +61,13 @@ const DEFAULT_LABELS: Required<SlideshowLabels> = {
   sectionsLabel: "Sections",
 };
 
+const EMPTY_SLIDESHOW_LABELS: SlideshowLabels = {};
+
 function SlideshowImpl({
   completedSections,
   completionDialogTitle = "Mark section as complete?",
   currentIndex,
-  labels = {},
+  labels = EMPTY_SLIDESHOW_LABELS,
   onComplete,
   onExit,
   onNavigate,

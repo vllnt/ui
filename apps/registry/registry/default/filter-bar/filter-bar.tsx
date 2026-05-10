@@ -250,13 +250,15 @@ const DEFAULT_LABELS: Required<FilterBarLabels> = {
   tagsLabel: "Tags:",
 };
 
+const EMPTY_FILTER_BAR_LABELS: FilterBarLabels = {};
+
 // eslint-disable-next-line max-lines-per-function -- Complex filter component with sub-components
 function FilterBarImpl({
   className,
   currentDifficulty,
   currentTags,
   difficultyOptions,
-  labels = {},
+  labels = EMPTY_FILTER_BAR_LABELS,
   onFiltersChange,
   searchQuery,
   tags,

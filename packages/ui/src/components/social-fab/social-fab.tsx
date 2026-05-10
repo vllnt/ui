@@ -208,6 +208,8 @@ function ExpandedPanel({
   );
 }
 
+const EMPTY_SHARE_PLATFORMS: SharePlatformConfig[] = [];
+
 export function SocialFAB({
   actions,
   bottomOffset = 24,
@@ -218,7 +220,7 @@ export function SocialFAB({
   onClose,
   onOpen,
   rightOffset = 24,
-  sharePlatforms = [],
+  sharePlatforms = EMPTY_SHARE_PLATFORMS,
 }: SocialFabProps) {
   const options: UseSocialFabOptions = { onAction, onClose, onOpen };
   const fab = useSocialFab(options);
