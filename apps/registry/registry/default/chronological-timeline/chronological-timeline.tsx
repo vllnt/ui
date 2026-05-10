@@ -124,6 +124,7 @@ type VideoMediaProps = {
 };
 
 function VideoMedia({ media }: VideoMediaProps): ReactNode {
+  const iframeTitle = media.title || "Embedded timeline video";
   return (
     <figure className="overflow-hidden rounded-xl border bg-muted">
       <div className="aspect-video w-full">
@@ -132,7 +133,7 @@ function VideoMedia({ media }: VideoMediaProps): ReactNode {
           allowFullScreen
           className="h-full w-full"
           src={media.src}
-          title={media.title ?? "Embedded video"}
+          title={iframeTitle}
         />
       </div>
       {media.caption || media.credit ? (
