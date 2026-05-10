@@ -59,12 +59,27 @@ type RegistryFile = {
 
 type Stability = "stable" | "beta" | "experimental" | "deprecated";
 
+type A11yKeyboardBinding = {
+  keys: string;
+  action: string;
+};
+
+type A11ySchema = {
+  role?: string;
+  keyboard?: A11yKeyboardBinding[];
+  aria?: string[];
+  focusManagement?: "auto" | "manual";
+  notes?: string;
+};
+
 type ComponentMeta = {
   stability?: Stability;
   replacedBy?: string;
+  a11y?: A11ySchema;
 };
 
 type RegistryItem = {
+  a11y?: A11ySchema;
   category?: string;
   dependencies?: string[];
   description?: string;
@@ -178,6 +193,14 @@ for (const item of registry.items) {
     }
   } else {
     delete item.replacedBy;
+  }
+
+  // Stamp a11y schema (see #255) — agents generating UI need to know the
+  // keyboard model, ARIA roles, and focus expectations of each component.
+  if (meta.a11y) {
+    item.a11y = meta.a11y;
+  } else {
+    delete item.a11y;
   }
 
   processed += 1;

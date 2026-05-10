@@ -898,7 +898,39 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "a11y": {
+        "role": "combobox",
+        "keyboard": [
+          {
+            "keys": "Enter / Space",
+            "action": "open the listbox"
+          },
+          {
+            "keys": "ArrowDown",
+            "action": "open + move active option down"
+          },
+          {
+            "keys": "ArrowUp",
+            "action": "move active option up"
+          },
+          {
+            "keys": "Escape",
+            "action": "close the listbox"
+          },
+          {
+            "keys": "Type-ahead",
+            "action": "filter options"
+          }
+        ],
+        "aria": [
+          "aria-controls",
+          "aria-expanded",
+          "aria-haspopup"
+        ],
+        "focusManagement": "auto",
+        "notes": "Trigger button has role='combobox'. Listbox id is wired via React.useId() so consumers don't need to manage it."
+      }
     },
     {
       "name": "command",
@@ -1185,7 +1217,27 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "a11y": {
+        "role": "dialog",
+        "keyboard": [
+          {
+            "keys": "Escape",
+            "action": "close the dialog"
+          },
+          {
+            "keys": "Tab / Shift+Tab",
+            "action": "cycle focus within the dialog (focus trap)"
+          }
+        ],
+        "aria": [
+          "aria-modal",
+          "aria-labelledby",
+          "aria-describedby"
+        ],
+        "focusManagement": "auto",
+        "notes": "Built on Radix Dialog: focus trap + restore on close + scroll lock are automatic."
+      }
     },
     {
       "name": "document-sibling-nav",
@@ -4296,5 +4348,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-05-10T14:52:31.798Z"
+  "generatedAt": "2026-05-10T15:02:17.375Z"
 }

@@ -1,0 +1,15 @@
+{
+  "a11y": {
+    "role": "combobox",
+    "keyboard": [
+      { "keys": "Enter / Space", "action": "open the listbox" },
+      { "keys": "ArrowDown", "action": "open + move active option down" },
+      { "keys": "ArrowUp", "action": "move active option up" },
+      { "keys": "Escape", "action": "close the listbox" },
+      { "keys": "Type-ahead", "action": "filter options" }
+    ],
+    "aria": ["aria-controls", "aria-expanded", "aria-haspopup"],
+    "focusManagement": "auto",
+    "notes": "Trigger button has role='combobox'. Listbox id is wired via React.useId() so consumers don't need to manage it."
+  }
+}

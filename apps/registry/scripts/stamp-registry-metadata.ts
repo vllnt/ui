@@ -22,7 +22,21 @@ const publicRDir = join(repoRoot, "apps/registry/public/r");
 
 type Stability = "stable" | "beta" | "experimental" | "deprecated";
 
+type A11yKeyboardBinding = {
+  keys: string;
+  action: string;
+};
+
+type A11ySchema = {
+  role?: string;
+  keyboard?: A11yKeyboardBinding[];
+  aria?: string[];
+  focusManagement?: "auto" | "manual";
+  notes?: string;
+};
+
 type RegistryItem = {
+  a11y?: A11ySchema;
   name: string;
   version?: string;
   stability?: Stability;
@@ -53,6 +67,11 @@ for (const item of registry.items) {
     data.replacedBy = item.replacedBy;
   } else {
     delete data.replacedBy;
+  }
+  if (item.a11y) {
+    data.a11y = item.a11y;
+  } else {
+    delete data.a11y;
   }
 
   writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);
