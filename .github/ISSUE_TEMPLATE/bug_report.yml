@@ -2,6 +2,7 @@ name: Bug report
 description: Report a broken behavior in @vllnt/ui
 title: "[bug] "
 labels: ["bug"]
+type: Bug
 body:
   - type: markdown
     attributes:

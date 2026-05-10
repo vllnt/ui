@@ -1,0 +1,49 @@
+name: Issue Type Enforcer
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+
+permissions:
+  issues: write
+
+concurrency:
+  group: issue-type-enforcer-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Require type on issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify issue type is set
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          OWNER="${REPO%/*}"
+          NAME="${REPO#*/}"
+
+          TYPE=$(gh api graphql \
+            -f query="query{repository(owner:\"$OWNER\",name:\"$NAME\"){issue(number:$ISSUE_NUMBER){issueType{name}}}}" \
+            --jq '.data.repository.issue.issueType.name // "NONE"')
+
+          echo "issue=#$ISSUE_NUMBER type=$TYPE"
+
+          if [ "$TYPE" = "NONE" ]; then
+            gh issue edit "$ISSUE_NUMBER" --add-label "needs-triage" -R "$REPO" >/dev/null
+            EXISTING=$(gh issue view "$ISSUE_NUMBER" -R "$REPO" --json comments --jq '[.comments[] | select(.body | contains("issue is missing a **type**"))] | length')
+            if [ "$EXISTING" = "0" ]; then
+              gh issue comment "$ISSUE_NUMBER" -R "$REPO" --body "This issue is missing a **type** (Task / Bug / Feature). A maintainer will set one shortly. See [CONTRIBUTING.md → Issue types](https://github.com/${REPO}/blob/main/CONTRIBUTING.md#issue-types)."
+            fi
+            exit 1
+          fi
+
+          gh issue edit "$ISSUE_NUMBER" --remove-label "needs-triage" -R "$REPO" >/dev/null 2>&1 || true
+          echo "Type set ($TYPE) — passing."
