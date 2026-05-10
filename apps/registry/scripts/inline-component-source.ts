@@ -72,6 +72,14 @@ type A11ySchema = {
   notes?: string;
 };
 
+type UsageExample = {
+  title: string;
+  description?: string;
+  code: string;
+  framework?: "react" | "next";
+  storyId?: string;
+};
+
 type ComponentMeta = {
   stability?: Stability;
   replacedBy?: string;
@@ -83,6 +91,7 @@ type RegistryItem = {
   category?: string;
   dependencies?: string[];
   description?: string;
+  examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
   registryDependencies?: string[];
@@ -116,6 +125,24 @@ const readComponentMeta = (name: string): ComponentMeta => {
     return JSON.parse(readFileSync(metaPath, "utf8")) as ComponentMeta;
   } catch {
     return {};
+  }
+};
+
+const readComponentExamples = (name: string): UsageExample[] => {
+  const examplesPath = join(componentsRoot, name, "examples.json");
+  if (!existsSync(examplesPath)) return [];
+  try {
+    const raw = JSON.parse(readFileSync(examplesPath, "utf8")) as unknown;
+    if (!Array.isArray(raw)) return [];
+    return raw.filter(
+      (entry): entry is UsageExample =>
+        typeof entry === "object" &&
+        entry !== null &&
+        typeof (entry as UsageExample).title === "string" &&
+        typeof (entry as UsageExample).code === "string",
+    );
+  } catch {
+    return [];
   }
 };
 
@@ -201,6 +228,17 @@ for (const item of registry.items) {
     item.a11y = meta.a11y;
   } else {
     delete item.a11y;
+  }
+
+  // Stamp inline usage examples (see #254) — agents see how to use the
+  // component without scraping Storybook iframes. Source: optional
+  // packages/ui/src/components/<name>/examples.json. Schema:
+  // [{ title, description?, code, framework?, storyId? }].
+  const examples = readComponentExamples(item.name);
+  if (examples.length > 0) {
+    item.examples = examples;
+  } else {
+    delete item.examples;
   }
 
   processed += 1;

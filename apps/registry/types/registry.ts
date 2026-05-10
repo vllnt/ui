@@ -28,11 +28,20 @@ export type A11ySchema = {
   notes?: string;
 };
 
+export type UsageExample = {
+  title: string;
+  description?: string;
+  code: string;
+  framework?: "react" | "next";
+  storyId?: string;
+};
+
 export type RegistryComponent = {
   a11y?: A11ySchema;
   category?: ComponentCategory;
   dependencies?: string[];
   description?: string;
+  examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
   registryDependencies?: string[];

@@ -1,0 +1,8 @@
+[
+  {
+    "title": "Default",
+    "description": "Empty state for an empty list — explain what's empty + offer a single primary action.",
+    "code": "import { Button, EmptyState } from \"@vllnt/ui\";\nimport { Inbox } from \"lucide-react\";\n\nexport function Demo() {\n  return (\n    <EmptyState\n      icon={<Inbox className=\"h-8 w-8\" />}\n      title=\"No tickets yet\"\n      description=\"Create your first support ticket to start tracking conversations.\"\n      action={<Button>Create ticket</Button>}\n    />\n  );\n}\n",
+    "framework": "react"
+  }
+]

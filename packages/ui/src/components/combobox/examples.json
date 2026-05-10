@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Default",
+    "description": "Single-select combobox with type-ahead.",
+    "code": "import { Combobox } from \"@vllnt/ui\";\n\nconst options = [\n  { label: \"React\", value: \"react\" },\n  { label: \"Vue\", value: \"vue\" },\n  { label: \"Svelte\", value: \"svelte\" },\n  { label: \"Solid\", value: \"solid\" },\n];\n\nexport function Demo() {\n  return <Combobox options={options} placeholder=\"Pick a framework\" />;\n}\n",
+    "framework": "react"
+  },
+  {
+    "title": "Controlled",
+    "description": "Pair Combobox with React.useState for full control over the selected value.",
+    "code": "\"use client\";\nimport * as React from \"react\";\nimport { Combobox } from \"@vllnt/ui\";\n\nconst options = [\n  { label: \"Pending\", value: \"pending\" },\n  { label: \"Approved\", value: \"approved\" },\n  { label: \"Rejected\", value: \"rejected\" },\n];\n\nexport function Demo() {\n  const [value, setValue] = React.useState(\"pending\");\n  return (\n    <Combobox\n      options={options}\n      value={value}\n      onValueChange={setValue}\n      placeholder=\"Status\"\n    />\n  );\n}\n",
+    "framework": "react"
+  }
+]
