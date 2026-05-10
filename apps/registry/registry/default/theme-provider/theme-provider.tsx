@@ -1,3 +1,10 @@
-// Re-export from @vllnt/ui package
-export * from '@vllnt/ui'
+"use client";
 
+import {
+  ThemeProvider as NextThemesProvider,
+  type ThemeProviderProps,
+} from "next-themes";
+
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}

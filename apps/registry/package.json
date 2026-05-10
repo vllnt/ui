@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "registry:build": "shadcn build",
+    "registry:build": "tsx scripts/inline-component-source.ts && shadcn build",
+    "registry:sync-shims": "tsx scripts/inline-component-source.ts",
     "sync-storybook": "tsx scripts/sync-from-storybook.ts"
   },
   "dependencies": {
