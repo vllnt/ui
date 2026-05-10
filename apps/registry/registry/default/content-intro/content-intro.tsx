@@ -160,7 +160,7 @@ function ContentIntroImpl({
 
       {/* Sticky Start/Continue Button */}
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/80 backdrop-blur-sm safe-bottom">
-        <div className="mx-auto max-w-3xl px-4 py-4">
+        <div className="mx-auto max-w-3xl p-4">
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground hidden sm:block">
               {hasProgress

@@ -397,7 +397,7 @@ function SlideshowImpl({
       </div>
 
       {/* Bottom Nav */}
-      <div className="relative z-20 flex items-center justify-between px-4 py-4 border-t border-border bg-background">
+      <div className="relative z-20 flex items-center justify-between p-4 border-t border-border bg-background">
         <button
           className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md hover:bg-muted transition-colors disabled:opacity-50 disabled:pointer-events-none"
           disabled={!canGoPrevious}

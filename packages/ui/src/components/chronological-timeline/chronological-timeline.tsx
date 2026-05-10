@@ -156,7 +156,7 @@ type AudioMediaProps = {
 
 function AudioMedia({ media }: AudioMediaProps): ReactNode {
   return (
-    <figure className="overflow-hidden rounded-xl border bg-muted px-3 py-3">
+    <figure className="overflow-hidden rounded-xl border bg-muted p-3">
       <audio
         aria-label={media.alt}
         className="w-full"
@@ -510,7 +510,7 @@ export const ChronologicalTimeline = forwardRef<
       >
         <ProgressStrip activeId={activeId} ids={ids} label={progressLabel} />
         {title ? (
-          <header className="px-6 py-6">
+          <header className="p-6">
             <h2 className="text-2xl font-semibold tracking-tight" id={titleId}>
               {title}
             </h2>

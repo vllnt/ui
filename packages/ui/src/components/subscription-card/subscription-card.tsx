@@ -111,7 +111,7 @@ function SubscriptionDetails({
           {priceLabel}
         </p>
       </div>
-      <div className="space-y-3 rounded-lg border border-border/70 bg-muted/20 px-4 py-4">
+      <div className="space-y-3 rounded-lg border border-border/70 bg-muted/20 p-4">
         <DetailRow label="Renewal" value={renewalLabel} />
         {seatsLabel ? <DetailRow label="Seats" value={seatsLabel} /> : null}
         {usageLabel ? <DetailRow label="Usage" value={usageLabel} /> : null}

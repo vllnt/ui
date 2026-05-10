@@ -65,7 +65,7 @@ function WalletDetails({
           {balanceLabel}
         </p>
       </div>
-      <div className="space-y-3 rounded-lg border border-border/70 bg-muted/20 px-4 py-4">
+      <div className="space-y-3 rounded-lg border border-border/70 bg-muted/20 p-4">
         {availableLabel ? (
           <DetailRow label="Available now" value={availableLabel} />
         ) : null}

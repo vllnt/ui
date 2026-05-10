@@ -159,7 +159,7 @@ function ScopeOptionButton({
   return (
     <button
       className={cn(
-        "flex w-full items-start justify-between rounded-md border px-3 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
+        "flex w-full items-start justify-between rounded-md border p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
         selectedValue === node.id && "border-primary bg-accent",
         node.disabled && "cursor-not-allowed opacity-50",
       )}
@@ -209,7 +209,7 @@ function ScopeSearchResults({
   selectedValue?: string;
 }) {
   return (
-    <div className="space-y-2 px-1 py-1">
+    <div className="space-y-2 p-1">
       {results.map(({ node, path }) => (
         <ScopeOptionButton
           key={getPathLabel(path)}
@@ -239,7 +239,7 @@ function ScopeCurrentLevel({
   selectedValue?: string;
 }) {
   return (
-    <div className="space-y-2 px-1 py-1">
+    <div className="space-y-2 p-1">
       {nodes.map((node) => (
         <ScopeOptionButton
           key={node.id}

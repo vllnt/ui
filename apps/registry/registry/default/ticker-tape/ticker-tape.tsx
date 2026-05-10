@@ -41,7 +41,7 @@ function formatChange(change: number) {
 
 function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
   return (
-    <div className="flex min-w-max items-center gap-3 px-3 py-3">
+    <div className="flex min-w-max items-center gap-3 p-3">
       {items.map((item) => {
         const isPositive = item.change >= 0;
         const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
