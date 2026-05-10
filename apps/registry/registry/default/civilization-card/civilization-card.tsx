@@ -161,6 +161,7 @@ function CivilizationHero({ color, image, imageAlt }: HeroProps): ReactNode {
       )}
     >
       {image ? (
+        {/* eslint-disable-next-line nextjs-no-img-element */}
         <img
           alt={imageAlt ?? ""}
           className="h-full w-full object-cover mix-blend-multiply"

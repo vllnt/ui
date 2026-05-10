@@ -577,6 +577,7 @@ function Stage({ annotations, source }: StageProps): ReactNode {
           transformOrigin: "top left",
         }}
       >
+        {/* eslint-disable-next-line nextjs-no-img-element */}
         <img
           alt={source.alt}
           className="block h-auto max-w-none select-none"
