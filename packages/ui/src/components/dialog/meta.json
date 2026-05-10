@@ -1,0 +1,12 @@
+{
+  "a11y": {
+    "role": "dialog",
+    "keyboard": [
+      { "keys": "Escape", "action": "close the dialog" },
+      { "keys": "Tab / Shift+Tab", "action": "cycle focus within the dialog (focus trap)" }
+    ],
+    "aria": ["aria-modal", "aria-labelledby", "aria-describedby"],
+    "focusManagement": "auto",
+    "notes": "Built on Radix Dialog: focus trap + restore on close + scroll lock are automatic."
+  }
+}

@@ -15,7 +15,21 @@ export type ComponentCategory =
 
 export type Stability = "stable" | "beta" | "experimental" | "deprecated";
 
+export type A11yKeyboardBinding = {
+  keys: string;
+  action: string;
+};
+
+export type A11ySchema = {
+  role?: string;
+  keyboard?: A11yKeyboardBinding[];
+  aria?: string[];
+  focusManagement?: "auto" | "manual";
+  notes?: string;
+};
+
 export type RegistryComponent = {
+  a11y?: A11ySchema;
   category?: ComponentCategory;
   dependencies?: string[];
   description?: string;
