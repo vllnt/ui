@@ -1,33 +1,62 @@
 ---
 title: VLLNT UI - Component Registry
-description: A component registry built with shadcn/ui. Install components using the shadcn CLI.
+description: 225 agent-first React components. Install with the shadcn CLI — no library to import, no version lock-in.
 type: home
 og:
   title: ui.vllnt.ai
-  description: Component Registry built with shadcn/ui
+  description: Agent-first React component registry — install with the shadcn CLI
   type: home
 ---
 
-# Getting Started
+# Install any component in one line
 
-Welcome to VLLNT UI. This is a component registry built with shadcn/ui.
+Pick a component, copy its install command, run it. The CLI fetches the source from `ui.vllnt.ai/r/<name>.json` and writes it directly into your repo — you own the code.
 
-## Installation
-
-Install components using the shadcn CLI:
+## Install (pick your package manager)
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/[component-name].json
+# pnpm
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+
+# npm
+npx shadcn@latest add https://ui.vllnt.ai/r/button.json
+
+# yarn
+yarn dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+
+# bun
+bunx --bun shadcn@latest add https://ui.vllnt.ai/r/button.json
 ```
 
-## Usage
+Replace `button.json` with any component name from the [registry](/components).
 
-Import components from `@vllnt/ui`:
+## No CLI to install
+
+There is no `@vllnt/cli`. The shadcn CLI already speaks the registry format — running it against `ui.vllnt.ai/r/<name>.json` is the supported install path. Same UX, less to maintain.
+
+## Usage after install
 
 ```tsx
-import { Button } from '@vllnt/ui'
+import { Button } from "@/components/ui/button";
 
 export function MyComponent() {
-  return <Button>Click me</Button>
+  return <Button>Click me</Button>;
 }
 ```
+
+The CLI installs source files into your project under `components/ui/` (configurable via `components.json`), so updates are explicit — re-run the install command when you want a newer version.
+
+## Why this works for agents
+
+Every component is also exposed as a machine-readable JSON descriptor. AI coding agents can read them directly:
+
+- `https://ui.vllnt.ai/r/registry.json` — index of all 225 components
+- `https://ui.vllnt.ai/r/<name>.json` — one component
+- `https://ui.vllnt.ai/llms.txt` — concise index per the [llmstxt.org](https://llmstxt.org) spec
+- `https://ui.vllnt.ai/llms-full.txt` — full agent context in one fetch
+
+## Next steps
+
+- Browse [all 225 components](/components)
+- Read the [philosophy](/philosophy) behind the library
+- Read the [docs](/docs)
