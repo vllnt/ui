@@ -15,7 +15,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -30,7 +32,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -45,7 +49,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -61,6 +67,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "ai"
@@ -76,11 +83,9 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "badge",
-        "button"
-      ],
+      "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "ai"
@@ -98,6 +103,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "learning"
@@ -115,9 +121,28 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
       "category": "learning"
+    },
+    {
+      "name": "ai-sidebar",
+      "type": "registry:component",
+      "title": "AI Sidebar",
+      "description": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger.",
+      "files": [
+        {
+          "path": "registry/default/ai-sidebar/ai-sidebar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai"
     },
     {
       "name": "ai-source-citation",
@@ -132,6 +157,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "learning"
@@ -148,27 +174,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "learning"
-    },
-    {
-      "name": "ai-sidebar",
-      "type": "registry:component",
-      "title": "AI Sidebar",
-      "description": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger.",
-      "files": [
-        {
-          "path": "registry/default/ai-sidebar/ai-sidebar.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [
-        "button"
-      ],
       "dependencies": [
-        "lucide-react"
+        "@vllnt/ui@^0.2.1"
       ],
-      "category": "ai"
+      "category": "learning"
     },
     {
       "name": "ai-tool-call-display",
@@ -183,6 +192,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "class-variance-authority",
         "lucide-react"
       ],
@@ -200,7 +210,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -215,7 +227,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -230,7 +244,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -245,7 +261,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -260,7 +278,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -275,7 +295,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -305,7 +327,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -319,12 +343,10 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "button",
-        "input",
-        "switch"
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "dependencies": [],
       "category": "billing"
     },
     {
@@ -339,7 +361,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -354,7 +378,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -369,7 +395,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -385,6 +413,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react",
         "class-variance-authority",
         "@radix-ui/react-slot"
@@ -418,7 +447,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -433,7 +464,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -448,7 +481,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -463,7 +498,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -478,7 +515,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -493,7 +532,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -508,7 +549,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -523,7 +566,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -538,7 +583,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -553,7 +600,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -568,7 +617,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -583,7 +634,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -598,7 +651,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -613,23 +668,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "core"
-    },
-    {
-      "name": "chronological-timeline",
-      "type": "registry:component",
-      "title": "Chronological Timeline",
-      "description": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip.",
-      "files": [
-        {
-          "path": "registry/default/chronological-timeline/chronological-timeline.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
+      "category": "core"
     },
     {
       "name": "checklist",
@@ -643,7 +685,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -658,7 +702,26 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display"
+    },
+    {
+      "name": "chronological-timeline",
+      "type": "registry:component",
+      "title": "Chronological Timeline",
+      "description": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip.",
+      "files": [
+        {
+          "path": "registry/default/chronological-timeline/chronological-timeline.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -672,10 +735,9 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "badge"
-      ],
+      "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "educational"
@@ -692,28 +754,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "content"
-    },
-    {
-      "name": "copy-button",
-      "type": "registry:component",
-      "title": "Copy Button",
-      "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
-      "files": [
-        {
-          "path": "registry/default/copy-button/copy-button.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [
-        "button",
-        "tooltip"
-      ],
       "dependencies": [
-        "lucide-react"
+        "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "content"
     },
     {
       "name": "code-playground",
@@ -727,7 +771,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -742,7 +788,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -757,7 +805,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -772,7 +822,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -787,7 +839,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -802,7 +856,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -817,7 +873,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -832,7 +890,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -847,7 +907,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -862,7 +924,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -877,8 +941,28 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
+    },
+    {
+      "name": "copy-button",
+      "type": "registry:component",
+      "title": "Copy Button",
+      "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
+      "files": [
+        {
+          "path": "registry/default/copy-button/copy-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "core"
     },
     {
       "name": "countdown-timer",
@@ -892,7 +976,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -907,7 +993,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -922,7 +1010,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -938,6 +1028,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "@tanstack/react-table"
       ],
       "category": "data"
@@ -954,7 +1045,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -969,22 +1062,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "overlay"
-    },
-    {
-      "name": "drawer",
-      "type": "registry:component",
-      "title": "Drawer",
-      "description": "Slide-out panel anchored to the screen edge.",
-      "files": [
-        {
-          "path": "registry/default/drawer/drawer.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
       "category": "overlay"
     },
     {
@@ -1000,9 +1080,27 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
       "category": "content"
+    },
+    {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "Slide-out panel anchored to the screen edge.",
+      "files": [
+        {
+          "path": "registry/default/drawer/drawer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "overlay"
     },
     {
       "name": "dropdown-menu",
@@ -1016,7 +1114,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -1031,7 +1131,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -1047,6 +1149,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
       "category": "core"
@@ -1063,7 +1166,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "educational"
     },
     {
@@ -1078,7 +1183,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -1093,7 +1200,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -1108,7 +1217,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -1123,7 +1234,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -1138,7 +1251,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -1153,7 +1268,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1168,7 +1285,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -1183,7 +1302,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -1198,7 +1319,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -1212,11 +1335,10 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "input",
-        "label"
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "dependencies": [],
       "category": "form"
     },
     {
@@ -1231,7 +1353,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -1246,7 +1370,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -1261,7 +1387,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -1276,7 +1404,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1291,7 +1421,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -1306,7 +1438,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -1321,27 +1455,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
-    },
-    {
-      "name": "horizontal-scroll-row",
-      "type": "registry:component",
-      "title": "Horizontal Scroll Row",
-      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
-      "files": [
-        {
-          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [
-        "button"
-      ],
       "dependencies": [
-        "lucide-react"
+        "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "data"
     },
     {
       "name": "historic-timeline",
@@ -1355,8 +1472,46 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
+    },
+    {
+      "name": "historical-figure-card",
+      "type": "registry:component",
+      "title": "Historical Figure Card",
+      "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
+      "files": [
+        {
+          "path": "registry/default/historical-figure-card/historical-figure-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "educational"
+    },
+    {
+      "name": "horizontal-scroll-row",
+      "type": "registry:component",
+      "title": "Horizontal Scroll Row",
+      "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+      "files": [
+        {
+          "path": "registry/default/horizontal-scroll-row/horizontal-scroll-row.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "navigation"
     },
     {
       "name": "hover-card",
@@ -1370,28 +1525,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "overlay"
-    },
-    {
-      "name": "historical-figure-card",
-      "type": "registry:component",
-      "title": "Historical Figure Card",
-      "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
-      "files": [
-        {
-          "path": "registry/default/historical-figure-card/historical-figure-card.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [
-        "avatar",
-        "badge"
-      ],
       "dependencies": [
-        "lucide-react"
+        "@vllnt/ui@^0.2.1"
       ],
-      "category": "educational"
+      "category": "overlay"
     },
     {
       "name": "infinite-plane",
@@ -1405,7 +1542,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1420,23 +1559,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "form"
-    },
-    {
-      "name": "interactive-timeline",
-      "type": "registry:component",
-      "title": "Interactive Timeline",
-      "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
-      "files": [
-        {
-          "path": "registry/default/interactive-timeline/interactive-timeline.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
+      "category": "form"
     },
     {
       "name": "input",
@@ -1450,7 +1576,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -1465,8 +1593,27 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
+    },
+    {
+      "name": "interactive-timeline",
+      "type": "registry:component",
+      "title": "Interactive Timeline",
+      "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
+      "files": [
+        {
+          "path": "registry/default/interactive-timeline/interactive-timeline.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display"
     },
     {
       "name": "jarvis-dock",
@@ -1480,7 +1627,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -1496,6 +1645,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
       "category": "core"
@@ -1512,7 +1662,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -1527,7 +1679,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -1541,11 +1695,9 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "button",
-        "input"
-      ],
+      "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "educational"
@@ -1562,7 +1714,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1577,7 +1731,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -1592,7 +1748,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -1622,7 +1780,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1637,22 +1797,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
-    },
-    {
-      "name": "market-treemap",
-      "type": "registry:component",
-      "title": "Market Treemap",
-      "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
-      "files": [
-        {
-          "path": "registry/default/market-treemap/market-treemap.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
       "category": "data"
     },
     {
@@ -1667,23 +1814,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
-    },
-    {
-      "name": "marquee",
-      "type": "registry:component",
-      "title": "Marquee",
-      "description": "Continuously scrolling content lane for badges, logos, and status chips.",
-      "files": [
-        {
-          "path": "registry/default/marquee/marquee.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "utility"
+      "category": "data-display"
     },
     {
       "name": "map-timeline",
@@ -1697,8 +1831,44 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
+    },
+    {
+      "name": "market-treemap",
+      "type": "registry:component",
+      "title": "Market Treemap",
+      "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+      "files": [
+        {
+          "path": "registry/default/market-treemap/market-treemap.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data"
+    },
+    {
+      "name": "marquee",
+      "type": "registry:component",
+      "title": "Marquee",
+      "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+      "files": [
+        {
+          "path": "registry/default/marquee/marquee.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility"
     },
     {
       "name": "mdx-content",
@@ -1712,7 +1882,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -1727,7 +1899,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -1742,7 +1916,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -1757,7 +1933,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -1772,7 +1950,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -1786,11 +1966,9 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "badge",
-        "button"
-      ],
+      "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "ai"
@@ -1807,7 +1985,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -1821,13 +2001,10 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "badge",
-        "button",
-        "command",
-        "popover"
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "dependencies": [],
       "category": "form"
     },
     {
@@ -1842,7 +2019,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1857,7 +2036,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -1872,7 +2053,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -1886,11 +2069,9 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "button",
-        "input"
-      ],
+      "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "form"
@@ -1907,7 +2088,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -1922,7 +2105,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1937,7 +2122,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -1952,7 +2139,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -1967,7 +2156,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -1982,7 +2173,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -1997,7 +2190,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -2012,7 +2207,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "educational"
     },
     {
@@ -2027,7 +2224,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -2042,7 +2241,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2057,7 +2258,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2072,7 +2275,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2087,7 +2292,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -2102,7 +2309,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2117,7 +2326,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2131,13 +2342,29 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "button"
-      ],
+      "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "billing"
+    },
+    {
+      "name": "primary-source-viewer",
+      "type": "registry:component",
+      "title": "Primary Source Viewer",
+      "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
+      "files": [
+        {
+          "path": "registry/default/primary-source-viewer/primary-source-viewer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display"
     },
     {
       "name": "pro-tip",
@@ -2151,7 +2378,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -2166,23 +2395,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "learning"
-    },
-    {
-      "name": "primary-source-viewer",
-      "type": "registry:component",
-      "title": "Primary Source Viewer",
-      "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
-      "files": [
-        {
-          "path": "registry/default/primary-source-viewer/primary-source-viewer.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
+      "category": "learning"
     },
     {
       "name": "progress-bar",
@@ -2196,29 +2412,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
-    },
-    {
-      "name": "prompt-templates",
-      "type": "registry:component",
-      "title": "Prompt Templates",
-      "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
-      "files": [
-        {
-          "path": "registry/default/prompt-templates/prompt-templates.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [
-        "badge",
-        "button",
-        "input"
-      ],
       "dependencies": [
-        "lucide-react"
+        "@vllnt/ui@^0.2.1"
       ],
-      "category": "ai"
+      "category": "data"
     },
     {
       "name": "progress-card",
@@ -2232,8 +2429,28 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
+    },
+    {
+      "name": "prompt-templates",
+      "type": "registry:component",
+      "title": "Prompt Templates",
+      "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
+      "files": [
+        {
+          "path": "registry/default/prompt-templates/prompt-templates.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai"
     },
     {
       "name": "property-section",
@@ -2247,7 +2464,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2262,7 +2481,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -2277,7 +2498,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -2292,7 +2515,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -2307,7 +2532,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2322,7 +2549,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2337,7 +2566,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -2352,7 +2583,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2367,7 +2600,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -2382,7 +2617,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2397,7 +2634,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2412,7 +2651,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2427,38 +2668,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
-    },
-    {
-      "name": "selection-halo",
-      "type": "registry:component",
-      "title": "Selection Halo",
-      "description": "Local-user selection halo with corner handles + label slot for spatial canvases.",
-      "files": [
-        {
-          "path": "registry/default/selection-halo/selection-halo.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
-    },
-    {
-      "name": "snap-guides",
-      "type": "registry:component",
-      "title": "Snap Guides",
-      "description": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag.",
-      "files": [
-        {
-          "path": "registry/default/snap-guides/snap-guides.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
     },
     {
       "name": "scroll-area",
@@ -2472,7 +2685,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2487,7 +2702,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
     },
     {
@@ -2502,7 +2719,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -2516,10 +2735,10 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "toggle-group"
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "dependencies": [],
       "category": "form"
     },
     {
@@ -2534,8 +2753,27 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
+    },
+    {
+      "name": "selection-halo",
+      "type": "registry:component",
+      "title": "Selection Halo",
+      "description": "Local-user selection halo with corner handles + label slot for spatial canvases.",
+      "files": [
+        {
+          "path": "registry/default/selection-halo/selection-halo.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display"
     },
     {
       "name": "selection-presence",
@@ -2549,7 +2787,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2564,7 +2804,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -2579,7 +2821,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2594,7 +2838,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2609,7 +2855,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -2624,7 +2872,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -2639,7 +2889,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -2655,6 +2907,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "navigation"
@@ -2671,7 +2924,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -2686,7 +2941,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -2701,8 +2958,27 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
+    },
+    {
+      "name": "snap-guides",
+      "type": "registry:component",
+      "title": "Snap Guides",
+      "description": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag.",
+      "files": [
+        {
+          "path": "registry/default/snap-guides/snap-guides.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display"
     },
     {
       "name": "sparkline-grid",
@@ -2716,7 +2992,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2731,7 +3009,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2746,7 +3026,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2761,7 +3043,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2776,7 +3060,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2791,7 +3077,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2806,7 +3094,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -2821,7 +3111,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -2836,7 +3128,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -2851,7 +3145,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2866,7 +3162,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data-display"
     },
     {
@@ -2881,7 +3179,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2896,7 +3196,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -2911,7 +3213,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2926,7 +3230,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -2941,7 +3247,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -2955,10 +3263,10 @@
           "type": "registry:component"
         }
       ],
-      "registryDependencies": [
-        "badge"
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "dependencies": [],
       "category": "form"
     },
     {
@@ -2973,7 +3281,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -2988,7 +3298,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -3003,7 +3315,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -3018,7 +3332,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -3034,6 +3350,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "learning"
@@ -3050,7 +3367,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "utility"
     },
     {
@@ -3065,7 +3384,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -3080,7 +3401,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -3096,6 +3419,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
       "category": "content"
@@ -3112,25 +3436,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "form"
-    },
-    {
-      "name": "transaction-list",
-      "type": "registry:component",
-      "title": "Transaction List",
-      "description": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row.",
-      "files": [
-        {
-          "path": "registry/default/transaction-list/transaction-list.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "registryDependencies": [
-        "badge"
-      ],
-      "dependencies": [],
-      "category": "billing"
     },
     {
       "name": "tldr-section",
@@ -3144,7 +3453,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -3159,7 +3470,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -3174,7 +3487,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "core"
     },
     {
@@ -3189,23 +3504,10 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "core"
-    },
-    {
-      "name": "tree-view",
-      "type": "registry:component",
-      "title": "Tree View",
-      "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
-      "files": [
-        {
-          "path": "registry/default/tree-view/tree-view.tsx",
-          "type": "registry:component"
-        }
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
       ],
-      "registryDependencies": [],
-      "dependencies": [],
-      "category": "data-display"
+      "category": "core"
     },
     {
       "name": "tooltip",
@@ -3219,7 +3521,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "overlay"
     },
     {
@@ -3234,7 +3538,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -3249,8 +3555,44 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
+    },
+    {
+      "name": "transaction-list",
+      "type": "registry:component",
+      "title": "Transaction List",
+      "description": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row.",
+      "files": [
+        {
+          "path": "registry/default/transaction-list/transaction-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "billing"
+    },
+    {
+      "name": "tree-view",
+      "type": "registry:component",
+      "title": "Tree View",
+      "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
+      "files": [
+        {
+          "path": "registry/default/tree-view/tree-view.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display"
     },
     {
       "name": "tutorial-card",
@@ -3264,7 +3606,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -3279,7 +3623,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -3294,7 +3640,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -3309,7 +3657,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -3324,7 +3674,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "learning"
     },
     {
@@ -3339,7 +3691,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -3354,7 +3708,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -3369,7 +3725,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -3384,7 +3742,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -3399,7 +3759,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "content"
     },
     {
@@ -3414,7 +3776,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -3429,7 +3793,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -3444,7 +3810,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "navigation"
     },
     {
@@ -3459,7 +3827,9 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
       "category": "data"
     },
     {
@@ -3475,6 +3845,7 @@
       ],
       "registryDependencies": [],
       "dependencies": [
+        "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
       "category": "overlay"

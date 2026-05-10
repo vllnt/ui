@@ -1,20 +1,21 @@
-'use client'
+"use client";
 
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent } from "react";
 
-import { cn } from '../../../lib/utils'
+import { cn } from "@vllnt/ui";
+import { Input } from "@vllnt/ui";
 
 export type InlineInputProps = {
-  className?: string
-  /** Called when editing is cancelled (Escape key or blur without changes). */
-  onCancel?: () => void
-  /** Called when editing is committed (Enter key or blur with changes). */
-  onCommit: (value: string) => void
+  className?: string;
+  /** Called when user presses Escape or blurs without changes. */
+  onCancel?: () => void;
   /** Called when the input value changes. */
-  onChange: (value: string) => void
+  onChange: (value: string) => void;
+  /** Called when user presses Enter or blurs with changes. */
+  onCommit: (value: string) => void;
   /** Current input value. */
-  value: string
-}
+  value: string;
+};
 
 /**
  * Inline input for editing text with keyboard support.
@@ -30,37 +31,30 @@ export function InlineInput({
   value,
 }: InlineInputProps) {
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      onCommit(value)
-    } else if (event.key === 'Escape') {
-      event.preventDefault()
-      onCancel?.()
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onCommit(value);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      onCancel?.();
     }
-  }
+  };
 
   return (
-    <input
+    <Input
       autoFocus // eslint-disable-line jsx-a11y/no-autofocus
-      className={cn(
-        'flex h-7 flex-1 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors',
-        'file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
-        'placeholder:text-muted-foreground',
-        'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        className
-      )}
+      className={cn("flex-1 h-7 text-sm", className)}
       onBlur={() => {
-        onCommit(value)
+        onCommit(value);
       }}
       onChange={(event) => {
-        onChange(event.target.value)
+        onChange(event.target.value);
       }}
       onClick={(event) => {
-        event.stopPropagation()
+        event.stopPropagation();
       }}
       onKeyDown={handleKeyDown}
       value={value}
     />
-  )
+  );
 }

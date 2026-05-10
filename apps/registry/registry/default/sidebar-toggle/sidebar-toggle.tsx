@@ -1,38 +1,44 @@
-'use client'
+"use client";
 
-import { Menu, X } from 'lucide-react'
+import { Menu, X } from "lucide-react";
 
-import { cn } from '../../../lib/utils'
+import { cn } from "@vllnt/ui";
+import { Button } from "@vllnt/ui";
 
 export type SidebarToggleProps = {
-  className?: string
-  /** Called when toggle is clicked. */
-  onToggle: () => void
-  /** Whether the sidebar is currently open. */
-  open: boolean
-}
+  className?: string;
+  /** Called when user clicks the toggle. */
+  onToggle: () => void;
+  /** Whether the sidebar is open. */
+  open: boolean;
+};
 
 /** Responsive sidebar toggle button that shows Menu/X icons based on state. */
-export function SidebarToggle({ className, onToggle, open }: SidebarToggleProps) {
-  const buttonClass = cn(
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors',
-    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'hover:bg-accent hover:text-accent-foreground',
-    'h-9 w-9',
-    className
-  )
-
+export function SidebarToggle({
+  className,
+  onToggle,
+  open,
+}: SidebarToggleProps) {
   return (
     <>
       {/* Mobile: shows X when open, Menu when closed */}
-      <button className={cn(buttonClass, 'lg:hidden')} onClick={onToggle} type="button">
+      <Button
+        className={cn("lg:hidden", className)}
+        onClick={onToggle}
+        size="icon"
+        variant="ghost"
+      >
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </button>
+      </Button>
       {/* Desktop: always shows Menu icon */}
-      <button className={cn(buttonClass, 'hidden lg:flex')} onClick={onToggle} type="button">
+      <Button
+        className={cn("hidden lg:flex", className)}
+        onClick={onToggle}
+        size="icon"
+        variant="ghost"
+      >
         <Menu className="h-5 w-5" />
-      </button>
+      </Button>
     </>
-  )
+  );
 }
