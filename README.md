@@ -16,7 +16,7 @@
 
 ## Features
 
-- **144 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation)
+- **225 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
 - **Accessible by default** — Radix UI handles focus, keyboard nav, and ARIA
 - **Tailwind CSS + CVA** — variant-driven styling with full theme override via CSS variables
 - **shadcn-compatible registry** — install individual components with `shadcn add`
@@ -98,7 +98,7 @@ Override CSS variables after importing styles:
 ## Components
 
 <details>
-<summary>All 144 components</summary>
+<summary>All 225 components</summary>
 
 | Category | Components |
 |----------|------------|
