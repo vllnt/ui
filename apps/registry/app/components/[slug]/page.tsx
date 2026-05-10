@@ -210,7 +210,15 @@ export default async function ComponentPage(props: Props) {
                 <p className="text-muted-foreground text-lg mb-6">
                   {displayDescription}
                 </p>
-                <QuickAdd componentName={component.name} />
+                <div className="flex flex-wrap items-center gap-3">
+                  <QuickAdd componentName={component.name} />
+                  <Link
+                    className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+                    href={`/report?component=${component.name}`}
+                  >
+                    Report a bug
+                  </Link>
+                </div>
               </div>
 
               {/* Preview — Storybook Embed */}
