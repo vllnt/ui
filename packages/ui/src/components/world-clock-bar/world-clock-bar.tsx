@@ -52,24 +52,52 @@ function useLiveDate(now: WorldClockBarProps["now"], updateIntervalMs: number) {
   return liveNow;
 }
 
+const TIME_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
+function getTimeFormatter(
+  locale: string,
+  timeZone: string,
+): Intl.DateTimeFormat {
+  const key = `${locale}|${timeZone}`;
+  let formatter = TIME_FORMATTER_CACHE.get(key);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(locale, {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone,
+      timeZoneName: "short",
+    });
+    TIME_FORMATTER_CACHE.set(key, formatter);
+  }
+  return formatter;
+}
+
+const DATE_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
+function getDateFormatter(
+  locale: string,
+  timeZone: string,
+): Intl.DateTimeFormat {
+  const key = `${locale}|${timeZone}`;
+  let formatter = DATE_FORMATTER_CACHE.get(key);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "short",
+      timeZone,
+      weekday: "short",
+    });
+    DATE_FORMATTER_CACHE.set(key, formatter);
+  }
+  return formatter;
+}
+
 function formatZoneDateTime(
   zone: WorldClockBarZone,
   date: Date,
   showDate: boolean,
 ) {
   const locale = zone.locale ?? "en-US";
-  const timeFormatter = new Intl.DateTimeFormat(locale, {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: zone.timeZone,
-    timeZoneName: "short",
-  });
-  const dateFormatter = new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    timeZone: zone.timeZone,
-    weekday: "short",
-  });
+  const timeFormatter = getTimeFormatter(locale, zone.timeZone);
+  const dateFormatter = getDateFormatter(locale, zone.timeZone);
 
   return {
     date: showDate ? dateFormatter.format(date) : "",

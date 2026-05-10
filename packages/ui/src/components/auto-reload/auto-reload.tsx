@@ -123,11 +123,25 @@ function valueToCents(value: string): number {
   return Math.round(parsed * CENTS_PER_UNIT);
 }
 
+const CURRENCY_FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
+function getCurrencyFormatter(
+  locale: string,
+  currency: string,
+): Intl.NumberFormat {
+  const key = `${locale}|${currency}`;
+  let formatter = CURRENCY_FORMATTER_CACHE.get(key);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, {
+      currency,
+      style: "currency",
+    });
+    CURRENCY_FORMATTER_CACHE.set(key, formatter);
+  }
+  return formatter;
+}
+
 function getCurrencySymbol(locale: string, currency: string): string {
-  const formatted = new Intl.NumberFormat(locale, {
-    currency,
-    style: "currency",
-  }).format(0);
+  const formatted = getCurrencyFormatter(locale, currency).format(0);
   const symbol = formatted.replaceAll(/[\d\s,.]/g, "");
   return symbol.length > 0 ? symbol : currency;
 }

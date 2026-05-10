@@ -13,6 +13,20 @@ export type NumberTickerProps = React.ComponentPropsWithoutRef<"span"> & {
   value: number;
 };
 
+const NUMBER_FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
+function getNumberTickerFormatter(
+  locale: string | undefined,
+  formatOptions: Intl.NumberFormatOptions | undefined,
+): Intl.NumberFormat {
+  const key = `${locale ?? ""}|${formatOptions ? JSON.stringify(formatOptions) : ""}`;
+  let formatter = NUMBER_FORMATTER_CACHE.get(key);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, formatOptions);
+    NUMBER_FORMATTER_CACHE.set(key, formatter);
+  }
+  return formatter;
+}
+
 export const NumberTicker = React.forwardRef<
   HTMLSpanElement,
   NumberTickerProps
@@ -72,10 +86,7 @@ export const NumberTicker = React.forwardRef<
       };
     }, [delay, duration, from, value]);
 
-    const formatter = React.useMemo(
-      () => new Intl.NumberFormat(locale, formatOptions),
-      [formatOptions, locale],
-    );
+    const formatter = getNumberTickerFormatter(locale, formatOptions);
 
     return (
       <span

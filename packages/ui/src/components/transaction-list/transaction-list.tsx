@@ -11,6 +11,37 @@ const CENTS_PER_UNIT = 100;
 const DEFAULT_LOCALE = "en-US";
 const DEFAULT_CURRENCY = "USD";
 
+const CURRENCY_FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
+function getCurrencyFormatter(
+  locale: string,
+  currency: string,
+): Intl.NumberFormat {
+  const key = `${locale}|${currency}`;
+  let formatter = CURRENCY_FORMATTER_CACHE.get(key);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale, {
+      currency,
+      style: "currency",
+    });
+    CURRENCY_FORMATTER_CACHE.set(key, formatter);
+  }
+  return formatter;
+}
+
+const DATE_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
+function getTransactionDateFormatter(locale: string): Intl.DateTimeFormat {
+  let formatter = DATE_FORMATTER_CACHE.get(locale);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(locale, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+    DATE_FORMATTER_CACHE.set(locale, formatter);
+  }
+  return formatter;
+}
+
 /**
  * Transaction type for {@link TransactionListItem}.
  *
@@ -135,10 +166,9 @@ export function formatTransactionAmount(
   } = {},
 ): string {
   const { currency = DEFAULT_CURRENCY, locale = DEFAULT_LOCALE } = options;
-  return new Intl.NumberFormat(locale, {
-    currency,
-    style: "currency",
-  }).format(amountCents / CENTS_PER_UNIT);
+  return getCurrencyFormatter(locale, currency).format(
+    amountCents / CENTS_PER_UNIT,
+  );
 }
 
 /**
@@ -150,11 +180,7 @@ export function formatTransactionDate(
   timestamp: number,
   locale: string = DEFAULT_LOCALE,
 ): string {
-  return new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(timestamp));
+  return getTransactionDateFormatter(locale).format(new Date(timestamp));
 }
 
 /**

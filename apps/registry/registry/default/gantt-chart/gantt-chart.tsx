@@ -169,26 +169,35 @@ function diffInDays(later: Date, earlier: Date): number {
   return (later.getTime() - earlier.getTime()) / MS_PER_DAY;
 }
 
+const TICK_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
+function getTickDateTimeFormatter(
+  locale: string,
+  scale: "day" | "month" | "week",
+): Intl.DateTimeFormat {
+  const key = `${locale}|${scale}`;
+  let formatter = TICK_FORMATTER_CACHE.get(key);
+  if (!formatter) {
+    const options: Intl.DateTimeFormatOptions =
+      scale === "month"
+        ? { month: "short", year: "numeric" }
+        : { day: "2-digit", month: "short" };
+    formatter = new Intl.DateTimeFormat(locale, options);
+    TICK_FORMATTER_CACHE.set(key, formatter);
+  }
+  return formatter;
+}
+
 function buildTickFormatter(
   scale: GanttScale,
   locale: string,
 ): (date: Date) => string {
   switch (scale) {
     case "day":
-      return new Intl.DateTimeFormat(locale, {
-        day: "2-digit",
-        month: "short",
-      }).format;
+      return getTickDateTimeFormatter(locale, "day").format;
     case "week":
-      return new Intl.DateTimeFormat(locale, {
-        day: "2-digit",
-        month: "short",
-      }).format;
+      return getTickDateTimeFormatter(locale, "week").format;
     case "month":
-      return new Intl.DateTimeFormat(locale, {
-        month: "short",
-        year: "numeric",
-      }).format;
+      return getTickDateTimeFormatter(locale, "month").format;
     case "quarter":
       return (date: Date) => {
         const quarter = Math.floor(date.getMonth() / 3) + 1;

@@ -496,7 +496,7 @@ describe("Form", () => {
               )}
             />
             <Button disabled={form.formState.isSubmitting} type="submit">
-              {form.formState.isSubmitting ? "Saving…" : "Submit"}
+              {form.formState.isSubmitting ? "Saving…" : "Save changes"}
             </Button>
           </>
         )}
