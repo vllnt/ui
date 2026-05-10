@@ -214,7 +214,7 @@ export function Quiz({
         {options.map((opt, index) => (
           <QuizOptionButton
             index={index}
-            key={index}
+            key={typeof opt === "string" ? opt : `quiz-option-${String(opt)}`}
             onSelect={(index_) => {
               if (!submitted) setSelectedIndex(index_);
             }}

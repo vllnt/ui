@@ -101,7 +101,7 @@ export function CodePlayground({
               {lines.map((line, index) => (
                 <CodeLine
                   highlightLines={highlightLines}
-                  key={index}
+                  key={`${line}-${index + 1}`}
                   line={line}
                   lineNumber={index + 1}
                 />
