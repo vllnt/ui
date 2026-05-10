@@ -18,7 +18,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "activity-heatmap",
@@ -35,7 +37,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "activity-log",
@@ -52,7 +56,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "agent-activity",
@@ -70,7 +76,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "ai"
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-artifact",
@@ -88,7 +96,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "ai"
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-chat-input",
@@ -106,7 +116,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-message-bubble",
@@ -124,7 +136,9 @@
         "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-sidebar",
@@ -142,7 +156,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "ai"
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-source-citation",
@@ -160,7 +176,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-streaming-text",
@@ -177,7 +195,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ai-tool-call-display",
@@ -196,7 +216,9 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "alert",
@@ -213,7 +235,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "alert-dialog",
@@ -230,7 +254,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "alert-pulse",
@@ -247,7 +273,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "anchor-port",
@@ -264,7 +292,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "animated-text",
@@ -281,7 +311,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "annotation",
@@ -298,7 +330,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "area-chart",
@@ -330,7 +364,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "auto-reload",
@@ -347,7 +383,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "billing"
+      "category": "billing",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "avatar",
@@ -364,7 +402,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "avatar-group",
@@ -381,7 +421,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "badge",
@@ -398,7 +440,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "banner",
@@ -418,7 +462,9 @@
         "class-variance-authority",
         "@radix-ui/react-slot"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "bar-chart",
@@ -450,7 +496,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "border-beam",
@@ -467,7 +515,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "bottom-activity-strip",
@@ -484,7 +534,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "breadcrumb",
@@ -501,7 +553,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "button",
@@ -518,7 +572,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "calendar",
@@ -535,7 +591,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "callout",
@@ -552,7 +610,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "candlestick-chart",
@@ -569,7 +629,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "canvas-shell",
@@ -586,7 +648,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "canvas-view",
@@ -603,7 +667,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "card",
@@ -620,7 +686,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "carousel",
@@ -637,7 +705,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "category-filter",
@@ -654,7 +724,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "checkbox",
@@ -671,7 +743,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "checklist",
@@ -688,7 +762,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "choropleth-map",
@@ -705,7 +781,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "chronological-timeline",
@@ -722,7 +800,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "civilization-card",
@@ -740,7 +820,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "educational"
+      "category": "educational",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "code-block",
@@ -757,7 +839,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "code-playground",
@@ -774,7 +858,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "collapsible",
@@ -791,7 +877,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "combobox",
@@ -808,7 +896,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "command",
@@ -825,7 +915,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "comment-pin",
@@ -842,7 +934,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "comparison",
@@ -859,7 +953,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "completion-dialog",
@@ -876,7 +972,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "connector-edge",
@@ -893,7 +991,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "content-intro",
@@ -910,7 +1010,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "context-lens",
@@ -927,7 +1029,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "context-menu",
@@ -944,7 +1048,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "copy-button",
@@ -962,7 +1068,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "countdown-timer",
@@ -979,7 +1087,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "credit-badge",
@@ -996,7 +1106,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "data-list",
@@ -1013,7 +1125,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "data-table",
@@ -1031,7 +1145,9 @@
         "@vllnt/ui@^0.2.1",
         "@tanstack/react-table"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "date-picker",
@@ -1048,7 +1164,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "dialog",
@@ -1065,7 +1183,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "document-sibling-nav",
@@ -1083,7 +1203,9 @@
         "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "drawer",
@@ -1100,7 +1222,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "dropdown-menu",
@@ -1117,7 +1241,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "edge-label",
@@ -1134,7 +1260,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "empty-state",
@@ -1152,7 +1280,9 @@
         "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "era-comparison",
@@ -1169,7 +1299,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "educational"
+      "category": "educational",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "exercise",
@@ -1186,7 +1318,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "faq",
@@ -1203,7 +1337,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "file-upload",
@@ -1220,7 +1356,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "filter-bar",
@@ -1237,7 +1375,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "flashcard",
@@ -1254,7 +1394,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "floating-action-button",
@@ -1271,7 +1413,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "floating-toolbar",
@@ -1288,7 +1432,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "flow-diagram",
@@ -1305,7 +1451,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "follow-mode",
@@ -1322,7 +1470,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "form",
@@ -1339,7 +1489,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "gantt-chart",
@@ -1356,7 +1508,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "geography-quiz-map",
@@ -1373,7 +1527,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "globe-3d",
@@ -1390,7 +1546,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "group-hull",
@@ -1407,7 +1565,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "handoff-beacon",
@@ -1424,7 +1584,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "heat-map-overlay",
@@ -1441,7 +1603,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "heat-overlay",
@@ -1458,7 +1622,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "historic-timeline",
@@ -1475,7 +1641,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "historical-figure-card",
@@ -1493,7 +1661,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "educational"
+      "category": "educational",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "horizontal-scroll-row",
@@ -1511,7 +1681,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "hover-card",
@@ -1528,7 +1700,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "infinite-plane",
@@ -1545,7 +1719,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "inline-input",
@@ -1562,7 +1738,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "input",
@@ -1579,7 +1757,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "input-otp",
@@ -1596,7 +1776,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "interactive-timeline",
@@ -1613,7 +1795,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "jarvis-dock",
@@ -1630,7 +1814,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "kbd",
@@ -1648,7 +1834,9 @@
         "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "key-concept",
@@ -1665,7 +1853,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "keyboard-shortcuts-help",
@@ -1682,7 +1872,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "knowledge-check",
@@ -1700,7 +1892,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "educational"
+      "category": "educational",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "lang-provider",
@@ -1717,7 +1911,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "learning-objectives",
@@ -1734,7 +1930,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "left-rail",
@@ -1751,7 +1949,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "line-chart",
@@ -1783,7 +1983,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "live-feed",
@@ -1800,7 +2002,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "map-2d",
@@ -1817,7 +2021,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "map-timeline",
@@ -1834,7 +2040,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "market-treemap",
@@ -1851,7 +2059,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "marquee",
@@ -1868,7 +2078,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "mdx-content",
@@ -1885,7 +2097,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "menubar",
@@ -1902,7 +2116,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "metric-cluster",
@@ -1919,7 +2135,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "metric-gauge",
@@ -1936,7 +2154,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "mini-map-panel",
@@ -1953,7 +2173,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "model-comparison",
@@ -1971,7 +2193,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "ai"
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "model-selector",
@@ -1988,7 +2212,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "multi-select",
@@ -2005,7 +2231,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "multi-select-lasso",
@@ -2022,7 +2250,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "navbar-saas",
@@ -2039,7 +2269,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "navigation-menu",
@@ -2056,7 +2288,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "newsletter-signup",
@@ -2074,7 +2308,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "number-input",
@@ -2091,7 +2327,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "number-ticker",
@@ -2108,7 +2346,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "object-card",
@@ -2125,7 +2365,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "object-handle",
@@ -2142,7 +2384,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "object-inspector",
@@ -2159,7 +2403,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "order-book",
@@ -2176,7 +2422,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "pagination",
@@ -2193,7 +2441,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "parallel-timeline",
@@ -2210,7 +2460,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "educational"
+      "category": "educational",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "password-input",
@@ -2227,7 +2479,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "plan-badge",
@@ -2244,7 +2498,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "playback-ghost",
@@ -2261,7 +2517,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "policy-delivery-panel",
@@ -2278,7 +2536,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "popover",
@@ -2295,7 +2555,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "presence-stack",
@@ -2312,7 +2574,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "presence-sync-indicator",
@@ -2329,7 +2593,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "pricing-table",
@@ -2347,7 +2613,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "billing"
+      "category": "billing",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "primary-source-viewer",
@@ -2364,7 +2632,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "pro-tip",
@@ -2381,7 +2651,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "profile-section",
@@ -2398,7 +2670,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "progress-bar",
@@ -2415,7 +2689,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "progress-card",
@@ -2432,7 +2708,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "prompt-templates",
@@ -2450,7 +2728,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "ai"
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "property-section",
@@ -2467,7 +2747,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "quiz",
@@ -2484,7 +2766,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "radio-group",
@@ -2501,7 +2785,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "rating",
@@ -2518,7 +2804,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "relationship-inspector",
@@ -2535,7 +2823,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "resizable",
@@ -2552,7 +2842,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "right-dock",
@@ -2569,7 +2861,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "role-badge",
@@ -2586,7 +2880,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "route-map",
@@ -2603,7 +2899,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "routing-assignment-panel",
@@ -2620,7 +2918,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "run-timeline",
@@ -2637,7 +2937,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "runtime-overview-panel",
@@ -2654,7 +2956,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "scope-selector",
@@ -2671,7 +2975,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "scroll-area",
@@ -2688,7 +2994,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "search-bar",
@@ -2705,7 +3013,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "search-dialog",
@@ -2722,7 +3032,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "segmented-control",
@@ -2739,7 +3051,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "select",
@@ -2756,7 +3070,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "selection-halo",
@@ -2773,7 +3089,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "selection-presence",
@@ -2790,7 +3108,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "separator",
@@ -2807,7 +3127,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "severity-badge",
@@ -2824,7 +3146,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "share-section",
@@ -2841,7 +3165,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "sheet",
@@ -2858,7 +3184,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "sidebar",
@@ -2875,7 +3203,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "sidebar-provider",
@@ -2892,7 +3222,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "sidebar-toggle",
@@ -2910,7 +3242,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "skeleton",
@@ -2927,7 +3261,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "slider",
@@ -2944,7 +3280,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "slideshow",
@@ -2961,7 +3299,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "snap-guides",
@@ -2978,7 +3318,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "sparkline-grid",
@@ -2995,7 +3337,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "spinner",
@@ -3012,7 +3356,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "stat-card",
@@ -3029,7 +3375,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "state-badge-overlay",
@@ -3046,7 +3394,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "status-board",
@@ -3063,7 +3413,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "status-indicator",
@@ -3080,7 +3432,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "step-by-step",
@@ -3097,7 +3451,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "step-navigation",
@@ -3114,7 +3470,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "stepper",
@@ -3131,7 +3489,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "sticky-metric",
@@ -3148,7 +3508,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "story-map",
@@ -3165,7 +3527,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "subscription-card",
@@ -3182,7 +3546,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "table",
@@ -3199,7 +3565,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "table-of-contents",
@@ -3216,7 +3584,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "table-of-contents-panel",
@@ -3233,7 +3603,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tabs",
@@ -3250,7 +3622,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tags-input",
@@ -3267,7 +3641,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "terminal",
@@ -3284,7 +3660,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "textarea",
@@ -3301,7 +3679,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "theme-provider",
@@ -3318,7 +3698,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "theme-toggle",
@@ -3335,7 +3717,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "thinking-block",
@@ -3353,7 +3737,9 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "thread-bubble",
@@ -3370,7 +3756,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "utility"
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "threshold-ring",
@@ -3387,7 +3775,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "ticker-tape",
@@ -3404,7 +3794,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "timeline",
@@ -3422,7 +3814,9 @@
         "@vllnt/ui@^0.2.1",
         "class-variance-authority"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "timeline-scrubber",
@@ -3439,7 +3833,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "form"
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tldr-section",
@@ -3456,7 +3852,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "toast",
@@ -3473,7 +3871,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "toggle",
@@ -3490,7 +3890,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "toggle-group",
@@ -3507,7 +3909,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "core"
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tooltip",
@@ -3524,7 +3928,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "top-bar",
@@ -3541,7 +3947,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tour",
@@ -3558,7 +3966,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "transaction-list",
@@ -3575,7 +3985,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "billing"
+      "category": "billing",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tree-view",
@@ -3592,7 +4004,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data-display"
+      "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tutorial-card",
@@ -3609,7 +4023,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tutorial-complete",
@@ -3626,7 +4042,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tutorial-filters",
@@ -3643,7 +4061,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tutorial-intro-content",
@@ -3660,7 +4080,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "tutorial-mdx",
@@ -3677,7 +4099,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "learning"
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "usage-breakdown",
@@ -3694,7 +4118,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "video-embed",
@@ -3711,7 +4137,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "view-switcher",
@@ -3728,7 +4156,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "viewport-bookmarks",
@@ -3745,7 +4175,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "wallet-card",
@@ -3762,7 +4194,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "content"
+      "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "watchlist",
@@ -3779,7 +4213,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "workspace-switcher",
@@ -3796,7 +4232,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "world-breadcrumbs",
@@ -3813,7 +4251,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "navigation"
+      "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "world-clock-bar",
@@ -3830,7 +4270,9 @@
       "dependencies": [
         "@vllnt/ui@^0.2.1"
       ],
-      "category": "data"
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "zoom-hud",
@@ -3848,7 +4290,11 @@
         "@vllnt/ui@^0.2.1",
         "lucide-react"
       ],
-      "category": "overlay"
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
     }
-  ]
+  ],
+  "version": "0.2.1",
+  "generatedAt": "2026-05-10T14:52:31.798Z"
 }

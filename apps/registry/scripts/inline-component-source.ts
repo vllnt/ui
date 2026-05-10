@@ -57,6 +57,13 @@ type RegistryFile = {
   type: string;
 };
 
+type Stability = "stable" | "beta" | "experimental" | "deprecated";
+
+type ComponentMeta = {
+  stability?: Stability;
+  replacedBy?: string;
+};
+
 type RegistryItem = {
   category?: string;
   dependencies?: string[];
@@ -64,19 +71,38 @@ type RegistryItem = {
   files: RegistryFile[];
   name: string;
   registryDependencies?: string[];
+  replacedBy?: string;
+  stability?: Stability;
   title?: string;
   type: string;
+  version?: string;
 };
 
 type Registry = {
+  $schema?: string;
+  generatedAt?: string;
+  homepage?: string;
   items: RegistryItem[];
+  name?: string;
+  version?: string;
 };
 
 const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as {
   version: string;
 };
-const PACKAGE_VERSION_RANGE = `^${packageJson.version}`;
+const PACKAGE_VERSION = packageJson.version;
+const PACKAGE_VERSION_RANGE = `^${PACKAGE_VERSION}`;
 const PACKAGE_DEP = `${PACKAGE_NAME}@${PACKAGE_VERSION_RANGE}`;
+
+const readComponentMeta = (name: string): ComponentMeta => {
+  const metaPath = join(componentsRoot, name, "meta.json");
+  if (!existsSync(metaPath)) return {};
+  try {
+    return JSON.parse(readFileSync(metaPath, "utf8")) as ComponentMeta;
+  } catch {
+    return {};
+  }
+};
 
 const rewriteImports = (source: string): string => {
   // Collect import lines that target lib utilities or sibling components
@@ -140,6 +166,20 @@ for (const item of registry.items) {
   );
   item.dependencies = [PACKAGE_DEP, ...otherDeps];
 
+  // Stamp version + stability per the registry item schema (see #253).
+  // Defaults to the published @vllnt/ui version + "stable"; per-component
+  // overrides come from packages/ui/src/components/<name>/meta.json if present.
+  const meta = readComponentMeta(item.name);
+  item.version = PACKAGE_VERSION;
+  item.stability = meta.stability ?? "stable";
+  if (item.stability === "deprecated") {
+    if (meta.replacedBy) {
+      item.replacedBy = meta.replacedBy;
+    }
+  } else {
+    delete item.replacedBy;
+  }
+
   processed += 1;
 }
 
@@ -159,6 +199,23 @@ for (const name of RESERVED_REGISTRY_NAMES) {
 // Sort items alphabetically for deterministic output
 registry.items.sort((a, b) => a.name.localeCompare(b.name));
 
+// Stamp top-level version + generatedAt so agents can detect schema/library changes.
+registry.version = PACKAGE_VERSION;
+registry.generatedAt = new Date().toISOString();
+
+// Validate: any deprecated component must declare replacedBy.
+const deprecatedWithoutReplacement = registry.items.filter(
+  (item) => item.stability === "deprecated" && !item.replacedBy,
+);
+if (deprecatedWithoutReplacement.length > 0) {
+  console.error(
+    `Deprecated components missing replacedBy: ${deprecatedWithoutReplacement
+      .map((item) => item.name)
+      .join(", ")}`,
+  );
+  process.exitCode = 1;
+}
+
 writeFileSync(registryJsonPath, `${JSON.stringify(registry, null, 2)}\n`);
 
 console.log(
@@ -167,3 +224,4 @@ console.log(
 console.log(
   `All siblings/utilities now resolve through ${PACKAGE_NAME}@${PACKAGE_VERSION_RANGE}.`,
 );
+console.log(`Stamped version=${PACKAGE_VERSION} on ${processed} items.`);
