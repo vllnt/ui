@@ -57,7 +57,7 @@ export default async function DocumentationPage() {
                 { label: "Docs" },
               ]}
             />
-            <h1 className="text-4xl font-bold mb-4">Documentation</h1>
+            <h1 className="text-4xl font-semibold mb-4">Documentation</h1>
             <p className="text-muted-foreground text-lg">
               Learn how to use VLLNT UI components in your projects.
             </p>

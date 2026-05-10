@@ -142,7 +142,7 @@ export default function VsShadcnPage() {
           <p className="text-sm uppercase tracking-wide text-muted-foreground">
             Comparison · v{version}
           </p>
-          <h1 className="mt-2 text-4xl font-bold">VLLNT UI vs shadcn/ui</h1>
+          <h1 className="mt-2 text-4xl font-semibold">VLLNT UI vs shadcn/ui</h1>
 
           <div className="prose prose-lg dark:prose-invert mt-6 max-w-none">
             <h2>TLDR</h2>
