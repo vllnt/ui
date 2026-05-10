@@ -10,9 +10,9 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "registry:build": "tsx scripts/inline-component-source.ts && shadcn build && tsx scripts/stamp-registry-metadata.ts",
+    "registry:build": "tsx scripts/inline-component-source.ts && shadcn build && tsx scripts/stamp-registry-metadata.ts && tsx scripts/generate-component-metadata.ts",
     "registry:sync-shims": "tsx scripts/inline-component-source.ts",
-    "sync-storybook": "tsx scripts/sync-from-storybook.ts"
+    "sync-storybook": "tsx scripts/generate-component-metadata.ts"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",
