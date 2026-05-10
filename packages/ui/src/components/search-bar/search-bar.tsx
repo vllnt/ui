@@ -125,9 +125,10 @@ function SearchBarInner({
     const newUrl = parameters.toString();
     lastSetSearchParameterReference.current = trimmedQuery;
     // next/navigation router.replace is the canonical client-side
-    // navigation primitive in Next App Router — not the
-    // window.location.href anti-pattern this rule targets.
-    // eslint-disable-next-line nextjs-no-client-side-redirect
+    // navigation primitive in Next App Router. The react-doctor
+    // nextjs-no-client-side-redirect rule targets window.location
+    // hard redirects, not Next router.replace — but ESLint doesn't
+    // know that rule, so we don't add an eslint-disable for it.
     router.replace(`?${newUrl}`);
   }, [debouncedQuery, router, onSearch, searchParameters]);
 

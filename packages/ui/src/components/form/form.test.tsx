@@ -517,7 +517,9 @@ describe("Form", () => {
     resolveSubmit();
 
     await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Save changes" })).toBeEnabled();
+      expect(
+        screen.getByRole("button", { name: "Save changes" }),
+      ).toBeEnabled();
       expect(screen.getByRole("textbox", { name: "Email" })).toBeEnabled();
     });
   });
