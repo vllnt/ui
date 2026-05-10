@@ -537,13 +537,13 @@ function CalloutPreview() {
 function CheckboxPreview() {
   return (
     <div className="space-y-2">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <Checkbox id="terms" />
         <label className="text-sm" htmlFor="terms">
           Accept terms
         </label>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <Checkbox defaultChecked id="marketing" />
         <label className="text-sm" htmlFor="marketing">
           Receive emails
@@ -1231,13 +1231,13 @@ function SelectPreview() {
 function RadioGroupPreview() {
   return (
     <RadioGroup defaultValue="option-one">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <RadioGroupItem id="option-one" value="option-one" />
         <label className="text-sm" htmlFor="option-one">
           Option One
         </label>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <RadioGroupItem id="option-two" value="option-two" />
         <label className="text-sm" htmlFor="option-two">
           Option Two
@@ -1697,7 +1697,7 @@ function DataTablePreview() {
 
 function SkeletonPreview() {
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center gap-x-4">
       <Skeleton className="h-12 w-12 rounded-full" />
       <div className="space-y-2">
         <Skeleton className="h-4 w-[200px]" />
@@ -1715,7 +1715,7 @@ function SeparatorPreview() {
         <p className="text-sm text-muted-foreground">A component library.</p>
       </div>
       <Separator />
-      <div className="flex h-5 items-center space-x-4 text-sm">
+      <div className="flex h-5 items-center gap-x-4 text-sm">
         <div>Docs</div>
         <Separator orientation="vertical" />
         <div>Source</div>
@@ -1799,7 +1799,7 @@ function CollapsiblePreview() {
       onOpenChange={setIsOpen}
       open={isOpen}
     >
-      <div className="flex items-center justify-between space-x-4">
+      <div className="flex items-center justify-between gap-x-4">
         <h4 className="text-sm font-semibold">Collapsible Section</h4>
         <CollapsibleTrigger asChild>
           <Button size="sm" variant="ghost">

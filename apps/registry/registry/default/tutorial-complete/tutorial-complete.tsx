@@ -211,7 +211,7 @@ function TutorialCompleteImpl({
       {/* Back Link */}
       <div className="text-center pt-8">
         <LinkComponent
-          className="inline-flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-x-2 text-muted-foreground hover:text-foreground transition-colors"
           href={backHref}
         >
           <span>← {labels.backToTutorials}</span>
