@@ -24,7 +24,7 @@ export type NavbarSaasProps = {
   showMobileMenu?: boolean;
 };
 
-const EMPTY_NAV_ITEMS: NavItem[] = Object.freeze([]) as NavItem[];
+const EMPTY_NAV_ITEMS: NavItem[] = [];
 
 export function NavbarSaas({
   brand,
