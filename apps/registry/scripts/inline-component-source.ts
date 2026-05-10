@@ -80,6 +80,15 @@ type UsageExample = {
   storyId?: string;
 };
 
+type PropDefinition = {
+  name: string;
+  type: string;
+  required?: boolean;
+  defaultValue?: string;
+  description?: string;
+  deprecated?: boolean;
+};
+
 type ComponentMeta = {
   stability?: Stability;
   replacedBy?: string;
@@ -94,6 +103,7 @@ type RegistryItem = {
   examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
+  props?: PropDefinition[];
   registryDependencies?: string[];
   replacedBy?: string;
   stability?: Stability;
@@ -140,6 +150,24 @@ const readComponentExamples = (name: string): UsageExample[] => {
         entry !== null &&
         typeof (entry as UsageExample).title === "string" &&
         typeof (entry as UsageExample).code === "string",
+    );
+  } catch {
+    return [];
+  }
+};
+
+const readComponentProps = (name: string): PropDefinition[] => {
+  const propsPath = join(componentsRoot, name, "props.json");
+  if (!existsSync(propsPath)) return [];
+  try {
+    const raw = JSON.parse(readFileSync(propsPath, "utf8")) as unknown;
+    if (!Array.isArray(raw)) return [];
+    return raw.filter(
+      (entry): entry is PropDefinition =>
+        typeof entry === "object" &&
+        entry !== null &&
+        typeof (entry as PropDefinition).name === "string" &&
+        typeof (entry as PropDefinition).type === "string",
     );
   } catch {
     return [];
@@ -239,6 +267,19 @@ for (const item of registry.items) {
     item.examples = examples;
   } else {
     delete item.examples;
+  }
+
+  // Stamp prop definitions (see #242) — agents reading /r/<name>.json
+  // see the public API surface in TSDoc-shaped JSON. Source: optional
+  // packages/ui/src/components/<name>/props.json. Schema:
+  // [{ name, type, required?, defaultValue?, description?, deprecated? }].
+  // Auto-extraction from TS source is a future follow-up; props.json is
+  // the contract for now.
+  const props = readComponentProps(item.name);
+  if (props.length > 0) {
+    item.props = props;
+  } else {
+    delete item.props;
   }
 
   processed += 1;

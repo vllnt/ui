@@ -594,6 +594,49 @@
           "code": "import { Button, Spinner } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <Button disabled>\n      <Spinner className=\"h-4 w-4\" />\n      Saving…\n    </Button>\n  );\n}\n",
           "framework": "react"
         }
+      ],
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"default\" | \"secondary\" | \"outline\" | \"ghost\" | \"destructive\" | \"link\"",
+          "required": false,
+          "defaultValue": "\"default\"",
+          "description": "Visual variant. Use \"destructive\" only for irreversible actions; \"link\" only inside text flow."
+        },
+        {
+          "name": "size",
+          "type": "\"default\" | \"sm\" | \"lg\" | \"icon\"",
+          "required": false,
+          "defaultValue": "\"default\"",
+          "description": "Size token. Use \"icon\" for icon-only buttons."
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": "false",
+          "description": "If true, the underlying element is the first child (Radix Slot pattern). Use to render a Next.js Link or another routing element while keeping Button styles."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": "false",
+          "description": "Visually and functionally disabled. Pair with `aria-disabled` if you need event handlers to keep firing."
+        },
+        {
+          "name": "type",
+          "type": "\"button\" | \"submit\" | \"reset\"",
+          "required": false,
+          "defaultValue": "\"button\"",
+          "description": "HTML button type. Set explicitly to \"submit\" inside <form>, otherwise the implicit submit behaviour can surprise users."
+        },
+        {
+          "name": "...rest",
+          "type": "ButtonHTMLAttributes<HTMLButtonElement>",
+          "required": false,
+          "description": "All native <button> attributes are forwarded."
+        }
       ]
     },
     {
@@ -963,6 +1006,65 @@
           "description": "Pair Combobox with React.useState for full control over the selected value.",
           "code": "\"use client\";\nimport * as React from \"react\";\nimport { Combobox } from \"@vllnt/ui\";\n\nconst options = [\n  { label: \"Pending\", value: \"pending\" },\n  { label: \"Approved\", value: \"approved\" },\n  { label: \"Rejected\", value: \"rejected\" },\n];\n\nexport function Demo() {\n  const [value, setValue] = React.useState(\"pending\");\n  return (\n    <Combobox\n      options={options}\n      value={value}\n      onValueChange={setValue}\n      placeholder=\"Status\"\n    />\n  );\n}\n",
           "framework": "react"
+        }
+      ],
+      "props": [
+        {
+          "name": "options",
+          "type": "ComboboxOption[]",
+          "required": true,
+          "description": "List of options. Each option must have a unique `value`. Optional `keywords` are added to the searchable haystack."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "Controlled selected value. Pair with `onValueChange`. Omit for uncontrolled."
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "required": false,
+          "description": "Called when the user picks an option (or clears by re-selecting the active one)."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "defaultValue": "\"Select an option\"",
+          "description": "Trigger label when no option is selected."
+        },
+        {
+          "name": "searchPlaceholder",
+          "type": "string",
+          "required": false,
+          "defaultValue": "\"Search options...\"",
+          "description": "Placeholder for the type-ahead search input inside the listbox."
+        },
+        {
+          "name": "emptyText",
+          "type": "string",
+          "required": false,
+          "defaultValue": "\"No option found.\"",
+          "description": "Shown when the search yields zero matches."
+        },
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "Class applied to the popover content (the listbox container)."
+        },
+        {
+          "name": "triggerClassName",
+          "type": "string",
+          "required": false,
+          "description": "Class applied to the trigger button."
+        },
+        {
+          "name": "commandClassName",
+          "type": "string",
+          "required": false,
+          "description": "Class applied to the inner Command element."
         }
       ]
     },
@@ -4390,5 +4492,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-05-10T15:12:14.518Z"
+  "generatedAt": "2026-05-10T15:22:31.217Z"
 }

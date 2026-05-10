@@ -43,10 +43,20 @@ type UsageExample = {
   storyId?: string;
 };
 
+type PropDefinition = {
+  name: string;
+  type: string;
+  required?: boolean;
+  defaultValue?: string;
+  description?: string;
+  deprecated?: boolean;
+};
+
 type RegistryItem = {
   a11y?: A11ySchema;
   examples?: UsageExample[];
   name: string;
+  props?: PropDefinition[];
   version?: string;
   stability?: Stability;
   replacedBy?: string;
@@ -86,6 +96,11 @@ for (const item of registry.items) {
     data.examples = item.examples;
   } else {
     delete data.examples;
+  }
+  if (item.props && item.props.length > 0) {
+    data.props = item.props;
+  } else {
+    delete data.props;
   }
 
   writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);

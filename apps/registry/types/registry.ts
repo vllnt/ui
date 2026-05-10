@@ -36,6 +36,15 @@ export type UsageExample = {
   storyId?: string;
 };
 
+export type PropDefinition = {
+  name: string;
+  type: string;
+  required?: boolean;
+  defaultValue?: string;
+  description?: string;
+  deprecated?: boolean;
+};
+
 export type RegistryComponent = {
   a11y?: A11ySchema;
   category?: ComponentCategory;
@@ -44,6 +53,7 @@ export type RegistryComponent = {
   examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
+  props?: PropDefinition[];
   registryDependencies?: string[];
   replacedBy?: string;
   stability?: Stability;
