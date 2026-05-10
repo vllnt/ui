@@ -12,11 +12,65 @@ import { Header } from "@/components/header";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  description: "VLLNT UI Component Registry",
+  applicationName: "VLLNT UI",
+  authors: [{ name: "VLLNT", url: "https://github.com/vllnt" }],
+  category: "Developer Tools",
+  creator: "VLLNT",
+  description:
+    "Agent-first React component registry. 225 accessible components built on Radix UI, Tailwind CSS, and CVA. Install via the shadcn CLI.",
+  formatDetection: {
+    address: false,
+    email: false,
+    telephone: false,
+  },
+  generator: "Next.js",
+  keywords: [
+    "react",
+    "components",
+    "react components",
+    "ui library",
+    "component library",
+    "tailwind",
+    "tailwindcss",
+    "radix",
+    "radix-ui",
+    "shadcn",
+    "shadcn-ui",
+    "registry",
+    "design system",
+    "accessible",
+    "typescript",
+    "ai",
+    "llms.txt",
+    "open source",
+  ],
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai",
   ),
-  title: "VLLNT UI - Component Registry",
+  openGraph: {
+    locale: "en_US",
+    siteName: "VLLNT UI",
+    type: "website",
+  },
+  publisher: "VLLNT",
+  referrer: "origin-when-cross-origin",
+  robots: {
+    follow: true,
+    googleBot: {
+      follow: true,
+      index: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+    index: true,
+  },
+  title: "VLLNT UI — 225 agent-first React components",
+  twitter: {
+    card: "summary_large_image",
+    creator: "@vllnt",
+    site: "@vllnt",
+  },
 };
 
 export default function RootLayout({
