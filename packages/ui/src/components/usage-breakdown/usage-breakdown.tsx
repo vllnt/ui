@@ -63,10 +63,17 @@ function formatPercent(value: number): string {
   return `${Math.round(value)}%`;
 }
 
+const LARGE_VALUE_FORMATTER = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 0,
+});
+const SMALL_VALUE_FORMATTER = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 1,
+});
+
 function formatValue(value: number): string {
-  return new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: value >= 100 ? 0 : 1,
-  }).format(value);
+  return value >= 100
+    ? LARGE_VALUE_FORMATTER.format(value)
+    : SMALL_VALUE_FORMATTER.format(value);
 }
 
 function getRelativeWidth(value: number, maxValue: number): number {

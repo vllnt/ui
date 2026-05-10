@@ -61,11 +61,7 @@ export type AnimatedTextProps = React.ComponentPropsWithoutRef<"p"> & {
 
 function getSegments(text: string, splitBy: AnimatedTextSplit): string[] {
   if (splitBy === "character") {
-    const segmenter = new Intl.Segmenter(undefined, {
-      granularity: "grapheme",
-    });
-
-    return Array.from(segmenter.segment(text), ({ segment }) => segment);
+    return Array.from(GLYPH_SEGMENTER.segment(text), ({ segment }) => segment);
   }
 
   return text.match(/\S+\s*/g) ?? [];
