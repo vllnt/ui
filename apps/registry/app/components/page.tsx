@@ -5,6 +5,7 @@ import Link from "next/link";
 import componentMetadata from "@/lib/component-metadata.json";
 import { getPageContent } from "@/lib/content";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import {
   components,
   getSidebarSections,
@@ -25,6 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const og = frontmatter.og;
 
   return {
+    alternates: { canonical: canonical("/components") },
     description: frontmatter.description,
     openGraph: generateOGMetadata({
       description: og?.description ?? frontmatter.description,
