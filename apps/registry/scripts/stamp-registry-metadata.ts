@@ -35,8 +35,17 @@ type A11ySchema = {
   notes?: string;
 };
 
+type UsageExample = {
+  title: string;
+  description?: string;
+  code: string;
+  framework?: "react" | "next";
+  storyId?: string;
+};
+
 type RegistryItem = {
   a11y?: A11ySchema;
+  examples?: UsageExample[];
   name: string;
   version?: string;
   stability?: Stability;
@@ -72,6 +81,11 @@ for (const item of registry.items) {
     data.a11y = item.a11y;
   } else {
     delete data.a11y;
+  }
+  if (item.examples && item.examples.length > 0) {
+    data.examples = item.examples;
+  } else {
+    delete data.examples;
   }
 
   writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);

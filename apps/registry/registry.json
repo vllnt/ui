@@ -574,7 +574,27 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "examples": [
+        {
+          "title": "Default",
+          "description": "Default button with primary variant.",
+          "code": "import { Button } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return <Button>Click me</Button>;\n}\n",
+          "framework": "react"
+        },
+        {
+          "title": "Variants",
+          "description": "All variant styles in one row.",
+          "code": "import { Button } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <div className=\"flex gap-2\">\n      <Button variant=\"default\">Default</Button>\n      <Button variant=\"secondary\">Secondary</Button>\n      <Button variant=\"outline\">Outline</Button>\n      <Button variant=\"ghost\">Ghost</Button>\n      <Button variant=\"destructive\">Delete</Button>\n    </div>\n  );\n}\n",
+          "framework": "react"
+        },
+        {
+          "title": "Loading state",
+          "description": "Disabled button with a spinner — keeps width stable so layouts don't jump.",
+          "code": "import { Button, Spinner } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <Button disabled>\n      <Spinner className=\"h-4 w-4\" />\n      Saving…\n    </Button>\n  );\n}\n",
+          "framework": "react"
+        }
+      ]
     },
     {
       "name": "calendar",
@@ -930,7 +950,21 @@
         ],
         "focusManagement": "auto",
         "notes": "Trigger button has role='combobox'. Listbox id is wired via React.useId() so consumers don't need to manage it."
-      }
+      },
+      "examples": [
+        {
+          "title": "Default",
+          "description": "Single-select combobox with type-ahead.",
+          "code": "import { Combobox } from \"@vllnt/ui\";\n\nconst options = [\n  { label: \"React\", value: \"react\" },\n  { label: \"Vue\", value: \"vue\" },\n  { label: \"Svelte\", value: \"svelte\" },\n  { label: \"Solid\", value: \"solid\" },\n];\n\nexport function Demo() {\n  return <Combobox options={options} placeholder=\"Pick a framework\" />;\n}\n",
+          "framework": "react"
+        },
+        {
+          "title": "Controlled",
+          "description": "Pair Combobox with React.useState for full control over the selected value.",
+          "code": "\"use client\";\nimport * as React from \"react\";\nimport { Combobox } from \"@vllnt/ui\";\n\nconst options = [\n  { label: \"Pending\", value: \"pending\" },\n  { label: \"Approved\", value: \"approved\" },\n  { label: \"Rejected\", value: \"rejected\" },\n];\n\nexport function Demo() {\n  const [value, setValue] = React.useState(\"pending\");\n  return (\n    <Combobox\n      options={options}\n      value={value}\n      onValueChange={setValue}\n      placeholder=\"Status\"\n    />\n  );\n}\n",
+          "framework": "react"
+        }
+      ]
     },
     {
       "name": "command",
@@ -1334,7 +1368,15 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "examples": [
+        {
+          "title": "Default",
+          "description": "Empty state for an empty list — explain what's empty + offer a single primary action.",
+          "code": "import { Button, EmptyState } from \"@vllnt/ui\";\nimport { Inbox } from \"lucide-react\";\n\nexport function Demo() {\n  return (\n    <EmptyState\n      icon={<Inbox className=\"h-8 w-8\" />}\n      title=\"No tickets yet\"\n      description=\"Create your first support ticket to start tracking conversations.\"\n      action={<Button>Create ticket</Button>}\n    />\n  );\n}\n",
+          "framework": "react"
+        }
+      ]
     },
     {
       "name": "era-comparison",
@@ -4348,5 +4390,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-05-10T15:02:17.375Z"
+  "generatedAt": "2026-05-10T15:12:14.518Z"
 }

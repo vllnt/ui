@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Default",
+    "description": "Default button with primary variant.",
+    "code": "import { Button } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return <Button>Click me</Button>;\n}\n",
+    "framework": "react"
+  },
+  {
+    "title": "Variants",
+    "description": "All variant styles in one row.",
+    "code": "import { Button } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <div className=\"flex gap-2\">\n      <Button variant=\"default\">Default</Button>\n      <Button variant=\"secondary\">Secondary</Button>\n      <Button variant=\"outline\">Outline</Button>\n      <Button variant=\"ghost\">Ghost</Button>\n      <Button variant=\"destructive\">Delete</Button>\n    </div>\n  );\n}\n",
+    "framework": "react"
+  },
+  {
+    "title": "Loading state",
+    "description": "Disabled button with a spinner — keeps width stable so layouts don't jump.",
+    "code": "import { Button, Spinner } from \"@vllnt/ui\";\n\nexport function Demo() {\n  return (\n    <Button disabled>\n      <Spinner className=\"h-4 w-4\" />\n      Saving…\n    </Button>\n  );\n}\n",
+    "framework": "react"
+  }
+]
