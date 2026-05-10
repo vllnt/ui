@@ -212,7 +212,7 @@ export default function VsShadcnPage() {
             <p>
               The honest answer: many projects use both. shadcn/ui as the
               baseline, VLLNT UI for the families shadcn doesn&rsquo;t cover.
-              Same install model — they coexist cleanly.
+              Same install model: they coexist cleanly.
             </p>
           </div>
         </div>

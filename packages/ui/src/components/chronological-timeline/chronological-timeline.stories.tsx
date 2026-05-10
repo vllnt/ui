@@ -75,7 +75,7 @@ export const WithImageMedia: Story = {
         title="Sputnik 1"
       >
         <p>
-          A polished metal sphere with four trailing antennas — and the
+          A polished metal sphere with four trailing antennas, and the
           beep-beep-beep heard around the world.
         </p>
       </ChronoEvent>

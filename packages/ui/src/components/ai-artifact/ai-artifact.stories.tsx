@@ -108,8 +108,8 @@ export const Document: Story = {
           <h1>Project brief</h1>
           <p>This is a generated outline that the user can refine.</p>
           <ul>
-            <li>Goal — articulate the problem</li>
-            <li>Scope — single-quarter</li>
+            <li>Goal: articulate the problem</li>
+            <li>Scope: single-quarter</li>
           </ul>
         </article>
       </AIArtifactContent>
