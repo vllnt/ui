@@ -53,10 +53,9 @@ function Hero({
         </p>
 
         <div className="mt-8">
-          <CodeBlock
-            code={`pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json`}
-            language="bash"
-          />
+          <CodeBlock language="bash">
+            {`pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json`}
+          </CodeBlock>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
