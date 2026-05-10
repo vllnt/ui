@@ -206,10 +206,13 @@ function useProgressTrackerContext(): ProgressTrackerContextValue {
   return context;
 }
 
+const EMPTY_PROGRESS_TRACKER_MODULES: ProgressTrackerModuleItem[] = [];
+const EMPTY_PROGRESS_TRACKER_SKILLS: string[] = [];
+
 function ProgressTrackerRoot({
   children,
   className,
-  modules = [],
+  modules = EMPTY_PROGRESS_TRACKER_MODULES,
   overallProgress,
   streak = 0,
   title = "Learning progress",
@@ -447,7 +450,7 @@ function ProgressTrackerModule({
   lessons,
   persistKey,
   progress,
-  skills = [],
+  skills = EMPTY_PROGRESS_TRACKER_SKILLS,
   status,
   timeSpent,
   title,

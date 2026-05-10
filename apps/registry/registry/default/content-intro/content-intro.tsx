@@ -47,13 +47,15 @@ const DEFAULT_LABELS: Required<ContentIntroLabels> = {
   tableOfContentsLabel: "Table of Contents",
 };
 
+const EMPTY_CONTENT_INTRO_LABELS: ContentIntroLabels = {};
+
 // eslint-disable-next-line max-lines-per-function -- Complex intro with TOC and sticky button
 function ContentIntroImpl({
   additionalContent,
   completedSections,
   estimatedTime,
   isLoading = false,
-  labels = {},
+  labels = EMPTY_CONTENT_INTRO_LABELS,
   onGoToSection,
   onStart,
   renderIntroContent,
