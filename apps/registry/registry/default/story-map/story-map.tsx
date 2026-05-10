@@ -152,7 +152,6 @@ type ChapterMediaProps = {
 function ChapterMedia({ media }: ChapterMediaProps): ReactNode {
   return (
     <figure className="overflow-hidden rounded-xl border bg-muted">
-        {/* eslint-disable-next-line nextjs-no-img-element */}
       <img
         alt={media.alt}
         className="aspect-video w-full object-cover"
