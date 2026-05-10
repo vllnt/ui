@@ -62,7 +62,7 @@ function DefaultLink({
   );
 }
 
-const EMPTY_PROGRESS_CARD_LIST: string[] = Object.freeze([]) as string[];
+const EMPTY_PROGRESS_CARD_LIST: string[] = [];
 
 function ContentCardImpl({
   badgeLabel,

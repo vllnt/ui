@@ -36,7 +36,7 @@ export type CodePlaygroundProps = {
   title: string;
 };
 
-const EMPTY_HIGHLIGHT_LINES: number[] = Object.freeze([]) as number[];
+const EMPTY_HIGHLIGHT_LINES: number[] = [];
 
 export function CodePlayground({
   children,

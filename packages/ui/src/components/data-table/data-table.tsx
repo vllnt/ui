@@ -80,9 +80,7 @@ function SortIcon({ direction }: { direction: "asc" | "desc" | false }) {
   return <ArrowUpDown className="h-4 w-4" />;
 }
 
-const EMPTY_FILTERABLE_COLUMNS: DataTableFilter[] = Object.freeze(
-  [],
-) as DataTableFilter[];
+const EMPTY_FILTERABLE_COLUMNS: DataTableFilter[] = [];
 
 function DataTableComponent<TData extends RowData>({
   caption,

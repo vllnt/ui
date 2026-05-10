@@ -161,9 +161,8 @@ function buildCustomComponents(
   };
 }
 
-const EMPTY_MDX_COMPONENTS: MDXContentProps["components"] = Object.freeze(
-  {},
-) as MDXContentProps["components"];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const EMPTY_MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {};
 
 export async function MDXContent({
   components = EMPTY_MDX_COMPONENTS,
