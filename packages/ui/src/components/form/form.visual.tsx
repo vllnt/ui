@@ -6,7 +6,7 @@ test.describe("Form Visual", () => {
   test("invalid state", async ({ mount, page }) => {
     await mount(<FormInvalidEmailPreview />);
 
-    await page.getByRole("button", { name: "Submit" }).click();
+    await page.getByRole("button", { name: "Save changes" }).click();
 
     await expect(page).toHaveScreenshot("form-invalid.png");
   });
