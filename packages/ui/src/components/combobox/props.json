@@ -1,0 +1,59 @@
+[
+  {
+    "name": "options",
+    "type": "ComboboxOption[]",
+    "required": true,
+    "description": "List of options. Each option must have a unique `value`. Optional `keywords` are added to the searchable haystack."
+  },
+  {
+    "name": "value",
+    "type": "string",
+    "required": false,
+    "description": "Controlled selected value. Pair with `onValueChange`. Omit for uncontrolled."
+  },
+  {
+    "name": "onValueChange",
+    "type": "(value: string) => void",
+    "required": false,
+    "description": "Called when the user picks an option (or clears by re-selecting the active one)."
+  },
+  {
+    "name": "placeholder",
+    "type": "string",
+    "required": false,
+    "defaultValue": "\"Select an option\"",
+    "description": "Trigger label when no option is selected."
+  },
+  {
+    "name": "searchPlaceholder",
+    "type": "string",
+    "required": false,
+    "defaultValue": "\"Search options...\"",
+    "description": "Placeholder for the type-ahead search input inside the listbox."
+  },
+  {
+    "name": "emptyText",
+    "type": "string",
+    "required": false,
+    "defaultValue": "\"No option found.\"",
+    "description": "Shown when the search yields zero matches."
+  },
+  {
+    "name": "className",
+    "type": "string",
+    "required": false,
+    "description": "Class applied to the popover content (the listbox container)."
+  },
+  {
+    "name": "triggerClassName",
+    "type": "string",
+    "required": false,
+    "description": "Class applied to the trigger button."
+  },
+  {
+    "name": "commandClassName",
+    "type": "string",
+    "required": false,
+    "description": "Class applied to the inner Command element."
+  }
+]

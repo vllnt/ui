@@ -1,0 +1,43 @@
+[
+  {
+    "name": "variant",
+    "type": "\"default\" | \"secondary\" | \"outline\" | \"ghost\" | \"destructive\" | \"link\"",
+    "required": false,
+    "defaultValue": "\"default\"",
+    "description": "Visual variant. Use \"destructive\" only for irreversible actions; \"link\" only inside text flow."
+  },
+  {
+    "name": "size",
+    "type": "\"default\" | \"sm\" | \"lg\" | \"icon\"",
+    "required": false,
+    "defaultValue": "\"default\"",
+    "description": "Size token. Use \"icon\" for icon-only buttons."
+  },
+  {
+    "name": "asChild",
+    "type": "boolean",
+    "required": false,
+    "defaultValue": "false",
+    "description": "If true, the underlying element is the first child (Radix Slot pattern). Use to render a Next.js Link or another routing element while keeping Button styles."
+  },
+  {
+    "name": "disabled",
+    "type": "boolean",
+    "required": false,
+    "defaultValue": "false",
+    "description": "Visually and functionally disabled. Pair with `aria-disabled` if you need event handlers to keep firing."
+  },
+  {
+    "name": "type",
+    "type": "\"button\" | \"submit\" | \"reset\"",
+    "required": false,
+    "defaultValue": "\"button\"",
+    "description": "HTML button type. Set explicitly to \"submit\" inside <form>, otherwise the implicit submit behaviour can surprise users."
+  },
+  {
+    "name": "...rest",
+    "type": "ButtonHTMLAttributes<HTMLButtonElement>",
+    "required": false,
+    "description": "All native <button> attributes are forwarded."
+  }
+]
