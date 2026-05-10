@@ -13,6 +13,8 @@ export type ComponentCategory =
   | "overlay"
   | "utility";
 
+export type Stability = "stable" | "beta" | "experimental" | "deprecated";
+
 export type RegistryComponent = {
   category?: ComponentCategory;
   dependencies?: string[];
@@ -20,15 +22,20 @@ export type RegistryComponent = {
   files: RegistryFile[];
   name: string;
   registryDependencies?: string[];
+  replacedBy?: string;
+  stability?: Stability;
   title: string;
   type: "registry:component";
+  version?: string;
 };
 
 export type RegistryItem = RegistryComponent;
 
 export type Registry = {
   $schema?: string;
+  generatedAt?: string;
   homepage?: string;
   items: RegistryItem[];
   name: string;
+  version?: string;
 };
