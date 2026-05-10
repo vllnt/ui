@@ -14,16 +14,16 @@
   },
   "activity-heatmap": {
     "category": "data",
-    "defaultStoryId": "data-activityheatmap--default",
+    "defaultStoryId": "deploymentactivity--default",
     "description": "Contribution-style grid for visualizing operational activity over time.",
     "name": "activity-heatmap",
     "stories": [
       {
-        "id": "data-activityheatmap--default",
+        "id": "deploymentactivity--default",
         "name": "Default"
       },
       {
-        "id": "data-activityheatmap--two-weeks",
+        "id": "deploymentactivity--two-weeks",
         "name": "Two Weeks"
       }
     ],
@@ -31,20 +31,70 @@
   },
   "activity-log": {
     "category": "data",
-    "defaultStoryId": "analytics-activitylog--default",
+    "defaultStoryId": "activitylog--default",
     "description": "Paginated activity feed for audit history and analytics changes.",
     "name": "activity-log",
     "stories": [
       {
-        "id": "analytics-activitylog--default",
+        "id": "activitylog--default",
         "name": "Default"
       },
       {
-        "id": "analytics-activitylog--empty",
+        "id": "activitylog--empty",
         "name": "Empty"
       }
     ],
     "title": "Activity Log"
+  },
+  "agent-activity": {
+    "category": "ai",
+    "defaultStoryId": "ai-agentactivity--default",
+    "description": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress.",
+    "name": "agent-activity",
+    "stories": [
+      {
+        "id": "ai-agentactivity--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-agentactivity--completed",
+        "name": "Completed"
+      },
+      {
+        "id": "ai-agentactivity--error-state",
+        "name": "Error State"
+      },
+      {
+        "id": "ai-agentactivity--collapsed-details",
+        "name": "Collapsed Details"
+      }
+    ],
+    "title": "Agent Activity"
+  },
+  "ai-artifact": {
+    "category": "ai",
+    "defaultStoryId": "generatedcomponent--default",
+    "description": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips.",
+    "name": "ai-artifact",
+    "stories": [
+      {
+        "id": "generatedcomponent--default",
+        "name": "Default"
+      },
+      {
+        "id": "generatedcomponent--read-only",
+        "name": "Read Only"
+      },
+      {
+        "id": "generatedcomponent--document",
+        "name": "Document"
+      },
+      {
+        "id": "generatedcomponent--minimal",
+        "name": "Minimal"
+      }
+    ],
+    "title": "AI Artifact"
   },
   "ai-chat-input": {
     "category": "learning",
@@ -84,14 +134,35 @@
     ],
     "title": "AI Message Bubble"
   },
+  "ai-sidebar": {
+    "category": "ai",
+    "defaultStoryId": "ai-aisidebar--default",
+    "description": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger.",
+    "name": "ai-sidebar",
+    "stories": [
+      {
+        "id": "ai-aisidebar--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-aisidebar--left-side",
+        "name": "Left Side"
+      },
+      {
+        "id": "ai-aisidebar--closed",
+        "name": "Closed"
+      }
+    ],
+    "title": "AI Sidebar"
+  },
   "ai-source-citation": {
     "category": "learning",
-    "defaultStoryId": "ai-sourcecitation--default",
+    "defaultStoryId": "designingreadableaiconversations--default",
     "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
     "name": "ai-source-citation",
     "stories": [
       {
-        "id": "ai-sourcecitation--default",
+        "id": "designingreadableaiconversations--default",
         "name": "Default"
       }
     ],
@@ -160,6 +231,31 @@
       }
     ],
     "title": "Alert Dialog"
+  },
+  "alert-pulse": {
+    "category": "utility",
+    "defaultStoryId": "canvas-alertpulse--default",
+    "description": "Pulsing ring overlay for alerting canvas objects, with severity tones.",
+    "name": "alert-pulse",
+    "stories": [
+      {
+        "id": "canvas-alertpulse--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-alertpulse--info",
+        "name": "Info"
+      },
+      {
+        "id": "canvas-alertpulse--error",
+        "name": "Error"
+      },
+      {
+        "id": "canvas-alertpulse--reduced-motion",
+        "name": "Reduced Motion"
+      }
+    ],
+    "title": "Alert Pulse"
   },
   "anchor-port": {
     "category": "utility",
@@ -269,6 +365,35 @@
     ],
     "title": "Aspect Ratio"
   },
+  "auto-reload": {
+    "category": "billing",
+    "defaultStoryId": "billing-autoreload--default",
+    "description": "Toggle + collapsible threshold/amount form for automatic credit reloading with locale-aware currency.",
+    "name": "auto-reload",
+    "stories": [
+      {
+        "id": "billing-autoreload--default",
+        "name": "Default"
+      },
+      {
+        "id": "billing-autoreload--enabled",
+        "name": "Enabled"
+      },
+      {
+        "id": "billing-autoreload--euro",
+        "name": "Euro"
+      },
+      {
+        "id": "billing-autoreload--saving",
+        "name": "Saving"
+      },
+      {
+        "id": "billing-autoreload--disabled-for-unsubscribed",
+        "name": "Disabled For Unsubscribed"
+      }
+    ],
+    "title": "Auto Reload"
+  },
   "avatar": {
     "category": "core",
     "defaultStoryId": "core-avatar--default",
@@ -324,6 +449,39 @@
     ],
     "title": "Badge"
   },
+  "banner": {
+    "category": "core",
+    "defaultStoryId": "core-banner--default",
+    "description": "Full-width announcement bar with variants, dismissal, and an optional action slot.",
+    "name": "banner",
+    "stories": [
+      {
+        "id": "core-banner--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-banner--warning",
+        "name": "Warning"
+      },
+      {
+        "id": "core-banner--success",
+        "name": "Success"
+      },
+      {
+        "id": "core-banner--destructive",
+        "name": "Destructive"
+      },
+      {
+        "id": "core-banner--dismissible",
+        "name": "Dismissible"
+      },
+      {
+        "id": "core-banner--with-action",
+        "name": "With Action"
+      }
+    ],
+    "title": "Banner"
+  },
   "bar-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -334,12 +492,12 @@
   },
   "blog-card": {
     "category": "content",
-    "defaultStoryId": "content-blogcard--default",
+    "defaultStoryId": "exampleblogpost--default",
     "description": "Card layout for displaying blog post previews.",
     "name": "blog-card",
     "stories": [
       {
-        "id": "content-blogcard--default",
+        "id": "exampleblogpost--default",
         "name": "Default"
       }
     ],
@@ -361,6 +519,31 @@
       }
     ],
     "title": "Border Beam"
+  },
+  "bottom-activity-strip": {
+    "category": "data",
+    "defaultStoryId": "canvas-bottomactivitystrip--default",
+    "description": "Slim horizontally-scrolling row of recent canvas events for low-noise live activity.",
+    "name": "bottom-activity-strip",
+    "stories": [
+      {
+        "id": "canvas-bottomactivitystrip--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-bottomactivitystrip--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-bottomactivitystrip--capped",
+        "name": "Capped"
+      },
+      {
+        "id": "canvas-bottomactivitystrip--non-interactive",
+        "name": "Non Interactive"
+      }
+    ],
+    "title": "Bottom Activity Strip"
   },
   "breadcrumb": {
     "category": "navigation",
@@ -554,6 +737,85 @@
     ],
     "title": "Checklist"
   },
+  "choropleth-map": {
+    "category": "data-display",
+    "defaultStoryId": "maps-choroplethmap--default",
+    "description": "Standalone SVG choropleth — region polygons shaded by data value with tooltip, legend, and accessible data-table fallback.",
+    "name": "choropleth-map",
+    "stories": [
+      {
+        "id": "maps-choroplethmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "maps-choroplethmap--diverging-scale",
+        "name": "Diverging Scale"
+      },
+      {
+        "id": "maps-choroplethmap--missing-data",
+        "name": "Missing Data"
+      },
+      {
+        "id": "maps-choroplethmap--custom-tooltip",
+        "name": "Custom Tooltip"
+      }
+    ],
+    "title": "Choropleth Map"
+  },
+  "chronological-timeline": {
+    "category": "data-display",
+    "defaultStoryId": "thespacerace--default",
+    "description": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip.",
+    "name": "chronological-timeline",
+    "stories": [
+      {
+        "id": "thespacerace--default",
+        "name": "Default"
+      },
+      {
+        "id": "thespacerace--with-image-media",
+        "name": "With Image Media"
+      },
+      {
+        "id": "thespacerace--compact",
+        "name": "Compact"
+      },
+      {
+        "id": "thespacerace--untitled",
+        "name": "Untitled"
+      }
+    ],
+    "title": "Chronological Timeline"
+  },
+  "civilization-card": {
+    "category": "educational",
+    "defaultStoryId": "educational-civilizationcard--default",
+    "description": "Civilization overview with hero band, BCE/CE era timeline, key stats, achievements, and notable leaders.",
+    "name": "civilization-card",
+    "stories": [
+      {
+        "id": "educational-civilizationcard--default",
+        "name": "Default"
+      },
+      {
+        "id": "educational-civilizationcard--with-action",
+        "name": "With Action"
+      },
+      {
+        "id": "educational-civilizationcard--extant",
+        "name": "Extant"
+      },
+      {
+        "id": "educational-civilizationcard--comparison",
+        "name": "Comparison"
+      },
+      {
+        "id": "educational-civilizationcard--minimal",
+        "name": "Minimal"
+      }
+    ],
+    "title": "Civilization Card"
+  },
   "code-block": {
     "category": "content",
     "defaultStoryId": "content-codeblock--default",
@@ -623,14 +885,39 @@
     ],
     "title": "Command"
   },
+  "comment-pin": {
+    "category": "utility",
+    "defaultStoryId": "canvas-commentpin--default",
+    "description": "Anchored discussion pin rendered at canvas coordinates with author + unread badge.",
+    "name": "comment-pin",
+    "stories": [
+      {
+        "id": "canvas-commentpin--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-commentpin--resolved",
+        "name": "Resolved"
+      },
+      {
+        "id": "canvas-commentpin--no-unread",
+        "name": "No Unread"
+      },
+      {
+        "id": "canvas-commentpin--non-interactive",
+        "name": "Non Interactive"
+      }
+    ],
+    "title": "Comment Pin"
+  },
   "comparison": {
     "category": "data",
-    "defaultStoryId": "data-comparison--default",
+    "defaultStoryId": "exampletitle--default",
     "description": "Side-by-side comparison layout for content or features.",
     "name": "comparison",
     "stories": [
       {
-        "id": "data-comparison--default",
+        "id": "exampletitle--default",
         "name": "Default"
       }
     ],
@@ -638,12 +925,12 @@
   },
   "completion-dialog": {
     "category": "learning",
-    "defaultStoryId": "learning-completiondialog--default",
+    "defaultStoryId": "congratulations--default",
     "description": "Dialog displayed upon completing a task or workflow.",
     "name": "completion-dialog",
     "stories": [
       {
-        "id": "learning-completiondialog--default",
+        "id": "congratulations--default",
         "name": "Default"
       }
     ],
@@ -664,16 +951,41 @@
   },
   "content-intro": {
     "category": "content",
-    "defaultStoryId": "content-contentintro--default",
+    "defaultStoryId": "introduction--default",
     "description": "Introductory section for content pages with title and description.",
     "name": "content-intro",
     "stories": [
       {
-        "id": "content-contentintro--default",
+        "id": "introduction--default",
         "name": "Default"
       }
     ],
     "title": "Content Intro"
+  },
+  "context-lens": {
+    "category": "utility",
+    "defaultStoryId": "canvas-contextlens--default",
+    "description": "Vignette overlay that dims the canvas outside a circular focus region.",
+    "name": "context-lens",
+    "stories": [
+      {
+        "id": "canvas-contextlens--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-contextlens--tight",
+        "name": "Tight"
+      },
+      {
+        "id": "canvas-contextlens--soft",
+        "name": "Soft"
+      },
+      {
+        "id": "canvas-contextlens--hidden",
+        "name": "Hidden"
+      }
+    ],
+    "title": "Context Lens"
   },
   "context-menu": {
     "category": "overlay",
@@ -688,18 +1000,43 @@
     ],
     "title": "Context Menu"
   },
+  "copy-button": {
+    "category": "core",
+    "defaultStoryId": "core-copybutton--default",
+    "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
+    "name": "copy-button",
+    "stories": [
+      {
+        "id": "core-copybutton--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-copybutton--inline",
+        "name": "Inline"
+      },
+      {
+        "id": "core-copybutton--button-variant",
+        "name": "Button Variant"
+      },
+      {
+        "id": "core-copybutton--custom-labels",
+        "name": "Custom Labels"
+      }
+    ],
+    "title": "Copy Button"
+  },
   "countdown-timer": {
     "category": "data",
-    "defaultStoryId": "data-countdowntimer--default",
+    "defaultStoryId": "slatimer--default",
     "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
     "name": "countdown-timer",
     "stories": [
       {
-        "id": "data-countdowntimer--default",
+        "id": "slatimer--default",
         "name": "Default"
       },
       {
-        "id": "data-countdowntimer--breached",
+        "id": "slatimer--breached",
         "name": "Breached"
       }
     ],
@@ -707,16 +1044,16 @@
   },
   "credit-badge": {
     "category": "content",
-    "defaultStoryId": "account-billing-creditbadge--default",
+    "defaultStoryId": "accountbilling-creditbadge--default",
     "description": "Balance status pill for credits, wallet states, and billing health.",
     "name": "credit-badge",
     "stories": [
       {
-        "id": "account-billing-creditbadge--default",
+        "id": "accountbilling-creditbadge--default",
         "name": "Default"
       },
       {
-        "id": "account-billing-creditbadge--states",
+        "id": "accountbilling-creditbadge--states",
         "name": "States"
       }
     ],
@@ -782,6 +1119,39 @@
     ],
     "title": "Dialog"
   },
+  "document-sibling-nav": {
+    "category": "content",
+    "defaultStoryId": "whythinclientsareback--default",
+    "description": "Newer/older navigator: links to the previous and next item in an ordered series.",
+    "name": "document-sibling-nav",
+    "stories": [
+      {
+        "id": "whythinclientsareback--default",
+        "name": "Default"
+      },
+      {
+        "id": "whythinclientsareback--only-previous",
+        "name": "Only Previous"
+      },
+      {
+        "id": "whythinclientsareback--only-next",
+        "name": "Only Next"
+      },
+      {
+        "id": "whythinclientsareback--compact",
+        "name": "Compact"
+      },
+      {
+        "id": "whythinclientsareback--with-meta",
+        "name": "With Meta"
+      },
+      {
+        "id": "whythinclientsareback--localized",
+        "name": "Localized"
+      }
+    ],
+    "title": "Document Sibling Nav"
+  },
   "drawer": {
     "category": "overlay",
     "defaultStoryId": "overlay-drawer--default",
@@ -821,14 +1191,60 @@
     ],
     "title": "Edge Label"
   },
+  "empty-state": {
+    "category": "core",
+    "defaultStoryId": "noresultsfound--default",
+    "description": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes.",
+    "name": "empty-state",
+    "stories": [
+      {
+        "id": "noresultsfound--default",
+        "name": "Default"
+      },
+      {
+        "id": "noresultsfound--size-sm",
+        "name": "Size Sm"
+      },
+      {
+        "id": "noresultsfound--size-lg",
+        "name": "Size Lg"
+      },
+      {
+        "id": "noresultsfound--with-action",
+        "name": "With Action"
+      }
+    ],
+    "title": "Empty State"
+  },
+  "era-comparison": {
+    "category": "educational",
+    "defaultStoryId": "educational-eracomparison--default",
+    "description": "Side-by-side comparison of historical eras with domain rows, color-themed columns, highlights, and figure chips.",
+    "name": "era-comparison",
+    "stories": [
+      {
+        "id": "educational-eracomparison--default",
+        "name": "Default"
+      },
+      {
+        "id": "educational-eracomparison--two-column",
+        "name": "Two Column"
+      },
+      {
+        "id": "educational-eracomparison--with-figure-links",
+        "name": "With Figure Links"
+      }
+    ],
+    "title": "Era Comparison"
+  },
   "exercise": {
     "category": "learning",
-    "defaultStoryId": "learning-exercise--default",
+    "defaultStoryId": "reverseastring--default",
     "description": "Interactive exercise block for learning content.",
     "name": "exercise",
     "stories": [
       {
-        "id": "learning-exercise--default",
+        "id": "reverseastring--default",
         "name": "Default"
       }
     ],
@@ -875,12 +1291,12 @@
   },
   "flashcard": {
     "category": "learning",
-    "defaultStoryId": "learning-flashcard--default",
+    "defaultStoryId": "partsofspeech--default",
     "description": "Study card for active recall with prompt and answer states.",
     "name": "flashcard",
     "stories": [
       {
-        "id": "learning-flashcard--default",
+        "id": "partsofspeech--default",
         "name": "Default"
       }
     ],
@@ -899,6 +1315,27 @@
     ],
     "title": "Floating Action Button"
   },
+  "floating-toolbar": {
+    "category": "data-display",
+    "defaultStoryId": "canvas-floatingtoolbar--default",
+    "description": "Compact action bar that floats above a selection — primary / ghost / destructive variants.",
+    "name": "floating-toolbar",
+    "stories": [
+      {
+        "id": "canvas-floatingtoolbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-floatingtoolbar--disabled",
+        "name": "Disabled"
+      },
+      {
+        "id": "canvas-floatingtoolbar--compact",
+        "name": "Compact"
+      }
+    ],
+    "title": "Floating Toolbar"
+  },
   "flow-diagram": {
     "category": "data",
     "defaultStoryId": "data-flowdiagram--default",
@@ -911,6 +1348,27 @@
       }
     ],
     "title": "Flow Diagram"
+  },
+  "follow-mode": {
+    "category": "data-display",
+    "defaultStoryId": "canvas-followmode--default",
+    "description": "Follow-mode chrome — outlines a region with a participant's color and surfaces a stop-following chip.",
+    "name": "follow-mode",
+    "stories": [
+      {
+        "id": "canvas-followmode--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-followmode--emerald",
+        "name": "Emerald"
+      },
+      {
+        "id": "canvas-followmode--no-stop",
+        "name": "No Stop"
+      }
+    ],
+    "title": "Follow Mode"
   },
   "form": {
     "category": "form",
@@ -929,6 +1387,73 @@
     ],
     "title": "Form"
   },
+  "gantt-chart": {
+    "category": "data",
+    "defaultStoryId": "designsystem--default",
+    "description": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales.",
+    "name": "gantt-chart",
+    "stories": [
+      {
+        "id": "designsystem--default",
+        "name": "Default"
+      },
+      {
+        "id": "designsystem--quarter-scale",
+        "name": "Quarter Scale"
+      },
+      {
+        "id": "designsystem--single-group",
+        "name": "Single Group"
+      },
+      {
+        "id": "designsystem--no-milestones",
+        "name": "No Milestones"
+      }
+    ],
+    "title": "Gantt Chart"
+  },
+  "geography-quiz-map": {
+    "category": "data-display",
+    "defaultStoryId": "educational-geographyquizmap--default",
+    "description": "Interactive identify-mode map quiz — click the correct region per prompt with visual feedback, score, and results panel.",
+    "name": "geography-quiz-map",
+    "stories": [
+      {
+        "id": "educational-geographyquizmap--default",
+        "name": "Default"
+      },
+      {
+        "id": "educational-geographyquizmap--prompt-only",
+        "name": "Prompt Only"
+      },
+      {
+        "id": "educational-geographyquizmap--short-quiz",
+        "name": "Short Quiz"
+      }
+    ],
+    "title": "Geography Quiz Map"
+  },
+  "globe-3d": {
+    "category": "data-display",
+    "defaultStoryId": "maps-globe3d--default",
+    "description": "Standalone SVG pseudo-3D globe — orthographic projection with auto-rotation, drag interaction, lat/lng markers, and great-circle arcs.",
+    "name": "globe-3d",
+    "stories": [
+      {
+        "id": "maps-globe3d--default",
+        "name": "Default"
+      },
+      {
+        "id": "maps-globe3d--static",
+        "name": "Static"
+      },
+      {
+        "id": "maps-globe3d--slow-rotation",
+        "name": "Slow Rotation"
+      }
+    ],
+    "title": "Globe 3D"
+  },
   "group-hull": {
     "category": "utility",
     "defaultStoryId": "canvas-grouphull--default",
@@ -941,6 +1466,139 @@
       }
     ],
     "title": "Group Hull"
+  },
+  "handoff-beacon": {
+    "category": "data-display",
+    "defaultStoryId": "canvas-handoffbeacon--default",
+    "description": "Attention-routing beacon with pulsing ring and optional source / message card for live canvases.",
+    "name": "handoff-beacon",
+    "stories": [
+      {
+        "id": "canvas-handoffbeacon--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-handoffbeacon--cluster",
+        "name": "Cluster"
+      },
+      {
+        "id": "canvas-handoffbeacon--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "canvas-handoffbeacon--anonymous",
+        "name": "Anonymous"
+      }
+    ],
+    "title": "Handoff Beacon"
+  },
+  "heat-map-overlay": {
+    "category": "data-display",
+    "defaultStoryId": "maps-heatmapoverlay--default",
+    "description": "Standalone SVG geographic heat map — radial-gradient blobs with configurable radius, blur, gradient, and opacity.",
+    "name": "heat-map-overlay",
+    "stories": [
+      {
+        "id": "maps-heatmapoverlay--default",
+        "name": "Default"
+      },
+      {
+        "id": "maps-heatmapoverlay--tight-radius",
+        "name": "Tight Radius"
+      },
+      {
+        "id": "maps-heatmapoverlay--custom-gradient",
+        "name": "Custom Gradient"
+      },
+      {
+        "id": "maps-heatmapoverlay--high-opacity",
+        "name": "High Opacity"
+      },
+      {
+        "id": "maps-heatmapoverlay--with-info-panel",
+        "name": "With Info Panel"
+      }
+    ],
+    "title": "Heat Map Overlay"
+  },
+  "heat-overlay": {
+    "category": "data",
+    "defaultStoryId": "canvas-heatoverlay--default",
+    "description": "Heatmap-style overlay drawing soft radial blobs for canvas activity samples.",
+    "name": "heat-overlay",
+    "stories": [
+      {
+        "id": "canvas-heatoverlay--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-heatoverlay--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-heatoverlay--cool",
+        "name": "Cool"
+      },
+      {
+        "id": "canvas-heatoverlay--high-intensity",
+        "name": "High Intensity"
+      }
+    ],
+    "title": "Heat Overlay"
+  },
+  "historic-timeline": {
+    "category": "data-display",
+    "defaultStoryId": "firstolympics--default",
+    "description": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers.",
+    "name": "historic-timeline",
+    "stories": [
+      {
+        "id": "firstolympics--default",
+        "name": "Default"
+      },
+      {
+        "id": "firstolympics--tight-window",
+        "name": "Tight Window"
+      },
+      {
+        "id": "firstolympics--no-categories",
+        "name": "No Categories"
+      },
+      {
+        "id": "firstolympics--periods-only",
+        "name": "Periods Only"
+      }
+    ],
+    "title": "Historic Timeline"
+  },
+  "historical-figure-card": {
+    "category": "educational",
+    "defaultStoryId": "polymath--default",
+    "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
+    "name": "historical-figure-card",
+    "stories": [
+      {
+        "id": "polymath--default",
+        "name": "Default"
+      },
+      {
+        "id": "polymath--with-connections",
+        "name": "With Connections"
+      },
+      {
+        "id": "polymath--with-biography",
+        "name": "With Biography"
+      },
+      {
+        "id": "polymath--antiquity",
+        "name": "Antiquity"
+      },
+      {
+        "id": "polymath--minimal",
+        "name": "Minimal"
+      }
+    ],
+    "title": "Historical Figure Card"
   },
   "horizontal-scroll-row": {
     "category": "navigation",
@@ -1032,6 +1690,89 @@
     ],
     "title": "Input OTP"
   },
+  "interactive-timeline": {
+    "category": "data-display",
+    "defaultStoryId": "v10--default",
+    "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
+    "name": "interactive-timeline",
+    "stories": [
+      {
+        "id": "v10--default",
+        "name": "Default"
+      },
+      {
+        "id": "v10--no-toolbar",
+        "name": "No Toolbar"
+      },
+      {
+        "id": "v10--single-track",
+        "name": "Single Track"
+      },
+      {
+        "id": "v10--tight-window",
+        "name": "Tight Window"
+      }
+    ],
+    "title": "Interactive Timeline"
+  },
+  "jarvis-dock": {
+    "category": "navigation",
+    "defaultStoryId": "canvas-jarvisdock--default",
+    "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
+    "name": "jarvis-dock",
+    "stories": [
+      {
+        "id": "canvas-jarvisdock--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-jarvisdock--no-palette",
+        "name": "No Palette"
+      },
+      {
+        "id": "canvas-jarvisdock--actions-only",
+        "name": "Actions Only"
+      },
+      {
+        "id": "canvas-jarvisdock--with-badges",
+        "name": "With Badges"
+      }
+    ],
+    "title": "Jarvis Dock"
+  },
+  "kbd": {
+    "category": "core",
+    "defaultStoryId": "core-kbd--default",
+    "description": "Keyboard key indicator with platform-aware modifier expansion via the shortcut prop.",
+    "name": "kbd",
+    "stories": [
+      {
+        "id": "core-kbd--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-kbd--size-sm",
+        "name": "Size Sm"
+      },
+      {
+        "id": "core-kbd--size-lg",
+        "name": "Size Lg"
+      },
+      {
+        "id": "core-kbd--shortcut",
+        "name": "Shortcut"
+      },
+      {
+        "id": "core-kbd--mod-shortcut",
+        "name": "Mod Shortcut"
+      },
+      {
+        "id": "core-kbd--composed",
+        "name": "Composed"
+      }
+    ],
+    "title": "Kbd"
+  },
   "key-concept": {
     "category": "learning",
     "defaultStoryId": "learning-keyconcept--default",
@@ -1057,6 +1798,27 @@
       }
     ],
     "title": "Keyboard Shortcuts Help"
+  },
+  "knowledge-check": {
+    "category": "educational",
+    "defaultStoryId": "checkyourunderstanding--default",
+    "description": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary.",
+    "name": "knowledge-check",
+    "stories": [
+      {
+        "id": "checkyourunderstanding--default",
+        "name": "Default"
+      },
+      {
+        "id": "checkyourunderstanding--single-question",
+        "name": "Single Question"
+      },
+      {
+        "id": "checkyourunderstanding--multiple-choice-only",
+        "name": "Multiple Choice Only"
+      }
+    ],
+    "title": "Knowledge Check"
   },
   "lang-provider": {
     "category": "utility",
@@ -1105,22 +1867,93 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "live-cursor": {
+    "category": "utility",
+    "defaultStoryId": "canvas-livecursor--default",
+    "description": "Remote user's cursor rendered at canvas coordinates with name + status chip.",
+    "name": "live-cursor",
+    "stories": [
+      {
+        "id": "canvas-livecursor--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-livecursor--with-status",
+        "name": "With Status"
+      },
+      {
+        "id": "canvas-livecursor--chip-hidden",
+        "name": "Chip Hidden"
+      },
+      {
+        "id": "canvas-livecursor--warm",
+        "name": "Warm"
+      }
+    ],
+    "title": "Live Cursor"
+  },
   "live-feed": {
     "category": "data",
-    "defaultStoryId": "data-livefeed--default",
+    "defaultStoryId": "latencybreachongateway--default",
     "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
     "name": "live-feed",
     "stories": [
       {
-        "id": "data-livefeed--default",
+        "id": "latencybreachongateway--default",
         "name": "Default"
       },
       {
-        "id": "data-livefeed--empty",
+        "id": "latencybreachongateway--empty",
         "name": "Empty"
       }
     ],
     "title": "Live Feed"
+  },
+  "map-2d": {
+    "category": "data-display",
+    "defaultStoryId": "maps-map2d--default",
+    "description": "Lightweight 2D map primitive — SVG canvas with equirectangular projection, markers, popups, GeoJSON polygon layers, zoom controls, and an optional backdrop image.",
+    "name": "map-2d",
+    "stories": [
+      {
+        "id": "maps-map2d--default",
+        "name": "Default"
+      },
+      {
+        "id": "maps-map2d--with-backdrop",
+        "name": "With Backdrop"
+      },
+      {
+        "id": "maps-map2d--with-standalone-popup",
+        "name": "With Standalone Popup"
+      },
+      {
+        "id": "maps-map2d--no-controls",
+        "name": "No Controls"
+      }
+    ],
+    "title": "Map 2D"
+  },
+  "map-timeline": {
+    "category": "data-display",
+    "defaultStoryId": "educational-maptimeline--default",
+    "description": "Standalone SVG map + time slider — era polygons and year-pinned events appear as the user scrubs the timeline.",
+    "name": "map-timeline",
+    "stories": [
+      {
+        "id": "educational-maptimeline--default",
+        "name": "Default"
+      },
+      {
+        "id": "educational-maptimeline--roman-era",
+        "name": "Roman Era"
+      },
+      {
+        "id": "educational-maptimeline--no-controls",
+        "name": "No Controls"
+      }
+    ],
+    "title": "Map Timeline"
   },
   "market-treemap": {
     "category": "data",
@@ -1190,6 +2023,31 @@
     ],
     "title": "Menubar"
   },
+  "metric-cluster": {
+    "category": "data",
+    "defaultStoryId": "research2025--default",
+    "description": "Compact stack of related metrics pinned to a canvas object's corner.",
+    "name": "metric-cluster",
+    "stories": [
+      {
+        "id": "research2025--default",
+        "name": "Default"
+      },
+      {
+        "id": "research2025--untitled",
+        "name": "Untitled"
+      },
+      {
+        "id": "research2025--bottom-left",
+        "name": "Bottom Left"
+      },
+      {
+        "id": "research2025--healthy",
+        "name": "Healthy"
+      }
+    ],
+    "title": "Metric Cluster"
+  },
   "metric-gauge": {
     "category": "data",
     "defaultStoryId": "data-metricgauge--default",
@@ -1219,6 +2077,31 @@
       }
     ],
     "title": "Mini Map Panel"
+  },
+  "model-comparison": {
+    "category": "ai",
+    "defaultStoryId": "ai-modelcomparison--default",
+    "description": "Side-by-side comparison of AI model responses with optional blind mode, metadata stats, and a vote bar.",
+    "name": "model-comparison",
+    "stories": [
+      {
+        "id": "ai-modelcomparison--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-modelcomparison--blind",
+        "name": "Blind"
+      },
+      {
+        "id": "ai-modelcomparison--with-vote",
+        "name": "With Vote"
+      },
+      {
+        "id": "ai-modelcomparison--three-columns",
+        "name": "Three Columns"
+      }
+    ],
+    "title": "Model Comparison"
   },
   "model-selector": {
     "category": "form",
@@ -1254,14 +2137,39 @@
     ],
     "title": "Multi Select"
   },
+  "multi-select-lasso": {
+    "category": "utility",
+    "defaultStoryId": "canvas-multiselectlasso--default",
+    "description": "Selection rectangle overlay for canvas multi-select gestures.",
+    "name": "multi-select-lasso",
+    "stories": [
+      {
+        "id": "canvas-multiselectlasso--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-multiselectlasso--no-count",
+        "name": "No Count"
+      },
+      {
+        "id": "canvas-multiselectlasso--single-item",
+        "name": "Single Item"
+      },
+      {
+        "id": "canvas-multiselectlasso--hidden",
+        "name": "Hidden"
+      }
+    ],
+    "title": "Multi Select Lasso"
+  },
   "navbar-saas": {
     "category": "navigation",
-    "defaultStoryId": "navigation-navbarsaas--default",
+    "defaultStoryId": "home--default",
     "description": "SaaS-style navigation bar with branding and links.",
     "name": "navbar-saas",
     "stories": [
       {
-        "id": "navigation-navbarsaas--default",
+        "id": "home--default",
         "name": "Default"
       }
     ],
@@ -1279,6 +2187,35 @@
       }
     ],
     "title": "Navigation Menu"
+  },
+  "newsletter-signup": {
+    "category": "form",
+    "defaultStoryId": "forms-newslettersignup--default",
+    "description": "Email-capture form with idle/sending/sent/error state machine, custom validators, and overridable labels.",
+    "name": "newsletter-signup",
+    "stories": [
+      {
+        "id": "forms-newslettersignup--default",
+        "name": "Default"
+      },
+      {
+        "id": "forms-newslettersignup--stacked",
+        "name": "Stacked"
+      },
+      {
+        "id": "forms-newslettersignup--error-state",
+        "name": "Error State"
+      },
+      {
+        "id": "forms-newslettersignup--custom-labels",
+        "name": "Custom Labels"
+      },
+      {
+        "id": "forms-newslettersignup--corporate-only",
+        "name": "Corporate Only"
+      }
+    ],
+    "title": "Newsletter Signup"
   },
   "number-input": {
     "category": "form",
@@ -1336,6 +2273,31 @@
     ],
     "title": "Object Handle"
   },
+  "object-inspector": {
+    "category": "content",
+    "defaultStoryId": "claude37128kctx--default",
+    "description": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots.",
+    "name": "object-inspector",
+    "stories": [
+      {
+        "id": "claude37128kctx--default",
+        "name": "Default"
+      },
+      {
+        "id": "claude37128kctx--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "claude37128kctx--with-body",
+        "name": "With Body"
+      },
+      {
+        "id": "claude37128kctx--failed",
+        "name": "Failed"
+      }
+    ],
+    "title": "Object Inspector"
+  },
   "order-book": {
     "category": "data",
     "defaultStoryId": "data-orderbook--default",
@@ -1366,6 +2328,31 @@
     ],
     "title": "Pagination"
   },
+  "parallel-timeline": {
+    "category": "educational",
+    "defaultStoryId": "augustusbecomesemperor--default",
+    "description": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history.",
+    "name": "parallel-timeline",
+    "stories": [
+      {
+        "id": "augustusbecomesemperor--default",
+        "name": "Default"
+      },
+      {
+        "id": "augustusbecomesemperor--with-era",
+        "name": "With Era"
+      },
+      {
+        "id": "augustusbecomesemperor--two-tracks",
+        "name": "Two Tracks"
+      },
+      {
+        "id": "augustusbecomesemperor--tight-window",
+        "name": "Tight Window"
+      }
+    ],
+    "title": "Parallel Timeline"
+  },
   "password-input": {
     "category": "form",
     "defaultStoryId": "form-passwordinput--default",
@@ -1381,24 +2368,74 @@
   },
   "plan-badge": {
     "category": "content",
-    "defaultStoryId": "account-billing-planbadge--default",
+    "defaultStoryId": "accountbilling-planbadge--default",
     "description": "Subscription tier indicator for pricing, billing, and account summaries.",
     "name": "plan-badge",
     "stories": [
       {
-        "id": "account-billing-planbadge--default",
+        "id": "accountbilling-planbadge--default",
         "name": "Default"
       },
       {
-        "id": "account-billing-planbadge--all-tiers",
+        "id": "accountbilling-planbadge--all-tiers",
         "name": "All Tiers"
       },
       {
-        "id": "account-billing-planbadge--trial",
+        "id": "accountbilling-planbadge--trial",
         "name": "Trial"
       }
     ],
     "title": "Plan Badge"
+  },
+  "playback-ghost": {
+    "category": "utility",
+    "defaultStoryId": "canvas-playbackghost--default",
+    "description": "Translucent overlay marking where a canvas object was at a previous timestamp during playback.",
+    "name": "playback-ghost",
+    "stories": [
+      {
+        "id": "canvas-playbackghost--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-playbackghost--faint",
+        "name": "Faint"
+      },
+      {
+        "id": "canvas-playbackghost--bold",
+        "name": "Bold"
+      },
+      {
+        "id": "canvas-playbackghost--glyphless",
+        "name": "Glyphless"
+      }
+    ],
+    "title": "Playback Ghost"
+  },
+  "policy-delivery-panel": {
+    "category": "content",
+    "defaultStoryId": "canvas-policydeliverypanel--default",
+    "description": "Right-dock panel listing policies / guardrails active for the route or run.",
+    "name": "policy-delivery-panel",
+    "stories": [
+      {
+        "id": "canvas-policydeliverypanel--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-policydeliverypanel--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-policydeliverypanel--all-enforced",
+        "name": "All Enforced"
+      },
+      {
+        "id": "canvas-policydeliverypanel--non-interactive",
+        "name": "Non Interactive"
+      }
+    ],
+    "title": "Policy Delivery Panel"
   },
   "popover": {
     "category": "overlay",
@@ -1412,6 +2449,98 @@
       }
     ],
     "title": "Popover"
+  },
+  "presence-stack": {
+    "category": "data",
+    "defaultStoryId": "canvas-presencestack--default",
+    "description": "Overlapping live-presence avatars with status dots and a sane overflow chip.",
+    "name": "presence-stack",
+    "stories": [
+      {
+        "id": "canvas-presencestack--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-presencestack--solo",
+        "name": "Solo"
+      },
+      {
+        "id": "canvas-presencestack--no-overflow",
+        "name": "No Overflow"
+      },
+      {
+        "id": "canvas-presencestack--all-away",
+        "name": "All Away"
+      }
+    ],
+    "title": "Presence Stack"
+  },
+  "presence-sync-indicator": {
+    "category": "data",
+    "defaultStoryId": "canvas-presencesyncindicator--live",
+    "description": "Compact pill that surfaces live connection + sync health for a collaborative canvas.",
+    "name": "presence-sync-indicator",
+    "stories": [
+      {
+        "id": "canvas-presencesyncindicator--live",
+        "name": "Live"
+      },
+      {
+        "id": "canvas-presencesyncindicator--syncing",
+        "name": "Syncing"
+      },
+      {
+        "id": "canvas-presencesyncindicator--reconnecting",
+        "name": "Reconnecting"
+      },
+      {
+        "id": "canvas-presencesyncindicator--offline",
+        "name": "Offline"
+      }
+    ],
+    "title": "Presence Sync Indicator"
+  },
+  "pricing-table": {
+    "category": "billing",
+    "defaultStoryId": "billing-pricingtable--default",
+    "description": "Plan comparison with feature checklist, tier highlighting, CTA, and an optional monthly/annual toggle.",
+    "name": "pricing-table",
+    "stories": [
+      {
+        "id": "billing-pricingtable--default",
+        "name": "Default"
+      },
+      {
+        "id": "billing-pricingtable--with-period-toggle",
+        "name": "With Period Toggle"
+      },
+      {
+        "id": "billing-pricingtable--two-column",
+        "name": "Two Column"
+      }
+    ],
+    "title": "Pricing Table"
+  },
+  "primary-source-viewer": {
+    "category": "data-display",
+    "defaultStoryId": "magnacarta1215--default",
+    "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
+    "name": "primary-source-viewer",
+    "stories": [
+      {
+        "id": "magnacarta1215--default",
+        "name": "Default"
+      },
+      {
+        "id": "magnacarta1215--minimal",
+        "name": "Minimal"
+      },
+      {
+        "id": "magnacarta1215--no-transcription",
+        "name": "No Transcription"
+      }
+    ],
+    "title": "Primary Source Viewer"
   },
   "pro-tip": {
     "category": "learning",
@@ -1465,6 +2594,56 @@
     ],
     "title": "Progress Card"
   },
+  "prompt-templates": {
+    "category": "ai",
+    "defaultStoryId": "codereview--default",
+    "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
+    "name": "prompt-templates",
+    "stories": [
+      {
+        "id": "codereview--default",
+        "name": "Default"
+      },
+      {
+        "id": "codereview--no-categories",
+        "name": "No Categories"
+      },
+      {
+        "id": "codereview--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "codereview--custom-labels",
+        "name": "Custom Labels"
+      }
+    ],
+    "title": "Prompt Templates"
+  },
+  "property-section": {
+    "category": "content",
+    "defaultStoryId": "layout--default",
+    "description": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse.",
+    "name": "property-section",
+    "stories": [
+      {
+        "id": "layout--default",
+        "name": "Default"
+      },
+      {
+        "id": "layout--with-sublabels",
+        "name": "With Sublabels"
+      },
+      {
+        "id": "layout--collapsible",
+        "name": "Collapsible"
+      },
+      {
+        "id": "layout--untitled",
+        "name": "Untitled"
+      }
+    ],
+    "title": "Property Section"
+  },
   "quiz": {
     "category": "learning",
     "defaultStoryId": "learning-quiz--default",
@@ -1508,6 +2687,31 @@
     ],
     "title": "Rating"
   },
+  "relationship-inspector": {
+    "category": "content",
+    "defaultStoryId": "canvas-relationshipinspector--default",
+    "description": "Right-dock panel listing inbound + outbound edges of the focused canvas object.",
+    "name": "relationship-inspector",
+    "stories": [
+      {
+        "id": "canvas-relationshipinspector--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-relationshipinspector--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-relationshipinspector--inbound-only",
+        "name": "Inbound Only"
+      },
+      {
+        "id": "canvas-relationshipinspector--non-interactive",
+        "name": "Non Interactive"
+      }
+    ],
+    "title": "Relationship Inspector"
+  },
   "resizable": {
     "category": "utility",
     "defaultStoryId": "utility-resizable--default",
@@ -1536,20 +2740,124 @@
   },
   "role-badge": {
     "category": "content",
-    "defaultStoryId": "account-billing-rolebadge--default",
+    "defaultStoryId": "accountbilling-rolebadge--default",
     "description": "Account role indicator for owners, admins, members, and billing contacts.",
     "name": "role-badge",
     "stories": [
       {
-        "id": "account-billing-rolebadge--default",
+        "id": "accountbilling-rolebadge--default",
         "name": "Default"
       },
       {
-        "id": "account-billing-rolebadge--team-roles",
+        "id": "accountbilling-rolebadge--team-roles",
         "name": "Team Roles"
       }
     ],
     "title": "Role Badge"
+  },
+  "route-map": {
+    "category": "data-display",
+    "defaultStoryId": "maps-routemap--default",
+    "description": "Standalone SVG map with animated route paths, waypoints, and progress indicator. For trade routes, voyages, migrations, delivery tracking.",
+    "name": "route-map",
+    "stories": [
+      {
+        "id": "maps-routemap--default",
+        "name": "Default"
+      },
+      {
+        "id": "maps-routemap--animated",
+        "name": "Animated"
+      },
+      {
+        "id": "maps-routemap--columbus-voyage",
+        "name": "Columbus Voyage"
+      },
+      {
+        "id": "maps-routemap--with-info-panel",
+        "name": "With Info Panel"
+      },
+      {
+        "id": "maps-routemap--dotted",
+        "name": "Dotted"
+      }
+    ],
+    "title": "Route Map"
+  },
+  "routing-assignment-panel": {
+    "category": "content",
+    "defaultStoryId": "canvas-routingassignmentpanel--default",
+    "description": "Right-dock panel listing the agent slots an active route dispatches to.",
+    "name": "routing-assignment-panel",
+    "stories": [
+      {
+        "id": "canvas-routingassignmentpanel--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-routingassignmentpanel--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-routingassignmentpanel--primary-only",
+        "name": "Primary Only"
+      },
+      {
+        "id": "canvas-routingassignmentpanel--non-interactive",
+        "name": "Non Interactive"
+      }
+    ],
+    "title": "Routing Assignment Panel"
+  },
+  "run-timeline": {
+    "category": "data",
+    "defaultStoryId": "canvas-runtimeline--default",
+    "description": "Multi-lane execution timeline showing run phases over time, with optional cursor.",
+    "name": "run-timeline",
+    "stories": [
+      {
+        "id": "canvas-runtimeline--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-runtimeline--single-lane",
+        "name": "Single Lane"
+      },
+      {
+        "id": "canvas-runtimeline--no-cursor",
+        "name": "No Cursor"
+      },
+      {
+        "id": "canvas-runtimeline--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Run Timeline"
+  },
+  "runtime-overview-panel": {
+    "category": "content",
+    "defaultStoryId": "canvas-runtimeoverviewpanel--default",
+    "description": "Top-of-dock summary tile grid for runtime health when no canvas object is selected.",
+    "name": "runtime-overview-panel",
+    "stories": [
+      {
+        "id": "canvas-runtimeoverviewpanel--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-runtimeoverviewpanel--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "canvas-runtimeoverviewpanel--all-healthy",
+        "name": "All Healthy"
+      },
+      {
+        "id": "canvas-runtimeoverviewpanel--degraded",
+        "name": "Degraded"
+      }
+    ],
+    "title": "Runtime Overview Panel"
   },
   "scope-selector": {
     "category": "form",
@@ -1596,12 +2904,12 @@
   },
   "search-dialog": {
     "category": "learning",
-    "defaultStoryId": "learning-searchdialog--default",
+    "defaultStoryId": "exampletitle--default",
     "description": "Full-screen search dialog with keyboard navigation.",
     "name": "search-dialog",
     "stories": [
       {
-        "id": "learning-searchdialog--default",
+        "id": "exampletitle--default",
         "name": "Default"
       }
     ],
@@ -1640,6 +2948,52 @@
       }
     ],
     "title": "Select"
+  },
+  "selection-halo": {
+    "category": "data-display",
+    "defaultStoryId": "canvas-selectionhalo--default",
+    "description": "Local-user selection halo with corner handles + label slot for spatial canvases.",
+    "name": "selection-halo",
+    "stories": [
+      {
+        "id": "canvas-selectionhalo--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-selectionhalo--pulsing",
+        "name": "Pulsing"
+      },
+      {
+        "id": "canvas-selectionhalo--no-label",
+        "name": "No Label"
+      }
+    ],
+    "title": "Selection Halo"
+  },
+  "selection-presence": {
+    "category": "utility",
+    "defaultStoryId": "canvas-selectionpresence--default",
+    "description": "Dashed-border overlay marking what another user has selected on the canvas.",
+    "name": "selection-presence",
+    "stories": [
+      {
+        "id": "canvas-selectionpresence--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-selectionpresence--warm",
+        "name": "Warm"
+      },
+      {
+        "id": "canvas-selectionpresence--chip-hidden",
+        "name": "Chip Hidden"
+      },
+      {
+        "id": "canvas-selectionpresence--tall",
+        "name": "Tall"
+      }
+    ],
+    "title": "Selection Presence"
   },
   "separator": {
     "category": "core",
@@ -1719,12 +3073,12 @@
   },
   "sidebar": {
     "category": "navigation",
-    "defaultStoryId": "navigation-sidebar--default",
+    "defaultStoryId": "introduction--default",
     "description": "Collapsible sidebar navigation layout.",
     "name": "sidebar",
     "stories": [
       {
-        "id": "navigation-sidebar--default",
+        "id": "introduction--default",
         "name": "Default"
       }
     ],
@@ -1784,16 +3138,37 @@
   },
   "slideshow": {
     "category": "content",
-    "defaultStoryId": "content-slideshow--default",
+    "defaultStoryId": "introduction--default",
     "description": "Step-through slideshow for presenting content sequentially.",
     "name": "slideshow",
     "stories": [
       {
-        "id": "content-slideshow--default",
+        "id": "introduction--default",
         "name": "Default"
       }
     ],
     "title": "Slideshow"
+  },
+  "snap-guides": {
+    "category": "data-display",
+    "defaultStoryId": "canvas-snapguides--default",
+    "description": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag.",
+    "name": "snap-guides",
+    "stories": [
+      {
+        "id": "canvas-snapguides--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-snapguides--single-vertical",
+        "name": "Single Vertical"
+      },
+      {
+        "id": "canvas-snapguides--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Snap Guides"
   },
   "sparkline-grid": {
     "category": "data",
@@ -1821,246 +3196,6 @@
       {
         "id": "utility-spinner--default",
         "name": "Default"
-      },
-      {
-        "id": "utility-unicodespinner--all-animations",
-        "name": "All Animations"
-      },
-      {
-        "id": "utility-unicodespinner--arc",
-        "name": "Arc"
-      },
-      {
-        "id": "utility-unicodespinner--arrow",
-        "name": "Arrow"
-      },
-      {
-        "id": "utility-unicodespinner--balloon",
-        "name": "Balloon"
-      },
-      {
-        "id": "utility-unicodespinner--bounce",
-        "name": "Bounce"
-      },
-      {
-        "id": "utility-unicodespinner--braille",
-        "name": "Braille"
-      },
-      {
-        "id": "utility-unicodespinner--braillewave",
-        "name": "Braillewave"
-      },
-      {
-        "id": "utility-unicodespinner--breathe",
-        "name": "Breathe"
-      },
-      {
-        "id": "utility-unicodespinner--cascade",
-        "name": "Cascade"
-      },
-      {
-        "id": "utility-unicodespinner--checkerboard",
-        "name": "Checkerboard"
-      },
-      {
-        "id": "utility-unicodespinner--circle-halves",
-        "name": "Circle Halves"
-      },
-      {
-        "id": "utility-unicodespinner--circle-quarters",
-        "name": "Circle Quarters"
-      },
-      {
-        "id": "utility-unicodespinner--clock",
-        "name": "Clock"
-      },
-      {
-        "id": "utility-unicodespinner--columns",
-        "name": "Columns"
-      },
-      {
-        "id": "utility-unicodespinner--diagswipe",
-        "name": "Diagswipe"
-      },
-      {
-        "id": "utility-unicodespinner--dna",
-        "name": "Dna"
-      },
-      {
-        "id": "utility-unicodespinner--dots",
-        "name": "Dots"
-      },
-      {
-        "id": "utility-unicodespinner--dots-2",
-        "name": "Dots 2"
-      },
-      {
-        "id": "utility-unicodespinner--dots-3",
-        "name": "Dots 3"
-      },
-      {
-        "id": "utility-unicodespinner--dots-4",
-        "name": "Dots 4"
-      },
-      {
-        "id": "utility-unicodespinner--dots-5",
-        "name": "Dots 5"
-      },
-      {
-        "id": "utility-unicodespinner--dots-6",
-        "name": "Dots 6"
-      },
-      {
-        "id": "utility-unicodespinner--dots-7",
-        "name": "Dots 7"
-      },
-      {
-        "id": "utility-unicodespinner--dots-8",
-        "name": "Dots 8"
-      },
-      {
-        "id": "utility-unicodespinner--dots-9",
-        "name": "Dots 9"
-      },
-      {
-        "id": "utility-unicodespinner--dots-10",
-        "name": "Dots 10"
-      },
-      {
-        "id": "utility-unicodespinner--dots-11",
-        "name": "Dots 11"
-      },
-      {
-        "id": "utility-unicodespinner--dots-12",
-        "name": "Dots 12"
-      },
-      {
-        "id": "utility-unicodespinner--dots-13",
-        "name": "Dots 13"
-      },
-      {
-        "id": "utility-unicodespinner--dots-14",
-        "name": "Dots 14"
-      },
-      {
-        "id": "utility-unicodespinner--dots-circle",
-        "name": "Dots Circle"
-      },
-      {
-        "id": "utility-unicodespinner--double-arrow",
-        "name": "Double Arrow"
-      },
-      {
-        "id": "utility-unicodespinner--dqpb",
-        "name": "Dqpb"
-      },
-      {
-        "id": "utility-unicodespinner--earth",
-        "name": "Earth"
-      },
-      {
-        "id": "utility-unicodespinner--fillsweep",
-        "name": "Fillsweep"
-      },
-      {
-        "id": "utility-unicodespinner--grow-horizontal",
-        "name": "Grow Horizontal"
-      },
-      {
-        "id": "utility-unicodespinner--grow-vertical",
-        "name": "Grow Vertical"
-      },
-      {
-        "id": "utility-unicodespinner--hearts",
-        "name": "Hearts"
-      },
-      {
-        "id": "utility-unicodespinner--helix",
-        "name": "Helix"
-      },
-      {
-        "id": "utility-unicodespinner--moon",
-        "name": "Moon"
-      },
-      {
-        "id": "utility-unicodespinner--noise",
-        "name": "Noise"
-      },
-      {
-        "id": "utility-unicodespinner--orbit",
-        "name": "Orbit"
-      },
-      {
-        "id": "utility-unicodespinner--point",
-        "name": "Point"
-      },
-      {
-        "id": "utility-unicodespinner--pulse",
-        "name": "Pulse"
-      },
-      {
-        "id": "utility-unicodespinner--rain",
-        "name": "Rain"
-      },
-      {
-        "id": "utility-unicodespinner--rolling-line",
-        "name": "Rolling Line"
-      },
-      {
-        "id": "utility-unicodespinner--sand",
-        "name": "Sand"
-      },
-      {
-        "id": "utility-unicodespinner--scan",
-        "name": "Scan"
-      },
-      {
-        "id": "utility-unicodespinner--scanline",
-        "name": "Scanline"
-      },
-      {
-        "id": "utility-unicodespinner--simple-dots",
-        "name": "Simple Dots"
-      },
-      {
-        "id": "utility-unicodespinner--simple-dots-scrolling",
-        "name": "Simple Dots Scrolling"
-      },
-      {
-        "id": "utility-unicodespinner--snake",
-        "name": "Snake"
-      },
-      {
-        "id": "utility-unicodespinner--sparkle",
-        "name": "Sparkle"
-      },
-      {
-        "id": "utility-unicodespinner--speaker",
-        "name": "Speaker"
-      },
-      {
-        "id": "utility-unicodespinner--square-corners",
-        "name": "Square Corners"
-      },
-      {
-        "id": "utility-unicodespinner--toggle",
-        "name": "Toggle"
-      },
-      {
-        "id": "utility-unicodespinner--triangle",
-        "name": "Triangle"
-      },
-      {
-        "id": "utility-unicodespinner--wave",
-        "name": "Wave"
-      },
-      {
-        "id": "utility-unicodespinner--waverows",
-        "name": "Waverows"
-      },
-      {
-        "id": "utility-unicodespinner--weather",
-        "name": "Weather"
       }
     ],
     "title": "Spinner"
@@ -2082,18 +3217,43 @@
     ],
     "title": "Stat Card"
   },
+  "state-badge-overlay": {
+    "category": "utility",
+    "defaultStoryId": "canvas-statebadgeoverlay--default",
+    "description": "State chip pinned to a canvas object's corner — idle, queued, running, complete, failed, stopped.",
+    "name": "state-badge-overlay",
+    "stories": [
+      {
+        "id": "canvas-statebadgeoverlay--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-statebadgeoverlay--failed",
+        "name": "Failed"
+      },
+      {
+        "id": "canvas-statebadgeoverlay--complete",
+        "name": "Complete"
+      },
+      {
+        "id": "canvas-statebadgeoverlay--custom-label",
+        "name": "Custom Label"
+      }
+    ],
+    "title": "State Badge Overlay"
+  },
   "status-board": {
     "category": "data",
-    "defaultStoryId": "data-statusboard--default",
+    "defaultStoryId": "servicehealth--default",
     "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
     "name": "status-board",
     "stories": [
       {
-        "id": "data-statusboard--default",
+        "id": "servicehealth--default",
         "name": "Default"
       },
       {
-        "id": "data-statusboard--compact",
+        "id": "servicehealth--compact",
         "name": "Compact"
       }
     ],
@@ -2144,33 +3304,79 @@
   },
   "stepper": {
     "category": "learning",
-    "defaultStoryId": "learning-stepper--default",
+    "defaultStoryId": "introduction--default",
     "description": "Sequenced steps with complete, current, and upcoming states.",
     "name": "stepper",
     "stories": [
       {
-        "id": "learning-stepper--default",
+        "id": "introduction--default",
         "name": "Default"
       },
       {
-        "id": "learning-stepper--vertical",
+        "id": "introduction--vertical",
         "name": "Vertical"
       }
     ],
     "title": "Stepper"
   },
+  "sticky-metric": {
+    "category": "data",
+    "defaultStoryId": "canvas-stickymetric--default",
+    "description": "Pinned metric pill that sticks to a canvas object's corner.",
+    "name": "sticky-metric",
+    "stories": [
+      {
+        "id": "canvas-stickymetric--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-stickymetric--danger",
+        "name": "Danger"
+      },
+      {
+        "id": "canvas-stickymetric--bottom-left",
+        "name": "Bottom Left"
+      },
+      {
+        "id": "canvas-stickymetric--plain",
+        "name": "Plain"
+      }
+    ],
+    "title": "Sticky Metric"
+  },
+  "story-map": {
+    "category": "data-display",
+    "defaultStoryId": "educational-storymap--default",
+    "description": "Standalone SVG scroll-driven narrative map — IntersectionObserver tracks the active chapter and the map shifts to its center + zoom.",
+    "name": "story-map",
+    "stories": [
+      {
+        "id": "educational-storymap--default",
+        "name": "Default"
+      },
+      {
+        "id": "educational-storymap--with-media",
+        "name": "With Media"
+      },
+      {
+        "id": "educational-storymap--single-chapter",
+        "name": "Single Chapter"
+      }
+    ],
+    "title": "Story Map"
+  },
   "subscription-card": {
     "category": "content",
-    "defaultStoryId": "account-billing-subscriptioncard--default",
+    "defaultStoryId": "accountbilling-subscriptioncard--default",
     "description": "Subscription status and management card for plan, renewal, and usage details.",
     "name": "subscription-card",
     "stories": [
       {
-        "id": "account-billing-subscriptioncard--default",
+        "id": "accountbilling-subscriptioncard--default",
         "name": "Default"
       },
       {
-        "id": "account-billing-subscriptioncard--trialing",
+        "id": "accountbilling-subscriptioncard--trialing",
         "name": "Trialing"
       }
     ],
@@ -2204,12 +3410,12 @@
   },
   "table-of-contents-panel": {
     "category": "utility",
-    "defaultStoryId": "utility-tableofcontentspanel--default",
+    "defaultStoryId": "introduction--default",
     "description": "Side panel rendering a table of contents for page navigation.",
     "name": "table-of-contents-panel",
     "stories": [
       {
-        "id": "utility-tableofcontentspanel--default",
+        "id": "introduction--default",
         "name": "Default"
       }
     ],
@@ -2314,6 +3520,56 @@
     ],
     "title": "Thinking Block"
   },
+  "thread-bubble": {
+    "category": "utility",
+    "defaultStoryId": "research2025--default",
+    "description": "Expanded discussion bubble for an anchored canvas comment thread.",
+    "name": "thread-bubble",
+    "stories": [
+      {
+        "id": "research2025--default",
+        "name": "Default"
+      },
+      {
+        "id": "research2025--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "research2025--with-footer",
+        "name": "With Footer"
+      },
+      {
+        "id": "research2025--read-only",
+        "name": "Read Only"
+      }
+    ],
+    "title": "Thread Bubble"
+  },
+  "threshold-ring": {
+    "category": "data",
+    "defaultStoryId": "canvas-thresholdring--default",
+    "description": "Compact ring gauge expressing how close a value is to a threshold.",
+    "name": "threshold-ring",
+    "stories": [
+      {
+        "id": "canvas-thresholdring--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-thresholdring--healthy-budget",
+        "name": "Healthy Budget"
+      },
+      {
+        "id": "canvas-thresholdring--over-threshold",
+        "name": "Over Threshold"
+      },
+      {
+        "id": "canvas-thresholdring--no-threshold",
+        "name": "No Threshold"
+      }
+    ],
+    "title": "Threshold Ring"
+  },
   "ticker-tape": {
     "category": "data",
     "defaultStoryId": "data-tickertape--default",
@@ -2330,6 +3586,56 @@
       }
     ],
     "title": "Ticker Tape"
+  },
+  "timeline": {
+    "category": "content",
+    "defaultStoryId": "content-timeline--default",
+    "description": "Vertical or horizontal timeline of sequential events with completed/active/upcoming statuses and connector lines.",
+    "name": "timeline",
+    "stories": [
+      {
+        "id": "content-timeline--default",
+        "name": "Default"
+      },
+      {
+        "id": "content-timeline--horizontal",
+        "name": "Horizontal"
+      },
+      {
+        "id": "content-timeline--with-rich-content",
+        "name": "With Rich Content"
+      },
+      {
+        "id": "content-timeline--color-overrides",
+        "name": "Color Overrides"
+      }
+    ],
+    "title": "Timeline"
+  },
+  "timeline-scrubber": {
+    "category": "form",
+    "defaultStoryId": "canvas-timelinescrubber--default",
+    "description": "Range slider for scrubbing through canvas state playback, with optional milestone ticks.",
+    "name": "timeline-scrubber",
+    "stories": [
+      {
+        "id": "canvas-timelinescrubber--default",
+        "name": "Default"
+      },
+      {
+        "id": "canvas-timelinescrubber--no-ticks",
+        "name": "No Ticks"
+      },
+      {
+        "id": "canvas-timelinescrubber--warning",
+        "name": "Warning"
+      },
+      {
+        "id": "canvas-timelinescrubber--raw-values",
+        "name": "Raw Values"
+      }
+    ],
+    "title": "Timeline Scrubber"
   },
   "tldr-section": {
     "category": "content",
@@ -2431,25 +3737,75 @@
   },
   "tour": {
     "category": "learning",
-    "defaultStoryId": "learning-tour--default",
+    "defaultStoryId": "overview--default",
     "description": "Guided onboarding flow for introducing content or interface patterns.",
     "name": "tour",
     "stories": [
       {
-        "id": "learning-tour--default",
+        "id": "overview--default",
         "name": "Default"
       }
     ],
     "title": "Tour"
   },
+  "transaction-list": {
+    "category": "billing",
+    "defaultStoryId": "billing-transactionlist--default",
+    "description": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row.",
+    "name": "transaction-list",
+    "stories": [
+      {
+        "id": "billing-transactionlist--default",
+        "name": "Default"
+      },
+      {
+        "id": "billing-transactionlist--with-subscription",
+        "name": "With Subscription"
+      },
+      {
+        "id": "billing-transactionlist--trial-and-past-due",
+        "name": "Trial And Past Due"
+      },
+      {
+        "id": "billing-transactionlist--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Transaction List"
+  },
+  "tree-view": {
+    "category": "data-display",
+    "defaultStoryId": "datadisplay-treeview--default",
+    "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
+    "name": "tree-view",
+    "stories": [
+      {
+        "id": "datadisplay-treeview--default",
+        "name": "Default"
+      },
+      {
+        "id": "datadisplay-treeview--multi-select",
+        "name": "Multi Select"
+      },
+      {
+        "id": "datadisplay-treeview--collapsed",
+        "name": "Collapsed"
+      },
+      {
+        "id": "datadisplay-treeview--single-level",
+        "name": "Single Level"
+      }
+    ],
+    "title": "Tree View"
+  },
   "tutorial-card": {
     "category": "learning",
-    "defaultStoryId": "learning-tutorialcard--default",
+    "defaultStoryId": "exampletitle--default",
     "description": "Card for displaying tutorial previews with metadata.",
     "name": "tutorial-card",
     "stories": [
       {
-        "id": "learning-tutorialcard--default",
+        "id": "exampletitle--default",
         "name": "Default"
       }
     ],
@@ -2457,12 +3813,12 @@
   },
   "tutorial-complete": {
     "category": "learning",
-    "defaultStoryId": "learning-tutorialcomplete--default",
+    "defaultStoryId": "nextsteps--default",
     "description": "Completion screen displayed when a tutorial is finished.",
     "name": "tutorial-complete",
     "stories": [
       {
-        "id": "learning-tutorialcomplete--default",
+        "id": "nextsteps--default",
         "name": "Default"
       }
     ],
@@ -2483,12 +3839,12 @@
   },
   "tutorial-intro-content": {
     "category": "learning",
-    "defaultStoryId": "learning-tutorialintrocontent--default",
+    "defaultStoryId": "reactfundamentals--default",
     "description": "Introduction section for tutorial pages with overview and prerequisites.",
     "name": "tutorial-intro-content",
     "stories": [
       {
-        "id": "learning-tutorialintrocontent--default",
+        "id": "reactfundamentals--default",
         "name": "Default"
       }
     ],
@@ -2509,20 +3865,20 @@
   },
   "usage-breakdown": {
     "category": "data",
-    "defaultStoryId": "analytics-usagebreakdown--default",
+    "defaultStoryId": "usagebreakdown--default",
     "description": "Ranked resource consumption list with relative share and trend cues.",
     "name": "usage-breakdown",
     "stories": [
       {
-        "id": "analytics-usagebreakdown--default",
+        "id": "usagebreakdown--default",
         "name": "Default"
       },
       {
-        "id": "analytics-usagebreakdown--top-two-only",
+        "id": "usagebreakdown--top-two-only",
         "name": "Top Two Only"
       },
       {
-        "id": "analytics-usagebreakdown--empty",
+        "id": "usagebreakdown--empty",
         "name": "Empty"
       }
     ],
@@ -2530,12 +3886,12 @@
   },
   "video-embed": {
     "category": "content",
-    "defaultStoryId": "content-videoembed--default",
+    "defaultStoryId": "tutorialvideo--default",
     "description": "Responsive video embed for YouTube and other providers.",
     "name": "video-embed",
     "stories": [
       {
-        "id": "content-videoembed--default",
+        "id": "tutorialvideo--default",
         "name": "Default"
       }
     ],
@@ -2581,16 +3937,16 @@
   },
   "wallet-card": {
     "category": "content",
-    "defaultStoryId": "account-billing-walletcard--default",
+    "defaultStoryId": "accountbilling-walletcard--default",
     "description": "Credit balance display card for available, pending, and refresh details.",
     "name": "wallet-card",
     "stories": [
       {
-        "id": "account-billing-walletcard--default",
+        "id": "accountbilling-walletcard--default",
         "name": "Default"
       },
       {
-        "id": "account-billing-walletcard--depleted",
+        "id": "accountbilling-walletcard--depleted",
         "name": "Depleted"
       }
     ],
@@ -2653,16 +4009,16 @@
   },
   "world-clock-bar": {
     "category": "data",
-    "defaultStoryId": "data-worldclockbar--default",
+    "defaultStoryId": "followthesunhandoff--default",
     "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
     "name": "world-clock-bar",
     "stories": [
       {
-        "id": "data-worldclockbar--default",
+        "id": "followthesunhandoff--default",
         "name": "Default"
       },
       {
-        "id": "data-worldclockbar--time-only",
+        "id": "followthesunhandoff--time-only",
         "name": "Time Only"
       }
     ],
