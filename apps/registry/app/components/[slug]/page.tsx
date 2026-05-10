@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { CodeBlock, Sidebar, TableOfContents } from "@vllnt/ui";
+import { Breadcrumb, CodeBlock, Sidebar, TableOfContents } from "@vllnt/ui";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -198,6 +198,14 @@ export default async function ComponentPage(props: Props) {
             <div className="min-w-0">
               {/* Header */}
               <div className="mb-8">
+                <Breadcrumb
+                  className="mb-4 text-muted-foreground"
+                  items={[
+                    { href: "/", label: "Home" },
+                    { href: "/components", label: "Components" },
+                    { label: displayTitle },
+                  ]}
+                />
                 <h1 className="text-4xl font-bold mb-2">{displayTitle}</h1>
                 <p className="text-muted-foreground text-lg mb-6">
                   {displayDescription}
