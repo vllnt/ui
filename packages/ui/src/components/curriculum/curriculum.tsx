@@ -86,15 +86,15 @@ function statusLabel(status: LessonStatus): string {
 
 function statusIcon(status: LessonStatus): ReactNode {
   if (status === "completed") {
-    return <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-500" />;
+    return <CheckCircle2 className="size-4 flex-shrink-0 text-green-500" />;
   }
   if (status === "in-progress") {
-    return <PlayCircle className="h-4 w-4 flex-shrink-0 text-primary" />;
+    return <PlayCircle className="size-4 flex-shrink-0 text-primary" />;
   }
   if (status === "locked") {
-    return <Lock className="h-4 w-4 flex-shrink-0 text-muted-foreground" />;
+    return <Lock className="size-4 flex-shrink-0 text-muted-foreground" />;
   }
-  return <BookOpen className="h-4 w-4 flex-shrink-0 text-muted-foreground" />;
+  return <BookOpen className="size-4 flex-shrink-0 text-muted-foreground" />;
 }
 
 const difficultyStyles: Record<LessonDifficulty, string> = {
@@ -155,7 +155,7 @@ function LessonMeta({
           className="flex items-center gap-1 text-xs text-muted-foreground"
           title={prerequisitesLabel}
         >
-          <Link2 aria-hidden="true" className="h-3 w-3" />
+          <Link2 aria-hidden="true" className="size-3" />
         </span>
       ) : null}
       {difficulty ? (
@@ -170,7 +170,7 @@ function LessonMeta({
       ) : null}
       {duration ? (
         <span className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Clock className="h-3 w-3" />
+          <Clock className="size-3" />
           {duration}
         </span>
       ) : null}
@@ -229,13 +229,13 @@ function ModuleTrigger({
       <div className="mt-0.5 flex flex-shrink-0 items-center gap-3">
         {estimatedHours === undefined ? null : (
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Clock className="h-3.5 w-3.5" />
+            <Clock className="size-3.5" />
             {estimatedHours}h
           </span>
         )}
         <ChevronDown
           className={cn(
-            "h-4 w-4 text-muted-foreground transition-transform duration-200",
+            "size-4 text-muted-foreground transition-transform duration-200",
             isExpanded && "rotate-180",
           )}
         />
@@ -290,12 +290,12 @@ function CurriculumRoot({
       >
         <div className="flex items-center justify-between border-b px-6 py-4">
           <div className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5 text-primary" />
+            <GraduationCap className="size-5 text-primary" />
             <h2 className="text-lg font-semibold">{title}</h2>
           </div>
           {totalHours === undefined ? null : (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <Clock className="h-4 w-4" />
+              <Clock className="size-4" />
               <span>{totalHours}h total</span>
             </div>
           )}

@@ -132,7 +132,7 @@ function MessageActions({ messageId }: MessageActionsProps) {
           }}
           type="button"
         >
-          <RefreshCw className="h-3 w-3" />
+          <RefreshCw className="size-3" />
         </button>
       ) : null}
       {onFeedback ? (
@@ -145,7 +145,7 @@ function MessageActions({ messageId }: MessageActionsProps) {
             }}
             type="button"
           >
-            <ThumbsUp className="h-3 w-3" />
+            <ThumbsUp className="size-3" />
           </button>
           <button
             aria-label="Negative feedback"
@@ -155,7 +155,7 @@ function MessageActions({ messageId }: MessageActionsProps) {
             }}
             type="button"
           >
-            <ThumbsDown className="h-3 w-3" />
+            <ThumbsDown className="size-3" />
           </button>
         </>
       ) : null}
@@ -484,14 +484,14 @@ export const ConversationScrollButton = forwardRef<
     <button
       aria-label="Scroll to bottom"
       className={cn(
-        "absolute bottom-4 right-4 flex h-8 w-8 items-center justify-center rounded-full border bg-background shadow-md transition-colors hover:bg-muted",
+        "absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full border bg-background shadow-md transition-colors hover:bg-muted",
         className,
       )}
       onClick={scrollToBottom}
       ref={reference}
       type="button"
     >
-      <ArrowDown className="h-4 w-4" />
+      <ArrowDown className="size-4" />
     </button>
   );
 });
@@ -521,14 +521,14 @@ export const ConversationLoading = forwardRef<
       role="status"
     >
       <span
-        className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground"
+        className="size-2 animate-bounce rounded-full bg-muted-foreground"
         style={{ animationDelay: "-0.3s" }}
       />
       <span
-        className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground"
+        className="size-2 animate-bounce rounded-full bg-muted-foreground"
         style={{ animationDelay: "-0.15s" }}
       />
-      <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" />
+      <span className="size-2 animate-bounce rounded-full bg-muted-foreground" />
     </div>
   );
 });

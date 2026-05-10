@@ -28,7 +28,7 @@ function FAQItem({ children, defaultOpen = false, question }: FAQItemProps) {
         <span className="font-medium text-sm pr-4">{question}</span>
         <ChevronDown
           className={cn(
-            "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+            "size-4 flex-shrink-0 transition-transform duration-200",
             isOpen && "rotate-180",
           )}
         />
@@ -56,7 +56,7 @@ function FAQ({ children, title = "Frequently Asked Questions" }: FAQProps) {
   return (
     <div className="my-6 rounded-lg border bg-card">
       <div className="flex items-center gap-2 p-4 border-b border-border">
-        <HelpCircle className="h-5 w-5 text-primary" />
+        <HelpCircle className="size-5 text-primary" />
         <h4 className="font-semibold">{title}</h4>
       </div>
       <div className="px-4">{children}</div>

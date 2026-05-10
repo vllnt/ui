@@ -68,12 +68,12 @@ function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
               )}
               variant="outline"
             >
-              <TrendIcon className="h-3 w-3" />
+              <TrendIcon className="size-3" />
               {formatChange(item.change)}
             </Badge>
             {item.volume ? (
               <span className="hidden items-center text-xs text-muted-foreground sm:inline-flex">
-                <Dot className="h-3.5 w-3.5" />
+                <Dot className="size-3.5" />
                 {item.volume}
               </span>
             ) : null}

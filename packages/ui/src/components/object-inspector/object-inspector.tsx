@@ -121,7 +121,7 @@ const StatusDot = (props: {
   >
     <span
       aria-hidden="true"
-      className={cn("h-1.5 w-1.5 rounded-full", STATUS_DOT[props.status])}
+      className={cn("size-1.5 rounded-full", STATUS_DOT[props.status])}
     />
     {STATUS_LABEL[props.status]}
   </span>

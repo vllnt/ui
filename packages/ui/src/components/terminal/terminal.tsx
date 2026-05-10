@@ -40,13 +40,13 @@ export function Terminal({
     <div className="my-6 rounded-lg border bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 dark:bg-zinc-800 border-b border-zinc-800">
         <div className="flex items-center gap-2">
-          <TerminalIcon className="h-4 w-4 text-zinc-400" />
+          <TerminalIcon className="size-4 text-zinc-400" />
           <span className="text-sm font-medium text-zinc-300">{title}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="h-3 w-3 rounded-full bg-red-500" />
-          <div className="h-3 w-3 rounded-full bg-yellow-500" />
-          <div className="h-3 w-3 rounded-full bg-green-500" />
+          <div className="size-3 rounded-full bg-red-500" />
+          <div className="size-3 rounded-full bg-yellow-500" />
+          <div className="size-3 rounded-full bg-green-500" />
         </div>
       </div>
       <div className="relative">
@@ -73,15 +73,15 @@ export function Terminal({
         </div>
         {copyable && commands.length > 0 ? (
           <Button
-            className="absolute top-2 right-2 h-8 w-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
+            className="absolute top-2 right-2 size-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
             onClick={handleCopy}
             size="icon"
             variant="ghost"
           >
             {copied ? (
-              <Check className="h-3 w-3" />
+              <Check className="size-3" />
             ) : (
-              <Copy className="h-3 w-3" />
+              <Copy className="size-3" />
             )}
           </Button>
         ) : null}
@@ -130,13 +130,13 @@ export function SimpleTerminal({
     <div className="my-6 rounded-lg border bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 dark:bg-zinc-800 border-b border-zinc-800">
         <div className="flex items-center gap-2">
-          <TerminalIcon className="h-4 w-4 text-zinc-400" />
+          <TerminalIcon className="size-4 text-zinc-400" />
           <span className="text-sm font-medium text-zinc-300">{title}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="h-3 w-3 rounded-full bg-red-500" />
-          <div className="h-3 w-3 rounded-full bg-yellow-500" />
-          <div className="h-3 w-3 rounded-full bg-green-500" />
+          <div className="size-3 rounded-full bg-red-500" />
+          <div className="size-3 rounded-full bg-yellow-500" />
+          <div className="size-3 rounded-full bg-green-500" />
         </div>
       </div>
       <div className="relative">
@@ -163,15 +163,15 @@ export function SimpleTerminal({
         </div>
         {commands.length > 0 && (
           <Button
-            className="absolute top-2 right-2 h-8 w-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
+            className="absolute top-2 right-2 size-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
             onClick={handleCopy}
             size="icon"
             variant="ghost"
           >
             {copied ? (
-              <Check className="h-3 w-3" />
+              <Check className="size-3" />
             ) : (
-              <Copy className="h-3 w-3" />
+              <Copy className="size-3" />
             )}
           </Button>
         )}

@@ -90,14 +90,14 @@ function KeyboardShortcutsHelpImpl({
           </h2>
           <button
             aria-label="Close shortcuts help"
-            className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-muted"
+            className="flex size-8 items-center justify-center rounded-md hover:bg-muted"
             onClick={onClose}
             ref={closeButtonRef}
             type="button"
           >
             {closeIcon ?? (
               <svg
-                className="h-5 w-5"
+                className="size-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

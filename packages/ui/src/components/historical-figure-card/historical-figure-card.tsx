@@ -326,7 +326,7 @@ function FigureBio({
         <ChevronDown
           aria-hidden="true"
           className={cn(
-            "h-4 w-4 transition-transform",
+            "size-4 transition-transform",
             open ? "rotate-180" : "rotate-0",
           )}
         />
@@ -379,10 +379,10 @@ function FigureHeader({
   const altName = typeof name === "string" ? name : undefined;
   return (
     <header className="flex items-start gap-4">
-      <Avatar className="h-14 w-14 shrink-0 ring-2 ring-border">
+      <Avatar className="size-14 shrink-0 ring-2 ring-border">
         {portrait ? <AvatarImage alt={altName} src={portrait} /> : null}
         <AvatarFallback className="text-sm">
-          {initials || <User aria-hidden="true" className="h-5 w-5" />}
+          {initials || <User aria-hidden="true" className="size-5" />}
         </AvatarFallback>
       </Avatar>
       <div className="flex min-w-0 flex-1 flex-col gap-1">

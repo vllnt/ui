@@ -10,7 +10,7 @@ test.describe("StatCard Visual", () => {
         <StatCard
           change="+8.2%"
           description="Monthly recurring revenue"
-          icon={<TrendingUp className="h-4 w-4" />}
+          icon={<TrendingUp className="size-4" />}
           label="MRR"
           meta="vs last month"
           tone="success"
@@ -20,7 +20,7 @@ test.describe("StatCard Visual", () => {
         <StatCard
           change="-1.6%"
           description="Average response time"
-          icon={<BarChart3 className="h-4 w-4" />}
+          icon={<BarChart3 className="size-4" />}
           label="API latency"
           meta="p95 · 24h"
           tone="warning"

@@ -51,7 +51,7 @@ function QuizOptionButton({
         {showResult ? (
           option.correct ? (
             <svg
-              className="h-4 w-4 text-green-500"
+              className="size-4 text-green-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -65,7 +65,7 @@ function QuizOptionButton({
             </svg>
           ) : (
             <svg
-              className="h-4 w-4 text-red-500"
+              className="size-4 text-red-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -81,7 +81,7 @@ function QuizOptionButton({
         ) : null}
         {submitted && !isSelected && option.correct ? (
           <svg
-            className="h-4 w-4 text-green-500/50"
+            className="size-4 text-green-500/50"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -196,7 +196,7 @@ export function Quiz({
     <div className={cn("my-6 rounded-lg border bg-card p-6", className)}>
       <div className="flex items-start gap-3 mb-4">
         <svg
-          className="h-5 w-5 text-primary flex-shrink-0 mt-0.5"
+          className="size-5 text-primary flex-shrink-0 mt-0.5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

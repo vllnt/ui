@@ -22,7 +22,7 @@ function Step({
   return (
     <div className={cn("flex gap-4", className)}>
       <div className="flex flex-col items-center">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">
+        <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">
           {number}
         </div>
         <div className="w-px flex-1 bg-border mt-2" />
@@ -59,7 +59,7 @@ function InteractiveStep({
       <div className="flex flex-col items-center">
         <button
           className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-colors",
+            "flex size-8 items-center justify-center rounded-full text-sm font-bold transition-colors",
             isCompleted
               ? "bg-green-500 text-white"
               : "bg-primary text-primary-foreground",
@@ -69,7 +69,7 @@ function InteractiveStep({
         >
           {isCompleted ? (
             <svg
-              className="h-4 w-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ function StepByStep({
         {title ? (
           <div className="flex items-center gap-2 mb-4">
             <svg
-              className="h-5 w-5 text-primary"
+              className="size-5 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -185,7 +185,7 @@ function StepByStep({
       {title ? (
         <div className="flex items-center gap-2 mb-4">
           <svg
-            className="h-5 w-5 text-primary"
+            className="size-5 text-primary"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

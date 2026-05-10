@@ -50,11 +50,11 @@ function StepIcon({
   stepNumber: number;
 }): ReactNode {
   if (state === "complete") {
-    return <Check className="h-4 w-4" />;
+    return <Check className="size-4" />;
   }
 
   if (!showNumbers) {
-    return <Circle className="h-3.5 w-3.5 fill-current stroke-none" />;
+    return <Circle className="size-3.5 fill-current stroke-none" />;
   }
 
   return <span className="text-xs font-semibold">{stepNumber}</span>;
@@ -94,7 +94,7 @@ function StepperItem({
         <span
           aria-current={stepState === "current" ? "step" : undefined}
           className={cn(
-            "relative z-10 flex h-8 w-8 items-center justify-center rounded-full border text-sm transition-colors",
+            "relative z-10 flex size-8 items-center justify-center rounded-full border text-sm transition-colors",
             stepState === "complete" &&
               "border-primary bg-primary text-primary-foreground",
             stepState === "current" &&

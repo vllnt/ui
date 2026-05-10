@@ -189,7 +189,7 @@ const ControlButton = forwardRef<HTMLButtonElement, ControlButtonProps>(
     <button
       aria-label={ariaLabel}
       className={cn(
-        "inline-flex h-7 w-7 items-center justify-center rounded text-sm font-semibold hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "inline-flex size-7 items-center justify-center rounded text-sm font-semibold hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
       onClick={onActivate}
@@ -332,7 +332,7 @@ export const MapMarker = forwardRef<HTMLButtonElement, MapMarkerProps>(
           {...rest}
         >
           <svg
-            className="pointer-events-none h-6 w-6 overflow-visible"
+            className="pointer-events-none size-6 overflow-visible"
             viewBox="-10 -10 20 20"
           >
             <MarkerVisual>{children}</MarkerVisual>

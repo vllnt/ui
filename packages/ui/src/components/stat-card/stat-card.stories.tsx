@@ -7,7 +7,7 @@ const meta = {
   args: {
     change: "+8.2%",
     description: "Monthly recurring revenue",
-    icon: <DollarSign className="h-4 w-4" />,
+    icon: <DollarSign className="size-4" />,
     label: "MRR",
     meta: "vs last month",
     tone: "success",
@@ -29,7 +29,7 @@ export const Grid: Story = {
       <StatCard
         change="+8.2%"
         description="Monthly recurring revenue"
-        icon={<DollarSign className="h-4 w-4" />}
+        icon={<DollarSign className="size-4" />}
         label="MRR"
         meta="vs last month"
         tone="success"
@@ -39,7 +39,7 @@ export const Grid: Story = {
       <StatCard
         change="+3.1 pts"
         description="Onboarding completion"
-        icon={<TrendingUp className="h-4 w-4" />}
+        icon={<TrendingUp className="size-4" />}
         label="Activation"
         meta="Trailing 7 days"
         tone="neutral"
@@ -49,7 +49,7 @@ export const Grid: Story = {
       <StatCard
         change="-12 ms"
         description="Average API response time"
-        icon={<Activity className="h-4 w-4" />}
+        icon={<Activity className="size-4" />}
         label="Latency"
         meta="p95 · us-east-1"
         tone="warning"

@@ -59,7 +59,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       >
         <div className="flex items-center gap-3">
           <svg
-            className="w-5 h-5 text-muted-foreground"
+            className="size-5 text-muted-foreground"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -75,7 +75,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
           <span className="text-sm font-medium text-foreground">{label}</span>
         </div>
         <svg
-          className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
+          className={`size-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"

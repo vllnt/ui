@@ -50,11 +50,7 @@ export function NavbarSaas({
                 size="icon"
                 variant="ghost"
               >
-                {open ? (
-                  <X className="h-4 w-4" />
-                ) : (
-                  <Menu className="h-4 w-4" />
-                )}
+                {open ? <X className="size-4" /> : <Menu className="size-4" />}
               </Button>
             ) : null}
             {brand ? (

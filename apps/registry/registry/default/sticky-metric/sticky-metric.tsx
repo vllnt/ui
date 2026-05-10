@@ -139,7 +139,7 @@ export const StickyMetric = forwardRef<HTMLDivElement, StickyMetricProps>(
       >
         <span
           aria-hidden="true"
-          className={cn("h-1.5 w-1.5 rounded-full", TONE_DOT[tone])}
+          className={cn("size-1.5 rounded-full", TONE_DOT[tone])}
           data-sticky-metric-dot
         />
         <span className="font-medium text-muted-foreground">{label}</span>

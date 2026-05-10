@@ -202,10 +202,10 @@ export const LiveFeed = React.forwardRef<HTMLDivElement, LiveFeedProps>(
           <Badge variant="outline">
             <span
               aria-hidden="true"
-              className="relative mr-1.5 inline-flex h-2 w-2"
+              className="relative mr-1.5 inline-flex size-2"
             >
-              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-emerald-500 opacity-70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="absolute inline-flex size-2 animate-ping rounded-full bg-emerald-500 opacity-70" />
+              <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
             </span>{" "}
             Live
           </Badge>

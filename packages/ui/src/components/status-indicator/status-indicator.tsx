@@ -127,9 +127,9 @@ const dotVariants = cva("rounded-full", {
   },
   variants: {
     size: {
-      lg: "h-2.5 w-2.5",
-      md: "h-2 w-2",
-      sm: "h-1.5 w-1.5",
+      lg: "size-2.5",
+      md: "size-2",
+      sm: "size-1.5",
     },
     tone: {
       danger: "bg-red-500",

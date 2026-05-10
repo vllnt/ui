@@ -168,7 +168,7 @@ function CivilizationHero({ color, image, imageAlt }: HeroProps): ReactNode {
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center text-muted-foreground/50">
-          <Globe aria-hidden="true" className="h-12 w-12" />
+          <Globe aria-hidden="true" className="size-12" />
         </div>
       )}
     </div>

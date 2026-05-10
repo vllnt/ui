@@ -76,7 +76,7 @@ function FeatureIndicator({
     return (
       <span
         aria-hidden="true"
-        className="mt-0.5 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary"
+        className="mt-0.5 inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary"
       >
         ✓
       </span>
@@ -86,14 +86,14 @@ function FeatureIndicator({
     return (
       <Check
         aria-hidden="true"
-        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+        className="mt-0.5 size-4 shrink-0 text-primary"
       />
     );
   }
   return (
     <X
       aria-hidden="true"
-      className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/60"
+      className="mt-0.5 size-4 shrink-0 text-muted-foreground/60"
     />
   );
 }

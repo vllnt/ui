@@ -60,7 +60,7 @@ function DialogContent({
       >
         {closeIcon ?? (
           <svg
-            className="h-4 w-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

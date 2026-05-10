@@ -98,7 +98,7 @@ const Tile = (props: { metric: RuntimeMetric }): React.ReactElement => {
       <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wide text-muted-foreground">
         <span
           aria-hidden="true"
-          className={cn("h-1.5 w-1.5 rounded-full", TONE_DOT[tone])}
+          className={cn("size-1.5 rounded-full", TONE_DOT[tone])}
         />
         {metric.label}
       </span>

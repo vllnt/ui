@@ -18,7 +18,7 @@ import { cn } from "../../lib/utils";
 import type { CopyStatus, FlowControlsProps } from "./types";
 
 const BUTTON_CLASS =
-  "flex h-8 w-8 items-center justify-center rounded hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
+  "flex size-8 items-center justify-center rounded hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
 
 type ControlButtonProps = {
   disabled?: boolean;
@@ -52,14 +52,14 @@ function ControlButton({
 function getCopyIcon(status: CopyStatus | undefined) {
   switch (status) {
     case "copying":
-      return <Loader2 className="h-4 w-4 animate-spin" />;
+      return <Loader2 className="size-4 animate-spin" />;
     case "success":
-      return <Check className="h-4 w-4 text-green-500" />;
+      return <Check className="size-4 text-green-500" />;
     case "error":
-      return <X className="h-4 w-4 text-destructive" />;
+      return <X className="size-4 text-destructive" />;
     case "idle":
     case undefined:
-      return <Copy className="h-4 w-4" />;
+      return <Copy className="size-4" />;
   }
 }
 
@@ -96,20 +96,20 @@ export const FlowControls = memo(function FlowControls({
       )}
     >
       <ControlButton
-        icon={<Plus className="h-4 w-4" />}
+        icon={<Plus className="size-4" />}
         label="Zoom in"
         onClick={onZoomIn}
         title="Zoom in"
       />
       <ControlButton
-        icon={<Minus className="h-4 w-4" />}
+        icon={<Minus className="size-4" />}
         label="Zoom out"
         onClick={onZoomOut}
         title="Zoom out"
       />
       <div className="h-px bg-border" />
       <ControlButton
-        icon={<Move className="h-4 w-4" />}
+        icon={<Move className="size-4" />}
         label="Fit view"
         onClick={onFitView}
         title="Fit view"
@@ -130,7 +130,7 @@ export const FlowControls = memo(function FlowControls({
         <>
           <div className="h-px bg-border" />
           <ControlButton
-            icon={<Maximize2 className="h-4 w-4" />}
+            icon={<Maximize2 className="size-4" />}
             label="Fullscreen"
             onClick={onFullscreen}
             title="Toggle fullscreen"

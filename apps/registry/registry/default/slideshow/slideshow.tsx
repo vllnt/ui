@@ -210,7 +210,7 @@ function SlideshowImpl({
           >
             {isTocOpen ? (
               <svg
-                className="h-5 w-5"
+                className="size-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -224,7 +224,7 @@ function SlideshowImpl({
               </svg>
             ) : (
               <svg
-                className="h-5 w-5"
+                className="size-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -256,7 +256,7 @@ function SlideshowImpl({
             type="button"
           >
             <svg
-              className="h-5 w-5"
+              className="size-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -310,7 +310,7 @@ function SlideshowImpl({
                   type="button"
                 >
                   <svg
-                    className="h-4 w-4"
+                    className="size-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -342,7 +342,7 @@ function SlideshowImpl({
                     >
                       <div
                         className={cn(
-                          "flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center",
+                          "flex-shrink-0 size-5 rounded-full border-2 flex items-center justify-center",
                           isCompleted
                             ? "bg-foreground border-foreground"
                             : "border-muted-foreground",
@@ -350,7 +350,7 @@ function SlideshowImpl({
                       >
                         {isCompleted ? (
                           <svg
-                            className="h-3 w-3 text-background"
+                            className="size-3 text-background"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -405,7 +405,7 @@ function SlideshowImpl({
           type="button"
         >
           <svg
-            className="h-4 w-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -429,7 +429,7 @@ function SlideshowImpl({
           </span>
           {!isLastSection && (
             <svg
-              className="h-4 w-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

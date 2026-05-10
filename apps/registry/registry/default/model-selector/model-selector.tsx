@@ -285,7 +285,7 @@ function ProviderFilterMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="h-9 gap-2" size="sm" variant="outline">
-          <Filter className="h-4 w-4" />
+          <Filter className="size-4" />
           {providerFilter === "all" ? "All Providers" : providerFilter}
         </Button>
       </DropdownMenuTrigger>
@@ -317,7 +317,7 @@ function SortMenu({ onChange, sortBy }: SortMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="h-9 gap-2" size="sm" variant="outline">
-          <ArrowUpDown className="h-4 w-4" />
+          <ArrowUpDown className="size-4" />
           Sort
         </Button>
       </DropdownMenuTrigger>

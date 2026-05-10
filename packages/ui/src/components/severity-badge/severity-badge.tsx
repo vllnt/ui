@@ -158,7 +158,7 @@ function SeverityBadge({
       {...props}
     >
       {showDot ? (
-        <span aria-hidden="true" className="relative flex h-2 w-2">
+        <span aria-hidden="true" className="relative flex size-2">
           {pulse ? (
             <span
               className={cn(
@@ -169,7 +169,7 @@ function SeverityBadge({
           ) : null}
           <span
             className={cn(
-              "relative inline-flex h-2 w-2 rounded-full",
+              "relative inline-flex size-2 rounded-full",
               DOT_COLOR[level],
             )}
           />
