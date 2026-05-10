@@ -2,6 +2,7 @@ name: Feature request
 description: Propose a new component, variant, or API addition
 title: "[feat] "
 labels: ["enhancement"]
+type: Feature
 body:
   - type: textarea
     id: problem

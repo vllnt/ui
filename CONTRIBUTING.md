@@ -93,3 +93,15 @@ Canary builds ship automatically on every push to `main`.
 ## Reporting bugs / requesting features
 
 Use the GitHub issue templates under [Issues](https://github.com/vllnt/ui/issues/new/choose). Include repro steps, expected vs. actual, and environment details.
+
+## Issue types
+
+Every issue carries a **type**: `Bug`, `Feature`, or `Task`. The repo's issue templates (`bug_report.yml`, `feature_request.yml`, `task.yml`) set this automatically — please use them.
+
+| Type | When |
+|------|------|
+| `Bug` | Something is broken — wrong output, crash, regression, accessibility violation, security issue. |
+| `Feature` | New user-visible capability — new component, new public API, new site surface. |
+| `Task` | Internal work — refactor, infra, docs, CI, sweeps, dependency bumps, version bumps. |
+
+A CI check (`.github/workflows/issue-type-enforcer.yml`) labels typeless issues `needs-triage` and posts a reminder. Maintainers triage these manually.
