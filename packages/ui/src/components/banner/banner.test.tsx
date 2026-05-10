@@ -129,6 +129,7 @@ describe("Banner", () => {
         <Banner>
           x
           <BannerAction asChild>
+            {/* eslint-disable-next-line nextjs-no-a-element */}
             <a href="/upgrade">Upgrade</a>
           </BannerAction>
         </Banner>,

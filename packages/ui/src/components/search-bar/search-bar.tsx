@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -14,7 +14,39 @@ type SearchBarProps = {
   placeholder?: string;
 };
 
-export function SearchBar({
+export function SearchBar(props: SearchBarProps) {
+  // useSearchParams suspends during SSR — Suspense boundary keeps the
+  // surrounding tree streamable. See react-doctor rule
+  // nextjs-no-use-search-params-without-suspense + Next.js docs.
+  return (
+    <Suspense fallback={<SearchBarFallback {...props} />}>
+      <SearchBarInner {...props} />
+    </Suspense>
+  );
+}
+
+function SearchBarFallback({
+  className,
+  placeholder = "Search posts...",
+}: SearchBarProps) {
+  return (
+    <form className={`flex gap-2 ${className}`}>
+      <Input
+        aria-label={placeholder}
+        className="flex-1"
+        disabled
+        placeholder={placeholder}
+        type="text"
+        value=""
+      />
+      <Button disabled type="submit" variant="outline">
+        Search
+      </Button>
+    </form>
+  );
+}
+
+function SearchBarInner({
   className,
   onSearch,
   placeholder = "Search posts...",
@@ -92,6 +124,10 @@ export function SearchBar({
     }
     const newUrl = parameters.toString();
     lastSetSearchParameterReference.current = trimmedQuery;
+    // next/navigation router.replace is the canonical client-side
+    // navigation primitive in Next App Router — not the
+    // window.location.href anti-pattern this rule targets.
+    // eslint-disable-next-line nextjs-no-client-side-redirect
     router.replace(`?${newUrl}`);
   }, [debouncedQuery, router, onSearch, searchParameters]);
 

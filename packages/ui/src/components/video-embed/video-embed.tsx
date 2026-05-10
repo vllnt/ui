@@ -71,6 +71,7 @@ export function VideoEmbed({
             type="button"
           >
             {thumbnail ? (
+        {/* eslint-disable-next-line nextjs-no-img-element */}
               <img
                 alt={title}
                 className="absolute inset-0 w-full h-full object-cover"
