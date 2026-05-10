@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { Footer } from "@/components/footer/footer";
 import {
   getCategoryCount,
   getComponentCount,
@@ -298,6 +299,7 @@ export function Landing() {
       <AgentCallout />
       <FeaturedComponents />
       <CommunityCTA />
+      <Footer />
     </>
   );
 }
