@@ -113,7 +113,7 @@ function ContentIntroImpl({
                   >
                     <span
                       className={cn(
-                        "flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
+                        "flex-shrink-0 size-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
                         isLoading && "animate-pulse bg-muted",
                         !isLoading &&
                           isCompleted &&
@@ -123,7 +123,7 @@ function ContentIntroImpl({
                     >
                       {isCompleted ? (
                         <svg
-                          className="h-3 w-3"
+                          className="size-3"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ function ContentIntroImpl({
               size="lg"
             >
               <svg
-                className="h-5 w-5"
+                className="size-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

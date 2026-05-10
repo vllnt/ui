@@ -63,10 +63,7 @@ export const PlanBadge = React.forwardRef<HTMLSpanElement, PlanBadgeProps>(
         ref={reference}
         {...props}
       >
-        <span
-          aria-hidden="true"
-          className="h-1.5 w-1.5 rounded-full bg-current"
-        />
+        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
         <span>{label ?? getPlanLabel(tier)}</span>
         {state === "trial" ? (
           <span className="text-current/80">Trial</span>

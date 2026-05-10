@@ -152,7 +152,7 @@ function CopyIcon({
   size: "sm" | "xs";
 }): ReactNode {
   const Icon = copied ? Check : Copy;
-  const sizeClass = size === "xs" ? "h-3 w-3" : "h-4 w-4";
+  const sizeClass = size === "xs" ? "size-3" : "size-4";
   return <Icon aria-hidden="true" className={cn(sizeClass, className)} />;
 }
 
@@ -206,7 +206,7 @@ const ButtonTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
         <Button
           aria-label={accessibleLabel}
           className={cn(
-            "h-6 w-6 align-middle text-muted-foreground hover:text-foreground",
+            "size-6 align-middle text-muted-foreground hover:text-foreground",
             className,
           )}
           onClick={onClickHandler}
@@ -224,7 +224,7 @@ const ButtonTrigger = forwardRef<HTMLButtonElement, TriggerProps>(
     return (
       <Button
         aria-label={accessibleLabel}
-        className={cn("h-8 w-8", className)}
+        className={cn("size-8", className)}
         onClick={onClickHandler}
         ref={ref}
         size="icon"

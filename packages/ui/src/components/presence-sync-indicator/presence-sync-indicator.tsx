@@ -112,7 +112,7 @@ export const PresenceSyncIndicator = forwardRef<
     >
       <span
         aria-hidden="true"
-        className={cn("h-1.5 w-1.5 rounded-full", STATE_DOT[state])}
+        className={cn("size-1.5 rounded-full", STATE_DOT[state])}
         data-presence-sync-dot
       />
       <span className={cn("font-medium", STATE_TEXT[state])}>{text}</span>

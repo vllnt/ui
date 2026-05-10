@@ -171,14 +171,14 @@ function SubmitButton({
   if (status === "sending") {
     content = (
       <>
-        <Loader2 aria-hidden="true" className="mr-2 h-4 w-4 animate-spin" />
+        <Loader2 aria-hidden="true" className="mr-2 size-4 animate-spin" />
         {labels.sending}
       </>
     );
   } else if (status === "error") {
     content = (
       <>
-        <XCircle aria-hidden="true" className="mr-2 h-4 w-4" />
+        <XCircle aria-hidden="true" className="mr-2 size-4" />
         {labels.tryAgain}
       </>
     );
@@ -212,7 +212,7 @@ function SuccessPanel({ className, message }: SuccessPanelProps): ReactNode {
       )}
       role="status"
     >
-      <CheckCircle2 aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+      <CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
       <span>{message}</span>
     </div>
   );

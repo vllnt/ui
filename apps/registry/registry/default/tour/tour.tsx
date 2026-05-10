@@ -96,7 +96,7 @@ function TourFooter({
           <button
             aria-label={`Go to ${step.title}`}
             className={cn(
-              "h-2.5 w-2.5 rounded-full transition-colors",
+              "size-2.5 rounded-full transition-colors",
               index === currentStep ? "bg-primary" : "bg-muted-foreground/30",
             )}
             key={step.id}

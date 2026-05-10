@@ -31,7 +31,7 @@ const AISourceCitation = forwardRef<HTMLAnchorElement, AISourceCitationProps>(
         {...props}
       >
         <div className="flex items-start gap-2">
-          <Quote className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+          <Quote className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -40,7 +40,7 @@ const AISourceCitation = forwardRef<HTMLAnchorElement, AISourceCitationProps>(
                 </p>
                 <p className="text-xs text-muted-foreground">{source}</p>
               </div>
-              <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <ExternalLink className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </div>
           </div>
         </div>

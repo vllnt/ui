@@ -74,8 +74,8 @@ export class FlowErrorBoundary extends Component<
           )}
           style={{ height }}
         >
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
-            <AlertTriangle className="h-6 w-6 text-destructive" />
+          <div className="flex size-12 items-center justify-center rounded-full bg-destructive/10">
+            <AlertTriangle className="size-6 text-destructive" />
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-foreground">
@@ -91,7 +91,7 @@ export class FlowErrorBoundary extends Component<
             onClick={this.handleRetry}
             type="button"
           >
-            <RefreshCw className="h-4 w-4" />
+            <RefreshCw className="size-4" />
             Try again
           </button>
         </div>

@@ -95,7 +95,7 @@ function UsageBreakdownTrend({ item }: { item: UsageBreakdownItem }) {
 
   return (
     <Badge className={cn("gap-1 border", toneClasses[trendTone])}>
-      <TrendIcon className="h-3.5 w-3.5" />
+      <TrendIcon className="size-3.5" />
       {item.trend.label}
     </Badge>
   );
@@ -134,7 +134,7 @@ function UsageBreakdownRow({
   return (
     <li className="rounded-lg border bg-background/70 p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border bg-muted text-sm font-semibold text-muted-foreground">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-md border bg-muted text-sm font-semibold text-muted-foreground">
           {item.icon ?? rank}
         </div>
         <div className="min-w-0 flex-1 space-y-3">

@@ -81,7 +81,7 @@ function ComboboxOptionItem({
     >
       <Check
         className={cn(
-          "mr-2 h-4 w-4",
+          "mr-2 size-4",
           selectedValue === option.value ? "opacity-100" : "opacity-0",
         )}
       />
@@ -178,7 +178,7 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
             <span className="truncate">
               {selectedOption ? selectedOption.label : placeholder}
             </span>
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <ComboboxListPanel

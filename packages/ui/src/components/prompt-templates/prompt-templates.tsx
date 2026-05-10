@@ -176,7 +176,7 @@ function FilterBar({
       <div className="relative">
         <Search
           aria-hidden="true"
-          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
         />
         <Input
           aria-label={labels.searchPlaceholder}
@@ -320,7 +320,7 @@ function CardActions({
         type="button"
         variant={variableCount > 0 ? "outline" : "default"}
       >
-        <Sparkles aria-hidden="true" className="mr-2 h-3.5 w-3.5" />
+        <Sparkles aria-hidden="true" className="mr-2 size-3.5" />
         {useLabel}
       </Button>
     </div>

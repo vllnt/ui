@@ -18,20 +18,20 @@ export function LearningObjectives({
     <div className="my-6 rounded-lg border bg-gradient-to-br from-primary/5 to-primary/10 p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Target className="h-5 w-5 text-primary" />
+          <Target className="size-5 text-primary" />
           <h4 className="font-semibold text-foreground">{title}</h4>
         </div>
         {estimatedTime ? (
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Clock className="h-4 w-4" />
+            <Clock className="size-4" />
             <span>{estimatedTime}</span>
           </div>
         ) : null}
       </div>
       <ul className="space-y-2">
-        {objectives.map((objective, index) => (
+        {objectives.map((objective) => (
           <li className="flex items-start gap-2" key={objective}>
-            <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+            <CheckCircle2 className="size-4 text-primary flex-shrink-0 mt-0.5" />
             <span className="text-sm text-muted-foreground">{objective}</span>
           </li>
         ))}
@@ -55,7 +55,7 @@ export function Prerequisites({
     <div className="my-6 rounded-lg border bg-muted/30 p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <GraduationCap className="h-5 w-5 text-muted-foreground" />
+          <GraduationCap className="size-5 text-muted-foreground" />
           <h4 className="font-semibold text-foreground">{title}</h4>
         </div>
         {level ? (
@@ -65,7 +65,7 @@ export function Prerequisites({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <li
             className="flex items-start gap-2 text-sm text-muted-foreground"
             key={item}
@@ -93,7 +93,7 @@ export function Summary({
   return (
     <div className="my-6 rounded-lg border bg-muted/30 p-6">
       <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-        <GraduationCap className="h-5 w-5" />
+        <GraduationCap className="size-5" />
         {title}
       </h4>
       <div className="text-sm text-muted-foreground [&>p]:mb-2">{children}</div>
@@ -105,7 +105,7 @@ export function Summary({
           <ul className="space-y-1">
             {keyTakeaways.map((takeaway) => (
               <li className="flex items-start gap-2 text-sm" key={takeaway}>
-                <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-4 text-green-500 flex-shrink-0 mt-0.5" />
                 <span className="text-muted-foreground">{takeaway}</span>
               </li>
             ))}

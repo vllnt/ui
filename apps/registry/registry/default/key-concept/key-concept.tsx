@@ -29,12 +29,12 @@ export function KeyConcept({
     >
       <div className="flex items-start gap-3">
         {icon ? (
-          <span className="h-5 w-5 text-primary flex-shrink-0 mt-0.5">
+          <span className="size-5 text-primary flex-shrink-0 mt-0.5">
             {icon}
           </span>
         ) : (
           <svg
-            className="h-5 w-5 text-primary flex-shrink-0 mt-0.5"
+            className="size-5 text-primary flex-shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -75,10 +75,10 @@ export function Glossary({
     <div className={cn("my-6", className)}>
       <h4 className="font-semibold mb-3 flex items-center gap-2">
         {icon ? (
-          <span className="h-4 w-4">{icon}</span>
+          <span className="size-4">{icon}</span>
         ) : (
           <svg
-            className="h-4 w-4"
+            className="size-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

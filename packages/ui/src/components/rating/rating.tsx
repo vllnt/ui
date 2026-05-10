@@ -8,9 +8,9 @@ import type { ReactNode } from "react";
 import { cn } from "../../lib/utils";
 
 const sizeClasses = {
-  lg: "h-6 w-6",
-  md: "h-5 w-5",
-  sm: "h-4 w-4",
+  lg: "size-6",
+  md: "size-5",
+  sm: "size-4",
 };
 
 export type RatingProps = {

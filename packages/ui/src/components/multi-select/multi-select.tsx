@@ -145,11 +145,11 @@ function OptionList({
                 >
                   <span
                     className={cn(
-                      "flex h-4 w-4 items-center justify-center rounded-sm border border-input bg-background text-primary transition-opacity",
+                      "flex size-4 items-center justify-center rounded-sm border border-input bg-background text-primary transition-opacity",
                       isSelected ? "opacity-100" : "opacity-50",
                     )}
                   >
-                    {isSelected ? <Check className="h-3.5 w-3.5" /> : null}
+                    {isSelected ? <Check className="size-3.5" /> : null}
                   </span>
                   <span className="flex-1">{option.label}</span>
                 </CommandItem>
@@ -276,7 +276,7 @@ const MultiSelectTrigger = React.forwardRef<
           selectedOptions={selectedOptions}
         />
       </span>
-      <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+      <ChevronDown className="ml-2 size-4 shrink-0 opacity-50" />
     </Button>
   ),
 );

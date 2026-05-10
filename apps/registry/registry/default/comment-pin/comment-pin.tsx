@@ -76,7 +76,7 @@ const PinBody = (props: PinBodyInput): React.ReactElement => {
       <span
         aria-hidden="true"
         className={cn(
-          "flex h-7 w-7 items-center justify-center rounded-full border border-background text-[11px] font-semibold shadow-sm",
+          "flex size-7 items-center justify-center rounded-full border border-background text-[11px] font-semibold shadow-sm",
           STATE_FILL[props.state],
         )}
         data-comment-pin-body

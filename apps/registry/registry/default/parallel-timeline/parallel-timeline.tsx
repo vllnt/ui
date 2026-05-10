@@ -272,7 +272,7 @@ function EventMarker({
       <div
         aria-hidden="true"
         className={cn(
-          "h-3 w-3 rounded-full border-2 ring-2 ring-background",
+          "size-3 rounded-full border-2 ring-2 ring-background",
           palette.marker,
         )}
       />

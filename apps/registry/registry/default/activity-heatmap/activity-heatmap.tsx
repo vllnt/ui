@@ -192,7 +192,7 @@ function HeatmapGrid({
         {LEVEL_CLASS_NAMES.map((className) => (
           <span
             className={cn(
-              "h-3 w-3 rounded-[3px] border border-border/40",
+              "size-3 rounded-[3px] border border-border/40",
               className,
             )}
             key={`legend-${className}`}

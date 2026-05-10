@@ -79,14 +79,14 @@ export function VideoEmbed({
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/20" />
             )}
-            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform group-hover:scale-110">
-              <Play className="h-6 w-6 ml-1" />
+            <div className="relative z-10 flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform group-hover:scale-110">
+              <Play className="size-6 ml-1" />
             </div>
           </button>
         )}
       </div>
       <p className="mt-2 text-sm text-center text-muted-foreground flex items-center justify-center gap-1">
-        <Video className="h-4 w-4" />
+        <Video className="size-4" />
         {title}
       </p>
     </div>

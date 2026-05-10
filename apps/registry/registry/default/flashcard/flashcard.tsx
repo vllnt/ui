@@ -55,7 +55,7 @@ export function Flashcard({
           <CardTitle>{title}</CardTitle>
         </div>
         <Button onClick={toggleFlipped} size="sm" variant="outline">
-          <RefreshCcw className="mr-2 h-4 w-4" />
+          <RefreshCcw className="mr-2 size-4" />
           Flip
         </Button>
       </CardHeader>

@@ -65,14 +65,14 @@ export type StatCardProps = React.HTMLAttributes<HTMLDivElement> &
 
 function TrendIcon({ trend }: { trend: StatCardTrend }) {
   if (trend === "up") {
-    return <ArrowUpRight className="h-3.5 w-3.5" />;
+    return <ArrowUpRight className="size-3.5" />;
   }
 
   if (trend === "down") {
-    return <ArrowDownRight className="h-3.5 w-3.5" />;
+    return <ArrowDownRight className="size-3.5" />;
   }
 
-  return <ArrowRight className="h-3.5 w-3.5" />;
+  return <ArrowRight className="size-3.5" />;
 }
 
 const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(

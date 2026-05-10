@@ -451,7 +451,7 @@ function EventNode({
       ) : (
         <span
           className={cn(
-            "block h-3 w-3 rounded-full border-2 ring-2 ring-background",
+            "block size-3 rounded-full border-2 ring-2 ring-background",
             palette.dot,
             active ? "ring-primary" : "",
           )}
@@ -490,7 +490,7 @@ function TrackRow({
       <div className="absolute left-0 z-30 flex h-full w-32 shrink-0 items-center gap-2 border-r border-border bg-background px-3 text-xs font-medium">
         <span
           aria-hidden="true"
-          className={cn("h-2 w-2 rounded-full", palette.dot)}
+          className={cn("size-2 rounded-full", palette.dot)}
         />
         <span className="truncate">{track.label}</span>
       </div>
@@ -679,7 +679,7 @@ export const InteractiveTimelineZoomIn = forwardRef<
     <button
       aria-label={labels.zoomIn}
       className={cn(
-        "inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
       onClick={zoomIn}
@@ -707,7 +707,7 @@ export const InteractiveTimelineZoomOut = forwardRef<
     <button
       aria-label={labels.zoomOut}
       className={cn(
-        "inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
       onClick={zoomOut}

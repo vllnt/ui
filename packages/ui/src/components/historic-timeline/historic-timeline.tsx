@@ -389,7 +389,7 @@ function EventMarker({
       <div
         aria-hidden="true"
         className={cn(
-          "h-3 w-3 rounded-full border-2 ring-2 ring-background",
+          "size-3 rounded-full border-2 ring-2 ring-background",
           palette.marker,
         )}
       />
@@ -465,7 +465,7 @@ function Legend({ categories }: LegendProps): ReactNode {
           >
             <span
               aria-hidden="true"
-              className={cn("h-2 w-2 rounded-full", palette.marker)}
+              className={cn("size-2 rounded-full", palette.marker)}
             />
             {category.label}
           </span>

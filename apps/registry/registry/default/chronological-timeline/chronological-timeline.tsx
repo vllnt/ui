@@ -215,8 +215,8 @@ function RailColumn({ featured }: RailColumnProps): ReactNode {
       <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border" />
       <span
         className={cn(
-          "relative z-10 mt-3 block h-3 w-3 rounded-full border-2 border-background bg-primary",
-          featured ? "h-4 w-4" : "",
+          "relative z-10 mt-3 block size-3 rounded-full border-2 border-background bg-primary",
+          featured ? "size-4" : "",
         )}
       />
     </div>

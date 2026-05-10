@@ -113,7 +113,7 @@ function CollapsibleSection({
         <span>{title}</span>
         <ChevronDown
           className={cn(
-            "h-3 w-3 transition-transform duration-200",
+            "size-3 transition-transform duration-200",
             isOpen && "rotate-180",
           )}
         />

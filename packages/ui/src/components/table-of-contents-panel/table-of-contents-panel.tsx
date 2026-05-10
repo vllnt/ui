@@ -110,14 +110,14 @@ function TableOfContentsPanelImpl({
             </h2>
             <button
               aria-label="Close table of contents"
-              className="flex h-8 w-8 items-center justify-center rounded-md hover:bg-muted"
+              className="flex size-8 items-center justify-center rounded-md hover:bg-muted"
               onClick={onClose}
               ref={closeButtonRef}
               type="button"
             >
               {closeIcon ?? (
                 <svg
-                  className="h-5 w-5"
+                  className="size-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -176,7 +176,7 @@ function TableOfContentsPanelImpl({
                     >
                       <span
                         className={cn(
-                          "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
+                          "flex size-5 shrink-0 items-center justify-center rounded-full border",
                           isCompleted
                             ? "border-primary bg-primary text-primary-foreground"
                             : "border-muted-foreground",
@@ -184,7 +184,7 @@ function TableOfContentsPanelImpl({
                       >
                         {isCompleted ? (
                           <svg
-                            className="h-3 w-3"
+                            className="size-3"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"

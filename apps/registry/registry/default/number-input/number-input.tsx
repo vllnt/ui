@@ -88,9 +88,9 @@ function StepButton({
       variant="ghost"
     >
       {direction === "decrement" ? (
-        <Minus className="h-4 w-4" />
+        <Minus className="size-4" />
       ) : (
-        <Plus className="h-4 w-4" />
+        <Plus className="size-4" />
       )}
     </Button>
   );

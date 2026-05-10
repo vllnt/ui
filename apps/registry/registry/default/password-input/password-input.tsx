@@ -45,11 +45,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
           }}
           type="button"
         >
-          {visible ? (
-            <EyeOff className="h-4 w-4" />
-          ) : (
-            <Eye className="h-4 w-4" />
-          )}
+          {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
         </button>
       </div>
     );

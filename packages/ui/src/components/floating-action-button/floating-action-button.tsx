@@ -25,7 +25,7 @@ function FloatingActionButtonImpl({
     <button
       aria-label={ariaLabel}
       className={cn(
-        "fixed z-40 flex h-12 w-12 items-center justify-center rounded-full",
+        "fixed z-40 flex size-12 items-center justify-center rounded-full",
         "bg-primary text-primary-foreground shadow-lg",
         "transition-transform hover:scale-110",
         "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",

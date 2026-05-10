@@ -77,7 +77,7 @@ function MarketTreemapTile({
               tone.trendClassName,
             )}
           >
-            <TrendIcon className="h-4 w-4" />
+            <TrendIcon className="size-4" />
             {item.change > 0 ? "+" : ""}
             {item.change.toFixed(2)}%
           </div>

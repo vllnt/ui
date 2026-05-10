@@ -72,7 +72,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             ref={reference}
             variant="outline"
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="mr-2 size-4" />
             {selectedDate
               ? defaultDateFormatter.format(selectedDate)
               : placeholder}

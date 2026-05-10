@@ -110,7 +110,7 @@ export const HandoffBeacon = forwardRef<HTMLDivElement, HandoffBeaconProps>(
         <span
           aria-hidden="true"
           className={cn(
-            "block h-3 w-3 rounded-full ring-2 ring-offset-2 ring-offset-background",
+            "block size-3 rounded-full ring-2 ring-offset-2 ring-offset-background",
             LEVEL_DOT[level],
             LEVEL_RING[level],
           )}

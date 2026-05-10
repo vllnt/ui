@@ -143,7 +143,7 @@ function AccordionTrigger({
       {icon ? (
         <span
           className={cn(
-            "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+            "size-4 flex-shrink-0 transition-transform duration-200",
             isOpen && "rotate-180",
           )}
         >
@@ -152,7 +152,7 @@ function AccordionTrigger({
       ) : (
         <svg
           className={cn(
-            "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+            "size-4 flex-shrink-0 transition-transform duration-200",
             isOpen && "rotate-180",
           )}
           fill="none"

@@ -17,7 +17,7 @@ describe("StatCard", () => {
       <StatCard
         change="+12.4%"
         description="Month-over-month growth"
-        icon={<Activity className="h-4 w-4" />}
+        icon={<Activity className="size-4" />}
         label="Activation"
         meta="Updated 5 minutes ago"
         trend="up"

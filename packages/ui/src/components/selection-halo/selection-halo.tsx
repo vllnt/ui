@@ -101,7 +101,7 @@ export const SelectionHalo = forwardRef<HTMLDivElement, SelectionHaloProps>(
           <span
             aria-hidden="true"
             className={cn(
-              "absolute h-2 w-2 rounded-sm border-2 border-primary bg-background",
+              "absolute size-2 rounded-sm border-2 border-primary bg-background",
               corner === "nw" && "-left-1 -top-1",
               corner === "ne" && "-right-1 -top-1",
               corner === "se" && "-bottom-1 -right-1",

@@ -28,7 +28,7 @@ export function SidebarToggle({
         size="icon"
         variant="ghost"
       >
-        {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {open ? <X className="size-5" /> : <Menu className="size-5" />}
       </Button>
       {/* Desktop: always shows Menu icon */}
       <Button
@@ -37,7 +37,7 @@ export function SidebarToggle({
         size="icon"
         variant="ghost"
       >
-        <Menu className="h-5 w-5" />
+        <Menu className="size-5" />
       </Button>
     </>
   );

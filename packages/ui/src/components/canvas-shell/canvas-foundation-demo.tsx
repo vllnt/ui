@@ -164,7 +164,7 @@ function DemoCanvasObjects() {
           <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <Layers3 className="size-5" />
           </div>
-          <div className="h-2 w-2 rounded-full bg-primary/50" />
+          <div className="size-2 rounded-full bg-primary/50" />
         </div>
         <div className="mt-5 space-y-3">
           <div className="h-3 w-24 rounded-full bg-foreground/10" />
@@ -182,9 +182,9 @@ function DemoCanvasObjects() {
             <Activity className="size-4" />
           </div>
           <div className="flex gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-foreground/10" />
-            <div className="h-2 w-2 rounded-full bg-foreground/10" />
-            <div className="h-2 w-2 rounded-full bg-primary/45" />
+            <div className="size-2 rounded-full bg-foreground/10" />
+            <div className="size-2 rounded-full bg-foreground/10" />
+            <div className="size-2 rounded-full bg-primary/45" />
           </div>
         </div>
         <div className="mt-4 space-y-3">

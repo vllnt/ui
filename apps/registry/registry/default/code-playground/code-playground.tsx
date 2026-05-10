@@ -63,8 +63,8 @@ export function CodePlayground({
     <div className="my-6 rounded-lg border bg-card overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/30">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-primary/10">
-            <Code className="h-4 w-4 text-primary" />
+          <div className="flex size-8 items-center justify-center rounded bg-primary/10">
+            <Code className="size-4 text-primary" />
           </div>
           <div>
             <h4 className="font-semibold text-sm">{title}</h4>
@@ -76,20 +76,20 @@ export function CodePlayground({
         <div className="flex items-center gap-2">
           {filename ? (
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <FileCode className="h-3 w-3" />
+              <FileCode className="size-3" />
               <span className="font-mono">{filename}</span>
             </div>
           ) : null}
           <Button
-            className="h-8 w-8"
+            className="size-8"
             onClick={handleCopy}
             size="icon"
             variant="ghost"
           >
             {copied ? (
-              <Check className="h-3 w-3" />
+              <Check className="size-3" />
             ) : (
-              <Copy className="h-3 w-3" />
+              <Copy className="size-3" />
             )}
           </Button>
         </div>
@@ -134,7 +134,7 @@ export function FileTree({
     <div className="my-6 rounded-lg border bg-card overflow-hidden">
       <div className="px-4 py-2 border-b bg-muted/30">
         <h4 className="font-semibold text-sm flex items-center gap-2">
-          <FileCode className="h-4 w-4" />
+          <FileCode className="size-4" />
           {title}
         </h4>
       </div>
