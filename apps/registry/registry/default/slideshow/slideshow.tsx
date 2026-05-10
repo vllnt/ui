@@ -332,7 +332,7 @@ function SlideshowImpl({
                         "w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors",
                         isCurrent ? "bg-muted" : "hover:bg-muted/50",
                       )}
-                      key={`${section.id}-${index}`}
+                      key={section.id}
                       onClick={() => {
                         handleTocNavigate(index);
                       }}

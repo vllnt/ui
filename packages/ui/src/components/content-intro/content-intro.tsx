@@ -101,7 +101,7 @@ function ContentIntroImpl({
               const isCompleted =
                 !isLoading && completedSections.has(section.id);
               return (
-                <li key={`${section.id}-${index}`}>
+                <li key={section.id}>
                   <button
                     className="w-full flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-muted/50 transition-colors text-left"
                     onClick={() => {

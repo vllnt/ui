@@ -189,13 +189,13 @@ function HeatmapGrid({
 
       <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground">
         <span>Less</span>
-        {LEVEL_CLASS_NAMES.map((className, index) => (
+        {LEVEL_CLASS_NAMES.map((className) => (
           <span
             className={cn(
               "h-3 w-3 rounded-[3px] border border-border/40",
               className,
             )}
-            key={`legend-${index}`}
+            key={`legend-${className}`}
           />
         ))}
         <span>More</span>
