@@ -4,6 +4,40 @@ All notable changes to `@vllnt/ui` are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+> Target version: **`0.3.0`** — canary only; not yet published. See [ROADMAP.md](../../ROADMAP.md) for shipping criteria.
+
+### Added
+
+- **Hooks + utility primitives** — `CopyButton` (+ `useCopyToClipboard` hook), `Banner` + `BannerAction`, `Kbd`, `EmptyState`, `DocumentSiblingNav`.
+- **Pricing + identity cards** — `PricingTable` + `PricingPlan`, `HistoricalFigureCard`, `CivilizationCard` (+ `CivilizationComparison`).
+- **Newsletter** — `NewsletterSignup` (state-machine driven submit flow).
+- **AI compound families** — `ModelComparison` (+ `Column`, `Meta`, `Vote`), `PromptTemplates`, `AgentActivity`, `AISidebar`, `AIArtifact`.
+- **Era / financial** — `EraComparison`, `TransactionList`.
+- **Forms** — `Form`, `MultiSelect`, `SegmentedControl`, `TagsInput`, `AutoReload`.
+- **Educational** — `KnowledgeCheck` (inline question runner).
+- **Charts + timelines** — `GanttChart`, `ParallelTimeline`, `Timeline` + `TimelineItem`, `HistoricTimeline`, `InteractiveTimeline`, `ChronologicalTimeline`, `TreeView`.
+- **Document + reading** — `PrimarySourceViewer` compound family.
+- **Maps + geography** — `Map2D`, `ChoroplethMap`, `RouteMap`, `HeatMapOverlay`, `GeographyQuizMap`, `MapTimeline`, `StoryMap`, `Globe3D`.
+- **Canvas foundation** — `CanvasShell`, `CanvasView`, `InfinitePlane`, `ViewportBookmarks`, `WorldBreadcrumbs`, `TopBar`, `LeftRail`, `RightDock`, `ZoomHud`, `MiniMapPanel`, `WorkspaceSwitcher`.
+- **Canvas selection + manipulation** — `SelectionHalo`, `SnapGuides`, `FloatingToolbar`, `MultiSelectLasso`, `FollowMode`, `HandoffBeacon`.
+- **Canvas spatial objects** — `ObjectCard`, `ObjectHandle`, `AnchorPort`, `ConnectorEdge`, `EdgeLabel`, `GroupHull`.
+- **Canvas collaboration primitives** — `LiveCursor`, `CommentPin`, `PresenceSyncIndicator`, `PresenceStack`, `SelectionPresence`, `ThreadBubble`.
+- **Inspector + dock panels** — `PropertySection`, `ObjectInspector`, `RelationshipInspector`, `RuntimeOverviewPanel`, `RoutingAssignmentPanel`, `PolicyDeliveryPanel`.
+- **Runtime overlays** — `AlertPulse`, `ThresholdRing`, `StickyMetric`, `HeatOverlay`, `StateBadgeOverlay`, `MetricCluster`, `JarvisDock`, `ContextLens`.
+- **Time navigation** — `TimelineScrubber`, `PlaybackGhost`, `BottomActivityStrip`, `RunTimeline`.
+- Total component count: **225** (up from 140).
+
+### Changed
+
+- Registry installs use a **hybrid CLI strategy** — leaf component source is inlined, sibling registry items resolve via `@vllnt/ui` to keep installs minimal and dedupe shared primitives.
+
+### Notes
+
+- `ROADMAP.md` added at repo root tracking 50 open issues across 8 phases gating the `0.3.0` cut.
+- `0.3.0` requires the codebase-health gate (`react-doctor` CI + 0 errors), the agent-first surface (`/llms.txt`, `/mcp`, sitemap, JSON-LD), and the rebuilt landing page before shipping.
+
 ## [0.2.1] - 2026-04-21
 
 ### Fixed
