@@ -83,7 +83,7 @@ export default function VsIndexPage() {
                     VLLNT UI vs {entry.name}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {entry.tagline} — page coming soon.
+                    {entry.tagline}. Page coming soon.
                   </p>
                 </li>
               ),

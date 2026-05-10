@@ -184,7 +184,7 @@ export function ReportBugForm({
         Open prefilled GitHub issue
       </button>
       <p className="text-xs text-muted-foreground">
-        Submitting opens a new GitHub issue tab — nothing is sent to a server.
+        Submitting opens a new GitHub issue tab. Nothing is sent to a server.
       </p>
     </form>
   );

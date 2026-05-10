@@ -48,7 +48,7 @@ function Hero({
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
           Built on Radix UI, Tailwind CSS, and CVA. Every component is also a
-          machine-readable JSON descriptor — agents (Claude, Cursor, Cline,
+          machine-readable JSON descriptor: agents (Claude, Cursor, Cline,
           Continue) read the registry directly without scraping HTML.
         </p>
 
@@ -212,7 +212,7 @@ function FeaturedComponents() {
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <h2 className="text-2xl font-semibold">Featured components</h2>
         <p className="mt-2 text-muted-foreground">
-          A few favourites — browse all {getComponentCount()} from{" "}
+          A few favourites. Browse all {getComponentCount()} from{" "}
           <Link className="font-medium text-foreground underline" href="/components">
             /components
           </Link>
