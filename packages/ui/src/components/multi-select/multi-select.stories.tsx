@@ -31,17 +31,19 @@ export const Searchable: Story = {
   },
 };
 
+function ControlledMultiSelectDemo(props: React.ComponentProps<typeof MultiSelect>) {
+  const [value, setValue] = React.useState(["react", "vue"]);
+
+  return (
+    <div className="w-full max-w-sm">
+      <MultiSelect {...props} onValueChange={setValue} value={value} />
+    </div>
+  );
+}
+
 export const Controlled: Story = {
   args: {
     searchable: true,
   },
-  render: (args) => {
-    const [value, setValue] = React.useState(["react", "vue"]);
-
-    return (
-      <div className="w-full max-w-sm">
-        <MultiSelect {...args} onValueChange={setValue} value={value} />
-      </div>
-    );
-  },
+  render: (args) => <ControlledMultiSelectDemo {...args} />,
 };
