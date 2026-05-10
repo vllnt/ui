@@ -164,9 +164,10 @@ function StepByStep({
         <div className="space-y-0">
           {steps.map((step, index) => {
             const stepElement = step as React.ReactElement<StepProps>;
+            const stepKey = `${stepElement.props.title}-${index + 1}`;
             return (
               <Step
-                key={index}
+                key={stepKey}
                 number={index + 1}
                 title={stepElement.props.title}
               >
@@ -207,7 +208,7 @@ function StepByStep({
           <InteractiveStep
             isCompleted={completedSteps.has(index)}
             isLast={index === steps.length - 1}
-            key={index}
+            key={`${(step as React.ReactElement<StepProps>).props.title}-${index + 1}`}
             onToggle={() => {
               toggleStep(index);
             }}

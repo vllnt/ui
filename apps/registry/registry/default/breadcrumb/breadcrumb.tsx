@@ -43,7 +43,7 @@ export function Breadcrumb({
       className={cn("flex items-center space-x-1 text-sm", className)}
     >
       {items.map((item, index) => (
-        <div className="flex items-center" key={index}>
+        <div className="flex items-center" key={typeof item.label === "string" ? item.label : `breadcrumb-${index}`}>
           {index > 0 && (
             <span className="mx-2">
               <SeparatorIcon type={separator} />

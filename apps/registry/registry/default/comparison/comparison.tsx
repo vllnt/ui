@@ -74,7 +74,7 @@ export function Comparison({
           </div>
           <ul className="p-4 space-y-2">
             {before.items.map((item, index) => (
-              <li className="flex items-start gap-2 text-sm" key={index}>
+              <li className="flex items-start gap-2 text-sm" key={item}>
                 <BeforeIcon
                   className={cn(
                     "h-4 w-4 mt-0.5 flex-shrink-0",
@@ -97,7 +97,7 @@ export function Comparison({
           </div>
           <ul className="p-4 space-y-2">
             {after.items.map((item, index) => (
-              <li className="flex items-start gap-2 text-sm" key={index}>
+              <li className="flex items-start gap-2 text-sm" key={item}>
                 <AfterIcon
                   className={cn(
                     "h-4 w-4 mt-0.5 flex-shrink-0",

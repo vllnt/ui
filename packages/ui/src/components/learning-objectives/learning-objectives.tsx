@@ -30,7 +30,7 @@ export function LearningObjectives({
       </div>
       <ul className="space-y-2">
         {objectives.map((objective, index) => (
-          <li className="flex items-start gap-2" key={index}>
+          <li className="flex items-start gap-2" key={objective}>
             <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
             <span className="text-sm text-muted-foreground">{objective}</span>
           </li>
@@ -68,7 +68,7 @@ export function Prerequisites({
         {items.map((item, index) => (
           <li
             className="flex items-start gap-2 text-sm text-muted-foreground"
-            key={index}
+            key={item}
           >
             <span className="text-primary">•</span>
             {item}
@@ -103,8 +103,8 @@ export function Summary({
             Key Takeaways
           </p>
           <ul className="space-y-1">
-            {keyTakeaways.map((takeaway, index) => (
-              <li className="flex items-start gap-2 text-sm" key={index}>
+            {keyTakeaways.map((takeaway) => (
+              <li className="flex items-start gap-2 text-sm" key={takeaway}>
                 <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0 mt-0.5" />
                 <span className="text-muted-foreground">{takeaway}</span>
               </li>
