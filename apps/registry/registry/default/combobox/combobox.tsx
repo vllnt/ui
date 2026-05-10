@@ -90,6 +90,49 @@ function ComboboxOptionItem({
   );
 }
 
+function ComboboxListPanel({
+  className,
+  commandClassName,
+  emptyText,
+  listboxId,
+  onSelect,
+  options,
+  resolvedValue,
+  searchPlaceholder,
+}: {
+  className?: string;
+  commandClassName?: string;
+  emptyText: string;
+  listboxId: string;
+  onSelect: (value: string) => void;
+  options: ComboboxOption[];
+  resolvedValue: string;
+  searchPlaceholder: string;
+}) {
+  return (
+    <PopoverContent
+      className={cn("w-[var(--radix-popover-trigger-width)] p-0", className)}
+    >
+      <Command className={commandClassName}>
+        <CommandInput placeholder={searchPlaceholder} />
+        <CommandList id={listboxId}>
+          <CommandEmpty>{emptyText}</CommandEmpty>
+          <CommandGroup>
+            {options.map((option) => (
+              <ComboboxOptionItem
+                key={option.value}
+                onSelect={onSelect}
+                option={option}
+                selectedValue={resolvedValue}
+              />
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </PopoverContent>
+  );
+}
+
 const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
   (
     {
@@ -138,29 +181,16 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          className={cn(
-            "w-[var(--radix-popover-trigger-width)] p-0",
-            className,
-          )}
-        >
-          <Command className={commandClassName}>
-            <CommandInput placeholder={searchPlaceholder} />
-            <CommandList id={listboxId}>
-              <CommandEmpty>{emptyText}</CommandEmpty>
-              <CommandGroup>
-                {options.map((option) => (
-                  <ComboboxOptionItem
-                    key={option.value}
-                    onSelect={handleSelect}
-                    option={option}
-                    selectedValue={resolvedValue}
-                  />
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
+        <ComboboxListPanel
+          className={className}
+          commandClassName={commandClassName}
+          emptyText={emptyText}
+          listboxId={listboxId}
+          onSelect={handleSelect}
+          options={options}
+          resolvedValue={resolvedValue}
+          searchPlaceholder={searchPlaceholder}
+        />
       </Popover>
     );
   },
