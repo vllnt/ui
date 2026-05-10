@@ -96,19 +96,23 @@ function formatRelative(eventDate: Date, now: Date): string {
     return `${Math.floor(deltaMs / DAY_MS)}d ago`;
   }
 
-  return new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-    month: "short",
-  }).format(eventDate);
+  return SHORT_DATE_FORMATTER.format(eventDate);
 }
 
+const SHORT_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  day: "numeric",
+  month: "short",
+});
+
+const ABSOLUTE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  hour: "numeric",
+  minute: "2-digit",
+  month: "short",
+  second: "2-digit",
+});
+
 function formatAbsolute(eventDate: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    month: "short",
-    second: "2-digit",
-  }).format(eventDate);
+  return ABSOLUTE_FORMATTER.format(eventDate);
 }
 
 function sortEventsDesc(events: LiveFeedEvent[]): LiveFeedEvent[] {

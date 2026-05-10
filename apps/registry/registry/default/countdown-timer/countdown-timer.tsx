@@ -110,14 +110,16 @@ function formatSegments(milliseconds: number): TimerSegment[] {
   ];
 }
 
+const DEADLINE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  month: "short",
+  timeZoneName: "short",
+});
+
 function formatDeadline(date: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    month: "short",
-    timeZoneName: "short",
-  }).format(date);
+  return DEADLINE_FORMATTER.format(date);
 }
 
 function getProgress(deadline: Date, now: Date, startedAt?: Date): number {

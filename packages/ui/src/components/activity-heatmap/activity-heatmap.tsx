@@ -114,21 +114,24 @@ function getGridData(
   });
 }
 
+const MONTH_LABEL_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  timeZone: "UTC",
+});
+
+const TOOLTIP_DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  day: "numeric",
+  month: "short",
+  timeZone: "UTC",
+  year: "numeric",
+});
+
 function formatMonthLabel(date: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    timeZone: "UTC",
-  }).format(date);
+  return MONTH_LABEL_FORMATTER.format(date);
 }
 
 function formatTooltip(date: Date, count: number): string {
-  const formattedDate = new Intl.DateTimeFormat("en-US", {
-    day: "numeric",
-    month: "short",
-    timeZone: "UTC",
-    year: "numeric",
-  }).format(date);
-
+  const formattedDate = TOOLTIP_DATE_FORMATTER.format(date);
   return `${count} activity ${count === 1 ? "event" : "events"} on ${formattedDate}`;
 }
 
