@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { getPageContent } from "@/lib/content";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const og = frontmatter.og;
 
   return {
+    alternates: { canonical: canonical("/philosophy") },
     description: frontmatter.description,
     openGraph: generateOGMetadata({
       description: og?.description ?? frontmatter.description,

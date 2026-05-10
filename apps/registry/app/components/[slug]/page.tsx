@@ -11,6 +11,7 @@ import { QuickAdd } from "@/components/quick-add";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import {
   getCategoryForComponent,
   getSidebarSections,
@@ -76,6 +77,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   };
 
   return {
+    alternates: { canonical: canonical(`/components/${slug}`) },
     description,
     openGraph: generateOGMetadata(ogParameters),
     title: `${title} - VLLNT UI`,
