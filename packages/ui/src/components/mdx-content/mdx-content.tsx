@@ -161,8 +161,12 @@ function buildCustomComponents(
   };
 }
 
+const EMPTY_MDX_COMPONENTS: MDXContentProps["components"] = Object.freeze(
+  {},
+) as MDXContentProps["components"];
+
 export async function MDXContent({
-  components = {},
+  components = EMPTY_MDX_COMPONENTS,
   content,
   enableMDX = true,
 }: MDXContentProps) {

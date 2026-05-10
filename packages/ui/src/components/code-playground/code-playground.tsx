@@ -36,11 +36,13 @@ export type CodePlaygroundProps = {
   title: string;
 };
 
+const EMPTY_HIGHLIGHT_LINES: number[] = Object.freeze([]) as number[];
+
 export function CodePlayground({
   children,
   description,
   filename,
-  highlightLines = [],
+  highlightLines = EMPTY_HIGHLIGHT_LINES,
   language = "typescript",
   showLineNumbers = false,
   title,

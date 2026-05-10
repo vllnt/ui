@@ -62,6 +62,8 @@ function DefaultLink({
   );
 }
 
+const EMPTY_PROGRESS_CARD_LIST: string[] = Object.freeze([]) as string[];
+
 function ContentCardImpl({
   badgeLabel,
   badgeVariant = "default",
@@ -69,9 +71,9 @@ function ContentCardImpl({
   getProgress,
   href,
   linkComponent: LinkComponent = DefaultLink,
-  metadata = [],
+  metadata = EMPTY_PROGRESS_CARD_LIST,
   progressLabel = "completed",
-  tags = [],
+  tags = EMPTY_PROGRESS_CARD_LIST,
   title,
 }: ContentCardProps): React.ReactNode {
   const [progress, setProgress] = useState<ContentCardProgress | null>(null);
