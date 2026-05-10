@@ -27,19 +27,21 @@ export const Empty: Story = {
   },
 };
 
-export const Controlled: Story = {
-  render: () => {
-    const [value, setValue] = React.useState(["Design", "Docs"]);
+function ControlledTagsInputDemo() {
+  const [value, setValue] = React.useState(["Design", "Docs"]);
 
-    return (
-      <div className="w-full max-w-sm">
-        <TagsInput
-          aria-label="Controlled tags"
-          onValueChange={setValue}
-          placeholder="Add a workflow tag"
-          value={value}
-        />
-      </div>
-    );
-  },
+  return (
+    <div className="w-full max-w-sm">
+      <TagsInput
+        aria-label="Controlled tags"
+        onValueChange={setValue}
+        placeholder="Add a workflow tag"
+        value={value}
+      />
+    </div>
+  );
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledTagsInputDemo />,
 };

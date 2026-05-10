@@ -35,19 +35,21 @@ export const Disabled: Story = {
   ),
 };
 
-export const Controlled: Story = {
-  render: () => {
-    const [value, setValue] = React.useState("activity");
+function ControlledSegmentedControlDemo() {
+  const [value, setValue] = React.useState("activity");
 
-    return (
-      <div className="w-full max-w-sm space-y-3">
-        <SegmentedControl aria-label="Dashboard section" onValueChange={setValue} value={value}>
-          <SegmentedControlItem value="activity">Activity</SegmentedControlItem>
-          <SegmentedControlItem value="usage">Usage</SegmentedControlItem>
-          <SegmentedControlItem value="members">Members</SegmentedControlItem>
-        </SegmentedControl>
-        <p className="text-sm text-muted-foreground">Selected: {value}</p>
-      </div>
-    );
-  },
+  return (
+    <div className="w-full max-w-sm space-y-3">
+      <SegmentedControl aria-label="Dashboard section" onValueChange={setValue} value={value}>
+        <SegmentedControlItem value="activity">Activity</SegmentedControlItem>
+        <SegmentedControlItem value="usage">Usage</SegmentedControlItem>
+        <SegmentedControlItem value="members">Members</SegmentedControlItem>
+      </SegmentedControl>
+      <p className="text-sm text-muted-foreground">Selected: {value}</p>
+    </div>
+  );
+}
+
+export const Controlled: Story = {
+  render: () => <ControlledSegmentedControlDemo />,
 };

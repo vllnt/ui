@@ -89,33 +89,35 @@ export const EmptyState: Story = {
   ),
 };
 
-export const Streaming: Story = {
-  render: () => {
-    const [messages] = React.useState<ConversationMessage[]>([
-      {
-        id: "user-1",
-        role: "user",
-        content: "Draft the announcement post.",
-      },
-      {
-        id: "assistant-1",
-        role: "assistant",
-        content: "I’m drafting a concise launch announcement",
-        isStreaming: true,
-      },
-    ]);
+function StreamingThreadDemo() {
+  const [messages] = React.useState<ConversationMessage[]>([
+    {
+      id: "user-1",
+      role: "user",
+      content: "Draft the announcement post.",
+    },
+    {
+      id: "assistant-1",
+      role: "assistant",
+      content: "I’m drafting a concise launch announcement",
+      isStreaming: true,
+    },
+  ]);
 
-    return (
-      <ConversationThread isStreaming={true} messages={messages}>
-        <ConversationHeader>
-          <ConversationTitle>Workspace assistant</ConversationTitle>
-        </ConversationHeader>
-        <ConversationMessages>
-          <ConversationEmpty />
-          <ConversationScrollButton />
-          <ConversationLoading />
-        </ConversationMessages>
-      </ConversationThread>
-    );
-  },
+  return (
+    <ConversationThread isStreaming={true} messages={messages}>
+      <ConversationHeader>
+        <ConversationTitle>Workspace assistant</ConversationTitle>
+      </ConversationHeader>
+      <ConversationMessages>
+        <ConversationEmpty />
+        <ConversationScrollButton />
+        <ConversationLoading />
+      </ConversationMessages>
+    </ConversationThread>
+  );
+}
+
+export const Streaming: Story = {
+  render: () => <StreamingThreadDemo />,
 };

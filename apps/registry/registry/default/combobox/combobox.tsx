@@ -106,6 +106,7 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
     reference,
   ) => {
     const [open, setOpen] = React.useState(false);
+    const listboxId = React.useId();
     const { resolvedValue, setResolvedValue } = useComboboxValue(
       value,
       onValueChange,
@@ -123,7 +124,9 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
       <Popover onOpenChange={setOpen} open={open}>
         <PopoverTrigger asChild>
           <Button
+            aria-controls={listboxId}
             aria-expanded={open}
+            aria-haspopup="listbox"
             className={cn("w-full justify-between", triggerClassName)}
             ref={reference}
             role="combobox"
@@ -143,7 +146,7 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
         >
           <Command className={commandClassName}>
             <CommandInput placeholder={searchPlaceholder} />
-            <CommandList>
+            <CommandList id={listboxId}>
               <CommandEmpty>{emptyText}</CommandEmpty>
               <CommandGroup>
                 {options.map((option) => (

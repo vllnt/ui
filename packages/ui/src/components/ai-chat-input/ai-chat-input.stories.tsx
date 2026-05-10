@@ -14,27 +14,29 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: () => {
-    const [value, setValue] = React.useState(
-      "Draft a release note for the latest accessibility fixes.",
-    );
+function DefaultChatInputDemo() {
+  const [value, setValue] = React.useState(
+    "Draft a release note for the latest accessibility fixes.",
+  );
 
-    return (
-      <div className="max-w-2xl">
-        <AIChatInput
-          helperText="Shift + Enter adds a new line"
-          onSubmit={(event) => {
-            event.preventDefault();
-          }}
-          onValueChange={setValue}
-          status="2 files attached"
-          toolbar={<Badge variant="secondary">Repo context</Badge>}
-          value={value}
-        />
-      </div>
-    );
-  },
+  return (
+    <div className="max-w-2xl">
+      <AIChatInput
+        helperText="Shift + Enter adds a new line"
+        onSubmit={(event) => {
+          event.preventDefault();
+        }}
+        onValueChange={setValue}
+        status="2 files attached"
+        toolbar={<Badge variant="secondary">Repo context</Badge>}
+        value={value}
+      />
+    </div>
+  );
+}
+
+export const Default: Story = {
+  render: () => <DefaultChatInputDemo />,
 };
 
 export const Submitting: Story = {
