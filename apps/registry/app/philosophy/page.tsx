@@ -36,7 +36,7 @@ export default async function PhilosophyPage() {
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-4">Philosophy</h1>
+            <h1 className="text-4xl font-semibold mb-4">Philosophy</h1>
             <p className="text-muted-foreground text-lg">
               The principles that guide VLLNT UI design and development.
             </p>

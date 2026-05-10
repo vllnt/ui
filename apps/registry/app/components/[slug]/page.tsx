@@ -206,7 +206,7 @@ export default async function ComponentPage(props: Props) {
                     { label: displayTitle },
                   ]}
                 />
-                <h1 className="text-4xl font-bold mb-2">{displayTitle}</h1>
+                <h1 className="text-4xl font-semibold mb-2">{displayTitle}</h1>
                 <p className="text-muted-foreground text-lg mb-6">
                   {displayDescription}
                 </p>

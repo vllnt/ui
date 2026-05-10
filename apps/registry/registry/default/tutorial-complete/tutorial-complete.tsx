@@ -106,7 +106,7 @@ function TutorialCompleteImpl({
           />
         </div>
 
-        <h2 className="text-3xl font-bold mb-2">
+        <h2 className="text-3xl font-semibold mb-2">
           {isFullyComplete ? labels.tutorialComplete : labels.tutorialFinished}
         </h2>
 

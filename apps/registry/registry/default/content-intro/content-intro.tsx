@@ -87,7 +87,7 @@ function ContentIntroImpl({
       <div className="animate-in fade-in-0 duration-500 pb-24">
         {/* Introduction Content */}
         <section className="py-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">{title}</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
             {renderIntroContent()}
           </div>
