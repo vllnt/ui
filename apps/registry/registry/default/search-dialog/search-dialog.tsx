@@ -76,7 +76,7 @@ export function SearchDialog({
 }: SearchDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const sortedItems = [...items].sort((a, b) => a.title.localeCompare(b.title));
+  const sortedItems = items.toSorted((a, b) => a.title.localeCompare(b.title));
 
   useKeyboardShortcut(() => {
     if (enableKeyboardShortcut) {

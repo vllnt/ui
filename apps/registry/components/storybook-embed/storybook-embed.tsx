@@ -147,15 +147,14 @@ export function StorybookEmbed({
   height = 400,
   storyId,
 }: StorybookEmbedProps): React.ReactElement {
-  const [hasManualThemeSelection, setHasManualThemeSelection] =
-    React.useState(false);
+  const hasManualThemeSelectionRef = React.useRef(false);
   const [previewTheme, setPreviewTheme] = React.useState<null | PreviewTheme>(
     null,
   );
   const resolvedStoryId = storyId ?? toStoryId(componentName);
 
   React.useEffect(() => {
-    if (hasManualThemeSelection) {
+    if (hasManualThemeSelectionRef.current) {
       return;
     }
 
@@ -180,7 +179,7 @@ export function StorybookEmbed({
       observer.disconnect();
       mediaQuery.removeEventListener("change", updateTheme);
     };
-  }, [hasManualThemeSelection]);
+  }, []);
 
   const iframeSource = React.useMemo(() => {
     if (previewTheme === null) {
@@ -194,7 +193,7 @@ export function StorybookEmbed({
     <div className={className}>
       <PreviewThemeControls
         onValueChange={(value) => {
-          setHasManualThemeSelection(true);
+          hasManualThemeSelectionRef.current = true;
           setPreviewTheme(value);
         }}
         value={previewTheme}

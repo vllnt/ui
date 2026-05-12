@@ -8,14 +8,19 @@ import type {
 const registry = registryData as Registry;
 
 const components = registry.items
-  .filter(
-    (item): item is RegistryComponent => item.type === "registry:component",
+  .reduce<{ category?: ComponentCategory; name: string; title: string }[]>(
+    (items, item) => {
+      if (item.type === "registry:component") {
+        items.push({
+          category: item.category,
+          name: item.name,
+          title: item.title,
+        });
+      }
+      return items;
+    },
+    [],
   )
-  .map((item) => ({
-    category: item.category,
-    name: item.name,
-    title: item.title,
-  }))
   .sort((a, b) => a.title.localeCompare(b.title));
 
 const categoryLabels: Record<ComponentCategory, string> = {
@@ -53,13 +58,24 @@ function groupComponentsByCategory(
     return accumulator;
   }, new Map<ComponentCategory, { name: string; title: string }[]>());
 
-  return categoryOrder
-    .filter((cat) => grouped.has(cat))
-    .map((category) => ({
+  const sections: {
+    category: ComponentCategory;
+    items: { name: string; title: string }[];
+    label: string;
+  }[] = [];
+
+  for (const category of categoryOrder) {
+    const items = grouped.get(category);
+    if (items) {
+      sections.push({
       category,
-      items: grouped.get(category) ?? [],
+      items,
       label: categoryLabels[category],
-    }));
+      });
+    }
+  }
+
+  return sections;
 }
 
 const groupedComponents = groupComponentsByCategory(components);

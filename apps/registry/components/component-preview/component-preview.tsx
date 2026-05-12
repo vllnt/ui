@@ -1033,10 +1033,10 @@ function StepNavigationPreview() {
       canPrev={step > 1}
       currentStep={step}
       onNext={() => {
-        setStep(step + 1);
+        setStep((currentStep) => currentStep + 1);
       }}
       onPrev={() => {
-        setStep(step - 1);
+        setStep((currentStep) => currentStep - 1);
       }}
       stepLabel="Step"
       totalSteps={5}

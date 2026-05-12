@@ -181,7 +181,7 @@ function getTickDateTimeFormatter(
       scale === "month"
         ? { month: "short", year: "numeric" }
         : { day: "2-digit", month: "short" };
-    formatter = new Intl.DateTimeFormat(locale, options);
+    formatter = Intl.DateTimeFormat(locale, options);
     TICK_FORMATTER_CACHE.set(key, formatter);
   }
   return formatter;
@@ -240,16 +240,16 @@ function buildTicks(input: TicksInput): { label: string; offset: number }[] {
   const formatter = buildTickFormatter(scale, locale);
   const stepDays = getTickStep(scale);
   const tickCount = Math.floor(totalDays / stepDays);
-  return Array.from({ length: tickCount + 1 })
-    .map((_, index) => {
-      const day = index * stepDays;
-      return {
-        date: new Date(start.getTime() + day * MS_PER_DAY),
-        offset: day,
-      };
-    })
-    .filter((tick) => tick.date.getTime() <= end.getTime())
-    .map((tick) => ({ label: formatter(tick.date), offset: tick.offset }));
+  return Array.from({ length: tickCount + 1 }).reduce<
+    { label: string; offset: number }[]
+  >((ticks, _, index) => {
+    const day = index * stepDays;
+    const date = new Date(start.getTime() + day * MS_PER_DAY);
+    if (date.getTime() <= end.getTime()) {
+      ticks.push({ label: formatter(date), offset: day });
+    }
+    return ticks;
+  }, []);
 }
 
 type GeometryOptions = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -125,8 +125,12 @@ function CompletionDialogImpl({
   onConfirm,
   title,
 }: CompletionDialogProps): React.ReactNode {
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
+  const keyDownHandlerRef = useRef<(event: KeyboardEvent) => void>(() => {
+    return;
+  });
+
+  useEffect(() => {
+    keyDownHandlerRef.current = (event: KeyboardEvent) => {
       if (!isOpen) return;
       if (event.key === "Escape") {
         event.preventDefault();
@@ -148,17 +152,20 @@ function CompletionDialogImpl({
         event.stopPropagation();
         onCancel();
       }
-    },
-    [isOpen, onClose, onConfirm, onCancel, confirmShortcut, cancelShortcut],
-  );
+    };
+  }, [cancelShortcut, confirmShortcut, isOpen, onCancel, onClose, onConfirm]);
 
   useEffect(() => {
     if (!isOpen) return;
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
+    const onDocumentKeyDown = (event: KeyboardEvent) => {
+      keyDownHandlerRef.current(event);
     };
-  }, [isOpen, handleKeyDown]);
+
+    document.addEventListener("keydown", onDocumentKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", onDocumentKeyDown, true);
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

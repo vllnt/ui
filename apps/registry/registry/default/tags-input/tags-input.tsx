@@ -11,11 +11,18 @@ function normalizeTag(tag: string) {
 }
 
 function getNormalizedTags(tags: string[]) {
-  return tags
-    .map(normalizeTag)
-    .filter(
-      (tag, index, values) => tag.length > 0 && values.indexOf(tag) === index,
-    );
+  return tags.reduce<{ seen: Set<string>; tags: string[] }>(
+    (state, tag) => {
+      const normalizedTag = normalizeTag(tag);
+      if (normalizedTag.length > 0 && !state.seen.has(normalizedTag)) {
+        state.seen.add(normalizedTag);
+        state.tags.push(normalizedTag);
+      }
+
+      return state;
+    },
+    { seen: new Set(), tags: [] },
+  ).tags;
 }
 
 function shouldAddTagFromKey(key: string) {

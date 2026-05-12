@@ -15,6 +15,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const COMPONENTS_DIR = join(__dirname, '../src/components')
+const MANUALLY_MAINTAINED_TESTS = new Set(['cookie-consent'])
 
 interface VariantInfo {
   name: string
@@ -427,8 +428,7 @@ async function main(): Promise<void> {
     const visualPath = join(dirPath, `${component.fileName}.visual.tsx`)
 
     // Skip manually crafted tests (CookieConsent) even with --force
-    const manuallyMaintained = ['cookie-consent']
-    if (manuallyMaintained.includes(component.dirName)) {
+    if (MANUALLY_MAINTAINED_TESTS.has(component.dirName)) {
       console.log(`⏭️  ${component.name}: Manually maintained test`)
       skipped++
       continue

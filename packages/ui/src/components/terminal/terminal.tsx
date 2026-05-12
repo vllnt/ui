@@ -17,6 +17,15 @@ export type TerminalProps = {
   title?: string;
 };
 
+function getCommandContents(lines: TerminalLine[]): string[] {
+  return lines.reduce<string[]>((commands, line) => {
+    if (line.type === "command") {
+      commands.push(line.content);
+    }
+    return commands;
+  }, []);
+}
+
 export function Terminal({
   copyable = true,
   lines,
@@ -24,9 +33,7 @@ export function Terminal({
 }: TerminalProps) {
   const [copied, setCopied] = useState(false);
 
-  const commands = lines
-    .filter((l) => l.type === "command")
-    .map((l) => l.content);
+  const commands = getCommandContents(lines);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(commands.join("\n"));
@@ -114,9 +121,7 @@ export function SimpleTerminal({
       return { content: line, type: "output" };
     });
 
-  const commands = lines
-    .filter((l) => l.type === "command")
-    .map((l) => l.content);
+  const commands = getCommandContents(lines);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(commands.join("\n"));

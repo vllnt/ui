@@ -21,7 +21,7 @@ function getNumberTickerFormatter(
   const key = `${locale ?? ""}|${formatOptions ? JSON.stringify(formatOptions) : ""}`;
   let formatter = NUMBER_FORMATTER_CACHE.get(key);
   if (!formatter) {
-    formatter = new Intl.NumberFormat(locale, formatOptions);
+    formatter = Intl.NumberFormat(locale, formatOptions);
     NUMBER_FORMATTER_CACHE.set(key, formatter);
   }
   return formatter;

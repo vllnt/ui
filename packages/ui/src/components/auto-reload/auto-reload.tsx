@@ -131,7 +131,7 @@ function getCurrencyFormatter(
   const key = `${locale}|${currency}`;
   let formatter = CURRENCY_FORMATTER_CACHE.get(key);
   if (!formatter) {
-    formatter = new Intl.NumberFormat(locale, {
+    formatter = Intl.NumberFormat(locale, {
       currency,
       style: "currency",
     });

@@ -174,9 +174,7 @@ function UsageBreakdownRow({
 }
 
 function getSortedItems(items: UsageBreakdownItem[], maxItems?: number) {
-  const rankedItems = [...items].sort(
-    (left, right) => right.value - left.value,
-  );
+  const rankedItems = items.toSorted((left, right) => right.value - left.value);
   return typeof maxItems === "number"
     ? rankedItems.slice(0, maxItems)
     : rankedItems;

@@ -29,7 +29,7 @@ export function LearningObjectives({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {objectives.map((objective, index) => (
+        {objectives.map((objective) => (
           <li className="flex items-start gap-2" key={objective}>
             <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
             <span className="text-sm text-muted-foreground">{objective}</span>
@@ -65,7 +65,7 @@ export function Prerequisites({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <li
             className="flex items-start gap-2 text-sm text-muted-foreground"
             key={item}

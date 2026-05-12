@@ -17,6 +17,15 @@ export type TerminalProps = {
   title?: string;
 };
 
+function getCommandContents(lines: TerminalLine[]): string[] {
+  return lines.reduce<string[]>((commands, line) => {
+    if (line.type === "command") {
+      commands.push(line.content);
+    }
+    return commands;
+  }, []);
+}
+
 export function Terminal({
   copyable = true,
   lines,
@@ -24,9 +33,7 @@ export function Terminal({
 }: TerminalProps) {
   const [copied, setCopied] = useState(false);
 
-  const commands = lines
-    .filter((l) => l.type === "command")
-    .map((l) => l.content);
+  const commands = getCommandContents(lines);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(commands.join("\n"));
@@ -52,7 +59,10 @@ export function Terminal({
       <div className="relative">
         <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
           {lines.map((line) => (
-            <div className="flex items-start" key={`${line.type}-${line.content}`}>
+            <div
+              className="flex items-start"
+              key={`${line.type}-${line.content}`}
+            >
               {line.type === "command" && (
                 <>
                   <span className="text-green-400 mr-2 select-none">$</span>
@@ -111,9 +121,7 @@ export function SimpleTerminal({
       return { content: line, type: "output" };
     });
 
-  const commands = lines
-    .filter((l) => l.type === "command")
-    .map((l) => l.content);
+  const commands = getCommandContents(lines);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(commands.join("\n"));
@@ -139,7 +147,10 @@ export function SimpleTerminal({
       <div className="relative">
         <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
           {lines.map((line) => (
-            <div className="flex items-start" key={`${line.type}-${line.content}`}>
+            <div
+              className="flex items-start"
+              key={`${line.type}-${line.content}`}
+            >
               {line.type === "command" && (
                 <>
                   <span className="text-green-400 mr-2 select-none">$</span>

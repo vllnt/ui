@@ -9,25 +9,25 @@ type TLDRSectionProps = {
 
 export function TLDRSection({ children, label }: TLDRSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasBeenOpened, setHasBeenOpened] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(false);
+  const hasBeenOpenedRef = useRef(false);
   const timerReference = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (isExpanded && !hasBeenOpened) {
+    if (isExpanded && !hasBeenOpenedRef.current) {
       // Clear any existing timer
       if (timerReference.current) {
         clearTimeout(timerReference.current);
       }
 
       const rafId = requestAnimationFrame(() => {
-        setIsLoading(true);
-        setHasBeenOpened(true);
+        setShowSkeleton(true);
+        hasBeenOpenedRef.current = true;
       });
 
       // Simulate loading with skeleton
       timerReference.current = setTimeout(() => {
-        setIsLoading(false);
+        setShowSkeleton(false);
         timerReference.current = null;
       }, 800);
 
@@ -37,6 +37,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
           clearTimeout(timerReference.current);
           timerReference.current = null;
         }
+        setShowSkeleton(false);
       };
     }
 
@@ -45,8 +46,9 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
         clearTimeout(timerReference.current);
         timerReference.current = null;
       }
+      setShowSkeleton(false);
     };
-  }, [isExpanded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isExpanded]);
 
   return (
     <div className="my-8 rounded-lg border border-border bg-muted/30 overflow-hidden">
@@ -91,7 +93,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       </button>
       {isExpanded ? (
         <div className="px-4 pb-4 pt-2 border-t border-border">
-          {isLoading ? (
+          {showSkeleton ? (
             <div className="space-y-3">
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />

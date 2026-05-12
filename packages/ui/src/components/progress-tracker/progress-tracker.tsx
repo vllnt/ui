@@ -103,9 +103,10 @@ function readPersistedChecklistItems(persistKey?: string): string[] {
 }
 
 function areStringArraysEqual(left: string[], right: string[]): boolean {
-  if (left.length !== right.length) return false;
-
-  return left.every((value, index) => value === right[index]);
+  return (
+    left.length === right.length &&
+    left.every((value, index) => value === right[index])
+  );
 }
 
 function getChecklistPersistKey(event?: Event): null | string {
@@ -257,7 +258,13 @@ function ProgressTrackerOverview({
   const { modules, overallProgress, streak, title } =
     useProgressTrackerContext();
   const trackedPersistKeys = React.useMemo(
-    () => modules.map((module) => module.persistKey).filter(Boolean),
+    () =>
+      modules.reduce<string[]>((keys, module) => {
+        if (module.persistKey) {
+          keys.push(module.persistKey);
+        }
+        return keys;
+      }, []),
     [modules],
   );
   const [, forceChecklistRefresh] = React.useState(0);

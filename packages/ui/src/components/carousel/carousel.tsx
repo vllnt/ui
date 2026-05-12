@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -82,6 +83,11 @@ function useCarouselLogic({
     setCanScrollPrevious(api.canScrollPrev());
     setCanScrollNext(api.canScrollNext());
   }, []);
+  const onSelectReference = useRef(onSelect);
+
+  useEffect(() => {
+    onSelectReference.current = onSelect;
+  }, [onSelect]);
 
   const scrollPrevious = useCallback(() => {
     api?.scrollPrev();
@@ -117,19 +123,23 @@ function useCarouselLogic({
       return;
     }
 
-    api.on("reInit", onSelect);
-    api.on("select", onSelect);
+    const notifySelection = (selectedApi: CarouselApi) => {
+      onSelectReference.current(selectedApi);
+    };
+
+    api.on("reInit", notifySelection);
+    api.on("select", notifySelection);
 
     const rafId = requestAnimationFrame(() => {
-      onSelect(api);
+      notifySelection(api);
     });
 
     return () => {
-      api?.off("select", onSelect);
-      api?.off("reInit", onSelect);
+      api?.off("select", notifySelection);
+      api?.off("reInit", notifySelection);
       cancelAnimationFrame(rafId);
     };
-  }, [api, onSelect]);
+  }, [api]);
 
   return {
     api,

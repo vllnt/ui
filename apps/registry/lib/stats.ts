@@ -56,7 +56,17 @@ export function getFeaturedComponents(): readonly RegistryItem[] {
     "timeline",
     "globe-3d",
   ];
-  return featuredSlugs
-    .map((slug) => REGISTRY.items.find((item) => item.name === slug))
-    .filter((item): item is RegistryItem => item !== undefined);
+  const registryByName = new Map<string, RegistryItem>();
+  for (const item of REGISTRY.items) {
+    registryByName.set(item.name, item);
+  }
+
+  const featured: RegistryItem[] = [];
+  for (const slug of featuredSlugs) {
+    const item = registryByName.get(slug);
+    if (item) {
+      featured.push(item);
+    }
+  }
+  return featured;
 }

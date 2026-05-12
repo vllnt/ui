@@ -107,10 +107,16 @@ function getSummary(items: StatusBoardItem[]) {
     },
   );
 
-  return STATUS_ORDER.map((status) => ({
-    count: counts[status],
-    status,
-  })).filter((entry) => entry.count > 0);
+  return STATUS_ORDER.reduce<{ count: number; status: StatusBoardStatus }[]>(
+    (summary, status) => {
+      const count = counts[status];
+      if (count > 0) {
+        summary.push({ count, status });
+      }
+      return summary;
+    },
+    [],
+  );
 }
 
 function StatusBoardSummary({ items }: { items: StatusBoardItem[] }) {

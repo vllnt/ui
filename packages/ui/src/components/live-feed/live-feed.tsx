@@ -116,7 +116,7 @@ function formatAbsolute(eventDate: Date): string {
 }
 
 function sortEventsDesc(events: LiveFeedEvent[]): LiveFeedEvent[] {
-  return [...events].sort(
+  return events.toSorted(
     (a, b) =>
       normalizeDate(b.timestamp).getTime() -
       normalizeDate(a.timestamp).getTime(),
