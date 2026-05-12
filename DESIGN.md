@@ -4,9 +4,9 @@
 > Humans read this file. Agents read it too — every UI suggestion must follow it.
 
 This is the **canonical** brand & design guideline for the library. The full
-machine-readable token set lives in `packages/design/tokens.json` (shipping in a
-follow-up to keep this PR scoped). Site renderings at `/design` will mirror this
-file once that route lands.
+machine-readable token set lives in `packages/design/tokens.json`, is documented
+in `packages/design/README.md`, and is mirrored publicly at `/r/design.json`.
+The site rendering at `/design` reads this file directly.
 
 ---
 
@@ -50,6 +50,10 @@ standalone wordmark file; the type itself is the mark.
 Tokens live as CSS variables in `packages/ui/themes/default.css`. Components
 **always** consume tokens — never raw hex. The token set is versioned with the
 library.
+
+Machine clients use `packages/design/tokens.json`. The JSON schema is
+documented in `packages/design/tokens.schema.json` and groups tokens by color,
+typography, spacing, radius, elevation, motion, and iconography.
 
 ### Semantic tokens (consumer-facing)
 

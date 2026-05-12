@@ -64,8 +64,9 @@ Repository-wide docs (audience = contributors, not just agents):
 
 ## Quick reference
 
-The two most-violated rules in PR review history:
+The most-violated rules in PR review history:
 
+0. **Design rules are mandatory for UI work.** Any UI suggestion or component/site change must follow [`DESIGN.md`](./DESIGN.md) and the machine-readable tokens in [`packages/design/tokens.json`](./packages/design/tokens.json). List any intentional deviation in the PR body.
 1. **Workspace gates green at HEAD** ([R6](./docs/agents/RULES.md#r6--workspace-gates-green-at-head)). Touched-file passes alone are not ship-OK. Run `pnpm -F @vllnt/ui lint && pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json && pnpm build && pnpm test:once` — all must be green.
 2. **PR body matches HEAD** ([R3](./docs/agents/RULES.md#r3--pr-body-matches-head)). After every push, rewrite the body to match the current head. Stale claims block ship.
 3. **Linked issue required** ([R5](./docs/agents/RULES.md#r5--linked-issue-required)). Every PR must reference a GitHub issue. Accepted keywords: `close` / `closes` / `closed`, `fix` / `fixes` / `fixed`, `resolve` / `resolves` / `resolved`, or repo phrases `Part of` / `Related to` — all case-insensitive, optional colon — followed by `#123` or `owner/repo#123`.
