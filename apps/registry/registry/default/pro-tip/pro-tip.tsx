@@ -66,12 +66,12 @@ export function ProTip({
       className={cn("my-6 rounded-lg border p-4", config.className, className)}
     >
       <div className="flex items-start gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-current/10 flex-shrink-0">
+        <div className="flex size-8 items-center justify-center rounded-full bg-current/10 flex-shrink-0">
           {icon ? (
-            <span className="h-4 w-4">{icon}</span>
+            <span className="size-4">{icon}</span>
           ) : (
             <svg
-              className="h-4 w-4"
+              className="size-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -124,12 +124,12 @@ export function CommonMistake({
       <div className="p-4">
         <div className="flex items-start gap-3">
           {icon ? (
-            <span className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5">
+            <span className="size-5 text-red-500 flex-shrink-0 mt-0.5">
               {icon}
             </span>
           ) : (
             <svg
-              className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"
+              className="size-5 text-red-500 flex-shrink-0 mt-0.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -156,12 +156,12 @@ export function CommonMistake({
         <div className="border-t border-red-500/30 bg-green-500/5 p-4">
           <div className="flex items-start gap-3">
             {fixIcon ? (
-              <span className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5">
+              <span className="size-5 text-green-500 flex-shrink-0 mt-0.5">
                 {fixIcon}
               </span>
             ) : (
               <svg
-                className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5"
+                className="size-5 text-green-500 flex-shrink-0 mt-0.5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

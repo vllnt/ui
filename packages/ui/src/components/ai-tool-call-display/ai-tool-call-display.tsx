@@ -41,10 +41,10 @@ export type AIToolCallDisplayProps = React.ComponentPropsWithoutRef<"div"> & {
 };
 
 const statusIconMap: Record<AIToolCallStatus, React.ReactNode> = {
-  complete: <CheckCircle2 className="h-4 w-4" />,
-  error: <AlertCircle className="h-4 w-4" />,
-  queued: <Clock3 className="h-4 w-4" />,
-  running: <Wrench className="h-4 w-4 animate-pulse" />,
+  complete: <CheckCircle2 className="size-4" />,
+  error: <AlertCircle className="size-4" />,
+  queued: <Clock3 className="size-4" />,
+  running: <Wrench className="size-4 animate-pulse" />,
 };
 
 const AIToolCallDisplay = forwardRef<HTMLDivElement, AIToolCallDisplayProps>(

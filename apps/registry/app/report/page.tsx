@@ -30,7 +30,7 @@ export default async function ReportBugPage({
       <Sidebar sections={getSidebarSections()} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-2xl px-4 py-16 lg:px-8">
-          <h1 className="text-4xl font-bold mb-3">Report a bug</h1>
+          <h1 className="text-4xl font-semibold mb-3">Report a bug</h1>
           <p className="text-muted-foreground text-lg mb-8">
             Found something broken? Fill out the fields and we&rsquo;ll open a
             prefilled GitHub issue with the right labels and template.

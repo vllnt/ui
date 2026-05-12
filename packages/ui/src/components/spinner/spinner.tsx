@@ -10,9 +10,9 @@ function Spinner({ className, size = "md", ...props }: SpinnerProps) {
       className={cn(
         "animate-spin rounded-full border-2 border-current border-t-transparent",
         {
-          "h-4 w-4": size === "sm",
-          "h-6 w-6": size === "md",
-          "h-8 w-8": size === "lg",
+          "size-4": size === "sm",
+          "size-6": size === "md",
+          "size-8": size === "lg",
         },
         className,
       )}

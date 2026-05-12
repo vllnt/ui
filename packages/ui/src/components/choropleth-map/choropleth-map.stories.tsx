@@ -128,9 +128,9 @@ export const CustomTooltip: Story = {
           <span>
             <strong>{region.name}</strong> ({region.id})
             {value === undefined ? (
-              <span className="text-muted-foreground"> — no data</span>
+              <span className="text-muted-foreground">: no data</span>
             ) : (
-              <span> — ${value.toLocaleString()}B</span>
+              <span>: ${value.toLocaleString()}B</span>
             )}
           </span>
         )}

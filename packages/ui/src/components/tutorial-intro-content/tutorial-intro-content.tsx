@@ -66,7 +66,7 @@ const serverMarkdownComponents = {
   }: React.HTMLAttributes<HTMLHeadingElement> & {
     children?: React.ReactNode;
   }) => (
-    <h1 className="text-2xl font-bold mt-8 mb-4" {...props}>
+    <h1 className="text-2xl font-semibold mt-8 mb-4" {...props}>
       {children}
     </h1>
   ),
@@ -76,7 +76,7 @@ const serverMarkdownComponents = {
   }: React.HTMLAttributes<HTMLHeadingElement> & {
     children?: React.ReactNode;
   }) => (
-    <h2 className="text-xl font-bold mt-6 mb-3" {...props}>
+    <h2 className="text-xl font-semibold mt-6 mb-3" {...props}>
       {children}
     </h2>
   ),
@@ -86,7 +86,7 @@ const serverMarkdownComponents = {
   }: React.HTMLAttributes<HTMLHeadingElement> & {
     children?: React.ReactNode;
   }) => (
-    <h3 className="text-lg font-bold mt-4 mb-2" {...props}>
+    <h3 className="text-lg font-semibold mt-4 mb-2" {...props}>
       {children}
     </h3>
   ),
@@ -185,7 +185,7 @@ export function TutorialIntroContent({
 
   return (
     <section className={cn("py-6", className)}>
-      <h2 className="text-2xl md:text-3xl font-bold mb-6">{title}</h2>
+      <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
       <div className="max-w-none [&_h2:first-of-type]:hidden">
         <ReactMarkdown components={serverMarkdownComponents}>
           {markdownContent}

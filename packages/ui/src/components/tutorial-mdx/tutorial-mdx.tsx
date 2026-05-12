@@ -130,22 +130,22 @@ const markdownComponents: Components = {
     );
   },
   h1: ({ children, ...props }) => (
-    <h1 className="text-2xl font-bold mt-8 mb-4" {...props}>
+    <h1 className="text-2xl font-semibold mt-8 mb-4" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }) => (
-    <h2 className="text-xl font-bold mt-6 mb-3" {...props}>
+    <h2 className="text-xl font-semibold mt-6 mb-3" {...props}>
       {children}
     </h2>
   ),
   h3: ({ children, ...props }) => (
-    <h3 className="text-lg font-bold mt-4 mb-2" {...props}>
+    <h3 className="text-lg font-semibold mt-4 mb-2" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }) => (
-    <h4 className="text-base font-bold mt-3 mb-2" {...props}>
+    <h4 className="text-base font-semibold mt-3 mb-2" {...props}>
       {children}
     </h4>
   ),

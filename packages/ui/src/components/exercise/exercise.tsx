@@ -25,8 +25,8 @@ function ExerciseHeader({ completed, config, onToggle, title }: HeaderProps) {
   return (
     <div className="flex items-start justify-between gap-4 mb-4">
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-          <Dumbbell className="h-5 w-5 text-primary" />
+        <div className="flex size-10 items-center justify-center rounded-full bg-primary/10">
+          <Dumbbell className="size-5 text-primary" />
         </div>
         <div>
           <h4 className="font-semibold text-foreground">{title}</h4>
@@ -43,7 +43,7 @@ function ExerciseHeader({ completed, config, onToggle, title }: HeaderProps) {
       >
         {completed ? (
           <>
-            <Check className="h-4 w-4 mr-1" />
+            <Check className="size-4 mr-1" />
             Done
           </>
         ) : (
@@ -91,12 +91,12 @@ function ExerciseSolution({ onToggle, showSolution, solution }: SolutionProps) {
       <Button className="mb-3" onClick={onToggle} size="sm" variant="outline">
         {showSolution ? (
           <>
-            <EyeOff className="h-4 w-4 mr-1" />
+            <EyeOff className="size-4 mr-1" />
             Hide Solution
           </>
         ) : (
           <>
-            <Eye className="h-4 w-4 mr-1" />
+            <Eye className="size-4 mr-1" />
             Show Solution
           </>
         )}

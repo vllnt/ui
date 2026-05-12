@@ -53,10 +53,7 @@ export const CreditBadge = React.forwardRef<HTMLSpanElement, CreditBadgeProps>(
         ref={reference}
         {...props}
       >
-        <span
-          aria-hidden="true"
-          className="h-1.5 w-1.5 rounded-full bg-current"
-        />
+        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
         <span>
           {amount
             ? `${amount} • ${label ?? getStatusLabel(status)}`

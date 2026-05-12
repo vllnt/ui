@@ -186,7 +186,7 @@ function TreeRow({
       <span
         aria-hidden="true"
         className={cn(
-          "inline-flex h-4 w-4 shrink-0 items-center justify-center text-xs text-muted-foreground transition-transform",
+          "inline-flex size-4 shrink-0 items-center justify-center text-xs text-muted-foreground transition-transform",
           hasChildren ? "" : "opacity-0",
           expanded ? "rotate-90" : "",
         )}
@@ -194,7 +194,7 @@ function TreeRow({
         ▸
       </span>
       {node.icon ? (
-        <span aria-hidden="true" className="inline-flex h-4 w-4 shrink-0">
+        <span aria-hidden="true" className="inline-flex size-4 shrink-0">
           {node.icon}
         </span>
       ) : null}

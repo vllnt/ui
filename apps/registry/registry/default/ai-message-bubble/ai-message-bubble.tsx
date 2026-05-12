@@ -98,7 +98,7 @@ const AIMessageBubble = forwardRef<HTMLDivElement, AIMessageBubbleProps>(
             isUser ? "flex-row-reverse text-right" : "flex-row",
           )}
         >
-          <Avatar className="mt-0.5 h-8 w-8 border border-border/70">
+          <Avatar className="mt-0.5 size-8 border border-border/70">
             <AvatarFallback className="bg-muted text-[11px] font-medium uppercase text-muted-foreground">
               {fallbackLabel}
             </AvatarFallback>

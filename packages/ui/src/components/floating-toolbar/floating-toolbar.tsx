@@ -129,7 +129,7 @@ export const FloatingToolbar = forwardRef<HTMLDivElement, FloatingToolbarProps>(
               type="button"
             >
               {action.glyph ? (
-                <span aria-hidden="true" className="inline-flex h-3 w-3">
+                <span aria-hidden="true" className="inline-flex size-3">
                   {action.glyph}
                 </span>
               ) : null}

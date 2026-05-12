@@ -159,7 +159,7 @@ function ScopeOptionButton({
   return (
     <button
       className={cn(
-        "flex w-full items-start justify-between rounded-md border px-3 py-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
+        "flex w-full items-start justify-between rounded-md border p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground",
         selectedValue === node.id && "border-primary bg-accent",
         node.disabled && "cursor-not-allowed opacity-50",
       )}
@@ -189,9 +189,9 @@ function ScopeOptionButton({
         ) : null}
       </div>
       {selectedValue === node.id ? (
-        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+        <Check className="mt-0.5 size-4 shrink-0 text-primary" />
       ) : node.children && node.children.length > 0 ? (
-        <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+        <ChevronRight className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
       ) : null}
     </button>
   );
@@ -209,7 +209,7 @@ function ScopeSearchResults({
   selectedValue?: string;
 }) {
   return (
-    <div className="space-y-2 px-1 py-1">
+    <div className="space-y-2 p-1">
       {results.map(({ node, path }) => (
         <ScopeOptionButton
           key={getPathLabel(path)}
@@ -239,7 +239,7 @@ function ScopeCurrentLevel({
   selectedValue?: string;
 }) {
   return (
-    <div className="space-y-2 px-1 py-1">
+    <div className="space-y-2 p-1">
       {nodes.map((node) => (
         <ScopeOptionButton
           key={node.id}
@@ -316,7 +316,7 @@ function ScopeSelectorBreadcrumb({
   return (
     <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
       <Button className="h-7 px-2" onClick={onBack} size="sm" variant="ghost">
-        <ChevronRight className="h-3.5 w-3.5 rotate-180" />
+        <ChevronRight className="size-3.5 rotate-180" />
         Back
       </Button>
       <span className="truncate">{getPathLabel(currentPath)}</span>
@@ -333,7 +333,7 @@ function ScopeSelectorPopoverBody({
     <PopoverContent align="start" className="w-[380px] p-0" sideOffset={8}>
       <div className="border-b p-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             className="pl-9"
             onChange={(event) => {
@@ -479,7 +479,7 @@ const ScopeSelector = forwardRef<HTMLButtonElement, ScopeSelectorProps>(
             <span className="truncate text-left">
               {state.selectedPathLabel ?? placeholder}
             </span>
-            <ChevronRight className="h-4 w-4 shrink-0 rotate-90 text-muted-foreground" />
+            <ChevronRight className="size-4 shrink-0 rotate-90 text-muted-foreground" />
           </Button>
         </PopoverTrigger>
         <ScopeSelectorPopoverBody

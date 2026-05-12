@@ -78,7 +78,7 @@ export const SparklineGrid = React.forwardRef<
                     : "border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400",
                 )}
               >
-                <TrendIcon className="h-3.5 w-3.5" />
+                <TrendIcon className="size-3.5" />
                 {item.change > 0 ? "+" : ""}
                 {item.change.toFixed(2)}%
               </div>

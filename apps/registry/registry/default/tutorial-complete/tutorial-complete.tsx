@@ -97,16 +97,16 @@ function TutorialCompleteImpl({
       {/* Completion Status */}
       <div className="text-center py-12">
         <div
-          className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${
+          className={`inline-flex items-center justify-center size-20 rounded-full mb-6 ${
             isFullyComplete ? "bg-green-100 dark:bg-green-900/30" : "bg-muted"
           }`}
         >
           <Check
-            className={`h-10 w-10 ${isFullyComplete ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}
+            className={`size-10 ${isFullyComplete ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}
           />
         </div>
 
-        <h2 className="text-3xl font-bold mb-2">
+        <h2 className="text-3xl font-semibold mb-2">
           {isFullyComplete ? labels.tutorialComplete : labels.tutorialFinished}
         </h2>
 
@@ -117,7 +117,7 @@ function TutorialCompleteImpl({
         </p>
 
         <Button className="gap-2" onClick={onRestart} variant="outline">
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="size-4" />
           {labels.startOver}
         </Button>
       </div>
@@ -138,18 +138,18 @@ function TutorialCompleteImpl({
                 type="button"
               >
                 <div
-                  className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  className={`flex-shrink-0 size-5 rounded-full border-2 flex items-center justify-center ${
                     isCompleted
                       ? "bg-foreground border-foreground"
                       : "border-muted-foreground"
                   }`}
                 >
                   {isCompleted ? (
-                    <Check className="h-3 w-3 text-background" />
+                    <Check className="size-3 text-background" />
                   ) : null}
                 </div>
                 <span className="flex-1 truncate">{section.title}</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                <ChevronRight className="size-4 text-muted-foreground" />
               </button>
             );
           })}
@@ -173,7 +173,7 @@ function TutorialCompleteImpl({
                   {item.type}
                 </span>
                 <span className="flex-1 truncate">{item.title}</span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                <ChevronRight className="size-4 text-muted-foreground" />
               </LinkComponent>
             ))}
           </div>

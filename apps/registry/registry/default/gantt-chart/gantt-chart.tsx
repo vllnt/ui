@@ -345,7 +345,7 @@ function MilestoneMarker({
     >
       <div
         aria-hidden="true"
-        className="h-3 w-3 rotate-45 bg-amber-500 ring-2 ring-background"
+        className="size-3 rotate-45 bg-amber-500 ring-2 ring-background"
       />
       {titleText ? (
         <span className="mt-0.5 whitespace-nowrap rounded bg-amber-500/20 px-1 text-[10px] font-medium text-amber-900 dark:text-amber-200">

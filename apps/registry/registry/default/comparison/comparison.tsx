@@ -77,7 +77,7 @@ export function Comparison({
               <li className="flex items-start gap-2 text-sm" key={item}>
                 <BeforeIcon
                   className={cn(
-                    "h-4 w-4 mt-0.5 flex-shrink-0",
+                    "size-4 mt-0.5 flex-shrink-0",
                     beforeConfig.iconClass,
                   )}
                 />
@@ -100,7 +100,7 @@ export function Comparison({
               <li className="flex items-start gap-2 text-sm" key={item}>
                 <AfterIcon
                   className={cn(
-                    "h-4 w-4 mt-0.5 flex-shrink-0",
+                    "size-4 mt-0.5 flex-shrink-0",
                     afterConfig.iconClass,
                   )}
                 />
@@ -127,17 +127,17 @@ export function BeforeAfter({ after, before, title }: BeforeAfterProps) {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-start">
         <div className="rounded-lg border border-red-500/30 bg-red-500/5 overflow-hidden">
           <div className="px-4 py-2 bg-red-500/10 text-red-700 dark:text-red-300 font-medium text-sm flex items-center gap-2">
-            <X className="h-4 w-4" />
+            <X className="size-4" />
             Before
           </div>
           <div className="p-4 text-sm [&>pre]:my-0">{before}</div>
         </div>
         <div className="hidden md:flex items-center justify-center h-full">
-          <ArrowRight className="h-6 w-6 text-muted-foreground" />
+          <ArrowRight className="size-6 text-muted-foreground" />
         </div>
         <div className="rounded-lg border border-green-500/30 bg-green-500/5 overflow-hidden">
           <div className="px-4 py-2 bg-green-500/10 text-green-700 dark:text-green-300 font-medium text-sm flex items-center gap-2">
-            <Check className="h-4 w-4" />
+            <Check className="size-4" />
             After
           </div>
           <div className="p-4 text-sm [&>pre]:my-0">{after}</div>

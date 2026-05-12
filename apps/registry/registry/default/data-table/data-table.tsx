@@ -70,14 +70,14 @@ export type DataTableProps<TData extends RowData> =
 
 function SortIcon({ direction }: { direction: "asc" | "desc" | false }) {
   if (direction === "asc") {
-    return <ArrowUp className="h-4 w-4" />;
+    return <ArrowUp className="size-4" />;
   }
 
   if (direction === "desc") {
-    return <ArrowDown className="h-4 w-4" />;
+    return <ArrowDown className="size-4" />;
   }
 
-  return <ArrowUpDown className="h-4 w-4" />;
+  return <ArrowUpDown className="size-4" />;
 }
 
 const EMPTY_FILTERABLE_COLUMNS: DataTableFilter[] = [];

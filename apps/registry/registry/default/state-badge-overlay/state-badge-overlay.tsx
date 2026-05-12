@@ -159,7 +159,7 @@ export const StateBadgeOverlay = forwardRef<
     >
       <span
         aria-hidden="true"
-        className={cn("h-1.5 w-1.5 rounded-full", STATE_DOT[state])}
+        className={cn("size-1.5 rounded-full", STATE_DOT[state])}
         data-state-badge-dot
       />
       {text}

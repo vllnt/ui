@@ -38,7 +38,7 @@ export function ProfileSection({
   return (
     <div className="text-center space-y-4">
       {showImage ? (
-        <div className="relative w-24 h-24 mx-auto overflow-hidden rounded-md">
+        <div className="relative size-24 mx-auto overflow-hidden rounded-md">
           <Image
             alt={displayImageAlt}
             className="w-full h-full object-cover rounded-md"

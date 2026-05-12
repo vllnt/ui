@@ -46,9 +46,9 @@ export function ThinkingBlock({
         type="button"
       >
         {isExpanded ? (
-          <ChevronDown className="h-3 w-3" />
+          <ChevronDown className="size-3" />
         ) : (
-          <ChevronRight className="h-3 w-3" />
+          <ChevronRight className="size-3" />
         )}
         <span>
           Thinking

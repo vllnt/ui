@@ -49,7 +49,7 @@ export const Submitting: Story = {
         submitLabel="Sending"
         toolbar={
           <Badge className="gap-1" variant="secondary">
-            <Sparkles className="h-3 w-3" />
+            <Sparkles className="size-3" />
             Deep research mode
           </Badge>
         }

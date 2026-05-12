@@ -84,7 +84,7 @@ const ChipBody = (props: { event: ActivityEvent }): React.ReactElement => {
     <span className="flex items-center gap-1.5 whitespace-nowrap">
       <span
         aria-hidden="true"
-        className={cn("h-1.5 w-1.5 rounded-full", TONE_DOT[tone])}
+        className={cn("size-1.5 rounded-full", TONE_DOT[tone])}
       />
       <span className="text-foreground">{event.label}</span>
       <span className="text-[10px] text-muted-foreground" data-strip-event-ts>

@@ -146,7 +146,7 @@ function PaginationControls({
         size="sm"
         variant="outline"
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="size-4" />
         Previous
       </Button>
       {pageNumbers.map((pageNumber) => (
@@ -171,7 +171,7 @@ function PaginationControls({
         variant="outline"
       >
         Next
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight className="size-4" />
       </Button>
     </div>
   );
@@ -189,14 +189,14 @@ function ActivityRow({ item }: ActivityRowProps) {
       <span
         aria-hidden="true"
         className={cn(
-          "absolute left-4 top-3 h-3 w-3 rounded-full ring-4 ring-background",
+          "absolute left-4 top-3 size-3 rounded-full ring-4 ring-background",
           palette.markerClassName,
         )}
       />
       <div className="rounded-lg border bg-background/70 p-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 items-start gap-3">
-            <Avatar className="h-9 w-9 border bg-muted">
+            <Avatar className="size-9 border bg-muted">
               <AvatarFallback>{getInitials(item.actor)}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 space-y-1">
@@ -204,7 +204,7 @@ function ActivityRow({ item }: ActivityRowProps) {
                 <span className="font-medium text-foreground">
                   {item.actor}
                 </span>
-                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+                <ArrowRight className="size-3.5 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">
                   {item.action}
                 </span>

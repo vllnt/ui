@@ -340,7 +340,7 @@ function ProgressTrackerOverview({
         <div className="flex items-center gap-2 rounded-full border bg-background px-3 py-1 text-sm text-muted-foreground whitespace-nowrap">
           <span
             aria-hidden="true"
-            className="inline-flex h-2.5 w-2.5 rounded-full bg-primary"
+            className="inline-flex size-2.5 rounded-full bg-primary"
           />
           <span>
             <span className="font-semibold text-foreground">{streak}</span> day
@@ -350,8 +350,8 @@ function ProgressTrackerOverview({
       </CardHeader>
       <CardContent className="grid gap-6 lg:grid-cols-[auto,1fr] lg:items-center">
         <div className="mx-auto flex flex-col items-center gap-3 text-center">
-          <div className="relative flex h-36 w-36 items-center justify-center">
-            <svg className="h-36 w-36 -rotate-90" viewBox="0 0 120 120">
+          <div className="relative flex size-36 items-center justify-center">
+            <svg className="size-36 -rotate-90" viewBox="0 0 120 120">
               <circle
                 className="stroke-muted"
                 cx="60"

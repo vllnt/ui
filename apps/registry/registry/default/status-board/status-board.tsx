@@ -146,7 +146,7 @@ function StatusBoardCard({ item }: { item: StatusBoardItem }) {
             <div className="flex items-center gap-2">
               <span
                 aria-hidden="true"
-                className={cn("h-2.5 w-2.5 rounded-full", meta.dotClassName)}
+                className={cn("size-2.5 rounded-full", meta.dotClassName)}
               />
               <CardTitle className="text-base leading-none">
                 {item.label}

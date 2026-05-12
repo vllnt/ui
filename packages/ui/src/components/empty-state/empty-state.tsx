@@ -58,9 +58,9 @@ const iconVariants = cva(
     },
     variants: {
       size: {
-        lg: "h-16 w-16",
-        md: "h-12 w-12",
-        sm: "h-8 w-8",
+        lg: "size-16",
+        md: "size-12",
+        sm: "size-8",
       },
     },
   },

@@ -133,15 +133,15 @@ export function CodeBlock({
             </span>
           ) : null}
           <Button
-            className="h-8 w-8"
+            className="size-8"
             onClick={handleCopy}
             size="icon"
             variant="ghost"
           >
             {copied ? (
-              <Check className="h-3 w-3" />
+              <Check className="size-3" />
             ) : (
-              <Copy className="h-3 w-3" />
+              <Copy className="size-3" />
             )}
           </Button>
         </div>

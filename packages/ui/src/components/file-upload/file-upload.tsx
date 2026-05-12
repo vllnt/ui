@@ -111,7 +111,7 @@ function FileListItem({
         type="button"
         variant="ghost"
       >
-        <X className="h-4 w-4" />
+        <X className="size-4" />
       </Button>
     </li>
   );
@@ -177,13 +177,13 @@ function FileUploadDropzone({
       role="button"
       tabIndex={disabled ? -1 : 0}
     >
-      <UploadCloud className="mb-3 h-10 w-10 text-muted-foreground" />
+      <UploadCloud className="mb-3 size-10 text-muted-foreground" />
       <div className="space-y-1">
         <p className="font-medium">{dropzoneText}</p>
         <p className="text-sm text-muted-foreground">{helperText}</p>
       </div>
       <span className="mt-4 inline-flex h-10 items-center justify-center rounded-md border border-input bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm">
-        <FileUp className="mr-2 h-4 w-4" />
+        <FileUp className="mr-2 size-4" />
         {browseLabel}
       </span>
       {children}

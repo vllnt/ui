@@ -191,7 +191,7 @@ function GaugeLegend({ thresholds }: { thresholds: MetricGaugeThreshold[] }) {
           <span
             aria-hidden="true"
             className={cn(
-              "h-2 w-2 rounded-full bg-current",
+              "size-2 rounded-full bg-current",
               threshold.colorClassName,
             )}
           />

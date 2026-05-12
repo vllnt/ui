@@ -156,7 +156,7 @@ type AudioMediaProps = {
 
 function AudioMedia({ media }: AudioMediaProps): ReactNode {
   return (
-    <figure className="overflow-hidden rounded-xl border bg-muted px-3 py-3">
+    <figure className="overflow-hidden rounded-xl border bg-muted p-3">
       <audio
         aria-label={media.alt}
         className="w-full"
@@ -215,8 +215,8 @@ function RailColumn({ featured }: RailColumnProps): ReactNode {
       <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border" />
       <span
         className={cn(
-          "relative z-10 mt-3 block h-3 w-3 rounded-full border-2 border-background bg-primary",
-          featured ? "h-4 w-4" : "",
+          "relative z-10 mt-3 block size-3 rounded-full border-2 border-background bg-primary",
+          featured ? "size-4" : "",
         )}
       />
     </div>
@@ -510,7 +510,7 @@ export const ChronologicalTimeline = forwardRef<
       >
         <ProgressStrip activeId={activeId} ids={ids} label={progressLabel} />
         {title ? (
-          <header className="px-6 py-6">
+          <header className="p-6">
             <h2 className="text-2xl font-semibold tracking-tight" id={titleId}>
               {title}
             </h2>

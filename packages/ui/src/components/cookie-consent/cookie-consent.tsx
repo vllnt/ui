@@ -206,7 +206,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
             onClick={handleClose}
             type="button"
           >
-            <X className="h-3 w-3" />
+            <X className="size-3" />
           </button>
         ) : null}
       </div>

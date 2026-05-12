@@ -311,7 +311,7 @@ export const AISidebarTitle = forwardRef<
       ref={ref}
       {...rest}
     >
-      <Bot aria-hidden="true" className="h-4 w-4 text-muted-foreground" />
+      <Bot aria-hidden="true" className="size-4 text-muted-foreground" />
       {children ?? labels.defaultTitle}
     </h2>
   );
@@ -339,7 +339,7 @@ export const AISidebarClose = forwardRef<
   return (
     <Button
       aria-label={labels.close}
-      className={cn("h-8 w-8", className)}
+      className={cn("size-8", className)}
       onClick={handleClick}
       ref={ref}
       size="icon"
@@ -347,7 +347,7 @@ export const AISidebarClose = forwardRef<
       variant="ghost"
       {...rest}
     >
-      <X aria-hidden="true" className="h-4 w-4" />
+      <X aria-hidden="true" className="size-4" />
     </Button>
   );
 });
@@ -434,7 +434,7 @@ export const AISidebarTrigger = forwardRef<
       variant="outline"
       {...rest}
     >
-      {children ?? <MessageSquarePlus aria-hidden="true" className="h-4 w-4" />}
+      {children ?? <MessageSquarePlus aria-hidden="true" className="size-4" />}
     </Button>
   );
 });

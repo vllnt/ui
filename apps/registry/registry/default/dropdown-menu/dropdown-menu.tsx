@@ -105,7 +105,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     ref={reference}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
         <span className="text-xs">✓</span>
       </DropdownMenuPrimitive.ItemIndicator>
@@ -128,7 +128,7 @@ const DropdownMenuRadioItem = React.forwardRef<
     ref={reference}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className="absolute left-2 flex size-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
         <span className="text-xs">○</span>
       </DropdownMenuPrimitive.ItemIndicator>
@@ -161,7 +161,7 @@ const DropdownMenuSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, ...props }, reference) => (
   <DropdownMenuPrimitive.Separator
-    className={cn("-mx-1 my-1 h-px bg-muted", className)}
+    className={cn("-m-1 h-px bg-muted", className)}
     ref={reference}
     {...props}
   />

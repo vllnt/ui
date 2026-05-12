@@ -74,7 +74,7 @@ export function Callout({
     >
       <div className="flex items-start gap-3">
         {icon ? (
-          <span className="h-5 w-5 flex-shrink-0 mt-0.5">{icon}</span>
+          <span className="size-5 flex-shrink-0 mt-0.5">{icon}</span>
         ) : null}
         <div className="flex-1 min-w-0">
           {displayTitle ? (

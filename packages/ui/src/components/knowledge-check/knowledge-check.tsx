@@ -351,9 +351,9 @@ function Feedback({
       role="status"
     >
       {answer.correct ? (
-        <CheckCircle2 aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+        <CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
       ) : (
-        <XCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+        <XCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
       )}
       <div className="flex flex-col gap-1">
         <span className="font-medium">
@@ -392,7 +392,7 @@ function MultipleChoiceOption({
     <div className="flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-accent">
       <input
         checked={value === option.value}
-        className="h-4 w-4"
+        className="size-4"
         id={id}
         name={groupName}
         onChange={onChange}
@@ -568,7 +568,7 @@ function ScoreSummary({
         {score.correct} {labels.outOf} {score.total}
       </p>
       <Button onClick={onRetry} size="sm" type="button" variant="outline">
-        <RotateCcw aria-hidden="true" className="mr-2 h-4 w-4" />
+        <RotateCcw aria-hidden="true" className="mr-2 size-4" />
         {labels.retry}
       </Button>
     </div>

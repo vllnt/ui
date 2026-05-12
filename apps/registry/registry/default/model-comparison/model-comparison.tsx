@@ -121,12 +121,12 @@ function ComparisonHeader({
         >
           {blind ? (
             <>
-              <Eye aria-hidden="true" className="mr-2 h-4 w-4" />
+              <Eye aria-hidden="true" className="mr-2 size-4" />
               {labels.reveal}
             </>
           ) : (
             <>
-              <EyeOff aria-hidden="true" className="mr-2 h-4 w-4" />
+              <EyeOff aria-hidden="true" className="mr-2 size-4" />
               {labels.hide}
             </>
           )}

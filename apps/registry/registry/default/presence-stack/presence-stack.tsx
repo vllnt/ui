@@ -78,7 +78,7 @@ const Avatar = (props: { user: PresenceUser }): React.ReactElement => {
   const status = user.status ?? "active";
   return (
     <span
-      className="relative -ml-2 inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-background text-[11px] font-semibold text-white shadow-sm first:ml-0"
+      className="relative -ml-2 inline-flex size-7 items-center justify-center rounded-full border-2 border-background text-[11px] font-semibold text-white shadow-sm first:ml-0"
       data-presence-stack-status={status}
       data-presence-stack-user={user.id}
       style={{ backgroundColor: user.color ?? "var(--foreground)" }}
@@ -88,7 +88,7 @@ const Avatar = (props: { user: PresenceUser }): React.ReactElement => {
       <span
         aria-hidden="true"
         className={cn(
-          "absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-background",
+          "absolute -bottom-0.5 -right-0.5 size-2 rounded-full border border-background",
           STATUS_DOT[status],
         )}
         data-presence-stack-dot

@@ -212,7 +212,7 @@ function Marker({ color, icon, status }: MarkerProps): ReactNode {
     <span
       aria-hidden="true"
       className={cn(
-        "relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 bg-background text-[10px]",
+        "relative z-10 flex size-6 shrink-0 items-center justify-center rounded-full border-2 bg-background text-[10px]",
         borderClass,
       )}
     >
@@ -228,7 +228,7 @@ function Marker({ color, icon, status }: MarkerProps): ReactNode {
       ) : (
         <span
           className={cn(
-            "h-2.5 w-2.5 rounded-full",
+            "size-2.5 rounded-full",
             override ? fillClass : palette.markerFill,
           )}
         />

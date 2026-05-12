@@ -41,7 +41,7 @@ function formatChange(change: number) {
 
 function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
   return (
-    <div className="flex min-w-max items-center gap-3 px-3 py-3">
+    <div className="flex min-w-max items-center gap-3 p-3">
       {items.map((item) => {
         const isPositive = item.change >= 0;
         const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
@@ -68,12 +68,12 @@ function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
               )}
               variant="outline"
             >
-              <TrendIcon className="h-3 w-3" />
+              <TrendIcon className="size-3" />
               {formatChange(item.change)}
             </Badge>
             {item.volume ? (
               <span className="hidden items-center text-xs text-muted-foreground sm:inline-flex">
-                <Dot className="h-3.5 w-3.5" />
+                <Dot className="size-3.5" />
                 {item.volume}
               </span>
             ) : null}

@@ -39,7 +39,7 @@ const HorizontalScrollRow = memo(function HorizontalScrollRow({
           <div className="flex gap-1">
             <Button
               aria-label="Scroll left"
-              className="h-8 w-8"
+              className="size-8"
               disabled={!canScrollLeft}
               onClick={() => {
                 scroll("left");
@@ -47,11 +47,11 @@ const HorizontalScrollRow = memo(function HorizontalScrollRow({
               size="icon"
               variant="outline"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="size-4" />
             </Button>
             <Button
               aria-label="Scroll right"
-              className="h-8 w-8"
+              className="size-8"
               disabled={!canScrollRight}
               onClick={() => {
                 scroll("right");
@@ -59,7 +59,7 @@ const HorizontalScrollRow = memo(function HorizontalScrollRow({
               size="icon"
               variant="outline"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="size-4" />
             </Button>
           </div>
         ) : null}

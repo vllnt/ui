@@ -48,9 +48,9 @@ function AIChatInputFooter({
         type="submit"
       >
         {isSubmitting ? (
-          <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+          <LoaderCircle className="mr-2 size-4 animate-spin" />
         ) : (
-          <SendHorizontal className="mr-2 h-4 w-4" />
+          <SendHorizontal className="mr-2 size-4" />
         )}
         {submitLabel}
       </Button>
@@ -111,7 +111,7 @@ const AIChatInput = forwardRef<HTMLFormElement, AIChatInputProps>(
       >
         <div className="space-y-3">
           <Textarea
-            className="min-h-[120px] resize-none rounded-xl border-0 bg-transparent px-1 py-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="min-h-[120px] resize-none rounded-xl border-0 bg-transparent p-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
             disabled={disabled}
             onChange={(event) => {
               textareaProps?.onChange?.(event);

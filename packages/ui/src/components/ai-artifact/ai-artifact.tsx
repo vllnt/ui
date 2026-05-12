@@ -481,7 +481,7 @@ export const AIArtifactCopyButton = forwardRef<
   return (
     <Button
       aria-label={copied ? labels.copied : labels.copy}
-      className={cn("h-8 w-8", className)}
+      className={cn("size-8", className)}
       onClick={handleClick}
       ref={ref}
       size="icon"
@@ -490,9 +490,9 @@ export const AIArtifactCopyButton = forwardRef<
       {...rest}
     >
       {copied ? (
-        <Check aria-hidden="true" className="h-4 w-4" />
+        <Check aria-hidden="true" className="size-4" />
       ) : (
-        <Copy aria-hidden="true" className="h-4 w-4" />
+        <Copy aria-hidden="true" className="size-4" />
       )}
     </Button>
   );
@@ -522,7 +522,7 @@ export const AIArtifactEditButton = forwardRef<
   return (
     <Button
       aria-label={labels.edit}
-      className={cn("h-8 w-8", className)}
+      className={cn("size-8", className)}
       onClick={handleClick}
       ref={ref}
       size="icon"
@@ -530,7 +530,7 @@ export const AIArtifactEditButton = forwardRef<
       variant="ghost"
       {...rest}
     >
-      <Pencil aria-hidden="true" className="h-4 w-4" />
+      <Pencil aria-hidden="true" className="size-4" />
     </Button>
   );
 });
@@ -558,7 +558,7 @@ export const AIArtifactDownloadButton = forwardRef<
   return (
     <Button
       aria-label={labels.download}
-      className={cn("h-8 w-8", className)}
+      className={cn("size-8", className)}
       onClick={handleClick}
       ref={ref}
       size="icon"
@@ -566,7 +566,7 @@ export const AIArtifactDownloadButton = forwardRef<
       variant="ghost"
       {...rest}
     >
-      <Download aria-hidden="true" className="h-4 w-4" />
+      <Download aria-hidden="true" className="size-4" />
     </Button>
   );
 });
@@ -596,7 +596,7 @@ export const AIArtifactFullscreenButton = forwardRef<
     <Button
       aria-label={fullscreen ? labels.exitFullscreen : labels.enterFullscreen}
       aria-pressed={fullscreen}
-      className={cn("h-8 w-8", className)}
+      className={cn("size-8", className)}
       onClick={handleClick}
       ref={ref}
       size="icon"
@@ -605,9 +605,9 @@ export const AIArtifactFullscreenButton = forwardRef<
       {...rest}
     >
       {fullscreen ? (
-        <Minimize2 aria-hidden="true" className="h-4 w-4" />
+        <Minimize2 aria-hidden="true" className="size-4" />
       ) : (
-        <Maximize2 aria-hidden="true" className="h-4 w-4" />
+        <Maximize2 aria-hidden="true" className="size-4" />
       )}
     </Button>
   );

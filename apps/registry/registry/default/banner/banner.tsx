@@ -185,7 +185,7 @@ export const Banner = forwardRef<HTMLDivElement, BannerProps>(
         {icon ? (
           <span
             aria-hidden="true"
-            className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center [&>svg]:h-4 [&>svg]:w-4"
+            className="mt-0.5 flex size-4 shrink-0 items-center justify-center [&>svg]:h-4 [&>svg]:w-4"
           >
             {icon}
           </span>
@@ -196,11 +196,11 @@ export const Banner = forwardRef<HTMLDivElement, BannerProps>(
         {dismissible ? (
           <button
             aria-label={dismissLabel}
-            className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md opacity-70 transition-colors hover:bg-foreground/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md opacity-70 transition-colors hover:bg-foreground/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             onClick={handleDismiss}
             type="button"
           >
-            <X aria-hidden="true" className="h-4 w-4" />
+            <X aria-hidden="true" className="size-4" />
           </button>
         ) : null}
       </div>

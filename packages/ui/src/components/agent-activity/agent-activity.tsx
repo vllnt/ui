@@ -74,11 +74,11 @@ const STATUS_CLASSES: Record<
 };
 
 const DEFAULT_STATUS_ICON: Record<AgentStepStatus, ReactNode> = {
-  completed: <CheckCircle2 aria-hidden="true" className="h-4 w-4" />,
-  error: <AlertTriangle aria-hidden="true" className="h-4 w-4" />,
-  pending: <Circle aria-hidden="true" className="h-4 w-4" />,
-  running: <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" />,
-  skipped: <MinusCircle aria-hidden="true" className="h-4 w-4" />,
+  completed: <CheckCircle2 aria-hidden="true" className="size-4" />,
+  error: <AlertTriangle aria-hidden="true" className="size-4" />,
+  pending: <Circle aria-hidden="true" className="size-4" />,
+  running: <Loader2 aria-hidden="true" className="size-4 animate-spin" />,
+  skipped: <MinusCircle aria-hidden="true" className="size-4" />,
 };
 
 type StepContextValue = {
@@ -285,7 +285,7 @@ function StepRow({
       <span
         aria-hidden="true"
         className={cn(
-          "mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center",
+          "mt-0.5 inline-flex size-5 shrink-0 items-center justify-center",
           iconClass,
         )}
       >
@@ -297,14 +297,14 @@ function StepRow({
           aria-controls={detailsId}
           aria-expanded={open}
           aria-label={open ? labels.collapse : labels.expand}
-          className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           onClick={onToggle}
           type="button"
         >
           <ChevronDown
             aria-hidden="true"
             className={cn(
-              "h-4 w-4 transition-transform",
+              "size-4 transition-transform",
               open ? "rotate-180" : "rotate-0",
             )}
           />

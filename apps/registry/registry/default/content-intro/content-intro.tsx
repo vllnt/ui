@@ -89,7 +89,7 @@ function ContentIntroImpl({
       <div className="animate-in fade-in-0 duration-500 pb-24">
         {/* Introduction Content */}
         <section className="py-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">{title}</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
             {renderIntroContent()}
           </div>
@@ -115,7 +115,7 @@ function ContentIntroImpl({
                   >
                     <span
                       className={cn(
-                        "flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
+                        "flex-shrink-0 size-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
                         isLoading && "animate-pulse bg-muted",
                         !isLoading &&
                           isCompleted &&
@@ -125,7 +125,7 @@ function ContentIntroImpl({
                     >
                       {isCompleted ? (
                         <svg
-                          className="h-3 w-3"
+                          className="size-3"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -162,7 +162,7 @@ function ContentIntroImpl({
 
       {/* Sticky Start/Continue Button */}
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/80 backdrop-blur-sm safe-bottom">
-        <div className="mx-auto max-w-3xl px-4 py-4">
+        <div className="mx-auto max-w-3xl p-4">
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground hidden sm:block">
               {hasProgress
@@ -175,7 +175,7 @@ function ContentIntroImpl({
               size="lg"
             >
               <svg
-                className="h-5 w-5"
+                className="size-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
