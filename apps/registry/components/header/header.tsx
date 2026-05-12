@@ -1,7 +1,16 @@
 "use client";
 
-import { NavbarSaas, SearchDialog } from "@vllnt/ui";
-import { Github } from "lucide-react";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  NavbarSaas,
+  SearchDialog,
+} from "@vllnt/ui";
+import { ChevronDown, ExternalLink } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import registryData from "@/registry.json";
@@ -46,6 +55,25 @@ export function Header() {
             }}
             searchPlaceholder="Search components..."
           />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="outline">
+                What&apos;s new
+                <ChevronDown className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/releases">Releases</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/changelog">Changelog</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/rss.xml">RSS feed</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <a
             aria-label="VLLNT UI on GitHub"
             className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -53,7 +81,7 @@ export function Header() {
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <ExternalLink className="size-4" />
           </a>
         </div>
       }
