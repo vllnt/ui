@@ -1,0 +1,8 @@
+{
+  "slug": "ai-chat",
+  "title": "AI Chat",
+  "demoUrl": "https://ui.vllnt.ai/templates/ai-chat",
+  "installCommand": "pnpm dlx create-vllnt-app@latest --template ai-chat",
+  "screenshots": ["screenshots/preview.svg"],
+  "components": ["ai-artifact", "ai-chat-input", "ai-message-bubble", "ai-sidebar", "ai-source-citation", "ai-streaming-text", "ai-tool-call-display", "conversation-thread", "prompt-templates"]
+}

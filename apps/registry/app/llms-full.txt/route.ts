@@ -2,6 +2,12 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import registry from "../../registry.json";
+import {
+  getTemplateGithubUrl,
+  getTemplateInstallCommand,
+  getTemplatePath,
+  TEMPLATES,
+} from "../../lib/templates";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
@@ -61,7 +67,6 @@ async function buildLlmsFullTxt(): Promise<string> {
   lines.push("");
   lines.push("```bash");
   lines.push(`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json`);
-  lines.push(`# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`);
   lines.push("```");
   lines.push("");
 
@@ -73,6 +78,26 @@ async function buildLlmsFullTxt(): Promise<string> {
     lines.push(`Source: ${SITE_URL}/${page.slug === "home" ? "" : page.slug}`);
     lines.push("");
     lines.push(body);
+    lines.push("");
+  }
+
+  lines.push("## Templates");
+  lines.push("");
+  lines.push(
+    "Starter kits pair complete app shapes with component lists and a one-line pnpm install command.",
+  );
+  lines.push("");
+
+  for (const template of TEMPLATES) {
+    lines.push(`### ${template.title}`);
+    lines.push("");
+    lines.push(`- Slug: \`${template.slug}\``);
+    lines.push(`- Page: ${SITE_URL}${getTemplatePath(template)}`);
+    lines.push(`- Demo: ${template.demoUrl}`);
+    lines.push(`- Source: ${getTemplateGithubUrl(template)}`);
+    lines.push(`- Install: \`${getTemplateInstallCommand(template)}\``);
+    lines.push(`- Audience: ${template.audience}`);
+    lines.push(`- Components: ${template.components.join(", ")}`);
     lines.push("");
   }
 

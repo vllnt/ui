@@ -1,0 +1,8 @@
+{
+  "slug": "docs-site",
+  "title": "Docs Site",
+  "demoUrl": "https://ui.vllnt.ai/templates/docs-site",
+  "installCommand": "pnpm dlx create-vllnt-app@latest --template docs-site",
+  "screenshots": ["screenshots/preview.svg"],
+  "components": ["accordion", "breadcrumb", "callout", "code-block", "copy-button", "document-sibling-nav", "mdx-content", "navigation-menu", "search-dialog", "sidebar", "table-of-contents", "tabs"]
+}

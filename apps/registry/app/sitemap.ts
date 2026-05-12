@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import registry from "../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
@@ -36,7 +37,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    {
+      url: `${SITE_URL}/templates`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
   ];
+
+  const templateRoutes: MetadataRoute.Sitemap = TEMPLATES.map((template) => ({
+    url: `${SITE_URL}${getTemplatePath(template)}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
 
   const items = (registry as { readonly items: readonly RegistryItem[] }).items;
 
@@ -62,5 +76,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...staticRoutes, ...componentRoutes, ...registryEndpoints];
+  return [
+    ...staticRoutes,
+    ...templateRoutes,
+    ...componentRoutes,
+    ...registryEndpoints,
+  ];
 }

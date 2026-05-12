@@ -1,4 +1,9 @@
 import registry from "../../registry.json";
+import {
+  getTemplateInstallCommand,
+  getTemplatePath,
+  TEMPLATES,
+} from "../../lib/templates";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
@@ -79,6 +84,19 @@ function buildLlmsTxt(): string {
   lines.push(
     `- [Components index](${SITE_URL}/components): browse all components by category`,
   );
+  lines.push(
+    `- [Templates](${SITE_URL}/templates): starter kits for full VLLNT UI apps`,
+  );
+  lines.push("");
+
+  lines.push("## Templates");
+  lines.push("");
+  for (const template of TEMPLATES) {
+    lines.push(
+      `- [${template.title}](${SITE_URL}${getTemplatePath(template)}): ` +
+        `${template.description} Install: \`${getTemplateInstallCommand(template)}\``,
+    );
+  }
   lines.push("");
 
   lines.push("## Registry API");
