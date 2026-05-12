@@ -404,7 +404,7 @@ function VariableField({
   onValueChange,
   value,
 }: VariableFieldProps): ReactNode {
-  const handleChange = useCallback(
+  const handleVariableValueChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       onValueChange(name, event.target.value);
     },
@@ -417,7 +417,7 @@ function VariableField({
       </label>
       <Input
         id={fieldId}
-        onChange={handleChange}
+        onChange={handleVariableValueChange}
         placeholder={`Value for ${name}`}
         value={value}
       />

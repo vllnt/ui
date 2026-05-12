@@ -98,7 +98,7 @@ const Chip = (props: { event: ActivityEvent }): React.ReactElement => {
   const { event } = props;
   const tone = event.tone ?? "neutral";
   if (event.onActivate) {
-    const handleClick = (): void => {
+    const handleActivateEvent = (): void => {
       event.onActivate?.();
     };
     return (
@@ -106,7 +106,7 @@ const Chip = (props: { event: ActivityEvent }): React.ReactElement => {
         className="flex items-center rounded-full border border-border bg-background px-2 py-1 text-[11px] transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-strip-event={event.id}
         data-strip-event-tone={tone}
-        onClick={handleClick}
+        onClick={handleActivateEvent}
         type="button"
       >
         <ChipBody event={event} />
