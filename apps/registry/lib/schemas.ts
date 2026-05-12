@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ogImageFrontmatterSchema = z.object({
+const ogImageFrontmatterSchema = z.object({
   category: z.string().optional(),
   description: z.string().optional(),
   title: z.string().optional(),
@@ -15,4 +15,3 @@ export const pageFrontmatterSchema = z.object({
 });
 
 export type PageFrontmatter = z.infer<typeof pageFrontmatterSchema>;
-export type OGImageFrontmatter = z.infer<typeof ogImageFrontmatterSchema>;
