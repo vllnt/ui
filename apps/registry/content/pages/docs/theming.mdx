@@ -1,0 +1,61 @@
+---
+title: Theming
+description: Customize design tokens, CSS variables, dark mode, and local themes for VLLNT UI.
+type: docs
+og:
+  title: Theming
+  description: Design tokens, CSS variables, and dark mode for VLLNT UI
+  type: docs
+---
+
+# Theming
+
+VLLNT UI components are styled with Tailwind utilities that read semantic CSS variables. The goal is to keep component source portable while allowing each application to define its own brand surface.
+
+## Token model
+
+Use semantic tokens for component intent:
+
+- `background` and `foreground` for page surfaces.
+- `card` and `card-foreground` for contained panels.
+- `primary`, `secondary`, `muted`, and `accent` for interaction states.
+- `border`, `input`, and `ring` for control chrome.
+- `destructive` for destructive actions.
+
+Avoid hard-coding product colors inside component internals. Prefer mapping brand color decisions into variables once.
+
+## Dark mode
+
+Use a class-based dark mode strategy so server-rendered markup and client hydration agree:
+
+```tsx
+<html className="dark">
+  <body>{children}</body>
+</html>
+```
+
+The site uses `ThemeProvider` for the registry app, but copied components only need the variables and Tailwind utilities available in their host application.
+
+## Custom themes
+
+Define theme variables at the application boundary:
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+}
+```
+
+Keep custom themes semantic. If a component needs a new recurring intent, add a token for the intent instead of scattering one-off utility colors.
+
+## Motion and density
+
+Components should remain usable in dense product surfaces. Use motion to communicate state changes, not as decoration. Respect `prefers-reduced-motion` when adding new animation.

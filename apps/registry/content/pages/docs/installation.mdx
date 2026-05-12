@@ -1,0 +1,65 @@
+---
+title: Installation
+description: Install VLLNT UI with pnpm, Tailwind CSS, the shadcn CLI, and your first registry component.
+type: docs
+og:
+  title: Installation
+  description: Install VLLNT UI components with the shadcn CLI
+  type: docs
+---
+
+# Installation
+
+VLLNT UI ships as both an npm package and a shadcn-compatible registry. Most teams should install individual components from the registry so the source lands in their app and can be adapted locally.
+
+## Prerequisites
+
+- Node.js 20 or newer.
+- pnpm for this repository and for examples in this documentation.
+- A React application with TypeScript.
+- Tailwind CSS configured in the application.
+
+## Install the package
+
+Use the package when you want to import prebuilt exports from `@vllnt/ui`:
+
+```bash
+pnpm add @vllnt/ui
+```
+
+Then import a component:
+
+```tsx
+import { Button } from "@vllnt/ui";
+
+export function SaveButton() {
+  return <Button>Save</Button>;
+}
+```
+
+## Add a registry component
+
+Use the shadcn CLI when you want the component source copied into your project:
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
+
+Replace `button` with any component slug from the [component index](/components).
+
+## Tailwind setup
+
+Make sure your app imports the shared CSS variables and scans the files where copied components live. The exact Tailwind setup depends on your app, but the minimum shape is:
+
+```css
+@import "tailwindcss";
+```
+
+Keep your component directory inside Tailwind content scanning, and keep the registry-generated utility classes intact unless you know the rendered states no longer need them.
+
+## First component checklist
+
+- Install one small component, such as `button` or `badge`.
+- Import it from the copied local path or from `@vllnt/ui`, depending on your chosen install mode.
+- Render it in a page with light and dark mode enabled.
+- Run your app lint and typecheck before adding more components.
