@@ -89,14 +89,18 @@ body {
   min-width: 320px;
 }
 `,
-    "/tailwind.config.js": `/** @type {import("tailwindcss").Config} */
+    "/tailwind.config.js": `import uiPreset from "@vllnt/ui/tailwind-preset";
+
+/** @type {import("tailwindcss").Config} */
 export default {
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{ts,tsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+  presets: [uiPreset],
+  content: [
+    "./index.html",
+    "./src/**/*.{ts,tsx}",
+    "./node_modules/@vllnt/ui/dist/**/*.{js,mjs,cjs}",
+    "./node_modules/@vllnt/ui/src/**/*.{ts,tsx}",
+  ],
 };
 `,
   };
