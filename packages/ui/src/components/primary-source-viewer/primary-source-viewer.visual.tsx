@@ -49,7 +49,7 @@ test.describe("PrimarySourceViewer Visual", () => {
           />
         </PrimarySourceAnnotations>
         <PrimarySourceTranscription>
-          <p>John, by the grace of God, King of England...</p>
+          <p>John, by the grace of God, King of England&hellip;</p>
         </PrimarySourceTranscription>
         <PrimarySourceContext>
           <PrimarySourceMetadata>

@@ -120,7 +120,9 @@ function StorybookIframe({
           className="flex animate-pulse items-center justify-center rounded-b-lg bg-muted"
           style={{ height, inset: 0, position: "absolute", zIndex: 1 }}
         >
-          <p className="text-sm text-muted-foreground">Loading preview...</p>
+          <p className="text-sm text-muted-foreground">
+            Loading preview&hellip;
+          </p>
         </div>
       )}
       <iframe
