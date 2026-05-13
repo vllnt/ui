@@ -178,51 +178,226 @@ function SearchResultContent({
   );
 }
 
-// eslint-disable-next-line max-lines-per-function
-export function SearchDialog({
+function SearchTriggerButton({
   buttonText,
   buttonTextMobile,
-  docsEmptyText,
-  docsGroupHeading,
-  docsSearch,
-  emptyText,
-  enableKeyboardShortcut,
+  onOpen,
+}: {
+  buttonText?: string;
+  buttonTextMobile?: string;
+  onOpen: () => void;
+}) {
+  return (
+    <Button
+      className={cn(
+        "relative h-9 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64",
+      )}
+      onClick={onOpen}
+      variant="outline"
+    >
+      <Search className="mr-2 size-4" />
+      <span className="hidden lg:inline-flex">{buttonText ?? "Search..."}</span>
+      <span className="inline-flex lg:hidden">
+        {buttonTextMobile ?? "Search..."}
+      </span>
+      <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        <span className="text-xs">⌘</span>K
+      </kbd>
+    </Button>
+  );
+}
+
+function ComponentResultsGroup({
   groupHeading,
+  hasDocumentationSearch,
   items,
-  minDocsSearchLength,
-  onDocsSelect,
+  labels,
   onSelect,
-  scopeLabels,
-  searchPlaceholder,
-}: SearchDialogProps) {
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [scope, setScope] = useState<SearchScope>("components");
+  query,
+}: {
+  groupHeading?: string;
+  hasDocumentationSearch: boolean;
+  items: SearchItem[];
+  labels: Record<SearchScope, string>;
+  onSelect: (item: SearchItem) => void;
+  query: string;
+}) {
+  return (
+    <CommandGroup
+      heading={
+        groupHeading ?? (hasDocumentationSearch ? labels.components : undefined)
+      }
+    >
+      {items.map((item) => (
+        <CommandItem
+          key={item.id}
+          onSelect={() => {
+            onSelect(item);
+          }}
+          value={getItemValue(item)}
+        >
+          <SearchResultContent item={item} query={query} />
+        </CommandItem>
+      ))}
+    </CommandGroup>
+  );
+}
+
+function DocumentationStatusItem({
+  documentationSearchLength,
+  trimmedQuery,
+}: {
+  documentationSearchLength: number;
+  trimmedQuery: string;
+}) {
+  return (
+    <CommandItem disabled value={`${trimmedQuery} search-docs-min-length`}>
+      <span className="text-sm text-muted-foreground">
+        Type at least {documentationSearchLength} characters to search docs.
+      </span>
+    </CommandItem>
+  );
+}
+
+function DocumentationLoadingItem({ trimmedQuery }: { trimmedQuery: string }) {
+  return (
+    <CommandItem disabled value={`${trimmedQuery} searching-docs`}>
+      <span className="text-sm text-muted-foreground">Searching docs...</span>
+    </CommandItem>
+  );
+}
+
+function DocumentationResultsGroup({
+  docsGroupHeading,
+  documentationItems,
+  documentationLoading,
+  documentationSearchLength,
+  onSelect,
+  query,
+  scope,
+  trimmedQuery,
+}: {
+  docsGroupHeading?: string;
+  documentationItems: SearchItem[];
+  documentationLoading: boolean;
+  documentationSearchLength: number;
+  onSelect: (item: SearchItem) => void;
+  query: string;
+  scope: SearchScope;
+  trimmedQuery: string;
+}) {
+  const showMinimumLengthPrompt =
+    scope === "docs" && trimmedQuery.length < documentationSearchLength;
+  const showDocumentationItems =
+    !documentationLoading && trimmedQuery.length >= documentationSearchLength;
+
+  return (
+    <CommandGroup heading={docsGroupHeading ?? "Docs"}>
+      {showMinimumLengthPrompt ? (
+        <DocumentationStatusItem
+          documentationSearchLength={documentationSearchLength}
+          trimmedQuery={trimmedQuery}
+        />
+      ) : null}
+      {documentationLoading ? (
+        <DocumentationLoadingItem trimmedQuery={trimmedQuery} />
+      ) : null}
+      {showDocumentationItems
+        ? documentationItems.map((item) => (
+            <CommandItem
+              key={item.id}
+              onSelect={() => {
+                onSelect(item);
+              }}
+              value={getItemValue(item)}
+            >
+              <SearchResultContent item={item} query={query} />
+            </CommandItem>
+          ))
+        : null}
+    </CommandGroup>
+  );
+}
+
+function SearchDialogList({
+  currentEmptyText,
+  docsGroupHeading,
+  documentationItems,
+  documentationLoading,
+  documentationSearchLength,
+  groupHeading,
+  hasDocumentationSearch,
+  labels,
+  onComponentSelect,
+  onDocumentationSelect,
+  query,
+  scope,
+  showComponents,
+  showDocumentation,
+  sortedItems,
+  trimmedQuery,
+}: {
+  currentEmptyText: string;
+  docsGroupHeading?: string;
+  documentationItems: SearchItem[];
+  documentationLoading: boolean;
+  documentationSearchLength: number;
+  groupHeading?: string;
+  hasDocumentationSearch: boolean;
+  labels: Record<SearchScope, string>;
+  onComponentSelect: (item: SearchItem) => void;
+  onDocumentationSelect: (item: SearchItem) => void;
+  query: string;
+  scope: SearchScope;
+  showComponents: boolean;
+  showDocumentation: boolean;
+  sortedItems: SearchItem[];
+  trimmedQuery: string;
+}) {
+  return (
+    <CommandList className="max-h-[420px]">
+      <CommandEmpty>{currentEmptyText}</CommandEmpty>
+      {showComponents ? (
+        <ComponentResultsGroup
+          groupHeading={groupHeading}
+          hasDocumentationSearch={hasDocumentationSearch}
+          items={sortedItems}
+          labels={labels}
+          onSelect={onComponentSelect}
+          query={query}
+        />
+      ) : null}
+      {showDocumentation ? (
+        <DocumentationResultsGroup
+          docsGroupHeading={docsGroupHeading}
+          documentationItems={documentationItems}
+          documentationLoading={documentationLoading}
+          documentationSearchLength={documentationSearchLength}
+          onSelect={onDocumentationSelect}
+          query={query}
+          scope={scope}
+          trimmedQuery={trimmedQuery}
+        />
+      ) : null}
+    </CommandList>
+  );
+}
+
+type DocumentationSearchOptions = {
+  docsSearch?: (query: string) => Promise<SearchItem[]>;
+  minDocsSearchLength?: number;
+};
+
+function useDocumentationSearch({
+  docsSearch,
+  minDocsSearchLength,
+}: DocumentationSearchOptions) {
   const [documentationItems, setDocumentationItems] = useState<SearchItem[]>(
     [],
   );
   const [documentationLoading, setDocumentationLoading] = useState(false);
   const activeDocumentationRequest = useRef(0);
-
   const documentationSearchLength = minDocsSearchLength ?? 2;
-  const hasDocumentationSearch = docsSearch !== undefined;
-  const labels = { ...DEFAULT_SCOPE_LABELS, ...scopeLabels };
-  const trimmedQuery = query.trim();
-  const showComponents = scope !== "docs";
-  const showDocumentation = hasDocumentationSearch && scope !== "components";
-
-  const sortedItems = useMemo(
-    () => [...items].sort((a, b) => a.title.localeCompare(b.title)),
-    [items],
-  );
-
-  const toggleOpen = useCallback(() => {
-    if (enableKeyboardShortcut ?? true) {
-      setOpen((previous) => !previous);
-    }
-  }, [enableKeyboardShortcut]);
-
-  useKeyboardShortcut(toggleOpen);
 
   const runDocumentationSearch = useCallback(
     (nextQuery: string, nextScope: SearchScope) => {
@@ -262,6 +437,40 @@ export function SearchDialog({
     [docsSearch, documentationSearchLength],
   );
 
+  return {
+    documentationItems,
+    documentationLoading,
+    documentationSearchLength,
+    hasDocumentationSearch: docsSearch !== undefined,
+    runDocumentationSearch,
+  };
+}
+
+type SearchDialogHandlersOptions = {
+  enableKeyboardShortcut?: boolean;
+  onDocsSelect?: (item: SearchItem) => void;
+  onSelect: (item: SearchItem) => void;
+  runDocumentationSearch: (query: string, scope: SearchScope) => void;
+};
+
+function useSearchDialogHandlers({
+  enableKeyboardShortcut,
+  onDocsSelect,
+  onSelect,
+  runDocumentationSearch,
+}: SearchDialogHandlersOptions) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [scope, setScope] = useState<SearchScope>("components");
+
+  const toggleOpen = useCallback(() => {
+    if (enableKeyboardShortcut ?? true) {
+      setOpen((previous) => !previous);
+    }
+  }, [enableKeyboardShortcut]);
+
+  useKeyboardShortcut(toggleOpen);
+
   const handleQueryChange = useCallback(
     (nextQuery: string) => {
       setQuery(nextQuery);
@@ -282,11 +491,9 @@ export function SearchDialog({
     (nextOpen: boolean) => {
       setOpen(nextOpen);
 
-      if (!nextOpen) {
-        return;
+      if (nextOpen) {
+        runDocumentationSearch(query, scope);
       }
-
-      runDocumentationSearch(query, scope);
     },
     [query, runDocumentationSearch, scope],
   );
@@ -307,109 +514,180 @@ export function SearchDialog({
     [onDocsSelect, onSelect],
   );
 
-  const currentEmptyText =
-    scope === "docs" && trimmedQuery.length < documentationSearchLength
-      ? `Type at least ${documentationSearchLength} characters to search docs.`
-      : scope === "docs"
-        ? (docsEmptyText ?? "No docs found.")
-        : (emptyText ?? "No results found.");
+  return {
+    handleComponentSelect,
+    handleDocumentationSelect,
+    handleOpenChange,
+    handleQueryChange,
+    handleScopeChange,
+    open,
+    query,
+    scope,
+  };
+}
 
+function getCurrentEmptyText({
+  docsEmptyText,
+  documentationSearchLength,
+  emptyText,
+  scope,
+  trimmedQuery,
+}: {
+  docsEmptyText?: string;
+  documentationSearchLength: number;
+  emptyText?: string;
+  scope: SearchScope;
+  trimmedQuery: string;
+}) {
+  if (scope === "docs" && trimmedQuery.length < documentationSearchLength) {
+    return `Type at least ${documentationSearchLength} characters to search docs.`;
+  }
+
+  if (scope === "docs") {
+    return docsEmptyText ?? "No docs found.";
+  }
+
+  return emptyText ?? "No results found.";
+}
+
+type SearchDialogViewProps = Pick<
+  SearchDialogProps,
+  | "buttonText"
+  | "buttonTextMobile"
+  | "docsGroupHeading"
+  | "groupHeading"
+  | "searchPlaceholder"
+> & {
+  currentEmptyText: string;
+  documentationSearch: ReturnType<typeof useDocumentationSearch>;
+  handlers: ReturnType<typeof useSearchDialogHandlers>;
+  labels: Record<SearchScope, string>;
+  showDocumentation: boolean;
+  sortedItems: SearchItem[];
+  trimmedQuery: string;
+};
+
+function SearchDialogView({
+  buttonText,
+  buttonTextMobile,
+  currentEmptyText,
+  docsGroupHeading,
+  documentationSearch,
+  groupHeading,
+  handlers,
+  labels,
+  searchPlaceholder,
+  showDocumentation,
+  sortedItems,
+  trimmedQuery,
+}: SearchDialogViewProps) {
   return (
     <>
-      <Button
-        className={cn(
-          "relative h-9 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64",
-        )}
-        onClick={() => {
-          handleOpenChange(true);
+      <SearchTriggerButton
+        buttonText={buttonText}
+        buttonTextMobile={buttonTextMobile}
+        onOpen={() => {
+          handlers.handleOpenChange(true);
         }}
-        variant="outline"
+      />
+      <CommandDialog
+        onOpenChange={handlers.handleOpenChange}
+        open={handlers.open}
       >
-        <Search className="mr-2 size-4" />
-        <span className="hidden lg:inline-flex">
-          {buttonText ?? "Search..."}
-        </span>
-        <span className="inline-flex lg:hidden">
-          {buttonTextMobile ?? "Search..."}
-        </span>
-        <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      </Button>
-      <CommandDialog onOpenChange={handleOpenChange} open={open}>
         <CommandInput
-          onValueChange={handleQueryChange}
+          onValueChange={handlers.handleQueryChange}
           placeholder={searchPlaceholder ?? "Search..."}
-          value={query}
+          value={handlers.query}
         />
-        {hasDocumentationSearch ? (
+        {documentationSearch.hasDocumentationSearch ? (
           <ScopeTabs
             labels={labels}
-            onScopeChange={handleScopeChange}
-            scope={scope}
+            onScopeChange={handlers.handleScopeChange}
+            scope={handlers.scope}
           />
         ) : null}
-        <CommandList className="max-h-[420px]">
-          <CommandEmpty>{currentEmptyText}</CommandEmpty>
-          {showComponents ? (
-            <CommandGroup
-              heading={
-                groupHeading ??
-                (hasDocumentationSearch ? labels.components : undefined)
-              }
-            >
-              {sortedItems.map((item) => (
-                <CommandItem
-                  key={item.id}
-                  onSelect={() => {
-                    handleComponentSelect(item);
-                  }}
-                  value={getItemValue(item)}
-                >
-                  <SearchResultContent item={item} query={query} />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          ) : null}
-          {showDocumentation ? (
-            <CommandGroup heading={docsGroupHeading ?? "Docs"}>
-              {scope === "docs" &&
-              trimmedQuery.length < documentationSearchLength ? (
-                <CommandItem
-                  disabled
-                  value={`${trimmedQuery} search-docs-min-length`}
-                >
-                  <span className="text-sm text-muted-foreground">
-                    Type at least {documentationSearchLength} characters to
-                    search docs.
-                  </span>
-                </CommandItem>
-              ) : null}
-              {documentationLoading ? (
-                <CommandItem disabled value={`${trimmedQuery} searching-docs`}>
-                  <span className="text-sm text-muted-foreground">
-                    Searching docs...
-                  </span>
-                </CommandItem>
-              ) : null}
-              {!documentationLoading &&
-              trimmedQuery.length >= documentationSearchLength
-                ? documentationItems.map((item) => (
-                    <CommandItem
-                      key={item.id}
-                      onSelect={() => {
-                        handleDocumentationSelect(item);
-                      }}
-                      value={getItemValue(item)}
-                    >
-                      <SearchResultContent item={item} query={query} />
-                    </CommandItem>
-                  ))
-                : null}
-            </CommandGroup>
-          ) : null}
-        </CommandList>
+        <SearchDialogList
+          currentEmptyText={currentEmptyText}
+          docsGroupHeading={docsGroupHeading}
+          documentationItems={documentationSearch.documentationItems}
+          documentationLoading={documentationSearch.documentationLoading}
+          documentationSearchLength={
+            documentationSearch.documentationSearchLength
+          }
+          groupHeading={groupHeading}
+          hasDocumentationSearch={documentationSearch.hasDocumentationSearch}
+          labels={labels}
+          onComponentSelect={handlers.handleComponentSelect}
+          onDocumentationSelect={handlers.handleDocumentationSelect}
+          query={handlers.query}
+          scope={handlers.scope}
+          showComponents={handlers.scope !== "docs"}
+          showDocumentation={showDocumentation}
+          sortedItems={sortedItems}
+          trimmedQuery={trimmedQuery}
+        />
       </CommandDialog>
     </>
+  );
+}
+
+export function SearchDialog({
+  buttonText,
+  buttonTextMobile,
+  docsEmptyText,
+  docsGroupHeading,
+  docsSearch,
+  emptyText,
+  enableKeyboardShortcut,
+  groupHeading,
+  items,
+  minDocsSearchLength,
+  onDocsSelect,
+  onSelect,
+  scopeLabels,
+  searchPlaceholder,
+}: SearchDialogProps) {
+  const documentationSearch = useDocumentationSearch({
+    docsSearch,
+    minDocsSearchLength,
+  });
+  const handlers = useSearchDialogHandlers({
+    enableKeyboardShortcut,
+    onDocsSelect,
+    onSelect,
+    runDocumentationSearch: documentationSearch.runDocumentationSearch,
+  });
+  const labels = { ...DEFAULT_SCOPE_LABELS, ...scopeLabels };
+  const trimmedQuery = handlers.query.trim();
+  const sortedItems = useMemo(
+    () => [...items].sort((a, b) => a.title.localeCompare(b.title)),
+    [items],
+  );
+  const currentEmptyText = getCurrentEmptyText({
+    docsEmptyText,
+    documentationSearchLength: documentationSearch.documentationSearchLength,
+    emptyText,
+    scope: handlers.scope,
+    trimmedQuery,
+  });
+  const showDocumentation =
+    documentationSearch.hasDocumentationSearch &&
+    handlers.scope !== "components";
+
+  return (
+    <SearchDialogView
+      buttonText={buttonText}
+      buttonTextMobile={buttonTextMobile}
+      currentEmptyText={currentEmptyText}
+      docsGroupHeading={docsGroupHeading}
+      documentationSearch={documentationSearch}
+      groupHeading={groupHeading}
+      handlers={handlers}
+      labels={labels}
+      searchPlaceholder={searchPlaceholder}
+      showDocumentation={showDocumentation}
+      sortedItems={sortedItems}
+      trimmedQuery={trimmedQuery}
+    />
   );
 }
