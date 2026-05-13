@@ -4,19 +4,17 @@ import path from "node:path";
 import { Breadcrumb, CodeBlock, Sidebar, TableOfContents } from "@vllnt/ui";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { QuickAdd } from "@/components/quick-add";
 import { StorybookEmbed } from "@/components/storybook-embed";
+import { Link, type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
-import {
-  breadcrumbLd,
-  jsonLdScript,
-  softwareSourceCodeLd,
-} from "@/lib/jsonld";
+import { breadcrumbLd, jsonLdScript, softwareSourceCodeLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical } from "@/lib/seo";
+import { getLocalizedDescription } from "@/lib/registry-i18n";
+import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import {
   getCategoryForComponent,
   getSidebarSections,
@@ -25,7 +23,7 @@ import registryData from "@/registry.json";
 import type { Registry, RegistryComponent } from "@/types/registry";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: Locale; slug: string }>;
 };
 
 const registry = registryData as Registry;
@@ -45,13 +43,18 @@ const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  return registry.items
+  const components = registry.items
     .filter(
       (item): item is RegistryComponent => item.type === "registry:component",
     )
-    .map((item) => ({
-      slug: item.name,
-    }));
+    .map((item) => item.name);
+
+  return routing.locales.flatMap((locale) =>
+    components.map((slug) => ({
+      locale,
+      slug,
+    })),
+  );
 }
 
 function getNpmUrl(packageName: string): string {
@@ -59,7 +62,7 @@ function getNpmUrl(packageName: string): string {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { slug } = await props.params;
+  const { locale, slug } = await props.params;
   const component = registry.items.find(
     (item): item is RegistryComponent =>
       item.name === slug && item.type === "registry:component",
@@ -72,7 +75,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const meta = metadata_map[slug];
   const category = getCategoryForComponent(slug);
   const title = meta?.title ?? component.title;
-  const description = meta?.description ?? component.description;
+  const description = getLocalizedDescription(component, locale);
 
   const ogParameters = {
     category,
@@ -82,16 +85,23 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   };
 
   return {
-    alternates: { canonical: canonical(`/components/${slug}`) },
+    alternates: {
+      canonical: canonical(`/components/${slug}`, locale),
+      languages: languageAlternates(`/components/${slug}`),
+    },
     description,
-    openGraph: generateOGMetadata(ogParameters),
+    openGraph: generateOGMetadata(ogParameters, {
+      locale,
+      pathname: `/components/${slug}`,
+    }),
     title: `${title} - VLLNT UI`,
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
 export default async function ComponentPage(props: Props) {
-  const { slug } = await props.params;
+  const { locale, slug } = await props.params;
+  setRequestLocale(locale);
   const component = registry.items.find(
     (item): item is RegistryComponent =>
       item.name === slug && item.type === "registry:component",
@@ -103,7 +113,9 @@ export default async function ComponentPage(props: Props) {
 
   const meta = metadata_map[slug];
   const displayTitle = meta?.title ?? component.title ?? component.name;
-  const displayDescription = meta?.description ?? component.description ?? "";
+  const displayDescription = getLocalizedDescription(component, locale);
+  const t = await getTranslations({ locale, namespace: "pages.component" });
+  const common = await getTranslations({ locale, namespace: "common" });
 
   // Read component source for code display
   let componentCode = "";
@@ -158,16 +170,15 @@ export default async function ComponentPage(props: Props) {
   const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/${component.name}.json`;
 
   const sections = [
-    { id: "installation", title: "Installation" },
-    ...(meta?.defaultStoryId ? [{ id: "storybook", title: "Storybook" }] : []),
-    ...(componentCode ? [{ id: "code", title: "Code" }] : []),
+    { id: "installation", title: t("installation") },
+    ...(meta?.defaultStoryId
+      ? [{ id: "storybook", title: t("storybook") }]
+      : []),
+    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
     ...(component.dependencies && component.dependencies.length > 0
-      ? [{ id: "dependencies", title: "Dependencies" }]
+      ? [{ id: "dependencies", title: t("dependencies") }]
       : []),
   ] as { id: string; title: string }[];
-
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>
@@ -180,18 +191,23 @@ export default async function ComponentPage(props: Props) {
               title: displayTitle,
             }),
             breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Components", url: `${SITE_URL}/components` },
+              { name: common("home"), url: canonical("/", locale) },
+              {
+                name: common("components"),
+                url: canonical("/components", locale),
+              },
               {
                 name: displayTitle,
-                url: `${SITE_URL}/components/${component.name}`,
+                url: canonical(`/components/${component.name}`, locale),
               },
             ]),
           ]),
         }}
         type="application/ld+json"
       />
-      <Sidebar sections={getSidebarSections(getCategoryForComponent(slug))} />
+      <Sidebar
+        sections={getSidebarSections(getCategoryForComponent(slug), locale)}
+      />
       <main className="flex-1 overflow-y-auto bg-background overflow-x-hidden">
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_200px] gap-8">
@@ -201,8 +217,14 @@ export default async function ComponentPage(props: Props) {
                 <Breadcrumb
                   className="mb-4 text-muted-foreground"
                   items={[
-                    { href: "/", label: "Home" },
-                    { href: "/components", label: "Components" },
+                    {
+                      href: localizePathname("/", locale),
+                      label: common("home"),
+                    },
+                    {
+                      href: localizePathname("/components", locale),
+                      label: common("components"),
+                    },
                     { label: displayTitle },
                   ]}
                 />
@@ -216,7 +238,7 @@ export default async function ComponentPage(props: Props) {
                     className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
                     href={`/report?component=${component.name}`}
                   >
-                    Report a bug
+                    {t("reportBug")}
                   </Link>
                 </div>
               </div>
@@ -235,7 +257,9 @@ export default async function ComponentPage(props: Props) {
 
               {/* Installation */}
               <div className="mb-8 scroll-mt-8" id="installation">
-                <h2 className="text-2xl font-semibold mb-4">Installation</h2>
+                <h2 className="text-2xl font-semibold mb-4">
+                  {t("installation")}
+                </h2>
                 <CodeBlock language="bash" showLanguage={true}>
                   {installCommand}
                 </CodeBlock>
@@ -244,10 +268,11 @@ export default async function ComponentPage(props: Props) {
               {/* Storybook link */}
               {meta?.defaultStoryId ? (
                 <div className="mb-8 scroll-mt-8" id="storybook">
-                  <h2 className="text-2xl font-semibold mb-4">Storybook</h2>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    {t("storybook")}
+                  </h2>
                   <p className="text-muted-foreground mb-4">
-                    Explore all variants, controls, and accessibility checks in
-                    the interactive Storybook playground.
+                    {t("storybookDescription")}
                   </p>
                   <Link
                     className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
@@ -255,13 +280,13 @@ export default async function ComponentPage(props: Props) {
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    View in Storybook
+                    {t("viewInStorybook")}
                     <ExternalLink className="h-4 w-4" />
                   </Link>
                   {meta.stories.length > 1 ? (
                     <div className="mt-4">
                       <p className="text-sm text-muted-foreground mb-2">
-                        {meta.stories.length} stories available:
+                        {t("storiesAvailable", { count: meta.stories.length })}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {meta.stories.map((story) => (
@@ -284,7 +309,7 @@ export default async function ComponentPage(props: Props) {
               {/* Code */}
               {componentCode ? (
                 <div className="mb-8 scroll-mt-8" id="code">
-                  <h2 className="text-2xl font-semibold mb-4">Code</h2>
+                  <h2 className="text-2xl font-semibold mb-4">{t("code")}</h2>
                   <CodeBlock language="typescript" showLanguage={true}>
                     {componentCode}
                   </CodeBlock>
@@ -294,7 +319,9 @@ export default async function ComponentPage(props: Props) {
               {/* Dependencies */}
               {component.dependencies && component.dependencies.length > 0 ? (
                 <div className="mb-8 scroll-mt-8" id="dependencies">
-                  <h2 className="text-2xl font-semibold mb-4">Dependencies</h2>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    {t("dependencies")}
+                  </h2>
                   <div className="rounded-lg border bg-card p-6">
                     <ul className="space-y-2">
                       {component.dependencies.map((dep) => {

@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "check:translations": "tsx scripts/check-page-translations.ts",
     "registry:build": "tsx scripts/inline-component-source.ts && shadcn build && tsx scripts/stamp-registry-metadata.ts && tsx scripts/generate-component-metadata.ts",
     "registry:sync-shims": "tsx scripts/inline-component-source.ts",
     "sync-storybook": "tsx scripts/generate-component-metadata.ts"
@@ -25,6 +26,7 @@
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.468.0",
     "next": "16.1.6",
+    "next-intl": "^4.11.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",

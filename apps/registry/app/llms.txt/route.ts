@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/naming-convention, functional/no-loop-statements, max-lines-per-function */
+
 import registry from "../../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type RegistryItem = {
+  readonly category: string;
+  readonly description: string;
   readonly name: string;
   readonly title: string;
-  readonly description: string;
-  readonly category: string;
 };
 
 const CATEGORY_ORDER: readonly string[] = [
@@ -51,9 +53,7 @@ function buildLlmsTxt(): string {
 
   const sortedCategories = [
     ...CATEGORY_ORDER.filter((c) => grouped.has(c)),
-    ...[...grouped.keys()]
-      .filter((c) => !CATEGORY_ORDER.includes(c))
-      .sort(),
+    ...[...grouped.keys()].filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
   ];
 
   const lines: string[] = [];
@@ -74,6 +74,9 @@ function buildLlmsTxt(): string {
     `- [Documentation](${SITE_URL}/docs): theming, registry usage, conventions`,
   );
   lines.push(
+    `- [Documentation FR](${SITE_URL}/fr/docs): version francaise de la documentation`,
+  );
+  lines.push(
     `- [Philosophy](${SITE_URL}/philosophy): design principles and component patterns`,
   );
   lines.push(
@@ -90,6 +93,12 @@ function buildLlmsTxt(): string {
     `- [Sitemap](${SITE_URL}/sitemap.xml): every public route, refreshed per deploy`,
   );
   lines.push(
+    `- [French llms.txt](${SITE_URL}/fr/llms.txt): localized agent index`,
+  );
+  lines.push(
+    `- [French llms-full.txt](${SITE_URL}/fr/llms-full.txt): localized long-form agent context`,
+  );
+  lines.push(
     "- Install command: `pnpm dlx shadcn@latest add " +
       `${SITE_URL}/r/<name>.json` +
       "`",
@@ -102,7 +111,9 @@ function buildLlmsTxt(): string {
     const label = CATEGORY_LABEL[category] ?? category;
     lines.push(`## Components — ${label}`);
     lines.push("");
-    for (const item of [...bucket].sort((a, b) => a.name.localeCompare(b.name))) {
+    for (const item of [...bucket].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )) {
       lines.push(
         `- [${item.title}](${SITE_URL}/components/${item.name}): ${item.description}`,
       );
@@ -114,13 +125,14 @@ function buildLlmsTxt(): string {
 }
 
 export const dynamic = "force-static";
-export const revalidate = 86400;
+export const revalidate = 86_400;
 
 export function GET(): Response {
   return new Response(buildLlmsTxt(), {
     headers: {
+      "Cache-Control":
+        "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
     },
   });
 }

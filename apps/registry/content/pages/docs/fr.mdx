@@ -1,0 +1,33 @@
+---
+title: Documentation
+description: Apprenez a utiliser les composants VLLNT UI dans vos projets.
+type: docs
+og:
+  title: Documentation
+  description: Apprenez a utiliser les composants VLLNT UI
+  type: docs
+---
+
+# Demarrer
+
+Bienvenue dans VLLNT UI. C'est un registre de composants construit avec le format shadcn/ui.
+
+## Installation
+
+Installez les composants avec la CLI shadcn :
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/[component-name].json
+```
+
+## Utilisation
+
+Importez les composants depuis `@vllnt/ui` :
+
+```tsx
+import { Button } from '@vllnt/ui'
+
+export function MyComponent() {
+  return <Button>Click me</Button>
+}
+```

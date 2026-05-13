@@ -57,6 +57,7 @@ type RegistryItem = {
   examples?: UsageExample[];
   name: string;
   props?: PropDefinition[];
+  descriptions?: Partial<Record<string, string>>;
   version?: string;
   stability?: Stability;
   replacedBy?: string;
@@ -101,6 +102,11 @@ for (const item of registry.items) {
     data.props = item.props;
   } else {
     delete data.props;
+  }
+  if (item.descriptions && Object.keys(item.descriptions).length > 0) {
+    data.descriptions = item.descriptions;
+  } else {
+    delete data.descriptions;
   }
 
   writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`);

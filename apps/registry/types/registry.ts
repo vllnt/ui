@@ -4,9 +4,13 @@ export type RegistryFile = {
 };
 
 export type ComponentCategory =
+  | "ai"
+  | "billing"
   | "content"
   | "core"
   | "data"
+  | "data-display"
+  | "educational"
   | "form"
   | "learning"
   | "navigation"
@@ -50,6 +54,7 @@ export type RegistryComponent = {
   category?: ComponentCategory;
   dependencies?: string[];
   description?: string;
+  descriptions?: Partial<Record<string, string>>;
   examples?: UsageExample[];
   files: RegistryFile[];
   name: string;

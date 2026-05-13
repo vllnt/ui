@@ -31,6 +31,7 @@ const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 type RegistryItem = {
   category?: string;
   description?: string;
+  descriptions?: Partial<Record<string, string>>;
   files: { path: string; type: string }[];
   name: string;
   title?: string;
@@ -50,6 +51,7 @@ type ComponentMetadata = {
   category: string;
   defaultStoryId: string;
   description: string;
+  descriptions?: Partial<Record<string, string>>;
   name: string;
   stories: StoryEntry[];
   title: string;
@@ -175,6 +177,7 @@ for (const item of registry.items) {
     category: item.category ?? "utility",
     defaultStoryId: entries.defaultStoryId,
     description: item.description ?? "",
+    descriptions: item.descriptions,
     name: item.name,
     stories: entries.stories,
     title: item.title ?? item.name,

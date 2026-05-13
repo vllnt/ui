@@ -1,13 +1,11 @@
+/* eslint-disable max-lines-per-function */
+
 import { CodeBlock } from "@vllnt/ui";
-import {
-  ArrowRight,
-  Github,
-  Sparkles,
-  Terminal,
-} from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, ExternalLink, Sparkles, Terminal } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Footer } from "@/components/footer/footer";
+import { Link } from "@/i18n/routing";
 import {
   getCategoryCount,
   getComponentCount,
@@ -21,13 +19,6 @@ const STORYBOOK_URL = "https://storybook.vllnt.ai";
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
 
-const TRUST_BADGES = [
-  { label: "MIT" },
-  { label: "TypeScript" },
-  { label: "RSC compatible" },
-  { label: "Tailwind v4 ready" },
-];
-
 function Hero({
   componentCount,
   version,
@@ -35,26 +26,32 @@ function Hero({
   componentCount: number;
   version: string;
 }) {
+  const t = useTranslations("landing.hero");
+  const trustBadges = [
+    { label: "MIT" },
+    { label: "TypeScript" },
+    { label: t("rscCompatible") },
+    { label: t("tailwindReady") },
+  ];
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 lg:px-8">
         <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          v{version} · MIT
+          {t("kicker", { version })}
         </p>
         <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl">
-          {componentCount} agent-first React components.
+          {t("title", { count: componentCount })}
           <br />
-          <span className="text-muted-foreground">Copy, paste, ship.</span>
+          <span className="text-muted-foreground">{t("subtitle")}</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-          Built on Radix UI, Tailwind CSS, and CVA. Every component is also a
-          machine-readable JSON descriptor: agents (Claude, Cursor, Cline,
-          Continue) read the registry directly without scraping HTML.
+          {t("description")}
         </p>
 
         <div className="mt-8">
           <CodeBlock language="bash">
-            {`pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json`}
+            pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
           </CodeBlock>
         </div>
 
@@ -63,14 +60,14 @@ function Hero({
             className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
             href="/components"
           >
-            Browse {componentCount} components
+            {t("browseComponents", { count: componentCount })}
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
             href="/docs"
           >
-            Read the docs
+            {t("readDocs")}
           </Link>
           <a
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -78,13 +75,13 @@ function Hero({
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
-            GitHub
+            <ExternalLink className="h-4 w-4" />
+            {t("github")}
           </a>
         </div>
 
         <ul className="mt-8 flex flex-wrap gap-3 text-xs text-muted-foreground">
-          {TRUST_BADGES.map((badge) => (
+          {trustBadges.map((badge) => (
             <li
               className="rounded-full border border-border bg-muted/40 px-3 py-1"
               key={badge.label}
@@ -109,16 +106,18 @@ function Stats({
   generatedAt?: string;
   version: string;
 }) {
+  const t = useTranslations("landing.stats");
+
   return (
     <section className="border-b border-border bg-muted/30">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-12 lg:grid-cols-4 lg:px-8">
-        <Stat label="Components" value={String(componentCount)} />
-        <Stat label="Categories" value={String(categoryCount)} />
-        <Stat label="Library version" value={`v${version}`} />
+        <Stat label={t("components")} value={String(componentCount)} />
+        <Stat label={t("categories")} value={String(categoryCount)} />
+        <Stat label={t("libraryVersion")} value={`v${version}`} />
         <Stat
-          label="Last build"
+          label={t("lastBuild")}
           value={
-            generatedAt ? new Date(generatedAt).toISOString().slice(0, 10) : "—"
+            generatedAt ? new Date(generatedAt).toISOString().slice(0, 10) : "-"
           }
         />
       </div>
@@ -136,36 +135,33 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 function AgentCallout() {
+  const t = useTranslations("landing.agent");
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
           <Sparkles className="h-4 w-4" />
-          Agent-first
+          {t("eyebrow")}
         </div>
-        <h2 className="mt-2 text-3xl font-semibold">
-          Built so AI coding agents can use it directly.
-        </h2>
+        <h2 className="mt-2 text-3xl font-semibold">{t("title")}</h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Every component ships as a machine-readable JSON descriptor with
-          name, version, stability, accessibility schema, usage examples,
-          and prop definitions. Agents discover the registry through three
-          surfaces.
+          {t("description")}
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <AgentCard
-            description="Concise index per the llmstxt.org spec — sections, links, descriptions."
+            description={t("llmsDescription")}
             href="/llms.txt"
             title="/llms.txt"
           />
           <AgentCard
-            description="Full registry context in one fetch — docs + per-component descriptors."
+            description={t("llmsFullDescription")}
             href="/llms-full.txt"
             title="/llms-full.txt"
           />
           <AgentCard
-            description="Streamable HTTP MCP server. Tools: search_components, get_component, list_categories."
+            description={t("mcpDescription")}
             href="/mcp"
             title="/mcp"
           />
@@ -184,6 +180,8 @@ function AgentCard({
   href: string;
   title: string;
 }) {
+  const t = useTranslations("landing.agent");
+
   return (
     <a
       className="group rounded-lg border border-border p-5 hover:border-foreground/40"
@@ -197,7 +195,7 @@ function AgentCard({
       </div>
       <p className="mt-3 text-sm text-muted-foreground">{description}</p>
       <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-foreground">
-        Open
+        {t("open")}
         <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
       </p>
     </a>
@@ -205,15 +203,19 @@ function AgentCard({
 }
 
 function FeaturedComponents() {
+  const t = useTranslations("landing.featured");
   const featured = getFeaturedComponents();
   if (featured.length === 0) return null;
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-        <h2 className="text-2xl font-semibold">Featured components</h2>
+        <h2 className="text-2xl font-semibold">{t("title")}</h2>
         <p className="mt-2 text-muted-foreground">
-          A few favourites. Browse all {getComponentCount()} from{" "}
-          <Link className="font-medium text-foreground underline" href="/components">
+          {t("description", { count: getComponentCount() })}{" "}
+          <Link
+            className="font-medium text-foreground underline"
+            href="/components"
+          >
             /components
           </Link>
           .
@@ -240,13 +242,14 @@ function FeaturedComponents() {
 }
 
 function CommunityCTA() {
+  const t = useTranslations("landing.community");
+
   return (
     <section>
       <div className="mx-auto max-w-7xl px-4 py-20 lg:px-8">
-        <h2 className="text-3xl font-semibold">Build with the community.</h2>
+        <h2 className="text-3xl font-semibold">{t("title")}</h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          MIT licensed. No tracking. No backend. Issues, ideas, and pull
-          requests welcome.
+          {t("description")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a
@@ -255,8 +258,8 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
-            Star on GitHub
+            <ExternalLink className="h-4 w-4" />
+            {t("starGithub")}
           </a>
           <a
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -264,7 +267,7 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            Request a component
+            {t("requestComponent")}
           </a>
           <a
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -272,7 +275,7 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            Open Storybook
+            {t("openStorybook")}
           </a>
         </div>
       </div>

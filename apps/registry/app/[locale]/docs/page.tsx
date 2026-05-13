@@ -1,26 +1,39 @@
 import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
 
+import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical } from "@/lib/seo";
+import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { frontmatter } = await getPageContent("docs");
+type Props = {
+  params: Promise<{ locale: Locale }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const { frontmatter } = await getPageContent("docs", locale);
   const og = frontmatter.og;
 
   return {
-    alternates: { canonical: canonical("/docs") },
+    alternates: {
+      canonical: canonical("/docs", locale),
+      languages: languageAlternates("/docs"),
+    },
     description: frontmatter.description,
-    openGraph: generateOGMetadata({
-      description: og?.description ?? frontmatter.description,
-      title: og?.title ?? frontmatter.title,
-      type: og?.type ?? frontmatter.type,
-    }),
+    openGraph: generateOGMetadata(
+      {
+        description: og?.description ?? frontmatter.description,
+        title: og?.title ?? frontmatter.title,
+        type: og?.type ?? frontmatter.type,
+      },
+      { locale, pathname: "/docs" },
+    ),
     title: frontmatter.title,
     twitter: generateTwitterMetadata({
       description: og?.description ?? frontmatter.description,
@@ -30,8 +43,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function DocumentationPage() {
-  const { content } = await getPageContent("docs");
+export default async function DocumentationPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const { content, frontmatter } = await getPageContent("docs", locale);
 
   return (
     <>
@@ -46,20 +61,20 @@ export default async function DocumentationPage() {
         }}
         type="application/ld+json"
       />
-      <Sidebar sections={getSidebarSections()} />
+      <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: "/", label: "Home" },
+                { href: localizePathname("/", locale), label: "Home" },
                 { label: "Docs" },
               ]}
             />
-            <h1 className="text-4xl font-semibold mb-4">Documentation</h1>
+            <h1 className="text-4xl font-semibold mb-4">{frontmatter.title}</h1>
             <p className="text-muted-foreground text-lg">
-              Learn how to use VLLNT UI components in your projects.
+              {frontmatter.description}
             </p>
           </div>
 
