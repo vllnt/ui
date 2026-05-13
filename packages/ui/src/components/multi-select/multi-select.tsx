@@ -236,129 +236,118 @@ function useMultiSelectState({
   };
 }
 
-const MultiSelectTrigger = React.forwardRef<
-  HTMLButtonElement,
-  MultiSelectTriggerProps
->(
-  (
-    {
+const MultiSelectTrigger = ({
+  className,
+  contentId,
+  disabled = false,
+  onKeyDown,
+  open,
+  placeholder = "Select options",
+  ref,
+  selectedOptions,
+  ...props
+}: MultiSelectTriggerProps & React.RefAttributes<HTMLButtonElement>) => (
+  <Button
+    aria-controls={contentId}
+    aria-expanded={open}
+    aria-haspopup="listbox"
+    className={cn(
+      "min-h-10 w-full justify-between px-3 py-2 text-sm font-normal",
+      selectedOptions.length === 0 && "text-muted-foreground",
       className,
-      contentId,
-      disabled = false,
-      onKeyDown,
-      open,
-      placeholder = "Select options",
-      selectedOptions,
-      ...props
-    },
-    ref,
-  ) => (
-    <Button
-      aria-controls={contentId}
-      aria-expanded={open}
-      aria-haspopup="listbox"
-      className={cn(
-        "min-h-10 w-full justify-between px-3 py-2 text-sm font-normal",
-        selectedOptions.length === 0 && "text-muted-foreground",
-        className,
-      )}
-      disabled={disabled}
-      onKeyDown={onKeyDown}
-      ref={ref}
-      role="combobox"
-      type="button"
-      variant="outline"
-      {...props}
-    >
-      <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1 text-left">
-        <TriggerContent
-          placeholder={placeholder}
-          selectedOptions={selectedOptions}
-        />
-      </span>
-      <ChevronDown className="ml-2 size-4 shrink-0 opacity-50" />
-    </Button>
-  ),
+    )}
+    disabled={disabled}
+    onKeyDown={onKeyDown}
+    ref={ref}
+    role="combobox"
+    type="button"
+    variant="outline"
+    {...props}
+  >
+    <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1 text-left">
+      <TriggerContent
+        placeholder={placeholder}
+        selectedOptions={selectedOptions}
+      />
+    </span>
+    <ChevronDown className="ml-2 size-4 shrink-0 opacity-50" />
+  </Button>
 );
 MultiSelectTrigger.displayName = "MultiSelectTrigger";
 
-const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
-  (
-    {
-      defaultValue = [],
-      emptyText = "No options found.",
-      onKeyDown,
-      onOpenChange,
-      onValueChange,
-      options,
-      searchable = false,
-      searchPlaceholder = "Search options...",
-      value,
-      ...props
+const MultiSelect = ({
+  defaultValue = [],
+  emptyText = "No options found.",
+  onKeyDown,
+  onOpenChange,
+  onValueChange,
+  options,
+  ref,
+  searchable = false,
+  searchPlaceholder = "Search options...",
+  value,
+  ...props
+}: MultiSelectProps & React.RefAttributes<HTMLButtonElement>) => {
+  const contentId = React.useId();
+  const { handleOpenChange, open, selectedValues, setSelectedValues } =
+    useMultiSelectState({ defaultValue, onOpenChange, onValueChange, value });
+  const selectedOptions = React.useMemo(
+    () => options.filter((option) => selectedValues.includes(option.value)),
+    [options, selectedValues],
+  );
+
+  const handleSelect = React.useCallback(
+    (nextValue: string) => {
+      const nextSelectedValues = selectedValues.includes(nextValue)
+        ? selectedValues.filter((valueItem) => valueItem !== nextValue)
+        : [...selectedValues, nextValue];
+
+      setSelectedValues(nextSelectedValues);
     },
-    ref,
-  ) => {
-    const contentId = React.useId();
-    const { handleOpenChange, open, selectedValues, setSelectedValues } =
-      useMultiSelectState({ defaultValue, onOpenChange, onValueChange, value });
-    const selectedOptions = React.useMemo(
-      () => options.filter((option) => selectedValues.includes(option.value)),
-      [options, selectedValues],
-    );
+    [selectedValues, setSelectedValues],
+  );
 
-    const handleSelect = React.useCallback(
-      (nextValue: string) => {
-        const nextSelectedValues = selectedValues.includes(nextValue)
-          ? selectedValues.filter((valueItem) => valueItem !== nextValue)
-          : [...selectedValues, nextValue];
+  const handleTriggerKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLButtonElement>) => {
+      onKeyDown?.(event);
 
-        setSelectedValues(nextSelectedValues);
-      },
-      [selectedValues, setSelectedValues],
-    );
+      if (event.defaultPrevented || props.disabled) {
+        return;
+      }
 
-    const handleTriggerKeyDown = React.useCallback(
-      (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        onKeyDown?.(event);
+      if (shouldOpenFromKey(event.key)) {
+        event.preventDefault();
+        handleOpenChange(true);
+      }
+    },
+    [handleOpenChange, onKeyDown, props.disabled],
+  );
 
-        if (event.defaultPrevented || props.disabled) {
-          return;
-        }
-
-        if (shouldOpenFromKey(event.key)) {
-          event.preventDefault();
-          handleOpenChange(true);
-        }
-      },
-      [handleOpenChange, onKeyDown, props.disabled],
-    );
-
-    return (
-      <Popover onOpenChange={handleOpenChange} open={open}>
-        <PopoverTrigger asChild>
-          <MultiSelectTrigger
-            {...props}
-            contentId={contentId}
-            onKeyDown={handleTriggerKeyDown}
-            open={open}
-            ref={ref}
-            selectedOptions={selectedOptions}
-          />
-        </PopoverTrigger>
-        <MultiSelectContent
+  return (
+    <Popover onOpenChange={handleOpenChange} open={open}>
+      <PopoverTrigger asChild>
+        <MultiSelectTrigger
+          {...props}
           contentId={contentId}
-          disabled={props.disabled || false}
-          emptyText={emptyText}
-          onSelect={handleSelect}
-          options={options}
-          searchable={searchable}
-          searchPlaceholder={searchPlaceholder}
-          selectedValues={selectedValues}
+          onKeyDown={handleTriggerKeyDown}
+          open={open}
+          ref={ref}
+          selectedOptions={selectedOptions}
         />
-      </Popover>
-    );
-  },
-);
+      </PopoverTrigger>
+      <MultiSelectContent
+        contentId={contentId}
+        disabled={props.disabled || false}
+        emptyText={emptyText}
+        onSelect={handleSelect}
+        options={options}
+        searchable={searchable}
+        searchPlaceholder={searchPlaceholder}
+        selectedValues={selectedValues}
+      />
+    </Popover>
+  );
+};
 MultiSelect.displayName = "MultiSelect";
 
 export { MultiSelect };

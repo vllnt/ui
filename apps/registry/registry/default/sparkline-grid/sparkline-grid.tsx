@@ -37,10 +37,14 @@ const gridColumns = {
   4: "md:grid-cols-2 xl:grid-cols-4",
 };
 
-export const SparklineGrid = React.forwardRef<
-  HTMLDivElement,
-  SparklineGridProps
->(({ className, columns = 2, items, ...props }, reference) => {
+// eslint-disable-next-line max-lines-per-function
+export const SparklineGrid = ({
+  className,
+  columns = 2,
+  items,
+  ref: reference,
+  ...props
+}: SparklineGridProps & React.RefAttributes<HTMLDivElement>) => {
   if (items.length === 0) {
     return null;
   }
@@ -106,6 +110,6 @@ export const SparklineGrid = React.forwardRef<
       })}
     </div>
   );
-});
+};
 
 SparklineGrid.displayName = "SparklineGrid";

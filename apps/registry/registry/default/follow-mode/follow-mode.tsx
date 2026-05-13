@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -78,58 +74,59 @@ export type FollowModeProps = {
  *
  * @public
  */
-export const FollowMode = forwardRef<HTMLDivElement, FollowModeProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      color = "blue",
-      labels,
-      name,
-      onStop,
-      ...rest
-    } = props;
-    const palette = PALETTE[color];
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
+export const FollowMode = (
+  props: FollowModeProps & React.RefAttributes<HTMLDivElement>,
+) => {
+  const {
+    children,
+    className,
+    color = "blue",
+    labels,
+    name,
+    onStop,
+    ref,
+    ...rest
+  } = props;
+  const palette = PALETTE[color];
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <div
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "relative h-full w-full rounded-2xl ring-2 ring-inset",
+        palette.ring,
+        className,
+      )}
+      data-follow-color={color}
+      ref={ref}
+      {...rest}
+    >
       <div
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "relative h-full w-full rounded-2xl ring-2 ring-inset",
-          palette.ring,
-          className,
-        )}
-        data-follow-color={color}
-        ref={ref}
-        {...rest}
+        className="pointer-events-auto absolute left-1/2 top-2 z-30 flex -translate-x-1/2 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow-sm"
+        data-follow-chip
       >
-        <div
-          className="pointer-events-auto absolute left-1/2 top-2 z-30 flex -translate-x-1/2 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow-sm"
-          data-follow-chip
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5",
+            palette.chip,
+          )}
         >
-          <span
-            className={cn(
-              "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5",
-              palette.chip,
-            )}
+          <span aria-hidden="true">▸</span>
+          <span>Following {name}</span>
+        </span>
+        {onStop ? (
+          <button
+            aria-label={resolvedLabels.stop}
+            className="inline-flex h-5 items-center rounded-full border border-border bg-background px-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            onClick={onStop}
+            type="button"
           >
-            <span aria-hidden="true">▸</span>
-            <span>Following {name}</span>
-          </span>
-          {onStop ? (
-            <button
-              aria-label={resolvedLabels.stop}
-              className="inline-flex h-5 items-center rounded-full border border-border bg-background px-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              onClick={onStop}
-              type="button"
-            >
-              {resolvedLabels.stop}
-            </button>
-          ) : null}
-        </div>
-        {children}
+            {resolvedLabels.stop}
+          </button>
+        ) : null}
       </div>
-    );
-  },
-);
+      {children}
+    </div>
+  );
+};
 FollowMode.displayName = "FollowMode";

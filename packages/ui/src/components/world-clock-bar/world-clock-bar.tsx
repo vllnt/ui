@@ -134,49 +134,42 @@ function WorldClockCard({
   );
 }
 
-export const WorldClockBar = React.forwardRef<
-  HTMLDivElement,
-  WorldClockBarProps
->(
-  (
-    {
-      className,
-      now,
-      showDate = true,
-      title = "World clock",
-      updateIntervalMs = 60_000,
-      zones,
-      ...props
-    },
-    ref,
-  ) => {
-    const liveNow = useLiveDate(now, updateIntervalMs);
+export const WorldClockBar = ({
+  className,
+  now,
+  ref,
+  showDate = true,
+  title = "World clock",
+  updateIntervalMs = 60_000,
+  zones,
+  ...props
+}: WorldClockBarProps & React.RefAttributes<HTMLDivElement>) => {
+  const liveNow = useLiveDate(now, updateIntervalMs);
 
-    return (
-      <div className={cn("space-y-3", className)} ref={ref} {...props}>
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-            <p className="text-sm text-muted-foreground">
-              Synchronized time across distributed teams and regions.
-            </p>
-          </div>
-          <Badge variant="outline">{zones.length} zones</Badge>
+  return (
+    <div className={cn("space-y-3", className)} ref={ref} {...props}>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          <p className="text-sm text-muted-foreground">
+            Synchronized time across distributed teams and regions.
+          </p>
         </div>
-
-        <div className="flex gap-3 overflow-x-auto pb-1">
-          {zones.map((zone) => (
-            <WorldClockCard
-              date={liveNow}
-              key={`${zone.city}-${zone.timeZone}`}
-              showDate={showDate}
-              zone={zone}
-            />
-          ))}
-        </div>
+        <Badge variant="outline">{zones.length} zones</Badge>
       </div>
-    );
-  },
-);
+
+      <div className="flex gap-3 overflow-x-auto pb-1">
+        {zones.map((zone) => (
+          <WorldClockCard
+            date={liveNow}
+            key={`${zone.city}-${zone.timeZone}`}
+            showDate={showDate}
+            zone={zone}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 WorldClockBar.displayName = "WorldClockBar";

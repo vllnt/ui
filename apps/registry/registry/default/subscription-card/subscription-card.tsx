@@ -147,74 +147,68 @@ function SubscriptionActions({
   );
 }
 
-export const SubscriptionCard = React.forwardRef<
-  React.ComponentRef<typeof Card>,
-  SubscriptionCardProps
->(
-  (
-    {
-      className,
-      note,
-      plan,
-      priceLabel,
-      primaryActionLabel,
-      renewalLabel,
-      seatsLabel,
-      secondaryActionLabel,
-      status,
-      usageLabel,
-      ...props
-    },
-    reference,
-  ) => {
-    return (
-      <Card
-        className={cn(
-          "w-full max-w-md border-border/70 bg-card shadow-sm",
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <CardHeader className="space-y-4 pb-4">
-          <div className="flex items-start justify-between gap-3">
-            <div className="space-y-1">
-              <CardTitle className="text-lg">Subscription</CardTitle>
-              <CardDescription>
-                Billing overview for the current workspace plan.
-              </CardDescription>
-            </div>
-            <span
-              className={cn(
-                "inline-flex rounded-full px-2.5 py-1 text-xs font-medium",
-                getStatusClasses(status),
-              )}
-            >
-              {getStatusLabel(status)}
-            </span>
+export const SubscriptionCard = ({
+  className,
+  note,
+  plan,
+  priceLabel,
+  primaryActionLabel,
+  ref: reference,
+  renewalLabel,
+  seatsLabel,
+  secondaryActionLabel,
+  status,
+  usageLabel,
+  ...props
+}: SubscriptionCardProps &
+  React.RefAttributes<React.ComponentRef<typeof Card>>) => {
+  return (
+    <Card
+      className={cn(
+        "w-full max-w-md border-border/70 bg-card shadow-sm",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <CardHeader className="space-y-4 pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1">
+            <CardTitle className="text-lg">Subscription</CardTitle>
+            <CardDescription>
+              Billing overview for the current workspace plan.
+            </CardDescription>
           </div>
-          <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
-            <div>
-              <p className="text-sm font-medium">Current plan</p>
-              <p className="text-xs text-muted-foreground">{renewalLabel}</p>
-            </div>
-            <PlanBadge state={getPlanState(status)} tier={plan} />
+          <span
+            className={cn(
+              "inline-flex rounded-full px-2.5 py-1 text-xs font-medium",
+              getStatusClasses(status),
+            )}
+          >
+            {getStatusLabel(status)}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
+          <div>
+            <p className="text-sm font-medium">Current plan</p>
+            <p className="text-xs text-muted-foreground">{renewalLabel}</p>
           </div>
-        </CardHeader>
-        <SubscriptionDetails
-          note={note}
-          priceLabel={priceLabel}
-          renewalLabel={renewalLabel}
-          seatsLabel={seatsLabel}
-          usageLabel={usageLabel}
-        />
-        <SubscriptionActions
-          primaryActionLabel={primaryActionLabel}
-          secondaryActionLabel={secondaryActionLabel}
-        />
-      </Card>
-    );
-  },
-);
+          <PlanBadge state={getPlanState(status)} tier={plan} />
+        </div>
+      </CardHeader>
+      <SubscriptionDetails
+        note={note}
+        priceLabel={priceLabel}
+        renewalLabel={renewalLabel}
+        seatsLabel={seatsLabel}
+        usageLabel={usageLabel}
+      />
+      <SubscriptionActions
+        primaryActionLabel={primaryActionLabel}
+        secondaryActionLabel={secondaryActionLabel}
+      />
+    </Card>
+  );
+};
 
 SubscriptionCard.displayName = "SubscriptionCard";

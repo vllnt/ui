@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -294,63 +294,59 @@ function ActivityLogBody({
   );
 }
 
-const ActivityLog = forwardRef<HTMLDivElement, ActivityLogProps>(
-  (
-    {
-      className,
-      defaultPage = 1,
-      description,
-      emptyMessage = "No activity recorded yet.",
-      items,
-      onPageChange,
-      page,
-      pageSize = 5,
-      title = "Activity log",
-      ...props
-    },
-    ref,
-  ) => {
-    const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
-    const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
-    const currentPage = Math.min(
-      Math.max(page ?? uncontrolledPage, 1),
-      totalPages,
-    );
-    const pageNumbers = useMemo(
-      () => buildPageNumbers(currentPage, totalPages),
-      [currentPage, totalPages],
-    );
+const ActivityLog = ({
+  className,
+  defaultPage = 1,
+  description,
+  emptyMessage = "No activity recorded yet.",
+  items,
+  onPageChange,
+  page,
+  pageSize = 5,
+  ref,
+  title = "Activity log",
+  ...props
+}: ActivityLogProps & React.RefAttributes<HTMLDivElement>) => {
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
+  const currentPage = Math.min(
+    Math.max(page ?? uncontrolledPage, 1),
+    totalPages,
+  );
+  const pageNumbers = useMemo(
+    () => buildPageNumbers(currentPage, totalPages),
+    [currentPage, totalPages],
+  );
 
-    function handlePageChange(nextPage: number) {
-      if (page === undefined) {
-        setUncontrolledPage(nextPage);
-      }
-      onPageChange?.(nextPage);
+  function handlePageChange(nextPage: number) {
+    if (page === undefined) {
+      setUncontrolledPage(nextPage);
     }
+    onPageChange?.(nextPage);
+  }
 
-    return (
-      <Card className={cn("w-full", className)} ref={ref} {...props}>
-        <ActivityLogHeader
+  return (
+    <Card className={cn("w-full", className)} ref={ref} {...props}>
+      <ActivityLogHeader
+        currentPage={currentPage}
+        description={description}
+        title={title}
+        totalPages={totalPages}
+      />
+      <CardContent className="space-y-4">
+        <ActivityLogBody
           currentPage={currentPage}
-          description={description}
-          title={title}
+          emptyMessage={emptyMessage}
+          items={items}
+          onPageChange={handlePageChange}
+          pageNumbers={pageNumbers}
+          pageSize={pageSize}
           totalPages={totalPages}
         />
-        <CardContent className="space-y-4">
-          <ActivityLogBody
-            currentPage={currentPage}
-            emptyMessage={emptyMessage}
-            items={items}
-            onPageChange={handlePageChange}
-            pageNumbers={pageNumbers}
-            pageSize={pageSize}
-            totalPages={totalPages}
-          />
-        </CardContent>
-      </Card>
-    );
-  },
-);
+      </CardContent>
+    </Card>
+  );
+};
 
 ActivityLog.displayName = "ActivityLog";
 

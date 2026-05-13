@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -139,31 +135,32 @@ const Body = (props: {
  *
  * @public
  */
-export const PropertySection = forwardRef<HTMLElement, PropertySectionProps>(
-  (props, ref) => {
-    const {
-      className,
-      collapsible = false,
-      entries,
-      labels,
-      title,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "rounded-lg border bg-background text-foreground",
-          className,
-        )}
-        data-property-section
-        ref={ref}
-        {...rest}
-      >
-        <Body collapsible={collapsible} entries={entries} title={title} />
-      </section>
-    );
-  },
-);
+export const PropertySection = (
+  props: PropertySectionProps & React.RefAttributes<HTMLElement>,
+) => {
+  const {
+    className,
+    collapsible = false,
+    entries,
+    labels,
+    ref,
+    title,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <section
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "rounded-lg border bg-background text-foreground",
+        className,
+      )}
+      data-property-section
+      ref={ref}
+      {...rest}
+    >
+      <Body collapsible={collapsible} entries={entries} title={title} />
+    </section>
+  );
+};
 PropertySection.displayName = "PropertySection";

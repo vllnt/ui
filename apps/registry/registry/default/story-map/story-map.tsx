@@ -4,12 +4,11 @@ import {
   Children,
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   isValidElement,
   type ReactElement,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useId,
   useMemo,
@@ -105,7 +104,7 @@ type Ctx = {
 const StoryMapContext = createContext<Ctx | null>(null);
 
 function useStoryMapContext(): Ctx {
-  const ctx = useContext(StoryMapContext);
+  const ctx = use(StoryMapContext);
   if (!ctx) {
     throw new Error("StoryMap subcomponent used outside its root.");
   }
@@ -190,65 +189,66 @@ function ChapterHeader({ subtitle, title }: ChapterHeaderProps): ReactNode {
  *
  * @public
  */
-export const StoryMapChapter = forwardRef<HTMLElement, StoryMapChapterProps>(
-  (props, forwardedRef) => {
-    const {
-      center,
-      children,
-      className,
-      color = "red",
-      id,
-      media,
-      subtitle,
-      title,
-      zoom = 2,
-      ...rest
-    } = props;
-    const generatedId = useId();
-    const chapterId = id ?? generatedId;
-    const localRef = useRef<HTMLElement | null>(null);
-    const { registerChapter, registerMarker, unregisterMarker } =
-      useStoryMapContext();
+export const StoryMapChapter = (
+  props: StoryMapChapterProps & React.RefAttributes<HTMLElement>,
+) => {
+  const {
+    center,
+    children,
+    className,
+    color = "red",
+    id,
+    media,
+    ref: forwardedRef,
+    subtitle,
+    title,
+    zoom = 2,
+    ...rest
+  } = props;
+  const generatedId = useId();
+  const chapterId = id ?? generatedId;
+  const localRef = useRef<HTMLElement | null>(null);
+  const { registerChapter, registerMarker, unregisterMarker } =
+    useStoryMapContext();
 
-    useEffect(() => {
-      registerMarker({ center, color, id: chapterId, zoom });
-      return () => {
-        unregisterMarker(chapterId);
-      };
-    }, [center, chapterId, color, registerMarker, unregisterMarker, zoom]);
+  useEffect(() => {
+    registerMarker({ center, color, id: chapterId, zoom });
+    return () => {
+      unregisterMarker(chapterId);
+    };
+  }, [center, chapterId, color, registerMarker, unregisterMarker, zoom]);
 
-    const refCallback = useCallback(
-      (node: HTMLElement | null) => {
-        localRef.current = node;
-        registerChapter(chapterId, node);
-        if (typeof forwardedRef === "function") forwardedRef(node);
-        else if (forwardedRef) forwardedRef.current = node;
-      },
-      [chapterId, forwardedRef, registerChapter],
-    );
+  const refCallback = useCallback(
+    (node: HTMLElement | null) => {
+      localRef.current = node;
+      registerChapter(chapterId, node);
+      if (typeof forwardedRef === "function") forwardedRef(node);
+      else if (forwardedRef) forwardedRef.current = node;
+    },
+    [chapterId, forwardedRef, registerChapter],
+  );
 
-    return (
-      <article
-        className={cn(
-          "flex min-h-screen flex-col justify-center gap-3 py-12",
-          className,
-        )}
-        data-chapter-id={chapterId}
-        id={chapterId}
-        ref={refCallback}
-        {...rest}
-      >
-        <ChapterHeader subtitle={subtitle} title={title} />
-        {media ? <ChapterMedia media={media} /> : null}
-        {children ? (
-          <div className="space-y-2 text-sm leading-relaxed text-foreground [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-muted-foreground">
-            {children}
-          </div>
-        ) : null}
-      </article>
-    );
-  },
-);
+  return (
+    <article
+      className={cn(
+        "flex min-h-screen flex-col justify-center gap-3 py-12",
+        className,
+      )}
+      data-chapter-id={chapterId}
+      id={chapterId}
+      ref={refCallback}
+      {...rest}
+    >
+      <ChapterHeader subtitle={subtitle} title={title} />
+      {media ? <ChapterMedia media={media} /> : null}
+      {children ? (
+        <div className="space-y-2 text-sm leading-relaxed text-foreground [&_blockquote]:my-3 [&_blockquote]:border-l-2 [&_blockquote]:border-primary [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-muted-foreground">
+          {children}
+        </div>
+      ) : null}
+    </article>
+  );
+};
 StoryMapChapter.displayName = "StoryMapChapter";
 
 type Marker = RegisterArguments;
@@ -464,7 +464,9 @@ type ShellProps = {
   titleId: string;
 };
 
-const Shell = forwardRef<HTMLElement, ShellProps>(function Shell(props, ref) {
+const Shell = function Shell(
+  props: ShellProps & React.RefAttributes<HTMLElement>,
+) {
   const {
     activeId,
     backdrop,
@@ -474,6 +476,7 @@ const Shell = forwardRef<HTMLElement, ShellProps>(function Shell(props, ref) {
     labels,
     markers,
     orderedIds,
+    ref,
     titleId,
   } = props;
   return (
@@ -524,7 +527,7 @@ const Shell = forwardRef<HTMLElement, ShellProps>(function Shell(props, ref) {
       </div>
     </section>
   );
-});
+};
 
 /**
  * Scroll-driven narrative map. Place {@link StoryMapChapter} children
@@ -554,8 +557,11 @@ const Shell = forwardRef<HTMLElement, ShellProps>(function Shell(props, ref) {
  *
  * @public
  */
-export const StoryMap = forwardRef<HTMLElement, StoryMapProps>((props, ref) => {
-  const { backdrop, backdropAlt, children, className, labels, ...rest } = props;
+export const StoryMap = (
+  props: StoryMapProps & React.RefAttributes<HTMLElement>,
+) => {
+  const { backdrop, backdropAlt, children, className, labels, ref, ...rest } =
+    props;
   const titleId = useId();
   const resolvedLabels = useMemo(
     () => ({ ...DEFAULT_LABELS, ...labels }),
@@ -605,5 +611,5 @@ export const StoryMap = forwardRef<HTMLElement, StoryMapProps>((props, ref) => {
       </Shell>
     </StoryMapContext.Provider>
   );
-});
+};
 StoryMap.displayName = "StoryMap";

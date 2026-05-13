@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -85,11 +81,10 @@ const normalizeRect = (rect: LassoRect): LassoRect => {
  *
  * @public
  */
-export const MultiSelectLasso = forwardRef<
-  HTMLDivElement,
-  MultiSelectLassoProps
->((props, ref) => {
-  const { className, count, hint, labels, rect, ...rest } = props;
+export const MultiSelectLasso = (
+  props: MultiSelectLassoProps & React.RefAttributes<HTMLDivElement>,
+) => {
+  const { className, count, hint, labels, rect, ref, ...rest } = props;
   if (!rect) {
     return null;
   }
@@ -135,5 +130,5 @@ export const MultiSelectLasso = forwardRef<
       ) : null}
     </div>
   );
-});
+};
 MultiSelectLasso.displayName = "MultiSelectLasso";

@@ -195,7 +195,7 @@ function useChecklistProgress(
 }
 
 function useProgressTrackerContext(): ProgressTrackerContextValue {
-  const context = React.useContext(ProgressTrackerContext);
+  const context = React.use(ProgressTrackerContext);
 
   if (!context) {
     throw new Error(

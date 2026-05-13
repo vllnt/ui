@@ -202,65 +202,58 @@ function SessionPill({ sessionChange }: { sessionChange: number }) {
   );
 }
 
-export const CandlestickChart = React.forwardRef<
-  HTMLDivElement,
-  CandlestickChartProps
->(
-  (
-    {
-      className,
-      data,
-      height = DEFAULT_HEIGHT,
-      showGrid = true,
-      width = DEFAULT_WIDTH,
-      ...props
-    },
-    reference,
-  ) => {
-    const firstCandle = data[0];
-    const finalCandle = data.at(-1);
+export const CandlestickChart = ({
+  className,
+  data,
+  height = DEFAULT_HEIGHT,
+  ref: reference,
+  showGrid = true,
+  width = DEFAULT_WIDTH,
+  ...props
+}: CandlestickChartProps & React.RefAttributes<HTMLDivElement>) => {
+  const firstCandle = data[0];
+  const finalCandle = data.at(-1);
 
-    if (!firstCandle || !finalCandle) {
-      return null;
-    }
+  if (!firstCandle || !finalCandle) {
+    return null;
+  }
 
-    const metrics = buildMetrics(data, height, width);
-    const sessionChange = finalCandle.close - firstCandle.open;
+  const metrics = buildMetrics(data, height, width);
+  const sessionChange = finalCandle.close - firstCandle.open;
 
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-              OHLC session
-            </p>
-            <h3 className="text-lg font-semibold text-foreground">
-              Candlestick chart
-            </h3>
-          </div>
-          <SessionPill sessionChange={sessionChange} />
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            OHLC session
+          </p>
+          <h3 className="text-lg font-semibold text-foreground">
+            Candlestick chart
+          </h3>
         </div>
-        <svg
-          aria-label="Candlestick chart"
-          className="h-full w-full"
-          height={height}
-          role="img"
-          viewBox={`0 0 ${width} ${height}`}
-          width={width}
-        >
-          <PriceGrid metrics={metrics} showGrid={showGrid} width={width} />
-          <CandleMarks data={data} height={height} metrics={metrics} />
-        </svg>
+        <SessionPill sessionChange={sessionChange} />
       </div>
-    );
-  },
-);
+      <svg
+        aria-label="Candlestick chart"
+        className="h-full w-full"
+        height={height}
+        role="img"
+        viewBox={`0 0 ${width} ${height}`}
+        width={width}
+      >
+        <PriceGrid metrics={metrics} showGrid={showGrid} width={width} />
+        <CandleMarks data={data} height={height} metrics={metrics} />
+      </svg>
+    </div>
+  );
+};
 
 CandlestickChart.displayName = "CandlestickChart";

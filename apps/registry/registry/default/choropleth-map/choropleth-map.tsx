@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useState,
@@ -78,7 +77,7 @@ type ChoroplethCtx = {
 const ChoroplethContext = createContext<ChoroplethCtx | null>(null);
 
 function useChoroplethContext(): ChoroplethCtx {
-  const ctx = useContext(ChoroplethContext);
+  const ctx = use(ChoroplethContext);
   if (!ctx) {
     throw new Error("ChoroplethMap subcomponent used outside its root.");
   }
@@ -257,10 +256,12 @@ export type ChoroplethTooltipProps = {
   children?: ChoroplethTooltipRender;
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const ChoroplethTooltip = forwardRef<
-  HTMLDivElement,
-  ChoroplethTooltipProps
->(({ children, className, ...rest }, ref) => {
+export const ChoroplethTooltip = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ChoroplethTooltipProps & React.RefAttributes<HTMLDivElement>) => {
   const { hover, regionByid } = useChoroplethContext();
   if (!hover) return null;
   const region = regionByid.get(hover.id);
@@ -290,7 +291,7 @@ export const ChoroplethTooltip = forwardRef<
       )}
     </div>
   );
-});
+};
 ChoroplethTooltip.displayName = "ChoroplethTooltip";
 
 /**
@@ -303,10 +304,12 @@ export type ChoroplethLegendProps = {
   title?: ReactNode;
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const ChoroplethLegend = forwardRef<
-  HTMLDivElement,
-  ChoroplethLegendProps
->(({ className, title, ...rest }, ref) => {
+export const ChoroplethLegend = ({
+  className,
+  ref,
+  title,
+  ...rest
+}: ChoroplethLegendProps & React.RefAttributes<HTMLDivElement>) => {
   const { legend } = useChoroplethContext();
   if (!legend) return null;
   const stops = legend.scale.join(", ");
@@ -336,7 +339,7 @@ export const ChoroplethLegend = forwardRef<
       </div>
     </div>
   );
-});
+};
 ChoroplethLegend.displayName = "ChoroplethLegend";
 
 type DataSummaryProps = {
@@ -502,80 +505,82 @@ function RegionsLayer({
  *
  * @public
  */
-export const ChoroplethMap = forwardRef<HTMLElement, ChoroplethMapProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      colorScale = DEFAULT_SCALE,
-      data,
-      domain: domainProperty,
-      labels,
-      missingColor = DEFAULT_MISSING,
-      onSelectRegion,
-      regions,
-      ...rest
-    } = props;
-    const titleId = useId();
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
+// eslint-disable-next-line max-lines-per-function
+export const ChoroplethMap = (
+  props: ChoroplethMapProps & React.RefAttributes<HTMLElement>,
+) => {
+  const {
+    children,
+    className,
+    colorScale = DEFAULT_SCALE,
+    data,
+    domain: domainProperty,
+    labels,
+    missingColor = DEFAULT_MISSING,
+    onSelectRegion,
+    ref,
+    regions,
+    ...rest
+  } = props;
+  const titleId = useId();
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
 
-    const domain = useMemo(
-      () => domainProperty ?? computeDomain(Object.values(data)),
-      [data, domainProperty],
-    );
+  const domain = useMemo(
+    () => domainProperty ?? computeDomain(Object.values(data)),
+    [data, domainProperty],
+  );
 
-    const ctx = useChoroplethState({
-      colorScale,
-      data,
-      domain,
-      missingColor,
-      regions,
-    });
-    const buckets = useMemo(() => bucketChildren(children), [children]);
+  const ctx = useChoroplethState({
+    colorScale,
+    data,
+    domain,
+    missingColor,
+    regions,
+  });
+  const buckets = useMemo(() => bucketChildren(children), [children]);
 
-    const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [selectedId, setSelectedId] = useState<string | undefined>();
 
-    const handleSelect = useCallback(
-      (region: ChoroplethRegion) => {
-        setSelectedId(region.id);
-        onSelectRegion?.(region);
-      },
-      [onSelectRegion],
-    );
+  const handleSelect = useCallback(
+    (region: ChoroplethRegion) => {
+      setSelectedId(region.id);
+      onSelectRegion?.(region);
+    },
+    [onSelectRegion],
+  );
 
-    return (
-      <ChoroplethContext.Provider value={ctx}>
-        <section
-          aria-label={resolvedLabels.region}
-          className={cn(
-            "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
-            className,
-          )}
-          ref={ref}
-          {...rest}
+  return (
+    <ChoroplethContext.Provider value={ctx}>
+      <section
+        aria-label={resolvedLabels.region}
+        className={cn(
+          "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <svg
+          aria-hidden="true"
+          className="block h-full w-full"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox={`0 0 ${VIEWBOX_WIDTH.toString()} ${VIEWBOX_HEIGHT.toString()}`}
         >
-          <svg
-            aria-hidden="true"
-            className="block h-full w-full"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox={`0 0 ${VIEWBOX_WIDTH.toString()} ${VIEWBOX_HEIGHT.toString()}`}
-          >
-            <RegionsLayer
-              onSelect={handleSelect}
-              regions={regions}
-              selectedId={selectedId}
-              setHoverFn={ctx.setHover}
-            />
-          </svg>
-          {buckets.tooltip}
-          {buckets.legend}
-          <DataSummary data={data} regions={regions} titleId={titleId} />
-        </section>
-      </ChoroplethContext.Provider>
-    );
-  },
-);
+          <RegionsLayer
+            onSelect={handleSelect}
+            regions={regions}
+            selectedId={selectedId}
+            setHoverFn={ctx.setHover}
+          />
+        </svg>
+        {buckets.tooltip}
+        {buckets.legend}
+        <DataSummary data={data} regions={regions} titleId={titleId} />
+      </section>
+    </ChoroplethContext.Provider>
+  );
+};
 ChoroplethMap.displayName = "ChoroplethMap";

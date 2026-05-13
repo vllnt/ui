@@ -3,7 +3,6 @@
 import {
   type ChangeEvent,
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   useCallback,
   useId,
@@ -595,37 +594,37 @@ function TemplateGrid({ controller, labels }: GridProps): ReactNode {
   );
 }
 
-export const PromptTemplates = forwardRef<HTMLElement, PromptTemplatesProps>(
-  (props, ref) => {
-    const { categories, className, labels, onSelect, templates, ...rest } =
-      props;
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const controller = usePromptTemplatesController(templates, onSelect);
+export const PromptTemplates = (
+  props: PromptTemplatesProps & React.RefAttributes<HTMLElement>,
+) => {
+  const { categories, className, labels, onSelect, ref, templates, ...rest } =
+    props;
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const controller = usePromptTemplatesController(templates, onSelect);
 
-    return (
-      <section
-        className={cn(
-          "flex flex-col gap-4 rounded-2xl border bg-background p-4",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <FilterBar
-          categories={categories ?? []}
-          labels={resolvedLabels}
-          onCategoryChange={controller.handleCategoryChange}
-          onQueryChange={controller.handleQueryChange}
-          query={controller.query}
-          searchId={controller.searchId}
-          selectedCategory={controller.selectedCategory}
-        />
-        <TemplateGrid controller={controller} labels={resolvedLabels} />
-      </section>
-    );
-  },
-);
+  return (
+    <section
+      className={cn(
+        "flex flex-col gap-4 rounded-2xl border bg-background p-4",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      <FilterBar
+        categories={categories ?? []}
+        labels={resolvedLabels}
+        onCategoryChange={controller.handleCategoryChange}
+        onQueryChange={controller.handleQueryChange}
+        query={controller.query}
+        searchId={controller.searchId}
+        selectedCategory={controller.selectedCategory}
+      />
+      <TemplateGrid controller={controller} labels={resolvedLabels} />
+    </section>
+  );
+};
 PromptTemplates.displayName = "PromptTemplates";

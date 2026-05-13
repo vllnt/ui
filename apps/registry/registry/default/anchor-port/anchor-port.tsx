@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cn } from "@vllnt/ui";
 
 export type AnchorPortProps = React.ComponentPropsWithoutRef<"span"> & {
@@ -29,38 +27,33 @@ const sideClasses: Record<NonNullable<AnchorPortProps["side"]>, string> = {
   top: "self-start",
 };
 
-const AnchorPort = forwardRef<HTMLSpanElement, AnchorPortProps>(
-  (
-    {
+const AnchorPort = ({
+  className,
+  ref,
+  side = "right",
+  state = "idle",
+  tone = "bidirectional",
+  ...props
+}: AnchorPortProps & React.RefAttributes<HTMLSpanElement>) => (
+  <span
+    aria-label={props["aria-label"] ?? `${tone} ${side} port ${state}`}
+    className={cn(
+      "inline-flex size-7 items-center justify-center rounded-full border shadow-sm",
+      toneClasses[tone],
+      stateClasses[state],
+      sideClasses[side],
       className,
-      side = "right",
-      state = "idle",
-      tone = "bidirectional",
-      ...props
-    },
-    ref,
-  ) => (
-    <span
-      aria-label={props["aria-label"] ?? `${tone} ${side} port ${state}`}
-      className={cn(
-        "inline-flex size-7 items-center justify-center rounded-full border shadow-sm",
-        toneClasses[tone],
-        stateClasses[state],
-        sideClasses[side],
-        className,
-      )}
-      data-side={side}
-      data-state={state}
-      data-tone={tone}
-      ref={ref}
-      role="img"
-      {...props}
-    >
-      <span className="size-2.5 rounded-full bg-current" />
-    </span>
-  ),
+    )}
+    data-side={side}
+    data-state={state}
+    data-tone={tone}
+    ref={ref}
+    role="img"
+    {...props}
+  >
+    <span className="size-2.5 rounded-full bg-current" />
+  </span>
 );
 
 AnchorPort.displayName = "AnchorPort";
-
 export { AnchorPort };

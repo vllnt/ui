@@ -60,69 +60,65 @@ function getPathCoordinates(data: Datum[], dimensions: ChartDimensions) {
   return { area, line };
 }
 
-export const AreaChart = React.forwardRef<HTMLDivElement, AreaChartProps>(
-  (
-    {
-      className,
-      color = "currentColor",
-      data,
-      gradientId = "area-chart-gradient",
-      height = DEFAULT_HEIGHT,
-      strokeWidth = DEFAULT_STROKE_WIDTH,
-      width = DEFAULT_WIDTH,
-      ...props
-    },
-    reference,
-  ) => {
-    const { area, line } = React.useMemo(
-      () => getPathCoordinates(data, { height, strokeWidth, width }),
-      [data, width, height, strokeWidth],
-    );
+export const AreaChart = ({
+  className,
+  color = "currentColor",
+  data,
+  gradientId = "area-chart-gradient",
+  height = DEFAULT_HEIGHT,
+  ref: reference,
+  strokeWidth = DEFAULT_STROKE_WIDTH,
+  width = DEFAULT_WIDTH,
+  ...props
+}: AreaChartProps & React.RefAttributes<HTMLDivElement>) => {
+  const { area, line } = React.useMemo(
+    () => getPathCoordinates(data, { height, strokeWidth, width }),
+    [data, width, height, strokeWidth],
+  );
 
-    if (!line) return null;
+  if (!line) return null;
 
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-border bg-background/40 p-3",
-          className,
-        )}
-        ref={reference}
-        {...props}
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-background/40 p-3",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <svg
+        aria-label="Area chart"
+        className="h-full w-full"
+        height={height}
+        role="img"
+        viewBox={`0 0 ${width} ${height}`}
+        width={width}
       >
-        <svg
-          aria-label="Area chart"
-          className="h-full w-full"
-          height={height}
-          role="img"
-          viewBox={`0 0 ${width} ${height}`}
-          width={width}
-        >
-          <defs>
-            <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity="0.5" />
-              <stop offset="100%" stopColor={color} stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <path
-            d={area}
-            fill={`url(#${gradientId})`}
-            stroke="none"
-            vectorEffect="non-scaling-stroke"
-          />
-          <path
-            d={line}
-            fill="none"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={strokeWidth}
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-      </div>
-    );
-  },
-);
+        <defs>
+          <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.5" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path
+          d={area}
+          fill={`url(#${gradientId})`}
+          stroke="none"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d={line}
+          fill="none"
+          stroke={color}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={strokeWidth}
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
+  );
+};
 
 AreaChart.displayName = "AreaChart";

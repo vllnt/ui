@@ -173,38 +173,34 @@ function StatusBoardCard({ item }: { item: StatusBoardItem }) {
   );
 }
 
-export const StatusBoard = React.forwardRef<HTMLDivElement, StatusBoardProps>(
-  (
-    {
-      className,
-      columns = 3,
-      description,
-      items,
-      title = "Status board",
-      ...props
-    },
-    ref,
-  ) => {
-    return (
-      <div className={cn("space-y-4", className)} ref={ref} {...props}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-1">
-            <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-            {description ? (
-              <p className="text-sm text-muted-foreground">{description}</p>
-            ) : null}
-          </div>
-          <StatusBoardSummary items={items} />
+export const StatusBoard = ({
+  className,
+  columns = 3,
+  description,
+  items,
+  ref,
+  title = "Status board",
+  ...props
+}: StatusBoardProps & React.RefAttributes<HTMLDivElement>) => {
+  return (
+    <div className={cn("space-y-4", className)} ref={ref} {...props}>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          {description ? (
+            <p className="text-sm text-muted-foreground">{description}</p>
+          ) : null}
         </div>
-
-        <div className={cn("grid gap-4", getColumnsClassName(columns))}>
-          {items.map((item) => (
-            <StatusBoardCard item={item} key={item.label} />
-          ))}
-        </div>
+        <StatusBoardSummary items={items} />
       </div>
-    );
-  },
-);
+
+      <div className={cn("grid gap-4", getColumnsClassName(columns))}>
+        {items.map((item) => (
+          <StatusBoardCard item={item} key={item.label} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 StatusBoard.displayName = "StatusBoard";

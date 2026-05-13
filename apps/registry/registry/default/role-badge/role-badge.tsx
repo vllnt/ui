@@ -39,23 +39,27 @@ function getRoleClasses(accountRole: RoleBadgeRole): string {
   }
 }
 
-export const RoleBadge = React.forwardRef<HTMLSpanElement, RoleBadgeProps>(
-  ({ accountRole, className, label, ...props }, reference) => {
-    return (
-      <span
-        className={cn(
-          badgeVariants({ variant: "outline" }),
-          "rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
-          getRoleClasses(accountRole),
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        {label ?? getRoleLabel(accountRole)}
-      </span>
-    );
-  },
-);
+export const RoleBadge = ({
+  accountRole,
+  className,
+  label,
+  ref: reference,
+  ...props
+}: RoleBadgeProps & React.RefAttributes<HTMLSpanElement>) => {
+  return (
+    <span
+      className={cn(
+        badgeVariants({ variant: "outline" }),
+        "rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
+        getRoleClasses(accountRole),
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      {label ?? getRoleLabel(accountRole)}
+    </span>
+  );
+};
 
 RoleBadge.displayName = "RoleBadge";

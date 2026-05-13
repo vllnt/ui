@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -67,60 +63,61 @@ export type SelectionHaloProps = {
  *
  * @public
  */
-export const SelectionHalo = forwardRef<HTMLDivElement, SelectionHaloProps>(
-  (props, ref) => {
-    const {
-      bounds,
-      className,
-      label,
-      labels,
-      pulsing = false,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
-      <div
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "pointer-events-none absolute z-20 rounded-md ring-2 ring-primary",
-          pulsing ? "animate-pulse" : "",
-          className,
-        )}
-        data-pulsing={pulsing ? "true" : undefined}
-        data-selection-halo
-        ref={ref}
-        style={{
-          height: `${bounds.height.toString()}px`,
-          left: `${bounds.x.toString()}px`,
-          top: `${bounds.y.toString()}px`,
-          width: `${bounds.width.toString()}px`,
-        }}
-        {...rest}
-      >
-        {(["nw", "ne", "se", "sw"] as const).map((corner) => (
-          <span
-            aria-hidden="true"
-            className={cn(
-              "absolute size-2 rounded-sm border-2 border-primary bg-background",
-              corner === "nw" && "-left-1 -top-1",
-              corner === "ne" && "-right-1 -top-1",
-              corner === "se" && "-bottom-1 -right-1",
-              corner === "sw" && "-bottom-1 -left-1",
-            )}
-            data-handle-corner={corner}
-            key={corner}
-          />
-        ))}
-        {label ? (
-          <span
-            className="absolute -top-6 left-0 inline-flex items-center rounded-md bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-sm"
-            data-selection-label
-          >
-            {label}
-          </span>
-        ) : null}
-      </div>
-    );
-  },
-);
+export const SelectionHalo = (
+  props: SelectionHaloProps & React.RefAttributes<HTMLDivElement>,
+) => {
+  const {
+    bounds,
+    className,
+    label,
+    labels,
+    pulsing = false,
+    ref,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <div
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "pointer-events-none absolute z-20 rounded-md ring-2 ring-primary",
+        pulsing ? "animate-pulse" : "",
+        className,
+      )}
+      data-pulsing={pulsing ? "true" : undefined}
+      data-selection-halo
+      ref={ref}
+      style={{
+        height: `${bounds.height.toString()}px`,
+        left: `${bounds.x.toString()}px`,
+        top: `${bounds.y.toString()}px`,
+        width: `${bounds.width.toString()}px`,
+      }}
+      {...rest}
+    >
+      {(["nw", "ne", "se", "sw"] as const).map((corner) => (
+        <span
+          aria-hidden="true"
+          className={cn(
+            "absolute size-2 rounded-sm border-2 border-primary bg-background",
+            corner === "nw" && "-left-1 -top-1",
+            corner === "ne" && "-right-1 -top-1",
+            corner === "se" && "-bottom-1 -right-1",
+            corner === "sw" && "-bottom-1 -left-1",
+          )}
+          data-handle-corner={corner}
+          key={corner}
+        />
+      ))}
+      {label ? (
+        <span
+          className="absolute -top-6 left-0 inline-flex items-center rounded-md bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-sm"
+          data-selection-label
+        >
+          {label}
+        </span>
+      ) : null}
+    </div>
+  );
+};
 SelectionHalo.displayName = "SelectionHalo";

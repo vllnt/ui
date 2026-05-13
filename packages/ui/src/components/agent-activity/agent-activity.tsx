@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useState,
@@ -155,47 +154,48 @@ const ACTIVITY_LIVE_REGION_ROLE: Record<AgentActivityStatus, "log" | "status"> =
  *
  * @public
  */
-export const AgentActivity = forwardRef<HTMLElement, AgentActivityProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      elapsed,
-      labels,
-      status = "idle",
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
-      <section
-        aria-live={status === "running" ? "polite" : "off"}
-        className={cn(
-          "flex flex-col gap-3 rounded-2xl border bg-background p-4",
-          className,
-        )}
-        data-status={status}
-        ref={ref}
-        role={ACTIVITY_LIVE_REGION_ROLE[status]}
-        {...rest}
-      >
-        <header className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
-            {resolvedLabels.activity}
-          </h3>
-          {elapsed ? (
-            <span
-              aria-label={resolvedLabels.elapsed}
-              className="text-xs font-mono text-muted-foreground"
-            >
-              {elapsed}
-            </span>
-          ) : null}
-        </header>
-        <ol className="flex flex-col gap-2">{children}</ol>
-      </section>
-    );
-  },
-);
+export const AgentActivity = (
+  props: AgentActivityProps & React.RefAttributes<HTMLElement>,
+) => {
+  const {
+    children,
+    className,
+    elapsed,
+    labels,
+    ref,
+    status = "idle",
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <section
+      aria-live={status === "running" ? "polite" : "off"}
+      className={cn(
+        "flex flex-col gap-3 rounded-2xl border bg-background p-4",
+        className,
+      )}
+      data-status={status}
+      ref={ref}
+      role={ACTIVITY_LIVE_REGION_ROLE[status]}
+      {...rest}
+    >
+      <header className="flex items-center justify-between gap-3">
+        <h3 className="text-sm font-semibold tracking-tight text-foreground">
+          {resolvedLabels.activity}
+        </h3>
+        {elapsed ? (
+          <span
+            aria-label={resolvedLabels.elapsed}
+            className="text-xs font-mono text-muted-foreground"
+          >
+            {elapsed}
+          </span>
+        ) : null}
+      </header>
+      <ol className="flex flex-col gap-2">{children}</ol>
+    </section>
+  );
+};
 AgentActivity.displayName = "AgentActivity";
 
 /**
@@ -314,68 +314,66 @@ function StepRow({
   );
 }
 
-export const AgentStep = forwardRef<HTMLLIElement, AgentStepProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      defaultOpen = true,
-      icon,
-      status,
-      ...rest
-    } = props;
-    const split = useMemo(() => splitChildren(children), [children]);
-    const palette = STATUS_CLASSES[status];
-    const hasDetails = split.body.length > 0;
-    const [open, setOpen] = useState(defaultOpen);
-    const detailsId = useId();
+export const AgentStep = (
+  props: AgentStepProps & React.RefAttributes<HTMLLIElement>,
+) => {
+  const {
+    children,
+    className,
+    defaultOpen = true,
+    icon,
+    ref,
+    status,
+    ...rest
+  } = props;
+  const split = useMemo(() => splitChildren(children), [children]);
+  const palette = STATUS_CLASSES[status];
+  const hasDetails = split.body.length > 0;
+  const [open, setOpen] = useState(defaultOpen);
+  const detailsId = useId();
 
-    const handleToggle = useCallback(() => {
-      setOpen((value) => !value);
-    }, []);
+  const handleToggle = useCallback(() => {
+    setOpen((value) => !value);
+  }, []);
 
-    const contextValue = useMemo<StepContextValue>(
-      () => ({ status }),
-      [status],
-    );
-    const resolvedIcon = icon ?? DEFAULT_STATUS_ICON[status];
+  const contextValue = useMemo<StepContextValue>(() => ({ status }), [status]);
+  const resolvedIcon = icon ?? DEFAULT_STATUS_ICON[status];
 
-    return (
-      <li
-        className={cn(
-          "rounded-xl border ring-1",
-          palette.rowClass,
-          palette.ringClass,
-          className,
-        )}
-        data-status={status}
-        ref={ref}
-        {...rest}
-      >
-        <StepContext.Provider value={contextValue}>
-          <StepRow
-            detailsId={detailsId}
-            hasDetails={hasDetails}
-            header={split.header}
-            icon={resolvedIcon}
-            iconClass={palette.iconClass}
-            labels={DEFAULT_LABELS}
-            onToggle={handleToggle}
-            open={open}
-          />
-          {hasDetails && open ? (
-            <div
-              className="border-t border-border/60 px-3 py-2 text-xs"
-              id={detailsId}
-            >
-              <div className="flex flex-col gap-2 pl-8">{split.body}</div>
-            </div>
-          ) : null}
-        </StepContext.Provider>
-      </li>
-    );
-  },
-);
+  return (
+    <li
+      className={cn(
+        "rounded-xl border ring-1",
+        palette.rowClass,
+        palette.ringClass,
+        className,
+      )}
+      data-status={status}
+      ref={ref}
+      {...rest}
+    >
+      <StepContext.Provider value={contextValue}>
+        <StepRow
+          detailsId={detailsId}
+          hasDetails={hasDetails}
+          header={split.header}
+          icon={resolvedIcon}
+          iconClass={palette.iconClass}
+          labels={DEFAULT_LABELS}
+          onToggle={handleToggle}
+          open={open}
+        />
+        {hasDetails && open ? (
+          <div
+            className="border-t border-border/60 px-3 py-2 text-xs"
+            id={detailsId}
+          >
+            <div className="flex flex-col gap-2 pl-8">{split.body}</div>
+          </div>
+        ) : null}
+      </StepContext.Provider>
+    </li>
+  );
+};
 AgentStep.displayName = "AgentStep";
 
 /**
@@ -390,10 +388,11 @@ export type AgentStepTitleProps = ComponentPropsWithoutRef<"p">;
  *
  * @public
  */
-export const AgentStepTitle = forwardRef<
-  HTMLParagraphElement,
-  AgentStepTitleProps
->(({ className, ...rest }, ref) => (
+export const AgentStepTitle = ({
+  className,
+  ref,
+  ...rest
+}: AgentStepTitleProps & React.RefAttributes<HTMLParagraphElement>) => (
   <p
     className={cn(
       "text-sm font-medium leading-tight text-foreground",
@@ -402,7 +401,7 @@ export const AgentStepTitle = forwardRef<
     ref={ref}
     {...rest}
   />
-));
+);
 AgentStepTitle.displayName = "AgentStepTitle";
 
 /**
@@ -417,16 +416,17 @@ export type AgentStepDurationProps = ComponentPropsWithoutRef<"span">;
  *
  * @public
  */
-export const AgentStepDuration = forwardRef<
-  HTMLSpanElement,
-  AgentStepDurationProps
->(({ className, ...rest }, ref) => (
+export const AgentStepDuration = ({
+  className,
+  ref,
+  ...rest
+}: AgentStepDurationProps & React.RefAttributes<HTMLSpanElement>) => (
   <span
     className={cn("font-mono text-xs text-muted-foreground", className)}
     ref={ref}
     {...rest}
   />
-));
+);
 AgentStepDuration.displayName = "AgentStepDuration";
 
 /**
@@ -446,10 +446,13 @@ export type AgentStepProgressProps = {
  *
  * @public
  */
-export const AgentStepProgress = forwardRef<
-  HTMLDivElement,
-  AgentStepProgressProps
->(({ className, label = "Step progress", value, ...rest }, ref) => {
+export const AgentStepProgress = ({
+  className,
+  label = "Step progress",
+  ref,
+  value,
+  ...rest
+}: AgentStepProgressProps & React.RefAttributes<HTMLDivElement>) => {
   const clamped = Math.max(0, Math.min(100, value));
   return (
     <div
@@ -468,7 +471,7 @@ export const AgentStepProgress = forwardRef<
       />
     </div>
   );
-});
+};
 AgentStepProgress.displayName = "AgentStepProgress";
 
 /**
@@ -484,14 +487,16 @@ export type AgentStepDetailProps = ComponentPropsWithoutRef<"div">;
  *
  * @public
  */
-export const AgentStepDetail = forwardRef<HTMLDivElement, AgentStepDetailProps>(
-  ({ className, ...rest }, ref) => (
-    <div
-      className={cn("text-xs text-muted-foreground", className)}
-      ref={ref}
-      {...rest}
-    />
-  ),
+export const AgentStepDetail = ({
+  className,
+  ref,
+  ...rest
+}: AgentStepDetailProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("text-xs text-muted-foreground", className)}
+    ref={ref}
+    {...rest}
+  />
 );
 AgentStepDetail.displayName = "AgentStepDetail";
 
@@ -501,5 +506,5 @@ AgentStepDetail.displayName = "AgentStepDetail";
  * @public
  */
 export function useAgentStepStatus(): AgentStepStatus {
-  return useContext(StepContext).status;
+  return use(StepContext).status;
 }
