@@ -9,11 +9,11 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from "react";
 
 import { Bot, MessageSquarePlus, X } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-uncontrolled-state";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 
@@ -131,16 +131,17 @@ export function AISidebarProvider({
     () => ({ ...DEFAULT_LABELS, ...labels }),
     [labels],
   );
-  const [uncontrolled, setUncontrolled] = useState(defaultOpen);
-  const isControlled = controlledOpen !== undefined;
-  const openState = isControlled ? controlledOpen : uncontrolled;
+  const [openState, setOpenState] = useControllableState({
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+    value: controlledOpen,
+  });
 
   const setOpen = useCallback(
     (next: boolean) => {
-      if (!isControlled) setUncontrolled(next);
-      onOpenChange?.(next);
+      setOpenState(next);
     },
-    [isControlled, onOpenChange],
+    [setOpenState],
   );
 
   const open = useCallback(() => {

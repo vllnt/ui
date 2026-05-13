@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useId, useLayoutEffect, useReducer } from "react";
 
 import { ChevronDown, ChevronRight } from "lucide-react";
 
@@ -14,26 +14,43 @@ export type ThinkingBlockProps = {
   thinking: string;
 };
 
+type ThinkingBlockState = {
+  isExpanded: boolean;
+};
+
+type ThinkingBlockAction =
+  | { isStreaming: boolean; type: "streaming-changed" }
+  | { type: "toggle" };
+
+function thinkingBlockReducer(
+  state: ThinkingBlockState,
+  action: ThinkingBlockAction,
+): ThinkingBlockState {
+  switch (action.type) {
+    case "streaming-changed":
+      return action.isStreaming ? { isExpanded: true } : state;
+    case "toggle":
+      return { isExpanded: !state.isExpanded };
+  }
+}
+
 /** Collapsible thinking block with streaming support. */
 export function ThinkingBlock({
   className,
   isStreaming = false,
   thinking,
 }: ThinkingBlockProps) {
-  const [isExpanded, setIsExpanded] = useState(isStreaming);
+  const [{ isExpanded }, dispatch] = useReducer(thinkingBlockReducer, {
+    isExpanded: isStreaming,
+  });
   const contentId = useId();
 
-  // Auto-open when streaming starts
-  useEffect(() => {
-    if (isStreaming) {
-      requestAnimationFrame(() => {
-        setIsExpanded(true);
-      });
-    }
+  useLayoutEffect(() => {
+    dispatch({ isStreaming, type: "streaming-changed" });
   }, [isStreaming]);
 
   const toggleExpanded = useCallback(() => {
-    setIsExpanded((previous) => !previous);
+    dispatch({ type: "toggle" });
   }, []);
 
   return (

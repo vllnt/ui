@@ -5,6 +5,10 @@ import { memo, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import {
+  useDocumentEventListener,
+  useEventCallback,
+} from "../../lib/use-event-callback";
 import { useMounted } from "../../lib/use-mounted";
 import { cn } from "../../lib/utils";
 import { CompletionDialog } from "../completion-dialog";
@@ -153,8 +157,8 @@ function SlideshowImpl({
     [currentIndex, goToSection],
   );
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
+  const handleDocumentKeyDown = useEventCallback(
+    (event: KeyboardEvent): void => {
       if (isCompletionDialogOpen) return;
       if (event.key === "Escape") {
         event.preventDefault();
@@ -176,12 +180,10 @@ function SlideshowImpl({
         event.preventDefault();
         handlePrevious();
       }
-    };
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [handleNext, handlePrevious, onExit, isTocOpen, isCompletionDialogOpen]);
+    },
+  );
+
+  useDocumentEventListener("keydown", handleDocumentKeyDown, true);
 
   if (!currentSection || !mounted) return null;
 

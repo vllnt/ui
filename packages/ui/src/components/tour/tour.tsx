@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import type { ReactNode } from "react";
 
+import { useUncontrolledState } from "../../lib/use-uncontrolled-state";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -135,7 +134,7 @@ export function Tour({
   onStepChange,
   steps,
 }: TourProps): ReactNode {
-  const [currentStep, setCurrentStep] = useState(defaultStep);
+  const [currentStep, setCurrentStep] = useUncontrolledState(defaultStep);
 
   if (steps.length === 0) {
     return null;

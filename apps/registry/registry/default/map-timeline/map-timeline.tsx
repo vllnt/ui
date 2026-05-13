@@ -552,7 +552,6 @@ function usePlayback(arguments_: {
         const next = yearRef.current + delta * speed;
         if (next >= endYear) {
           setYear(endYear);
-          setIsPlaying(false);
           return;
         }
         setYear(next);

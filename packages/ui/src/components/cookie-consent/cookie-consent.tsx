@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { forwardRef, useCallback, useEffect, useReducer } from "react";
 
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
@@ -27,6 +27,33 @@ const cookieConsentVariants = cva(
     },
   },
 );
+
+type CookieAnimationState = {
+  isAnimatingOut: boolean;
+  isVisible: boolean;
+};
+
+type CookieAnimationAction =
+  | { type: "finish-close" }
+  | { type: "hide" }
+  | { type: "show" }
+  | { type: "start-close" };
+
+function cookieAnimationReducer(
+  state: CookieAnimationState,
+  action: CookieAnimationAction,
+): CookieAnimationState {
+  switch (action.type) {
+    case "finish-close":
+      return { ...state, isAnimatingOut: false };
+    case "hide":
+      return { ...state, isVisible: false };
+    case "show":
+      return { isAnimatingOut: false, isVisible: true };
+    case "start-close":
+      return { ...state, isAnimatingOut: true };
+  }
+}
 
 export type CookieConsentProps = {
   /** Text for the accept button */
@@ -77,22 +104,27 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     },
     reference,
   ) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+    const [{ isAnimatingOut, isVisible }, dispatch] = useReducer(
+      cookieAnimationReducer,
+      {
+        isAnimatingOut: false,
+        isVisible: false,
+      },
+    );
 
     // Handle visibility with animation
     useEffect(() => {
       if (open) {
         // Small delay for mount animation
         const timer = setTimeout(() => {
-          setIsVisible(true);
+          dispatch({ type: "show" });
         }, 50);
         return () => {
           clearTimeout(timer);
         };
       }
       const rafId = requestAnimationFrame(() => {
-        setIsVisible(false);
+        dispatch({ type: "hide" });
       });
       return () => {
         cancelAnimationFrame(rafId);
@@ -100,9 +132,9 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     }, [open]);
 
     const handleClose = useCallback(() => {
-      setIsAnimatingOut(true);
+      dispatch({ type: "start-close" });
       setTimeout(() => {
-        setIsAnimatingOut(false);
+        dispatch({ type: "finish-close" });
         onOpenChange?.(false);
       }, 200);
     }, [onOpenChange]);

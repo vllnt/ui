@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useMemo } from "react";
 
 import type { ReactNode } from "react";
 
@@ -76,18 +76,11 @@ function ContentCardImpl({
   tags = EMPTY_PROGRESS_CARD_LIST,
   title,
 }: ContentCardProps): React.ReactNode {
-  const [progress, setProgress] = useState<ContentCardProgress | null>(null);
   const isHydrated = useMounted();
-
-  // Load progress after hydration
-  useEffect(() => {
-    if (getProgress) {
-      const result = getProgress();
-      requestAnimationFrame(() => {
-        setProgress(result);
-      });
-    }
-  }, [getProgress]);
+  const progress = useMemo(
+    () => (isHydrated && getProgress ? getProgress() : null),
+    [getProgress, isHydrated],
+  );
 
   const showProgress = isHydrated && progress && progress.completedCount > 0;
 

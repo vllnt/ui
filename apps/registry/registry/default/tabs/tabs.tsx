@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import type { ReactNode } from "react";
 
+import { useUncontrolledState } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 // Context for tabs state
@@ -35,7 +36,7 @@ function Tabs({
   defaultValue,
   onValueChange,
 }: TabsProps): React.ReactNode {
-  const [activeTab, setActiveTab] = useState(defaultValue);
+  const [activeTab, setActiveTab] = useUncontrolledState(defaultValue);
 
   const handleSetActiveTab = (value: string): void => {
     setActiveTab(value);

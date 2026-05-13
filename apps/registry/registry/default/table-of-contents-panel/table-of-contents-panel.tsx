@@ -4,6 +4,10 @@ import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import {
+  useEventCallback,
+  useWindowEventListener,
+} from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type TOCSection = {
@@ -47,25 +51,21 @@ function TableOfContentsPanelImpl({
 }: TableOfContentsPanelProps): React.ReactNode {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const handleEscapeKey = useEventCallback((event: KeyboardEvent): void => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+    }
+  });
 
   // Focus trap and close on Escape
   useEffect(() => {
     if (!isOpen) return;
 
     closeButtonRef.current?.focus();
+  }, [isOpen]);
 
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  useWindowEventListener("keydown", handleEscapeKey, { enabled: isOpen });
 
   // Prevent body scroll when open
   useEffect(() => {

@@ -59,6 +59,10 @@ type ProgressTrackerContextValue = {
 const ProgressTrackerContext =
   React.createContext<null | ProgressTrackerContextValue>(null);
 
+function noop(): void {
+  return undefined;
+}
+
 function clampPercentage(value: number): number {
   if (Number.isNaN(value)) return 0;
   if (value <= 1) return Math.round(Math.max(0, value) * 100);
@@ -102,12 +106,6 @@ function readPersistedChecklistItems(persistKey?: string): string[] {
   }
 }
 
-function areStringArraysEqual(left: string[], right: string[]): boolean {
-  if (left.length !== right.length) return false;
-
-  return left.every((value, index) => value === right[index]);
-}
-
 function getChecklistPersistKey(event?: Event): null | string {
   if (!(event instanceof CustomEvent)) return null;
 
@@ -140,47 +138,65 @@ function getResolvedLessonProgress(module: ProgressTrackerModuleItem): {
   };
 }
 
+function getPersistedChecklistSnapshot(persistKey?: string): string {
+  return JSON.stringify(readPersistedChecklistItems(persistKey));
+}
+
+function parsePersistedChecklistSnapshot(snapshot: string): string[] {
+  try {
+    const parsed = JSON.parse(snapshot) as unknown;
+    return Array.isArray(parsed)
+      ? parsed.filter((item): item is string => typeof item === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}
+
 function useChecklistProgress(
   checklistItems: ChecklistItem[] = [],
   persistKey?: string,
 ): null | { completedCount: number; progress: number; total: number } {
   const total = checklistItems.length;
-  const [persistedIds, setPersistedIds] = React.useState<string[]>(() =>
-    readPersistedChecklistItems(persistKey),
+  const subscribe = React.useCallback(
+    (onStoreChange: () => void) => {
+      if (!persistKey || typeof window === "undefined") return noop;
+
+      const sync = (event?: Event): void => {
+        const eventPersistKey = getChecklistPersistKey(event);
+        if (eventPersistKey && eventPersistKey !== persistKey) return;
+
+        onStoreChange();
+      };
+      const syncEventListener: EventListener = (event) => {
+        sync(event);
+      };
+
+      window.addEventListener("storage", sync);
+      window.addEventListener("focus", sync);
+      window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
+
+      return () => {
+        window.removeEventListener("storage", sync);
+        window.removeEventListener("focus", sync);
+        window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
+      };
+    },
+    [persistKey],
   );
-  const setPersistedIdsIfChanged = React.useCallback((nextIds: string[]) => {
-    setPersistedIds((currentIds) =>
-      areStringArraysEqual(currentIds, nextIds) ? currentIds : nextIds,
-    );
-  }, []);
-
-  React.useEffect(() => {
-    setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
-  }, [persistKey, setPersistedIdsIfChanged]);
-
-  React.useEffect(() => {
-    if (!persistKey || typeof window === "undefined") return;
-
-    const sync = (event?: Event): void => {
-      const eventPersistKey = getChecklistPersistKey(event);
-      if (eventPersistKey && eventPersistKey !== persistKey) return;
-
-      setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
-    };
-    const syncEventListener: EventListener = (event) => {
-      sync(event);
-    };
-
-    window.addEventListener("storage", sync);
-    window.addEventListener("focus", sync);
-    window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
-
-    return () => {
-      window.removeEventListener("storage", sync);
-      window.removeEventListener("focus", sync);
-      window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
-    };
-  }, [persistKey, setPersistedIdsIfChanged]);
+  const getSnapshot = React.useCallback(
+    () => getPersistedChecklistSnapshot(persistKey),
+    [persistKey],
+  );
+  const persistedSnapshot = React.useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    () => "[]",
+  );
+  const persistedIds = React.useMemo(
+    () => parsePersistedChecklistSnapshot(persistedSnapshot),
+    [persistedSnapshot],
+  );
 
   if (!persistKey || total === 0) return null;
 

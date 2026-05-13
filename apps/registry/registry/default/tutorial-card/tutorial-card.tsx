@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useMemo } from "react";
 
 import type { ReactNode } from "react";
 
@@ -81,17 +81,11 @@ function TutorialCardImpl({
   linkComponent: LinkComponent = DefaultLink,
   tutorial,
 }: TutorialCardProps): React.ReactNode {
-  const [progress, setProgress] = useState<null | TutorialCardProgress>(null);
   const isHydrated = useMounted();
-
-  useEffect(() => {
-    if (getProgress) {
-      const result = getProgress(tutorial.id);
-      requestAnimationFrame(() => {
-        setProgress(result);
-      });
-    }
-  }, [getProgress, tutorial.id]);
+  const progress = useMemo(
+    () => (isHydrated && getProgress ? getProgress(tutorial.id) : null),
+    [getProgress, isHydrated, tutorial.id],
+  );
 
   const difficultyVariant = DIFFICULTY_VARIANTS[tutorial.difficulty];
   // Cap completedCount at sectionCount to handle stale localStorage data

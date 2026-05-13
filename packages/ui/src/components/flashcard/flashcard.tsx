@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { RefreshCcw } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { useUncontrolledState } from "../../lib/use-uncontrolled-state";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge";
 import { Button } from "../button";
@@ -31,7 +30,7 @@ export function Flashcard({
   question,
   title = "Flashcard",
 }: FlashcardProps): ReactNode {
-  const [flipped, setFlipped] = useState(defaultFlipped);
+  const [flipped, setFlipped] = useUncontrolledState(defaultFlipped);
 
   const toggleFlipped = (): void => {
     const nextValue = !flipped;
