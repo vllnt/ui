@@ -111,6 +111,15 @@ function getSafeAreaStyle(
   } satisfies CanvasShellSafeAreaStyle;
 }
 
+function getCanvasShellContentStyle(): CSSProperties {
+  return {
+    paddingBottom: "var(--canvas-shell-safe-bottom)",
+    paddingLeft: "var(--canvas-shell-safe-left)",
+    paddingRight: "var(--canvas-shell-safe-right)",
+    paddingTop: "var(--canvas-shell-safe-top)",
+  } satisfies CSSProperties;
+}
+
 const hasChromeContent = Boolean;
 
 type CanvasShellChromeAfterProps = Pick<
@@ -235,10 +244,15 @@ function renderLegacyCanvasShell(
   );
 }
 
-function renderFloatingContent(
-  children: ReactNode,
-  contentStyle: CSSProperties,
-) {
+type CanvasShellFloatingContentProps = {
+  children?: ReactNode;
+  contentStyle: CSSProperties;
+};
+
+function CanvasShellFloatingContent({
+  children,
+  contentStyle,
+}: CanvasShellFloatingContentProps) {
   return (
     <div
       className="relative z-0 h-full w-full min-h-0 min-w-0"
@@ -291,12 +305,7 @@ function renderFloatingCanvasShell(
     ...getSafeAreaStyle(safeAreaInsets),
     ...style,
   } satisfies CSSProperties;
-  const contentStyle = {
-    paddingBottom: "var(--canvas-shell-safe-bottom)",
-    paddingLeft: "var(--canvas-shell-safe-left)",
-    paddingRight: "var(--canvas-shell-safe-right)",
-    paddingTop: "var(--canvas-shell-safe-top)",
-  } satisfies CSSProperties;
+  const contentStyle = getCanvasShellContentStyle();
 
   return (
     <section
@@ -314,7 +323,9 @@ function renderFloatingCanvasShell(
         leftBar={hasLeftBar ? resolvedLeftBar : undefined}
         topBar={hasTopBar ? topBar : undefined}
       />
-      {renderFloatingContent(children, contentStyle)}
+      <CanvasShellFloatingContent contentStyle={contentStyle}>
+        {children}
+      </CanvasShellFloatingContent>
       <CanvasShellChromeAfter
         bottomBar={hasBottomBar ? resolvedBottomBar : undefined}
         inset={inset}

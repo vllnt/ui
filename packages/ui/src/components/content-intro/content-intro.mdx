@@ -33,9 +33,9 @@ const sections = [
 
 <ContentIntro
   estimatedTime="value"
+  introContent={<p>Welcome to this tutorial.</p>}
   onGoToSection={(index) => console.log(index)}
   onStart={() => {}}
-  renderIntroContent={() => {}}
   sections={sections}
   title="My Title"
 />
@@ -52,11 +52,11 @@ const sections = [
 | `additionalContent` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `completedSections` | `Set&lt;string&gt;` | Yes | - |
 | `estimatedTime` | `string` | Yes | - |
+| `introContent` | `ReactNode` | Yes | Rendered introduction content |
 | `isLoading` | `boolean` | No | `true` or `false` |
 | `labels` | `ContentIntroLabels` | No | `ContentIntroLabels` object |
 | `onGoToSection` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
 | `onStart` | `() =&gt; void` | Yes | Callback function |
-| `renderIntroContent` | `() =&gt; ReactNode` | Yes | Callback function |
 | `sections` | `ContentIntroSection[]` | Yes | Array of `ContentIntroSection` objects |
 | `title` | `string` | Yes | - |
 
@@ -91,4 +91,3 @@ type ContentIntroLabels = {
 | `continueLabel` | `string` | No | - |
 | `startLabel` | `string` | No | - |
 | `tableOfContentsLabel` | `string` | No | - |
-

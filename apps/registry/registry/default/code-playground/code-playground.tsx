@@ -27,7 +27,7 @@ function CodeLine({ highlightLines, line, lineNumber }: CodeLineProps) {
 }
 
 export type CodePlaygroundProps = {
-  children: ReactNode;
+  children?: string;
   description?: string;
   filename?: string;
   highlightLines?: number[];
@@ -48,7 +48,7 @@ export function CodePlayground({
   title,
 }: CodePlaygroundProps) {
   const [copied, setCopied] = useState(false);
-  const code = typeof children === "string" ? children : "";
+  const code = children ?? "";
   const lines = code.split("\n");
 
   const handleCopy = async () => {

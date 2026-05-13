@@ -1,9 +1,10 @@
 "use client";
 
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback } from "react";
 
 import type { ReactNode } from "react";
 
+import { useDocumentEventListener } from "../../lib/use-event-callback";
 import { cn } from "../../lib/utils";
 import { Button } from "../button";
 
@@ -25,6 +26,8 @@ export type ContentIntroProps = {
   completedSections: Set<string>;
   /** Estimated time to complete */
   estimatedTime: string;
+  /** Rendered introduction content */
+  introContent: ReactNode;
   /** Is loading progress */
   isLoading?: boolean;
   /** Labels for i18n */
@@ -33,8 +36,6 @@ export type ContentIntroProps = {
   onGoToSection: (index: number) => void;
   /** Callback when starting */
   onStart: () => void;
-  /** Render function for intro content */
-  renderIntroContent: () => ReactNode;
   /** Sections for TOC */
   sections: ContentIntroSection[];
   /** Intro section title */
@@ -54,11 +55,11 @@ function ContentIntroImpl({
   additionalContent,
   completedSections,
   estimatedTime,
+  introContent,
   isLoading = false,
   labels = EMPTY_CONTENT_INTRO_LABELS,
   onGoToSection,
   onStart,
-  renderIntroContent,
   sections,
   title,
 }: ContentIntroProps): React.ReactNode {
@@ -75,12 +76,7 @@ function ContentIntroImpl({
     [onStart],
   );
 
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handleKeyDown]);
+  useDocumentEventListener("keydown", handleKeyDown);
 
   return (
     <>
@@ -89,7 +85,7 @@ function ContentIntroImpl({
         <section className="py-6">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
-            {renderIntroContent()}
+            {introContent}
           </div>
         </section>
 

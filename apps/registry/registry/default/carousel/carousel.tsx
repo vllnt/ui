@@ -74,15 +74,6 @@ function useCarouselLogic({
   const [canScrollPrevious, setCanScrollPrevious] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
-  const onSelect = useCallback((api: CarouselApi) => {
-    if (!api) {
-      return;
-    }
-
-    setCanScrollPrevious(api.canScrollPrev());
-    setCanScrollNext(api.canScrollNext());
-  }, []);
-
   const scrollPrevious = useCallback(() => {
     api?.scrollPrev();
   }, [api]);
@@ -117,19 +108,28 @@ function useCarouselLogic({
       return;
     }
 
-    api.on("reInit", onSelect);
-    api.on("select", onSelect);
+    const updateScrollButtons = (currentApi: CarouselApi) => {
+      if (!currentApi) {
+        return;
+      }
+
+      setCanScrollPrevious(currentApi.canScrollPrev());
+      setCanScrollNext(currentApi.canScrollNext());
+    };
+
+    api.on("reInit", updateScrollButtons);
+    api.on("select", updateScrollButtons);
 
     const rafId = requestAnimationFrame(() => {
-      onSelect(api);
+      updateScrollButtons(api);
     });
 
     return () => {
-      api?.off("select", onSelect);
-      api?.off("reInit", onSelect);
+      api?.off("select", updateScrollButtons);
+      api?.off("reInit", updateScrollButtons);
       cancelAnimationFrame(rafId);
     };
-  }, [api, onSelect]);
+  }, [api]);
 
   return {
     api,

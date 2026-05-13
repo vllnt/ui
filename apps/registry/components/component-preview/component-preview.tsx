@@ -2139,7 +2139,7 @@ function SpinnerPreview() {
 }
 
 // eslint-disable-next-line max-lines-per-function -- Switch statement mapping all components
-export function ComponentPreview({ componentName }: ComponentPreviewProps) {
+function getComponentPreview(componentName: string): React.ReactNode {
   switch (componentName) {
     case "accordion":
       return <AccordionPreview />;
@@ -2482,4 +2482,8 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
     default:
       return <div className="text-muted-foreground">Preview not available</div>;
   }
+}
+
+export function ComponentPreview({ componentName }: ComponentPreviewProps) {
+  return getComponentPreview(componentName);
 }

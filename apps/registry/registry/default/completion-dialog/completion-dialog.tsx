@@ -4,6 +4,7 @@ import { memo, useCallback, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import { useDocumentEventListener } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
@@ -152,13 +153,7 @@ function CompletionDialogImpl({
     [isOpen, onClose, onConfirm, onCancel, confirmShortcut, cancelShortcut],
   );
 
-  useEffect(() => {
-    if (!isOpen) return;
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [isOpen, handleKeyDown]);
+  useDocumentEventListener("keydown", handleKeyDown, true);
 
   if (!isOpen) return null;
 

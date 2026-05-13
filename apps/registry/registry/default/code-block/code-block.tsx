@@ -1,9 +1,10 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
+import type { WheelEvent } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   oneDark,
@@ -14,34 +15,11 @@ import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
 type CodeBlockProps = {
-  children: ReactNode;
+  children?: string;
   className?: string;
   language?: string;
   showLanguage?: boolean;
 };
-
-function extractTextFromChildren(children: ReactNode): string {
-  if (typeof children === "string") {
-    return children;
-  }
-  if (typeof children === "number") {
-    return String(children);
-  }
-  if (Array.isArray(children)) {
-    return children.map(extractTextFromChildren).join("");
-  }
-  if (
-    children &&
-    typeof children === "object" &&
-    "props" in children &&
-    children.props &&
-    typeof children.props === "object" &&
-    "children" in children.props
-  ) {
-    return extractTextFromChildren(children.props.children as ReactNode);
-  }
-  return String(children ?? "");
-}
 
 function findScrollableParent(
   element: HTMLElement | null,
@@ -49,6 +27,15 @@ function findScrollableParent(
   if (!element) return undefined;
   if (element.scrollHeight > element.clientHeight) return element;
   return findScrollableParent(element.parentElement);
+}
+
+function redirectVerticalWheel(event: WheelEvent<HTMLDivElement>): void {
+  if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+  const scrollable = findScrollableParent(event.currentTarget);
+  if (scrollable) {
+    scrollable.scrollTop += event.deltaY;
+    event.preventDefault();
+  }
 }
 
 export function CodeBlock({
@@ -63,28 +50,7 @@ export function CodeBlock({
   const resolvedTheme = theme === "system" ? systemTheme : theme;
   const isDark = resolvedTheme !== "light";
   const codeStyle = isDark ? oneDark : oneLight;
-  const code = extractTextFromChildren(children);
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) return;
-
-    const onWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      const scrollable = findScrollableParent(element);
-      if (scrollable) {
-        scrollable.scrollTop += event.deltaY;
-        event.preventDefault();
-      }
-    };
-
-    element.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      element.removeEventListener("wheel", onWheel);
-    };
-  }, []);
+  const code = children ?? "";
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -103,7 +69,7 @@ export function CodeBlock({
     >
       <div
         className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
-        ref={scrollRef}
+        onWheel={redirectVerticalWheel}
       >
         <SyntaxHighlighter
           codeTagProps={{

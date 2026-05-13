@@ -2,9 +2,10 @@
 
 import { memo, useCallback, useEffect, useState } from "react";
 
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import { useDocumentEventListener } from "../../lib/use-event-callback";
 import { useMounted } from "../../lib/use-mounted";
 import { cn } from "../../lib/utils";
 import { CompletionDialog } from "../completion-dialog";
@@ -12,6 +13,10 @@ import { CompletionDialog } from "../completion-dialog";
 export type SlideshowSection = {
   id: string;
   title: string;
+};
+
+export type SlideshowSectionContentProps = {
+  section: SlideshowSection;
 };
 
 export type SlideshowLabels = {
@@ -42,8 +47,8 @@ export type SlideshowProps = {
   onNavigate: (index: number) => void;
   /** Callback to toggle section completion */
   onToggleSection: (sectionId: string) => void;
-  /** Render function for section content */
-  renderContent: (section: SlideshowSection) => ReactNode;
+  /** Component used to render the current section content */
+  SectionContent: ComponentType<SlideshowSectionContentProps>;
   /** Sections to display */
   sections: SlideshowSection[];
   /** Tutorial title */
@@ -63,6 +68,318 @@ const DEFAULT_LABELS: Required<SlideshowLabels> = {
 
 const EMPTY_SLIDESHOW_LABELS: SlideshowLabels = {};
 
+type MergedSlideshowLabels = Required<SlideshowLabels>;
+
+type SlideshowHeaderProps = {
+  currentIndex: number;
+  currentSection: SlideshowSection;
+  isTocOpen: boolean;
+  labels: MergedSlideshowLabels;
+  onExit: () => void;
+  onToggleToc: () => void;
+  sectionCount: number;
+  title: string;
+};
+
+function SlideshowHeader({
+  currentIndex,
+  currentSection,
+  isTocOpen,
+  labels,
+  onExit,
+  onToggleToc,
+  sectionCount,
+  title,
+}: SlideshowHeaderProps): ReactNode {
+  return (
+    <div className="flex items-center justify-between px-4 py-3 mt-1 border-b border-border bg-background">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <button
+          aria-label={isTocOpen ? labels.closeTocLabel : labels.openTocLabel}
+          className="flex-shrink-0 p-2 rounded-lg hover:bg-muted transition-colors"
+          onClick={onToggleToc}
+          type="button"
+        >
+          {isTocOpen ? (
+            <svg
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+          ) : (
+            <svg
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M4 6h16M4 12h16M4 18h16"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+          )}
+        </button>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs text-muted-foreground truncate">{title}</p>
+          <p className="text-sm font-medium truncate">{currentSection.title}</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <span className="text-xs text-muted-foreground tabular-nums hidden sm:inline">
+          {currentIndex + 1}/{sectionCount}
+        </span>
+        <button
+          aria-label={labels.exitLabel}
+          className="p-2 rounded-lg hover:bg-muted transition-colors"
+          onClick={onExit}
+          type="button"
+        >
+          <svg
+            className="size-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M6 18L18 6M6 6l12 12"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+type SlideshowTableOfContentsProps = {
+  completedSections: Set<string>;
+  currentIndex: number;
+  isOpen: boolean;
+  labels: MergedSlideshowLabels;
+  onClose: () => void;
+  onNavigate: (index: number) => void;
+  sections: SlideshowSection[];
+};
+
+function SlideshowTableOfContents({
+  completedSections,
+  currentIndex,
+  isOpen,
+  labels,
+  onClose,
+  onNavigate,
+  sections,
+}: SlideshowTableOfContentsProps): ReactNode {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="absolute inset-0 z-20 flex animate-in fade-in-0 duration-200"
+      onClick={onClose}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onClose();
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      <div className="absolute inset-0 bg-background/40" />
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+      <div
+        className="relative w-full sm:max-w-sm bg-background border-r border-border h-full overflow-auto shadow-2xl"
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+        onKeyDown={(event) => {
+          event.stopPropagation();
+        }}
+        role="dialog"
+      >
+        <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b border-border bg-background">
+          <h3 className="font-semibold">{labels.sectionsLabel}</h3>
+          <button
+            aria-label={labels.closeLabel}
+            className="p-2 rounded-lg hover:bg-muted transition-colors"
+            onClick={onClose}
+            type="button"
+          >
+            <svg
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="p-2">
+          {sections.map((section, index) => {
+            const isCompleted = completedSections.has(section.id);
+            const isCurrent = index === currentIndex;
+            return (
+              <button
+                className={cn(
+                  "w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors",
+                  isCurrent ? "bg-muted" : "hover:bg-muted/50",
+                )}
+                key={section.id}
+                onClick={() => {
+                  onNavigate(index);
+                }}
+                type="button"
+              >
+                <div
+                  className={cn(
+                    "flex-shrink-0 size-5 rounded-full border-2 flex items-center justify-center",
+                    isCompleted
+                      ? "bg-foreground border-foreground"
+                      : "border-muted-foreground",
+                  )}
+                >
+                  {isCompleted ? (
+                    <svg
+                      className="size-3 text-background"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M5 13l4 4L19 7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                      />
+                    </svg>
+                  ) : null}
+                </div>
+                <span
+                  className={cn(
+                    "flex-1 text-sm truncate",
+                    isCompleted && "line-through opacity-60",
+                  )}
+                >
+                  {section.title}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type SlideshowContentProps = {
+  animationDirection: "left" | "right" | null;
+  currentSection: SlideshowSection;
+  SectionContent: ComponentType<SlideshowSectionContentProps>;
+};
+
+function SlideshowContent({
+  animationDirection,
+  currentSection,
+  SectionContent,
+}: SlideshowContentProps): ReactNode {
+  return (
+    <div className="h-full overflow-auto px-4 py-8 md:px-8 lg:px-16">
+      <div className="mx-auto max-w-3xl">
+        <div
+          className={cn(
+            "transition-all duration-150 ease-out",
+            animationDirection === "left" && "opacity-0 -translate-x-4",
+            animationDirection === "right" && "opacity-0 translate-x-4",
+            !animationDirection && "opacity-100 translate-x-0",
+          )}
+        >
+          <SectionContent section={currentSection} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type SlideshowBottomNavProps = {
+  canGoPrevious: boolean;
+  isLastSection: boolean;
+  labels: MergedSlideshowLabels;
+  onNext: () => void;
+  onPrevious: () => void;
+};
+
+function SlideshowBottomNav({
+  canGoPrevious,
+  isLastSection,
+  labels,
+  onNext,
+  onPrevious,
+}: SlideshowBottomNavProps): ReactNode {
+  return (
+    <div className="relative z-20 flex items-center justify-between p-4 border-t border-border bg-background">
+      <button
+        className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md hover:bg-muted transition-colors disabled:opacity-50 disabled:pointer-events-none"
+        disabled={!canGoPrevious}
+        onClick={onPrevious}
+        type="button"
+      >
+        <svg
+          className="size-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="m15 19-7-7 7-7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+        </svg>
+        <span>{labels.prevLabel}</span>
+      </button>
+      <button
+        className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md bg-foreground text-background hover:bg-foreground/90 transition-colors"
+        onClick={onNext}
+        type="button"
+      >
+        <span>{isLastSection ? labels.finishLabel : labels.nextLabel}</span>
+        {!isLastSection && (
+          <svg
+            className="size-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="m9 5 7 7-7 7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+            />
+          </svg>
+        )}
+      </button>
+    </div>
+  );
+}
+
 function SlideshowImpl({
   completedSections,
   completionDialogTitle = "Mark section as complete?",
@@ -72,10 +389,10 @@ function SlideshowImpl({
   onExit,
   onNavigate,
   onToggleSection,
-  renderContent,
+  SectionContent,
   sections,
   title,
-}: SlideshowProps): React.ReactNode {
+}: SlideshowProps): ReactNode {
   const mergedLabels = { ...DEFAULT_LABELS, ...labels };
   const [animationDirection, setAnimationDirection] = useState<
     "left" | "right" | null
@@ -153,8 +470,8 @@ function SlideshowImpl({
     [currentIndex, goToSection],
   );
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
+  const handleSlideshowKeyDown = useCallback(
+    (event: KeyboardEvent): void => {
       if (isCompletionDialogOpen) return;
       if (event.key === "Escape") {
         event.preventDefault();
@@ -164,7 +481,7 @@ function SlideshowImpl({
       }
       if (event.key === "t" || event.key === "T") {
         event.preventDefault();
-        setIsTocOpen((p) => !p);
+        setIsTocOpen((previous) => !previous);
         return;
       }
       if (event.key === "ArrowRight" || event.key === "j") {
@@ -176,12 +493,11 @@ function SlideshowImpl({
         event.preventDefault();
         handlePrevious();
       }
-    };
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [handleNext, handlePrevious, onExit, isTocOpen, isCompletionDialogOpen]);
+    },
+    [handleNext, handlePrevious, isCompletionDialogOpen, isTocOpen, onExit],
+  );
+
+  useDocumentEventListener("keydown", handleSlideshowKeyDown, true);
 
   if (!currentSection || !mounted) return null;
 
@@ -195,255 +511,47 @@ function SlideshowImpl({
         />
       </div>
 
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 mt-1 border-b border-border bg-background">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
-          <button
-            aria-label={
-              isTocOpen ? mergedLabels.closeTocLabel : mergedLabels.openTocLabel
-            }
-            className="flex-shrink-0 p-2 rounded-lg hover:bg-muted transition-colors"
-            onClick={() => {
-              setIsTocOpen((p) => !p);
-            }}
-            type="button"
-          >
-            {isTocOpen ? (
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M6 18L18 6M6 6l12 12"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </svg>
-            ) : (
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M4 6h16M4 12h16M4 18h16"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </svg>
-            )}
-          </button>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground truncate">{title}</p>
-            <p className="text-sm font-medium truncate">
-              {currentSection.title}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-xs text-muted-foreground tabular-nums hidden sm:inline">
-            {currentIndex + 1}/{sections.length}
-          </span>
-          <button
-            aria-label={mergedLabels.exitLabel}
-            className="p-2 rounded-lg hover:bg-muted transition-colors"
-            onClick={onExit}
-            type="button"
-          >
-            <svg
-              className="size-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M6 18L18 6M6 6l12 12"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+      <SlideshowHeader
+        currentIndex={currentIndex}
+        currentSection={currentSection}
+        isTocOpen={isTocOpen}
+        labels={mergedLabels}
+        onExit={onExit}
+        onToggleToc={() => {
+          setIsTocOpen((previous) => !previous);
+        }}
+        sectionCount={sections.length}
+        title={title}
+      />
 
       {/* Content */}
       <div className="relative flex-1 overflow-hidden">
-        {isTocOpen ? (
-          <div
-            className="absolute inset-0 z-20 flex animate-in fade-in-0 duration-200"
-            onClick={() => {
-              setIsTocOpen(false);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ")
-                setIsTocOpen(false);
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="absolute inset-0 bg-background/40" />
-            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-            <div
-              className="relative w-full sm:max-w-sm bg-background border-r border-border h-full overflow-auto shadow-2xl"
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-              onKeyDown={(event) => {
-                event.stopPropagation();
-              }}
-              role="dialog"
-            >
-              <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b border-border bg-background">
-                <h3 className="font-semibold">{mergedLabels.sectionsLabel}</h3>
-                <button
-                  aria-label={mergedLabels.closeLabel}
-                  className="p-2 rounded-lg hover:bg-muted transition-colors"
-                  onClick={() => {
-                    setIsTocOpen(false);
-                  }}
-                  type="button"
-                >
-                  <svg
-                    className="size-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M6 18L18 6M6 6l12 12"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="p-2">
-                {sections.map((section, index) => {
-                  const isCompleted = completedSections.has(section.id);
-                  const isCurrent = index === currentIndex;
-                  return (
-                    <button
-                      className={cn(
-                        "w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors",
-                        isCurrent ? "bg-muted" : "hover:bg-muted/50",
-                      )}
-                      key={section.id}
-                      onClick={() => {
-                        handleTocNavigate(index);
-                      }}
-                      type="button"
-                    >
-                      <div
-                        className={cn(
-                          "flex-shrink-0 size-5 rounded-full border-2 flex items-center justify-center",
-                          isCompleted
-                            ? "bg-foreground border-foreground"
-                            : "border-muted-foreground",
-                        )}
-                      >
-                        {isCompleted ? (
-                          <svg
-                            className="size-3 text-background"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              d="M5 13l4 4L19 7"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                            />
-                          </svg>
-                        ) : null}
-                      </div>
-                      <span
-                        className={cn(
-                          "flex-1 text-sm truncate",
-                          isCompleted && "line-through opacity-60",
-                        )}
-                      >
-                        {section.title}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        ) : null}
+        <SlideshowTableOfContents
+          completedSections={completedSections}
+          currentIndex={currentIndex}
+          isOpen={isTocOpen}
+          labels={mergedLabels}
+          onClose={() => {
+            setIsTocOpen(false);
+          }}
+          onNavigate={handleTocNavigate}
+          sections={sections}
+        />
 
-        <div className="h-full overflow-auto px-4 py-8 md:px-8 lg:px-16">
-          <div className="mx-auto max-w-3xl">
-            <div
-              className={cn(
-                "transition-all duration-150 ease-out",
-                animationDirection === "left" && "opacity-0 -translate-x-4",
-                animationDirection === "right" && "opacity-0 translate-x-4",
-                !animationDirection && "opacity-100 translate-x-0",
-              )}
-            >
-              {renderContent(currentSection)}
-            </div>
-          </div>
-        </div>
+        <SlideshowContent
+          animationDirection={animationDirection}
+          currentSection={currentSection}
+          SectionContent={SectionContent}
+        />
       </div>
 
-      {/* Bottom Nav */}
-      <div className="relative z-20 flex items-center justify-between p-4 border-t border-border bg-background">
-        <button
-          className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md hover:bg-muted transition-colors disabled:opacity-50 disabled:pointer-events-none"
-          disabled={!canGoPrevious}
-          onClick={handlePrevious}
-          type="button"
-        >
-          <svg
-            className="size-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="m15 19-7-7 7-7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-            />
-          </svg>
-          <span>{mergedLabels.prevLabel}</span>
-        </button>
-        <button
-          className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md bg-foreground text-background hover:bg-foreground/90 transition-colors"
-          onClick={handleNext}
-          type="button"
-        >
-          <span>
-            {isLastSection ? mergedLabels.finishLabel : mergedLabels.nextLabel}
-          </span>
-          {!isLastSection && (
-            <svg
-              className="size-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="m9 5 7 7-7 7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
-          )}
-        </button>
-      </div>
+      <SlideshowBottomNav
+        canGoPrevious={canGoPrevious}
+        isLastSection={isLastSection}
+        labels={mergedLabels}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
+      />
 
       <CompletionDialog
         description={`You're about to ${isLastSection ? "finish" : "move to the next section from"}: ${currentSection.title}`}

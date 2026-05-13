@@ -6,9 +6,9 @@ const meta = {
   args: {
     completedSections: new Set<string>(),
     estimatedTime: "10 min",
+    introContent: "Welcome to this tutorial.",
     onGoToSection: () => {},
     onStart: () => {},
-    renderIntroContent: () => "Welcome to this tutorial.",
     sections: [
       { id: "intro", title: "Introduction" },
       { id: "basics", title: "Basics" },
