@@ -37,6 +37,8 @@ storybook-static/
 
 # Generated
 public/r/
+public/_pagefind/
+apps/registry/public/_pagefind/
 next-env.d.ts
 
 # Local config

@@ -4,6 +4,7 @@ import { NavbarSaas, SearchDialog } from "@vllnt/ui";
 import { Github } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { searchPagefind } from "@/components/header/pagefind-search";
 import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
@@ -26,6 +27,7 @@ export function Header() {
     .filter((item) => item.type === "registry:component")
     .map((item) => ({
       description: item.description,
+      href: `/components/${item.name}`,
       id: item.name,
       title: item.title,
     }));
@@ -37,14 +39,20 @@ export function Header() {
       rightSlot={
         <div className="flex items-center gap-2">
           <SearchDialog
-            buttonText="Search components..."
-            emptyText="No components found."
+            buttonText="Search..."
+            docsEmptyText="No docs found."
+            docsGroupHeading="Docs"
+            docsSearch={searchPagefind}
+            emptyText="No results found."
             groupHeading="Components"
             items={searchItems}
-            onSelect={(item) => {
-              router.push(`/components/${item.id}`);
+            onDocsSelect={(item) => {
+              router.push(item.href ?? item.id);
             }}
-            searchPlaceholder="Search components..."
+            onSelect={(item) => {
+              router.push(item.href ?? `/components/${item.id}`);
+            }}
+            searchPlaceholder="Search docs and components..."
           />
           <a
             aria-label="VLLNT UI on GitHub"
