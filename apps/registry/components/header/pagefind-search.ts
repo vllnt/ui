@@ -50,8 +50,17 @@ async function loadPagefind() {
   return pagefindPromise;
 }
 
-function stripMarkup(value: string) {
-  return value.replaceAll(/<[^>]*>/g, "");
+const MARKUP_PATTERN = /<[^<>]*>/g;
+const ANGLE_BRACKET_PATTERN = /[<>]/g;
+
+function stripMarkup(value: string): string {
+  const plainText = value.replaceAll(MARKUP_PATTERN, "");
+
+  if (plainText === value) {
+    return plainText.replaceAll(ANGLE_BRACKET_PATTERN, "");
+  }
+
+  return stripMarkup(plainText);
 }
 
 function getFallbackTitle(url: string) {
