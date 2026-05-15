@@ -3,28 +3,16 @@ import { describe, expect, it, vi } from "vitest";
 
 import { Quiz, type QuizOption } from "./quiz";
 
-function keyedOption(option: QuizOption, key: string): QuizOption {
-  return Object.assign(option, {
-    toString: () => key,
-  });
-}
-
 const options: QuizOption[] = [
-  keyedOption(
-    {
-      correct: true,
-      explanation: "Paris is the capital of France.",
-      label: "Paris",
-    },
-    "paris",
-  ),
-  keyedOption(
-    {
-      explanation: "London is the capital of the United Kingdom.",
-      label: "London",
-    },
-    "london",
-  ),
+  {
+    correct: true,
+    explanation: "Paris is the capital of France.",
+    label: "Paris",
+  },
+  {
+    explanation: "London is the capital of the United Kingdom.",
+    label: "London",
+  },
 ];
 
 function renderQuiz(onAnswer = vi.fn()) {
@@ -42,6 +30,21 @@ function renderQuiz(onAnswer = vi.fn()) {
 }
 
 describe("Quiz", () => {
+  it("renders normal public option objects without duplicate key warnings", () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(vi.fn());
+
+    renderQuiz();
+
+    const messages = consoleError.mock.calls.map((call) => call.join(" "));
+    consoleError.mockRestore();
+
+    expect(messages).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("Encountered two children with the same key"),
+      ]),
+    );
+  });
+
   it("renders the question and disables submission until an option is selected", () => {
     renderQuiz();
 
