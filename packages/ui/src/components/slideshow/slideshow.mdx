@@ -55,7 +55,7 @@ function SectionContent({ section }) {
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `SectionContent` | `ComponentType&lt;SlideshowSectionContentProps&gt;` | Yes | Component used to render the current section content |
+| `SectionContent` | `ComponentType&lt;SlideshowSectionContentProps&gt;` | No | Component used to render the current section content. Preferred over `renderContent` when both are provided. |
 | `completedSections` | `Set&lt;string&gt;` | Yes | - |
 | `completionDialogTitle` | `string` | No | - |
 | `currentIndex` | `number` | Yes | - |
@@ -64,6 +64,7 @@ function SectionContent({ section }) {
 | `onExit` | `() =&gt; void` | Yes | Callback function |
 | `onNavigate` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
 | `onToggleSection` | `(sectionId: string) =&gt; void` | Yes | Callback: `(sectionId: string) => void` |
+| `renderContent` | `(section: SlideshowSection) =&gt; ReactNode` | No | Legacy render prop used to render the current section content |
 | `sections` | `SlideshowSection[]` | Yes | Array of `SlideshowSection` objects |
 | `title` | `string` | Yes | - |
 

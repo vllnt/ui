@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Children, isValidElement, useState } from "react";
 
 import { Check, Code, Copy, FileCode } from "lucide-react";
 import type { ReactNode } from "react";
@@ -27,7 +27,8 @@ function CodeLine({ highlightLines, line, lineNumber }: CodeLineProps) {
 }
 
 export type CodePlaygroundProps = {
-  children?: string;
+  children?: ReactNode;
+  code?: string;
   description?: string;
   filename?: string;
   highlightLines?: number[];
@@ -38,8 +39,23 @@ export type CodePlaygroundProps = {
 
 const EMPTY_HIGHLIGHT_LINES: number[] = [];
 
+function extractTextFromChildren(children: ReactNode): string {
+  return Children.toArray(children)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") {
+        return String(child);
+      }
+      if (isValidElement<{ children?: ReactNode }>(child)) {
+        return extractTextFromChildren(child.props.children);
+      }
+      return "";
+    })
+    .join("");
+}
+
 export function CodePlayground({
   children,
+  code: codeProperty,
   description,
   filename,
   highlightLines = EMPTY_HIGHLIGHT_LINES,
@@ -48,7 +64,7 @@ export function CodePlayground({
   title,
 }: CodePlaygroundProps) {
   const [copied, setCopied] = useState(false);
-  const code = children ?? "";
+  const code = codeProperty ?? extractTextFromChildren(children);
   const lines = code.split("\n");
 
   const handleCopy = async () => {

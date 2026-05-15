@@ -27,7 +27,7 @@ export type ContentIntroProps = {
   /** Estimated time to complete */
   estimatedTime: string;
   /** Rendered introduction content */
-  introContent: ReactNode;
+  introContent?: ReactNode;
   /** Is loading progress */
   isLoading?: boolean;
   /** Labels for i18n */
@@ -36,6 +36,8 @@ export type ContentIntroProps = {
   onGoToSection: (index: number) => void;
   /** Callback when starting */
   onStart: () => void;
+  /** Render prop used by existing consumers to provide introduction content */
+  renderIntroContent?: () => ReactNode;
   /** Sections for TOC */
   sections: ContentIntroSection[];
   /** Intro section title */
@@ -60,11 +62,13 @@ function ContentIntroImpl({
   labels = EMPTY_CONTENT_INTRO_LABELS,
   onGoToSection,
   onStart,
+  renderIntroContent,
   sections,
   title,
 }: ContentIntroProps): React.ReactNode {
   const mergedLabels = { ...DEFAULT_LABELS, ...labels };
   const hasProgress = completedSections.size > 0;
+  const renderedIntroContent = introContent ?? renderIntroContent?.();
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -85,7 +89,7 @@ function ContentIntroImpl({
         <section className="py-6">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
-            {introContent}
+            {renderedIntroContent}
           </div>
         </section>
 

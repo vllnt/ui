@@ -52,11 +52,12 @@ const sections = [
 | `additionalContent` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `completedSections` | `Set&lt;string&gt;` | Yes | - |
 | `estimatedTime` | `string` | Yes | - |
-| `introContent` | `ReactNode` | Yes | Rendered introduction content |
+| `introContent` | `ReactNode` | No | Rendered introduction content. Preferred over `renderIntroContent` when both are provided. |
 | `isLoading` | `boolean` | No | `true` or `false` |
 | `labels` | `ContentIntroLabels` | No | `ContentIntroLabels` object |
 | `onGoToSection` | `(index: number) =&gt; void` | Yes | Callback: `(index: number) => void` |
 | `onStart` | `() =&gt; void` | Yes | Callback function |
+| `renderIntroContent` | `() =&gt; ReactNode` | No | Legacy render prop for introduction content |
 | `sections` | `ContentIntroSection[]` | Yes | Array of `ContentIntroSection` objects |
 | `title` | `string` | Yes | - |
 

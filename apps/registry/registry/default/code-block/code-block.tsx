@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Children, isValidElement, useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
-import type { WheelEvent } from "react";
+import type { ReactNode, WheelEvent } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   oneDark,
@@ -15,11 +15,26 @@ import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
 type CodeBlockProps = {
-  children?: string;
+  children?: ReactNode;
   className?: string;
+  code?: string;
   language?: string;
   showLanguage?: boolean;
 };
+
+export function extractTextFromChildren(children: ReactNode): string {
+  return Children.toArray(children)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") {
+        return String(child);
+      }
+      if (isValidElement<{ children?: ReactNode }>(child)) {
+        return extractTextFromChildren(child.props.children);
+      }
+      return "";
+    })
+    .join("");
+}
 
 function findScrollableParent(
   element: HTMLElement | null,
@@ -41,6 +56,7 @@ function redirectVerticalWheel(event: WheelEvent<HTMLDivElement>): void {
 export function CodeBlock({
   children,
   className,
+  code: codeProperty,
   language = "typescript",
   showLanguage = false,
 }: CodeBlockProps) {
@@ -50,7 +66,7 @@ export function CodeBlock({
   const resolvedTheme = theme === "system" ? systemTheme : theme;
   const isDark = resolvedTheme !== "light";
   const codeStyle = isDark ? oneDark : oneLight;
-  const code = children ?? "";
+  const code = codeProperty ?? extractTextFromChildren(children);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);

@@ -38,6 +38,8 @@ import { CodePlayground, FileTree } from '@vllnt/ui'
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
+| `children` | `ReactNode` | No | Code content. Strings, numbers, arrays, and nested element text are extracted for rendering and copy. |
+| `code` | `string` | No | Explicit code string. Preferred over `children` when provided. |
 | `description` | `string` | No | - |
 | `filename` | `string` | No | - |
 | `highlightLines` | `number[]` | No | Array of `number` |

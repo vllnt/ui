@@ -47,8 +47,10 @@ export type SlideshowProps = {
   onNavigate: (index: number) => void;
   /** Callback to toggle section completion */
   onToggleSection: (sectionId: string) => void;
+  /** Render prop used by existing consumers to render the current section content */
+  renderContent?: (section: SlideshowSection) => ReactNode;
   /** Component used to render the current section content */
-  SectionContent: ComponentType<SlideshowSectionContentProps>;
+  SectionContent?: ComponentType<SlideshowSectionContentProps>;
   /** Sections to display */
   sections: SlideshowSection[];
   /** Tutorial title */
@@ -290,14 +292,22 @@ function SlideshowTableOfContents({
 type SlideshowContentProps = {
   animationDirection: "left" | "right" | null;
   currentSection: SlideshowSection;
-  SectionContent: ComponentType<SlideshowSectionContentProps>;
+  renderContent?: (section: SlideshowSection) => ReactNode;
+  SectionContent?: ComponentType<SlideshowSectionContentProps>;
 };
 
 function SlideshowContent({
   animationDirection,
   currentSection,
+  renderContent,
   SectionContent,
 }: SlideshowContentProps): ReactNode {
+  const content = SectionContent ? (
+    <SectionContent section={currentSection} />
+  ) : (
+    renderContent?.(currentSection)
+  );
+
   return (
     <div className="h-full overflow-auto px-4 py-8 md:px-8 lg:px-16">
       <div className="mx-auto max-w-3xl">
@@ -309,7 +319,7 @@ function SlideshowContent({
             !animationDirection && "opacity-100 translate-x-0",
           )}
         >
-          <SectionContent section={currentSection} />
+          {content}
         </div>
       </div>
     </div>
@@ -389,6 +399,7 @@ function SlideshowImpl({
   onExit,
   onNavigate,
   onToggleSection,
+  renderContent,
   SectionContent,
   sections,
   title,
@@ -541,6 +552,7 @@ function SlideshowImpl({
         <SlideshowContent
           animationDirection={animationDirection}
           currentSection={currentSection}
+          renderContent={renderContent}
           SectionContent={SectionContent}
         />
       </div>
