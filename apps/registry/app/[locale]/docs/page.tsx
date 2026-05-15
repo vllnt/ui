@@ -1,6 +1,6 @@
 import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
@@ -8,8 +8,6 @@ import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type Props = {
   params: Promise<{ locale: Locale }>;
@@ -46,6 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function DocumentationPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const common = await getTranslations({ locale, namespace: "common" });
   const { content, frontmatter } = await getPageContent("docs", locale);
 
   return (
@@ -54,8 +53,8 @@ export default async function DocumentationPage({ params }: Props) {
         dangerouslySetInnerHTML={{
           __html: jsonLdScript(
             breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Docs", url: `${SITE_URL}/docs` },
+              { name: common("home"), url: canonical("/", locale) },
+              { name: common("docs"), url: canonical("/docs", locale) },
             ]),
           ),
         }}
@@ -68,8 +67,8 @@ export default async function DocumentationPage({ params }: Props) {
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
-                { label: "Docs" },
+                { href: localizePathname("/", locale), label: common("home") },
+                { label: common("docs") },
               ]}
             />
             <h1 className="text-4xl font-semibold mb-4">{frontmatter.title}</h1>
