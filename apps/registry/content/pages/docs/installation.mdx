@@ -27,6 +27,24 @@ Use the package when you want to import prebuilt exports from `@vllnt/ui`:
 pnpm add @vllnt/ui
 ```
 
+Then import the full package stylesheet once from your app entry, such as `app/layout.tsx` or `src/main.tsx`:
+
+```tsx
+import "@vllnt/ui/styles.css";
+```
+
+Add the VLLNT UI Tailwind preset and keep your application source in Tailwind content scanning:
+
+```ts
+// tailwind.config.ts
+import uiPreset from "@vllnt/ui/tailwind-preset";
+
+export default {
+  presets: [uiPreset],
+  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+};
+```
+
 Then import a component:
 
 ```tsx
@@ -51,19 +69,24 @@ Replace `button` with any component slug from the [component index](/components)
 
 Package installs and registry installs need slightly different setup:
 
-- Package imports should load the shared styles once from your app entry, such as `app/layout.tsx` or `src/main.tsx`:
-
-```tsx
-import "@vllnt/ui/styles.css";
-```
-
+- Package installs import `@vllnt/ui/styles.css` once, use `@vllnt/ui/tailwind-preset`, and scan your app source files in `content`.
 - Registry installs copy component source into your app. Keep Tailwind configured for your app styles, and make sure Tailwind content scanning includes the destination paths where the shadcn CLI writes those copied components.
 
-```css
-@import "tailwindcss";
+```ts
+// tailwind.config.ts
+export default {
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./registry/**/*.{ts,tsx}",
+  ],
+};
 ```
 
-Use `@vllnt/ui/themes/default.css` instead of `@vllnt/ui/styles.css` only when you want the package theme variables without Tailwind base layer styles. Keep registry-generated utility classes intact unless you know the rendered states no longer need them.
+The exact registry paths depend on your shadcn `components.json` aliases. Include whichever local directories receive copied VLLNT UI components.
+
+Use `@vllnt/ui/themes/default.css` instead of `@vllnt/ui/styles.css` only when you intentionally want the package theme variables without Tailwind base layer styles. The theme file is variables-only; it is not a substitute for the full package stylesheet. Keep registry-generated utility classes intact unless you know the rendered states no longer need them.
 
 ## First component checklist
 
