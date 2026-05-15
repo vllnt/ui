@@ -1,4 +1,4 @@
-import { Breadcrumb, CodeBlock, Sidebar } from "@vllnt/ui";
+import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import { ExternalLink, Github } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -17,7 +17,6 @@ import { getSidebarSections } from "@/lib/sidebar-sections";
 import {
   getTemplate,
   getTemplateGithubUrl,
-  getTemplateInstallCommand,
   getTemplatePath,
   TEMPLATES,
 } from "@/lib/templates";
@@ -69,7 +68,6 @@ export default async function TemplatePage(props: Props) {
     notFound();
   }
 
-  const installCommand = getTemplateInstallCommand(template);
   const templatePath = getTemplatePath(template);
   const templateUrl = `${SITE_URL}${templatePath}`;
   const githubUrl = getTemplateGithubUrl(template);
@@ -86,7 +84,6 @@ export default async function TemplatePage(props: Props) {
           ]),
           softwareApplicationLd({
             description: template.description,
-            installCommand,
             name: template.title,
             url: templateUrl,
           }),
@@ -109,9 +106,7 @@ export default async function TemplatePage(props: Props) {
               <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 Template
               </p>
-              <h1 className="mt-2 text-4xl font-semibold">
-                {template.title}
-              </h1>
+              <h1 className="mt-2 text-4xl font-semibold">{template.title}</h1>
               <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
                 {template.description}
               </p>
@@ -128,10 +123,12 @@ export default async function TemplatePage(props: Props) {
               </div>
 
               <section className="mt-10">
-                <h2 className="text-2xl font-semibold">Install</h2>
-                <div className="mt-4">
-                  <CodeBlock language="bash">{installCommand}</CodeBlock>
-                </div>
+                <h2 className="text-2xl font-semibold">Source</h2>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  This template is available as source in the VLLNT UI
+                  repository. Copy or adapt the files from the template source
+                  until a supported template CLI is available.
+                </p>
               </section>
 
               <section className="mt-10">

@@ -2,11 +2,11 @@
 
 Dense dashboard kit with sidebar navigation, filters, data tables, chart panels, and status-heavy operational views.
 
-## Install
+## Source
 
-```bash
-pnpm dlx create-vllnt-app@latest --template dashboard
-```
+This template is published as source in the VLLNT UI repository. Copy or adapt the files from the template source until a supported template CLI is available.
+
+- Source: https://github.com/vllnt/ui/tree/main/templates/dashboard
 
 ## Included pages
 

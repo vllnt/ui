@@ -2,11 +2,11 @@
 
 App Router starter with auth-ready routes, theming, and five example pages wired around VLLNT UI primitives.
 
-## Install
+## Source
 
-```bash
-pnpm dlx create-vllnt-app@latest --template next-starter
-```
+This template is published as source in the VLLNT UI repository. Copy or adapt the files from the template source until a supported template CLI is available.
+
+- Source: https://github.com/vllnt/ui/tree/main/templates/next-starter
 
 ## Included pages
 

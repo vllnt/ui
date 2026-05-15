@@ -2,7 +2,16 @@
   "slug": "next-starter",
   "title": "Next Starter",
   "demoUrl": "https://ui.vllnt.ai/templates/next-starter",
-  "installCommand": "pnpm dlx create-vllnt-app@latest --template next-starter",
-  "screenshots": ["screenshots/preview.svg"],
-  "components": ["button", "card", "form", "input", "tabs", "navbar-saas", "theme-provider"]
+  "screenshots": [
+    "screenshots/preview.svg"
+  ],
+  "components": [
+    "button",
+    "card",
+    "form",
+    "input",
+    "tabs",
+    "navbar-saas",
+    "theme-provider"
+  ]
 }

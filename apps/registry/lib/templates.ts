@@ -135,7 +135,6 @@ export const TEMPLATES: readonly Template[] = [
       "ai-source-citation",
       "ai-streaming-text",
       "ai-tool-call-display",
-      "conversation-thread",
       "prompt-templates",
     ],
     demoUrl: `${SITE_URL}/templates/ai-chat`,
@@ -196,8 +195,4 @@ export function getTemplatePath(template: Template): string {
 
 export function getTemplateGithubUrl(template: Template): string {
   return `${GITHUB_REPO_URL}/tree/main/${template.githubPath}`;
-}
-
-export function getTemplateInstallCommand(template: Template): string {
-  return `pnpm dlx create-vllnt-app@latest --template ${template.slug}`;
 }

@@ -1,26 +1,25 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import registry from "../../registry.json";
 import {
   getTemplateGithubUrl,
-  getTemplateInstallCommand,
   getTemplatePath,
   TEMPLATES,
 } from "../../lib/templates";
+import registry from "../../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type RegistryItem = {
-  readonly name: string;
-  readonly title: string;
-  readonly description: string;
   readonly category: string;
   readonly dependencies?: readonly string[];
+  readonly description: string;
+  readonly name: string;
   readonly registryDependencies?: readonly string[];
+  readonly title: string;
 };
 
-const DOC_PAGES: ReadonlyArray<{ slug: string; title: string }> = [
+const DOC_PAGES: readonly { slug: string; title: string }[] = [
   { slug: "home", title: "Get Started" },
   { slug: "docs", title: "Documentation" },
   { slug: "philosophy", title: "Philosophy" },
@@ -34,13 +33,8 @@ function stripFrontmatter(source: string): string {
   return source.slice(end + 4).replace(/^\n+/, "");
 }
 
-async function readDocPage(slug: string): Promise<string> {
-  const file = path.join(
-    process.cwd(),
-    "content",
-    "pages",
-    `${slug}.mdx`,
-  );
+async function readDocumentPage(slug: string): Promise<string> {
+  const file = path.join(process.cwd(), "content", "pages", `${slug}.mdx`);
   try {
     const raw = await readFile(file, "utf8");
     return stripFrontmatter(raw).trim();
@@ -71,7 +65,7 @@ async function buildLlmsFullTxt(): Promise<string> {
   lines.push("");
 
   for (const page of DOC_PAGES) {
-    const body = await readDocPage(page.slug);
+    const body = await readDocumentPage(page.slug);
     if (!body) continue;
     lines.push(`## ${page.title}`);
     lines.push("");
@@ -84,7 +78,7 @@ async function buildLlmsFullTxt(): Promise<string> {
   lines.push("## Templates");
   lines.push("");
   lines.push(
-    "Starter kits pair complete app shapes with component lists and a one-line pnpm install command.",
+    "Starter kits pair complete app shapes with component lists and source paths that can be copied or adapted until a supported template CLI is available.",
   );
   lines.push("");
 
@@ -95,7 +89,6 @@ async function buildLlmsFullTxt(): Promise<string> {
     lines.push(`- Page: ${SITE_URL}${getTemplatePath(template)}`);
     lines.push(`- Demo: ${template.demoUrl}`);
     lines.push(`- Source: ${getTemplateGithubUrl(template)}`);
-    lines.push(`- Install: \`${getTemplateInstallCommand(template)}\``);
     lines.push(`- Audience: ${template.audience}`);
     lines.push(`- Components: ${template.components.join(", ")}`);
     lines.push("");
@@ -132,14 +125,15 @@ async function buildLlmsFullTxt(): Promise<string> {
 }
 
 export const dynamic = "force-static";
-export const revalidate = 86400;
+export const revalidate = 86_400;
 
 export async function GET(): Promise<Response> {
   const body = await buildLlmsFullTxt();
   return new Response(body, {
     headers: {
+      "Cache-Control":
+        "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
     },
   });
 }

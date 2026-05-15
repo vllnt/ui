@@ -2,11 +2,11 @@
 
 AI chat starter with conversation state, artifacts, citations, tool calls, prompt templates, and an assistant sidebar.
 
-## Install
+## Source
 
-```bash
-pnpm dlx create-vllnt-app@latest --template ai-chat
-```
+This template is published as source in the VLLNT UI repository. Copy or adapt the files from the template source until a supported template CLI is available.
+
+- Source: https://github.com/vllnt/ui/tree/main/templates/ai-chat
 
 ## Included pages
 

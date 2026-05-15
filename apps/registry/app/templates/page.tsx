@@ -1,22 +1,15 @@
-import { CodeBlock, Sidebar } from "@vllnt/ui";
+import { Sidebar } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 
-import {
-  jsonLdScriptAttributes,
-  softwareApplicationLd,
-} from "@/lib/jsonld";
+import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-import {
-  getTemplateInstallCommand,
-  getTemplatePath,
-  TEMPLATES,
-} from "@/lib/templates";
+import { getTemplatePath, TEMPLATES } from "@/lib/templates";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
@@ -49,7 +42,6 @@ export default function TemplatesPage() {
           TEMPLATES.map((template) =>
             softwareApplicationLd({
               description: template.description,
-              installCommand: getTemplateInstallCommand(template),
               name: template.title,
               url: `${SITE_URL}${getTemplatePath(template)}`,
             }),
@@ -68,12 +60,6 @@ export default function TemplatesPage() {
               Curated app blueprints that show how VLLNT UI components work in
               finished product surfaces, not only isolated component examples.
             </p>
-          </div>
-
-          <div className="mt-8 max-w-3xl">
-            <CodeBlock language="bash">
-              {`pnpm dlx create-vllnt-app@latest --template next-starter`}
-            </CodeBlock>
           </div>
 
           <ul className="mt-12 grid gap-5 lg:grid-cols-2">
