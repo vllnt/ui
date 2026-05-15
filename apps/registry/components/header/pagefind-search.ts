@@ -50,17 +50,16 @@ async function loadPagefind() {
   return pagefindPromise;
 }
 
-const MARKUP_PATTERN = /<[^<>]*>/g;
 const ANGLE_BRACKET_PATTERN = /[<>]/g;
+const HTML_MIME_TYPE = "text/html";
 
 function stripMarkup(value: string): string {
-  const plainText = value.replaceAll(MARKUP_PATTERN, "");
+  const document = new DOMParser().parseFromString(value, HTML_MIME_TYPE);
 
-  if (plainText === value) {
-    return plainText.replaceAll(ANGLE_BRACKET_PATTERN, "");
-  }
-
-  return stripMarkup(plainText);
+  return (document.body.textContent ?? "").replaceAll(
+    ANGLE_BRACKET_PATTERN,
+    "",
+  );
 }
 
 function getFallbackTitle(url: string) {
