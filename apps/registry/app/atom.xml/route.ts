@@ -12,6 +12,7 @@ const ATOM_HEADERS = new Headers([
   ],
   ["Content-Type", "application/atom+xml; charset=utf-8"],
 ]);
+type ReleaseRecord = Awaited<ReturnType<typeof getReleaseRecords>>[number];
 
 function escapeXml(value: string): string {
   return value
@@ -23,24 +24,27 @@ function escapeXml(value: string): string {
 }
 
 function buildAtomDate(value?: string): string {
-  return new Date(value ?? Date.now()).toISOString();
+  return new Date(value ?? 0).toISOString();
+}
+
+function buildAtomEntry(release: ReleaseRecord): string {
+  const link = releasePageUrl(release);
+  return [
+    "  <entry>",
+    `    <title>${escapeXml(release.title)}</title>`,
+    `    <id>${escapeXml(link)}</id>`,
+    `    <link href="${escapeXml(link)}" />`,
+    `    <updated>${escapeXml(buildAtomDate(release.date))}</updated>`,
+    `    <summary>${escapeXml(release.summary)}</summary>`,
+    "  </entry>",
+  ].join("\n");
 }
 
 async function buildAtomXml(): Promise<string> {
   const releases = await getReleaseRecords();
   const entries = releases
-    .map((release) => {
-      const link = releasePageUrl(release);
-      return [
-        "  <entry>",
-        `    <title>${escapeXml(release.title)}</title>`,
-        `    <id>${escapeXml(link)}</id>`,
-        `    <link href="${escapeXml(link)}" />`,
-        `    <updated>${escapeXml(buildAtomDate(release.date))}</updated>`,
-        `    <summary>${escapeXml(release.summary)}</summary>`,
-        "  </entry>",
-      ].join("\n");
-    })
+    .filter((release) => release.date !== undefined)
+    .map(buildAtomEntry)
     .join("\n");
 
   return [

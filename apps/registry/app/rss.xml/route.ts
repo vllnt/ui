@@ -12,6 +12,7 @@ const RSS_HEADERS = new Headers([
   ],
   ["Content-Type", "application/rss+xml; charset=utf-8"],
 ]);
+type ReleaseRecord = Awaited<ReturnType<typeof getReleaseRecords>>[number];
 
 function escapeXml(value: string): string {
   return value
@@ -23,24 +24,27 @@ function escapeXml(value: string): string {
 }
 
 function buildRssDate(value?: string): string {
-  return new Date(value ?? Date.now()).toUTCString();
+  return new Date(value ?? 0).toUTCString();
+}
+
+function buildRssItem(release: ReleaseRecord): string {
+  const link = releasePageUrl(release);
+  return [
+    "    <item>",
+    `      <title>${escapeXml(release.title)}</title>`,
+    `      <link>${escapeXml(link)}</link>`,
+    `      <guid isPermaLink="true">${escapeXml(link)}</guid>`,
+    `      <pubDate>${escapeXml(buildRssDate(release.date))}</pubDate>`,
+    `      <description>${escapeXml(release.summary)}</description>`,
+    "    </item>",
+  ].join("\n");
 }
 
 async function buildRssXml(): Promise<string> {
   const releases = await getReleaseRecords();
   const items = releases
-    .map((release) => {
-      const link = releasePageUrl(release);
-      return [
-        "    <item>",
-        `      <title>${escapeXml(release.title)}</title>`,
-        `      <link>${escapeXml(link)}</link>`,
-        `      <guid isPermaLink="true">${escapeXml(link)}</guid>`,
-        `      <pubDate>${escapeXml(buildRssDate(release.date))}</pubDate>`,
-        `      <description>${escapeXml(release.summary)}</description>`,
-        "    </item>",
-      ].join("\n");
-    })
+    .filter((release) => release.date !== undefined)
+    .map(buildRssItem)
     .join("\n");
 
   return [
