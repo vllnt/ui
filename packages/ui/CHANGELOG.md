@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 
 - Registry installs use a **hybrid CLI strategy** — leaf component source is inlined, sibling registry items resolve via `@vllnt/ui` to keep installs minimal and dedupe shared primitives.
+- **React 19 peer requirement** — `@vllnt/ui` now requires React/React DOM 19 peers after migrating the component surface for React 19 ref-as-prop and `use()` patterns.
 
 ### Notes
 
@@ -76,7 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Publish workflow now uses `npx --yes npm@latest publish` so OIDC trusted publishing survives GitHub runners that ship pre-11.5.1 npm.
 
-## [0.1.11] - 2026-04 *(last canary-era release)*
+## [0.1.11] - 2026-04 _(last canary-era release)_
 
 ### Fixed
 
