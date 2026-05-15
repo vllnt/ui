@@ -102,7 +102,7 @@ function buildLlmsTxt(): string {
     const label = CATEGORY_LABEL[category] ?? category;
     lines.push(`## Components — ${label}`);
     lines.push("");
-    for (const item of bucket.toSorted((a, b) => a.name.localeCompare(b.name))) {
+    for (const item of [...bucket].sort((a, b) => a.name.localeCompare(b.name))) {
       lines.push(
         `- [${item.title}](${SITE_URL}/components/${item.name}): ${item.description}`,
       );

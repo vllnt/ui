@@ -90,7 +90,7 @@ async function buildLlmsFullTxt(): Promise<string> {
   );
   lines.push("");
 
-  for (const item of items.toSorted((a, b) => a.name.localeCompare(b.name))) {
+  for (const item of [...items].sort((a, b) => a.name.localeCompare(b.name))) {
     lines.push(`### ${item.title}`);
     lines.push("");
     lines.push(`- Slug: \`${item.name}\``);
