@@ -49,13 +49,21 @@ Replace `button` with any component slug from the [component index](/components)
 
 ## Tailwind setup
 
-Make sure your app imports the shared CSS variables and scans the files where copied components live. The exact Tailwind setup depends on your app, but the minimum shape is:
+Package installs and registry installs need slightly different setup:
+
+- Package imports should load the shared styles once from your app entry, such as `app/layout.tsx` or `src/main.tsx`:
+
+```tsx
+import "@vllnt/ui/styles.css";
+```
+
+- Registry installs copy component source into your app. Keep Tailwind configured for your app styles, and make sure Tailwind content scanning includes the destination paths where the shadcn CLI writes those copied components.
 
 ```css
 @import "tailwindcss";
 ```
 
-Keep your component directory inside Tailwind content scanning, and keep the registry-generated utility classes intact unless you know the rendered states no longer need them.
+Use `@vllnt/ui/themes/default.css` instead of `@vllnt/ui/styles.css` only when you want the package theme variables without Tailwind base layer styles. Keep registry-generated utility classes intact unless you know the rendered states no longer need them.
 
 ## First component checklist
 
