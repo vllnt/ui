@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -164,6 +164,39 @@ describe("MapTimeline", () => {
       const pause = screen.getByRole("button", { name: "Pause" });
       expect(pause).toHaveAttribute("aria-pressed", "true");
       expect(pause).toHaveAttribute("data-playing", "true");
+    });
+
+    it("returns to play state when playback advances beyond the end year", () => {
+      vi.useFakeTimers();
+
+      try {
+        render(
+          <MapTimeline endYear={2} initialYear={0} speed={100} startYear={0}>
+            <MapTimelineControls>
+              <MapTimelinePlayButton />
+            </MapTimelineControls>
+          </MapTimeline>,
+        );
+
+        fireEvent.click(screen.getByRole("button", { name: "Play" }));
+        expect(screen.getByRole("button", { name: "Pause" })).toHaveAttribute(
+          "data-playing",
+          "true",
+        );
+
+        act(() => {
+          vi.advanceTimersByTime(64);
+        });
+        act(() => {
+          vi.advanceTimersByTime(64);
+        });
+
+        const button = screen.getByRole("button", { name: "Play" });
+        expect(button).toHaveAttribute("aria-pressed", "false");
+        expect(button).not.toHaveAttribute("data-playing");
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 
