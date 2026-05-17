@@ -1,10 +1,9 @@
 "use client";
 
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
-import { useDocumentEventListener } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
@@ -51,6 +50,36 @@ const DEFAULT_LABELS: Required<ContentIntroLabels> = {
 };
 
 const EMPTY_CONTENT_INTRO_LABELS: ContentIntroLabels = {};
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+type EventListenerOptions = AddEventListenerOptions | boolean;
+
+function useDocumentEventListener<TKey extends keyof DocumentEventMap>(
+  type: TKey,
+  listener: (event: DocumentEventMap[TKey]) => void,
+  options?: EventListenerOptions,
+): void {
+  const listenerRef = useRef(listener);
+
+  useIsomorphicLayoutEffect(() => {
+    listenerRef.current = listener;
+  }, [listener]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleEvent = (event: DocumentEventMap[TKey]): void => {
+      listenerRef.current(event);
+    };
+
+    document.addEventListener(type, handleEvent, options);
+    return () => {
+      document.removeEventListener(type, handleEvent, options);
+    };
+  }, [options, type]);
+}
 
 // eslint-disable-next-line max-lines-per-function -- Complex intro with TOC and sticky button
 function ContentIntroImpl({

@@ -1,12 +1,18 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import type { ComponentType, ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-import { useDocumentEventListener } from "@vllnt/ui";
-import { useMounted } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { CompletionDialog } from "@vllnt/ui";
 
@@ -69,6 +75,52 @@ const DEFAULT_LABELS: Required<SlideshowLabels> = {
 };
 
 const EMPTY_SLIDESHOW_LABELS: SlideshowLabels = {};
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+type EventListenerOptions = AddEventListenerOptions | boolean;
+
+function useDocumentEventListener<TKey extends keyof DocumentEventMap>(
+  type: TKey,
+  listener: (event: DocumentEventMap[TKey]) => void,
+  options?: EventListenerOptions,
+): void {
+  const listenerRef = useRef(listener);
+
+  useIsomorphicLayoutEffect(() => {
+    listenerRef.current = listener;
+  }, [listener]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleEvent = (event: DocumentEventMap[TKey]): void => {
+      listenerRef.current(event);
+    };
+
+    document.addEventListener(type, handleEvent, options);
+    return () => {
+      document.removeEventListener(type, handleEvent, options);
+    };
+  }, [options, type]);
+}
+
+function noop(): void {
+  /* intentional no-op for useSyncExternalStore */
+}
+
+function subscribe(): () => void {
+  return noop;
+}
+
+function useMounted(): boolean {
+  return useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+}
 
 type MergedSlideshowLabels = Required<SlideshowLabels>;
 

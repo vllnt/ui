@@ -32,6 +32,7 @@ const sections = [
 ]
 
 <ContentIntro
+  completedSections={new Set()}
   estimatedTime="value"
   introContent={<p>Welcome to this tutorial.</p>}
   onGoToSection={(index) => console.log(index)}

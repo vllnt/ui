@@ -37,7 +37,8 @@ function SectionContent({ section }) {
 
 <Slideshow
   SectionContent={SectionContent}
-  currentIndex="0"
+  completedSections={new Set()}
+  currentIndex={0}
   onComplete={() => {}}
   onExit={() => {}}
   onNavigate={(index) => console.log(index)}
