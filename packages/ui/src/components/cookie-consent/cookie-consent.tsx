@@ -9,8 +9,6 @@ import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 
 const cookieConsentVariants = cva(
-  // Base: safe-area-inset for notched devices
-  // Desktop: compact single-line layout, height matches button
   "fixed z-50 rounded-lg border bg-background shadow-lg transition-all duration-300 max-w-[calc(100vw-2rem)] p-4 sm:py-1.5 sm:px-3",
   {
     defaultVariants: {
@@ -18,8 +16,6 @@ const cookieConsentVariants = cva(
     },
     variants: {
       position: {
-        // Mobile: 16px (1rem) from edges, respects safe area
-        // Desktop: 16px from edges
         "bottom-center": "bottom-4 left-1/2 -translate-x-1/2 mb-safe",
         "bottom-left": "bottom-4 left-4 right-4 sm:right-auto mb-safe ml-safe",
         "bottom-right": "bottom-4 right-4 left-4 sm:left-auto mb-safe mr-safe",
@@ -114,7 +110,6 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
 
     const closeTimerRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
-    // Clear close timer on unmount to avoid dispatching into an unmounted component.
     useEffect(
       () => () => {
         if (closeTimerRef.current !== null) {
@@ -124,10 +119,8 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       [],
     );
 
-    // Handle visibility with animation
     useEffect(() => {
       if (open) {
-        // Small delay for mount animation
         const timer = setTimeout(() => {
           dispatch({ type: "show" });
         }, 50);
@@ -169,7 +162,6 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
         aria-live="polite"
         className={cn(
           cookieConsentVariants({ position }),
-          // Animation states
           isVisible && !isAnimatingOut
             ? "translate-y-0 opacity-100"
             : "translate-y-4 opacity-0",
