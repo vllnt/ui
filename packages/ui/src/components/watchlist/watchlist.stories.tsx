@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Watchlist } from "./watchlist";
 
+const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+
 const sampleItems = [
   {
     change: 1.42,
@@ -46,6 +48,13 @@ const meta = {
   args: {
     items: sampleItems,
   },
+  argTypes: {
+    as: {
+      control: "select",
+      description: "Override the rendered heading tag.",
+      options: headingTagOptions,
+    },
+  },
   component: Watchlist,
   title: "Data/Watchlist",
 } satisfies Meta<typeof Watchlist>;
@@ -59,5 +68,11 @@ export const Compact: Story = {
   args: {
     items: sampleItems.slice(0, 3),
     title: "Top movers",
+  },
+};
+
+export const HeadingOverride: Story = {
+  args: {
+    as: "h2",
   },
 };
