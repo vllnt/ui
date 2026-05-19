@@ -90,5 +90,6 @@ export function ContentCard({
   );
 }
 
-// Keep BlogCard as an alias for backward compatibility
-export const BlogCard = ContentCard;
+export function BlogCard(props: ContentCardProps) {
+  return <ContentCard {...props} />;
+}
