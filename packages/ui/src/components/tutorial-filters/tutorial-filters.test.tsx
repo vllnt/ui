@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -72,8 +72,8 @@ describe("TutorialFilters", () => {
         onFilterChange={handleFilterChange}
       />,
     );
-    const [reactTag] = screen.getAllByText("React");
-    if (!reactTag) throw new Error("Expected React tag to render");
+    const tagList = screen.getByTestId("tag-filter-list");
+    const reactTag = within(tagList).getByText("React");
 
     fireEvent.click(reactTag);
     fireEvent.click(screen.getByText("Design"));

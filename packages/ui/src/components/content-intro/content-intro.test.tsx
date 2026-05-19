@@ -58,7 +58,9 @@ describe("ContentIntro", () => {
     render(<ContentIntro {...baseProps} onStart={handleStart} />);
 
     fireEvent.click(screen.getByText("Start Tutorial"));
-    fireEvent.keyDown(document, { key: "Enter" });
+    fireEvent.keyDown(screen.getByRole("button", { name: /start tutorial/i }), {
+      key: "Enter",
+    });
 
     expect(handleStart).toHaveBeenCalledTimes(2);
   });

@@ -58,13 +58,8 @@ describe("TableOfContentsPanel", () => {
 
   it("closes on Escape and backdrop click", () => {
     const handleClose = vi.fn();
-    const { container } = render(
-      <TableOfContentsPanel {...baseProps} onClose={handleClose} />,
-    );
-    const backdrop = container.querySelector<HTMLElement>(
-      "[aria-hidden='true']",
-    );
-    if (!backdrop) throw new Error("Expected backdrop to render");
+    render(<TableOfContentsPanel {...baseProps} onClose={handleClose} />);
+    const backdrop = screen.getByTestId("toc-backdrop");
 
     fireEvent.keyDown(window, { key: "Escape" });
     fireEvent.click(backdrop);

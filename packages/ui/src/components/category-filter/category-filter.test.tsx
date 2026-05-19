@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 let mockPathname = "/en/design-systems";
 
@@ -10,6 +10,10 @@ vi.mock("next/navigation", () => ({
 import { CategoryFilter } from "./category-filter";
 
 describe("CategoryFilter", () => {
+  beforeEach(() => {
+    mockPathname = "/en/design-systems";
+  });
+
   it("renders nothing when there are no categories", () => {
     const { container } = render(<CategoryFilter categories={[]} lang="en" />);
 
