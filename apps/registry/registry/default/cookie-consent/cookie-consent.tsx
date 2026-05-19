@@ -5,8 +5,7 @@ import { forwardRef, useCallback, useEffect, useReducer, useRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
-import { cn } from "../../lib/utils";
-import { Button } from "../button/button";
+import { Button, cn } from "@vllnt/ui";
 
 const cookieConsentVariants = cva(
   // Base: safe-area-inset for notched devices
