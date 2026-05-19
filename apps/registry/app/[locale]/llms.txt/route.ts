@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention, functional/no-loop-statements, max-lines-per-function */
+/* eslint-disable @typescript-eslint/naming-convention, max-lines-per-function */
 
 import { isLocale, routing } from "../../../i18n/routing";
 import registry from "../../../registry.json";
@@ -62,13 +62,14 @@ export async function GET(
     "",
   ];
 
-  for (const item of [...items].sort((a, b) => a.name.localeCompare(b.name))) {
-    lines.push(
-      `- [${item.title}](${SITE_URL}/fr/components/${item.name}): ${item.description}`,
+  const componentLines = [...items]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(
+      (item) =>
+        `- [${item.title}](${SITE_URL}/fr/components/${item.name}): ${item.description}`,
     );
-  }
 
-  return new Response(lines.join("\n"), {
+  return new Response([...lines, ...componentLines].join("\n"), {
     headers: {
       "Cache-Control":
         "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",

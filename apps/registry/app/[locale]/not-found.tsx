@@ -1,6 +1,6 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { useLocale, useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { isLocale, Link } from "@/i18n/routing";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -23,11 +23,11 @@ const POPULAR_COMPONENTS: readonly { name: string; slug: string }[] = [
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
 
-export default function NotFound() {
-  const requestedLocale = useLocale();
+export default async function NotFound() {
+  const requestedLocale = await getLocale();
   const locale = isLocale(requestedLocale) ? requestedLocale : "en";
-  const common = useTranslations("common");
-  const t = useTranslations("pages.notFound");
+  const common = await getTranslations({ locale, namespace: "common" });
+  const t = await getTranslations({ locale, namespace: "pages.notFound" });
 
   return (
     <>

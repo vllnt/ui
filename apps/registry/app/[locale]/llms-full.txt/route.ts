@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention, functional/no-loop-statements, max-lines-per-function */
+/* eslint-disable @typescript-eslint/naming-convention, max-lines-per-function */
 
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -66,16 +66,22 @@ export async function GET(
     "",
   ];
 
-  for (const page of pages) {
-    const body = await readDocumentPage(page.slug);
-    if (!body) continue;
-    lines.push(`## ${page.title}`);
-    lines.push("");
-    lines.push(body);
-    lines.push("");
-  }
+  const pageBodies = await Promise.all(
+    pages.map(async (page) => ({
+      body: await readDocumentPage(page.slug),
+      title: page.title,
+    })),
+  );
 
-  return new Response(lines.join("\n"), {
+  const allLines = pageBodies.reduce<string[]>(
+    (accumulator, { body, title }) => {
+      if (!body) return accumulator;
+      return [...accumulator, `## ${title}`, "", body, ""];
+    },
+    lines,
+  );
+
+  return new Response(allLines.join("\n"), {
     headers: {
       "Cache-Control":
         "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
