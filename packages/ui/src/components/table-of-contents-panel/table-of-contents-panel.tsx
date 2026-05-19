@@ -91,6 +91,7 @@ function TableOfContentsPanelImpl({
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        data-testid="toc-backdrop"
         onClick={onClose}
       />
 
