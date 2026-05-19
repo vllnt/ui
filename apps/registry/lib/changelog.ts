@@ -101,6 +101,27 @@ function extractSummary(notes: string): string {
   );
 }
 
+function countBreakingChangesFromNotes(notes: string): number {
+  const lines = notes.split("\n");
+  let inBreakingSection = false;
+  let count = 0;
+  for (const line of lines) {
+    if (/^###\s+.*breaking/i.test(line)) {
+      inBreakingSection = true;
+      continue;
+    }
+    if (/^###/.test(line)) {
+      inBreakingSection = false;
+      continue;
+    }
+    if (inBreakingSection && line.trim().startsWith("- ")) {
+      count++;
+    }
+  }
+  if (count > 0) return count;
+  return /breaking/i.test(notes) ? 1 : 0;
+}
+
 function countBreakingChanges(entry: ChangelogEntry): number {
   return entry.sections
     .filter((section) => section.type === "breaking")
@@ -133,9 +154,14 @@ function changelogCandidates(): readonly string[] {
 }
 
 async function readChangelog(): Promise<string> {
-  return Promise.any(
-    changelogCandidates().map((candidate) => readFile(candidate, "utf8")),
-  ).catch(() => "");
+  for (const candidate of changelogCandidates()) {
+    try {
+      return await readFile(candidate, "utf8");
+    } catch {
+      // try next candidate
+    }
+  }
+  return "";
 }
 
 function parseHeading(line: string): Heading | undefined {
@@ -236,20 +262,23 @@ function entryToReleaseRecord(entry: ChangelogEntry): ReleaseRecord {
   const notes = entry.sections
     .map((section) => `### ${section.title}\n\n${section.body}`)
     .join("\n\n");
-  const version = entry.version === "Unreleased" ? "0.3.0" : entry.version;
-  const tag = `v${normalizeVersion(version)}`;
+  const isUnreleased = entry.version === "Unreleased";
+  const version = isUnreleased ? "Unreleased" : entry.version;
+  const anchor = versionToAnchor(version);
 
   return {
-    anchor: versionToAnchor(version),
+    anchor,
     breakingChanges: countBreakingChanges(entry),
     componentDelta: extractComponentDelta(notes),
     date: entry.date,
     migrationUrl: extractMigrationUrl(notes),
     notes,
     summary: extractSummary(notes),
-    title: entry.version === "Unreleased" ? "0.3.0 preview" : `v${version}`,
-    url: `${GITHUB_REPO_URL}/releases/tag/${tag}`,
-    version: tag,
+    title: isUnreleased ? "Unreleased" : `v${normalizeVersion(version)}`,
+    url: isUnreleased
+      ? `${GITHUB_REPO_URL}/blob/main/CHANGELOG.md#unreleased`
+      : `${GITHUB_REPO_URL}/releases/tag/v${normalizeVersion(version)}`,
+    version,
   };
 }
 
@@ -276,7 +305,7 @@ function githubRecordToReleaseRecord(
 
   return {
     anchor: versionToAnchor(version),
-    breakingChanges: /breaking/i.test(notes) ? 1 : 0,
+    breakingChanges: countBreakingChangesFromNotes(notes),
     componentDelta: extractComponentDelta(notes),
     date: stringField(record, "published_at")?.slice(0, 10),
     migrationUrl: extractMigrationUrl(notes),
@@ -360,17 +389,17 @@ export async function getLatestReleaseRecords(
 ): Promise<readonly ReleaseRecord[]> {
   const releases = await getReleaseRecords();
   return releases
-    .filter(
-      (release) => release.date !== undefined || release.anchor === "v0-3-0",
-    )
+    .filter((release) => release.date !== undefined)
     .slice(0, limit);
 }
 
-export function feedUpdatedAt(releases: readonly ReleaseRecord[]): string {
+export function feedUpdatedAt(
+  releases: readonly ReleaseRecord[],
+): string | undefined {
   const firstDated = releases.find((release) => release.date);
-  return firstDated?.date
-    ? new Date(firstDated.date).toISOString()
-    : new Date().toISOString();
+  if (firstDated?.date) return new Date(firstDated.date).toISOString();
+  const buildTime = process.env["BUILD_TIME"];
+  return buildTime ? new Date(buildTime).toISOString() : undefined;
 }
 
 export function releasePageUrl(release: ReleaseRecord): string {

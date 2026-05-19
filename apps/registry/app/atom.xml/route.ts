@@ -47,6 +47,7 @@ async function buildAtomXml(): Promise<string> {
     .map(buildAtomEntry)
     .join("\n");
 
+  const updatedAt = feedUpdatedAt(releases);
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<feed xmlns="http://www.w3.org/2005/Atom">',
@@ -54,7 +55,8 @@ async function buildAtomXml(): Promise<string> {
     `  <id>${SITE_URL}/releases</id>`,
     `  <link href="${SITE_URL}/releases" />`,
     `  <link rel="self" href="${SITE_URL}/atom.xml" />`,
-    `  <updated>${escapeXml(feedUpdatedAt(releases))}</updated>`,
+    "  <author><name>vllnt</name></author>",
+    ...(updatedAt ? [`  <updated>${escapeXml(updatedAt)}</updated>`] : []),
     entries,
     "</feed>",
   ].join("\n");

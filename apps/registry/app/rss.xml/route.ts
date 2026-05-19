@@ -47,6 +47,7 @@ async function buildRssXml(): Promise<string> {
     .map(buildRssItem)
     .join("\n");
 
+  const updatedAt = feedUpdatedAt(releases);
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0">',
@@ -54,7 +55,9 @@ async function buildRssXml(): Promise<string> {
     "    <title>VLLNT UI Releases</title>",
     `    <link>${SITE_URL}/releases</link>`,
     "    <description>Versioned VLLNT UI release notes.</description>",
-    `    <lastBuildDate>${buildRssDate(feedUpdatedAt(releases))}</lastBuildDate>`,
+    ...(updatedAt
+      ? [`    <lastBuildDate>${buildRssDate(updatedAt)}</lastBuildDate>`]
+      : []),
     "    <language>en-US</language>",
     items,
     "  </channel>",

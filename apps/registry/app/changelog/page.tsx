@@ -128,6 +128,7 @@ export default async function ChangelogPage({
     to: parameters.to,
     type,
   });
+  const latestDate = entries.find((e) => e.date)?.date;
 
   return (
     <>
@@ -141,7 +142,9 @@ export default async function ChangelogPage({
             {
               "@context": "https://schema.org",
               "@type": "Article",
-              dateModified: new Date().toISOString(),
+              dateModified: latestDate
+                ? new Date(latestDate).toISOString()
+                : undefined,
               description: DESCRIPTION,
               headline: "VLLNT UI Changelog",
               mainEntityOfPage: `${SITE_URL}/changelog`,
