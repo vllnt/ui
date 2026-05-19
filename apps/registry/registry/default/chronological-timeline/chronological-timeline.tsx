@@ -314,7 +314,7 @@ export const ChronoEvent = forwardRef<HTMLElement, ChronoEventProps>(
       [eventId, forwardedRef, registerEvent],
     );
 
-    const handleFocus = useCallback(() => {
+    const handleFocusEvent = useCallback(() => {
       setActiveId(eventId);
     }, [eventId, setActiveId]);
 
@@ -328,7 +328,7 @@ export const ChronoEvent = forwardRef<HTMLElement, ChronoEventProps>(
         data-event-id={eventId}
         data-featured={featured ? "true" : undefined}
         id={eventId}
-        onFocus={handleFocus}
+        onFocus={handleFocusEvent}
         ref={refCallback}
         {...rest}
       >
