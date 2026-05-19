@@ -119,10 +119,7 @@ describe("NavbarSaas", () => {
       expect(container.querySelector(".lucide-menu")).toBeInTheDocument();
     });
 
-    const trigger = container.querySelector("button[class*='lg:hidden']");
-    if (!trigger) {
-      throw new Error("Expected mobile menu trigger to render");
-    }
+    const trigger = screen.getByTestId("navbar-saas-mobile-trigger");
 
     fireEvent.click(trigger);
 

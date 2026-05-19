@@ -128,11 +128,11 @@ describe("Sidebar", () => {
     const trigger = screen.getByRole("button", { name: "Guides" });
     const panel = trigger.nextElementSibling;
 
-    expect(panel?.className).toContain("grid-rows-[0fr]");
+    expect(panel).toHaveAttribute("aria-hidden", "true");
 
     fireEvent.click(trigger);
 
-    expect(panel?.className).toContain("grid-rows-[1fr]");
+    expect(panel).not.toHaveAttribute("aria-hidden", "true");
   });
 
   it("opens on desktop and closes on mobile resize", async () => {
@@ -169,10 +169,7 @@ describe("Sidebar", () => {
       expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
     });
 
-    const overlay = document.querySelector("div[role='button']");
-    if (!overlay) {
-      throw new Error("Expected mobile overlay to render");
-    }
+    const overlay = screen.getByTestId("sidebar-overlay");
 
     fireEvent.click(overlay);
 
