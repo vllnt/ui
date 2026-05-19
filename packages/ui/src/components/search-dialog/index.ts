@@ -1,1 +1,1 @@
-export { SearchDialog } from "./search-dialog";
+export { SearchDialog, type SearchItem } from "./search-dialog";

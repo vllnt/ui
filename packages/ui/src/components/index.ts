@@ -655,7 +655,7 @@ export {
 } from "./share-section";
 
 // Registry/Documentation components
-export { SearchDialog } from "./search-dialog";
+export { SearchDialog, type SearchItem } from "./search-dialog";
 
 // Theme & Language providers
 export { LangProvider } from "./lang-provider";
