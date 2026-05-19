@@ -108,7 +108,37 @@ const Message = (props: { message: ThreadMessage }): React.ReactElement => {
  *
  * @public
  */
-// eslint-disable-next-line max-lines-per-function
+function ThreadBubbleHeader({
+  onResolve,
+  title,
+}: {
+  onResolve?: () => void;
+  title?: React.ReactNode;
+}): null | React.ReactElement {
+  if (!title && !onResolve) return null;
+  return (
+    <header className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-wide text-muted-foreground">
+      {title ? (
+        <span className="truncate font-semibold" data-thread-bubble-title>
+          {title}
+        </span>
+      ) : (
+        <span aria-hidden="true" />
+      )}
+      {onResolve ? (
+        <button
+          className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          data-thread-bubble-resolve
+          onClick={onResolve}
+          type="button"
+        >
+          Resolve
+        </button>
+      ) : null}
+    </header>
+  );
+}
+
 export const ThreadBubble = (
   props: ThreadBubbleProps & React.RefAttributes<HTMLElement>,
 ) => {
@@ -123,9 +153,7 @@ export const ThreadBubble = (
     ...rest
   } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const handleResolve = (): void => {
-    onResolve?.();
-  };
+
   return (
     <section
       aria-label={resolvedLabels.region}
@@ -137,27 +165,7 @@ export const ThreadBubble = (
       ref={ref}
       {...rest}
     >
-      {title || onResolve ? (
-        <header className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-wide text-muted-foreground">
-          {title ? (
-            <span className="truncate font-semibold" data-thread-bubble-title>
-              {title}
-            </span>
-          ) : (
-            <span aria-hidden="true" />
-          )}
-          {onResolve ? (
-            <button
-              className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              data-thread-bubble-resolve
-              onClick={handleResolve}
-              type="button"
-            >
-              Resolve
-            </button>
-          ) : null}
-        </header>
-      ) : null}
+      <ThreadBubbleHeader onResolve={onResolve} title={title} />
       {messages.length === 0 ? (
         <p
           className="px-1 py-2 text-center text-[11px] text-muted-foreground"

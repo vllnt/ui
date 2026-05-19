@@ -384,7 +384,6 @@ function TreeRows({
  *
  * @public
  */
-// eslint-disable-next-line max-lines-per-function
 export const TreeView = (
   props: TreeViewProps & React.RefAttributes<HTMLUListElement>,
 ) => {
@@ -402,10 +401,7 @@ export const TreeView = (
     selectionMode = "single",
     ...rest
   } = props;
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
+  const regionLabel = labels?.region ?? DEFAULT_LABELS.region;
 
   const { applyExpand, applySelect, expandedSet, selectedSet } = useTreeState({
     defaultExpanded,
@@ -437,7 +433,7 @@ export const TreeView = (
 
   return (
     <ul
-      aria-label={resolvedLabels.region}
+      aria-label={regionLabel}
       aria-multiselectable={selectionMode === "multiple" || undefined}
       className={cn(
         "flex flex-col gap-0.5 rounded-2xl border bg-background p-2 text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",

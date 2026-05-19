@@ -820,21 +820,22 @@ function noop(): void {
 function useToolbarHandlers(arguments_: {
   endTime: number;
   scrollerId: string;
-  setZoom: (next: ((previous: number) => number) | number) => void;
   startTime: number;
-  zoom: number;
 }): {
   centerToday: () => void;
+  setZoom: React.Dispatch<React.SetStateAction<number>>;
+  zoom: number;
   zoomIn: () => void;
   zoomOut: () => void;
 } {
-  const { endTime, scrollerId, setZoom, startTime } = arguments_;
+  const { endTime, scrollerId, startTime } = arguments_;
+  const [zoom, setZoom] = useState(1);
   const zoomIn = useCallback(() => {
     setZoom((current) => clamp(current * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM));
-  }, [setZoom]);
+  }, []);
   const zoomOut = useCallback(() => {
     setZoom((current) => clamp(current / ZOOM_STEP, MIN_ZOOM, MAX_ZOOM));
-  }, [setZoom]);
+  }, []);
   const centerToday = useCallback(() => {
     if (typeof document === "undefined") return;
     const node = document.querySelector<HTMLElement>(
@@ -848,7 +849,7 @@ function useToolbarHandlers(arguments_: {
     const targetX = offset * node.scrollWidth - node.clientWidth / 2;
     node.scrollLeft = clamp(targetX, 0, node.scrollWidth);
   }, [endTime, scrollerId, startTime]);
-  return { centerToday, zoomIn, zoomOut };
+  return { centerToday, setZoom, zoom, zoomIn, zoomOut };
 }
 
 type FilterState = {
@@ -1010,7 +1011,6 @@ function useTimelineFilter(
  *
  * @public
  */
-// eslint-disable-next-line max-lines-per-function
 export const InteractiveTimeline = (
   props: InteractiveTimelineProps & React.RefAttributes<HTMLElement>,
 ) => {
@@ -1036,17 +1036,13 @@ export const InteractiveTimeline = (
   });
   const scrollerId = useId();
 
-  const [zoom, setZoom] = useState<number>(1);
-
   const { filteredEvents, toggleCategory, visibleCategories } =
     useTimelineFilter(categories, events);
 
-  const { centerToday, zoomIn, zoomOut } = useToolbarHandlers({
+  const { centerToday, zoom, zoomIn, zoomOut } = useToolbarHandlers({
     endTime,
     scrollerId,
-    setZoom,
     startTime,
-    zoom,
   });
 
   const { handleSelect, selectedId } = useEventSelection(onEventClick);

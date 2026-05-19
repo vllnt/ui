@@ -478,7 +478,6 @@ function scheduleAdvance(
  *
  * @public
  */
-// eslint-disable-next-line max-lines-per-function
 export const GeographyQuizMap = (
   props: GeographyQuizMapProps & React.RefAttributes<HTMLElement>,
 ) => {
@@ -495,15 +494,13 @@ export const GeographyQuizMap = (
     ...rest
   } = props;
   const titleId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
   const { handleSelect, state } = useQuizState({ onComplete, questions });
 
   const phase: Phase =
     state.questionIndex >= questions.length ? "complete" : "playing";
   const current = questions[state.questionIndex];
+
+  const regionLabel = labels?.region ?? DEFAULT_LABELS.region;
 
   const ctx = useMemo<QuizCtx>(
     () => ({
@@ -536,7 +533,7 @@ export const GeographyQuizMap = (
         {...rest}
       >
         <span className="sr-only" id={titleId}>
-          {resolvedLabels.region}
+          {regionLabel}
         </span>
         <Stage
           backdrop={backdrop}

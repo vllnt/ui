@@ -417,8 +417,7 @@ function FormInner<TFieldValues extends FieldValues = FieldValues>({
   );
 }
 
-const FormBase = FormInner as typeof FormInner & { displayName?: string };
-FormBase.displayName = "Form";
+const FormBase = Object.assign(FormInner, { displayName: "Form" });
 
 const Form = FormBase as <TFieldValues extends FieldValues = FieldValues>(
   props: FormProps<TFieldValues> & React.RefAttributes<HTMLFormElement>,

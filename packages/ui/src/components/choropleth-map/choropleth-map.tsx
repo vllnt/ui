@@ -481,6 +481,20 @@ function RegionsLayer({
   );
 }
 
+function useRegionSelection(
+  onSelectRegion?: ChoroplethMapProps["onSelectRegion"],
+): { handleSelect: (region: ChoroplethRegion) => void; selectedId?: string } {
+  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const handleSelect = useCallback(
+    (region: ChoroplethRegion) => {
+      setSelectedId(region.id);
+      onSelectRegion?.(region);
+    },
+    [onSelectRegion],
+  );
+  return { handleSelect, selectedId };
+}
+
 /**
  * Region-colored data map (choropleth). Standalone SVG primitive — no
  * external map library or tile provider required. Pass an array of
@@ -505,7 +519,6 @@ function RegionsLayer({
  *
  * @public
  */
-// eslint-disable-next-line max-lines-per-function
 export const ChoroplethMap = (
   props: ChoroplethMapProps & React.RefAttributes<HTMLElement>,
 ) => {
@@ -523,14 +536,12 @@ export const ChoroplethMap = (
     ...rest
   } = props;
   const titleId = useId();
-  const resolvedLabels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labels }),
-    [labels],
-  );
-
-  const domain = useMemo(
-    () => domainProperty ?? computeDomain(Object.values(data)),
-    [data, domainProperty],
+  const { domain, resolvedLabels } = useMemo(
+    () => ({
+      domain: domainProperty ?? computeDomain(Object.values(data)),
+      resolvedLabels: { ...DEFAULT_LABELS, ...labels },
+    }),
+    [data, domainProperty, labels],
   );
 
   const ctx = useChoroplethState({
@@ -541,16 +552,7 @@ export const ChoroplethMap = (
     regions,
   });
   const buckets = useMemo(() => bucketChildren(children), [children]);
-
-  const [selectedId, setSelectedId] = useState<string | undefined>();
-
-  const handleSelect = useCallback(
-    (region: ChoroplethRegion) => {
-      setSelectedId(region.id);
-      onSelectRegion?.(region);
-    },
-    [onSelectRegion],
-  );
+  const { handleSelect, selectedId } = useRegionSelection(onSelectRegion);
 
   return (
     <ChoroplethContext.Provider value={ctx}>

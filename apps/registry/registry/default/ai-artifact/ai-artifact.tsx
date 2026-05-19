@@ -136,15 +136,47 @@ function pickExtension(type: AIArtifactType, language: string): string {
   }
 }
 
-const SLUG_INVALID_CHARS = /[^\da-z]+/g;
-const SLUG_TRIM = /^-+|-+$/g;
-
 type FilenameInput = {
   filename?: string;
   language: string;
   title: ReactNode;
   type: AIArtifactType;
 };
+
+function isSlugCharacter(character: string): boolean {
+  const codePoint = character.codePointAt(0) ?? 0;
+  return (
+    (codePoint >= 48 && codePoint <= 57) ||
+    (codePoint >= 97 && codePoint <= 122)
+  );
+}
+
+function slugifyTitle(value: string): string {
+  const lowercase = value.toLowerCase();
+  return Array.from(
+    { length: lowercase.length },
+    (_, index) => lowercase[index] ?? "",
+  )
+    .reduce(
+      (slug, character) => {
+        if (isSlugCharacter(character)) {
+          if (slug.pendingSeparator && slug.parts.length > 0) {
+            slug.parts.push("-");
+          }
+          slug.parts.push(character);
+          slug.pendingSeparator = false;
+          return slug;
+        }
+
+        if (slug.parts.length > 0) {
+          slug.pendingSeparator = true;
+        }
+        return slug;
+      },
+      { parts: [] as string[], pendingSeparator: false },
+    )
+    .parts.join("");
+}
 
 function buildFilename({
   filename,
@@ -155,10 +187,7 @@ function buildFilename({
   if (filename) return filename;
   const base =
     typeof title === "string" && title.length > 0 ? title : "artifact";
-  const slug = base
-    .toLowerCase()
-    .replaceAll(SLUG_INVALID_CHARS, "-")
-    .replaceAll(SLUG_TRIM, "");
+  const slug = slugifyTitle(base);
   const safeBase = slug.length > 0 ? slug : "artifact";
   return `${safeBase}.${pickExtension(type, language)}`;
 }
