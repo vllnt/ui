@@ -21,6 +21,13 @@ export function useEventCallback<TArguments extends unknown[], TReturnValue>(
   }, []);
 }
 
+/**
+ * Attaches a document-level event listener that stays current with the latest `listener` reference.
+ *
+ * @param options - Pass a stable reference (e.g. a module-level constant or `useMemo`/`useCallback`
+ *   value). An inline object literal creates a new reference every render, which re-registers the
+ *   listener on each render cycle.
+ */
 export function useDocumentEventListener<TKey extends keyof DocumentEventMap>(
   type: TKey,
   listener: (event: DocumentEventMap[TKey]) => void,

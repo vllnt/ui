@@ -1,10 +1,10 @@
 "use client";
 
-import { Children, isValidElement, useState } from "react";
+import { Children, isValidElement, useEffect, useRef, useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
-import type { ReactNode, WheelEvent } from "react";
+import type { ReactNode } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   oneDark,
@@ -44,15 +44,6 @@ function findScrollableParent(
   return findScrollableParent(element.parentElement);
 }
 
-function redirectVerticalWheel(event: WheelEvent<HTMLDivElement>): void {
-  if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-  const scrollable = findScrollableParent(event.currentTarget);
-  if (scrollable) {
-    scrollable.scrollTop += event.deltaY;
-    event.preventDefault();
-  }
-}
-
 export function CodeBlock({
   children,
   className,
@@ -62,6 +53,26 @@ export function CodeBlock({
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const { systemTheme, theme } = useTheme();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = scrollContainerRef.current;
+    if (!node) return;
+
+    const handleWheel = (event: WheelEvent): void => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      const scrollable = findScrollableParent(node);
+      if (scrollable) {
+        scrollable.scrollTop += event.deltaY;
+        event.preventDefault();
+      }
+    };
+
+    node.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      node.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
 
   const resolvedTheme = theme === "system" ? systemTheme : theme;
   const isDark = resolvedTheme !== "light";
@@ -85,7 +96,7 @@ export function CodeBlock({
     >
       <div
         className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
-        onWheel={redirectVerticalWheel}
+        ref={scrollContainerRef}
       >
         <SyntaxHighlighter
           codeTagProps={{
