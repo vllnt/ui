@@ -4,11 +4,14 @@ import { memo, type ReactNode } from "react";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { useHorizontalScroll } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
 type HorizontalScrollRowProps = {
+  /** Heading tag for the title. Defaults to `h3`. */
+  as?: HeadingTag;
   children: ReactNode;
   className?: string;
   description?: string;
@@ -16,6 +19,7 @@ type HorizontalScrollRowProps = {
 };
 
 const HorizontalScrollRow = memo(function HorizontalScrollRow({
+  as: Heading = "h3",
   children,
   className,
   description,
@@ -30,7 +34,7 @@ const HorizontalScrollRow = memo(function HorizontalScrollRow({
     <section className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <Heading className="text-lg font-semibold">{title}</Heading>
           {description ? (
             <p className="text-sm text-muted-foreground">{description}</p>
           ) : null}
