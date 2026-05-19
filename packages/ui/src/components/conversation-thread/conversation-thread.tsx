@@ -521,14 +521,14 @@ export const ConversationLoading = forwardRef<
       role="status"
     >
       <span
-        className="size-2 animate-bounce rounded-full bg-muted-foreground"
+        className="size-2 animate-pulse rounded-full bg-muted-foreground"
         style={{ animationDelay: "-0.3s" }}
       />
       <span
-        className="size-2 animate-bounce rounded-full bg-muted-foreground"
+        className="size-2 animate-pulse rounded-full bg-muted-foreground"
         style={{ animationDelay: "-0.15s" }}
       />
-      <span className="size-2 animate-bounce rounded-full bg-muted-foreground" />
+      <span className="size-2 animate-pulse rounded-full bg-muted-foreground" />
     </div>
   );
 });

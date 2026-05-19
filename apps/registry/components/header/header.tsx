@@ -1,9 +1,9 @@
 "use client";
 
 import { NavbarSaas, SearchDialog } from "@vllnt/ui";
-import { Github } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { GitHubMark } from "@/components/github-mark";
 import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
@@ -48,12 +48,12 @@ export function Header() {
           />
           <a
             aria-label="VLLNT UI on GitHub"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
             href={GITHUB_URL}
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <GitHubMark className="size-4" />
           </a>
         </div>
       }
