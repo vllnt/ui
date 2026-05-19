@@ -7,15 +7,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
-import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
-import {
-  breadcrumbLd,
-  jsonLdScript,
-  softwareSourceCodeLd,
-} from "@/lib/jsonld";
+import { breadcrumbLd, jsonLdScript, softwareSourceCodeLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import {
+  getPlaygroundExample,
+  getRegistryPackageVersion,
+} from "@/lib/playground";
 import { canonical } from "@/lib/seo";
 import {
   getCategoryForComponent,
@@ -104,6 +104,8 @@ export default async function ComponentPage(props: Props) {
   const meta = metadata_map[slug];
   const displayTitle = meta?.title ?? component.title ?? component.name;
   const displayDescription = meta?.description ?? component.description ?? "";
+  const playgroundExample = getPlaygroundExample(component);
+  const registryPackageVersion = getRegistryPackageVersion(registry.version);
 
   // Read component source for code display
   let componentCode = "";
@@ -159,6 +161,10 @@ export default async function ComponentPage(props: Props) {
 
   const sections = [
     { id: "installation", title: "Installation" },
+    ...(meta?.defaultStoryId ? [{ id: "preview", title: "Preview" }] : []),
+    ...(meta?.defaultStoryId
+      ? [{ id: "playground", title: "Playground" }]
+      : []),
     ...(meta?.defaultStoryId ? [{ id: "storybook", title: "Storybook" }] : []),
     ...(componentCode ? [{ id: "code", title: "Code" }] : []),
     ...(component.dependencies && component.dependencies.length > 0
@@ -166,8 +172,7 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>
@@ -221,16 +226,14 @@ export default async function ComponentPage(props: Props) {
                 </div>
               </div>
 
-              {/* Preview — Storybook Embed */}
+              {/* Preview + Playground */}
               {meta?.defaultStoryId ? (
-                <div className="mb-8 scroll-mt-8">
-                  <div className="rounded-lg border bg-card overflow-hidden">
-                    <StorybookEmbed
-                      componentName={component.name}
-                      storyId={meta.defaultStoryId}
-                    />
-                  </div>
-                </div>
+                <PreviewPlaygroundTabs
+                  componentName={component.name}
+                  example={playgroundExample}
+                  packageVersion={registryPackageVersion}
+                  storyId={meta.defaultStoryId}
+                />
               ) : null}
 
               {/* Installation */}
