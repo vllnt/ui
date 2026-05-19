@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -146,16 +142,16 @@ const RowBody = (props: { bookmark: ViewportBookmark }): React.ReactElement => {
  *
  * @public
  */
-export const ViewportBookmarks = forwardRef<
-  HTMLElement,
-  ViewportBookmarksProps
->((props, ref) => {
+export const ViewportBookmarks = (
+  props: ViewportBookmarksProps & React.RefAttributes<HTMLElement>,
+) => {
   const {
     activeId,
     bookmarks,
     className,
     labels,
     onSelect,
+    ref,
     title = "Saved views",
     ...rest
   } = props;
@@ -196,5 +192,5 @@ export const ViewportBookmarks = forwardRef<
       )}
     </section>
   );
-});
+};
 ViewportBookmarks.displayName = "ViewportBookmarks";

@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -82,65 +82,66 @@ const safeRadius = (value: number): number => (value < 6 ? 6 : value);
  *
  * @public
  */
-export const AlertPulse = forwardRef<SVGSVGElement, AlertPulseProps>(
-  (props, ref) => {
-    const {
-      className,
-      cx,
-      cy,
-      labels,
-      radius = 36,
-      reducedMotion = false,
-      severity = "warn",
-      ...rest
-    } = props;
-    const r = safeRadius(radius);
-    const ariaLabel = labels?.region ?? SEVERITY_LABEL[severity];
-    const size = r * 2 + 24;
-    return (
-      <svg
-        aria-label={ariaLabel}
+export const AlertPulse = (
+  props: AlertPulseProps & React.RefAttributes<SVGSVGElement>,
+) => {
+  const {
+    className,
+    cx,
+    cy,
+    labels,
+    radius = 36,
+    reducedMotion = false,
+    ref,
+    severity = "warn",
+    ...rest
+  } = props;
+  const r = safeRadius(radius);
+  const ariaLabel = labels?.region ?? SEVERITY_LABEL[severity];
+  const size = r * 2 + 24;
+  return (
+    <svg
+      aria-label={ariaLabel}
+      className={cn(
+        "pointer-events-none absolute z-20 overflow-visible",
+        className,
+      )}
+      data-alert-pulse
+      data-alert-severity={severity}
+      height={size}
+      ref={ref}
+      role="img"
+      style={{
+        left: cx - size / 2,
+        top: cy - size / 2,
+      }}
+      width={size}
+      {...rest}
+    >
+      <circle
+        className={cn("origin-center", SEVERITY_STROKE[severity])}
+        cx={size / 2}
+        cy={size / 2}
+        fill="none"
+        r={r}
+        strokeOpacity={0.7}
+        strokeWidth={2}
+      />
+      <circle
         className={cn(
-          "pointer-events-none absolute z-20 overflow-visible",
-          className,
+          "origin-center",
+          SEVERITY_STROKE[severity],
+          SEVERITY_FILL[severity],
+          reducedMotion ? null : "animate-ping",
         )}
-        data-alert-pulse
-        data-alert-severity={severity}
-        height={size}
-        ref={ref}
-        role="img"
-        style={{
-          left: cx - size / 2,
-          top: cy - size / 2,
-        }}
-        width={size}
-        {...rest}
-      >
-        <circle
-          className={cn("origin-center", SEVERITY_STROKE[severity])}
-          cx={size / 2}
-          cy={size / 2}
-          fill="none"
-          r={r}
-          strokeOpacity={0.7}
-          strokeWidth={2}
-        />
-        <circle
-          className={cn(
-            "origin-center",
-            SEVERITY_STROKE[severity],
-            SEVERITY_FILL[severity],
-            reducedMotion ? null : "animate-ping",
-          )}
-          cx={size / 2}
-          cy={size / 2}
-          data-alert-pulse-ring
-          r={r}
-          strokeOpacity={0.4}
-          strokeWidth={2}
-        />
-      </svg>
-    );
-  },
-);
+        cx={size / 2}
+        cy={size / 2}
+        data-alert-pulse-ring
+        r={r}
+        strokeOpacity={0.4}
+        strokeWidth={2}
+      />
+    </svg>
+  );
+};
 AlertPulse.displayName = "AlertPulse";

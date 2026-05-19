@@ -2,7 +2,6 @@
 
 import {
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   type SyntheticEvent,
   useCallback,
@@ -317,16 +316,16 @@ function useNewsletterSignupController(
   };
 }
 
-export const NewsletterSignup = forwardRef<
-  HTMLFormElement,
-  NewsletterSignupProps
->((props, ref) => {
+export const NewsletterSignup = (
+  props: NewsletterSignupProps & React.RefAttributes<HTMLFormElement>,
+) => {
   const {
     autoComplete = "email",
     className,
     labels,
     onStatusChange,
     onSubmit,
+    ref,
     validate,
     variant = "inline",
     ...rest
@@ -364,14 +363,14 @@ export const NewsletterSignup = forwardRef<
       status={controller.status}
     />
   );
-});
+};
 NewsletterSignup.displayName = "NewsletterSignup";
 
 type FormBodyProps = {
   autoComplete: string;
   className?: string;
   errorId: string;
-  formRef: React.ForwardedRef<HTMLFormElement>;
+  formRef?: React.Ref<HTMLFormElement>;
   inputId: string;
   inputRef: React.RefObject<HTMLInputElement | null>;
   labels: Required<NewsletterSignupLabels>;

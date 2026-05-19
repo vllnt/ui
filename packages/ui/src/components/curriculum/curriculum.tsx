@@ -4,8 +4,8 @@ import {
   Children,
   createContext,
   isValidElement,
+  use,
   useCallback,
-  useContext,
   useMemo,
   useState,
 } from "react";
@@ -35,7 +35,7 @@ type CurriculumContextValue = {
 const CurriculumContext = createContext<CurriculumContextValue | null>(null);
 
 function useCurriculumContext(): CurriculumContextValue {
-  const ctx = useContext(CurriculumContext);
+  const ctx = use(CurriculumContext);
   if (!ctx) {
     throw new Error("CurriculumModule must be used within a Curriculum");
   }

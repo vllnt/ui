@@ -2,7 +2,6 @@
 
 import {
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   useSyncExternalStore,
 } from "react";
@@ -53,8 +52,6 @@ const SPECIAL_KEY_LABELS: Record<string, string> = {
   space: "Space",
   tab: "⇥",
 };
-
-const SHORTCUT_SEPARATOR = /\s*\+\s*/;
 
 function isMacPlatform(): boolean {
   if (typeof navigator === "undefined") return false;
@@ -123,52 +120,52 @@ export type KbdProps = {
  *
  * @public
  */
-export const Kbd = forwardRef<HTMLElement, KbdProps>(
-  ({ children, className, shortcut, size, ...rest }, ref) => {
-    const isMac = useIsMac();
+export const Kbd = ({
+  children,
+  className,
+  ref,
+  shortcut,
+  size,
+  ...rest
+}: KbdProps & React.RefAttributes<HTMLElement>) => {
+  const isMac = useIsMac();
 
-    if (children !== undefined) {
-      return (
-        <kbd
-          className={cn(kbdVariants({ size }), className)}
-          ref={ref}
-          {...rest}
-        >
-          {children}
-        </kbd>
-      );
-    }
-
-    if (shortcut) {
-      const tokens = shortcut.split(SHORTCUT_SEPARATOR).filter(Boolean);
-      const ariaLabel = tokens
-        .map((token) => formatToken(token, isMac))
-        .join(" + ");
-      return (
-        <span aria-label={ariaLabel} className="inline-flex items-center gap-1">
-          {tokens.map((token, index) => (
-            <kbd
-              className={cn(kbdVariants({ size }), className)}
-              key={`${token}-${index.toString()}`}
-              ref={index === 0 ? ref : undefined}
-              {...(index === 0 ? rest : {})}
-            >
-              {formatToken(token, isMac)}
-            </kbd>
-          ))}
-        </span>
-      );
-    }
-
+  if (children !== undefined) {
     return (
-      <kbd
-        className={cn(kbdVariants({ size }), className)}
-        ref={ref}
-        {...rest}
-      />
+      <kbd className={cn(kbdVariants({ size }), className)} ref={ref} {...rest}>
+        {children}
+      </kbd>
     );
-  },
-);
+  }
+
+  if (shortcut) {
+    const tokens = shortcut
+      .split("+")
+      .map((token) => token.trim())
+      .filter(Boolean);
+    const ariaLabel = tokens
+      .map((token) => formatToken(token, isMac))
+      .join(" + ");
+    return (
+      <span aria-label={ariaLabel} className="inline-flex items-center gap-1">
+        {tokens.map((token, index) => (
+          <kbd
+            className={cn(kbdVariants({ size }), className)}
+            key={`${token}-${index.toString()}`}
+            ref={index === 0 ? ref : undefined}
+            {...(index === 0 ? rest : {})}
+          >
+            {formatToken(token, isMac)}
+          </kbd>
+        ))}
+      </span>
+    );
+  }
+
+  return (
+    <kbd className={cn(kbdVariants({ size }), className)} ref={ref} {...rest} />
+  );
+};
 Kbd.displayName = "Kbd";
 
 export { kbdVariants };

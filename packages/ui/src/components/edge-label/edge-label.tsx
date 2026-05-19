@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cn } from "../../lib/utils";
 
 export type EdgeLabelProps = React.ComponentPropsWithoutRef<"span"> & {
@@ -14,21 +12,23 @@ const emphasisClasses: Record<
   subtle: "border-border/60 bg-background/90 text-muted-foreground",
 };
 
-const EdgeLabel = forwardRef<HTMLSpanElement, EdgeLabelProps>(
-  ({ className, emphasis = "subtle", ...props }, ref) => (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] shadow-sm",
-        emphasisClasses[emphasis],
-        className,
-      )}
-      data-emphasis={emphasis}
-      ref={ref}
-      {...props}
-    />
-  ),
+const EdgeLabel = ({
+  className,
+  emphasis = "subtle",
+  ref,
+  ...props
+}: EdgeLabelProps & React.RefAttributes<HTMLSpanElement>) => (
+  <span
+    className={cn(
+      "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] shadow-sm",
+      emphasisClasses[emphasis],
+      className,
+    )}
+    data-emphasis={emphasis}
+    ref={ref}
+    {...props}
+  />
 );
 
 EdgeLabel.displayName = "EdgeLabel";
-
 export { EdgeLabel };

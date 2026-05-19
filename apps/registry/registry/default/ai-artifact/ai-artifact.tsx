@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useMemo,
   useState,
 } from "react";
@@ -114,7 +113,7 @@ const AIArtifactContext =
  * @public
  */
 export function useAIArtifact(): AIArtifactContextValue {
-  return useContext(AIArtifactContext);
+  return use(AIArtifactContext);
 }
 
 function pickExtension(type: AIArtifactType, language: string): string {
@@ -137,15 +136,47 @@ function pickExtension(type: AIArtifactType, language: string): string {
   }
 }
 
-const SLUG_INVALID_CHARS = /[^\da-z]+/g;
-const SLUG_TRIM = /^-+|-+$/g;
-
 type FilenameInput = {
   filename?: string;
   language: string;
   title: ReactNode;
   type: AIArtifactType;
 };
+
+function isSlugCharacter(character: string): boolean {
+  const codePoint = character.codePointAt(0) ?? 0;
+  return (
+    (codePoint >= 48 && codePoint <= 57) ||
+    (codePoint >= 97 && codePoint <= 122)
+  );
+}
+
+function slugifyTitle(value: string): string {
+  const lowercase = value.toLowerCase();
+  return Array.from(
+    { length: lowercase.length },
+    (_, index) => lowercase[index] ?? "",
+  )
+    .reduce(
+      (slug, character) => {
+        if (isSlugCharacter(character)) {
+          if (slug.pendingSeparator && slug.parts.length > 0) {
+            slug.parts.push("-");
+          }
+          slug.parts.push(character);
+          slug.pendingSeparator = false;
+          return slug;
+        }
+
+        if (slug.parts.length > 0) {
+          slug.pendingSeparator = true;
+        }
+        return slug;
+      },
+      { parts: [] as string[], pendingSeparator: false },
+    )
+    .parts.join("");
+}
 
 function buildFilename({
   filename,
@@ -156,10 +187,7 @@ function buildFilename({
   if (filename) return filename;
   const base =
     typeof title === "string" && title.length > 0 ? title : "artifact";
-  const slug = base
-    .toLowerCase()
-    .replaceAll(SLUG_INVALID_CHARS, "-")
-    .replaceAll(SLUG_TRIM, "");
+  const slug = slugifyTitle(base);
   const safeBase = slug.length > 0 ? slug : "artifact";
   return `${safeBase}.${pickExtension(type, language)}`;
 }
@@ -375,62 +403,63 @@ function useArtifactController(
   );
 }
 
-export const AIArtifact = forwardRef<HTMLElement, AIArtifactProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      defaultFullscreen = false,
-      filename,
-      labels,
-      language = "",
-      onEdit,
-      subtitle,
-      title,
-      type = "code",
-      value = "",
-      ...rest
-    } = props;
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const contextValue = useArtifactController({
-      defaultFullscreen,
-      filename,
-      labels: resolvedLabels,
-      language,
-      onEdit,
-      title,
-      type,
-      value,
-    });
+export const AIArtifact = (
+  props: AIArtifactProps & React.RefAttributes<HTMLElement>,
+) => {
+  const {
+    children,
+    className,
+    defaultFullscreen = false,
+    filename,
+    labels,
+    language = "",
+    onEdit,
+    ref,
+    subtitle,
+    title,
+    type = "code",
+    value = "",
+    ...rest
+  } = props;
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const contextValue = useArtifactController({
+    defaultFullscreen,
+    filename,
+    labels: resolvedLabels,
+    language,
+    onEdit,
+    title,
+    type,
+    value,
+  });
 
-    return (
-      <AIArtifactContext.Provider value={contextValue}>
-        <section
-          aria-label={typeof title === "string" ? title : undefined}
-          className={cn(
-            "flex flex-col gap-3 rounded-2xl border bg-background p-4",
-            className,
-          )}
-          data-fullscreen={contextValue.fullscreen ? "true" : "false"}
-          data-type={type}
-          ref={ref}
-          {...rest}
-        >
-          <ArtifactHeader
-            language={language}
-            subtitle={subtitle}
-            title={title}
-            type={type}
-          />
-          {children}
-        </section>
-      </AIArtifactContext.Provider>
-    );
-  },
-);
+  return (
+    <AIArtifactContext.Provider value={contextValue}>
+      <section
+        aria-label={typeof title === "string" ? title : undefined}
+        className={cn(
+          "flex flex-col gap-3 rounded-2xl border bg-background p-4",
+          className,
+        )}
+        data-fullscreen={contextValue.fullscreen ? "true" : "false"}
+        data-type={type}
+        ref={ref}
+        {...rest}
+      >
+        <ArtifactHeader
+          language={language}
+          subtitle={subtitle}
+          title={title}
+          type={type}
+        />
+        {children}
+      </section>
+    </AIArtifactContext.Provider>
+  );
+};
 AIArtifact.displayName = "AIArtifact";
 
 /**
@@ -438,10 +467,11 @@ AIArtifact.displayName = "AIArtifact";
  *
  * @public
  */
-export const AIArtifactToolbar = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ className, ...rest }, ref) => (
+export const AIArtifactToolbar = ({
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & React.RefAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-wrap items-center gap-1.5 border-b border-border pb-2",
@@ -451,7 +481,7 @@ export const AIArtifactToolbar = forwardRef<
     role="toolbar"
     {...rest}
   />
-));
+);
 AIArtifactToolbar.displayName = "AIArtifactToolbar";
 
 type ToolbarButtonProps = Omit<
@@ -465,10 +495,12 @@ type ToolbarButtonProps = Omit<
  *
  * @public
  */
-export const AIArtifactCopyButton = forwardRef<
-  HTMLButtonElement,
-  ToolbarButtonProps
->(({ className, onClick, ...rest }, ref) => {
+export const AIArtifactCopyButton = ({
+  className,
+  onClick,
+  ref,
+  ...rest
+}: ToolbarButtonProps & React.RefAttributes<HTMLButtonElement>) => {
   const { copied, copy, labels } = useAIArtifact();
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -496,7 +528,7 @@ export const AIArtifactCopyButton = forwardRef<
       )}
     </Button>
   );
-});
+};
 AIArtifactCopyButton.displayName = "AIArtifactCopyButton";
 
 /**
@@ -505,10 +537,12 @@ AIArtifactCopyButton.displayName = "AIArtifactCopyButton";
  *
  * @public
  */
-export const AIArtifactEditButton = forwardRef<
-  HTMLButtonElement,
-  ToolbarButtonProps
->(({ className, onClick, ...rest }, ref) => {
+export const AIArtifactEditButton = ({
+  className,
+  onClick,
+  ref,
+  ...rest
+}: ToolbarButtonProps & React.RefAttributes<HTMLButtonElement>) => {
   const { hasOnEdit, labels, onEdit } = useAIArtifact();
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -533,7 +567,7 @@ export const AIArtifactEditButton = forwardRef<
       <Pencil aria-hidden="true" className="size-4" />
     </Button>
   );
-});
+};
 AIArtifactEditButton.displayName = "AIArtifactEditButton";
 
 /**
@@ -542,10 +576,12 @@ AIArtifactEditButton.displayName = "AIArtifactEditButton";
  *
  * @public
  */
-export const AIArtifactDownloadButton = forwardRef<
-  HTMLButtonElement,
-  ToolbarButtonProps
->(({ className, onClick, ...rest }, ref) => {
+export const AIArtifactDownloadButton = ({
+  className,
+  onClick,
+  ref,
+  ...rest
+}: ToolbarButtonProps & React.RefAttributes<HTMLButtonElement>) => {
   const { download, labels } = useAIArtifact();
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -569,7 +605,7 @@ export const AIArtifactDownloadButton = forwardRef<
       <Download aria-hidden="true" className="size-4" />
     </Button>
   );
-});
+};
 AIArtifactDownloadButton.displayName = "AIArtifactDownloadButton";
 
 /**
@@ -579,10 +615,12 @@ AIArtifactDownloadButton.displayName = "AIArtifactDownloadButton";
  *
  * @public
  */
-export const AIArtifactFullscreenButton = forwardRef<
-  HTMLButtonElement,
-  ToolbarButtonProps
->(({ className, onClick, ...rest }, ref) => {
+export const AIArtifactFullscreenButton = ({
+  className,
+  onClick,
+  ref,
+  ...rest
+}: ToolbarButtonProps & React.RefAttributes<HTMLButtonElement>) => {
   const { fullscreen, labels, toggleFullscreen } = useAIArtifact();
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -611,7 +649,7 @@ export const AIArtifactFullscreenButton = forwardRef<
       )}
     </Button>
   );
-});
+};
 AIArtifactFullscreenButton.displayName = "AIArtifactFullscreenButton";
 
 /**
@@ -620,10 +658,11 @@ AIArtifactFullscreenButton.displayName = "AIArtifactFullscreenButton";
  *
  * @public
  */
-export const AIArtifactContent = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ className, ...rest }, ref) => (
+export const AIArtifactContent = ({
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & React.RefAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground",
@@ -632,7 +671,7 @@ export const AIArtifactContent = forwardRef<
     ref={ref}
     {...rest}
   />
-));
+);
 AIArtifactContent.displayName = "AIArtifactContent";
 
 /**
@@ -640,10 +679,12 @@ AIArtifactContent.displayName = "AIArtifactContent";
  *
  * @public
  */
-export const AIArtifactVersions = forwardRef<
-  HTMLElement,
-  ComponentPropsWithoutRef<"nav">
->(({ children, className, ...rest }, ref) => {
+export const AIArtifactVersions = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"nav"> & React.RefAttributes<HTMLElement>) => {
   const { labels } = useAIArtifact();
   return (
     <nav
@@ -658,7 +699,7 @@ export const AIArtifactVersions = forwardRef<
       {children}
     </nav>
   );
-});
+};
 AIArtifactVersions.displayName = "AIArtifactVersions";
 
 /**
@@ -679,10 +720,13 @@ export type AIArtifactVersionProps = {
  *
  * @public
  */
-export const AIArtifactVersion = forwardRef<
-  HTMLButtonElement,
-  AIArtifactVersionProps
->(({ active = false, className, label, ...rest }, ref) => (
+export const AIArtifactVersion = ({
+  active = false,
+  className,
+  label,
+  ref,
+  ...rest
+}: AIArtifactVersionProps & React.RefAttributes<HTMLButtonElement>) => (
   <button
     aria-current={active ? "true" : undefined}
     className={cn(
@@ -698,5 +742,5 @@ export const AIArtifactVersion = forwardRef<
   >
     {label}
   </button>
-));
+);
 AIArtifactVersion.displayName = "AIArtifactVersion";

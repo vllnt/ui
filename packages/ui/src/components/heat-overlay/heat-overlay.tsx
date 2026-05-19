@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentPropsWithoutRef, forwardRef, useId } from "react";
+import { type ComponentPropsWithoutRef, useId } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -124,51 +124,52 @@ const HeatBlob = (props: {
  *
  * @public
  */
-export const HeatOverlay = forwardRef<SVGSVGElement, HeatOverlayProps>(
-  (props, ref) => {
-    const {
-      className,
-      defaultTone = "warn",
-      intensity = 48,
-      labels,
-      points,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const gradientId = useId();
-    if (points.length === 0) {
-      return null;
-    }
-    return (
-      <svg
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "pointer-events-none absolute inset-0 z-10 h-full w-full",
-          className,
-        )}
-        data-heat-overlay
-        ref={ref}
-        role="img"
-        {...rest}
-      >
-        <defs>
-          <radialGradient cx="50%" cy="50%" id={gradientId} r="50%">
-            <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-            <stop offset="70%" stopColor="currentColor" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        {points.map((point) => (
-          <HeatBlob
-            defaultTone={defaultTone}
-            gradientId={gradientId}
-            intensity={intensity}
-            key={point.id}
-            point={point}
-          />
-        ))}
-      </svg>
-    );
-  },
-);
+export const HeatOverlay = (
+  props: HeatOverlayProps & React.RefAttributes<SVGSVGElement>,
+) => {
+  const {
+    className,
+    defaultTone = "warn",
+    intensity = 48,
+    labels,
+    points,
+    ref,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const gradientId = useId();
+  if (points.length === 0) {
+    return null;
+  }
+  return (
+    <svg
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "pointer-events-none absolute inset-0 z-10 h-full w-full",
+        className,
+      )}
+      data-heat-overlay
+      ref={ref}
+      role="img"
+      {...rest}
+    >
+      <defs>
+        <radialGradient cx="50%" cy="50%" id={gradientId} r="50%">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
+          <stop offset="70%" stopColor="currentColor" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {points.map((point) => (
+        <HeatBlob
+          defaultTone={defaultTone}
+          gradientId={gradientId}
+          intensity={intensity}
+          key={point.id}
+          point={point}
+        />
+      ))}
+    </svg>
+  );
+};
 HeatOverlay.displayName = "HeatOverlay";

@@ -168,66 +168,62 @@ export type TagsInputProps = Omit<
   value?: string[];
 };
 
-const TagsInput = React.forwardRef<HTMLInputElement, TagsInputProps>(
-  (
-    {
-      className,
-      defaultValue = [],
-      disabled = false,
-      onBlur,
-      onKeyDown,
-      onValueChange,
-      placeholder = "Add a tag",
-      value,
-      ...props
-    },
-    ref,
-  ) => {
-    const [inputValue, setInputValue] = React.useState("");
-    const { tags, updateTags } = useTagsInputState({
-      defaultValue,
-      onValueChange,
-      value,
-    });
-    const { handleKeyDown, removeTag } = useTagsInputHandlers({
-      disabled,
-      inputValue,
-      onKeyDown,
-      setInputValue,
-      tags,
-      updateTags,
-    });
+const TagsInput = ({
+  className,
+  defaultValue = [],
+  disabled = false,
+  onBlur,
+  onKeyDown,
+  onValueChange,
+  placeholder = "Add a tag",
+  ref,
+  value,
+  ...props
+}: TagsInputProps & React.RefAttributes<HTMLInputElement>) => {
+  const [inputValue, setInputValue] = React.useState("");
+  const { tags, updateTags } = useTagsInputState({
+    defaultValue,
+    onValueChange,
+    value,
+  });
+  const { handleKeyDown, removeTag } = useTagsInputHandlers({
+    disabled,
+    inputValue,
+    onKeyDown,
+    setInputValue,
+    tags,
+    updateTags,
+  });
 
-    return (
-      <div
-        aria-disabled={disabled || undefined}
-        className={cn(
-          "flex min-h-10 w-full flex-wrap items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
-          disabled && "cursor-not-allowed opacity-50",
-          className,
-        )}
-        data-disabled={disabled ? "true" : undefined}
-        role="group"
-      >
-        <TagList disabled={disabled} onRemove={removeTag} tags={tags} />
-        <input
-          {...props}
-          className="min-w-[8rem] flex-1 border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed"
-          disabled={disabled}
-          onBlur={onBlur}
-          onChange={(event) => {
-            setInputValue(event.target.value);
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          ref={ref}
-          type="text"
-          value={inputValue}
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      aria-disabled={disabled || undefined}
+      className={cn(
+        "flex min-h-10 w-full flex-wrap items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        disabled && "cursor-not-allowed opacity-50",
+        className,
+      )}
+      data-disabled={disabled ? "true" : undefined}
+      role="group"
+    >
+      <TagList disabled={disabled} onRemove={removeTag} tags={tags} />
+      <input
+        {...props}
+        className="min-w-[8rem] flex-1 border-0 bg-transparent p-0 text-sm placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed"
+        disabled={disabled}
+        onBlur={onBlur}
+        onChange={(event) => {
+          setInputValue(event.target.value);
+        }}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        ref={ref}
+        type="text"
+        value={inputValue}
+      />
+    </div>
+  );
+};
 TagsInput.displayName = "TagsInput";
 
 export { TagsInput };

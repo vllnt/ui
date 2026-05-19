@@ -204,40 +204,33 @@ function HeatmapGrid({
   );
 }
 
-export const ActivityHeatmap = React.forwardRef<
-  HTMLDivElement,
-  ActivityHeatmapProps
->(
-  (
-    {
-      className,
-      data,
-      description,
-      endDate = new Date(),
-      title = "Activity heatmap",
-      weeks = 12,
-      ...props
-    },
-    ref,
-  ) => {
-    const normalizedEndDate = normalizeDate(endDate);
-    const gridData = getGridData(data, normalizedEndDate, weeks);
+export const ActivityHeatmap = ({
+  className,
+  data,
+  description,
+  endDate = new Date(),
+  ref,
+  title = "Activity heatmap",
+  weeks = 12,
+  ...props
+}: ActivityHeatmapProps & React.RefAttributes<HTMLDivElement>) => {
+  const normalizedEndDate = normalizeDate(endDate);
+  const gridData = getGridData(data, normalizedEndDate, weeks);
 
-    return (
-      <div className={cn("space-y-4", className)} ref={ref} {...props}>
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-          {description ? (
-            <p className="text-sm text-muted-foreground">{description}</p>
-          ) : null}
-        </div>
-
-        <div className="overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
-          <HeatmapGrid gridData={gridData} weeks={weeks} />
-        </div>
+  return (
+    <div className={cn("space-y-4", className)} ref={ref} {...props}>
+      <div className="space-y-1">
+        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+        {description ? (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        ) : null}
       </div>
-    );
-  },
-);
+
+      <div className="overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
+        <HeatmapGrid gridData={gridData} weeks={weeks} />
+      </div>
+    </div>
+  );
+};
 
 ActivityHeatmap.displayName = "ActivityHeatmap";

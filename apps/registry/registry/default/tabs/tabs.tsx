@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, use, useMemo, useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -15,7 +15,7 @@ type TabsContextValue = {
 const TabsContext = createContext<null | TabsContextValue>(null);
 
 function useTabsContext(): TabsContextValue {
-  const context = useContext(TabsContext);
+  const context = use(TabsContext);
   if (!context) {
     throw new Error("Tab components must be used within a Tabs component");
   }

@@ -3,12 +3,11 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useRef,
@@ -196,7 +195,7 @@ type TimelineCtx = {
 const TimelineContext = createContext<null | TimelineCtx>(null);
 
 function useTimelineContext(): TimelineCtx {
-  const ctx = useContext(TimelineContext);
+  const ctx = use(TimelineContext);
   if (!ctx) {
     throw new Error("InteractiveTimeline subcomponent used outside its root.");
   }
@@ -647,10 +646,12 @@ function ScrollArea({
  *
  * @public
  */
-export const InteractiveTimelineToolbar = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ children, className, ...rest }, ref) => (
+export const InteractiveTimelineToolbar = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & React.RefAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-wrap items-center gap-2 border-b border-border bg-muted/30 px-3 py-2",
@@ -662,7 +663,7 @@ export const InteractiveTimelineToolbar = forwardRef<
   >
     {children}
   </div>
-));
+);
 InteractiveTimelineToolbar.displayName = "InteractiveTimelineToolbar";
 
 /**
@@ -670,10 +671,12 @@ InteractiveTimelineToolbar.displayName = "InteractiveTimelineToolbar";
  *
  * @public
  */
-export const InteractiveTimelineZoomIn = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ className, ...rest }, ref) => {
+export const InteractiveTimelineZoomIn = ({
+  className,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> &
+  React.RefAttributes<HTMLButtonElement>) => {
   const { labels, zoomIn } = useTimelineContext();
   return (
     <button
@@ -690,7 +693,7 @@ export const InteractiveTimelineZoomIn = forwardRef<
       <span aria-hidden="true">+</span>
     </button>
   );
-});
+};
 InteractiveTimelineZoomIn.displayName = "InteractiveTimelineZoomIn";
 
 /**
@@ -698,10 +701,12 @@ InteractiveTimelineZoomIn.displayName = "InteractiveTimelineZoomIn";
  *
  * @public
  */
-export const InteractiveTimelineZoomOut = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ className, ...rest }, ref) => {
+export const InteractiveTimelineZoomOut = ({
+  className,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> &
+  React.RefAttributes<HTMLButtonElement>) => {
   const { labels, zoomOut } = useTimelineContext();
   return (
     <button
@@ -718,7 +723,7 @@ export const InteractiveTimelineZoomOut = forwardRef<
       <span aria-hidden="true">−</span>
     </button>
   );
-});
+};
 InteractiveTimelineZoomOut.displayName = "InteractiveTimelineZoomOut";
 
 /**
@@ -727,10 +732,13 @@ InteractiveTimelineZoomOut.displayName = "InteractiveTimelineZoomOut";
  *
  * @public
  */
-export const InteractiveTimelineToday = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ children, className, ...rest }, ref) => {
+export const InteractiveTimelineToday = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> &
+  React.RefAttributes<HTMLButtonElement>) => {
   const { centerToday, labels } = useTimelineContext();
   return (
     <button
@@ -747,7 +755,7 @@ export const InteractiveTimelineToday = forwardRef<
       {children ?? "Today"}
     </button>
   );
-});
+};
 InteractiveTimelineToday.displayName = "InteractiveTimelineToday";
 
 /**
@@ -759,10 +767,12 @@ export type InteractiveTimelineFilterProps = {
   categories: InteractiveTimelineCategory[];
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const InteractiveTimelineFilter = forwardRef<
-  HTMLDivElement,
-  InteractiveTimelineFilterProps
->(({ categories, className, ...rest }, ref) => {
+export const InteractiveTimelineFilter = ({
+  categories,
+  className,
+  ref,
+  ...rest
+}: InteractiveTimelineFilterProps & React.RefAttributes<HTMLDivElement>) => {
   const { toggleCategory, visibleCategories } = useTimelineContext();
   return (
     <div
@@ -794,7 +804,7 @@ export const InteractiveTimelineFilter = forwardRef<
       })}
     </div>
   );
-});
+};
 InteractiveTimelineFilter.displayName = "InteractiveTimelineFilter";
 
 const FALLBACK_TRACK: InteractiveTimelineTrack = {
@@ -810,21 +820,22 @@ function noop(): void {
 function useToolbarHandlers(arguments_: {
   endTime: number;
   scrollerId: string;
-  setZoom: (next: ((previous: number) => number) | number) => void;
   startTime: number;
-  zoom: number;
 }): {
   centerToday: () => void;
+  setZoom: React.Dispatch<React.SetStateAction<number>>;
+  zoom: number;
   zoomIn: () => void;
   zoomOut: () => void;
 } {
-  const { endTime, scrollerId, setZoom, startTime } = arguments_;
+  const { endTime, scrollerId, startTime } = arguments_;
+  const [zoom, setZoom] = useState(1);
   const zoomIn = useCallback(() => {
     setZoom((current) => clamp(current * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM));
-  }, [setZoom]);
+  }, []);
   const zoomOut = useCallback(() => {
     setZoom((current) => clamp(current / ZOOM_STEP, MIN_ZOOM, MAX_ZOOM));
-  }, [setZoom]);
+  }, []);
   const centerToday = useCallback(() => {
     if (typeof document === "undefined") return;
     const node = document.querySelector<HTMLElement>(
@@ -838,7 +849,7 @@ function useToolbarHandlers(arguments_: {
     const targetX = offset * node.scrollWidth - node.clientWidth / 2;
     node.scrollLeft = clamp(targetX, 0, node.scrollWidth);
   }, [endTime, scrollerId, startTime]);
-  return { centerToday, zoomIn, zoomOut };
+  return { centerToday, setZoom, zoom, zoomIn, zoomOut };
 }
 
 type FilterState = {
@@ -1000,10 +1011,9 @@ function useTimelineFilter(
  *
  * @public
  */
-export const InteractiveTimeline = forwardRef<
-  HTMLElement,
-  InteractiveTimelineProps
->((props, ref) => {
+export const InteractiveTimeline = (
+  props: InteractiveTimelineProps & React.RefAttributes<HTMLElement>,
+) => {
   const {
     categories = [],
     children,
@@ -1012,6 +1022,7 @@ export const InteractiveTimeline = forwardRef<
     events = [],
     labels,
     onEventClick = noop,
+    ref,
     startDate,
     tracks: trackProperty,
     ...rest
@@ -1025,17 +1036,13 @@ export const InteractiveTimeline = forwardRef<
   });
   const scrollerId = useId();
 
-  const [zoom, setZoom] = useState<number>(1);
-
   const { filteredEvents, toggleCategory, visibleCategories } =
     useTimelineFilter(categories, events);
 
-  const { centerToday, zoomIn, zoomOut } = useToolbarHandlers({
+  const { centerToday, zoom, zoomIn, zoomOut } = useToolbarHandlers({
     endTime,
     scrollerId,
-    setZoom,
     startTime,
-    zoom,
   });
 
   const { handleSelect, selectedId } = useEventSelection(onEventClick);
@@ -1077,5 +1084,5 @@ export const InteractiveTimeline = forwardRef<
       </section>
     </TimelineContext.Provider>
   );
-});
+};
 InteractiveTimeline.displayName = "InteractiveTimeline";

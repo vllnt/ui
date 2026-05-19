@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@vllnt/ui";
@@ -69,73 +67,66 @@ export type AIMessageBubbleProps = React.ComponentPropsWithoutRef<"div"> &
     timestamp?: string;
   };
 
-const AIMessageBubble = forwardRef<HTMLDivElement, AIMessageBubbleProps>(
-  (
-    {
-      author,
-      children,
-      className,
-      messageRole = "assistant",
-      status,
-      timestamp,
-      ...props
-    },
-    ref,
-  ) => {
-    const resolvedMessageRole = messageRole ?? "assistant";
-    const isUser = resolvedMessageRole === "user";
-    const fallbackLabel = (author ?? resolvedMessageRole)
-      .charAt(0)
-      .toUpperCase();
+const AIMessageBubble = ({
+  author,
+  children,
+  className,
+  messageRole = "assistant",
+  ref,
+  status,
+  timestamp,
+  ...props
+}: AIMessageBubbleProps & React.RefAttributes<HTMLDivElement>) => {
+  const resolvedMessageRole = messageRole ?? "assistant";
+  const isUser = resolvedMessageRole === "user";
+  const fallbackLabel = (author ?? resolvedMessageRole).charAt(0).toUpperCase();
 
-    return (
+  return (
+    <div
+      className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}
+    >
       <div
-        className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}
+        className={cn(
+          "flex w-full max-w-3xl gap-3",
+          isUser ? "flex-row-reverse text-right" : "flex-row",
+        )}
       >
+        <Avatar className="mt-0.5 size-8 border border-border/70">
+          <AvatarFallback className="bg-muted text-[11px] font-medium uppercase text-muted-foreground">
+            {fallbackLabel}
+          </AvatarFallback>
+        </Avatar>
+
         <div
           className={cn(
-            "flex w-full max-w-3xl gap-3",
-            isUser ? "flex-row-reverse text-right" : "flex-row",
+            "min-w-0 space-y-2",
+            isUser ? "items-end" : "items-start",
           )}
         >
-          <Avatar className="mt-0.5 size-8 border border-border/70">
-            <AvatarFallback className="bg-muted text-[11px] font-medium uppercase text-muted-foreground">
-              {fallbackLabel}
-            </AvatarFallback>
-          </Avatar>
+          <AIMessageMeta
+            author={author}
+            isUser={isUser}
+            status={status}
+            timestamp={timestamp}
+          />
 
           <div
             className={cn(
-              "min-w-0 space-y-2",
-              isUser ? "items-end" : "items-start",
+              bubbleVariants({ messageRole: resolvedMessageRole }),
+              className,
             )}
+            ref={ref}
+            {...props}
           >
-            <AIMessageMeta
-              author={author}
-              isUser={isUser}
-              status={status}
-              timestamp={timestamp}
-            />
-
-            <div
-              className={cn(
-                bubbleVariants({ messageRole: resolvedMessageRole }),
-                className,
-              )}
-              ref={ref}
-              {...props}
-            >
-              <div className="text-sm leading-6 whitespace-pre-wrap">
-                {children}
-              </div>
+            <div className="text-sm leading-6 whitespace-pre-wrap">
+              {children}
             </div>
           </div>
         </div>
       </div>
-    );
-  },
-);
+    </div>
+  );
+};
 
 AIMessageBubble.displayName = "AIMessageBubble";
-
 export { AIMessageBubble };

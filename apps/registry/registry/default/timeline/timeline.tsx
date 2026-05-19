@@ -3,9 +3,8 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
-  useContext,
+  use,
   useMemo,
 } from "react";
 
@@ -109,7 +108,7 @@ const TimelineContext = createContext<TimelineContextValue>({
  * @public
  */
 export function useTimelineOrientation(): TimelineOrientation {
-  return useContext(TimelineContext).orientation;
+  return use(TimelineContext).orientation;
 }
 
 const timelineVariants = cva("flex", {
@@ -152,27 +151,31 @@ export type TimelineProps = ComponentPropsWithoutRef<"ol"> &
  *
  * @public
  */
-export const Timeline = forwardRef<HTMLOListElement, TimelineProps>(
-  ({ children, className, orientation, ...rest }, ref) => {
-    const resolvedOrientation: TimelineOrientation = orientation ?? "vertical";
-    const contextValue = useMemo<TimelineContextValue>(
-      () => ({ orientation: resolvedOrientation }),
-      [resolvedOrientation],
-    );
-    return (
-      <TimelineContext.Provider value={contextValue}>
-        <ol
-          className={cn(timelineVariants({ orientation }), className)}
-          data-orientation={resolvedOrientation}
-          ref={ref}
-          {...rest}
-        >
-          {children}
-        </ol>
-      </TimelineContext.Provider>
-    );
-  },
-);
+export const Timeline = ({
+  children,
+  className,
+  orientation,
+  ref,
+  ...rest
+}: TimelineProps & React.RefAttributes<HTMLOListElement>) => {
+  const resolvedOrientation: TimelineOrientation = orientation ?? "vertical";
+  const contextValue = useMemo<TimelineContextValue>(
+    () => ({ orientation: resolvedOrientation }),
+    [resolvedOrientation],
+  );
+  return (
+    <TimelineContext.Provider value={contextValue}>
+      <ol
+        className={cn(timelineVariants({ orientation }), className)}
+        data-orientation={resolvedOrientation}
+        ref={ref}
+        {...rest}
+      >
+        {children}
+      </ol>
+    </TimelineContext.Provider>
+  );
+};
 Timeline.displayName = "Timeline";
 
 /**
@@ -320,50 +323,49 @@ function ItemBody({
  *
  * @public
  */
-export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      color,
-      date,
-      description,
-      icon,
-      isLast = false,
-      status = "upcoming",
-      title,
-      ...rest
-    } = props;
-    const orientation = useTimelineOrientation();
-    return (
-      <li
-        className={cn(
-          "relative",
-          orientation === "horizontal"
-            ? "flex flex-1 flex-col items-center gap-2 px-3 pt-1"
-            : "flex items-start gap-3 pb-6 last:pb-0",
-          className,
-        )}
-        data-status={status}
-        ref={ref}
-        {...rest}
+export const TimelineItem = (
+  props: TimelineItemProps & React.RefAttributes<HTMLLIElement>,
+) => {
+  const {
+    children,
+    className,
+    color,
+    date,
+    description,
+    icon,
+    isLast = false,
+    ref,
+    status = "upcoming",
+    title,
+    ...rest
+  } = props;
+  const orientation = useTimelineOrientation();
+  return (
+    <li
+      className={cn(
+        "relative",
+        orientation === "horizontal"
+          ? "flex flex-1 flex-col items-center gap-2 px-3 pt-1"
+          : "flex items-start gap-3 pb-6 last:pb-0",
+        className,
+      )}
+      data-status={status}
+      ref={ref}
+      {...rest}
+    >
+      {isLast ? null : <Connector orientation={orientation} status={status} />}
+      <Marker color={color} icon={icon} status={status} />
+      <ItemBody
+        date={date}
+        description={description}
+        orientation={orientation}
+        title={title}
       >
-        {isLast ? null : (
-          <Connector orientation={orientation} status={status} />
-        )}
-        <Marker color={color} icon={icon} status={status} />
-        <ItemBody
-          date={date}
-          description={description}
-          orientation={orientation}
-          title={title}
-        >
-          {children}
-        </ItemBody>
-      </li>
-    );
-  },
-);
+        {children}
+      </ItemBody>
+    </li>
+  );
+};
 TimelineItem.displayName = "TimelineItem";
 
 export { timelineVariants };

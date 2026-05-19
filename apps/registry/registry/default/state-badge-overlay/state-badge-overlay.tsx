@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -121,15 +117,15 @@ export type StateBadgeOverlayProps = {
  *
  * @public
  */
-export const StateBadgeOverlay = forwardRef<
-  HTMLDivElement,
-  StateBadgeOverlayProps
->((props, ref) => {
+export const StateBadgeOverlay = (
+  props: StateBadgeOverlayProps & React.RefAttributes<HTMLDivElement>,
+) => {
   const {
     anchor = "top-right",
     className,
     label,
     labels,
+    ref,
     state,
     x,
     y,
@@ -165,5 +161,5 @@ export const StateBadgeOverlay = forwardRef<
       {text}
     </div>
   );
-});
+};
 StateBadgeOverlay.displayName = "StateBadgeOverlay";

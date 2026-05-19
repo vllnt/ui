@@ -2,11 +2,10 @@
 
 import {
   createContext,
-  forwardRef,
   type ReactNode,
   type RefObject,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -103,7 +102,7 @@ const ConversationThreadContext =
   createContext<ConversationThreadContextValue | null>(null);
 
 function useConversationThreadContext(): ConversationThreadContextValue {
-  const ctx = useContext(ConversationThreadContext);
+  const ctx = use(ConversationThreadContext);
   if (!ctx) {
     throw new Error(
       "ConversationThread compound components must be used within <ConversationThread>",
@@ -282,78 +281,72 @@ function useConversationScroll(
  * </ConversationThread>
  * ```
  */
-export const ConversationThread = forwardRef<
-  HTMLDivElement,
-  ConversationThreadProps
->(
-  (
-    {
-      children,
-      className,
-      isStreaming = false,
+export const ConversationThread = ({
+  children,
+  className,
+  isStreaming = false,
+  messages,
+  onFeedback,
+  onRetry,
+  onSend,
+  ref: reference,
+}: ConversationThreadProps & React.RefAttributes<HTMLDivElement>) => {
+  const {
+    handleScroll,
+    isAtBottom,
+    messagesEndRef,
+    scrollContainerRef,
+    scrollToBottom,
+  } = useConversationScroll(messages, isStreaming);
+
+  const contextValue = useMemo<ConversationThreadContextValue>(
+    () => ({
+      handleScroll,
+      isAtBottom,
+      isStreaming,
       messages,
+      messagesEndRef,
       onFeedback,
       onRetry,
       onSend,
-    },
-    reference,
-  ) => {
-    const {
-      handleScroll,
-      isAtBottom,
-      messagesEndRef,
       scrollContainerRef,
       scrollToBottom,
-    } = useConversationScroll(messages, isStreaming);
+    }),
+    [
+      handleScroll,
+      isAtBottom,
+      isStreaming,
+      messages,
+      messagesEndRef,
+      onFeedback,
+      onRetry,
+      onSend,
+      scrollContainerRef,
+      scrollToBottom,
+    ],
+  );
 
-    const contextValue = useMemo<ConversationThreadContextValue>(
-      () => ({
-        handleScroll,
-        isAtBottom,
-        isStreaming,
-        messages,
-        messagesEndRef,
-        onFeedback,
-        onRetry,
-        onSend,
-        scrollContainerRef,
-        scrollToBottom,
-      }),
-      [
-        handleScroll,
-        isAtBottom,
-        isStreaming,
-        messages,
-        messagesEndRef,
-        onFeedback,
-        onRetry,
-        onSend,
-        scrollContainerRef,
-        scrollToBottom,
-      ],
-    );
-
-    return (
-      <ConversationThreadContext.Provider value={contextValue}>
-        <div
-          className={cn("flex h-full flex-col overflow-hidden", className)}
-          ref={reference}
-        >
-          {children}
-        </div>
-      </ConversationThreadContext.Provider>
-    );
-  },
-);
+  return (
+    <ConversationThreadContext.Provider value={contextValue}>
+      <div
+        className={cn("flex h-full flex-col overflow-hidden", className)}
+        ref={reference}
+      >
+        {children}
+      </div>
+    </ConversationThreadContext.Provider>
+  );
+};
 ConversationThread.displayName = "ConversationThread";
 
 // ---- Compound components ----
 
 /** Optional header slot, rendered above the message list. */
-export const ConversationHeader = forwardRef<
-  HTMLDivElement,
-  ConversationHeaderProps
->(({ children, className }, reference) => {
+export const ConversationHeader = ({
+  children,
+  className,
+  ref: reference,
+}: ConversationHeaderProps & React.RefAttributes<HTMLDivElement>) => {
   return (
     <div
       className={cn("flex shrink-0 items-center border-b px-4 py-3", className)}
@@ -362,14 +355,15 @@ export const ConversationHeader = forwardRef<
       {children}
     </div>
   );
-});
+};
 ConversationHeader.displayName = "ConversationHeader";
 
 /** Title text for use inside ConversationHeader. */
-export const ConversationTitle = forwardRef<
-  HTMLHeadingElement,
-  ConversationTitleProps
->(({ children, className }, reference) => {
+export const ConversationTitle = ({
+  children,
+  className,
+  ref: reference,
+}: ConversationTitleProps & React.RefAttributes<HTMLHeadingElement>) => {
   return (
     <h2
       className={cn("text-sm font-semibold leading-none", className)}
@@ -378,7 +372,7 @@ export const ConversationTitle = forwardRef<
       {children}
     </h2>
   );
-});
+};
 ConversationTitle.displayName = "ConversationTitle";
 
 /**
@@ -386,10 +380,11 @@ ConversationTitle.displayName = "ConversationTitle";
  * Pass ConversationEmpty, ConversationScrollButton, and ConversationLoading as children —
  * the component renders these as absolute overlays that read state from context.
  */
-export const ConversationMessages = forwardRef<
-  HTMLDivElement,
-  ConversationMessagesProps
->(({ children, className }, reference) => {
+export const ConversationMessages = ({
+  children,
+  className,
+  ref: reference,
+}: ConversationMessagesProps & React.RefAttributes<HTMLDivElement>) => {
   const { handleScroll, messages, messagesEndRef, scrollContainerRef } =
     useConversationThreadContext();
 
@@ -413,17 +408,18 @@ export const ConversationMessages = forwardRef<
       {children}
     </div>
   );
-});
+};
 ConversationMessages.displayName = "ConversationMessages";
 
 /**
  * Shown when the message list is empty. Hides automatically once messages exist.
  * Renders as a centered overlay — pass ConversationSuggestions or custom content as children.
  */
-export const ConversationEmpty = forwardRef<
-  HTMLDivElement,
-  ConversationEmptyProps
->(({ children, className }, reference) => {
+export const ConversationEmpty = ({
+  children,
+  className,
+  ref: reference,
+}: ConversationEmptyProps & React.RefAttributes<HTMLDivElement>) => {
   const { messages } = useConversationThreadContext();
 
   if (messages.length > 0) return null;
@@ -441,14 +437,15 @@ export const ConversationEmpty = forwardRef<
       </div>
     </div>
   );
-});
+};
 ConversationEmpty.displayName = "ConversationEmpty";
 
 /** Suggested prompt chips displayed in the empty state. Calls onSend when clicked. */
-export const ConversationSuggestions = forwardRef<
-  HTMLDivElement,
-  ConversationSuggestionsProps
->(({ className, suggestions = [] }, reference) => {
+export const ConversationSuggestions = ({
+  className,
+  ref: reference,
+  suggestions = [],
+}: ConversationSuggestionsProps & React.RefAttributes<HTMLDivElement>) => {
   const { onSend } = useConversationThreadContext();
 
   return (
@@ -468,14 +465,14 @@ export const ConversationSuggestions = forwardRef<
       ))}
     </div>
   );
-});
+};
 ConversationSuggestions.displayName = "ConversationSuggestions";
 
 /** Floating button that appears when the user scrolls up, to jump back to the bottom. */
-export const ConversationScrollButton = forwardRef<
-  HTMLButtonElement,
-  ConversationScrollButtonProps
->(({ className }, reference) => {
+export const ConversationScrollButton = ({
+  className,
+  ref: reference,
+}: ConversationScrollButtonProps & React.RefAttributes<HTMLButtonElement>) => {
   const { isAtBottom, scrollToBottom } = useConversationThreadContext();
 
   if (isAtBottom) return null;
@@ -494,17 +491,17 @@ export const ConversationScrollButton = forwardRef<
       <ArrowDown className="size-4" />
     </button>
   );
-});
+};
 ConversationScrollButton.displayName = "ConversationScrollButton";
 
 /**
  * Typing indicator shown while the assistant is streaming a response.
  * Visible when isStreaming is true and the last message role is "assistant".
  */
-export const ConversationLoading = forwardRef<
-  HTMLDivElement,
-  ConversationLoadingProps
->(({ className }, reference) => {
+export const ConversationLoading = ({
+  className,
+  ref: reference,
+}: ConversationLoadingProps & React.RefAttributes<HTMLDivElement>) => {
   const { isStreaming, messages } = useConversationThreadContext();
   const lastMessage = messages.at(-1);
 
@@ -531,5 +528,5 @@ export const ConversationLoading = forwardRef<
       <span className="size-2 animate-bounce rounded-full bg-muted-foreground" />
     </div>
   );
-});
+};
 ConversationLoading.displayName = "ConversationLoading";

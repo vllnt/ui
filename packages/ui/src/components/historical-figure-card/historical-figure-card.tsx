@@ -2,7 +2,6 @@
 
 import {
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   useCallback,
   useState,
@@ -426,10 +425,9 @@ function FigureLifeBlock({
   );
 }
 
-export const HistoricalFigureCard = forwardRef<
-  HTMLElement,
-  HistoricalFigureCardProps
->((props, ref) => {
+export const HistoricalFigureCard = (
+  props: HistoricalFigureCardProps & React.RefAttributes<HTMLElement>,
+) => {
   const {
     biography,
     birth,
@@ -443,6 +441,7 @@ export const HistoricalFigureCard = forwardRef<
     portrait,
     profileHref,
     quote,
+    ref,
     title,
     works,
     ...rest
@@ -502,5 +501,5 @@ export const HistoricalFigureCard = forwardRef<
       ) : null}
     </article>
   );
-});
+};
 HistoricalFigureCard.displayName = "HistoricalFigureCard";

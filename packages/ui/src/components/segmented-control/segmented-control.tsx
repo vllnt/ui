@@ -54,29 +54,39 @@ export type SegmentedControlItemProps = React.ComponentPropsWithoutRef<
 > &
   VariantProps<typeof segmentedControlItemVariants>;
 
-const SegmentedControl = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
-  SegmentedControlProps
->(({ className, size, ...props }, ref) => (
+const SegmentedControl = ({
+  className,
+  ref,
+  size,
+  ...props
+}: SegmentedControlProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof ToggleGroupPrimitive.Root>
+  >) => (
   <ToggleGroupPrimitive.Root
     className={cn(segmentedControlVariants({ size }), className)}
     ref={ref}
     type="single"
     {...props}
   />
-));
+);
 SegmentedControl.displayName = "SegmentedControl";
 
-const SegmentedControlItem = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
-  SegmentedControlItemProps
->(({ className, size, ...props }, ref) => (
+const SegmentedControlItem = ({
+  className,
+  ref,
+  size,
+  ...props
+}: SegmentedControlItemProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof ToggleGroupPrimitive.Item>
+  >) => (
   <ToggleGroupPrimitive.Item
     className={cn(segmentedControlItemVariants({ size }), className)}
     ref={ref}
     {...props}
   />
-));
+);
 SegmentedControlItem.displayName = "SegmentedControlItem";
 
 export {

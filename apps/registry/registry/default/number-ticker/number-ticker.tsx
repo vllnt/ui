@@ -27,77 +27,70 @@ function getNumberTickerFormatter(
   return formatter;
 }
 
-export const NumberTicker = React.forwardRef<
-  HTMLSpanElement,
-  NumberTickerProps
->(
-  (
-    {
-      className,
-      delay = 0,
-      duration = 1.2,
-      formatOptions,
-      from = 0,
-      locale,
-      value,
-      ...props
-    },
-    ref,
-  ) => {
-    const [currentValue, setCurrentValue] = React.useState(from);
+export const NumberTicker = ({
+  className,
+  delay = 0,
+  duration = 1.2,
+  formatOptions,
+  from = 0,
+  locale,
+  ref,
+  value,
+  ...props
+}: NumberTickerProps & React.RefAttributes<HTMLSpanElement>) => {
+  const [currentValue, setCurrentValue] = React.useState(from);
 
-    React.useEffect(() => {
-      const reducedMotion =
-        typeof window !== "undefined" &&
-        typeof window.matchMedia === "function" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  React.useEffect(() => {
+    const reducedMotion =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      if (reducedMotion || duration <= 0) {
-        setCurrentValue(value);
-        return;
-      }
+    if (reducedMotion || duration <= 0) {
+      setCurrentValue(value);
+      return;
+    }
 
-      let animationFrame = 0;
-      let timeoutId = 0;
-      const startDelay = Math.max(0, delay * 1000);
-      const durationMs = duration * 1000;
+    let animationFrame = 0;
+    let timeoutId = 0;
+    const startDelay = Math.max(0, delay * 1000);
+    const durationMs = duration * 1000;
 
-      timeoutId = window.setTimeout(() => {
-        const startTime = performance.now();
+    timeoutId = window.setTimeout(() => {
+      const startTime = performance.now();
 
-        const tick = (timestamp: number) => {
-          const elapsed = timestamp - startTime;
-          const progress = Math.min(elapsed / durationMs, 1);
-          const nextValue = from + (value - from) * progress;
+      const tick = (timestamp: number) => {
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / durationMs, 1);
+        const nextValue = from + (value - from) * progress;
 
-          setCurrentValue(nextValue);
+        setCurrentValue(nextValue);
 
-          if (progress < 1) {
-            animationFrame = window.requestAnimationFrame(tick);
-          }
-        };
-
-        animationFrame = window.requestAnimationFrame(tick);
-      }, startDelay);
-
-      return () => {
-        window.clearTimeout(timeoutId);
-        window.cancelAnimationFrame(animationFrame);
+        if (progress < 1) {
+          animationFrame = window.requestAnimationFrame(tick);
+        }
       };
-    }, [delay, duration, from, value]);
 
-    const formatter = getNumberTickerFormatter(locale, formatOptions);
+      animationFrame = window.requestAnimationFrame(tick);
+    }, startDelay);
 
-    return (
-      <span
-        className={cn("tabular-nums tracking-tight", className)}
-        ref={ref}
-        {...props}
-      >
-        {formatter.format(currentValue)}
-      </span>
-    );
-  },
-);
+    return () => {
+      window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, [delay, duration, from, value]);
+
+  const formatter = getNumberTickerFormatter(locale, formatOptions);
+
+  return (
+    <span
+      className={cn("tabular-nums tracking-tight", className)}
+      ref={ref}
+      {...props}
+    >
+      {formatter.format(currentValue)}
+    </span>
+  );
+};
 
 NumberTicker.displayName = "NumberTicker";

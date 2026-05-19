@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -67,11 +63,10 @@ export type SelectionPresenceProps = {
  *
  * @public
  */
-export const SelectionPresence = forwardRef<
-  HTMLDivElement,
-  SelectionPresenceProps
->((props, ref) => {
-  const { className, color, height, labels, name, width, x, y, ...rest } =
+export const SelectionPresence = (
+  props: SelectionPresenceProps & React.RefAttributes<HTMLDivElement>,
+) => {
+  const { className, color, height, labels, name, ref, width, x, y, ...rest } =
     props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const accent = color ?? "var(--foreground)";
@@ -110,5 +105,5 @@ export const SelectionPresence = forwardRef<
       )}
     </div>
   );
-});
+};
 SelectionPresence.displayName = "SelectionPresence";

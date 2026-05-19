@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentPropsWithoutRef, forwardRef, useId } from "react";
+import { type ComponentPropsWithoutRef, useId } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -79,68 +79,68 @@ const safeRadius = (value: number): number => (value < 0 ? 0 : value);
  *
  * @public
  */
-export const ContextLens = forwardRef<SVGSVGElement, ContextLensProps>(
-  (props, ref) => {
-    const { className, focus, labels, opacity = 0.55, ...rest } = props;
-    const maskId = useId();
-    if (!focus) {
-      return null;
-    }
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const inner = safeRadius(focus.inner);
-    const outer = safeRadius(Math.max(focus.outer, inner));
-    const fillOpacity = clamp01(opacity);
-    return (
-      <svg
-        aria-hidden="true"
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "pointer-events-none absolute inset-0 z-20 h-full w-full",
-          className,
-        )}
-        data-context-lens
-        ref={ref}
-        {...rest}
-      >
-        <defs>
-          <radialGradient
-            cx={focus.cx}
-            cy={focus.cy}
-            data-context-lens-gradient
-            gradientUnits="userSpaceOnUse"
-            id={maskId}
-            r={outer === 0 ? 1 : outer}
-          >
-            <stop offset="0%" stopColor="black" stopOpacity={0} />
-            <stop
-              offset={outer === 0 ? "100%" : `${(inner / outer) * 100}%`}
-              stopColor="black"
-              stopOpacity={0}
-            />
-            <stop offset="100%" stopColor="black" stopOpacity={1} />
-          </radialGradient>
-        </defs>
-        <rect
-          data-context-lens-dim
-          fill="black"
-          fillOpacity={fillOpacity}
-          height="100%"
-          mask={`url(#${maskId}-mask)`}
-          width="100%"
-          x={0}
-          y={0}
-        />
-        <mask id={`${maskId}-mask`}>
-          <rect fill="white" height="100%" width="100%" x={0} y={0} />
-          <circle
-            cx={focus.cx}
-            cy={focus.cy}
-            fill={`url(#${maskId})`}
-            r={outer}
+export const ContextLens = (
+  props: ContextLensProps & React.RefAttributes<SVGSVGElement>,
+) => {
+  const { className, focus, labels, opacity = 0.55, ref, ...rest } = props;
+  const maskId = useId();
+  if (!focus) {
+    return null;
+  }
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const inner = safeRadius(focus.inner);
+  const outer = safeRadius(Math.max(focus.outer, inner));
+  const fillOpacity = clamp01(opacity);
+  return (
+    <svg
+      aria-hidden="true"
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "pointer-events-none absolute inset-0 z-20 h-full w-full",
+        className,
+      )}
+      data-context-lens
+      ref={ref}
+      {...rest}
+    >
+      <defs>
+        <radialGradient
+          cx={focus.cx}
+          cy={focus.cy}
+          data-context-lens-gradient
+          gradientUnits="userSpaceOnUse"
+          id={maskId}
+          r={outer === 0 ? 1 : outer}
+        >
+          <stop offset="0%" stopColor="black" stopOpacity={0} />
+          <stop
+            offset={outer === 0 ? "100%" : `${(inner / outer) * 100}%`}
+            stopColor="black"
+            stopOpacity={0}
           />
-        </mask>
-      </svg>
-    );
-  },
-);
+          <stop offset="100%" stopColor="black" stopOpacity={1} />
+        </radialGradient>
+      </defs>
+      <rect
+        data-context-lens-dim
+        fill="black"
+        fillOpacity={fillOpacity}
+        height="100%"
+        mask={`url(#${maskId}-mask)`}
+        width="100%"
+        x={0}
+        y={0}
+      />
+      <mask id={`${maskId}-mask`}>
+        <rect fill="white" height="100%" width="100%" x={0} y={0} />
+        <circle
+          cx={focus.cx}
+          cy={focus.cy}
+          fill={`url(#${maskId})`}
+          r={outer}
+        />
+      </mask>
+    </svg>
+  );
+};
 ContextLens.displayName = "ContextLens";

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-  useMemo,
-} from "react";
+import { type ComponentPropsWithoutRef, type ReactNode, useMemo } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -530,47 +525,48 @@ function TimelineColumn({
  *
  * @public
  */
-export const GanttChart = forwardRef<HTMLDivElement, GanttChartProps>(
-  (props, ref) => {
-    const {
-      className,
-      endDate,
-      groups,
-      labels,
-      locale = DEFAULT_LOCALE,
-      milestones = [],
-      now,
-      scale = "month",
-      startDate,
-      taskColumnWidth = 200,
-      ...rest
-    } = props;
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const geometry = useChartGeometry({ endDate, locale, scale, startDate });
-    const nowDate = useMemo(() => (now ? toDate(now) : new Date()), [now]);
+export const GanttChart = (
+  props: GanttChartProps & React.RefAttributes<HTMLDivElement>,
+) => {
+  const {
+    className,
+    endDate,
+    groups,
+    labels,
+    locale = DEFAULT_LOCALE,
+    milestones = [],
+    now,
+    ref,
+    scale = "month",
+    startDate,
+    taskColumnWidth = 200,
+    ...rest
+  } = props;
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const geometry = useChartGeometry({ endDate, locale, scale, startDate });
+  const nowDate = useMemo(() => (now ? toDate(now) : new Date()), [now]);
 
-    return (
-      <div
-        className={cn(
-          "flex w-full overflow-x-auto rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <LeftColumn groups={groups} taskColumnWidth={taskColumnWidth} />
-        <TimelineColumn
-          geometry={geometry}
-          groups={groups}
-          labels={resolvedLabels}
-          milestones={milestones}
-          now={nowDate}
-        />
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      className={cn(
+        "flex w-full overflow-x-auto rounded-2xl border bg-background text-foreground",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      <LeftColumn groups={groups} taskColumnWidth={taskColumnWidth} />
+      <TimelineColumn
+        geometry={geometry}
+        groups={groups}
+        labels={resolvedLabels}
+        milestones={milestones}
+        now={nowDate}
+      />
+    </div>
+  );
+};
 GanttChart.displayName = "GanttChart";

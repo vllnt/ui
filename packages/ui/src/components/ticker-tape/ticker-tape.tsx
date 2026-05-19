@@ -84,47 +84,49 @@ function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
   );
 }
 
-export const TickerTape = React.forwardRef<HTMLDivElement, TickerTapeProps>(
-  (
-    { className, items, pauseOnHover = true, speedSeconds = 28, ...props },
-    reference,
-  ) => {
-    if (items.length === 0) {
-      return null;
-    }
+export const TickerTape = ({
+  className,
+  items,
+  pauseOnHover = true,
+  ref: reference,
+  speedSeconds = 28,
+  ...props
+}: TickerTapeProps & React.RefAttributes<HTMLDivElement>) => {
+  if (items.length === 0) {
+    return null;
+  }
 
-    return (
+  return (
+    <div
+      aria-label="TickerTape"
+      className={cn(
+        "relative overflow-hidden rounded-2xl border border-border bg-card/70 backdrop-blur-sm",
+        className,
+      )}
+      ref={reference}
+      role="region"
+      {...props}
+    >
+      <style>{tickerTapeKeyframes}</style>
       <div
-        aria-label="TickerTape"
         className={cn(
-          "relative overflow-hidden rounded-2xl border border-border bg-card/70 backdrop-blur-sm",
-          className,
+          "flex w-max items-stretch",
+          pauseOnHover && "hover:[animation-play-state:paused]",
         )}
-        ref={reference}
-        role="region"
-        {...props}
+        style={{
+          animationDuration: `${speedSeconds}s`,
+          animationIterationCount: "infinite",
+          animationName: "ticker-tape-scroll",
+          animationTimingFunction: "linear",
+        }}
       >
-        <style>{tickerTapeKeyframes}</style>
-        <div
-          className={cn(
-            "flex w-max items-stretch",
-            pauseOnHover && "hover:[animation-play-state:paused]",
-          )}
-          style={{
-            animationDuration: `${speedSeconds}s`,
-            animationIterationCount: "infinite",
-            animationName: "ticker-tape-scroll",
-            animationTimingFunction: "linear",
-          }}
-        >
+        <TickerTapeRow items={items} />
+        <div aria-hidden="true">
           <TickerTapeRow items={items} />
-          <div aria-hidden="true">
-            <TickerTapeRow items={items} />
-          </div>
         </div>
       </div>
-    );
-  },
-);
+    </div>
+  );
+};
 
 TickerTape.displayName = "TickerTape";

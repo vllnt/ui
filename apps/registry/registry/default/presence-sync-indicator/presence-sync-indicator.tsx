@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -90,11 +86,10 @@ export type PresenceSyncIndicatorProps = {
  *
  * @public
  */
-export const PresenceSyncIndicator = forwardRef<
-  HTMLDivElement,
-  PresenceSyncIndicatorProps
->((props, ref) => {
-  const { className, label, labels, state, status, ...rest } = props;
+export const PresenceSyncIndicator = (
+  props: PresenceSyncIndicatorProps & React.RefAttributes<HTMLDivElement>,
+) => {
+  const { className, label, labels, ref, state, status, ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const text = label ?? STATE_LABEL[state];
   return (
@@ -126,5 +121,5 @@ export const PresenceSyncIndicator = forwardRef<
       ) : null}
     </div>
   );
-});
+};
 PresenceSyncIndicator.displayName = "PresenceSyncIndicator";

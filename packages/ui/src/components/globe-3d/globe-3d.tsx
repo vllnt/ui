@@ -4,13 +4,12 @@ import {
   Children,
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   isValidElement,
   type PointerEvent as ReactPointerEvent,
   type ReactElement,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useId,
   useMemo,
@@ -126,7 +125,7 @@ type Ctx = {
 const GlobeContext = createContext<Ctx | null>(null);
 
 function useGlobeContext(): Ctx {
-  const ctx = useContext(GlobeContext);
+  const ctx = use(GlobeContext);
   if (!ctx) {
     throw new Error("Globe3D subcomponent used outside its root.");
   }
@@ -157,40 +156,40 @@ export type GlobeMarkerProps = {
  *
  * @public
  */
-export const GlobeMarker = forwardRef<SVGGElement, GlobeMarkerProps>(
-  (props, ref) => {
-    const { color = "red", id, label, lat, lng, ...rest } = props;
-    const { rotationLat, rotationLng } = useGlobeContext();
-    const projected = project({ lat, lng }, rotationLng, rotationLat);
-    if (!projected.visible) return null;
-    const palette = PALETTE[color];
-    return (
-      <g
-        data-marker-id={id}
-        data-marker-visible="true"
-        ref={ref}
-        transform={`translate(${projected.x.toString()}, ${projected.y.toString()})`}
-        {...rest}
-      >
-        <circle
-          className={cn("stroke-background", palette.fill)}
-          r="5"
-          strokeWidth="1.5"
-        />
-        {label ? (
-          <text
-            className="select-none fill-foreground text-[10px] font-semibold"
-            dominantBaseline="middle"
-            textAnchor="middle"
-            y="-10"
-          >
-            {label}
-          </text>
-        ) : null}
-      </g>
-    );
-  },
-);
+export const GlobeMarker = (
+  props: GlobeMarkerProps & React.RefAttributes<SVGGElement>,
+) => {
+  const { color = "red", id, label, lat, lng, ref, ...rest } = props;
+  const { rotationLat, rotationLng } = useGlobeContext();
+  const projected = project({ lat, lng }, rotationLng, rotationLat);
+  if (!projected.visible) return null;
+  const palette = PALETTE[color];
+  return (
+    <g
+      data-marker-id={id}
+      data-marker-visible="true"
+      ref={ref}
+      transform={`translate(${projected.x.toString()}, ${projected.y.toString()})`}
+      {...rest}
+    >
+      <circle
+        className={cn("stroke-background", palette.fill)}
+        r="5"
+        strokeWidth="1.5"
+      />
+      {label ? (
+        <text
+          className="select-none fill-foreground text-[10px] font-semibold"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          y="-10"
+        >
+          {label}
+        </text>
+      ) : null}
+    </g>
+  );
+};
 GlobeMarker.displayName = "GlobeMarker";
 
 /**
@@ -246,27 +245,27 @@ function buildArc(arguments_: {
  *
  * @public
  */
-export const GlobeArc = forwardRef<SVGPathElement, GlobeArcProps>(
-  (props, ref) => {
-    const { color = "cyan", from, id, strokeWidth = 2, to, ...rest } = props;
-    const { rotationLat, rotationLng } = useGlobeContext();
-    const path = buildArc({ from, rotationLat, rotationLng, to });
-    if (!path) return null;
-    const palette = PALETTE[color];
-    return (
-      <path
-        className={cn("fill-none", palette.stroke)}
-        d={path}
-        data-arc-id={id}
-        ref={ref}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={strokeWidth}
-        {...rest}
-      />
-    );
-  },
-);
+export const GlobeArc = (
+  props: GlobeArcProps & React.RefAttributes<SVGPathElement>,
+) => {
+  const { color = "cyan", from, id, ref, strokeWidth = 2, to, ...rest } = props;
+  const { rotationLat, rotationLng } = useGlobeContext();
+  const path = buildArc({ from, rotationLat, rotationLng, to });
+  if (!path) return null;
+  const palette = PALETTE[color];
+  return (
+    <path
+      className={cn("fill-none", palette.stroke)}
+      d={path}
+      data-arc-id={id}
+      ref={ref}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={strokeWidth}
+      {...rest}
+    />
+  );
+};
 GlobeArc.displayName = "GlobeArc";
 
 type GraticuleProps = {
@@ -570,13 +569,16 @@ function DataSummary({ children, titleId }: DataSummaryProps): ReactNode {
  *
  * @public
  */
-export const Globe3D = forwardRef<HTMLElement, Globe3DProps>((props, ref) => {
+export const Globe3D = (
+  props: Globe3DProps & React.RefAttributes<HTMLElement>,
+) => {
   const {
     autoRotate = true,
     children,
     className,
     initialPosition = { lat: 20, lng: 0 },
     labels,
+    ref,
     rotationSpeed = 8,
     ...rest
   } = props;
@@ -638,5 +640,5 @@ export const Globe3D = forwardRef<HTMLElement, Globe3DProps>((props, ref) => {
       </section>
     </GlobeContext.Provider>
   );
-});
+};
 Globe3D.displayName = "Globe3D";

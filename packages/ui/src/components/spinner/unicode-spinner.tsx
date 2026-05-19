@@ -663,71 +663,64 @@ export type UnicodeSpinnerProps = Omit<
   size?: keyof typeof UNICODE_SPINNER_SIZE_CLASSES;
 };
 
-export const UnicodeSpinner = React.forwardRef<
-  HTMLSpanElement,
-  UnicodeSpinnerProps
->(
-  (
-    {
-      animation = "braille",
-      className,
-      interval,
-      label,
-      paused = false,
-      size = "md",
-      ...props
-    },
-    ref,
-  ) => {
-    const preset = UNICODE_SPINNER_PRESETS[animation];
-    const resolvedInterval = interval ?? preset.interval;
-    const [frameIndex, setFrameIndex] = React.useState(0);
+export const UnicodeSpinner = ({
+  animation = "braille",
+  className,
+  interval,
+  label,
+  paused = false,
+  ref,
+  size = "md",
+  ...props
+}: UnicodeSpinnerProps & React.RefAttributes<HTMLSpanElement>) => {
+  const preset = UNICODE_SPINNER_PRESETS[animation];
+  const resolvedInterval = interval ?? preset.interval;
+  const [frameIndex, setFrameIndex] = React.useState(0);
 
-    React.useEffect(() => {
-      setFrameIndex(0);
-    }, [animation]);
+  React.useEffect(() => {
+    setFrameIndex(0);
+  }, [animation]);
 
-    React.useEffect(() => {
-      if (paused) {
-        return;
-      }
+  React.useEffect(() => {
+    if (paused) {
+      return;
+    }
 
-      const timer = window.setInterval(() => {
-        setFrameIndex((current) => (current + 1) % preset.frames.length);
-      }, resolvedInterval);
+    const timer = window.setInterval(() => {
+      setFrameIndex((current) => (current + 1) % preset.frames.length);
+    }, resolvedInterval);
 
-      return () => {
-        window.clearInterval(timer);
-      };
-    }, [paused, preset.frames.length, resolvedInterval]);
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [paused, preset.frames.length, resolvedInterval]);
 
-    const frame = preset.frames[frameIndex] ?? preset.frames[0] ?? "⠋";
-    const accessibleLabel = label ? `Loading ${label}` : "Loading";
+  const frame = preset.frames[frameIndex] ?? preset.frames[0] ?? "⠋";
+  const accessibleLabel = label ? `Loading ${label}` : "Loading";
 
-    return (
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 font-mono leading-none text-foreground",
+        UNICODE_SPINNER_SIZE_CLASSES[size],
+        className,
+      )}
+      ref={ref}
+      role="status"
+      {...props}
+    >
       <span
-        className={cn(
-          "inline-flex items-center gap-2 font-mono leading-none text-foreground",
-          UNICODE_SPINNER_SIZE_CLASSES[size],
-          className,
-        )}
-        ref={ref}
-        role="status"
-        {...props}
+        aria-hidden="true"
+        className="inline-block min-w-[1em] whitespace-pre"
       >
-        <span
-          aria-hidden="true"
-          className="inline-block min-w-[1em] whitespace-pre"
-        >
-          {frame}
-        </span>
-        {label ? (
-          <span className="text-sm font-medium text-foreground">{label}</span>
-        ) : null}
-        <span className="sr-only">{accessibleLabel}</span>
+        {frame}
       </span>
-    );
-  },
-);
+      {label ? (
+        <span className="text-sm font-medium text-foreground">{label}</span>
+      ) : null}
+      <span className="sr-only">{accessibleLabel}</span>
+    </span>
+  );
+};
 
 UnicodeSpinner.displayName = "UnicodeSpinner";

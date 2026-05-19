@@ -2,7 +2,6 @@
 
 import {
   type ComponentPropsWithoutRef,
-  forwardRef,
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useCallback,
@@ -385,81 +384,77 @@ function TreeRows({
  *
  * @public
  */
-export const TreeView = forwardRef<HTMLUListElement, TreeViewProps>(
-  (props, ref) => {
-    const {
-      className,
-      defaultExpanded,
-      defaultSelected,
-      expanded,
-      labels,
-      nodes,
-      onExpandedChange,
-      onSelect,
-      selected,
-      selectionMode = "single",
-      ...rest
-    } = props;
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
+export const TreeView = (
+  props: TreeViewProps & React.RefAttributes<HTMLUListElement>,
+) => {
+  const {
+    className,
+    defaultExpanded,
+    defaultSelected,
+    expanded,
+    labels,
+    nodes,
+    onExpandedChange,
+    onSelect,
+    ref,
+    selected,
+    selectionMode = "single",
+    ...rest
+  } = props;
+  const regionLabel = labels?.region ?? DEFAULT_LABELS.region;
 
-    const { applyExpand, applySelect, expandedSet, selectedSet } = useTreeState(
-      {
-        defaultExpanded,
-        defaultSelected,
-        expanded,
-        onExpandedChange,
-        onSelect,
-        selected,
-        selectionMode,
-      },
-    );
+  const { applyExpand, applySelect, expandedSet, selectedSet } = useTreeState({
+    defaultExpanded,
+    defaultSelected,
+    expanded,
+    onExpandedChange,
+    onSelect,
+    selected,
+    selectionMode,
+  });
 
-    const flat = useMemo(
-      () => flattenVisible({ expanded: expandedSet, nodes }),
-      [expandedSet, nodes],
-    );
+  const flat = useMemo(
+    () => flattenVisible({ expanded: expandedSet, nodes }),
+    [expandedSet, nodes],
+  );
 
-    const [activeId, setActiveId] = useState<string | undefined>(
-      () => flat[0]?.node.id,
-    );
+  const [activeId, setActiveId] = useState<string | undefined>(
+    () => flat[0]?.node.id,
+  );
 
-    const handleKeyDown = useKeyboardHandler({
-      activeId,
-      applyExpand,
-      applySelect,
-      expandedSet,
-      flat,
-      setActiveId,
-    });
+  const handleKeyDown = useKeyboardHandler({
+    activeId,
+    applyExpand,
+    applySelect,
+    expandedSet,
+    flat,
+    setActiveId,
+  });
 
-    return (
-      <ul
-        aria-label={resolvedLabels.region}
-        aria-multiselectable={selectionMode === "multiple" || undefined}
-        className={cn(
-          "flex flex-col gap-0.5 rounded-2xl border bg-background p-2 text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-          className,
-        )}
-        onKeyDown={handleKeyDown}
-        ref={ref}
-        role="tree"
-        tabIndex={0}
-        {...rest}
-      >
-        <TreeRows
-          activeId={activeId}
-          applyExpand={applyExpand}
-          applySelect={applySelect}
-          expandedSet={expandedSet}
-          flat={flat}
-          selectedSet={selectedSet}
-          setActiveId={setActiveId}
-        />
-      </ul>
-    );
-  },
-);
+  return (
+    <ul
+      aria-label={regionLabel}
+      aria-multiselectable={selectionMode === "multiple" || undefined}
+      className={cn(
+        "flex flex-col gap-0.5 rounded-2xl border bg-background p-2 text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        className,
+      )}
+      onKeyDown={handleKeyDown}
+      ref={ref}
+      role="tree"
+      tabIndex={0}
+      {...rest}
+    >
+      <TreeRows
+        activeId={activeId}
+        applyExpand={applyExpand}
+        applySelect={applySelect}
+        expandedSet={expandedSet}
+        flat={flat}
+        selectedSet={selectedSet}
+        setActiveId={setActiveId}
+      />
+    </ul>
+  );
+};
 TreeView.displayName = "TreeView";
