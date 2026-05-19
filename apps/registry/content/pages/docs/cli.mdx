@@ -1,0 +1,60 @@
+---
+title: CLI
+description: Use the shadcn CLI with VLLNT UI registry URLs, aliases, and repeatable team workflows.
+type: docs
+og:
+  title: CLI
+  description: shadcn CLI cookbook for VLLNT UI
+  type: docs
+---
+
+# CLI
+
+The VLLNT UI registry uses the same JSON descriptor shape expected by the shadcn CLI. You can install components directly from public URLs without adding a custom package dependency.
+
+## Add one component
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
+
+The CLI reads the descriptor, installs dependencies, and writes source files into your configured component directory.
+
+## Add multiple components
+
+Install components one at a time so diffs are easy to review:
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/dialog.json
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/toast.json
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/form.json
+```
+
+## Inspect the registry first
+
+Use the registry index when scripting:
+
+```bash
+curl https://ui.vllnt.ai/r/registry.json
+```
+
+Each item includes its slug, title, description, category, dependencies, and file list. Per-component descriptors live at:
+
+```text
+https://ui.vllnt.ai/r/<name>.json
+```
+
+## Team workflow
+
+- Pin component additions in pull requests instead of installing during deployment.
+- Review generated files like normal application code.
+- Keep local edits close to the copied component so future updates are easy to reconcile.
+- Re-run the CLI only when you intentionally accept upstream changes.
+
+## Custom registries
+
+If you build a private registry on top of VLLNT UI, keep the same descriptor fields and stable URL shape. Consumers should be able to swap only the host:
+
+```bash
+pnpm dlx shadcn@latest add https://your-registry.example.com/r/button.json
+```

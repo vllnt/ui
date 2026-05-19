@@ -1,4 +1,5 @@
 import registryData from "@/registry.json";
+import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import type {
   ComponentCategory,
   Registry,
@@ -72,6 +73,18 @@ export function getSidebarSections(_activeCategory?: ComponentCategory) {
         { href: "/philosophy", title: "Philosophy" },
         { href: "/components", title: "Components" },
       ],
+    },
+    {
+      collapsible: true,
+      defaultOpen: true,
+      items: [
+        { href: "/docs", title: "Overview" },
+        ...DOCS_PAGES.map((page) => ({
+          href: getDocsPath(page),
+          title: page.title,
+        })),
+      ],
+      title: "Documentation",
     },
     ...groupedComponents.map((group) => ({
       collapsible: true,
