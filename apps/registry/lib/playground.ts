@@ -50,5 +50,10 @@ export function getPlaygroundExample(
 }
 
 export function getRegistryPackageVersion(version: string | undefined): string {
-  return version ? `^${version}` : "latest";
+  if (!version) {
+    throw new Error(
+      "getRegistryPackageVersion: version is undefined. Registry component is missing a package version.",
+    );
+  }
+  return `^${version}`;
 }

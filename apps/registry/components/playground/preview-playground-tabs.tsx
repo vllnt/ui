@@ -47,16 +47,16 @@ export function PreviewPlaygroundTabs({
   return (
     <div className="mb-8 scroll-mt-8" id="preview">
       <span aria-hidden="true" className="block scroll-mt-8" id="playground" />
-      <Tabs
-        className="my-0"
-        defaultValue={activeTab}
-        key={activeTab}
-        onValueChange={setActiveTab}
-      >
+      <Tabs className="my-0" onValueChange={setActiveTab} value={activeTab}>
         <div className="flex items-center justify-between gap-4 border-b">
           <TabsList className="border-b-0">
             <TabsTrigger value="preview">Preview</TabsTrigger>
-            <TabsTrigger className="hidden md:inline-flex" value="playground">
+            <TabsTrigger
+              aria-hidden="true"
+              className="hidden md:inline-flex"
+              tabIndex={-1}
+              value="playground"
+            >
               Playground
             </TabsTrigger>
           </TabsList>
@@ -73,7 +73,11 @@ export function PreviewPlaygroundTabs({
             <StorybookEmbed componentName={componentName} storyId={storyId} />
           </div>
         </TabsContent>
-        <TabsContent className="hidden pt-4 md:block" value="playground">
+        <TabsContent
+          aria-hidden="true"
+          className="hidden pt-4 md:block"
+          value="playground"
+        >
           <div>
             <ComponentPlaygroundShell
               componentName={componentName}

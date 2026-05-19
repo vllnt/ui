@@ -21,7 +21,7 @@ type SandpackPlaygroundProps = {
 
 function buildDependencies(packageVersion: string): Record<string, string> {
   return {
-    "@vitejs/plugin-react": "latest",
+    "@vitejs/plugin-react": "^5.0.0",
     "@vllnt/ui": packageVersion,
     autoprefixer: "^10.4.20",
     "class-variance-authority": "^0.7.1",
@@ -32,7 +32,7 @@ function buildDependencies(packageVersion: string): Record<string, string> {
     "react-dom": "^19.2.0",
     "tailwind-merge": "^3.3.1",
     tailwindcss: "^3.4.17",
-    vite: "latest",
+    vite: "^7.3.2",
   };
 }
 
