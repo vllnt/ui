@@ -1,5 +1,6 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -122,9 +123,9 @@ export default function VsShadcnPage() {
     },
     {
       attribute: "Templates / starter kits",
-      vllnt: "Coming soon",
+      vllnt: "Curated app templates for Next.js, dashboards, SaaS, AI chat, and docs",
       shadcn: "Many official + community templates",
-      winner: "shadcn",
+      winner: "even",
     },
     {
       attribute: "License",
@@ -158,6 +159,11 @@ export default function VsShadcnPage() {
               third-party tutorials and templates, shadcn/ui wins. If you want
               the broadest curated component set and a registry that AI agents
               can read directly, VLLNT UI wins.
+            </p>
+            <p>
+              VLLNT UI now includes a{" "}
+              <Link href="/templates">starter kit gallery</Link> for finished
+              app shells built from the registry.
             </p>
           </div>
 

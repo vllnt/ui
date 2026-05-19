@@ -71,6 +71,7 @@ export function getSidebarSections(_activeCategory?: ComponentCategory) {
         { href: "/", title: "Get Started" },
         { href: "/philosophy", title: "Philosophy" },
         { href: "/components", title: "Components" },
+        { href: "/templates", title: "Templates" },
       ],
     },
     ...groupedComponents.map((group) => ({

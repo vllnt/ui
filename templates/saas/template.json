@@ -1,0 +1,23 @@
+{
+  "slug": "saas",
+  "title": "SaaS",
+  "demoUrl": "https://ui.vllnt.ai/templates/saas",
+  "screenshots": [
+    "screenshots/preview.svg"
+  ],
+  "components": [
+    "badge",
+    "banner",
+    "button",
+    "card",
+    "dialog",
+    "form",
+    "input",
+    "navbar-saas",
+    "pricing-table",
+    "profile-section",
+    "subscription-card",
+    "tabs",
+    "toast"
+  ]
+}

@@ -13,22 +13,29 @@ type Registry = {
 };
 
 export function Header() {
-  const router = useRouter();
+  const { push } = useRouter();
   const registry = registryData as Registry;
 
   const navItems = [
     { href: "/", title: "Get Started" },
     { href: "/philosophy", title: "Philosophy" },
     { href: "/components", title: "Components" },
+    { href: "/templates", title: "Templates" },
   ];
 
-  const searchItems = registry.items
-    .filter((item) => item.type === "registry:component")
-    .map((item) => ({
+  const searchItems = registry.items.reduce<
+    { description?: string; id: string; title: string }[]
+  >((items, item) => {
+    if (item.type !== "registry:component") return items;
+
+    items.push({
       description: item.description,
       id: item.name,
       title: item.title,
-    }));
+    });
+
+    return items;
+  }, []);
 
   return (
     <NavbarSaas
@@ -42,18 +49,18 @@ export function Header() {
             groupHeading="Components"
             items={searchItems}
             onSelect={(item) => {
-              router.push(`/components/${item.id}`);
+              push(`/components/${item.id}`);
             }}
             searchPlaceholder="Search components..."
           />
           <a
             aria-label="VLLNT UI on GitHub"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
             href={GITHUB_URL}
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <Github className="size-4" />
           </a>
         </div>
       }
