@@ -108,7 +108,6 @@ export function softwareApplicationLd(application: {
     applicationCategory: "DeveloperApplication",
     codeRepository: "https://github.com/vllnt/ui",
     description: application.description,
-    installUrl: application.url,
     name: application.name,
     operatingSystem: "Web",
     softwareRequirements: "Node.js, pnpm, React, Tailwind CSS",

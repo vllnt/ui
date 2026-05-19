@@ -1,5 +1,5 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
-import { ExternalLink, Github } from "lucide-react";
+import { Github } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -113,7 +113,7 @@ export default async function TemplatePage(props: Props) {
 
               <div className="mt-8 overflow-hidden rounded-md border border-border bg-muted/30">
                 <Image
-                  alt=""
+                  alt={`${template.title} template screenshot`}
                   className="aspect-video w-full object-cover"
                   height={720}
                   priority
@@ -166,15 +166,6 @@ export default async function TemplatePage(props: Props) {
               <section className="rounded-md border border-border bg-card p-5">
                 <h2 className="text-lg font-semibold">Links</h2>
                 <div className="mt-4 grid gap-3">
-                  <a
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-foreground px-4 text-sm font-medium text-background hover:opacity-90"
-                    href={template.demoUrl}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    Live demo
-                    <ExternalLink className="size-4" />
-                  </a>
                   <a
                     className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
                     href={githubUrl}

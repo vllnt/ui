@@ -71,7 +71,7 @@ export default function TemplatesPage() {
                 <Link className="group block" href={getTemplatePath(template)}>
                   <div className="border-b border-border bg-muted/30">
                     <Image
-                      alt=""
+                      alt={`${template.title} template screenshot`}
                       className="aspect-video w-full object-cover"
                       height={720}
                       src={template.screenshot}
