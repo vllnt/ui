@@ -142,9 +142,9 @@ export default async function ChangelogPage({
             {
               "@context": "https://schema.org",
               "@type": "Article",
-              dateModified: latestDate
-                ? new Date(latestDate).toISOString()
-                : undefined,
+              ...(latestDate
+                ? { dateModified: new Date(latestDate).toISOString() }
+                : {}),
               description: DESCRIPTION,
               headline: "VLLNT UI Changelog",
               mainEntityOfPage: `${SITE_URL}/changelog`,
