@@ -1,7 +1,8 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 
+import { isLocale, Link } from "@/i18n/routing";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: "Page not found · VLLNT UI",
 };
 
-const POPULAR_COMPONENTS: ReadonlyArray<{ name: string; slug: string }> = [
+const POPULAR_COMPONENTS: readonly { name: string; slug: string }[] = [
   { name: "Button", slug: "button" },
   { name: "DataTable", slug: "data-table" },
   { name: "AI Chat Input", slug: "ai-chat-input" },
@@ -22,19 +23,23 @@ const POPULAR_COMPONENTS: ReadonlyArray<{ name: string; slug: string }> = [
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const requestedLocale = await getLocale();
+  const locale = isLocale(requestedLocale) ? requestedLocale : "en";
+  const common = await getTranslations({ locale, namespace: "common" });
+  const t = await getTranslations({ locale, namespace: "pages.notFound" });
+
   return (
     <>
-      <Sidebar sections={getSidebarSections()} />
+      <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-24 lg:px-8 max-w-3xl">
           <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
             404
           </p>
-          <h1 className="mt-3 text-4xl font-semibold">Page not found</h1>
+          <h1 className="mt-3 text-4xl font-semibold">{t("title")}</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            That route does not exist. Try one of the popular components below,
-            or jump back to the index.
+            {t("description")}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -42,7 +47,7 @@ export default function NotFound() {
               className="inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
               href="/components"
             >
-              Browse all components
+              {common("browseComponents")}
             </Link>
             <Link
               className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -62,7 +67,7 @@ export default function NotFound() {
 
           <section className="mt-16">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              Popular components
+              {t("popular")}
             </h2>
             <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {POPULAR_COMPONENTS.map((component) => (

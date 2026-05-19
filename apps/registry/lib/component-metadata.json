@@ -3,6 +3,9 @@
     "category": "content",
     "defaultStoryId": "content-accordion--default",
     "description": "Collapsible content sections supporting single or multiple open items.",
+    "descriptions": {
+      "en": "Collapsible content sections supporting single or multiple open items."
+    },
     "name": "accordion",
     "stories": [
       {
@@ -16,6 +19,9 @@
     "category": "data",
     "defaultStoryId": "deploymentactivity--default",
     "description": "Contribution-style grid for visualizing operational activity over time.",
+    "descriptions": {
+      "en": "Contribution-style grid for visualizing operational activity over time."
+    },
     "name": "activity-heatmap",
     "stories": [
       {
@@ -33,6 +39,9 @@
     "category": "data",
     "defaultStoryId": "activitylog--default",
     "description": "Paginated activity feed for audit history and analytics changes.",
+    "descriptions": {
+      "en": "Paginated activity feed for audit history and analytics changes."
+    },
     "name": "activity-log",
     "stories": [
       {
@@ -50,6 +59,9 @@
     "category": "ai",
     "defaultStoryId": "ai-agentactivity--default",
     "description": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress.",
+    "descriptions": {
+      "en": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress."
+    },
     "name": "agent-activity",
     "stories": [
       {
@@ -75,6 +87,9 @@
     "category": "ai",
     "defaultStoryId": "generatedcomponent--default",
     "description": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips.",
+    "descriptions": {
+      "en": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips."
+    },
     "name": "ai-artifact",
     "stories": [
       {
@@ -100,6 +115,9 @@
     "category": "learning",
     "defaultStoryId": "ai-chatinput--default",
     "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
+    "descriptions": {
+      "en": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states."
+    },
     "name": "ai-chat-input",
     "stories": [
       {
@@ -117,6 +135,9 @@
     "category": "learning",
     "defaultStoryId": "ai-messagebubble--default",
     "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
+    "descriptions": {
+      "en": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces."
+    },
     "name": "ai-message-bubble",
     "stories": [
       {
@@ -138,6 +159,9 @@
     "category": "ai",
     "defaultStoryId": "ai-aisidebar--default",
     "description": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger.",
+    "descriptions": {
+      "en": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger."
+    },
     "name": "ai-sidebar",
     "stories": [
       {
@@ -159,6 +183,9 @@
     "category": "learning",
     "defaultStoryId": "designingreadableaiconversations--default",
     "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
+    "descriptions": {
+      "en": "Compact source reference card for AI answers with a title, origin label, and optional excerpt."
+    },
     "name": "ai-source-citation",
     "stories": [
       {
@@ -172,6 +199,9 @@
     "category": "learning",
     "defaultStoryId": "ai-streamingtext--default",
     "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
+    "descriptions": {
+      "en": "Readable text block for partial assistant output with an optional live cursor while tokens stream in."
+    },
     "name": "ai-streaming-text",
     "stories": [
       {
@@ -189,6 +219,9 @@
     "category": "learning",
     "defaultStoryId": "ai-toolcalldisplay--default",
     "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
+    "descriptions": {
+      "en": "Structured card for tool invocation traces, statuses, serialized input, and returned output."
+    },
     "name": "ai-tool-call-display",
     "stories": [
       {
@@ -206,6 +239,9 @@
     "category": "data",
     "defaultStoryId": "data-alert--default",
     "description": "Displays an alert message to the user.",
+    "descriptions": {
+      "en": "Displays an alert message to the user."
+    },
     "name": "alert",
     "stories": [
       {
@@ -223,6 +259,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-alertdialog--default",
     "description": "Modal dialog for confirming destructive or important actions.",
+    "descriptions": {
+      "en": "Modal dialog for confirming destructive or important actions."
+    },
     "name": "alert-dialog",
     "stories": [
       {
@@ -236,6 +275,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-alertpulse--default",
     "description": "Pulsing ring overlay for alerting canvas objects, with severity tones.",
+    "descriptions": {
+      "en": "Pulsing ring overlay for alerting canvas objects, with severity tones."
+    },
     "name": "alert-pulse",
     "stories": [
       {
@@ -261,6 +303,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-anchorport--default",
     "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
+    "descriptions": {
+      "en": "Port marker for object inputs, outputs, and bidirectional links on the canvas."
+    },
     "name": "anchor-port",
     "stories": [
       {
@@ -274,6 +319,9 @@
     "category": "utility",
     "defaultStoryId": "utility-animatedtext--terminal",
     "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
+    "descriptions": {
+      "en": "Staggered text reveal for headings, pull quotes, and short supporting copy."
+    },
     "name": "animated-text",
     "stories": [
       {
@@ -331,6 +379,9 @@
     "category": "learning",
     "defaultStoryId": "learning-annotation--default",
     "description": "Inline highlight with an attached contextual note.",
+    "descriptions": {
+      "en": "Inline highlight with an attached contextual note."
+    },
     "name": "annotation",
     "stories": [
       {
@@ -356,6 +407,9 @@
     "category": "utility",
     "defaultStoryId": "utility-aspectratio--default",
     "description": "Constrains content to a specified aspect ratio.",
+    "descriptions": {
+      "en": "Constrains content to a specified aspect ratio."
+    },
     "name": "aspect-ratio",
     "stories": [
       {
@@ -369,6 +423,9 @@
     "category": "billing",
     "defaultStoryId": "billing-autoreload--default",
     "description": "Toggle + collapsible threshold/amount form for automatic credit reloading with locale-aware currency.",
+    "descriptions": {
+      "en": "Toggle + collapsible threshold/amount form for automatic credit reloading with locale-aware currency."
+    },
     "name": "auto-reload",
     "stories": [
       {
@@ -398,6 +455,9 @@
     "category": "core",
     "defaultStoryId": "core-avatar--default",
     "description": "Displays a user avatar image with fallback initials.",
+    "descriptions": {
+      "en": "Displays a user avatar image with fallback initials."
+    },
     "name": "avatar",
     "stories": [
       {
@@ -411,6 +471,9 @@
     "category": "data",
     "defaultStoryId": "data-avatargroup--default",
     "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
+    "descriptions": {
+      "en": "Overlapping avatar stack for participants, assignees, and collaborative contexts."
+    },
     "name": "avatar-group",
     "stories": [
       {
@@ -428,6 +491,9 @@
     "category": "core",
     "defaultStoryId": "core-badge--default",
     "description": "Small status label with variant styles.",
+    "descriptions": {
+      "en": "Small status label with variant styles."
+    },
     "name": "badge",
     "stories": [
       {
@@ -453,6 +519,9 @@
     "category": "core",
     "defaultStoryId": "core-banner--default",
     "description": "Full-width announcement bar with variants, dismissal, and an optional action slot.",
+    "descriptions": {
+      "en": "Full-width announcement bar with variants, dismissal, and an optional action slot."
+    },
     "name": "banner",
     "stories": [
       {
@@ -494,6 +563,9 @@
     "category": "content",
     "defaultStoryId": "exampleblogpost--default",
     "description": "Card layout for displaying blog post previews.",
+    "descriptions": {
+      "en": "Card layout for displaying blog post previews."
+    },
     "name": "blog-card",
     "stories": [
       {
@@ -507,6 +579,9 @@
     "category": "utility",
     "defaultStoryId": "utility-borderbeam--default",
     "description": "Animated accent beam that travels around the border of a highlighted surface.",
+    "descriptions": {
+      "en": "Animated accent beam that travels around the border of a highlighted surface."
+    },
     "name": "border-beam",
     "stories": [
       {
@@ -524,6 +599,9 @@
     "category": "data",
     "defaultStoryId": "canvas-bottomactivitystrip--default",
     "description": "Slim horizontally-scrolling row of recent canvas events for low-noise live activity.",
+    "descriptions": {
+      "en": "Slim horizontally-scrolling row of recent canvas events for low-noise live activity."
+    },
     "name": "bottom-activity-strip",
     "stories": [
       {
@@ -549,6 +627,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-breadcrumb--default",
     "description": "Navigation breadcrumb trail showing the current page hierarchy.",
+    "descriptions": {
+      "en": "Navigation breadcrumb trail showing the current page hierarchy."
+    },
     "name": "breadcrumb",
     "stories": [
       {
@@ -562,6 +643,9 @@
     "category": "core",
     "defaultStoryId": "core-button--default",
     "description": "Interactive button with multiple variants and sizes.",
+    "descriptions": {
+      "en": "Interactive button with multiple variants and sizes."
+    },
     "name": "button",
     "stories": [
       {
@@ -607,6 +691,9 @@
     "category": "form",
     "defaultStoryId": "form-calendar--default",
     "description": "Date picker calendar for selecting dates.",
+    "descriptions": {
+      "en": "Date picker calendar for selecting dates."
+    },
     "name": "calendar",
     "stories": [
       {
@@ -620,6 +707,9 @@
     "category": "content",
     "defaultStoryId": "content-callout--default",
     "description": "Highlighted content block with variant styles for info, warning, danger, and more.",
+    "descriptions": {
+      "en": "Highlighted content block with variant styles for info, warning, danger, and more."
+    },
     "name": "callout",
     "stories": [
       {
@@ -633,6 +723,9 @@
     "category": "data",
     "defaultStoryId": "data-candlestickchart--default",
     "description": "OHLC financial chart for session-by-session price action.",
+    "descriptions": {
+      "en": "OHLC financial chart for session-by-session price action."
+    },
     "name": "candlestick-chart",
     "stories": [
       {
@@ -650,6 +743,9 @@
     "category": "utility",
     "defaultStoryId": "layout-canvasshell--default",
     "description": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions.",
+    "descriptions": {
+      "en": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions."
+    },
     "name": "canvas-shell",
     "stories": [
       {
@@ -663,6 +759,9 @@
     "category": "utility",
     "defaultStoryId": "layout-canvasview--default",
     "description": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support.",
+    "descriptions": {
+      "en": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support."
+    },
     "name": "canvas-view",
     "stories": [
       {
@@ -676,6 +775,9 @@
     "category": "content",
     "defaultStoryId": "content-card--default",
     "description": "Container with header, content, and footer sections.",
+    "descriptions": {
+      "en": "Container with header, content, and footer sections."
+    },
     "name": "card",
     "stories": [
       {
@@ -689,6 +791,9 @@
     "category": "content",
     "defaultStoryId": "content-carousel--default",
     "description": "Scrollable content carousel with navigation controls.",
+    "descriptions": {
+      "en": "Scrollable content carousel with navigation controls."
+    },
     "name": "carousel",
     "stories": [
       {
@@ -702,6 +807,9 @@
     "category": "form",
     "defaultStoryId": "form-categoryfilter--default",
     "description": "Filterable category selection for content lists.",
+    "descriptions": {
+      "en": "Filterable category selection for content lists."
+    },
     "name": "category-filter",
     "stories": [
       {
@@ -715,6 +823,9 @@
     "category": "core",
     "defaultStoryId": "core-checkbox--default",
     "description": "Toggle control for boolean input.",
+    "descriptions": {
+      "en": "Toggle control for boolean input."
+    },
     "name": "checkbox",
     "stories": [
       {
@@ -728,6 +839,9 @@
     "category": "learning",
     "defaultStoryId": "learning-checklist--default",
     "description": "Interactive checklist with progress tracking and toggleable items.",
+    "descriptions": {
+      "en": "Interactive checklist with progress tracking and toggleable items."
+    },
     "name": "checklist",
     "stories": [
       {
@@ -741,6 +855,9 @@
     "category": "data-display",
     "defaultStoryId": "maps-choroplethmap--default",
     "description": "Standalone SVG choropleth — region polygons shaded by data value with tooltip, legend, and accessible data-table fallback.",
+    "descriptions": {
+      "en": "Standalone SVG choropleth — region polygons shaded by data value with tooltip, legend, and accessible data-table fallback."
+    },
     "name": "choropleth-map",
     "stories": [
       {
@@ -766,6 +883,9 @@
     "category": "data-display",
     "defaultStoryId": "thespacerace--default",
     "description": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip.",
+    "descriptions": {
+      "en": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip."
+    },
     "name": "chronological-timeline",
     "stories": [
       {
@@ -791,6 +911,9 @@
     "category": "educational",
     "defaultStoryId": "educational-civilizationcard--default",
     "description": "Civilization overview with hero band, BCE/CE era timeline, key stats, achievements, and notable leaders.",
+    "descriptions": {
+      "en": "Civilization overview with hero band, BCE/CE era timeline, key stats, achievements, and notable leaders."
+    },
     "name": "civilization-card",
     "stories": [
       {
@@ -820,6 +943,9 @@
     "category": "content",
     "defaultStoryId": "content-codeblock--default",
     "description": "Syntax-highlighted code display with copy support.",
+    "descriptions": {
+      "en": "Syntax-highlighted code display with copy support."
+    },
     "name": "code-block",
     "stories": [
       {
@@ -833,6 +959,9 @@
     "category": "content",
     "defaultStoryId": "content-codeplayground--default",
     "description": "Interactive code editor with live preview.",
+    "descriptions": {
+      "en": "Interactive code editor with live preview."
+    },
     "name": "code-playground",
     "stories": [
       {
@@ -846,6 +975,9 @@
     "category": "content",
     "defaultStoryId": "content-collapsible--default",
     "description": "Expandable and collapsible content section.",
+    "descriptions": {
+      "en": "Expandable and collapsible content section."
+    },
     "name": "collapsible",
     "stories": [
       {
@@ -859,6 +991,9 @@
     "category": "form",
     "defaultStoryId": "form-combobox--default",
     "description": "Searchable select input for choosing from a list of options.",
+    "descriptions": {
+      "en": "Searchable select input for choosing from a list of options."
+    },
     "name": "combobox",
     "stories": [
       {
@@ -876,6 +1011,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-command--default",
     "description": "Command palette with search, groups, and keyboard navigation.",
+    "descriptions": {
+      "en": "Command palette with search, groups, and keyboard navigation."
+    },
     "name": "command",
     "stories": [
       {
@@ -889,6 +1027,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-commentpin--default",
     "description": "Anchored discussion pin rendered at canvas coordinates with author + unread badge.",
+    "descriptions": {
+      "en": "Anchored discussion pin rendered at canvas coordinates with author + unread badge."
+    },
     "name": "comment-pin",
     "stories": [
       {
@@ -914,6 +1055,9 @@
     "category": "data",
     "defaultStoryId": "exampletitle--default",
     "description": "Side-by-side comparison layout for content or features.",
+    "descriptions": {
+      "en": "Side-by-side comparison layout for content or features."
+    },
     "name": "comparison",
     "stories": [
       {
@@ -927,6 +1071,9 @@
     "category": "learning",
     "defaultStoryId": "congratulations--default",
     "description": "Dialog displayed upon completing a task or workflow.",
+    "descriptions": {
+      "en": "Dialog displayed upon completing a task or workflow."
+    },
     "name": "completion-dialog",
     "stories": [
       {
@@ -940,6 +1087,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-connectoredge--default",
     "description": "Curved edge between canvas objects with optional inline label state.",
+    "descriptions": {
+      "en": "Curved edge between canvas objects with optional inline label state."
+    },
     "name": "connector-edge",
     "stories": [
       {
@@ -953,6 +1103,9 @@
     "category": "content",
     "defaultStoryId": "introduction--default",
     "description": "Introductory section for content pages with title and description.",
+    "descriptions": {
+      "en": "Introductory section for content pages with title and description."
+    },
     "name": "content-intro",
     "stories": [
       {
@@ -966,6 +1119,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-contextlens--default",
     "description": "Vignette overlay that dims the canvas outside a circular focus region.",
+    "descriptions": {
+      "en": "Vignette overlay that dims the canvas outside a circular focus region."
+    },
     "name": "context-lens",
     "stories": [
       {
@@ -991,6 +1147,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-contextmenu--default",
     "description": "Right-click context menu with items and submenus.",
+    "descriptions": {
+      "en": "Right-click context menu with items and submenus."
+    },
     "name": "context-menu",
     "stories": [
       {
@@ -1004,6 +1163,9 @@
     "category": "core",
     "defaultStoryId": "core-copybutton--default",
     "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
+    "descriptions": {
+      "en": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook."
+    },
     "name": "copy-button",
     "stories": [
       {
@@ -1029,6 +1191,9 @@
     "category": "data",
     "defaultStoryId": "slatimer--default",
     "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
+    "descriptions": {
+      "en": "Countdown and SLA timer for deadlines, escalations, and response windows."
+    },
     "name": "countdown-timer",
     "stories": [
       {
@@ -1046,6 +1211,9 @@
     "category": "content",
     "defaultStoryId": "accountbilling-creditbadge--default",
     "description": "Balance status pill for credits, wallet states, and billing health.",
+    "descriptions": {
+      "en": "Balance status pill for credits, wallet states, and billing health."
+    },
     "name": "credit-badge",
     "stories": [
       {
@@ -1063,6 +1231,9 @@
     "category": "data",
     "defaultStoryId": "data-datalist--default",
     "description": "Semantic key-value metadata layout for displaying labels with values.",
+    "descriptions": {
+      "en": "Semantic key-value metadata layout for displaying labels with values."
+    },
     "name": "data-list",
     "stories": [
       {
@@ -1080,6 +1251,9 @@
     "category": "data",
     "defaultStoryId": "data-datatable--default",
     "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
+    "descriptions": {
+      "en": "Enhanced data table with sorting, filtering, selection, and pagination controls."
+    },
     "name": "data-table",
     "stories": [
       {
@@ -1093,6 +1267,9 @@
     "category": "form",
     "defaultStoryId": "form-datepicker--default",
     "description": "Single-date picker built with the shared calendar and popover primitives.",
+    "descriptions": {
+      "en": "Single-date picker built with the shared calendar and popover primitives."
+    },
     "name": "date-picker",
     "stories": [
       {
@@ -1110,6 +1287,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-dialog--default",
     "description": "Modal dialog overlay for focused content and actions.",
+    "descriptions": {
+      "en": "Modal dialog overlay for focused content and actions."
+    },
     "name": "dialog",
     "stories": [
       {
@@ -1123,6 +1303,9 @@
     "category": "content",
     "defaultStoryId": "whythinclientsareback--default",
     "description": "Newer/older navigator: links to the previous and next item in an ordered series.",
+    "descriptions": {
+      "en": "Newer/older navigator: links to the previous and next item in an ordered series."
+    },
     "name": "document-sibling-nav",
     "stories": [
       {
@@ -1156,6 +1339,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-drawer--default",
     "description": "Slide-out panel anchored to the screen edge.",
+    "descriptions": {
+      "en": "Slide-out panel anchored to the screen edge."
+    },
     "name": "drawer",
     "stories": [
       {
@@ -1169,6 +1355,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-dropdownmenu--default",
     "description": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus.",
+    "descriptions": {
+      "en": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus."
+    },
     "name": "dropdown-menu",
     "stories": [
       {
@@ -1182,6 +1371,9 @@
     "category": "overlay",
     "defaultStoryId": "canvas-edgelabel--default",
     "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
+    "descriptions": {
+      "en": "Inline edge label for relationship semantics such as streams, handoffs, or policies."
+    },
     "name": "edge-label",
     "stories": [
       {
@@ -1195,6 +1387,9 @@
     "category": "core",
     "defaultStoryId": "noresultsfound--default",
     "description": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes.",
+    "descriptions": {
+      "en": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes."
+    },
     "name": "empty-state",
     "stories": [
       {
@@ -1220,6 +1415,9 @@
     "category": "educational",
     "defaultStoryId": "educational-eracomparison--default",
     "description": "Side-by-side comparison of historical eras with domain rows, color-themed columns, highlights, and figure chips.",
+    "descriptions": {
+      "en": "Side-by-side comparison of historical eras with domain rows, color-themed columns, highlights, and figure chips."
+    },
     "name": "era-comparison",
     "stories": [
       {
@@ -1241,6 +1439,9 @@
     "category": "learning",
     "defaultStoryId": "reverseastring--default",
     "description": "Interactive exercise block for learning content.",
+    "descriptions": {
+      "en": "Interactive exercise block for learning content."
+    },
     "name": "exercise",
     "stories": [
       {
@@ -1254,6 +1455,9 @@
     "category": "content",
     "defaultStoryId": "content-faq--default",
     "description": "Frequently asked questions section with expandable answers.",
+    "descriptions": {
+      "en": "Frequently asked questions section with expandable answers."
+    },
     "name": "faq",
     "stories": [
       {
@@ -1267,6 +1471,9 @@
     "category": "form",
     "defaultStoryId": "form-fileupload--default",
     "description": "Dropzone-style file picker with previews for selected files.",
+    "descriptions": {
+      "en": "Dropzone-style file picker with previews for selected files."
+    },
     "name": "file-upload",
     "stories": [
       {
@@ -1280,6 +1487,9 @@
     "category": "form",
     "defaultStoryId": "form-filterbar--default",
     "description": "Horizontal bar with filter controls for content lists.",
+    "descriptions": {
+      "en": "Horizontal bar with filter controls for content lists."
+    },
     "name": "filter-bar",
     "stories": [
       {
@@ -1293,6 +1503,9 @@
     "category": "learning",
     "defaultStoryId": "partsofspeech--default",
     "description": "Study card for active recall with prompt and answer states.",
+    "descriptions": {
+      "en": "Study card for active recall with prompt and answer states."
+    },
     "name": "flashcard",
     "stories": [
       {
@@ -1306,6 +1519,9 @@
     "category": "utility",
     "defaultStoryId": "utility-floatingactionbutton--default",
     "description": "Fixed-position action button for primary actions.",
+    "descriptions": {
+      "en": "Fixed-position action button for primary actions."
+    },
     "name": "floating-action-button",
     "stories": [
       {
@@ -1319,6 +1535,9 @@
     "category": "data-display",
     "defaultStoryId": "canvas-floatingtoolbar--default",
     "description": "Compact action bar that floats above a selection — primary / ghost / destructive variants.",
+    "descriptions": {
+      "en": "Compact action bar that floats above a selection — primary / ghost / destructive variants."
+    },
     "name": "floating-toolbar",
     "stories": [
       {
@@ -1340,6 +1559,9 @@
     "category": "data",
     "defaultStoryId": "data-flowdiagram--default",
     "description": "Interactive flow diagram with nodes, edges, and controls.",
+    "descriptions": {
+      "en": "Interactive flow diagram with nodes, edges, and controls."
+    },
     "name": "flow-diagram",
     "stories": [
       {
@@ -1353,6 +1575,9 @@
     "category": "data-display",
     "defaultStoryId": "canvas-followmode--default",
     "description": "Follow-mode chrome — outlines a region with a participant's color and surfaces a stop-following chip.",
+    "descriptions": {
+      "en": "Follow-mode chrome — outlines a region with a participant's color and surfaces a stop-following chip."
+    },
     "name": "follow-mode",
     "stories": [
       {
@@ -1374,6 +1599,9 @@
     "category": "form",
     "defaultStoryId": "core-form--default",
     "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
+    "descriptions": {
+      "en": "Validation wrapper for composing labels, descriptions, controls, and messages."
+    },
     "name": "form",
     "stories": [
       {
@@ -1391,6 +1619,9 @@
     "category": "data",
     "defaultStoryId": "designsystem--default",
     "description": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales.",
+    "descriptions": {
+      "en": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales."
+    },
     "name": "gantt-chart",
     "stories": [
       {
@@ -1416,6 +1647,9 @@
     "category": "data-display",
     "defaultStoryId": "educational-geographyquizmap--default",
     "description": "Interactive identify-mode map quiz — click the correct region per prompt with visual feedback, score, and results panel.",
+    "descriptions": {
+      "en": "Interactive identify-mode map quiz — click the correct region per prompt with visual feedback, score, and results panel."
+    },
     "name": "geography-quiz-map",
     "stories": [
       {
@@ -1437,6 +1671,9 @@
     "category": "data-display",
     "defaultStoryId": "maps-globe3d--default",
     "description": "Standalone SVG pseudo-3D globe — orthographic projection with auto-rotation, drag interaction, lat/lng markers, and great-circle arcs.",
+    "descriptions": {
+      "en": "Standalone SVG pseudo-3D globe — orthographic projection with auto-rotation, drag interaction, lat/lng markers, and great-circle arcs."
+    },
     "name": "globe-3d",
     "stories": [
       {
@@ -1458,6 +1695,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-grouphull--default",
     "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
+    "descriptions": {
+      "en": "Durable boundary wrapper for related runtime objects sharing context or ownership."
+    },
     "name": "group-hull",
     "stories": [
       {
@@ -1471,6 +1711,9 @@
     "category": "data-display",
     "defaultStoryId": "canvas-handoffbeacon--default",
     "description": "Attention-routing beacon with pulsing ring and optional source / message card for live canvases.",
+    "descriptions": {
+      "en": "Attention-routing beacon with pulsing ring and optional source / message card for live canvases."
+    },
     "name": "handoff-beacon",
     "stories": [
       {
@@ -1496,6 +1739,9 @@
     "category": "data-display",
     "defaultStoryId": "maps-heatmapoverlay--default",
     "description": "Standalone SVG geographic heat map — radial-gradient blobs with configurable radius, blur, gradient, and opacity.",
+    "descriptions": {
+      "en": "Standalone SVG geographic heat map — radial-gradient blobs with configurable radius, blur, gradient, and opacity."
+    },
     "name": "heat-map-overlay",
     "stories": [
       {
@@ -1525,6 +1771,9 @@
     "category": "data",
     "defaultStoryId": "canvas-heatoverlay--default",
     "description": "Heatmap-style overlay drawing soft radial blobs for canvas activity samples.",
+    "descriptions": {
+      "en": "Heatmap-style overlay drawing soft radial blobs for canvas activity samples."
+    },
     "name": "heat-overlay",
     "stories": [
       {
@@ -1550,6 +1799,9 @@
     "category": "data-display",
     "defaultStoryId": "firstolympics--default",
     "description": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers.",
+    "descriptions": {
+      "en": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers."
+    },
     "name": "historic-timeline",
     "stories": [
       {
@@ -1575,6 +1827,9 @@
     "category": "educational",
     "defaultStoryId": "polymath--default",
     "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
+    "descriptions": {
+      "en": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section."
+    },
     "name": "historical-figure-card",
     "stories": [
       {
@@ -1604,6 +1859,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-horizontalscrollrow--default",
     "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
+    "descriptions": {
+      "en": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar."
+    },
     "name": "horizontal-scroll-row",
     "stories": [
       {
@@ -1617,6 +1875,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-hovercard--default",
     "description": "Card that appears on hover for previewing content.",
+    "descriptions": {
+      "en": "Card that appears on hover for previewing content."
+    },
     "name": "hover-card",
     "stories": [
       {
@@ -1630,6 +1891,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-infiniteplane--dot",
     "description": "Tiled pannable backdrop for the canvas with dot or grid pattern that drifts with the viewport.",
+    "descriptions": {
+      "en": "Tiled pannable backdrop for the canvas with dot or grid pattern that drifts with the viewport."
+    },
     "name": "infinite-plane",
     "stories": [
       {
@@ -1655,6 +1919,9 @@
     "category": "form",
     "defaultStoryId": "form-inlineinput--default",
     "description": "Inline text input with keyboard commit and cancel support.",
+    "descriptions": {
+      "en": "Inline text input with keyboard commit and cancel support."
+    },
     "name": "inline-input",
     "stories": [
       {
@@ -1668,6 +1935,9 @@
     "category": "core",
     "defaultStoryId": "core-input--default",
     "description": "Text input field for forms.",
+    "descriptions": {
+      "en": "Text input field for forms."
+    },
     "name": "input",
     "stories": [
       {
@@ -1681,6 +1951,9 @@
     "category": "form",
     "defaultStoryId": "form-inputotp--default",
     "description": "One-time password input with segmented fields.",
+    "descriptions": {
+      "en": "One-time password input with segmented fields."
+    },
     "name": "input-otp",
     "stories": [
       {
@@ -1694,6 +1967,9 @@
     "category": "data-display",
     "defaultStoryId": "v10--default",
     "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
+    "descriptions": {
+      "en": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events."
+    },
     "name": "interactive-timeline",
     "stories": [
       {
@@ -1719,6 +1995,9 @@
     "category": "navigation",
     "defaultStoryId": "canvas-jarvisdock--default",
     "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
+    "descriptions": {
+      "en": "Floating bottom dock with quick-action buttons + a command-palette trigger."
+    },
     "name": "jarvis-dock",
     "stories": [
       {
@@ -1744,6 +2023,9 @@
     "category": "core",
     "defaultStoryId": "core-kbd--default",
     "description": "Keyboard key indicator with platform-aware modifier expansion via the shortcut prop.",
+    "descriptions": {
+      "en": "Keyboard key indicator with platform-aware modifier expansion via the shortcut prop."
+    },
     "name": "kbd",
     "stories": [
       {
@@ -1777,6 +2059,9 @@
     "category": "learning",
     "defaultStoryId": "learning-keyconcept--default",
     "description": "Highlighted definition block for key terms and a glossary list.",
+    "descriptions": {
+      "en": "Highlighted definition block for key terms and a glossary list."
+    },
     "name": "key-concept",
     "stories": [
       {
@@ -1790,6 +2075,9 @@
     "category": "learning",
     "defaultStoryId": "learning-keyboardshortcutshelp--default",
     "description": "Displays available keyboard shortcuts to the user.",
+    "descriptions": {
+      "en": "Displays available keyboard shortcuts to the user."
+    },
     "name": "keyboard-shortcuts-help",
     "stories": [
       {
@@ -1803,6 +2091,9 @@
     "category": "educational",
     "defaultStoryId": "checkyourunderstanding--default",
     "description": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary.",
+    "descriptions": {
+      "en": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary."
+    },
     "name": "knowledge-check",
     "stories": [
       {
@@ -1824,6 +2115,9 @@
     "category": "utility",
     "defaultStoryId": "utility-langprovider--default",
     "description": "Context provider for language and internationalization.",
+    "descriptions": {
+      "en": "Context provider for language and internationalization."
+    },
     "name": "lang-provider",
     "stories": [
       {
@@ -1837,6 +2131,9 @@
     "category": "learning",
     "defaultStoryId": "learning-learningobjectives--default",
     "description": "Lists learning goals for educational content.",
+    "descriptions": {
+      "en": "Lists learning goals for educational content."
+    },
     "name": "learning-objectives",
     "stories": [
       {
@@ -1850,6 +2147,9 @@
     "category": "navigation",
     "defaultStoryId": "layout-leftrail--default",
     "description": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls.",
+    "descriptions": {
+      "en": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls."
+    },
     "name": "left-rail",
     "stories": [
       {
@@ -1871,6 +2171,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-livecursor--default",
     "description": "Remote user's cursor rendered at canvas coordinates with name + status chip.",
+    "descriptions": {
+      "en": "Remote user's cursor rendered at canvas coordinates with name + status chip."
+    },
     "name": "live-cursor",
     "stories": [
       {
@@ -1896,6 +2199,9 @@
     "category": "data",
     "defaultStoryId": "latencybreachongateway--default",
     "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
+    "descriptions": {
+      "en": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time."
+    },
     "name": "live-feed",
     "stories": [
       {
@@ -1913,6 +2219,9 @@
     "category": "data-display",
     "defaultStoryId": "maps-map2d--default",
     "description": "Lightweight 2D map primitive — SVG canvas with equirectangular projection, markers, popups, GeoJSON polygon layers, zoom controls, and an optional backdrop image.",
+    "descriptions": {
+      "en": "Lightweight 2D map primitive — SVG canvas with equirectangular projection, markers, popups, GeoJSON polygon layers, zoom controls, and an optional backdrop image."
+    },
     "name": "map-2d",
     "stories": [
       {
@@ -1938,6 +2247,9 @@
     "category": "data-display",
     "defaultStoryId": "educational-maptimeline--default",
     "description": "Standalone SVG map + time slider — era polygons and year-pinned events appear as the user scrubs the timeline.",
+    "descriptions": {
+      "en": "Standalone SVG map + time slider — era polygons and year-pinned events appear as the user scrubs the timeline."
+    },
     "name": "map-timeline",
     "stories": [
       {
@@ -1959,6 +2271,9 @@
     "category": "data",
     "defaultStoryId": "data-markettreemap--default",
     "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
+    "descriptions": {
+      "en": "Sector-style market heatmap using weighted tiles and signed performance colors."
+    },
     "name": "market-treemap",
     "stories": [
       {
@@ -1972,6 +2287,9 @@
     "category": "utility",
     "defaultStoryId": "utility-marquee--default",
     "description": "Continuously scrolling content lane for badges, logos, and status chips.",
+    "descriptions": {
+      "en": "Continuously scrolling content lane for badges, logos, and status chips."
+    },
     "name": "marquee",
     "stories": [
       {
@@ -2001,6 +2319,9 @@
     "category": "content",
     "defaultStoryId": "content-mdxcontent--default",
     "description": "Renders MDX content with component mapping.",
+    "descriptions": {
+      "en": "Renders MDX content with component mapping."
+    },
     "name": "mdx-content",
     "stories": [
       {
@@ -2014,6 +2335,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-menubar--default",
     "description": "Horizontal menu bar with dropdown menus.",
+    "descriptions": {
+      "en": "Horizontal menu bar with dropdown menus."
+    },
     "name": "menubar",
     "stories": [
       {
@@ -2027,6 +2351,9 @@
     "category": "data",
     "defaultStoryId": "research2025--default",
     "description": "Compact stack of related metrics pinned to a canvas object's corner.",
+    "descriptions": {
+      "en": "Compact stack of related metrics pinned to a canvas object's corner."
+    },
     "name": "metric-cluster",
     "stories": [
       {
@@ -2052,6 +2379,9 @@
     "category": "data",
     "defaultStoryId": "data-metricgauge--default",
     "description": "Real-time arc and dial display for monitored percentages and utilization.",
+    "descriptions": {
+      "en": "Real-time arc and dial display for monitored percentages and utilization."
+    },
     "name": "metric-gauge",
     "stories": [
       {
@@ -2069,6 +2399,9 @@
     "category": "data",
     "defaultStoryId": "panels-minimappanel--default",
     "description": "Viewport overview panel showing canvas bounds, markers, and the current zoom window.",
+    "descriptions": {
+      "en": "Viewport overview panel showing canvas bounds, markers, and the current zoom window."
+    },
     "name": "mini-map-panel",
     "stories": [
       {
@@ -2082,6 +2415,9 @@
     "category": "ai",
     "defaultStoryId": "ai-modelcomparison--default",
     "description": "Side-by-side comparison of AI model responses with optional blind mode, metadata stats, and a vote bar.",
+    "descriptions": {
+      "en": "Side-by-side comparison of AI model responses with optional blind mode, metadata stats, and a vote bar."
+    },
     "name": "model-comparison",
     "stories": [
       {
@@ -2107,6 +2443,9 @@
     "category": "form",
     "defaultStoryId": "form-modelselector--default",
     "description": "Dropdown selector for choosing AI models.",
+    "descriptions": {
+      "en": "Dropdown selector for choosing AI models."
+    },
     "name": "model-selector",
     "stories": [
       {
@@ -2120,6 +2459,9 @@
     "category": "form",
     "defaultStoryId": "form-multiselect--default",
     "description": "Popover-based multi-selection input with selected-value badges and optional search.",
+    "descriptions": {
+      "en": "Popover-based multi-selection input with selected-value badges and optional search."
+    },
     "name": "multi-select",
     "stories": [
       {
@@ -2141,6 +2483,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-multiselectlasso--default",
     "description": "Selection rectangle overlay for canvas multi-select gestures.",
+    "descriptions": {
+      "en": "Selection rectangle overlay for canvas multi-select gestures."
+    },
     "name": "multi-select-lasso",
     "stories": [
       {
@@ -2166,6 +2511,9 @@
     "category": "navigation",
     "defaultStoryId": "home--default",
     "description": "SaaS-style navigation bar with branding and links.",
+    "descriptions": {
+      "en": "SaaS-style navigation bar with branding and links."
+    },
     "name": "navbar-saas",
     "stories": [
       {
@@ -2179,6 +2527,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-navigationmenu--default",
     "description": "Accessible navigation menu with links and sub-navigation.",
+    "descriptions": {
+      "en": "Accessible navigation menu with links and sub-navigation."
+    },
     "name": "navigation-menu",
     "stories": [
       {
@@ -2192,6 +2543,9 @@
     "category": "form",
     "defaultStoryId": "forms-newslettersignup--default",
     "description": "Email-capture form with idle/sending/sent/error state machine, custom validators, and overridable labels.",
+    "descriptions": {
+      "en": "Email-capture form with idle/sending/sent/error state machine, custom validators, and overridable labels."
+    },
     "name": "newsletter-signup",
     "stories": [
       {
@@ -2221,6 +2575,9 @@
     "category": "form",
     "defaultStoryId": "form-numberinput--default",
     "description": "Numeric input with increment and decrement controls.",
+    "descriptions": {
+      "en": "Numeric input with increment and decrement controls."
+    },
     "name": "number-input",
     "stories": [
       {
@@ -2234,6 +2591,9 @@
     "category": "utility",
     "defaultStoryId": "utility-numberticker--default",
     "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
+    "descriptions": {
+      "en": "Animated number transitions for stats, KPIs, and compact numeric callouts."
+    },
     "name": "number-ticker",
     "stories": [
       {
@@ -2251,6 +2611,9 @@
     "category": "content",
     "defaultStoryId": "canvas-objectcard--default",
     "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
+    "descriptions": {
+      "en": "Durable object view for agents, runs, artifacts, and tasks inside the canvas."
+    },
     "name": "object-card",
     "stories": [
       {
@@ -2264,6 +2627,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-objecthandle--default",
     "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
+    "descriptions": {
+      "en": "Drag/reposition affordance for spatial objects that need a calm grab target."
+    },
     "name": "object-handle",
     "stories": [
       {
@@ -2277,6 +2643,9 @@
     "category": "content",
     "defaultStoryId": "claude37128kctx--default",
     "description": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots.",
+    "descriptions": {
+      "en": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots."
+    },
     "name": "object-inspector",
     "stories": [
       {
@@ -2302,6 +2671,9 @@
     "category": "data",
     "defaultStoryId": "data-orderbook--default",
     "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
+    "descriptions": {
+      "en": "Level II bid/ask depth ladder with cumulative size bars and spread readout."
+    },
     "name": "order-book",
     "stories": [
       {
@@ -2319,6 +2691,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-pagination--default",
     "description": "Page navigation controls with previous, next, and page links.",
+    "descriptions": {
+      "en": "Page navigation controls with previous, next, and page links."
+    },
     "name": "pagination",
     "stories": [
       {
@@ -2332,6 +2707,9 @@
     "category": "educational",
     "defaultStoryId": "augustusbecomesemperor--default",
     "description": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history.",
+    "descriptions": {
+      "en": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history."
+    },
     "name": "parallel-timeline",
     "stories": [
       {
@@ -2357,6 +2735,9 @@
     "category": "form",
     "defaultStoryId": "form-passwordinput--default",
     "description": "Password field with a built-in visibility toggle.",
+    "descriptions": {
+      "en": "Password field with a built-in visibility toggle."
+    },
     "name": "password-input",
     "stories": [
       {
@@ -2370,6 +2751,9 @@
     "category": "content",
     "defaultStoryId": "accountbilling-planbadge--default",
     "description": "Subscription tier indicator for pricing, billing, and account summaries.",
+    "descriptions": {
+      "en": "Subscription tier indicator for pricing, billing, and account summaries."
+    },
     "name": "plan-badge",
     "stories": [
       {
@@ -2391,6 +2775,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-playbackghost--default",
     "description": "Translucent overlay marking where a canvas object was at a previous timestamp during playback.",
+    "descriptions": {
+      "en": "Translucent overlay marking where a canvas object was at a previous timestamp during playback."
+    },
     "name": "playback-ghost",
     "stories": [
       {
@@ -2416,6 +2803,9 @@
     "category": "content",
     "defaultStoryId": "canvas-policydeliverypanel--default",
     "description": "Right-dock panel listing policies / guardrails active for the route or run.",
+    "descriptions": {
+      "en": "Right-dock panel listing policies / guardrails active for the route or run."
+    },
     "name": "policy-delivery-panel",
     "stories": [
       {
@@ -2441,6 +2831,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-popover--default",
     "description": "Floating content panel anchored to a trigger element.",
+    "descriptions": {
+      "en": "Floating content panel anchored to a trigger element."
+    },
     "name": "popover",
     "stories": [
       {
@@ -2454,6 +2847,9 @@
     "category": "data",
     "defaultStoryId": "canvas-presencestack--default",
     "description": "Overlapping live-presence avatars with status dots and a sane overflow chip.",
+    "descriptions": {
+      "en": "Overlapping live-presence avatars with status dots and a sane overflow chip."
+    },
     "name": "presence-stack",
     "stories": [
       {
@@ -2479,6 +2875,9 @@
     "category": "data",
     "defaultStoryId": "canvas-presencesyncindicator--live",
     "description": "Compact pill that surfaces live connection + sync health for a collaborative canvas.",
+    "descriptions": {
+      "en": "Compact pill that surfaces live connection + sync health for a collaborative canvas."
+    },
     "name": "presence-sync-indicator",
     "stories": [
       {
@@ -2504,6 +2903,9 @@
     "category": "billing",
     "defaultStoryId": "billing-pricingtable--default",
     "description": "Plan comparison with feature checklist, tier highlighting, CTA, and an optional monthly/annual toggle.",
+    "descriptions": {
+      "en": "Plan comparison with feature checklist, tier highlighting, CTA, and an optional monthly/annual toggle."
+    },
     "name": "pricing-table",
     "stories": [
       {
@@ -2525,6 +2927,9 @@
     "category": "data-display",
     "defaultStoryId": "magnacarta1215--default",
     "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
+    "descriptions": {
+      "en": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer."
+    },
     "name": "primary-source-viewer",
     "stories": [
       {
@@ -2546,6 +2951,9 @@
     "category": "learning",
     "defaultStoryId": "learning-protip--default",
     "description": "Highlighted tip block with variants for tips, best practices, gotchas, and more.",
+    "descriptions": {
+      "en": "Highlighted tip block with variants for tips, best practices, gotchas, and more."
+    },
     "name": "pro-tip",
     "stories": [
       {
@@ -2559,6 +2967,9 @@
     "category": "learning",
     "defaultStoryId": "learning-profilesection--default",
     "description": "User profile display section with avatar and details.",
+    "descriptions": {
+      "en": "User profile display section with avatar and details."
+    },
     "name": "profile-section",
     "stories": [
       {
@@ -2572,6 +2983,9 @@
     "category": "data",
     "defaultStoryId": "data-progressbar--default",
     "description": "Visual progress indicator with labels and completion state.",
+    "descriptions": {
+      "en": "Visual progress indicator with labels and completion state."
+    },
     "name": "progress-bar",
     "stories": [
       {
@@ -2585,6 +2999,9 @@
     "category": "data",
     "defaultStoryId": "data-progresscard--default",
     "description": "Card displaying progress metrics and status.",
+    "descriptions": {
+      "en": "Card displaying progress metrics and status."
+    },
     "name": "progress-card",
     "stories": [
       {
@@ -2598,6 +3015,9 @@
     "category": "ai",
     "defaultStoryId": "codereview--default",
     "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
+    "descriptions": {
+      "en": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect."
+    },
     "name": "prompt-templates",
     "stories": [
       {
@@ -2623,6 +3043,9 @@
     "category": "content",
     "defaultStoryId": "layout--default",
     "description": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse.",
+    "descriptions": {
+      "en": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse."
+    },
     "name": "property-section",
     "stories": [
       {
@@ -2648,6 +3071,9 @@
     "category": "learning",
     "defaultStoryId": "learning-quiz--default",
     "description": "Interactive multiple-choice quiz with hints, explanations, and scoring.",
+    "descriptions": {
+      "en": "Interactive multiple-choice quiz with hints, explanations, and scoring."
+    },
     "name": "quiz",
     "stories": [
       {
@@ -2661,6 +3087,9 @@
     "category": "core",
     "defaultStoryId": "core-radiogroup--default",
     "description": "Group of radio buttons for single-selection input.",
+    "descriptions": {
+      "en": "Group of radio buttons for single-selection input."
+    },
     "name": "radio-group",
     "stories": [
       {
@@ -2674,6 +3103,9 @@
     "category": "learning",
     "defaultStoryId": "learning-rating--default",
     "description": "Inline star rating for lightweight learner feedback.",
+    "descriptions": {
+      "en": "Inline star rating for lightweight learner feedback."
+    },
     "name": "rating",
     "stories": [
       {
@@ -2691,6 +3123,9 @@
     "category": "content",
     "defaultStoryId": "canvas-relationshipinspector--default",
     "description": "Right-dock panel listing inbound + outbound edges of the focused canvas object.",
+    "descriptions": {
+      "en": "Right-dock panel listing inbound + outbound edges of the focused canvas object."
+    },
     "name": "relationship-inspector",
     "stories": [
       {
@@ -2716,6 +3151,9 @@
     "category": "utility",
     "defaultStoryId": "utility-resizable--default",
     "description": "Resizable panel layout with draggable handles.",
+    "descriptions": {
+      "en": "Resizable panel layout with draggable handles."
+    },
     "name": "resizable",
     "stories": [
       {
@@ -2729,6 +3167,9 @@
     "category": "navigation",
     "defaultStoryId": "layout-rightdock--default",
     "description": "Context dock for inspectors, summaries, and secondary canvas panels.",
+    "descriptions": {
+      "en": "Context dock for inspectors, summaries, and secondary canvas panels."
+    },
     "name": "right-dock",
     "stories": [
       {
@@ -2742,6 +3183,9 @@
     "category": "content",
     "defaultStoryId": "accountbilling-rolebadge--default",
     "description": "Account role indicator for owners, admins, members, and billing contacts.",
+    "descriptions": {
+      "en": "Account role indicator for owners, admins, members, and billing contacts."
+    },
     "name": "role-badge",
     "stories": [
       {
@@ -2759,6 +3203,9 @@
     "category": "data-display",
     "defaultStoryId": "maps-routemap--default",
     "description": "Standalone SVG map with animated route paths, waypoints, and progress indicator. For trade routes, voyages, migrations, delivery tracking.",
+    "descriptions": {
+      "en": "Standalone SVG map with animated route paths, waypoints, and progress indicator. For trade routes, voyages, migrations, delivery tracking."
+    },
     "name": "route-map",
     "stories": [
       {
@@ -2788,6 +3235,9 @@
     "category": "content",
     "defaultStoryId": "canvas-routingassignmentpanel--default",
     "description": "Right-dock panel listing the agent slots an active route dispatches to.",
+    "descriptions": {
+      "en": "Right-dock panel listing the agent slots an active route dispatches to."
+    },
     "name": "routing-assignment-panel",
     "stories": [
       {
@@ -2813,6 +3263,9 @@
     "category": "data",
     "defaultStoryId": "canvas-runtimeline--default",
     "description": "Multi-lane execution timeline showing run phases over time, with optional cursor.",
+    "descriptions": {
+      "en": "Multi-lane execution timeline showing run phases over time, with optional cursor."
+    },
     "name": "run-timeline",
     "stories": [
       {
@@ -2838,6 +3291,9 @@
     "category": "content",
     "defaultStoryId": "canvas-runtimeoverviewpanel--default",
     "description": "Top-of-dock summary tile grid for runtime health when no canvas object is selected.",
+    "descriptions": {
+      "en": "Top-of-dock summary tile grid for runtime health when no canvas object is selected."
+    },
     "name": "runtime-overview-panel",
     "stories": [
       {
@@ -2863,6 +3319,9 @@
     "category": "form",
     "defaultStoryId": "analytics-scopeselector--default",
     "description": "Multi-level scope picker for nested environments, teams, and targets.",
+    "descriptions": {
+      "en": "Multi-level scope picker for nested environments, teams, and targets."
+    },
     "name": "scope-selector",
     "stories": [
       {
@@ -2880,6 +3339,9 @@
     "category": "utility",
     "defaultStoryId": "utility-scrollarea--default",
     "description": "Custom scrollable area with styled scrollbars.",
+    "descriptions": {
+      "en": "Custom scrollable area with styled scrollbars."
+    },
     "name": "scroll-area",
     "stories": [
       {
@@ -2893,6 +3355,9 @@
     "category": "form",
     "defaultStoryId": "form-searchbar--default",
     "description": "Text search input with icon and clear functionality.",
+    "descriptions": {
+      "en": "Text search input with icon and clear functionality."
+    },
     "name": "search-bar",
     "stories": [
       {
@@ -2906,6 +3371,9 @@
     "category": "learning",
     "defaultStoryId": "exampletitle--default",
     "description": "Full-screen search dialog with keyboard navigation.",
+    "descriptions": {
+      "en": "Full-screen search dialog with keyboard navigation."
+    },
     "name": "search-dialog",
     "stories": [
       {
@@ -2919,6 +3387,9 @@
     "category": "form",
     "defaultStoryId": "form-segmentedcontrol--default",
     "description": "Single-choice segmented selector for switching modes, views, or filters.",
+    "descriptions": {
+      "en": "Single-choice segmented selector for switching modes, views, or filters."
+    },
     "name": "segmented-control",
     "stories": [
       {
@@ -2940,6 +3411,9 @@
     "category": "form",
     "defaultStoryId": "form-select--default",
     "description": "Dropdown select input for choosing from a list of options.",
+    "descriptions": {
+      "en": "Dropdown select input for choosing from a list of options."
+    },
     "name": "select",
     "stories": [
       {
@@ -2953,6 +3427,9 @@
     "category": "data-display",
     "defaultStoryId": "canvas-selectionhalo--default",
     "description": "Local-user selection halo with corner handles + label slot for spatial canvases.",
+    "descriptions": {
+      "en": "Local-user selection halo with corner handles + label slot for spatial canvases."
+    },
     "name": "selection-halo",
     "stories": [
       {
@@ -2974,6 +3451,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-selectionpresence--default",
     "description": "Dashed-border overlay marking what another user has selected on the canvas.",
+    "descriptions": {
+      "en": "Dashed-border overlay marking what another user has selected on the canvas."
+    },
     "name": "selection-presence",
     "stories": [
       {
@@ -2999,6 +3479,9 @@
     "category": "core",
     "defaultStoryId": "core-separator--default",
     "description": "Visual divider between content sections.",
+    "descriptions": {
+      "en": "Visual divider between content sections."
+    },
     "name": "separator",
     "stories": [
       {
@@ -3012,6 +3495,9 @@
     "category": "data",
     "defaultStoryId": "data-severitybadge--default",
     "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
+    "descriptions": {
+      "en": "Operational severity label with tone variants and optional pulse for critical incidents."
+    },
     "name": "severity-badge",
     "stories": [
       {
@@ -3041,6 +3527,9 @@
     "category": "content",
     "defaultStoryId": "content-sharesection--default",
     "description": "Social sharing buttons and link copy section.",
+    "descriptions": {
+      "en": "Social sharing buttons and link copy section."
+    },
     "name": "share-section",
     "stories": [
       {
@@ -3054,6 +3543,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-sheet--default",
     "description": "Slide-over panel from the edge of the screen.",
+    "descriptions": {
+      "en": "Slide-over panel from the edge of the screen."
+    },
     "name": "sheet",
     "stories": [
       {
@@ -3075,6 +3567,9 @@
     "category": "navigation",
     "defaultStoryId": "introduction--default",
     "description": "Collapsible sidebar navigation layout.",
+    "descriptions": {
+      "en": "Collapsible sidebar navigation layout."
+    },
     "name": "sidebar",
     "stories": [
       {
@@ -3088,6 +3583,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-sidebarprovider--default",
     "description": "Context provider for managing sidebar open/close state.",
+    "descriptions": {
+      "en": "Context provider for managing sidebar open/close state."
+    },
     "name": "sidebar-provider",
     "stories": [
       {
@@ -3101,6 +3599,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-sidebartoggle--default",
     "description": "Responsive toggle button for opening and closing the sidebar.",
+    "descriptions": {
+      "en": "Responsive toggle button for opening and closing the sidebar."
+    },
     "name": "sidebar-toggle",
     "stories": [
       {
@@ -3114,6 +3615,9 @@
     "category": "core",
     "defaultStoryId": "core-skeleton--default",
     "description": "Placeholder loading animation for content.",
+    "descriptions": {
+      "en": "Placeholder loading animation for content."
+    },
     "name": "skeleton",
     "stories": [
       {
@@ -3127,6 +3631,9 @@
     "category": "core",
     "defaultStoryId": "core-slider--default",
     "description": "Range slider input for selecting numeric values.",
+    "descriptions": {
+      "en": "Range slider input for selecting numeric values."
+    },
     "name": "slider",
     "stories": [
       {
@@ -3140,6 +3647,9 @@
     "category": "content",
     "defaultStoryId": "introduction--default",
     "description": "Step-through slideshow for presenting content sequentially.",
+    "descriptions": {
+      "en": "Step-through slideshow for presenting content sequentially."
+    },
     "name": "slideshow",
     "stories": [
       {
@@ -3153,6 +3663,9 @@
     "category": "data-display",
     "defaultStoryId": "canvas-snapguides--default",
     "description": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag.",
+    "descriptions": {
+      "en": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag."
+    },
     "name": "snap-guides",
     "stories": [
       {
@@ -3174,6 +3687,9 @@
     "category": "data",
     "defaultStoryId": "data-sparklinegrid--default",
     "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
+    "descriptions": {
+      "en": "KPI grid of labeled value tiles each paired with a compact sparkline trend."
+    },
     "name": "sparkline-grid",
     "stories": [
       {
@@ -3191,6 +3707,9 @@
     "category": "utility",
     "defaultStoryId": "utility-spinner--default",
     "description": "Animated loading spinner indicator.",
+    "descriptions": {
+      "en": "Animated loading spinner indicator."
+    },
     "name": "spinner",
     "stories": [
       {
@@ -3204,6 +3723,9 @@
     "category": "data",
     "defaultStoryId": "data-statcard--default",
     "description": "Headline KPI card for metrics, trends, and supporting context.",
+    "descriptions": {
+      "en": "Headline KPI card for metrics, trends, and supporting context."
+    },
     "name": "stat-card",
     "stories": [
       {
@@ -3221,6 +3743,9 @@
     "category": "utility",
     "defaultStoryId": "canvas-statebadgeoverlay--default",
     "description": "State chip pinned to a canvas object's corner — idle, queued, running, complete, failed, stopped.",
+    "descriptions": {
+      "en": "State chip pinned to a canvas object's corner — idle, queued, running, complete, failed, stopped."
+    },
     "name": "state-badge-overlay",
     "stories": [
       {
@@ -3246,6 +3771,9 @@
     "category": "data",
     "defaultStoryId": "servicehealth--default",
     "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
+    "descriptions": {
+      "en": "Service health grid for surfacing infrastructure state, queue pressure, and incidents."
+    },
     "name": "status-board",
     "stories": [
       {
@@ -3263,6 +3791,9 @@
     "category": "data",
     "defaultStoryId": "data-statusindicator--default",
     "description": "Compact status label with tone, variant, and activity dot options.",
+    "descriptions": {
+      "en": "Compact status label with tone, variant, and activity dot options."
+    },
     "name": "status-indicator",
     "stories": [
       {
@@ -3280,6 +3811,9 @@
     "category": "learning",
     "defaultStoryId": "learning-stepbystep--default",
     "description": "Numbered step guide with optional interactive completion tracking.",
+    "descriptions": {
+      "en": "Numbered step guide with optional interactive completion tracking."
+    },
     "name": "step-by-step",
     "stories": [
       {
@@ -3293,6 +3827,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-stepnavigation--default",
     "description": "Navigation controls for stepping through multi-page content.",
+    "descriptions": {
+      "en": "Navigation controls for stepping through multi-page content."
+    },
     "name": "step-navigation",
     "stories": [
       {
@@ -3306,6 +3843,9 @@
     "category": "learning",
     "defaultStoryId": "introduction--default",
     "description": "Sequenced steps with complete, current, and upcoming states.",
+    "descriptions": {
+      "en": "Sequenced steps with complete, current, and upcoming states."
+    },
     "name": "stepper",
     "stories": [
       {
@@ -3323,6 +3863,9 @@
     "category": "data",
     "defaultStoryId": "canvas-stickymetric--default",
     "description": "Pinned metric pill that sticks to a canvas object's corner.",
+    "descriptions": {
+      "en": "Pinned metric pill that sticks to a canvas object's corner."
+    },
     "name": "sticky-metric",
     "stories": [
       {
@@ -3348,6 +3891,9 @@
     "category": "data-display",
     "defaultStoryId": "educational-storymap--default",
     "description": "Standalone SVG scroll-driven narrative map — IntersectionObserver tracks the active chapter and the map shifts to its center + zoom.",
+    "descriptions": {
+      "en": "Standalone SVG scroll-driven narrative map — IntersectionObserver tracks the active chapter and the map shifts to its center + zoom."
+    },
     "name": "story-map",
     "stories": [
       {
@@ -3369,6 +3915,9 @@
     "category": "content",
     "defaultStoryId": "accountbilling-subscriptioncard--default",
     "description": "Subscription status and management card for plan, renewal, and usage details.",
+    "descriptions": {
+      "en": "Subscription status and management card for plan, renewal, and usage details."
+    },
     "name": "subscription-card",
     "stories": [
       {
@@ -3386,6 +3935,9 @@
     "category": "data",
     "defaultStoryId": "data-table--default",
     "description": "Styled data table with header, body, and footer sections.",
+    "descriptions": {
+      "en": "Styled data table with header, body, and footer sections."
+    },
     "name": "table",
     "stories": [
       {
@@ -3399,6 +3951,9 @@
     "category": "utility",
     "defaultStoryId": "utility-tableofcontents--default",
     "description": "Auto-generated table of contents from page headings.",
+    "descriptions": {
+      "en": "Auto-generated table of contents from page headings."
+    },
     "name": "table-of-contents",
     "stories": [
       {
@@ -3412,6 +3967,9 @@
     "category": "utility",
     "defaultStoryId": "introduction--default",
     "description": "Side panel rendering a table of contents for page navigation.",
+    "descriptions": {
+      "en": "Side panel rendering a table of contents for page navigation."
+    },
     "name": "table-of-contents-panel",
     "stories": [
       {
@@ -3425,6 +3983,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-tabs--default",
     "description": "Tabbed content panels with keyboard-accessible tab triggers.",
+    "descriptions": {
+      "en": "Tabbed content panels with keyboard-accessible tab triggers."
+    },
     "name": "tabs",
     "stories": [
       {
@@ -3438,6 +3999,9 @@
     "category": "form",
     "defaultStoryId": "form-tagsinput--default",
     "description": "Keyboard-friendly tag editor for adding and removing string values.",
+    "descriptions": {
+      "en": "Keyboard-friendly tag editor for adding and removing string values."
+    },
     "name": "tags-input",
     "stories": [
       {
@@ -3459,6 +4023,9 @@
     "category": "content",
     "defaultStoryId": "content-terminal--default",
     "description": "Terminal-style display for command output.",
+    "descriptions": {
+      "en": "Terminal-style display for command output."
+    },
     "name": "terminal",
     "stories": [
       {
@@ -3472,6 +4039,9 @@
     "category": "core",
     "defaultStoryId": "core-textarea--default",
     "description": "Multi-line text input field.",
+    "descriptions": {
+      "en": "Multi-line text input field."
+    },
     "name": "textarea",
     "stories": [
       {
@@ -3485,6 +4055,9 @@
     "category": "utility",
     "defaultStoryId": "utility-themeprovider--default",
     "description": "Context provider for light/dark theme switching.",
+    "descriptions": {
+      "en": "Context provider for light/dark theme switching."
+    },
     "name": "theme-provider",
     "stories": [
       {
@@ -3498,6 +4071,9 @@
     "category": "utility",
     "defaultStoryId": "utility-themetoggle--default",
     "description": "Button to toggle between light and dark themes.",
+    "descriptions": {
+      "en": "Button to toggle between light and dark themes."
+    },
     "name": "theme-toggle",
     "stories": [
       {
@@ -3511,6 +4087,9 @@
     "category": "learning",
     "defaultStoryId": "learning-thinkingblock--default",
     "description": "Collapsible block showing AI thinking/reasoning with streaming support.",
+    "descriptions": {
+      "en": "Collapsible block showing AI thinking/reasoning with streaming support."
+    },
     "name": "thinking-block",
     "stories": [
       {
@@ -3524,6 +4103,9 @@
     "category": "utility",
     "defaultStoryId": "research2025--default",
     "description": "Expanded discussion bubble for an anchored canvas comment thread.",
+    "descriptions": {
+      "en": "Expanded discussion bubble for an anchored canvas comment thread."
+    },
     "name": "thread-bubble",
     "stories": [
       {
@@ -3549,6 +4131,9 @@
     "category": "data",
     "defaultStoryId": "canvas-thresholdring--default",
     "description": "Compact ring gauge expressing how close a value is to a threshold.",
+    "descriptions": {
+      "en": "Compact ring gauge expressing how close a value is to a threshold."
+    },
     "name": "threshold-ring",
     "stories": [
       {
@@ -3574,6 +4159,9 @@
     "category": "data",
     "defaultStoryId": "data-tickertape--default",
     "description": "Marquee-style scrolling symbol tape with price and change badges.",
+    "descriptions": {
+      "en": "Marquee-style scrolling symbol tape with price and change badges."
+    },
     "name": "ticker-tape",
     "stories": [
       {
@@ -3591,6 +4179,9 @@
     "category": "content",
     "defaultStoryId": "content-timeline--default",
     "description": "Vertical or horizontal timeline of sequential events with completed/active/upcoming statuses and connector lines.",
+    "descriptions": {
+      "en": "Vertical or horizontal timeline of sequential events with completed/active/upcoming statuses and connector lines."
+    },
     "name": "timeline",
     "stories": [
       {
@@ -3616,6 +4207,9 @@
     "category": "form",
     "defaultStoryId": "canvas-timelinescrubber--default",
     "description": "Range slider for scrubbing through canvas state playback, with optional milestone ticks.",
+    "descriptions": {
+      "en": "Range slider for scrubbing through canvas state playback, with optional milestone ticks."
+    },
     "name": "timeline-scrubber",
     "stories": [
       {
@@ -3641,6 +4235,9 @@
     "category": "content",
     "defaultStoryId": "content-tldrsection--default",
     "description": "Summary section for quick content overview.",
+    "descriptions": {
+      "en": "Summary section for quick content overview."
+    },
     "name": "tldr-section",
     "stories": [
       {
@@ -3654,6 +4251,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-toast--default",
     "description": "Temporary notification messages with action support.",
+    "descriptions": {
+      "en": "Temporary notification messages with action support."
+    },
     "name": "toast",
     "stories": [
       {
@@ -3675,6 +4275,9 @@
     "category": "core",
     "defaultStoryId": "core-toggle--default",
     "description": "Two-state toggle button.",
+    "descriptions": {
+      "en": "Two-state toggle button."
+    },
     "name": "toggle",
     "stories": [
       {
@@ -3700,6 +4303,9 @@
     "category": "core",
     "defaultStoryId": "core-togglegroup--default",
     "description": "Group of toggle buttons for single or multiple selection.",
+    "descriptions": {
+      "en": "Group of toggle buttons for single or multiple selection."
+    },
     "name": "toggle-group",
     "stories": [
       {
@@ -3713,6 +4319,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-tooltip--default",
     "description": "Informational popup displayed on hover or focus.",
+    "descriptions": {
+      "en": "Informational popup displayed on hover or focus."
+    },
     "name": "tooltip",
     "stories": [
       {
@@ -3726,6 +4335,9 @@
     "category": "navigation",
     "defaultStoryId": "layout-topbar--default",
     "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
+    "descriptions": {
+      "en": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions."
+    },
     "name": "top-bar",
     "stories": [
       {
@@ -3739,6 +4351,9 @@
     "category": "learning",
     "defaultStoryId": "overview--default",
     "description": "Guided onboarding flow for introducing content or interface patterns.",
+    "descriptions": {
+      "en": "Guided onboarding flow for introducing content or interface patterns."
+    },
     "name": "tour",
     "stories": [
       {
@@ -3752,6 +4367,9 @@
     "category": "billing",
     "defaultStoryId": "billing-transactionlist--default",
     "description": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row.",
+    "descriptions": {
+      "en": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row."
+    },
     "name": "transaction-list",
     "stories": [
       {
@@ -3777,6 +4395,9 @@
     "category": "data-display",
     "defaultStoryId": "datadisplay-treeview--default",
     "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
+    "descriptions": {
+      "en": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation."
+    },
     "name": "tree-view",
     "stories": [
       {
@@ -3802,6 +4423,9 @@
     "category": "learning",
     "defaultStoryId": "exampletitle--default",
     "description": "Card for displaying tutorial previews with metadata.",
+    "descriptions": {
+      "en": "Card for displaying tutorial previews with metadata."
+    },
     "name": "tutorial-card",
     "stories": [
       {
@@ -3815,6 +4439,9 @@
     "category": "learning",
     "defaultStoryId": "nextsteps--default",
     "description": "Completion screen displayed when a tutorial is finished.",
+    "descriptions": {
+      "en": "Completion screen displayed when a tutorial is finished."
+    },
     "name": "tutorial-complete",
     "stories": [
       {
@@ -3828,6 +4455,9 @@
     "category": "learning",
     "defaultStoryId": "learning-tutorialfilters--default",
     "description": "Filter controls for browsing tutorials by category or difficulty.",
+    "descriptions": {
+      "en": "Filter controls for browsing tutorials by category or difficulty."
+    },
     "name": "tutorial-filters",
     "stories": [
       {
@@ -3841,6 +4471,9 @@
     "category": "learning",
     "defaultStoryId": "reactfundamentals--default",
     "description": "Introduction section for tutorial pages with overview and prerequisites.",
+    "descriptions": {
+      "en": "Introduction section for tutorial pages with overview and prerequisites."
+    },
     "name": "tutorial-intro-content",
     "stories": [
       {
@@ -3854,6 +4487,9 @@
     "category": "learning",
     "defaultStoryId": "learning-tutorialmdx--default",
     "description": "MDX renderer tailored for tutorial content with custom components.",
+    "descriptions": {
+      "en": "MDX renderer tailored for tutorial content with custom components."
+    },
     "name": "tutorial-mdx",
     "stories": [
       {
@@ -3867,6 +4503,9 @@
     "category": "data",
     "defaultStoryId": "usagebreakdown--default",
     "description": "Ranked resource consumption list with relative share and trend cues.",
+    "descriptions": {
+      "en": "Ranked resource consumption list with relative share and trend cues."
+    },
     "name": "usage-breakdown",
     "stories": [
       {
@@ -3888,6 +4527,9 @@
     "category": "content",
     "defaultStoryId": "tutorialvideo--default",
     "description": "Responsive video embed for YouTube and other providers.",
+    "descriptions": {
+      "en": "Responsive video embed for YouTube and other providers."
+    },
     "name": "video-embed",
     "stories": [
       {
@@ -3901,6 +4543,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-viewswitcher--default",
     "description": "URL param-based toggle between named views with pill/tab styling.",
+    "descriptions": {
+      "en": "URL param-based toggle between named views with pill/tab styling."
+    },
     "name": "view-switcher",
     "stories": [
       {
@@ -3914,6 +4559,9 @@
     "category": "navigation",
     "defaultStoryId": "canvas-viewportbookmarks--default",
     "description": "Saved-view list for the canvas — pinned spatial locations with optional active state.",
+    "descriptions": {
+      "en": "Saved-view list for the canvas — pinned spatial locations with optional active state."
+    },
     "name": "viewport-bookmarks",
     "stories": [
       {
@@ -3939,6 +4587,9 @@
     "category": "content",
     "defaultStoryId": "accountbilling-walletcard--default",
     "description": "Credit balance display card for available, pending, and refresh details.",
+    "descriptions": {
+      "en": "Credit balance display card for available, pending, and refresh details."
+    },
     "name": "wallet-card",
     "stories": [
       {
@@ -3956,6 +4607,9 @@
     "category": "data",
     "defaultStoryId": "data-watchlist--default",
     "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
+    "descriptions": {
+      "en": "Tracked-symbol list with price, change, and advancing/declining summary."
+    },
     "name": "watchlist",
     "stories": [
       {
@@ -3973,6 +4627,9 @@
     "category": "navigation",
     "defaultStoryId": "navigation-workspaceswitcher--default",
     "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
+    "descriptions": {
+      "en": "Segmented workspace picker for switching between canvas views and operational contexts."
+    },
     "name": "workspace-switcher",
     "stories": [
       {
@@ -3986,6 +4643,9 @@
     "category": "navigation",
     "defaultStoryId": "canvas-worldbreadcrumbs--default",
     "description": "Spatial trail showing the canvas's current location in a hierarchy of worlds, groups, and runs.",
+    "descriptions": {
+      "en": "Spatial trail showing the canvas's current location in a hierarchy of worlds, groups, and runs."
+    },
     "name": "world-breadcrumbs",
     "stories": [
       {
@@ -4011,6 +4671,9 @@
     "category": "data",
     "defaultStoryId": "followthesunhandoff--default",
     "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
+    "descriptions": {
+      "en": "Multi-timezone display for follow-the-sun teams and operational handoffs."
+    },
     "name": "world-clock-bar",
     "stories": [
       {
@@ -4028,6 +4691,9 @@
     "category": "overlay",
     "defaultStoryId": "overlay-zoomhud--default",
     "description": "Zoom controls with current percentage, increment buttons, and reset action for canvas views.",
+    "descriptions": {
+      "en": "Zoom controls with current percentage, increment buttons, and reset action for canvas views."
+    },
     "name": "zoom-hud",
     "stories": [
       {

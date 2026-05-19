@@ -1,7 +1,9 @@
 "use client";
 
+import { useId, useState } from "react";
+
+import { useTranslations } from "next-intl";
 import type * as React from "react";
-import { useState } from "react";
 
 const REPO = "vllnt/ui";
 
@@ -40,47 +42,53 @@ function buildIssueUrl({
     .filter(Boolean)
     .join("\n");
 
-  const params = new URLSearchParams({
-    template: "feature_request.yml",
-    title: `[feat] ${name || "new component"}`,
+  const parameters = new URLSearchParams({
     body,
     labels: "enhancement,component",
+    template: "feature_request.yml",
+    title: `[feat] ${name || "new component"}`,
   });
 
-  return `https://github.com/${REPO}/issues/new?${params.toString()}`;
+  return `https://github.com/${REPO}/issues/new?${parameters.toString()}`;
 }
 
 function Field({
-  autoFocus,
   label,
   onChange,
   placeholder,
   required,
   value,
 }: {
-  autoFocus?: boolean;
   label: string;
   onChange: (value: string) => void;
   placeholder?: string;
   required?: boolean;
   value: string;
 }) {
+  const labelId = useId();
+
   return (
-    <label className="block">
-      <span className="text-sm font-medium">
+    <div>
+      <span className="text-sm font-medium" id={labelId}>
         {label}
-        {required ? <span className="ml-1 text-destructive">*</span> : null}
+        {required ? (
+          <span aria-hidden="true" className="ml-1 text-destructive">
+            *
+          </span>
+        ) : null}
       </span>
       <input
-        autoFocus={autoFocus}
+        aria-labelledby={labelId}
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         type="text"
         value={value}
       />
-    </label>
+    </div>
   );
 }
 
@@ -99,32 +107,42 @@ function TextField({
   rows?: number;
   value: string;
 }) {
+  const labelId = useId();
+
   return (
-    <label className="block">
-      <span className="text-sm font-medium">
+    <div>
+      <span className="text-sm font-medium" id={labelId}>
         {label}
-        {required ? <span className="ml-1 text-destructive">*</span> : null}
+        {required ? (
+          <span aria-hidden="true" className="ml-1 text-destructive">
+            *
+          </span>
+        ) : null}
       </span>
       <textarea
+        aria-labelledby={labelId}
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         rows={rows}
         value={value}
       />
-    </label>
+    </div>
   );
 }
 
 export function RequestComponentForm() {
+  const t = useTranslations("forms.requestComponent");
   const [name, setName] = useState("");
   const [problem, setProblem] = useState("");
   const [similar, setSimilar] = useState("");
   const [useCase, setUseCase] = useState("");
   const [reference, setReference] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const url = buildIssueUrl({ name, problem, reference, similar, useCase });
     window.open(url, "_blank", "noopener,noreferrer");
@@ -133,38 +151,37 @@ export function RequestComponentForm() {
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <Field
-        autoFocus
-        label="Component name"
+        label={t("nameLabel")}
         onChange={setName}
-        placeholder="e.g. ToastStack"
+        placeholder={t("namePlaceholder")}
         required
         value={name}
       />
       <TextField
-        label="What problem does it solve?"
+        label={t("problemLabel")}
         onChange={setProblem}
-        placeholder="The user-facing need, not the implementation."
+        placeholder={t("problemPlaceholder")}
         required
         rows={3}
         value={problem}
       />
       <Field
-        label="Similar to (optional)"
+        label={t("similarLabel")}
         onChange={setSimilar}
-        placeholder="shadcn Toast, Radix Toast, etc."
+        placeholder={t("similarPlaceholder")}
         value={similar}
       />
       <TextField
-        label="Use case"
+        label={t("useCaseLabel")}
         onChange={setUseCase}
-        placeholder="The concrete scenario where you'd reach for this."
+        placeholder={t("useCasePlaceholder")}
         rows={3}
         value={useCase}
       />
       <TextField
-        label="References / prior art (optional)"
+        label={t("referenceLabel")}
         onChange={setReference}
-        placeholder="Links, screenshots, design references…"
+        placeholder={t("referencePlaceholder")}
         rows={3}
         value={reference}
       />
@@ -172,11 +189,9 @@ export function RequestComponentForm() {
         className="inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
         type="submit"
       >
-        Open prefilled GitHub issue
+        {t("submit")}
       </button>
-      <p className="text-xs text-muted-foreground">
-        Submitting opens a new GitHub issue tab. Nothing is sent to a server.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("note")}</p>
     </form>
   );
 }

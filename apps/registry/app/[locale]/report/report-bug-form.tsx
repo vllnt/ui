@@ -1,7 +1,9 @@
 "use client";
 
+import { useId, useState } from "react";
+
+import { useTranslations } from "next-intl";
 import type * as React from "react";
-import { useState } from "react";
 
 const REPO = "vllnt/ui";
 
@@ -44,47 +46,53 @@ function buildIssueUrl({
     .filter(Boolean)
     .join("\n");
 
-  const params = new URLSearchParams({
-    template: "bug_report.yml",
-    title: `${titleSlug}${summary || "bug summary"}`,
+  const parameters = new URLSearchParams({
     body,
     labels: component ? `bug,component:${component}` : "bug",
+    template: "bug_report.yml",
+    title: `${titleSlug}${summary || "bug summary"}`,
   });
 
-  return `https://github.com/${REPO}/issues/new?${params.toString()}`;
+  return `https://github.com/${REPO}/issues/new?${parameters.toString()}`;
 }
 
 function Field({
-  autoFocus,
   label,
   onChange,
   placeholder,
   required,
   value,
 }: {
-  autoFocus?: boolean;
   label: string;
   onChange: (value: string) => void;
   placeholder?: string;
   required?: boolean;
   value: string;
 }) {
+  const labelId = useId();
+
   return (
-    <label className="block">
-      <span className="text-sm font-medium">
+    <div>
+      <span className="text-sm font-medium" id={labelId}>
         {label}
-        {required ? <span className="ml-1 text-destructive">*</span> : null}
+        {required ? (
+          <span aria-hidden="true" className="ml-1 text-destructive">
+            *
+          </span>
+        ) : null}
       </span>
       <input
-        autoFocus={autoFocus}
+        aria-labelledby={labelId}
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         type="text"
         value={value}
       />
-    </label>
+    </div>
   );
 }
 
@@ -103,21 +111,30 @@ function TextField({
   rows?: number;
   value: string;
 }) {
+  const labelId = useId();
+
   return (
-    <label className="block">
-      <span className="text-sm font-medium">
+    <div>
+      <span className="text-sm font-medium" id={labelId}>
         {label}
-        {required ? <span className="ml-1 text-destructive">*</span> : null}
+        {required ? (
+          <span aria-hidden="true" className="ml-1 text-destructive">
+            *
+          </span>
+        ) : null}
       </span>
       <textarea
+        aria-labelledby={labelId}
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         rows={rows}
         value={value}
       />
-    </label>
+    </div>
   );
 }
 
@@ -126,13 +143,14 @@ export function ReportBugForm({
 }: {
   initialComponent?: string;
 }) {
+  const t = useTranslations("forms.report");
   const [component, setComponent] = useState(initialComponent);
   const [summary, setSummary] = useState("");
   const [repro, setRepro] = useState("");
   const [expected, setExpected] = useState("");
   const [actual, setActual] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const url = buildIssueUrl({ actual, component, expected, repro, summary });
     window.open(url, "_blank", "noopener,noreferrer");
@@ -141,38 +159,37 @@ export function ReportBugForm({
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <Field
-        label="Component (optional)"
+        label={t("componentLabel")}
         onChange={setComponent}
-        placeholder="e.g. button, combobox, ai-chat-input"
+        placeholder={t("componentPlaceholder")}
         value={component}
       />
       <Field
-        autoFocus
-        label="One-line summary"
+        label={t("summaryLabel")}
         onChange={setSummary}
-        placeholder="Concise headline for the issue title."
+        placeholder={t("summaryPlaceholder")}
         required
         value={summary}
       />
       <TextField
-        label="Reproduction"
+        label={t("reproLabel")}
         onChange={setRepro}
-        placeholder="Minimal repo / sandbox link / runnable snippet."
+        placeholder={t("reproPlaceholder")}
         required
         rows={4}
         value={repro}
       />
       <TextField
-        label="Expected behavior"
+        label={t("expectedLabel")}
         onChange={setExpected}
-        placeholder="What you expected to happen."
+        placeholder={t("expectedPlaceholder")}
         required
         value={expected}
       />
       <TextField
-        label="Actual behavior"
+        label={t("actualLabel")}
         onChange={setActual}
-        placeholder="What actually happened. Include console output or screenshots if useful."
+        placeholder={t("actualPlaceholder")}
         required
         rows={4}
         value={actual}
@@ -181,11 +198,9 @@ export function ReportBugForm({
         className="inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
         type="submit"
       >
-        Open prefilled GitHub issue
+        {t("submit")}
       </button>
-      <p className="text-xs text-muted-foreground">
-        Submitting opens a new GitHub issue tab. Nothing is sent to a server.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("note")}</p>
     </form>
   );
 }

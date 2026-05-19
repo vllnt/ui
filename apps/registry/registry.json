@@ -20,7 +20,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Collapsible content sections supporting single or multiple open items."
+      }
     },
     {
       "name": "activity-heatmap",
@@ -39,7 +42,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Contribution-style grid for visualizing operational activity over time."
+      }
     },
     {
       "name": "activity-log",
@@ -58,7 +64,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Paginated activity feed for audit history and analytics changes."
+      }
     },
     {
       "name": "agent-activity",
@@ -78,7 +87,10 @@
       ],
       "category": "ai",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress."
+      }
     },
     {
       "name": "ai-artifact",
@@ -98,7 +110,10 @@
       ],
       "category": "ai",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips."
+      }
     },
     {
       "name": "ai-chat-input",
@@ -118,7 +133,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states."
+      }
     },
     {
       "name": "ai-message-bubble",
@@ -138,7 +156,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces."
+      }
     },
     {
       "name": "ai-sidebar",
@@ -158,7 +179,10 @@
       ],
       "category": "ai",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger."
+      }
     },
     {
       "name": "ai-source-citation",
@@ -178,7 +202,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact source reference card for AI answers with a title, origin label, and optional excerpt."
+      }
     },
     {
       "name": "ai-streaming-text",
@@ -197,7 +224,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Readable text block for partial assistant output with an optional live cursor while tokens stream in."
+      }
     },
     {
       "name": "ai-tool-call-display",
@@ -218,7 +248,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Structured card for tool invocation traces, statuses, serialized input, and returned output."
+      }
     },
     {
       "name": "alert",
@@ -237,7 +270,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Displays an alert message to the user."
+      }
     },
     {
       "name": "alert-dialog",
@@ -256,7 +292,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Modal dialog for confirming destructive or important actions."
+      }
     },
     {
       "name": "alert-pulse",
@@ -275,7 +314,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Pulsing ring overlay for alerting canvas objects, with severity tones."
+      }
     },
     {
       "name": "anchor-port",
@@ -294,7 +336,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Port marker for object inputs, outputs, and bidirectional links on the canvas."
+      }
     },
     {
       "name": "animated-text",
@@ -313,7 +358,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Staggered text reveal for headings, pull quotes, and short supporting copy."
+      }
     },
     {
       "name": "annotation",
@@ -332,7 +380,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Inline highlight with an attached contextual note."
+      }
     },
     {
       "name": "area-chart",
@@ -366,7 +417,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Constrains content to a specified aspect ratio."
+      }
     },
     {
       "name": "auto-reload",
@@ -385,7 +439,10 @@
       ],
       "category": "billing",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Toggle + collapsible threshold/amount form for automatic credit reloading with locale-aware currency."
+      }
     },
     {
       "name": "avatar",
@@ -404,7 +461,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Displays a user avatar image with fallback initials."
+      }
     },
     {
       "name": "avatar-group",
@@ -423,7 +483,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Overlapping avatar stack for participants, assignees, and collaborative contexts."
+      }
     },
     {
       "name": "badge",
@@ -442,7 +505,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Small status label with variant styles."
+      }
     },
     {
       "name": "banner",
@@ -464,7 +530,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Full-width announcement bar with variants, dismissal, and an optional action slot."
+      }
     },
     {
       "name": "bar-chart",
@@ -498,7 +567,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Card layout for displaying blog post previews."
+      }
     },
     {
       "name": "border-beam",
@@ -517,7 +589,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Animated accent beam that travels around the border of a highlighted surface."
+      }
     },
     {
       "name": "bottom-activity-strip",
@@ -536,7 +611,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Slim horizontally-scrolling row of recent canvas events for low-noise live activity."
+      }
     },
     {
       "name": "breadcrumb",
@@ -555,7 +633,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Navigation breadcrumb trail showing the current page hierarchy."
+      }
     },
     {
       "name": "button",
@@ -637,7 +718,10 @@
           "required": false,
           "description": "All native <button> attributes are forwarded."
         }
-      ]
+      ],
+      "descriptions": {
+        "en": "Interactive button with multiple variants and sizes."
+      }
     },
     {
       "name": "calendar",
@@ -656,7 +740,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Date picker calendar for selecting dates."
+      }
     },
     {
       "name": "callout",
@@ -675,7 +762,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Highlighted content block with variant styles for info, warning, danger, and more."
+      }
     },
     {
       "name": "candlestick-chart",
@@ -694,7 +784,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "OHLC financial chart for session-by-session price action."
+      }
     },
     {
       "name": "canvas-shell",
@@ -713,7 +806,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions."
+      }
     },
     {
       "name": "canvas-view",
@@ -732,7 +828,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support."
+      }
     },
     {
       "name": "card",
@@ -751,7 +850,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Container with header, content, and footer sections."
+      }
     },
     {
       "name": "carousel",
@@ -770,7 +872,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Scrollable content carousel with navigation controls."
+      }
     },
     {
       "name": "category-filter",
@@ -789,7 +894,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Filterable category selection for content lists."
+      }
     },
     {
       "name": "checkbox",
@@ -808,7 +916,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Toggle control for boolean input."
+      }
     },
     {
       "name": "checklist",
@@ -827,7 +938,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive checklist with progress tracking and toggleable items."
+      }
     },
     {
       "name": "choropleth-map",
@@ -846,7 +960,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Standalone SVG choropleth — region polygons shaded by data value with tooltip, legend, and accessible data-table fallback."
+      }
     },
     {
       "name": "chronological-timeline",
@@ -865,7 +982,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip."
+      }
     },
     {
       "name": "civilization-card",
@@ -885,7 +1005,10 @@
       ],
       "category": "educational",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Civilization overview with hero band, BCE/CE era timeline, key stats, achievements, and notable leaders."
+      }
     },
     {
       "name": "code-block",
@@ -904,7 +1027,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Syntax-highlighted code display with copy support."
+      }
     },
     {
       "name": "code-playground",
@@ -923,7 +1049,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive code editor with live preview."
+      }
     },
     {
       "name": "collapsible",
@@ -942,7 +1071,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Expandable and collapsible content section."
+      }
     },
     {
       "name": "combobox",
@@ -1066,7 +1198,10 @@
           "required": false,
           "description": "Class applied to the inner Command element."
         }
-      ]
+      ],
+      "descriptions": {
+        "en": "Searchable select input for choosing from a list of options."
+      }
     },
     {
       "name": "command",
@@ -1085,7 +1220,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Command palette with search, groups, and keyboard navigation."
+      }
     },
     {
       "name": "comment-pin",
@@ -1104,7 +1242,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Anchored discussion pin rendered at canvas coordinates with author + unread badge."
+      }
     },
     {
       "name": "comparison",
@@ -1123,7 +1264,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Side-by-side comparison layout for content or features."
+      }
     },
     {
       "name": "completion-dialog",
@@ -1142,7 +1286,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Dialog displayed upon completing a task or workflow."
+      }
     },
     {
       "name": "connector-edge",
@@ -1161,7 +1308,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Curved edge between canvas objects with optional inline label state."
+      }
     },
     {
       "name": "content-intro",
@@ -1180,7 +1330,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Introductory section for content pages with title and description."
+      }
     },
     {
       "name": "context-lens",
@@ -1199,7 +1352,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Vignette overlay that dims the canvas outside a circular focus region."
+      }
     },
     {
       "name": "context-menu",
@@ -1218,7 +1374,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Right-click context menu with items and submenus."
+      }
     },
     {
       "name": "copy-button",
@@ -1238,7 +1397,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook."
+      }
     },
     {
       "name": "countdown-timer",
@@ -1257,7 +1419,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Countdown and SLA timer for deadlines, escalations, and response windows."
+      }
     },
     {
       "name": "credit-badge",
@@ -1276,7 +1441,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Balance status pill for credits, wallet states, and billing health."
+      }
     },
     {
       "name": "data-list",
@@ -1295,7 +1463,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Semantic key-value metadata layout for displaying labels with values."
+      }
     },
     {
       "name": "data-table",
@@ -1315,7 +1486,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Enhanced data table with sorting, filtering, selection, and pagination controls."
+      }
     },
     {
       "name": "date-picker",
@@ -1334,7 +1508,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Single-date picker built with the shared calendar and popover primitives."
+      }
     },
     {
       "name": "dialog",
@@ -1373,6 +1550,9 @@
         ],
         "focusManagement": "auto",
         "notes": "Built on Radix Dialog: focus trap + restore on close + scroll lock are automatic."
+      },
+      "descriptions": {
+        "en": "Modal dialog overlay for focused content and actions."
       }
     },
     {
@@ -1393,7 +1573,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Newer/older navigator: links to the previous and next item in an ordered series."
+      }
     },
     {
       "name": "drawer",
@@ -1412,7 +1595,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Slide-out panel anchored to the screen edge."
+      }
     },
     {
       "name": "dropdown-menu",
@@ -1431,7 +1617,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus."
+      }
     },
     {
       "name": "edge-label",
@@ -1450,7 +1639,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Inline edge label for relationship semantics such as streams, handoffs, or policies."
+      }
     },
     {
       "name": "empty-state",
@@ -1478,7 +1670,10 @@
           "code": "import { Button, EmptyState } from \"@vllnt/ui\";\nimport { Inbox } from \"lucide-react\";\n\nexport function Demo() {\n  return (\n    <EmptyState\n      icon={<Inbox className=\"h-8 w-8\" />}\n      title=\"No tickets yet\"\n      description=\"Create your first support ticket to start tracking conversations.\"\n      action={<Button>Create ticket</Button>}\n    />\n  );\n}\n",
           "framework": "react"
         }
-      ]
+      ],
+      "descriptions": {
+        "en": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes."
+      }
     },
     {
       "name": "era-comparison",
@@ -1497,7 +1692,10 @@
       ],
       "category": "educational",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Side-by-side comparison of historical eras with domain rows, color-themed columns, highlights, and figure chips."
+      }
     },
     {
       "name": "exercise",
@@ -1516,7 +1714,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive exercise block for learning content."
+      }
     },
     {
       "name": "faq",
@@ -1535,7 +1736,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Frequently asked questions section with expandable answers."
+      }
     },
     {
       "name": "file-upload",
@@ -1554,7 +1758,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Dropzone-style file picker with previews for selected files."
+      }
     },
     {
       "name": "filter-bar",
@@ -1573,7 +1780,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Horizontal bar with filter controls for content lists."
+      }
     },
     {
       "name": "flashcard",
@@ -1592,7 +1802,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Study card for active recall with prompt and answer states."
+      }
     },
     {
       "name": "floating-action-button",
@@ -1611,7 +1824,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Fixed-position action button for primary actions."
+      }
     },
     {
       "name": "floating-toolbar",
@@ -1630,7 +1846,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact action bar that floats above a selection — primary / ghost / destructive variants."
+      }
     },
     {
       "name": "flow-diagram",
@@ -1649,7 +1868,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive flow diagram with nodes, edges, and controls."
+      }
     },
     {
       "name": "follow-mode",
@@ -1668,7 +1890,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Follow-mode chrome — outlines a region with a participant's color and surfaces a stop-following chip."
+      }
     },
     {
       "name": "form",
@@ -1687,7 +1912,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Validation wrapper for composing labels, descriptions, controls, and messages."
+      }
     },
     {
       "name": "gantt-chart",
@@ -1706,7 +1934,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales."
+      }
     },
     {
       "name": "geography-quiz-map",
@@ -1725,7 +1956,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive identify-mode map quiz — click the correct region per prompt with visual feedback, score, and results panel."
+      }
     },
     {
       "name": "globe-3d",
@@ -1744,7 +1978,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Standalone SVG pseudo-3D globe — orthographic projection with auto-rotation, drag interaction, lat/lng markers, and great-circle arcs."
+      }
     },
     {
       "name": "group-hull",
@@ -1763,7 +2000,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Durable boundary wrapper for related runtime objects sharing context or ownership."
+      }
     },
     {
       "name": "handoff-beacon",
@@ -1782,7 +2022,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Attention-routing beacon with pulsing ring and optional source / message card for live canvases."
+      }
     },
     {
       "name": "heat-map-overlay",
@@ -1801,7 +2044,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Standalone SVG geographic heat map — radial-gradient blobs with configurable radius, blur, gradient, and opacity."
+      }
     },
     {
       "name": "heat-overlay",
@@ -1820,7 +2066,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Heatmap-style overlay drawing soft radial blobs for canvas activity samples."
+      }
     },
     {
       "name": "historic-timeline",
@@ -1839,7 +2088,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers."
+      }
     },
     {
       "name": "historical-figure-card",
@@ -1859,7 +2111,10 @@
       ],
       "category": "educational",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section."
+      }
     },
     {
       "name": "horizontal-scroll-row",
@@ -1879,7 +2134,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar."
+      }
     },
     {
       "name": "hover-card",
@@ -1898,7 +2156,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Card that appears on hover for previewing content."
+      }
     },
     {
       "name": "infinite-plane",
@@ -1917,7 +2178,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Tiled pannable backdrop for the canvas with dot or grid pattern that drifts with the viewport."
+      }
     },
     {
       "name": "inline-input",
@@ -1936,7 +2200,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Inline text input with keyboard commit and cancel support."
+      }
     },
     {
       "name": "input",
@@ -1955,7 +2222,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Text input field for forms."
+      }
     },
     {
       "name": "input-otp",
@@ -1974,7 +2244,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "One-time password input with segmented fields."
+      }
     },
     {
       "name": "interactive-timeline",
@@ -1993,7 +2266,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events."
+      }
     },
     {
       "name": "jarvis-dock",
@@ -2012,7 +2288,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Floating bottom dock with quick-action buttons + a command-palette trigger."
+      }
     },
     {
       "name": "kbd",
@@ -2032,7 +2311,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Keyboard key indicator with platform-aware modifier expansion via the shortcut prop."
+      }
     },
     {
       "name": "key-concept",
@@ -2051,7 +2333,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Highlighted definition block for key terms and a glossary list."
+      }
     },
     {
       "name": "keyboard-shortcuts-help",
@@ -2070,7 +2355,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Displays available keyboard shortcuts to the user."
+      }
     },
     {
       "name": "knowledge-check",
@@ -2090,7 +2378,10 @@
       ],
       "category": "educational",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary."
+      }
     },
     {
       "name": "lang-provider",
@@ -2109,7 +2400,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Context provider for language and internationalization."
+      }
     },
     {
       "name": "learning-objectives",
@@ -2128,7 +2422,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Lists learning goals for educational content."
+      }
     },
     {
       "name": "left-rail",
@@ -2147,7 +2444,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls."
+      }
     },
     {
       "name": "line-chart",
@@ -2181,7 +2481,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Remote user's cursor rendered at canvas coordinates with name + status chip."
+      }
     },
     {
       "name": "live-feed",
@@ -2200,7 +2503,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time."
+      }
     },
     {
       "name": "map-2d",
@@ -2219,7 +2525,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Lightweight 2D map primitive — SVG canvas with equirectangular projection, markers, popups, GeoJSON polygon layers, zoom controls, and an optional backdrop image."
+      }
     },
     {
       "name": "map-timeline",
@@ -2238,7 +2547,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Standalone SVG map + time slider — era polygons and year-pinned events appear as the user scrubs the timeline."
+      }
     },
     {
       "name": "market-treemap",
@@ -2257,7 +2569,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Sector-style market heatmap using weighted tiles and signed performance colors."
+      }
     },
     {
       "name": "marquee",
@@ -2276,7 +2591,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Continuously scrolling content lane for badges, logos, and status chips."
+      }
     },
     {
       "name": "mdx-content",
@@ -2295,7 +2613,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Renders MDX content with component mapping."
+      }
     },
     {
       "name": "menubar",
@@ -2314,7 +2635,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Horizontal menu bar with dropdown menus."
+      }
     },
     {
       "name": "metric-cluster",
@@ -2333,7 +2657,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact stack of related metrics pinned to a canvas object's corner."
+      }
     },
     {
       "name": "metric-gauge",
@@ -2352,7 +2679,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Real-time arc and dial display for monitored percentages and utilization."
+      }
     },
     {
       "name": "mini-map-panel",
@@ -2371,7 +2701,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Viewport overview panel showing canvas bounds, markers, and the current zoom window."
+      }
     },
     {
       "name": "model-comparison",
@@ -2391,7 +2724,10 @@
       ],
       "category": "ai",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Side-by-side comparison of AI model responses with optional blind mode, metadata stats, and a vote bar."
+      }
     },
     {
       "name": "model-selector",
@@ -2410,7 +2746,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Dropdown selector for choosing AI models."
+      }
     },
     {
       "name": "multi-select",
@@ -2429,7 +2768,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Popover-based multi-selection input with selected-value badges and optional search."
+      }
     },
     {
       "name": "multi-select-lasso",
@@ -2448,7 +2790,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Selection rectangle overlay for canvas multi-select gestures."
+      }
     },
     {
       "name": "navbar-saas",
@@ -2467,7 +2812,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "SaaS-style navigation bar with branding and links."
+      }
     },
     {
       "name": "navigation-menu",
@@ -2486,7 +2834,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Accessible navigation menu with links and sub-navigation."
+      }
     },
     {
       "name": "newsletter-signup",
@@ -2506,7 +2857,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Email-capture form with idle/sending/sent/error state machine, custom validators, and overridable labels."
+      }
     },
     {
       "name": "number-input",
@@ -2525,7 +2879,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Numeric input with increment and decrement controls."
+      }
     },
     {
       "name": "number-ticker",
@@ -2544,7 +2901,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Animated number transitions for stats, KPIs, and compact numeric callouts."
+      }
     },
     {
       "name": "object-card",
@@ -2563,7 +2923,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Durable object view for agents, runs, artifacts, and tasks inside the canvas."
+      }
     },
     {
       "name": "object-handle",
@@ -2582,7 +2945,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Drag/reposition affordance for spatial objects that need a calm grab target."
+      }
     },
     {
       "name": "object-inspector",
@@ -2601,7 +2967,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots."
+      }
     },
     {
       "name": "order-book",
@@ -2620,7 +2989,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Level II bid/ask depth ladder with cumulative size bars and spread readout."
+      }
     },
     {
       "name": "pagination",
@@ -2639,7 +3011,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Page navigation controls with previous, next, and page links."
+      }
     },
     {
       "name": "parallel-timeline",
@@ -2658,7 +3033,10 @@
       ],
       "category": "educational",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history."
+      }
     },
     {
       "name": "password-input",
@@ -2677,7 +3055,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Password field with a built-in visibility toggle."
+      }
     },
     {
       "name": "plan-badge",
@@ -2696,7 +3077,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Subscription tier indicator for pricing, billing, and account summaries."
+      }
     },
     {
       "name": "playback-ghost",
@@ -2715,7 +3099,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Translucent overlay marking where a canvas object was at a previous timestamp during playback."
+      }
     },
     {
       "name": "policy-delivery-panel",
@@ -2734,7 +3121,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Right-dock panel listing policies / guardrails active for the route or run."
+      }
     },
     {
       "name": "popover",
@@ -2753,7 +3143,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Floating content panel anchored to a trigger element."
+      }
     },
     {
       "name": "presence-stack",
@@ -2772,7 +3165,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Overlapping live-presence avatars with status dots and a sane overflow chip."
+      }
     },
     {
       "name": "presence-sync-indicator",
@@ -2791,7 +3187,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact pill that surfaces live connection + sync health for a collaborative canvas."
+      }
     },
     {
       "name": "pricing-table",
@@ -2811,7 +3210,10 @@
       ],
       "category": "billing",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Plan comparison with feature checklist, tier highlighting, CTA, and an optional monthly/annual toggle."
+      }
     },
     {
       "name": "primary-source-viewer",
@@ -2830,7 +3232,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer."
+      }
     },
     {
       "name": "pro-tip",
@@ -2849,7 +3254,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Highlighted tip block with variants for tips, best practices, gotchas, and more."
+      }
     },
     {
       "name": "profile-section",
@@ -2868,7 +3276,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "User profile display section with avatar and details."
+      }
     },
     {
       "name": "progress-bar",
@@ -2887,7 +3298,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Visual progress indicator with labels and completion state."
+      }
     },
     {
       "name": "progress-card",
@@ -2906,7 +3320,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Card displaying progress metrics and status."
+      }
     },
     {
       "name": "prompt-templates",
@@ -2926,7 +3343,10 @@
       ],
       "category": "ai",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect."
+      }
     },
     {
       "name": "property-section",
@@ -2945,7 +3365,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse."
+      }
     },
     {
       "name": "quiz",
@@ -2964,7 +3387,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Interactive multiple-choice quiz with hints, explanations, and scoring."
+      }
     },
     {
       "name": "radio-group",
@@ -2983,7 +3409,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Group of radio buttons for single-selection input."
+      }
     },
     {
       "name": "rating",
@@ -3002,7 +3431,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Inline star rating for lightweight learner feedback."
+      }
     },
     {
       "name": "relationship-inspector",
@@ -3021,7 +3453,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Right-dock panel listing inbound + outbound edges of the focused canvas object."
+      }
     },
     {
       "name": "resizable",
@@ -3040,7 +3475,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Resizable panel layout with draggable handles."
+      }
     },
     {
       "name": "right-dock",
@@ -3059,7 +3497,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Context dock for inspectors, summaries, and secondary canvas panels."
+      }
     },
     {
       "name": "role-badge",
@@ -3078,7 +3519,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Account role indicator for owners, admins, members, and billing contacts."
+      }
     },
     {
       "name": "route-map",
@@ -3097,7 +3541,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Standalone SVG map with animated route paths, waypoints, and progress indicator. For trade routes, voyages, migrations, delivery tracking."
+      }
     },
     {
       "name": "routing-assignment-panel",
@@ -3116,7 +3563,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Right-dock panel listing the agent slots an active route dispatches to."
+      }
     },
     {
       "name": "run-timeline",
@@ -3135,7 +3585,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Multi-lane execution timeline showing run phases over time, with optional cursor."
+      }
     },
     {
       "name": "runtime-overview-panel",
@@ -3154,7 +3607,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Top-of-dock summary tile grid for runtime health when no canvas object is selected."
+      }
     },
     {
       "name": "scope-selector",
@@ -3173,7 +3629,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Multi-level scope picker for nested environments, teams, and targets."
+      }
     },
     {
       "name": "scroll-area",
@@ -3192,7 +3651,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Custom scrollable area with styled scrollbars."
+      }
     },
     {
       "name": "search-bar",
@@ -3211,7 +3673,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Text search input with icon and clear functionality."
+      }
     },
     {
       "name": "search-dialog",
@@ -3230,7 +3695,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Full-screen search dialog with keyboard navigation."
+      }
     },
     {
       "name": "segmented-control",
@@ -3249,7 +3717,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Single-choice segmented selector for switching modes, views, or filters."
+      }
     },
     {
       "name": "select",
@@ -3268,7 +3739,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Dropdown select input for choosing from a list of options."
+      }
     },
     {
       "name": "selection-halo",
@@ -3287,7 +3761,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Local-user selection halo with corner handles + label slot for spatial canvases."
+      }
     },
     {
       "name": "selection-presence",
@@ -3306,7 +3783,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Dashed-border overlay marking what another user has selected on the canvas."
+      }
     },
     {
       "name": "separator",
@@ -3325,7 +3805,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Visual divider between content sections."
+      }
     },
     {
       "name": "severity-badge",
@@ -3344,7 +3827,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Operational severity label with tone variants and optional pulse for critical incidents."
+      }
     },
     {
       "name": "share-section",
@@ -3363,7 +3849,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Social sharing buttons and link copy section."
+      }
     },
     {
       "name": "sheet",
@@ -3382,7 +3871,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Slide-over panel from the edge of the screen."
+      }
     },
     {
       "name": "sidebar",
@@ -3401,7 +3893,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Collapsible sidebar navigation layout."
+      }
     },
     {
       "name": "sidebar-provider",
@@ -3420,7 +3915,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Context provider for managing sidebar open/close state."
+      }
     },
     {
       "name": "sidebar-toggle",
@@ -3440,7 +3938,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Responsive toggle button for opening and closing the sidebar."
+      }
     },
     {
       "name": "skeleton",
@@ -3459,7 +3960,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Placeholder loading animation for content."
+      }
     },
     {
       "name": "slider",
@@ -3478,7 +3982,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Range slider input for selecting numeric values."
+      }
     },
     {
       "name": "slideshow",
@@ -3497,7 +4004,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Step-through slideshow for presenting content sequentially."
+      }
     },
     {
       "name": "snap-guides",
@@ -3516,7 +4026,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag."
+      }
     },
     {
       "name": "sparkline-grid",
@@ -3535,7 +4048,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "KPI grid of labeled value tiles each paired with a compact sparkline trend."
+      }
     },
     {
       "name": "spinner",
@@ -3554,7 +4070,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Animated loading spinner indicator."
+      }
     },
     {
       "name": "stat-card",
@@ -3573,7 +4092,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Headline KPI card for metrics, trends, and supporting context."
+      }
     },
     {
       "name": "state-badge-overlay",
@@ -3592,7 +4114,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "State chip pinned to a canvas object's corner — idle, queued, running, complete, failed, stopped."
+      }
     },
     {
       "name": "status-board",
@@ -3611,7 +4136,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Service health grid for surfacing infrastructure state, queue pressure, and incidents."
+      }
     },
     {
       "name": "status-indicator",
@@ -3630,7 +4158,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact status label with tone, variant, and activity dot options."
+      }
     },
     {
       "name": "step-by-step",
@@ -3649,7 +4180,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Numbered step guide with optional interactive completion tracking."
+      }
     },
     {
       "name": "step-navigation",
@@ -3668,7 +4202,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Navigation controls for stepping through multi-page content."
+      }
     },
     {
       "name": "stepper",
@@ -3687,7 +4224,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Sequenced steps with complete, current, and upcoming states."
+      }
     },
     {
       "name": "sticky-metric",
@@ -3706,7 +4246,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Pinned metric pill that sticks to a canvas object's corner."
+      }
     },
     {
       "name": "story-map",
@@ -3725,7 +4268,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Standalone SVG scroll-driven narrative map — IntersectionObserver tracks the active chapter and the map shifts to its center + zoom."
+      }
     },
     {
       "name": "subscription-card",
@@ -3744,7 +4290,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Subscription status and management card for plan, renewal, and usage details."
+      }
     },
     {
       "name": "table",
@@ -3763,7 +4312,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Styled data table with header, body, and footer sections."
+      }
     },
     {
       "name": "table-of-contents",
@@ -3782,7 +4334,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Auto-generated table of contents from page headings."
+      }
     },
     {
       "name": "table-of-contents-panel",
@@ -3801,7 +4356,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Side panel rendering a table of contents for page navigation."
+      }
     },
     {
       "name": "tabs",
@@ -3820,7 +4378,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Tabbed content panels with keyboard-accessible tab triggers."
+      }
     },
     {
       "name": "tags-input",
@@ -3839,7 +4400,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Keyboard-friendly tag editor for adding and removing string values."
+      }
     },
     {
       "name": "terminal",
@@ -3858,7 +4422,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Terminal-style display for command output."
+      }
     },
     {
       "name": "textarea",
@@ -3877,7 +4444,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Multi-line text input field."
+      }
     },
     {
       "name": "theme-provider",
@@ -3896,7 +4466,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Context provider for light/dark theme switching."
+      }
     },
     {
       "name": "theme-toggle",
@@ -3915,7 +4488,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Button to toggle between light and dark themes."
+      }
     },
     {
       "name": "thinking-block",
@@ -3935,7 +4511,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Collapsible block showing AI thinking/reasoning with streaming support."
+      }
     },
     {
       "name": "thread-bubble",
@@ -3954,7 +4533,10 @@
       ],
       "category": "utility",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Expanded discussion bubble for an anchored canvas comment thread."
+      }
     },
     {
       "name": "threshold-ring",
@@ -3973,7 +4555,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Compact ring gauge expressing how close a value is to a threshold."
+      }
     },
     {
       "name": "ticker-tape",
@@ -3992,7 +4577,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Marquee-style scrolling symbol tape with price and change badges."
+      }
     },
     {
       "name": "timeline",
@@ -4012,7 +4600,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Vertical or horizontal timeline of sequential events with completed/active/upcoming statuses and connector lines."
+      }
     },
     {
       "name": "timeline-scrubber",
@@ -4031,7 +4622,10 @@
       ],
       "category": "form",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Range slider for scrubbing through canvas state playback, with optional milestone ticks."
+      }
     },
     {
       "name": "tldr-section",
@@ -4050,7 +4644,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Summary section for quick content overview."
+      }
     },
     {
       "name": "toast",
@@ -4069,7 +4666,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Temporary notification messages with action support."
+      }
     },
     {
       "name": "toggle",
@@ -4088,7 +4688,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Two-state toggle button."
+      }
     },
     {
       "name": "toggle-group",
@@ -4107,7 +4710,10 @@
       ],
       "category": "core",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Group of toggle buttons for single or multiple selection."
+      }
     },
     {
       "name": "tooltip",
@@ -4126,7 +4732,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Informational popup displayed on hover or focus."
+      }
     },
     {
       "name": "top-bar",
@@ -4145,7 +4754,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions."
+      }
     },
     {
       "name": "tour",
@@ -4164,7 +4776,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Guided onboarding flow for introducing content or interface patterns."
+      }
     },
     {
       "name": "transaction-list",
@@ -4183,7 +4798,10 @@
       ],
       "category": "billing",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row."
+      }
     },
     {
       "name": "tree-view",
@@ -4202,7 +4820,10 @@
       ],
       "category": "data-display",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation."
+      }
     },
     {
       "name": "tutorial-card",
@@ -4221,7 +4842,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Card for displaying tutorial previews with metadata."
+      }
     },
     {
       "name": "tutorial-complete",
@@ -4240,7 +4864,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Completion screen displayed when a tutorial is finished."
+      }
     },
     {
       "name": "tutorial-filters",
@@ -4259,7 +4886,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Filter controls for browsing tutorials by category or difficulty."
+      }
     },
     {
       "name": "tutorial-intro-content",
@@ -4278,7 +4908,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Introduction section for tutorial pages with overview and prerequisites."
+      }
     },
     {
       "name": "tutorial-mdx",
@@ -4297,7 +4930,10 @@
       ],
       "category": "learning",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "MDX renderer tailored for tutorial content with custom components."
+      }
     },
     {
       "name": "usage-breakdown",
@@ -4316,7 +4952,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Ranked resource consumption list with relative share and trend cues."
+      }
     },
     {
       "name": "video-embed",
@@ -4335,7 +4974,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Responsive video embed for YouTube and other providers."
+      }
     },
     {
       "name": "view-switcher",
@@ -4354,7 +4996,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "URL param-based toggle between named views with pill/tab styling."
+      }
     },
     {
       "name": "viewport-bookmarks",
@@ -4373,7 +5018,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Saved-view list for the canvas — pinned spatial locations with optional active state."
+      }
     },
     {
       "name": "wallet-card",
@@ -4392,7 +5040,10 @@
       ],
       "category": "content",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Credit balance display card for available, pending, and refresh details."
+      }
     },
     {
       "name": "watchlist",
@@ -4411,7 +5062,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Tracked-symbol list with price, change, and advancing/declining summary."
+      }
     },
     {
       "name": "workspace-switcher",
@@ -4430,7 +5084,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Segmented workspace picker for switching between canvas views and operational contexts."
+      }
     },
     {
       "name": "world-breadcrumbs",
@@ -4449,7 +5106,10 @@
       ],
       "category": "navigation",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Spatial trail showing the canvas's current location in a hierarchy of worlds, groups, and runs."
+      }
     },
     {
       "name": "world-clock-bar",
@@ -4468,7 +5128,10 @@
       ],
       "category": "data",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Multi-timezone display for follow-the-sun teams and operational handoffs."
+      }
     },
     {
       "name": "zoom-hud",
@@ -4488,7 +5151,10 @@
       ],
       "category": "overlay",
       "version": "0.2.1",
-      "stability": "stable"
+      "stability": "stable",
+      "descriptions": {
+        "en": "Zoom controls with current percentage, increment buttons, and reset action for canvas views."
+      }
     }
   ],
   "version": "0.2.1",

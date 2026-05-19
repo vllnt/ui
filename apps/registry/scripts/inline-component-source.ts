@@ -100,6 +100,7 @@ type RegistryItem = {
   category?: string;
   dependencies?: string[];
   description?: string;
+  descriptions?: Partial<Record<string, string>>;
   examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
@@ -229,6 +230,13 @@ for (const item of registry.items) {
 
   // No transitive registry pulls — @vllnt/ui covers all internals
   item.registryDependencies = [];
+
+  // Keep the canonical English description while making room for additive
+  // locale overlays such as /r/<name>.fr.json.
+  item.descriptions = {
+    ...(item.descriptions ?? {}),
+    en: item.description ?? item.descriptions?.en ?? "",
+  };
 
   // Ensure @vllnt/ui is in npm dependencies (preserve any other declared deps)
   const otherDeps = (item.dependencies ?? []).filter(
