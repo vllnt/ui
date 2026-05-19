@@ -2,7 +2,7 @@ import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 
 import { getPageContent } from "@/lib/content";
-import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
+import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -36,15 +36,12 @@ export default async function DocumentationPage() {
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{
-          __html: jsonLdScript(
-            breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Docs", url: `${SITE_URL}/docs` },
-            ]),
-          ),
-        }}
-        type="application/ld+json"
+        {...jsonLdScriptAttributes(
+          breadcrumbLd([
+            { name: "Home", url: SITE_URL },
+            { name: "Docs", url: `${SITE_URL}/docs` },
+          ]),
+        )}
       />
       <Sidebar sections={getSidebarSections()} />
       <main className="flex-1 overflow-y-auto bg-background">

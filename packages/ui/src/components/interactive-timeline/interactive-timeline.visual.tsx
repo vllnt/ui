@@ -54,14 +54,17 @@ const EVENTS = [
   },
 ];
 
+const TIMELINE_START = new Date("2024-01-01");
+const TIMELINE_END = new Date("2025-01-01");
+
 test.describe("InteractiveTimeline Visual", () => {
   test("default", async ({ mount }) => {
     const component = await mount(
       <InteractiveTimeline
         categories={CATEGORIES}
-        endDate={new Date("2025-01-01")}
+        endDate={TIMELINE_END}
         events={EVENTS}
-        startDate={new Date("2024-01-01")}
+        startDate={TIMELINE_START}
         tracks={TRACKS}
       >
         <InteractiveTimelineToolbar>
