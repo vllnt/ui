@@ -159,6 +159,10 @@ export function StorybookEmbed({
     }
 
     const updateTheme = () => {
+      if (hasManualThemeSelectionRef.current) {
+        return;
+      }
+
       setPreviewTheme(normalizePreviewTheme(resolveDocumentTheme()));
     };
 
