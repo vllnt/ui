@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Search } from "lucide-react";
 
@@ -118,12 +125,16 @@ function HighlightedText({ query, text }: { query: string; text: string }) {
 }
 
 function ScopeTabs({
+  getTabId,
   labels,
   onScopeChange,
+  panelId,
   scope,
 }: {
+  getTabId: (s: SearchScope) => string;
   labels: Record<SearchScope, string>;
   onScopeChange: (scope: SearchScope) => void;
+  panelId: string;
   scope: SearchScope;
 }) {
   const scopes: SearchScope[] = ["components", "docs", "everything"];
@@ -136,11 +147,13 @@ function ScopeTabs({
     >
       {scopes.map((nextScope) => (
         <button
+          aria-controls={panelId}
           aria-selected={scope === nextScope}
           className={cn(
             "h-8 rounded-sm px-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
             scope === nextScope && "bg-accent text-accent-foreground",
           )}
+          id={getTabId(nextScope)}
           key={nextScope}
           onClick={() => {
             onScopeChange(nextScope);
@@ -320,6 +333,7 @@ function DocumentationResultsGroup({
 }
 
 function SearchDialogList({
+  activeTabId,
   currentEmptyText,
   docsGroupHeading,
   documentationItems,
@@ -330,6 +344,7 @@ function SearchDialogList({
   labels,
   onComponentSelect,
   onDocumentationSelect,
+  panelId,
   query,
   scope,
   showComponents,
@@ -337,6 +352,7 @@ function SearchDialogList({
   sortedItems,
   trimmedQuery,
 }: {
+  activeTabId?: string;
   currentEmptyText: string;
   docsGroupHeading?: string;
   documentationItems: SearchItem[];
@@ -347,6 +363,7 @@ function SearchDialogList({
   labels: Record<SearchScope, string>;
   onComponentSelect: (item: SearchItem) => void;
   onDocumentationSelect: (item: SearchItem) => void;
+  panelId?: string;
   query: string;
   scope: SearchScope;
   showComponents: boolean;
@@ -355,7 +372,12 @@ function SearchDialogList({
   trimmedQuery: string;
 }) {
   return (
-    <CommandList className="max-h-[420px]">
+    <CommandList
+      aria-labelledby={activeTabId}
+      className="max-h-[420px]"
+      id={panelId}
+      role={activeTabId === undefined ? undefined : "tabpanel"}
+    >
       <CommandEmpty>{currentEmptyText}</CommandEmpty>
       {showComponents ? (
         <ComponentResultsGroup
@@ -581,6 +603,10 @@ function SearchDialogView({
   sortedItems,
   trimmedQuery,
 }: SearchDialogViewProps) {
+  const baseId = useId();
+  const getTabId = (s: SearchScope) => `${baseId}-tab-${s}`;
+  const panelId = `${baseId}-panel`;
+
   return (
     <>
       <SearchTriggerButton
@@ -601,12 +627,19 @@ function SearchDialogView({
         />
         {documentationSearch.hasDocumentationSearch ? (
           <ScopeTabs
+            getTabId={getTabId}
             labels={labels}
             onScopeChange={handlers.handleScopeChange}
+            panelId={panelId}
             scope={handlers.scope}
           />
         ) : null}
         <SearchDialogList
+          activeTabId={
+            documentationSearch.hasDocumentationSearch
+              ? getTabId(handlers.scope)
+              : undefined
+          }
           currentEmptyText={currentEmptyText}
           docsGroupHeading={docsGroupHeading}
           documentationItems={documentationSearch.documentationItems}
@@ -619,6 +652,9 @@ function SearchDialogView({
           labels={labels}
           onComponentSelect={handlers.handleComponentSelect}
           onDocumentationSelect={handlers.handleDocumentationSelect}
+          panelId={
+            documentationSearch.hasDocumentationSearch ? panelId : undefined
+          }
           query={handlers.query}
           scope={handlers.scope}
           showComponents={handlers.scope !== "docs"}

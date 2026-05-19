@@ -38,13 +38,26 @@ const SNIPPET_CONTEXT = 50;
 
 let pagefindPromise: Promise<PagefindModule> | undefined;
 
+function isPagefindModule(value: unknown): value is PagefindModule {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "search" in value &&
+    typeof (value as Record<string, unknown>).search === "function"
+  );
+}
+
 async function loadPagefind() {
   pagefindPromise ??= import(
     /* webpackIgnore: true */ PAGEFIND_BUNDLE_PATH
-  ).then((module) => {
-    const pagefind = module as PagefindModule;
-    void pagefind.init?.();
-    return pagefind;
+  ).then((loaded) => {
+    if (!isPagefindModule(loaded)) {
+      throw new Error(
+        "Pagefind module did not expose the expected `search` function.",
+      );
+    }
+    void loaded.init?.();
+    return loaded;
   });
 
   return pagefindPromise;
@@ -54,6 +67,7 @@ const ANGLE_BRACKET_PATTERN = /[<>]/g;
 const HTML_MIME_TYPE = "text/html";
 
 function stripMarkup(value: string): string {
+  if (typeof DOMParser === "undefined") return value;
   const document = new DOMParser().parseFromString(value, HTML_MIME_TYPE);
 
   return (document.body.textContent ?? "").replaceAll(
