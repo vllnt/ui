@@ -7,12 +7,6 @@ export type DesignGuideSection = {
   readonly title: string;
 };
 
-// Candidate order:
-// 1. Anchored to source file — resolves relative to this file, not invocation CWD
-//    (lib/ → apps/registry/ → apps/ → repo root).
-// 2. process.cwd()/DESIGN.md — works when invoked from monorepo root (local dev,
-//    Docker builder where WORKDIR=/src).
-// 3. process.cwd()/../../DESIGN.md — legacy fallback.
 const DESIGN_FILE_CANDIDATES = [
   path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
