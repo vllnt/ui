@@ -1,3 +1,5 @@
+import { Children } from "react";
+
 import { evaluate } from "@mdx-js/mdx";
 import type React from "react";
 import * as runtime from "react/jsx-runtime";
@@ -33,10 +35,7 @@ const MDXComponents: Components = {
   code: ({ children, className, ...props }: React.ComponentProps<"code">) => {
     if (typeof className === "string" && className.startsWith("language-")) {
       const language = className.replace(/^language-/, "");
-      const text =
-        typeof children === "string"
-          ? children.replace(/\n$/, "")
-          : String(children ?? "");
+      const text = Children.toArray(children).join("").replace(/\n$/, "");
       return <CodeBlock language={language}>{text}</CodeBlock>;
     }
     return (

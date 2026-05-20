@@ -24,22 +24,25 @@ function ViewSwitcherInner({
   options,
   paramName: parameterName = "view",
 }: ViewSwitcherProps) {
-  const router = useRouter();
+  const { push } = useRouter();
   const pathname = usePathname();
   const searchParameters = useSearchParams();
+  const searchParametersString = searchParameters.toString();
 
   const resolvedDefault = defaultKey ?? options[0]?.key ?? "";
-  const currentKey = searchParameters.get(parameterName) ?? resolvedDefault;
+  const currentKey =
+    new URLSearchParams(searchParametersString).get(parameterName) ??
+    resolvedDefault;
 
   function handleSelect(key: string): void {
-    const parameters = new URLSearchParams(searchParameters.toString());
+    const parameters = new URLSearchParams(searchParametersString);
     if (key === resolvedDefault) {
       parameters.delete(parameterName);
     } else {
       parameters.set(parameterName, key);
     }
     const query = parameters.toString();
-    router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    push(query ? `${pathname}?${query}` : pathname, { scroll: false });
   }
 
   return (

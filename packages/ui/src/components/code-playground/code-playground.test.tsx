@@ -37,4 +37,14 @@ describe("CodePlayground", () => {
 
     expect(screen.getByText(/greeting/)).toBeInTheDocument();
   });
+
+  it("accepts ReactNode children", () => {
+    render(
+      <CodePlayground title="Demo">
+        <span>const value = 1;</span>
+      </CodePlayground>,
+    );
+
+    expect(screen.getByText(/value/)).toBeInTheDocument();
+  });
 });

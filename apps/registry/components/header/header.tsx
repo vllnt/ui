@@ -13,7 +13,7 @@ type Registry = {
 };
 
 export function Header() {
-  const router = useRouter();
+  const { push } = useRouter();
   const registry = registryData as Registry;
 
   const navItems = [
@@ -42,7 +42,7 @@ export function Header() {
             groupHeading="Components"
             items={searchItems}
             onSelect={(item) => {
-              router.push(`/components/${item.id}`);
+              push(`/components/${item.id}`);
             }}
             searchPlaceholder="Search components..."
           />

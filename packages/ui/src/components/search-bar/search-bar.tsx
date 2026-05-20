@@ -51,9 +51,11 @@ function SearchBarInner({
   onSearch,
   placeholder = "Search posts...",
 }: SearchBarProps) {
-  const router = useRouter();
+  const { replace } = useRouter();
   const searchParameters = useSearchParams();
-  const initialQuery = searchParameters.get("search") ?? "";
+  const searchParametersString = searchParameters.toString();
+  const initialQuery =
+    new URLSearchParams(searchParametersString).get("search") ?? "";
   const [query, setQuery] = useState(initialQuery);
   const debouncedQuery = useDebounce(query, 300);
   const isInitialMount = useRef(true);
@@ -66,7 +68,8 @@ function SearchBarInner({
   // Sync query with URL search params (e.g., on browser back/forward)
   // Sync when user is not actively typing and URL changed externally
   useEffect(() => {
-    const searchParameter = searchParameters.get("search") ?? "";
+    const searchParameter =
+      new URLSearchParams(searchParametersString).get("search") ?? "";
 
     // Skip if this is the search param we set ourselves
     if (searchParameter === lastSetSearchParameterReference.current) {
@@ -80,7 +83,7 @@ function SearchBarInner({
         lastDebouncedQueryReference.current = searchParameter;
       });
     }
-  }, [searchParameters, query]); // Include query to properly sync state
+  }, [searchParametersString, query]); // Include query to properly sync state
 
   // Update URL when debounced query changes
   useEffect(() => {
@@ -108,7 +111,8 @@ function SearchBarInner({
     }
 
     // Check current URL to avoid unnecessary updates
-    const currentUrlParameter = searchParameters.get("search") ?? "";
+    const parameters = new URLSearchParams(searchParametersString);
+    const currentUrlParameter = parameters.get("search") ?? "";
 
     // Skip if URL already matches the debounced query
     if (trimmedQuery === currentUrlParameter) {
@@ -116,7 +120,6 @@ function SearchBarInner({
       return;
     }
 
-    const parameters = new URLSearchParams(searchParameters);
     if (trimmedQuery) {
       parameters.set("search", trimmedQuery);
     } else {
@@ -129,8 +132,8 @@ function SearchBarInner({
     // nextjs-no-client-side-redirect rule targets window.location
     // hard redirects, not Next router.replace — but ESLint doesn't
     // know that rule, so we don't add an eslint-disable for it.
-    router.replace(`?${newUrl}`);
-  }, [debouncedQuery, router, onSearch, searchParameters]);
+    replace(`?${newUrl}`);
+  }, [debouncedQuery, onSearch, replace, searchParametersString]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -169,7 +172,7 @@ function SearchBarInner({
     if (onSearch) {
       onSearch(trimmedQuery);
     } else {
-      const parameters = new URLSearchParams(searchParameters);
+      const parameters = new URLSearchParams(searchParametersString);
       if (trimmedQuery) {
         parameters.set("search", trimmedQuery);
       } else {
@@ -177,7 +180,7 @@ function SearchBarInner({
       }
       const newUrl = parameters.toString();
       lastSetSearchParameterReference.current = trimmedQuery;
-      router.replace(`?${newUrl}`);
+      replace(`?${newUrl}`);
     }
   };
 

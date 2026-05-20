@@ -33,6 +33,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Registry installs use a **hybrid CLI strategy** — leaf component source is inlined, sibling registry items resolve via `@vllnt/ui` to keep installs minimal and dedupe shared primitives.
 
+### Fixed
+
+- **Public API compatibility:** `ContentIntro` accepts legacy `renderIntroContent`, `Slideshow` accepts legacy `renderContent`, and `CodeBlock`/`CodePlayground` accept `ReactNode` children with text extraction while keeping additive explicit code props.
+
 ### Notes
 
 - `ROADMAP.md` added at repo root tracking 50 open issues across 8 phases gating the `0.3.0` cut.

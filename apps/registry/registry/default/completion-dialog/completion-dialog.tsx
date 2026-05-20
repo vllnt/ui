@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -23,6 +23,36 @@ export type CompletionDialogProps = {
 };
 
 type DialogContentProps = Omit<CompletionDialogProps, "isOpen">;
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+type EventListenerOptions = AddEventListenerOptions | boolean;
+
+function useDocumentEventListener<TKey extends keyof DocumentEventMap>(
+  type: TKey,
+  listener: (event: DocumentEventMap[TKey]) => void,
+  options?: EventListenerOptions,
+): void {
+  const listenerRef = useRef(listener);
+
+  useIsomorphicLayoutEffect(() => {
+    listenerRef.current = listener;
+  }, [listener]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleEvent = (event: DocumentEventMap[TKey]): void => {
+      listenerRef.current(event);
+    };
+
+    document.addEventListener(type, handleEvent, options);
+    return () => {
+      document.removeEventListener(type, handleEvent, options);
+    };
+  }, [options, type]);
+}
 
 // eslint-disable-next-line max-lines-per-function -- Dialog content with keyboard handling
 function DialogContent({
@@ -152,13 +182,7 @@ function CompletionDialogImpl({
     [isOpen, onClose, onConfirm, onCancel, confirmShortcut, cancelShortcut],
   );
 
-  useEffect(() => {
-    if (!isOpen) return;
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [isOpen, handleKeyDown]);
+  useDocumentEventListener("keydown", handleKeyDown, true);
 
   if (!isOpen) return null;
 

@@ -10,7 +10,7 @@ const meta = {
     onExit: () => {},
     onNavigate: () => {},
     onToggleSection: () => {},
-    renderContent: () => "Slide content here.",
+    SectionContent: ({ section }) => `Slide content for ${section.title}.`,
     sections: [
       { id: "intro", title: "Introduction" },
       { id: "setup", title: "Setup" },

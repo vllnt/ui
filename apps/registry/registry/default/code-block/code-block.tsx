@@ -1,9 +1,10 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { Children, isValidElement, useEffect, useRef, useState } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
+import type { ReactNode } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   oneDark,
@@ -14,33 +15,25 @@ import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
 type CodeBlockProps = {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
+  code?: string;
   language?: string;
   showLanguage?: boolean;
 };
 
-function extractTextFromChildren(children: ReactNode): string {
-  if (typeof children === "string") {
-    return children;
-  }
-  if (typeof children === "number") {
-    return String(children);
-  }
-  if (Array.isArray(children)) {
-    return children.map(extractTextFromChildren).join("");
-  }
-  if (
-    children &&
-    typeof children === "object" &&
-    "props" in children &&
-    children.props &&
-    typeof children.props === "object" &&
-    "children" in children.props
-  ) {
-    return extractTextFromChildren(children.props.children as ReactNode);
-  }
-  return String(children ?? "");
+export function extractTextFromChildren(children: ReactNode): string {
+  return Children.toArray(children)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") {
+        return String(child);
+      }
+      if (isValidElement<{ children?: ReactNode }>(child)) {
+        return extractTextFromChildren(child.props.children);
+      }
+      return "";
+    })
+    .join("");
 }
 
 function findScrollableParent(
@@ -54,37 +47,37 @@ function findScrollableParent(
 export function CodeBlock({
   children,
   className,
+  code: codeProperty,
   language = "typescript",
   showLanguage = false,
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const { systemTheme, theme } = useTheme();
-
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
-  const isDark = resolvedTheme !== "light";
-  const codeStyle = isDark ? oneDark : oneLight;
-  const code = extractTextFromChildren(children);
-
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const element = scrollRef.current;
-    if (!element) return;
+    const node = scrollContainerRef.current;
+    if (!node) return;
 
-    const onWheel = (event: WheelEvent) => {
+    const handleWheel = (event: WheelEvent): void => {
       if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      const scrollable = findScrollableParent(element);
+      const scrollable = findScrollableParent(node);
       if (scrollable) {
         scrollable.scrollTop += event.deltaY;
         event.preventDefault();
       }
     };
 
-    element.addEventListener("wheel", onWheel, { passive: false });
+    node.addEventListener("wheel", handleWheel, { passive: false });
     return () => {
-      element.removeEventListener("wheel", onWheel);
+      node.removeEventListener("wheel", handleWheel);
     };
   }, []);
+
+  const resolvedTheme = theme === "system" ? systemTheme : theme;
+  const isDark = resolvedTheme !== "light";
+  const codeStyle = isDark ? oneDark : oneLight;
+  const code = codeProperty ?? extractTextFromChildren(children);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -103,7 +96,7 @@ export function CodeBlock({
     >
       <div
         className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
-        ref={scrollRef}
+        ref={scrollContainerRef}
       >
         <SyntaxHighlighter
           codeTagProps={{

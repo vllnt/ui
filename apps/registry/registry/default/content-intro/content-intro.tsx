@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -25,6 +25,8 @@ export type ContentIntroProps = {
   completedSections: Set<string>;
   /** Estimated time to complete */
   estimatedTime: string;
+  /** Rendered introduction content */
+  introContent?: ReactNode;
   /** Is loading progress */
   isLoading?: boolean;
   /** Labels for i18n */
@@ -33,8 +35,8 @@ export type ContentIntroProps = {
   onGoToSection: (index: number) => void;
   /** Callback when starting */
   onStart: () => void;
-  /** Render function for intro content */
-  renderIntroContent: () => ReactNode;
+  /** Render prop used by existing consumers to provide introduction content */
+  renderIntroContent?: () => ReactNode;
   /** Sections for TOC */
   sections: ContentIntroSection[];
   /** Intro section title */
@@ -49,11 +51,42 @@ const DEFAULT_LABELS: Required<ContentIntroLabels> = {
 
 const EMPTY_CONTENT_INTRO_LABELS: ContentIntroLabels = {};
 
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+type EventListenerOptions = AddEventListenerOptions | boolean;
+
+function useDocumentEventListener<TKey extends keyof DocumentEventMap>(
+  type: TKey,
+  listener: (event: DocumentEventMap[TKey]) => void,
+  options?: EventListenerOptions,
+): void {
+  const listenerRef = useRef(listener);
+
+  useIsomorphicLayoutEffect(() => {
+    listenerRef.current = listener;
+  }, [listener]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const handleEvent = (event: DocumentEventMap[TKey]): void => {
+      listenerRef.current(event);
+    };
+
+    document.addEventListener(type, handleEvent, options);
+    return () => {
+      document.removeEventListener(type, handleEvent, options);
+    };
+  }, [options, type]);
+}
+
 // eslint-disable-next-line max-lines-per-function -- Complex intro with TOC and sticky button
 function ContentIntroImpl({
   additionalContent,
   completedSections,
   estimatedTime,
+  introContent,
   isLoading = false,
   labels = EMPTY_CONTENT_INTRO_LABELS,
   onGoToSection,
@@ -64,6 +97,7 @@ function ContentIntroImpl({
 }: ContentIntroProps): React.ReactNode {
   const mergedLabels = { ...DEFAULT_LABELS, ...labels };
   const hasProgress = completedSections.size > 0;
+  const renderedIntroContent = introContent ?? renderIntroContent?.();
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -75,12 +109,7 @@ function ContentIntroImpl({
     [onStart],
   );
 
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handleKeyDown]);
+  useDocumentEventListener("keydown", handleKeyDown);
 
   return (
     <>
@@ -89,7 +118,7 @@ function ContentIntroImpl({
         <section className="py-6">
           <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
-            {renderIntroContent()}
+            {renderedIntroContent}
           </div>
         </section>
 
