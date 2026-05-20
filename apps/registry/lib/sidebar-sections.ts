@@ -1,9 +1,5 @@
 import registryData from "@/registry.json";
-import type {
-  ComponentCategory,
-  Registry,
-  RegistryComponent,
-} from "@/types/registry";
+import type { ComponentCategory, Registry } from "@/types/registry";
 
 const registry = registryData as Registry;
 
@@ -58,24 +54,18 @@ function groupComponentsByCategory(
     return accumulator;
   }, new Map<ComponentCategory, { name: string; title: string }[]>());
 
-  const sections: {
-    category: ComponentCategory;
-    items: { name: string; title: string }[];
-    label: string;
-  }[] = [];
-
-  for (const category of categoryOrder) {
-    const items = grouped.get(category);
-    if (items) {
-      sections.push({
-      category,
-      items,
-      label: categoryLabels[category],
-      });
-    }
-  }
-
-  return sections;
+  return categoryOrder.flatMap((category) => {
+    const categoryItems = grouped.get(category);
+    return categoryItems
+      ? [
+          {
+            category,
+            items: categoryItems,
+            label: categoryLabels[category],
+          },
+        ]
+      : [];
+  });
 }
 
 const groupedComponents = groupComponentsByCategory(components);

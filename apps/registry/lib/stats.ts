@@ -2,14 +2,14 @@ import packageJson from "../../../packages/ui/package.json";
 import registry from "../registry.json";
 
 type RegistryItem = {
-  readonly name: string;
   readonly category?: string;
+  readonly name: string;
 };
 
 type Registry = {
+  readonly generatedAt?: string;
   readonly items: readonly RegistryItem[];
   readonly version?: string;
-  readonly generatedAt?: string;
 };
 
 const REGISTRY = registry as Registry;
@@ -33,11 +33,12 @@ export type CategoryStat = {
 };
 
 export function getCategoryStats(): readonly CategoryStat[] {
-  const counts = new Map<string, number>();
-  for (const item of REGISTRY.items) {
+  const counts = REGISTRY.items.reduce((accumulator, item) => {
     const key = item.category ?? "uncategorized";
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
+    accumulator.set(key, (accumulator.get(key) ?? 0) + 1);
+    return accumulator;
+  }, new Map<string, number>());
+
   return [...counts.entries()]
     .map(([category, count]) => ({ category, count }))
     .sort((a, b) => a.category.localeCompare(b.category));
@@ -56,17 +57,12 @@ export function getFeaturedComponents(): readonly RegistryItem[] {
     "timeline",
     "globe-3d",
   ];
-  const registryByName = new Map<string, RegistryItem>();
-  for (const item of REGISTRY.items) {
-    registryByName.set(item.name, item);
-  }
+  const registryByName = new Map(
+    REGISTRY.items.map((item) => [item.name, item] as const),
+  );
 
-  const featured: RegistryItem[] = [];
-  for (const slug of featuredSlugs) {
+  return featuredSlugs.flatMap((slug) => {
     const item = registryByName.get(slug);
-    if (item) {
-      featured.push(item);
-    }
-  }
-  return featured;
+    return item ? [item] : [];
+  });
 }

@@ -10,11 +10,7 @@ import { notFound } from "next/navigation";
 import { QuickAdd } from "@/components/quick-add";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
-import {
-  breadcrumbLd,
-  jsonLdScript,
-  softwareSourceCodeLd,
-} from "@/lib/jsonld";
+import { breadcrumbLd, jsonLdScript, softwareSourceCodeLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
 import {
@@ -45,11 +41,11 @@ const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  return registry.items.reduce<{ slug: string }[]>((params, item) => {
+  return registry.items.reduce<{ slug: string }[]>((parameters, item) => {
     if (item.type === "registry:component") {
-      params.push({ slug: item.name });
+      parameters.push({ slug: item.name });
     }
-    return params;
+    return parameters;
   }, []);
 }
 
@@ -165,8 +161,7 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>
