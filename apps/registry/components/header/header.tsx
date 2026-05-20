@@ -1,7 +1,7 @@
 "use client";
 
 import { NavbarSaas, SearchDialog } from "@vllnt/ui";
-import { Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import registryData from "@/registry.json";
@@ -19,6 +19,7 @@ export function Header() {
   const navItems = [
     { href: "/", title: "Get Started" },
     { href: "/philosophy", title: "Philosophy" },
+    { href: "/design", title: "Design" },
     { href: "/components", title: "Components" },
   ];
 
@@ -53,7 +54,7 @@ export function Header() {
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <ExternalLink className="h-4 w-4" />
           </a>
         </div>
       }

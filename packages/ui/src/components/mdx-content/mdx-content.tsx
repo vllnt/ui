@@ -2,6 +2,7 @@ import { evaluate } from "@mdx-js/mdx";
 import type React from "react";
 import * as runtime from "react/jsx-runtime";
 import ReactMarkdown, { type Components } from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import { CodeBlock } from "../code-block/code-block";
 
@@ -135,6 +136,8 @@ const proseClasses = [
   "prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-lg",
 ].join(" ");
 
+const markdownPlugins = [remarkGfm];
+
 function removeImportStatements(
   content: string,
   componentNames: string[],
@@ -204,14 +207,21 @@ export async function MDXContent({
 
     return (
       <div className={proseClasses}>
-        <ReactMarkdown components={allComponents}>{content}</ReactMarkdown>
+        <ReactMarkdown
+          components={allComponents}
+          remarkPlugins={markdownPlugins}
+        >
+          {content}
+        </ReactMarkdown>
       </div>
     );
   }
 
   return (
     <div className={proseClasses}>
-      <ReactMarkdown components={allComponents}>{content}</ReactMarkdown>
+      <ReactMarkdown components={allComponents} remarkPlugins={markdownPlugins}>
+        {content}
+      </ReactMarkdown>
     </div>
   );
 }

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VLLNT UI design tokens",
+  "type": "object",
+  "required": ["name", "version", "source", "color", "typography", "spacing", "radius", "elevation", "motion", "iconography"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "const": "VLLNT UI"
+    },
+    "version": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "required": ["guide", "theme"],
+      "properties": {
+        "guide": {
+          "type": "string"
+        },
+        "theme": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "color": {
+      "type": "object"
+    },
+    "typography": {
+      "type": "object"
+    },
+    "spacing": {
+      "type": "object"
+    },
+    "radius": {
+      "type": "object"
+    },
+    "elevation": {
+      "type": "object"
+    },
+    "motion": {
+      "type": "object"
+    },
+    "iconography": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

@@ -35,6 +35,7 @@ None.
 ## Checklist
 
 - [ ] Component(s) follow the conventions in [AGENTS.md](../AGENTS.md).
+- [ ] UI changes follow [DESIGN.md](../DESIGN.md). Deviations:
 - [ ] New exports added to `packages/ui/src/index.ts`.
 - [ ] Tests added (unit + visual, as applicable).
 - [ ] CHANGELOG note added under `[Unreleased]` for user-facing changes.
