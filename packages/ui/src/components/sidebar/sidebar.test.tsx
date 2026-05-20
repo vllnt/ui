@@ -128,11 +128,18 @@ describe("Sidebar", () => {
     const trigger = screen.getByRole("button", { name: "Guides" });
     const panel = trigger.nextElementSibling;
 
-    expect(panel).toHaveAttribute("aria-hidden", "true");
+    expect(panel).toHaveAttribute("hidden");
+    expect(
+      screen.queryByRole("link", { name: "Forms" }),
+    ).not.toBeInTheDocument();
 
     fireEvent.click(trigger);
 
-    expect(panel).not.toHaveAttribute("aria-hidden", "true");
+    expect(panel).not.toHaveAttribute("hidden");
+    expect(screen.getByRole("link", { name: "Forms" })).toHaveAttribute(
+      "href",
+      "/docs/forms",
+    );
   });
 
   it("opens on desktop and closes on mobile resize", async () => {
