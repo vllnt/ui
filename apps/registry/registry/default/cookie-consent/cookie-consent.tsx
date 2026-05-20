@@ -5,7 +5,7 @@ import { forwardRef, useCallback, useEffect, useReducer, useRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
-import { Button, cn } from "@vllnt/ui";
+import { Button, cn, useControllableState } from "@vllnt/ui";
 
 const cookieConsentVariants = cva(
   "fixed z-50 rounded-lg border bg-background shadow-lg transition-all duration-300 max-w-[calc(100vw-2rem)] p-4 sm:py-1.5 sm:px-3",
@@ -90,7 +90,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       onAccept,
       onDecline,
       onOpenChange,
-      open = true,
+      open,
       position,
       settingsHref,
       settingsText = "Learn more",
@@ -99,6 +99,12 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     },
     reference,
   ) => {
+    const [openState, setOpenState] = useControllableState({
+      defaultValue: true,
+      onChange: onOpenChange,
+      value: open,
+    });
+
     const [{ isAnimatingOut, isVisible }, dispatch] = useReducer(
       cookieAnimationReducer,
       {
@@ -119,7 +125,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     );
 
     useEffect(() => {
-      if (open) {
+      if (openState) {
         const timer = setTimeout(() => {
           dispatch({ type: "show" });
         }, 50);
@@ -133,15 +139,15 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       return () => {
         cancelAnimationFrame(rafId);
       };
-    }, [open]);
+    }, [openState]);
 
     const handleClose = useCallback(() => {
       dispatch({ type: "start-close" });
       closeTimerRef.current = setTimeout(() => {
         dispatch({ type: "finish-close" });
-        onOpenChange?.(false);
+        setOpenState(false);
       }, 200);
-    }, [onOpenChange]);
+    }, [setOpenState]);
 
     const handleAccept = useCallback(() => {
       onAccept?.();
@@ -153,7 +159,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       handleClose();
     }, [onDecline, handleClose]);
 
-    if (!open && !isAnimatingOut) return null;
+    if (!openState && !isAnimatingOut) return null;
 
     return (
       <div

@@ -5,6 +5,7 @@ import { forwardRef, useCallback, useEffect, useReducer, useRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-uncontrolled-state";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 
@@ -91,7 +92,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       onAccept,
       onDecline,
       onOpenChange,
-      open = true,
+      open,
       position,
       settingsHref,
       settingsText = "Learn more",
@@ -100,6 +101,12 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     },
     reference,
   ) => {
+    const [openState, setOpenState] = useControllableState({
+      defaultValue: true,
+      onChange: onOpenChange,
+      value: open,
+    });
+
     const [{ isAnimatingOut, isVisible }, dispatch] = useReducer(
       cookieAnimationReducer,
       {
@@ -120,7 +127,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
     );
 
     useEffect(() => {
-      if (open) {
+      if (openState) {
         const timer = setTimeout(() => {
           dispatch({ type: "show" });
         }, 50);
@@ -134,15 +141,15 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       return () => {
         cancelAnimationFrame(rafId);
       };
-    }, [open]);
+    }, [openState]);
 
     const handleClose = useCallback(() => {
       dispatch({ type: "start-close" });
       closeTimerRef.current = setTimeout(() => {
         dispatch({ type: "finish-close" });
-        onOpenChange?.(false);
+        setOpenState(false);
       }, 200);
-    }, [onOpenChange]);
+    }, [setOpenState]);
 
     const handleAccept = useCallback(() => {
       onAccept?.();
@@ -154,7 +161,7 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
       handleClose();
     }, [onDecline, handleClose]);
 
-    if (!open && !isAnimatingOut) return null;
+    if (!openState && !isAnimatingOut) return null;
 
     return (
       <div
