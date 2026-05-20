@@ -123,6 +123,7 @@ function CollapsibleSection({
           "grid transition-all duration-200 ease-in-out",
           isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
         )}
+        hidden={!isOpen}
       >
         <div className="overflow-hidden">{children}</div>
       </div>
@@ -146,6 +147,7 @@ export function Sidebar({ sections }: SidebarProps) {
       {isMobile && open ? (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          data-testid="sidebar-overlay"
           onClick={() => {
             setOpen(false);
           }}
