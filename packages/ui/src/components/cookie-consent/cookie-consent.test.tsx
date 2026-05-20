@@ -222,6 +222,37 @@ describe("CookieConsent", () => {
 
       expect(handleOpenChange).toHaveBeenCalledWith(false);
     });
+
+    it("removes the default uncontrolled banner after accept animation", async () => {
+      render(<CookieConsent />);
+
+      const acceptButtons = screen.getAllByRole("button", { name: "Accept" });
+      fireEvent.click(acceptButtons[0]!);
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+      await act(async () => {
+        vi.advanceTimersByTime(200);
+      });
+
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+
+    it("removes the default uncontrolled banner after close-button animation", async () => {
+      render(<CookieConsent showCloseButton={true} />);
+
+      fireEvent.click(
+        screen.getByRole("button", { name: "Close cookie consent" }),
+      );
+
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+      await act(async () => {
+        vi.advanceTimersByTime(200);
+      });
+
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
   });
 
   describe("animation", () => {

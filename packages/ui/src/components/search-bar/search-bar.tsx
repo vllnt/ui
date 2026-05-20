@@ -5,6 +5,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useDebounce } from "../../lib/use-debounce";
+import { useEventCallback } from "../../lib/use-event-callback";
 import { Button } from "../button/button";
 import { Input } from "../input/input";
 
@@ -58,6 +59,9 @@ function SearchBarInner({
   const debouncedQuery = useDebounce(query, 300);
   const isInitialMount = useRef(true);
   const isUserTyping = useRef(false);
+  const runSearch = useEventCallback((searchQuery: string): void => {
+    onSearch?.(searchQuery);
+  });
 
   const typingTimeoutReference = useRef<NodeJS.Timeout | undefined>(undefined);
   const lastSetSearchParameterReference = useRef<string>("");
@@ -103,7 +107,7 @@ function SearchBarInner({
     lastDebouncedQueryReference.current = trimmedQuery;
 
     if (onSearch) {
-      onSearch(trimmedQuery);
+      runSearch(trimmedQuery);
       return;
     }
 
@@ -130,7 +134,7 @@ function SearchBarInner({
     // hard redirects, not Next router.replace — but ESLint doesn't
     // know that rule, so we don't add an eslint-disable for it.
     router.replace(`?${newUrl}`);
-  }, [debouncedQuery, router, onSearch, searchParameters]);
+  }, [debouncedQuery, onSearch, router, runSearch, searchParameters]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

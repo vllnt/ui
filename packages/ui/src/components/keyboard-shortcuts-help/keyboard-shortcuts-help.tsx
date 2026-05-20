@@ -4,6 +4,10 @@ import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import {
+  useEventCallback,
+  useWindowEventListener,
+} from "../../lib/use-event-callback";
 import { cn } from "../../lib/utils";
 
 export type KeyboardShortcut = {
@@ -32,25 +36,21 @@ function KeyboardShortcutsHelpImpl({
   title = "Keyboard Shortcuts",
 }: KeyboardShortcutsHelpProps): React.ReactNode {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const handleEscapeKey = useEventCallback((event: KeyboardEvent): void => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+    }
+  });
 
   // Focus trap and close on Escape
   useEffect(() => {
     if (!isOpen) return;
 
     closeButtonRef.current?.focus();
+  }, [isOpen]);
 
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  useWindowEventListener("keydown", handleEscapeKey, { enabled: isOpen });
 
   // Prevent body scroll when open
   useEffect(() => {

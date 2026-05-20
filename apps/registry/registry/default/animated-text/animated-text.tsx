@@ -166,7 +166,6 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
 
   React.useEffect(() => {
     if (!active) {
-      setProgress(length);
       return;
     }
 
@@ -191,7 +190,7 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
     };
   }, [active, length, stagger]);
 
-  return progress;
+  return active ? progress : length;
 }
 
 function useMatrixFrame({

@@ -1,16 +1,46 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 
 type TLDRSectionProps = {
   children: React.ReactNode;
   label: string;
 };
 
+type TLDRSectionState = {
+  hasBeenOpened: boolean;
+  isExpanded: boolean;
+  isLoading: boolean;
+};
+
+type TLDRSectionAction =
+  | { type: "finish-loading" }
+  | { type: "mark-opened" }
+  | { type: "toggle" };
+
+function tldrSectionReducer(
+  state: TLDRSectionState,
+  action: TLDRSectionAction,
+): TLDRSectionState {
+  switch (action.type) {
+    case "finish-loading":
+      return { ...state, isLoading: false };
+    case "mark-opened":
+      return { ...state, hasBeenOpened: true, isLoading: true };
+    case "toggle":
+      return { ...state, isExpanded: !state.isExpanded };
+  }
+}
+
 export function TLDRSection({ children, label }: TLDRSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasBeenOpened, setHasBeenOpened] = useState(false);
+  const [{ hasBeenOpened, isExpanded, isLoading }, dispatch] = useReducer(
+    tldrSectionReducer,
+    {
+      hasBeenOpened: false,
+      isExpanded: false,
+      isLoading: false,
+    },
+  );
   const timerReference = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -21,13 +51,12 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       }
 
       const rafId = requestAnimationFrame(() => {
-        setIsLoading(true);
-        setHasBeenOpened(true);
+        dispatch({ type: "mark-opened" });
       });
 
       // Simulate loading with skeleton
       timerReference.current = setTimeout(() => {
-        setIsLoading(false);
+        dispatch({ type: "finish-loading" });
         timerReference.current = null;
       }, 800);
 
@@ -53,7 +82,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       <button
         className="flex items-center justify-between w-full px-4 py-3 hover:bg-muted/50 transition-colors"
         onClick={() => {
-          setIsExpanded(!isExpanded);
+          dispatch({ type: "toggle" });
         }}
         type="button"
       >

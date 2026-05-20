@@ -684,10 +684,6 @@ export const UnicodeSpinner = React.forwardRef<
     const [frameIndex, setFrameIndex] = React.useState(0);
 
     React.useEffect(() => {
-      setFrameIndex(0);
-    }, [animation]);
-
-    React.useEffect(() => {
       if (paused) {
         return;
       }
@@ -701,7 +697,10 @@ export const UnicodeSpinner = React.forwardRef<
       };
     }, [paused, preset.frames.length, resolvedInterval]);
 
-    const frame = preset.frames[frameIndex] ?? preset.frames[0] ?? "⠋";
+    const normalizedFrameIndex =
+      preset.frames.length > 0 ? frameIndex % preset.frames.length : 0;
+    const frame =
+      preset.frames[normalizedFrameIndex] ?? preset.frames[0] ?? "⠋";
     const accessibleLabel = label ? `Loading ${label}` : "Loading";
 
     return (

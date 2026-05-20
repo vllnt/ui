@@ -5,9 +5,7 @@ import { forwardRef, useCallback, useEffect, useReducer, useRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 
-import { useControllableState } from "../../lib/use-uncontrolled-state";
-import { cn } from "../../lib/utils";
-import { Button } from "../button/button";
+import { Button, cn, useControllableState } from "@vllnt/ui";
 
 const cookieConsentVariants = cva(
   "fixed z-50 rounded-lg border bg-background shadow-lg transition-all duration-300 max-w-[calc(100vw-2rem)] p-4 sm:py-1.5 sm:px-3",

@@ -121,12 +121,16 @@ function TextField({
   );
 }
 
+function useInitialState<T>(initialValue: T) {
+  return useState(initialValue);
+}
+
 export function ReportBugForm({
   initialComponent = "",
 }: {
   initialComponent?: string;
 }) {
-  const [component, setComponent] = useState(initialComponent);
+  const [component, setComponent] = useInitialState(initialComponent);
   const [summary, setSummary] = useState("");
   const [repro, setRepro] = useState("");
   const [expected, setExpected] = useState("");

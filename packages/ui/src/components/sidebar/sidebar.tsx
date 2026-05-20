@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useUncontrolledState } from "../../lib/use-uncontrolled-state";
 import { cn } from "../../lib/utils";
 import { useSidebar } from "../sidebar-provider";
 
@@ -25,26 +32,51 @@ type SidebarProps = {
   sections: SidebarSection[];
 };
 
+function noop(): void {
+  return undefined;
+}
+
+function getMobileSnapshot(): boolean {
+  return typeof window === "undefined" ? false : window.innerWidth < 1024;
+}
+
+function subscribeToResize(
+  onStoreChange: () => void,
+  onEnterMobile: () => void,
+): () => void {
+  if (typeof window === "undefined") return noop;
+
+  let previousIsMobile = getMobileSnapshot();
+  const handleResize = (): void => {
+    const nextIsMobile = getMobileSnapshot();
+    if (nextIsMobile && !previousIsMobile) {
+      onEnterMobile();
+    }
+    previousIsMobile = nextIsMobile;
+    onStoreChange();
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}
+
 function useMobile(setOpen: (open: boolean) => void) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 1024;
-      setIsMobile(mobile);
-      if (mobile) {
-        setOpen(false);
-      } else {
-        setOpen(true);
-      }
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
+  const handleEnterMobile = useCallback(() => {
+    setOpen(false);
   }, [setOpen]);
+  const subscribe = useCallback(
+    (onStoreChange: () => void) =>
+      subscribeToResize(onStoreChange, handleEnterMobile),
+    [handleEnterMobile],
+  );
+
+  const isMobile = useSyncExternalStore(
+    subscribe,
+    getMobileSnapshot,
+    () => false,
+  );
 
   return isMobile;
 }
@@ -88,7 +120,7 @@ function CollapsibleSection({
   defaultOpen = true,
   title,
 }: CollapsibleSectionProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isOpen, setIsOpen] = useUncontrolledState(defaultOpen);
 
   if (!collapsible) {
     return (

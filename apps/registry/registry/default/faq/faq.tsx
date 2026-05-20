@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { ChevronDown, HelpCircle } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { useUncontrolledState } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type FAQItemProps = {
@@ -14,7 +13,7 @@ export type FAQItemProps = {
 };
 
 function FAQItem({ children, defaultOpen = false, question }: FAQItemProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isOpen, setIsOpen] = useUncontrolledState(defaultOpen);
 
   return (
     <div className="border-b border-border last:border-b-0">
