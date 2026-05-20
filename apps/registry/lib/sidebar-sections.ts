@@ -1,21 +1,22 @@
 import registryData from "@/registry.json";
-import type {
-  ComponentCategory,
-  Registry,
-  RegistryComponent,
-} from "@/types/registry";
+import type { ComponentCategory, Registry } from "@/types/registry";
 
 const registry = registryData as Registry;
 
 const components = registry.items
-  .filter(
-    (item): item is RegistryComponent => item.type === "registry:component",
+  .reduce<{ category?: ComponentCategory; name: string; title: string }[]>(
+    (items, item) => {
+      if (item.type === "registry:component") {
+        items.push({
+          category: item.category,
+          name: item.name,
+          title: item.title,
+        });
+      }
+      return items;
+    },
+    [],
   )
-  .map((item) => ({
-    category: item.category,
-    name: item.name,
-    title: item.title,
-  }))
   .sort((a, b) => a.title.localeCompare(b.title));
 
 const categoryLabels: Record<ComponentCategory, string> = {
@@ -53,13 +54,18 @@ function groupComponentsByCategory(
     return accumulator;
   }, new Map<ComponentCategory, { name: string; title: string }[]>());
 
-  return categoryOrder
-    .filter((cat) => grouped.has(cat))
-    .map((category) => ({
-      category,
-      items: grouped.get(category) ?? [],
-      label: categoryLabels[category],
-    }));
+  return categoryOrder.flatMap((category) => {
+    const categoryItems = grouped.get(category);
+    return categoryItems
+      ? [
+          {
+            category,
+            items: categoryItems,
+            label: categoryLabels[category],
+          },
+        ]
+      : [];
+  });
 }
 
 const groupedComponents = groupComponentsByCategory(components);

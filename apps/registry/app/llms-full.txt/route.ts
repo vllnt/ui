@@ -65,8 +65,15 @@ async function buildLlmsFullTxt(): Promise<string> {
   lines.push("```");
   lines.push("");
 
-  for (const page of DOC_PAGES) {
-    const body = await readDocPage(page.slug);
+  const docPages = await Promise.all(
+    DOC_PAGES.map(async (page) => ({
+      ...page,
+      body: await readDocPage(page.slug),
+    })),
+  );
+
+  for (const page of docPages) {
+    const { body } = page;
     if (!body) continue;
     lines.push(`## ${page.title}`);
     lines.push("");

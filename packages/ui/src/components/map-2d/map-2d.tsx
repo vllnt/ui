@@ -122,7 +122,7 @@ function useMapState(arguments_: {
     };
   }, [center]);
   const [pan, setPan] = useState<{ x: number; y: number }>(initialPan);
-  const [zoom, setZoom] = useState<number>(
+  const [zoom, setZoom] = useState<number>(() =>
     clamp(initialZoom, MIN_ZOOM, MAX_ZOOM),
   );
 

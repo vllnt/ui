@@ -280,20 +280,22 @@ function buildLine(arguments_: {
   rotationLng: number;
 }): string {
   const { points, rotationLat, rotationLng } = arguments_;
-  return points
-    .map((coord) => project(coord, rotationLng, rotationLat))
-    .reduce<{ path: string; pen: "down" | "up" }>(
-      (state, projected) => {
-        if (!projected.visible) return { path: state.path, pen: "up" };
-        const head = state.pen === "up" ? "M" : "L";
-        const separator = state.path.length > 0 ? " " : "";
-        return {
-          path: `${state.path}${separator}${head}${projected.x.toString()},${projected.y.toString()}`,
-          pen: "down",
-        };
-      },
-      { path: "", pen: "up" },
-    ).path;
+  return points.reduce<{ path: string; pen: "down" | "up" }>(
+    (state, coord) => {
+      const projected = project(coord, rotationLng, rotationLat);
+      if (!projected.visible) {
+        return { path: state.path, pen: "up" };
+      }
+
+      const head = state.pen === "up" ? "M" : "L";
+      const separator = state.path.length > 0 ? " " : "";
+      return {
+        path: `${state.path}${separator}${head}${projected.x.toString()},${projected.y.toString()}`,
+        pen: "down",
+      };
+    },
+    { path: "", pen: "up" },
+  ).path;
 }
 
 function range(start: number, end: number, step: number): number[] {
@@ -308,9 +310,16 @@ function Graticule({ rotationLat, rotationLng }: GraticuleProps): ReactNode {
   const meridians = range(-150, 180, 30).map<GlobeCoord[]>((lng) =>
     range(-85, 85, 5).map((lat) => ({ lat, lng })),
   );
-  const lines = [...parallels, ...meridians]
-    .map((points) => buildLine({ points, rotationLat, rotationLng }))
-    .filter((path) => path.length > 0);
+  const lines = [...parallels, ...meridians].reduce<string[]>(
+    (paths, points) => {
+      const path = buildLine({ points, rotationLat, rotationLng });
+      if (path.length > 0) {
+        paths.push(path);
+      }
+      return paths;
+    },
+    [],
+  );
   return (
     <g
       className="fill-none stroke-foreground/20"

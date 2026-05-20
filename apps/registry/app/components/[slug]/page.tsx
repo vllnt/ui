@@ -10,11 +10,7 @@ import { notFound } from "next/navigation";
 import { QuickAdd } from "@/components/quick-add";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
-import {
-  breadcrumbLd,
-  jsonLdScript,
-  softwareSourceCodeLd,
-} from "@/lib/jsonld";
+import { breadcrumbLd, jsonLdScript, softwareSourceCodeLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
 import {
@@ -45,13 +41,12 @@ const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  return registry.items
-    .filter(
-      (item): item is RegistryComponent => item.type === "registry:component",
-    )
-    .map((item) => ({
-      slug: item.name,
-    }));
+  return registry.items.reduce<{ slug: string }[]>((parameters, item) => {
+    if (item.type === "registry:component") {
+      parameters.push({ slug: item.name });
+    }
+    return parameters;
+  }, []);
 }
 
 function getNpmUrl(packageName: string): string {
@@ -166,8 +161,7 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>

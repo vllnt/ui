@@ -944,11 +944,12 @@ function useTimelineFilter(
 
   const visibleCategories = useMemo(
     () =>
-      new Set(
-        categories
-          .filter((category) => !hidden.has(category.id))
-          .map((category) => category.id),
-      ),
+      categories.reduce<Set<string>>((visible, category) => {
+        if (!hidden.has(category.id)) {
+          visible.add(category.id);
+        }
+        return visible;
+      }, new Set()),
     [categories, hidden],
   );
 

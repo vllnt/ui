@@ -22,13 +22,18 @@ export function Header() {
     { href: "/components", title: "Components" },
   ];
 
-  const searchItems = registry.items
-    .filter((item) => item.type === "registry:component")
-    .map((item) => ({
-      description: item.description,
-      id: item.name,
-      title: item.title,
-    }));
+  const searchItems = registry.items.reduce<
+    { description?: string; id: string; title: string }[]
+  >((items, item) => {
+    if (item.type === "registry:component") {
+      items.push({
+        description: item.description,
+        id: item.name,
+        title: item.title,
+      });
+    }
+    return items;
+  }, []);
 
   return (
     <NavbarSaas

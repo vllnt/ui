@@ -506,7 +506,7 @@ function useTimelineState(arguments_: {
   year: number;
 } {
   const { endYear, initialYear, onYearChange, startYear } = arguments_;
-  const [year, setYear] = useState<number>(
+  const [year, setYear] = useState<number>(() =>
     clamp(initialYear ?? startYear, startYear, endYear),
   );
   const [isPlaying, setIsPlaying] = useState(false);
