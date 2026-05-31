@@ -109,10 +109,6 @@ function StorybookIframe({
 }): React.ReactElement {
   const [isLoaded, setIsLoaded] = React.useState(false);
 
-  React.useEffect(() => {
-    setIsLoaded(false);
-  }, [iframeSource]);
-
   return (
     <div style={{ minHeight: height, position: "relative" }}>
       {isLoaded ? null : (
@@ -206,6 +202,7 @@ export function StorybookEmbed({
           componentName={componentName}
           height={height}
           iframeSource={iframeSource}
+          key={iframeSource}
         />
       ) : null}
     </div>
