@@ -25,6 +25,7 @@ This root file is a **pointer** — it tracks repo-wide events that don't ship i
 - **Registry-item richness** — every `/r/<name>.json` now carries `version`, `stability`, optional `a11y` schema, optional inline `examples`. Top-level `/r/registry.json` carries `version` + `generatedAt`.
 - **Site UX** — Header GitHub icon, `/request-component` and `/report` pages with prefilled-GitHub-issue forms, per-component "Report a bug" button.
 - **Brand** — `DESIGN.md` at repo root with the canonical brand + design guideline (color tokens, typography, motion, anti-patterns).
+- **Agent skill** — `skills/vllnt-ui/` teaches AI coding harnesses how to consume `@vllnt/ui` and follow the design system. Acts as a table of contents: stable rules inline, the live component set + deep docs fetched from `/r/registry.json`, `/llms.txt`, `/llms-full.txt`, and `DESIGN.md`.
 
 ### Notes
 
