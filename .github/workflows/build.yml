@@ -1,4 +1,7 @@
-# ui — vllnt-cluster build pipeline (ui-registry app from monorepo).
+# ui — vllnt-cluster build pipeline.
+# Matrix builds both ui-registry (root Dockerfile) and storybook
+# (apps/storybook/Dockerfile) in parallel, each pushed to its own
+# OVH registry repo + deployed via the cluster deployer API.
 
 name: build
 
@@ -9,17 +12,13 @@ on:
     types: [opened, synchronize, reopened]
   workflow_dispatch: {}
 
-env:
-  SERVICE_NAME: ui-registry
-  IMAGE_BASE: "${{ vars.REGISTRY_HOST }}/vllnt/ui-registry"
-
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build-sign-scan-deploy:
-    name: build · sign · scan · deploy
+    name: build · sign · scan · deploy (${{ matrix.service }})
     runs-on: vllnt-cluster
     timeout-minutes: 25
     permissions:
@@ -27,6 +26,16 @@ jobs:
       checks: write
       deployments: write
       pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: ui-registry
+            dockerfile: Dockerfile
+          - service: storybook
+            dockerfile: apps/storybook/Dockerfile
+    env:
+      IMAGE_BASE: "${{ vars.REGISTRY_HOST }}/vllnt/${{ matrix.service }}"
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 1 }
@@ -58,6 +67,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ${{ matrix.dockerfile }}
           push: true
           tags: "${{ env.IMAGE_BASE }}:${{ steps.tag.outputs.tag }}"
           provenance: false
@@ -89,7 +99,7 @@ jobs:
         env:
           DEPLOYER_API_BEARER: ${{ secrets.DEPLOYER_API_BEARER }}
         with:
-          service:   ui-registry
+          service:   ${{ matrix.service }}
           env:       ${{ steps.tag.outputs.env }}
           sha:       ${{ steps.tag.outputs.sha }}
           digest:    ${{ steps.build.outputs.digest }}
