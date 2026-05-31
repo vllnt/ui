@@ -21,6 +21,7 @@ This file is the **index**. Detailed rules live in [`docs/agents/`](./docs/agent
 |------|---------|-----------|
 | `packages/ui/` | `@vllnt/ui` component library | npm (public) |
 | `apps/registry/` | `ui.vllnt.ai` — Next.js registry + docs site | deployed (Vercel) |
+| `skills/` | Agent skills (e.g. `vllnt-ui` — how to consume `@vllnt/ui` + the design system) | — |
 | `.github/workflows/` | CI: `ci.yml`, `publish.yml`, `storybook.yml`, `pr-issue-link.yml` | — |
 
 External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt/typescript`.
