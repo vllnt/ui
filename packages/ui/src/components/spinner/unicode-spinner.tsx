@@ -675,11 +675,16 @@ export const UnicodeSpinner = ({
 }: UnicodeSpinnerProps & React.RefAttributes<HTMLSpanElement>) => {
   const preset = UNICODE_SPINNER_PRESETS[animation];
   const resolvedInterval = interval ?? preset.interval;
-  const [frameIndex, setFrameIndex] = React.useState(0);
+  const [frameState, setFrameState] = React.useState(() => ({
+    animation,
+    frameIndex: 0,
+  }));
+  let frameIndex = frameState.frameIndex;
 
-  React.useEffect(() => {
-    setFrameIndex(0);
-  }, [animation]);
+  if (frameState.animation !== animation) {
+    frameIndex = 0;
+    setFrameState({ animation, frameIndex });
+  }
 
   React.useEffect(() => {
     if (paused) {
@@ -687,13 +692,22 @@ export const UnicodeSpinner = ({
     }
 
     const timer = window.setInterval(() => {
-      setFrameIndex((current) => (current + 1) % preset.frames.length);
+      setFrameState((current) => {
+        if (current.animation !== animation) {
+          return current;
+        }
+
+        return {
+          ...current,
+          frameIndex: (current.frameIndex + 1) % preset.frames.length,
+        };
+      });
     }, resolvedInterval);
 
     return () => {
       window.clearInterval(timer);
     };
-  }, [paused, preset.frames.length, resolvedInterval]);
+  }, [animation, paused, preset.frames.length, resolvedInterval]);
 
   const frame = preset.frames[frameIndex] ?? preset.frames[0] ?? "⠋";
   const accessibleLabel = label ? `Loading ${label}` : "Loading";

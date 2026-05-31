@@ -161,26 +161,53 @@ function buildRevealPlan(
   return revealPlan;
 }
 
+type RevealProgressState = {
+  active: boolean;
+  length: number;
+  progress: number;
+  stagger: number;
+};
+
 function useRevealProgress(active: boolean, length: number, stagger: number) {
-  const [progress, setProgress] = React.useState(0);
+  const [state, setState] = React.useState<RevealProgressState>(() => ({
+    active,
+    length,
+    progress: active ? 0 : length,
+    stagger,
+  }));
+  let progress = state.progress;
+
+  if (
+    state.active !== active ||
+    state.length !== length ||
+    state.stagger !== stagger
+  ) {
+    progress = active ? 0 : length;
+    setState({ active, length, progress, stagger });
+  }
 
   React.useEffect(() => {
     if (!active) {
-      setProgress(length);
       return;
     }
 
-    setProgress(0);
-
     const revealInterval = window.setInterval(
       () => {
-        setProgress((current) => {
-          if (current >= length + 4) {
+        setState((current) => {
+          if (
+            current.active !== active ||
+            current.length !== length ||
+            current.stagger !== stagger
+          ) {
+            return current;
+          }
+
+          if (current.progress >= length + 4) {
             window.clearInterval(revealInterval);
             return current;
           }
 
-          return current + 1;
+          return { ...current, progress: current.progress + 1 };
         });
       },
       Math.max(16, stagger),
@@ -193,7 +220,6 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
 
   return progress;
 }
-
 function useMatrixFrame({
   active,
   progress,
