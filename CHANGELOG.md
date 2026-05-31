@@ -32,6 +32,10 @@ Release automation can regenerate this file from Conventional Commits with
   prefilled-GitHub-issue forms, per-component "Report a bug" button.
 - **Brand** - `DESIGN.md` at repo root with the canonical brand and design
   guideline (color tokens, typography, motion, anti-patterns).
+- **Agent skill** - `skills/vllnt-ui/` teaches AI coding harnesses how to consume
+  `@vllnt/ui` and follow the design system. It acts as a table of contents:
+  stable rules inline, with the live component set and deep docs fetched from
+  `/r/registry.json`, `/llms.txt`, `/llms-full.txt`, and `DESIGN.md`.
 - **Hooks + utility primitives** - `CopyButton` with `useCopyToClipboard`,
   `Banner` with `BannerAction`, `Kbd`, `EmptyState`, `DocumentSiblingNav`.
 - **Pricing + identity cards** - `PricingTable`, `PricingPlan`,
