@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
@@ -25,26 +25,29 @@ type SidebarProps = {
   sections: SidebarSection[];
 };
 
+const getMobileSnapshot = () =>
+  typeof window === "undefined" ? false : window.innerWidth < 1024;
+
+const getServerMobileSnapshot = () => false;
+
+const subscribeToViewportResize = (onStoreChange: () => void) => {
+  window.addEventListener("resize", onStoreChange);
+
+  return () => {
+    window.removeEventListener("resize", onStoreChange);
+  };
+};
+
 function useMobile(setOpen: (open: boolean) => void) {
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(
+    subscribeToViewportResize,
+    getMobileSnapshot,
+    getServerMobileSnapshot,
+  );
 
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 1024;
-      setIsMobile(mobile);
-      if (mobile) {
-        setOpen(false);
-      } else {
-        setOpen(true);
-      }
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, [setOpen]);
+    setOpen(!isMobile);
+  }, [isMobile, setOpen]);
 
   return isMobile;
 }
