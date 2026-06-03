@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type StepProps = {
@@ -117,6 +118,8 @@ function InteractiveStep({
 }
 
 export type StepByStepProps = {
+  /** Heading tag for the main title. Defaults to `h3`. */
+  as?: HeadingTag;
   children: ReactNode;
   className?: string;
   interactive?: boolean;
@@ -125,6 +128,7 @@ export type StepByStepProps = {
 
 // eslint-disable-next-line max-lines-per-function -- Complex component with interactive/non-interactive modes
 function StepByStep({
+  as: Heading = "h3",
   children,
   className,
   interactive = false,
@@ -158,7 +162,7 @@ function StepByStep({
                 strokeWidth={2}
               />
             </svg>
-            <h3 className="font-semibold text-lg">{title}</h3>
+            <Heading className="font-semibold text-lg">{title}</Heading>
           </div>
         ) : null}
         <div className="space-y-0">

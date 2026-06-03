@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 
@@ -12,6 +13,8 @@ export type WorldClockBarZone = {
 };
 
 export type WorldClockBarProps = React.ComponentPropsWithoutRef<"div"> & {
+  /** Heading tag for the title. Defaults to `h2`. */
+  as?: HeadingTag;
   now?: Date | number | string;
   showDate?: boolean;
   title?: string;
@@ -140,6 +143,7 @@ export const WorldClockBar = React.forwardRef<
 >(
   (
     {
+      as: Heading = "h2",
       className,
       now,
       showDate = true,
@@ -156,7 +160,9 @@ export const WorldClockBar = React.forwardRef<
       <div className={cn("space-y-3", className)} ref={ref} {...props}>
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+            <Heading className="text-lg font-semibold tracking-tight">
+              {title}
+            </Heading>
             <p className="text-sm text-muted-foreground">
               Synchronized time across distributed teams and regions.
             </p>

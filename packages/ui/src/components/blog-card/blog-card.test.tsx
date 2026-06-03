@@ -85,7 +85,9 @@ describe("ContentCard", () => {
 });
 
 describe("BlogCard", () => {
-  it("is the same component as ContentCard", () => {
-    expect(BlogCard).toBe(ContentCard);
+  it("renders through the backwards-compatible alias", () => {
+    render(<BlogCard href="/posts/first-post" post={post} />);
+
+    expect(screen.getByText("First post")).toBeInTheDocument();
   });
 });

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import registry from "../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
@@ -38,6 +39,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  const docsRoutes: MetadataRoute.Sitemap = DOCS_PAGES.map((page) => ({
+    url: `${SITE_URL}${getDocsPath(page)}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
+
   const items = (registry as { readonly items: readonly RegistryItem[] }).items;
 
   const componentRoutes: MetadataRoute.Sitemap = items.map((item) => ({
@@ -62,5 +70,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...staticRoutes, ...componentRoutes, ...registryEndpoints];
+  return [
+    ...staticRoutes,
+    ...docsRoutes,
+    ...componentRoutes,
+    ...registryEndpoints,
+  ];
 }

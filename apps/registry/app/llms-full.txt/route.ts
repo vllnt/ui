@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 import registry from "../../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
@@ -14,11 +15,20 @@ type RegistryItem = {
   readonly registryDependencies?: readonly string[];
 };
 
-const DOC_PAGES: ReadonlyArray<{ slug: string; title: string }> = [
-  { slug: "home", title: "Get Started" },
-  { slug: "docs", title: "Documentation" },
-  { slug: "philosophy", title: "Philosophy" },
-  { slug: "components", title: "Components Overview" },
+const REFERENCE_PAGES: readonly {
+  href: string;
+  slug: string;
+  title: string;
+}[] = [
+  { href: "/", slug: "home", title: "Get Started" },
+  { href: "/docs", slug: "docs", title: "Documentation" },
+  ...DOCS_PAGES.map((page) => ({
+    href: getDocsPath(page),
+    slug: `docs/${page.slug}`,
+    title: page.title,
+  })),
+  { href: "/philosophy", slug: "philosophy", title: "Philosophy" },
+  { href: "/components", slug: "components", title: "Components Overview" },
 ];
 
 function stripFrontmatter(source: string): string {
@@ -61,23 +71,15 @@ async function buildLlmsFullTxt(): Promise<string> {
   lines.push("");
   lines.push("```bash");
   lines.push(`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json`);
-  lines.push(`# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`);
   lines.push("```");
   lines.push("");
 
-  const docPages = await Promise.all(
-    DOC_PAGES.map(async (page) => ({
-      ...page,
-      body: await readDocPage(page.slug),
-    })),
-  );
-
-  for (const page of docPages) {
-    const { body } = page;
+  for (const page of REFERENCE_PAGES) {
+    const body = await readDocPage(page.slug);
     if (!body) continue;
     lines.push(`## ${page.title}`);
     lines.push("");
-    lines.push(`Source: ${SITE_URL}/${page.slug === "home" ? "" : page.slug}`);
+    lines.push(`Source: ${SITE_URL}${page.href}`);
     lines.push("");
     lines.push(body);
     lines.push("");

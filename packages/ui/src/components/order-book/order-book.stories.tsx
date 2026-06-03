@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { OrderBook } from "./order-book";
 
+const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+
 const sampleAsks = [
   { price: 185.24, size: 4.2 },
   { price: 185.31, size: 6.8 },
@@ -23,6 +25,13 @@ const meta = {
     asks: sampleAsks,
     bids: sampleBids,
   },
+  argTypes: {
+    as: {
+      control: "select",
+      description: "Override the rendered heading tag.",
+      options: headingTagOptions,
+    },
+  },
   component: OrderBook,
   title: "Data/OrderBook",
 } satisfies Meta<typeof OrderBook>;
@@ -35,5 +44,11 @@ export const Default: Story = {};
 export const TightSpread: Story = {
   args: {
     asks: sampleAsks.map((level) => ({ ...level, price: level.price - 0.02 })),
+  },
+};
+
+export const HeadingOverride: Story = {
+  args: {
+    as: "h2",
   },
 };
