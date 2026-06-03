@@ -38,10 +38,13 @@ apps:
       args:
         # Registry inlines the storybook URL at build time (Next.js bakes
         # NEXT_PUBLIC_* during `next build`) so it can embed live component
-        # previews. Points at the public storybook. (Preview registry ->
-        # preview storybook cross-linking is a planned per-env enhancement —
-        # see docs/specs/ntk.md.)
-        NEXT_PUBLIC_STORYBOOK_URL: https://storybook.vllnt.ai
+        # previews. {url:storybook} is resolved per-env by the deployer:
+        #   production → https://storybook.vllnt.ai
+        #   preview    → the matching pr-<N> storybook (tailnet)
+        # so a preview registry links to its own preview storybook. The tailnet
+        # base stays in the deployer, never this public file. ntk.yaml token
+        # reference: vllnt/infra docs/specs/ntk.md.
+        NEXT_PUBLIC_STORYBOOK_URL: "{url:storybook}"
 
   # Component workshop → storybook.vllnt.ai
   - name: storybook
