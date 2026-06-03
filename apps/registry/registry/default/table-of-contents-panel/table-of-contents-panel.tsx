@@ -4,6 +4,7 @@ import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type TOCSection = {
@@ -12,6 +13,8 @@ export type TOCSection = {
 };
 
 export type TableOfContentsPanelProps = {
+  /** Heading tag for the panel title. Defaults to `h2`. */
+  as?: HeadingTag;
   className?: string;
   closeIcon?: ReactNode;
   completedSections: Set<string>;
@@ -30,6 +33,7 @@ export type TableOfContentsPanelProps = {
 
 // eslint-disable-next-line max-lines-per-function -- Complex panel with progress and section list
 function TableOfContentsPanelImpl({
+  as: Heading = "h2",
   className,
   closeIcon,
   completedSections,
@@ -106,9 +110,9 @@ function TableOfContentsPanelImpl({
         <div className="flex h-full flex-col">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <h2 className="text-lg font-semibold" id="toc-title">
+            <Heading className="text-lg font-semibold" id="toc-title">
               {title}
-            </h2>
+            </Heading>
             <button
               aria-label="Close table of contents"
               className="flex size-8 items-center justify-center rounded-md hover:bg-muted"
