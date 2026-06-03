@@ -1,0 +1,57 @@
+# ntk.yaml — vllnt/ui deploy config (ntk CLI / vllnt platform deployer).
+#
+# Public repo: this file is declarative and PUBLIC-SAFE only.
+#   - No secrets, tokens, or credentials (the deploy token is passed via the
+#     NTK_TOKEN env at deploy time, never committed).
+#   - No internal infra identifiers (registry host, tailnet IDs, node names, IPs).
+#   - Secrets + per-env private vars are injected by the deployer from the
+#     platform vault at deploy time — they are never declared here.
+# Preview hostnames are tailnet-only and derived by the deployer per-PR; they
+# are intentionally not declared in this file. See docs/specs/ntk.md.
+
+project: ui                          # token-scope + allowlist key (granted server-side)
+
+apps:
+  # Component registry / docs site → ui.vllnt.ai
+  - name: ui-registry
+    path: apps/registry
+    port: 3000
+    healthcheck: /
+    domains:
+      production: ui.vllnt.ai
+    visibility:                      # previews are tailnet-only (hostname derived by deployer)
+      production: public
+      preview:    tailnet
+    replicas:
+      production: 1
+      preview:    1
+    resources:
+      requests: { cpu: 100m, memory: 256Mi }
+      limits:   { cpu: 1000m, memory: 1024Mi }
+    env:
+      production:
+        SITE_URL: https://ui.vllnt.ai
+        NEXT_PUBLIC_SITE_URL: https://ui.vllnt.ai
+    build:
+      dockerfile: Dockerfile         # repo-root Dockerfile builds @vllnt/ui-registry
+      context: .
+
+  # Component workshop → storybook.vllnt.ai
+  - name: storybook
+    path: apps/storybook
+    port: 8080
+    healthcheck: /healthz
+    domains:
+      production: storybook.vllnt.ai
+    visibility:
+      production: public
+      preview:    tailnet
+    replicas:
+      production: 1
+      preview:    1
+    resources:
+      requests: { cpu: 50m, memory: 64Mi }
+      limits:   { cpu: 500m, memory: 256Mi }
+    build:
+      dockerfile: apps/storybook/Dockerfile
+      context: .
