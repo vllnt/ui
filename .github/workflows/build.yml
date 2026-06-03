@@ -65,12 +65,22 @@ jobs:
 
       - id: build
         uses: docker/build-push-action@v6
+        # Hard ceiling on a single build so a runaway can't hold a pool slot
+        # forever (the pr-243 20-min case). Default 25m; the ntk deploy path
+        # honors ntk.yaml build.timeout per-app (deployer-enforced).
+        timeout-minutes: 25
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
           tags: "${{ env.IMAGE_BASE }}:${{ steps.tag.outputs.tag }}"
           provenance: false
+          # Registry build cache (per-app): unchanged layers (pnpm install, base,
+          # deps) reuse across every PR/build and survive BuildKit pod
+          # restarts/scaling — the cross-build speedup that makes the multi-replica
+          # pool actually fast under load. mode=max caches intermediate layers too.
+          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}:buildcache,mode=max
 
       - name: Trivy scan
         uses: aquasecurity/trivy-action@0.35.0
