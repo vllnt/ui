@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
@@ -25,26 +25,29 @@ type SidebarProps = {
   sections: SidebarSection[];
 };
 
+const getMobileSnapshot = () =>
+  typeof window === "undefined" ? false : window.innerWidth < 1024;
+
+const getServerMobileSnapshot = () => false;
+
+const subscribeToViewportResize = (onStoreChange: () => void) => {
+  window.addEventListener("resize", onStoreChange);
+
+  return () => {
+    window.removeEventListener("resize", onStoreChange);
+  };
+};
+
 function useMobile(setOpen: (open: boolean) => void) {
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(
+    subscribeToViewportResize,
+    getMobileSnapshot,
+    getServerMobileSnapshot,
+  );
 
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 1024;
-      setIsMobile(mobile);
-      if (mobile) {
-        setOpen(false);
-      } else {
-        setOpen(true);
-      }
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, [setOpen]);
+    setOpen(!isMobile);
+  }, [isMobile, setOpen]);
 
   return isMobile;
 }
@@ -123,6 +126,7 @@ function CollapsibleSection({
           "grid transition-all duration-200 ease-in-out",
           isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
         )}
+        hidden={!isOpen}
       >
         <div className="overflow-hidden">{children}</div>
       </div>
@@ -146,6 +150,7 @@ export function Sidebar({ sections }: SidebarProps) {
       {isMobile && open ? (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          data-testid="sidebar-overlay"
           onClick={() => {
             setOpen(false);
           }}

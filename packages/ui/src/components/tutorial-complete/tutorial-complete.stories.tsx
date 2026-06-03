@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { TutorialComplete } from "./tutorial-complete";
 
+const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+
 const meta = {
   args: {
     backHref: "/tutorials",
@@ -37,6 +39,18 @@ const meta = {
     ],
     title: "React Fundamentals",
   },
+  argTypes: {
+    titleAs: {
+      control: "select",
+      description: "Override the rendered title heading tag.",
+      options: headingTagOptions,
+    },
+    sectionLabelAs: {
+      control: "select",
+      description: "Override the rendered section label heading tag.",
+      options: headingTagOptions,
+    },
+  },
   component: TutorialComplete,
   title: "Learning/TutorialComplete",
 } satisfies Meta<typeof TutorialComplete>;
@@ -45,3 +59,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const HeadingOverride: Story = {
+  args: {
+    titleAs: "h2",
+    sectionLabelAs: "h4",
+  },
+};

@@ -1,3 +1,5 @@
+import type { HeadingTag } from "../../lib/types";
+
 export type SharePlatform =
   | "bluesky"
   | "facebook"
@@ -45,6 +47,8 @@ function buildShareUrl(
 }
 
 type ShareSectionProps = {
+  /** Heading tag for the share title. Defaults to `h3`. */
+  as?: HeadingTag;
   buildUrl?: (platform: SharePlatform, url: string, title: string) => string;
   platforms?: PlatformConfig[];
   shareOn: string;
@@ -54,6 +58,7 @@ type ShareSectionProps = {
 };
 
 export function ShareSection({
+  as: Heading = "h3",
   buildUrl: buildUrlFunction = buildShareUrl,
   platforms = defaultPlatforms,
   shareOn,
@@ -63,7 +68,7 @@ export function ShareSection({
 }: ShareSectionProps) {
   return (
     <div className="border-t border-border pt-6 mt-8">
-      <h3 className="text-lg font-semibold mb-4">{shareTitle}</h3>
+      <Heading className="text-lg font-semibold mb-4">{shareTitle}</Heading>
       <div className="flex flex-wrap gap-3">
         {platforms.map((platform) => (
           <a

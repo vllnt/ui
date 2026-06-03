@@ -65,7 +65,7 @@ const Row = (props: {
   onSelect?: (id: string) => void;
 }): React.ReactElement => {
   const { active, bookmark, onSelect } = props;
-  const handleClick = (): void => {
+  const handleSelectBookmark = (): void => {
     onSelect?.(bookmark.id);
   };
   const rowClass =
@@ -84,7 +84,7 @@ const Row = (props: {
         )}
         data-viewport-bookmark={bookmark.id}
         data-viewport-bookmark-active={active}
-        onClick={handleClick}
+        onClick={handleSelectBookmark}
         type="button"
       >
         <RowBody bookmark={bookmark} />

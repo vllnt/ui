@@ -2,6 +2,7 @@
 
 import { type ReactNode, useState } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type QuizOption = {
@@ -157,6 +158,8 @@ function QuizResult({
 }
 
 export type QuizProps = {
+  /** Heading tag for the question. Defaults to `h4`. */
+  as?: HeadingTag;
   className?: string;
   explanation?: ReactNode;
   hint?: string;
@@ -167,6 +170,7 @@ export type QuizProps = {
 
 // eslint-disable-next-line max-lines-per-function -- Interactive quiz with state management
 export function Quiz({
+  as: Heading = "h4",
   className,
   explanation,
   hint,
@@ -208,13 +212,13 @@ export function Quiz({
             strokeWidth={2}
           />
         </svg>
-        <h4 className="font-semibold text-foreground">{question}</h4>
+        <Heading className="font-semibold text-foreground">{question}</Heading>
       </div>
       <div className="space-y-2 mb-4">
         {options.map((opt, index) => (
           <QuizOptionButton
             index={index}
-            key={typeof opt === "string" ? opt : `quiz-option-${String(opt)}`}
+            key={`quiz-option-${index}-${opt.label}`}
             onSelect={(index_) => {
               if (!submitted) setSelectedIndex(index_);
             }}

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
 export type KeyConceptProps = {
@@ -59,6 +60,8 @@ export function KeyConcept({
 }
 
 export type GlossaryProps = {
+  /** Heading tag for the glossary title. Defaults to `h4`. */
+  as?: HeadingTag;
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
@@ -66,6 +69,7 @@ export type GlossaryProps = {
 };
 
 export function Glossary({
+  as: Heading = "h4",
   children,
   className,
   icon,
@@ -73,7 +77,7 @@ export function Glossary({
 }: GlossaryProps): React.ReactNode {
   return (
     <div className={cn("my-6", className)}>
-      <h4 className="font-semibold mb-3 flex items-center gap-2">
+      <Heading className="font-semibold mb-3 flex items-center gap-2">
         {icon ? (
           <span className="size-4">{icon}</span>
         ) : (
@@ -92,7 +96,7 @@ export function Glossary({
           </svg>
         )}
         {title}
-      </h4>
+      </Heading>
       <dl className="space-y-2">{children}</dl>
     </div>
   );
