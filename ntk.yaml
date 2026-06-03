@@ -35,6 +35,13 @@ apps:
     build:
       dockerfile: Dockerfile         # repo-root Dockerfile builds @vllnt/ui-registry
       context: .
+      args:
+        # Registry inlines the storybook URL at build time (Next.js bakes
+        # NEXT_PUBLIC_* during `next build`) so it can embed live component
+        # previews. Points at the public storybook. (Preview registry ->
+        # preview storybook cross-linking is a planned per-env enhancement —
+        # see docs/specs/ntk.md.)
+        NEXT_PUBLIC_STORYBOOK_URL: https://storybook.vllnt.ai
 
   # Component workshop → storybook.vllnt.ai
   - name: storybook
