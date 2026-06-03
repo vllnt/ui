@@ -58,24 +58,6 @@ export function softwareSourceCodeLd(component: {
   };
 }
 
-export function itemListLd(items: ReadonlyArray<{
-  readonly name: string;
-  readonly title: string;
-}>): JsonLdNode {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "VLLNT UI Components",
-    numberOfItems: items.length,
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.title,
-      url: `${SITE_URL}/components/${item.name}`,
-    })),
-  };
-}
-
 export function breadcrumbLd(trail: ReadonlyArray<{
   readonly name: string;
   readonly url: string;
