@@ -1,0 +1,45 @@
+---
+title: Components
+description: Learn component anatomy, accessibility expectations, composition patterns, and test coverage.
+type: docs
+og:
+  title: Components
+  description: Component anatomy and quality expectations for VLLNT UI
+  type: docs
+---
+
+# Components
+
+VLLNT UI components are designed as accessible primitives for real application surfaces. Each component should expose predictable DOM, semantic state, and enough composition hooks to fit product workflows.
+
+## Anatomy
+
+Most components live under:
+
+```text
+packages/ui/src/components/<name>/
+```
+
+Common files include:
+
+- `<name>.tsx` for source.
+- `<name>.test.tsx` for Vitest coverage.
+- `<name>.stories.tsx` for Storybook examples.
+- `<name>.visual.tsx` for component-test screenshots when applicable.
+- `index.ts` for exports.
+
+## Composition
+
+Prefer explicit subcomponents when a component has multiple regions. Keep root elements semantic: dialogs are dialogs, lists are lists, navigation is navigation, and controls expose native button or input behavior whenever possible.
+
+## Accessibility
+
+Every interactive component should support keyboard operation, visible focus, ARIA only where native semantics are not enough, and stable labels for assistive technology. Components built on Radix primitives should preserve the primitive's accessibility contract.
+
+## Testing
+
+Tests should cover rendering, prop forwarding, key interactions, and accessibility-critical state. When a component persists state or listens to browser events, include regression tests for storage and event behavior.
+
+## Registry copies
+
+Registry files are generated from package source. Fix source first, then regenerate the registry output instead of editing `apps/registry/registry/default` by hand.

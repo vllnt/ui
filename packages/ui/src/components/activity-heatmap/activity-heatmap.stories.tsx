@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { ActivityHeatmap } from "./activity-heatmap";
 
+const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+
 const meta = {
   args: {
     data: [
@@ -18,6 +20,13 @@ const meta = {
     title: "Deployment activity",
     weeks: 12,
   },
+  argTypes: {
+    as: {
+      control: "select",
+      description: "Override the rendered heading tag.",
+      options: headingTagOptions,
+    },
+  },
   component: ActivityHeatmap,
   title: "Data/ActivityHeatmap",
 } satisfies Meta<typeof ActivityHeatmap>;
@@ -30,5 +39,11 @@ export const Default: Story = {};
 export const TwoWeeks: Story = {
   args: {
     weeks: 2,
+  },
+};
+
+export const HeadingOverride: Story = {
+  args: {
+    as: "h2",
   },
 };

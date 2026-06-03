@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Check, Code, Copy, FileCode } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 import { Button } from "../button";
 
@@ -27,6 +28,8 @@ function CodeLine({ highlightLines, line, lineNumber }: CodeLineProps) {
 }
 
 export type CodePlaygroundProps = {
+  /** Heading tag for the title. Defaults to `h4`. */
+  as?: HeadingTag;
   children: ReactNode;
   description?: string;
   filename?: string;
@@ -39,6 +42,7 @@ export type CodePlaygroundProps = {
 const EMPTY_HIGHLIGHT_LINES: number[] = [];
 
 export function CodePlayground({
+  as: Heading = "h4",
   children,
   description,
   filename,
@@ -67,7 +71,7 @@ export function CodePlayground({
             <Code className="size-4 text-primary" />
           </div>
           <div>
-            <h4 className="font-semibold text-sm">{title}</h4>
+            <Heading className="font-semibold text-sm">{title}</Heading>
             {description ? (
               <p className="text-xs text-muted-foreground">{description}</p>
             ) : null}

@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { CandlestickChart } from "./candlestick-chart";
 
+const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+
 const sampleData = [
   { close: 189.8, high: 191.2, label: "Mon", low: 182.4, open: 184.6 },
   { close: 186.1, high: 193.5, label: "Tue", low: 184.8, open: 190.3 },
@@ -14,6 +16,13 @@ const sampleData = [
 const meta = {
   args: {
     data: sampleData,
+  },
+  argTypes: {
+    as: {
+      control: "select",
+      description: "Override the rendered heading tag.",
+      options: headingTagOptions,
+    },
   },
   component: CandlestickChart,
   title: "Data/CandlestickChart",
@@ -28,5 +37,11 @@ export const Compact: Story = {
   args: {
     height: 220,
     width: 560,
+  },
+};
+
+export const HeadingOverride: Story = {
+  args: {
+    as: "h2",
   },
 };
