@@ -470,7 +470,7 @@ export const AIArtifactCopyButton = forwardRef<
   ToolbarButtonProps
 >(({ className, onClick, ...rest }, ref) => {
   const { copied, copy, labels } = useAIArtifact();
-  const handleClick = useCallback(
+  const handleCopyArtifact = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -482,7 +482,7 @@ export const AIArtifactCopyButton = forwardRef<
     <Button
       aria-label={copied ? labels.copied : labels.copy}
       className={cn("size-8", className)}
-      onClick={handleClick}
+      onClick={handleCopyArtifact}
       ref={ref}
       size="icon"
       type="button"
@@ -510,7 +510,7 @@ export const AIArtifactEditButton = forwardRef<
   ToolbarButtonProps
 >(({ className, onClick, ...rest }, ref) => {
   const { hasOnEdit, labels, onEdit } = useAIArtifact();
-  const handleClick = useCallback(
+  const handleEditArtifact = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -523,7 +523,7 @@ export const AIArtifactEditButton = forwardRef<
     <Button
       aria-label={labels.edit}
       className={cn("size-8", className)}
-      onClick={handleClick}
+      onClick={handleEditArtifact}
       ref={ref}
       size="icon"
       type="button"
@@ -547,7 +547,7 @@ export const AIArtifactDownloadButton = forwardRef<
   ToolbarButtonProps
 >(({ className, onClick, ...rest }, ref) => {
   const { download, labels } = useAIArtifact();
-  const handleClick = useCallback(
+  const handleDownloadArtifact = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -559,7 +559,7 @@ export const AIArtifactDownloadButton = forwardRef<
     <Button
       aria-label={labels.download}
       className={cn("size-8", className)}
-      onClick={handleClick}
+      onClick={handleDownloadArtifact}
       ref={ref}
       size="icon"
       type="button"
@@ -584,7 +584,7 @@ export const AIArtifactFullscreenButton = forwardRef<
   ToolbarButtonProps
 >(({ className, onClick, ...rest }, ref) => {
   const { fullscreen, labels, toggleFullscreen } = useAIArtifact();
-  const handleClick = useCallback(
+  const handleToggleArtifactFullscreen = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -597,7 +597,7 @@ export const AIArtifactFullscreenButton = forwardRef<
       aria-label={fullscreen ? labels.exitFullscreen : labels.enterFullscreen}
       aria-pressed={fullscreen}
       className={cn("size-8", className)}
-      onClick={handleClick}
+      onClick={handleToggleArtifactFullscreen}
       ref={ref}
       size="icon"
       type="button"

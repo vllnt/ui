@@ -414,7 +414,7 @@ function EventNode({
   const titleText = typeof event.title === "string" ? event.title : "Event";
   const tooltipId = `${event.id}-tooltip`;
 
-  const handleClick = (
+  const handleSelectTimelineEvent = (
     mouseEvent: ReactMouseEvent<HTMLButtonElement>,
   ): void => {
     mouseEvent.stopPropagation();
@@ -433,7 +433,7 @@ function EventNode({
       data-event-id={event.id}
       data-event-track={event.track ?? ""}
       data-selected={active ? "true" : undefined}
-      onClick={handleClick}
+      onClick={handleSelectTimelineEvent}
       style={{
         left: `${(left * 100).toString()}%`,
         width: isDuration ? `${(width * 100).toString()}%` : undefined,

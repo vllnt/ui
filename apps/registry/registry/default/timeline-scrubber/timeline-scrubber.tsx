@@ -247,7 +247,9 @@ export const TimelineScrubber = forwardRef<
   const span = safeEnd - start;
   const clamped = clamp(value, start, safeEnd);
   const ratio = clamp((clamped - start) / span, 0, 1);
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleScrubberValueChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
     onValueChange(clamp(Number(event.target.value), start, safeEnd));
   };
   return (
@@ -274,7 +276,7 @@ export const TimelineScrubber = forwardRef<
         inputId={inputId}
         max={safeEnd}
         min={start}
-        onChange={handleChange}
+        onChange={handleScrubberValueChange}
         ratio={ratio}
         scrubberId={inputId}
         span={span}
