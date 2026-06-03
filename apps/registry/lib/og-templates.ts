@@ -10,7 +10,7 @@ const DESCRIPTION_MAX = 120;
 const TITLE_MAX_LARGE = 25;
 const TITLE_MAX_SMALL = 30;
 
-export const OG_TEMPLATES = {
+const OG_TEMPLATES = {
   component: {
     descriptionMaxLength: DESCRIPTION_MAX,
     footerLabel: "COMPONENT",

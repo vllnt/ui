@@ -50,14 +50,14 @@ function ShareMenu({
   return (
     <div className="flex flex-col gap-0.5 rounded-md border border-zinc-300 bg-background p-1.5 shadow-md dark:border-zinc-600">
       {platforms.map((p) => {
-        const handleClick = () => {
+        const handleSelectSharePlatform = () => {
           onPlatformSelect(p.key);
         };
         return (
           <button
             className="rounded px-3 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             key={p.key}
-            onClick={handleClick}
+            onClick={handleSelectSharePlatform}
             type="button"
           >
             {p.label}
@@ -69,11 +69,11 @@ function ShareMenu({
 }
 
 function ActionButton({ action }: { action: SocialFabActionConfig }) {
-  const handleClick = action.onClick;
+  const handleRunAction = action.onClick;
   return (
     <button
       className="rounded px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent"
-      onClick={handleClick}
+      onClick={handleRunAction}
       type="button"
     >
       {action.label}
@@ -133,7 +133,7 @@ function MainFabButton({
   mainText: string;
   onToggle: () => void;
 }) {
-  const handleClick = onToggle;
+  const handleToggleSharePanel = onToggle;
   return (
     <button
       aria-expanded={isExpanded}
@@ -144,7 +144,7 @@ function MainFabButton({
         "transition-all duration-200 ease-out",
         "hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md dark:hover:border-zinc-500",
       )}
-      onClick={handleClick}
+      onClick={handleToggleSharePanel}
       type="button"
     >
       <span className="text-sm font-mono">

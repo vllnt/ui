@@ -82,7 +82,7 @@ const Crumb = (props: {
 }): React.ReactElement => {
   const { crumb, isLast, onSelect } = props;
   const glyph = crumb.kind ? KIND_GLYPH[crumb.kind] : null;
-  const handleClick = (): void => {
+  const handleSelectCrumb = (): void => {
     onSelect?.(crumb.id);
   };
   const text = (
@@ -115,7 +115,7 @@ const Crumb = (props: {
       className="inline-flex items-center rounded-sm text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       data-world-breadcrumb={crumb.id}
       data-world-breadcrumb-active="false"
-      onClick={handleClick}
+      onClick={handleSelectCrumb}
       type="button"
     >
       {text}

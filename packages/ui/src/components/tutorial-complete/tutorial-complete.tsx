@@ -5,6 +5,7 @@ import { memo } from "react";
 import { Check, ChevronRight, RotateCcw } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { Button } from "../button";
 import { ProfileSection } from "../profile-section";
 import { ShareSection } from "../share-section";
@@ -54,9 +55,13 @@ export type TutorialCompleteProps = {
     socialLinks: { href: string; label: string }[];
   };
   relatedContent: TutorialCompleteRelatedContent[];
+  /** Heading tag for review/related-content section labels. Defaults to `h3`. */
+  sectionLabelAs?: HeadingTag;
   sections: TutorialCompleteSection[];
   shareUrl: string;
   title: string;
+  /** Heading tag for the main completion title. Defaults to `h2`. */
+  titleAs?: HeadingTag;
 };
 
 function DefaultLink({
@@ -86,9 +91,11 @@ function TutorialCompleteImpl({
   onRestart,
   profile,
   relatedContent,
+  sectionLabelAs: SectionHeading = "h3",
   sections,
   shareUrl,
   title,
+  titleAs: TitleHeading = "h2",
 }: TutorialCompleteProps): React.ReactNode {
   const isFullyComplete = completionPercent === 100;
 
@@ -106,9 +113,9 @@ function TutorialCompleteImpl({
           />
         </div>
 
-        <h2 className="text-3xl font-semibold mb-2">
+        <TitleHeading className="text-3xl font-semibold mb-2">
           {isFullyComplete ? labels.tutorialComplete : labels.tutorialFinished}
-        </h2>
+        </TitleHeading>
 
         <p className="text-muted-foreground mb-6">
           {isFullyComplete
@@ -124,7 +131,9 @@ function TutorialCompleteImpl({
 
       {/* Review Sections */}
       <div className="max-w-2xl mx-auto mt-8">
-        <h3 className="text-lg font-semibold mb-4">{labels.reviewSections}</h3>
+        <SectionHeading className="text-lg font-semibold mb-4">
+          {labels.reviewSections}
+        </SectionHeading>
         <div className="space-y-2">
           {sections.map((section, index) => {
             const isCompleted = completedSections.has(section.id);
@@ -159,9 +168,9 @@ function TutorialCompleteImpl({
       {/* Related Content */}
       {relatedContent.length > 0 ? (
         <div className="max-w-2xl mx-auto mt-12">
-          <h3 className="text-lg font-semibold mb-4">
+          <SectionHeading className="text-lg font-semibold mb-4">
             {labels.relatedContent}
-          </h3>
+          </SectionHeading>
           <div className="space-y-2">
             {relatedContent.map((item) => (
               <LinkComponent

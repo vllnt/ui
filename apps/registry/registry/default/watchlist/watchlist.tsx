@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight, Star } from "lucide-react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type WatchlistItem = {
@@ -14,6 +15,8 @@ export type WatchlistItem = {
 };
 
 export type WatchlistProps = {
+  /** Heading tag for the title. Defaults to `h2`. */
+  as?: HeadingTag;
   eyebrow?: string;
   items: WatchlistItem[];
   title?: string;
@@ -89,6 +92,7 @@ function WatchlistRow({ item }: { item: WatchlistItem }): React.JSX.Element {
 export const Watchlist = React.forwardRef<HTMLDivElement, WatchlistProps>(
   (
     {
+      as: Heading = "h2",
       className,
       eyebrow = "Tracked symbols",
       items,
@@ -119,7 +123,9 @@ export const Watchlist = React.forwardRef<HTMLDivElement, WatchlistProps>(
             <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
               {eyebrow}
             </p>
-            <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+            <Heading className="text-lg font-semibold text-foreground">
+              {title}
+            </Heading>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-emerald-600 dark:text-emerald-400">

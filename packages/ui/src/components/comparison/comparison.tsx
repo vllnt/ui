@@ -3,6 +3,7 @@
 import { ArrowRight, Check, Minus, X } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
 type ComparisonSide = {
@@ -13,6 +14,8 @@ type ComparisonSide = {
 
 export type ComparisonProps = {
   after: ComparisonSide;
+  /** Heading tag for the title. Defaults to `h4`. */
+  as?: HeadingTag;
   before: ComparisonSide;
   title?: string;
 };
@@ -40,6 +43,7 @@ const variantConfig = {
 
 export function Comparison({
   after,
+  as: Heading = "h4",
   before,
   title,
   ...rest
@@ -61,7 +65,7 @@ export function Comparison({
 
   return (
     <div className="my-6">
-      {title ? <h4 className="font-semibold mb-3">{title}</h4> : null}
+      {title ? <Heading className="font-semibold mb-3">{title}</Heading> : null}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className={cn("rounded-lg border", beforeConfig.className)}>
           <div

@@ -10,6 +10,13 @@ type JsonLdValue =
 
 type JsonLdNode = { readonly [key: string]: JsonLdValue };
 
+export type JsonLdScriptAttributes = {
+  readonly dangerouslySetInnerHTML: {
+    readonly __html: string;
+  };
+  readonly type: "application/ld+json";
+};
+
 export function organizationLd(): JsonLdNode {
   return {
     "@context": "https://schema.org",
@@ -51,24 +58,6 @@ export function softwareSourceCodeLd(component: {
   };
 }
 
-export function itemListLd(items: ReadonlyArray<{
-  readonly name: string;
-  readonly title: string;
-}>): JsonLdNode {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "VLLNT UI Components",
-    numberOfItems: items.length,
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: item.title,
-      url: `${SITE_URL}/components/${item.name}`,
-    })),
-  };
-}
-
 export function breadcrumbLd(trail: ReadonlyArray<{
   readonly name: string;
   readonly url: string;
@@ -85,6 +74,41 @@ export function breadcrumbLd(trail: ReadonlyArray<{
   };
 }
 
+export function techArticleLd(article: {
+  readonly description: string;
+  readonly title: string;
+  readonly url: string;
+}): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: article.title,
+    description: article.description,
+    url: article.url,
+    author: {
+      "@type": "Organization",
+      name: "VLLNT",
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "VLLNT",
+      url: SITE_URL,
+    },
+    programmingLanguage: "TypeScript",
+    about: "React component library documentation",
+  };
+}
+
 export function jsonLdScript(node: JsonLdNode | readonly JsonLdNode[]): string {
-  return JSON.stringify(node);
+  return JSON.stringify(node).replaceAll("<", "\\u003c");
+}
+
+export function jsonLdScriptAttributes(
+  node: JsonLdNode | readonly JsonLdNode[],
+): JsonLdScriptAttributes {
+  return {
+    dangerouslySetInnerHTML: { __html: jsonLdScript(node) },
+    type: "application/ld+json",
+  };
 }
