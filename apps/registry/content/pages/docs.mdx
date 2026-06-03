@@ -10,17 +10,17 @@ og:
 
 # Getting Started
 
-Welcome to VLLNT UI. This is a component registry built with shadcn/ui.
+Welcome to VLLNT UI. This is an accessible React component registry built with Radix primitives, Tailwind CSS, CVA, and the shadcn CLI registry format.
 
-## Installation
+## Quick install
 
-Install components using the shadcn CLI:
+Install any component with the shadcn CLI:
 
 ```bash
 pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/[component-name].json
 ```
 
-## Usage
+## Package usage
 
 Import components from `@vllnt/ui`:
 
@@ -31,3 +31,10 @@ export function MyComponent() {
   return <Button>Click me</Button>
 }
 ```
+
+## Machine-readable surfaces
+
+- `/r/registry.json` lists every registry item.
+- `/r/<name>.json` returns the shadcn-compatible descriptor for one component.
+- `/sitemap.xml` exposes all public pages and registry endpoints.
+- `/llms.txt` and `/llms-full.txt` provide compact and full agent context.

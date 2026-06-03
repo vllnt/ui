@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 import {
@@ -26,6 +27,8 @@ export type StatusBoardItem = {
 };
 
 export type StatusBoardProps = React.ComponentPropsWithoutRef<"div"> & {
+  /** Heading tag for the title. Defaults to `h2`. */
+  as?: HeadingTag;
   columns?: 2 | 3 | 4;
   description?: string;
   items: StatusBoardItem[];
@@ -176,6 +179,7 @@ function StatusBoardCard({ item }: { item: StatusBoardItem }) {
 export const StatusBoard = React.forwardRef<HTMLDivElement, StatusBoardProps>(
   (
     {
+      as: Heading = "h2",
       className,
       columns = 3,
       description,
@@ -189,7 +193,9 @@ export const StatusBoard = React.forwardRef<HTMLDivElement, StatusBoardProps>(
       <div className={cn("space-y-4", className)} ref={ref} {...props}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-1">
-            <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+            <Heading className="text-lg font-semibold tracking-tight">
+              {title}
+            </Heading>
             {description ? (
               <p className="text-sm text-muted-foreground">{description}</p>
             ) : null}

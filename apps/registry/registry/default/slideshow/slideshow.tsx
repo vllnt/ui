@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { useMounted } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { CompletionDialog } from "@vllnt/ui";
@@ -26,6 +27,8 @@ export type SlideshowLabels = {
 };
 
 export type SlideshowProps = {
+  /** Heading tag for the sections label inside the table of contents. Defaults to `h3`. */
+  as?: HeadingTag;
   /** Completed section IDs */
   completedSections: Set<string>;
   /** Dialog labels */
@@ -64,6 +67,7 @@ const DEFAULT_LABELS: Required<SlideshowLabels> = {
 const EMPTY_SLIDESHOW_LABELS: SlideshowLabels = {};
 
 function SlideshowImpl({
+  as: SectionsHeading = "h3",
   completedSections,
   completionDialogTitle = "Mark section as complete?",
   currentIndex,
@@ -300,7 +304,9 @@ function SlideshowImpl({
               role="dialog"
             >
               <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b border-border bg-background">
-                <h3 className="font-semibold">{mergedLabels.sectionsLabel}</h3>
+                <SectionsHeading className="font-semibold">
+                  {mergedLabels.sectionsLabel}
+                </SectionsHeading>
                 <button
                   aria-label={mergedLabels.closeLabel}
                   className="p-2 rounded-lg hover:bg-muted transition-colors"

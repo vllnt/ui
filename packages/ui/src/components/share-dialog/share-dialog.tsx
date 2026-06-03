@@ -42,7 +42,7 @@ function PlatformButton({
   onClick: (key: string) => void;
   platform: SharePlatform;
 }) {
-  const handleClick = () => {
+  const handleSelectPlatform = () => {
     onClick(platform.key);
   };
 
@@ -55,7 +55,7 @@ function PlatformButton({
         "hover:bg-accent hover:text-accent-foreground",
         "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
       )}
-      onClick={handleClick}
+      onClick={handleSelectPlatform}
       type="button"
     >
       {platform.label}

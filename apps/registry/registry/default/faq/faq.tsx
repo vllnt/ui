@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type FAQItemProps = {
@@ -48,16 +49,22 @@ function FAQItem({ children, defaultOpen = false, question }: FAQItemProps) {
 }
 
 export type FAQProps = {
+  /** Heading tag for the FAQ title. Defaults to `h4`. */
+  as?: HeadingTag;
   children: ReactNode;
   title?: string;
 };
 
-function FAQ({ children, title = "Frequently Asked Questions" }: FAQProps) {
+function FAQ({
+  as: Heading = "h4",
+  children,
+  title = "Frequently Asked Questions",
+}: FAQProps) {
   return (
     <div className="my-6 rounded-lg border bg-card">
       <div className="flex items-center gap-2 p-4 border-b border-border">
         <HelpCircle className="size-5 text-primary" />
-        <h4 className="font-semibold">{title}</h4>
+        <Heading className="font-semibold">{title}</Heading>
       </div>
       <div className="px-4">{children}</div>
     </div>
