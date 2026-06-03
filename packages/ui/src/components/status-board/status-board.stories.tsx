@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { StatusBoard } from "./status-board";
 
+const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+
 const meta = {
   args: {
     description: "Track health, latency, and incident context across key services.",
@@ -37,6 +39,13 @@ const meta = {
     ],
     title: "Service health",
   },
+  argTypes: {
+    as: {
+      control: "select",
+      description: "Override the rendered heading tag.",
+      options: headingTagOptions,
+    },
+  },
   component: StatusBoard,
   title: "Data/StatusBoard",
 } satisfies Meta<typeof StatusBoard>;
@@ -49,5 +58,11 @@ export const Default: Story = {};
 export const Compact: Story = {
   args: {
     columns: 2,
+  },
+};
+
+export const HeadingOverride: Story = {
+  args: {
+    as: "h2",
   },
 };

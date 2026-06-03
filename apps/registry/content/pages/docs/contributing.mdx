@@ -1,0 +1,47 @@
+---
+title: Contributing
+description: Set up the repository, run the dev loop, follow story conventions, and prepare PRs.
+type: docs
+og:
+  title: Contributing
+  description: Contributor workflow for VLLNT UI
+  type: docs
+---
+
+# Contributing
+
+The repository is a pnpm and Turborepo workspace. The package source lives in `packages/ui`, and the registry/docs site lives in `apps/registry`.
+
+## Setup
+
+```bash
+pnpm install --frozen-lockfile
+```
+
+Use pnpm only. Do not use npm, yarn, or bun for workspace commands.
+
+## Local dev loop
+
+Useful commands from the repo root:
+
+```bash
+pnpm -F @vllnt/ui lint
+pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
+pnpm build
+pnpm test:once
+pnpm check:circular
+```
+
+Run narrower tests while developing, then run the full gates before opening or updating a PR.
+
+## Stories
+
+Stories should demonstrate realistic states, not only default rendering. Include disabled, loading, empty, error, and long-content states when those states exist.
+
+## Registry output
+
+Do not hand-edit generated registry files. Update source files under `packages/ui/src/components`, then regenerate registry output through the documented scripts.
+
+## Pull requests
+
+Every PR should link an issue, keep the body aligned with the current head, and include validation evidence. Keep unrelated refactors out of feature PRs so review can focus on the issue being closed.

@@ -252,6 +252,21 @@ function SimplePreview({ description }: { description: string }) {
   );
 }
 
+// Graceful fallback for components without a dedicated preview: a muted wordmark
+// tile derived from the component slug, so gallery cards still look intentional.
+function PlaceholderPreview({ componentName }: { componentName: string }) {
+  const label = componentName
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <span className="text-sm font-medium text-muted-foreground">{label}</span>
+    </div>
+  );
+}
+
 function ButtonPreview() {
   return (
     <div className="flex flex-wrap gap-2">
@@ -2486,6 +2501,6 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
     case "world-clock-bar":
       return <WorldClockBarPreview />;
     default:
-      return <div className="text-muted-foreground">Preview not available</div>;
+      return <PlaceholderPreview componentName={componentName} />;
   }
 }

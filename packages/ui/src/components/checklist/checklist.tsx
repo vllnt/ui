@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
 export const CHECKLIST_PROGRESS_EVENT = "vllnt:checklist-progress-change";
@@ -128,6 +129,7 @@ function ChecklistItemRow({
 
 type ChecklistHeaderProps = {
   checked: number;
+  Heading: HeadingTag;
   progress: number;
   title?: string;
   total: number;
@@ -135,6 +137,7 @@ type ChecklistHeaderProps = {
 
 function ChecklistHeader({
   checked,
+  Heading,
   progress,
   title,
   total,
@@ -142,7 +145,7 @@ function ChecklistHeader({
   if (!title) return null;
   return (
     <div className="flex items-center justify-between mb-3">
-      <h4 className="font-semibold flex items-center gap-2">
+      <Heading className="font-semibold flex items-center gap-2">
         <svg
           className="size-5 text-primary"
           fill="none"
@@ -157,7 +160,7 @@ function ChecklistHeader({
           />
         </svg>
         {title}
-      </h4>
+      </Heading>
       <span className="text-xs text-muted-foreground">
         {checked}/{total} ({progress}%)
       </span>
@@ -166,6 +169,8 @@ function ChecklistHeader({
 }
 
 export type ChecklistProps = {
+  /** Heading tag for the checklist title. Defaults to `h4`. */
+  as?: HeadingTag;
   className?: string;
   items: ChecklistItem[];
   onComplete?: () => void;
@@ -175,6 +180,7 @@ export type ChecklistProps = {
 
 // eslint-disable-next-line max-lines-per-function -- Complex interactive component with state and localStorage
 export function Checklist({
+  as: Heading = "h4",
   className,
   items,
   onComplete,
@@ -224,6 +230,7 @@ export function Checklist({
     <div className={cn("my-6 rounded-lg border bg-card p-4", className)}>
       <ChecklistHeader
         checked={checked.size}
+        Heading={Heading}
         progress={progress}
         title={title}
         total={items.length}

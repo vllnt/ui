@@ -4,10 +4,13 @@ import { memo, useCallback, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
 export type CompletionDialogProps = {
+  /** Heading tag for the dialog title. Defaults to `h2`. */
+  as?: HeadingTag;
   cancelLabel?: string;
   cancelShortcut?: string;
   className?: string;
@@ -26,6 +29,7 @@ type DialogContentProps = Omit<CompletionDialogProps, "isOpen">;
 
 // eslint-disable-next-line max-lines-per-function -- Dialog content with keyboard handling
 function DialogContent({
+  as: Heading = "h2",
   cancelLabel = "Skip",
   cancelShortcut = "S",
   className,
@@ -75,9 +79,9 @@ function DialogContent({
         )}
       </button>
       <div className="mb-4">
-        <h2 className="text-lg font-semibold" id="completion-dialog-title">
+        <Heading className="text-lg font-semibold" id="completion-dialog-title">
           {title}
-        </h2>
+        </Heading>
         {description ? (
           <div className="text-sm text-muted-foreground mt-1.5">
             {description}
@@ -112,6 +116,7 @@ function DialogContent({
 
 // eslint-disable-next-line max-lines-per-function -- Modal with keyboard handling
 function CompletionDialogImpl({
+  as,
   cancelLabel,
   cancelShortcut = "S",
   className,
@@ -178,6 +183,7 @@ function CompletionDialogImpl({
         onClick={onClose}
       />
       <DialogContent
+        as={as}
         cancelLabel={cancelLabel}
         cancelShortcut={cancelShortcut}
         className={className}
