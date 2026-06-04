@@ -3,6 +3,7 @@
 import { NavbarSaas, SearchDialog } from "@vllnt/ui";
 import { useRouter } from "next/navigation";
 
+import { searchPagefind } from "@/components/header/pagefind-search";
 import { GitHubMark } from "@/components/github-mark";
 import registryData from "@/registry.json";
 
@@ -13,7 +14,7 @@ type Registry = {
 };
 
 export function Header() {
-  const { push } = useRouter();
+  const router = useRouter();
   const registry = registryData as Registry;
 
   const navItems = [
@@ -24,12 +25,13 @@ export function Header() {
   ];
 
   const searchItems = registry.items.reduce<
-    { description?: string; id: string; title: string }[]
+    { description?: string; href?: string; id: string; title: string }[]
   >((items, item) => {
     if (item.type !== "registry:component") return items;
 
     items.push({
       description: item.description,
+      href: `/components/${item.name}`,
       id: item.name,
       title: item.title,
     });
@@ -44,14 +46,20 @@ export function Header() {
       rightSlot={
         <div className="flex items-center gap-2">
           <SearchDialog
-            buttonText="Search components..."
-            emptyText="No components found."
+            buttonText="Search..."
+            docsEmptyText="No docs found."
+            docsGroupHeading="Docs"
+            docsSearch={searchPagefind}
+            emptyText="No results found."
             groupHeading="Components"
             items={searchItems}
-            onSelect={(item) => {
-              push(`/components/${item.id}`);
+            onDocsSelect={(item) => {
+              router.push(item.href ?? item.id);
             }}
-            searchPlaceholder="Search components..."
+            onSelect={(item) => {
+              router.push(item.href ?? `/components/${item.id}`);
+            }}
+            searchPlaceholder="Search docs and components..."
           />
           <a
             aria-label="VLLNT UI on GitHub"

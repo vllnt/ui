@@ -93,6 +93,12 @@ export default [
     },
   },
   {
+    files: ['**/components/search-dialog/search-dialog.tsx'],
+    rules: {
+      'max-lines-per-function': 'off',
+    },
+  },
+  {
     files: ['**/components/tldr-section/tldr-section.tsx'],
     rules: {
       'max-lines-per-function': 'off',
