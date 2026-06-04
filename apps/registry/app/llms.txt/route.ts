@@ -89,13 +89,10 @@ function buildDocumentationLines(): readonly string[] {
     "",
     `- [Get Started](${SITE_URL}/): install and use any component`,
     `- [Documentation](${SITE_URL}/docs): theming, registry usage, conventions`,
-  );
-  for (const page of DOCS_PAGES) {
-    lines.push(
-      `- [${page.title}](${SITE_URL}${getDocsPath(page)}): ${page.description}`,
-    );
-  }
-  lines.push(
+    ...DOCS_PAGES.map(
+      (page) =>
+        `- [${page.title}](${SITE_URL}${getDocsPath(page)}): ${page.description}`,
+    ),
     `- [Philosophy](${SITE_URL}/philosophy): design principles and component patterns`,
     `- [Components index](${SITE_URL}/components): browse all components by category`,
     `- [Changelog](${SITE_URL}/changelog): canonical Keep a Changelog release history`,
