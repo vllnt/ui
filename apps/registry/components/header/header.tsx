@@ -33,6 +33,7 @@ export function Header() {
     { href: "/philosophy", title: "Philosophy" },
     { href: "/design", title: "Design" },
     { href: "/components", title: "Components" },
+    { href: "/templates", title: "Templates" },
   ];
 
   const searchItems = registry.items.reduce<

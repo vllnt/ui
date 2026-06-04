@@ -5,6 +5,7 @@ import { getLatestReleaseRecords } from "@/lib/changelog";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
+import { getTemplatePath, TEMPLATES } from "../../lib/templates";
 import registry from "../../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
@@ -134,6 +135,26 @@ async function buildReleaseLines(): Promise<readonly string[]> {
   ];
 }
 
+function buildTemplateLines(): readonly string[] {
+  if (TEMPLATES.length === 0) return [];
+
+  return [
+    "## Templates",
+    "",
+    "Starter kits pairing complete app shapes with component lists and source paths.",
+    "",
+    ...TEMPLATES.flatMap((template) => [
+      `### ${template.title}`,
+      "",
+      `- Slug: \`${template.slug}\``,
+      `- Page: ${SITE_URL}${getTemplatePath(template)}`,
+      `- Audience: ${template.audience}`,
+      `- Components: ${template.components.join(", ")}`,
+      "",
+    ]),
+  ];
+}
+
 function buildComponentLines(item: RegistryItem): readonly string[] {
   return [
     `### ${item.title}`,
@@ -173,6 +194,7 @@ async function buildLlmsFullTxt(): Promise<string> {
   const documentLines = await buildDocumentLines();
   const designLines = await buildDesignLines();
   const releaseLines = await buildReleaseLines();
+  const templateLines = buildTemplateLines();
 
   return [
     ...buildIntroLines(items),
@@ -180,6 +202,7 @@ async function buildLlmsFullTxt(): Promise<string> {
     ...documentLines,
     ...designLines,
     ...releaseLines,
+    ...templateLines,
     ...buildComponentsReferenceLines(items),
   ].join("\n");
 }

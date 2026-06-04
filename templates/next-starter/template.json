@@ -1,0 +1,17 @@
+{
+  "slug": "next-starter",
+  "title": "Next Starter",
+  "demoUrl": "https://ui.vllnt.ai/templates/next-starter",
+  "screenshots": [
+    "screenshots/preview.svg"
+  ],
+  "components": [
+    "button",
+    "card",
+    "form",
+    "input",
+    "tabs",
+    "navbar-saas",
+    "theme-provider"
+  ]
+}

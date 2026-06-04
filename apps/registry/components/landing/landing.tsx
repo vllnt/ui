@@ -38,7 +38,7 @@ function Hero({
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 lg:px-8">
         <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          v{version} · MIT
+          v{version} / MIT
         </p>
         <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl">
           {componentCount} agent-first React components.
@@ -62,6 +62,12 @@ function Hero({
           >
             Browse {componentCount} components
             <ArrowRight className="size-4" />
+          </Link>
+          <Link
+            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+            href="/templates"
+          >
+            Browse templates
           </Link>
           <Link
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -148,12 +154,12 @@ function AgentCallout() {
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <AgentCard
-            description="Concise index per the llmstxt.org spec — sections, links, descriptions."
+            description="Concise index per the llmstxt.org spec - sections, links, descriptions."
             href="/llms.txt"
             title="/llms.txt"
           />
           <AgentCard
-            description="Full registry context in one fetch — docs + per-component descriptors."
+            description="Full registry context in one fetch - docs + per-component descriptors."
             href="/llms-full.txt"
             title="/llms-full.txt"
           />

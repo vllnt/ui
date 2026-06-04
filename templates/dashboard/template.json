@@ -1,0 +1,42 @@
+{
+  "slug": "dashboard",
+  "title": "Dashboard",
+  "demoUrl": "https://ui.vllnt.ai/templates/dashboard",
+  "screenshots": [
+    "screenshots/preview.svg"
+  ],
+  "components": [
+    "activity-log",
+    "area-chart",
+    "bar-chart",
+    "button",
+    "calendar",
+    "card",
+    "category-filter",
+    "checkbox",
+    "command",
+    "data-list",
+    "data-table",
+    "date-picker",
+    "dropdown-menu",
+    "filter-bar",
+    "line-chart",
+    "metric-cluster",
+    "metric-gauge",
+    "pagination",
+    "popover",
+    "progress-bar",
+    "scroll-area",
+    "select",
+    "sidebar",
+    "stat-card",
+    "status-board",
+    "status-indicator",
+    "table",
+    "tabs",
+    "toast",
+    "tooltip",
+    "view-switcher",
+    "workspace-switcher"
+  ]
+}

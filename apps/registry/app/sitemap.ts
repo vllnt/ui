@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
+import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import registry from "../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
@@ -35,6 +36,7 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
   const routes = [
     { changeFrequency: "weekly", priority: 1, url: SITE_URL },
     { changeFrequency: "weekly", priority: 1, url: `${SITE_URL}/components` },
+    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/templates` },
     { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/changelog` },
     { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/docs` },
     {
@@ -56,6 +58,17 @@ function docsRoutes(lastModified: Date): MetadataRoute.Sitemap {
       lastModified,
       priority: 0.75,
       url: `${SITE_URL}${getDocsPath(page)}`,
+    }),
+  );
+}
+
+function templateRoutes(lastModified: Date): MetadataRoute.Sitemap {
+  return TEMPLATES.map((template) =>
+    entry({
+      changeFrequency: "weekly",
+      lastModified,
+      priority: 0.7,
+      url: `${SITE_URL}${getTemplatePath(template)}`,
     }),
   );
 }
@@ -109,6 +122,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticRoutes(lastModified),
     ...docsRoutes(lastModified),
+    ...templateRoutes(lastModified),
     ...componentRoutes(items, lastModified),
     ...registryRoutes(items, lastModified),
   ];

@@ -96,6 +96,7 @@ function buildDocumentationLines(): readonly string[] {
     `- [Philosophy](${SITE_URL}/philosophy): design principles and component patterns`,
     `- [Design guide](${SITE_URL}/design): brand, tokens, accessibility, and UI rules`,
     `- [Components index](${SITE_URL}/components): browse all components by category`,
+    `- [Templates](${SITE_URL}/templates): starter kits for full VLLNT UI apps`,
     `- [Changelog](${SITE_URL}/changelog): canonical Keep a Changelog release history`,
     `- [Releases](${SITE_URL}/releases): versioned release cards, GitHub notes, and RSS links`,
     `- [RSS feed](${SITE_URL}/rss.xml): release feed for notification and agent polling`,
