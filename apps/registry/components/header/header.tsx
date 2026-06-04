@@ -9,12 +9,19 @@ import {
   NavbarSaas,
   SearchDialog,
 } from "@vllnt/ui";
-import { ChevronDown } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { ChevronDown, Languages } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { searchPagefind } from "@/components/header/pagefind-search";
 import { GitHubMark } from "@/components/github-mark";
+import {
+  Link,
+  type Locale,
+  routing,
+  usePathname,
+  useRouter,
+} from "@/i18n/routing";
+import { localizePathname } from "@/lib/seo";
 import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
@@ -23,17 +30,29 @@ type Registry = {
   items: { description?: string; name: string; title: string; type: string }[];
 };
 
-export function Header() {
+type HeaderProps = {
+  readonly locale: Locale;
+};
+
+export function Header({ locale }: HeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const t = useTranslations("header");
   const registry = registryData as Registry;
 
   const navItems = [
-    { href: "/", title: "Get Started" },
-    { href: "/docs", title: "Docs" },
-    { href: "/philosophy", title: "Philosophy" },
-    { href: "/design", title: "Design" },
-    { href: "/components", title: "Components" },
-    { href: "/templates", title: "Templates" },
+    { href: localizePathname("/", locale), title: t("navGetStarted") },
+    { href: localizePathname("/docs", locale), title: "Docs" },
+    {
+      href: localizePathname("/philosophy", locale),
+      title: t("navPhilosophy"),
+    },
+    { href: localizePathname("/design", locale), title: "Design" },
+    {
+      href: localizePathname("/components", locale),
+      title: t("navComponents"),
+    },
+    { href: localizePathname("/templates", locale), title: "Templates" },
   ];
 
   const searchItems = registry.items.reduce<
@@ -43,7 +62,7 @@ export function Header() {
 
     items.push({
       description: item.description,
-      href: `/components/${item.name}`,
+      href: localizePathname(`/components/${item.name}`, locale),
       id: item.name,
       title: item.title,
     });
@@ -69,7 +88,9 @@ export function Header() {
               router.push(item.href ?? item.id);
             }}
             onSelect={(item) => {
-              router.push(item.href ?? `/components/${item.id}`);
+              router.push(
+                item.href ?? localizePathname(`/components/${item.id}`, locale),
+              );
             }}
             searchPlaceholder="Search docs and components..."
           />
@@ -88,12 +109,29 @@ export function Header() {
                 <Link href="/changelog">Changelog</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/rss.xml">RSS feed</Link>
+                <a href="/rss.xml">RSS feed</a>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <div className="flex items-center rounded-md border border-border">
+            <Languages
+              aria-hidden="true"
+              className="ml-2 size-4 text-muted-foreground"
+            />
+            {routing.locales.map((entry) => (
+              <Link
+                aria-current={entry === locale ? "page" : undefined}
+                className="px-2 py-1 text-xs font-medium uppercase text-muted-foreground hover:text-foreground aria-[current=page]:text-foreground"
+                href={pathname}
+                key={entry}
+                locale={entry}
+              >
+                {entry}
+              </Link>
+            ))}
+          </div>
           <a
-            aria-label="VLLNT UI on GitHub"
+            aria-label={t("githubLabel")}
             className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
             href={GITHUB_URL}
             rel="noreferrer"

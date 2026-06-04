@@ -1,9 +1,46 @@
+import { type Locale, routing } from "@/i18n/routing";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
-export function canonical(pathname: string): string {
+export function localizePathname(
+  pathname: string,
+  locale: Locale = routing.defaultLocale,
+): string {
   const trimmed = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  if (trimmed === "/") {
-    return SITE_URL;
+  const normalized = trimmed === "/" ? "" : trimmed.replace(/\/$/, "");
+
+  if (locale === routing.defaultLocale) {
+    return normalized || "/";
   }
-  return `${SITE_URL}${trimmed.replace(/\/$/, "")}`;
+
+  return `/${locale}${normalized}`;
+}
+
+export function canonical(
+  pathname: string,
+  locale: Locale = routing.defaultLocale,
+): string {
+  const localized = localizePathname(pathname, locale);
+  return localized === "/" ? SITE_URL : `${SITE_URL}${localized}`;
+}
+
+export function languageAlternates(pathname: string): Record<string, string> {
+  const alternates = Object.fromEntries(
+    routing.locales.map((locale) => [locale, canonical(pathname, locale)]),
+  );
+
+  return {
+    ...alternates,
+    "x-default": canonical(pathname, routing.defaultLocale),
+  };
+}
+
+export function ogLocale(locale: Locale): string {
+  return locale === "fr" ? "fr_FR" : "en_US";
+}
+
+export function alternateOgLocales(locale: Locale): string[] {
+  return routing.locales
+    .filter((entry) => entry !== locale)
+    .map((entry) => ogLocale(entry));
 }

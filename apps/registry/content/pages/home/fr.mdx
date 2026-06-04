@@ -1,0 +1,62 @@
+---
+title: VLLNT UI - Registre de composants
+description: 225 composants React agent-first. Installez avec la CLI shadcn - aucune bibliotheque a importer, aucun verrou de version.
+type: home
+og:
+  title: ui.vllnt.ai
+  description: Registre de composants React agent-first - installez avec la CLI shadcn
+  type: home
+---
+
+# Installez n'importe quel composant en une ligne
+
+Choisissez un composant, copiez sa commande d'installation, puis lancez-la. La CLI recupere la source depuis `ui.vllnt.ai/r/<name>.json` et l'ecrit directement dans votre depot. Le code vous appartient.
+
+## Installation
+
+```bash
+# pnpm
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+
+# npm
+npx shadcn@latest add https://ui.vllnt.ai/r/button.json
+
+# yarn
+yarn dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+
+# bun
+bunx --bun shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
+
+Remplacez `button.json` par le nom d'un composant du [registre](/fr/components).
+
+## Pas de CLI supplementaire
+
+Il n'y a pas de `@vllnt/cli`. La CLI shadcn comprend deja le format de registre. L'utiliser avec `ui.vllnt.ai/r/<name>.json` est le chemin d'installation supporte.
+
+## Utilisation apres installation
+
+```tsx
+import { Button } from "@/components/ui/button";
+
+export function MyComponent() {
+  return <Button>Click me</Button>;
+}
+```
+
+La CLI installe les fichiers source dans votre projet sous `components/ui/`, configurable via `components.json`. Les mises a jour restent explicites : relancez la commande quand vous voulez une version plus recente.
+
+## Pourquoi c'est utile aux agents
+
+Chaque composant est aussi expose comme descripteur JSON lisible par machine :
+
+- `https://ui.vllnt.ai/r/registry.json` - index des 225 composants
+- `https://ui.vllnt.ai/r/<name>.json` - un composant
+- `https://ui.vllnt.ai/llms.txt` - index concis selon la specification [llmstxt.org](https://llmstxt.org)
+- `https://ui.vllnt.ai/llms-full.txt` - contexte agent complet en une requete
+
+## Etapes suivantes
+
+- Parcourir [les 225 composants](/fr/components)
+- Lire la [philosophie](/fr/philosophy) de la bibliotheque
+- Lire la [documentation](/fr/docs)

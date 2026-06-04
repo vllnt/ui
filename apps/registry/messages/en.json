@@ -1,0 +1,152 @@
+{
+  "common": {
+    "backToHome": "Back home",
+    "browseComponents": "Browse all components",
+    "components": "Components",
+    "docs": "Docs",
+    "getStarted": "Get Started",
+    "github": "GitHub",
+    "home": "Home",
+    "locale": "Language",
+    "philosophy": "Philosophy",
+    "readDocs": "Read the docs",
+    "requestComponent": "Request a component"
+  },
+  "header": {
+    "githubLabel": "VLLNT UI on GitHub",
+    "navComponents": "Components",
+    "navGetStarted": "Get Started",
+    "navPhilosophy": "Philosophy",
+    "searchButton": "Search components...",
+    "searchEmpty": "No components found.",
+    "searchGroup": "Components",
+    "searchPlaceholder": "Search components..."
+  },
+  "footer": {
+    "builtWith": "VLLNT UI · MIT licensed · Built with Radix UI, Tailwind CSS, and CVA",
+    "community": "Community",
+    "discussions": "Discussions",
+    "legal": "Legal",
+    "library": "Library",
+    "maintainedBy": "Maintained by",
+    "registryJson": "Registry JSON",
+    "reportBug": "Report a bug",
+    "resources": "Resources",
+    "sponsor": "Sponsor",
+    "storybook": "Storybook"
+  },
+  "pages": {
+    "components": {
+      "description": "Explore all {count} components available in the library.",
+      "noPreview": "No preview",
+      "stories": "{count, plural, one {# story} other {# stories}}",
+      "title": "Components"
+    },
+    "docs": {
+      "description": "Learn how to use VLLNT UI components in your projects.",
+      "title": "Documentation"
+    },
+    "home": {
+      "description": "Install any of {count} accessible React components with the shadcn CLI. Built on Radix UI, Tailwind CSS, and CVA. Every component is a machine-readable JSON descriptor agents can consume directly. v{version}, MIT licensed.",
+      "title": "VLLNT UI - {count} agent-first React components"
+    },
+    "notFound": {
+      "description": "That route does not exist. Try one of the popular components below, or jump back to the index.",
+      "popular": "Popular components",
+      "title": "Page not found"
+    },
+    "philosophy": {
+      "description": "The principles that guide VLLNT UI design and development.",
+      "title": "Philosophy"
+    },
+    "report": {
+      "description": "Found something broken? Fill out the fields and we'll open a prefilled GitHub issue with the right labels and template.",
+      "metaDescription": "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue - no backend.",
+      "title": "Report a bug"
+    },
+    "requestComponent": {
+      "description": "Don't see what you need? Fill out the fields and we'll open a prefilled GitHub issue with the right labels and template.",
+      "metaDescription": "Request a new VLLNT UI component. The form opens a prefilled GitHub issue - no backend.",
+      "title": "Request a component"
+    },
+    "component": {
+      "code": "Code",
+      "dependencies": "Dependencies",
+      "installation": "Installation",
+      "reportBug": "Report a bug",
+      "storybook": "Storybook",
+      "storybookDescription": "Explore all variants, controls, and accessibility checks in the interactive Storybook playground.",
+      "storiesAvailable": "{count, plural, one {# story available:} other {# stories available:}}",
+      "viewInStorybook": "View in Storybook"
+    }
+  },
+  "landing": {
+    "agent": {
+      "description": "Every component ships as a machine-readable JSON descriptor with name, version, stability, accessibility schema, usage examples, and prop definitions. Agents discover the registry through three surfaces.",
+      "eyebrow": "Agent-first",
+      "llmsDescription": "Concise index per the llmstxt.org spec: sections, links, descriptions.",
+      "llmsFullDescription": "Full registry context in one fetch: docs plus per-component descriptors.",
+      "mcpDescription": "Streamable HTTP MCP server. Tools: search_components, get_component, list_categories.",
+      "open": "Open",
+      "title": "Built so AI coding agents can use it directly."
+    },
+    "community": {
+      "description": "MIT licensed. No tracking. No backend. Issues, ideas, and pull requests welcome.",
+      "openStorybook": "Open Storybook",
+      "requestComponent": "Request a component",
+      "starGithub": "Star on GitHub",
+      "title": "Build with the community."
+    },
+    "featured": {
+      "description": "A few favourites. Browse all {count} from",
+      "title": "Featured components"
+    },
+    "hero": {
+      "browseComponents": "Browse {count} components",
+      "description": "Built on Radix UI, Tailwind CSS, and CVA. Every component is also a machine-readable JSON descriptor: agents read the registry directly without scraping HTML.",
+      "github": "GitHub",
+      "kicker": "v{version} - MIT",
+      "readDocs": "Read the docs",
+      "rscCompatible": "RSC compatible",
+      "subtitle": "Copy, paste, ship.",
+      "tailwindReady": "Tailwind v4 ready",
+      "title": "{count} agent-first React components."
+    },
+    "stats": {
+      "categories": "Categories",
+      "components": "Components",
+      "lastBuild": "Last build",
+      "libraryVersion": "Library version"
+    }
+  },
+  "forms": {
+    "report": {
+      "actualLabel": "Actual behavior",
+      "actualPlaceholder": "What actually happened. Include console output or screenshots if useful.",
+      "componentLabel": "Component (optional)",
+      "componentPlaceholder": "e.g. button, combobox, ai-chat-input",
+      "expectedLabel": "Expected behavior",
+      "expectedPlaceholder": "What you expected to happen.",
+      "note": "Submitting opens a new GitHub issue tab. Nothing is sent to a server.",
+      "reproLabel": "Reproduction",
+      "reproPlaceholder": "Minimal repo / sandbox link / runnable snippet.",
+      "submit": "Open prefilled GitHub issue",
+      "summaryLabel": "One-line summary",
+      "summaryPlaceholder": "Concise headline for the issue title."
+    },
+    "requestComponent": {
+      "nameLabel": "Component name",
+      "namePlaceholder": "e.g. ToastStack",
+      "note": "Submitting opens a new GitHub issue tab. Nothing is sent to a server.",
+      "problemLabel": "What problem does it solve?",
+      "problemPlaceholder": "The user-facing need, not the implementation.",
+      "referenceLabel": "References / prior art (optional)",
+      "referencePlaceholder": "Links, screenshots, design references...",
+      "similarLabel": "Similar to (optional)",
+      "similarPlaceholder": "shadcn Toast, Radix Toast, etc.",
+      "submit": "Open prefilled GitHub issue",
+      "useCaseLabel": "Use case",
+      "useCasePlaceholder": "The concrete scenario where you'd reach for this."
+    }
+  }
+}
