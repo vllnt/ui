@@ -16,6 +16,10 @@ type ComponentThumbnailProps = {
  * preview up front. Mounting in the browser also keeps previews that depend on
  * browser APIs (e.g. `useSearchParams`, `window`) out of the static build.
  *
+ * `[contain:layout]` makes the card the containing block for `position: fixed`
+ * previews (e.g. StepNavigation, ContentIntro) so they render clipped inside the
+ * card instead of escaping to float over the whole viewport.
+ *
  * @param componentName - Registry slug used to resolve the matching preview.
  */
 export function ComponentThumbnail({
@@ -50,7 +54,7 @@ export function ComponentThumbnail({
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none flex h-44 items-center justify-center overflow-hidden border-b bg-muted/30 p-4"
+      className="pointer-events-none flex h-44 items-center justify-center overflow-hidden border-b bg-muted/30 p-4 [contain:layout]"
       ref={containerRef}
     >
       {isVisible ? <ComponentPreview componentName={componentName} /> : null}
