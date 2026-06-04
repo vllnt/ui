@@ -190,7 +190,7 @@ export function Sidebar({ sections }: SidebarProps) {
           ) : null}
 
           <nav
-            className="flex-1 p-4 overflow-y-auto h-full"
+            className="flex-1 p-4 overflow-y-auto h-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             ref={scrollContainerReference}
           >
             <div className="space-y-4">
