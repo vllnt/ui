@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { z } from "zod";
 
+import type { Locale } from "@/i18n/routing";
+import { alternateOgLocales, canonical, ogLocale } from "@/lib/seo";
+
 export const OG_IMAGE_WIDTH = 2400;
 export const OG_IMAGE_HEIGHT = 1260;
 
@@ -15,6 +18,11 @@ const ogImageParametersSchema = z.object({
 });
 
 export type OGImageParametersInput = z.input<typeof ogImageParametersSchema>;
+
+type PageMetadataOptions = {
+  locale?: Locale;
+  pathname?: string;
+};
 
 function generateOGImageURL(parameters: OGImageParametersInput): string {
   const validated = ogImageParametersSchema.parse(parameters);
@@ -32,14 +40,21 @@ function generateOGImageURL(parameters: OGImageParametersInput): string {
 
 export function generateOGMetadata(
   parameters: OGImageParametersInput,
+  options: PageMetadataOptions = {},
 ): Metadata["openGraph"] {
   const validated = ogImageParametersSchema.parse(parameters);
+  const locale = options.locale ?? "en";
+  const url =
+    options.pathname === undefined
+      ? SITE_URL
+      : canonical(options.pathname, locale);
   const ogImageURL = new URL(
     generateOGImageURL(validated),
     SITE_URL,
   ).toString();
 
   return {
+    alternateLocale: alternateOgLocales(locale),
     description: validated.description,
     images: [
       {
@@ -49,10 +64,11 @@ export function generateOGMetadata(
         width: OG_IMAGE_WIDTH,
       },
     ],
+    locale: ogLocale(locale),
     siteName: "VLLNT UI",
     title: validated.title,
     type: "website",
-    url: SITE_URL,
+    url,
   };
 }
 

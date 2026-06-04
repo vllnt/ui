@@ -1,0 +1,152 @@
+{
+  "common": {
+    "backToHome": "Retour a l'accueil",
+    "browseComponents": "Parcourir les composants",
+    "components": "Composants",
+    "docs": "Documentation",
+    "getStarted": "Demarrer",
+    "github": "GitHub",
+    "home": "Accueil",
+    "locale": "Langue",
+    "philosophy": "Philosophie",
+    "readDocs": "Lire la documentation",
+    "requestComponent": "Demander un composant"
+  },
+  "header": {
+    "githubLabel": "VLLNT UI sur GitHub",
+    "navComponents": "Composants",
+    "navGetStarted": "Demarrer",
+    "navPhilosophy": "Philosophie",
+    "searchButton": "Rechercher des composants...",
+    "searchEmpty": "Aucun composant trouve.",
+    "searchGroup": "Composants",
+    "searchPlaceholder": "Rechercher des composants..."
+  },
+  "footer": {
+    "builtWith": "VLLNT UI · licence MIT · Construit avec Radix UI, Tailwind CSS et CVA",
+    "community": "Communaute",
+    "discussions": "Discussions",
+    "legal": "Legal",
+    "library": "Bibliotheque",
+    "maintainedBy": "Maintenu par",
+    "registryJson": "JSON du registre",
+    "reportBug": "Signaler un bug",
+    "resources": "Ressources",
+    "sponsor": "Sponsoriser",
+    "storybook": "Storybook"
+  },
+  "pages": {
+    "components": {
+      "description": "Explorez les {count} composants disponibles dans la bibliotheque.",
+      "noPreview": "Aucun apercu",
+      "stories": "{count, plural, one {# story} other {# stories}}",
+      "title": "Composants"
+    },
+    "docs": {
+      "description": "Apprenez a utiliser les composants VLLNT UI dans vos projets.",
+      "title": "Documentation"
+    },
+    "home": {
+      "description": "Installez n'importe lequel des {count} composants React accessibles avec la CLI shadcn. Construit sur Radix UI, Tailwind CSS et CVA. Chaque composant est un descripteur JSON lisible par les agents. v{version}, licence MIT.",
+      "title": "VLLNT UI - {count} composants React agent-first"
+    },
+    "notFound": {
+      "description": "Cette route n'existe pas. Essayez l'un des composants populaires ci-dessous ou retournez a l'index.",
+      "popular": "Composants populaires",
+      "title": "Page introuvable"
+    },
+    "philosophy": {
+      "description": "Les principes qui guident la conception et le developpement de VLLNT UI.",
+      "title": "Philosophie"
+    },
+    "report": {
+      "description": "Vous avez trouve quelque chose de casse ? Remplissez les champs et nous ouvrirons une issue GitHub pre-remplie avec les bons labels et le bon template.",
+      "metaDescription": "Signalez un bug dans VLLNT UI. Le formulaire ouvre une issue GitHub pre-remplie, sans backend.",
+      "title": "Signaler un bug"
+    },
+    "requestComponent": {
+      "description": "Vous ne trouvez pas ce dont vous avez besoin ? Remplissez les champs et nous ouvrirons une issue GitHub pre-remplie avec les bons labels et le bon template.",
+      "metaDescription": "Demandez un nouveau composant VLLNT UI. Le formulaire ouvre une issue GitHub pre-remplie, sans backend.",
+      "title": "Demander un composant"
+    },
+    "component": {
+      "code": "Code",
+      "dependencies": "Dependances",
+      "installation": "Installation",
+      "reportBug": "Signaler un bug",
+      "storybook": "Storybook",
+      "storybookDescription": "Explorez les variantes, controles et verifications d'accessibilite dans le playground Storybook interactif.",
+      "storiesAvailable": "{count, plural, one {# story disponible :} other {# stories disponibles :}}",
+      "viewInStorybook": "Voir dans Storybook"
+    }
+  },
+  "landing": {
+    "agent": {
+      "description": "Chaque composant est publie comme descripteur JSON lisible par machine avec nom, version, stabilite, schema d'accessibilite, exemples d'usage et definitions de props. Les agents decouvrent le registre via trois surfaces.",
+      "eyebrow": "Agent-first",
+      "llmsDescription": "Index concis selon la specification llmstxt.org : sections, liens et descriptions.",
+      "llmsFullDescription": "Contexte complet du registre en une requete : docs et descripteurs par composant.",
+      "mcpDescription": "Serveur HTTP MCP streamable. Outils : search_components, get_component, list_categories.",
+      "open": "Ouvrir",
+      "title": "Concu pour que les agents de code l'utilisent directement."
+    },
+    "community": {
+      "description": "Licence MIT. Pas de tracking. Pas de backend. Issues, idees et pull requests sont bienvenues.",
+      "openStorybook": "Ouvrir Storybook",
+      "requestComponent": "Demander un composant",
+      "starGithub": "Star sur GitHub",
+      "title": "Construisez avec la communaute."
+    },
+    "featured": {
+      "description": "Quelques favoris. Parcourez les {count} depuis",
+      "title": "Composants en avant"
+    },
+    "hero": {
+      "browseComponents": "Parcourir {count} composants",
+      "description": "Construit sur Radix UI, Tailwind CSS et CVA. Chaque composant est aussi un descripteur JSON lisible par machine : les agents lisent le registre directement sans scraper le HTML.",
+      "github": "GitHub",
+      "kicker": "v{version} - MIT",
+      "readDocs": "Lire la documentation",
+      "rscCompatible": "Compatible RSC",
+      "subtitle": "Copiez, collez, livrez.",
+      "tailwindReady": "Pret pour Tailwind v4",
+      "title": "{count} composants React agent-first."
+    },
+    "stats": {
+      "categories": "Categories",
+      "components": "Composants",
+      "lastBuild": "Dernier build",
+      "libraryVersion": "Version library"
+    }
+  },
+  "forms": {
+    "report": {
+      "actualLabel": "Comportement actuel",
+      "actualPlaceholder": "Ce qui s'est produit. Ajoutez console ou captures si utile.",
+      "componentLabel": "Composant (optionnel)",
+      "componentPlaceholder": "ex. button, combobox, ai-chat-input",
+      "expectedLabel": "Comportement attendu",
+      "expectedPlaceholder": "Ce que vous attendiez.",
+      "note": "La soumission ouvre un nouvel onglet GitHub. Rien n'est envoye a un serveur.",
+      "reproLabel": "Reproduction",
+      "reproPlaceholder": "Depot minimal / lien sandbox / snippet executable.",
+      "submit": "Ouvrir une issue GitHub pre-remplie",
+      "summaryLabel": "Resume en une ligne",
+      "summaryPlaceholder": "Titre concis pour l'issue."
+    },
+    "requestComponent": {
+      "nameLabel": "Nom du composant",
+      "namePlaceholder": "ex. ToastStack",
+      "note": "La soumission ouvre un nouvel onglet GitHub. Rien n'est envoye a un serveur.",
+      "problemLabel": "Quel probleme resout-il ?",
+      "problemPlaceholder": "Le besoin utilisateur, pas l'implementation.",
+      "referenceLabel": "References / inspirations (optionnel)",
+      "referencePlaceholder": "Liens, captures, references design...",
+      "similarLabel": "Similaire a (optionnel)",
+      "similarPlaceholder": "shadcn Toast, Radix Toast, etc.",
+      "submit": "Ouvrir une issue GitHub pre-remplie",
+      "useCaseLabel": "Cas d'usage",
+      "useCasePlaceholder": "Le scenario concret ou vous utiliseriez ce composant."
+    }
+  }
+}

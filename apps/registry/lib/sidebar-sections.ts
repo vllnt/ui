@@ -1,5 +1,7 @@
+import { type Locale, routing } from "@/i18n/routing";
 import registryData from "@/registry.json";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
+import { localizePathname } from "@/lib/seo";
 import type {
   ComponentCategory,
   Registry,
@@ -65,23 +67,32 @@ function groupComponentsByCategory(
 
 const groupedComponents = groupComponentsByCategory(components);
 
-export function getSidebarSections(_activeCategory?: ComponentCategory) {
+export function getSidebarSections(
+  _activeCategory?: ComponentCategory,
+  locale: Locale = routing.defaultLocale,
+) {
   return [
     {
       items: [
-        { href: "/", title: "Get Started" },
-        { href: "/philosophy", title: "Philosophy" },
-        { href: "/components", title: "Components" },
-        { href: "/templates", title: "Templates" },
+        { href: localizePathname("/", locale), title: "Get Started" },
+        {
+          href: localizePathname("/philosophy", locale),
+          title: "Philosophy",
+        },
+        {
+          href: localizePathname("/components", locale),
+          title: "Components",
+        },
+        { href: localizePathname("/templates", locale), title: "Templates" },
       ],
     },
     {
       collapsible: true,
       defaultOpen: true,
       items: [
-        { href: "/docs", title: "Overview" },
+        { href: localizePathname("/docs", locale), title: "Overview" },
         ...DOCS_PAGES.map((page) => ({
-          href: getDocsPath(page),
+          href: localizePathname(getDocsPath(page), locale),
           title: page.title,
         })),
       ],
@@ -91,7 +102,7 @@ export function getSidebarSections(_activeCategory?: ComponentCategory) {
       collapsible: true,
       defaultOpen: true,
       items: group.items.map((item) => ({
-        href: `/components/${item.name}`,
+        href: localizePathname(`/components/${item.name}`, locale),
         title: item.title,
       })),
       title: group.label,
