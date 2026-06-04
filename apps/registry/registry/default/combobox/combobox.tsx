@@ -41,12 +41,6 @@ function useComboboxValue(
 ) {
   const [internalValue, setInternalValue] = React.useState(value ?? "");
 
-  React.useEffect(() => {
-    if (value !== undefined) {
-      setInternalValue(value);
-    }
-  }, [value]);
-
   const resolvedValue = value ?? internalValue;
 
   const setResolvedValue = (nextValue: string) => {

@@ -27,12 +27,6 @@ function useFileUploadState(
     controlledFiles ?? [],
   );
 
-  React.useEffect(() => {
-    if (controlledFiles !== undefined) {
-      setInternalFiles(controlledFiles);
-    }
-  }, [controlledFiles]);
-
   const resolvedFiles = controlledFiles ?? internalFiles;
 
   const updateFiles = React.useCallback(

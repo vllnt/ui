@@ -150,15 +150,17 @@ function useChecklistProgress(
   const [persistedIds, setPersistedIds] = React.useState<string[]>(() =>
     readPersistedChecklistItems(persistKey),
   );
+  const [trackedPersistKey, setTrackedPersistKey] = React.useState(persistKey);
   const setPersistedIdsIfChanged = React.useCallback((nextIds: string[]) => {
     setPersistedIds((currentIds) =>
       areStringArraysEqual(currentIds, nextIds) ? currentIds : nextIds,
     );
   }, []);
 
-  React.useEffect(() => {
+  if (trackedPersistKey !== persistKey) {
+    setTrackedPersistKey(persistKey);
     setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
-  }, [persistKey, setPersistedIdsIfChanged]);
+  }
 
   React.useEffect(() => {
     if (!persistKey || typeof window === "undefined") return;

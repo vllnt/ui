@@ -42,12 +42,6 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
     );
     const selectedDate = value ?? internalValue;
 
-    React.useEffect(() => {
-      if (value !== undefined) {
-        setInternalValue(value);
-      }
-    }, [value]);
-
     const handleSelect = (nextDate: Date | undefined) => {
       if (value === undefined) {
         setInternalValue(nextDate);
