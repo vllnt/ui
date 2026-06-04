@@ -109,10 +109,6 @@ function StorybookIframe({
 }): React.ReactElement {
   const [isLoaded, setIsLoaded] = React.useState(false);
 
-  React.useEffect(() => {
-    setIsLoaded(false);
-  }, [iframeSource]);
-
   return (
     <div style={{ minHeight: height, position: "relative" }}>
       {isLoaded ? null : (
@@ -120,7 +116,9 @@ function StorybookIframe({
           className="flex animate-pulse items-center justify-center rounded-b-lg bg-muted"
           style={{ height, inset: 0, position: "absolute", zIndex: 1 }}
         >
-          <p className="text-sm text-muted-foreground">Loading preview...</p>
+          <p className="text-sm text-muted-foreground">
+            Loading preview&hellip;
+          </p>
         </div>
       )}
       <iframe
@@ -204,6 +202,7 @@ export function StorybookEmbed({
           componentName={componentName}
           height={height}
           iframeSource={iframeSource}
+          key={iframeSource}
         />
       ) : null}
     </div>

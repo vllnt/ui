@@ -48,7 +48,7 @@ function ShareMenu({
   platforms: SharePlatformConfig[];
 }) {
   return (
-    <div className="flex flex-col gap-0.5 rounded-md border border-gray-300 bg-background p-1.5 shadow-md dark:border-gray-600">
+    <div className="flex flex-col gap-0.5 rounded-md border border-zinc-300 bg-background p-1.5 shadow-md dark:border-zinc-600">
       {platforms.map((p) => {
         const handleSelectSharePlatform = () => {
           onPlatformSelect(p.key);
@@ -101,7 +101,7 @@ function ActionPanel({
   const handleShareMouseLeave = isMobile ? undefined : onShareLeave;
 
   return (
-    <div className="flex flex-col gap-0.5 rounded-md border border-gray-300 bg-background p-1.5 shadow-md dark:border-gray-600">
+    <div className="flex flex-col gap-0.5 rounded-md border border-zinc-300 bg-background p-1.5 shadow-md dark:border-zinc-600">
       {shareAction ? (
         <button
           className="rounded px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent"
@@ -140,9 +140,9 @@ function MainFabButton({
       aria-label={isExpanded ? labels.close : labels.share}
       className={cn(
         "flex size-10 items-center justify-center rounded-md",
-        "border border-gray-300 bg-background dark:border-gray-600",
+        "border border-zinc-300 bg-background dark:border-zinc-600",
         "transition-all duration-200 ease-out",
-        "hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-md dark:hover:border-gray-500",
+        "hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md dark:hover:border-zinc-500",
       )}
       onClick={handleToggleSharePanel}
       type="button"

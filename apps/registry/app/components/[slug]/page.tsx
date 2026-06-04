@@ -166,8 +166,7 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>
@@ -253,7 +252,7 @@ export default async function ComponentPage(props: Props) {
                     target="_blank"
                   >
                     View in Storybook
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="size-4" />
                   </Link>
                   {meta.stories.length > 1 ? (
                     <div className="mt-4">
@@ -307,7 +306,7 @@ export default async function ComponentPage(props: Props) {
                               rel="noopener noreferrer"
                               target="_blank"
                             >
-                              <ExternalLink className="h-3 w-3" />
+                              <ExternalLink className="size-3" />
                             </Link>
                           </li>
                         );

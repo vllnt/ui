@@ -1,9 +1,9 @@
 "use client";
 
 import { NavbarSaas, SearchDialog } from "@vllnt/ui";
-import { Github } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { GitHubMark } from "@/components/github-mark";
 import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
@@ -60,7 +60,7 @@ export function Header() {
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="size-4" />
+            <GitHubMark className="size-4" />
           </a>
         </div>
       }

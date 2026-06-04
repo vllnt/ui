@@ -62,10 +62,7 @@ export default async function DocumentationPage() {
           <div className="mb-8">
             <Breadcrumb
               className="mb-4 text-muted-foreground"
-              items={[
-                { href: "/", label: "Home" },
-                { label: "Docs" },
-              ]}
+              items={[{ href: "/", label: "Home" }, { label: "Docs" }]}
             />
             <h1 className="text-4xl font-semibold mb-4">Documentation</h1>
             <p className="text-muted-foreground text-lg">
