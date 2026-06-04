@@ -42,6 +42,7 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
       priority: 0.6,
       url: `${SITE_URL}/philosophy`,
     },
+    { changeFrequency: "monthly", priority: 0.8, url: `${SITE_URL}/design` },
     { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/releases` },
   ] satisfies readonly Omit<SitemapEntryInput, "lastModified">[];
 
@@ -83,6 +84,12 @@ function registryRoutes(
       lastModified,
       priority: 0.3,
       url: `${SITE_URL}/r/registry.json`,
+    }),
+    entry({
+      changeFrequency: "monthly",
+      lastModified,
+      priority: 0.3,
+      url: `${SITE_URL}/r/design.json`,
     }),
     ...items.map((item) =>
       entry({

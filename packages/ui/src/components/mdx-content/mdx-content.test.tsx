@@ -13,6 +13,26 @@ describe("MDXContent", () => {
     vi.restoreAllMocks();
   });
 
+  it("renders GFM pipe tables as accessible tables", async () => {
+    const content = [
+      "| Name | Status |",
+      "| --- | --- |",
+      "| Design | Ready |",
+    ].join("\n");
+
+    render(await MDXContent({ content, enableMDX: false }));
+
+    expect(screen.getByRole("table")).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: "Name" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("columnheader", { name: "Status" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Design" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Ready" })).toBeInTheDocument();
+  });
+
   it("renders markdown headings, links, and list items", async () => {
     const node = await MDXContent({
       content:

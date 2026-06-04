@@ -28,6 +28,7 @@ const COLUMNS: readonly FooterColumn[] = [
       { href: "/components", label: "Components" },
       { href: "/docs", label: "Docs" },
       { href: "/philosophy", label: "Philosophy" },
+      { href: "/design", label: "Design" },
     ],
     title: "Library",
   },
@@ -35,6 +36,7 @@ const COLUMNS: readonly FooterColumn[] = [
     links: [
       { external: true, href: STORYBOOK_URL, label: "Storybook" },
       { href: "/r/registry.json", label: "Registry JSON" },
+      { href: "/r/design.json", label: "Design tokens" },
       { href: "/changelog", label: "Changelog" },
       { href: "/releases", label: "Releases" },
       { href: "/rss.xml", label: "RSS feed" },

@@ -94,6 +94,7 @@ function buildDocumentationLines(): readonly string[] {
         `- [${page.title}](${SITE_URL}${getDocsPath(page)}): ${page.description}`,
     ),
     `- [Philosophy](${SITE_URL}/philosophy): design principles and component patterns`,
+    `- [Design guide](${SITE_URL}/design): brand, tokens, accessibility, and UI rules`,
     `- [Components index](${SITE_URL}/components): browse all components by category`,
     `- [Changelog](${SITE_URL}/changelog): canonical Keep a Changelog release history`,
     `- [Releases](${SITE_URL}/releases): versioned release cards, GitHub notes, and RSS links`,
@@ -107,6 +108,7 @@ function buildRegistryLines(): readonly string[] {
     "## Registry API",
     "",
     `- [Registry index](${SITE_URL}/r/registry.json): full machine-readable list of all components`,
+    `- [Design tokens](${SITE_URL}/r/design.json): machine-readable VLLNT UI token contract`,
     `- [Sitemap](${SITE_URL}/sitemap.xml): every public route, refreshed per deploy`,
     "- Install command: `pnpm dlx shadcn@latest add " +
       `${SITE_URL}/r/<name>.json` +

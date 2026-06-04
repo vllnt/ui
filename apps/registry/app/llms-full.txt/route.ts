@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getLatestReleaseRecords } from "@/lib/changelog";
+import { getDesignGuideMarkdown } from "@/lib/design-guide";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 import registry from "../../registry.json";
@@ -97,6 +98,19 @@ async function buildDocumentLines(): Promise<readonly string[]> {
   return pageSections.flat();
 }
 
+async function buildDesignLines(): Promise<readonly string[]> {
+  const designGuide = await getDesignGuideMarkdown();
+  return [
+    "## Design Guide",
+    "",
+    `Source: ${SITE_URL}/design`,
+    `Tokens: ${SITE_URL}/r/design.json`,
+    "",
+    designGuide,
+    "",
+  ];
+}
+
 async function buildReleaseLines(): Promise<readonly string[]> {
   const releases = await getLatestReleaseRecords(5);
   if (releases.length === 0) return [];
@@ -157,12 +171,14 @@ function buildComponentsReferenceLines(
 async function buildLlmsFullTxt(): Promise<string> {
   const items = getRegistryItems();
   const documentLines = await buildDocumentLines();
+  const designLines = await buildDesignLines();
   const releaseLines = await buildReleaseLines();
 
   return [
     ...buildIntroLines(items),
     ...buildInstallLines(),
     ...documentLines,
+    ...designLines,
     ...releaseLines,
     ...buildComponentsReferenceLines(items),
   ].join("\n");
