@@ -17,8 +17,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const componentCount = getComponentCount();
   const version = getLibraryVersion();
-  const title = `VLLNT UI — ${componentCount} agent-first React components`;
-  const description = `Install any of ${componentCount} accessible React components with the shadcn CLI. Built on Radix UI, Tailwind CSS, and CVA. Every component is a machine-readable JSON descriptor agents can consume directly. v${version}, MIT licensed.`;
+  const title = "VLLNT UI — UI components & design system for AI agents";
+  const description = `Open-source React components for building AI apps: chat, streaming text, tool calls, citations, agent activity, and artifacts. ${componentCount} accessible components, readable by AI agents via llms.txt + JSON. Install with the shadcn CLI. v${version}, MIT.`;
 
   return {
     alternates: {

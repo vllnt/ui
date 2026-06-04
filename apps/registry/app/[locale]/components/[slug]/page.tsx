@@ -6,12 +6,12 @@ import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import { setRequestLocale } from "next-intl/server";
 
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
 import { type Locale, routing } from "@/i18n/routing";
+import { getAiSeo } from "@/lib/ai-seo";
 import componentMetadata from "@/lib/component-metadata.json";
 import {
   breadcrumbLd,
@@ -81,8 +81,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const meta = metadata_map[slug];
   const category = getCategoryForComponent(slug);
+  const aiSeo = getAiSeo(slug);
   const title = meta?.title ?? component.title;
-  const description = meta?.description ?? component.description;
+  const description =
+    aiSeo?.description ?? meta?.description ?? component.description;
   const pathname = `/components/${slug}`;
 
   const ogParameters = {
@@ -99,7 +101,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     description,
     openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
-    title: `${title} - VLLNT UI`,
+    title: aiSeo?.title ?? `${title} - VLLNT UI`,
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
@@ -117,8 +119,10 @@ export default async function ComponentPage(props: Props) {
   }
 
   const meta = metadata_map[slug];
+  const aiSeo = getAiSeo(slug);
   const displayTitle = meta?.title ?? component.title ?? component.name;
-  const displayDescription = meta?.description ?? component.description ?? "";
+  const displayDescription =
+    aiSeo?.description ?? meta?.description ?? component.description ?? "";
   const playgroundExample = getPlaygroundExample(component);
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
 
@@ -245,6 +249,25 @@ export default async function ComponentPage(props: Props) {
                   </Link>
                 </div>
               </div>
+
+              {/* When to use in an AI app */}
+              {aiSeo?.whenToUse ? (
+                <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
+                  <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+                    When to use this in an AI app
+                  </h2>
+                  <p className="mt-3 text-base leading-relaxed">
+                    {aiSeo.whenToUse}
+                  </p>
+                  <Link
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
+                    href={localizePathname("/ai", locale)}
+                  >
+                    Browse all AI agent components
+                    <ExternalLink className="size-3" />
+                  </Link>
+                </div>
+              ) : null}
 
               {/* Preview + Playground */}
               {meta?.defaultStoryId ? (
