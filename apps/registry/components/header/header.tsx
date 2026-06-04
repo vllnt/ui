@@ -53,6 +53,10 @@ export function Header({ locale }: HeaderProps) {
       title: t("navComponents"),
     },
     { href: localizePathname("/templates", locale), title: "Templates" },
+    {
+      href: localizePathname("/request-component", locale),
+      title: "Request",
+    },
   ];
 
   const searchItems = registry.items.reduce<

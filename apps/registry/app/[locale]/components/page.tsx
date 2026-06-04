@@ -112,6 +112,22 @@ export default async function ComponentsPage({ params }: Props) {
               </div>
             </section>
           ))}
+
+          <section className="mt-4 flex flex-col items-center gap-3 rounded-lg border border-dashed bg-card px-6 py-12 text-center">
+            <h2 className="text-xl font-semibold">
+              Don&rsquo;t see what you need?
+            </h2>
+            <p className="text-muted-foreground max-w-md">
+              Request a new component and we&rsquo;ll open a prefilled GitHub
+              issue with the right labels and template.
+            </p>
+            <Link
+              className="mt-2 inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
+              href={localizePathname("/request-component", locale)}
+            >
+              Request a component
+            </Link>
+          </section>
         </div>
       </main>
     </>
