@@ -12,7 +12,7 @@ import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
 import {
   breadcrumbLd,
-  jsonLdScript,
+  jsonLdScriptAttributes,
   softwareSourceCodeLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -45,13 +45,12 @@ const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  return registry.items
-    .filter(
-      (item): item is RegistryComponent => item.type === "registry:component",
-    )
-    .map((item) => ({
-      slug: item.name,
-    }));
+  return registry.items.reduce<{ slug: string }[]>((parameters, item) => {
+    if (item.type === "registry:component") {
+      parameters.push({ slug: item.name });
+    }
+    return parameters;
+  }, []);
 }
 
 function getNpmUrl(packageName: string): string {
@@ -166,30 +165,26 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{
-          __html: jsonLdScript([
-            softwareSourceCodeLd({
-              description: displayDescription,
-              name: component.name,
-              title: displayTitle,
-            }),
-            breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Components", url: `${SITE_URL}/components` },
-              {
-                name: displayTitle,
-                url: `${SITE_URL}/components/${component.name}`,
-              },
-            ]),
+        {...jsonLdScriptAttributes([
+          softwareSourceCodeLd({
+            description: displayDescription,
+            name: component.name,
+            title: displayTitle,
+          }),
+          breadcrumbLd([
+            { name: "Home", url: SITE_URL },
+            { name: "Components", url: `${SITE_URL}/components` },
+            {
+              name: displayTitle,
+              url: `${SITE_URL}/components/${component.name}`,
+            },
           ]),
-        }}
-        type="application/ld+json"
+        ])}
       />
       <Sidebar sections={getSidebarSections(getCategoryForComponent(slug))} />
       <main className="flex-1 overflow-y-auto bg-background overflow-x-hidden">
@@ -256,7 +251,7 @@ export default async function ComponentPage(props: Props) {
                     target="_blank"
                   >
                     View in Storybook
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="size-4" />
                   </Link>
                   {meta.stories.length > 1 ? (
                     <div className="mt-4">
@@ -310,7 +305,7 @@ export default async function ComponentPage(props: Props) {
                               rel="noopener noreferrer"
                               target="_blank"
                             >
-                              <ExternalLink className="h-3 w-3" />
+                              <ExternalLink className="size-3" />
                             </Link>
                           </li>
                         );

@@ -74,4 +74,22 @@ describe("ProfileSection", () => {
 
     expect(screen.getByAltText("custom alt")).toBeInTheDocument();
   });
+
+  it("renders the name as an h3 heading by default", () => {
+    render(<ProfileSection dict={dict} />);
+
+    const heading = screen.getByRole("heading", { level: 3, name: "bv" });
+    expect(heading).toBeInTheDocument();
+  });
+
+  it("renders the name with the heading tag passed via the as prop", () => {
+    render(<ProfileSection as="h1" dict={dict} />);
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "bv" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 3, name: "bv" }),
+    ).not.toBeInTheDocument();
+  });
 });

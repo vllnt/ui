@@ -14,6 +14,12 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const COMPONENTS_DIR = join(__dirname, '../src/components')
+const REQUIRED_PROP_NAMES = new Set(['id', 'label', 'title', 'name'])
+const IGNORED_REQUIRED_PROP_NAMES = new Set(['className', 'ref', 'key', 'style', 'children'])
+const DELIMITER_OPEN = new Set(['{', '[', '('])
+const DELIMITER_CLOSE = new Set(['}', ']', ')'])
+const NON_IMPLEMENTATION_FILE_PATTERN = /\.(?:stories|test|visual)\./
+const CHILDREN_REFERENCE_PATTERN = /\{children\}/
 
 interface PropInfo {
   name: string
@@ -153,7 +159,7 @@ function generateObjectValue(typeDef: TypeDef, allTypes: TypeDef[], indent: numb
   const fields: string[] = []
 
   for (const field of typeDef.fields) {
-    if (!field.required && field.name !== 'id' && field.name !== 'label' && field.name !== 'title' && field.name !== 'name') continue
+    if (!field.required && !REQUIRED_PROP_NAMES.has(field.name)) continue
     const val = generateValue(field, allTypes, indent + 2)
     fields.push(`${innerPad}${field.name}: ${val},`)
   }
@@ -180,7 +186,7 @@ function extractRequiredProps(source: string, componentName: string): PropInfo[]
       const block = extractTypeBlock(source, match.index + match[0].length - 1)
       if (block) {
         return parsePropsFromBlock(block).filter(
-          (p) => p.required && !['className', 'ref', 'key', 'style', 'children'].includes(p.name)
+          (p) => p.required && !IGNORED_REQUIRED_PROP_NAMES.has(p.name)
         )
       }
     }
@@ -207,8 +213,8 @@ function extractStoryArgs(storySource: string): Set<string> {
   let innerDepth = 0
   let pos = 0
   while (pos < block.length) {
-    if (block[pos] === '{' || block[pos] === '[' || block[pos] === '(') { innerDepth++; pos++; continue }
-    if (block[pos] === '}' || block[pos] === ']' || block[pos] === ')') { innerDepth--; pos++; continue }
+    if (DELIMITER_OPEN.has(block[pos] ?? '')) { innerDepth++; pos++; continue }
+    if (DELIMITER_CLOSE.has(block[pos] ?? '')) { innerDepth--; pos++; continue }
     if (innerDepth === 0) {
       const m = block.slice(pos).match(/^(\w+)\s*:/)
       if (m?.[1]) {
@@ -266,11 +272,25 @@ function main(): void {
   for (const dir of componentDirs) {
     const dirPath = join(COMPONENTS_DIR, dir)
     const name = toPascalCase(dir)
-    const files = readdirSync(dirPath)
-    const mainFile = files.find((f) => f === `${dir}.tsx`) ?? files.find((f) =>
-      f.endsWith('.tsx') && !f.includes('.test.') && !f.includes('.visual.') && !f.includes('.stories.')
-    )
-    const storyFileName = files.find((f) => f.endsWith('.stories.tsx'))
+    let fallbackMainFile: string | undefined
+    let mainFile: string | undefined
+    let storyFileName: string | undefined
+    for (const file of readdirSync(dirPath)) {
+      if (file === `${dir}.tsx`) {
+        mainFile = file
+      } else if (
+        !fallbackMainFile &&
+        file.endsWith('.tsx') &&
+        !NON_IMPLEMENTATION_FILE_PATTERN.test(file)
+      ) {
+        fallbackMainFile = file
+      }
+
+      if (!storyFileName && file.endsWith('.stories.tsx')) {
+        storyFileName = file
+      }
+    }
+    mainFile ??= fallbackMainFile
     if (!mainFile || !storyFileName) continue
 
     const source = readFileSync(join(dirPath, mainFile), 'utf-8')
@@ -303,11 +323,11 @@ function main(): void {
 
     const patched = patchStory(storySource, argsToAdd)
 
-    let cleanedArgs = storySource.match(/args\s*:\s*\{[^}]*children\s*:\s*"[^"]*"[^}]*\}/s)
+    const cleanedArgs = storySource.match(/args\s*:\s*\{[^}]*children\s*:\s*"[^"]*"[^}]*\}/s)
     let finalSource = patched
     if (cleanedArgs) {
       const childrenPropInComponent = requiredProps.some((p) => p.name === 'children') ||
-        source.includes('{children}')
+        CHILDREN_REFERENCE_PATTERN.test(source)
       if (!childrenPropInComponent) {
         finalSource = finalSource.replace(/\s*children\s*:\s*"[^"]*",?\n?/g, '\n')
       }

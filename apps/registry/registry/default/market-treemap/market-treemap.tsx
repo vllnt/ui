@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type MarketTreemapItem = {
@@ -12,6 +13,8 @@ export type MarketTreemapItem = {
 };
 
 export type MarketTreemapProps = {
+  /** Heading tag for the main "Market treemap" title. Defaults to `h2`. */
+  as?: HeadingTag;
   items: MarketTreemapItem[];
 } & React.HTMLAttributes<HTMLDivElement>;
 
@@ -96,7 +99,7 @@ function MarketTreemapTile({
 export const MarketTreemap = React.forwardRef<
   HTMLDivElement,
   MarketTreemapProps
->(({ className, items, ...props }, reference) => {
+>(({ as: Heading = "h2", className, items, ...props }, reference) => {
   if (items.length === 0) {
     return null;
   }
@@ -117,9 +120,9 @@ export const MarketTreemap = React.forwardRef<
           <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
             Sector heatmap
           </p>
-          <h2 className="text-lg font-semibold text-foreground">
+          <Heading className="text-lg font-semibold text-foreground">
             Market treemap
-          </h2>
+          </Heading>
         </div>
         <p className="text-sm text-muted-foreground">
           Tile size maps market cap proxy; color reflects session change.

@@ -27,12 +27,12 @@ export function getRegistryGeneratedAt(): string | undefined {
   return REGISTRY.generatedAt;
 }
 
-export type CategoryStat = {
+type CategoryStat = {
   readonly category: string;
   readonly count: number;
 };
 
-export function getCategoryStats(): readonly CategoryStat[] {
+function getCategoryStats(): readonly CategoryStat[] {
   const counts = new Map<string, number>();
   for (const item of REGISTRY.items) {
     const key = item.category ?? "uncategorized";

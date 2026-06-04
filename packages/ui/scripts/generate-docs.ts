@@ -23,6 +23,9 @@ const __dirname = dirname(__filename)
 
 const COMPONENTS_DIR = join(__dirname, '../src/components')
 const REGISTRY_PATH = join(__dirname, '../../../apps/registry/registry.json')
+const REACT_NODE_IGNORED_PROP_NAMES = new Set(['children', 'className', 'ref', 'key', 'style'])
+const NON_TRIVIAL_PROP_NAMES = new Set(['className', 'children', 'ref', 'key', 'style'])
+const NON_TRIVIAL_NO_CHILDREN_PROP_NAMES = new Set(['className', 'ref', 'key', 'style'])
 
 interface RegistryItem {
   name: string
@@ -262,7 +265,7 @@ function parsePropsFromBlock(block: string): PropInfo[] {
       let type = (propMatch[3] ?? '').trim().replace(/;$/, '').replace(/,$/, '')
 
       if (!name || !type) continue
-      if (['children', 'className', 'ref', 'key', 'style'].includes(name) && type === 'ReactNode') continue
+      if (REACT_NODE_IGNORED_PROP_NAMES.has(name) && type === 'ReactNode') continue
 
       props.push({ name, type, required, description: '' })
     }
@@ -327,13 +330,14 @@ function extractExports(source: string): string[] {
   const namedExports = source.matchAll(/export\s*\{\s*([^}]+)\s*\}/g)
   for (const match of namedExports) {
     if (!match[1]) continue
-    const names = match[1]
-      .split(',')
-      .map((n) => n.trim())
-      .filter((n) => !n.startsWith('type '))
-      .map((n) => n.split(/\s+as\s+/)[0]?.trim() ?? '')
-      .filter((n) => n.length > 0 && /^[A-Z]/.test(n))
-    exports.push(...names)
+    for (const rawName of match[1].split(',')) {
+      const trimmed = rawName.trim()
+      if (trimmed.startsWith('type ')) continue
+      const name = trimmed.split(/\s+as\s+/)[0]?.trim() ?? ''
+      if (name.length > 0 && /^[A-Z]/.test(name)) {
+        exports.push(name)
+      }
+    }
   }
 
   const constExports = source.matchAll(/export\s+(?:const|function)\s+([A-Z]\w+)/g)
@@ -360,6 +364,10 @@ function extractStoryExports(storySource: string): string[] {
 function extractSubComponents(source: string, mainName: string, allTypes: TypeDefinition[]): SubComponentInfo[] {
   const subComponents: SubComponentInfo[] = []
   const attachedImplNames = new Set<string>()
+  const typesByName = new Map<string, TypeDefinition>()
+  for (const typeDef of allTypes) {
+    typesByName.set(typeDef.name, typeDef)
+  }
 
   const attachRegex = new RegExp(`${mainName}\\.(\\w+)\\s*=\\s*(\\w+)`, 'g')
   let match
@@ -368,7 +376,7 @@ function extractSubComponents(source: string, mainName: string, allTypes: TypeDe
     if (!implName) continue
     attachedImplNames.add(implName)
     const propsTypeName = `${implName}Props`
-    const typeDef = allTypes.find((t) => t.name === propsTypeName)
+    const typeDef = typesByName.get(propsTypeName)
     subComponents.push({
       name: `${mainName}.${match[1]}`,
       props: typeDef?.fields ?? [],
@@ -384,7 +392,7 @@ function extractSubComponents(source: string, mainName: string, allTypes: TypeDe
 
     if (name.startsWith(mainName)) {
       const propsTypeName = `${name}Props`
-      const typeDef = allTypes.find((t) => t.name === propsTypeName)
+      const typeDef = typesByName.get(propsTypeName)
       if (typeDef && typeDef.fields.length > 0) {
         subComponents.push({
           name,
@@ -437,7 +445,7 @@ function generateUsageExample(component: ComponentMeta): string {
   lines.push(`<${name}`)
 
   const nonTrivialProps = props.filter(
-    (p) => p.required && !['className', 'children', 'ref', 'key', 'style'].includes(p.name)
+    (p) => p.required && !NON_TRIVIAL_PROP_NAMES.has(p.name)
   )
 
   for (const prop of nonTrivialProps) {
@@ -492,7 +500,7 @@ function generateCompoundExample(component: ComponentMeta): string {
   const lines: string[] = []
 
   const mainProps = props.filter(
-    (p) => p.required && !['children', 'className', 'ref', 'key', 'style'].includes(p.name)
+    (p) => p.required && !NON_TRIVIAL_PROP_NAMES.has(p.name)
   )
   const mainPropsStr = mainProps.map((p) => {
     const kind = classifyType(p.type)
@@ -505,18 +513,24 @@ function generateCompoundExample(component: ComponentMeta): string {
 
   lines.push(`<${name}${mainPropsStr ? ` ${mainPropsStr}` : ''}>`)
 
-  const hasDotSubs = subComponents.some((sc) => sc.name.includes('.'))
-  const subs = hasDotSubs
-    ? subComponents.filter((sc) => sc.name.includes('.'))
-    : subComponents
+  const dotSubs: SubComponentInfo[] = []
+  for (const sub of subComponents) {
+    if (sub.name.split('.').length > 1) {
+      dotSubs.push(sub)
+    }
+  }
+  const subs = dotSubs.length > 0 ? dotSubs : subComponents
 
   for (const sub of subs) {
-    const hasValue = sub.props.some((p) => p.name === 'value')
-    const hasChildren = sub.props.some((p) => p.name === 'children')
-    const hasQuestion = sub.props.some((p) => p.name === 'question')
+    let hasChildren = false
+    let hasQuestion = false
+    for (const prop of sub.props) {
+      if (prop.name === 'children') hasChildren = true
+      if (prop.name === 'question') hasQuestion = true
+    }
 
     const requiredProps = sub.props.filter(
-      (p) => p.required && !['children', 'className', 'ref', 'key', 'style'].includes(p.name)
+      (p) => p.required && !NON_TRIVIAL_PROP_NAMES.has(p.name)
     )
     const propsStr = requiredProps.map((p) => {
       if (p.name === 'value') return `value="item-1"`
@@ -562,7 +576,7 @@ function generateArrayPropsExample(component: ComponentMeta): string {
   for (const prop of props) {
     if (prop.name === arrayProp.name) {
       lines.push(`  ${prop.name}={${arrayProp.name}}`)
-    } else if (prop.required && prop.name !== 'className' && prop.name !== 'children') {
+    } else if (prop.required && !NON_TRIVIAL_PROP_NAMES.has(prop.name)) {
       const kind = classifyType(prop.type)
       if (kind === 'primitive') {
         lines.push(`  ${prop.name}="${exampleValue(prop)}"`)
@@ -658,7 +672,8 @@ function analyzeComponent(dirPath: string, registryItems: RegistryItem[]): Compo
 
   const propsTypeNames = new Set<string>([`${name}Props`])
   for (const sc of subComponents) {
-    const scName = sc.name.includes('.') ? sc.name.split('.').pop() ?? '' : sc.name
+    const parts = sc.name.split('.')
+    const scName = parts.length > 1 ? parts[parts.length - 1] ?? '' : sc.name
     propsTypeNames.add(`${scName}Props`)
   }
   const attachRegex2 = new RegExp(`${name}\\.(\\w+)\\s*=\\s*(\\w+)`, 'g')
@@ -763,10 +778,13 @@ function generateMdx(component: ComponentMeta): string {
   lines.push('')
   lines.push('```tsx')
   const allExports = [...exports]
+  const allExportNames = new Set(allExports)
   for (const sub of subComponents) {
-    const subExportName = sub.name.includes('.') ? '' : sub.name
-    if (subExportName && !allExports.includes(subExportName)) {
+    const parts = sub.name.split('.')
+    const subExportName = parts.length > 1 ? '' : sub.name
+    if (subExportName && !allExportNames.has(subExportName)) {
       allExports.push(subExportName)
+      allExportNames.add(subExportName)
     }
   }
   if (allExports.length > 3) {
@@ -809,7 +827,7 @@ function generateMdx(component: ComponentMeta): string {
     lines.push('')
 
     const nonTrivialProps = props.filter(
-      (p) => !['className', 'ref', 'key', 'style'].includes(p.name)
+      (p) => !NON_TRIVIAL_NO_CHILDREN_PROP_NAMES.has(p.name)
     )
 
     if (nonTrivialProps.length > 0) {
@@ -833,7 +851,7 @@ function generateMdx(component: ComponentMeta): string {
       lines.push('')
       if (sub.props.length > 0) {
         const nonTrivialProps = sub.props.filter(
-          (p) => !['className', 'ref', 'key', 'style'].includes(p.name)
+          (p) => !NON_TRIVIAL_NO_CHILDREN_PROP_NAMES.has(p.name)
         )
         if (nonTrivialProps.length > 0) {
           lines.push(`| Prop | Type | Required | Description |`)

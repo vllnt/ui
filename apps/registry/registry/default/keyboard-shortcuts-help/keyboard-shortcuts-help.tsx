@@ -4,6 +4,7 @@ import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type KeyboardShortcut = {
@@ -12,6 +13,8 @@ export type KeyboardShortcut = {
 };
 
 export type KeyboardShortcutsHelpProps = {
+  /** Heading tag for the modal title. Defaults to `h2`. */
+  as?: HeadingTag;
   className?: string;
   closeIcon?: ReactNode;
   footer?: ReactNode;
@@ -23,6 +26,7 @@ export type KeyboardShortcutsHelpProps = {
 
 // eslint-disable-next-line max-lines-per-function -- Modal with keyboard handling and focus trap
 function KeyboardShortcutsHelpImpl({
+  as: Heading = "h2",
   className,
   closeIcon,
   footer,
@@ -85,9 +89,9 @@ function KeyboardShortcutsHelpImpl({
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold" id="shortcuts-title">
+          <Heading className="text-lg font-semibold" id="shortcuts-title">
             {title}
-          </h2>
+          </Heading>
           <button
             aria-label="Close shortcuts help"
             className="flex size-8 items-center justify-center rounded-md hover:bg-muted"

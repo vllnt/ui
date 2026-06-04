@@ -1,0 +1,45 @@
+---
+title: Registry
+description: Understand the /r/registry.json schema and how to build a compatible registry surface.
+type: docs
+og:
+  title: Registry
+  description: VLLNT UI registry schema and extension guide
+  type: docs
+---
+
+# Registry
+
+The public registry is the machine-readable contract behind the component site. It exposes a top-level index and one descriptor per component.
+
+## Endpoints
+
+- `/r/registry.json` lists every component and registry-level metadata.
+- `/r/<name>.json` returns the install descriptor for a single component.
+- `/components/<name>` is the human documentation page for the same component.
+
+## Item shape
+
+Registry items include:
+
+- `name`: stable slug used in URLs.
+- `title`: human-readable component name.
+- `description`: short summary for search, agents, and docs.
+- `type`: registry item kind.
+- `category`: component category.
+- `files`: source files installed by the CLI.
+- `dependencies`: npm dependencies required by the component.
+- `registryDependencies`: other registry components needed at runtime.
+- `version` and `stability`: release metadata stamped during registry build.
+
+## Building on top
+
+A compatible registry should keep stable component slugs, serve JSON with cache-friendly URLs, and preserve the `files` contract expected by the shadcn CLI. If you wrap VLLNT UI in a private registry, keep your custom metadata additive so standard tooling can still read the descriptor.
+
+## Generated files
+
+The registry app generates shims and metadata from the package source. Do not hand-edit generated output. Change the source component, then run the documented registry build or shim sync script.
+
+## Agent usage
+
+Agents should prefer `/r/registry.json` for discovery and `/r/<name>.json` for implementation details. Use `/llms-full.txt` when a single text context is easier than fetching many JSON endpoints.
