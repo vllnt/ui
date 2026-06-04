@@ -1,0 +1,20 @@
+{
+  "$schema": "https://react.doctor/schema/config.json",
+  "failOn": "error",
+  "rules": {
+    "react-doctor/no-multi-comp": "off",
+    "react-doctor/only-export-components": "off"
+  },
+  "ignore": {
+    "files": [
+      "**/registry/default/**",
+      "**/storybook-static/**",
+      "**/dist/**",
+      "**/.next/**",
+      "**/public/r/**",
+      "**/public/_pagefind/**",
+      "**/*.visual.tsx",
+      "**/*.visual.fixture.tsx"
+    ]
+  }
+}
