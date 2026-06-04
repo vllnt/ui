@@ -32,10 +32,27 @@ export function ComponentPlaygroundShell({
   packageVersion,
   surface,
 }: ComponentPlaygroundShellProps): React.ReactElement {
+  const [sharedCode, setSharedCode] = React.useState<string | undefined>();
+
+  React.useEffect(() => {
+    if (surface !== "route" || typeof window === "undefined") {
+      return;
+    }
+    const shared = new URLSearchParams(window.location.search).get("code");
+    if (shared) {
+      setSharedCode(shared);
+    }
+  }, [surface]);
+
+  const effectiveExample = sharedCode
+    ? { ...example, code: sharedCode }
+    : example;
+
   return (
     <SandpackPlayground
       componentName={componentName}
-      example={example}
+      example={effectiveExample}
+      key={sharedCode ? "shared" : "default"}
       packageVersion={packageVersion}
       surface={surface}
     />

@@ -7,10 +7,13 @@ import {
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
+  useActiveCode,
 } from "@codesandbox/sandpack-react";
 import { track } from "@vercel/analytics";
+import { Check, Share2 } from "lucide-react";
 
 import type { PlaygroundExample } from "@/lib/playground";
+import { withRef } from "@/lib/share";
 
 type SandpackPlaygroundProps = {
   componentName: string;
@@ -106,6 +109,45 @@ export default {
   };
 }
 
+/**
+ * Encodes the current editor code into a shareable `?code=` URL on the
+ * dedicated playground route. Lives inside SandpackProvider so it can read
+ * live edits via {@link useActiveCode}.
+ */
+function PlaygroundShareButton({
+  componentName,
+}: {
+  componentName: string;
+}): React.ReactElement {
+  const { code } = useActiveCode();
+  const [copied, setCopied] = React.useState(false);
+
+  const handleShare = React.useCallback(async () => {
+    const url = new URL(
+      `/components/${componentName}/playground`,
+      window.location.origin,
+    );
+    url.searchParams.set("code", code);
+    await navigator.clipboard.writeText(withRef(url.toString(), "share"));
+    setCopied(true);
+    track("playground_share", { component: componentName });
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }, [code, componentName]);
+
+  return (
+    <button
+      className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
+      onClick={handleShare}
+      type="button"
+    >
+      {copied ? <Check className="size-3" /> : <Share2 className="size-3" />}
+      {copied ? "Link copied!" : "Share playground"}
+    </button>
+  );
+}
+
 export function SandpackPlayground({
   componentName,
   example,
@@ -150,6 +192,11 @@ export function SandpackPlayground({
         template="react-ts"
         theme="auto"
       >
+        {surface === "route" ? (
+          <div className="flex justify-end border-b bg-muted/30 px-4 py-2">
+            <PlaygroundShareButton componentName={componentName} />
+          </div>
+        ) : null}
         <SandpackLayout className="!m-0 !rounded-none !border-0">
           <SandpackCodeEditor
             className="min-h-[460px] flex-1"
