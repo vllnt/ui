@@ -2,15 +2,61 @@
 
 import { useState } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export const CHECKLIST_PROGRESS_EVENT = "vllnt:checklist-progress-change";
+export const CHECKLIST_STORAGE_VERSION = 1;
 
 export type ChecklistItem = {
   description?: string;
   id: string;
   label: string;
 };
+
+type ChecklistStoragePayload = {
+  checked: string[];
+  version: typeof CHECKLIST_STORAGE_VERSION;
+};
+
+function stringItemsFromUnknown(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
+export function parseChecklistStorageValue(saved: string): string[] {
+  try {
+    const parsed: unknown = JSON.parse(saved);
+
+    if (Array.isArray(parsed)) {
+      return stringItemsFromUnknown(parsed);
+    }
+
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      "version" in parsed &&
+      "checked" in parsed &&
+      parsed.version === CHECKLIST_STORAGE_VERSION
+    ) {
+      return stringItemsFromUnknown(parsed.checked);
+    }
+  } catch {
+    return [];
+  }
+
+  return [];
+}
+
+export function createChecklistStorageValue(ids: Iterable<string>): string {
+  const payload: ChecklistStoragePayload = {
+    checked: [...ids],
+    version: CHECKLIST_STORAGE_VERSION,
+  };
+
+  return JSON.stringify(payload);
+}
 
 type ChecklistItemRowProps = {
   isChecked: boolean;
@@ -83,6 +129,7 @@ function ChecklistItemRow({
 
 type ChecklistHeaderProps = {
   checked: number;
+  Heading: HeadingTag;
   progress: number;
   title?: string;
   total: number;
@@ -90,6 +137,7 @@ type ChecklistHeaderProps = {
 
 function ChecklistHeader({
   checked,
+  Heading,
   progress,
   title,
   total,
@@ -97,7 +145,7 @@ function ChecklistHeader({
   if (!title) return null;
   return (
     <div className="flex items-center justify-between mb-3">
-      <h4 className="font-semibold flex items-center gap-2">
+      <Heading className="font-semibold flex items-center gap-2">
         <svg
           className="size-5 text-primary"
           fill="none"
@@ -112,7 +160,7 @@ function ChecklistHeader({
           />
         </svg>
         {title}
-      </h4>
+      </Heading>
       <span className="text-xs text-muted-foreground">
         {checked}/{total} ({progress}%)
       </span>
@@ -121,6 +169,8 @@ function ChecklistHeader({
 }
 
 export type ChecklistProps = {
+  /** Heading tag for the checklist title. Defaults to `h4`. */
+  as?: HeadingTag;
   className?: string;
   items: ChecklistItem[];
   onComplete?: () => void;
@@ -130,6 +180,7 @@ export type ChecklistProps = {
 
 // eslint-disable-next-line max-lines-per-function -- Complex interactive component with state and localStorage
 export function Checklist({
+  as: Heading = "h4",
   className,
   items,
   onComplete,
@@ -140,11 +191,7 @@ export function Checklist({
     if (typeof window !== "undefined" && persistKey) {
       const saved = localStorage.getItem(`checklist:${persistKey}`);
       if (saved) {
-        try {
-          return new Set(JSON.parse(saved) as string[]);
-        } catch {
-          /* skip */
-        }
+        return new Set(parseChecklistStorageValue(saved));
       }
     }
     return new Set();
@@ -159,7 +206,7 @@ export function Checklist({
       try {
         localStorage.setItem(
           `checklist:${persistKey}`,
-          JSON.stringify([...newChecked]),
+          createChecklistStorageValue(newChecked),
         );
         window.dispatchEvent(
           new CustomEvent(CHECKLIST_PROGRESS_EVENT, {
@@ -183,6 +230,7 @@ export function Checklist({
     <div className={cn("my-6 rounded-lg border bg-card p-4", className)}>
       <ChecklistHeader
         checked={checked.size}
+        Heading={Heading}
         progress={progress}
         title={title}
         total={items.length}

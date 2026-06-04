@@ -4,7 +4,12 @@ import { SearchDialog } from "./search-dialog";
 
 test.describe("SearchDialog Visual", () => {
   test("default", async ({ mount, page }) => {
-    await mount(<SearchDialog />);
+    await mount(
+      <SearchDialog
+        items={[{ id: "button", title: "Button" }]}
+        onSelect={() => {}}
+      />,
+    );
     await expect(page).toHaveScreenshot("search-dialog-default.png");
   });
 });

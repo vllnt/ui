@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm registry:build && next build",
-    "clean": "rm -rf .next node_modules public/r",
+    "build": "pnpm registry:build && next build && pnpm search:index",
+    "clean": "rm -rf .next node_modules public/r public/_pagefind",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "registry:build": "tsx scripts/inline-component-source.ts && shadcn build && tsx scripts/stamp-registry-metadata.ts && tsx scripts/generate-component-metadata.ts",
     "registry:sync-shims": "tsx scripts/inline-component-source.ts",
+    "search:index": "pagefind --site .next/server/app --output-path public/_pagefind --root-selector main --force-language en",
     "sync-storybook": "tsx scripts/generate-component-metadata.ts"
   },
   "dependencies": {
@@ -43,7 +44,8 @@
     "@vllnt/typescript": "^1.0.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.1",
-    "postcss": "^8.5",
+    "pagefind": "^1.5.2",
+    "postcss": "^8.5.10",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.0",

@@ -14,6 +14,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const COMPONENTS_DIR = join(__dirname, "../src/components");
+const IGNORED_REQUIRED_PROP_NAMES = new Set(["className", "key", "ref", "style"]);
+const DELIMITER_OPEN = new Set(["{", "[", "("]);
+const DELIMITER_CLOSE = new Set(["}", "]", ")"]);
+const NON_IMPLEMENTATION_FILE_PATTERN = /\.(?:stories|test|visual)\./;
 
 interface PropInfo {
   name: string;
@@ -99,7 +103,7 @@ function extractRequiredProps(source: string, componentName: string): PropInfo[]
     const block = extractNamedPropsBlock(source, candidateName);
     if (block) {
       return parsePropsFromBlock(block).filter(
-        (prop) => !["className", "key", "ref", "style"].includes(prop.name) && prop.required,
+        (prop) => !IGNORED_REQUIRED_PROP_NAMES.has(prop.name) && prop.required,
       );
     }
   }
@@ -109,7 +113,7 @@ function extractRequiredProps(source: string, componentName: string): PropInfo[]
     const block = extractNamedPropsBlock(source, fallbackMatch[1]);
     if (block) {
       return parsePropsFromBlock(block).filter(
-        (prop) => !["className", "key", "ref", "style"].includes(prop.name) && prop.required,
+        (prop) => !IGNORED_REQUIRED_PROP_NAMES.has(prop.name) && prop.required,
       );
     }
   }
@@ -142,13 +146,13 @@ function extractTopLevelKeys(block: string): Set<string> {
   let index = 0;
 
   while (index < block.length) {
-    if (["{", "[", "("].includes(block[index] ?? "")) {
+    if (DELIMITER_OPEN.has(block[index] ?? "")) {
       depth++;
       index++;
       continue;
     }
 
-    if (["}", "]", ")"].includes(block[index] ?? "")) {
+    if (DELIMITER_CLOSE.has(block[index] ?? "")) {
       depth--;
       index++;
       continue;
@@ -219,17 +223,27 @@ function verify(): void {
   for (const dir of componentDirs) {
     const dirPath = join(COMPONENTS_DIR, dir);
     const componentName = toPascalCase(dir);
-    const files = readdirSync(dirPath);
-    const mainFile =
-      files.find((file) => file === `${dir}.tsx`) ??
-      files.find(
-        (file) =>
-          file.endsWith(".tsx") &&
-          !file.includes(".stories.") &&
-          !file.includes(".test.") &&
-          !file.includes(".visual."),
-      );
-    const storyFile = files.find((file) => file.endsWith(".stories.tsx"));
+    let fallbackMainFile: string | undefined;
+    let mainFile: string | undefined;
+    let storyFile: string | undefined;
+
+    for (const file of readdirSync(dirPath)) {
+      if (file === `${dir}.tsx`) {
+        mainFile = file;
+      } else if (
+        !fallbackMainFile &&
+        file.endsWith(".tsx") &&
+        !NON_IMPLEMENTATION_FILE_PATTERN.test(file)
+      ) {
+        fallbackMainFile = file;
+      }
+
+      if (!storyFile && file.endsWith(".stories.tsx")) {
+        storyFile = file;
+      }
+    }
+
+    mainFile ??= fallbackMainFile;
 
     if (!mainFile || !storyFile) continue;
     checked++;

@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type ActivityHeatmapItem = {
@@ -8,6 +9,8 @@ export type ActivityHeatmapItem = {
 };
 
 export type ActivityHeatmapProps = React.ComponentPropsWithoutRef<"div"> & {
+  /** Heading tag for the title. Defaults to `h2`. */
+  as?: HeadingTag;
   data: ActivityHeatmapItem[];
   description?: string;
   endDate?: Date | number | string;
@@ -210,6 +213,7 @@ export const ActivityHeatmap = React.forwardRef<
 >(
   (
     {
+      as: Heading = "h2",
       className,
       data,
       description,
@@ -226,7 +230,9 @@ export const ActivityHeatmap = React.forwardRef<
     return (
       <div className={cn("space-y-4", className)} ref={ref} {...props}>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+          <Heading className="text-lg font-semibold tracking-tight">
+            {title}
+          </Heading>
           {description ? (
             <p className="text-sm text-muted-foreground">{description}</p>
           ) : null}

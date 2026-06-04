@@ -1,0 +1,51 @@
+---
+title: FAQ
+description: Answers to common questions about licensing, peer dependencies, RSC, Tailwind, and support.
+type: docs
+og:
+  title: FAQ
+  description: Common VLLNT UI questions
+  type: docs
+---
+
+# FAQ
+
+## What license does VLLNT UI use?
+
+The project is released under the repository license. Check `LICENSE` in the repo for the canonical license text.
+
+## Is this a package or a shadcn registry?
+
+Both. You can import from `@vllnt/ui`, or you can copy component source into your app with the shadcn CLI and `/r/<name>.json` descriptors.
+
+## What are the peer dependencies?
+
+React, React DOM, Tailwind CSS, and Radix primitives are the important runtime expectations. Individual registry descriptors list their npm dependencies.
+
+## Does it support React Server Components?
+
+Components that use hooks or browser APIs are client components. Server-safe exports can be rendered from server components, but interactive components should keep their `"use client"` directive.
+
+## Does it support Tailwind v4?
+
+The registry site uses Tailwind-compatible utility classes and semantic variables. Check component source and your app's Tailwind setup when copying components into a Tailwind v4 project.
+
+## Can I customize component source?
+
+Yes. Registry installation copies source into your app. Keep changes local, and re-run the CLI only when you intentionally reconcile upstream updates.
+
+## Are components accessible?
+
+Accessibility is a core requirement. Components use native semantics and Radix primitives where appropriate, and tests cover important roles and interactions.
+
+## How do I report a bug?
+
+Use the report link on the component page or open a GitHub issue with reproduction details, expected behavior, and environment information.
+
+## Can AI agents use the registry?
+
+Yes. Use `/llms.txt`, `/llms-full.txt`, `/r/registry.json`, and `/r/<name>.json` for agent-friendly context.
+
+## How often is the registry updated?
+
+The registry is rebuilt during site deployment. Registry JSON includes version and generated metadata so consumers can compare changes.

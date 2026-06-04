@@ -40,14 +40,19 @@ const CATEGORIES = [
   { color: "red" as const, id: "incident", label: "Incident" },
 ];
 
+const TIMELINE_START = new Date("2024-01-01");
+const TIMELINE_END = new Date("2025-01-01");
+const OUTSIDE_WINDOW_START = new Date("2010-01-01");
+const OUTSIDE_WINDOW_END = new Date("2010-12-31");
+
 describe("InteractiveTimeline", () => {
   describe("rendering", () => {
     it("renders track labels and event markers", () => {
       const { container } = render(
         <InteractiveTimeline
-          endDate={new Date("2025-01-01")}
+          endDate={TIMELINE_END}
           events={EVENTS}
-          startDate={new Date("2024-01-01")}
+          startDate={TIMELINE_START}
           tracks={TRACKS}
         />,
       );
@@ -65,9 +70,9 @@ describe("InteractiveTimeline", () => {
     it("falls back to a single default track when none provided", () => {
       const { container } = render(
         <InteractiveTimeline
-          endDate={new Date("2025-01-01")}
+          endDate={TIMELINE_END}
           events={EVENTS}
-          startDate={new Date("2024-01-01")}
+          startDate={TIMELINE_START}
         />,
       );
 
@@ -82,10 +87,10 @@ describe("InteractiveTimeline", () => {
       const onEventClick = vi.fn();
       const { container } = render(
         <InteractiveTimeline
-          endDate={new Date("2025-01-01")}
+          endDate={TIMELINE_END}
           events={EVENTS}
           onEventClick={onEventClick}
-          startDate={new Date("2024-01-01")}
+          startDate={TIMELINE_START}
           tracks={TRACKS}
         />,
       );
@@ -103,9 +108,9 @@ describe("InteractiveTimeline", () => {
     it("marks the clicked event as selected via data-selected", () => {
       const { container } = render(
         <InteractiveTimeline
-          endDate={new Date("2025-01-01")}
+          endDate={TIMELINE_END}
           events={EVENTS}
-          startDate={new Date("2024-01-01")}
+          startDate={TIMELINE_START}
           tracks={TRACKS}
         />,
       );
@@ -125,9 +130,9 @@ describe("InteractiveTimeline", () => {
       const { container } = render(
         <InteractiveTimeline
           categories={CATEGORIES}
-          endDate={new Date("2025-01-01")}
+          endDate={TIMELINE_END}
           events={EVENTS}
-          startDate={new Date("2024-01-01")}
+          startDate={TIMELINE_START}
           tracks={TRACKS}
         >
           <InteractiveTimelineToolbar>
@@ -155,9 +160,9 @@ describe("InteractiveTimeline", () => {
     it("doubles inner width on zoom-in and halves on zoom-out", () => {
       const { container } = render(
         <InteractiveTimeline
-          endDate={new Date("2025-01-01")}
+          endDate={TIMELINE_END}
           events={EVENTS}
-          startDate={new Date("2024-01-01")}
+          startDate={TIMELINE_START}
           tracks={TRACKS}
         >
           <InteractiveTimelineToolbar>
@@ -204,9 +209,9 @@ describe("InteractiveTimeline", () => {
     it("hides the today marker when outside the window", () => {
       const { container } = render(
         <InteractiveTimeline
-          endDate={new Date("2010-12-31")}
+          endDate={OUTSIDE_WINDOW_END}
           events={[]}
-          startDate={new Date("2010-01-01")}
+          startDate={OUTSIDE_WINDOW_START}
           tracks={TRACKS}
         />,
       );

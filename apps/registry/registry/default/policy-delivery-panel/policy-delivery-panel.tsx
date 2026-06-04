@@ -107,7 +107,7 @@ const RowBody = (props: { policy: PolicyEntry }): React.ReactElement => {
 const Row = (props: { policy: PolicyEntry }): React.ReactElement => {
   const { policy } = props;
   if (policy.onToggle) {
-    const handleClick = (): void => {
+    const handleTogglePolicy = (): void => {
       policy.onToggle?.();
     };
     return (
@@ -115,7 +115,7 @@ const Row = (props: { policy: PolicyEntry }): React.ReactElement => {
         className="flex w-full items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-policy-row={policy.id}
         data-policy-status={policy.status}
-        onClick={handleClick}
+        onClick={handleTogglePolicy}
         type="button"
       >
         <RowBody policy={policy} />

@@ -1,9 +1,10 @@
 "use client";
 
-import { memo, useCallback, useEffect } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 import { Button } from "../button";
 
@@ -39,6 +40,10 @@ export type ContentIntroProps = {
   sections: ContentIntroSection[];
   /** Intro section title */
   title: string;
+  /** Heading tag for the main title. Defaults to `h2`. */
+  titleAs?: HeadingTag;
+  /** Heading tag for the table-of-contents label. Defaults to `h3`. */
+  tocLabelAs?: HeadingTag;
 };
 
 const DEFAULT_LABELS: Required<ContentIntroLabels> = {
@@ -61,33 +66,39 @@ function ContentIntroImpl({
   renderIntroContent,
   sections,
   title,
+  titleAs: TitleHeading = "h2",
+  tocLabelAs: TocHeading = "h3",
 }: ContentIntroProps): React.ReactNode {
   const mergedLabels = { ...DEFAULT_LABELS, ...labels };
   const hasProgress = completedSections.size > 0;
-
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        onStart();
-      }
-    },
-    [onStart],
-  );
+  const onStartRef = useRef(onStart);
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+    onStartRef.current = onStart;
+  }, [onStart]);
+
+  useEffect(() => {
+    const onDocumentKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        onStartRef.current();
+      }
     };
-  }, [handleKeyDown]);
+
+    document.addEventListener("keydown", onDocumentKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onDocumentKeyDown);
+    };
+  }, []);
 
   return (
     <>
       <div className="animate-in fade-in-0 duration-500 pb-24">
         {/* Introduction Content */}
         <section className="py-6">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-6">{title}</h2>
+          <TitleHeading className="text-2xl md:text-3xl font-semibold mb-6">
+            {title}
+          </TitleHeading>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
             {renderIntroContent()}
           </div>
@@ -95,9 +106,9 @@ function ContentIntroImpl({
 
         {/* Table of Contents */}
         <section className="mt-8 py-6 border-t border-border">
-          <h3 className="text-lg font-semibold mb-4">
+          <TocHeading className="text-lg font-semibold mb-4">
             {mergedLabels.tableOfContentsLabel}
-          </h3>
+          </TocHeading>
           <ol className="space-y-2">
             {sections.map((section, index) => {
               const isCompleted =

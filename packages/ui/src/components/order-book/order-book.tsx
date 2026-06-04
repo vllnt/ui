@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
 export type OrderBookLevel = {
@@ -9,6 +10,8 @@ export type OrderBookLevel = {
 };
 
 export type OrderBookProps = {
+  /** Heading tag for the main "Order book" title. Defaults to `h2`. */
+  as?: HeadingTag;
   asks: OrderBookLevel[];
   bids: OrderBookLevel[];
   precision?: number;
@@ -105,7 +108,10 @@ function BookSide({
 }
 
 export const OrderBook = React.forwardRef<HTMLDivElement, OrderBookProps>(
-  ({ asks, bids, className, precision = 2, ...props }, reference) => {
+  (
+    { as: Heading = "h2", asks, bids, className, precision = 2, ...props },
+    reference,
+  ) => {
     if (asks.length === 0 && bids.length === 0) {
       return null;
     }
@@ -131,9 +137,9 @@ export const OrderBook = React.forwardRef<HTMLDivElement, OrderBookProps>(
             <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
               Level II
             </p>
-            <h2 className="text-lg font-semibold text-foreground">
+            <Heading className="text-lg font-semibold text-foreground">
               Order book
-            </h2>
+            </Heading>
           </div>
           <div className="rounded-full border border-border bg-background/70 px-3 py-1 text-sm text-muted-foreground tabular-nums">
             Spread {formatNumber(spread, precision)}

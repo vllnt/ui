@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useTransition } from "react";
 
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
@@ -263,16 +263,16 @@ function FilterBarImpl({
   searchQuery,
   tags,
 }: FilterBarProps): React.ReactNode {
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const mergedLabels = { ...DEFAULT_LABELS, ...labels };
 
   const handleDifficultyChange = useCallback(
     (difficulty: string): void => {
-      setIsPending(true);
-      onFiltersChange({ difficulty });
-      setIsPending(false);
+      startTransition(() => {
+        onFiltersChange({ difficulty });
+      });
     },
-    [onFiltersChange],
+    [onFiltersChange, startTransition],
   );
 
   const handleSearchChange = useCallback(

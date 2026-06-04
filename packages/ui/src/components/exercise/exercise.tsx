@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Check, Dumbbell, Eye, EyeOff } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 import { Button } from "../button";
 
@@ -17,11 +18,18 @@ const difficultyConfig = {
 type HeaderProps = {
   completed: boolean;
   config: { className: string; label: string };
+  Heading: HeadingTag;
   onToggle: () => void;
   title: string;
 };
 
-function ExerciseHeader({ completed, config, onToggle, title }: HeaderProps) {
+function ExerciseHeader({
+  completed,
+  config,
+  Heading,
+  onToggle,
+  title,
+}: HeaderProps) {
   return (
     <div className="flex items-start justify-between gap-4 mb-4">
       <div className="flex items-center gap-3">
@@ -29,7 +37,7 @@ function ExerciseHeader({ completed, config, onToggle, title }: HeaderProps) {
           <Dumbbell className="size-5 text-primary" />
         </div>
         <div>
-          <h4 className="font-semibold text-foreground">{title}</h4>
+          <Heading className="font-semibold text-foreground">{title}</Heading>
           <span className={cn("text-xs font-medium", config.className)}>
             {config.label}
           </span>
@@ -114,6 +122,8 @@ function ExerciseSolution({ onToggle, showSolution, solution }: SolutionProps) {
 }
 
 export type ExerciseProps = {
+  /** Heading tag for the exercise title. Defaults to `h4`. */
+  as?: HeadingTag;
   children: ReactNode;
   difficulty?: "easy" | "hard" | "medium";
   hint?: string;
@@ -122,6 +132,7 @@ export type ExerciseProps = {
 };
 
 export function Exercise({
+  as: Heading = "h4",
   children,
   difficulty = "medium",
   hint,
@@ -137,6 +148,7 @@ export function Exercise({
       <ExerciseHeader
         completed={completed}
         config={difficultyConfig[difficulty]}
+        Heading={Heading}
         onToggle={() => {
           setCompleted(!completed);
         }}

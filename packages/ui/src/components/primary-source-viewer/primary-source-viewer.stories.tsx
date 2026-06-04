@@ -59,7 +59,7 @@ export const Default: Story = {
         />
       </PrimarySourceAnnotations>
       <PrimarySourceTranscription>
-        <p>John, by the grace of God, King of England, Lord of Ireland...</p>
+        <p>John, by the grace of God, King of England, Lord of Ireland&hellip;</p>
         <p>
           No free man shall be seized, imprisoned, dispossessed, outlawed,
           exiled, or destroyed, except by the lawful judgment of his peers.

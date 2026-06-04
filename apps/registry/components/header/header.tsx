@@ -1,9 +1,10 @@
 "use client";
 
 import { NavbarSaas, SearchDialog } from "@vllnt/ui";
-import { Github } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { searchPagefind } from "@/components/header/pagefind-search";
+import { GitHubMark } from "@/components/github-mark";
 import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
@@ -18,17 +19,25 @@ export function Header() {
 
   const navItems = [
     { href: "/", title: "Get Started" },
+    { href: "/docs", title: "Docs" },
     { href: "/philosophy", title: "Philosophy" },
     { href: "/components", title: "Components" },
   ];
 
-  const searchItems = registry.items
-    .filter((item) => item.type === "registry:component")
-    .map((item) => ({
+  const searchItems = registry.items.reduce<
+    { description?: string; href?: string; id: string; title: string }[]
+  >((items, item) => {
+    if (item.type !== "registry:component") return items;
+
+    items.push({
       description: item.description,
+      href: `/components/${item.name}`,
       id: item.name,
       title: item.title,
-    }));
+    });
+
+    return items;
+  }, []);
 
   return (
     <NavbarSaas
@@ -37,23 +46,29 @@ export function Header() {
       rightSlot={
         <div className="flex items-center gap-2">
           <SearchDialog
-            buttonText="Search components..."
-            emptyText="No components found."
+            buttonText="Search..."
+            docsEmptyText="No docs found."
+            docsGroupHeading="Docs"
+            docsSearch={searchPagefind}
+            emptyText="No results found."
             groupHeading="Components"
             items={searchItems}
-            onSelect={(item) => {
-              router.push(`/components/${item.id}`);
+            onDocsSelect={(item) => {
+              router.push(item.href ?? item.id);
             }}
-            searchPlaceholder="Search components..."
+            onSelect={(item) => {
+              router.push(item.href ?? `/components/${item.id}`);
+            }}
+            searchPlaceholder="Search docs and components..."
           />
           <a
             aria-label="VLLNT UI on GitHub"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
             href={GITHUB_URL}
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <GitHubMark className="size-4" />
           </a>
         </div>
       }
