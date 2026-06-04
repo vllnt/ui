@@ -37,6 +37,40 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 | `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
 | `pnpm -F @vllnt/ui test:coverage` | Vitest with coverage |
 | `pnpm check:circular` | Fail on circular imports |
+| `pnpm doctor` | react-doctor health scan (top rules) |
+| `pnpm doctor:full` | Verbose full scan with per-file detail |
+| `pnpm doctor:errors` | Scan, exit non-zero on any **error** (CI/pre-commit gate) |
+| `pnpm doctor:staged` | Scan only staged files (what the pre-commit hook runs) |
+
+---
+
+## React health (react-doctor)
+
+[react-doctor](https://github.com/millionco/react-doctor) scans React-specific
+correctness, a11y, and dead-code health. Three surfaces, one shared gate
+(**errors block, warnings are advisory**):
+
+| Surface | Trigger | Gate |
+|---------|---------|------|
+| CI ([`.github/workflows/react-doctor.yml`](./.github/workflows/react-doctor.yml)) | PR (diff) + push to main (full report) | `--fail-on error` |
+| Pre-commit ([`.githooks/pre-commit`](./.githooks/pre-commit)) | `git commit` with staged `.ts/.tsx` | `--fail-on error` on staged files |
+| Local | `pnpm doctor*` scripts | per script |
+
+The pre-commit hook is enabled automatically: the root `package.json` `prepare`
+script points `core.hooksPath` at `.githooks/` on `pnpm install`. Bypass once
+with `git commit --no-verify`.
+
+### Config — [`doctor.config.json`](./doctor.config.json)
+
+- `ignore.files` skips generated/build output so the score reflects hand-written
+  source: `registry/default/**` (generated from `packages/ui/src` by
+  `inline-component-source.ts`), `storybook-static`, `dist`, `.next`, Pagefind
+  and shadcn registry output, and `*.visual.tsx` Playwright CT fixtures (test
+  entry files the import graph can't see).
+- Two rules are `off` because they conflict with deliberate library patterns:
+  `no-multi-comp` (compound components such as `Alert`/`AlertTitle` co-located
+  by design) and `only-export-components` (shadcn `cva` variants/types
+  co-exported with the component).
 
 ---
 

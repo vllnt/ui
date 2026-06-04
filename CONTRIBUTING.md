@@ -30,6 +30,12 @@ Key scripts (from repo root):
 | `pnpm test:once` | Vitest single-run across the workspace |
 | `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
 | `pnpm check:circular` | Fail on circular imports |
+| `pnpm doctor` | react-doctor React-health scan |
+
+A [react-doctor](https://github.com/millionco/react-doctor) **pre-commit hook**
+(in `.githooks/`, enabled automatically on `pnpm install`) blocks commits that
+introduce React *errors* on staged files; warnings are advisory. Bypass once
+with `git commit --no-verify`. See AGENTS.md → *React health* for details.
 
 ## Branching & PRs
 
