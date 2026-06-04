@@ -25,7 +25,7 @@ export function Header() {
   ];
 
   const searchItems = registry.items.reduce<
-    { description?: string; id: string; title: string }[]
+    { description?: string; href?: string; id: string; title: string }[]
   >((items, item) => {
     if (item.type !== "registry:component") return items;
 
