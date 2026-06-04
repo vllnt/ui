@@ -1,7 +1,10 @@
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { CHECKLIST_PROGRESS_EVENT } from "../checklist";
+import {
+  CHECKLIST_PROGRESS_EVENT,
+  createChecklistStorageValue,
+} from "../checklist";
 
 import {
   ProgressTracker,
@@ -89,7 +92,7 @@ describe("ProgressTracker", () => {
   it("uses Checklist persistence when checklist items and a persist key are provided", () => {
     localStorage.setItem(
       "checklist:react-fundamentals",
-      JSON.stringify(["intro", "components", "hooks"]),
+      createChecklistStorageValue(["intro", "components", "hooks"]),
     );
 
     render(
@@ -209,7 +212,7 @@ describe("ProgressTracker", () => {
     act(() => {
       localStorage.setItem(
         "checklist:react-fundamentals",
-        JSON.stringify(["intro", "components", "hooks"]),
+        createChecklistStorageValue(["intro", "components", "hooks"]),
       );
       window.dispatchEvent(
         new CustomEvent(CHECKLIST_PROGRESS_EVENT, {

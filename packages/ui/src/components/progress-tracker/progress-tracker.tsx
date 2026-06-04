@@ -13,7 +13,11 @@ import {
   CardHeader,
   CardTitle,
 } from "../card";
-import { CHECKLIST_PROGRESS_EVENT, type ChecklistItem } from "../checklist";
+import {
+  CHECKLIST_PROGRESS_EVENT,
+  type ChecklistItem,
+  parseChecklistStorageValue,
+} from "../checklist";
 import { ProgressBar } from "../progress-bar";
 
 export type ProgressTrackerModuleStatus =
@@ -93,10 +97,7 @@ function readPersistedChecklistItems(persistKey?: string): string[] {
   try {
     const saved = localStorage.getItem(`checklist:${persistKey}`);
     if (!saved) return [];
-    const parsed = JSON.parse(saved) as unknown;
-    return Array.isArray(parsed)
-      ? parsed.filter((item): item is string => typeof item === "string")
-      : [];
+    return parseChecklistStorageValue(saved);
   } catch {
     return [];
   }
