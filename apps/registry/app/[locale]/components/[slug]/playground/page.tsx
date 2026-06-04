@@ -2,10 +2,10 @@ import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import { setRequestLocale } from "next-intl/server";
 
-import { ComponentPlaygroundShell } from "@/components/playground";
+import { PlaygroundCodePanel } from "@/components/playground";
+import { StorybookEmbed } from "@/components/storybook-embed";
 import { type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -70,7 +70,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const description =
     meta?.description ??
     component.description ??
-    "Edit a live VLLNT UI component sandbox.";
+    "Preview a VLLNT UI component and copy its example.";
   const pathname = `/components/${slug}/playground`;
 
   const ogParameters = {
@@ -104,7 +104,9 @@ export default async function ComponentPlaygroundPage(props: Props) {
   const meta = metadata_map[slug];
   const displayTitle = meta?.title ?? component.title ?? component.name;
   const displayDescription =
-    meta?.description ?? component.description ?? "Edit this component live.";
+    meta?.description ??
+    component.description ??
+    "Preview this component and copy its example.";
   const playgroundExample = getPlaygroundExample(component);
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
 
@@ -124,10 +126,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
                 label: "Components",
               },
               {
-                href: localizePathname(
-                  `/components/${component.name}`,
-                  locale,
-                ),
+                href: localizePathname(`/components/${component.name}`, locale),
                 label: displayTitle,
               },
               { label: "Playground" },
@@ -149,12 +148,21 @@ export default async function ComponentPlaygroundPage(props: Props) {
               Back to component
             </Link>
           </div>
-          <ComponentPlaygroundShell
-            componentName={component.name}
-            example={playgroundExample}
-            packageVersion={registryPackageVersion}
-            surface="route"
-          />
+          <div className="space-y-6">
+            <div className="overflow-hidden rounded-lg border bg-card">
+              <StorybookEmbed
+                componentName={component.name}
+                height={460}
+                storyId={meta?.defaultStoryId}
+              />
+            </div>
+            <PlaygroundCodePanel
+              componentName={component.name}
+              example={playgroundExample}
+              packageVersion={registryPackageVersion}
+              surface="route"
+            />
+          </div>
         </div>
       </main>
     </>
