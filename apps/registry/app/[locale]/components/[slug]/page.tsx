@@ -187,9 +187,6 @@ export default async function ComponentPage(props: Props) {
   const sections = [
     { id: "installation", title: "Installation" },
     ...(meta?.defaultStoryId ? [{ id: "preview", title: "Preview" }] : []),
-    ...(meta?.defaultStoryId
-      ? [{ id: "playground", title: "Playground" }]
-      : []),
     ...(meta?.defaultStoryId ? [{ id: "storybook", title: "Storybook" }] : []),
     ...(componentCode ? [{ id: "code", title: "Code" }] : []),
     ...(component.dependencies && component.dependencies.length > 0
