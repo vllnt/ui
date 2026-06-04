@@ -28,7 +28,7 @@ type A11ySchema = {
   notes?: string;
 };
 
-type UsageExample = {
+export type UsageExample = {
   title: string;
   description?: string;
   code: string;
