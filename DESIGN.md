@@ -3,10 +3,15 @@
 > Single source of truth for VLLNT UI's brand and design conventions.
 > Humans read this file. Agents read it too — every UI suggestion must follow it.
 
-This is the **canonical** brand & design guideline for the library. The full
-machine-readable token set lives in `packages/design/tokens.json`, is documented
-in `packages/design/README.md`, and is mirrored publicly at `/r/design.json`.
-The site rendering at `/design` reads this file directly.
+This is the **canonical** brand & design guideline for the library. Read it on
+the web at three public surfaces, all generated from this one file:
+
+- [`/DESIGN.md`](https://ui.vllnt.ai/DESIGN.md) — this file as raw markdown (canonical for agents).
+- [`/design`](https://ui.vllnt.ai/design) — human-browsable rendering with a contents nav.
+- [`/r/design.json`](https://ui.vllnt.ai/r/design.json) — machine-readable token set.
+
+The full token set lives in `packages/design/tokens.json` and is documented in
+`packages/design/README.md`.
 
 ---
 
@@ -249,14 +254,18 @@ No coloured shadows. No multi-layered glow effects.
 
 ---
 
-## 14. Roadmap (this file)
+## 14. Surfaces and roadmap
 
-This document is the **v1 brand baseline** for VLLNT UI. Expansions tracked
-separately:
+This document is the **v1 brand baseline** for VLLNT UI. It ships on these
+surfaces today:
 
-- `packages/design/tokens.json` — machine-readable tokens (same source of truth, JSON form). Follow-up.
-- `/design` site route — human-browsable rendering of this file with live token previews. Follow-up.
-- `/r/design.json` — JSON endpoint mirroring tokens for agent consumption. Follow-up.
+- [`/DESIGN.md`](https://ui.vllnt.ai/DESIGN.md) — this file as raw markdown.
+- [`/design`](https://ui.vllnt.ai/design) — human-browsable rendering with a contents nav.
+- [`/r/design.json`](https://ui.vllnt.ai/r/design.json) — JSON token set, mirroring `packages/design/tokens.json`.
+
+Still planned:
+
+- Live token previews inline on the `/design` page.
 - `meta.json` a11y schemas per component (#255) — keyboard / ARIA / focus rules surfaced via the registry.
 
 ---

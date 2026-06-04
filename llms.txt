@@ -33,6 +33,7 @@ import { Button } from "@vllnt/ui";
 ## Key docs
 
 - [Root README](https://github.com/vllnt/ui/blob/main/README.md) — overview + component index
+- [DESIGN](https://ui.vllnt.ai/DESIGN.md) — canonical brand, tokens, and design system rules
 - [Package README](https://github.com/vllnt/ui/blob/main/packages/ui/README.md) — setup, theming, full component tables
 - [CHANGELOG](https://github.com/vllnt/ui/blob/main/packages/ui/CHANGELOG.md) — version history
 - [CONTRIBUTING](https://github.com/vllnt/ui/blob/main/CONTRIBUTING.md) — dev + PR workflow

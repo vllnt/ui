@@ -120,7 +120,7 @@ Override CSS variables after importing styles:
 
 ## AI agents
 
-Building with an AI coding agent? Install the [`vllnt-ui` skill](skills/vllnt-ui/SKILL.md) — it gives agents the component set, design tokens, and usage patterns, pointing to the live registry and [`DESIGN.md`](DESIGN.md) for current detail. Agents working *in this repo* should read [AGENTS.md](AGENTS.md).
+Building with an AI coding agent? Install the [`vllnt-ui` skill](skills/vllnt-ui/SKILL.md) — it gives agents the component set, design tokens, and usage patterns, pointing to the live registry and [`DESIGN.md`](https://ui.vllnt.ai/DESIGN.md) for current detail. Agents working *in this repo* should read [AGENTS.md](AGENTS.md).
 
 ## Contributing
 

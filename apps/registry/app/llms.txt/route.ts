@@ -110,6 +110,7 @@ function buildRegistryLines(): readonly string[] {
     "",
     `- [Registry index](${SITE_URL}/r/registry.json): full machine-readable list of all components`,
     `- [Design tokens](${SITE_URL}/r/design.json): machine-readable VLLNT UI token contract`,
+    `- [Design guide (raw)](${SITE_URL}/DESIGN.md): canonical brand and design rules as raw markdown`,
     `- [Sitemap](${SITE_URL}/sitemap.xml): every public route, refreshed per deploy`,
     "- Install command: `pnpm dlx shadcn@latest add " +
       `${SITE_URL}/r/<name>.json` +

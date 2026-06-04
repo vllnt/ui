@@ -45,7 +45,7 @@ The component set changes; the design rules don't. Hardcoded lists go stale —
 | Full component list / TOC | `https://ui.vllnt.ai/r/registry.json` | JSON — `items[]` with `name`, `title`, `description` |
 | Browse a component (props, demos) | `https://ui.vllnt.ai/components` · `…/components/{slug}` | HTML |
 | Install one component | `https://ui.vllnt.ai/r/{name}.json` | JSON (shadcn) |
-| Design system (canonical) | `https://raw.githubusercontent.com/vllnt/ui/main/DESIGN.md` | Markdown |
+| Design system (canonical) | `https://ui.vllnt.ai/DESIGN.md` | Markdown (raw) |
 | AI orientation (short) | `https://ui.vllnt.ai/llms.txt` | text |
 | AI deep reference (full) | `https://ui.vllnt.ai/llms-full.txt` | text |
 
@@ -53,8 +53,9 @@ Rules:
 - "What components exist?" / "is there an X component?" → fetch `/r/registry.json`
   and read `items[].name`. **Do not answer the component list from memory.**
 - Need exact props / a11y map / examples → fetch the component page or its `.tsx`.
-- Need a design decision not covered below → fetch `DESIGN.md`.
-- When `ui.vllnt.ai/design` ships (DESIGN.md §14 roadmap), prefer it over the raw link.
+- Need a design decision not covered below → fetch `https://ui.vllnt.ai/DESIGN.md`.
+- For human-readable browsing use `https://ui.vllnt.ai/design`. If `/DESIGN.md` is
+  unreachable, fall back to `https://raw.githubusercontent.com/vllnt/ui/main/DESIGN.md`.
 
 ---
 

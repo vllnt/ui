@@ -16,6 +16,7 @@
   - Public npm: https://www.npmjs.com/package/@vllnt/ui
   - shadcn registry: https://ui.vllnt.ai/r
   - Docs: https://ui.vllnt.ai
+  - Design system: https://ui.vllnt.ai/DESIGN.md
   - Storybook: https://storybook.vllnt.ai
 
 ## Install

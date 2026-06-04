@@ -91,19 +91,22 @@ function registryRoutes(
   items: readonly RegistryItem[],
   lastModified: Date,
 ): MetadataRoute.Sitemap {
-  return [
-    entry({
+  const rawRoutes = [
+    {
       changeFrequency: "weekly",
-      lastModified,
       priority: 0.3,
       url: `${SITE_URL}/r/registry.json`,
-    }),
-    entry({
+    },
+    {
       changeFrequency: "monthly",
-      lastModified,
       priority: 0.3,
       url: `${SITE_URL}/r/design.json`,
-    }),
+    },
+    { changeFrequency: "monthly", priority: 0.3, url: `${SITE_URL}/DESIGN.md` },
+  ] satisfies readonly Omit<SitemapEntryInput, "lastModified">[];
+
+  return [
+    ...rawRoutes.map((route) => entry({ ...route, lastModified })),
     ...items.map((item) =>
       entry({
         changeFrequency: "weekly",
