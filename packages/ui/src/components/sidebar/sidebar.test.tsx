@@ -78,6 +78,14 @@ function SidebarStateProbe() {
       >
         Open sidebar
       </button>
+      <button
+        onClick={() => {
+          setOpen(false);
+        }}
+        type="button"
+      >
+        Close sidebar
+      </button>
     </>
   );
 }
@@ -198,6 +206,21 @@ describe("Sidebar", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
+    });
+  });
+
+  it("collapses to zero width on desktop when closed", async () => {
+    const { container } = renderSidebar();
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
+    });
+    expect(container.querySelector("aside")).toHaveClass("w-64");
+
+    fireEvent.click(screen.getByRole("button", { name: "Close sidebar" }));
+
+    await waitFor(() => {
+      expect(container.querySelector("aside")).toHaveClass("w-0", "border-r-0");
     });
   });
 });
