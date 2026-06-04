@@ -7,15 +7,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
-import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
 import {
   breadcrumbLd,
-  jsonLdScript,
+  jsonLdScriptAttributes,
   softwareSourceCodeLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import {
+  getPlaygroundExample,
+  getRegistryPackageVersion,
+} from "@/lib/playground";
 import { canonical } from "@/lib/seo";
 import {
   getCategoryForComponent,
@@ -45,13 +49,12 @@ const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  return registry.items
-    .filter(
-      (item): item is RegistryComponent => item.type === "registry:component",
-    )
-    .map((item) => ({
-      slug: item.name,
-    }));
+  return registry.items.reduce<{ slug: string }[]>((parameters, item) => {
+    if (item.type === "registry:component") {
+      parameters.push({ slug: item.name });
+    }
+    return parameters;
+  }, []);
 }
 
 function getNpmUrl(packageName: string): string {
@@ -104,6 +107,8 @@ export default async function ComponentPage(props: Props) {
   const meta = metadata_map[slug];
   const displayTitle = meta?.title ?? component.title ?? component.name;
   const displayDescription = meta?.description ?? component.description ?? "";
+  const playgroundExample = getPlaygroundExample(component);
+  const registryPackageVersion = getRegistryPackageVersion(registry.version);
 
   // Read component source for code display
   let componentCode = "";
@@ -159,6 +164,10 @@ export default async function ComponentPage(props: Props) {
 
   const sections = [
     { id: "installation", title: "Installation" },
+    ...(meta?.defaultStoryId ? [{ id: "preview", title: "Preview" }] : []),
+    ...(meta?.defaultStoryId
+      ? [{ id: "playground", title: "Playground" }]
+      : []),
     ...(meta?.defaultStoryId ? [{ id: "storybook", title: "Storybook" }] : []),
     ...(componentCode ? [{ id: "code", title: "Code" }] : []),
     ...(component.dependencies && component.dependencies.length > 0
@@ -166,30 +175,26 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{
-          __html: jsonLdScript([
-            softwareSourceCodeLd({
-              description: displayDescription,
-              name: component.name,
-              title: displayTitle,
-            }),
-            breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Components", url: `${SITE_URL}/components` },
-              {
-                name: displayTitle,
-                url: `${SITE_URL}/components/${component.name}`,
-              },
-            ]),
+        {...jsonLdScriptAttributes([
+          softwareSourceCodeLd({
+            description: displayDescription,
+            name: component.name,
+            title: displayTitle,
+          }),
+          breadcrumbLd([
+            { name: "Home", url: SITE_URL },
+            { name: "Components", url: `${SITE_URL}/components` },
+            {
+              name: displayTitle,
+              url: `${SITE_URL}/components/${component.name}`,
+            },
           ]),
-        }}
-        type="application/ld+json"
+        ])}
       />
       <Sidebar sections={getSidebarSections(getCategoryForComponent(slug))} />
       <main className="flex-1 overflow-y-auto bg-background overflow-x-hidden">
@@ -221,16 +226,14 @@ export default async function ComponentPage(props: Props) {
                 </div>
               </div>
 
-              {/* Preview — Storybook Embed */}
+              {/* Preview + Playground */}
               {meta?.defaultStoryId ? (
-                <div className="mb-8 scroll-mt-8">
-                  <div className="rounded-lg border bg-card overflow-hidden">
-                    <StorybookEmbed
-                      componentName={component.name}
-                      storyId={meta.defaultStoryId}
-                    />
-                  </div>
-                </div>
+                <PreviewPlaygroundTabs
+                  componentName={component.name}
+                  example={playgroundExample}
+                  packageVersion={registryPackageVersion}
+                  storyId={meta.defaultStoryId}
+                />
               ) : null}
 
               {/* Installation */}
@@ -256,7 +259,7 @@ export default async function ComponentPage(props: Props) {
                     target="_blank"
                   >
                     View in Storybook
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="size-4" />
                   </Link>
                   {meta.stories.length > 1 ? (
                     <div className="mt-4">
@@ -310,7 +313,7 @@ export default async function ComponentPage(props: Props) {
                               rel="noopener noreferrer"
                               target="_blank"
                             >
-                              <ExternalLink className="h-3 w-3" />
+                              <ExternalLink className="size-3" />
                             </Link>
                           </li>
                         );

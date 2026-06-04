@@ -52,12 +52,14 @@ export function ThinkingBlock({
         )}
         <span>
           Thinking
-          {isStreaming ? <span className="ml-1 animate-pulse">...</span> : null}
+          {isStreaming ? (
+            <span className="ml-1 animate-pulse">&hellip;</span>
+          ) : null}
         </span>
       </button>
       {isExpanded ? (
         <div
-          className="mt-2 p-3 bg-muted/50 rounded text-xs text-muted-foreground whitespace-pre-wrap border-l-2 border-muted-foreground/30 max-h-48 overflow-y-auto"
+          className="mt-2 p-3 bg-muted/50 rounded text-xs text-muted-foreground whitespace-pre-wrap border-l border-muted-foreground/30 max-h-48 overflow-y-auto"
           id={contentId}
         >
           {thinking}

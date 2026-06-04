@@ -110,7 +110,7 @@ export const FloatingToolbar = forwardRef<HTMLDivElement, FloatingToolbarProps>(
       >
         {actions.map((action) => {
           const variant = action.variant ?? "ghost";
-          const handleClick = (): void => {
+          const handleActivateToolbarAction = (): void => {
             action.onActivate();
           };
           return (
@@ -125,7 +125,7 @@ export const FloatingToolbar = forwardRef<HTMLDivElement, FloatingToolbarProps>(
               data-variant={variant}
               disabled={action.disabled}
               key={action.id}
-              onClick={handleClick}
+              onClick={handleActivateToolbarAction}
               type="button"
             >
               {action.glyph ? (

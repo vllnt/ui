@@ -1,11 +1,14 @@
-import {
-  getTemplateGithubUrl,
-  getTemplatePath,
-  TEMPLATES,
-} from "../../lib/templates";
+import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 import registry from "../../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const TEXT_HEADERS = new Headers([
+  [
+    "Cache-Control",
+    "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
+  ],
+  ["Content-Type", "text/plain; charset=utf-8"],
+]);
 
 type RegistryItem = {
   readonly category: string;
@@ -29,117 +32,133 @@ const CATEGORY_ORDER: readonly string[] = [
   "utility",
 ];
 
-const CATEGORY_LABEL: Record<string, string> = {
-  ai: "AI",
-  billing: "Billing & Plans",
-  content: "Content",
-  core: "Core primitives",
-  data: "Data",
-  "data-display": "Data display",
-  educational: "Educational",
-  form: "Form",
-  learning: "Learning",
-  navigation: "Navigation",
-  overlay: "Overlay",
-  utility: "Utility",
-};
+const CATEGORY_LABEL = new Map<string, string>([
+  ["ai", "AI"],
+  ["billing", "Billing & Plans"],
+  ["content", "Content"],
+  ["core", "Core primitives"],
+  ["data", "Data"],
+  ["data-display", "Data display"],
+  ["educational", "Educational"],
+  ["form", "Form"],
+  ["learning", "Learning"],
+  ["navigation", "Navigation"],
+  ["overlay", "Overlay"],
+  ["utility", "Utility"],
+]);
 
-function buildLlmsTxt(): string {
-  const items = (registry as { readonly items: readonly RegistryItem[] }).items;
+function getRegistryItems(): readonly RegistryItem[] {
+  return (registry as { readonly items: readonly RegistryItem[] }).items;
+}
 
-  const grouped = new Map<string, RegistryItem[]>();
-  for (const item of items) {
-    const bucket = grouped.get(item.category) ?? [];
-    bucket.push(item);
-    grouped.set(item.category, bucket);
-  }
+function groupItems(
+  items: readonly RegistryItem[],
+): ReadonlyMap<string, readonly RegistryItem[]> {
+  return items.reduce((groups, item) => {
+    const bucket = groups.get(item.category) ?? [];
+    groups.set(item.category, [...bucket, item]);
+    return groups;
+  }, new Map<string, readonly RegistryItem[]>());
+}
 
-  const sortedCategories = [
-    ...CATEGORY_ORDER.filter((c) => grouped.has(c)),
-    ...[...grouped.keys()].filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
+function getSortedCategories(
+  grouped: ReadonlyMap<string, readonly RegistryItem[]>,
+): readonly string[] {
+  return [
+    ...CATEGORY_ORDER.filter((category) => grouped.has(category)),
+    ...[...grouped.keys()]
+      .filter((category) => !CATEGORY_ORDER.includes(category))
+      .sort(),
   ];
+}
 
-  const lines: string[] = [];
-
-  lines.push("# VLLNT UI");
-  lines.push("");
-  lines.push(
+function buildIntroLines(items: readonly RegistryItem[]): readonly string[] {
+  return [
+    "# VLLNT UI",
+    "",
     "> Agent-first React component registry. " +
       `${items.length} accessible components built on Radix UI, Tailwind CSS, and CVA. ` +
       "Install via the shadcn CLI against any /r/<name>.json endpoint.",
-  );
-  lines.push("");
+    "",
+  ];
+}
 
-  lines.push("## Docs");
-  lines.push("");
-  lines.push(`- [Get Started](${SITE_URL}/): install and use any component`);
-  lines.push(
+function buildDocumentationLines(): readonly string[] {
+  return [
+    "## Docs",
+    "",
+    `- [Get Started](${SITE_URL}/): install and use any component`,
     `- [Documentation](${SITE_URL}/docs): theming, registry usage, conventions`,
-  );
-  lines.push(
+    ...DOCS_PAGES.map(
+      (page) =>
+        `- [${page.title}](${SITE_URL}${getDocsPath(page)}): ${page.description}`,
+    ),
     `- [Philosophy](${SITE_URL}/philosophy): design principles and component patterns`,
-  );
-  lines.push(
+    `- [Design guide](${SITE_URL}/design): brand, tokens, accessibility, and UI rules`,
     `- [Components index](${SITE_URL}/components): browse all components by category`,
-  );
-  lines.push(
     `- [Templates](${SITE_URL}/templates): starter kits for full VLLNT UI apps`,
-  );
-  lines.push("");
+    `- [Changelog](${SITE_URL}/changelog): canonical Keep a Changelog release history`,
+    `- [Releases](${SITE_URL}/releases): versioned release cards, GitHub notes, and RSS links`,
+    `- [RSS feed](${SITE_URL}/rss.xml): release feed for notification and agent polling`,
+    "",
+  ];
+}
 
-  lines.push("## Templates");
-  lines.push("");
-  for (const template of TEMPLATES) {
-    lines.push(
-      `- [${template.title}](${SITE_URL}${getTemplatePath(template)}): ` +
-        `${template.description} Source: ${getTemplateGithubUrl(template)}`,
-    );
-  }
-  lines.push("");
-
-  lines.push("## Registry API");
-  lines.push("");
-  lines.push(
+function buildRegistryLines(): readonly string[] {
+  return [
+    "## Registry API",
+    "",
     `- [Registry index](${SITE_URL}/r/registry.json): full machine-readable list of all components`,
-  );
-  lines.push(
+    `- [Design tokens](${SITE_URL}/r/design.json): machine-readable VLLNT UI token contract`,
     `- [Sitemap](${SITE_URL}/sitemap.xml): every public route, refreshed per deploy`,
-  );
-  lines.push(
     "- Install command: `pnpm dlx shadcn@latest add " +
       `${SITE_URL}/r/<name>.json` +
       "`",
-  );
-  lines.push("");
+    "",
+  ];
+}
 
-  for (const category of sortedCategories) {
-    const bucket = grouped.get(category);
-    if (!bucket || bucket.length === 0) continue;
-    const label = CATEGORY_LABEL[category] ?? category;
-    lines.push(`## Components — ${label}`);
-    lines.push("");
-    for (const item of [...bucket].sort((a, b) =>
-      a.name.localeCompare(b.name),
-    )) {
-      lines.push(
+function buildCategoryLines(
+  category: string,
+  grouped: ReadonlyMap<string, readonly RegistryItem[]>,
+): readonly string[] {
+  const bucket = grouped.get(category);
+  if (!bucket || bucket.length === 0) return [];
+  const label = CATEGORY_LABEL.get(category) ?? category;
+  const itemLines = [...bucket]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(
+      (item) =>
         `- [${item.title}](${SITE_URL}/components/${item.name}): ${item.description}`,
-      );
-    }
-    lines.push("");
-  }
+    );
 
-  return lines.join("\n");
+  return [`## Components - ${label}`, "", ...itemLines, ""];
+}
+
+function buildComponentLines(
+  items: readonly RegistryItem[],
+): readonly string[] {
+  const grouped = groupItems(items);
+  return getSortedCategories(grouped).flatMap((category) =>
+    buildCategoryLines(category, grouped),
+  );
+}
+
+function buildLlmsTxt(): string {
+  const items = getRegistryItems();
+  return [
+    ...buildIntroLines(items),
+    ...buildDocumentationLines(),
+    ...buildRegistryLines(),
+    ...buildComponentLines(items),
+  ].join("\n");
 }
 
 export const dynamic = "force-static";
 export const revalidate = 86_400;
 
-export function GET(): Response {
-  return new Response(buildLlmsTxt(), {
-    headers: {
-      "Cache-Control":
-        "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800",
-      "Content-Type": "text/plain; charset=utf-8",
-    },
-  });
+function getLlmsTxt(): Response {
+  return new Response(buildLlmsTxt(), { headers: TEXT_HEADERS });
 }
+
+export { getLlmsTxt as GET };

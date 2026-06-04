@@ -1,4 +1,4 @@
-export type RegistryFile = {
+type RegistryFile = {
   path: string;
   type: string;
 };
@@ -13,14 +13,14 @@ export type ComponentCategory =
   | "overlay"
   | "utility";
 
-export type Stability = "stable" | "beta" | "experimental" | "deprecated";
+type Stability = "stable" | "beta" | "experimental" | "deprecated";
 
-export type A11yKeyboardBinding = {
+type A11yKeyboardBinding = {
   keys: string;
   action: string;
 };
 
-export type A11ySchema = {
+type A11ySchema = {
   role?: string;
   keyboard?: A11yKeyboardBinding[];
   aria?: string[];
@@ -36,7 +36,7 @@ export type UsageExample = {
   storyId?: string;
 };
 
-export type PropDefinition = {
+type PropDefinition = {
   name: string;
   type: string;
   required?: boolean;
@@ -62,7 +62,7 @@ export type RegistryComponent = {
   version?: string;
 };
 
-export type RegistryItem = RegistryComponent;
+type RegistryItem = RegistryComponent;
 
 export type Registry = {
   $schema?: string;

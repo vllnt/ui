@@ -12,50 +12,55 @@ const LICENSE_URL = "https://github.com/vllnt/ui/blob/main/LICENSE";
 const COC_URL = "https://github.com/vllnt/ui/blob/main/CODE_OF_CONDUCT.md";
 
 type FooterLink = {
+  readonly external?: boolean;
   readonly href: string;
   readonly label: string;
-  readonly external?: boolean;
 };
 
 type FooterColumn = {
-  readonly title: string;
   readonly links: readonly FooterLink[];
+  readonly title: string;
 };
 
 const COLUMNS: readonly FooterColumn[] = [
   {
-    title: "Library",
     links: [
       { href: "/components", label: "Components" },
       { href: "/docs", label: "Docs" },
       { href: "/philosophy", label: "Philosophy" },
+      { href: "/design", label: "Design" },
     ],
+    title: "Library",
   },
   {
-    title: "Resources",
     links: [
       { external: true, href: STORYBOOK_URL, label: "Storybook" },
       { href: "/r/registry.json", label: "Registry JSON" },
+      { href: "/r/design.json", label: "Design tokens" },
+      { href: "/changelog", label: "Changelog" },
+      { href: "/releases", label: "Releases" },
+      { href: "/rss.xml", label: "RSS feed" },
       { href: "/llms.txt", label: "llms.txt" },
       { href: "/mcp", label: "MCP" },
       { external: true, href: GITHUB_URL, label: "GitHub" },
     ],
+    title: "Resources",
   },
   {
-    title: "Community",
     links: [
       { external: true, href: REQUEST_URL, label: "Request a component" },
       { external: true, href: REPORT_URL, label: "Report a bug" },
       { external: true, href: DISCUSSIONS_URL, label: "Discussions" },
       { external: true, href: SPONSOR_URL, label: "Sponsor" },
     ],
+    title: "Community",
   },
   {
-    title: "Legal",
     links: [
       { external: true, href: LICENSE_URL, label: "License (MIT)" },
       { external: true, href: COC_URL, label: "Code of Conduct" },
     ],
+    title: "Legal",
   },
 ];
 

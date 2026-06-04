@@ -493,13 +493,13 @@ function FillBlankField({
   onChange,
   value,
 }: FillBlankFieldProps): ReactNode {
-  const handleChange = useCallback(
+  const handleBlankValueChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       onChange(event.target.value);
     },
     [onChange],
   );
-  return <Input id={inputId} onChange={handleChange} value={value} />;
+  return <Input id={inputId} onChange={handleBlankValueChange} value={value} />;
 }
 
 type QuestionFieldProps = {

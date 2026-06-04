@@ -479,17 +479,22 @@ describe("hasUseClientDirective", () => {
 
 describe("client directives", () => {
   it("marks hook-based shipped components as client components", () => {
-    const missingDirectiveFiles = listTypeScriptFiles(COMPONENTS_ROOT)
-      .filter((filePath) =>
-        SKIPPED_SUFFIXES.every((suffix) => !filePath.endsWith(suffix)),
-      )
-      .filter((filePath) => {
-        const source = readFileSync(filePath, "utf8");
-        return fileUsesHooks(source) && !hasUseClientDirective(source);
-      })
-      .map((filePath) =>
-        filePath.replace(`${COMPONENTS_ROOT}/`, "components/"),
-      );
+    const missingDirectiveFiles = listTypeScriptFiles(COMPONENTS_ROOT).reduce<
+      string[]
+    >((missingFiles, filePath) => {
+      if (SKIPPED_SUFFIXES.some((suffix) => filePath.endsWith(suffix))) {
+        return missingFiles;
+      }
+
+      const source = readFileSync(filePath, "utf8");
+      if (fileUsesHooks(source) && !hasUseClientDirective(source)) {
+        missingFiles.push(
+          filePath.replace(`${COMPONENTS_ROOT}/`, "components/"),
+        );
+      }
+
+      return missingFiles;
+    }, []);
 
     expect(missingDirectiveFiles).toEqual([]);
   });

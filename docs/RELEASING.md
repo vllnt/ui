@@ -23,7 +23,7 @@ The release workflow does not push commits to `main`. Version bumps land via nor
 Open a PR that:
 
 - Updates `packages/ui/package.json` `"version"` to the new target (follow SemVer — see below).
-- Moves the matching entry in `packages/ui/CHANGELOG.md` from `[Unreleased]` to a dated `[x.y.z]` section.
+- Moves the matching entry in root `CHANGELOG.md` and `packages/ui/CHANGELOG.md` from `[Unreleased]` to a dated `[x.y.z]` section. Root `CHANGELOG.md` is the source used for the website, feeds, and GitHub Release notes.
 
 Merge the PR normally. The canary workflow on `main` will immediately publish `@vllnt/ui@{x.y.z}-canary.{sha}` — a dress-rehearsal of the release tarball.
 
@@ -35,7 +35,7 @@ CI will:
 
 - Run quality gates (lint / typecheck / build / test).
 - Read the version from `packages/ui/package.json`. **Fails fast** if a matching `v{x.y.z}` tag already exists — catches dispatches against stale main.
-- Generate release notes grouped by `feat` / `fix` / other, aggregating commit subjects since the previous tag.
+- Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes.
 - Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
 - `pnpm pack` and `npx --yes npm@latest publish --tag latest --provenance --access public`. OIDC trusted publishing signs the provenance attestation.
 - Create the GitHub Release for the new tag.
@@ -47,7 +47,7 @@ CI will:
 
 ## Before requesting a release
 
-- `CHANGELOG.md` has an `[Unreleased]` section describing user-facing changes.
+- `CHANGELOG.md` has an `[Unreleased]` section describing user-facing changes. Use `cliff.toml` with git-cliff if you need to regenerate it from Conventional Commits.
 - The canary built from the same commit passes and lists the expected components (check logs for the tarball manifest).
 - Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.ai` / `storybook.vllnt.ai`).
 

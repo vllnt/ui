@@ -24,6 +24,8 @@ const REACT_HOOK_PATTERN =
   /\b(?:[A-Za-z_$][A-Za-z0-9_$]*\s*\.\s*)?use[A-Z][A-Za-z0-9_]*(?:\s*<[^\n]*>)?\s*\(/
 
 const USE_CLIENT_PATTERN = /^['"]use client['"];?$/
+const ARROW_TOKEN_PATTERN = /=>/
+const BLOCK_COMMENT_END_PATTERN = /\*\//
 
 const EXCLUDED_SUFFIXES = [
   '.stories.tsx',
@@ -170,8 +172,10 @@ export function collapseMultilineGenericHookCalls(source: string): string {
     const gap = source.slice(cursor, suffixCursor)
     result += source.slice(lastIndex, start)
 
-    if (inner.includes('\n') || gap.includes('\n')) {
-      const newlines = (inner.match(/\n/g)?.length ?? 0) + (gap.match(/\n/g)?.length ?? 0)
+    const innerNewlines = inner.match(/\n/g)?.length ?? 0
+    const gapNewlines = gap.match(/\n/g)?.length ?? 0
+    if (innerNewlines > 0 || gapNewlines > 0) {
+      const newlines = innerNewlines + gapNewlines
       result +=
         source.slice(start, typeArgsStart) +
         inner.replace(/\n/g, ' ') +
@@ -219,7 +223,7 @@ export function fileUsesHooks(source: string): boolean {
       pendingHookAssignment = false
       if (HOOK_DEF_CONTINUATION_PATTERN.test(trimmed)) {
         pendingHookDef = true
-        pendingArrowHookDef = trimmed.includes('=>')
+        pendingArrowHookDef = ARROW_TOKEN_PATTERN.test(trimmed)
       }
     }
 
@@ -249,7 +253,7 @@ export function fileUsesHooks(source: string): boolean {
 
     if (HOOK_DEF_LINE_PATTERN.test(line)) {
       const inlineBody = ARROW_INLINE_BODY_PATTERN.test(line)
-      const isArrowHookDef = line.includes('=>')
+      const isArrowHookDef = ARROW_TOKEN_PATTERN.test(line)
       const balancedBraces = opens > 0 && opens === closes
       if (opens > closes) {
         hookBodyDepth = depth
@@ -289,7 +293,7 @@ export function hasUseClientDirective(source: string): boolean {
     if (trimmed.length === 0) continue
 
     if (inBlockComment) {
-      const blockEnd = trimmed.indexOf('*/')
+      const blockEnd = trimmed.search(BLOCK_COMMENT_END_PATTERN)
       if (blockEnd === -1) continue
       inBlockComment = false
       trimmed = trimmed.slice(blockEnd + 2).trim()
@@ -299,7 +303,7 @@ export function hasUseClientDirective(source: string): boolean {
     if (trimmed.startsWith('//')) continue
 
     while (trimmed.startsWith('/*')) {
-      const blockEnd = trimmed.indexOf('*/')
+      const blockEnd = trimmed.search(BLOCK_COMMENT_END_PATTERN)
       if (blockEnd === -1) {
         inBlockComment = true
         trimmed = ''

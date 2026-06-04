@@ -192,7 +192,7 @@ export const LiveFeed = React.forwardRef<HTMLDivElement, LiveFeedProps>(
 
     return (
       <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
-        <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0 pb-3">
+        <CardHeader className="flex flex-row items-start justify-between gap-3 gap-y-0 pb-3">
           <div className="space-y-1">
             <CardTitle className="text-base">{title}</CardTitle>
             {description ? (

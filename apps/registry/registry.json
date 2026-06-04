@@ -2291,7 +2291,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.2.1",
+        "@mdx-js/mdx@^3.1.1",
+        "react-markdown@^10.1.0",
+        "remark-gfm@^4.0.1"
       ],
       "category": "content",
       "version": "0.2.1",
@@ -4492,5 +4495,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-05-10T19:14:31.709Z"
+  "generatedAt": "2026-05-19T14:58:41.644Z"
 }

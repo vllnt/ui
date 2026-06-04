@@ -39,7 +39,7 @@ function ThemeButton({
   return (
     <Button
       aria-label={ariaLabel}
-      className="bg-background text-foreground border border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+      className="bg-background text-foreground border border-zinc-300 dark:border-zinc-600 hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors"
       size="icon"
       variant="outline"
       {...props}
@@ -148,7 +148,7 @@ export function ThemeToggle({ dict }: ThemeToggleProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="bg-background border border-gray-300 dark:border-gray-600"
+        className="bg-background border border-zinc-300 dark:border-zinc-600"
         onMouseEnter={() => {
           isHoveringOverMenuAreaReference.current = true;
           clearCloseTimer();

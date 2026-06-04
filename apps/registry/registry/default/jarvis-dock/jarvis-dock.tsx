@@ -78,7 +78,7 @@ const ActionButton = (props: {
 }): React.ReactElement => {
   const { action } = props;
   const tone = action.tone ?? "neutral";
-  const handleClick = (): void => {
+  const handleActivateAction = (): void => {
     action.onActivate();
   };
   return (
@@ -86,7 +86,7 @@ const ActionButton = (props: {
       className="group relative flex size-12 flex-col items-center justify-center gap-0.5 rounded-md border border-transparent text-[10px] uppercase tracking-wide text-muted-foreground transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       data-jarvis-action={action.id}
       data-jarvis-tone={tone}
-      onClick={handleClick}
+      onClick={handleActivateAction}
       type="button"
     >
       <span
