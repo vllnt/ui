@@ -134,4 +134,17 @@ describe("NavbarSaas", () => {
       expect(container.querySelector(".lucide-menu")).not.toBeInTheDocument();
     });
   });
+
+  it("renders the sidebar toggle on desktop and toggles its icon", () => {
+    setViewportWidth(1280);
+    const { container } = renderNavbar();
+
+    const trigger = screen.getByTestId("navbar-saas-mobile-trigger");
+    expect(trigger).toHaveAttribute("aria-label", "Toggle sidebar");
+    expect(container.querySelector(".lucide-menu")).toBeInTheDocument();
+
+    fireEvent.click(trigger);
+
+    expect(container.querySelector(".lucide-x")).toBeInTheDocument();
+  });
 });
