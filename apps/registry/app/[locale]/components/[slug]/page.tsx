@@ -1,16 +1,22 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { Breadcrumb, CodeBlock, Sidebar, TableOfContents } from "@vllnt/ui";
+import {
+  Breadcrumb,
+  CodeBlock,
+  ShareSection,
+  Sidebar,
+  TableOfContents,
+} from "@vllnt/ui";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
 import { setRequestLocale } from "next-intl/server";
 
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
+import { ShareEmbedBar } from "@/components/share-embed-bar";
 import { type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
 import {
@@ -24,6 +30,7 @@ import {
   getRegistryPackageVersion,
 } from "@/lib/playground";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { oembedUrl, withRef } from "@/lib/share";
 import {
   getCategoryForComponent,
   getSidebarSections,
@@ -96,6 +103,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     alternates: {
       canonical: canonical(pathname, locale),
       languages: languageAlternates(pathname),
+      types: {
+        "application/json+oembed": oembedUrl(canonical(pathname, locale)),
+      },
     },
     description,
     openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
@@ -234,6 +244,11 @@ export default async function ComponentPage(props: Props) {
                 </p>
                 <div className="flex flex-wrap items-center gap-3">
                   <QuickAdd componentName={component.name} />
+                  <ShareEmbedBar
+                    pageUrl={canonical(`/components/${component.name}`, locale)}
+                    slug={component.name}
+                    title={displayTitle}
+                  />
                   <Link
                     className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
                     href={localizePathname(
@@ -342,6 +357,16 @@ export default async function ComponentPage(props: Props) {
                   </div>
                 </div>
               ) : null}
+
+              <ShareSection
+                shareOn="Share on"
+                shareTitle="Share this component"
+                title={`${displayTitle} — VLLNT UI`}
+                url={withRef(
+                  canonical(`/components/${component.name}`, locale),
+                  "share",
+                )}
+              />
             </div>
 
             {/* Table of Contents */}

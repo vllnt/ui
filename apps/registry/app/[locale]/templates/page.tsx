@@ -1,4 +1,4 @@
-import { Sidebar } from "@vllnt/ui";
+import { ShareSection, Sidebar } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -6,10 +6,12 @@ import Link from "next/link";
 import Script from "next/script";
 import { setRequestLocale } from "next-intl/server";
 
+import { BadgeSnippets } from "@/components/badge-snippets";
 import type { Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
 
@@ -143,6 +145,15 @@ export default async function TemplatesPage({ params }: Props) {
               </li>
             ))}
           </ul>
+
+          <BadgeSnippets />
+
+          <ShareSection
+            shareOn="Share on"
+            shareTitle="Share these templates"
+            title="VLLNT UI Templates"
+            url={withRef(canonical("/templates", locale), "share")}
+          />
         </div>
       </main>
     </>
