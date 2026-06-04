@@ -58,6 +58,37 @@ export function softwareSourceCodeLd(component: {
   };
 }
 
+export function softwareApplicationLd(application: {
+  readonly description: string;
+  readonly installCommand?: string;
+  readonly name: string;
+  readonly url: string;
+}): JsonLdNode {
+  const node: JsonLdNode = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    applicationCategory: "DeveloperApplication",
+    codeRepository: "https://github.com/vllnt/ui",
+    description: application.description,
+    name: application.name,
+    operatingSystem: "Web",
+    softwareRequirements: "Node.js, pnpm, React, Tailwind CSS",
+    url: application.url,
+  };
+
+  if (application.installCommand) {
+    return {
+      ...node,
+      potentialAction: {
+        "@type": "InstallAction",
+        target: application.installCommand,
+      },
+    };
+  }
+
+  return node;
+}
+
 export function breadcrumbLd(trail: ReadonlyArray<{
   readonly name: string;
   readonly url: string;
