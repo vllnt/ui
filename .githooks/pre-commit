@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+# react-doctor pre-commit gate.
+#
+# Blocks commits that introduce React *errors* on staged files.
+# Warnings are advisory and never block a commit (gate is --fail-on error,
+# matching .github/workflows/react-doctor.yml and doctor.config.json).
+#
+# Enabled via `git config core.hooksPath .githooks`, which the root
+# package.json "prepare" script runs automatically on `pnpm install`.
+#
+# Skip once with:  git commit --no-verify
+#
+# Implementation note: we feed the staged file list to `--changed-files-from`
+# rather than using `--staged`. In this pnpm monorepo React is a peerDependency,
+# and `--staged` copies files into a temp sandbox whose generated package.json
+# has no React dep ("No React dependency found"), which would block every commit.
+# `--changed-files-from` scans the listed files in place, with real resolution.
+
+# Only run when React/TS source is staged — keep doc/config-only commits fast.
+files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(tsx|jsx|ts)$')
+if [ -z "$files" ]; then
+  exit 0
+fi
+
+echo "react-doctor: scanning staged files…"
+printf '%s\n' "$files" | npx --yes react-doctor . --offline --changed-files-from /dev/stdin --fail-on error

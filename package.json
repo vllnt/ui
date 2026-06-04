@@ -12,6 +12,7 @@
   },
   "packageManager": "pnpm@9.15.4",
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
@@ -26,7 +27,7 @@
     "doctor:json": "npx --yes react-doctor . --offline --json > .react-doctor.json",
     "doctor:errors": "npx --yes react-doctor . --offline --fail-on error",
     "doctor:diff": "npx --yes react-doctor . --offline --diff origin/main",
-    "doctor:staged": "npx --yes react-doctor . --offline --staged --fail-on error",
+    "doctor:staged": "git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(tsx|jsx|ts)$' | npx --yes react-doctor . --offline --changed-files-from /dev/stdin --fail-on error",
     "doctor:score": "npx --yes react-doctor . --offline --score"
   },
   "devDependencies": {
