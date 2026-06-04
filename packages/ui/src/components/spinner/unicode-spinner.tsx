@@ -682,10 +682,12 @@ export const UnicodeSpinner = React.forwardRef<
     const preset = UNICODE_SPINNER_PRESETS[animation];
     const resolvedInterval = interval ?? preset.interval;
     const [frameIndex, setFrameIndex] = React.useState(0);
+    const [previousAnimation, setPreviousAnimation] = React.useState(animation);
 
-    React.useEffect(() => {
+    if (previousAnimation !== animation) {
+      setPreviousAnimation(animation);
       setFrameIndex(0);
-    }, [animation]);
+    }
 
     React.useEffect(() => {
       if (paused) {

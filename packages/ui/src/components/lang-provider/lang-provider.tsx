@@ -17,18 +17,18 @@ export function LangProvider({
 }: LangProviderProps) {
   const pathname = usePathname();
 
-  useEffect(() => {
-    // Extract language from pathname - matches /en, /fr, /en/, /fr/, etc.
-    const langMatch = /^\/([a-z]{2})(?:\/|$)/.exec(pathname);
-    const lang =
-      langMatch &&
-      supportedLanguages.includes(langMatch[1] as SupportedLanguage)
-        ? (langMatch[1] as SupportedLanguage)
-        : defaultLanguage;
+  // Derive the language during render from the pathname.
+  // Matches /en, /fr, /en/, /fr/, etc.
+  const langMatch = /^\/([a-z]{2})(?:\/|$)/.exec(pathname);
+  const lang =
+    langMatch && supportedLanguages.includes(langMatch[1] as SupportedLanguage)
+      ? (langMatch[1] as SupportedLanguage)
+      : defaultLanguage;
 
-    // Update the HTML lang attribute
+  useEffect(() => {
+    // Sync the derived language to the document's lang attribute.
     document.documentElement.setAttribute("lang", lang);
-  }, [pathname, defaultLanguage, supportedLanguages]);
+  }, [lang]);
 
   return null;
 }

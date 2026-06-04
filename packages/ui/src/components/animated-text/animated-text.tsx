@@ -162,15 +162,22 @@ function buildRevealPlan(
 }
 
 function useRevealProgress(active: boolean, length: number, stagger: number) {
-  const [progress, setProgress] = React.useState(0);
+  const [progress, setProgress] = React.useState(() => (active ? 0 : length));
+  const [revealKey, setRevealKey] = React.useState({ active, length, stagger });
+
+  if (
+    revealKey.active !== active ||
+    revealKey.length !== length ||
+    revealKey.stagger !== stagger
+  ) {
+    setRevealKey({ active, length, stagger });
+    setProgress(active ? 0 : length);
+  }
 
   React.useEffect(() => {
     if (!active) {
-      setProgress(length);
       return;
     }
-
-    setProgress(0);
 
     const revealInterval = window.setInterval(
       () => {
