@@ -86,6 +86,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          href="/rss.xml"
+          rel="alternate"
+          title="VLLNT UI releases"
+          type="application/rss+xml"
+        />
+        <link
+          href="/atom.xml"
+          rel="alternate"
+          title="VLLNT UI releases"
+          type="application/atom+xml"
+        />
         <script {...jsonLdScriptAttributes(organizationLd())} />
         <script {...jsonLdScriptAttributes(websiteLd())} />
       </head>

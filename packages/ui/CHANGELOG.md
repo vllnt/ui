@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **Release intelligence surface** — `/changelog`, `/releases`, `/rss.xml`, and `/atom.xml` expose one changelog source through HTML, GitHub release cards, and feed readers. `/docs/changelog` redirects to `/changelog`.
 - **Hooks + utility primitives** — `CopyButton` (+ `useCopyToClipboard` hook), `Banner` + `BannerAction`, `Kbd`, `EmptyState`, `DocumentSiblingNav`.
 - **Pricing + identity cards** — `PricingTable` + `PricingPlan`, `HistoricalFigureCard`, `CivilizationCard` (+ `CivilizationComparison`).
 - **Newsletter** — `NewsletterSignup` (state-machine driven submit flow).

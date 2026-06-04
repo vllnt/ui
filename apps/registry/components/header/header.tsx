@@ -1,6 +1,16 @@
 "use client";
 
-import { NavbarSaas, SearchDialog } from "@vllnt/ui";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  NavbarSaas,
+  SearchDialog,
+} from "@vllnt/ui";
+import { ChevronDown } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { searchPagefind } from "@/components/header/pagefind-search";
@@ -61,6 +71,25 @@ export function Header() {
             }}
             searchPlaceholder="Search docs and components..."
           />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="outline">
+                What&apos;s new
+                <ChevronDown className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/releases">Releases</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/changelog">Changelog</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/rss.xml">RSS feed</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <a
             aria-label="VLLNT UI on GitHub"
             className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
