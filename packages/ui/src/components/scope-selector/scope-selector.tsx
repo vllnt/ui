@@ -5,7 +5,7 @@ import { forwardRef, useMemo, useState } from "react";
 import { Check, ChevronRight, Search } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import { Button } from "../button";
 import { Input } from "../input";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover";

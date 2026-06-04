@@ -8,7 +8,7 @@ import { createPortal } from "react-dom";
 import type { HeadingTag } from "../../lib/types";
 import { useMounted } from "../../lib/use-mounted";
 import { cn } from "../../lib/utils";
-import { CompletionDialog } from "../completion-dialog";
+import { CompletionDialog } from "../completion-dialog/completion-dialog";
 
 export type SlideshowSection = {
   id: string;

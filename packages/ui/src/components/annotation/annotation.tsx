@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 
 const toneClasses = {
   amber: "bg-amber-500/20 text-amber-950 dark:text-amber-100",

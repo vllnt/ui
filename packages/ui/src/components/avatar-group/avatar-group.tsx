@@ -3,7 +3,7 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 
 const avatarGroupVariants = cva("flex items-center", {
   defaultVariants: {

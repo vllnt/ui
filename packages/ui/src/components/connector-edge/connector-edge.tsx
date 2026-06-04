@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { CSSProperties } from "react";
 
 import { cn } from "../../lib/utils";
-import { EdgeLabel } from "../edge-label";
+import { EdgeLabel } from "../edge-label/edge-label";
 
 export type ConnectorEdgePoint = {
   x: number;

@@ -5,7 +5,7 @@ import { forwardRef, type ReactNode, useMemo } from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import {
   Card,
   CardContent,

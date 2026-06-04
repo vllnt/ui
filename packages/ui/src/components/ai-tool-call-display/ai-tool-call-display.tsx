@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 import { AlertCircle, CheckCircle2, Clock3, Wrench } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 
 const statusVariants = cva(
   "rounded-full px-2 py-0 text-[10px] uppercase tracking-wide",

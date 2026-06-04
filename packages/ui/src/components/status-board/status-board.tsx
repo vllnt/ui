@@ -2,7 +2,7 @@ import * as React from "react";
 
 import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import {
   Card,
   CardContent,

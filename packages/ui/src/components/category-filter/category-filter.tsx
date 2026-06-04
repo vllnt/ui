@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 
 type CategoryFilterProps = {
   categories: string[];

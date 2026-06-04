@@ -5,7 +5,7 @@ import * as React from "react";
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import {
   Card,
   CardContent,

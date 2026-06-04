@@ -1,6 +1,6 @@
 import { Activity, Bot, Compass, Layers3, Sparkles } from "lucide-react";
 
-import { BottomBar } from "../bottom-bar";
+import { BottomBar } from "../bottom-bar/bottom-bar";
 import { Button } from "../button";
 import { CanvasView } from "../canvas-view";
 import { ChatDockSection } from "../chat-dock-section";

@@ -3,7 +3,7 @@
 import { memo, useCallback, useTransition } from "react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 
 export type FilterOption = {
   label: string;
