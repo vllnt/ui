@@ -77,11 +77,14 @@ function slugifyTitleSegment(segment: string): string {
 }
 
 function titleToStoryIdPrefix(title: string): string {
-  return title
-    .split("/")
-    .map((segment) => slugifyTitleSegment(segment))
-    .filter(Boolean)
-    .join("-");
+  const segments: string[] = [];
+  for (const segment of title.split("/")) {
+    const slug = slugifyTitleSegment(segment);
+    if (slug) {
+      segments.push(slug);
+    }
+  }
+  return segments.join("-");
 }
 
 function exportNameToSlug(exportName: string): string {

@@ -33,12 +33,12 @@ export function QuickAdd({ componentName }: QuickAddProps) {
       >
         {copied ? (
           <>
-            <Check className="h-3 w-3" />
+            <Check className="size-3" />
             Copied!
           </>
         ) : (
           <>
-            <Copy className="h-3 w-3" />
+            <Copy className="size-3" />
             Copy install command
           </>
         )}
@@ -50,7 +50,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         variant="outline"
       >
         Add to v0.dev
-        <ExternalLink className="h-3 w-3" />
+        <ExternalLink className="size-3" />
       </Button>
     </div>
   );

@@ -25,7 +25,7 @@ const MDXComponents: Components = {
   ),
   blockquote: ({ children, ...props }: React.ComponentProps<"blockquote">) => (
     <blockquote
-      className="border-l-4 border-primary pl-4 italic text-muted-foreground my-6 py-2 text-sm"
+      className="border-l border-primary pl-4 italic text-muted-foreground my-6 py-2 text-sm"
       {...props}
     >
       {children}
@@ -127,8 +127,8 @@ const proseClasses = [
   "prose-strong:font-semibold prose-em:italic",
   "prose-a:text-primary prose-a:underline prose-a:underline-offset-4 hover:prose-a:text-primary/80",
   "prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono",
-  "prose-pre:my-6 prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:bg-black prose-pre:py-4 prose-pre:font-mono prose-pre:text-sm prose-pre:text-white prose-pre:shadow-lg dark:prose-pre:bg-zinc-900",
-  "prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-blockquote:my-6 prose-blockquote:py-2",
+  "prose-pre:my-6 prose-pre:overflow-x-auto prose-pre:rounded-lg prose-pre:border prose-pre:bg-zinc-950 prose-pre:py-4 prose-pre:font-mono prose-pre:text-sm prose-pre:text-white prose-pre:shadow-lg dark:prose-pre:bg-zinc-900",
+  "prose-blockquote:border-l prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-blockquote:my-6 prose-blockquote:py-2",
   "prose-hr:my-8 prose-hr:border-border",
   "prose-table:w-full prose-table:border-collapse prose-table:border prose-table:border-border",
   "prose-th:border prose-th:border-border prose-th:bg-muted prose-th:p-2 prose-th:text-left prose-th:font-medium",

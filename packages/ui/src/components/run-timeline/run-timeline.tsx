@@ -167,7 +167,7 @@ const PhaseBar = (props: {
   };
   const ariaLabel = `${STATE_LABEL[state]} ${phase.start} → ${phase.end}`;
   if (phase.onActivate) {
-    const handleClick = (): void => {
+    const handleActivatePhase = (): void => {
       phase.onActivate?.();
     };
     return (
@@ -179,7 +179,7 @@ const PhaseBar = (props: {
         )}
         data-run-phase={phase.id}
         data-run-phase-state={state}
-        onClick={handleClick}
+        onClick={handleActivatePhase}
         style={sharedStyle}
         type="button"
       >

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import registry from "../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
@@ -34,6 +35,7 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
   const routes = [
     { changeFrequency: "weekly", priority: 1, url: SITE_URL },
     { changeFrequency: "weekly", priority: 1, url: `${SITE_URL}/components` },
+    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/changelog` },
     { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/docs` },
     {
       changeFrequency: "monthly",
@@ -41,9 +43,21 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
       url: `${SITE_URL}/philosophy`,
     },
     { changeFrequency: "monthly", priority: 0.8, url: `${SITE_URL}/design` },
+    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/releases` },
   ] satisfies readonly Omit<SitemapEntryInput, "lastModified">[];
 
   return routes.map((route) => entry({ ...route, lastModified }));
+}
+
+function docsRoutes(lastModified: Date): MetadataRoute.Sitemap {
+  return DOCS_PAGES.map((page) =>
+    entry({
+      changeFrequency: "monthly",
+      lastModified,
+      priority: 0.75,
+      url: `${SITE_URL}${getDocsPath(page)}`,
+    }),
+  );
 }
 
 function componentRoutes(
@@ -94,6 +108,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticRoutes(lastModified),
+    ...docsRoutes(lastModified),
     ...componentRoutes(items, lastModified),
     ...registryRoutes(items, lastModified),
   ];

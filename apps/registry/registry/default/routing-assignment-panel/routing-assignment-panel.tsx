@@ -127,7 +127,7 @@ const RowBody = (props: {
 const Row = (props: { assignment: RoutingAssignment }): React.ReactElement => {
   const { assignment } = props;
   if (assignment.onActivate) {
-    const handleClick = (): void => {
+    const handleActivateAssignment = (): void => {
       assignment.onActivate?.();
     };
     return (
@@ -135,7 +135,7 @@ const Row = (props: { assignment: RoutingAssignment }): React.ReactElement => {
         className="flex w-full items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-routing-assignment={assignment.id}
         data-routing-role={assignment.role}
-        onClick={handleClick}
+        onClick={handleActivateAssignment}
         type="button"
       >
         <RowBody assignment={assignment} />

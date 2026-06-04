@@ -3,13 +3,18 @@
 import { CheckCircle2, Clock, GraduationCap, Target } from "lucide-react";
 import type { ReactNode } from "react";
 
+import type { HeadingTag } from "../../lib/types";
+
 export type LearningObjectivesProps = {
+  /** Heading tag for the title. Defaults to `h4`. */
+  as?: HeadingTag;
   estimatedTime?: string;
   objectives: string[];
   title?: string;
 };
 
 export function LearningObjectives({
+  as: Heading = "h4",
   estimatedTime,
   objectives,
   title = "What you'll learn",
@@ -19,7 +24,7 @@ export function LearningObjectives({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Target className="size-5 text-primary" />
-          <h4 className="font-semibold text-foreground">{title}</h4>
+          <Heading className="font-semibold text-foreground">{title}</Heading>
         </div>
         {estimatedTime ? (
           <div className="flex items-center gap-1 text-sm text-muted-foreground">

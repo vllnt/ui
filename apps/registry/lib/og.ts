@@ -6,7 +6,7 @@ export const OG_IMAGE_HEIGHT = 1260;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
-export const ogImageParametersSchema = z.object({
+const ogImageParametersSchema = z.object({
   category: z.string().max(100).optional(),
   description: z.string().max(500).optional(),
   title: z.string().min(1).max(200).default("VLLNT UI"),
@@ -15,9 +15,8 @@ export const ogImageParametersSchema = z.object({
 });
 
 export type OGImageParametersInput = z.input<typeof ogImageParametersSchema>;
-export type OGImageParameters = z.infer<typeof ogImageParametersSchema>;
 
-export function generateOGImageURL(parameters: OGImageParametersInput): string {
+function generateOGImageURL(parameters: OGImageParametersInput): string {
   const validated = ogImageParametersSchema.parse(parameters);
 
   const searchParameters = new URLSearchParams({

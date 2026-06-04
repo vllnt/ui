@@ -25,27 +25,33 @@ function useTabsContext(): TabsContextValue {
 export type TabsProps = {
   children: ReactNode;
   className?: string;
-  defaultValue: string;
+  defaultValue?: string;
   onValueChange?: (value: string) => void;
+  value?: string;
 };
 
 function Tabs({
   children,
   className,
-  defaultValue,
+  defaultValue = "",
   onValueChange,
+  value,
 }: TabsProps): React.ReactNode {
-  const [activeTab, setActiveTab] = useState(defaultValue);
+  const [internalTab, setInternalTab] = useState(defaultValue);
+  const isControlled = value !== undefined;
+  const activeTab = isControlled ? value : internalTab;
 
-  const handleSetActiveTab = (value: string): void => {
-    setActiveTab(value);
-    onValueChange?.(value);
+  const handleSetActiveTab = (next: string): void => {
+    if (!isControlled) {
+      setInternalTab(next);
+    }
+    onValueChange?.(next);
   };
 
   const contextValue = useMemo(
     () => ({ activeTab, setActiveTab: handleSetActiveTab }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeTab],
+    [activeTab, isControlled],
   );
 
   return (
@@ -72,14 +78,18 @@ function TabsList({ children, className }: TabsListProps): React.ReactNode {
 }
 
 export type TabsTriggerProps = {
+  "aria-hidden"?: "false" | "true" | boolean;
   children: ReactNode;
   className?: string;
+  tabIndex?: number;
   value: string;
 };
 
 function TabsTrigger({
+  "aria-hidden": ariaHidden,
   children,
   className,
+  tabIndex,
   value,
 }: TabsTriggerProps): React.ReactNode {
   const { activeTab, setActiveTab } = useTabsContext();
@@ -87,6 +97,7 @@ function TabsTrigger({
 
   return (
     <button
+      aria-hidden={ariaHidden}
       aria-selected={isActive}
       className={cn(
         "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors",
@@ -100,6 +111,7 @@ function TabsTrigger({
         setActiveTab(value);
       }}
       role="tab"
+      tabIndex={tabIndex}
       type="button"
     >
       {children}
@@ -108,12 +120,14 @@ function TabsTrigger({
 }
 
 export type TabsContentProps = {
+  "aria-hidden"?: "false" | "true" | boolean;
   children: ReactNode;
   className?: string;
   value: string;
 };
 
 function TabsContent({
+  "aria-hidden": ariaHidden,
   children,
   className,
   value,
@@ -123,7 +137,11 @@ function TabsContent({
   if (activeTab !== value) return null;
 
   return (
-    <div className={cn("pt-4", className)} role="tabpanel">
+    <div
+      aria-hidden={ariaHidden}
+      className={cn("pt-4", className)}
+      role="tabpanel"
+    >
       {children}
     </div>
   );

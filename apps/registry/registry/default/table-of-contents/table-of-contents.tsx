@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 type TableOfContentsProps = {
+  /** Heading tag for the "On This Page" label. Defaults to `h3`. */
+  as?: HeadingTag;
   sections: { id: string; title: string }[];
 };
 
@@ -53,7 +56,10 @@ function useActiveSection(sections: { id: string; title: string }[]) {
   return activeSection;
 }
 
-export function TableOfContents({ sections }: TableOfContentsProps) {
+export function TableOfContents({
+  as: Heading = "h3",
+  sections,
+}: TableOfContentsProps) {
   const activeSection = useActiveSection(sections);
 
   if (sections.length === 0) {
@@ -64,9 +70,9 @@ export function TableOfContents({ sections }: TableOfContentsProps) {
     <aside className="hidden xl:block">
       <div className="sticky top-8">
         <div className="border-l-2 border-border pl-4">
-          <h3 className="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">
+          <Heading className="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">
             On This Page
-          </h3>
+          </Heading>
           <nav className="space-y-2">
             {sections.map((section) => (
               <button

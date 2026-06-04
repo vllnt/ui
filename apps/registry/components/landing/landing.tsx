@@ -1,13 +1,10 @@
-import { CodeBlock } from "@vllnt/ui";
-import {
-  ArrowRight,
-  Github,
-  Sparkles,
-  Terminal,
-} from "lucide-react";
+import { Badge, CodeBlock } from "@vllnt/ui";
+import { ArrowRight, Sparkles, Terminal } from "lucide-react";
 import Link from "next/link";
 
 import { Footer } from "@/components/footer/footer";
+import { GitHubMark } from "@/components/github-mark";
+import { getLatestReleaseRecords } from "@/lib/changelog";
 import {
   getCategoryCount,
   getComponentCount,
@@ -20,6 +17,8 @@ const GITHUB_URL = "https://github.com/vllnt/ui";
 const STORYBOOK_URL = "https://storybook.vllnt.ai";
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
+const INSTALL_COMMAND =
+  "pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json";
 
 const TRUST_BADGES = [
   { label: "MIT" },
@@ -53,9 +52,7 @@ function Hero({
         </p>
 
         <div className="mt-8">
-          <CodeBlock language="bash">
-            {`pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json`}
-          </CodeBlock>
+          <CodeBlock language="bash">{INSTALL_COMMAND}</CodeBlock>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -64,7 +61,7 @@ function Hero({
             href="/components"
           >
             Browse {componentCount} components
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="size-4" />
           </Link>
           <Link
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -78,7 +75,7 @@ function Hero({
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <GitHubMark className="size-4" />
             GitHub
           </a>
         </div>
@@ -109,18 +106,15 @@ function Stats({
   generatedAt?: string;
   version: string;
 }) {
+  const generatedDate = generatedAt?.slice(0, 10) ?? "—";
+
   return (
     <section className="border-b border-border bg-muted/30">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-12 lg:grid-cols-4 lg:px-8">
         <Stat label="Components" value={String(componentCount)} />
         <Stat label="Categories" value={String(categoryCount)} />
         <Stat label="Library version" value={`v${version}`} />
-        <Stat
-          label="Last build"
-          value={
-            generatedAt ? new Date(generatedAt).toISOString().slice(0, 10) : "—"
-          }
-        />
+        <Stat label="Last build" value={generatedDate} />
       </div>
     </section>
   );
@@ -140,17 +134,16 @@ function AgentCallout() {
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-          <Sparkles className="h-4 w-4" />
+          <Sparkles className="size-4" />
           Agent-first
         </div>
         <h2 className="mt-2 text-3xl font-semibold">
           Built so AI coding agents can use it directly.
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Every component ships as a machine-readable JSON descriptor with
-          name, version, stability, accessibility schema, usage examples,
-          and prop definitions. Agents discover the registry through three
-          surfaces.
+          Every component ships as a machine-readable JSON descriptor with name,
+          version, stability, accessibility schema, usage examples, and prop
+          definitions. Agents discover the registry through three surfaces.
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -192,13 +185,13 @@ function AgentCard({
       target="_blank"
     >
       <div className="flex items-center gap-2 text-sm font-mono">
-        <Terminal className="h-4 w-4 text-muted-foreground" />
+        <Terminal className="size-4 text-muted-foreground" />
         <span>{title}</span>
       </div>
       <p className="mt-3 text-sm text-muted-foreground">{description}</p>
       <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-foreground">
         Open
-        <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+        <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
       </p>
     </a>
   );
@@ -213,7 +206,10 @@ function FeaturedComponents() {
         <h2 className="text-2xl font-semibold">Featured components</h2>
         <p className="mt-2 text-muted-foreground">
           A few favourites. Browse all {getComponentCount()} from{" "}
-          <Link className="font-medium text-foreground underline" href="/components">
+          <Link
+            className="font-medium text-foreground underline"
+            href="/components"
+          >
             /components
           </Link>
           .
@@ -239,6 +235,61 @@ function FeaturedComponents() {
   );
 }
 
+async function ReleasesStrip() {
+  const releases = await getLatestReleaseRecords(3);
+  if (releases.length === 0) return null;
+
+  return (
+    <section className="border-b border-border bg-muted/20">
+      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold">Latest releases</h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              Follow what changed across the component library, registry, and
+              release pipeline.
+            </p>
+          </div>
+          <Link
+            className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            href="/releases"
+          >
+            View all releases
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
+
+        <ul className="mt-8 grid gap-3 lg:grid-cols-3">
+          {releases.map((release, index) => (
+            <li
+              className="border border-border bg-background p-5"
+              key={release.anchor}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge>{release.version}</Badge>
+                {index === 0 ? (
+                  <Badge variant="secondary">What&apos;s new</Badge>
+                ) : null}
+              </div>
+              <h3 className="mt-4 font-semibold">{release.title}</h3>
+              <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
+                {release.summary}
+              </p>
+              <Link
+                className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
+                href={`/releases#${release.anchor}`}
+              >
+                Read notes
+                <ArrowRight className="size-3" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 function CommunityCTA() {
   return (
     <section>
@@ -255,7 +306,7 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            <Github className="h-4 w-4" />
+            <GitHubMark className="size-4" />
             Star on GitHub
           </a>
           <a
@@ -280,7 +331,7 @@ function CommunityCTA() {
   );
 }
 
-export function Landing() {
+export async function Landing() {
   const componentCount = getComponentCount();
   const categoryCount = getCategoryCount();
   const version = getLibraryVersion();
@@ -295,6 +346,7 @@ export function Landing() {
         generatedAt={generatedAt}
         version={version}
       />
+      <ReleasesStrip />
       <AgentCallout />
       <FeaturedComponents />
       <CommunityCTA />

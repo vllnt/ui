@@ -105,7 +105,7 @@ const markdownComponents: Components = {
   ),
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="border-l-4 border-primary pl-4 italic text-muted-foreground my-6 py-2 text-sm"
+      className="border-l border-primary pl-4 italic text-muted-foreground my-6 py-2 text-sm"
       {...props}
     >
       {children}

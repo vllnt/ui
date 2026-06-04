@@ -65,14 +65,14 @@ describe("ToastClose", () => {
 
 describe("ToastAction", () => {
   it("renders children + invokes onClick", () => {
-    const handleClick = vi.fn();
+    const handleRetryAction = vi.fn();
     render(
-      <ToastAction altText="retry" onClick={handleClick}>
+      <ToastAction altText="retry" onClick={handleRetryAction}>
         Retry
       </ToastAction>,
     );
 
     fireEvent.click(screen.getByText("Retry"));
-    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(handleRetryAction).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import type { HeadingTag } from "../../lib/types";
 import { Button } from "../button/button";
 
 type ProfileDict = {
@@ -16,6 +17,8 @@ type SocialLink = {
 };
 
 type ProfileSectionProps = {
+  /** Heading tag for the profile name. Defaults to `h3`. */
+  as?: HeadingTag;
   compact?: boolean;
   dict: ProfileDict;
   imageAlt?: string;
@@ -24,6 +27,7 @@ type ProfileSectionProps = {
 };
 
 export function ProfileSection({
+  as: Heading = "h3",
   compact = false,
   dict,
   imageAlt,
@@ -51,9 +55,9 @@ export function ProfileSection({
       ) : null}
 
       <div className="space-y-2">
-        <h3 className={`font-semibold ${compact ? "text-lg" : "text-xl"}`}>
+        <Heading className={`font-semibold ${compact ? "text-lg" : "text-xl"}`}>
           {dict.profile.name}
-        </h3>
+        </Heading>
         <p className="text-sm text-muted-foreground">
           {compact ? dict.profile.tagline : `> ${dict.profile.tagline}`}
         </p>

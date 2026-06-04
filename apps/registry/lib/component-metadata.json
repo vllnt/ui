@@ -2904,13 +2904,17 @@
   },
   "search-dialog": {
     "category": "learning",
-    "defaultStoryId": "exampletitle--default",
+    "defaultStoryId": "learning-searchdialog--default",
     "description": "Full-screen search dialog with keyboard navigation.",
     "name": "search-dialog",
     "stories": [
       {
-        "id": "exampletitle--default",
+        "id": "learning-searchdialog--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-searchdialog--with-docs",
+        "name": "With Docs"
       }
     ],
     "title": "Search Dialog"

@@ -175,7 +175,7 @@
     "eslint": "^9.39.1",
     "jsdom": "^26.1.0",
     "playwright": "^1.57.0",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.10",
     "storybook": "^10.2.17",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",

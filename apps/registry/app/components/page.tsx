@@ -2,6 +2,7 @@ import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { ComponentThumbnail } from "@/components/component-thumbnail";
 import componentMetadata from "@/lib/component-metadata.json";
 import { getPageContent } from "@/lib/content";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -70,7 +71,8 @@ export default function ComponentsPage() {
                       href={`/components/${component.name}`}
                       key={component.name}
                     >
-                      <div className="flex-1 p-4 bg-muted/30 border-b min-h-[100px] flex flex-col justify-center">
+                      <ComponentThumbnail componentName={component.name} />
+                      <div className="flex flex-1 flex-col p-4">
                         <h3 className="text-sm font-medium group-hover:text-foreground transition-colors">
                           {component.title}
                         </h3>
@@ -79,13 +81,11 @@ export default function ComponentsPage() {
                             {meta.description}
                           </p>
                         ) : null}
-                      </div>
-                      <div className="px-3 py-2 shrink-0 flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {storyCount > 0
-                            ? `${storyCount} ${storyCount === 1 ? "story" : "stories"}`
-                            : "No preview"}
-                        </span>
+                        {storyCount > 0 ? (
+                          <span className="mt-3 text-xs text-muted-foreground">
+                            {`${storyCount} ${storyCount === 1 ? "story" : "stories"}`}
+                          </span>
+                        ) : null}
                       </div>
                     </Link>
                   );

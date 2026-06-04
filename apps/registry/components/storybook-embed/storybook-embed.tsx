@@ -109,10 +109,6 @@ function StorybookIframe({
 }): React.ReactElement {
   const [isLoaded, setIsLoaded] = React.useState(false);
 
-  React.useEffect(() => {
-    setIsLoaded(false);
-  }, [iframeSource]);
-
   return (
     <div style={{ minHeight: height, position: "relative" }}>
       {isLoaded ? null : (
@@ -120,7 +116,9 @@ function StorybookIframe({
           className="flex animate-pulse items-center justify-center rounded-b-lg bg-muted"
           style={{ height, inset: 0, position: "absolute", zIndex: 1 }}
         >
-          <p className="text-sm text-muted-foreground">Loading preview...</p>
+          <p className="text-sm text-muted-foreground">
+            Loading preview&hellip;
+          </p>
         </div>
       )}
       <iframe
@@ -147,19 +145,22 @@ export function StorybookEmbed({
   height = 400,
   storyId,
 }: StorybookEmbedProps): React.ReactElement {
-  const [hasManualThemeSelection, setHasManualThemeSelection] =
-    React.useState(false);
+  const hasManualThemeSelectionRef = React.useRef(false);
   const [previewTheme, setPreviewTheme] = React.useState<null | PreviewTheme>(
     null,
   );
   const resolvedStoryId = storyId ?? toStoryId(componentName);
 
   React.useEffect(() => {
-    if (hasManualThemeSelection) {
+    if (hasManualThemeSelectionRef.current) {
       return;
     }
 
     const updateTheme = () => {
+      if (hasManualThemeSelectionRef.current) {
+        return;
+      }
+
       setPreviewTheme(normalizePreviewTheme(resolveDocumentTheme()));
     };
 
@@ -180,7 +181,7 @@ export function StorybookEmbed({
       observer.disconnect();
       mediaQuery.removeEventListener("change", updateTheme);
     };
-  }, [hasManualThemeSelection]);
+  }, []);
 
   const iframeSource = React.useMemo(() => {
     if (previewTheme === null) {
@@ -194,7 +195,7 @@ export function StorybookEmbed({
     <div className={className}>
       <PreviewThemeControls
         onValueChange={(value) => {
-          setHasManualThemeSelection(true);
+          hasManualThemeSelectionRef.current = true;
           setPreviewTheme(value);
         }}
         value={previewTheme}
@@ -204,6 +205,7 @@ export function StorybookEmbed({
           componentName={componentName}
           height={height}
           iframeSource={iframeSource}
+          key={iframeSource}
         />
       ) : null}
     </div>

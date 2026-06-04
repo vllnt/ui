@@ -328,7 +328,7 @@ export const AISidebarClose = forwardRef<
   Omit<ComponentPropsWithoutRef<"button">, "type">
 >(({ className, onClick, ...rest }, ref) => {
   const { close, labels } = useAISidebar();
-  const handleClick = useCallback(
+  const handleCloseSidebar = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -340,7 +340,7 @@ export const AISidebarClose = forwardRef<
     <Button
       aria-label={labels.close}
       className={cn("size-8", className)}
-      onClick={handleClick}
+      onClick={handleCloseSidebar}
       ref={ref}
       size="icon"
       type="button"
@@ -413,7 +413,7 @@ export const AISidebarTrigger = forwardRef<
   AISidebarTriggerProps
 >(({ children, className, onClick, ...rest }, ref) => {
   const { labels, openState, toggle } = useAISidebar();
-  const handleClick = useCallback(
+  const handleToggleSidebar = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented) return;
@@ -427,7 +427,7 @@ export const AISidebarTrigger = forwardRef<
       aria-label={children ? undefined : labels.open}
       className={cn(className)}
       data-state={openState ? "open" : "closed"}
-      onClick={handleClick}
+      onClick={handleToggleSidebar}
       ref={ref}
       size={children ? "sm" : "icon"}
       type="button"
