@@ -105,6 +105,7 @@ async function buildDesignLines(): Promise<readonly string[]> {
     "## Design Guide",
     "",
     `Source: ${SITE_URL}/design`,
+    `Raw: ${SITE_URL}/DESIGN.md`,
     `Tokens: ${SITE_URL}/r/design.json`,
     "",
     designGuide,
