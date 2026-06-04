@@ -237,6 +237,12 @@ type ComponentPreviewProps = {
   componentName: string;
 };
 
+const DATE_PICKER_PREVIEW_DATE = new Date("2026-04-19T00:00:00.000Z");
+const HORIZONTAL_SCROLL_ROW_CARDS = Array.from({ length: 6 }, (_, index) => ({
+  id: `featured-card-${index + 1}`,
+  label: `Card ${index + 1}`,
+}));
+
 // Simple text-based preview for components that need complex context
 function SimplePreview({ description }: { description: string }) {
   return (
@@ -329,7 +335,7 @@ function ComboboxPreview() {
 function DatePickerPreview() {
   return (
     <div className="w-full max-w-sm">
-      <DatePicker value={new Date("2026-04-19T00:00:00.000Z")} />
+      <DatePicker value={DATE_PICKER_PREVIEW_DATE} />
     </div>
   );
 }
@@ -1428,12 +1434,12 @@ function AlertDialogPreview() {
 function HorizontalScrollRowPreview() {
   return (
     <HorizontalScrollRow description="Browse our picks" title="Featured">
-      {Array.from({ length: 6 }, (_, index) => (
+      {HORIZONTAL_SCROLL_ROW_CARDS.map((card) => (
         <div
           className="min-w-[180px] snap-start rounded-lg border bg-card p-4 text-sm"
-          key={index}
+          key={card.id}
         >
-          Card {index + 1}
+          {card.label}
         </div>
       ))}
     </HorizontalScrollRow>

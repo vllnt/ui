@@ -12,7 +12,7 @@ import { StorybookEmbed } from "@/components/storybook-embed";
 import componentMetadata from "@/lib/component-metadata.json";
 import {
   breadcrumbLd,
-  jsonLdScript,
+  jsonLdScriptAttributes,
   softwareSourceCodeLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -172,24 +172,21 @@ export default async function ComponentPage(props: Props) {
   return (
     <>
       <script
-        dangerouslySetInnerHTML={{
-          __html: jsonLdScript([
-            softwareSourceCodeLd({
-              description: displayDescription,
-              name: component.name,
-              title: displayTitle,
-            }),
-            breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Components", url: `${SITE_URL}/components` },
-              {
-                name: displayTitle,
-                url: `${SITE_URL}/components/${component.name}`,
-              },
-            ]),
+        {...jsonLdScriptAttributes([
+          softwareSourceCodeLd({
+            description: displayDescription,
+            name: component.name,
+            title: displayTitle,
+          }),
+          breadcrumbLd([
+            { name: "Home", url: SITE_URL },
+            { name: "Components", url: `${SITE_URL}/components` },
+            {
+              name: displayTitle,
+              url: `${SITE_URL}/components/${component.name}`,
+            },
           ]),
-        }}
-        type="application/ld+json"
+        ])}
       />
       <Sidebar sections={getSidebarSections(getCategoryForComponent(slug))} />
       <main className="flex-1 overflow-y-auto bg-background overflow-x-hidden">
