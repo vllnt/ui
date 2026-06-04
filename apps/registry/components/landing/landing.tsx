@@ -105,18 +105,15 @@ function Stats({
   generatedAt?: string;
   version: string;
 }) {
+  const generatedDate = generatedAt?.slice(0, 10) ?? "—";
+
   return (
     <section className="border-b border-border bg-muted/30">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-12 lg:grid-cols-4 lg:px-8">
         <Stat label="Components" value={String(componentCount)} />
         <Stat label="Categories" value={String(categoryCount)} />
         <Stat label="Library version" value={`v${version}`} />
-        <Stat
-          label="Last build"
-          value={
-            generatedAt ? new Date(generatedAt).toISOString().slice(0, 10) : "—"
-          }
-        />
+        <Stat label="Last build" value={generatedDate} />
       </div>
     </section>
   );
