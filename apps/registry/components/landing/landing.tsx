@@ -1,8 +1,9 @@
 import { Badge, CodeBlock } from "@vllnt/ui";
-import { ArrowRight, ExternalLink, Sparkles, Terminal } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal } from "lucide-react";
 import Link from "next/link";
 
 import { Footer } from "@/components/footer/footer";
+import { GitHubMark } from "@/components/github-mark";
 import { getLatestReleaseRecords } from "@/lib/changelog";
 import {
   getCategoryCount,
@@ -16,6 +17,8 @@ const GITHUB_URL = "https://github.com/vllnt/ui";
 const STORYBOOK_URL = "https://storybook.vllnt.ai";
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
+const INSTALL_COMMAND =
+  "pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json";
 
 const TRUST_BADGES = [
   { label: "MIT" },
@@ -49,9 +52,7 @@ function Hero({
         </p>
 
         <div className="mt-8">
-          <CodeBlock language="bash">
-            pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
-          </CodeBlock>
+          <CodeBlock language="bash">{INSTALL_COMMAND}</CodeBlock>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -60,7 +61,7 @@ function Hero({
             href="/components"
           >
             Browse {componentCount} components
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="size-4" />
           </Link>
           <Link
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -74,7 +75,7 @@ function Hero({
             rel="noreferrer"
             target="_blank"
           >
-            <ExternalLink className="size-4" />
+            <GitHubMark className="size-4" />
             GitHub
           </a>
         </div>
@@ -105,18 +106,15 @@ function Stats({
   generatedAt?: string;
   version: string;
 }) {
+  const generatedDate = generatedAt?.slice(0, 10) ?? "—";
+
   return (
     <section className="border-b border-border bg-muted/30">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-12 lg:grid-cols-4 lg:px-8">
         <Stat label="Components" value={String(componentCount)} />
         <Stat label="Categories" value={String(categoryCount)} />
         <Stat label="Library version" value={`v${version}`} />
-        <Stat
-          label="Last build"
-          value={
-            generatedAt ? new Date(generatedAt).toISOString().slice(0, 10) : "—"
-          }
-        />
+        <Stat label="Last build" value={generatedDate} />
       </div>
     </section>
   );
@@ -136,7 +134,7 @@ function AgentCallout() {
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-          <Sparkles className="h-4 w-4" />
+          <Sparkles className="size-4" />
           Agent-first
         </div>
         <h2 className="mt-2 text-3xl font-semibold">
@@ -187,13 +185,13 @@ function AgentCard({
       target="_blank"
     >
       <div className="flex items-center gap-2 text-sm font-mono">
-        <Terminal className="h-4 w-4 text-muted-foreground" />
+        <Terminal className="size-4 text-muted-foreground" />
         <span>{title}</span>
       </div>
       <p className="mt-3 text-sm text-muted-foreground">{description}</p>
       <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-foreground">
         Open
-        <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+        <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
       </p>
     </a>
   );
@@ -308,7 +306,7 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            <ExternalLink className="size-4" />
+            <GitHubMark className="size-4" />
             Star on GitHub
           </a>
           <a

@@ -48,16 +48,16 @@ function ShareMenu({
   platforms: SharePlatformConfig[];
 }) {
   return (
-    <div className="flex flex-col gap-0.5 rounded-md border border-gray-300 bg-background p-1.5 shadow-md dark:border-gray-600">
+    <div className="flex flex-col gap-0.5 rounded-md border border-zinc-300 bg-background p-1.5 shadow-md dark:border-zinc-600">
       {platforms.map((p) => {
-        const handleClick = () => {
+        const handleSelectSharePlatform = () => {
           onPlatformSelect(p.key);
         };
         return (
           <button
             className="rounded px-3 py-1.5 text-left text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             key={p.key}
-            onClick={handleClick}
+            onClick={handleSelectSharePlatform}
             type="button"
           >
             {p.label}
@@ -69,11 +69,11 @@ function ShareMenu({
 }
 
 function ActionButton({ action }: { action: SocialFabActionConfig }) {
-  const handleClick = action.onClick;
+  const handleRunAction = action.onClick;
   return (
     <button
       className="rounded px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent"
-      onClick={handleClick}
+      onClick={handleRunAction}
       type="button"
     >
       {action.label}
@@ -101,7 +101,7 @@ function ActionPanel({
   const handleShareMouseLeave = isMobile ? undefined : onShareLeave;
 
   return (
-    <div className="flex flex-col gap-0.5 rounded-md border border-gray-300 bg-background p-1.5 shadow-md dark:border-gray-600">
+    <div className="flex flex-col gap-0.5 rounded-md border border-zinc-300 bg-background p-1.5 shadow-md dark:border-zinc-600">
       {shareAction ? (
         <button
           className="rounded px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent"
@@ -133,18 +133,18 @@ function MainFabButton({
   mainText: string;
   onToggle: () => void;
 }) {
-  const handleClick = onToggle;
+  const handleToggleSharePanel = onToggle;
   return (
     <button
       aria-expanded={isExpanded}
       aria-label={isExpanded ? labels.close : labels.share}
       className={cn(
         "flex size-10 items-center justify-center rounded-md",
-        "border border-gray-300 bg-background dark:border-gray-600",
+        "border border-zinc-300 bg-background dark:border-zinc-600",
         "transition-all duration-200 ease-out",
-        "hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-md dark:hover:border-gray-500",
+        "hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md dark:hover:border-zinc-500",
       )}
-      onClick={handleClick}
+      onClick={handleToggleSharePanel}
       type="button"
     >
       <span className="text-sm font-mono">

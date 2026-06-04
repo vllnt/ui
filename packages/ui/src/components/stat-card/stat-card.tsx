@@ -97,7 +97,7 @@ const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
       {...props}
     >
       <div className={accentVariants({ tone })} />
-      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0 pb-3">
+      <CardHeader className="flex flex-row items-start justify-between gap-4 gap-y-0 pb-3">
         <div className="space-y-1">
           <CardDescription className="text-xs font-medium uppercase tracking-[0.14em]">
             {label}

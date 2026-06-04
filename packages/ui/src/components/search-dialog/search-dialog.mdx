@@ -49,12 +49,18 @@ const items = [
 | ---- | ---- | -------- | ----------- |
 | `buttonText` | `string` | No | - |
 | `buttonTextMobile` | `string` | No | - |
+| `docsEmptyText` | `string` | No | - |
+| `docsGroupHeading` | `string` | No | - |
+| `docsSearch` | `(query: string) =&gt; Promise&lt;SearchItem[]&gt;` | No | Optional async docs search provider |
 | `emptyText` | `string` | No | - |
 | `enableKeyboardShortcut` | `boolean` | No | `true` or `false` |
 | `groupHeading` | `string` | No | - |
 | `items` | `SearchItem[]` | Yes | Array of `SearchItem` objects |
+| `minDocsSearchLength` | `number` | No | Minimum query length before docs search runs |
+| `onDocsSelect` | `(item: SearchItem) =&gt; void` | No | Optional docs result callback |
 | `onSelect` | `(item: SearchItem) =&gt; void` | Yes | Callback: `(item: SearchItem) => void` |
 | `searchPlaceholder` | `string` | No | - |
+| `scopeLabels` | `Partial&lt;Record&lt;"components" \| "docs" \| "everything", string&gt;&gt;` | No | Optional tab labels |
 
 ## Type Definitions
 
@@ -63,8 +69,10 @@ const items = [
 ```tsx
 type SearchItem = {
   description?: string
+  href?: string
   id: string
   keywords?: string
+  snippet?: string
   title: string
 }
 ```
@@ -72,7 +80,8 @@ type SearchItem = {
 | Field | Type | Required | Description |
 | ----- | ---- | -------- | ----------- |
 | `description` | `string` | No | - |
+| `href` | `string` | No | - |
 | `id` | `string` | Yes | - |
 | `keywords` | `string` | No | - |
+| `snippet` | `string` | No | - |
 | `title` | `string` | Yes | - |
-

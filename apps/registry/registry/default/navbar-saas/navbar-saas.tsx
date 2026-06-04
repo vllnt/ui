@@ -44,6 +44,7 @@ export function NavbarSaas({
             {showMobileMenu && isMobile ? (
               <Button
                 className="lg:hidden"
+                data-testid="navbar-saas-mobile-trigger"
                 onClick={() => {
                   setOpen(!open);
                 }}

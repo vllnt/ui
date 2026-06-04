@@ -368,7 +368,7 @@ export const MapTimelineSlider = forwardRef<
 >(({ className, ...rest }, ref) => {
   const { endYear, labels, setYear, startYear, year } = useTimelineContext();
   const sliderId = useId();
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleYearChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setYear(Number.parseInt(event.target.value, 10));
   };
   return (
@@ -383,7 +383,7 @@ export const MapTimelineSlider = forwardRef<
         id={sliderId}
         max={endYear}
         min={startYear}
-        onChange={handleChange}
+        onChange={handleYearChange}
         ref={ref}
         type="range"
         value={year}
@@ -411,7 +411,7 @@ export const MapTimelinePlayButton = forwardRef<
   Omit<ComponentPropsWithoutRef<"button">, "aria-pressed" | "onClick" | "type">
 >(({ className, ...rest }, ref) => {
   const { isPlaying, labels, setIsPlaying } = useTimelineContext();
-  const handleClick = (): void => {
+  const handleTogglePlayback = (): void => {
     setIsPlaying(!isPlaying);
   };
   return (
@@ -423,7 +423,7 @@ export const MapTimelinePlayButton = forwardRef<
         className,
       )}
       data-playing={isPlaying ? "true" : undefined}
-      onClick={handleClick}
+      onClick={handleTogglePlayback}
       ref={ref}
       type="button"
       {...rest}
@@ -506,7 +506,7 @@ function useTimelineState(arguments_: {
   year: number;
 } {
   const { endYear, initialYear, onYearChange, startYear } = arguments_;
-  const [year, setYear] = useState<number>(
+  const [year, setYear] = useState<number>(() =>
     clamp(initialYear ?? startYear, startYear, endYear),
   );
   const [isPlaying, setIsPlaying] = useState(false);

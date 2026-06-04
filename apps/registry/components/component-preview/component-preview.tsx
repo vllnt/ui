@@ -237,11 +237,32 @@ type ComponentPreviewProps = {
   componentName: string;
 };
 
+const DATE_PICKER_PREVIEW_DATE = new Date("2026-04-19T00:00:00.000Z");
+const HORIZONTAL_SCROLL_ROW_CARDS = Array.from({ length: 6 }, (_, index) => ({
+  id: `featured-card-${index + 1}`,
+  label: `Card ${index + 1}`,
+}));
+
 // Simple text-based preview for components that need complex context
 function SimplePreview({ description }: { description: string }) {
   return (
     <div className="text-sm text-muted-foreground p-4 border rounded-lg bg-muted/30">
       <p>{description}</p>
+    </div>
+  );
+}
+
+// Graceful fallback for components without a dedicated preview: a muted wordmark
+// tile derived from the component slug, so gallery cards still look intentional.
+function PlaceholderPreview({ componentName }: { componentName: string }) {
+  const label = componentName
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <span className="text-sm font-medium text-muted-foreground">{label}</span>
     </div>
   );
 }
@@ -314,7 +335,7 @@ function ComboboxPreview() {
 function DatePickerPreview() {
   return (
     <div className="w-full max-w-sm">
-      <DatePicker value={new Date("2026-04-19T00:00:00.000Z")} />
+      <DatePicker value={DATE_PICKER_PREVIEW_DATE} />
     </div>
   );
 }
@@ -537,13 +558,13 @@ function CalloutPreview() {
 function CheckboxPreview() {
   return (
     <div className="space-y-2">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <Checkbox id="terms" />
         <label className="text-sm" htmlFor="terms">
           Accept terms
         </label>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <Checkbox defaultChecked id="marketing" />
         <label className="text-sm" htmlFor="marketing">
           Receive emails
@@ -994,7 +1015,7 @@ function FloatingActionButtonPreview() {
         }}
         position="bottom-right"
       >
-        <Plus className="h-5 w-5" />
+        <Plus className="size-5" />
       </FloatingActionButton>
     </div>
   );
@@ -1033,10 +1054,10 @@ function StepNavigationPreview() {
       canPrev={step > 1}
       currentStep={step}
       onNext={() => {
-        setStep(step + 1);
+        setStep((currentStep) => currentStep + 1);
       }}
       onPrev={() => {
-        setStep(step - 1);
+        setStep((currentStep) => currentStep - 1);
       }}
       stepLabel="Step"
       totalSteps={5}
@@ -1231,13 +1252,13 @@ function SelectPreview() {
 function RadioGroupPreview() {
   return (
     <RadioGroup defaultValue="option-one">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <RadioGroupItem id="option-one" value="option-one" />
         <label className="text-sm" htmlFor="option-one">
           Option One
         </label>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-x-2">
         <RadioGroupItem id="option-two" value="option-two" />
         <label className="text-sm" htmlFor="option-two">
           Option Two
@@ -1259,13 +1280,13 @@ function TogglePreview() {
   return (
     <div className="flex gap-2">
       <Toggle aria-label="Toggle bold">
-        <Bold className="h-4 w-4" />
+        <Bold className="size-4" />
       </Toggle>
       <Toggle aria-label="Toggle italic">
-        <Italic className="h-4 w-4" />
+        <Italic className="size-4" />
       </Toggle>
       <Toggle aria-label="Toggle underline">
-        <Underline className="h-4 w-4" />
+        <Underline className="size-4" />
       </Toggle>
     </div>
   );
@@ -1275,13 +1296,13 @@ function ToggleGroupPreview() {
   return (
     <ToggleGroup type="multiple">
       <ToggleGroupItem aria-label="Toggle bold" value="bold">
-        <Bold className="h-4 w-4" />
+        <Bold className="size-4" />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Toggle italic" value="italic">
-        <Italic className="h-4 w-4" />
+        <Italic className="size-4" />
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Toggle underline" value="underline">
-        <Underline className="h-4 w-4" />
+        <Underline className="size-4" />
       </ToggleGroupItem>
     </ToggleGroup>
   );
@@ -1413,12 +1434,12 @@ function AlertDialogPreview() {
 function HorizontalScrollRowPreview() {
   return (
     <HorizontalScrollRow description="Browse our picks" title="Featured">
-      {Array.from({ length: 6 }, (_, index) => (
+      {HORIZONTAL_SCROLL_ROW_CARDS.map((card) => (
         <div
           className="min-w-[180px] snap-start rounded-lg border bg-card p-4 text-sm"
-          key={index}
+          key={card.id}
         >
-          Card {index + 1}
+          {card.label}
         </div>
       ))}
     </HorizontalScrollRow>
@@ -1697,8 +1718,8 @@ function DataTablePreview() {
 
 function SkeletonPreview() {
   return (
-    <div className="flex items-center space-x-4">
-      <Skeleton className="h-12 w-12 rounded-full" />
+    <div className="flex items-center gap-x-4">
+      <Skeleton className="size-12 rounded-full" />
       <div className="space-y-2">
         <Skeleton className="h-4 w-[200px]" />
         <Skeleton className="h-4 w-[150px]" />
@@ -1715,7 +1736,7 @@ function SeparatorPreview() {
         <p className="text-sm text-muted-foreground">A component library.</p>
       </div>
       <Separator />
-      <div className="flex h-5 items-center space-x-4 text-sm">
+      <div className="flex h-5 items-center gap-x-4 text-sm">
         <div>Docs</div>
         <Separator orientation="vertical" />
         <div>Source</div>
@@ -1730,7 +1751,7 @@ function AlertPreview() {
   return (
     <div className="space-y-4 w-full max-w-md">
       <Alert>
-        <TerminalIcon className="h-4 w-4" />
+        <TerminalIcon className="size-4" />
         <AlertTitle>Heads up!</AlertTitle>
         <AlertDescription>
           You can add components using the CLI.
@@ -1799,11 +1820,11 @@ function CollapsiblePreview() {
       onOpenChange={setIsOpen}
       open={isOpen}
     >
-      <div className="flex items-center justify-between space-x-4">
+      <div className="flex items-center justify-between gap-x-4">
         <h4 className="text-sm font-semibold">Collapsible Section</h4>
         <CollapsibleTrigger asChild>
           <Button size="sm" variant="ghost">
-            <ChevronsUpDown className="h-4 w-4" />
+            <ChevronsUpDown className="size-4" />
           </Button>
         </CollapsibleTrigger>
       </div>
@@ -2480,6 +2501,6 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
     case "world-clock-bar":
       return <WorldClockBarPreview />;
     default:
-      return <div className="text-muted-foreground">Preview not available</div>;
+      return <PlaceholderPreview componentName={componentName} />;
   }
 }

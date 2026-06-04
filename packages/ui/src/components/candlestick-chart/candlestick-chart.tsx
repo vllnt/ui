@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
 export type CandlestickDatum = {
@@ -13,6 +14,8 @@ export type CandlestickDatum = {
 };
 
 export type CandlestickChartProps = {
+  /** Heading tag for the title. Defaults to `h3`. */
+  as?: HeadingTag;
   data: CandlestickDatum[];
   height?: number;
   showGrid?: boolean;
@@ -208,6 +211,7 @@ export const CandlestickChart = React.forwardRef<
 >(
   (
     {
+      as: Heading = "h3",
       className,
       data,
       height = DEFAULT_HEIGHT,
@@ -241,9 +245,9 @@ export const CandlestickChart = React.forwardRef<
             <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
               OHLC session
             </p>
-            <h3 className="text-lg font-semibold text-foreground">
+            <Heading className="text-lg font-semibold text-foreground">
               Candlestick chart
-            </h3>
+            </Heading>
           </div>
           <SessionPill sessionChange={sessionChange} />
         </div>

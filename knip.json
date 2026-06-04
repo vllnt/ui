@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    "apps/registry": {
+      "ignore": [
+        "components/component-preview/component-preview.tsx",
+        "content/pages/**",
+        "lib/utils.ts",
+        "registry.ts",
+        "registry/default/**",
+        "styles.css",
+        "themes/default.css"
+      ]
+    },
+    "packages/ui": {
+      "ignore": [
+        ".storybook/next-stubs.ts",
+        ".storybook/next-themes-stub.ts",
+        "styles.dev.css"
+      ]
+    }
+  }
+}

@@ -30,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Time navigation** — `TimelineScrubber`, `PlaybackGhost`, `BottomActivityStrip`, `RunTimeline`.
 - Total component count: **225** (up from 140).
 
+- **A11y heading-level override** — every title-bearing component (`ProfileSection`, `FAQ`, `Slideshow`, `WorldClockBar`, `TableOfContentsPanel`, `TableOfContents`, `KeyboardShortcutsHelp`, `Watchlist`, `OrderBook`, `HorizontalScrollRow`, `MarketTreemap`, `ActivityHeatmap`, `Glossary`, `StatusBoard`, `CodePlayground`, `Comparison`, `Quiz`, `Exercise`, `ShareSection`, `CompletionDialog`, `Checklist`, `LearningObjectives`, `CandlestickChart`, `StepByStep`) accepts an `as` prop (`"h1"`–`"h6"`); multi-title components (`ContentIntro`, `TutorialComplete`) expose `titleAs` + `tocLabelAs` / `sectionLabelAs`. Defaults preserve existing heading tags. `HeadingTag` is re-exported from `@vllnt/ui`.
+
 ### Changed
 
 - Registry installs use a **hybrid CLI strategy** — leaf component source is inlined, sibling registry items resolve via `@vllnt/ui` to keep installs minimal and dedupe shared primitives.

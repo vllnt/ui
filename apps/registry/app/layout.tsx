@@ -8,7 +8,11 @@ import type { Metadata } from "next";
 import type React from "react";
 
 import { Header } from "@/components/header";
-import { jsonLdScript, organizationLd, websiteLd } from "@/lib/jsonld";
+import {
+  jsonLdScriptAttributes,
+  organizationLd,
+  websiteLd,
+} from "@/lib/jsonld";
 
 import "./globals.css";
 
@@ -94,14 +98,8 @@ export default function RootLayout({
           title="VLLNT UI releases"
           type="application/atom+xml"
         />
-        <script
-          dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationLd()) }}
-          type="application/ld+json"
-        />
-        <script
-          dangerouslySetInnerHTML={{ __html: jsonLdScript(websiteLd()) }}
-          type="application/ld+json"
-        />
+        <script {...jsonLdScriptAttributes(organizationLd())} />
+        <script {...jsonLdScriptAttributes(websiteLd())} />
       </head>
       <body className="h-full overflow-hidden">
         <ThemeProvider

@@ -19,7 +19,7 @@ function getCurrencyFormatter(
   const key = `${locale}|${currency}`;
   let formatter = CURRENCY_FORMATTER_CACHE.get(key);
   if (!formatter) {
-    formatter = new Intl.NumberFormat(locale, {
+    formatter = Intl.NumberFormat(locale, {
       currency,
       style: "currency",
     });
@@ -32,7 +32,7 @@ const DATE_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
 function getTransactionDateFormatter(locale: string): Intl.DateTimeFormat {
   let formatter = DATE_FORMATTER_CACHE.get(locale);
   if (!formatter) {
-    formatter = new Intl.DateTimeFormat(locale, {
+    formatter = Intl.DateTimeFormat(locale, {
       day: "numeric",
       month: "short",
       year: "numeric",

@@ -143,7 +143,7 @@ export const CommentPin = forwardRef<HTMLDivElement, CommentPinProps>(
     const ariaLabel = showBadge
       ? `${resolvedLabels.region}, ${unread} ${resolvedLabels.unreadSuffix}`
       : resolvedLabels.region;
-    const handleClick = (): void => {
+    const handleActivateComment = (): void => {
       onActivate?.();
     };
     const body = (
@@ -173,7 +173,7 @@ export const CommentPin = forwardRef<HTMLDivElement, CommentPinProps>(
             aria-label={ariaLabel}
             className="relative inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             data-comment-pin-trigger
-            onClick={handleClick}
+            onClick={handleActivateComment}
             type="button"
           >
             {body}

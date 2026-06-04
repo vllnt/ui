@@ -57,4 +57,31 @@ describe("FAQ", () => {
 
     expect(screen.getByText("Frequently Asked Questions")).toBeInTheDocument();
   });
+
+  it("renders the title as h4 by default", () => {
+    render(
+      <FAQ title="Common questions">
+        <FAQItem question="Q1">A</FAQItem>
+      </FAQ>,
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 4, name: "Common questions" }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the title with the heading tag passed via the as prop", () => {
+    render(
+      <FAQ as="h2" title="Common questions">
+        <FAQItem question="Q1">A</FAQItem>
+      </FAQ>,
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Common questions" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { level: 4, name: "Common questions" }),
+    ).not.toBeInTheDocument();
+  });
 });

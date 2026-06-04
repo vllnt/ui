@@ -14,6 +14,7 @@ export type {
 // Re-export lib utilities
 export {
   getOtherLanguage,
+  type HeadingTag,
   LANGUAGE_NAMES,
   type SupportedLanguage,
   type SupportedLanguage as UISupportedLanguage,
