@@ -3,7 +3,7 @@ import * as React from "react";
 import { ArrowDownRight, ArrowUpRight, Dot } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 
 export type TickerTapeItem = {
   change: number;

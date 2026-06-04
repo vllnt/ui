@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 import { useSidebar } from "../sidebar-provider";
 import { ThemeToggle } from "../theme-toggle";
 

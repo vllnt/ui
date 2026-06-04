@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 import { LoaderCircle, SendHorizontal } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 import { Textarea } from "../textarea";
 
 const formShellVariants = cva(

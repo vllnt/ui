@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Check, Copy, Terminal as TerminalIcon } from "lucide-react";
 
-import { Button } from "../button";
+import { Button } from "../button/button";
 
 export type TerminalLine = {
   content: string;

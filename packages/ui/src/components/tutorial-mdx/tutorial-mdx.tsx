@@ -12,7 +12,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../accordion";
+} from "../accordion/accordion";
 import { Callout } from "../callout";
 import { Checklist } from "../checklist";
 import { CodePlayground, FileTree } from "../code-playground";

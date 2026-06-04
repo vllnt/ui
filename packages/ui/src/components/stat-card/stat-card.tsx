@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Card, CardContent, CardDescription, CardHeader } from "../card";
+import { Card, CardContent, CardDescription, CardHeader } from "../card/card";
 
 const statCardVariants = cva("overflow-hidden border shadow-sm", {
   defaultVariants: {

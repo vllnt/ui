@@ -5,7 +5,7 @@ import * as React from "react";
 import { Minus, Plus } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 
 export type NumberInputProps = Omit<
   React.ComponentPropsWithoutRef<"input">,

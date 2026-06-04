@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 
 import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 
 export type CompletionDialogProps = {
   /** Heading tag for the dialog title. Defaults to `h2`. */

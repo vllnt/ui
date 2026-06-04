@@ -19,7 +19,7 @@ import {
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 import { Checkbox } from "../checkbox";
 import { Input } from "../input";
 import {

@@ -4,7 +4,7 @@ import { AlertCircle, ArrowRight, Inbox, ListTodo, Siren } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 
 export type OverviewCardTone = "danger" | "default" | "warning";
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import {
   Card,
   CardContent,

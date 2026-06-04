@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../lib/utils";
-import { Avatar, AvatarFallback } from "../avatar";
+import { Avatar, AvatarFallback } from "../avatar/avatar";
 import { Badge } from "../badge";
 
 const bubbleVariants = cva(

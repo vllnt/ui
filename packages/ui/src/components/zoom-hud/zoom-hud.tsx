@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { Minus, Plus, RotateCcw } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { Button } from "../button/button";
 
 export type ZoomHUDProps = React.ComponentPropsWithoutRef<"div"> & {
   onReset?: () => void;

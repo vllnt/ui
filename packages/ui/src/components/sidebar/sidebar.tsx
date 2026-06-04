@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 import { useMounted } from "../../lib/use-mounted";
 import { cn } from "../../lib/utils";
-import { useSidebar } from "../sidebar-provider";
+import { useSidebar } from "../sidebar-provider/sidebar-provider";
 
 export type SidebarItem = {
   href: string;

@@ -16,7 +16,7 @@ import {
 import { ArrowDown, RefreshCw, ThumbsDown, ThumbsUp } from "lucide-react";
 
 import { cn } from "../../lib/utils";
-import { ThinkingBlock } from "../thinking-block";
+import { ThinkingBlock } from "../thinking-block/thinking-block";
 
 /** A single tool call made by the assistant. */
 export type ToolCall = {

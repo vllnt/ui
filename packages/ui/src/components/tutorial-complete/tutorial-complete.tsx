@@ -6,7 +6,7 @@ import { Check, ChevronRight, RotateCcw } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { HeadingTag } from "../../lib/types";
-import { Button } from "../button";
+import { Button } from "../button/button";
 import { ProfileSection } from "../profile-section";
 import { ShareSection } from "../share-section";
 
