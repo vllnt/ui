@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -71,23 +71,25 @@ function ContentIntroImpl({
 }: ContentIntroProps): React.ReactNode {
   const mergedLabels = { ...DEFAULT_LABELS, ...labels };
   const hasProgress = completedSections.size > 0;
-
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        onStart();
-      }
-    },
-    [onStart],
-  );
+  const onStartRef = useRef(onStart);
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+    onStartRef.current = onStart;
+  }, [onStart]);
+
+  useEffect(() => {
+    const onDocumentKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        onStartRef.current();
+      }
     };
-  }, [handleKeyDown]);
+
+    document.addEventListener("keydown", onDocumentKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onDocumentKeyDown);
+    };
+  }, []);
 
   return (
     <>

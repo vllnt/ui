@@ -45,13 +45,12 @@ const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  return registry.items
-    .filter(
-      (item): item is RegistryComponent => item.type === "registry:component",
-    )
-    .map((item) => ({
-      slug: item.name,
-    }));
+  return registry.items.reduce<{ slug: string }[]>((parameters, item) => {
+    if (item.type === "registry:component") {
+      parameters.push({ slug: item.name });
+    }
+    return parameters;
+  }, []);
 }
 
 function getNpmUrl(packageName: string): string {

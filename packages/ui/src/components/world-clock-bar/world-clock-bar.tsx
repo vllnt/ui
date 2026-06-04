@@ -63,7 +63,7 @@ function getTimeFormatter(
   const key = `${locale}|${timeZone}`;
   let formatter = TIME_FORMATTER_CACHE.get(key);
   if (!formatter) {
-    formatter = new Intl.DateTimeFormat(locale, {
+    formatter = Intl.DateTimeFormat(locale, {
       hour: "numeric",
       minute: "2-digit",
       timeZone,
@@ -82,7 +82,7 @@ function getDateFormatter(
   const key = `${locale}|${timeZone}`;
   let formatter = DATE_FORMATTER_CACHE.get(key);
   if (!formatter) {
-    formatter = new Intl.DateTimeFormat(locale, {
+    formatter = Intl.DateTimeFormat(locale, {
       day: "numeric",
       month: "short",
       timeZone,
