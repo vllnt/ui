@@ -1,5 +1,6 @@
 import "@vllnt/ui/styles.css";
 import "@vllnt/ui/themes/default.css";
+import "../globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -18,8 +19,6 @@ import {
   websiteLd,
 } from "@/lib/jsonld";
 import { alternateOgLocales, languageAlternates, ogLocale } from "@/lib/seo";
-
-import "../globals.css";
 
 type Props = {
   readonly children: React.ReactNode;
@@ -43,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     category: "Developer Tools",
     creator: "VLLNT",
     description:
-      "Agent-first React component registry. 225 accessible components built on Radix UI, Tailwind CSS, and CVA. Install via the shadcn CLI.",
+      "The UI design system for AI agents and AI-first apps. Open-source React components for AI chat, streaming, tool calls, citations, agents, and artifacts — readable by AI agents via llms.txt. Install with the shadcn CLI.",
     formatDetection: {
       address: false,
       email: false,
@@ -51,22 +50,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     generator: "Next.js",
     keywords: [
-      "react",
-      "components",
+      "ui for ai agents",
+      "ai agent ui",
+      "ai ui components",
+      "ai chat ui",
+      "ai chat ui react",
+      "generative ui",
+      "llm ui components",
+      "agent-first ui",
+      "design system for ai",
+      "ai-first design system",
       "react components",
       "ui library",
       "component library",
       "tailwind",
-      "tailwindcss",
-      "radix",
       "radix-ui",
       "shadcn",
-      "shadcn-ui",
       "registry",
       "design system",
       "accessible",
       "typescript",
-      "ai",
       "llms.txt",
       "open source",
     ],
@@ -92,7 +95,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
       index: true,
     },
-    title: "VLLNT UI — 225 agent-first React components",
+    title: "VLLNT UI — UI components & design system for AI agents",
     twitter: {
       card: "summary_large_image",
       creator: "@vllnt",

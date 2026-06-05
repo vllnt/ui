@@ -131,6 +131,26 @@ export function techArticleLd(article: {
   };
 }
 
+export function faqPageLd(
+  entries: ReadonlyArray<{
+    readonly question: string;
+    readonly answer: string;
+  }>,
+): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: entries.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.answer,
+      },
+    })),
+  };
+}
+
 export function jsonLdScript(node: JsonLdNode | readonly JsonLdNode[]): string {
   return JSON.stringify(node).replaceAll("<", "\\u003c");
 }
