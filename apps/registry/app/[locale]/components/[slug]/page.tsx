@@ -14,6 +14,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
+import { CodeStatic } from "@/components/code-static/code-static";
+import { LazyMount } from "@/components/lazy-mount/lazy-mount";
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
 import { ShareEmbedBar } from "@/components/share-embed-bar";
@@ -271,9 +273,7 @@ export default async function ComponentPage(props: Props) {
               {/* Installation */}
               <div className="mb-8 scroll-mt-8" id="installation">
                 <h2 className="text-2xl font-semibold mb-4">Installation</h2>
-                <CodeBlock language="bash" showLanguage={true}>
-                  {installCommand}
-                </CodeBlock>
+                <CodeStatic code={installCommand} language="bash" />
               </div>
 
               {/* Storybook link */}
@@ -320,9 +320,11 @@ export default async function ComponentPage(props: Props) {
               {componentCode ? (
                 <div className="mb-8 scroll-mt-8" id="code">
                   <h2 className="text-2xl font-semibold mb-4">Code</h2>
-                  <CodeBlock language="typescript" showLanguage={true}>
-                    {componentCode}
-                  </CodeBlock>
+                  <LazyMount minHeight={320}>
+                    <CodeBlock language="typescript" showLanguage={true}>
+                      {componentCode}
+                    </CodeBlock>
+                  </LazyMount>
                 </div>
               ) : null}
 
@@ -340,6 +342,7 @@ export default async function ComponentPage(props: Props) {
                               {dep}
                             </code>
                             <Link
+                              aria-label={`View ${dep} on npm`}
                               className="text-muted-foreground hover:text-foreground transition-colors"
                               href={npmUrl}
                               rel="noopener noreferrer"
