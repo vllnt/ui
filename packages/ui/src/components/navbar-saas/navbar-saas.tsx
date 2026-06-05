@@ -62,7 +62,7 @@ export function NavbarSaas({
               )
             ) : null}
             {navItems.length > 0 ? (
-              <nav className="hidden md:flex gap-6">
+              <nav className="hidden lg:flex gap-6">
                 {navItems.map((item) => (
                   <Link
                     className={cn(

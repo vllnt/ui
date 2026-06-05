@@ -3,8 +3,6 @@ import Link from "next/link";
 const GITHUB_URL = "https://github.com/vllnt/ui";
 const STORYBOOK_URL = "https://storybook.vllnt.ai";
 const SPONSOR_URL = "https://github.com/sponsors/bntvllnt";
-const REQUEST_URL =
-  "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
 const REPORT_URL =
   "https://github.com/vllnt/ui/issues/new?template=bug_report.yml&labels=bug";
 const DISCUSSIONS_URL = "https://github.com/vllnt/ui/discussions";
@@ -48,7 +46,7 @@ const COLUMNS: readonly FooterColumn[] = [
   },
   {
     links: [
-      { external: true, href: REQUEST_URL, label: "Request a component" },
+      { href: "/request-component", label: "Request a component" },
       { external: true, href: REPORT_URL, label: "Report a bug" },
       { external: true, href: DISCUSSIONS_URL, label: "Discussions" },
       { external: true, href: SPONSOR_URL, label: "Sponsor" },

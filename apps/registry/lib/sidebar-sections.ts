@@ -84,6 +84,10 @@ export function getSidebarSections(
           title: "Components",
         },
         { href: localizePathname("/templates", locale), title: "Templates" },
+        {
+          href: localizePathname("/request-component", locale),
+          title: "Request a component",
+        },
       ],
     },
     {
