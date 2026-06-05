@@ -31,6 +31,20 @@ pnpm add @vllnt/ui
 
 > Published on the public [npm registry](https://www.npmjs.com/package/@vllnt/ui) with signed provenance. See [`packages/ui/README.md`](packages/ui/README.md) for full setup.
 
+### shadcn registry
+
+Install individual components with the [shadcn](https://ui.shadcn.com) CLI — no package dependency, you own the code:
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
+
+Or by `@vllnt` namespace once it's in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt": "https://ui.vllnt.ai/r/{name}.json"` to your `components.json` `registries`):
+
+```bash
+pnpm dlx shadcn@latest add @vllnt/button
+```
+
 ## Quick Start
 
 ```tsx
