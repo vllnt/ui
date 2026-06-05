@@ -413,6 +413,7 @@ export {
   useAgentStepStatus,
 } from "./agent-activity";
 export { StatCard, type StatCardProps, statCardVariants } from "./stat-card";
+export { StaticCode, type StaticCodeProps } from "./static-code";
 export {
   dotVariants,
   StatusIndicator,

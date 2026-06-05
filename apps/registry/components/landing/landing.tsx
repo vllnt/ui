@@ -1,8 +1,7 @@
-import { Badge } from "@vllnt/ui";
+import { Badge, StaticCode } from "@vllnt/ui";
 import { ArrowRight, Sparkles, Terminal } from "lucide-react";
 import Link from "next/link";
 
-import { CodeStatic } from "@/components/code-static/code-static";
 import { Footer } from "@/components/footer/footer";
 import { GitHubMark } from "@/components/github-mark";
 import { getLatestReleaseRecords } from "@/lib/changelog";
@@ -53,7 +52,7 @@ function Hero({
         </p>
 
         <div className="mt-8">
-          <CodeStatic code={INSTALL_COMMAND} language="bash" />
+          <StaticCode code={INSTALL_COMMAND} language="bash" />
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">

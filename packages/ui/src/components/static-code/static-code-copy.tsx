@@ -2,18 +2,19 @@
 
 import { useState } from "react";
 
-import { Button } from "@vllnt/ui";
 import { Check, Copy } from "lucide-react";
 
-type CopyCodeProps = {
+import { Button } from "../button/button";
+
+type StaticCodeCopyProps = {
   value: string;
 };
 
 /**
- * Client island: copies `value` to the clipboard so the surrounding code block
- * can stay a zero-JS server component.
+ * Client island for copying a server-rendered code block to the clipboard.
+ * Keeps the surrounding highlighted code as zero-JS server markup.
  */
-export function CopyCode({ value }: CopyCodeProps) {
+export function StaticCodeCopy({ value }: StaticCodeCopyProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
