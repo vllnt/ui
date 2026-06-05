@@ -36,7 +36,8 @@
       "import": "./src/tailwind-preset.ts"
     },
     "./styles.css": "./styles.css",
-    "./themes/default.css": "./themes/default.css"
+    "./themes/default.css": "./themes/default.css",
+    "./themes/presets.css": "./themes/presets.css"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
@@ -54,7 +55,8 @@
         "import": "./dist/tailwind-preset.js"
       },
       "./styles.css": "./styles.css",
-      "./themes/default.css": "./themes/default.css"
+      "./themes/default.css": "./themes/default.css",
+      "./themes/presets.css": "./themes/presets.css"
     }
   },
   "files": [

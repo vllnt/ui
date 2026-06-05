@@ -108,7 +108,7 @@ function DemoRightBar() {
               },
             ]}
           />
-          <div className="rounded-2xl border border-border/70 bg-background/75 p-4 shadow-[0_10px_35px_hsl(var(--foreground)/0.06)] backdrop-blur-xl">
+          <div className="rounded-2xl border border-border/70 bg-background/75 p-4 shadow-[0_10px_35px_oklch(var(--foreground)/0.06)] backdrop-blur-xl">
             <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
               Selected context
             </div>
@@ -158,8 +158,8 @@ function DemoBottomBar() {
 
 function DemoCanvasObjects() {
   return (
-    <div className="relative h-[1200px] w-[1600px] overflow-hidden rounded-[28px] border border-border/12 bg-[radial-gradient(circle_at_top,hsl(var(--primary)/0.07),transparent_38%),linear-gradient(180deg,hsl(var(--background)/0.18),hsl(var(--background)/0.04))]">
-      <div className="absolute left-[14%] top-[22%] w-72 rounded-[2rem] border border-border/18 bg-background/18 p-5 shadow-[0_22px_80px_hsl(var(--foreground)/0.05)] backdrop-blur-xl">
+    <div className="relative h-[1200px] w-[1600px] overflow-hidden rounded-[28px] border border-border/12 bg-[radial-gradient(circle_at_top,oklch(var(--primary)/0.07),transparent_38%),linear-gradient(180deg,oklch(var(--background)/0.18),oklch(var(--background)/0.04))]">
+      <div className="absolute left-[14%] top-[22%] w-72 rounded-[2rem] border border-border/18 bg-background/18 p-5 shadow-[0_22px_80px_oklch(var(--foreground)/0.05)] backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <Layers3 className="size-5" />
@@ -176,7 +176,7 @@ function DemoCanvasObjects() {
         </div>
       </div>
 
-      <div className="absolute right-[15%] top-[18%] w-56 rounded-[1.75rem] border border-border/18 bg-background/14 p-4 shadow-[0_18px_60px_hsl(var(--foreground)/0.04)] backdrop-blur-xl">
+      <div className="absolute right-[15%] top-[18%] w-56 rounded-[1.75rem] border border-border/18 bg-background/14 p-4 shadow-[0_18px_60px_oklch(var(--foreground)/0.04)] backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex size-10 items-center justify-center rounded-2xl bg-background/60 text-foreground/70">
             <Activity className="size-4" />
@@ -197,7 +197,7 @@ function DemoCanvasObjects() {
         </div>
       </div>
 
-      <div className="absolute bottom-[18%] left-[22%] w-64 rounded-[1.75rem] border border-border/18 bg-background/12 p-4 shadow-[0_18px_60px_hsl(var(--foreground)/0.04)] backdrop-blur-xl">
+      <div className="absolute bottom-[18%] left-[22%] w-64 rounded-[1.75rem] border border-border/18 bg-background/12 p-4 shadow-[0_18px_60px_oklch(var(--foreground)/0.04)] backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex size-10 items-center justify-center rounded-2xl bg-background/55 text-foreground/70">
             <Sparkles className="size-4" />

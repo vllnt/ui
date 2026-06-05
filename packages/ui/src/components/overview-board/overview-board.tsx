@@ -47,7 +47,7 @@ const OverviewCard = forwardRef<HTMLElement, OverviewCardProps>(
   ) => (
     <section
       className={cn(
-        "flex min-h-[172px] flex-col gap-4 rounded-2xl border p-5 shadow-[0_8px_30px_hsl(var(--foreground)/0.06)] backdrop-blur-xl",
+        "flex min-h-[172px] flex-col gap-4 rounded-2xl border p-5 shadow-[0_8px_30px_oklch(var(--foreground)/0.06)] backdrop-blur-xl",
         toneClassNames[tone],
         className,
       )}

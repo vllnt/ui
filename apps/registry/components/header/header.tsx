@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
   NavbarSaas,
   SearchDialog,
+  ThemeSwitcher,
 } from "@vllnt/ui";
 import { ChevronDown, Languages } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -53,6 +54,7 @@ export function Header({ locale }: HeaderProps) {
       title: t("navComponents"),
     },
     { href: localizePathname("/templates", locale), title: "Templates" },
+    { href: localizePathname("/themes", locale), title: "Themes" },
     {
       href: localizePathname("/request-component", locale),
       title: "Request",
@@ -80,6 +82,7 @@ export function Header({ locale }: HeaderProps) {
       navItems={navItems}
       rightSlot={
         <div className="flex items-center gap-2">
+          <ThemeSwitcher className="hidden xl:flex" />
           <SearchDialog
             buttonText="Search..."
             docsEmptyText="No docs found."

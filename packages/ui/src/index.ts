@@ -19,7 +19,20 @@ export {
   type SupportedLanguage,
   type SupportedLanguage as UISupportedLanguage,
 } from "./lib/types";
+export {
+  DEFAULT_THEME_PRESET,
+  isThemePresetName,
+  THEME_PRESET_STORAGE_KEY,
+  THEME_PRESETS,
+  type ThemePreset,
+  type ThemePresetName,
+} from "./lib/theme-presets";
 export { useDebounce } from "./lib/use-debounce";
 export { useHorizontalScroll } from "./lib/use-horizontal-scroll";
 export { useMounted } from "./lib/use-mounted";
+export {
+  setThemePreset,
+  useThemePreset,
+  type UseThemePresetResult,
+} from "./lib/use-theme-preset";
 export { cn } from "./lib/utils";

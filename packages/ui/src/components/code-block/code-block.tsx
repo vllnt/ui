@@ -114,7 +114,7 @@ export function CodeBlock({
             },
           }}
           customStyle={{
-            background: "hsl(var(--background))",
+            background: "oklch(var(--background))",
             fontSize: "0.875rem",
             margin: 0,
             minWidth: "fit-content",

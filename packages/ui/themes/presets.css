@@ -1,0 +1,63 @@
+/*
+ * Built-in theme presets. Applied via `data-theme="<name>"` on the document
+ * root. Each preset overrides the brand tokens (primary / ring) over the base
+ * `:root` and `.dark` tokens from default.css. Values are OKLCH channels
+ * ("L C H"), consumed as oklch(var(--x)). The `html[data-theme]` prefix gives
+ * these rules higher specificity than the base `.dark` class so the active
+ * preset always wins, regardless of stylesheet order.
+ */
+
+html[data-theme="blue"] {
+  --primary: 0.546 0.245 262.881;
+  --primary-foreground: 0.97 0.014 254.604;
+  --ring: 0.546 0.245 262.881;
+}
+html[data-theme="blue"].dark {
+  --primary: 0.623 0.214 259.815;
+  --primary-foreground: 0.97 0.014 254.604;
+  --ring: 0.623 0.214 259.815;
+}
+
+html[data-theme="green"] {
+  --primary: 0.723 0.219 149.579;
+  --primary-foreground: 0.982 0.018 155.826;
+  --ring: 0.723 0.219 149.579;
+}
+html[data-theme="green"].dark {
+  --primary: 0.696 0.17 162.48;
+  --primary-foreground: 0.393 0.095 152.535;
+  --ring: 0.527 0.154 150.069;
+}
+
+html[data-theme="amber"] {
+  --primary: 0.705 0.213 47.604;
+  --primary-foreground: 0.98 0.016 73.684;
+  --ring: 0.705 0.213 47.604;
+}
+html[data-theme="amber"].dark {
+  --primary: 0.646 0.222 41.116;
+  --primary-foreground: 0.98 0.016 73.684;
+  --ring: 0.646 0.222 41.116;
+}
+
+html[data-theme="rose"] {
+  --primary: 0.645 0.246 16.439;
+  --primary-foreground: 0.969 0.015 12.422;
+  --ring: 0.645 0.246 16.439;
+}
+html[data-theme="rose"].dark {
+  --primary: 0.645 0.246 16.439;
+  --primary-foreground: 0.969 0.015 12.422;
+  --ring: 0.645 0.246 16.439;
+}
+
+html[data-theme="violet"] {
+  --primary: 0.606 0.25 292.717;
+  --primary-foreground: 0.969 0.016 293.756;
+  --ring: 0.606 0.25 292.717;
+}
+html[data-theme="violet"].dark {
+  --primary: 0.541 0.281 293.009;
+  --primary-foreground: 0.969 0.016 293.756;
+  --ring: 0.541 0.281 293.009;
+}
