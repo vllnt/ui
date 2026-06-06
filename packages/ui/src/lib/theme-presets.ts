@@ -19,12 +19,13 @@ export const THEME_CUSTOM_CSS_STORAGE_KEY = "vllnt-theme-custom-css";
 export const THEME_CUSTOM_STYLE_ID = "vllnt-theme-custom-style";
 
 export type ThemePresetName =
-  | "amber"
-  | "blue"
+  | "cyberpunk"
   | "default"
-  | "green"
-  | "rose"
-  | "violet";
+  | "dracula"
+  | "matrix"
+  | "nord"
+  | "synthwave"
+  | "tron";
 
 export type ThemePreset = {
   /** Human-readable label for switcher UIs. */
@@ -37,11 +38,12 @@ export type ThemePreset = {
 
 export const THEME_PRESETS: readonly ThemePreset[] = [
   { label: "Default", name: "default", swatch: "oklch(0.2044 0 0)" },
-  { label: "Blue", name: "blue", swatch: "oklch(0.55 0.17 264)" },
-  { label: "Green", name: "green", swatch: "oklch(0.55 0.17 155)" },
-  { label: "Amber", name: "amber", swatch: "oklch(0.55 0.17 70)" },
-  { label: "Rose", name: "rose", swatch: "oklch(0.55 0.17 12)" },
-  { label: "Violet", name: "violet", swatch: "oklch(0.55 0.17 300)" },
+  { label: "Matrix", name: "matrix", swatch: "oklch(0.8 0.24 150)" },
+  { label: "Dracula", name: "dracula", swatch: "oklch(0.72 0.16 300)" },
+  { label: "Synthwave", name: "synthwave", swatch: "oklch(0.68 0.26 350)" },
+  { label: "Tron", name: "tron", swatch: "oklch(0.78 0.15 215)" },
+  { label: "Cyberpunk", name: "cyberpunk", swatch: "oklch(0.86 0.19 100)" },
+  { label: "Nord", name: "nord", swatch: "oklch(0.72 0.08 230)" },
 ];
 
 export const DEFAULT_THEME_PRESET: ThemePresetName = "default";
