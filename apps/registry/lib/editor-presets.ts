@@ -1,100 +1,274 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
- * Starting-point themes for the editor. Brand-token overrides mirror the
- * built-in runtime presets in `@vllnt/ui/themes/presets.css`; everything else
- * inherits the default neutral tokens.
+ * Starting-point themes for the editor. Each preset is a complete token set
+ * (tinted backgrounds, surfaces, text, and accent) so applying it transforms the
+ * whole site. Mirrors the runtime presets in `@vllnt/ui/themes/presets.css`.
  */
 
-import { DEFAULT_THEME, type ThemeColors, type ThemeData } from "./theme-tokens";
+import { DEFAULT_THEME, type ThemeData } from "./theme-tokens";
 
-interface PresetOverride {
-  readonly light: ThemeColors;
-  readonly dark: ThemeColors;
-}
-
-export interface EditorPreset {
-  readonly name: string;
+export type EditorPreset = {
   readonly label: string;
+  readonly name: string;
   readonly swatch: string;
   readonly theme: ThemeData;
-}
+};
 
-const OVERRIDES = {
-  blue: {
-    light: {
-      primary: "0.546 0.245 262.881",
-      "primary-foreground": "0.97 0.014 254.604",
-      ring: "0.546 0.245 262.881",
-    },
-    dark: {
-      primary: "0.623 0.214 259.815",
-      "primary-foreground": "0.97 0.014 254.604",
-      ring: "0.623 0.214 259.815",
-    },
+const BLUE: ThemeData = {
+  dark: {
+    accent: "0.32 0.05 264",
+    "accent-foreground": "0.96 0.012 264",
+    background: "0.17 0.022 264",
+    border: "0.29 0.03 264",
+    card: "0.21 0.026 264",
+    "card-foreground": "0.96 0.012 264",
+    destructive: "0.5022 0.1814 27.325",
+    "destructive-foreground": "0.97 0.01 27",
+    foreground: "0.96 0.012 264",
+    input: "0.29 0.03 264",
+    muted: "0.27 0.026 264",
+    "muted-foreground": "0.71 0.035 264",
+    popover: "0.21 0.026 264",
+    "popover-foreground": "0.96 0.012 264",
+    primary: "0.62 0.17 264",
+    "primary-foreground": "0.99 0.02 264",
+    ring: "0.55 0.16 264",
+    secondary: "0.27 0.03 264",
+    "secondary-foreground": "0.96 0.012 264",
   },
-  green: {
-    light: {
-      primary: "0.723 0.219 149.579",
-      "primary-foreground": "0.982 0.018 155.826",
-      ring: "0.723 0.219 149.579",
-    },
-    dark: {
-      primary: "0.696 0.17 162.48",
-      "primary-foreground": "0.393 0.095 152.535",
-      ring: "0.527 0.154 150.069",
-    },
+  light: {
+    accent: "0.92 0.055 264",
+    "accent-foreground": "0.32 0.09 264",
+    background: "0.99 0.006 264",
+    border: "0.9 0.028 264",
+    card: "0.995 0.004 264",
+    "card-foreground": "0.2 0.03 264",
+    destructive: "0.5771 0.2152 27.325",
+    "destructive-foreground": "0.99 0.01 27",
+    foreground: "0.2 0.03 264",
+    input: "0.9 0.028 264",
+    muted: "0.96 0.02 264",
+    "muted-foreground": "0.52 0.045 264",
+    popover: "0.995 0.004 264",
+    "popover-foreground": "0.2 0.03 264",
+    primary: "0.55 0.17 264",
+    "primary-foreground": "0.99 0.02 264",
+    ring: "0.55 0.17 264",
+    secondary: "0.95 0.03 264",
+    "secondary-foreground": "0.32 0.07 264",
   },
-  amber: {
-    light: {
-      primary: "0.705 0.213 47.604",
-      "primary-foreground": "0.98 0.016 73.684",
-      ring: "0.705 0.213 47.604",
-    },
-    dark: {
-      primary: "0.646 0.222 41.116",
-      "primary-foreground": "0.98 0.016 73.684",
-      ring: "0.646 0.222 41.116",
-    },
-  },
-  rose: {
-    light: {
-      primary: "0.645 0.246 16.439",
-      "primary-foreground": "0.969 0.015 12.422",
-      ring: "0.645 0.246 16.439",
-    },
-    dark: {
-      primary: "0.645 0.246 16.439",
-      "primary-foreground": "0.969 0.015 12.422",
-      ring: "0.645 0.246 16.439",
-    },
-  },
-  violet: {
-    light: {
-      primary: "0.606 0.25 292.717",
-      "primary-foreground": "0.969 0.016 293.756",
-      ring: "0.606 0.25 292.717",
-    },
-    dark: {
-      primary: "0.541 0.281 293.009",
-      "primary-foreground": "0.969 0.016 293.756",
-      ring: "0.541 0.281 293.009",
-    },
-  },
-} satisfies Record<string, PresetOverride>;
+  radius: "0.5rem",
+};
 
-function buildTheme(override: PresetOverride): ThemeData {
-  return {
-    light: { ...DEFAULT_THEME.light, ...override.light },
-    dark: { ...DEFAULT_THEME.dark, ...override.dark },
-    radius: DEFAULT_THEME.radius,
-  };
-}
+const GREEN: ThemeData = {
+  dark: {
+    accent: "0.32 0.05 155",
+    "accent-foreground": "0.96 0.012 155",
+    background: "0.17 0.022 155",
+    border: "0.29 0.03 155",
+    card: "0.21 0.026 155",
+    "card-foreground": "0.96 0.012 155",
+    destructive: "0.5022 0.1814 27.325",
+    "destructive-foreground": "0.97 0.01 27",
+    foreground: "0.96 0.012 155",
+    input: "0.29 0.03 155",
+    muted: "0.27 0.026 155",
+    "muted-foreground": "0.71 0.035 155",
+    popover: "0.21 0.026 155",
+    "popover-foreground": "0.96 0.012 155",
+    primary: "0.62 0.17 155",
+    "primary-foreground": "0.99 0.02 155",
+    ring: "0.55 0.16 155",
+    secondary: "0.27 0.03 155",
+    "secondary-foreground": "0.96 0.012 155",
+  },
+  light: {
+    accent: "0.92 0.055 155",
+    "accent-foreground": "0.32 0.09 155",
+    background: "0.99 0.006 155",
+    border: "0.9 0.028 155",
+    card: "0.995 0.004 155",
+    "card-foreground": "0.2 0.03 155",
+    destructive: "0.5771 0.2152 27.325",
+    "destructive-foreground": "0.99 0.01 27",
+    foreground: "0.2 0.03 155",
+    input: "0.9 0.028 155",
+    muted: "0.96 0.02 155",
+    "muted-foreground": "0.52 0.045 155",
+    popover: "0.995 0.004 155",
+    "popover-foreground": "0.2 0.03 155",
+    primary: "0.55 0.17 155",
+    "primary-foreground": "0.99 0.02 155",
+    ring: "0.55 0.17 155",
+    secondary: "0.95 0.03 155",
+    "secondary-foreground": "0.32 0.07 155",
+  },
+  radius: "0.5rem",
+};
+
+const AMBER: ThemeData = {
+  dark: {
+    accent: "0.32 0.05 70",
+    "accent-foreground": "0.96 0.012 70",
+    background: "0.17 0.022 70",
+    border: "0.29 0.03 70",
+    card: "0.21 0.026 70",
+    "card-foreground": "0.96 0.012 70",
+    destructive: "0.5022 0.1814 27.325",
+    "destructive-foreground": "0.97 0.01 27",
+    foreground: "0.96 0.012 70",
+    input: "0.29 0.03 70",
+    muted: "0.27 0.026 70",
+    "muted-foreground": "0.71 0.035 70",
+    popover: "0.21 0.026 70",
+    "popover-foreground": "0.96 0.012 70",
+    primary: "0.62 0.17 70",
+    "primary-foreground": "0.99 0.02 70",
+    ring: "0.55 0.16 70",
+    secondary: "0.27 0.03 70",
+    "secondary-foreground": "0.96 0.012 70",
+  },
+  light: {
+    accent: "0.92 0.055 70",
+    "accent-foreground": "0.32 0.09 70",
+    background: "0.99 0.006 70",
+    border: "0.9 0.028 70",
+    card: "0.995 0.004 70",
+    "card-foreground": "0.2 0.03 70",
+    destructive: "0.5771 0.2152 27.325",
+    "destructive-foreground": "0.99 0.01 27",
+    foreground: "0.2 0.03 70",
+    input: "0.9 0.028 70",
+    muted: "0.96 0.02 70",
+    "muted-foreground": "0.52 0.045 70",
+    popover: "0.995 0.004 70",
+    "popover-foreground": "0.2 0.03 70",
+    primary: "0.55 0.17 70",
+    "primary-foreground": "0.99 0.02 70",
+    ring: "0.55 0.17 70",
+    secondary: "0.95 0.03 70",
+    "secondary-foreground": "0.32 0.07 70",
+  },
+  radius: "0.5rem",
+};
+
+const ROSE: ThemeData = {
+  dark: {
+    accent: "0.32 0.05 12",
+    "accent-foreground": "0.96 0.012 12",
+    background: "0.17 0.022 12",
+    border: "0.29 0.03 12",
+    card: "0.21 0.026 12",
+    "card-foreground": "0.96 0.012 12",
+    destructive: "0.5022 0.1814 27.325",
+    "destructive-foreground": "0.97 0.01 27",
+    foreground: "0.96 0.012 12",
+    input: "0.29 0.03 12",
+    muted: "0.27 0.026 12",
+    "muted-foreground": "0.71 0.035 12",
+    popover: "0.21 0.026 12",
+    "popover-foreground": "0.96 0.012 12",
+    primary: "0.62 0.17 12",
+    "primary-foreground": "0.99 0.02 12",
+    ring: "0.55 0.16 12",
+    secondary: "0.27 0.03 12",
+    "secondary-foreground": "0.96 0.012 12",
+  },
+  light: {
+    accent: "0.92 0.055 12",
+    "accent-foreground": "0.32 0.09 12",
+    background: "0.99 0.006 12",
+    border: "0.9 0.028 12",
+    card: "0.995 0.004 12",
+    "card-foreground": "0.2 0.03 12",
+    destructive: "0.5771 0.2152 27.325",
+    "destructive-foreground": "0.99 0.01 27",
+    foreground: "0.2 0.03 12",
+    input: "0.9 0.028 12",
+    muted: "0.96 0.02 12",
+    "muted-foreground": "0.52 0.045 12",
+    popover: "0.995 0.004 12",
+    "popover-foreground": "0.2 0.03 12",
+    primary: "0.55 0.17 12",
+    "primary-foreground": "0.99 0.02 12",
+    ring: "0.55 0.17 12",
+    secondary: "0.95 0.03 12",
+    "secondary-foreground": "0.32 0.07 12",
+  },
+  radius: "0.5rem",
+};
+
+const VIOLET: ThemeData = {
+  dark: {
+    accent: "0.32 0.05 300",
+    "accent-foreground": "0.96 0.012 300",
+    background: "0.17 0.022 300",
+    border: "0.29 0.03 300",
+    card: "0.21 0.026 300",
+    "card-foreground": "0.96 0.012 300",
+    destructive: "0.5022 0.1814 27.325",
+    "destructive-foreground": "0.97 0.01 27",
+    foreground: "0.96 0.012 300",
+    input: "0.29 0.03 300",
+    muted: "0.27 0.026 300",
+    "muted-foreground": "0.71 0.035 300",
+    popover: "0.21 0.026 300",
+    "popover-foreground": "0.96 0.012 300",
+    primary: "0.62 0.17 300",
+    "primary-foreground": "0.99 0.02 300",
+    ring: "0.55 0.16 300",
+    secondary: "0.27 0.03 300",
+    "secondary-foreground": "0.96 0.012 300",
+  },
+  light: {
+    accent: "0.92 0.055 300",
+    "accent-foreground": "0.32 0.09 300",
+    background: "0.99 0.006 300",
+    border: "0.9 0.028 300",
+    card: "0.995 0.004 300",
+    "card-foreground": "0.2 0.03 300",
+    destructive: "0.5771 0.2152 27.325",
+    "destructive-foreground": "0.99 0.01 27",
+    foreground: "0.2 0.03 300",
+    input: "0.9 0.028 300",
+    muted: "0.96 0.02 300",
+    "muted-foreground": "0.52 0.045 300",
+    popover: "0.995 0.004 300",
+    "popover-foreground": "0.2 0.03 300",
+    primary: "0.55 0.17 300",
+    "primary-foreground": "0.99 0.02 300",
+    ring: "0.55 0.17 300",
+    secondary: "0.95 0.03 300",
+    "secondary-foreground": "0.32 0.07 300",
+  },
+  radius: "0.5rem",
+};
 
 export const EDITOR_PRESETS: readonly EditorPreset[] = [
-  { name: "default", label: "Default", swatch: "oklch(0.2044 0 0)", theme: DEFAULT_THEME },
-  { name: "blue", label: "Blue", swatch: "oklch(0.546 0.245 262.881)", theme: buildTheme(OVERRIDES.blue) },
-  { name: "green", label: "Green", swatch: "oklch(0.723 0.219 149.579)", theme: buildTheme(OVERRIDES.green) },
-  { name: "amber", label: "Amber", swatch: "oklch(0.705 0.213 47.604)", theme: buildTheme(OVERRIDES.amber) },
-  { name: "rose", label: "Rose", swatch: "oklch(0.645 0.246 16.439)", theme: buildTheme(OVERRIDES.rose) },
-  { name: "violet", label: "Violet", swatch: "oklch(0.606 0.25 292.717)", theme: buildTheme(OVERRIDES.violet) },
+  {
+    label: "Default",
+    name: "default",
+    swatch: "oklch(0.2044 0 0)",
+    theme: DEFAULT_THEME,
+  },
+  { label: "Blue", name: "blue", swatch: "oklch(0.55 0.17 264)", theme: BLUE },
+  {
+    label: "Green",
+    name: "green",
+    swatch: "oklch(0.55 0.17 155)",
+    theme: GREEN,
+  },
+  {
+    label: "Amber",
+    name: "amber",
+    swatch: "oklch(0.55 0.17 70)",
+    theme: AMBER,
+  },
+  { label: "Rose", name: "rose", swatch: "oklch(0.55 0.17 12)", theme: ROSE },
+  {
+    label: "Violet",
+    name: "violet",
+    swatch: "oklch(0.55 0.17 300)",
+    theme: VIOLET,
+  },
 ];

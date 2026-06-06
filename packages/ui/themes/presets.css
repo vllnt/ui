@@ -1,63 +1,232 @@
 /*
- * Built-in theme presets. Applied via `data-theme="<name>"` on the document
- * root. Each preset overrides the brand tokens (primary / ring) over the base
- * `:root` and `.dark` tokens from default.css. Values are OKLCH channels
- * ("L C H"), consumed as oklch(var(--x)). The `html[data-theme]` prefix gives
- * these rules higher specificity than the base `.dark` class so the active
- * preset always wins, regardless of stylesheet order.
+ * Built-in full themes. Applied via `data-theme="<name>"` on the document
+ * root. Each preset is a complete token set (background, surfaces, text, and
+ * accent) for light and dark, so switching transforms the entire UI. Values are
+ * OKLCH channels ("L C H"), consumed as oklch(var(--x)). The `html[data-theme]`
+ * prefix outranks the base `.dark` class so the active preset always wins.
  */
 
 html[data-theme="blue"] {
-  --primary: 0.546 0.245 262.881;
-  --primary-foreground: 0.97 0.014 254.604;
-  --ring: 0.546 0.245 262.881;
+  --background: 0.99 0.006 264;
+  --foreground: 0.2 0.03 264;
+  --card: 0.995 0.004 264;
+  --card-foreground: 0.2 0.03 264;
+  --popover: 0.995 0.004 264;
+  --popover-foreground: 0.2 0.03 264;
+  --primary: 0.55 0.17 264;
+  --primary-foreground: 0.99 0.02 264;
+  --secondary: 0.95 0.03 264;
+  --secondary-foreground: 0.32 0.07 264;
+  --muted: 0.96 0.02 264;
+  --muted-foreground: 0.52 0.045 264;
+  --accent: 0.92 0.055 264;
+  --accent-foreground: 0.32 0.09 264;
+  --destructive: 0.5771 0.2152 27.325;
+  --destructive-foreground: 0.99 0.01 27;
+  --border: 0.9 0.028 264;
+  --input: 0.9 0.028 264;
+  --ring: 0.55 0.17 264;
+  --radius: 0.5rem;
 }
+
 html[data-theme="blue"].dark {
-  --primary: 0.623 0.214 259.815;
-  --primary-foreground: 0.97 0.014 254.604;
-  --ring: 0.623 0.214 259.815;
+  --background: 0.17 0.022 264;
+  --foreground: 0.96 0.012 264;
+  --card: 0.21 0.026 264;
+  --card-foreground: 0.96 0.012 264;
+  --popover: 0.21 0.026 264;
+  --popover-foreground: 0.96 0.012 264;
+  --primary: 0.62 0.17 264;
+  --primary-foreground: 0.99 0.02 264;
+  --secondary: 0.27 0.03 264;
+  --secondary-foreground: 0.96 0.012 264;
+  --muted: 0.27 0.026 264;
+  --muted-foreground: 0.71 0.035 264;
+  --accent: 0.32 0.05 264;
+  --accent-foreground: 0.96 0.012 264;
+  --destructive: 0.5022 0.1814 27.325;
+  --destructive-foreground: 0.97 0.01 27;
+  --border: 0.29 0.03 264;
+  --input: 0.29 0.03 264;
+  --ring: 0.55 0.16 264;
 }
 
 html[data-theme="green"] {
-  --primary: 0.723 0.219 149.579;
-  --primary-foreground: 0.982 0.018 155.826;
-  --ring: 0.723 0.219 149.579;
+  --background: 0.99 0.006 155;
+  --foreground: 0.2 0.03 155;
+  --card: 0.995 0.004 155;
+  --card-foreground: 0.2 0.03 155;
+  --popover: 0.995 0.004 155;
+  --popover-foreground: 0.2 0.03 155;
+  --primary: 0.55 0.17 155;
+  --primary-foreground: 0.99 0.02 155;
+  --secondary: 0.95 0.03 155;
+  --secondary-foreground: 0.32 0.07 155;
+  --muted: 0.96 0.02 155;
+  --muted-foreground: 0.52 0.045 155;
+  --accent: 0.92 0.055 155;
+  --accent-foreground: 0.32 0.09 155;
+  --destructive: 0.5771 0.2152 27.325;
+  --destructive-foreground: 0.99 0.01 27;
+  --border: 0.9 0.028 155;
+  --input: 0.9 0.028 155;
+  --ring: 0.55 0.17 155;
+  --radius: 0.5rem;
 }
+
 html[data-theme="green"].dark {
-  --primary: 0.696 0.17 162.48;
-  --primary-foreground: 0.393 0.095 152.535;
-  --ring: 0.527 0.154 150.069;
+  --background: 0.17 0.022 155;
+  --foreground: 0.96 0.012 155;
+  --card: 0.21 0.026 155;
+  --card-foreground: 0.96 0.012 155;
+  --popover: 0.21 0.026 155;
+  --popover-foreground: 0.96 0.012 155;
+  --primary: 0.62 0.17 155;
+  --primary-foreground: 0.99 0.02 155;
+  --secondary: 0.27 0.03 155;
+  --secondary-foreground: 0.96 0.012 155;
+  --muted: 0.27 0.026 155;
+  --muted-foreground: 0.71 0.035 155;
+  --accent: 0.32 0.05 155;
+  --accent-foreground: 0.96 0.012 155;
+  --destructive: 0.5022 0.1814 27.325;
+  --destructive-foreground: 0.97 0.01 27;
+  --border: 0.29 0.03 155;
+  --input: 0.29 0.03 155;
+  --ring: 0.55 0.16 155;
 }
 
 html[data-theme="amber"] {
-  --primary: 0.705 0.213 47.604;
-  --primary-foreground: 0.98 0.016 73.684;
-  --ring: 0.705 0.213 47.604;
+  --background: 0.99 0.006 70;
+  --foreground: 0.2 0.03 70;
+  --card: 0.995 0.004 70;
+  --card-foreground: 0.2 0.03 70;
+  --popover: 0.995 0.004 70;
+  --popover-foreground: 0.2 0.03 70;
+  --primary: 0.55 0.17 70;
+  --primary-foreground: 0.99 0.02 70;
+  --secondary: 0.95 0.03 70;
+  --secondary-foreground: 0.32 0.07 70;
+  --muted: 0.96 0.02 70;
+  --muted-foreground: 0.52 0.045 70;
+  --accent: 0.92 0.055 70;
+  --accent-foreground: 0.32 0.09 70;
+  --destructive: 0.5771 0.2152 27.325;
+  --destructive-foreground: 0.99 0.01 27;
+  --border: 0.9 0.028 70;
+  --input: 0.9 0.028 70;
+  --ring: 0.55 0.17 70;
+  --radius: 0.5rem;
 }
+
 html[data-theme="amber"].dark {
-  --primary: 0.646 0.222 41.116;
-  --primary-foreground: 0.98 0.016 73.684;
-  --ring: 0.646 0.222 41.116;
+  --background: 0.17 0.022 70;
+  --foreground: 0.96 0.012 70;
+  --card: 0.21 0.026 70;
+  --card-foreground: 0.96 0.012 70;
+  --popover: 0.21 0.026 70;
+  --popover-foreground: 0.96 0.012 70;
+  --primary: 0.62 0.17 70;
+  --primary-foreground: 0.99 0.02 70;
+  --secondary: 0.27 0.03 70;
+  --secondary-foreground: 0.96 0.012 70;
+  --muted: 0.27 0.026 70;
+  --muted-foreground: 0.71 0.035 70;
+  --accent: 0.32 0.05 70;
+  --accent-foreground: 0.96 0.012 70;
+  --destructive: 0.5022 0.1814 27.325;
+  --destructive-foreground: 0.97 0.01 27;
+  --border: 0.29 0.03 70;
+  --input: 0.29 0.03 70;
+  --ring: 0.55 0.16 70;
 }
 
 html[data-theme="rose"] {
-  --primary: 0.645 0.246 16.439;
-  --primary-foreground: 0.969 0.015 12.422;
-  --ring: 0.645 0.246 16.439;
+  --background: 0.99 0.006 12;
+  --foreground: 0.2 0.03 12;
+  --card: 0.995 0.004 12;
+  --card-foreground: 0.2 0.03 12;
+  --popover: 0.995 0.004 12;
+  --popover-foreground: 0.2 0.03 12;
+  --primary: 0.55 0.17 12;
+  --primary-foreground: 0.99 0.02 12;
+  --secondary: 0.95 0.03 12;
+  --secondary-foreground: 0.32 0.07 12;
+  --muted: 0.96 0.02 12;
+  --muted-foreground: 0.52 0.045 12;
+  --accent: 0.92 0.055 12;
+  --accent-foreground: 0.32 0.09 12;
+  --destructive: 0.5771 0.2152 27.325;
+  --destructive-foreground: 0.99 0.01 27;
+  --border: 0.9 0.028 12;
+  --input: 0.9 0.028 12;
+  --ring: 0.55 0.17 12;
+  --radius: 0.5rem;
 }
+
 html[data-theme="rose"].dark {
-  --primary: 0.645 0.246 16.439;
-  --primary-foreground: 0.969 0.015 12.422;
-  --ring: 0.645 0.246 16.439;
+  --background: 0.17 0.022 12;
+  --foreground: 0.96 0.012 12;
+  --card: 0.21 0.026 12;
+  --card-foreground: 0.96 0.012 12;
+  --popover: 0.21 0.026 12;
+  --popover-foreground: 0.96 0.012 12;
+  --primary: 0.62 0.17 12;
+  --primary-foreground: 0.99 0.02 12;
+  --secondary: 0.27 0.03 12;
+  --secondary-foreground: 0.96 0.012 12;
+  --muted: 0.27 0.026 12;
+  --muted-foreground: 0.71 0.035 12;
+  --accent: 0.32 0.05 12;
+  --accent-foreground: 0.96 0.012 12;
+  --destructive: 0.5022 0.1814 27.325;
+  --destructive-foreground: 0.97 0.01 27;
+  --border: 0.29 0.03 12;
+  --input: 0.29 0.03 12;
+  --ring: 0.55 0.16 12;
 }
 
 html[data-theme="violet"] {
-  --primary: 0.606 0.25 292.717;
-  --primary-foreground: 0.969 0.016 293.756;
-  --ring: 0.606 0.25 292.717;
+  --background: 0.99 0.006 300;
+  --foreground: 0.2 0.03 300;
+  --card: 0.995 0.004 300;
+  --card-foreground: 0.2 0.03 300;
+  --popover: 0.995 0.004 300;
+  --popover-foreground: 0.2 0.03 300;
+  --primary: 0.55 0.17 300;
+  --primary-foreground: 0.99 0.02 300;
+  --secondary: 0.95 0.03 300;
+  --secondary-foreground: 0.32 0.07 300;
+  --muted: 0.96 0.02 300;
+  --muted-foreground: 0.52 0.045 300;
+  --accent: 0.92 0.055 300;
+  --accent-foreground: 0.32 0.09 300;
+  --destructive: 0.5771 0.2152 27.325;
+  --destructive-foreground: 0.99 0.01 27;
+  --border: 0.9 0.028 300;
+  --input: 0.9 0.028 300;
+  --ring: 0.55 0.17 300;
+  --radius: 0.5rem;
 }
+
 html[data-theme="violet"].dark {
-  --primary: 0.541 0.281 293.009;
-  --primary-foreground: 0.969 0.016 293.756;
-  --ring: 0.541 0.281 293.009;
+  --background: 0.17 0.022 300;
+  --foreground: 0.96 0.012 300;
+  --card: 0.21 0.026 300;
+  --card-foreground: 0.96 0.012 300;
+  --popover: 0.21 0.026 300;
+  --popover-foreground: 0.96 0.012 300;
+  --primary: 0.62 0.17 300;
+  --primary-foreground: 0.99 0.02 300;
+  --secondary: 0.27 0.03 300;
+  --secondary-foreground: 0.96 0.012 300;
+  --muted: 0.27 0.026 300;
+  --muted-foreground: 0.71 0.035 300;
+  --accent: 0.32 0.05 300;
+  --accent-foreground: 0.96 0.012 300;
+  --destructive: 0.5022 0.1814 27.325;
+  --destructive-foreground: 0.97 0.01 27;
+  --border: 0.29 0.03 300;
+  --input: 0.29 0.03 300;
+  --ring: 0.55 0.16 300;
 }

@@ -31,6 +31,8 @@ export { useDebounce } from "./lib/use-debounce";
 export { useHorizontalScroll } from "./lib/use-horizontal-scroll";
 export { useMounted } from "./lib/use-mounted";
 export {
+  type CustomTheme,
+  setCustomTheme,
   setThemePreset,
   useThemePreset,
   type UseThemePresetResult,

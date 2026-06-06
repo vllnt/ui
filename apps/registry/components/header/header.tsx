@@ -8,13 +8,12 @@ import {
   DropdownMenuTrigger,
   NavbarSaas,
   SearchDialog,
-  ThemeSwitcher,
 } from "@vllnt/ui";
 import { ChevronDown, Languages } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { searchPagefind } from "@/components/header/pagefind-search";
 import { GitHubMark } from "@/components/github-mark";
+import { searchPagefind } from "@/components/header/pagefind-search";
 import {
   Link,
   type Locale,
@@ -82,7 +81,6 @@ export function Header({ locale }: HeaderProps) {
       navItems={navItems}
       rightSlot={
         <div className="flex items-center gap-2">
-          <ThemeSwitcher className="hidden xl:flex" />
           <SearchDialog
             buttonText="Search..."
             docsEmptyText="No docs found."

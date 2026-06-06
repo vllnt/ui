@@ -1,9 +1,15 @@
 "use client";
 
-import { Button } from "@vllnt/ui";
 import { useEffect, useRef, useState } from "react";
 
-import { EDITOR_PRESETS } from "@/lib/editor-presets";
+import {
+  Button,
+  isThemePresetName,
+  setCustomTheme,
+  setThemePreset,
+} from "@vllnt/ui";
+
+import { EDITOR_PRESETS, type EditorPreset } from "@/lib/editor-presets";
 import { decodeTheme, encodeTheme } from "@/lib/theme-serialize";
 import {
   DEFAULT_THEME,
@@ -18,11 +24,13 @@ import { ThemePreview } from "./theme-preview";
 const STORAGE_KEY = "vllnt-theme-editor";
 const MODES: ThemeMode[] = ["light", "dark"];
 
-function readInitialTheme(): ThemeData | undefined {
-  const fromUrl = new URLSearchParams(window.location.search).get("t");
-  const urlTheme = fromUrl ? decodeTheme(fromUrl) : undefined;
-  if (urlTheme) {
-    return urlTheme;
+function readActiveTheme(): ThemeData | undefined {
+  const active = document.documentElement.dataset.theme;
+  if (active && active !== "custom") {
+    const preset = EDITOR_PRESETS.find((item) => item.name === active);
+    if (preset) {
+      return preset.theme;
+    }
   }
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
@@ -33,18 +41,26 @@ function readInitialTheme(): ThemeData | undefined {
 }
 
 /**
- * Interactive theme editor: edit OKLCH tokens per mode, seed from a preset,
- * preview live, and persist to the URL (shareable) and localStorage.
+ * Interactive theme editor. Picking a preset or editing a token re-themes the
+ * entire site live (and persists across navigation); the controls also drive
+ * the export panel and a focused preview of the chosen mode.
  */
 export function ThemeEditor() {
   const [theme, setTheme] = useState<ThemeData>(DEFAULT_THEME);
-  const [mode, setMode] = useState<ThemeMode>("light");
+  const [mode, setMode] = useState<ThemeMode>("dark");
   const isFirstRender = useRef(true);
 
   useEffect(() => {
-    const initial = readInitialTheme();
-    if (initial) {
-      setTheme(initial);
+    const fromUrl = new URLSearchParams(window.location.search).get("t");
+    const urlTheme = fromUrl ? decodeTheme(fromUrl) : undefined;
+    if (urlTheme) {
+      setTheme(urlTheme);
+      setCustomTheme(urlTheme);
+      return;
+    }
+    const restored = readActiveTheme();
+    if (restored) {
+      setTheme(restored);
     }
   }, []);
 
@@ -64,25 +80,42 @@ export function ThemeEditor() {
     }
   }, [theme]);
 
+  const applyPreset = (preset: EditorPreset): void => {
+    setTheme(preset.theme);
+    if (isThemePresetName(preset.name)) {
+      setThemePreset(preset.name);
+    } else {
+      setCustomTheme(preset.theme);
+    }
+  };
+
   const updateColor = (name: string, channels: string): void => {
-    setTheme((previous) => ({
-      ...previous,
-      [mode]: { ...previous[mode], [name]: channels },
-    }));
+    const next: ThemeData = {
+      ...theme,
+      [mode]: { ...theme[mode], [name]: channels },
+    };
+    setTheme(next);
+    setCustomTheme(next);
+  };
+
+  const updateRadius = (radius: string): void => {
+    const next: ThemeData = { ...theme, radius };
+    setTheme(next);
+    setCustomTheme(next);
   };
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,28rem)]">
       <div className="min-w-0 space-y-6">
         <div className="space-y-2">
-          <span className="text-sm font-semibold">Start from</span>
+          <span className="text-sm font-semibold">Theme</span>
           <div className="flex flex-wrap gap-2">
             {EDITOR_PRESETS.map((preset) => (
               <button
                 className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-xs hover:bg-accent"
                 key={preset.name}
                 onClick={() => {
-                  setTheme(preset.theme);
+                  applyPreset(preset);
                 }}
                 type="button"
               >
@@ -94,6 +127,10 @@ export function ThemeEditor() {
               </button>
             ))}
           </div>
+          <p className="text-xs text-muted-foreground">
+            Pick a theme to recolor the entire site, then fine-tune the tokens
+            below. Your choice is saved across the site.
+          </p>
         </div>
 
         <div className="flex items-center justify-between">
@@ -115,6 +152,7 @@ export function ThemeEditor() {
           <Button
             onClick={() => {
               setTheme(DEFAULT_THEME);
+              setThemePreset("default");
             }}
             size="sm"
             variant="ghost"
@@ -126,9 +164,7 @@ export function ThemeEditor() {
         <ColorControls
           colors={theme[mode]}
           onColorChange={updateColor}
-          onRadiusChange={(radius) => {
-            setTheme((previous) => ({ ...previous, radius }));
-          }}
+          onRadiusChange={updateRadius}
           radius={theme.radius}
         />
 
