@@ -27,6 +27,47 @@ const TRUST_BADGES = [
   { label: "Tailwind v4 ready" },
 ];
 
+function HeroActions({ componentCount }: { componentCount: number }) {
+  return (
+    <div className="mt-6 flex flex-wrap gap-3">
+      <Link
+        className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
+        href="/ai"
+      >
+        Explore AI components
+        <ArrowRight className="size-4" />
+      </Link>
+      <Link
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        href="/components"
+      >
+        Browse all {componentCount}
+      </Link>
+      <Link
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        href="/templates"
+      >
+        Browse templates
+      </Link>
+      <Link
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        href="/docs"
+      >
+        Read the docs
+      </Link>
+      <a
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        href={GITHUB_URL}
+        rel="noreferrer"
+        target="_blank"
+      >
+        <GitHubMark className="size-4" />
+        GitHub
+      </a>
+    </div>
+  );
+}
+
 function Hero({
   componentCount,
   version,
@@ -41,50 +82,23 @@ function Hero({
           v{version} / MIT
         </p>
         <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl">
-          {componentCount} agent-first React components.
+          The UI design system for AI agents.
           <br />
           <span className="text-muted-foreground">Copy, paste, ship.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-          Built on Radix UI, Tailwind CSS, and CVA. Every component is also a
-          machine-readable JSON descriptor: agents (Claude, Cursor, Cline,
-          Continue) read the registry directly without scraping HTML.
+          {componentCount} open-source React components for building AI apps —
+          chat, streaming, tool calls, citations, agents, and artifacts. Every
+          component is also a machine-readable JSON descriptor: agents (Claude,
+          Cursor, Cline, Continue) read the registry directly without scraping
+          HTML.
         </p>
 
         <div className="mt-8">
           <StaticCode code={INSTALL_COMMAND} language="bash" />
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-            href="/components"
-          >
-            Browse {componentCount} components
-            <ArrowRight className="size-4" />
-          </Link>
-          <Link
-            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
-            href="/templates"
-          >
-            Browse templates
-          </Link>
-          <Link
-            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
-            href="/docs"
-          >
-            Read the docs
-          </Link>
-          <a
-            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
-            href={GITHUB_URL}
-            rel="noreferrer"
-            target="_blank"
-          >
-            <GitHubMark className="size-4" />
-            GitHub
-          </a>
-        </div>
+        <HeroActions componentCount={componentCount} />
 
         <ul className="mt-8 flex flex-wrap gap-3 text-xs text-muted-foreground">
           {TRUST_BADGES.map((badge) => (

@@ -73,11 +73,24 @@ This builds the Next.js app and generates registry JSON files to `public/r/` usi
 ### Usage with shadcn CLI
 
 ```bash
-# Install a component
+# Install directly by URL — works today, no config
 pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
 
-# Or use the component name directly
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+Namespaced install (once `@vllnt` is listed in the [shadcn registry index](https://ui.shadcn.com/r/registries.json)) — add the registry to your app's `components.json`:
+
+```json
+{
+  "registries": {
+    "@vllnt": "https://ui.vllnt.ai/r/{name}.json"
+  }
+}
+```
+
+Then install by namespace:
+
+```bash
+pnpm dlx shadcn@latest add @vllnt/button
 ```
 
 ## Adding Components

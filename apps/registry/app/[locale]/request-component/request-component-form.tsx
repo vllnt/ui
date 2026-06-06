@@ -18,34 +18,22 @@ function buildIssueUrl({
   similar: string;
   useCase: string;
 }): string {
-  const body = [
-    "## What problem are you trying to solve?",
-    "",
-    problem || "_describe the user-facing need_",
-    "",
-    "## Proposed solution",
-    "",
-    name ? `Component: **${name}**` : "_component name_",
-    "",
-    similar ? `Similar to: ${similar}` : "",
-    "",
-    "## Use case",
-    "",
-    useCase || "_describe the concrete scenario_",
-    "",
-    "## References / prior art",
-    "",
-    reference || "_links, screenshots, design references_",
+  const proposal = [
+    name ? `Component: **${name}**` : "",
+    useCase ? `Use case: ${useCase}` : "",
+    reference ? `References / prior art: ${reference}` : "",
   ]
     .filter(Boolean)
-    .join("\n");
+    .join("\n\n");
 
   const params = new URLSearchParams({
     template: "feature_request.yml",
     title: `[feat] ${name || "new component"}`,
-    body,
     labels: "enhancement,component",
   });
+  if (problem) params.set("problem", problem);
+  if (proposal) params.set("proposal", proposal);
+  if (similar) params.set("alternatives", similar);
 
   return `https://github.com/${REPO}/issues/new?${params.toString()}`;
 }
