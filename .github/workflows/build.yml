@@ -105,14 +105,11 @@ jobs:
           shred -u /tmp/cosign.key
 
       - name: Deploy via vllnt deployer
-        uses: vllnt/deploy-action@v1
         env:
           DEPLOYER_API_BEARER: ${{ secrets.DEPLOYER_API_BEARER }}
-        with:
-          service:   ${{ matrix.service }}
-          env:       ${{ steps.tag.outputs.env }}
-          sha:       ${{ steps.tag.outputs.sha }}
-          digest:    ${{ steps.build.outputs.digest }}
-          pr_number: ${{ github.event.pull_request.number }}
-          agent_id:  ${{ github.actor }}
-          deployer_url: http://deployer.vllnt-platform:80
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${DEPLOYER_API_BEARER}" \
+            -H "Content-Type: application/json" \
+            -d '{"env":"${{ steps.tag.outputs.env }}","sha":"${{ steps.tag.outputs.sha }}","digest":"${{ steps.build.outputs.digest }}","pr_number":${{ github.event.pull_request.number || 0 }}}' \
+            http://deployer.vllnt-platform:80/api/v1/service/${{ matrix.service }}/deploy
