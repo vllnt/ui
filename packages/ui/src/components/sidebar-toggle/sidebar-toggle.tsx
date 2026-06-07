@@ -23,6 +23,7 @@ export function SidebarToggle({
     <>
       {/* Mobile: shows X when open, Menu when closed */}
       <Button
+        aria-label={open ? "Close menu" : "Open menu"}
         className={cn("lg:hidden", className)}
         onClick={onToggle}
         size="icon"
@@ -32,6 +33,7 @@ export function SidebarToggle({
       </Button>
       {/* Desktop: always shows Menu icon */}
       <Button
+        aria-label="Toggle sidebar"
         className={cn("hidden lg:flex", className)}
         onClick={onToggle}
         size="icon"

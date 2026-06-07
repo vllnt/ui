@@ -5,6 +5,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { CodeBlock } from "@vllnt/ui";
+import { StaticCode } from "@vllnt/ui";
 
 type MDXContentProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +39,7 @@ const MDXComponents: Components = {
         typeof children === "string"
           ? children.replace(/\n$/, "")
           : String(children ?? "");
-      return <CodeBlock language={language}>{text}</CodeBlock>;
+      return <StaticCode code={text} language={language} />;
     }
     return (
       <code

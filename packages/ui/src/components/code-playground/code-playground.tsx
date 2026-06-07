@@ -85,6 +85,7 @@ export function CodePlayground({
             </div>
           ) : null}
           <Button
+            aria-label={copied ? "Copied" : "Copy code"}
             className="size-8"
             onClick={handleCopy}
             size="icon"

@@ -1,4 +1,4 @@
-import { Badge, CodeBlock } from "@vllnt/ui";
+import { Badge, StaticCode } from "@vllnt/ui";
 import { ArrowRight, Sparkles, Terminal } from "lucide-react";
 import Link from "next/link";
 
@@ -95,7 +95,7 @@ function Hero({
         </p>
 
         <div className="mt-8">
-          <CodeBlock language="bash">{INSTALL_COMMAND}</CodeBlock>
+          <StaticCode code={INSTALL_COMMAND} language="bash" />
         </div>
 
         <HeroActions componentCount={componentCount} />

@@ -3,8 +3,6 @@ import "@vllnt/ui/themes/default.css";
 import "@vllnt/ui/themes/presets.css";
 import "../globals.css";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SidebarProvider, ThemePresetProvider, ThemeProvider } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -148,8 +146,6 @@ export default async function LocaleLayout({ children, params }: Props) {
             </div>
           </SidebarProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

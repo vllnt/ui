@@ -53,8 +53,8 @@ export function ComponentThumbnail({
 
   return (
     <div
-      aria-hidden="true"
       className="pointer-events-none flex h-44 items-center justify-center overflow-hidden border-b bg-muted/30 p-4 [contain:layout]"
+      inert
       ref={containerRef}
     >
       {isVisible ? <ComponentPreview componentName={componentName} /> : null}
