@@ -25,15 +25,23 @@ function ColorRow({
 }) {
   const inputId = `color-${name}`;
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2">
-      <label className="text-sm font-medium" htmlFor={inputId}>
+    <div className="flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2">
+      <label className="truncate text-sm font-medium" htmlFor={inputId}>
         {label}
       </label>
-      <div className="flex items-center gap-2">
-        <code className="text-xs text-muted-foreground">{channels}</code>
+      <div className="flex items-center gap-1.5">
+        <input
+          aria-label={`${label} OKLCH channels`}
+          className="w-24 rounded border border-border bg-transparent px-1.5 py-0.5 text-right font-mono text-xs text-muted-foreground focus:text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          onChange={(event) => {
+            onChange(name, event.target.value);
+          }}
+          spellCheck={false}
+          value={channels}
+        />
         <input
           aria-label={label}
-          className="size-7 cursor-pointer rounded border border-border bg-transparent"
+          className="size-7 shrink-0 cursor-pointer rounded border border-border bg-transparent"
           id={inputId}
           onChange={(event) => {
             onChange(name, hexToOklchChannels(event.target.value));

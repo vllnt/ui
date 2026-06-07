@@ -19,9 +19,15 @@ export const THEME_CUSTOM_CSS_STORAGE_KEY = "vllnt-theme-custom-css";
 export const THEME_CUSTOM_STYLE_ID = "vllnt-theme-custom-style";
 
 export type ThemePresetName =
+  | "aura"
+  | "chatgpt"
+  | "claude"
+  | "cyberlime"
   | "cyberpunk"
   | "default"
   | "dracula"
+  | "dusk"
+  | "gemini"
   | "matrix"
   | "nord"
   | "synthwave"
@@ -44,6 +50,12 @@ export const THEME_PRESETS: readonly ThemePreset[] = [
   { label: "Tron", name: "tron", swatch: "oklch(0.78 0.15 215)" },
   { label: "Cyberpunk", name: "cyberpunk", swatch: "oklch(0.86 0.19 100)" },
   { label: "Nord", name: "nord", swatch: "oklch(0.72 0.08 230)" },
+  { label: "Claude", name: "claude", swatch: "oklch(0.66 0.11 45)" },
+  { label: "ChatGPT", name: "chatgpt", swatch: "oklch(0.68 0.12 168)" },
+  { label: "Gemini", name: "gemini", swatch: "oklch(0.62 0.17 280)" },
+  { label: "Future Dusk", name: "dusk", swatch: "oklch(0.62 0.13 290)" },
+  { label: "Cyber Lime", name: "cyberlime", swatch: "oklch(0.88 0.22 128)" },
+  { label: "Aura", name: "aura", swatch: "oklch(0.66 0.26 350)" },
 ];
 
 export const DEFAULT_THEME_PRESET: ThemePresetName = "default";
