@@ -3,9 +3,9 @@ import path from "node:path";
 
 import {
   Breadcrumb,
-  CodeBlock,
   ShareSection,
   Sidebar,
+  StaticCode,
   TableOfContents,
 } from "@vllnt/ui";
 import { ExternalLink } from "lucide-react";
@@ -295,9 +295,7 @@ export default async function ComponentPage(props: Props) {
               {/* Installation */}
               <div className="mb-8 scroll-mt-8" id="installation">
                 <h2 className="text-2xl font-semibold mb-4">Installation</h2>
-                <CodeBlock language="bash" showLanguage={true}>
-                  {installCommand}
-                </CodeBlock>
+                <StaticCode code={installCommand} language="bash" />
               </div>
 
               {/* Storybook link */}
@@ -344,9 +342,7 @@ export default async function ComponentPage(props: Props) {
               {componentCode ? (
                 <div className="mb-8 scroll-mt-8" id="code">
                   <h2 className="text-2xl font-semibold mb-4">Code</h2>
-                  <CodeBlock language="typescript" showLanguage={true}>
-                    {componentCode}
-                  </CodeBlock>
+                  <StaticCode code={componentCode} language="typescript" />
                 </div>
               ) : null}
 
@@ -364,6 +360,7 @@ export default async function ComponentPage(props: Props) {
                               {dep}
                             </code>
                             <Link
+                              aria-label={`View ${dep} on npm`}
                               className="text-muted-foreground hover:text-foreground transition-colors"
                               href={npmUrl}
                               rel="noopener noreferrer"

@@ -80,6 +80,7 @@ export function Terminal({
         </div>
         {copyable && commands.length > 0 ? (
           <Button
+            aria-label={copied ? "Copied" : "Copy commands"}
             className="absolute top-2 right-2 size-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
             onClick={handleCopy}
             size="icon"
@@ -168,6 +169,7 @@ export function SimpleTerminal({
         </div>
         {commands.length > 0 && (
           <Button
+            aria-label={copied ? "Copied" : "Copy commands"}
             className="absolute top-2 right-2 size-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
             onClick={handleCopy}
             size="icon"

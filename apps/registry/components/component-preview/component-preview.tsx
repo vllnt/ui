@@ -1823,7 +1823,7 @@ function CollapsiblePreview() {
       <div className="flex items-center justify-between gap-x-4">
         <h4 className="text-sm font-semibold">Collapsible Section</h4>
         <CollapsibleTrigger asChild>
-          <Button size="sm" variant="ghost">
+          <Button aria-label="Toggle section" size="sm" variant="ghost">
             <ChevronsUpDown className="size-4" />
           </Button>
         </CollapsibleTrigger>

@@ -45,6 +45,19 @@ function resolveDocumentTheme(): PreviewTheme {
   return "light";
 }
 
+function scheduleIdle(callback: () => void): () => void {
+  if (typeof window.requestIdleCallback === "function") {
+    const handle = window.requestIdleCallback(callback);
+    return () => {
+      window.cancelIdleCallback(handle);
+    };
+  }
+  const handle = window.setTimeout(callback, 200);
+  return () => {
+    window.clearTimeout(handle);
+  };
+}
+
 function buildStorybookIframeSource(
   storyId: string,
   previewTheme: PreviewTheme,
@@ -123,6 +136,7 @@ function StorybookIframe({
       )}
       <iframe
         className="w-full rounded-b-lg border-0"
+        loading="lazy"
         onLoad={() => {
           setIsLoaded(true);
         }}
@@ -164,7 +178,9 @@ export function StorybookEmbed({
       setPreviewTheme(normalizePreviewTheme(resolveDocumentTheme()));
     };
 
-    updateTheme();
+    // Defer the first iframe load out of the critical hydration/LCP window so
+    // the 783KB Storybook bundle does not compete for the main thread/network.
+    const cancelIdle = scheduleIdle(updateTheme);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const observer = new MutationObserver(() => {
@@ -178,6 +194,7 @@ export function StorybookEmbed({
     mediaQuery.addEventListener("change", updateTheme);
 
     return () => {
+      cancelIdle();
       observer.disconnect();
       mediaQuery.removeEventListener("change", updateTheme);
     };
