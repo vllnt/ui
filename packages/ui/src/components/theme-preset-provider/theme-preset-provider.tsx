@@ -5,10 +5,12 @@ import { type ReactNode, useEffect } from "react";
 import {
   CUSTOM_THEME_NAME,
   DEFAULT_THEME_PRESET,
+  isThemePresetName,
   THEME_CUSTOM_CSS_STORAGE_KEY,
   THEME_CUSTOM_STYLE_ID,
   THEME_PRESET_STORAGE_KEY,
 } from "../../lib/theme-presets";
+import { setThemePreset } from "../../lib/use-theme-preset";
 
 const FOUC_SCRIPT = `(function(){try{var v=localStorage.getItem(${JSON.stringify(
   THEME_PRESET_STORAGE_KEY,
@@ -47,8 +49,8 @@ export function ThemePresetProvider({
     } catch {
       stored = null;
     }
-    if (!stored) {
-      document.documentElement.dataset.theme = defaultPreset;
+    if (!stored && isThemePresetName(defaultPreset)) {
+      setThemePreset(defaultPreset);
     }
   }, [defaultPreset]);
 

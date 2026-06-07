@@ -39,7 +39,24 @@ export function encodeTheme(theme: ThemeData): string {
   return base64UrlEncode(JSON.stringify(values));
 }
 
-/** Parse a token produced by {@link encodeTheme}; undefined when malformed. */
+const CHANNEL_PATTERN = /^(?:-?\d*\.?\d+\s+){2}-?\d*\.?\d+$/;
+const RADIUS_PATTERN = /^\d*\.?\d+(em|px|rem)?$/;
+
+/** Channel values must look like a plain "L C H" numeric triple. */
+function isChannelValue(value: string): boolean {
+  return CHANNEL_PATTERN.test(value.trim());
+}
+
+function isRadiusValue(value: string): boolean {
+  return RADIUS_PATTERN.test(value.trim());
+}
+
+/**
+ * Parse a token produced by {@link encodeTheme}; undefined when malformed or
+ * when any value is not a plain numeric channel/radius. The numeric check is a
+ * security boundary: a shared `?t=` URL carries untrusted input; without it,
+ * values would reach a `<style>` verbatim (CSS injection).
+ */
 export function decodeTheme(token: string): ThemeData | undefined {
   try {
     const parsed: unknown = JSON.parse(base64UrlDecode(token));
@@ -52,6 +69,13 @@ export function decodeTheme(token: string): ThemeData | undefined {
       return undefined;
     }
     const values = parsed;
+    const radius = values[expectedLength - 1] ?? DEFAULT_RADIUS;
+    if (
+      !values.slice(0, expectedLength - 1).every(isChannelValue) ||
+      !isRadiusValue(radius)
+    ) {
+      return undefined;
+    }
     return {
       dark: Object.fromEntries(
         THEME_TOKENS.map((token, index) => [
@@ -62,7 +86,7 @@ export function decodeTheme(token: string): ThemeData | undefined {
       light: Object.fromEntries(
         THEME_TOKENS.map((token, index) => [token.name, values[index] ?? ""]),
       ),
-      radius: values[expectedLength - 1] || DEFAULT_RADIUS,
+      radius,
     };
   } catch {
     return undefined;

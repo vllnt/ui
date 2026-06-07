@@ -100,9 +100,16 @@ export function oklchToCss(value: string): string {
   return `oklch(${l} ${c} ${h})`;
 }
 
-/** Convert an "L C H" channel string to an sRGB `#rrggbb` hex string. */
+/**
+ * Convert an "L C H" channel string to an sRGB `#rrggbb` hex string. Returns
+ * black for non-numeric input so a partly-typed value never yields an invalid
+ * `<input type="color">` value.
+ */
 export function oklchChannelsToHex(value: string): string {
   const [l, c, h] = parseOklchChannels(value);
+  if (!Number.isFinite(l) || !Number.isFinite(c) || !Number.isFinite(h)) {
+    return "#000000";
+  }
   return `#${oklchToSrgb(l, c, h)
     .map((channel) =>
       Math.round(channel * 255)

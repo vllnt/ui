@@ -13,6 +13,9 @@ const JSON_HEADERS = new Headers([
 
 const NAME_PATTERN = /^[\da-z-]{1,40}$/i;
 
+/** A well-formed token is ~700 chars; cap input before decoding. */
+const MAX_TOKEN_LENGTH = 2048;
+
 /**
  * Returns a shadcn `registry:theme` item decoded from the `?t=` token so a theme
  * built in the editor installs with `npx shadcn add <origin>/r/themes?t=...`.
@@ -25,6 +28,12 @@ export function GET(request: Request): Response {
   if (!token) {
     return NextResponse.json(
       { error: "Missing theme token. Expected ?t=<encoded>." },
+      { status: 400 },
+    );
+  }
+  if (token.length > MAX_TOKEN_LENGTH) {
+    return NextResponse.json(
+      { error: "Theme token too long." },
       { status: 400 },
     );
   }

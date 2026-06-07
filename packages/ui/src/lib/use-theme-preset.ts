@@ -20,16 +20,30 @@ export type CustomTheme = {
   readonly radius?: string;
 };
 
+/** Strip anything that could break out of a CSS custom-property name. */
+function safeIdent(value: string): string {
+  return value.replaceAll(/[^\w-]/g, "");
+}
+
+/**
+ * Strip characters that could break out of a CSS declaration or rule block. A
+ * custom theme can come from an untrusted source (a shared `?t=` URL), so this
+ * keeps digits, letters, dot, percent, space, and dash and drops the rest.
+ */
+function safeValue(value: string): string {
+  return value.replaceAll(/[^\s\w%.-]/g, "");
+}
+
 function themeDeclarations(variables: Record<string, string>): string {
   return Object.entries(variables)
-    .map(([token, value]) => `--${token}:${value}`)
+    .map(([token, value]) => `--${safeIdent(token)}:${safeValue(value)}`)
     .join(";");
 }
 
 function buildCustomCss(theme: CustomTheme): string {
   const light =
     themeDeclarations(theme.light) +
-    (theme.radius ? `;--radius:${theme.radius}` : "");
+    (theme.radius ? `;--radius:${safeValue(theme.radius)}` : "");
   return (
     `html[data-theme="${CUSTOM_THEME_NAME}"]{${light}}` +
     `html[data-theme="${CUSTOM_THEME_NAME}"].dark{${themeDeclarations(theme.dark)}}`

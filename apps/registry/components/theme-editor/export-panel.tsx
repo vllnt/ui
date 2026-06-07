@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@vllnt/ui";
 import { useEffect, useMemo, useState } from "react";
+
+import { Button } from "@vllnt/ui";
 
 import {
   themeInstallUrl,
@@ -29,7 +30,9 @@ function download(filename: string, content: string): void {
   anchor.href = url;
   anchor.download = filename;
   anchor.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 100);
 }
 
 /** Copy/download the theme as CSS, a shadcn CLI command, or tokens.json. */
@@ -55,11 +58,15 @@ export function ExportPanel({ theme }: ExportPanelProps) {
   const value = tab === "css" ? css : tab === "json" ? json : cli;
 
   const copy = async (): Promise<void> => {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 1500);
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 1500);
+    } catch {
+      /* clipboard blocked (insecure context or denied permission) */
+    }
   };
 
   return (
@@ -82,7 +89,7 @@ export function ExportPanel({ theme }: ExportPanelProps) {
           <Button onClick={copy} size="sm" variant="outline">
             {copied ? "Copied" : "Copy"}
           </Button>
-          {tab !== "cli" ? (
+          {tab === "cli" ? undefined : (
             <Button
               onClick={() => {
                 download(tab === "css" ? "theme.css" : "tokens.json", value);
@@ -92,7 +99,7 @@ export function ExportPanel({ theme }: ExportPanelProps) {
             >
               Download
             </Button>
-          ) : undefined}
+          )}
         </div>
       </div>
       <pre className="max-h-80 overflow-auto rounded-md border border-border bg-muted/30 p-4 text-xs leading-relaxed">
