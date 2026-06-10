@@ -6,6 +6,7 @@ import { setRequestLocale } from "next-intl/server";
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
@@ -58,15 +59,25 @@ const ROWS: readonly Row[] = [
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "VLLNT UI vs the Vercel AI SDK: a UI design system you own vs a model/streaming runtime. They solve different problems and compose together. Honest comparison.",
+    title: "VLLNT UI vs Vercel AI SDK",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical(PATHNAME, locale),
       languages: languageAlternates(PATHNAME),
     },
-    description:
-      "VLLNT UI vs the Vercel AI SDK: a UI design system you own vs a model/streaming runtime. They solve different problems and compose together. Honest comparison.",
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, {
+      locale,
+      pathname: PATHNAME,
+    }),
     title: "VLLNT UI vs Vercel AI SDK | VLLNT UI",
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 

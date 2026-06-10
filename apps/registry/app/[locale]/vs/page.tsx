@@ -4,6 +4,7 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
@@ -13,15 +14,22 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+    title: "VLLNT UI vs · Comparisons",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical("/vs", locale),
       languages: languageAlternates("/vs"),
     },
-    description:
-      "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
-    title: "VLLNT UI vs · Comparisons",
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, { locale, pathname: "/vs" }),
+    title: ogParameters.title,
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
