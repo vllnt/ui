@@ -4,10 +4,11 @@ import { setRequestLocale } from "next-intl/server";
 
 import { Landing } from "@/components/landing/landing";
 import type { Locale } from "@/i18n/routing";
+import { getNpmDistributionTags } from "@/lib/npm-version";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-import { getComponentCount, getLibraryVersion } from "@/lib/stats";
+import { getComponentCount } from "@/lib/stats";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -16,7 +17,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const componentCount = getComponentCount();
-  const version = getLibraryVersion();
+  const { latest: version } = await getNpmDistributionTags();
   const title = "VLLNT UI — UI components & design system for AI agents";
   const description = `Open-source React components for building AI apps: chat, streaming text, tool calls, citations, agent activity, and artifacts. ${componentCount} accessible components, readable by AI agents via llms.txt + JSON. Install with the shadcn CLI. v${version}, MIT.`;
 
