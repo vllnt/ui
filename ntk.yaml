@@ -19,6 +19,14 @@ apps:
     healthcheck: /
     domains:
       production: ui.vllnt.ai
+    tls:
+      # T1 cell (ADR-090e) has no shared *.vllnt.ai wildcard secret;
+      # without this the renderer defaults to the absent
+      # wildcard-vllnt-ai-tls and Traefik serves its default cert
+      # (site DOWN — incident 2026-06-10). Per-host DNS-01 cert,
+      # in-ns + auto-renewing.
+      production:
+        secretName: ui-registry-tls
     visibility:                      # previews are tailnet-only (hostname derived by deployer)
       production: public
       preview:    tailnet
@@ -53,6 +61,14 @@ apps:
     healthcheck: /healthz
     domains:
       production: storybook.vllnt.ai
+    tls:
+      # T1 cell (ADR-090e) has no shared *.vllnt.ai wildcard secret;
+      # without this the renderer defaults to the absent
+      # wildcard-vllnt-ai-tls and Traefik serves its default cert
+      # (site DOWN — incident 2026-06-10). Per-host DNS-01 cert,
+      # in-ns + auto-renewing.
+      production:
+        secretName: storybook-tls
     visibility:
       production: public
       preview:    tailnet
