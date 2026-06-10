@@ -1,7 +1,7 @@
 import { type Locale, routing } from "@/i18n/routing";
-import registryData from "@/registry.json";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import { localizePathname } from "@/lib/seo";
+import registryData from "@/registry.json";
 import type {
   ComponentCategory,
   Registry,

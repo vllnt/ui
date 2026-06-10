@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
-import { getReleaseRecords } from "@/lib/changelog";
 import type { Locale } from "@/i18n/routing";
+import { getReleaseRecords } from "@/lib/changelog";
 import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";

@@ -65,7 +65,8 @@ export default async function DocumentationPage({ params }: Props) {
             { name: "Docs", url: `${SITE_URL}/docs` },
           ]),
           techArticleLd({
-            description: "Learn how to use VLLNT UI components in your projects.",
+            description:
+              "Learn how to use VLLNT UI components in your projects.",
             title: "Documentation",
             url: `${SITE_URL}/docs`,
           }),
