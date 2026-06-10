@@ -4,6 +4,7 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount, getLibraryVersion } from "@/lib/stats";
@@ -14,15 +15,25 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "VLLNT UI vs shadcn/ui — registry format, component count, agent surface, theming, accessibility. Honest comparison.",
+    title: "VLLNT UI vs shadcn/ui",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical("/vs/shadcn", locale),
       languages: languageAlternates("/vs/shadcn"),
     },
-    description:
-      "VLLNT UI vs shadcn/ui — registry format, component count, agent surface, theming, accessibility. Honest comparison.",
-    title: "VLLNT UI vs shadcn/ui",
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, {
+      locale,
+      pathname: "/vs/shadcn",
+    }),
+    title: ogParameters.title,
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
