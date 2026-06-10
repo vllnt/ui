@@ -75,14 +75,14 @@ const buildBackground = (input: {
   if (input.pattern === "grid") {
     return {
       backgroundImage:
-        "linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px)",
+        "linear-gradient(to right, oklch(var(--border)) 1px, transparent 1px), linear-gradient(to bottom, oklch(var(--border)) 1px, transparent 1px)",
       backgroundPosition: pos,
       backgroundSize: `${size}px ${size}px`,
     };
   }
   return {
     backgroundImage:
-      "radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px)",
+      "radial-gradient(circle, oklch(var(--border)) 1px, transparent 1px)",
     backgroundPosition: pos,
     backgroundSize: `${size}px ${size}px`,
   };

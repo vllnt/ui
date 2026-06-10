@@ -33,7 +33,7 @@ const ChatDockSection = forwardRef<HTMLElement, ChatDockSectionProps>(
   ) => (
     <section
       className={cn(
-        "flex flex-col gap-4 rounded-2xl border border-border/70 bg-background/75 p-4 shadow-[0_10px_35px_hsl(var(--foreground)/0.06)] backdrop-blur-xl",
+        "flex flex-col gap-4 rounded-2xl border border-border/70 bg-background/75 p-4 shadow-[0_10px_35px_oklch(var(--foreground)/0.06)] backdrop-blur-xl",
         className,
       )}
       ref={ref}

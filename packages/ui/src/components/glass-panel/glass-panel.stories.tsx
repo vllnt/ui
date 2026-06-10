@@ -5,7 +5,7 @@ import { GlassPanel } from "./glass-panel";
 const meta = {
   component: GlassPanel,
   render: () => (
-    <div className="w-full max-w-md bg-[radial-gradient(circle_at_top,hsl(var(--primary)/0.08),transparent_45%)] p-8">
+    <div className="w-full max-w-md bg-[radial-gradient(circle_at_top,oklch(var(--primary)/0.08),transparent_45%)] p-8">
       <GlassPanel className="p-6">
         <div className="text-sm font-medium text-foreground">Floating shell chrome</div>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">

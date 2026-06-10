@@ -1,8 +1,9 @@
 import "@vllnt/ui/styles.css";
 import "@vllnt/ui/themes/default.css";
+import "@vllnt/ui/themes/presets.css";
 import "../globals.css";
 
-import { SidebarProvider, ThemeProvider } from "@vllnt/ui";
+import { SidebarProvider, ThemePresetProvider, ThemeProvider } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -135,6 +136,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           disableTransitionOnChange
           enableSystem
         >
+          <ThemePresetProvider />
           <SidebarProvider>
             <div className="flex h-full flex-col overflow-hidden">
               <NextIntlClientProvider>

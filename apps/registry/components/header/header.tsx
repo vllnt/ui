@@ -12,8 +12,8 @@ import {
 import { ChevronDown, Languages } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { searchPagefind } from "@/components/header/pagefind-search";
 import { GitHubMark } from "@/components/github-mark";
+import { searchPagefind } from "@/components/header/pagefind-search";
 import {
   Link,
   type Locale,
@@ -53,6 +53,7 @@ export function Header({ locale }: HeaderProps) {
       title: t("navComponents"),
     },
     { href: localizePathname("/templates", locale), title: "Templates" },
+    { href: localizePathname("/themes", locale), title: "Themes" },
     {
       href: localizePathname("/request-component", locale),
       title: "Request",
