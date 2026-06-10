@@ -1,7 +1,8 @@
 "use client";
 
-import type * as React from "react";
 import { useState } from "react";
+
+import type * as React from "react";
 
 const REPO = "vllnt/ui";
 
@@ -44,25 +45,23 @@ function buildIssueUrl({
     .filter(Boolean)
     .join("\n");
 
-  const params = new URLSearchParams({
-    template: "bug_report.yml",
-    title: `${titleSlug}${summary || "bug summary"}`,
+  const parameters = new URLSearchParams({
     body,
     labels: component ? `bug,component:${component}` : "bug",
+    template: "bug_report.yml",
+    title: `${titleSlug}${summary || "bug summary"}`,
   });
 
-  return `https://github.com/${REPO}/issues/new?${params.toString()}`;
+  return `https://github.com/${REPO}/issues/new?${parameters.toString()}`;
 }
 
 function Field({
-  autoFocus,
   label,
   onChange,
   placeholder,
   required,
   value,
 }: {
-  autoFocus?: boolean;
   label: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -76,9 +75,10 @@ function Field({
         {required ? <span className="ml-1 text-destructive">*</span> : null}
       </span>
       <input
-        autoFocus={autoFocus}
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         type="text"
@@ -111,7 +111,9 @@ function TextField({
       </span>
       <textarea
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         rows={rows}
@@ -132,7 +134,7 @@ export function ReportBugForm({
   const [expected, setExpected] = useState("");
   const [actual, setActual] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const url = buildIssueUrl({ actual, component, expected, repro, summary });
     window.open(url, "_blank", "noopener,noreferrer");
@@ -147,7 +149,6 @@ export function ReportBugForm({
         value={component}
       />
       <Field
-        autoFocus
         label="One-line summary"
         onChange={setSummary}
         placeholder="Concise headline for the issue title."

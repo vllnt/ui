@@ -31,14 +31,15 @@ describe("oklch", () => {
     expect(oklchChannelsToHex("")).toBe("#000000");
   });
 
-  it("round-trips channels -> hex -> channels within tolerance", () => {
-    for (const sample of ["0.5555 0 0", "0.6368 0.2078 25.326", "0.62 0.17 280"]) {
+  it.each(["0.5555 0 0", "0.6368 0.2078 25.326", "0.62 0.17 280"])(
+    "round-trips %s channels -> hex -> channels within tolerance",
+    (sample) => {
       const back = hexToOklchChannels(oklchChannelsToHex(sample));
       const [l1] = parseOklchChannels(sample);
       const [l2] = parseOklchChannels(back);
       expect(Math.abs(l1 - l2)).toBeLessThan(0.01);
-    }
-  });
+    },
+  );
 
   it("emits an achromatic 'L 0 0' form for greys", () => {
     expect(hexToOklchChannels("#808080")).toMatch(/^[\d.]+ 0 0$/);
