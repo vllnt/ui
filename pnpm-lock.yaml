@@ -15,6 +15,7 @@ overrides:
   ip-address: 10.1.1
   minimatch: '>=10.2.3'
   eslint-plugin-react>minimatch: ^3.1.2
+  eslint-plugin-jsx-a11y>minimatch: ^3.1.2
   ajv: '>=8.18.0'
   '@eslint/eslintrc>ajv': ^6.12.4
   eslint>ajv: ^6.12.4
@@ -12125,7 +12126,7 @@ snapshots:
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
       language-tags: 1.0.9
-      minimatch: 10.2.4
+      minimatch: 3.1.5
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
