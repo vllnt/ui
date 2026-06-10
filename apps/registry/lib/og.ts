@@ -80,8 +80,10 @@ export function generateTwitterMetadata(
 
   return {
     card: "summary_large_image",
+    creator: "@vllnt",
     description: validated.description,
     images: [ogImageURL],
+    site: "@vllnt",
     title: validated.title,
   };
 }
