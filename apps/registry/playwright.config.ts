@@ -1,7 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 41599;
-const BASE_URL = `http://localhost:${PORT}`;
+// When PLAYWRIGHT_BASE_URL is set (the ntk promote e2e gate points it at the
+// live preview URL) test that deployed instance and skip the local dev server.
+// Unset (local/CI run) → spin up `pnpm dev` and test localhost.
+const EXTERNAL_BASE_URL = process.env.PLAYWRIGHT_BASE_URL;
+const BASE_URL = EXTERNAL_BASE_URL ?? `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -15,10 +19,14 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    command: `pnpm dev --port ${PORT}`,
-    url: BASE_URL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  ...(EXTERNAL_BASE_URL
+    ? {}
+    : {
+        webServer: {
+          command: `pnpm dev --port ${PORT}`,
+          url: BASE_URL,
+          reuseExistingServer: !process.env.CI,
+          timeout: 120_000,
+        },
+      }),
 });
