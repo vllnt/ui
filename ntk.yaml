@@ -14,6 +14,7 @@ project: ui                          # token-scope + allowlist key (granted serv
 apps:
   # Component registry / docs site → ui.vllnt.ai
   - name: ui-registry
+    cell: apps   # T1 (vllnt-apps) — prod promote MUST target the cell, else defaults to mgmt
     path: apps/registry
     port: 3000
     healthcheck: /
@@ -63,6 +64,7 @@ apps:
 
   # Component workshop → storybook.vllnt.ai
   - name: storybook
+    cell: apps   # T1 (vllnt-apps) — prod promote MUST target the cell, else defaults to mgmt
     path: apps/storybook
     port: 8080
     healthcheck: /healthz
