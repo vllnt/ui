@@ -14,6 +14,8 @@
     "test:e2e": "playwright test",
     "registry:build": "tsx scripts/inline-component-source.ts && shadcn build && tsx scripts/stamp-registry-metadata.ts && tsx scripts/generate-component-metadata.ts",
     "registry:sync-shims": "tsx scripts/inline-component-source.ts",
+    "registry:check": "tsx scripts/check-registry-drift.ts",
+    "registry:integrity": "tsx scripts/check-registry-integrity.ts",
     "search:index": "pagefind --site .next/server/app --output-path public/_pagefind --root-selector main --force-language en",
     "sync-storybook": "tsx scripts/generate-component-metadata.ts"
   },

@@ -144,4 +144,32 @@ describe("CanvasView", () => {
 
     expect(onViewportChange).not.toHaveBeenCalled();
   });
+
+  it("calls preventDefault on a handled canvas wheel (non-passive intent)", () => {
+    render(<CanvasView />);
+
+    // fireEvent returns false when a cancelable event had preventDefault
+    // called. A native non-passive wheel listener drives the canvas; this
+    // guards that the handler still calls preventDefault.
+    const notCancelled = fireEvent.wheel(
+      screen.getByRole("button", { name: "Canvas workspace" }),
+      { deltaY: 120 },
+    );
+
+    expect(notCancelled).toBe(false);
+  });
+
+  it("resets the space-pan state when the canvas loses focus", () => {
+    render(<CanvasView />);
+
+    const viewport = screen.getByRole("button", { name: "Canvas workspace" });
+    viewport.focus();
+
+    fireEvent.keyDown(viewport, { key: " " });
+    expect(viewport).toHaveClass("cursor-grab");
+
+    fireEvent.blur(viewport);
+    expect(viewport).toHaveClass("cursor-default");
+    expect(viewport).not.toHaveClass("cursor-grab");
+  });
 });

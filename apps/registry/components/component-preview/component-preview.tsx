@@ -33,6 +33,7 @@ import {
   Button,
   Calendar,
   Callout,
+  CanvasView,
   Card,
   CardContent,
   CardDescription,
@@ -287,6 +288,23 @@ function BadgePreview() {
       <Badge variant="secondary">Secondary</Badge>
       <Badge variant="destructive">Destructive</Badge>
       <Badge variant="outline">Outline</Badge>
+    </div>
+  );
+}
+
+function CanvasViewPreview() {
+  return (
+    <div className="w-full">
+      <CanvasView className="h-80" defaultViewport={{ x: 32, y: 24, zoom: 1 }}>
+        <div className="relative h-[800px] w-[1200px]">
+          <div className="absolute left-12 top-10 w-56 rounded-xl border border-border bg-card p-4 text-sm shadow-sm">
+            Pan with space-drag or scroll. Zoom with control + wheel.
+          </div>
+          <div className="absolute left-[26rem] top-[18rem] w-52 rounded-xl border border-border bg-card p-4 text-sm shadow-sm">
+            Canvas objects live on a calm spatial surface.
+          </div>
+        </div>
+      </CanvasView>
     </div>
   );
 }
@@ -2217,9 +2235,7 @@ export function ComponentPreview({ componentName }: ComponentPreviewProps) {
         <SimplePreview description="Overlay shell for infinite-canvas workspaces with floating chrome regions." />
       );
     case "canvas-view":
-      return (
-        <SimplePreview description="Pan-and-zoom canvas surface with keyboard and modified-wheel controls." />
-      );
+      return <CanvasViewPreview />;
     case "connector-edge":
       return (
         <SimplePreview description="Curved connector edge for linking spatial objects on the canvas." />
