@@ -14,6 +14,8 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
+import { extractExports, extractVariants, toPascalCase, type VariantInfo } from './lib/component-analyzer'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -37,12 +39,6 @@ function loadCategoryMap(): Record<string, string> {
 
 const CATEGORY_MAP = loadCategoryMap()
 
-interface VariantInfo {
-  name: string
-  values: string[]
-  defaultValue?: string
-}
-
 interface ComponentInfo {
   name: string
   fileName: string
@@ -54,111 +50,8 @@ interface ComponentInfo {
   needsChildren: boolean
 }
 
-function toPascalCase(str: string): string {
-  return str
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('')
-}
 
-function extractVariants(source: string): VariantInfo[] {
-  const variants: VariantInfo[] = []
-  if (!source.includes('cva(')) return variants
 
-  const defaultsMatch = source.match(/defaultVariants\s*:\s*\{([^}]+)\}/s)
-  const defaults: Record<string, string> = {}
-  if (defaultsMatch?.[1]) {
-    const defaultsStr = defaultsMatch[1]
-    const defaultPairs = defaultsStr.matchAll(/(\w+)\s*:\s*['"](\w+)['"]/g)
-    for (const match of defaultPairs) {
-      if (match[1] && match[2]) {
-        defaults[match[1]] = match[2]
-      }
-    }
-  }
-
-  const variantsStartMatch = source.match(/variants\s*:\s*\{/)
-  if (!variantsStartMatch || variantsStartMatch.index === undefined) return variants
-
-  const variantsStartPos = variantsStartMatch.index + variantsStartMatch[0].length
-  let depth = 1
-  let variantsEndPos = variantsStartPos
-
-  for (let i = variantsStartPos; i < source.length; i++) {
-    if (source[i] === '{') depth++
-    if (source[i] === '}') {
-      depth--
-      if (depth === 0) {
-        variantsEndPos = i
-        break
-      }
-    }
-  }
-
-  const variantsBlock = source.slice(variantsStartPos, variantsEndPos)
-  const variantTypeRegex = /(\w+)\s*:\s*\{/g
-  let typeMatch
-
-  while ((typeMatch = variantTypeRegex.exec(variantsBlock)) !== null) {
-    const variantName = typeMatch[1]
-    const typeStartPos = typeMatch.index + typeMatch[0].length
-    let typeDepth = 1
-    let typeEndPos = typeStartPos
-
-    for (let i = typeStartPos; i < variantsBlock.length; i++) {
-      if (variantsBlock[i] === '{') typeDepth++
-      if (variantsBlock[i] === '}') {
-        typeDepth--
-        if (typeDepth === 0) {
-          typeEndPos = i
-          break
-        }
-      }
-    }
-
-    const typeContent = variantsBlock.slice(typeStartPos, typeEndPos)
-    const values: string[] = []
-    const keyRegex = /(\w+)\s*:\s*['"`,]/g
-    let keyMatch
-
-    while ((keyMatch = keyRegex.exec(typeContent)) !== null) {
-      if (keyMatch[1]) values.push(keyMatch[1])
-    }
-
-    if (values.length > 0 && variantName) {
-      variants.push({
-        name: variantName,
-        values,
-        defaultValue: defaults[variantName],
-      })
-    }
-  }
-
-  return variants
-}
-
-function extractExports(source: string): string[] {
-  const exports: string[] = []
-
-  const namedExports = source.matchAll(/export\s*\{\s*([^}]+)\s*\}/g)
-  for (const match of namedExports) {
-    if (!match[1]) continue
-    const names = match[1].split(',').map((n) => n.trim().split(' ')[0] ?? '')
-    exports.push(...names.filter((n) => n.length > 0 && /^[A-Z]/.test(n)))
-  }
-
-  const constExports = source.matchAll(/export\s+(?:const|function)\s+([A-Z]\w+)/g)
-  for (const match of constExports) {
-    if (match[1]) exports.push(match[1])
-  }
-
-  const defaultExport = source.match(/export\s+default\s+([A-Z]\w+)/)
-  if (defaultExport?.[1]) {
-    exports.push(defaultExport[1])
-  }
-
-  return [...new Set(exports)]
-}
 
 const CHILDREN_COMPONENTS = new Set([
   'Button', 'Badge', 'Label', 'Card', 'Accordion', 'Tabs', 'Dialog',

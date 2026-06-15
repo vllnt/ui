@@ -11,6 +11,8 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
+import { extractAllTypes, extractTypeBlock, parsePropsFromBlock, type PropInfo, toPascalCase, type TypeDefinition } from './lib/component-analyzer'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const COMPONENTS_DIR = join(__dirname, '../src/components')
@@ -21,63 +23,7 @@ const DELIMITER_CLOSE = new Set(['}', ']', ')'])
 const NON_IMPLEMENTATION_FILE_PATTERN = /\.(?:stories|test|visual)\./
 const CHILDREN_REFERENCE_PATTERN = /\{children\}/
 
-interface PropInfo {
-  name: string
-  type: string
-  required: boolean
-}
-
-interface TypeDef {
-  name: string
-  fields: PropInfo[]
-}
-
-function extractTypeBlock(source: string, startIndex: number): string {
-  let depth = 0
-  let blockStart = -1
-  for (let i = startIndex; i < source.length; i++) {
-    if (source[i] === '{') {
-      if (depth === 0) blockStart = i + 1
-      depth++
-    }
-    if (source[i] === '}') {
-      depth--
-      if (depth === 0) return source.slice(blockStart, i)
-    }
-  }
-  return ''
-}
-
-function parsePropsFromBlock(block: string): PropInfo[] {
-  const props: PropInfo[] = []
-  for (const line of block.split('\n')) {
-    const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('/*')) continue
-    const m = trimmed.match(/^(\w+)(\??)\s*:\s*(.+?)\s*;?\s*$/)
-    if (m?.[1] && m[3]) {
-      props.push({ name: m[1], type: m[3].replace(/[;,]$/, '').trim(), required: m[2] !== '?' })
-    }
-  }
-  return props
-}
-
-function extractAllTypes(source: string): TypeDef[] {
-  const types: TypeDef[] = []
-  const re = /(?:export\s+)?type\s+(\w+)\s*=\s*\{/g
-  let m
-  while ((m = re.exec(source)) !== null) {
-    if (!m[1]) continue
-    const block = extractTypeBlock(source, m.index + m[0].length - 1)
-    if (block) types.push({ name: m[1], fields: parsePropsFromBlock(block) })
-  }
-  return types
-}
-
-function toPascalCase(str: string): string {
-  return str.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join('')
-}
-
-function generateValue(prop: PropInfo, allTypes: TypeDef[], indent: number): string {
+function generateValue(prop: PropInfo, allTypes: TypeDefinition[], indent: number): string {
   const pad = ' '.repeat(indent)
   const t = prop.type.trim()
 
@@ -141,7 +87,7 @@ function generateValue(prop: PropInfo, allTypes: TypeDef[], indent: number): str
   return '""'
 }
 
-function generateArrayValue(itemType: string, allTypes: TypeDef[], indent: number): string {
+function generateArrayValue(itemType: string, allTypes: TypeDefinition[], indent: number): string {
   const pad = ' '.repeat(indent)
   const typeDef = allTypes.find((td) => td.name === itemType)
   if (typeDef) {
@@ -153,7 +99,7 @@ function generateArrayValue(itemType: string, allTypes: TypeDef[], indent: numbe
   return '[]'
 }
 
-function generateObjectValue(typeDef: TypeDef, allTypes: TypeDef[], indent: number): string {
+function generateObjectValue(typeDef: TypeDefinition, allTypes: TypeDefinition[], indent: number): string {
   const pad = ' '.repeat(indent)
   const innerPad = ' '.repeat(indent + 2)
   const fields: string[] = []

@@ -11,6 +11,8 @@ import { readdirSync, readFileSync, statSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
+import { extractTypeBlock, parsePropsFromBlock, type PropInfo, toPascalCase } from "./lib/component-analyzer";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const COMPONENTS_DIR = join(__dirname, "../src/components");
@@ -19,66 +21,11 @@ const DELIMITER_OPEN = new Set(["{", "[", "("]);
 const DELIMITER_CLOSE = new Set(["}", "]", ")"]);
 const NON_IMPLEMENTATION_FILE_PATTERN = /\.(?:stories|test|visual)\./;
 
-interface PropInfo {
-  name: string;
-  type: string;
-  required: boolean;
-}
-
 interface Violation {
   component: string;
   story: string;
   missingProps: string[];
   crashRisk: string;
-}
-
-function extractTypeBlock(source: string, startIndex: number): string {
-  let depth = 0;
-  let blockStart = -1;
-
-  for (let i = startIndex; i < source.length; i++) {
-    if (source[i] === "{") {
-      if (depth === 0) blockStart = i + 1;
-      depth++;
-    }
-
-    if (source[i] === "}") {
-      depth--;
-      if (depth === 0) return source.slice(blockStart, i);
-    }
-  }
-
-  return "";
-}
-
-function parsePropsFromBlock(block: string): PropInfo[] {
-  const props: PropInfo[] = [];
-  const lines = block.split("\n");
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("//") || trimmed.startsWith("/*")) continue;
-
-    const match = trimmed.match(/^(\w+)(\??)\s*:\s*(.+?)\s*;?\s*$/);
-    if (!match) continue;
-
-    const name = match[1] ?? "";
-    const required = match[2] !== "?";
-    const type = (match[3] ?? "").trim().replace(/[;,]$/, "");
-
-    if (name && type) {
-      props.push({ name, required, type });
-    }
-  }
-
-  return props;
-}
-
-function toPascalCase(str: string): string {
-  return str
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("");
 }
 
 function extractNamedPropsBlock(source: string, typeName: string): string {

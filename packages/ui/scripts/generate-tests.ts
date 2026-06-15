@@ -11,17 +11,13 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
+import { extractExports, extractVariants, toPascalCase, type VariantInfo } from './lib/component-analyzer'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const COMPONENTS_DIR = join(__dirname, '../src/components')
 const MANUALLY_MAINTAINED_TESTS = new Set(['cookie-consent'])
-
-interface VariantInfo {
-  name: string
-  values: string[]
-  defaultValue?: string
-}
 
 interface ComponentInfo {
   name: string // PascalCase name
@@ -36,131 +32,8 @@ interface ComponentInfo {
 }
 
 /**
- * Convert kebab-case to PascalCase
- */
-function toPascalCase(str: string): string {
-  return str
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('')
-}
-
-/**
- * Extract CVA variants from component source code
- * Uses direct regex matching on the variants object structure
- */
-function extractVariants(source: string): VariantInfo[] {
-  const variants: VariantInfo[] = []
-
-  // Check if cva is used
-  if (!source.includes('cva(')) return variants
-
-  // Extract defaultVariants
-  const defaultsMatch = source.match(/defaultVariants\s*:\s*\{([^}]+)\}/s)
-  const defaults: Record<string, string> = {}
-  if (defaultsMatch) {
-    const defaultsStr = defaultsMatch[1]
-    const defaultPairs = defaultsStr.matchAll(/(\w+)\s*:\s*['"](\w+)['"]/g)
-    for (const match of defaultPairs) {
-      defaults[match[1]] = match[2]
-    }
-  }
-
-  // Find "variants: {" and extract the block using bracket matching
-  const variantsStartMatch = source.match(/variants\s*:\s*\{/)
-  if (!variantsStartMatch || variantsStartMatch.index === undefined) return variants
-
-  const variantsStartPos = variantsStartMatch.index + variantsStartMatch[0].length
-  let depth = 1
-  let variantsEndPos = variantsStartPos
-
-  for (let i = variantsStartPos; i < source.length; i++) {
-    if (source[i] === '{') depth++
-    if (source[i] === '}') {
-      depth--
-      if (depth === 0) {
-        variantsEndPos = i
-        break
-      }
-    }
-  }
-
-  const variantsBlock = source.slice(variantsStartPos, variantsEndPos)
-
-  // Parse each variant type (e.g., size: {...}, variant: {...})
-  const variantTypeRegex = /(\w+)\s*:\s*\{/g
-  let typeMatch
-
-  while ((typeMatch = variantTypeRegex.exec(variantsBlock)) !== null) {
-    const variantName = typeMatch[1]
-    const typeStartPos = typeMatch.index + typeMatch[0].length
-
-    // Find matching closing brace
-    let typeDepth = 1
-    let typeEndPos = typeStartPos
-
-    for (let i = typeStartPos; i < variantsBlock.length; i++) {
-      if (variantsBlock[i] === '{') typeDepth++
-      if (variantsBlock[i] === '}') {
-        typeDepth--
-        if (typeDepth === 0) {
-          typeEndPos = i
-          break
-        }
-      }
-    }
-
-    const typeContent = variantsBlock.slice(typeStartPos, typeEndPos)
-
-    // Extract variant values (keys followed by : and a string)
-    const values: string[] = []
-    const keyRegex = /(\w+)\s*:\s*['"`,]/g
-    let keyMatch
-
-    while ((keyMatch = keyRegex.exec(typeContent)) !== null) {
-      values.push(keyMatch[1])
-    }
-
-    if (values.length > 0) {
-      variants.push({
-        name: variantName,
-        values,
-        defaultValue: defaults[variantName],
-      })
-    }
-  }
-
-  return variants
-}
-
-/**
  * Extract exported component names from source
  */
-function extractExports(source: string): string[] {
-  const exports: string[] = []
-
-  // Match: export { ComponentName }
-  const namedExports = source.matchAll(/export\s*\{\s*([^}]+)\s*\}/g)
-  for (const match of namedExports) {
-    const names = match[1].split(',').map((n) => n.trim().split(' ')[0])
-    exports.push(...names.filter((n) => n && /^[A-Z]/.test(n)))
-  }
-
-  // Match: export const ComponentName
-  const constExports = source.matchAll(/export\s+(?:const|function)\s+([A-Z]\w+)/g)
-  for (const match of constExports) {
-    exports.push(match[1])
-  }
-
-  // Match: export default ComponentName
-  const defaultExport = source.match(/export\s+default\s+([A-Z]\w+)/)
-  if (defaultExport) {
-    exports.push(defaultExport[1])
-  }
-
-  return [...new Set(exports)]
-}
-
 /**
  * Analyze a component file
  */
