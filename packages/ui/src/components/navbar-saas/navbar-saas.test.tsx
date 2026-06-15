@@ -29,7 +29,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-vi.mock("../theme-toggle", () => ({
+vi.mock("../theme-toggle/theme-toggle", () => ({
   ThemeToggle: () => (
     <button aria-label="Toggle theme" type="button">
       Theme
