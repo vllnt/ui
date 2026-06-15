@@ -2,31 +2,32 @@ import type { Metadata } from "next";
 import { z } from "zod";
 
 import type { Locale } from "@/i18n/routing";
+import { OG_TYPES } from "@/lib/og-templates";
 import { alternateOgLocales, canonical, ogLocale } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 
 export const OG_IMAGE_WIDTH = 2400;
 export const OG_IMAGE_HEIGHT = 1260;
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 const ogImageParametersSchema = z.object({
   category: z.string().max(100).optional(),
   description: z.string().max(500).optional(),
   title: z.string().min(1).max(200).default("VLLNT UI"),
-  type: z.enum(["home", "component", "docs", "page"]).default("page"),
+  type: z.enum(OG_TYPES).default("page"),
   url: z.string().max(200).optional(),
 });
 
 export type OGImageParametersInput = z.input<typeof ogImageParametersSchema>;
+
+type OGImageParameters = z.output<typeof ogImageParametersSchema>;
 
 type PageMetadataOptions = {
   locale?: Locale;
   pathname?: string;
 };
 
-function generateOGImageURL(parameters: OGImageParametersInput): string {
-  const validated = ogImageParametersSchema.parse(parameters);
-
+function generateOGImageURL(validated: OGImageParameters): string {
   const searchParameters = new URLSearchParams({
     title: validated.title,
     type: validated.type,

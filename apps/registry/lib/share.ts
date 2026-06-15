@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/routing";
-import { canonical } from "@/lib/seo";
+import { canonical, SITE_URL } from "@/lib/seo";
 
 /**
  * Centralized builders for the sharing and backlink system.
@@ -8,9 +8,6 @@ import { canonical } from "@/lib/seo";
  * page's DOM (the embed snippet caption, the badge anchor), not inside an
  * `<iframe>` — a search engine credits an iframe's links to the iframe origin.
  */
-
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 /** Attribution source tags appended as `?ref=` so referrals stay measurable. */
 export type ShareRef = "badge" | "embed" | "oembed" | "permalink" | "share";

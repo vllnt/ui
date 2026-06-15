@@ -12,7 +12,6 @@ import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
 
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
@@ -36,14 +35,16 @@ import {
   getCategoryForComponent,
   getSidebarSections,
 } from "@/lib/sidebar-sections";
-import registryData from "@/registry.json";
-import type { Registry, RegistryComponent } from "@/types/registry";
+import { getRegistry } from "@/lib/registry";
+import type { RegistryComponent } from "@/types/registry";
+import { SITE_URL } from "@/lib/seo";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const registry = registryData as Registry;
+const registry = getRegistry();
 const metadata_map = componentMetadata as Record<
   string,
   {
@@ -118,8 +119,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ComponentPage(props: Props) {
-  const { locale, slug } = await props.params;
-  setRequestLocale(locale);
+  const { locale, slug } = await resolveLocaleParams(props.params);
   const component = registry.items.find(
     (item): item is RegistryComponent =>
       item.name === slug && item.type === "registry:component",
@@ -199,7 +199,6 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
   return (
     <>

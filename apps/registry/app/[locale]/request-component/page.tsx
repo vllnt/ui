@@ -1,12 +1,13 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { RequestComponentForm } from "./request-component-form";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -22,14 +23,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     description:
       "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.",
+    openGraph: generateOGMetadata(
+      { description: "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.", title: "Request a component · VLLNT UI" },
+      { locale, pathname: "/request-component" },
+    ),
     robots: { follow: true, index: false },
     title: "Request a component · VLLNT UI",
+    twitter: generateTwitterMetadata({
+      description: "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.",
+      title: "Request a component · VLLNT UI",
+    }),
   };
 }
 
 export default async function RequestComponentPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
 
   return (
     <>

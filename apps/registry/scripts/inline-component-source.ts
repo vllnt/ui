@@ -179,9 +179,9 @@ const rewriteImports = (source: string): string => {
   // and replace each with a single deduped `import ... from "@vllnt/ui"` block.
   let code = source;
 
-  // `../../lib/(utils|types|use-X)` → `@vllnt/ui`
+  // `../../lib/(format|utils|types|use-X)` → `@vllnt/ui`
   code = code.replace(
-    /from\s+["'](?:\.\.\/)+lib\/(?:utils|types|use-[a-z-]+)["']/g,
+    /from\s+["'](?:\.\.\/)+lib\/(?:format|utils|types|use-[a-z-]+)["']/g,
     `from "${PACKAGE_NAME}"`,
   );
 

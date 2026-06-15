@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
-
-import { Button } from "@vllnt/ui";
+import { Button, useCopyToClipboard } from "@vllnt/ui";
 import { Check, Copy, ExternalLink } from "lucide-react";
 
 type QuickAddProps = {
@@ -13,14 +11,10 @@ export function QuickAdd({ componentName }: QuickAddProps) {
   const registryUrl = `https://ui.vllnt.ai/r/${componentName}.json`;
   const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`;
   const v0Url = `https://v0.dev/chat?q=add+component+from+${encodeURIComponent(registryUrl)}`;
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(installCommand);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    await copy(installCommand);
   };
 
   return (

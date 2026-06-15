@@ -1,30 +1,19 @@
 import packageJson from "../../../packages/ui/package.json";
-import registry from "../registry.json";
 
-type RegistryItem = {
-  readonly name: string;
-  readonly category?: string;
-};
+import { getRegistry, getRegistryItems } from "@/lib/registry";
 
-type Registry = {
-  readonly items: readonly RegistryItem[];
-  readonly version?: string;
-  readonly generatedAt?: string;
-};
-
-const REGISTRY = registry as Registry;
-const PACKAGE = packageJson as { readonly version: string };
+import type { RegistryComponent } from "@/types/registry";
 
 export function getComponentCount(): number {
-  return REGISTRY.items.length;
+  return getRegistryItems().length;
 }
 
 export function getLibraryVersion(): string {
-  return REGISTRY.version ?? PACKAGE.version;
+  return getRegistry().version ?? packageJson.version;
 }
 
 export function getRegistryGeneratedAt(): string | undefined {
-  return REGISTRY.generatedAt;
+  return getRegistry().generatedAt;
 }
 
 type CategoryStat = {
@@ -34,7 +23,7 @@ type CategoryStat = {
 
 function getCategoryStats(): readonly CategoryStat[] {
   const counts = new Map<string, number>();
-  for (const item of REGISTRY.items) {
+  for (const item of getRegistryItems()) {
     const key = item.category ?? "uncategorized";
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
@@ -47,7 +36,7 @@ export function getCategoryCount(): number {
   return getCategoryStats().length;
 }
 
-export function getFeaturedComponents(): readonly RegistryItem[] {
+export function getFeaturedComponents(): readonly RegistryComponent[] {
   const featuredSlugs = [
     "button",
     "data-table",
@@ -57,6 +46,6 @@ export function getFeaturedComponents(): readonly RegistryItem[] {
     "globe-3d",
   ];
   return featuredSlugs
-    .map((slug) => REGISTRY.items.find((item) => item.name === slug))
-    .filter((item): item is RegistryItem => item !== undefined);
+    .map((slug) => getRegistryItems().find((item) => item.name === slug))
+    .filter((item): item is RegistryComponent => item !== undefined);
 }

@@ -6,6 +6,19 @@ type OGTemplate = {
   titleSize: number;
 };
 
+/**
+ * The valid OG image types. Single source of truth — the Zod schemas in
+ * lib/og.ts and lib/schemas.ts derive their enums from this tuple, and
+ * OG_TEMPLATES must provide a template per entry.
+ */
+export const OG_TYPES = ["home", "component", "docs", "page"] as const;
+
+export type OGTemplateType = (typeof OG_TYPES)[number];
+
+function isOGTemplateType(type: string): type is OGTemplateType {
+  return (OG_TYPES as readonly string[]).includes(type);
+}
+
 const DESCRIPTION_MAX = 120;
 const TITLE_MAX_LARGE = 25;
 const TITLE_MAX_SMALL = 30;
@@ -39,15 +52,10 @@ const OG_TEMPLATES = {
     titleMaxLength: TITLE_MAX_LARGE,
     titleSize: 160,
   },
-} satisfies Record<string, OGTemplate>;
-
-export type OGTemplateType = keyof typeof OG_TEMPLATES;
+} satisfies Record<OGTemplateType, OGTemplate>;
 
 export function getTemplate(type: string): OGTemplate {
-  if (type in OG_TEMPLATES) {
-    return OG_TEMPLATES[type as OGTemplateType];
-  }
-  return OG_TEMPLATES.page;
+  return isOGTemplateType(type) ? OG_TEMPLATES[type] : OG_TEMPLATES.page;
 }
 
 export function truncateText(text: string, maxLength: number): string {

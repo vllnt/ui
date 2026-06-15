@@ -1,14 +1,14 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
 import { getLatestReleaseRecords } from "@/lib/changelog";
+import { getPageContent } from "@/lib/content";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
+import { getRegistryItems } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../../lib/templates";
-import registry from "../../registry.json";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+import type { RegistryComponent } from "@/types/registry";
+import { SITE_URL } from "@/lib/seo";
+
 const TEXT_HEADERS = new Headers([
   [
     "Cache-Control",
@@ -16,15 +16,6 @@ const TEXT_HEADERS = new Headers([
   ],
   ["Content-Type", "text/plain; charset=utf-8"],
 ]);
-
-type RegistryItem = {
-  readonly category: string;
-  readonly dependencies?: readonly string[];
-  readonly description: string;
-  readonly name: string;
-  readonly registryDependencies?: readonly string[];
-  readonly title: string;
-};
 
 const REFERENCE_PAGES: readonly {
   href: string;
@@ -42,28 +33,16 @@ const REFERENCE_PAGES: readonly {
   { href: "/components", slug: "components", title: "Components Overview" },
 ];
 
-function getRegistryItems(): readonly RegistryItem[] {
-  return (registry as { readonly items: readonly RegistryItem[] }).items;
-}
-
-function stripFrontmatter(source: string): string {
-  if (!source.startsWith("---")) return source;
-  const end = source.indexOf("\n---", 3);
-  if (end === -1) return source;
-  return source.slice(end + 4).replace(/^\n+/, "");
-}
-
 async function readDocumentPage(slug: string): Promise<string> {
-  const file = path.join(process.cwd(), "content", "pages", `${slug}.mdx`);
   try {
-    const raw = await readFile(file, "utf8");
-    return stripFrontmatter(raw).trim();
+    const { content } = await getPageContent(slug);
+    return content.trim();
   } catch {
     return "";
   }
 }
 
-function buildIntroLines(items: readonly RegistryItem[]): readonly string[] {
+function buildIntroLines(items: readonly RegistryComponent[]): readonly string[] {
   return [
     "# VLLNT UI - Full Reference",
     "",
@@ -156,13 +135,13 @@ function buildTemplateLines(): readonly string[] {
   ];
 }
 
-function buildComponentLines(item: RegistryItem): readonly string[] {
+function buildComponentLines(item: RegistryComponent): readonly string[] {
   return [
     `### ${item.title}`,
     "",
     `- Slug: \`${item.name}\``,
-    `- Category: \`${item.category}\``,
-    `- Description: ${item.description}`,
+    `- Category: \`${item.category ?? "uncategorized"}\``,
+    `- Description: ${item.description ?? ""}`,
     `- Page: ${SITE_URL}/components/${item.name}`,
     `- Schema: ${SITE_URL}/r/${item.name}.json`,
     ...(item.dependencies?.length
@@ -177,7 +156,7 @@ function buildComponentLines(item: RegistryItem): readonly string[] {
 }
 
 function buildComponentsReferenceLines(
-  items: readonly RegistryItem[],
+  items: readonly RegistryComponent[],
 ): readonly string[] {
   return [
     "## Components",

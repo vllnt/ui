@@ -2,7 +2,6 @@ import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
 
 import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
@@ -18,14 +17,15 @@ import {
   getCategoryForComponent,
   getSidebarSections,
 } from "@/lib/sidebar-sections";
-import registryData from "@/registry.json";
-import type { Registry, RegistryComponent } from "@/types/registry";
+import { getRegistry } from "@/lib/registry";
+import { resolveLocaleParams } from "@/lib/locale";
+import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const registry = registryData as Registry;
+const registry = getRegistry();
 const metadata_map = componentMetadata as Record<
   string,
   {
@@ -93,8 +93,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ComponentPlaygroundPage(props: Props) {
-  const { locale, slug } = await props.params;
-  setRequestLocale(locale);
+  const { locale, slug } = await resolveLocaleParams(props.params);
   const component = findComponent(slug);
 
   if (!component) {

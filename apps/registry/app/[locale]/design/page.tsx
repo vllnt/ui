@@ -2,7 +2,6 @@ import React, { type ComponentProps, type ReactNode } from "react";
 
 import { MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import {
@@ -15,6 +14,7 @@ import { jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { resolveLocaleParams } from "@/lib/locale";
 
 const DESCRIPTION =
   "Canonical VLLNT UI design rules, tokens, component patterns, accessibility expectations, and agent-facing guidance.";
@@ -89,8 +89,7 @@ function DesignHeadingThree({ children, ...props }: ComponentProps<"h3">) {
 }
 
 export default async function DesignPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
   const markdown = await getDesignGuideMarkdown();
   const sections = extractDesignGuideSections(markdown);
   const semanticColorCount = Object.keys(designTokens.color.semantic).length;

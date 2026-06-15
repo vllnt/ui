@@ -1,12 +1,13 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { ReportBugForm } from "./report-bug-form";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type LocaleParams = {
   readonly params: Promise<{ locale: Locale }>;
@@ -24,8 +25,16 @@ export async function generateMetadata({
     },
     description:
       "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.",
+    openGraph: generateOGMetadata(
+      { description: "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.", title: "Report a bug · VLLNT UI" },
+      { locale, pathname: "/report" },
+    ),
     robots: { follow: true, index: false },
     title: "Report a bug · VLLNT UI",
+    twitter: generateTwitterMetadata({
+      description: "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.",
+      title: "Report a bug · VLLNT UI",
+    }),
   };
 }
 
@@ -39,8 +48,7 @@ export default async function ReportBugPage({
 }: LocaleParams & {
   searchParams: Promise<SearchParameters>;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
   const { component } = await searchParams;
 
   return (

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 
-import { setRequestLocale } from "next-intl/server";
 
 import { type Locale, routing } from "@/i18n/routing";
 import {
@@ -15,8 +14,9 @@ import {
   softwareApplicationLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, languageAlternates, localizePathname, SITE_URL } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { resolveLocaleParams } from "@/lib/locale";
 import {
   getTemplate,
   getTemplateGithubUrl,
@@ -24,7 +24,6 @@ import {
   TEMPLATES,
 } from "@/lib/templates";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -73,8 +72,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function TemplatePage(props: Props) {
-  const { locale, slug } = await props.params;
-  setRequestLocale(locale);
+  const { locale, slug } = await resolveLocaleParams(props.params);
   const template = getTemplate(slug);
 
   if (!template) {

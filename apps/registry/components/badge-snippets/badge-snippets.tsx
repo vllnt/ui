@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { track } from "@vercel/analytics";
-import { Button } from "@vllnt/ui";
+import { Button, useCopyToClipboard } from "@vllnt/ui";
 import { Check, Copy } from "lucide-react";
 
 import { BADGE_SVG_PATH, buildBadgeSnippets } from "@/lib/share";
@@ -19,16 +19,13 @@ const FORMATS: readonly { label: string; value: SnippetFormat }[] = [
 export function BadgeSnippets(): React.ReactElement {
   const snippets = React.useMemo(() => buildBadgeSnippets(), []);
   const [format, setFormat] = React.useState<SnippetFormat>("html");
-  const [copied, setCopied] = React.useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   const handleCopy = React.useCallback(async () => {
-    await navigator.clipboard.writeText(snippets[format]);
-    setCopied(true);
-    track("badge_copy", { format });
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  }, [format, snippets]);
+    if (await copy(snippets[format])) {
+      track("badge_copy", { format });
+    }
+  }, [copy, format, snippets]);
 
   return (
     <section className="mt-16 rounded-md border border-border bg-card p-6">

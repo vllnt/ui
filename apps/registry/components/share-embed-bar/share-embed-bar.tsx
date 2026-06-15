@@ -12,6 +12,7 @@ import {
   DialogTitle,
   ShareDialog,
   type ShareDialogPlatform,
+  useCopyToClipboard,
 } from "@vllnt/ui";
 import { Check, Code2, Copy, Link2, Share2 } from "lucide-react";
 
@@ -63,16 +64,13 @@ function CopyLinkButton({
   pageUrl: string;
   slug: string;
 }): React.ReactElement {
-  const [copied, setCopied] = React.useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   const handleCopy = React.useCallback(async () => {
-    await navigator.clipboard.writeText(withRef(pageUrl, "permalink"));
-    setCopied(true);
-    track("permalink_copy", { component: slug });
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  }, [pageUrl, slug]);
+    if (await copy(withRef(pageUrl, "permalink"))) {
+      track("permalink_copy", { component: slug });
+    }
+  }, [copy, pageUrl, slug]);
 
   return (
     <Button className="gap-2" onClick={handleCopy} size="sm" variant="outline">
@@ -102,20 +100,17 @@ function EmbedDialog({
   slug: string;
   title: string;
 }): React.ReactElement {
-  const [copied, setCopied] = React.useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const snippet = React.useMemo(
     () => buildEmbedSnippet(slug, title),
     [slug, title],
   );
 
   const handleCopy = React.useCallback(async () => {
-    await navigator.clipboard.writeText(snippet);
-    setCopied(true);
-    track("embed_copy", { component: slug });
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  }, [slug, snippet]);
+    if (await copy(snippet)) {
+      track("embed_copy", { component: slug });
+    }
+  }, [copy, slug, snippet]);
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>

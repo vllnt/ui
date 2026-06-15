@@ -4,9 +4,13 @@ type RegistryFile = {
 };
 
 export type ComponentCategory =
+  | "ai"
+  | "billing"
   | "content"
   | "core"
   | "data"
+  | "data-display"
+  | "educational"
   | "form"
   | "learning"
   | "navigation"

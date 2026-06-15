@@ -2,7 +2,6 @@ import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
@@ -15,8 +14,9 @@ import {
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { SITE_URL } from "@/lib/seo";
+import { resolveLocaleParams } from "@/lib/locale";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -51,8 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DocumentationPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
   const { content } = await getPageContent("docs", locale);
 
   return (

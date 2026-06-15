@@ -2,7 +2,6 @@ import { Sidebar } from "@vllnt/ui";
 import { ArrowRight, Sparkles, Terminal } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
@@ -15,12 +14,13 @@ import { breadcrumbLd, faqPageLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { SITE_URL } from "@/lib/seo";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 const PATHNAME = "/ai";
 
 const TITLE = "AI Agent UI Components — chat, streaming, tools, citations";
@@ -98,8 +98,7 @@ function ComponentCard({ locale, slug }: { locale: Locale; slug: string }) {
 }
 
 export default async function AiHubPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
 
   const componentCount = getAiComponentSlugs().length;
 

@@ -1,12 +1,12 @@
 import { MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -41,8 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PhilosophyPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
   const { content } = await getPageContent("philosophy", locale);
 
   return (

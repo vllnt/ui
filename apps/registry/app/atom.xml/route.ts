@@ -3,8 +3,9 @@ import {
   getReleaseRecords,
   releasePageUrl,
 } from "@/lib/changelog";
+import { SITE_URL } from "@/lib/seo";
+import { escapeXml } from "@/lib/xml";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 const ATOM_HEADERS = new Headers([
   [
     "Cache-Control",
@@ -13,15 +14,6 @@ const ATOM_HEADERS = new Headers([
   ["Content-Type", "application/atom+xml; charset=utf-8"],
 ]);
 type ReleaseRecord = Awaited<ReturnType<typeof getReleaseRecords>>[number];
-
-function escapeXml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-}
 
 function buildAtomDate(value?: string): string {
   return new Date(value ?? 0).toISOString();

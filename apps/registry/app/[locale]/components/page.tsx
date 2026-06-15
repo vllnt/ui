@@ -1,7 +1,6 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
 
 import { ComponentThumbnail } from "@/components/component-thumbnail";
 import type { Locale } from "@/i18n/routing";
@@ -9,6 +8,7 @@ import componentMetadata from "@/lib/component-metadata.json";
 import { getPageContent } from "@/lib/content";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { resolveLocaleParams } from "@/lib/locale";
 import {
   components,
   getSidebarSections,
@@ -57,8 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ComponentsPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
 
   return (
     <>

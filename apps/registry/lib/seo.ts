@@ -1,6 +1,8 @@
 import { type Locale, routing } from "@/i18n/routing";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+/** Canonical absolute origin for the registry site. Single source of truth. */
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 export function localizePathname(
   pathname: string,

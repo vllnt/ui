@@ -1,7 +1,9 @@
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
-import registry from "../../registry.json";
+import { getRegistryItems } from "../../lib/registry";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+import type { RegistryComponent } from "@/types/registry";
+import { SITE_URL } from "@/lib/seo";
+
 const TEXT_HEADERS = new Headers([
   [
     "Cache-Control",
@@ -9,13 +11,6 @@ const TEXT_HEADERS = new Headers([
   ],
   ["Content-Type", "text/plain; charset=utf-8"],
 ]);
-
-type RegistryItem = {
-  readonly category: string;
-  readonly description: string;
-  readonly name: string;
-  readonly title: string;
-};
 
 const CATEGORY_ORDER: readonly string[] = [
   "core",
@@ -47,22 +42,19 @@ const CATEGORY_LABEL = new Map<string, string>([
   ["utility", "Utility"],
 ]);
 
-function getRegistryItems(): readonly RegistryItem[] {
-  return (registry as { readonly items: readonly RegistryItem[] }).items;
-}
-
 function groupItems(
-  items: readonly RegistryItem[],
-): ReadonlyMap<string, readonly RegistryItem[]> {
+  items: readonly RegistryComponent[],
+): ReadonlyMap<string, readonly RegistryComponent[]> {
   return items.reduce((groups, item) => {
-    const bucket = groups.get(item.category) ?? [];
-    groups.set(item.category, [...bucket, item]);
+    const category = item.category ?? "uncategorized";
+    const bucket = groups.get(category) ?? [];
+    groups.set(category, [...bucket, item]);
     return groups;
-  }, new Map<string, readonly RegistryItem[]>());
+  }, new Map<string, readonly RegistryComponent[]>());
 }
 
 function getSortedCategories(
-  grouped: ReadonlyMap<string, readonly RegistryItem[]>,
+  grouped: ReadonlyMap<string, readonly RegistryComponent[]>,
 ): readonly string[] {
   return [
     ...CATEGORY_ORDER.filter((category) => grouped.has(category)),
@@ -72,7 +64,7 @@ function getSortedCategories(
   ];
 }
 
-function buildIntroLines(items: readonly RegistryItem[]): readonly string[] {
+function buildIntroLines(items: readonly RegistryComponent[]): readonly string[] {
   return [
     "# VLLNT UI",
     "",
@@ -121,7 +113,7 @@ function buildRegistryLines(): readonly string[] {
 
 function buildCategoryLines(
   category: string,
-  grouped: ReadonlyMap<string, readonly RegistryItem[]>,
+  grouped: ReadonlyMap<string, readonly RegistryComponent[]>,
 ): readonly string[] {
   const bucket = grouped.get(category);
   if (!bucket || bucket.length === 0) return [];
@@ -130,14 +122,14 @@ function buildCategoryLines(
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(
       (item) =>
-        `- [${item.title}](${SITE_URL}/components/${item.name}): ${item.description}`,
+        `- [${item.title}](${SITE_URL}/components/${item.name}): ${item.description ?? ""}`,
     );
 
   return [`## Components - ${label}`, "", ...itemLines, ""];
 }
 
 function buildComponentLines(
-  items: readonly RegistryItem[],
+  items: readonly RegistryComponent[],
 ): readonly string[] {
   const grouped = groupItems(items);
   return getSortedCategories(grouped).flatMap((category) =>

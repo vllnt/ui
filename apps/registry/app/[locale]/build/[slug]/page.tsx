@@ -3,7 +3,6 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
 import { type Locale, routing } from "@/i18n/routing";
@@ -13,12 +12,13 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getUseCase, USE_CASES } from "@/lib/use-cases";
+import { SITE_URL } from "@/lib/seo";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -53,8 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function UseCasePage({ params }: Props) {
-  const { locale, slug } = await params;
-  setRequestLocale(locale);
+  const { locale, slug } = await resolveLocaleParams(params);
 
   const useCase = getUseCase(slug);
   if (!useCase) {

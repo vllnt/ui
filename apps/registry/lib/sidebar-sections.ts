@@ -1,19 +1,10 @@
 import { type Locale, routing } from "@/i18n/routing";
-import registryData from "@/registry.json";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
+import { getRegistryItems } from "@/lib/registry";
 import { localizePathname } from "@/lib/seo";
-import type {
-  ComponentCategory,
-  Registry,
-  RegistryComponent,
-} from "@/types/registry";
+import type { ComponentCategory } from "@/types/registry";
 
-const registry = registryData as Registry;
-
-const components = registry.items
-  .filter(
-    (item): item is RegistryComponent => item.type === "registry:component",
-  )
+const components = getRegistryItems()
   .map((item) => ({
     category: item.category,
     name: item.name,
@@ -22,9 +13,13 @@ const components = registry.items
   .sort((a, b) => a.title.localeCompare(b.title));
 
 const categoryLabels: Record<ComponentCategory, string> = {
+  ai: "AI",
+  billing: "Billing & Plans",
   content: "Content",
   core: "Core",
   data: "Data",
+  "data-display": "Data display",
+  educational: "Educational",
   form: "Form",
   learning: "Learning",
   navigation: "Navigation",
@@ -38,8 +33,12 @@ const categoryOrder: ComponentCategory[] = [
   "overlay",
   "navigation",
   "data",
+  "data-display",
+  "ai",
   "content",
   "learning",
+  "educational",
+  "billing",
   "utility",
 ];
 

@@ -18,6 +18,7 @@ import {
   websiteLd,
 } from "@/lib/jsonld";
 import { alternateOgLocales, languageAlternates, ogLocale } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 
 type Props = {
   readonly children: React.ReactNode;
@@ -73,7 +74,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "open source",
     ],
     metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai",
+      SITE_URL,
     ),
     openGraph: {
       alternateLocale: alternateOgLocales(locale),

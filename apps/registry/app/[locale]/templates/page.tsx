@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
 
 import { BadgeSnippets } from "@/components/badge-snippets";
 import type { Locale } from "@/i18n/routing";
@@ -14,8 +13,9 @@ import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
+import { SITE_URL } from "@/lib/seo";
+import { resolveLocaleParams } from "@/lib/locale";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 const title = "Templates - VLLNT UI";
 const description =
@@ -52,8 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TemplatesPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
 
   return (
     <>

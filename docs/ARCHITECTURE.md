@@ -7,9 +7,9 @@ vllnt/ui/
 ├── packages/
 │   └── ui/                   # @vllnt/ui — the shipped library
 │       ├── src/
-│       │   ├── components/   # 144 component folders
-│       │   ├── hooks/        # shared hooks (useDebounce, etc.)
-│       │   ├── lib/          # utilities (cn, registry helpers)
+│       │   ├── components/   # component folders (one per component)
+│       │   ├── lib/          # shared hooks + utilities (cn, format,
+│       │   │                 #   useControllableState, useNow, ...)
 │       │   └── index.ts      # barrel — the public surface
 │       ├── dist/             # tsup output (published)
 │       ├── styles.css

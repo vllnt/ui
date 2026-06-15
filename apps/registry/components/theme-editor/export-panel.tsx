@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@vllnt/ui";
+import { Button, useCopyToClipboard } from "@vllnt/ui";
 
 import {
   themeInstallUrl,
@@ -38,7 +38,9 @@ function download(filename: string, content: string): void {
 /** Copy/download the theme as CSS, a shadcn CLI command, or tokens.json. */
 export function ExportPanel({ theme }: ExportPanelProps) {
   const [tab, setTab] = useState<ExportTab>("css");
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: copyToClipboard } = useCopyToClipboard({
+    timeout: 1500,
+  });
   const [origin, setOrigin] = useState("https://ui.vllnt.ai");
 
   useEffect(() => {
@@ -58,15 +60,7 @@ export function ExportPanel({ theme }: ExportPanelProps) {
   const value = tab === "css" ? css : tab === "json" ? json : cli;
 
   const copy = async (): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => {
-        setCopied(false);
-      }, 1500);
-    } catch {
-      /* clipboard blocked (insecure context or denied permission) */
-    }
+    await copyToClipboard(value);
   };
 
   return (

@@ -1,11 +1,12 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -21,7 +22,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     description:
       "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+    openGraph: generateOGMetadata(
+      { description: "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.", title: "VLLNT UI vs · Comparisons" },
+      { locale, pathname: "/vs" },
+    ),
     title: "VLLNT UI vs · Comparisons",
+    twitter: generateTwitterMetadata({
+      description: "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+      title: "VLLNT UI vs · Comparisons",
+    }),
   };
 }
 
@@ -59,8 +68,7 @@ const COMPARISONS: ReadonlyArray<{
 ];
 
 export default async function VsIndexPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
 
   return (
     <>

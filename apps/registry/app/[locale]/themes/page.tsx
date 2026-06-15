@@ -1,12 +1,12 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
 
 import { ThemeEditor } from "@/components/theme-editor";
 import type { Locale } from "@/i18n/routing";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
+import { resolveLocaleParams } from "@/lib/locale";
 
 const TITLE = "Theme Generator";
 const DESCRIPTION =
@@ -42,8 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ThemesPage({ params }: Props) {
-  const { locale } = await params;
-  setRequestLocale(locale);
+  const { locale } = await resolveLocaleParams(params);
 
   return (
     <>

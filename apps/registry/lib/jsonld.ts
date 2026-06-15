@@ -1,4 +1,5 @@
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+import { SITE_URL } from "@/lib/seo";
+
 
 type JsonLdValue =
   | string
