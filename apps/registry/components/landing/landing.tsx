@@ -4,12 +4,13 @@ import Link from "next/link";
 
 import { Footer } from "@/components/footer/footer";
 import { GitHubMark } from "@/components/github-mark";
+import { VersionChannels } from "@/components/landing/version-channels";
 import { getLatestReleaseRecords } from "@/lib/changelog";
+import { getNpmDistributionTags } from "@/lib/npm-version";
 import {
   getCategoryCount,
   getComponentCount,
   getFeaturedComponents,
-  getLibraryVersion,
   getRegistryGeneratedAt,
 } from "@/lib/stats";
 
@@ -354,18 +355,19 @@ function CommunityCTA() {
 export async function Landing() {
   const componentCount = getComponentCount();
   const categoryCount = getCategoryCount();
-  const version = getLibraryVersion();
+  const { latest } = await getNpmDistributionTags();
   const generatedAt = getRegistryGeneratedAt();
 
   return (
     <>
-      <Hero componentCount={componentCount} version={version} />
+      <Hero componentCount={componentCount} version={latest} />
       <Stats
         categoryCount={categoryCount}
         componentCount={componentCount}
         generatedAt={generatedAt}
-        version={version}
+        version={latest}
       />
+      <VersionChannels />
       <ReleasesStrip />
       <AgentCallout />
       <FeaturedComponents />
