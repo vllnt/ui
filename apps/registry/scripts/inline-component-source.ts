@@ -41,7 +41,6 @@ const repoRoot = join(scriptDir, "../../..");
 const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
 const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const shimsRoot = join(repoRoot, "apps/registry/registry/default");
-const packageJsonPath = join(repoRoot, "packages/ui/package.json");
 
 const PACKAGE_NAME = "@vllnt/ui";
 const RESERVED_REGISTRY_NAMES = new Set([
@@ -121,11 +120,16 @@ type Registry = {
   version?: string;
 };
 
-const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as {
-  version: string;
-};
-const PACKAGE_VERSION = packageJson.version;
-const PACKAGE_VERSION_RANGE = `^${PACKAGE_VERSION}`;
+// The npm `latest` version external consumers install via shadcn. The registry
+// advertises this everywhere (item `dependencies` range + `version` stamps) so
+// `npx shadcn add` always resolves to a published release. Intentionally
+// decoupled from packages/ui/package.json, which runs ahead as the in-development
+// canary (e.g. 0.3.0-canary.<sha>, published on every merge to main — see
+// .github/workflows/publish.yml). Deriving the range from the canary version
+// would point installs at an unpublished version. Bump this only when a release
+// is published (see the release checklist in ROADMAP.md).
+const PUBLISHED_VERSION = "0.2.1";
+const PACKAGE_VERSION_RANGE = `^${PUBLISHED_VERSION}`;
 const PACKAGE_DEP = `${PACKAGE_NAME}@${PACKAGE_VERSION_RANGE}`;
 
 const readComponentMeta = (name: string): ComponentMeta => {
@@ -240,7 +244,7 @@ for (const item of registry.items) {
   // Defaults to the published @vllnt/ui version + "stable"; per-component
   // overrides come from packages/ui/src/components/<name>/meta.json if present.
   const meta = readComponentMeta(item.name);
-  item.version = PACKAGE_VERSION;
+  item.version = PUBLISHED_VERSION;
   item.stability = meta.stability ?? "stable";
   if (item.stability === "deprecated") {
     if (meta.replacedBy) {
@@ -302,7 +306,7 @@ for (const name of RESERVED_REGISTRY_NAMES) {
 registry.items.sort((a, b) => a.name.localeCompare(b.name));
 
 // Stamp top-level version + generatedAt so agents can detect schema/library changes.
-registry.version = PACKAGE_VERSION;
+registry.version = PUBLISHED_VERSION;
 registry.generatedAt = new Date().toISOString();
 
 // Validate: any deprecated component must declare replacedBy.
@@ -326,4 +330,4 @@ console.log(
 console.log(
   `All siblings/utilities now resolve through ${PACKAGE_NAME}@${PACKAGE_VERSION_RANGE}.`,
 );
-console.log(`Stamped version=${PACKAGE_VERSION} on ${processed} items.`);
+console.log(`Stamped version=${PUBLISHED_VERSION} on ${processed} items.`);

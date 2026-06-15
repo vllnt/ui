@@ -10,8 +10,9 @@ Release automation can regenerate this file from Conventional Commits with
 
 ## [Unreleased]
 
-> Target version: **`0.3.0`** - canary only; not yet published. See
-> [ROADMAP.md](./ROADMAP.md) for shipping criteria.
+> Target version: **`0.3.0`** - shipping as `0.3.0-canary.<sha>` on the npm
+> `canary` tag on every merge to main. The stable `latest` release is gated on
+> the [ROADMAP.md](./ROADMAP.md) shipping criteria and is not yet published.
 
 ### Added
 
