@@ -6,10 +6,45 @@ export default [
   },
   ...react,
   {
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
+  },
+  {
     rules: {
       '@next/next/no-html-link-for-pages': 'off',
       'simple-import-sort/exports': 'off',
       'react/jsx-pascal-case': ['error', { allowAllCaps: true }],
+      'jsx-a11y/anchor-ambiguous-text': 'error',
+      'jsx-a11y/interactive-supports-focus': [
+        'error',
+        {
+          tabbable: [
+            'button',
+            'checkbox',
+            'link',
+            'progressbar',
+            'searchbox',
+            'slider',
+            'spinbutton',
+            'switch',
+            'textbox',
+          ],
+        },
+      ],
+      'jsx-a11y/lang': 'error',
+      'jsx-a11y/no-aria-hidden-on-focusable': 'error',
+      'jsx-a11y/no-interactive-element-to-noninteractive-role': 'error',
+      'jsx-a11y/no-noninteractive-element-interactions': [
+        'error',
+        {
+          body: ['onError', 'onLoad'],
+          iframe: ['onError', 'onLoad'],
+          img: ['onError', 'onLoad'],
+        },
+      ],
+      'jsx-a11y/no-noninteractive-tabindex': 'error',
+      'jsx-a11y/no-static-element-interactions': 'error',
     },
   },
   {

@@ -50,6 +50,9 @@ export function ThemeEditor() {
   const [mode, setMode] = useState<ThemeMode>("dark");
   const isFirstRender = useRef(true);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- one-shot init from
+     URL/localStorage after hydration; a lazy useState initializer cannot
+     read window during SSR. */
   useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get("t");
     const urlTheme = fromUrl ? decodeTheme(fromUrl) : undefined;
@@ -63,6 +66,7 @@ export function ThemeEditor() {
       setTheme(restored);
     }
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (isFirstRender.current) {

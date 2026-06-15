@@ -21,7 +21,7 @@ type ThemePreviewProps = {
   readonly radius: string;
 };
 
-function toCssVars(colors: ThemeColors, radius: string): CSSProperties {
+function toCssVariables(colors: ThemeColors, radius: string): CSSProperties {
   const entries = THEME_TOKENS.map(
     (token) => [token.cssVar, colors[token.name] ?? ""] as const,
   );
@@ -40,7 +40,7 @@ export function ThemePreview({ colors, radius }: ThemePreviewProps) {
   return (
     <div
       className="space-y-6 rounded-lg border border-border bg-background p-6 text-foreground"
-      style={toCssVars(colors, radius)}
+      style={toCssVariables(colors, radius)}
     >
       <div className="space-y-1">
         <h3 className="text-lg font-semibold">The quick brown fox</h3>

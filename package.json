@@ -45,6 +45,7 @@
       "ip-address": "10.1.1",
       "minimatch": ">=10.2.3",
       "eslint-plugin-react>minimatch": "^3.1.2",
+      "eslint-plugin-jsx-a11y>minimatch": "^3.1.2",
       "ajv": ">=8.18.0",
       "@eslint/eslintrc>ajv": "^6.12.4",
       "eslint>ajv": "^6.12.4",

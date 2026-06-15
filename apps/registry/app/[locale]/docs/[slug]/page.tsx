@@ -5,7 +5,6 @@ import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-
 import { setRequestLocale } from "next-intl/server";
 
 import { type Locale, routing } from "@/i18n/routing";
@@ -32,7 +31,12 @@ export function generateStaticParams(): { locale: Locale; slug: string }[] {
   );
 }
 
-const ROOT_CHANGELOG_PATH = path.join(process.cwd(), "..", "..", "CHANGELOG.md");
+const ROOT_CHANGELOG_PATH = path.join(
+  process.cwd(),
+  "..",
+  "..",
+  "CHANGELOG.md",
+);
 const PACKAGE_CHANGELOG_PATH = path.join(
   process.cwd(),
   "..",
@@ -44,7 +48,8 @@ const PACKAGE_CHANGELOG_PATH = path.join(
 
 async function readChangelogFile(filePath: string): Promise<string> {
   try {
-    return (await readFile(filePath, "utf8")).trim();
+    const content = await readFile(filePath, "utf8");
+    return content.trim();
   } catch {
     return "";
   }
@@ -149,9 +154,7 @@ export default async function DocsSlugPage(props: Props) {
                 { label: frontmatter.title },
               ]}
             />
-            <h1 className="text-4xl font-semibold mb-4">
-              {frontmatter.title}
-            </h1>
+            <h1 className="text-4xl font-semibold mb-4">{frontmatter.title}</h1>
             <p className="text-muted-foreground text-lg">
               {frontmatter.description}
             </p>

@@ -1,13 +1,12 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
-import { Github } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-
 import { setRequestLocale } from "next-intl/server";
 
+import { GitHubMark } from "@/components/github-mark";
 import { type Locale, routing } from "@/i18n/routing";
 import {
   breadcrumbLd,
@@ -191,7 +190,7 @@ export default async function TemplatePage(props: Props) {
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <Github className="size-4" />
+                    <GitHubMark className="size-4" />
                     GitHub source
                   </a>
                 </div>

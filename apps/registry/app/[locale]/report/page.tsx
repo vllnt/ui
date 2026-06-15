@@ -9,13 +9,13 @@ import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { ReportBugForm } from "./report-bug-form";
 
-type LocaleParams = {
+type LocaleParameters = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
 export async function generateMetadata({
   params,
-}: LocaleParams): Promise<Metadata> {
+}: LocaleParameters): Promise<Metadata> {
   const { locale } = await params;
   const ogParameters = {
     description:
@@ -47,7 +47,7 @@ type SearchParameters = {
 export default async function ReportBugPage({
   params,
   searchParams,
-}: LocaleParams & {
+}: LocaleParameters & {
   searchParams: Promise<SearchParameters>;
 }) {
   const { locale } = await params;

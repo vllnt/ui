@@ -1,7 +1,8 @@
 "use client";
 
-import type * as React from "react";
 import { useState } from "react";
+
+import type * as React from "react";
 
 const REPO = "vllnt/ui";
 
@@ -26,27 +27,25 @@ function buildIssueUrl({
     .filter(Boolean)
     .join("\n\n");
 
-  const params = new URLSearchParams({
+  const parameters = new URLSearchParams({
+    labels: "enhancement,component",
     template: "feature_request.yml",
     title: `[feat] ${name || "new component"}`,
-    labels: "enhancement,component",
   });
-  if (problem) params.set("problem", problem);
-  if (proposal) params.set("proposal", proposal);
-  if (similar) params.set("alternatives", similar);
+  if (problem) parameters.set("problem", problem);
+  if (proposal) parameters.set("proposal", proposal);
+  if (similar) parameters.set("alternatives", similar);
 
-  return `https://github.com/${REPO}/issues/new?${params.toString()}`;
+  return `https://github.com/${REPO}/issues/new?${parameters.toString()}`;
 }
 
 function Field({
-  autoFocus,
   label,
   onChange,
   placeholder,
   required,
   value,
 }: {
-  autoFocus?: boolean;
   label: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -60,9 +59,10 @@ function Field({
         {required ? <span className="ml-1 text-destructive">*</span> : null}
       </span>
       <input
-        autoFocus={autoFocus}
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         type="text"
@@ -95,7 +95,9 @@ function TextField({
       </span>
       <textarea
         className="mt-2 block w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         placeholder={placeholder}
         required={required}
         rows={rows}
@@ -112,7 +114,7 @@ export function RequestComponentForm() {
   const [useCase, setUseCase] = useState("");
   const [reference, setReference] = useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     const url = buildIssueUrl({ name, problem, reference, similar, useCase });
     window.open(url, "_blank", "noopener,noreferrer");
@@ -121,7 +123,6 @@ export function RequestComponentForm() {
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <Field
-        autoFocus
         label="Component name"
         onChange={setName}
         placeholder="e.g. ToastStack"
