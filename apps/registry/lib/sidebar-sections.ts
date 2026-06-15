@@ -1,7 +1,7 @@
 import { type Locale, routing } from "@/i18n/routing";
-import registryData from "@/registry.json";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import { localizePathname } from "@/lib/seo";
+import registryData from "@/registry.json";
 import type {
   ComponentCategory,
   Registry,
@@ -84,6 +84,7 @@ export function getSidebarSections(
           title: "Components",
         },
         { href: localizePathname("/templates", locale), title: "Templates" },
+        { href: localizePathname("/themes", locale), title: "Themes" },
         {
           href: localizePathname("/request-component", locale),
           title: "Request a component",

@@ -660,7 +660,9 @@ export { SearchDialog, type SearchItem } from "./search-dialog";
 
 // Theme & Language providers
 export { LangProvider } from "./lang-provider";
+export { ThemePresetProvider } from "./theme-preset-provider";
 export { ThemeProvider } from "./theme-provider";
+export { ThemeSwitcher, type ThemeSwitcherProps } from "./theme-switcher";
 export { ThemeToggle } from "./theme-toggle";
 
 // Feature components

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount, getLibraryVersion } from "@/lib/stats";
@@ -14,23 +15,33 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "VLLNT UI vs shadcn/ui — registry format, component count, agent surface, theming, accessibility. Honest comparison.",
+    title: "VLLNT UI vs shadcn/ui",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical("/vs/shadcn", locale),
       languages: languageAlternates("/vs/shadcn"),
     },
-    description:
-      "VLLNT UI vs shadcn/ui — registry format, component count, agent surface, theming, accessibility. Honest comparison.",
-    title: "VLLNT UI vs shadcn/ui",
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, {
+      locale,
+      pathname: "/vs/shadcn",
+    }),
+    title: ogParameters.title,
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
 type Row = {
   readonly attribute: string;
-  readonly vllnt: string;
   readonly shadcn: string;
-  readonly winner?: "vllnt" | "shadcn" | "even";
+  readonly vllnt: string;
+  readonly winner?: "even" | "shadcn" | "vllnt";
 };
 
 export default async function VsShadcnPage({ params }: Props) {
@@ -42,110 +53,111 @@ export default async function VsShadcnPage({ params }: Props) {
   const rows: readonly Row[] = [
     {
       attribute: "Component count",
-      vllnt: `${componentCount} components`,
       shadcn: "~50 components",
+      vllnt: `${componentCount} components`,
       winner: "vllnt",
     },
     {
       attribute: "Install model",
-      vllnt: "shadcn CLI against /r/<name>.json",
       shadcn: "shadcn CLI against ui.shadcn.com/r",
+      vllnt: "shadcn CLI against /r/<name>.json",
       winner: "even",
     },
     {
       attribute: "You own the source after install",
-      vllnt: "Yes",
       shadcn: "Yes",
+      vllnt: "Yes",
       winner: "even",
     },
     {
       attribute: "Sibling-component resolution",
-      vllnt: "Hybrid: leaf source + @vllnt/ui peer dep for siblings",
       shadcn: "All source inlined per component",
+      vllnt: "Hybrid: leaf source + @vllnt/ui peer dep for siblings",
       winner: "vllnt",
     },
     {
       attribute: "/llms.txt agent index",
-      vllnt: "Yes — llmstxt.org compliant",
       shadcn: "No",
+      vllnt: "Yes — llmstxt.org compliant",
       winner: "vllnt",
     },
     {
       attribute: "MCP server",
-      vllnt: "Yes — ui.vllnt.ai/mcp (search/get/list tools)",
       shadcn: "No",
+      vllnt: "Yes — ui.vllnt.ai/mcp (search/get/list tools)",
       winner: "vllnt",
     },
     {
       attribute: "Per-component a11y schema in JSON",
-      vllnt: "Yes — keyboard map, ARIA roles, focus model",
       shadcn: "No",
+      vllnt: "Yes — keyboard map, ARIA roles, focus model",
       winner: "vllnt",
     },
     {
       attribute: "Per-component examples in JSON",
-      vllnt: "Yes — code-as-data, agent-readable",
       shadcn: "No",
+      vllnt: "Yes — code-as-data, agent-readable",
       winner: "vllnt",
     },
     {
       attribute: "Per-component props schema in JSON",
-      vllnt: "Yes — TSDoc-shaped",
       shadcn: "No",
+      vllnt: "Yes — TSDoc-shaped",
       winner: "vllnt",
     },
     {
       attribute: "version + stability per component",
-      vllnt: "Yes (stable / beta / experimental / deprecated)",
       shadcn: "No",
+      vllnt: "Yes (stable / beta / experimental / deprecated)",
       winner: "vllnt",
     },
     {
       attribute: "Theming",
-      vllnt: "CSS variables + design tokens (DESIGN.md)",
       shadcn: "CSS variables",
+      vllnt: "CSS variables + design tokens (DESIGN.md)",
       winner: "vllnt",
     },
     {
       attribute: "Accessibility primitives",
-      vllnt: "Radix UI",
       shadcn: "Radix UI",
+      vllnt: "Radix UI",
       winner: "even",
     },
     {
       attribute: "Variant system",
-      vllnt: "CVA",
       shadcn: "CVA",
+      vllnt: "CVA",
       winner: "even",
     },
     {
       attribute: "Community size",
-      vllnt: "Smaller, growing",
       shadcn: "Massive — millions of installs",
+      vllnt: "Smaller, growing",
       winner: "shadcn",
     },
     {
       attribute: "Namespace recognition",
-      vllnt: "@vllnt/ui (newer)",
       shadcn: "shadcn (industry standard)",
+      vllnt: "@vllnt/ui (newer)",
       winner: "shadcn",
     },
     {
       attribute: "Tutorials + content",
-      vllnt: "Limited (young project)",
       shadcn: "Extensive — countless videos, blogs, courses",
+      vllnt: "Limited (young project)",
       winner: "shadcn",
     },
     {
       attribute: "Templates / starter kits",
-      vllnt: "Curated app templates for Next.js, dashboards, SaaS, AI chat, and docs",
       shadcn: "Many official + community templates",
+      vllnt:
+        "Curated app templates for Next.js, dashboards, SaaS, AI chat, and docs",
       winner: "even",
     },
     {
       attribute: "License",
-      vllnt: "MIT",
       shadcn: "MIT",
+      vllnt: "MIT",
       winner: "even",
     },
   ];
@@ -166,8 +178,8 @@ export default async function VsShadcnPage({ params }: Props) {
               shadcn/ui is the industry standard. VLLNT UI is a younger sibling
               that takes the same registry idea further: more components, an
               agent-first surface (<code>/llms.txt</code>, <code>/mcp</code>,
-              richer JSON descriptors), and a hybrid install model that
-              dedupes shared primitives via <code>@vllnt/ui</code>.
+              richer JSON descriptors), and a hybrid install model that dedupes
+              shared primitives via <code>@vllnt/ui</code>.
             </p>
             <p>
               If you want maximum community signal and the largest pool of
@@ -180,8 +192,7 @@ export default async function VsShadcnPage({ params }: Props) {
               <Link href={localizePathname("/templates", locale)}>
                 starter kit gallery
               </Link>{" "}
-              for finished
-              app shells built from the registry.
+              for finished app shells built from the registry.
             </p>
           </div>
 
@@ -227,8 +238,8 @@ export default async function VsShadcnPage({ params }: Props) {
               that benefits from being &ldquo;just shadcn&rdquo;.
             </p>
             <p>
-              <strong>Pick VLLNT UI</strong> when you need components beyond
-              the shadcn core (timelines, maps, AI compounds, runtime overlays,
+              <strong>Pick VLLNT UI</strong> when you need components beyond the
+              shadcn core (timelines, maps, AI compounds, runtime overlays,
               canvas primitives), when AI agents are part of your authoring
               flow, or when you want the registry data structured enough to
               query programmatically.

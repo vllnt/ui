@@ -301,14 +301,14 @@ function renderFloatingCanvasShell(
   return (
     <section
       className={cn(
-        "relative isolate flex min-h-[720px] w-full overflow-hidden bg-[radial-gradient(circle_at_top,hsl(var(--background)/0.94),hsl(var(--muted)/0.6))]",
+        "relative isolate flex min-h-[720px] w-full overflow-hidden bg-[radial-gradient(circle_at_top,oklch(var(--background)/0.94),oklch(var(--muted)/0.6))]",
         className,
       )}
       ref={ref}
       style={mergedStyle}
       {...props}
     >
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)/0.94),hsl(var(--background)/0.8))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(var(--background)/0.94),oklch(var(--background)/0.8))]" />
       <CanvasShellChromeBefore
         inset={inset}
         leftBar={hasLeftBar ? resolvedLeftBar : undefined}

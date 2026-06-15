@@ -4,6 +4,7 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
@@ -13,48 +14,55 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+    title: "VLLNT UI vs · Comparisons",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical("/vs", locale),
       languages: languageAlternates("/vs"),
     },
-    description:
-      "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
-    title: "VLLNT UI vs · Comparisons",
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, { locale, pathname: "/vs" }),
+    title: ogParameters.title,
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
-const COMPARISONS: ReadonlyArray<{
-  readonly slug: string;
-  readonly name: string;
-  readonly tagline: string;
+const COMPARISONS: readonly {
   readonly available: boolean;
-}> = [
+  readonly name: string;
+  readonly slug: string;
+  readonly tagline: string;
+}[] = [
   {
-    slug: "shadcn",
+    available: true,
     name: "shadcn/ui",
+    slug: "shadcn",
     tagline:
       "Closest sibling. Same registry format. Different component count and agent surface.",
-    available: true,
   },
   {
-    slug: "radix",
+    available: false,
     name: "Radix UI",
+    slug: "radix",
     tagline: "Accessible primitives — VLLNT UI is built on top of these.",
-    available: false,
   },
   {
-    slug: "headless-ui",
+    available: false,
     name: "HeadlessUI",
+    slug: "headless-ui",
     tagline: "Tailwind Labs primitives — different ecosystem.",
-    available: false,
   },
   {
-    slug: "nextui",
-    name: "NextUI",
-    tagline: "Component library with its own design language.",
     available: false,
+    name: "NextUI",
+    slug: "nextui",
+    tagline: "Component library with its own design language.",
   },
 ];
 
@@ -70,8 +78,8 @@ export default async function VsIndexPage({ params }: Props) {
           <h1 className="text-4xl font-semibold mb-3">VLLNT UI vs the rest</h1>
           <p className="text-muted-foreground text-lg mb-10">
             Honest comparisons. We call out where alternatives are stronger,
-            where VLLNT UI fits better, and where the gap is small enough to
-            not matter.
+            where VLLNT UI fits better, and where the gap is small enough to not
+            matter.
           </p>
 
           <ul className="space-y-3">

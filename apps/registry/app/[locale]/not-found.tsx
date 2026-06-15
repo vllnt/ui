@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Page not found · VLLNT UI",
 };
 
-const POPULAR_COMPONENTS: ReadonlyArray<{ name: string; slug: string }> = [
+const POPULAR_COMPONENTS: readonly { name: string; slug: string }[] = [
   { name: "Button", slug: "button" },
   { name: "DataTable", slug: "data-table" },
   { name: "AI Chat Input", slug: "ai-chat-input" },

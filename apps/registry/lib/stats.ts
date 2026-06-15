@@ -2,14 +2,14 @@ import packageJson from "../../../packages/ui/package.json";
 import registry from "../registry.json";
 
 type RegistryItem = {
-  readonly name: string;
   readonly category?: string;
+  readonly name: string;
 };
 
 type Registry = {
+  readonly generatedAt?: string;
   readonly items: readonly RegistryItem[];
   readonly version?: string;
-  readonly generatedAt?: string;
 };
 
 const REGISTRY = registry as Registry;
@@ -33,11 +33,10 @@ type CategoryStat = {
 };
 
 function getCategoryStats(): readonly CategoryStat[] {
-  const counts = new Map<string, number>();
-  for (const item of REGISTRY.items) {
+  const counts = REGISTRY.items.reduce((accumulator, item) => {
     const key = item.category ?? "uncategorized";
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
+    return accumulator.set(key, (accumulator.get(key) ?? 0) + 1);
+  }, new Map<string, number>());
   return [...counts.entries()]
     .map(([category, count]) => ({ category, count }))
     .sort((a, b) => a.category.localeCompare(b.category));

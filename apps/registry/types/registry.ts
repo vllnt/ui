@@ -13,36 +13,36 @@ export type ComponentCategory =
   | "overlay"
   | "utility";
 
-type Stability = "stable" | "beta" | "experimental" | "deprecated";
+type Stability = "beta" | "deprecated" | "experimental" | "stable";
 
 type A11yKeyboardBinding = {
-  keys: string;
   action: string;
+  keys: string;
 };
 
 type A11ySchema = {
-  role?: string;
-  keyboard?: A11yKeyboardBinding[];
   aria?: string[];
   focusManagement?: "auto" | "manual";
+  keyboard?: A11yKeyboardBinding[];
   notes?: string;
+  role?: string;
 };
 
 export type UsageExample = {
-  title: string;
-  description?: string;
   code: string;
-  framework?: "react" | "next";
+  description?: string;
+  framework?: "next" | "react";
   storyId?: string;
+  title: string;
 };
 
-type PropDefinition = {
-  name: string;
-  type: string;
-  required?: boolean;
+type ComponentPropertyDefinition = {
   defaultValue?: string;
-  description?: string;
   deprecated?: boolean;
+  description?: string;
+  name: string;
+  required?: boolean;
+  type: string;
 };
 
 export type RegistryComponent = {
@@ -53,7 +53,7 @@ export type RegistryComponent = {
   examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
-  props?: PropDefinition[];
+  props?: ComponentPropertyDefinition[];
   registryDependencies?: string[];
   replacedBy?: string;
   stability?: Stability;

@@ -104,7 +104,7 @@ function PriceGrid({
   return ticks.map((tick) => (
     <g key={tick.value}>
       <line
-        stroke="hsl(var(--border))"
+        stroke="oklch(var(--border))"
         strokeDasharray="4 6"
         strokeOpacity="0.8"
         x1="0"
@@ -113,7 +113,7 @@ function PriceGrid({
         y2={tick.y}
       />
       <text
-        fill="hsl(var(--muted-foreground))"
+        fill="oklch(var(--muted-foreground))"
         fontSize="11"
         textAnchor="end"
         x={width - 6}
@@ -172,7 +172,7 @@ function CandleMarks({
           </title>
         </rect>
         <text
-          fill="hsl(var(--muted-foreground))"
+          fill="oklch(var(--muted-foreground))"
           fontSize="11"
           textAnchor="middle"
           x={centerX}

@@ -75,7 +75,9 @@ registry app build ─▶ .next/      (consumes @vllnt/ui via workspace link in 
 
 ## Theming
 
-All color/spacing/radius values are HSL CSS variables on `:root` and `.dark` in `styles.css`. Downstream apps override variables without patching components. The Tailwind preset (`@vllnt/ui/tailwind-preset`) maps variables to Tailwind tokens so utility classes stay in sync with theme overrides.
+All color values are **OKLCH channel** CSS variables (`L C H`) on `:root` and `.dark` in `styles.css` / `themes/default.css`; spacing and radius are length variables. Downstream apps override variables without patching components. The Tailwind preset (`@vllnt/ui/tailwind-preset`) maps variables to Tailwind tokens as `oklch(var(--name) / <alpha-value>)` so utility classes (including opacity modifiers) stay in sync with theme overrides.
+
+Beyond light/dark, a runtime **preset** layer (`themes/presets.css`) applies named themes via `data-theme` on the document root, switchable with `ThemeSwitcher` / `useThemePreset`. The registry app's `/themes` editor lets users author a custom OKLCH theme and export it as a CSS block, a `npx shadcn add` command (served by the `/r/themes` route handler), or design tokens.
 
 ## CI pipelines
 

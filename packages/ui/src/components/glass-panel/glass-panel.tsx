@@ -8,7 +8,7 @@ const GlassPanel = forwardRef<HTMLDivElement, GlassPanelProps>(
   ({ children, className, ...props }, ref) => (
     <div
       className={cn(
-        "rounded-2xl border border-border/60 bg-background/70 shadow-[0_12px_40px_hsl(var(--foreground)/0.08)] backdrop-blur-xl",
+        "rounded-2xl border border-border/60 bg-background/70 shadow-[0_12px_40px_oklch(var(--foreground)/0.08)] backdrop-blur-xl",
         className,
       )}
       ref={ref}

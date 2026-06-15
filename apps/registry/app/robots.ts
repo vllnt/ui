@@ -18,19 +18,19 @@ const AI_CRAWLERS = [
 
 export default function robots(): MetadataRoute.Robots {
   const aiAllow = AI_CRAWLERS.map((userAgent) => ({
-    userAgent,
     allow: "/",
+    userAgent,
   }));
 
   return {
+    host: SITE_URL,
     rules: [
       {
-        userAgent: "*",
         allow: "/",
+        userAgent: "*",
       },
       ...aiAllow,
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
   };
 }

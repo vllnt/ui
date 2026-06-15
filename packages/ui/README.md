@@ -44,7 +44,7 @@ export default {
 ```
 
 The preset configures:
-- **Colors**: `primary`, `secondary`, `muted`, `accent`, `destructive`, `background`, `foreground`, `card`, `popover`, `border`, `input`, `ring` — all as `hsl(var(--name))` for theming
+- **Colors**: `primary`, `secondary`, `muted`, `accent`, `destructive`, `background`, `foreground`, `card`, `popover`, `border`, `input`, `ring` — all as `oklch(var(--name) / <alpha-value>)` for theming
 - **Border radius**: `lg`, `md`, `sm` via `--radius` CSS variable
 - **Animations**: `accordion-down`, `accordion-up`, `shimmer`
 - **Font**: `mono` family via `--font-mono` variable
@@ -83,45 +83,59 @@ export function Example() {
 | `@vllnt/ui/tailwind-preset` | Tailwind CSS preset config |
 | `@vllnt/ui/styles.css` | Full styles (Tailwind base + theme variables + utilities) |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only (no Tailwind base) |
+| `@vllnt/ui/themes/presets.css` | Built-in color presets (applied via `data-theme`) |
 
 ## Theming
 
-All colors use HSL CSS variables. Override them after importing styles:
+All colors are **OKLCH channel** CSS variables (`L C H`), consumed as
+`oklch(var(--name) / <alpha-value>)`. Override them after importing styles:
 
 ```css
 /* Light theme */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  --background: 1 0 0;
+  --foreground: 0.1445 0 0;
+  --primary: 0.2044 0 0;
+  --primary-foreground: 0.9848 0 0;
+  --secondary: 0.9703 0 0;
+  --secondary-foreground: 0.2044 0 0;
+  --muted: 0.9703 0 0;
+  --muted-foreground: 0.5555 0 0;
+  --accent: 0.9703 0 0;
+  --accent-foreground: 0.2044 0 0;
+  --destructive: 0.6368 0.2078 25.326;
+  --destructive-foreground: 0.9848 0 0;
+  --border: 0.9219 0 0;
+  --input: 0.9219 0 0;
+  --ring: 0.1445 0 0;
   --radius: 0.5rem;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 3.9%;
+  --card: 1 0 0;
+  --card-foreground: 0.1445 0 0;
+  --popover: 1 0 0;
+  --popover-foreground: 0.1445 0 0;
 }
 
 /* Dark theme (applied via class="dark" on html/body) */
 .dark {
-  --background: 0 0% 3.9%;
-  --foreground: 0 0% 98%;
+  --background: 0 0 0;
+  --foreground: 0.9848 0 0;
   /* ... override other variables */
 }
 ```
 
-Use `@vllnt/ui/themes/default.css` instead of `@vllnt/ui/styles.css` if you only want the variables without Tailwind base layer styles.
+Use `@vllnt/ui/themes/default.css` instead of `@vllnt/ui/styles.css` if you only
+want the variables without the Tailwind base layer.
+
+### Runtime presets & the theme editor
+
+Import `@vllnt/ui/themes/presets.css` and switch between built-in color presets
+at runtime with `<ThemeSwitcher />` (or `setThemePreset` / `useThemePreset`),
+which set `data-theme` on the document root. Render `<ThemePresetProvider />`
+once near the root to restore the saved preset before paint.
+
+To design and export your own theme, use the visual editor at
+[`/themes`](https://ui.vllnt.ai/themes) — it exports a CSS block, a
+`npx shadcn add` command, or design tokens.
 
 ## Component Patterns
 

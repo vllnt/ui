@@ -14,11 +14,20 @@ project: ui                          # token-scope + allowlist key (granted serv
 apps:
   # Component registry / docs site → ui.vllnt.ai
   - name: ui-registry
+    cell: apps   # T1 (vllnt-apps) — prod promote MUST target the cell, else defaults to mgmt
     path: apps/registry
     port: 3000
     healthcheck: /
     domains:
       production: ui.vllnt.ai
+    tls:
+      # T1 cell (ADR-090e) has no shared *.vllnt.ai wildcard secret;
+      # without this the renderer defaults to the absent
+      # wildcard-vllnt-ai-tls and Traefik serves its default cert
+      # (site DOWN — incident 2026-06-10). Per-host DNS-01 cert,
+      # in-ns + auto-renewing.
+      production:
+        secretName: ui-registry-tls
     visibility:                      # previews are tailnet-only (hostname derived by deployer)
       production: public
       preview:    tailnet
@@ -45,14 +54,30 @@ apps:
         # base stays in the deployer, never this public file. ntk.yaml token
         # reference: vllnt/infra docs/specs/ntk.md.
         NEXT_PUBLIC_STORYBOOK_URL: "{url:storybook}"
+    e2e:
+      # Promote gate: ntk runs this against the live preview URL before a prod
+      # promote (blocks prod on failure). The registry ships a real Playwright
+      # e2e suite (apps/registry/e2e); its playwright.config reads
+      # PLAYWRIGHT_BASE_URL to target the deployed preview (and skip the local
+      # dev server) so the gate tests the built artifact, not localhost.
+      command: "PLAYWRIGHT_BASE_URL=$NTK_PREVIEW_URL pnpm --filter @vllnt/ui-registry test:e2e"
 
   # Component workshop → storybook.vllnt.ai
   - name: storybook
+    cell: apps   # T1 (vllnt-apps) — prod promote MUST target the cell, else defaults to mgmt
     path: apps/storybook
     port: 8080
     healthcheck: /healthz
     domains:
       production: storybook.vllnt.ai
+    tls:
+      # T1 cell (ADR-090e) has no shared *.vllnt.ai wildcard secret;
+      # without this the renderer defaults to the absent
+      # wildcard-vllnt-ai-tls and Traefik serves its default cert
+      # (site DOWN — incident 2026-06-10). Per-host DNS-01 cert,
+      # in-ns + auto-renewing.
+      production:
+        secretName: storybook-tls
     visibility:
       production: public
       preview:    tailnet
@@ -65,3 +90,12 @@ apps:
     build:
       dockerfile: apps/storybook/Dockerfile
       context: .
+    e2e:
+      # Promote gate: ntk runs this against the live preview URL before a prod
+      # promote (blocks prod on failure). storybook is a static nginx export of
+      # packages/ui (no app-local test harness; its component/visual tests run in
+      # CI via storybook.yml against a local static server, not the preview URL).
+      # The honest preview-URL gate here is a smoke: the deployed instance must
+      # serve its healthcheck AND the built Storybook index, proving the artifact
+      # is live before authorizing prod.
+      command: "curl -fsS \"$NTK_PREVIEW_URL/healthz\" && curl -fsS \"$NTK_PREVIEW_URL/\" >/dev/null"

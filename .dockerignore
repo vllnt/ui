@@ -1,0 +1,43 @@
+# Repo-root .dockerignore — the deployer's git-context build roots its COPY at the
+# repo root and ignores per-app build.context, so this must live at the repo root
+# (not per-app). Keeps the BuildKit context small + reproducible for BOTH images
+# (root Dockerfile → ui-registry, apps/storybook/Dockerfile → storybook).
+
+# VCS + CI
+.git
+.github
+.githooks
+
+# Dependencies (reinstalled in-image via pnpm --frozen-lockfile)
+node_modules
+**/node_modules
+.pnpm-store
+
+# Build outputs (rebuilt in-image)
+**/.next
+**/dist
+**/.turbo
+**/storybook-static
+**/coverage
+**/*.tsbuildinfo
+apps/registry/public/r
+apps/registry/public/_pagefind
+**/_pagefind
+
+# Tests + snapshots (not needed at build time)
+**/playwright-report
+**/playwright-results
+**/test-results
+packages/ui/.snapshots
+
+# Local env + editor + OS
+.env
+.env.local
+.env.*.local
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.mcp.json

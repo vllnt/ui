@@ -27,6 +27,9 @@ jobs:
       - name: Lint
         run: pnpm -F @vllnt/ui lint
 
+      - name: Lint registry
+        run: pnpm -F @vllnt/ui-registry lint
+
       - name: Typecheck
         run: pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
 
