@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Step, StepNavigation } from "@vllnt/ui";
+import { StepNavigation } from "@vllnt/ui";
 
 export default function StepNavigationPreview() {
   const [step, setStep] = React.useState(2);

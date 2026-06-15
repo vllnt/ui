@@ -2,15 +2,14 @@ import { Badge, Breadcrumb, Button, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { getReleaseRecords } from "@/lib/changelog";
 import type { Locale } from "@/i18n/routing";
+import { getReleaseRecords } from "@/lib/changelog";
 import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
-
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const DESCRIPTION =
   "Read VLLNT UI releases, including latest notes, component count deltas, breaking change counts, migration links, and GitHub release links.";
@@ -163,7 +162,7 @@ function releaseJsonLdItem(
 }
 
 export default async function ReleasesPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
   const releases = await getReleaseRecords();
 
   return (

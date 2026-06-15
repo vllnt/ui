@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 
 import { ComponentPreview } from "@/components/component-preview/component-preview";
 import componentMetadata from "@/lib/component-metadata.json";
-import { componentUrl, withRef } from "@/lib/share";
 import { getRegistry } from "@/lib/registry";
+import { componentUrl, withRef } from "@/lib/share";
 import type { RegistryComponent } from "@/types/registry";
 
 type Props = {

@@ -1,15 +1,14 @@
 import { SITE_URL } from "@/lib/seo";
 
-
 type JsonLdValue =
-  | string
-  | number
   | boolean
   | null
+  | number
   | readonly JsonLdValue[]
+  | string
   | { readonly [key: string]: JsonLdValue };
 
-type JsonLdNode = { readonly [key: string]: JsonLdValue };
+type JsonLdNode = Readonly<Record<string, JsonLdValue>>;
 
 export type JsonLdScriptAttributes = {
   readonly dangerouslySetInnerHTML: {
@@ -23,8 +22,8 @@ export function organizationLd(): JsonLdNode {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "VLLNT",
-    url: SITE_URL,
     sameAs: ["https://github.com/vllnt", "https://github.com/vllnt/ui"],
+    url: SITE_URL,
   };
 }
 
@@ -33,28 +32,28 @@ export function websiteLd(): JsonLdNode {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "VLLNT UI",
-    url: SITE_URL,
     publisher: {
       "@type": "Organization",
       name: "VLLNT",
     },
+    url: SITE_URL,
   };
 }
 
 export function softwareSourceCodeLd(component: {
+  readonly description: string;
   readonly name: string;
   readonly title: string;
-  readonly description: string;
 }): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
-    name: component.title,
-    description: component.description,
     codeRepository: "https://github.com/vllnt/ui",
+    description: component.description,
+    license: "https://opensource.org/license/mit",
+    name: component.title,
     programmingLanguage: "TypeScript",
     runtimePlatform: "React",
-    license: "https://opensource.org/license/mit",
     url: `${SITE_URL}/components/${component.name}`,
   };
 }
@@ -90,18 +89,20 @@ export function softwareApplicationLd(application: {
   return node;
 }
 
-export function breadcrumbLd(trail: ReadonlyArray<{
-  readonly name: string;
-  readonly url: string;
-}>): JsonLdNode {
+export function breadcrumbLd(
+  trail: readonly {
+    readonly name: string;
+    readonly url: string;
+  }[],
+): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: trail.map((step, index) => ({
       "@type": "ListItem",
-      position: index + 1,
-      name: step.name,
       item: step.url,
+      name: step.name,
+      position: index + 1,
     })),
   };
 }
@@ -114,40 +115,40 @@ export function techArticleLd(article: {
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    headline: article.title,
-    description: article.description,
-    url: article.url,
+    about: "React component library documentation",
     author: {
       "@type": "Organization",
       name: "VLLNT",
       url: SITE_URL,
     },
+    description: article.description,
+    headline: article.title,
+    programmingLanguage: "TypeScript",
     publisher: {
       "@type": "Organization",
       name: "VLLNT",
       url: SITE_URL,
     },
-    programmingLanguage: "TypeScript",
-    about: "React component library documentation",
+    url: article.url,
   };
 }
 
 export function faqPageLd(
-  entries: ReadonlyArray<{
-    readonly question: string;
+  entries: readonly {
     readonly answer: string;
-  }>,
+    readonly question: string;
+  }[],
 ): JsonLdNode {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: entries.map((entry) => ({
       "@type": "Question",
-      name: entry.question,
       acceptedAnswer: {
         "@type": "Answer",
         text: entry.answer,
       },
+      name: entry.question,
     })),
   };
 }

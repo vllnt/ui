@@ -1,6 +1,10 @@
 "use client";
 
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@vllnt/ui";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@vllnt/ui";
 
 export default function ResizablePreview() {
   return (

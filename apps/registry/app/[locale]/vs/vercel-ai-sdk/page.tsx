@@ -1,14 +1,13 @@
+import type { Metadata } from "next";
 
 import {
   ComparisonPage,
   comparisonPageMetadata,
   type ComparisonRow,
 } from "@/components/comparison-page/comparison-page";
-import { localizePathname } from "@/lib/seo";
-
 import type { Locale } from "@/i18n/routing";
-import { resolveLocaleParams } from "@/lib/locale";
-import type { Metadata } from "next";
+import { resolveLocaleParameters } from "@/lib/locale";
+import { localizePathname } from "@/lib/seo";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -64,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function VsVercelAiSdkPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
 
   return (
     <ComparisonPage
@@ -78,8 +77,8 @@ export default async function VsVercelAiSdkPage({ params }: Props) {
           These aren&apos;t competitors — they&apos;re layers. The Vercel AI SDK
           is the data layer that streams tokens and talks to model providers.
           VLLNT UI is the design system that renders the result: chat input,
-          message bubbles, streaming text, tool calls, citations, and
-          artifacts. Most AI apps want both.
+          message bubbles, streaming text, tool calls, citations, and artifacts.
+          Most AI apps want both.
         </p>
       }
       locale={locale}

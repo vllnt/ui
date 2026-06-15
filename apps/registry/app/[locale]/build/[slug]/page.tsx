@@ -8,17 +8,16 @@ import { Footer } from "@/components/footer/footer";
 import { type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
 import { breadcrumbLd, faqPageLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getUseCase, USE_CASES } from "@/lib/use-cases";
-import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale; slug: string }>;
 };
-
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -53,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function UseCasePage({ params }: Props) {
-  const { locale, slug } = await resolveLocaleParams(params);
+  const { locale, slug } = await resolveLocaleParameters(params);
 
   const useCase = getUseCase(slug);
   if (!useCase) {

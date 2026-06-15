@@ -1,8 +1,8 @@
+import { SITE_URL } from "@/lib/seo";
+import type { RegistryComponent } from "@/types/registry";
+
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 import { getRegistryItems } from "../../lib/registry";
-
-import type { RegistryComponent } from "@/types/registry";
-import { SITE_URL } from "@/lib/seo";
 
 const TEXT_HEADERS = new Headers([
   [
@@ -64,7 +64,9 @@ function getSortedCategories(
   ];
 }
 
-function buildIntroLines(items: readonly RegistryComponent[]): readonly string[] {
+function buildIntroLines(
+  items: readonly RegistryComponent[],
+): readonly string[] {
   return [
     "# VLLNT UI",
     "",

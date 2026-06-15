@@ -2,15 +2,14 @@ import { Badge, Breadcrumb, Button, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { type ChangelogTypeFilter, getChangelogEntries } from "@/lib/changelog";
 import type { Locale } from "@/i18n/routing";
+import { type ChangelogTypeFilter, getChangelogEntries } from "@/lib/changelog";
 import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
-
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type SearchParameters = {
   readonly from?: string;
@@ -18,7 +17,7 @@ type SearchParameters = {
   readonly type?: string;
 };
 
-type LocaleParams = {
+type LocaleParameters = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
@@ -37,7 +36,7 @@ const DESCRIPTION =
 
 export async function generateMetadata({
   params,
-}: LocaleParams): Promise<Metadata> {
+}: LocaleParameters): Promise<Metadata> {
   const { locale } = await params;
 
   return {
@@ -139,10 +138,10 @@ function FilterControls({
 export default async function ChangelogPage({
   params,
   searchParams,
-}: LocaleParams & {
+}: LocaleParameters & {
   readonly searchParams: Promise<SearchParameters>;
 }) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
   const parameters = await searchParams;
   const type = normalizeType(parameters.type);
   const entries = await getChangelogEntries({

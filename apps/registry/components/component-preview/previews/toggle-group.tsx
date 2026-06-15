@@ -1,6 +1,6 @@
 "use client";
 
-import { Toggle, ToggleGroup, ToggleGroupItem } from "@vllnt/ui";
+import { ToggleGroup, ToggleGroupItem } from "@vllnt/ui";
 import { Bold, Italic, Underline } from "lucide-react";
 
 export default function ToggleGroupPreview() {

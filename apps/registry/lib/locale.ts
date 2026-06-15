@@ -15,12 +15,12 @@ export type LocalePageProps = {
  * @param params - The page's `params` promise (may carry extra segments)
  * @returns The resolved params object
  * @example
- * const { locale, slug } = await resolveLocaleParams(params);
+ * const { locale, slug } = await resolveLocaleParameters(params);
  */
-export async function resolveLocaleParams<T extends { locale: Locale }>(
-  params: Promise<T>,
+export async function resolveLocaleParameters<T extends { locale: Locale }>(
+  parameters: Promise<T>,
 ): Promise<T> {
-  const resolved = await params;
+  const resolved = await parameters;
   setRequestLocale(resolved.locale);
   return resolved;
 }

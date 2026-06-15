@@ -319,6 +319,9 @@ export const ChronoEvent = forwardRef<HTMLElement, ChronoEventProps>(
     }, [eventId, setActiveId]);
 
     return (
+      /* Passive focus tracking: the container observes focus bubbling from
+         its interactive children to drive the scroll-spy active state. */
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <article
         aria-labelledby={`${eventId}-title`}
         className={cn(

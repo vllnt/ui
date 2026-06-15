@@ -1,6 +1,13 @@
 "use client";
 
-import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from "@vllnt/ui";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@vllnt/ui";
 
 export default function MenubarPreview() {
   return (

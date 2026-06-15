@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Button, CodePlayground } from "@vllnt/ui";
+import { CodePlayground } from "@vllnt/ui";
 
 export default function CodePlaygroundPreview() {
   return (

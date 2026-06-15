@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import registryJson from "../registry.json";
-
 import type { Registry, RegistryComponent } from "@/types/registry";
+
+import registryJson from "../registry.json";
 
 const registryFileSchema = z.object({
   path: z.string(),
@@ -30,7 +30,7 @@ const usageExampleSchema = z.object({
   title: z.string(),
 });
 
-const propDefinitionSchema = z.object({
+const propertyDefinitionSchema = z.object({
   defaultValue: z.string().optional(),
   deprecated: z.boolean().optional(),
   description: z.string().optional(),
@@ -62,10 +62,12 @@ const registryComponentSchema = z.object({
   examples: z.array(usageExampleSchema).optional(),
   files: z.array(registryFileSchema),
   name: z.string(),
-  props: z.array(propDefinitionSchema).optional(),
+  props: z.array(propertyDefinitionSchema).optional(),
   registryDependencies: z.array(z.string()).optional(),
   replacedBy: z.string().optional(),
-  stability: z.enum(["stable", "beta", "experimental", "deprecated"]).optional(),
+  stability: z
+    .enum(["stable", "beta", "experimental", "deprecated"])
+    .optional(),
   title: z.string(),
   type: z.literal("registry:component"),
   version: z.string().optional(),

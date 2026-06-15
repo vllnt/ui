@@ -1,6 +1,11 @@
 "use client";
 
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@vllnt/ui";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@vllnt/ui";
 
 export default function ContextMenuPreview() {
   return (

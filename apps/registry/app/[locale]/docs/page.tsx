@@ -11,12 +11,11 @@ import {
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
-
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -51,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DocumentationPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
   const { content } = await getPageContent("docs", locale);
 
   return (
@@ -64,7 +63,8 @@ export default async function DocumentationPage({ params }: Props) {
             { name: "Docs", url: `${SITE_URL}/docs` },
           ]),
           techArticleLd({
-            description: "Learn how to use VLLNT UI components in your projects.",
+            description:
+              "Learn how to use VLLNT UI components in your projects.",
             title: "Documentation",
             url: `${SITE_URL}/docs`,
           }),

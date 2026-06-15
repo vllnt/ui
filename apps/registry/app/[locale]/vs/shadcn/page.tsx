@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
@@ -5,12 +6,10 @@ import {
   comparisonPageMetadata,
   type ComparisonRow,
 } from "@/components/comparison-page/comparison-page";
+import type { Locale } from "@/i18n/routing";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { localizePathname } from "@/lib/seo";
 import { getComponentCount, getLibraryVersion } from "@/lib/stats";
-
-import type { Locale } from "@/i18n/routing";
-import { resolveLocaleParams } from "@/lib/locale";
-import type { Metadata } from "next";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -146,7 +145,7 @@ function buildRows(componentCount: number): readonly ComparisonRow[] {
 }
 
 export default async function VsShadcnPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
   const componentCount = getComponentCount();
   const version = getLibraryVersion();
 
@@ -162,15 +161,15 @@ export default async function VsShadcnPage({ params }: Props) {
           </p>
           <p>
             <strong>Pick VLLNT UI</strong> when you need components beyond the
-            shadcn core (timelines, maps, AI compounds, runtime overlays,
-            canvas primitives), when AI agents are part of your authoring flow,
-            or when you want the registry data structured enough to query
+            shadcn core (timelines, maps, AI compounds, runtime overlays, canvas
+            primitives), when AI agents are part of your authoring flow, or when
+            you want the registry data structured enough to query
             programmatically.
           </p>
           <p>
             The honest answer: many projects use both. shadcn/ui as the
-            baseline, VLLNT UI for the families shadcn doesn&rsquo;t cover.
-            Same install model: they coexist cleanly.
+            baseline, VLLNT UI for the families shadcn doesn&rsquo;t cover. Same
+            install model: they coexist cleanly.
           </p>
         </div>
       }
@@ -188,9 +187,9 @@ export default async function VsShadcnPage({ params }: Props) {
           </p>
           <p>
             If you want maximum community signal and the largest pool of
-            third-party tutorials and templates, shadcn/ui wins. If you want
-            the broadest curated component set and a registry that AI agents
-            can read directly, VLLNT UI wins.
+            third-party tutorials and templates, shadcn/ui wins. If you want the
+            broadest curated component set and a registry that AI agents can
+            read directly, VLLNT UI wins.
           </p>
           <p>
             VLLNT UI now includes a{" "}

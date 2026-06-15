@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { z } from "zod";
+
 import { SITE_URL } from "@/lib/seo";
 
 const GITHUB_REPO_URL = "https://github.com/vllnt/ui";
@@ -102,22 +103,12 @@ function extractSummary(notes: string): string {
 }
 
 function countBreakingChangesFromNotes(notes: string): number {
-  const lines = notes.split("\n");
-  let inBreakingSection = false;
-  let count = 0;
-  for (const line of lines) {
-    if (/^###\s+.*breaking/i.test(line)) {
-      inBreakingSection = true;
-      continue;
-    }
-    if (/^###/.test(line)) {
-      inBreakingSection = false;
-      continue;
-    }
-    if (inBreakingSection && line.trim().startsWith("- ")) {
-      count++;
-    }
-  }
+  const count = notes
+    .split(/\n(?=###\s)/)
+    .filter((section) => /^###\s+.*breaking/i.test(section))
+    .flatMap((section) =>
+      section.split("\n").filter((line) => line.trim().startsWith("- ")),
+    ).length;
   if (count > 0) return count;
   return /breaking/i.test(notes) ? 1 : 0;
 }
@@ -154,14 +145,11 @@ function changelogCandidates(): readonly string[] {
 }
 
 async function readChangelog(): Promise<string> {
-  for (const candidate of changelogCandidates()) {
-    try {
-      return await readFile(candidate, "utf8");
-    } catch {
-      // try next candidate
-    }
-  }
-  return "";
+  return changelogCandidates().reduce<Promise<string>>(
+    async (found, candidate) =>
+      (await found) || readFile(candidate, "utf8").catch(() => ""),
+    Promise.resolve(""),
+  );
 }
 
 function parseHeading(line: string): Heading | undefined {
@@ -398,7 +386,7 @@ export function feedUpdatedAt(
 ): string | undefined {
   const firstDated = releases.find((release) => release.date);
   if (firstDated?.date) return new Date(firstDated.date).toISOString();
-  const buildTime = process.env["BUILD_TIME"];
+  const buildTime = process.env.BUILD_TIME;
   return buildTime ? new Date(buildTime).toISOString() : undefined;
 }
 

@@ -24,21 +24,21 @@ import {
   jsonLdScriptAttributes,
   softwareSourceCodeLd,
 } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   getPlaygroundExample,
   getRegistryPackageVersion,
 } from "@/lib/playground";
+import { getRegistry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
 import {
   getCategoryForComponent,
   getSidebarSections,
 } from "@/lib/sidebar-sections";
-import { getRegistry } from "@/lib/registry";
 import type { RegistryComponent } from "@/types/registry";
-import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -119,7 +119,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ComponentPage(props: Props) {
-  const { locale, slug } = await resolveLocaleParams(props.params);
+  const { locale, slug } = await resolveLocaleParameters(props.params);
   const component = registry.items.find(
     (item): item is RegistryComponent =>
       item.name === slug && item.type === "registry:component",
@@ -198,7 +198,6 @@ export default async function ComponentPage(props: Props) {
       ? [{ id: "dependencies", title: "Dependencies" }]
       : []),
   ] as { id: string; title: string }[];
-
 
   return (
     <>

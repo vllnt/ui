@@ -2,7 +2,12 @@
 
 import * as React from "react";
 
-import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger, Toggle } from "@vllnt/ui";
+import {
+  Button,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@vllnt/ui";
 import { ChevronsUpDown } from "lucide-react";
 
 export default function CollapsiblePreview() {

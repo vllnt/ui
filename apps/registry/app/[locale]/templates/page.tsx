@@ -8,14 +8,13 @@ import Script from "next/script";
 import { BadgeSnippets } from "@/components/badge-snippets";
 import type { Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
-import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
-
 
 const title = "Templates - VLLNT UI";
 const description =
@@ -52,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TemplatesPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
 
   return (
     <>

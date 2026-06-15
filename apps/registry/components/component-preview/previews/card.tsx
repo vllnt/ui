@@ -1,6 +1,14 @@
 "use client";
 
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@vllnt/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@vllnt/ui";
 
 export default function CardPreview() {
   return (

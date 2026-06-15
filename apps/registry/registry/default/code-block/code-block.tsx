@@ -1,18 +1,28 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef } from "react";
+import {
+  type ComponentType,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  oneDark,
-  oneLight,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
+import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 import { useCopyToClipboard } from "@vllnt/ui";
+
+type PrismStyle = SyntaxHighlighterProps["style"];
+
+type LoadedHighlighter = {
+  oneDark: PrismStyle;
+  oneLight: PrismStyle;
+  SyntaxHighlighter: ComponentType<SyntaxHighlighterProps>;
+};
 
 type CodeBlockProps = {
   children: ReactNode;
@@ -59,14 +69,37 @@ export function CodeBlock({
   showLanguage = false,
 }: CodeBlockProps) {
   const { copied, copy } = useCopyToClipboard();
+  // react-syntax-highlighter (~10MB) is dynamic-imported on mount so the
+  // @vllnt/ui barrel's static graph never reaches it — barrel consumers that
+  // never render a CodeBlock ship zero bytes of it. Null until the chunk loads.
+  const [highlighter, setHighlighter] = useState<LoadedHighlighter | null>(
+    null,
+  );
   const { systemTheme, theme } = useTheme();
 
   const resolvedTheme = theme === "system" ? systemTheme : theme;
   const isDark = resolvedTheme !== "light";
-  const codeStyle = isDark ? oneDark : oneLight;
   const code = extractTextFromChildren(children);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    void Promise.all([
+      import("react-syntax-highlighter"),
+      import("react-syntax-highlighter/dist/esm/styles/prism"),
+    ]).then(([module_, styles]) => {
+      if (!active) return;
+      setHighlighter({
+        oneDark: styles.oneDark,
+        oneLight: styles.oneLight,
+        SyntaxHighlighter: module_.Prism,
+      });
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const element = scrollRef.current;
@@ -91,6 +124,9 @@ export function CodeBlock({
     await copy(code);
   };
 
+  const SyntaxHighlighter = highlighter?.SyntaxHighlighter;
+  const codeStyle = isDark ? highlighter?.oneDark : highlighter?.oneLight;
+
   return (
     <div
       className={cn(
@@ -102,27 +138,33 @@ export function CodeBlock({
         className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
         ref={scrollRef}
       >
-        <SyntaxHighlighter
-          codeTagProps={{
-            className: "font-mono text-sm",
-            style: {
-              background: "transparent",
-              display: "block",
-            },
-          }}
-          customStyle={{
-            background: "oklch(var(--background))",
-            fontSize: "0.875rem",
-            margin: 0,
-            minWidth: "fit-content",
-            overflowY: "hidden",
-            padding: "1rem",
-          }}
-          language={language}
-          style={codeStyle}
-        >
-          {code}
-        </SyntaxHighlighter>
+        {SyntaxHighlighter ? (
+          <SyntaxHighlighter
+            codeTagProps={{
+              className: "font-mono text-sm",
+              style: {
+                background: "transparent",
+                display: "block",
+              },
+            }}
+            customStyle={{
+              background: "oklch(var(--background))",
+              fontSize: "0.875rem",
+              margin: 0,
+              minWidth: "fit-content",
+              overflowY: "hidden",
+              padding: "1rem",
+            }}
+            language={language}
+            style={codeStyle}
+          >
+            {code}
+          </SyntaxHighlighter>
+        ) : (
+          <pre className="m-0 min-w-fit overflow-y-hidden p-4 font-mono text-sm">
+            <code className="block bg-transparent">{code}</code>
+          </pre>
+        )}
         <div className="absolute right-2 top-2 flex items-center gap-2">
           {showLanguage ? (
             <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">

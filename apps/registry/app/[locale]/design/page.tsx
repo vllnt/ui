@@ -11,10 +11,10 @@ import {
   slugifyHeading,
 } from "@/lib/design-guide";
 import { jsonLdScript } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-import { resolveLocaleParams } from "@/lib/locale";
 
 const DESCRIPTION =
   "Canonical VLLNT UI design rules, tokens, component patterns, accessibility expectations, and agent-facing guidance.";
@@ -89,7 +89,7 @@ function DesignHeadingThree({ children, ...props }: ComponentProps<"h3">) {
 }
 
 export default async function DesignPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
   const markdown = await getDesignGuideMarkdown();
   const sections = extractDesignGuideSections(markdown);
   const semanticColorCount = Object.keys(designTokens.color.semantic).length;

@@ -6,7 +6,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 
-
 import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPage, getDocsPath } from "@/lib/docs-pages";
@@ -15,12 +14,12 @@ import {
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-import { SITE_URL } from "@/lib/seo";
-import { resolveLocaleParams } from "@/lib/locale";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -32,7 +31,12 @@ export function generateStaticParams(): { locale: Locale; slug: string }[] {
   );
 }
 
-const ROOT_CHANGELOG_PATH = path.join(process.cwd(), "..", "..", "CHANGELOG.md");
+const ROOT_CHANGELOG_PATH = path.join(
+  process.cwd(),
+  "..",
+  "..",
+  "CHANGELOG.md",
+);
 const PACKAGE_CHANGELOG_PATH = path.join(
   process.cwd(),
   "..",
@@ -44,7 +48,8 @@ const PACKAGE_CHANGELOG_PATH = path.join(
 
 async function readChangelogFile(filePath: string): Promise<string> {
   try {
-    return (await readFile(filePath, "utf8")).trim();
+    const content = await readFile(filePath, "utf8");
+    return content.trim();
   } catch {
     return "";
   }
@@ -102,7 +107,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function DocsSlugPage(props: Props) {
-  const { locale, slug } = await resolveLocaleParams(props.params);
+  const { locale, slug } = await resolveLocaleParameters(props.params);
   const docsPage = getDocsPage(slug);
 
   if (!docsPage) {
@@ -148,9 +153,7 @@ export default async function DocsSlugPage(props: Props) {
                 { label: frontmatter.title },
               ]}
             />
-            <h1 className="text-4xl font-semibold mb-4">
-              {frontmatter.title}
-            </h1>
+            <h1 className="text-4xl font-semibold mb-4">{frontmatter.title}</h1>
             <p className="text-muted-foreground text-lg">
               {frontmatter.description}
             </p>

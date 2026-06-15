@@ -9,7 +9,6 @@ import { SITE_URL } from "@/lib/seo";
 export const OG_IMAGE_WIDTH = 2400;
 export const OG_IMAGE_HEIGHT = 1260;
 
-
 const ogImageParametersSchema = z.object({
   category: z.string().max(100).optional(),
   description: z.string().max(500).optional(),
@@ -81,8 +80,10 @@ export function generateTwitterMetadata(
 
   return {
     card: "summary_large_image",
+    creator: "@vllnt",
     description: validated.description,
     images: [ogImageURL],
+    site: "@vllnt",
     title: validated.title,
   };
 }

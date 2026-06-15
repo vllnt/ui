@@ -2,7 +2,15 @@
 
 import * as React from "react";
 
-import { Button, Calendar, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@vllnt/ui";
+import {
+  Button,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@vllnt/ui";
 
 export default function CommandPreview() {
   const [open, setOpen] = React.useState(false);

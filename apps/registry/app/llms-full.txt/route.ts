@@ -2,12 +2,11 @@ import { getLatestReleaseRecords } from "@/lib/changelog";
 import { getPageContent } from "@/lib/content";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
 import { getRegistryItems } from "@/lib/registry";
+import { SITE_URL } from "@/lib/seo";
+import type { RegistryComponent } from "@/types/registry";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../../lib/templates";
-
-import type { RegistryComponent } from "@/types/registry";
-import { SITE_URL } from "@/lib/seo";
 
 const TEXT_HEADERS = new Headers([
   [
@@ -42,7 +41,9 @@ async function readDocumentPage(slug: string): Promise<string> {
   }
 }
 
-function buildIntroLines(items: readonly RegistryComponent[]): readonly string[] {
+function buildIntroLines(
+  items: readonly RegistryComponent[],
+): readonly string[] {
   return [
     "# VLLNT UI - Full Reference",
     "",

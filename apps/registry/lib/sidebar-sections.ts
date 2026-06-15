@@ -12,20 +12,20 @@ const components = getRegistryItems()
   }))
   .sort((a, b) => a.title.localeCompare(b.title));
 
-const categoryLabels: Record<ComponentCategory, string> = {
-  ai: "AI",
-  billing: "Billing & Plans",
-  content: "Content",
-  core: "Core",
-  data: "Data",
-  "data-display": "Data display",
-  educational: "Educational",
-  form: "Form",
-  learning: "Learning",
-  navigation: "Navigation",
-  overlay: "Overlay",
-  utility: "Utility",
-};
+const categoryLabels = new Map<ComponentCategory, string>([
+  ["ai", "AI"],
+  ["billing", "Billing & Plans"],
+  ["content", "Content"],
+  ["core", "Core"],
+  ["data", "Data"],
+  ["data-display", "Data display"],
+  ["educational", "Educational"],
+  ["form", "Form"],
+  ["learning", "Learning"],
+  ["navigation", "Navigation"],
+  ["overlay", "Overlay"],
+  ["utility", "Utility"],
+]);
 
 const categoryOrder: ComponentCategory[] = [
   "core",
@@ -60,7 +60,7 @@ function groupComponentsByCategory(
     .map((category) => ({
       category,
       items: grouped.get(category) ?? [],
-      label: categoryLabels[category],
+      label: categoryLabels.get(category) ?? category,
     }));
 }
 

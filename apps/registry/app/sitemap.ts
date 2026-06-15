@@ -1,14 +1,13 @@
 import type { MetadataRoute } from "next";
 
+import { SITE_URL } from "@/lib/seo";
 import type { RegistryComponent } from "@/types/registry";
 
 import { getAiComponentSlugs } from "../lib/ai-seo";
 import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
-import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import { getRegistryItems } from "../lib/registry";
+import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import { getUseCasePath, USE_CASES } from "../lib/use-cases";
-import { SITE_URL } from "@/lib/seo";
-
 
 const AI_COMPONENT_SLUGS = new Set(getAiComponentSlugs());
 

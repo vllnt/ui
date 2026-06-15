@@ -1,6 +1,6 @@
 "use client";
 
-import { ThemeToggle, Toggle } from "@vllnt/ui";
+import { ThemeToggle } from "@vllnt/ui";
 
 export default function ThemeTogglePreview() {
   return (

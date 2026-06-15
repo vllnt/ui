@@ -2,12 +2,12 @@ import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 
 import type { Locale } from "@/i18n/routing";
+import { resolveLocaleParameters } from "@/lib/locale";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { RequestComponentForm } from "./request-component-form";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { resolveLocaleParams } from "@/lib/locale";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -15,29 +15,31 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.",
+    title: "Request a component",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical("/request-component", locale),
       languages: languageAlternates("/request-component"),
     },
-    description:
-      "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.",
-    openGraph: generateOGMetadata(
-      { description: "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.", title: "Request a component · VLLNT UI" },
-      { locale, pathname: "/request-component" },
-    ),
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, {
+      locale,
+      pathname: "/request-component",
+    }),
     robots: { follow: true, index: false },
     title: "Request a component · VLLNT UI",
-    twitter: generateTwitterMetadata({
-      description: "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.",
-      title: "Request a component · VLLNT UI",
-    }),
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
 export default async function RequestComponentPage({ params }: Props) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
 
   return (
     <>

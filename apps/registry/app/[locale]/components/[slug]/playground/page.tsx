@@ -7,18 +7,18 @@ import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import { type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   getPlaygroundExample,
   getRegistryPackageVersion,
 } from "@/lib/playground";
+import { getRegistry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import {
   getCategoryForComponent,
   getSidebarSections,
 } from "@/lib/sidebar-sections";
-import { getRegistry } from "@/lib/registry";
-import { resolveLocaleParams } from "@/lib/locale";
 import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
@@ -93,7 +93,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ComponentPlaygroundPage(props: Props) {
-  const { locale, slug } = await resolveLocaleParams(props.params);
+  const { locale, slug } = await resolveLocaleParameters(props.params);
   const component = findComponent(slug);
 
   if (!component) {

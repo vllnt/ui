@@ -73,9 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "llms.txt",
       "open source",
     ],
-    metadataBase: new URL(
-      SITE_URL,
-    ),
+    metadataBase: new URL(SITE_URL),
     openGraph: {
       alternateLocale: alternateOgLocales(locale),
       locale: ogLocale(locale),

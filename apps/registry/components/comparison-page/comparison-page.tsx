@@ -1,15 +1,14 @@
 import { Sidebar } from "@vllnt/ui";
+import type { Metadata } from "next";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { Footer } from "@/components/footer/footer";
+import type { Locale } from "@/i18n/routing";
 import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, SITE_URL } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-
-import type { Locale } from "@/i18n/routing";
-import type { Metadata } from "next";
-import type { ReactNode } from "react";
 
 /** One attribute row in a comparison table. */
 export type ComparisonRow = {
@@ -73,10 +72,48 @@ function winnerCellClassName(isWinner: boolean): string {
   return isWinner ? "p-3 font-semibold" : "p-3 text-muted-foreground";
 }
 
+function ComparisonTable({
+  competitorLabel,
+  rows,
+}: {
+  readonly competitorLabel: string;
+  readonly rows: readonly ComparisonRow[];
+}): ReactNode {
+  return (
+    <div className="mt-12 overflow-x-auto rounded-lg border border-border">
+      <table className="w-full text-sm">
+        <thead className="bg-muted">
+          <tr>
+            <th className="p-3 text-left font-semibold">Attribute</th>
+            <th className="p-3 text-left font-semibold">VLLNT UI</th>
+            <th className="p-3 text-left font-semibold">{competitorLabel}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr
+              className="border-t border-border align-top"
+              key={row.attribute}
+            >
+              <td className="p-3 font-medium">{row.attribute}</td>
+              <td className={winnerCellClassName(row.winner === "vllnt")}>
+                {row.vllnt}
+              </td>
+              <td className={winnerCellClassName(row.winner === "other")}>
+                {row.other}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 /**
  * Shared frame for every "VLLNT UI vs X" page: JSON-LD breadcrumb, sidebar,
  * title, intro, the side-by-side table with winner emphasis, optional prose
- * and CTA, and the footer. Pages supply data and content only.
+ * and CTA, and the footer. Pages supply the data and content.
  */
 export function ComparisonPage({
   afterTable,
@@ -113,35 +150,7 @@ export function ComparisonPage({
 
           {intro}
 
-          <div className="mt-12 overflow-x-auto rounded-lg border border-border">
-            <table className="w-full text-sm">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="p-3 text-left font-semibold">Attribute</th>
-                  <th className="p-3 text-left font-semibold">VLLNT UI</th>
-                  <th className="p-3 text-left font-semibold">
-                    {competitorLabel}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <tr
-                    className="border-t border-border align-top"
-                    key={row.attribute}
-                  >
-                    <td className="p-3 font-medium">{row.attribute}</td>
-                    <td className={winnerCellClassName(row.winner === "vllnt")}>
-                      {row.vllnt}
-                    </td>
-                    <td className={winnerCellClassName(row.winner === "other")}>
-                      {row.other}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ComparisonTable competitorLabel={competitorLabel} rows={rows} />
 
           {afterTable}
 

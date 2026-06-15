@@ -1,6 +1,14 @@
 "use client";
 
-import { Card, CardContent, Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@vllnt/ui";
+import {
+  Card,
+  CardContent,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@vllnt/ui";
 
 export default function CarouselPreview() {
   return (

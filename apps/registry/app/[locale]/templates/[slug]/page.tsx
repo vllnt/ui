@@ -1,22 +1,21 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
-import { Github } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 
-
+import { GitHubMark } from "@/components/github-mark";
 import { type Locale, routing } from "@/i18n/routing";
 import {
   breadcrumbLd,
   jsonLdScriptAttributes,
   softwareApplicationLd,
 } from "@/lib/jsonld";
+import { resolveLocaleParameters } from "@/lib/locale";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname, SITE_URL } from "@/lib/seo";
+import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-import { resolveLocaleParams } from "@/lib/locale";
 import {
   getTemplate,
   getTemplateGithubUrl,
@@ -24,6 +23,7 @@ import {
   TEMPLATES,
 } from "@/lib/templates";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -72,7 +72,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function TemplatePage(props: Props) {
-  const { locale, slug } = await resolveLocaleParams(props.params);
+  const { locale, slug } = await resolveLocaleParameters(props.params);
   const template = getTemplate(slug);
 
   if (!template) {
@@ -189,7 +189,7 @@ export default async function TemplatePage(props: Props) {
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <Github className="size-4" />
+                    <GitHubMark className="size-4" />
                     GitHub source
                   </a>
                 </div>

@@ -1,8 +1,7 @@
-import packageJson from "../../../packages/ui/package.json";
-
 import { getRegistry, getRegistryItems } from "@/lib/registry";
-
 import type { RegistryComponent } from "@/types/registry";
+
+import packageJson from "../../../packages/ui/package.json";
 
 export function getComponentCount(): number {
   return getRegistryItems().length;
@@ -22,11 +21,10 @@ type CategoryStat = {
 };
 
 function getCategoryStats(): readonly CategoryStat[] {
-  const counts = new Map<string, number>();
-  for (const item of getRegistryItems()) {
+  const counts = getRegistryItems().reduce((accumulator, item) => {
     const key = item.category ?? "uncategorized";
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
+    return accumulator.set(key, (accumulator.get(key) ?? 0) + 1);
+  }, new Map<string, number>());
   return [...counts.entries()]
     .map(([category, count]) => ({ category, count }))
     .sort((a, b) => a.category.localeCompare(b.category));

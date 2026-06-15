@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 
 import { Button, useCopyToClipboard } from "@vllnt/ui";
 
@@ -23,6 +23,17 @@ const TABS: { id: ExportTab; label: string }[] = [
   { id: "json", label: "tokens.json" },
 ];
 
+const unsubscribeNoop = (): void => undefined;
+const subscribeNever = (): (() => void) => unsubscribeNoop;
+
+function useOrigin(): string {
+  return useSyncExternalStore(
+    subscribeNever,
+    () => window.location.origin,
+    () => "https://ui.vllnt.ai",
+  );
+}
+
 function download(filename: string, content: string): void {
   const blob = new Blob([content], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
@@ -41,11 +52,7 @@ export function ExportPanel({ theme }: ExportPanelProps) {
   const { copied, copy: copyToClipboard } = useCopyToClipboard({
     timeout: 1500,
   });
-  const [origin, setOrigin] = useState("https://ui.vllnt.ai");
-
-  useEffect(() => {
-    setOrigin(window.location.origin);
-  }, []);
+  const origin = useOrigin();
 
   const css = useMemo(() => themeToCss(theme), [theme]);
   const json = useMemo(

@@ -1,6 +1,14 @@
 "use client";
 
-import { Form, FormControl, FormDescription, FormItem, FormLabel, FormMessage, Input } from "@vllnt/ui";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+} from "@vllnt/ui";
 
 export default function FormPreview() {
   return (

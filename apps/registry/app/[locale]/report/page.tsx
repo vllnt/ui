@@ -2,39 +2,41 @@ import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 
 import type { Locale } from "@/i18n/routing";
+import { resolveLocaleParameters } from "@/lib/locale";
+import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { ReportBugForm } from "./report-bug-form";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { resolveLocaleParams } from "@/lib/locale";
 
-type LocaleParams = {
+type LocaleParameters = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
 export async function generateMetadata({
   params,
-}: LocaleParams): Promise<Metadata> {
+}: LocaleParameters): Promise<Metadata> {
   const { locale } = await params;
+  const ogParameters = {
+    description:
+      "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.",
+    title: "Report a bug",
+    type: "page" as const,
+  };
 
   return {
     alternates: {
       canonical: canonical("/report", locale),
       languages: languageAlternates("/report"),
     },
-    description:
-      "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.",
-    openGraph: generateOGMetadata(
-      { description: "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.", title: "Report a bug · VLLNT UI" },
-      { locale, pathname: "/report" },
-    ),
+    description: ogParameters.description,
+    openGraph: generateOGMetadata(ogParameters, {
+      locale,
+      pathname: "/report",
+    }),
     robots: { follow: true, index: false },
     title: "Report a bug · VLLNT UI",
-    twitter: generateTwitterMetadata({
-      description: "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.",
-      title: "Report a bug · VLLNT UI",
-    }),
+    twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
@@ -45,10 +47,10 @@ type SearchParameters = {
 export default async function ReportBugPage({
   params,
   searchParams,
-}: LocaleParams & {
+}: LocaleParameters & {
   searchParams: Promise<SearchParameters>;
 }) {
-  const { locale } = await resolveLocaleParams(params);
+  const { locale } = await resolveLocaleParameters(params);
   const { component } = await searchParams;
 
   return (

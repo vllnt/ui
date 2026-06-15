@@ -1,6 +1,11 @@
 "use client";
 
-import { Button, HoverCard, HoverCardContent, HoverCardTrigger } from "@vllnt/ui";
+import {
+  Button,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@vllnt/ui";
 
 export default function HoverCardPreview() {
   return (

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { Sidebar, SidebarToggle } from "@vllnt/ui";
+import { SidebarToggle } from "@vllnt/ui";
 
 export default function SidebarTogglePreview() {
   const [open, setOpen] = React.useState(false);

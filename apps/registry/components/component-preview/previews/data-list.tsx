@@ -1,6 +1,11 @@
 "use client";
 
-import { DataList, DataListItem, DataListLabel, DataListValue } from "@vllnt/ui";
+import {
+  DataList,
+  DataListItem,
+  DataListLabel,
+  DataListValue,
+} from "@vllnt/ui";
 
 export default function DataListPreview() {
   return (
