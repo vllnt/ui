@@ -5,6 +5,7 @@ import { memo, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 
 import type { HeadingTag } from "@vllnt/ui";
+import { useDocumentKeyDown } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 
@@ -130,13 +131,8 @@ function CompletionDialogImpl({
   onConfirm,
   title,
 }: CompletionDialogProps): React.ReactNode {
-  const keyDownHandlerRef = useRef<(event: KeyboardEvent) => void>(() => {
-    return;
-  });
-
-  useEffect(() => {
-    keyDownHandlerRef.current = (event: KeyboardEvent) => {
-      if (!isOpen) return;
+  useDocumentKeyDown(
+    (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
@@ -157,20 +153,9 @@ function CompletionDialogImpl({
         event.stopPropagation();
         onCancel();
       }
-    };
-  }, [cancelShortcut, confirmShortcut, isOpen, onCancel, onClose, onConfirm]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const onDocumentKeyDown = (event: KeyboardEvent) => {
-      keyDownHandlerRef.current(event);
-    };
-
-    document.addEventListener("keydown", onDocumentKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", onDocumentKeyDown, true);
-    };
-  }, [isOpen]);
+    },
+    { capture: true, enabled: isOpen },
+  );
 
   if (!isOpen) return null;
 

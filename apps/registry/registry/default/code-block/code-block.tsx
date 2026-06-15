@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef } from "react";
 
 import { Check, Copy } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -12,6 +12,7 @@ import {
 
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
+import { useCopyToClipboard } from "@vllnt/ui";
 
 type CodeBlockProps = {
   children: ReactNode;
@@ -57,7 +58,7 @@ export function CodeBlock({
   language = "typescript",
   showLanguage = false,
 }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const { systemTheme, theme } = useTheme();
 
   const resolvedTheme = theme === "system" ? systemTheme : theme;
@@ -87,11 +88,7 @@ export function CodeBlock({
   }, []);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    await copy(code);
   };
 
   return (
@@ -114,7 +111,7 @@ export function CodeBlock({
             },
           }}
           customStyle={{
-            background: "hsl(var(--background))",
+            background: "oklch(var(--background))",
             fontSize: "0.875rem",
             margin: 0,
             minWidth: "fit-content",

@@ -12,7 +12,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@vllnt/ui";
 
 const kbdVariants = cva(
-  "inline-flex select-none items-center justify-center rounded border border-border bg-muted font-mono font-medium text-foreground shadow-[0_1px_0_0_hsl(var(--border))] [&>svg]:h-3 [&>svg]:w-3",
+  "inline-flex select-none items-center justify-center rounded border border-border bg-muted font-mono font-medium text-foreground shadow-[0_1px_0_0_oklch(var(--border))] [&>svg]:h-3 [&>svg]:w-3",
   {
     defaultVariants: {
       size: "md",

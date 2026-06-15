@@ -1,7 +1,8 @@
 "use client";
 
-import { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useMemo } from "react";
 
+import { useControllableState } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type WorkspaceOption = {
@@ -25,21 +26,16 @@ const WorkspaceSwitcher = forwardRef<HTMLDivElement, WorkspaceSwitcherProps>(
     { className, defaultValue, onValueChange, value, workspaces, ...props },
     ref,
   ) => {
-    const fallbackValue = defaultValue ?? workspaces[0]?.id ?? "";
-    const [internalValue, setInternalValue] = useState(fallbackValue);
-    const currentValue = value ?? internalValue;
+    const [currentValue, handleSelect] = useControllableState({
+      defaultValue: defaultValue ?? workspaces[0]?.id ?? "",
+      onChange: onValueChange,
+      value,
+    });
 
     const currentWorkspace = useMemo(
       () => workspaces.find((workspace) => workspace.id === currentValue),
       [currentValue, workspaces],
     );
-
-    function handleSelect(nextValue: string) {
-      if (value === undefined) {
-        setInternalValue(nextValue);
-      }
-      onValueChange?.(nextValue);
-    }
 
     return (
       <div

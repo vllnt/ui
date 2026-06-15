@@ -7,6 +7,7 @@ import {
   useMemo,
 } from "react";
 
+import { getDateTimeFormatter } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -169,22 +170,16 @@ function diffInDays(later: Date, earlier: Date): number {
   return (later.getTime() - earlier.getTime()) / MS_PER_DAY;
 }
 
-const TICK_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
 function getTickDateTimeFormatter(
   locale: string,
   scale: "day" | "month" | "week",
 ): Intl.DateTimeFormat {
-  const key = `${locale}|${scale}`;
-  let formatter = TICK_FORMATTER_CACHE.get(key);
-  if (!formatter) {
-    const options: Intl.DateTimeFormatOptions =
-      scale === "month"
-        ? { month: "short", year: "numeric" }
-        : { day: "2-digit", month: "short" };
-    formatter = Intl.DateTimeFormat(locale, options);
-    TICK_FORMATTER_CACHE.set(key, formatter);
-  }
-  return formatter;
+  return getDateTimeFormatter(
+    locale,
+    scale === "month"
+      ? { month: "short", year: "numeric" }
+      : { day: "2-digit", month: "short" },
+  );
 }
 
 function buildTickFormatter(

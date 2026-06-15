@@ -16,8 +16,8 @@ export const BorderBeam = React.forwardRef<HTMLSpanElement, BorderBeamProps>(
     {
       borderWidth = 1,
       className,
-      colorFrom = "hsl(var(--primary) / 0.85)",
-      colorTo = "hsl(var(--ring) / 0.25)",
+      colorFrom = "oklch(var(--primary) / 0.85)",
+      colorTo = "oklch(var(--ring) / 0.25)",
       delay = 0,
       duration = 6,
       reverse = false,

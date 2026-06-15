@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { Check, Copy, Terminal as TerminalIcon } from "lucide-react";
 
 import { Button } from "@vllnt/ui";
+import { useCopyToClipboard } from "@vllnt/ui";
 
 export type TerminalLine = {
   content: string;
@@ -31,16 +30,12 @@ export function Terminal({
   lines,
   title = "Terminal",
 }: TerminalProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   const commands = getCommandContents(lines);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(commands.join("\n"));
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    await copy(commands.join("\n"));
   };
 
   return (
@@ -107,7 +102,7 @@ export function SimpleTerminal({
   children,
   title = "Terminal",
 }: SimpleTerminalProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   const lines = children
     .trim()
@@ -125,11 +120,7 @@ export function SimpleTerminal({
   const commands = getCommandContents(lines);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(commands.join("\n"));
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+    await copy(commands.join("\n"));
   };
 
   return (

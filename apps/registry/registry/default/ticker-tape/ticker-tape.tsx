@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight, Dot } from "lucide-react";
 
+import { formatChange } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 
@@ -32,11 +33,6 @@ const tickerTapeKeyframes = `
 
 function formatPrice(price: number | string) {
   return typeof price === "number" ? price.toLocaleString() : price;
-}
-
-function formatChange(change: number) {
-  const sign = change > 0 ? "+" : "";
-  return `${sign}${change.toFixed(2)}%`;
 }
 
 function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {

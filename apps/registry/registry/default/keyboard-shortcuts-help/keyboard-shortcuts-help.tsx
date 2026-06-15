@@ -5,6 +5,8 @@ import { memo, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 
 import type { HeadingTag } from "@vllnt/ui";
+import { useBodyScrollLock } from "@vllnt/ui";
+import { useEscapeKey } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type KeyboardShortcut = {
@@ -37,32 +39,14 @@ function KeyboardShortcutsHelpImpl({
 }: KeyboardShortcutsHelpProps): React.ReactNode {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Focus trap and close on Escape
+  // Move focus to the close button when the modal opens
   useEffect(() => {
     if (!isOpen) return;
-
     closeButtonRef.current?.focus();
-
-    const handleKeyDown = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
-
-  // Prevent body scroll when open
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
   }, [isOpen]);
+
+  useEscapeKey(onClose, { enabled: isOpen, preventDefault: true });
+  useBodyScrollLock(isOpen);
 
   if (!isOpen) return null;
 

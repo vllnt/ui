@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { getNumberFormatter } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type NumberTickerProps = React.ComponentPropsWithoutRef<"span"> & {
@@ -12,20 +13,6 @@ export type NumberTickerProps = React.ComponentPropsWithoutRef<"span"> & {
   locale?: string;
   value: number;
 };
-
-const NUMBER_FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
-function getNumberTickerFormatter(
-  locale: string | undefined,
-  formatOptions: Intl.NumberFormatOptions | undefined,
-): Intl.NumberFormat {
-  const key = `${locale ?? ""}|${formatOptions ? JSON.stringify(formatOptions) : ""}`;
-  let formatter = NUMBER_FORMATTER_CACHE.get(key);
-  if (!formatter) {
-    formatter = Intl.NumberFormat(locale, formatOptions);
-    NUMBER_FORMATTER_CACHE.set(key, formatter);
-  }
-  return formatter;
-}
 
 export const NumberTicker = React.forwardRef<
   HTMLSpanElement,
@@ -86,7 +73,7 @@ export const NumberTicker = React.forwardRef<
       };
     }, [delay, duration, from, value]);
 
-    const formatter = getNumberTickerFormatter(locale, formatOptions);
+    const formatter = getNumberFormatter(locale, formatOptions);
 
     return (
       <span

@@ -23,6 +23,7 @@ import {
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
+import { useCopyToClipboard } from "@vllnt/ui";
 
 const COPIED_TIMEOUT_MS = 2000;
 
@@ -164,21 +165,6 @@ function buildFilename({
   return `${safeBase}.${pickExtension(type, language)}`;
 }
 
-async function writeToClipboard(value: string): Promise<boolean> {
-  if (
-    typeof navigator === "undefined" ||
-    typeof navigator.clipboard?.writeText !== "function"
-  ) {
-    return false;
-  }
-  try {
-    await navigator.clipboard.writeText(value);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function downloadValueAsFile(value: string, filename: string): void {
   if (typeof document === "undefined") return;
   const blob = new Blob([value], { type: "text/plain;charset=utf-8" });
@@ -317,21 +303,18 @@ function useArtifactController(
     value,
   } = options;
   const [fullscreen, setFullscreen] = useState(defaultFullscreen);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy: copyToClipboard } = useCopyToClipboard({
+    timeout: COPIED_TIMEOUT_MS,
+  });
   const resolvedFilename = useMemo(
     () => buildFilename({ filename, language, title, type }),
     [filename, language, title, type],
   );
 
-  const copy = useCallback(async () => {
-    const ok = await writeToClipboard(value);
-    if (!ok) return false;
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, COPIED_TIMEOUT_MS);
-    return true;
-  }, [value]);
+  const copy = useCallback(
+    async () => copyToClipboard(value),
+    [copyToClipboard, value],
+  );
 
   const download = useCallback(() => {
     downloadValueAsFile(value, resolvedFilename);

@@ -2,7 +2,9 @@
 
 import * as React from "react";
 
+import { getDateTimeFormatter } from "@vllnt/ui";
 import type { HeadingTag } from "@vllnt/ui";
+import { useNow } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 
@@ -22,85 +24,24 @@ export type WorldClockBarProps = React.ComponentPropsWithoutRef<"div"> & {
   zones: WorldClockBarZone[];
 };
 
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: WorldClockBarProps["now"], updateIntervalMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, updateIntervalMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, updateIntervalMs]);
-
-  return liveNow;
-}
-
-const TIME_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
-function getTimeFormatter(
-  locale: string,
-  timeZone: string,
-): Intl.DateTimeFormat {
-  const key = `${locale}|${timeZone}`;
-  let formatter = TIME_FORMATTER_CACHE.get(key);
-  if (!formatter) {
-    formatter = Intl.DateTimeFormat(locale, {
-      hour: "numeric",
-      minute: "2-digit",
-      timeZone,
-      timeZoneName: "short",
-    });
-    TIME_FORMATTER_CACHE.set(key, formatter);
-  }
-  return formatter;
-}
-
-const DATE_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
-function getDateFormatter(
-  locale: string,
-  timeZone: string,
-): Intl.DateTimeFormat {
-  const key = `${locale}|${timeZone}`;
-  let formatter = DATE_FORMATTER_CACHE.get(key);
-  if (!formatter) {
-    formatter = Intl.DateTimeFormat(locale, {
-      day: "numeric",
-      month: "short",
-      timeZone,
-      weekday: "short",
-    });
-    DATE_FORMATTER_CACHE.set(key, formatter);
-  }
-  return formatter;
-}
-
 function formatZoneDateTime(
   zone: WorldClockBarZone,
   date: Date,
   showDate: boolean,
 ) {
   const locale = zone.locale ?? "en-US";
-  const timeFormatter = getTimeFormatter(locale, zone.timeZone);
-  const dateFormatter = getDateFormatter(locale, zone.timeZone);
+  const timeFormatter = getDateTimeFormatter(locale, {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: zone.timeZone,
+    timeZoneName: "short",
+  });
+  const dateFormatter = getDateTimeFormatter(locale, {
+    day: "numeric",
+    month: "short",
+    timeZone: zone.timeZone,
+    weekday: "short",
+  });
 
   return {
     date: showDate ? dateFormatter.format(date) : "",
@@ -154,7 +95,7 @@ export const WorldClockBar = React.forwardRef<
     },
     ref,
   ) => {
-    const liveNow = useLiveDate(now, updateIntervalMs);
+    const liveNow = useNow({ now, tickMs: updateIntervalMs });
 
     return (
       <div className={cn("space-y-3", className)} ref={ref} {...props}>

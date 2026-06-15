@@ -25,6 +25,10 @@
       {
         "id": "deploymentactivity--two-weeks",
         "name": "Two Weeks"
+      },
+      {
+        "id": "deploymentactivity--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Activity Heatmap"
@@ -642,6 +646,10 @@
       {
         "id": "data-candlestickchart--compact",
         "name": "Compact"
+      },
+      {
+        "id": "data-candlestickchart--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Candlestick Chart"
@@ -733,6 +741,10 @@
       {
         "id": "learning-checklist--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-checklist--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Checklist"
@@ -838,6 +850,10 @@
       {
         "id": "content-codeplayground--default",
         "name": "Default"
+      },
+      {
+        "id": "content-codeplayground--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Code Playground"
@@ -919,6 +935,10 @@
       {
         "id": "exampletitle--default",
         "name": "Default"
+      },
+      {
+        "id": "exampletitle--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Comparison"
@@ -932,6 +952,10 @@
       {
         "id": "congratulations--default",
         "name": "Default"
+      },
+      {
+        "id": "congratulations--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Completion Dialog"
@@ -958,6 +982,10 @@
       {
         "id": "introduction--default",
         "name": "Default"
+      },
+      {
+        "id": "introduction--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Content Intro"
@@ -1246,6 +1274,10 @@
       {
         "id": "reverseastring--default",
         "name": "Default"
+      },
+      {
+        "id": "reverseastring--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Exercise"
@@ -1259,6 +1291,10 @@
       {
         "id": "content-faq--default",
         "name": "Default"
+      },
+      {
+        "id": "content-faq--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "FAQ"
@@ -1609,6 +1645,10 @@
       {
         "id": "navigation-horizontalscrollrow--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-horizontalscrollrow--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Horizontal Scroll Row"
@@ -1782,6 +1822,10 @@
       {
         "id": "learning-keyconcept--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-keyconcept--glossary-heading-override",
+        "name": "Glossary Heading Override"
       }
     ],
     "title": "Key Concept"
@@ -1795,6 +1839,10 @@
       {
         "id": "learning-keyboardshortcutshelp--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-keyboardshortcutshelp--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Keyboard Shortcuts Help"
@@ -1842,6 +1890,10 @@
       {
         "id": "learning-learningobjectives--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-learningobjectives--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Learning Objectives"
@@ -1964,6 +2016,10 @@
       {
         "id": "data-markettreemap--default",
         "name": "Default"
+      },
+      {
+        "id": "data-markettreemap--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Market Treemap"
@@ -2311,6 +2367,10 @@
       {
         "id": "data-orderbook--tight-spread",
         "name": "Tight Spread"
+      },
+      {
+        "id": "data-orderbook--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Order Book"
@@ -2564,6 +2624,10 @@
       {
         "id": "learning-profilesection--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-profilesection--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Profile Section"
@@ -2653,6 +2717,10 @@
       {
         "id": "learning-quiz--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-quiz--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Quiz"
@@ -3050,6 +3118,10 @@
       {
         "id": "content-sharesection--default",
         "name": "Default"
+      },
+      {
+        "id": "content-sharesection--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Share Section"
@@ -3149,6 +3221,10 @@
       {
         "id": "introduction--default",
         "name": "Default"
+      },
+      {
+        "id": "introduction--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Slideshow"
@@ -3259,6 +3335,10 @@
       {
         "id": "servicehealth--compact",
         "name": "Compact"
+      },
+      {
+        "id": "servicehealth--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Status Board"
@@ -3282,12 +3362,12 @@
   },
   "step-by-step": {
     "category": "learning",
-    "defaultStoryId": "learning-stepbystep--default",
+    "defaultStoryId": "gettingstarted--default",
     "description": "Numbered step guide with optional interactive completion tracking.",
     "name": "step-by-step",
     "stories": [
       {
-        "id": "learning-stepbystep--default",
+        "id": "gettingstarted--default",
         "name": "Default"
       }
     ],
@@ -3408,6 +3488,10 @@
       {
         "id": "utility-tableofcontents--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-tableofcontents--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Table Of Contents"
@@ -3421,6 +3505,10 @@
       {
         "id": "introduction--default",
         "name": "Default"
+      },
+      {
+        "id": "introduction--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Table Of Contents Panel"
@@ -3824,6 +3912,10 @@
       {
         "id": "nextsteps--default",
         "name": "Default"
+      },
+      {
+        "id": "nextsteps--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Tutorial Complete"
@@ -3969,6 +4061,10 @@
       {
         "id": "data-watchlist--compact",
         "name": "Compact"
+      },
+      {
+        "id": "data-watchlist--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Watchlist"
@@ -4024,6 +4120,10 @@
       {
         "id": "followthesunhandoff--time-only",
         "name": "Time Only"
+      },
+      {
+        "id": "followthesunhandoff--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "World Clock Bar"

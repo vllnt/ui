@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import { formatChange } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type SparklineGridItem = {
@@ -79,8 +80,7 @@ export const SparklineGrid = React.forwardRef<
                 )}
               >
                 <TrendIcon className="size-3.5" />
-                {item.change > 0 ? "+" : ""}
-                {item.change.toFixed(2)}%
+                {formatChange(item.change)}
               </div>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/20 p-3">

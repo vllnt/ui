@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 
+import { getCurrencyFormatter } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
 import { Input } from "@vllnt/ui";
@@ -121,23 +122,6 @@ function valueToCents(value: string): number {
   const parsed = Number.parseFloat(value);
   if (Number.isNaN(parsed)) return 0;
   return Math.round(parsed * CENTS_PER_UNIT);
-}
-
-const CURRENCY_FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
-function getCurrencyFormatter(
-  locale: string,
-  currency: string,
-): Intl.NumberFormat {
-  const key = `${locale}|${currency}`;
-  let formatter = CURRENCY_FORMATTER_CACHE.get(key);
-  if (!formatter) {
-    formatter = Intl.NumberFormat(locale, {
-      currency,
-      style: "currency",
-    });
-    CURRENCY_FORMATTER_CACHE.set(key, formatter);
-  }
-  return formatter;
 }
 
 function getCurrencySymbol(locale: string, currency: string): string {
