@@ -63,6 +63,11 @@ export type AIChatInputProps = React.ComponentPropsWithoutRef<"form"> & {
   disabled?: boolean;
   /** Optional helper text shown below the prompt field. */
   helperText?: string;
+  /**
+   * Accessible name for the message textarea. Defaults to `"Chat message"`.
+   * Override `textareaProps.aria-label` / `aria-labelledby` for finer control.
+   */
+  inputLabel?: string;
   /** Whether the submit action is in progress. */
   isSubmitting?: boolean;
   /** Called whenever the textarea value changes. */
@@ -85,6 +90,7 @@ const AIChatInput = forwardRef<HTMLFormElement, AIChatInputProps>(
       className,
       disabled = false,
       helperText,
+      inputLabel = "Chat message",
       isSubmitting = false,
       onSubmit,
       onValueChange,
@@ -111,6 +117,7 @@ const AIChatInput = forwardRef<HTMLFormElement, AIChatInputProps>(
       >
         <div className="space-y-3">
           <Textarea
+            aria-label={inputLabel}
             className="min-h-[120px] resize-none rounded-xl border-0 bg-transparent p-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
             disabled={disabled}
             onChange={(event) => {

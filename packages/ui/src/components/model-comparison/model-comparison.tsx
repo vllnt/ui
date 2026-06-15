@@ -9,6 +9,7 @@ import {
   useContext,
   useId,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -19,6 +20,13 @@ import { Badge } from "../badge/badge";
 import { Button } from "../button/button";
 
 const HIDDEN_LABEL_PREFIX = "Model";
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+function blindLabelForIndex(index: number): string {
+  const suffix =
+    index < ALPHABET.length ? ALPHABET[index] : (index + 1).toString();
+  return `${HIDDEN_LABEL_PREFIX} ${suffix}`;
+}
 
 /**
  * Localizable strings for {@link ModelComparison}.
@@ -58,11 +66,13 @@ const DEFAULT_LABELS = {
 type ModelComparisonContextValue = {
   blind: boolean;
   labels: Required<ModelComparisonLabels>;
+  registerColumn: (id: string) => number;
 };
 
 const DEFAULT_CONTEXT: ModelComparisonContextValue = {
   blind: false,
   labels: DEFAULT_LABELS,
+  registerColumn: () => 0,
 };
 
 const ModelComparisonContext = createContext(DEFAULT_CONTEXT);
@@ -173,10 +183,19 @@ export const ModelComparison = forwardRef<HTMLElement, ModelComparisonProps>(
       [labels],
     );
     const [blind, setBlind] = useState(blindDefault);
+    const columnIndexRef = useRef<Map<string, number>>(new Map());
+
+    const registerColumn = useCallback((id: string): number => {
+      const existing = columnIndexRef.current.get(id);
+      if (existing !== undefined) return existing;
+      const next = columnIndexRef.current.size;
+      columnIndexRef.current.set(id, next);
+      return next;
+    }, []);
 
     const contextValue = useMemo<ModelComparisonContextValue>(
-      () => ({ blind, labels: resolvedLabels }),
-      [blind, resolvedLabels],
+      () => ({ blind, labels: resolvedLabels, registerColumn }),
+      [blind, registerColumn, resolvedLabels],
     );
 
     const handleToggleBlind = useCallback(() => {
@@ -236,9 +255,10 @@ export const ModelComparisonColumn = forwardRef<
 >((props, ref) => {
   const { badge, children, className, label, model, ...rest } = props;
   const id = useId();
-  const { blind } = useContext(ModelComparisonContext);
+  const { blind, registerColumn } = useContext(ModelComparisonContext);
+  const columnIndex = registerColumn(id);
   const displayLabel = blind
-    ? `${HIDDEN_LABEL_PREFIX} ${id.slice(-2)}`
+    ? blindLabelForIndex(columnIndex)
     : (label ?? model);
 
   return (
@@ -381,7 +401,10 @@ export const ModelComparisonVote = forwardRef<
 
   return (
     <div
-      className={cn("flex flex-col items-center gap-2", className)}
+      className={cn(
+        "col-span-full flex flex-col items-center gap-2",
+        className,
+      )}
       ref={ref}
       {...rest}
     >

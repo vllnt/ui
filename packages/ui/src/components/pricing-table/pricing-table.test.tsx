@@ -70,6 +70,30 @@ describe("PricingPlan", () => {
       expect(screen.getByText("API access")).toHaveClass("line-through");
     });
 
+    it("exposes an accessible exclusion indicator for excluded features", () => {
+      render(
+        <PricingPlan
+          features={[{ included: false, label: "API access" }]}
+          name="Free"
+          price="$0"
+        />,
+      );
+
+      expect(screen.getByText("Not included:")).toBeInTheDocument();
+    });
+
+    it("exposes an accessible inclusion indicator for included features", () => {
+      render(
+        <PricingPlan
+          features={[{ included: true, label: "Unlimited projects" }]}
+          name="Pro"
+          price="$29"
+        />,
+      );
+
+      expect(screen.getByText("Included:")).toBeInTheDocument();
+    });
+
     it("renders limited-value features alongside the label", () => {
       render(
         <PricingPlan
@@ -150,6 +174,39 @@ describe("PricingTable", () => {
 
       expect(onPeriodChange).toHaveBeenCalledWith("annual");
       expect(screen.getByRole("radio", { name: "Monthly" })).toBeChecked();
+    });
+
+    it("uses a roving tabIndex so only the selected radio is tabbable", () => {
+      render(
+        <PricingTable showPeriodToggle>
+          <PricingPlan name="Free" price="$0" />
+        </PricingTable>,
+      );
+
+      expect(screen.getByRole("radio", { name: "Monthly" })).toHaveAttribute(
+        "tabindex",
+        "0",
+      );
+      expect(screen.getByRole("radio", { name: "Annual" })).toHaveAttribute(
+        "tabindex",
+        "-1",
+      );
+    });
+
+    it("moves selection with arrow keys", () => {
+      const onPeriodChange = vi.fn();
+      render(
+        <PricingTable onPeriodChange={onPeriodChange} showPeriodToggle>
+          <PricingPlan name="Free" price="$0" />
+        </PricingTable>,
+      );
+
+      fireEvent.keyDown(screen.getByRole("radio", { name: "Monthly" }), {
+        key: "ArrowRight",
+      });
+
+      expect(onPeriodChange).toHaveBeenCalledWith("annual");
+      expect(screen.getByRole("radio", { name: "Annual" })).toBeChecked();
     });
 
     it("renders custom labels and savings text", () => {

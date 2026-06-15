@@ -196,10 +196,10 @@ function Axis({ ticks }: AxisProps): ReactNode {
       aria-hidden="true"
       className="relative h-7 border-b border-border text-[10px] font-medium uppercase tracking-wide text-muted-foreground"
     >
-      {ticks.map((tick) => (
+      {ticks.map((tick, index) => (
         <span
           className="absolute top-1 -translate-x-1/2"
-          key={tick.label}
+          key={`${tick.label}-${index.toString()}`}
           style={{ left: `${tick.offset.toString()}%` }}
         >
           {tick.label}

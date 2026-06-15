@@ -34,4 +34,20 @@ describe("AIChatInput", () => {
 
     expect(screen.getByRole("button", { name: /send/i })).toBeDisabled();
   });
+
+  it("gives the textarea a default accessible name", () => {
+    render(<AIChatInput value="" />);
+
+    expect(
+      screen.getByRole("textbox", { name: "Chat message" }),
+    ).toBeInTheDocument();
+  });
+
+  it("lets consumers override the textarea accessible name", () => {
+    render(<AIChatInput inputLabel="Ask the assistant" value="" />);
+
+    expect(
+      screen.getByRole("textbox", { name: "Ask the assistant" }),
+    ).toBeInTheDocument();
+  });
 });

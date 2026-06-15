@@ -9,6 +9,9 @@ import { Globe } from "lucide-react";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 
+const FALLBACK_ERA_MIN_YEAR = -3000;
+const FALLBACK_ERA_SPAN_YEARS = 5000;
+
 const CIVILIZATION_COLOR_VARIANTS: Record<
   CivilizationCardColor,
   { gradient: string; ring: string }
@@ -180,8 +183,21 @@ type EraTimelineProps = {
   label: string;
 };
 
+function getEraBarGeometry(era: CivilizationCardEra): {
+  left: number;
+  width: number;
+} {
+  const end = era.end ?? new Date().getFullYear();
+  const min = Math.min(era.start, FALLBACK_ERA_MIN_YEAR);
+  const range = Math.max(end, min + FALLBACK_ERA_SPAN_YEARS) - min || 1;
+  const left = ((era.start - min) / range) * 100;
+  const width = Math.max(((end - era.start) / range) * 100, 1);
+  return { left, width };
+}
+
 function EraTimeline({ era, label }: EraTimelineProps): ReactNode {
   const eraLabel = formatEra(era);
+  const { left, width } = getEraBarGeometry(era);
   return (
     <div
       aria-label={`${label}: ${eraLabel}`}
@@ -191,8 +207,11 @@ function EraTimeline({ era, label }: EraTimelineProps): ReactNode {
       <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {eraLabel}
       </span>
-      <div className="h-1.5 w-full rounded-full bg-muted">
-        <span className="block h-full w-2/3 rounded-full bg-primary" />
+      <div className="relative h-1.5 w-full rounded-full bg-muted">
+        <span
+          className="absolute h-full rounded-full bg-primary"
+          style={{ left: `${left.toString()}%`, width: `${width.toString()}%` }}
+        />
       </div>
     </div>
   );

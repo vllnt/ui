@@ -20,6 +20,12 @@ export type CustomTheme = {
   readonly radius?: string;
 };
 
+/**
+ * The active theme reported by {@link useThemePreset}: a built-in preset name
+ * or `"custom"` when a user-authored custom theme drives the document.
+ */
+export type ActiveThemeName = ThemePresetName | typeof CUSTOM_THEME_NAME;
+
 /** Strip anything that could break out of a CSS custom-property name. */
 function safeIdent(value: string): string {
   return value.replaceAll(/[^\w-]/g, "");
@@ -74,12 +80,13 @@ function subscribe(onStoreChange: () => void): () => void {
   };
 }
 
-function getSnapshot(): ThemePresetName {
+function getSnapshot(): ActiveThemeName {
   const value = document.documentElement.dataset.theme;
+  if (value === CUSTOM_THEME_NAME) return CUSTOM_THEME_NAME;
   return value && isThemePresetName(value) ? value : DEFAULT_THEME_PRESET;
 }
 
-function getServerSnapshot(): ThemePresetName {
+function getServerSnapshot(): ActiveThemeName {
   return DEFAULT_THEME_PRESET;
 }
 
@@ -131,8 +138,8 @@ export function setCustomTheme(theme: CustomTheme): void {
 }
 
 export type UseThemePresetResult = {
-  /** The active preset. */
-  readonly preset: ThemePresetName;
+  /** The active preset, or `"custom"` when a custom theme drives the document. */
+  readonly preset: ActiveThemeName;
   /** All built-in presets, including `default`. */
   readonly presets: readonly ThemePreset[];
   /** Apply and persist a preset. */

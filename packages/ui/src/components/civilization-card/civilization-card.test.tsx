@@ -50,6 +50,30 @@ describe("CivilizationCard", () => {
         screen.getByRole("img", { name: /Era timeline/ }),
       ).toBeInTheDocument();
     });
+
+    it("sizes the timeline fill proportionally to the era span", () => {
+      const { rerender } = render(
+        <CivilizationCard era={{ end: 476, start: -27 }} name="Roman Empire" />,
+      );
+      const shortBar = screen
+        .getByRole("img", { name: /Era timeline/ })
+        .querySelector<HTMLSpanElement>("span[style]");
+      const shortWidth = shortBar?.style.width ?? "";
+      expect(shortWidth).not.toBe("");
+      expect(shortWidth).not.toBe("66.66667%");
+
+      rerender(
+        <CivilizationCard era={{ end: 1453, start: -2000 }} name="Long" />,
+      );
+      const longBar = screen
+        .getByRole("img", { name: /Era timeline/ })
+        .querySelector<HTMLSpanElement>("span[style]");
+      const longWidth = longBar?.style.width ?? "";
+
+      expect(Number.parseFloat(longWidth)).toBeGreaterThan(
+        Number.parseFloat(shortWidth),
+      );
+    });
   });
 
   describe("stats", () => {

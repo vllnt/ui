@@ -54,7 +54,9 @@ export const SparklineGrid = React.forwardRef<
       {items.map((item) => {
         const isPositive = item.change >= 0;
         const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
-        const stroke = isPositive ? "hsl(142 71% 45%)" : "hsl(348 83% 47%)";
+        const strokeClass = isPositive
+          ? "text-emerald-600 dark:text-emerald-400"
+          : "text-rose-600 dark:text-rose-400";
 
         return (
           <section
@@ -91,9 +93,10 @@ export const SparklineGrid = React.forwardRef<
                 viewBox="0 0 120 48"
               >
                 <path
+                  className={strokeClass}
                   d={buildSparklinePath(item.data, 120, 48)}
                   fill="none"
-                  stroke={stroke}
+                  stroke="currentColor"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2.5"

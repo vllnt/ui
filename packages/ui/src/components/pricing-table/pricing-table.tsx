@@ -4,8 +4,11 @@ import {
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
   forwardRef,
+  type KeyboardEvent,
   type ReactNode,
+  type Ref,
   useCallback,
+  useRef,
   useState,
 } from "react";
 
@@ -110,6 +113,9 @@ function FeatureRow({ feature }: { feature: PricingFeature }): ReactNode {
           included === false && "text-muted-foreground line-through",
         )}
       >
+        <span className="sr-only">
+          {included === false ? "Not included: " : "Included: "}
+        </span>
         {label}
         {isLimit ? (
           <span className="ml-1 text-muted-foreground">({included})</span>
@@ -310,17 +316,72 @@ type PeriodToggleProps = {
   period: PricingPeriod;
 };
 
+const PERIOD_ARROW_KEYS = new Set([
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+]);
+
+type PeriodRadioProps = {
+  buttonRef: Ref<HTMLButtonElement>;
+  children: ReactNode;
+  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
+  onSelect: () => void;
+  selected: boolean;
+};
+
+function PeriodRadio({
+  buttonRef,
+  children,
+  onKeyDown,
+  onSelect,
+  selected,
+}: PeriodRadioProps): ReactNode {
+  return (
+    <button
+      aria-checked={selected}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full px-3 py-1 transition-colors",
+        selected
+          ? "bg-background text-foreground shadow-sm"
+          : "text-muted-foreground hover:text-foreground",
+      )}
+      onClick={onSelect}
+      onKeyDown={onKeyDown}
+      ref={buttonRef}
+      role="radio"
+      tabIndex={selected ? 0 : -1}
+      type="button"
+    >
+      {children}
+    </button>
+  );
+}
+
 function PeriodToggle({
   labels,
   onChange,
   period,
 }: PeriodToggleProps): ReactNode {
+  const monthlyRef = useRef<HTMLButtonElement>(null);
+  const annualRef = useRef<HTMLButtonElement>(null);
   const handleSelectMonthly = useCallback(() => {
     onChange("monthly");
   }, [onChange]);
   const handleSelectAnnual = useCallback(() => {
     onChange("annual");
   }, [onChange]);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
+      if (!PERIOD_ARROW_KEYS.has(event.key)) return;
+      event.preventDefault();
+      const next: PricingPeriod = period === "monthly" ? "annual" : "monthly";
+      onChange(next);
+      (next === "monthly" ? monthlyRef : annualRef).current?.focus();
+    },
+    [onChange, period],
+  );
 
   return (
     <div
@@ -328,31 +389,19 @@ function PeriodToggle({
       className="mx-auto inline-flex items-center gap-2 rounded-full border bg-muted/40 p-1 text-sm"
       role="radiogroup"
     >
-      <button
-        aria-checked={period === "monthly"}
-        className={cn(
-          "rounded-full px-3 py-1 transition-colors",
-          period === "monthly"
-            ? "bg-background text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground",
-        )}
-        onClick={handleSelectMonthly}
-        role="radio"
-        type="button"
+      <PeriodRadio
+        buttonRef={monthlyRef}
+        onKeyDown={handleKeyDown}
+        onSelect={handleSelectMonthly}
+        selected={period === "monthly"}
       >
         {labels.monthly ?? "Monthly"}
-      </button>
-      <button
-        aria-checked={period === "annual"}
-        className={cn(
-          "inline-flex items-center gap-2 rounded-full px-3 py-1 transition-colors",
-          period === "annual"
-            ? "bg-background text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground",
-        )}
-        onClick={handleSelectAnnual}
-        role="radio"
-        type="button"
+      </PeriodRadio>
+      <PeriodRadio
+        buttonRef={annualRef}
+        onKeyDown={handleKeyDown}
+        onSelect={handleSelectAnnual}
+        selected={period === "annual"}
       >
         {labels.annual ?? "Annual"}
         {labels.savings ? (
@@ -360,7 +409,7 @@ function PeriodToggle({
             {labels.savings}
           </span>
         ) : null}
-      </button>
+      </PeriodRadio>
     </div>
   );
 }

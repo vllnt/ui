@@ -25,6 +25,10 @@
       {
         "id": "deploymentactivity--two-weeks",
         "name": "Two Weeks"
+      },
+      {
+        "id": "deploymentactivity--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Activity Heatmap"
@@ -545,6 +549,19 @@
     ],
     "title": "Bottom Activity Strip"
   },
+  "bottom-bar": {
+    "category": "navigation",
+    "defaultStoryId": "layout-bottombar--default",
+    "description": "Slim chrome strip pinned to the bottom of a canvas shell as a calm host for activity strips, status pills, and ambient indicators.",
+    "name": "bottom-bar",
+    "stories": [
+      {
+        "id": "layout-bottombar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Bottom Bar"
+  },
   "breadcrumb": {
     "category": "navigation",
     "defaultStoryId": "navigation-breadcrumb--default",
@@ -642,6 +659,10 @@
       {
         "id": "data-candlestickchart--compact",
         "name": "Compact"
+      },
+      {
+        "id": "data-candlestickchart--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Candlestick Chart"
@@ -711,6 +732,19 @@
     ],
     "title": "Category Filter"
   },
+  "chat-dock-section": {
+    "category": "ai",
+    "defaultStoryId": "layout-chatdocksection--default",
+    "description": "Sidebar section that hosts a compact, scrollable chat thread alongside a spatial workspace — slotted into a dock or rail to keep an AI assistant in view.",
+    "name": "chat-dock-section",
+    "stories": [
+      {
+        "id": "layout-chatdocksection--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Chat Dock Section"
+  },
   "checkbox": {
     "category": "core",
     "defaultStoryId": "core-checkbox--default",
@@ -733,6 +767,10 @@
       {
         "id": "learning-checklist--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-checklist--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Checklist"
@@ -838,6 +876,10 @@
       {
         "id": "content-codeplayground--default",
         "name": "Default"
+      },
+      {
+        "id": "content-codeplayground--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Code Playground"
@@ -919,6 +961,10 @@
       {
         "id": "exampletitle--default",
         "name": "Default"
+      },
+      {
+        "id": "exampletitle--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Comparison"
@@ -932,6 +978,10 @@
       {
         "id": "congratulations--default",
         "name": "Default"
+      },
+      {
+        "id": "congratulations--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Completion Dialog"
@@ -958,6 +1008,10 @@
       {
         "id": "introduction--default",
         "name": "Default"
+      },
+      {
+        "id": "introduction--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Content Intro"
@@ -999,6 +1053,40 @@
       }
     ],
     "title": "Context Menu"
+  },
+  "conversation-thread": {
+    "category": "learning",
+    "defaultStoryId": "ai-conversationthread--default",
+    "description": "Compound component family for AI chat UIs that orchestrates auto-scroll, streaming indicators, empty states, and message rendering.",
+    "name": "conversation-thread",
+    "stories": [
+      {
+        "id": "ai-conversationthread--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-conversationthread--empty-state",
+        "name": "Empty State"
+      },
+      {
+        "id": "ai-conversationthread--streaming",
+        "name": "Streaming"
+      }
+    ],
+    "title": "Conversation Thread"
+  },
+  "cookie-consent": {
+    "category": "core",
+    "defaultStoryId": "utility-cookieconsent--default",
+    "description": "Dismissible cookie-consent banner with positional variants and accept / reject actions for privacy compliance.",
+    "name": "cookie-consent",
+    "stories": [
+      {
+        "id": "utility-cookieconsent--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Cookie Consent"
   },
   "copy-button": {
     "category": "core",
@@ -1058,6 +1146,23 @@
       }
     ],
     "title": "Credit Badge"
+  },
+  "curriculum": {
+    "category": "learning",
+    "defaultStoryId": "fullstackdevelopment--default",
+    "description": "Course-layout container for a sequence of lessons or modules with title, progress, optional intro, and a stack of lesson rows.",
+    "name": "curriculum",
+    "stories": [
+      {
+        "id": "fullstackdevelopment--default",
+        "name": "Default"
+      },
+      {
+        "id": "fullstackdevelopment--expanded",
+        "name": "Expanded"
+      }
+    ],
+    "title": "Curriculum"
   },
   "data-list": {
     "category": "data",
@@ -1246,6 +1351,10 @@
       {
         "id": "reverseastring--default",
         "name": "Default"
+      },
+      {
+        "id": "reverseastring--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Exercise"
@@ -1259,6 +1368,10 @@
       {
         "id": "content-faq--default",
         "name": "Default"
+      },
+      {
+        "id": "content-faq--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "FAQ"
@@ -1432,6 +1545,19 @@
       }
     ],
     "title": "Geography Quiz Map"
+  },
+  "glass-panel": {
+    "category": "utility",
+    "defaultStoryId": "layout-glasspanel--default",
+    "description": "Frosted-glass surface for floating chrome above a canvas — dock panels, hovering toolbars, and transient overlays — with a translucent background and soft border.",
+    "name": "glass-panel",
+    "stories": [
+      {
+        "id": "layout-glasspanel--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Glass Panel"
   },
   "globe-3d": {
     "category": "data-display",
@@ -1609,6 +1735,10 @@
       {
         "id": "navigation-horizontalscrollrow--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-horizontalscrollrow--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Horizontal Scroll Row"
@@ -1782,6 +1912,10 @@
       {
         "id": "learning-keyconcept--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-keyconcept--glossary-heading-override",
+        "name": "Glossary Heading Override"
       }
     ],
     "title": "Key Concept"
@@ -1795,6 +1929,10 @@
       {
         "id": "learning-keyboardshortcutshelp--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-keyboardshortcutshelp--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Keyboard Shortcuts Help"
@@ -1820,6 +1958,19 @@
     ],
     "title": "Knowledge Check"
   },
+  "label": {
+    "category": "core",
+    "defaultStoryId": "utility-label--default",
+    "description": "Accessible form label that associates descriptive text with an input control.",
+    "name": "label",
+    "stories": [
+      {
+        "id": "utility-label--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Label"
+  },
   "lang-provider": {
     "category": "utility",
     "defaultStoryId": "utility-langprovider--default",
@@ -1842,6 +1993,10 @@
       {
         "id": "learning-learningobjectives--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-learningobjectives--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Learning Objectives"
@@ -1964,6 +2119,10 @@
       {
         "id": "data-markettreemap--default",
         "name": "Default"
+      },
+      {
+        "id": "data-markettreemap--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Market Treemap"
@@ -2311,9 +2470,26 @@
       {
         "id": "data-orderbook--tight-spread",
         "name": "Tight Spread"
+      },
+      {
+        "id": "data-orderbook--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Order Book"
+  },
+  "overview-board": {
+    "category": "data",
+    "defaultStoryId": "acompactsummaryboardforthefloatingcanvasshellrightrailoroverviewroute--default",
+    "description": "Grid of overview cards for at-a-glance dashboards — a row of headline metrics with consistent spacing and tone.",
+    "name": "overview-board",
+    "stories": [
+      {
+        "id": "acompactsummaryboardforthefloatingcanvasshellrightrailoroverviewroute--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Overview Board"
   },
   "pagination": {
     "category": "navigation",
@@ -2564,6 +2740,10 @@
       {
         "id": "learning-profilesection--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-profilesection--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Profile Section"
@@ -2593,6 +2773,23 @@
       }
     ],
     "title": "Progress Card"
+  },
+  "progress-tracker": {
+    "category": "learning",
+    "defaultStoryId": "javascriptbasics--default",
+    "description": "Curriculum-level learning dashboard for modules, lessons, exercises, streaks, and earned skills.",
+    "name": "progress-tracker",
+    "stories": [
+      {
+        "id": "javascriptbasics--default",
+        "name": "Default"
+      },
+      {
+        "id": "javascriptbasics--compact-dashboard",
+        "name": "Compact Dashboard"
+      }
+    ],
+    "title": "Progress Tracker"
   },
   "prompt-templates": {
     "category": "ai",
@@ -2653,6 +2850,10 @@
       {
         "id": "learning-quiz--default",
         "name": "Default"
+      },
+      {
+        "id": "learning-quiz--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Quiz"
@@ -3041,6 +3242,19 @@
     ],
     "title": "Severity Badge"
   },
+  "share-dialog": {
+    "category": "overlay",
+    "defaultStoryId": "utility-sharedialog--default",
+    "description": "Modal dialog for sharing a page across social platforms with a copy-link action and overridable labels.",
+    "name": "share-dialog",
+    "stories": [
+      {
+        "id": "utility-sharedialog--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Share Dialog"
+  },
   "share-section": {
     "category": "content",
     "defaultStoryId": "content-sharesection--default",
@@ -3050,6 +3264,10 @@
       {
         "id": "content-sharesection--default",
         "name": "Default"
+      },
+      {
+        "id": "content-sharesection--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Share Section"
@@ -3149,6 +3367,10 @@
       {
         "id": "introduction--default",
         "name": "Default"
+      },
+      {
+        "id": "introduction--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Slideshow"
@@ -3259,6 +3481,10 @@
       {
         "id": "servicehealth--compact",
         "name": "Compact"
+      },
+      {
+        "id": "servicehealth--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Status Board"
@@ -3282,12 +3508,12 @@
   },
   "step-by-step": {
     "category": "learning",
-    "defaultStoryId": "learning-stepbystep--default",
+    "defaultStoryId": "gettingstarted--default",
     "description": "Numbered step guide with optional interactive completion tracking.",
     "name": "step-by-step",
     "stories": [
       {
-        "id": "learning-stepbystep--default",
+        "id": "gettingstarted--default",
         "name": "Default"
       }
     ],
@@ -3386,6 +3612,19 @@
     ],
     "title": "Subscription Card"
   },
+  "switch": {
+    "category": "core",
+    "defaultStoryId": "utility-switch--default",
+    "description": "Toggle switch control for binary on/off state.",
+    "name": "switch",
+    "stories": [
+      {
+        "id": "utility-switch--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Switch"
+  },
   "table": {
     "category": "data",
     "defaultStoryId": "data-table--default",
@@ -3408,6 +3647,10 @@
       {
         "id": "utility-tableofcontents--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-tableofcontents--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Table Of Contents"
@@ -3421,6 +3664,10 @@
       {
         "id": "introduction--default",
         "name": "Default"
+      },
+      {
+        "id": "introduction--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Table Of Contents Panel"
@@ -3485,6 +3732,19 @@
     ],
     "title": "Textarea"
   },
+  "theme-preset-provider": {
+    "category": "utility",
+    "defaultStoryId": "utility-themepresetprovider--default",
+    "description": "Applies the persisted theme preset on mount and injects a no-flash script so the saved preset is set before paint.",
+    "name": "theme-preset-provider",
+    "stories": [
+      {
+        "id": "utility-themepresetprovider--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Theme Preset Provider"
+  },
   "theme-provider": {
     "category": "utility",
     "defaultStoryId": "utility-themeprovider--default",
@@ -3497,6 +3757,19 @@
       }
     ],
     "title": "Theme Provider"
+  },
+  "theme-switcher": {
+    "category": "utility",
+    "defaultStoryId": "utility-themeswitcher--default",
+    "description": "Compact swatch row for switching between built-in theme presets, kept in sync with every other consumer on the page.",
+    "name": "theme-switcher",
+    "stories": [
+      {
+        "id": "utility-themeswitcher--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Theme Switcher"
   },
   "theme-toggle": {
     "category": "utility",
@@ -3802,6 +4075,19 @@
     ],
     "title": "Tree View"
   },
+  "truncated-text": {
+    "category": "utility",
+    "defaultStoryId": "utility-truncatedtext--default",
+    "description": "Single-line text that truncates with an ellipsis when it exceeds a configurable max width.",
+    "name": "truncated-text",
+    "stories": [
+      {
+        "id": "utility-truncatedtext--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Truncated Text"
+  },
   "tutorial-card": {
     "category": "learning",
     "defaultStoryId": "exampletitle--default",
@@ -3824,6 +4110,10 @@
       {
         "id": "nextsteps--default",
         "name": "Default"
+      },
+      {
+        "id": "nextsteps--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Tutorial Complete"
@@ -3969,6 +4259,10 @@
       {
         "id": "data-watchlist--compact",
         "name": "Compact"
+      },
+      {
+        "id": "data-watchlist--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "Watchlist"
@@ -4024,6 +4318,10 @@
       {
         "id": "followthesunhandoff--time-only",
         "name": "Time Only"
+      },
+      {
+        "id": "followthesunhandoff--heading-override",
+        "name": "Heading Override"
       }
     ],
     "title": "World Clock Bar"

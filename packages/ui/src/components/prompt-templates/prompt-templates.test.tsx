@@ -73,10 +73,24 @@ describe("PromptTemplates", () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole("tab", { name: "Writing" }));
+      fireEvent.click(screen.getByRole("button", { name: "Writing" }));
 
       expect(screen.getByText("Polish writing")).toBeInTheDocument();
       expect(screen.queryByText("Code Review")).not.toBeInTheDocument();
+    });
+
+    it("reflects the active category chip with aria-pressed", () => {
+      render(
+        <PromptTemplates
+          categories={[{ name: "Code" }, { name: "Writing" }]}
+          templates={TEMPLATES}
+        />,
+      );
+
+      const writing = screen.getByRole("button", { name: "Writing" });
+      expect(writing).toHaveAttribute("aria-pressed", "false");
+      fireEvent.click(writing);
+      expect(writing).toHaveAttribute("aria-pressed", "true");
     });
 
     it("returns all templates when the All chip is selected again", () => {
@@ -87,10 +101,10 @@ describe("PromptTemplates", () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole("tab", { name: "Code" }));
+      fireEvent.click(screen.getByRole("button", { name: "Code" }));
       expect(screen.queryByText("Polish writing")).not.toBeInTheDocument();
 
-      fireEvent.click(screen.getByRole("tab", { name: "All" }));
+      fireEvent.click(screen.getByRole("button", { name: "All" }));
       expect(screen.getByText("Polish writing")).toBeInTheDocument();
     });
   });

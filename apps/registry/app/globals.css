@@ -12,51 +12,13 @@ body {
   }
 }
 
-@layer base {
-  :root {
-    --background: 1 0 0;
-    --foreground: 0.1445 0 0;
-    --card: 1 0 0;
-    --card-foreground: 0.1445 0 0;
-    --popover: 1 0 0;
-    --popover-foreground: 0.1445 0 0;
-    --primary: 0.2044 0 0;
-    --primary-foreground: 0.9848 0 0;
-    --secondary: 0.9703 0 0;
-    --secondary-foreground: 0.2044 0 0;
-    --muted: 0.9703 0 0;
-    --muted-foreground: 0.5555 0 0;
-    --accent: 0.9703 0 0;
-    --accent-foreground: 0.2044 0 0;
-    --destructive: 0.6368 0.2078 25.326;
-    --destructive-foreground: 0.9848 0 0;
-    --border: 0.9219 0 0;
-    --input: 0.9219 0 0;
-    --ring: 0.1445 0 0;
-    --radius: 0.5rem;
-  }
-  .dark {
-    --background: 0 0 0;
-    --foreground: 0.9848 0 0;
-    --card: 0.1445 0 0;
-    --card-foreground: 0.9848 0 0;
-    --popover: 0.1445 0 0;
-    --popover-foreground: 0.9848 0 0;
-    --primary: 0.9848 0 0;
-    --primary-foreground: 0.2044 0 0;
-    --secondary: 0.2686 0 0;
-    --secondary-foreground: 0.9848 0 0;
-    --muted: 0.2686 0 0;
-    --muted-foreground: 0.7153 0 0;
-    --accent: 0.2686 0 0;
-    --accent-foreground: 0.9848 0 0;
-    --destructive: 0.3959 0.1331 25.721;
-    --destructive-foreground: 0.9848 0 0;
-    --border: 0.2686 0 0;
-    --input: 0.2686 0 0;
-    --ring: 0.8697 0 0;
-  }
-}
+/*
+ * Semantic OKLCH tokens (:root and .dark) are authoritative in
+ * @vllnt/ui/styles.css and overridden, with higher precedence, by
+ * @vllnt/ui/themes/default.css — both imported by the locale and embed
+ * layouts. Re-declaring them here only created a divergence risk, so this app
+ * keeps just its own overrides below.
+ */
 
 @layer base {
   * {

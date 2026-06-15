@@ -1,3 +1,4 @@
+import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import {
@@ -7,7 +8,11 @@ import {
   THEME_PRESET_STORAGE_KEY,
   THEME_PRESETS,
 } from "./theme-presets";
-import { setCustomTheme, setThemePreset } from "./use-theme-preset";
+import {
+  setCustomTheme,
+  setThemePreset,
+  useThemePreset,
+} from "./use-theme-preset";
 
 beforeEach(() => {
   localStorage.clear();
@@ -129,5 +134,56 @@ describe("setThemePreset after setCustomTheme", () => {
 
     expect(document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`)).toBeNull();
     expect(localStorage.getItem(THEME_CUSTOM_CSS_STORAGE_KEY)).toBeNull();
+  });
+});
+
+describe("useThemePreset", () => {
+  it('reports "default" when no theme is applied', () => {
+    const { result } = renderHook(() => useThemePreset());
+
+    expect(result.current.preset).toBe("default");
+  });
+
+  it("reports the active built-in preset name", () => {
+    const { result } = renderHook(() => useThemePreset());
+
+    act(() => {
+      setThemePreset("matrix");
+    });
+
+    expect(result.current.preset).toBe("matrix");
+  });
+
+  it('reports "custom" while a custom theme is active', () => {
+    const { result } = renderHook(() => useThemePreset());
+
+    act(() => {
+      setCustomTheme({
+        dark: { primary: "0.6 0.1 200" },
+        light: { primary: "0.5 0.1 200" },
+        radius: "0.5rem",
+      });
+    });
+
+    expect(result.current.preset).toBe("custom");
+  });
+
+  it('returns to "default" after the custom theme is replaced by a preset', () => {
+    const { result } = renderHook(() => useThemePreset());
+
+    act(() => {
+      setCustomTheme({
+        dark: { primary: "0.6 0.1 200" },
+        light: { primary: "0.5 0.1 200" },
+        radius: "0.5rem",
+      });
+    });
+    expect(result.current.preset).toBe("custom");
+
+    act(() => {
+      setThemePreset("default");
+    });
+
+    expect(result.current.preset).toBe("default");
   });
 });

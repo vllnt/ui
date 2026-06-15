@@ -369,6 +369,7 @@ function Feedback({
 
 type MultipleChoiceFieldProps = {
   groupName: string;
+  labelId: string;
   onChange: (value: string) => void;
   options: KnowledgeCheckOption[];
   value?: string;
@@ -408,6 +409,7 @@ function MultipleChoiceOption({
 
 function MultipleChoiceField({
   groupName,
+  labelId,
   onChange,
   options,
   value,
@@ -419,7 +421,11 @@ function MultipleChoiceField({
     [onChange],
   );
   return (
-    <div className="flex flex-col gap-1.5" role="radiogroup">
+    <div
+      aria-labelledby={labelId}
+      className="flex flex-col gap-1.5"
+      role="radiogroup"
+    >
       {options.map((option) => (
         <MultipleChoiceOption
           groupName={groupName}
@@ -435,7 +441,7 @@ function MultipleChoiceField({
 
 type TrueFalseFieldProps = {
   falseLabel: string;
-  groupName: string;
+  labelId: string;
   onChange: (value: boolean) => void;
   trueLabel: string;
   value?: boolean;
@@ -443,7 +449,7 @@ type TrueFalseFieldProps = {
 
 function TrueFalseField({
   falseLabel,
-  groupName,
+  labelId,
   onChange,
   trueLabel,
   value,
@@ -456,9 +462,9 @@ function TrueFalseField({
   }, [onChange]);
   return (
     <div
-      aria-label={groupName}
+      aria-labelledby={labelId}
       className="flex flex-wrap gap-2"
-      role="radiogroup"
+      role="group"
     >
       <Button
         aria-pressed={value === true}
@@ -484,12 +490,14 @@ function TrueFalseField({
 
 type FillBlankFieldProps = {
   inputId: string;
+  labelId: string;
   onChange: (value: string) => void;
   value: string;
 };
 
 function FillBlankField({
   inputId,
+  labelId,
   onChange,
   value,
 }: FillBlankFieldProps): ReactNode {
@@ -499,7 +507,14 @@ function FillBlankField({
     },
     [onChange],
   );
-  return <Input id={inputId} onChange={handleBlankValueChange} value={value} />;
+  return (
+    <Input
+      aria-labelledby={labelId}
+      id={inputId}
+      onChange={handleBlankValueChange}
+      value={value}
+    />
+  );
 }
 
 type QuestionFieldProps = {
@@ -508,6 +523,7 @@ type QuestionFieldProps = {
   labels: Required<KnowledgeCheckLabels>;
   onResponse: (value: boolean | string) => void;
   question: KnowledgeCheckQuestion;
+  questionTextId: string;
   response?: boolean | string;
 };
 
@@ -517,6 +533,7 @@ function QuestionField({
   labels,
   onResponse,
   question,
+  questionTextId,
   response,
 }: QuestionFieldProps): ReactNode {
   switch (question.type) {
@@ -524,6 +541,7 @@ function QuestionField({
       return (
         <FillBlankField
           inputId={inputId}
+          labelId={questionTextId}
           onChange={onResponse}
           value={typeof response === "string" ? response : ""}
         />
@@ -532,6 +550,7 @@ function QuestionField({
       return (
         <MultipleChoiceField
           groupName={groupName}
+          labelId={questionTextId}
           onChange={onResponse}
           options={question.options}
           value={typeof response === "string" ? response : undefined}
@@ -541,7 +560,7 @@ function QuestionField({
       return (
         <TrueFalseField
           falseLabel={labels.falseOption}
-          groupName={groupName}
+          labelId={questionTextId}
           onChange={onResponse}
           trueLabel={labels.trueOption}
           value={typeof response === "boolean" ? response : undefined}
@@ -581,6 +600,7 @@ type QuestionPaneProps = {
   inputId: string;
   labels: Required<KnowledgeCheckLabels>;
   questions: KnowledgeCheckQuestion[];
+  questionTextId: string;
 };
 
 function QuestionPane({
@@ -589,6 +609,7 @@ function QuestionPane({
   inputId,
   labels,
   questions,
+  questionTextId,
 }: QuestionPaneProps): ReactNode {
   const question = controller.current;
   const response = controller.responses[question.id];
@@ -604,13 +625,16 @@ function QuestionPane({
       <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {`${(controller.index + 1).toString()} ${labels.outOf} ${questions.length.toString()}`}
       </p>
-      <p className="text-sm font-medium text-foreground">{question.question}</p>
+      <p className="text-sm font-medium text-foreground" id={questionTextId}>
+        {question.question}
+      </p>
       <QuestionField
         groupName={groupName}
         inputId={inputId}
         labels={labels}
         onResponse={handleResponse}
         question={question}
+        questionTextId={questionTextId}
         response={response}
       />
       <Feedback
@@ -723,6 +747,7 @@ export const KnowledgeCheck = forwardRef<HTMLElement, KnowledgeCheckProps>(
     );
     const groupName = useId();
     const inputId = useId();
+    const questionTextId = useId();
     const controller = useKnowledgeCheckController({
       onAnswer,
       onComplete,
@@ -756,6 +781,7 @@ export const KnowledgeCheck = forwardRef<HTMLElement, KnowledgeCheckProps>(
             inputId={inputId}
             labels={resolvedLabels}
             questions={questions}
+            questionTextId={questionTextId}
           />
         )}
       </section>

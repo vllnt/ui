@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 
+import { routing } from "@/i18n/routing";
+import { canonical } from "@/lib/seo";
+
 import { getAiComponentSlugs } from "../lib/ai-seo";
 import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../lib/templates";
@@ -22,6 +25,11 @@ type SitemapEntryInput = {
   readonly priority: number;
   readonly url: string;
 };
+type PageRouteInput = {
+  readonly changeFrequency: ChangeFrequency;
+  readonly path: string;
+  readonly priority: number;
+};
 
 function getRegistryItems(): readonly RegistryItem[] {
   return (registry as { readonly items: readonly RegistryItem[] }).items;
@@ -36,67 +44,80 @@ function entry({
   return { changeFrequency, lastModified, priority, url };
 }
 
+/**
+ * Expand a localizable page route into one sitemap entry per configured
+ * locale so non-default locales (e.g. `/fr/*`) are crawlable. The default
+ * locale stays unprefixed under the `as-needed` strategy.
+ */
+function localizedEntries(
+  route: PageRouteInput,
+  lastModified: Date,
+): MetadataRoute.Sitemap {
+  return routing.locales.map((locale) =>
+    entry({
+      changeFrequency: route.changeFrequency,
+      lastModified,
+      priority: route.priority,
+      url: canonical(route.path, locale),
+    }),
+  );
+}
+
 function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
   const routes = [
-    { changeFrequency: "weekly", priority: 1, url: SITE_URL },
-    { changeFrequency: "weekly", priority: 0.9, url: `${SITE_URL}/ai` },
-    { changeFrequency: "weekly", priority: 1, url: `${SITE_URL}/components` },
-    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/templates` },
-    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/changelog` },
-    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/docs` },
-    {
-      changeFrequency: "monthly",
-      priority: 0.6,
-      url: `${SITE_URL}/philosophy`,
-    },
-    { changeFrequency: "monthly", priority: 0.8, url: `${SITE_URL}/design` },
-    { changeFrequency: "weekly", priority: 0.8, url: `${SITE_URL}/releases` },
-    { changeFrequency: "monthly", priority: 0.7, url: `${SITE_URL}/vs/shadcn` },
-    {
-      changeFrequency: "monthly",
-      priority: 0.7,
-      url: `${SITE_URL}/vs/vercel-ai-sdk`,
-    },
-    {
-      changeFrequency: "monthly",
-      priority: 0.7,
-      url: `${SITE_URL}/vs/assistant-ui`,
-    },
-  ] satisfies readonly Omit<SitemapEntryInput, "lastModified">[];
+    { changeFrequency: "weekly", path: "/", priority: 1 },
+    { changeFrequency: "weekly", path: "/ai", priority: 0.9 },
+    { changeFrequency: "weekly", path: "/components", priority: 1 },
+    { changeFrequency: "weekly", path: "/templates", priority: 0.8 },
+    { changeFrequency: "weekly", path: "/changelog", priority: 0.8 },
+    { changeFrequency: "weekly", path: "/docs", priority: 0.8 },
+    { changeFrequency: "monthly", path: "/philosophy", priority: 0.6 },
+    { changeFrequency: "monthly", path: "/design", priority: 0.8 },
+    { changeFrequency: "weekly", path: "/releases", priority: 0.8 },
+    { changeFrequency: "monthly", path: "/vs/shadcn", priority: 0.7 },
+    { changeFrequency: "monthly", path: "/vs/vercel-ai-sdk", priority: 0.7 },
+    { changeFrequency: "monthly", path: "/vs/assistant-ui", priority: 0.7 },
+  ] satisfies readonly PageRouteInput[];
 
-  return routes.map((route) => entry({ ...route, lastModified }));
+  return routes.flatMap((route) => localizedEntries(route, lastModified));
 }
 
 function docsRoutes(lastModified: Date): MetadataRoute.Sitemap {
-  return DOCS_PAGES.map((page) =>
-    entry({
-      changeFrequency: "monthly",
+  return DOCS_PAGES.flatMap((page) =>
+    localizedEntries(
+      {
+        changeFrequency: "monthly",
+        path: getDocsPath(page),
+        priority: 0.75,
+      },
       lastModified,
-      priority: 0.75,
-      url: `${SITE_URL}${getDocsPath(page)}`,
-    }),
+    ),
   );
 }
 
 function templateRoutes(lastModified: Date): MetadataRoute.Sitemap {
-  return TEMPLATES.map((template) =>
-    entry({
-      changeFrequency: "weekly",
+  return TEMPLATES.flatMap((template) =>
+    localizedEntries(
+      {
+        changeFrequency: "weekly",
+        path: getTemplatePath(template),
+        priority: 0.7,
+      },
       lastModified,
-      priority: 0.7,
-      url: `${SITE_URL}${getTemplatePath(template)}`,
-    }),
+    ),
   );
 }
 
 function buildGuideRoutes(lastModified: Date): MetadataRoute.Sitemap {
-  return USE_CASES.map((useCase) =>
-    entry({
-      changeFrequency: "monthly",
+  return USE_CASES.flatMap((useCase) =>
+    localizedEntries(
+      {
+        changeFrequency: "monthly",
+        path: getUseCasePath(useCase),
+        priority: 0.8,
+      },
       lastModified,
-      priority: 0.8,
-      url: `${SITE_URL}${getUseCasePath(useCase)}`,
-    }),
+    ),
   );
 }
 
@@ -106,13 +127,15 @@ function componentRoutes(
 ): MetadataRoute.Sitemap {
   // Concentrate crawl budget on the AI wedge: AI components rank higher than
   // generic clones, which sit below the default.
-  return items.map((item) =>
-    entry({
-      changeFrequency: "weekly",
+  return items.flatMap((item) =>
+    localizedEntries(
+      {
+        changeFrequency: "weekly",
+        path: `/components/${item.name}`,
+        priority: AI_COMPONENT_SLUGS.has(item.name) ? 0.85 : 0.6,
+      },
       lastModified,
-      priority: AI_COMPONENT_SLUGS.has(item.name) ? 0.85 : 0.6,
-      url: `${SITE_URL}/components/${item.name}`,
-    }),
+    ),
   );
 }
 

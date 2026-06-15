@@ -189,7 +189,7 @@ function FilterBar({
         />
       </div>
       {categories.length > 0 ? (
-        <div className="flex flex-wrap gap-1.5" role="tablist">
+        <div className="flex flex-wrap gap-1.5">
           <CategoryChip
             active={selectedCategory === ALL_CATEGORY_VALUE}
             label={labels.allCategory}
@@ -233,7 +233,7 @@ function CategoryChip({
 }: CategoryChipProps): ReactNode {
   return (
     <button
-      aria-selected={active}
+      aria-pressed={active}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         active
@@ -242,7 +242,6 @@ function CategoryChip({
       )}
       data-value={value}
       onClick={onClick}
-      role="tab"
       type="button"
     >
       {icon ? (
@@ -574,10 +573,7 @@ function TemplateGrid({ controller, labels }: GridProps): ReactNode {
     );
   }
   return (
-    <div
-      className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
-      role="tabpanel"
-    >
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {controller.filtered.map((template) => (
         <PromptTemplateCard
           active={controller.activeId === template.id}

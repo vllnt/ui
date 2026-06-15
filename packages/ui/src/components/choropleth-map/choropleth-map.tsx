@@ -61,8 +61,29 @@ const DEFAULT_LABELS = {
   region: "Choropleth map",
 } as const satisfies Required<ChoroplethMapLabels>;
 
+/**
+ * Default sequential ramp (slate-100 → blue-700). The interpolation engine
+ * operates in sRGB hex space, so these defaults are light-mode optimized and
+ * fixed; under dark mode or a custom theme they render unchanged. Pass an
+ * explicit `colorScale` to match the active palette.
+ */
 const DEFAULT_SCALE: ChoroplethColorScale = ["#f1f5f9", "#1d4ed8"];
+
+/** sRGB fallback for missing regions when the theme `--muted` token is unavailable. */
 const DEFAULT_MISSING = "#e5e7eb";
+
+/**
+ * Resolve the theme `--muted` token to an `oklch()` color so regions with no
+ * data adapt to the active preset. Falls back to {@link DEFAULT_MISSING} on the
+ * server or when the token has no value.
+ */
+function resolveMissingColor(): string {
+  if (typeof window === "undefined") return DEFAULT_MISSING;
+  const muted = getComputedStyle(document.documentElement)
+    .getPropertyValue("--muted")
+    .trim();
+  return muted ? `oklch(${muted})` : DEFAULT_MISSING;
+}
 
 type Hover = { id: string; value?: number };
 
@@ -169,7 +190,7 @@ export type ChoroplethMapProps = {
   domain?: [number, number];
   /** Localizable strings. */
   labels?: ChoroplethMapLabels;
-  /** Color used when a region has no data. Defaults to a neutral gray. */
+  /** Color used when a region has no data. Defaults to the theme `--muted` token. */
   missingColor?: string;
   /** Fires after a region click. */
   onSelectRegion?: (region: ChoroplethRegion) => void;
@@ -511,7 +532,7 @@ export const ChoroplethMap = forwardRef<HTMLElement, ChoroplethMapProps>(
       data,
       domain: domainProperty,
       labels,
-      missingColor = DEFAULT_MISSING,
+      missingColor = resolveMissingColor(),
       onSelectRegion,
       regions,
       ...rest

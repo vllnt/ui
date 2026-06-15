@@ -163,15 +163,17 @@ function RegionShape({
   region,
   showAnswerFlash,
 }: RegionPathProps): ReactNode {
-  let fill = "rgb(226, 232, 240)";
-  if (isSelected && feedback === "correct") fill = "rgb(34, 197, 94)";
-  else if (isSelected && feedback === "incorrect") fill = "rgb(239, 68, 68)";
+  let fillClass = "fill-muted";
+  if (isSelected && feedback === "correct") fillClass = "fill-emerald-500";
+  else if (isSelected && feedback === "incorrect")
+    fillClass = "fill-destructive";
   else if (showAnswerFlash && isAnswerForCurrent && !isSelected)
-    fill = "rgba(34, 197, 94, 0.4)";
+    fillClass = "fill-emerald-500/40";
   return (
     <path
       aria-label={region.name}
       className={cn(
+        fillClass,
         "stroke-background outline-none transition-colors",
         disabled
           ? "cursor-not-allowed"
@@ -188,7 +190,6 @@ function RegionShape({
             ? "answer"
             : undefined
       }
-      fill={fill}
       onClick={() => {
         if (!disabled) onSelect(region.id);
       }}

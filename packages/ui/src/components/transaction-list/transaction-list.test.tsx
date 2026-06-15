@@ -38,6 +38,30 @@ describe("formatTransactionAmount", () => {
       formatTransactionAmount(2000, { currency: "EUR", locale: "en-IE" }),
     ).toMatch(/€20\.00/);
   });
+
+  it("delegates sign placement to Intl when signDisplay is set", () => {
+    expect(formatTransactionAmount(2000, { signDisplay: "always" })).toBe(
+      "+$20.00",
+    );
+    expect(formatTransactionAmount(-150, { signDisplay: "always" })).toBe(
+      "-$1.50",
+    );
+  });
+
+  it("produces well-formed bidirectional output for RTL locales", () => {
+    const intlNegative = new Intl.NumberFormat("ar-SA", {
+      currency: "SAR",
+      signDisplay: "always",
+      style: "currency",
+    }).format(-20);
+    expect(
+      formatTransactionAmount(-2000, {
+        currency: "SAR",
+        locale: "ar-SA",
+        signDisplay: "always",
+      }),
+    ).toBe(intlNegative);
+  });
 });
 
 describe("formatTransactionDate", () => {

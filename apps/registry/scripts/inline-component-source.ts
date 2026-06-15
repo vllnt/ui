@@ -183,9 +183,12 @@ const rewriteImports = (source: string): string => {
   // and replace each with a single deduped `import ... from "@vllnt/ui"` block.
   let code = source;
 
-  // `../../lib/(utils|types|use-X)` → `@vllnt/ui`
+  // `../../lib/<module>` → `@vllnt/ui`. Matches any single-segment kebab-case
+  // lib module (utils, types, theme-presets, use-*, …); every lib module is
+  // re-exported from the public @vllnt/ui barrel, so this rewrite is always safe
+  // and new lib modules are covered automatically (no regex edit per addition).
   code = code.replace(
-    /from\s+["'](?:\.\.\/)+lib\/(?:utils|types|use-[a-z-]+)["']/g,
+    /from\s+["'](?:\.\.\/)+lib\/[a-z][a-z0-9-]*["']/g,
     `from "${PACKAGE_NAME}"`,
   );
 

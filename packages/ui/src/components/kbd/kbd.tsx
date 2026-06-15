@@ -145,7 +145,11 @@ export const Kbd = forwardRef<HTMLElement, KbdProps>(
         .map((token) => formatToken(token, isMac))
         .join(" + ");
       return (
-        <span aria-label={ariaLabel} className="inline-flex items-center gap-1">
+        <span
+          aria-label={ariaLabel}
+          className="inline-flex items-center gap-1"
+          role="img"
+        >
           {tokens.map((token, index) => (
             <kbd
               className={cn(kbdVariants({ size }), className)}
