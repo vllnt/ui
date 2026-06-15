@@ -86,6 +86,27 @@ describe("ModelComparison", () => {
       expect(articles[0]).toHaveAttribute("data-blind", "true");
       expect(articles[0]?.dataset.model).toBeUndefined();
     });
+
+    it("assigns sequential, unique, colon-free blind labels", () => {
+      render(
+        <ModelComparison blindDefault>
+          <ModelComparisonColumn label="Sonnet" model="claude-sonnet-4-6">
+            content
+          </ModelComparisonColumn>
+          <ModelComparisonColumn label="GPT" model="gpt-4o">
+            content
+          </ModelComparisonColumn>
+        </ModelComparison>,
+      );
+
+      expect(
+        screen.getByRole("heading", { name: "Model A" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "Model B" }),
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/Model .*:/)).not.toBeInTheDocument();
+    });
   });
 
   describe("ModelComparisonMeta", () => {
@@ -128,6 +149,17 @@ describe("ModelComparison", () => {
       expect(onVote).toHaveBeenNthCalledWith(1, "left");
       expect(onVote).toHaveBeenNthCalledWith(2, "tie");
       expect(onVote).toHaveBeenNthCalledWith(3, "right");
+    });
+
+    it("spans the full comparison grid width", () => {
+      const { container } = render(
+        <ModelComparison hideBlindToggle>
+          <ModelComparisonVote />
+        </ModelComparison>,
+      );
+
+      const vote = container.querySelector(".col-span-full");
+      expect(vote).not.toBeNull();
     });
   });
 });

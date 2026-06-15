@@ -1,7 +1,28 @@
+import { type ReactNode, useState } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { AutoReload } from "./auto-reload";
+import { AutoReload, type AutoReloadSavePayload } from "./auto-reload";
+
+function ControlledAutoReload({
+  onSave,
+}: {
+  onSave: (payload: AutoReloadSavePayload) => void;
+}): ReactNode {
+  const [reloadAmountCents, setReloadAmountCents] = useState(2000);
+  const [thresholdCents, setThresholdCents] = useState(1000);
+  return (
+    <AutoReload
+      defaultEnabled
+      onReloadAmountChange={setReloadAmountCents}
+      onSave={onSave}
+      onThresholdChange={setThresholdCents}
+      reloadAmountCents={reloadAmountCents}
+      thresholdCents={thresholdCents}
+    />
+  );
+}
 
 describe("AutoReload", () => {
   describe("rendering", () => {
@@ -116,6 +137,21 @@ describe("AutoReload", () => {
       expect(onSave).toHaveBeenCalledWith({
         reloadAmountCents: 3000,
         thresholdCents: 550,
+      });
+    });
+
+    it("applies controlled-prop edits via onReloadAmountChange to the save payload", () => {
+      const onSave = vi.fn();
+      render(<ControlledAutoReload onSave={onSave} />);
+
+      fireEvent.change(screen.getByLabelText(/Reload amount/), {
+        target: { value: "30.00" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Save settings" }));
+
+      expect(onSave).toHaveBeenCalledWith({
+        reloadAmountCents: 3000,
+        thresholdCents: 1000,
       });
     });
   });

@@ -1,3 +1,5 @@
+import { createRef } from "react";
+
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
@@ -140,6 +142,36 @@ describe("EraComparison", () => {
 
       const link = screen.getByRole("link", { name: "Leonardo" });
       expect(link).toHaveAttribute("href", "/figures/leonardo");
+    });
+
+    it("forwards the ref to the span when href is absent", () => {
+      const ref = createRef<HTMLAnchorElement | HTMLSpanElement>();
+      render(
+        <EraComparison>
+          <EraColumn name="Era">
+            <EraDomain name="Art">
+              <EraFigure name="Leonardo" ref={ref} />
+            </EraDomain>
+          </EraColumn>
+        </EraComparison>,
+      );
+
+      expect(ref.current?.tagName).toBe("SPAN");
+    });
+
+    it("forwards the ref to the anchor when href is set", () => {
+      const ref = createRef<HTMLAnchorElement | HTMLSpanElement>();
+      render(
+        <EraComparison>
+          <EraColumn name="Era">
+            <EraDomain name="Art">
+              <EraFigure href="/figures/leonardo" name="Leonardo" ref={ref} />
+            </EraDomain>
+          </EraColumn>
+        </EraComparison>,
+      );
+
+      expect(ref.current?.tagName).toBe("A");
     });
 
     it("forwards anchorProps to the rendered <a>", () => {

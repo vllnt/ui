@@ -82,6 +82,28 @@ describe("AISidebar", () => {
         "true",
       );
     });
+
+    it("marks the closed sidebar inert so it is removed from the tab order", () => {
+      const { container, rerender } = render(
+        <AISidebarProvider open>
+          <AISidebar>
+            <AISidebarTitle>Assistant</AISidebarTitle>
+          </AISidebar>
+        </AISidebarProvider>,
+      );
+
+      expect(container.querySelector("aside")).not.toHaveAttribute("inert");
+
+      rerender(
+        <AISidebarProvider open={false}>
+          <AISidebar>
+            <AISidebarTitle>Assistant</AISidebarTitle>
+          </AISidebar>
+        </AISidebarProvider>,
+      );
+
+      expect(container.querySelector("aside")).toHaveAttribute("inert");
+    });
   });
 
   describe("toggle", () => {

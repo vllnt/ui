@@ -110,6 +110,9 @@ const DEFAULT_LABELS = {
   expand: "Show details",
 } as const satisfies Required<AgentActivityLabels>;
 
+const AgentActivityLabelsContext =
+  createContext<Required<AgentActivityLabels>>(DEFAULT_LABELS);
+
 /**
  * Props for {@link AgentActivity}.
  *
@@ -165,34 +168,39 @@ export const AgentActivity = forwardRef<HTMLElement, AgentActivityProps>(
       status = "idle",
       ...rest
     } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+    const resolvedLabels = useMemo(
+      () => ({ ...DEFAULT_LABELS, ...labels }),
+      [labels],
+    );
     return (
-      <section
-        aria-live={status === "running" ? "polite" : "off"}
-        className={cn(
-          "flex flex-col gap-3 rounded-2xl border bg-background p-4",
-          className,
-        )}
-        data-status={status}
-        ref={ref}
-        role={ACTIVITY_LIVE_REGION_ROLE[status]}
-        {...rest}
-      >
-        <header className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-semibold tracking-tight text-foreground">
-            {resolvedLabels.activity}
-          </h3>
-          {elapsed ? (
-            <span
-              aria-label={resolvedLabels.elapsed}
-              className="text-xs font-mono text-muted-foreground"
-            >
-              {elapsed}
-            </span>
-          ) : null}
-        </header>
-        <ol className="flex flex-col gap-2">{children}</ol>
-      </section>
+      <AgentActivityLabelsContext.Provider value={resolvedLabels}>
+        <section
+          aria-live={status === "running" ? "polite" : "off"}
+          className={cn(
+            "flex flex-col gap-3 rounded-2xl border bg-background p-4",
+            className,
+          )}
+          data-status={status}
+          ref={ref}
+          role={ACTIVITY_LIVE_REGION_ROLE[status]}
+          {...rest}
+        >
+          <header className="flex items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold tracking-tight text-foreground">
+              {resolvedLabels.activity}
+            </h3>
+            {elapsed ? (
+              <span
+                aria-label={resolvedLabels.elapsed}
+                className="text-xs font-mono text-muted-foreground"
+              >
+                {elapsed}
+              </span>
+            ) : null}
+          </header>
+          <ol className="flex flex-col gap-2">{children}</ol>
+        </section>
+      </AgentActivityLabelsContext.Provider>
     );
   },
 );
@@ -329,6 +337,7 @@ export const AgentStep = forwardRef<HTMLLIElement, AgentStepProps>(
     const hasDetails = split.body.length > 0;
     const [open, setOpen] = useState(defaultOpen);
     const detailsId = useId();
+    const labels = useContext(AgentActivityLabelsContext);
 
     const handleToggle = useCallback(() => {
       setOpen((value) => !value);
@@ -359,13 +368,14 @@ export const AgentStep = forwardRef<HTMLLIElement, AgentStepProps>(
             header={split.header}
             icon={resolvedIcon}
             iconClass={palette.iconClass}
-            labels={DEFAULT_LABELS}
+            labels={labels}
             onToggle={handleToggle}
             open={open}
           />
-          {hasDetails && open ? (
+          {hasDetails ? (
             <div
               className="border-t border-border/60 px-3 py-2 text-xs"
+              hidden={!open}
               id={detailsId}
             >
               <div className="flex flex-col gap-2 pl-8">{split.body}</div>

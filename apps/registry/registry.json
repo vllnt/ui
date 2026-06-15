@@ -346,8 +346,12 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "aspect-ratio",
@@ -478,8 +482,12 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "blog-card",
@@ -535,6 +543,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "bottom-bar",
+      "type": "registry:component",
+      "title": "Bottom Bar",
+      "description": "Slim chrome strip pinned to the bottom of a canvas shell as a calm host for activity strips, status pills, and ambient indicators.",
+      "files": [
+        {
+          "path": "registry/default/bottom-bar/bottom-bar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "navigation",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -788,6 +815,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "chat-dock-section",
+      "type": "registry:component",
+      "title": "Chat Dock Section",
+      "description": "Sidebar section that hosts a compact, scrollable chat thread alongside a spatial workspace — slotted into a dock or rail to keep an AI assistant in view.",
+      "files": [
+        {
+          "path": "registry/default/chat-dock-section/chat-dock-section.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "ai",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -1221,6 +1267,44 @@
       "stability": "stable"
     },
     {
+      "name": "conversation-thread",
+      "type": "registry:component",
+      "title": "Conversation Thread",
+      "description": "Compound component family for AI chat UIs that orchestrates auto-scroll, streaming indicators, empty states, and message rendering.",
+      "files": [
+        {
+          "path": "registry/default/conversation-thread/conversation-thread.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "cookie-consent",
+      "type": "registry:component",
+      "title": "Cookie Consent",
+      "description": "Dismissible cookie-consent banner with positional variants and accept / reject actions for privacy compliance.",
+      "files": [
+        {
+          "path": "registry/default/cookie-consent/cookie-consent.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "copy-button",
       "type": "registry:component",
       "title": "Copy Button",
@@ -1275,6 +1359,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "curriculum",
+      "type": "registry:component",
+      "title": "Curriculum",
+      "description": "Course-layout container for a sequence of lessons or modules with title, progress, optional intro, and a stack of lesson rows.",
+      "files": [
+        {
+          "path": "registry/default/curriculum/curriculum.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "learning",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -1728,6 +1831,25 @@
       "stability": "stable"
     },
     {
+      "name": "glass-panel",
+      "type": "registry:component",
+      "title": "Glass Panel",
+      "description": "Frosted-glass surface for floating chrome above a canvas — dock panels, hovering toolbars, and transient overlays — with a translucent background and soft border.",
+      "files": [
+        {
+          "path": "registry/default/glass-panel/glass-panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "globe-3d",
       "type": "registry:component",
       "title": "Globe 3D",
@@ -2093,6 +2215,25 @@
       "stability": "stable"
     },
     {
+      "name": "label",
+      "type": "registry:component",
+      "title": "Label",
+      "description": "Accessible form label that associates descriptive text with an input control.",
+      "files": [
+        {
+          "path": "registry/default/label/label.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "lang-provider",
       "type": "registry:component",
       "title": "Lang Provider",
@@ -2161,8 +2302,12 @@
         }
       ],
       "registryDependencies": [],
-      "dependencies": [],
-      "category": "data"
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
     },
     {
       "name": "live-cursor",
@@ -2626,6 +2771,25 @@
       "stability": "stable"
     },
     {
+      "name": "overview-board",
+      "type": "registry:component",
+      "title": "Overview Board",
+      "description": "Grid of overview cards for at-a-glance dashboards — a row of headline metrics with consistent spacing and tone.",
+      "files": [
+        {
+          "path": "registry/default/overview-board/overview-board.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "pagination",
       "type": "registry:component",
       "title": "Pagination",
@@ -2908,6 +3072,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "progress-tracker",
+      "type": "registry:component",
+      "title": "Progress Tracker",
+      "description": "Curriculum-level learning dashboard for modules, lessons, exercises, streaks, and earned skills.",
+      "files": [
+        {
+          "path": "registry/default/progress-tracker/progress-tracker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "learning",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -3350,6 +3533,25 @@
       "stability": "stable"
     },
     {
+      "name": "share-dialog",
+      "type": "registry:component",
+      "title": "Share Dialog",
+      "description": "Modal dialog for sharing a page across social platforms with a copy-link action and overridable labels.",
+      "files": [
+        {
+          "path": "registry/default/share-dialog/share-dialog.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "overlay",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "share-section",
       "type": "registry:component",
       "title": "Share Section",
@@ -3750,6 +3952,25 @@
       "stability": "stable"
     },
     {
+      "name": "switch",
+      "type": "registry:component",
+      "title": "Switch",
+      "description": "Toggle switch control for binary on/off state.",
+      "files": [
+        {
+          "path": "registry/default/switch/switch.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "table",
       "type": "registry:component",
       "title": "Table",
@@ -3883,6 +4104,25 @@
       "stability": "stable"
     },
     {
+      "name": "theme-preset-provider",
+      "type": "registry:component",
+      "title": "Theme Preset Provider",
+      "description": "Applies the persisted theme preset on mount and injects a no-flash script so the saved preset is set before paint.",
+      "files": [
+        {
+          "path": "registry/default/theme-preset-provider/theme-preset-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "theme-provider",
       "type": "registry:component",
       "title": "Theme Provider",
@@ -3890,6 +4130,25 @@
       "files": [
         {
           "path": "registry/default/theme-provider/theme-provider.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "theme-switcher",
+      "type": "registry:component",
+      "title": "Theme Switcher",
+      "description": "Compact swatch row for switching between built-in theme presets, kept in sync with every other consumer on the page.",
+      "files": [
+        {
+          "path": "registry/default/theme-switcher/theme-switcher.tsx",
           "type": "registry:component"
         }
       ],
@@ -4208,6 +4467,25 @@
       "stability": "stable"
     },
     {
+      "name": "truncated-text",
+      "type": "registry:component",
+      "title": "Truncated Text",
+      "description": "Single-line text that truncates with an ellipsis when it exceeds a configurable max width.",
+      "files": [
+        {
+          "path": "registry/default/truncated-text/truncated-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "tutorial-card",
       "type": "registry:component",
       "title": "Tutorial Card",
@@ -4495,5 +4773,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-05-19T14:58:41.644Z"
+  "generatedAt": "2026-06-15T19:29:07.199Z"
 }

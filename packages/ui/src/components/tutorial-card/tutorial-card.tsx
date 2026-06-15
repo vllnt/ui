@@ -12,7 +12,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
+} from "../card/card";
 
 export type TutorialCardProgress = {
   completedCount: number;

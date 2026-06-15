@@ -6,8 +6,8 @@ import { CalendarIcon } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
-import { Calendar, type CalendarProps } from "../calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+import { Calendar, type CalendarProps } from "../calendar/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 
 const defaultDateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",

@@ -7,7 +7,9 @@ import {
   type ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -303,6 +305,28 @@ type ControllerOptions = {
   value: string;
 };
 
+function useCopiedFlag(): { copied: boolean; flagCopied: () => void } {
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(
+    () => () => {
+      clearTimeout(timerRef.current);
+    },
+    [],
+  );
+
+  const flagCopied = useCallback(() => {
+    setCopied(true);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setCopied(false);
+    }, COPIED_TIMEOUT_MS);
+  }, []);
+
+  return { copied, flagCopied };
+}
+
 function useArtifactController(
   options: ControllerOptions,
 ): AIArtifactContextValue {
@@ -317,7 +341,7 @@ function useArtifactController(
     value,
   } = options;
   const [fullscreen, setFullscreen] = useState(defaultFullscreen);
-  const [copied, setCopied] = useState(false);
+  const { copied, flagCopied } = useCopiedFlag();
   const resolvedFilename = useMemo(
     () => buildFilename({ filename, language, title, type }),
     [filename, language, title, type],
@@ -326,12 +350,9 @@ function useArtifactController(
   const copy = useCallback(async () => {
     const ok = await writeToClipboard(value);
     if (!ok) return false;
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, COPIED_TIMEOUT_MS);
+    flagCopied();
     return true;
-  }, [value]);
+  }, [flagCopied, value]);
 
   const download = useCallback(() => {
     downloadValueAsFile(value, resolvedFilename);

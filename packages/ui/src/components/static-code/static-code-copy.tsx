@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { Check, Copy } from "lucide-react";
 
 import { Button } from "../button/button";
+import { useCopyToClipboard } from "../copy-button/copy-button";
 
 type StaticCodeCopyProps = {
   value: string;
@@ -15,21 +14,15 @@ type StaticCodeCopyProps = {
  * Keeps the surrounding highlighted code as zero-JS server markup.
  */
 export function StaticCodeCopy({ value }: StaticCodeCopyProps) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
+  const { copied, copy } = useCopyToClipboard();
 
   return (
     <Button
       aria-label={copied ? "Copied" : "Copy code"}
       className="absolute right-2 top-2 size-8"
-      onClick={handleCopy}
+      onClick={() => {
+        void copy(value);
+      }}
       size="icon"
       variant="ghost"
     >

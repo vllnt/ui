@@ -445,7 +445,7 @@ function EventList({ activeId, children }: EventListProps): ReactNode {
     <ol className="relative flex flex-col px-4 pb-6 md:px-6">
       {children.map((child, index) => (
         <li
-          className="block list-none"
+          className="group block list-none"
           data-active={
             isReactElementWithEventId(child, activeId) ? "true" : undefined
           }

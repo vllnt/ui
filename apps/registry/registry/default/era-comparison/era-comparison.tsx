@@ -6,11 +6,20 @@ import {
   createContext,
   forwardRef,
   type ReactNode,
+  type Ref,
   useContext,
   useMemo,
 } from "react";
 
 import { cn } from "@vllnt/ui";
+
+function assignRef<T>(ref: Ref<T> | undefined, node: null | T): void {
+  if (typeof ref === "function") {
+    ref(node);
+  } else if (ref) {
+    ref.current = node;
+  }
+}
 
 /**
  * Color theme for an {@link EraColumn} accent strip.
@@ -316,32 +325,42 @@ export type EraFigureProps = {
  *
  * @public
  */
-export const EraFigure = forwardRef<HTMLSpanElement, EraFigureProps>(
-  (props, ref) => {
-    const { anchorProps, className, href, name, ...rest } = props;
-    const color = useEraColumnColor();
-    const palette = ERA_PALETTE[color];
-    const baseClass = cn(
-      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-      palette.chip,
-      className,
-    );
-    if (href) {
-      return (
-        <a
-          className={cn(baseClass, "underline-offset-4 hover:underline")}
-          href={href}
-          {...anchorProps}
-        >
-          {name}
-        </a>
-      );
-    }
+export const EraFigure = forwardRef<
+  HTMLAnchorElement | HTMLSpanElement,
+  EraFigureProps
+>((props, ref) => {
+  const { anchorProps, className, href, name, ...rest } = props;
+  const color = useEraColumnColor();
+  const palette = ERA_PALETTE[color];
+  const baseClass = cn(
+    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+    palette.chip,
+    className,
+  );
+  if (href) {
     return (
-      <span className={baseClass} ref={ref} {...rest}>
+      <a
+        className={cn(baseClass, "underline-offset-4 hover:underline")}
+        href={href}
+        ref={(node) => {
+          assignRef(ref, node);
+        }}
+        {...anchorProps}
+      >
         {name}
-      </span>
+      </a>
     );
-  },
-);
+  }
+  return (
+    <span
+      className={baseClass}
+      ref={(node) => {
+        assignRef(ref, node);
+      }}
+      {...rest}
+    >
+      {name}
+    </span>
+  );
+});
 EraFigure.displayName = "EraFigure";

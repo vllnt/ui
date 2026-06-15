@@ -13,7 +13,6 @@ import {
 import type {
   KeyboardEvent as ReactKeyboardEvent,
   PointerEvent as ReactPointerEvent,
-  WheelEvent as ReactWheelEvent,
 } from "react";
 
 import { cn } from "../../lib/utils";
@@ -99,19 +98,21 @@ function supportsScrollableOverflow(value: string) {
 }
 
 function hasScrollableAxis(element: HTMLElement, axis: "x" | "y") {
-  const style = window.getComputedStyle(element);
-
   if (axis === "x") {
-    return (
-      supportsScrollableOverflow(style.overflowX) &&
-      element.scrollWidth > element.clientWidth
+    if (element.scrollWidth <= element.clientWidth) {
+      return false;
+    }
+
+    return supportsScrollableOverflow(
+      window.getComputedStyle(element).overflowX,
     );
   }
 
-  return (
-    supportsScrollableOverflow(style.overflowY) &&
-    element.scrollHeight > element.clientHeight
-  );
+  if (element.scrollHeight <= element.clientHeight) {
+    return false;
+  }
+
+  return supportsScrollableOverflow(window.getComputedStyle(element).overflowY);
 }
 
 function hasScrollableAncestor(
@@ -149,10 +150,13 @@ function shouldHandleCanvasKeyboardEvent(
   return true;
 }
 
-function shouldHandleCanvasWheelEvent(event: ReactWheelEvent<HTMLDivElement>) {
+function shouldHandleCanvasWheelEvent(
+  event: WheelEvent,
+  container: HTMLDivElement,
+) {
   if (
     isHtmlElement(event.target) &&
-    hasScrollableAncestor(event.target, event.currentTarget, {
+    hasScrollableAncestor(event.target, container, {
       x: event.deltaX,
       y: event.deltaY,
     })
@@ -293,12 +297,14 @@ function useViewportState({
 }
 
 function useCanvasKeyboardInteractions({
+  containerRef,
   nudgeViewport,
   resetViewport,
   setViewport,
   viewportRef,
   zoomStep,
 }: {
+  containerRef: React.RefObject<HTMLDivElement | null>;
   nudgeViewport: (deltaX: number, deltaY: number) => void;
   resetViewport: () => void;
   setViewport: (viewport: CanvasViewport) => void;
@@ -307,28 +313,15 @@ function useCanvasKeyboardInteractions({
 }) {
   const [isSpacePressed, setIsSpacePressed] = useState(false);
 
-  const handleWheel = useCallback(
-    (event: ReactWheelEvent<HTMLDivElement>) => {
-      if (event.ctrlKey || event.metaKey) {
-        event.preventDefault();
-        setViewport({
-          ...viewportRef.current,
-          zoom:
-            viewportRef.current.zoom +
-            (event.deltaY > 0 ? -zoomStep : zoomStep),
-        });
-        return;
-      }
-
-      if (!shouldHandleCanvasWheelEvent(event)) {
-        return;
-      }
-
-      event.preventDefault();
-      nudgeViewport(-event.deltaX, -event.deltaY);
-    },
-    [nudgeViewport, setViewport, viewportRef, zoomStep],
-  );
+  // React 19 marks the synthetic onWheel handler passive, which drops
+  // preventDefault(). useCanvasWheel attaches a native non-passive listener.
+  useCanvasWheel({
+    containerRef,
+    nudgeViewport,
+    setViewport,
+    viewportRef,
+    zoomStep,
+  });
 
   const handleKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -366,7 +359,58 @@ function useCanvasKeyboardInteractions({
     [],
   );
 
-  return { handleKeyDown, handleKeyUp, handleWheel, isSpacePressed };
+  const handleBlur = useCallback(() => {
+    setIsSpacePressed(false);
+  }, []);
+
+  return { handleBlur, handleKeyDown, handleKeyUp, isSpacePressed };
+}
+
+function useCanvasWheel({
+  containerRef,
+  nudgeViewport,
+  setViewport,
+  viewportRef,
+  zoomStep,
+}: {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  nudgeViewport: (deltaX: number, deltaY: number) => void;
+  setViewport: (viewport: CanvasViewport) => void;
+  viewportRef: ViewportReference;
+  zoomStep: number;
+}) {
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const handleWheel = (event: WheelEvent) => {
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        setViewport({
+          ...viewportRef.current,
+          zoom:
+            viewportRef.current.zoom +
+            (event.deltaY > 0 ? -zoomStep : zoomStep),
+        });
+        return;
+      }
+
+      if (!shouldHandleCanvasWheelEvent(event, container)) {
+        return;
+      }
+
+      event.preventDefault();
+      nudgeViewport(-event.deltaX, -event.deltaY);
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, [containerRef, nudgeViewport, setViewport, viewportRef, zoomStep]);
 }
 
 function endCanvasDrag(
@@ -491,31 +535,33 @@ function useCanvasViewHandle(
 
 type CanvasInteractionLayerProps = {
   children: React.ReactNode;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   instructionsId: string;
   isDragging: boolean;
   isSpacePressed: boolean;
+  onBlur: () => void;
   onKeyDown: (event: ReactKeyboardEvent<HTMLDivElement>) => void;
   onKeyUp: (event: ReactKeyboardEvent<HTMLDivElement>) => void;
   onPointerCancel: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => void;
   onPointerUp: (event: ReactPointerEvent<HTMLDivElement>) => void;
-  onWheel: (event: ReactWheelEvent<HTMLDivElement>) => void;
   viewport: CanvasViewport;
 };
 
 function CanvasInteractionLayer({
   children,
+  containerRef,
   instructionsId,
   isDragging,
   isSpacePressed,
+  onBlur,
   onKeyDown,
   onKeyUp,
   onPointerCancel,
   onPointerDown,
   onPointerMove,
   onPointerUp,
-  onWheel,
   viewport,
 }: CanvasInteractionLayerProps) {
   return (
@@ -530,13 +576,14 @@ function CanvasInteractionLayer({
           : "cursor-default",
       )}
       data-viewport={JSON.stringify(viewport)}
+      onBlur={onBlur}
       onKeyDown={onKeyDown}
       onKeyUp={onKeyUp}
       onPointerCancel={onPointerCancel}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onWheel={onWheel}
+      ref={containerRef}
       role="button"
       tabIndex={0}
     >
@@ -551,17 +598,22 @@ function CanvasInteractionLayer({
 
 function CanvasContentLayer({
   children,
+  isDragging,
   overlay,
   viewport,
 }: {
   children: React.ReactNode;
+  isDragging: boolean;
   overlay?: React.ReactNode;
   viewport: CanvasViewport;
 }) {
   return (
     <>
       <div
-        className="absolute inset-0 origin-top-left transition-transform duration-150 ease-out"
+        className={cn(
+          "absolute inset-0 origin-top-left",
+          isDragging ? "" : "transition-transform duration-150 ease-out",
+        )}
         style={{
           transform: `translate3d(${viewport.x}px, ${viewport.y}px, 0) scale(${viewport.zoom})`,
         }}
@@ -593,6 +645,7 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
     ref,
   ) => {
     const instructionsId = useId();
+    const interactionRef = useRef<HTMLDivElement>(null);
     const viewportState = useViewportState({
       defaultViewport,
       maxZoom,
@@ -600,6 +653,7 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
       onViewportChange,
     });
     const keyboard = useCanvasKeyboardInteractions({
+      containerRef: interactionRef,
       nudgeViewport: viewportState.nudgeViewport,
       resetViewport: viewportState.resetViewport,
       setViewport: viewportState.setViewport,
@@ -623,19 +677,21 @@ const CanvasView = forwardRef<CanvasViewHandle, CanvasViewProps>(
         {...props}
       >
         <CanvasInteractionLayer
+          containerRef={interactionRef}
           instructionsId={instructionsId}
           isDragging={pointer.isDragging}
           isSpacePressed={keyboard.isSpacePressed}
+          onBlur={keyboard.handleBlur}
           onKeyDown={keyboard.handleKeyDown}
           onKeyUp={keyboard.handleKeyUp}
           onPointerCancel={pointer.handlePointerCancel}
           onPointerDown={pointer.handlePointerDown}
           onPointerMove={pointer.handlePointerMove}
           onPointerUp={pointer.handlePointerUp}
-          onWheel={keyboard.handleWheel}
           viewport={viewportState.viewport}
         >
           <CanvasContentLayer
+            isDragging={pointer.isDragging}
             overlay={overlay}
             viewport={viewportState.viewport}
           >

@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './theme-switcher.stories'
+
+<Meta of={Stories} />
+
+# Theme Switcher
+
+Compact swatch row for switching between built-in theme presets. Reads and writes the active preset through the shared theme-preset hook, so it stays in sync with every other consumer on the page.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/theme-switcher.json
+```
+
+## Import
+
+```tsx
+import { ThemeSwitcher } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ThemeSwitcher />
+```
+
+Render it anywhere a preset picker belongs — a settings panel, a toolbar, or a footer. Pair it with `ThemePresetProvider` so the chosen preset survives reloads.
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `className` | `string` | No | Optional class applied to the swatch row container. |

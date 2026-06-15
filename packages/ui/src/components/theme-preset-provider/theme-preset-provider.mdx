@@ -1,0 +1,43 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './theme-preset-provider.stories'
+
+<Meta of={Stories} />
+
+# Theme Preset Provider
+
+Restores the persisted theme preset before paint to avoid a flash, and optionally seeds a default preset for first-time visitors. Render it once, high in the tree, alongside the light/dark theme provider.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/theme-preset-provider.json
+```
+
+## Import
+
+```tsx
+import { ThemePresetProvider } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ThemePresetProvider defaultPreset="ocean">
+  <App />
+</ThemePresetProvider>
+```
+
+Wrap the app once. Children read and write the active preset through the shared theme-preset hook, and a no-flash inline script applies the stored preset before the first paint.
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `children` | `React.ReactNode` | No | App tree that consumes the active theme preset. |
+| `defaultPreset` | `string` | No | Preset applied on first visit when no stored preference exists. |

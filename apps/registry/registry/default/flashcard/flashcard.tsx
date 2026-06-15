@@ -8,7 +8,13 @@ import type { ReactNode } from "react";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@vllnt/ui";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@vllnt/ui";
 
 export type FlashcardProps = {
   answer: ReactNode;

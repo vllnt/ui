@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("../profile-section", () => ({
+vi.mock("../profile-section/profile-section", () => ({
   ProfileSection: ({
     dict,
   }: {
@@ -15,7 +15,7 @@ vi.mock("../profile-section", () => ({
   ),
 }));
 
-vi.mock("../share-section", () => ({
+vi.mock("../share-section/share-section", () => ({
   ShareSection: ({
     shareTitle,
     title,

@@ -2,8 +2,8 @@ import * as React from "react";
 
 import { z } from "zod";
 
-import { Button } from "../button";
-import { Input } from "../input";
+import { Button } from "../button/button";
+import { Input } from "../input/input";
 
 import {
   Form,

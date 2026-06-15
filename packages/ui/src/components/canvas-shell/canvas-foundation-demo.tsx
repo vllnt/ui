@@ -1,14 +1,14 @@
 import { Activity, Bot, Compass, Layers3, Sparkles } from "lucide-react";
 
 import { BottomBar } from "../bottom-bar/bottom-bar";
-import { Button } from "../button";
-import { CanvasView } from "../canvas-view";
-import { ChatDockSection } from "../chat-dock-section";
-import { GlassPanel } from "../glass-panel";
-import { LeftRail } from "../left-rail";
-import { RightDock } from "../right-dock";
-import { TopBar } from "../top-bar";
-import { WorkspaceSwitcher } from "../workspace-switcher";
+import { Button } from "../button/button";
+import { CanvasView } from "../canvas-view/canvas-view";
+import { ChatDockSection } from "../chat-dock-section/chat-dock-section";
+import { GlassPanel } from "../glass-panel/glass-panel";
+import { LeftRail } from "../left-rail/left-rail";
+import { RightDock } from "../right-dock/right-dock";
+import { TopBar } from "../top-bar/top-bar";
+import { WorkspaceSwitcher } from "../workspace-switcher/workspace-switcher";
 
 import { CanvasShell } from "./canvas-shell";
 

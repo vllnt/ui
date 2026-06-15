@@ -114,10 +114,47 @@ describe("AgentActivity", () => {
         </AgentActivity>,
       );
 
-      expect(screen.queryByText("Hidden detail")).not.toBeInTheDocument();
+      expect(screen.getByText("Hidden detail")).not.toBeVisible();
       const toggle = screen.getByRole("button", { name: "Show details" });
       fireEvent.click(toggle);
-      expect(screen.getByText("Hidden detail")).toBeInTheDocument();
+      expect(screen.getByText("Hidden detail")).toBeVisible();
+    });
+
+    it("keeps the details panel mounted so aria-controls stays valid when collapsed", () => {
+      render(
+        <AgentActivity>
+          <AgentStep defaultOpen={false} status="completed">
+            <AgentStepTitle>Step</AgentStepTitle>
+            <AgentStepDetail>Hidden detail</AgentStepDetail>
+          </AgentStep>
+        </AgentActivity>,
+      );
+
+      const toggle = screen.getByRole("button", { name: "Show details" });
+      const controlledId = toggle.getAttribute("aria-controls");
+      expect(controlledId).toBeTruthy();
+      expect(
+        document.querySelector(`[id="${controlledId ?? ""}"]`),
+      ).not.toBeNull();
+    });
+
+    it("propagates AgentActivity labels to the step toggle", () => {
+      render(
+        <AgentActivity
+          labels={{ collapse: "Masquer", expand: "Voir les détails" }}
+        >
+          <AgentStep defaultOpen={false} status="completed">
+            <AgentStepTitle>Step</AgentStepTitle>
+            <AgentStepDetail>Detail</AgentStepDetail>
+          </AgentStep>
+        </AgentActivity>,
+      );
+
+      const toggle = screen.getByRole("button", { name: "Voir les détails" });
+      fireEvent.click(toggle);
+      expect(
+        screen.getByRole("button", { name: "Masquer" }),
+      ).toBeInTheDocument();
     });
 
     it("does not render the toggle when there are no details", () => {

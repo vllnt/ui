@@ -518,6 +518,7 @@ type ScrollAreaProps = {
   endTime: number;
   events: InteractiveTimelineEvent[];
   onSelect: (event: InteractiveTimelineEvent) => void;
+  scrollerId: string;
   selectedId?: string;
   startTime: number;
   tracks: InteractiveTimelineTrack[];
@@ -586,18 +587,29 @@ function ScrollArea({
   endTime,
   events,
   onSelect,
+  scrollerId,
   selectedId,
   startTime,
   tracks,
   zoom,
 }: ScrollAreaProps): ReactNode {
   const ref = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<null | ResizeObserver>(null);
   const [containerWidth, setContainerWidth] = useState(800);
   const dragHandlers = useScrollDrag(ref);
 
   const handleRef = useCallback((node: HTMLDivElement | null) => {
     ref.current = node;
-    if (node) setContainerWidth(node.clientWidth);
+    observerRef.current?.disconnect();
+    observerRef.current = null;
+    if (!node) return;
+    setContainerWidth(node.clientWidth);
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      setContainerWidth(node.clientWidth);
+    });
+    observer.observe(node);
+    observerRef.current = observer;
   }, []);
 
   const innerWidth = `${(zoom * 100).toString()}%`;
@@ -609,6 +621,7 @@ function ScrollArea({
   return (
     <div
       className="relative w-full cursor-grab overflow-x-auto active:cursor-grabbing"
+      data-scroller-id={scrollerId}
       data-zoom={zoom}
       ref={handleRef}
       {...dragHandlers}
@@ -1063,12 +1076,13 @@ export const InteractiveTimeline = forwardRef<
         {...rest}
       >
         {children}
-        <div data-scroller-id={scrollerId} id={scrollerId}>
+        <div id={scrollerId}>
           <ScrollArea
             categories={categories}
             endTime={endTime}
             events={filteredEvents}
             onSelect={handleSelect}
+            scrollerId={scrollerId}
             selectedId={selectedId}
             startTime={startTime}
             tracks={tracks}

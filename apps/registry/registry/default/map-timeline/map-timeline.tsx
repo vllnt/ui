@@ -173,8 +173,12 @@ export type MapTimelineLayerProps = {
   geometry: MapTimelineGeometry;
   /** Stable id used for analytics + React keys. */
   id?: string;
-  /** Display label rendered in the centroid when visible. */
-  label?: ReactNode;
+  /**
+   * Display label shown in the centroid when visible. Must be a plain
+   * string: an SVG `<text>` element renders this content and cannot display
+   * arbitrary React elements.
+   */
+  label?: string;
   /** Year (inclusive) when the layer first appears. */
   startYear: number;
 } & Omit<ComponentPropsWithoutRef<"g">, "id">;
@@ -253,14 +257,22 @@ MapTimelineLayer.displayName = "MapTimelineLayer";
 export type MapTimelineEventProps = {
   /** Color theme. Defaults to `"red"`. */
   color?: MapTimelineColor;
-  /** Optional description rendered in the tooltip. */
-  description?: ReactNode;
+  /**
+   * Optional description shown in the tooltip. Must be a plain string: an
+   * SVG `<text>` element renders this content and cannot display arbitrary
+   * React elements.
+   */
+  description?: string;
   /** Stable identifier. */
   id?: string;
   /** Geographic position. */
   position: GeoPosition;
-  /** Title rendered in the tooltip. */
-  title?: ReactNode;
+  /**
+   * Title shown in the tooltip. Must be a plain string: an SVG `<text>`
+   * element renders this content and cannot display arbitrary React
+   * elements.
+   */
+  title?: string;
   /** Inclusive ± window in years around `year` when the marker shows. Defaults to `0` (exact match). */
   toleranceYears?: number;
   /** Year the event happened. */
@@ -302,9 +314,7 @@ export const MapTimelineEvent = forwardRef<SVGGElement, MapTimelineEventProps>(
           r="6"
           strokeWidth="2"
         >
-          {title ? (
-            <title>{typeof title === "string" ? title : ""}</title>
-          ) : null}
+          {title ? <title>{title}</title> : null}
         </circle>
         {title ? (
           <text

@@ -58,7 +58,8 @@ async function readDocumentPage(slug: string): Promise<string> {
   try {
     const raw = await readFile(file, "utf8");
     return stripFrontmatter(raw).trim();
-  } catch {
+  } catch (error) {
+    console.error(`[llms-full.txt] failed to read ${file}`, error);
     return "";
   }
 }
@@ -210,6 +211,9 @@ async function buildLlmsFullTxt(): Promise<string> {
 
 export const dynamic = "force-static";
 export const revalidate = 86_400;
+// Pin to the Node.js runtime: readDocumentPage relies on fs and process.cwd(),
+// which are unavailable on the edge runtime.
+export const runtime = "nodejs";
 
 async function getLlmsFullTxt(): Promise<Response> {
   const body = await buildLlmsFullTxt();

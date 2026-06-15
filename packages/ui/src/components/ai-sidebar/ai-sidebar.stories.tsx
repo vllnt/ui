@@ -29,7 +29,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const Frame = ({ children }: { children: React.ReactNode }): JSX.Element => (
+const Frame = ({ children }: { children: React.ReactNode }): React.ReactNode => (
   <div className="relative h-[480px] w-full overflow-hidden rounded-xl border bg-muted/30">
     {children}
   </div>

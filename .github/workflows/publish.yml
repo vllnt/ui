@@ -175,9 +175,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cat <<'NOTES_EOF' > /tmp/release-notes.md
-          ${{ steps.changelog.outputs.body }}
-          NOTES_EOF
           gh release create "v${{ steps.version.outputs.version }}" \
             --title "v${{ steps.version.outputs.version }}" \
             --notes-file /tmp/release-notes.md

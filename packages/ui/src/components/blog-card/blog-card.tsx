@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
+} from "../card/card";
 
 type ContentCardPost = {
   date?: string;

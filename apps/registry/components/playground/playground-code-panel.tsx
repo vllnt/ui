@@ -68,6 +68,13 @@ export function PlaygroundCodePanel({
 
       if (sandboxUrl && sandboxTab) {
         sandboxTab.location.href = sandboxUrl;
+      } else if (sandboxUrl) {
+        // The browser blocked the popup yet the sandbox exists. Surface the URL
+        // for the user to open manually instead of leaving the click a no-op.
+        window.prompt(
+          "Your browser blocked the CodeSandbox popup. Copy this link to open it:",
+          sandboxUrl,
+        );
       } else {
         sandboxTab?.close();
       }

@@ -101,8 +101,12 @@ export type AutoReloadProps = {
   maxAmountCents?: number;
   /** Lowest allowed amount (cents). Defaults to `100`. */
   minAmountCents?: number;
+  /** Fires when the reload-amount input changes (cents). Required to keep `reloadAmountCents` controlled. */
+  onReloadAmountChange?: (cents: number) => void;
   /** Fires when the user clicks save. */
   onSave?: (payload: AutoReloadSavePayload) => void;
+  /** Fires when the threshold input changes (cents). Required to keep `thresholdCents` controlled. */
+  onThresholdChange?: (cents: number) => void;
   /** Fires when the toggle changes. */
   onToggle?: (enabled: boolean) => void;
   /** Controlled reload-amount value (cents). */
@@ -316,6 +320,8 @@ type ControllerOptions = {
   defaultReloadAmountCents: number;
   defaultThresholdCents: number;
   enabled?: boolean;
+  onReloadAmountChange?: (cents: number) => void;
+  onThresholdChange?: (cents: number) => void;
   onToggle?: (enabled: boolean) => void;
   reloadAmountCents?: number;
   thresholdCents?: number;
@@ -336,14 +342,20 @@ function useAutoReloadController(options: ControllerOptions): ControllerState {
     defaultReloadAmountCents,
     defaultThresholdCents,
     enabled: controlledEnabled,
+    onReloadAmountChange,
+    onThresholdChange,
     onToggle,
     reloadAmountCents: controlledReload,
     thresholdCents: controlledThreshold,
   } = options;
   const [uncontrolledEnabled, setUncontrolledEnabled] =
     useState(defaultEnabled);
-  const [threshold, setThreshold] = useState(defaultThresholdCents);
-  const [reloadAmount, setReloadAmount] = useState(defaultReloadAmountCents);
+  const [uncontrolledThreshold, setUncontrolledThreshold] = useState(
+    defaultThresholdCents,
+  );
+  const [uncontrolledReloadAmount, setUncontrolledReloadAmount] = useState(
+    defaultReloadAmountCents,
+  );
   const enabled = controlledEnabled ?? uncontrolledEnabled;
 
   const handleToggle = useCallback(
@@ -354,13 +366,29 @@ function useAutoReloadController(options: ControllerOptions): ControllerState {
     [controlledEnabled, onToggle],
   );
 
+  const setReloadAmount = useCallback(
+    (next: number) => {
+      if (controlledReload === undefined) setUncontrolledReloadAmount(next);
+      onReloadAmountChange?.(next);
+    },
+    [controlledReload, onReloadAmountChange],
+  );
+
+  const setThreshold = useCallback(
+    (next: number) => {
+      if (controlledThreshold === undefined) setUncontrolledThreshold(next);
+      onThresholdChange?.(next);
+    },
+    [controlledThreshold, onThresholdChange],
+  );
+
   return {
     enabled,
     handleToggle,
-    reloadAmount: controlledReload ?? reloadAmount,
+    reloadAmount: controlledReload ?? uncontrolledReloadAmount,
     setReloadAmount,
     setThreshold,
-    threshold: controlledThreshold ?? threshold,
+    threshold: controlledThreshold ?? uncontrolledThreshold,
   };
 }
 
@@ -374,6 +402,12 @@ function useAutoReloadController(options: ControllerOptions): ControllerState {
  * display the corresponding currency unit; consumers receive the cents
  * value from `onSave`.
  *
+ * When you pass the controlled `reloadAmountCents` / `thresholdCents` props
+ * you must also pass `onReloadAmountChange` / `onThresholdChange` and feed the
+ * value back, otherwise the component ignores user edits. Omit the controlled
+ * props to run uncontrolled with `defaultReloadAmountCents` /
+ * `defaultThresholdCents`.
+ *
  * @example
  * ```tsx
  * <AutoReload
@@ -382,6 +416,8 @@ function useAutoReloadController(options: ControllerOptions): ControllerState {
  *   reloadAmountCents={settings.reloadAmountCents}
  *   currency="EUR"
  *   onToggle={handleToggle}
+ *   onThresholdChange={setThresholdCents}
+ *   onReloadAmountChange={setReloadAmountCents}
  *   onSave={handleSave}
  *   isSaving={isSaving}
  * />
@@ -504,7 +540,9 @@ function useAutoReloadInternals(
     enabled: controlledEnabled,
     labels,
     locale = DEFAULT_LOCALE,
+    onReloadAmountChange,
     onSave,
+    onThresholdChange,
     onToggle,
     reloadAmountCents: controlledReload,
     thresholdCents: controlledThreshold,
@@ -521,6 +559,8 @@ function useAutoReloadInternals(
     defaultReloadAmountCents,
     defaultThresholdCents,
     enabled: controlledEnabled,
+    onReloadAmountChange,
+    onThresholdChange,
     onToggle,
     reloadAmountCents: controlledReload,
     thresholdCents: controlledThreshold,

@@ -73,6 +73,29 @@ Release automation can regenerate this file from Conventional Commits with
 - **Time navigation** - `TimelineScrubber`, `PlaybackGhost`,
   `BottomActivityStrip`, and `RunTimeline`.
 - Total component count: **225** (up from 140).
+- **OKLCH theming system** - color tokens migrated to the OKLCH color space, with
+  13 runtime theme presets, a `/themes` web theme editor route, and a `/r/themes`
+  endpoint. New public theme exports from `@vllnt/ui` (`THEME_PRESETS`,
+  `DEFAULT_THEME_PRESET`, `CUSTOM_THEME_NAME`, `ThemePreset` / `ThemePresetName`,
+  `useThemePreset`, `setThemePreset`, `setCustomTheme`) drive runtime preset
+  switching and user-supplied custom themes.
+- **Registry namespacing** - `registry.json` is published under the `@vllnt`
+  namespace for the shadcn registry index, so items install under the `@vllnt`
+  prefix.
+- **Localized routes** - English and French docs via `next-intl`, served under
+  `/en` and `/fr` locale prefixes.
+- **Starter templates gallery** - `/templates` showcases ready-to-use starter
+  templates.
+- **Component playground** - a per-component `playground` route renders an
+  interactive playground with an embedded Storybook view.
+- **Static docs search** - `Pagefind` powers fully static, client-side search
+  across the docs.
+- **MCP server** - `/mcp` exposes a Model Context Protocol JSON-RPC endpoint
+  (`tools/list`, `tools/call`) so MCP clients can discover and invoke registry
+  tools.
+- **Agent / SEO surface** - comparison pages under `/vs` (shadcn, vercel-ai-sdk,
+  assistant-ui), `/design.txt` and `/r/design.json` for the design system,
+  `/api/badge` for status badges, and `/api/oembed` for oEmbed embeds.
 
 ### Changed
 

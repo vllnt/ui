@@ -20,8 +20,11 @@ export {
   type SupportedLanguage as UISupportedLanguage,
 } from "./lib/types";
 export {
+  CUSTOM_THEME_NAME,
   DEFAULT_THEME_PRESET,
   isThemePresetName,
+  THEME_CUSTOM_CSS_STORAGE_KEY,
+  THEME_CUSTOM_STYLE_ID,
   THEME_PRESET_STORAGE_KEY,
   THEME_PRESETS,
   type ThemePreset,

@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useMounted } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { useSidebar } from "@vllnt/ui";
 
@@ -139,10 +140,13 @@ export function Sidebar({ sections }: SidebarProps) {
   const pathname = usePathname();
   const { open, setOpen } = useSidebar();
   const isMobile = useMobile(setOpen);
+  const mounted = useMounted();
   const scrollContainerReference = useRef<HTMLDivElement>(null);
   const { showBottomFade, showTopFade } = useScrollFade(
     scrollContainerReference,
   );
+
+  const collapsed = mounted && !isMobile && !open;
 
   return (
     <>
@@ -167,15 +171,16 @@ export function Sidebar({ sections }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full border-r bg-background transition-transform duration-300 ease-in-out",
+          "fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full bg-background transition-[transform,width] duration-300 ease-in-out",
           "flex flex-col",
           "overflow-hidden",
           "shrink-0",
-          isMobile ? "w-full" : "w-64",
-          isMobile && !open && "-translate-x-full",
+          collapsed ? "border-r-0" : "border-r",
+          collapsed ? "w-0" : isMobile ? "w-full" : "w-64",
           isMobile && open && "translate-x-0",
-          !isMobile && !open && "-translate-x-full lg:translate-x-0",
-          !isMobile && "lg:translate-x-0",
+          isMobile && !open && "-translate-x-full",
+          !isMobile && !collapsed && "-translate-x-full lg:translate-x-0",
+          !isMobile && collapsed && "-translate-x-full",
         )}
       >
         <div className="relative flex-1 overflow-hidden">
@@ -190,7 +195,7 @@ export function Sidebar({ sections }: SidebarProps) {
           ) : null}
 
           <nav
-            className="flex-1 p-4 overflow-y-auto h-full"
+            className="flex-1 p-4 overflow-y-auto overscroll-contain h-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             ref={scrollContainerReference}
           >
             <div className="space-y-4">

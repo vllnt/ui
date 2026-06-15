@@ -12,13 +12,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
+} from "../card/card";
 import {
   CHECKLIST_PROGRESS_EVENT,
   type ChecklistItem,
   parseChecklistStorageValue,
-} from "../checklist";
-import { ProgressBar } from "../progress-bar";
+} from "../checklist/checklist";
+import { ProgressBar } from "../progress-bar/progress-bar";
 
 export type ProgressTrackerModuleStatus =
   | "available"

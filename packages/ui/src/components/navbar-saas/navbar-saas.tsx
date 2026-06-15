@@ -7,8 +7,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
-import { useSidebar } from "../sidebar-provider";
-import { ThemeToggle } from "../theme-toggle";
+import { useSidebar } from "../sidebar-provider/sidebar-provider";
+import { ThemeToggle } from "../theme-toggle/theme-toggle";
 
 export type NavItem = {
   href: string;

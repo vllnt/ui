@@ -99,6 +99,25 @@ describe("AIArtifact", () => {
       });
       await screen.findByRole("button", { name: "Copied" });
     });
+
+    it("does not fire the reset timer after the artifact unmounts", async () => {
+      const errorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+      const { unmount } = render(
+        <AIArtifact title="Doc" value={VALUE}>
+          <AIArtifactToolbar>
+            <AIArtifactCopyButton />
+          </AIArtifactToolbar>
+        </AIArtifact>,
+      );
+
+      fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+      await screen.findByRole("button", { name: "Copied" });
+      unmount();
+      await new Promise((resolve) => setTimeout(resolve, 2100));
+
+      expect(errorSpy).not.toHaveBeenCalled();
+      errorSpy.mockRestore();
+    });
   });
 
   describe("AIArtifactEditButton", () => {

@@ -30,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Time navigation** — `TimelineScrubber`, `PlaybackGhost`, `BottomActivityStrip`, `RunTimeline`.
 - Total component count: **225** (up from 140).
 
+- **OKLCH theming system** — color tokens migrated to the OKLCH color space, with 13 runtime theme presets (`default`, `matrix`, `dracula`, `synthwave`, `tron`, `cyberpunk`, `nord`, `claude`, `chatgpt`, `gemini`, `dusk`, `cyberlime`, `aura`). New public theme exports from `@vllnt/ui`: `THEME_PRESETS`, `DEFAULT_THEME_PRESET`, `CUSTOM_THEME_NAME`, `isThemePresetName`, the `ThemePreset` and `ThemePresetName` types, plus the `useThemePreset` hook (with `UseThemePresetResult`), `setThemePreset`, and `setCustomTheme` for runtime preset switching and user-supplied custom themes.
+
 - **A11y heading-level override** — every title-bearing component (`ProfileSection`, `FAQ`, `Slideshow`, `WorldClockBar`, `TableOfContentsPanel`, `TableOfContents`, `KeyboardShortcutsHelp`, `Watchlist`, `OrderBook`, `HorizontalScrollRow`, `MarketTreemap`, `ActivityHeatmap`, `Glossary`, `StatusBoard`, `CodePlayground`, `Comparison`, `Quiz`, `Exercise`, `ShareSection`, `CompletionDialog`, `Checklist`, `LearningObjectives`, `CandlestickChart`, `StepByStep`) accepts an `as` prop (`"h1"`–`"h6"`); multi-title components (`ContentIntro`, `TutorialComplete`) expose `titleAs` + `tocLabelAs` / `sectionLabelAs`. Defaults preserve existing heading tags. `HeadingTag` is re-exported from `@vllnt/ui`.
 
 ### Changed

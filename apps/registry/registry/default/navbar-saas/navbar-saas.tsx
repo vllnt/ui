@@ -10,8 +10,6 @@ import { Button } from "@vllnt/ui";
 import { useSidebar } from "@vllnt/ui";
 import { ThemeToggle } from "@vllnt/ui";
 
-import { useMobile } from "./use-mobile";
-
 export type NavItem = {
   href: string;
   title: string;
@@ -34,16 +32,16 @@ export function NavbarSaas({
 }: NavbarSaasProps) {
   const pathname = usePathname();
   const { open, setOpen } = useSidebar();
-  const isMobile = useMobile();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
       <div className="w-full">
         <div className="mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            {showMobileMenu && isMobile ? (
+            {showMobileMenu ? (
               <Button
-                className="lg:hidden"
+                aria-expanded={open}
+                aria-label="Toggle sidebar"
                 data-testid="navbar-saas-mobile-trigger"
                 onClick={() => {
                   setOpen(!open);
@@ -64,7 +62,7 @@ export function NavbarSaas({
               )
             ) : null}
             {navItems.length > 0 ? (
-              <nav className="hidden md:flex gap-6">
+              <nav className="hidden lg:flex gap-6">
                 {navItems.map((item) => (
                   <Link
                     className={cn(

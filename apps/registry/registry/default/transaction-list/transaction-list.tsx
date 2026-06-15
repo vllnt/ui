@@ -15,12 +15,14 @@ const CURRENCY_FORMATTER_CACHE = new Map<string, Intl.NumberFormat>();
 function getCurrencyFormatter(
   locale: string,
   currency: string,
+  signDisplay: Intl.NumberFormatOptions["signDisplay"] = "auto",
 ): Intl.NumberFormat {
-  const key = `${locale}|${currency}`;
+  const key = `${locale}|${currency}|${signDisplay}`;
   let formatter = CURRENCY_FORMATTER_CACHE.get(key);
   if (!formatter) {
     formatter = Intl.NumberFormat(locale, {
       currency,
+      signDisplay,
       style: "currency",
     });
     CURRENCY_FORMATTER_CACHE.set(key, formatter);
@@ -155,6 +157,9 @@ const INTERVAL_LABEL: Record<SubscriptionInterval, string> = {
 /**
  * Format an amount in minor units as a localized currency string. Use the
  * locale + currency from {@link TransactionListProps} to drive the output.
+ * Pass `signDisplay` to let `Intl` place the sign — required for correct
+ * bidirectional output in RTL locales (e.g. `ar-SA`, `he-IL`), where a
+ * manually prepended `+`/`-` corrupts the directional marks.
  *
  * @public
  */
@@ -163,10 +168,15 @@ export function formatTransactionAmount(
   options: {
     currency?: string;
     locale?: string;
+    signDisplay?: Intl.NumberFormatOptions["signDisplay"];
   } = {},
 ): string {
-  const { currency = DEFAULT_CURRENCY, locale = DEFAULT_LOCALE } = options;
-  return getCurrencyFormatter(locale, currency).format(
+  const {
+    currency = DEFAULT_CURRENCY,
+    locale = DEFAULT_LOCALE,
+    signDisplay = "auto",
+  } = options;
+  return getCurrencyFormatter(locale, currency, signDisplay).format(
     amountCents / CENTS_PER_UNIT,
   );
 }
@@ -292,11 +302,13 @@ function TransactionListItem({
   transaction,
 }: TransactionListItemProps): ReactNode {
   const sign = SIGN_BY_TYPE[transaction.type];
-  const formatted = formatTransactionAmount(transaction.amountCents, {
+  const signedCents =
+    sign === "negative" ? -transaction.amountCents : transaction.amountCents;
+  const display = formatTransactionAmount(signedCents, {
     currency,
     locale,
+    signDisplay: "always",
   });
-  const display = sign === "negative" ? `-${formatted}` : `+${formatted}`;
   const ariaLabel =
     typeof transaction.description === "string"
       ? `${sign === "negative" ? "Debit" : "Credit"} ${display} for ${transaction.description}`

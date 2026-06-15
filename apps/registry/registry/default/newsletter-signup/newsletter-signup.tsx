@@ -430,10 +430,10 @@ function FormBody({
           type="email"
         />
         <p
-          aria-live="polite"
+          aria-live="assertive"
           className={cn("text-xs", message ? "text-destructive" : "sr-only")}
           id={errorId}
-          role={message ? "alert" : undefined}
+          role="alert"
         >
           {message ?? ""}
         </p>

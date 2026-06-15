@@ -102,7 +102,7 @@ function PriceGrid({
   });
 
   return ticks.map((tick) => (
-    <g key={tick.value}>
+    <g key={tick.y}>
       <line
         stroke="oklch(var(--border))"
         strokeDasharray="4 6"
@@ -143,12 +143,14 @@ function CandleMarks({
     const bodyY = Math.min(openY, closeY);
     const bodyHeight = Math.max(Math.abs(openY - closeY), 3);
     const isBullish = candle.close >= candle.open;
-    const fill = isBullish ? "hsl(142 71% 45%)" : "hsl(348 83% 47%)";
+    const colorClass = isBullish
+      ? "text-emerald-600 dark:text-emerald-400"
+      : "text-rose-600 dark:text-rose-400";
 
     return (
-      <g key={candle.label}>
+      <g className={colorClass} key={`${candle.label}-${index.toString()}`}>
         <line
-          stroke={fill}
+          stroke="currentColor"
           strokeLinecap="round"
           strokeWidth={2}
           x1={centerX}
@@ -157,11 +159,11 @@ function CandleMarks({
           y2={wickBottom}
         />
         <rect
-          fill={fill}
+          fill="currentColor"
           fillOpacity={isBullish ? 0.25 : 0.18}
           height={bodyHeight}
           rx={4}
-          stroke={fill}
+          stroke="currentColor"
           strokeWidth={1.5}
           width={metrics.bodyWidth}
           x={centerX - metrics.bodyWidth / 2}

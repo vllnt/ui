@@ -38,7 +38,7 @@ jobs:
       - name: react-doctor (PR diff)
         if: github.event_name == 'pull_request'
         run: |
-          npx --yes react-doctor . \
+          npx --yes react-doctor@0.5.x . \
             --diff origin/${{ github.base_ref }} \
             --annotations \
             --fail-on error \
@@ -47,7 +47,7 @@ jobs:
       - name: react-doctor (full scan on main)
         if: github.event_name == 'push'
         run: |
-          npx --yes react-doctor . \
+          npx --yes react-doctor@0.5.x . \
             --json \
             --offline > rd-report.json
           jq '.summary' rd-report.json

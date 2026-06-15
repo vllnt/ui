@@ -257,6 +257,7 @@ export const AISidebar = forwardRef<HTMLElement, AISidebarProps>(
           className,
         )}
         data-state={openState ? "open" : "closed"}
+        inert={!openState}
         ref={ref}
         style={{ width: `${width.toString()}px` }}
         {...rest}
