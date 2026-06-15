@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { X } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 
 function normalizeTag(tag: string) {
@@ -55,26 +56,18 @@ function useTagsInputState({
   onValueChange,
   value,
 }: TagsInputStateOptions) {
-  const [uncontrolledValue, setUncontrolledValue] = React.useState(() =>
-    getNormalizedTags(defaultValue),
-  );
-  const isControlled = value !== undefined;
-  const tags = React.useMemo(
-    () => getNormalizedTags(value ?? uncontrolledValue),
-    [uncontrolledValue, value],
-  );
+  const [storedTags, setStoredTags] = useControllableState({
+    defaultValue: () => getNormalizedTags(defaultValue),
+    onChange: onValueChange,
+    value,
+  });
+  const tags = React.useMemo(() => getNormalizedTags(storedTags), [storedTags]);
 
   const updateTags = React.useCallback(
     (nextTags: string[]) => {
-      const normalizedTags = getNormalizedTags(nextTags);
-
-      if (!isControlled) {
-        setUncontrolledValue(normalizedTags);
-      }
-
-      onValueChange?.(normalizedTags);
+      setStoredTags(getNormalizedTags(nextTags));
     },
-    [isControlled, onValueChange],
+    [setStoredTags],
   );
 
   return { tags, updateTags };

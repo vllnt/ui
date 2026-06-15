@@ -142,6 +142,41 @@ function getResolvedLessonProgress(module: ProgressTrackerModuleItem): {
   };
 }
 
+function useChecklistStorageSync(
+  persistKeys: readonly string[],
+  onSync: () => void,
+): void {
+  const onSyncRef = React.useRef(onSync);
+  React.useEffect(() => {
+    onSyncRef.current = onSync;
+  });
+
+  React.useEffect(() => {
+    if (persistKeys.length === 0 || typeof window === "undefined") return;
+
+    const trackedKeys = new Set(persistKeys);
+    const sync = (event?: Event): void => {
+      const eventPersistKey = getChecklistPersistKey(event);
+      if (eventPersistKey && !trackedKeys.has(eventPersistKey)) return;
+
+      onSyncRef.current();
+    };
+    const syncEventListener: EventListener = (event) => {
+      sync(event);
+    };
+
+    window.addEventListener("storage", sync);
+    window.addEventListener("focus", sync);
+    window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
+
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("focus", sync);
+      window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
+    };
+  }, [persistKeys]);
+}
+
 function useChecklistProgress(
   checklistItems: ChecklistItem[] = [],
   persistKey?: string,
@@ -162,29 +197,13 @@ function useChecklistProgress(
     setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
   }
 
-  React.useEffect(() => {
-    if (!persistKey || typeof window === "undefined") return;
-
-    const sync = (event?: Event): void => {
-      const eventPersistKey = getChecklistPersistKey(event);
-      if (eventPersistKey && eventPersistKey !== persistKey) return;
-
-      setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
-    };
-    const syncEventListener: EventListener = (event) => {
-      sync(event);
-    };
-
-    window.addEventListener("storage", sync);
-    window.addEventListener("focus", sync);
-    window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
-
-    return () => {
-      window.removeEventListener("storage", sync);
-      window.removeEventListener("focus", sync);
-      window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
-    };
-  }, [persistKey, setPersistedIdsIfChanged]);
+  const syncKeys = React.useMemo(
+    () => (persistKey ? [persistKey] : []),
+    [persistKey],
+  );
+  useChecklistStorageSync(syncKeys, () => {
+    setPersistedIdsIfChanged(readPersistedChecklistItems(persistKey));
+  });
 
   if (!persistKey || total === 0) return null;
 
@@ -272,32 +291,9 @@ function ProgressTrackerOverview({
   );
   const [, forceChecklistRefresh] = React.useState(0);
 
-  React.useEffect(() => {
-    if (trackedPersistKeys.length === 0 || typeof window === "undefined") {
-      return;
-    }
-
-    const trackedKeys = new Set(trackedPersistKeys);
-    const sync = (event?: Event): void => {
-      const eventPersistKey = getChecklistPersistKey(event);
-      if (eventPersistKey && !trackedKeys.has(eventPersistKey)) return;
-
-      forceChecklistRefresh((version) => version + 1);
-    };
-    const syncEventListener: EventListener = (event) => {
-      sync(event);
-    };
-
-    window.addEventListener("storage", sync);
-    window.addEventListener("focus", sync);
-    window.addEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
-
-    return () => {
-      window.removeEventListener("storage", sync);
-      window.removeEventListener("focus", sync);
-      window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
-    };
-  }, [trackedPersistKeys]);
+  useChecklistStorageSync(trackedPersistKeys, () => {
+    forceChecklistRefresh((version) => version + 1);
+  });
 
   const radius = 54;
   const circumference = 2 * Math.PI * radius;

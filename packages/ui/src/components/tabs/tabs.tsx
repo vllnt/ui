@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import type { ReactNode } from "react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 
 // Context for tabs state
@@ -37,21 +38,15 @@ function Tabs({
   onValueChange,
   value,
 }: TabsProps): React.ReactNode {
-  const [internalTab, setInternalTab] = useState(defaultValue);
-  const isControlled = value !== undefined;
-  const activeTab = isControlled ? value : internalTab;
-
-  const handleSetActiveTab = (next: string): void => {
-    if (!isControlled) {
-      setInternalTab(next);
-    }
-    onValueChange?.(next);
-  };
+  const [activeTab, setActiveTab] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
 
   const contextValue = useMemo(
-    () => ({ activeTab, setActiveTab: handleSetActiveTab }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeTab, isControlled],
+    () => ({ activeTab, setActiveTab }),
+    [activeTab, setActiveTab],
   );
 
   return (

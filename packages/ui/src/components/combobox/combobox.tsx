@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 import {
@@ -34,25 +35,6 @@ export type ComboboxProps = {
   triggerClassName?: string;
   value?: string;
 };
-
-function useComboboxValue(
-  value: string | undefined,
-  onValueChange?: (value: string) => void,
-) {
-  const [internalValue, setInternalValue] = React.useState(value ?? "");
-
-  const resolvedValue = value ?? internalValue;
-
-  const setResolvedValue = (nextValue: string) => {
-    if (value === undefined) {
-      setInternalValue(nextValue);
-    }
-
-    onValueChange?.(nextValue);
-  };
-
-  return { resolvedValue, setResolvedValue };
-}
 
 function ComboboxOptionItem({
   onSelect,
@@ -144,10 +126,11 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
   ) => {
     const [open, setOpen] = React.useState(false);
     const listboxId = React.useId();
-    const { resolvedValue, setResolvedValue } = useComboboxValue(
+    const [resolvedValue, setResolvedValue] = useControllableState({
+      defaultValue: value ?? "",
+      onChange: onValueChange,
       value,
-      onValueChange,
-    );
+    });
     const selectedOption = options.find(
       (option) => option.value === resolvedValue,
     );

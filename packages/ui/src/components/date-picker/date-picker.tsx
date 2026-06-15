@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 import { Calendar, type CalendarProps } from "../calendar";
@@ -37,17 +38,16 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
     reference,
   ) => {
     const [open, setOpen] = React.useState(false);
-    const [internalValue, setInternalValue] = React.useState<Date | undefined>(
+    const [selectedDate, setSelectedDate] = useControllableState<
+      Date | undefined
+    >({
+      defaultValue: value,
+      onChange: onValueChange,
       value,
-    );
-    const selectedDate = value ?? internalValue;
+    });
 
     const handleSelect = (nextDate: Date | undefined) => {
-      if (value === undefined) {
-        setInternalValue(nextDate);
-      }
-
-      onValueChange?.(nextDate);
+      setSelectedDate(nextDate);
 
       if (nextDate) {
         setOpen(false);

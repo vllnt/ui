@@ -4,6 +4,7 @@ import { forwardRef, useMemo, useState } from "react";
 
 import { Check, ChevronRight, Search } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 import { Button } from "../button";
@@ -387,9 +388,10 @@ function useScopeSelectorState({
 >): ScopeSelectorState {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+  const [selectedValue, setSelectedValue] = useControllableState<
+    string | undefined
+  >({ defaultValue, value });
   const [currentPath, setCurrentPath] = useState<ScopeSelectorNode[]>([]);
-  const selectedValue = value ?? uncontrolledValue;
   const selectedSelection = useMemo(
     () => findSelection(nodes, selectedValue),
     [nodes, selectedValue],
@@ -402,9 +404,7 @@ function useScopeSelectorState({
   const currentLevelNodes = getVisibleNodes(nodes, currentPath);
 
   function handleSelect(selection: ScopeSelectorSelection) {
-    if (value === undefined) {
-      setUncontrolledValue(selection.node.id);
-    }
+    setSelectedValue(selection.node.id);
     setCurrentPath(selection.path.slice(0, -1));
     setQuery("");
     setOpen(false);

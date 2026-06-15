@@ -54,7 +54,7 @@ describe("KeyboardShortcutsHelp", () => {
       />,
     );
 
-    fireEvent.keyDown(window, { key: "Escape" });
+    fireEvent.keyDown(document.body, { key: "Escape" });
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
 

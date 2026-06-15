@@ -13,6 +13,12 @@ export type {
 
 // Re-export lib utilities
 export {
+  formatChange,
+  getCurrencyFormatter,
+  getDateTimeFormatter,
+  getNumberFormatter,
+} from "./lib/format";
+export {
   getOtherLanguage,
   type HeadingTag,
   LANGUAGE_NAMES,
@@ -27,9 +33,21 @@ export {
   type ThemePreset,
   type ThemePresetName,
 } from "./lib/theme-presets";
+export { useBodyScrollLock } from "./lib/use-body-scroll-lock";
+export {
+  useControllableState,
+  type UseControllableStateOptions,
+} from "./lib/use-controllable-state";
 export { useDebounce } from "./lib/use-debounce";
+export {
+  useDocumentKeyDown,
+  type UseDocumentKeyDownOptions,
+  useEscapeKey,
+  type UseEscapeKeyOptions,
+} from "./lib/use-document-key-down";
 export { useHorizontalScroll } from "./lib/use-horizontal-scroll";
 export { useMounted } from "./lib/use-mounted";
+export { normalizeDate, useNow, type UseNowOptions } from "./lib/use-now";
 export {
   type CustomTheme,
   setCustomTheme,

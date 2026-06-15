@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Star } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 
 const sizeClasses = {
@@ -113,20 +114,15 @@ export function Rating({
   size = "md",
   value,
 }: RatingProps): ReactNode {
-  const isControlled = value !== undefined;
-  const [internalValue, setInternalValue] = useState(defaultValue);
+  const [activeValue, setActiveValue] = useControllableState({
+    defaultValue,
+    onChange: onValueChange,
+    value,
+  });
   const [hoveredValue, setHoveredValue] = useState(0);
-  const activeValue = isControlled ? (value ?? 0) : internalValue;
 
   const handleSelect = (nextValue: number): void => {
-    const resolvedValue =
-      allowClear && activeValue === nextValue ? 0 : nextValue;
-
-    if (!isControlled) {
-      setInternalValue(resolvedValue);
-    }
-
-    onValueChange?.(resolvedValue);
+    setActiveValue(allowClear && activeValue === nextValue ? 0 : nextValue);
   };
 
   return (

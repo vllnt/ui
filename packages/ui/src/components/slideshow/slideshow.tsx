@@ -1,11 +1,13 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 import type { HeadingTag } from "../../lib/types";
+import { useBodyScrollLock } from "../../lib/use-body-scroll-lock";
+import { useDocumentKeyDown } from "../../lib/use-document-key-down";
 import { useMounted } from "../../lib/use-mounted";
 import { cn } from "../../lib/utils";
 import { CompletionDialog } from "../completion-dialog/completion-dialog";
@@ -97,12 +99,7 @@ function SlideshowImpl({
   const canGoPrevious = currentIndex > 0;
   const progress = ((currentIndex + 1) / sections.length) * 100;
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
+  useBodyScrollLock();
 
   const goToSection = useCallback(
     (index: number, direction: "left" | "right") => {
@@ -157,8 +154,8 @@ function SlideshowImpl({
     [currentIndex, goToSection],
   );
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent): void => {
+  useDocumentKeyDown(
+    (event) => {
       if (isCompletionDialogOpen) return;
       if (event.key === "Escape") {
         event.preventDefault();
@@ -180,12 +177,9 @@ function SlideshowImpl({
         event.preventDefault();
         handlePrevious();
       }
-    };
-    document.addEventListener("keydown", handleKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-    };
-  }, [handleNext, handlePrevious, onExit, isTocOpen, isCompletionDialogOpen]);
+    },
+    { capture: true },
+  );
 
   if (!currentSection || !mounted) return null;
 

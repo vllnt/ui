@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { FileUp, UploadCloud, X } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 
@@ -23,22 +24,11 @@ function useFileUploadState(
   multiple: boolean,
   onFilesChange?: (files: File[]) => void,
 ) {
-  const [internalFiles, setInternalFiles] = React.useState<File[]>(
-    controlledFiles ?? [],
-  );
-
-  const resolvedFiles = controlledFiles ?? internalFiles;
-
-  const updateFiles = React.useCallback(
-    (nextFiles: File[]) => {
-      if (controlledFiles === undefined) {
-        setInternalFiles(nextFiles);
-      }
-
-      onFilesChange?.(nextFiles);
-    },
-    [controlledFiles, onFilesChange],
-  );
+  const [resolvedFiles, updateFiles] = useControllableState<File[]>({
+    defaultValue: controlledFiles ?? [],
+    onChange: onFilesChange,
+    value: controlledFiles,
+  });
 
   const addFiles = React.useCallback(
     (incomingFiles: File[] | FileList) => {

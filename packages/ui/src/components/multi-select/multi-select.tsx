@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Check, ChevronDown } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 import { Button } from "../button";
@@ -198,26 +199,21 @@ function useMultiSelectState({
   value,
 }: MultiSelectStateOptions) {
   const [open, setOpen] = React.useState(false);
-  const [uncontrolledValue, setUncontrolledValue] = React.useState(() =>
-    getUniqueValues(defaultValue),
-  );
-  const isControlled = value !== undefined;
+  const [storedValues, setStoredValues] = useControllableState({
+    defaultValue: () => getUniqueValues(defaultValue),
+    onChange: onValueChange,
+    value,
+  });
   const selectedValues = React.useMemo(
-    () => getUniqueValues(value ?? uncontrolledValue),
-    [uncontrolledValue, value],
+    () => getUniqueValues(storedValues),
+    [storedValues],
   );
 
   const setSelectedValues = React.useCallback(
     (nextValue: string[]) => {
-      const uniqueValues = getUniqueValues(nextValue);
-
-      if (!isControlled) {
-        setUncontrolledValue(uniqueValues);
-      }
-
-      onValueChange?.(uniqueValues);
+      setStoredValues(getUniqueValues(nextValue));
     },
-    [isControlled, onValueChange],
+    [setStoredValues],
   );
 
   const handleOpenChange = React.useCallback(

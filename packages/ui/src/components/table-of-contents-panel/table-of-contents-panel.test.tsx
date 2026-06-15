@@ -61,7 +61,7 @@ describe("TableOfContentsPanel", () => {
     render(<TableOfContentsPanel {...baseProps} onClose={handleClose} />);
     const backdrop = screen.getByTestId("toc-backdrop");
 
-    fireEvent.keyDown(window, { key: "Escape" });
+    fireEvent.keyDown(document.body, { key: "Escape" });
     fireEvent.click(backdrop);
 
     expect(handleClose).toHaveBeenCalledTimes(2);

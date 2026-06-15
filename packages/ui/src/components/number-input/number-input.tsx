@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Minus, Plus } from "lucide-react";
 
+import { useControllableState } from "../../lib/use-controllable-state";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 
@@ -24,27 +25,6 @@ function getNumericBound(bound: number | string | undefined) {
 
   const parsedBound = Number(bound);
   return Number.isNaN(parsedBound) ? undefined : parsedBound;
-}
-
-function useNumberInputState(
-  controlledValue: number | undefined,
-  defaultValue: number | undefined,
-  onValueChange?: (value?: number) => void,
-) {
-  const [internalValue, setInternalValue] = React.useState<number | undefined>(
-    defaultValue,
-  );
-  const resolvedValue = controlledValue ?? internalValue;
-
-  const commitValue = (nextValue?: number) => {
-    if (controlledValue === undefined) {
-      setInternalValue(nextValue);
-    }
-
-    onValueChange?.(nextValue);
-  };
-
-  return { commitValue, resolvedValue };
 }
 
 function clampNumber(
@@ -148,10 +128,12 @@ function NumberInputComponent(
   }: NumberInputProps,
   reference: React.ForwardedRef<HTMLInputElement>,
 ) {
-  const { commitValue, resolvedValue } = useNumberInputState(
-    value,
-    defaultValue,
-    onValueChange,
+  const [resolvedValue, commitValue] = useControllableState<number | undefined>(
+    {
+      defaultValue,
+      onChange: onValueChange,
+      value,
+    },
   );
   const parsedMin = getNumericBound(min);
   const parsedMax = getNumericBound(max);

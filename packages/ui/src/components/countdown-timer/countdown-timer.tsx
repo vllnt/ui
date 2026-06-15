@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { normalizeDate, useNow } from "../../lib/use-now";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 import {
@@ -26,39 +27,6 @@ type TimerSegment = {
   label: string;
   value: string;
 };
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: CountdownTimerProps["now"], tickMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, tickMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, tickMs]);
-
-  return liveNow;
-}
 
 function getRemainingMs(deadline: Date, now: Date): number {
   return deadline.getTime() - now.getTime();
@@ -218,7 +186,7 @@ export const CountdownTimer = React.forwardRef<
       () => (startedAt ? normalizeDate(startedAt) : undefined),
       [startedAt],
     );
-    const liveNow = useLiveDate(now, tickMs);
+    const liveNow = useNow({ now, tickMs });
     const remainingMs = getRemainingMs(deadlineDate, liveNow);
     const status = getStatus(remainingMs, warningThresholdMs);
     const segments = formatSegments(Math.abs(remainingMs));
