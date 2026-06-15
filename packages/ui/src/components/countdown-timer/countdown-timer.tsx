@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
+} from "../card/card";
 
 export type CountdownTimerProps = React.ComponentPropsWithoutRef<"div"> & {
   deadline: Date | number | string;

@@ -5,7 +5,7 @@ import { LoaderCircle, SendHorizontal } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
-import { Textarea } from "../textarea";
+import { Textarea } from "../textarea/textarea";
 
 const formShellVariants = cva(
   "rounded-2xl border border-border/70 bg-background shadow-sm",

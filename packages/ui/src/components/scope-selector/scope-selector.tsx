@@ -6,11 +6,11 @@ import { Check, ChevronRight, Search } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
-import { Button } from "../button";
-import { Input } from "../input";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
-import { ScrollArea } from "../scroll-area";
-import { Separator } from "../separator";
+import { Button } from "../button/button";
+import { Input } from "../input/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
+import { ScrollArea } from "../scroll-area/scroll-area";
+import { Separator } from "../separator/separator";
 
 export type ScopeSelectorNode = {
   badge?: string;

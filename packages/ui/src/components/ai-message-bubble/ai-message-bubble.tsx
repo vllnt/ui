@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../lib/utils";
 import { Avatar, AvatarFallback } from "../avatar/avatar";
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 
 const bubbleVariants = cva(
   "rounded-2xl border px-4 py-3 shadow-sm transition-colors",

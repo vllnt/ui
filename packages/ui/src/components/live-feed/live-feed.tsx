@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
+} from "../card/card";
 import {
   SeverityBadge,
   type SeverityBadgeLevel,

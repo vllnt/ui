@@ -6,21 +6,21 @@ import { ArrowUpDown, Filter } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
-import { Button } from "../button";
+import { Button } from "../button/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "../command";
+} from "../command/command";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../dialog";
+} from "../dialog/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,8 +29,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../dropdown-menu";
-import { Input } from "../input";
+} from "../dropdown-menu/dropdown-menu";
+import { Input } from "../input/input";
 
 /** Model information for the selector. */
 export type ModelInfo = {

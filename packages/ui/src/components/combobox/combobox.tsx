@@ -13,8 +13,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../command";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+} from "../command/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 
 export type ComboboxOption = {
   disabled?: boolean;

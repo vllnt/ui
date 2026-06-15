@@ -6,17 +6,17 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Avatar, AvatarFallback } from "../avatar/avatar";
-import { Badge } from "../badge";
-import { Button } from "../button";
+import { Badge } from "../badge/badge";
+import { Button } from "../button/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../card";
-import { ScrollArea } from "../scroll-area";
-import { Separator } from "../separator";
+} from "../card/card";
+import { ScrollArea } from "../scroll-area/scroll-area";
+import { Separator } from "../separator/separator";
 
 export type ActivityLogTone = "danger" | "default" | "success" | "warning";
 

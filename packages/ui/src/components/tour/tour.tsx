@@ -6,8 +6,14 @@ import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
-import { Button } from "../button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../card";
+import { Button } from "../button/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../card/card";
 
 export type TourStep = {
   badge?: string;

@@ -6,7 +6,7 @@ import { Check, ChevronDown } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
-import { Button } from "../button";
+import { Button } from "../button/button";
 import {
   Command,
   CommandEmpty,
@@ -14,8 +14,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../command";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+} from "../command/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 
 export type MultiSelectOption = {
   disabled?: boolean;

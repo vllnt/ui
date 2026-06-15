@@ -7,8 +7,8 @@ import type { ReactNode } from "react";
 
 import type { HeadingTag } from "../../lib/types";
 import { Button } from "../button/button";
-import { ProfileSection } from "../profile-section";
-import { ShareSection } from "../share-section";
+import { ProfileSection } from "../profile-section/profile-section";
+import { ShareSection } from "../share-section/share-section";
 
 export type TutorialCompleteSection = {
   id: string;

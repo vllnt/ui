@@ -13,24 +13,24 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../accordion/accordion";
-import { Callout } from "../callout";
-import { Checklist } from "../checklist";
-import { CodePlayground, FileTree } from "../code-playground";
-import { BeforeAfter, Comparison } from "../comparison";
-import { Exercise } from "../exercise";
-import { FAQ, FAQItem } from "../faq";
-import { Glossary, KeyConcept } from "../key-concept";
+import { Callout } from "../callout/callout";
+import { Checklist } from "../checklist/checklist";
+import { CodePlayground, FileTree } from "../code-playground/code-playground";
+import { BeforeAfter, Comparison } from "../comparison/comparison";
+import { Exercise } from "../exercise/exercise";
+import { FAQ, FAQItem } from "../faq/faq";
+import { Glossary, KeyConcept } from "../key-concept/key-concept";
 import {
   LearningObjectives,
   Prerequisites,
   Summary,
-} from "../learning-objectives";
-import { CommonMistake, ProTip } from "../pro-tip";
-import { Quiz } from "../quiz";
-import { Step, StepByStep } from "../step-by-step";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
-import { SimpleTerminal, Terminal } from "../terminal";
-import { VideoEmbed } from "../video-embed";
+} from "../learning-objectives/learning-objectives";
+import { CommonMistake, ProTip } from "../pro-tip/pro-tip";
+import { Quiz } from "../quiz/quiz";
+import { Step, StepByStep } from "../step-by-step/step-by-step";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs/tabs";
+import { SimpleTerminal, Terminal } from "../terminal/terminal";
+import { VideoEmbed } from "../video-embed/video-embed";
 
 // Lazy load FlowDiagram to avoid loading @xyflow/react (~185KB) on every page
 const LazyFlowDiagram = lazy(() =>

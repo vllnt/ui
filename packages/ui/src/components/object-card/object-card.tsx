@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
-import { Button } from "../button";
+import { Button } from "../button/button";
 
 export type ObjectCardMetric = {
   label: string;

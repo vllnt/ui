@@ -20,15 +20,15 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
-import { Checkbox } from "../checkbox";
-import { Input } from "../input";
+import { Checkbox } from "../checkbox/checkbox";
+import { Input } from "../input/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../select";
+} from "../select/select";
 import {
   Table,
   TableBody,
@@ -36,7 +36,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../table";
+} from "../table/table";
 
 export type DataTableFilterOption = {
   label: string;

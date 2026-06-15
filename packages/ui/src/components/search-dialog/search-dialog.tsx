@@ -20,7 +20,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../command";
+} from "../command/command";
 
 export type SearchItem = {
   description?: string;
