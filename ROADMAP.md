@@ -1,6 +1,6 @@
 # Roadmap — 0.3.0
 
-> Status: **planning** · Previous release: `v0.2.1` · Current canary: `0.2.1+85 components` · Tracking: [milestone TBD](https://github.com/vllnt/ui/milestones)
+> Status: **planning** · Previous release: `v0.2.1` · Current canary: `0.3.0-canary.<sha>` (+85 components) · Tracking: [milestone TBD](https://github.com/vllnt/ui/milestones)
 
 ## TLDR
 
@@ -219,9 +219,11 @@ Ship only when **all** of the following hold:
 - [ ] Google Rich Results Test: zero errors on `/components/[slug]` and `/design`.
 - [ ] CHANGELOG entry written, `/releases` shows `0.3.0` with notes.
 - [ ] `package.json` versions bumped:
-  - `packages/ui` → `0.3.0`
-  - `apps/registry` → `0.3.0`
-  - root → `0.3.0` (if applicable)
+  - [x] `packages/ui` → `0.3.0` (drives `0.3.0-canary.<sha>` on each merge to main)
+  - [x] `apps/registry` → `0.3.0`
+  - [ ] root → `0.3.0` (optional — private monorepo root, left at `0.1.0`)
+- [ ] At release, flip the registry's shadcn install target off the last published version:
+  - [ ] `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-source.ts` → `0.3.0` (stamps `@vllnt/ui@^0.3.0` + item/registry `version` into `registry.json`; kept at `0.2.1` during canary so `npx shadcn add` resolves to a published release)
 - [ ] Every closed issue is `Type`-tagged.
 - [ ] PR template in place (linked issue requirement enforced — already shipped via #152).
 
