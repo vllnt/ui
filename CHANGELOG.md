@@ -10,9 +10,9 @@ Release automation can regenerate this file from Conventional Commits with
 
 ## [Unreleased]
 
-> Target version: **`0.3.0`** - shipping as `0.3.0-canary.<sha>` on the npm
-> `canary` tag on every merge to main. The stable `latest` release is gated on
-> the [ROADMAP.md](./ROADMAP.md) shipping criteria and is not yet published.
+_Nothing yet._
+
+## [0.3.0] - 2026-06-16
 
 ### Added
 
@@ -103,12 +103,11 @@ Release automation can regenerate this file from Conventional Commits with
   inlined, sibling registry items resolve via `@vllnt/ui` to keep installs
   minimal and dedupe shared primitives.
 
-### Notes
+### Fixed
 
-- `ROADMAP.md` tracks the open work gating the `0.3.0` cut.
-- `0.3.0` requires the codebase-health gate (`react-doctor` CI + 0 errors), the
-  agent-first surface (`/llms.txt`, `/mcp`, sitemap, JSON-LD), and the rebuilt
-  landing page before shipping.
+- **Theme-adaptive chart colors** - `CandlestickChart` and `SparklineGrid`
+  series colors now follow the active theme and dark mode instead of hardcoded
+  values.
 
 ## [0.2.1] - 2026-04-21
 
@@ -233,6 +232,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 - Initial public publish to the public npm registry.
 
+[0.3.0]: https://github.com/vllnt/ui/releases/tag/v0.3.0
 [0.2.1]: https://github.com/vllnt/ui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/vllnt/ui/releases/tag/v0.2.0
 [0.1.11]: https://github.com/vllnt/ui/releases/tag/v0.1.11

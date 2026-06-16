@@ -23,7 +23,11 @@ The release workflow does not push commits to `main`. Version bumps land via nor
 Open a PR that:
 
 - Updates `packages/ui/package.json` `"version"` to the new target (follow SemVer — see below).
+- Updates `apps/registry/package.json` `"version"` to match.
 - Moves the matching entry in root `CHANGELOG.md` and `packages/ui/CHANGELOG.md` from `[Unreleased]` to a dated `[x.y.z]` section. Root `CHANGELOG.md` is the source used for the website, feeds, and GitHub Release notes.
+- Syncs docs that name a count or version: component count in `README.md` + `packages/ui/README.md`, `docs/ARCHITECTURE.md`, and the ROADMAP status line.
+
+Do **not** touch `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-source.ts` here — that pins the shadcn install target and must only advance **after** the new version is live on npm `latest` (see step 3). Bumping it before publish makes the deployed registry advertise `@vllnt/ui@^{x.y.z}` while npm `latest` is still the previous version, breaking `npx shadcn add`.
 
 Merge the PR normally. The canary workflow on `main` will immediately publish `@vllnt/ui@{x.y.z}-canary.{sha}` — a dress-rehearsal of the release tarball.
 
@@ -39,6 +43,15 @@ CI will:
 - Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
 - `pnpm pack` and `npx --yes npm@latest publish --tag latest --provenance --access public`. OIDC trusted publishing signs the provenance attestation.
 - Create the GitHub Release for the new tag.
+
+### 3. Point the registry at the published version (post-publish)
+
+Once `@vllnt/ui@{x.y.z}` is live on npm `latest`, open a small follow-up PR that:
+
+- Sets `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-source.ts` to `{x.y.z}`.
+- Runs `pnpm -F @vllnt/ui-registry registry:build` and commits the regenerated `registry.json` + `registry/default` shims (the install target becomes `@vllnt/ui@^{x.y.z}` and item versions update).
+
+The `registry:check` and `registry:integrity` CI guards confirm the regenerated registry is in sync and pins a real (non-prerelease) published version. Until this lands, `npx shadcn add` keeps resolving to the previous published version — harmless, just one release behind.
 
 ## Versioning policy
 

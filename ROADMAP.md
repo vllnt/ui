@@ -1,6 +1,6 @@
 # Roadmap — 0.3.0
 
-> Status: **planning** · Previous release: `v0.2.1` · Current canary: `0.3.0-canary.<sha>` (+85 components) · Tracking: [milestone TBD](https://github.com/vllnt/ui/milestones)
+> Status: **release prep** · Previous release: `v0.2.1` · Current canary: `0.3.0-canary.<sha>` (+85 components) · Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 ## TLDR
 
