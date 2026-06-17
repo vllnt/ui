@@ -819,6 +819,26 @@
       "stability": "stable"
     },
     {
+      "name": "chain-of-thought",
+      "type": "registry:component",
+      "title": "Chain of Thought",
+      "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
+      "files": [
+        {
+          "path": "registry/default/chain-of-thought/chain-of-thought.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "chat-dock-section",
       "type": "registry:component",
       "title": "Chat Dock Section",
@@ -3095,6 +3115,26 @@
       "stability": "stable"
     },
     {
+      "name": "prompt-input",
+      "type": "registry:component",
+      "title": "Prompt Input",
+      "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
+      "files": [
+        {
+          "path": "registry/default/prompt-input/prompt-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "prompt-templates",
       "type": "registry:component",
       "title": "Prompt Templates",
@@ -3187,6 +3227,26 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "reasoning",
+      "type": "registry:component",
+      "title": "Reasoning",
+      "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
+      "files": [
+        {
+          "path": "registry/default/reasoning/reasoning.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4773,5 +4833,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-06-15T19:29:07.199Z"
+  "generatedAt": "2026-06-17T00:54:55.557Z"
 }
