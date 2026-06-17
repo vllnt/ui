@@ -1,9 +1,5 @@
 import { type Locale, routing } from "@/i18n/routing";
-import {
-  components,
-  getCategoryForComponent,
-  groupedComponents,
-} from "@/lib/component-categories";
+import { groupedComponents } from "@/lib/component-categories";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import { localizePathname } from "@/lib/seo";
 import type { ComponentCategory } from "@/types/registry";
@@ -56,4 +52,8 @@ export function getSidebarSections(
   ];
 }
 
-export { components, getCategoryForComponent, groupedComponents };
+export {
+  components,
+  getCategoryForComponent,
+  groupedComponents,
+} from "@/lib/component-categories";

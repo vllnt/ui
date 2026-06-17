@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  components,
-  groupedComponents,
-} from "@/lib/component-categories";
+import { components, groupedComponents } from "@/lib/component-categories";
 import { registry } from "@/lib/registry";
 import type { ComponentCategory } from "@/types/registry";
 
