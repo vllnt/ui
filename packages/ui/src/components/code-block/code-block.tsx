@@ -30,27 +30,27 @@ type CodeBlockProps = {
   showLanguage?: boolean;
 };
 
-function extractTextFromChildren(children: ReactNode): string {
-  if (typeof children === "string") {
-    return children;
+function extractTextFromChildren(node: ReactNode): string {
+  if (typeof node === "string") {
+    return node;
   }
-  if (typeof children === "number") {
-    return String(children);
+  if (typeof node === "number") {
+    return String(node);
   }
-  if (Array.isArray(children)) {
-    return children.map(extractTextFromChildren).join("");
+  if (Array.isArray(node)) {
+    return node.map(extractTextFromChildren).join("");
   }
   if (
-    children &&
-    typeof children === "object" &&
-    "props" in children &&
-    children.props &&
-    typeof children.props === "object" &&
-    "children" in children.props
+    node &&
+    typeof node === "object" &&
+    "props" in node &&
+    node.props &&
+    typeof node.props === "object" &&
+    "children" in node.props
   ) {
-    return extractTextFromChildren(children.props.children as ReactNode);
+    return extractTextFromChildren(node.props.children as ReactNode);
   }
-  return String(children ?? "");
+  return String(node ?? "");
 }
 
 function findScrollableParent(
