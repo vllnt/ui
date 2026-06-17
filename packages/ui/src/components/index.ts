@@ -201,6 +201,96 @@ export {
   InputOTPSlot,
 } from "./input-otp";
 
+// Form primitives (#409)
+export {
+  ButtonGroup,
+  type ButtonGroupProps,
+  buttonGroupVariants,
+} from "./button-group";
+export {
+  CheckboxGroup,
+  CheckboxGroupItem,
+  type CheckboxGroupItemProps,
+  type CheckboxGroupProps,
+} from "./checkbox-group";
+export { ColorPicker, type ColorPickerProps } from "./color-picker";
+export { DateField, type DateFieldProps } from "./date-field";
+export {
+  DateRangePicker,
+  type DateRangePickerProps,
+} from "./date-range-picker";
+export {
+  Field,
+  FieldControl,
+  type FieldControlProps,
+  FieldDescription,
+  type FieldDescriptionProps,
+  FieldError,
+  type FieldErrorProps,
+  FieldLabel,
+  type FieldLabelProps,
+  type FieldProps,
+  fieldVariants,
+} from "./field";
+export {
+  Fieldset,
+  FieldsetContent,
+  type FieldsetContentProps,
+  FieldsetLegend,
+  type FieldsetLegendProps,
+  type FieldsetProps,
+} from "./fieldset";
+export {
+  InputGroup,
+  InputGroupAddon,
+  type InputGroupAddonProps,
+  inputGroupAddonVariants,
+  InputGroupInput,
+  type InputGroupInputProps,
+  type InputGroupProps,
+  inputGroupVariants,
+} from "./input-group";
+export {
+  Item,
+  ItemActions,
+  type ItemActionsProps,
+  ItemContent,
+  type ItemContentProps,
+  ItemDescription,
+  type ItemDescriptionProps,
+  ItemMedia,
+  type ItemMediaProps,
+  type ItemProps,
+  ItemTitle,
+  type ItemTitleProps,
+  itemVariants,
+} from "./item";
+export {
+  ListBox,
+  ListBoxItem,
+  type ListBoxItemProps,
+  type ListBoxProps,
+  type ListBoxSelectionMode,
+} from "./list-box";
+export { NativeSelect, type NativeSelectProps } from "./native-select";
+export {
+  type PhoneCountry,
+  PhoneInput,
+  type PhoneInputProps,
+} from "./phone-input";
+export { RangeCalendar, type RangeCalendarProps } from "./range-calendar";
+export { SearchField, type SearchFieldProps } from "./search-field";
+export {
+  TagGroup,
+  TagGroupItem,
+  type TagGroupItemProps,
+  type TagGroupProps,
+  type TagSelectionMode,
+} from "./tag-group";
+export { TextField, type TextFieldProps } from "./text-field";
+export { TimeField, type TimeFieldProps } from "./time-field";
+export { TimePicker, type TimePickerProps } from "./time-picker";
+
 // New shadcn primitives - Overlay
 export {
   Tooltip,
@@ -755,6 +845,24 @@ export {
 } from "./watchlist";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
+export {
+  type ContributionDay,
+  ContributionGraph,
+  type ContributionGraphProps,
+} from "./contribution-graph";
+export { GaugeChart, type GaugeChartProps } from "./gauge-chart";
+export { PieChart, type PieChartProps, type PieDatum } from "./pie-chart";
+export {
+  RadarChart,
+  type RadarChartProps,
+  type RadarDatum,
+} from "./radar-chart";
+export {
+  SankeyChart,
+  type SankeyChartProps,
+  type SankeyLink,
+  type SankeyNode,
+} from "./sankey-chart";
 export { LiveFeed, type LiveFeedEvent, type LiveFeedProps } from "./live-feed";
 export {
   MetricGauge,
@@ -1436,3 +1544,54 @@ export { TextReveal, type TextRevealProps } from "./text-reveal";
 export { TextShimmer, type TextShimmerProps } from "./text-shimmer";
 export { TiltCard, type TiltCardProps } from "./tilt-card";
 export { Typewriter, type TypewriterProps } from "./typewriter";
+export { Reasoning, type ReasoningProps } from "./reasoning";
+export {
+  ChainOfThought,
+  type ChainOfThoughtProps,
+  type ChainOfThoughtStatus,
+  type ChainOfThoughtStep,
+} from "./chain-of-thought";
+export { PromptInput, type PromptInputProps } from "./prompt-input";
+
+// Core primitives (#412)
+export {
+  Blockquote,
+  type BlockquoteProps,
+  H1,
+  H2,
+  H3,
+  H4,
+  type HeadingProps,
+  InlineCode,
+  type InlineCodeProps,
+  Lead,
+  List,
+  type ListProps,
+  Muted,
+  P,
+  type ParagraphProps,
+  type TypographyVariant,
+  typographyVariants,
+} from "./typography";
+export { Link, type LinkProps, linkVariants } from "./link";
+export {
+  Toolbar,
+  type ToolbarOrientation,
+  type ToolbarProps,
+  ToolbarSeparator,
+  type ToolbarSeparatorProps,
+} from "./toolbar";
+export { Meter, meterFillVariants, type MeterProps } from "./meter";
+export { QrCode, type QrCodeLevel, type QrCodeProps } from "./qr-code";
+export { Grid, type GridColumns, type GridGap, type GridProps } from "./grid";
+export {
+  Panel,
+  PanelBody,
+  PanelDescription,
+  type PanelDescriptionProps,
+  PanelFooter,
+  PanelHeader,
+  type PanelProps,
+  PanelTitle,
+  type PanelTitleProps,
+} from "./panel";
