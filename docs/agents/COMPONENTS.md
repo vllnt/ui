@@ -10,7 +10,7 @@ Every component lives at `packages/ui/src/components/{name}/`:
 
 ```
 {name}/
-  {name}.tsx         # implementation — React.forwardRef + CVA + cn()
+  {name}.tsx         # implementation — ref-as-prop + CVA + cn()
   {name}.test.tsx    # Vitest unit tests
   {name}.visual.tsx  # Playwright CT story (real Chromium)
   {name}.stories.tsx # Storybook story (default export + named stories)
@@ -22,25 +22,42 @@ Add the export to `packages/ui/src/index.ts`.
 
 ---
 
-## The forwardRef + displayName contract
+## The ref-as-prop + displayName contract
+
+`@vllnt/ui` targets **React 19** (peer `react`/`react-dom` `>=19.0.0`). Components accept `ref` as a normal prop — `forwardRef` is gone — and read context with `use()` instead of `useContext()`.
 
 Every named export — primitives **and compound subcomponents** — uses:
 
 ```tsx
-const Card = React.forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => (
+const Card = ({
+  className,
+  ref,
+  ...props
+}: CardProps & { ref?: React.Ref<HTMLDivElement> }) => (
   <div ref={ref} className={cn("rounded-md border", className)} {...props} />
-));
+);
 Card.displayName = "Card";
 
-const CardHeader = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<"div">>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("p-6", className)} {...props} />,
-);
+const CardHeader = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithoutRef<"div"> & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => <div ref={ref} className={cn("p-6", className)} {...props} />;
 CardHeader.displayName = "CardHeader";
 ```
 
-Compound parts (`Card.Header`, `Form.Field`, `Conversation.Title`, …) get the **same treatment**. No exceptions.
+Context is read with `use()`, never `useContext()`:
 
-> **Counters:** PR #150 — auto-fix added `forwardRef` + `displayName` to 8 compound parts of `ConversationThread`.
+```tsx
+import { use } from "react";
+const ctx = use(CardContext);
+```
+
+Compound parts (`Card.Header`, `Form.Field`, `Conversation.Title`, …) get the **same treatment**. No exceptions. ref-as-prop does **not** work under React 18, so React 19 is a hard requirement.
+
+> **History:** #268 migrated every component off `forwardRef`/`useContext`. Re-run the transform over newly added components with `scripts/migrate-react19.sh`. (The earlier `forwardRef` + `displayName` contract from PR #150 is superseded by this one.)
 
 ---
 
