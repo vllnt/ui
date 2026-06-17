@@ -3,7 +3,6 @@
 import {
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
-  forwardRef,
   type KeyboardEvent,
   type ReactNode,
   type Ref,
@@ -237,45 +236,44 @@ function PlanCta({ cta, highlighted }: PlanCtaProps): ReactNode {
  *
  * @public
  */
-export const PricingPlan = forwardRef<HTMLDivElement, PricingPlanProps>(
-  (props, ref) => {
-    const {
-      badge,
-      className,
-      cta,
-      description,
-      features,
-      highlighted = false,
-      name,
-      period,
-      price,
-      ...rest
-    } = props;
-    return (
-      <div
-        className={cn(
-          "relative flex flex-col gap-6 rounded-2xl border bg-background p-6 shadow-sm transition-colors",
-          highlighted
-            ? "border-primary shadow-md ring-1 ring-primary/20"
-            : "border-border",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        {badge ? (
-          <PlanBadgePill badge={badge} highlighted={highlighted} />
-        ) : null}
-        <PlanHeader description={description} name={name} />
-        <PlanPrice period={period} price={price} />
-        {features && features.length > 0 ? (
-          <PlanFeatures features={features} />
-        ) : null}
-        {cta ? <PlanCta cta={cta} highlighted={highlighted} /> : null}
-      </div>
-    );
-  },
-);
+export const PricingPlan = ({
+  ref,
+  ...props
+}: PricingPlanProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const {
+    badge,
+    className,
+    cta,
+    description,
+    features,
+    highlighted = false,
+    name,
+    period,
+    price,
+    ...rest
+  } = props;
+  return (
+    <div
+      className={cn(
+        "relative flex flex-col gap-6 rounded-2xl border bg-background p-6 shadow-sm transition-colors",
+        highlighted
+          ? "border-primary shadow-md ring-1 ring-primary/20"
+          : "border-border",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {badge ? <PlanBadgePill badge={badge} highlighted={highlighted} /> : null}
+      <PlanHeader description={description} name={name} />
+      <PlanPrice period={period} price={price} />
+      {features && features.length > 0 ? (
+        <PlanFeatures features={features} />
+      ) : null}
+      {cta ? <PlanCta cta={cta} highlighted={highlighted} /> : null}
+    </div>
+  );
+};
 PricingPlan.displayName = "PricingPlan";
 
 /**
@@ -431,45 +429,46 @@ function PeriodToggle({
  *
  * @public
  */
-export const PricingTable = forwardRef<HTMLDivElement, PricingTableProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      defaultPeriod = "monthly",
-      onPeriodChange,
-      period: controlledPeriod,
-      periodLabels,
-      showPeriodToggle = false,
-      ...rest
-    } = props;
+export const PricingTable = ({
+  ref,
+  ...props
+}: PricingTableProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const {
+    children,
+    className,
+    defaultPeriod = "monthly",
+    onPeriodChange,
+    period: controlledPeriod,
+    periodLabels,
+    showPeriodToggle = false,
+    ...rest
+  } = props;
 
-    const [uncontrolledPeriod, setUncontrolledPeriod] =
-      useState<PricingPeriod>(defaultPeriod);
-    const period = controlledPeriod ?? uncontrolledPeriod;
+  const [uncontrolledPeriod, setUncontrolledPeriod] =
+    useState<PricingPeriod>(defaultPeriod);
+  const period = controlledPeriod ?? uncontrolledPeriod;
 
-    const handlePeriodChange = useCallback(
-      (next: PricingPeriod) => {
-        if (controlledPeriod === undefined) setUncontrolledPeriod(next);
-        onPeriodChange?.(next);
-      },
-      [controlledPeriod, onPeriodChange],
-    );
+  const handlePeriodChange = useCallback(
+    (next: PricingPeriod) => {
+      if (controlledPeriod === undefined) setUncontrolledPeriod(next);
+      onPeriodChange?.(next);
+    },
+    [controlledPeriod, onPeriodChange],
+  );
 
-    return (
-      <div className={cn("flex flex-col gap-6", className)} ref={ref} {...rest}>
-        {showPeriodToggle ? (
-          <PeriodToggle
-            labels={periodLabels ?? {}}
-            onChange={handlePeriodChange}
-            period={period}
-          />
-        ) : null}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {children}
-        </div>
+  return (
+    <div className={cn("flex flex-col gap-6", className)} ref={ref} {...rest}>
+      {showPeriodToggle ? (
+        <PeriodToggle
+          labels={periodLabels ?? {}}
+          onChange={handlePeriodChange}
+          period={period}
+        />
+      ) : null}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {children}
       </div>
-    );
-  },
-);
+    </div>
+  );
+};
 PricingTable.displayName = "PricingTable";

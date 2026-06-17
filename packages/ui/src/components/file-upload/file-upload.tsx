@@ -70,7 +70,7 @@ function useFileUploadState(
 }
 
 function assignInputReference(
-  reference: React.ForwardedRef<HTMLInputElement>,
+  reference: React.Ref<HTMLInputElement> | undefined,
   node: HTMLInputElement | null,
 ) {
   if (typeof reference === "function") {
@@ -211,21 +211,19 @@ function FileUploadList({
   );
 }
 
-function FileUploadComponent(
-  {
-    accept,
-    browseLabel = "Choose files",
-    className,
-    disabled,
-    dropzoneText = "Drag and drop files here, or click to browse.",
-    files,
-    helperText = "Supports one or more files.",
-    multiple = true,
-    onFilesChange,
-    ...props
-  }: FileUploadProps,
-  reference: React.ForwardedRef<HTMLInputElement>,
-) {
+function FileUploadComponent({
+  accept,
+  browseLabel = "Choose files",
+  className,
+  disabled,
+  dropzoneText = "Drag and drop files here, or click to browse.",
+  files,
+  helperText = "Supports one or more files.",
+  multiple = true,
+  onFilesChange,
+  ref: reference,
+  ...props
+}: FileUploadProps & { ref?: React.Ref<HTMLInputElement> }) {
   const inputReference = React.useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = React.useState(false);
   const { addFiles, removeFile, resolvedFiles } = useFileUploadState(
@@ -274,7 +272,7 @@ function FileUploadComponent(
   );
 }
 
-const FileUpload = React.forwardRef(FileUploadComponent);
-FileUpload.displayName = "FileUpload";
+FileUploadComponent.displayName = "FileUpload";
+const FileUpload = FileUploadComponent;
 
 export { FileUpload };

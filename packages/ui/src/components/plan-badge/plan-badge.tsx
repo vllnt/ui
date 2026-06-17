@@ -50,30 +50,35 @@ function getPlanClasses(tier: PlanBadgeTier, state: PlanBadgeState): string {
   }
 }
 
-export const PlanBadge = React.forwardRef<HTMLSpanElement, PlanBadgeProps>(
-  ({ className, label, state = "current", tier, ...props }, reference) => {
-    return (
-      <span
-        className={cn(
-          badgeVariants({ variant: "outline" }),
-          "gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium tracking-[0.02em] shadow-none",
-          getPlanClasses(tier, state),
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
-        <span>{label ?? getPlanLabel(tier)}</span>
-        {state === "trial" ? (
-          <span className="text-current/80">Trial</span>
-        ) : null}
-        {state === "legacy" ? (
-          <span className="text-current/80">Legacy</span>
-        ) : null}
-      </span>
-    );
-  },
-);
+export const PlanBadge = ({
+  className,
+  label,
+  ref: reference,
+  state = "current",
+  tier,
+  ...props
+}: PlanBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  return (
+    <span
+      className={cn(
+        badgeVariants({ variant: "outline" }),
+        "gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium tracking-[0.02em] shadow-none",
+        getPlanClasses(tier, state),
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+      <span>{label ?? getPlanLabel(tier)}</span>
+      {state === "trial" ? (
+        <span className="text-current/80">Trial</span>
+      ) : null}
+      {state === "legacy" ? (
+        <span className="text-current/80">Legacy</span>
+      ) : null}
+    </span>
+  );
+};
 
 PlanBadge.displayName = "PlanBadge";

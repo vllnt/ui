@@ -203,59 +203,55 @@ function GaugeLegend({ thresholds }: { thresholds: MetricGaugeThreshold[] }) {
   );
 }
 
-export const MetricGauge = React.forwardRef<HTMLDivElement, MetricGaugeProps>(
-  (
-    {
-      className,
-      description,
-      label,
-      max,
-      min = 0,
-      thresholds = DEFAULT_THRESHOLDS,
-      unit,
-      value,
-      ...props
-    },
-    ref,
-  ) => {
-    const safeValue = clamp(value, min, max);
-    const percent = max === min ? 0 : ((safeValue - min) / (max - min)) * 100;
-    const endAngle = -90 + 180 * (percent / 100);
-    const activeThreshold = getActiveThreshold(percent, thresholds);
+export const MetricGauge = ({
+  className,
+  description,
+  label,
+  max,
+  min = 0,
+  ref,
+  thresholds = DEFAULT_THRESHOLDS,
+  unit,
+  value,
+  ...props
+}: MetricGaugeProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const safeValue = clamp(value, min, max);
+  const percent = max === min ? 0 : ((safeValue - min) / (max - min)) * 100;
+  const endAngle = -90 + 180 * (percent / 100);
+  const activeThreshold = getActiveThreshold(percent, thresholds);
 
-    return (
-      <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
-        <CardHeader className="space-y-2 pb-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <CardTitle className="text-base">{label}</CardTitle>
-              {description ? (
-                <CardDescription>{description}</CardDescription>
-              ) : null}
-            </div>
-            {activeThreshold ? (
-              <Badge variant="outline">{activeThreshold.label}</Badge>
+  return (
+    <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
+      <CardHeader className="space-y-2 pb-3">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <CardTitle className="text-base">{label}</CardTitle>
+            {description ? (
+              <CardDescription>{description}</CardDescription>
             ) : null}
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
           {activeThreshold ? (
-            <GaugeDial
-              activeThreshold={activeThreshold}
-              endAngle={endAngle}
-              label={label}
-              max={max}
-              min={min}
-              percent={percent}
-              safeValue={safeValue}
-              unit={unit}
-            />
+            <Badge variant="outline">{activeThreshold.label}</Badge>
           ) : null}
-          <GaugeLegend thresholds={thresholds} />
-        </CardContent>
-      </Card>
-    );
-  },
-);
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {activeThreshold ? (
+          <GaugeDial
+            activeThreshold={activeThreshold}
+            endAngle={endAngle}
+            label={label}
+            max={max}
+            min={min}
+            percent={percent}
+            safeValue={safeValue}
+            unit={unit}
+          />
+        ) : null}
+        <GaugeLegend thresholds={thresholds} />
+      </CardContent>
+    </Card>
+  );
+};
 
 MetricGauge.displayName = "MetricGauge";

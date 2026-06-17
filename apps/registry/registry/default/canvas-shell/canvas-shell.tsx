@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import type { CSSProperties, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
@@ -206,7 +204,7 @@ function renderLegacyCanvasShell(
     topBar,
     ...props
   }: CanvasShellProps,
-  ref: React.ForwardedRef<HTMLElement>,
+  ref: React.Ref<HTMLElement> | undefined,
 ) {
   return (
     <section
@@ -268,7 +266,7 @@ function renderFloatingCanvasShell(
     topBar,
     ...props
   }: CanvasShellProps,
-  ref: React.ForwardedRef<HTMLElement>,
+  ref: React.Ref<HTMLElement> | undefined,
 ) {
   const inset = toInsetValue(chromeInset) ?? "16px";
   const resolvedBottomBar = bottomBar ?? bottomSlot;
@@ -324,7 +322,10 @@ function renderFloatingCanvasShell(
   );
 }
 
-const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
+const CanvasShell = ({
+  ref,
+  ...props
+}: CanvasShellProps & { ref?: React.Ref<HTMLElement> }) => {
   const { bottomBar, chromeInset, contentPadding, leftBar, rightBar } = props;
   const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
     props,
@@ -342,7 +343,7 @@ const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
   }
 
   return renderFloatingCanvasShell(props, ref);
-});
+};
 
 CanvasShell.displayName = "CanvasShell";
 

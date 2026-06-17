@@ -107,61 +107,64 @@ function BookSide({
   );
 }
 
-export const OrderBook = React.forwardRef<HTMLDivElement, OrderBookProps>(
-  (
-    { as: Heading = "h2", asks, bids, className, precision = 2, ...props },
-    reference,
-  ) => {
-    if (asks.length === 0 && bids.length === 0) {
-      return null;
-    }
+export const OrderBook = ({
+  as: Heading = "h2",
+  asks,
+  bids,
+  className,
+  precision = 2,
+  ref: reference,
+  ...props
+}: OrderBookProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  if (asks.length === 0 && bids.length === 0) {
+    return null;
+  }
 
-    const askLevels = withCumulativeTotal(asks);
-    const bidLevels = withCumulativeTotal(bids);
-    const bestAsk = askLevels[0];
-    const bestBid = bidLevels[0];
-    const spread =
-      bestAsk && bestBid ? Math.max(bestAsk.price - bestBid.price, 0) : 0;
+  const askLevels = withCumulativeTotal(asks);
+  const bidLevels = withCumulativeTotal(bids);
+  const bestAsk = askLevels[0];
+  const bestBid = bidLevels[0];
+  const spread =
+    bestAsk && bestBid ? Math.max(bestAsk.price - bestBid.price, 0) : 0;
 
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-              Level II
-            </p>
-            <Heading className="text-lg font-semibold text-foreground">
-              Order book
-            </Heading>
-          </div>
-          <div className="rounded-full border border-border bg-background/70 px-3 py-1 text-sm text-muted-foreground tabular-nums">
-            Spread {formatNumber(spread, precision)}
-          </div>
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            Level II
+          </p>
+          <Heading className="text-lg font-semibold text-foreground">
+            Order book
+          </Heading>
         </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <BookSide
-            accent="ask"
-            levels={askLevels}
-            precision={precision}
-            title="Asks"
-          />
-          <BookSide
-            accent="bid"
-            levels={bidLevels}
-            precision={precision}
-            title="Bids"
-          />
+        <div className="rounded-full border border-border bg-background/70 px-3 py-1 text-sm text-muted-foreground tabular-nums">
+          Spread {formatNumber(spread, precision)}
         </div>
       </div>
-    );
-  },
-);
+      <div className="grid gap-4 lg:grid-cols-2">
+        <BookSide
+          accent="ask"
+          levels={askLevels}
+          precision={precision}
+          title="Asks"
+        />
+        <BookSide
+          accent="bid"
+          levels={bidLevels}
+          precision={precision}
+          title="Bids"
+        />
+      </div>
+    </div>
+  );
+};
 
 OrderBook.displayName = "OrderBook";

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -81,60 +77,61 @@ export type HandoffBeaconProps = {
  *
  * @public
  */
-export const HandoffBeacon = forwardRef<HTMLDivElement, HandoffBeaconProps>(
-  (props, ref) => {
-    const {
-      className,
-      labels,
-      level = "info",
-      message,
-      source,
-      x,
-      y,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
-      <div
-        aria-label={resolvedLabels.region}
+export const HandoffBeacon = ({
+  ref,
+  ...props
+}: HandoffBeaconProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const {
+    className,
+    labels,
+    level = "info",
+    message,
+    source,
+    x,
+    y,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <div
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "pointer-events-none absolute z-30 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1",
+        className,
+      )}
+      data-handoff-level={level}
+      ref={ref}
+      role="status"
+      style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
+      {...rest}
+    >
+      <span
+        aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute z-30 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1",
-          className,
+          "block size-3 rounded-full ring-2 ring-offset-2 ring-offset-background",
+          LEVEL_DOT[level],
+          LEVEL_RING[level],
         )}
-        data-handoff-level={level}
-        ref={ref}
-        role="status"
-        style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
-        {...rest}
-      >
-        <span
-          aria-hidden="true"
-          className={cn(
-            "block size-3 rounded-full ring-2 ring-offset-2 ring-offset-background",
-            LEVEL_DOT[level],
-            LEVEL_RING[level],
-          )}
-        />
-        {source || message ? (
-          <div
-            className="pointer-events-auto rounded-md border border-border bg-popover px-2 py-1 text-center text-[11px] font-medium shadow-md"
-            data-handoff-card
-          >
-            {source ? (
-              <p className="text-foreground">
-                <span className="font-semibold">{source}</span>
-                {message ? (
-                  <span className="text-muted-foreground"> · </span>
-                ) : null}
-                {message ? <span>{message}</span> : null}
-              </p>
-            ) : message ? (
-              <p className="text-foreground">{message}</p>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-    );
-  },
-);
+      />
+      {source || message ? (
+        <div
+          className="pointer-events-auto rounded-md border border-border bg-popover px-2 py-1 text-center text-[11px] font-medium shadow-md"
+          data-handoff-card
+        >
+          {source ? (
+            <p className="text-foreground">
+              <span className="font-semibold">{source}</span>
+              {message ? (
+                <span className="text-muted-foreground"> · </span>
+              ) : null}
+              {message ? <span>{message}</span> : null}
+            </p>
+          ) : message ? (
+            <p className="text-foreground">{message}</p>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+};
 HandoffBeacon.displayName = "HandoffBeacon";

@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import type { ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
@@ -134,50 +132,46 @@ function ObjectCardActions({ actions }: Pick<ObjectCardProps, "actions">) {
   );
 }
 
-const ObjectCard = forwardRef<HTMLElement, ObjectCardProps>(
-  (
-    {
-      actions,
-      children,
+const ObjectCard = ({
+  actions,
+  children,
+  className,
+  footer,
+  kind = "Object",
+  metrics = [],
+  ports,
+  ref,
+  state = "idle",
+  summary,
+  title,
+  ...props
+}: ObjectCardProps & { ref?: React.Ref<HTMLElement> }) => (
+  <article
+    className={cn(
+      "group relative flex min-w-[320px] max-w-[420px] flex-col gap-4 rounded-[1.5rem] border border-border/70 bg-[linear-gradient(180deg,oklch(var(--background)),oklch(var(--muted)/0.22))] p-5 shadow-[0_24px_80px_oklch(var(--foreground)/0.08)] transition-transform duration-200 hover:-translate-y-0.5",
       className,
-      footer,
-      kind = "Object",
-      metrics = [],
-      ports,
-      state = "idle",
-      summary,
-      title,
-      ...props
-    },
-    ref,
-  ) => (
-    <article
-      className={cn(
-        "group relative flex min-w-[320px] max-w-[420px] flex-col gap-4 rounded-[1.5rem] border border-border/70 bg-[linear-gradient(180deg,oklch(var(--background)),oklch(var(--muted)/0.22))] p-5 shadow-[0_24px_80px_oklch(var(--foreground)/0.08)] transition-transform duration-200 hover:-translate-y-0.5",
-        className,
-      )}
-      data-state={state}
-      ref={ref}
-      {...props}
-    >
-      <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,oklch(var(--foreground)/0.22),transparent)]" />
-      <ObjectCardHeader
-        kind={kind}
-        ports={ports}
-        state={state}
-        summary={summary}
-        title={title}
-      />
-      <ObjectCardMetrics metrics={metrics} />
-      {children ? <div className="space-y-3">{children}</div> : null}
-      <ObjectCardActions actions={actions} />
-      {footer ? (
-        <div className="border-t border-border/60 pt-3 text-sm text-muted-foreground">
-          {footer}
-        </div>
-      ) : null}
-    </article>
-  ),
+    )}
+    data-state={state}
+    ref={ref}
+    {...props}
+  >
+    <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,oklch(var(--foreground)/0.22),transparent)]" />
+    <ObjectCardHeader
+      kind={kind}
+      ports={ports}
+      state={state}
+      summary={summary}
+      title={title}
+    />
+    <ObjectCardMetrics metrics={metrics} />
+    {children ? <div className="space-y-3">{children}</div> : null}
+    <ObjectCardActions actions={actions} />
+    {footer ? (
+      <div className="border-t border-border/60 pt-3 text-sm text-muted-foreground">
+        {footer}
+      </div>
+    ) : null}
+  </article>
 );
 
 ObjectCard.displayName = "ObjectCard";

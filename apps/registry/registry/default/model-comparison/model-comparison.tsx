@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useRef,
@@ -167,66 +166,67 @@ function ComparisonHeader({
  *
  * @public
  */
-export const ModelComparison = forwardRef<HTMLElement, ModelComparisonProps>(
-  (props, ref) => {
-    const {
-      blindDefault = false,
-      children,
-      className,
-      hideBlindToggle = false,
-      labels,
-      prompt,
-      ...rest
-    } = props;
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const [blind, setBlind] = useState(blindDefault);
-    const columnIndexRef = useRef<Map<string, number>>(new Map());
+export const ModelComparison = ({
+  ref,
+  ...props
+}: ModelComparisonProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    blindDefault = false,
+    children,
+    className,
+    hideBlindToggle = false,
+    labels,
+    prompt,
+    ...rest
+  } = props;
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const [blind, setBlind] = useState(blindDefault);
+  const columnIndexRef = useRef<Map<string, number>>(new Map());
 
-    const registerColumn = useCallback((id: string): number => {
-      const existing = columnIndexRef.current.get(id);
-      if (existing !== undefined) return existing;
-      const next = columnIndexRef.current.size;
-      columnIndexRef.current.set(id, next);
-      return next;
-    }, []);
+  const registerColumn = useCallback((id: string): number => {
+    const existing = columnIndexRef.current.get(id);
+    if (existing !== undefined) return existing;
+    const next = columnIndexRef.current.size;
+    columnIndexRef.current.set(id, next);
+    return next;
+  }, []);
 
-    const contextValue = useMemo<ModelComparisonContextValue>(
-      () => ({ blind, labels: resolvedLabels, registerColumn }),
-      [blind, registerColumn, resolvedLabels],
-    );
+  const contextValue = useMemo<ModelComparisonContextValue>(
+    () => ({ blind, labels: resolvedLabels, registerColumn }),
+    [blind, registerColumn, resolvedLabels],
+  );
 
-    const handleToggleBlind = useCallback(() => {
-      setBlind((value) => !value);
-    }, []);
+  const handleToggleBlind = useCallback(() => {
+    setBlind((value) => !value);
+  }, []);
 
-    return (
-      <ModelComparisonContext.Provider value={contextValue}>
-        <section
-          className={cn(
-            "flex flex-col gap-4 rounded-2xl border bg-background p-4",
-            className,
-          )}
-          ref={ref}
-          {...rest}
-        >
-          <ComparisonHeader
-            blind={blind}
-            hideBlindToggle={hideBlindToggle}
-            labels={resolvedLabels}
-            onToggleBlind={handleToggleBlind}
-            prompt={prompt}
-          />
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {children}
-          </div>
-        </section>
-      </ModelComparisonContext.Provider>
-    );
-  },
-);
+  return (
+    <ModelComparisonContext.Provider value={contextValue}>
+      <section
+        className={cn(
+          "flex flex-col gap-4 rounded-2xl border bg-background p-4",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <ComparisonHeader
+          blind={blind}
+          hideBlindToggle={hideBlindToggle}
+          labels={resolvedLabels}
+          onToggleBlind={handleToggleBlind}
+          prompt={prompt}
+        />
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {children}
+        </div>
+      </section>
+    </ModelComparisonContext.Provider>
+  );
+};
 ModelComparison.displayName = "ModelComparison";
 
 /**
@@ -249,13 +249,13 @@ export type ModelComparisonColumnProps = {
  *
  * @public
  */
-export const ModelComparisonColumn = forwardRef<
-  HTMLElement,
-  ModelComparisonColumnProps
->((props, ref) => {
+export const ModelComparisonColumn = ({
+  ref,
+  ...props
+}: ModelComparisonColumnProps & { ref?: React.Ref<HTMLElement> }) => {
   const { badge, children, className, label, model, ...rest } = props;
   const id = useId();
-  const { blind, registerColumn } = useContext(ModelComparisonContext);
+  const { blind, registerColumn } = use(ModelComparisonContext);
   const columnIndex = registerColumn(id);
   const displayLabel = blind
     ? blindLabelForIndex(columnIndex)
@@ -284,7 +284,7 @@ export const ModelComparisonColumn = forwardRef<
       </div>
     </article>
   );
-});
+};
 ModelComparisonColumn.displayName = "ModelComparisonColumn";
 
 /**
@@ -307,12 +307,12 @@ export type ModelComparisonMetaProps = {
  *
  * @public
  */
-export const ModelComparisonMeta = forwardRef<
-  HTMLDListElement,
-  ModelComparisonMetaProps
->((props, ref) => {
+export const ModelComparisonMeta = ({
+  ref,
+  ...props
+}: ModelComparisonMetaProps & { ref?: React.Ref<HTMLDListElement> }) => {
   const { className, cost, latency, tokens, ...rest } = props;
-  const { labels } = useContext(ModelComparisonContext);
+  const { labels } = use(ModelComparisonContext);
 
   const items: { caption: string; value: ReactNode }[] = [];
   if (tokens !== undefined && tokens !== null) {
@@ -348,7 +348,7 @@ export const ModelComparisonMeta = forwardRef<
       ))}
     </dl>
   );
-});
+};
 ModelComparisonMeta.displayName = "ModelComparisonMeta";
 
 /**
@@ -382,12 +382,12 @@ export type ModelComparisonVoteProps = {
  *
  * @public
  */
-export const ModelComparisonVote = forwardRef<
-  HTMLDivElement,
-  ModelComparisonVoteProps
->((props, ref) => {
+export const ModelComparisonVote = ({
+  ref,
+  ...props
+}: ModelComparisonVoteProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const { buttonLabels, className, onVote, ...rest } = props;
-  const { labels: contextLabels } = useContext(ModelComparisonContext);
+  const { labels: contextLabels } = use(ModelComparisonContext);
 
   const handleLeft = useCallback(() => {
     onVote?.("left");
@@ -424,5 +424,5 @@ export const ModelComparisonVote = forwardRef<
       </div>
     </div>
   );
-});
+};
 ModelComparisonVote.displayName = "ModelComparisonVote";

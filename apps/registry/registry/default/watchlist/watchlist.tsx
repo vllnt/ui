@@ -89,63 +89,59 @@ function WatchlistRow({ item }: { item: WatchlistItem }): React.JSX.Element {
   );
 }
 
-export const Watchlist = React.forwardRef<HTMLDivElement, WatchlistProps>(
-  (
-    {
-      as: Heading = "h2",
-      className,
-      eyebrow = "Tracked symbols",
-      items,
-      title = "Watchlist",
-      ...props
-    },
-    reference,
-  ) => {
-    if (items.length === 0) {
-      return null;
-    }
+export const Watchlist = ({
+  as: Heading = "h2",
+  className,
+  eyebrow = "Tracked symbols",
+  items,
+  ref: reference,
+  title = "Watchlist",
+  ...props
+}: WatchlistProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  if (items.length === 0) {
+    return null;
+  }
 
-    const advancing = items.filter((item) => item.change >= 0).length;
-    const declining = items.length - advancing;
+  const advancing = items.filter((item) => item.change >= 0).length;
+  const declining = items.length - advancing;
 
-    return (
-      <section
-        aria-label={title}
-        className={cn(
-          "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <header className="mb-3 flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
-              {eyebrow}
-            </p>
-            <Heading className="text-lg font-semibold text-foreground">
-              {title}
-            </Heading>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-emerald-600 dark:text-emerald-400">
-              <ArrowUpRight className="size-3" />
-              {advancing} up
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-1 text-rose-600 dark:text-rose-400">
-              <ArrowDownRight className="size-3" />
-              {declining} down
-            </span>
-          </div>
-        </header>
-        <ul className="divide-y divide-border/60">
-          {items.map((item) => (
-            <WatchlistRow item={item} key={item.symbol} />
-          ))}
-        </ul>
-      </section>
-    );
-  },
-);
+  return (
+    <section
+      aria-label={title}
+      className={cn(
+        "rounded-2xl border border-border bg-card/80 p-4 shadow-sm",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <header className="mb-3 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            {eyebrow}
+          </p>
+          <Heading className="text-lg font-semibold text-foreground">
+            {title}
+          </Heading>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-emerald-600 dark:text-emerald-400">
+            <ArrowUpRight className="size-3" />
+            {advancing} up
+          </span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-1 text-rose-600 dark:text-rose-400">
+            <ArrowDownRight className="size-3" />
+            {declining} down
+          </span>
+        </div>
+      </header>
+      <ul className="divide-y divide-border/60">
+        {items.map((item) => (
+          <WatchlistRow item={item} key={item.symbol} />
+        ))}
+      </ul>
+    </section>
+  );
+};
 
 Watchlist.displayName = "Watchlist";

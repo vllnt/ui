@@ -75,63 +75,59 @@ function TrendIcon({ trend }: { trend: StatCardTrend }) {
   return <ArrowRight className="size-3.5" />;
 }
 
-const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
-  (
-    {
-      change,
-      className,
-      description,
-      icon,
-      label,
-      meta,
-      tone,
-      trend = "neutral",
-      value,
-      ...props
-    },
-    reference,
-  ) => (
-    <Card
-      className={cn(statCardVariants({ tone }), className)}
-      ref={reference}
-      {...props}
-    >
-      <div className={accentVariants({ tone })} />
-      <CardHeader className="flex flex-row items-start justify-between gap-4 gap-y-0 pb-3">
-        <div className="space-y-1">
-          <CardDescription className="text-xs font-medium uppercase tracking-[0.14em]">
-            {label}
-          </CardDescription>
-          <div className="text-3xl font-semibold tracking-tight">{value}</div>
+const StatCard = ({
+  change,
+  className,
+  description,
+  icon,
+  label,
+  meta,
+  ref: reference,
+  tone,
+  trend = "neutral",
+  value,
+  ...props
+}: StatCardProps & { ref?: React.Ref<HTMLDivElement> }) => (
+  <Card
+    className={cn(statCardVariants({ tone }), className)}
+    ref={reference}
+    {...props}
+  >
+    <div className={accentVariants({ tone })} />
+    <CardHeader className="flex flex-row items-start justify-between gap-4 gap-y-0 pb-3">
+      <div className="space-y-1">
+        <CardDescription className="text-xs font-medium uppercase tracking-[0.14em]">
+          {label}
+        </CardDescription>
+        <div className="text-3xl font-semibold tracking-tight">{value}</div>
+      </div>
+      {icon ? (
+        <div className="rounded-lg border bg-muted/50 p-2 text-muted-foreground">
+          {icon}
         </div>
-        {icon ? (
-          <div className="rounded-lg border bg-muted/50 p-2 text-muted-foreground">
-            {icon}
+      ) : null}
+    </CardHeader>
+    {description || change || meta ? (
+      <CardContent className="space-y-3">
+        {description ? (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        ) : null}
+        {change || meta ? (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            {change ? (
+              <div className={changeVariants({ trend })}>
+                <TrendIcon trend={trend} />
+                <span>{change}</span>
+              </div>
+            ) : null}
+            {meta ? (
+              <div className="text-xs text-muted-foreground">{meta}</div>
+            ) : null}
           </div>
         ) : null}
-      </CardHeader>
-      {description || change || meta ? (
-        <CardContent className="space-y-3">
-          {description ? (
-            <p className="text-sm text-muted-foreground">{description}</p>
-          ) : null}
-          {change || meta ? (
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              {change ? (
-                <div className={changeVariants({ trend })}>
-                  <TrendIcon trend={trend} />
-                  <span>{change}</span>
-                </div>
-              ) : null}
-              {meta ? (
-                <div className="text-xs text-muted-foreground">{meta}</div>
-              ) : null}
-            </div>
-          ) : null}
-        </CardContent>
-      ) : null}
-    </Card>
-  ),
+      </CardContent>
+    ) : null}
+  </Card>
 );
 
 StatCard.displayName = "StatCard";

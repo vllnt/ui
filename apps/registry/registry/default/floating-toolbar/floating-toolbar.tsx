@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -91,54 +87,55 @@ export type FloatingToolbarProps = {
  *
  * @public
  */
-export const FloatingToolbar = forwardRef<HTMLDivElement, FloatingToolbarProps>(
-  (props, ref) => {
-    const { actions, className, labels, x, y, ...rest } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
-      <div
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "absolute z-30 flex -translate-y-full items-center gap-1 rounded-md border border-border bg-background/95 p-1 shadow-md backdrop-blur",
-          className,
-        )}
-        data-floating-toolbar
-        ref={ref}
-        role="toolbar"
-        style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
-        {...rest}
-      >
-        {actions.map((action) => {
-          const variant = action.variant ?? "ghost";
-          const handleActivateToolbarAction = (): void => {
-            action.onActivate();
-          };
-          return (
-            <button
-              aria-label={action.ariaLabel ?? undefined}
-              className={cn(
-                "inline-flex h-7 items-center gap-1 rounded-md border px-2 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                VARIANT_CLASSES[variant],
-                action.disabled ? "cursor-not-allowed opacity-50" : "",
-              )}
-              data-action-id={action.id}
-              data-variant={variant}
-              disabled={action.disabled}
-              key={action.id}
-              onClick={handleActivateToolbarAction}
-              type="button"
-            >
-              {action.glyph ? (
-                <span aria-hidden="true" className="inline-flex size-3">
-                  {action.glyph}
-                </span>
-              ) : null}
-              <span>{action.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    );
-  },
-);
+export const FloatingToolbar = ({
+  ref,
+  ...props
+}: FloatingToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const { actions, className, labels, x, y, ...rest } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <div
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "absolute z-30 flex -translate-y-full items-center gap-1 rounded-md border border-border bg-background/95 p-1 shadow-md backdrop-blur",
+        className,
+      )}
+      data-floating-toolbar
+      ref={ref}
+      role="toolbar"
+      style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
+      {...rest}
+    >
+      {actions.map((action) => {
+        const variant = action.variant ?? "ghost";
+        const handleActivateToolbarAction = (): void => {
+          action.onActivate();
+        };
+        return (
+          <button
+            aria-label={action.ariaLabel ?? undefined}
+            className={cn(
+              "inline-flex h-7 items-center gap-1 rounded-md border px-2 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              VARIANT_CLASSES[variant],
+              action.disabled ? "cursor-not-allowed opacity-50" : "",
+            )}
+            data-action-id={action.id}
+            data-variant={variant}
+            disabled={action.disabled}
+            key={action.id}
+            onClick={handleActivateToolbarAction}
+            type="button"
+          >
+            {action.glyph ? (
+              <span aria-hidden="true" className="inline-flex size-3">
+                {action.glyph}
+              </span>
+            ) : null}
+            <span>{action.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 FloatingToolbar.displayName = "FloatingToolbar";

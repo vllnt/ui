@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Check, ChevronRight, Search } from "lucide-react";
 
@@ -445,52 +445,48 @@ function useScopeSelectorState({
   };
 }
 
-const ScopeSelector = forwardRef<HTMLButtonElement, ScopeSelectorProps>(
-  (
-    {
-      className,
-      defaultValue,
-      disabled,
-      emptyMessage = "No scopes available.",
-      nodes,
-      onValueChange,
-      placeholder = "Select scope",
-      searchPlaceholder = "Search scopes...",
-      value,
-    },
-    ref,
-  ) => {
-    const state = useScopeSelectorState({
-      defaultValue,
-      nodes,
-      onValueChange,
-      value,
-    });
+const ScopeSelector = ({
+  className,
+  defaultValue,
+  disabled,
+  emptyMessage = "No scopes available.",
+  nodes,
+  onValueChange,
+  placeholder = "Select scope",
+  ref,
+  searchPlaceholder = "Search scopes...",
+  value,
+}: ScopeSelectorProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const state = useScopeSelectorState({
+    defaultValue,
+    nodes,
+    onValueChange,
+    value,
+  });
 
-    return (
-      <Popover onOpenChange={state.handleOpenChange} open={state.open}>
-        <PopoverTrigger asChild>
-          <Button
-            className={cn("w-full justify-between", className)}
-            disabled={disabled}
-            ref={ref}
-            variant="outline"
-          >
-            <span className="truncate text-left">
-              {state.selectedPathLabel ?? placeholder}
-            </span>
-            <ChevronRight className="size-4 shrink-0 rotate-90 text-muted-foreground" />
-          </Button>
-        </PopoverTrigger>
-        <ScopeSelectorPopoverBody
-          emptyMessage={emptyMessage}
-          searchPlaceholder={searchPlaceholder}
-          state={state}
-        />
-      </Popover>
-    );
-  },
-);
+  return (
+    <Popover onOpenChange={state.handleOpenChange} open={state.open}>
+      <PopoverTrigger asChild>
+        <Button
+          className={cn("w-full justify-between", className)}
+          disabled={disabled}
+          ref={ref}
+          variant="outline"
+        >
+          <span className="truncate text-left">
+            {state.selectedPathLabel ?? placeholder}
+          </span>
+          <ChevronRight className="size-4 shrink-0 rotate-90 text-muted-foreground" />
+        </Button>
+      </PopoverTrigger>
+      <ScopeSelectorPopoverBody
+        emptyMessage={emptyMessage}
+        searchPlaceholder={searchPlaceholder}
+        state={state}
+      />
+    </Popover>
+  );
+};
 
 ScopeSelector.displayName = "ScopeSelector";
 

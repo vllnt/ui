@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useId,
   useMemo,
@@ -53,7 +52,7 @@ type ChronoCtx = {
 const ChronoContext = createContext<ChronoCtx | null>(null);
 
 function useChronoContext(): ChronoCtx {
-  const ctx = useContext(ChronoContext);
+  const ctx = use(ChronoContext);
   if (!ctx) {
     throw new Error("ChronoEvent used outside ChronologicalTimeline.");
   }
@@ -286,71 +285,72 @@ function EventCard({
  *
  * @public
  */
-export const ChronoEvent = forwardRef<HTMLElement, ChronoEventProps>(
-  (props, forwardedRef) => {
-    const {
-      children,
-      className,
-      date,
-      featured = false,
-      id,
-      media,
-      subtitle,
-      title,
-      ...rest
-    } = props;
-    const generatedId = useId();
-    const eventId = id ?? generatedId;
-    const ref = useRef<HTMLElement | null>(null);
-    const { registerEvent, setActiveId } = useChronoContext();
+export const ChronoEvent = ({
+  ref: forwardedRef,
+  ...props
+}: ChronoEventProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    children,
+    className,
+    date,
+    featured = false,
+    id,
+    media,
+    subtitle,
+    title,
+    ...rest
+  } = props;
+  const generatedId = useId();
+  const eventId = id ?? generatedId;
+  const ref = useRef<HTMLElement | null>(null);
+  const { registerEvent, setActiveId } = useChronoContext();
 
-    const refCallback = useCallback(
-      (node: HTMLElement | null) => {
-        ref.current = node;
-        registerEvent(eventId, node);
-        if (typeof forwardedRef === "function") forwardedRef(node);
-        else if (forwardedRef) forwardedRef.current = node;
-      },
-      [eventId, forwardedRef, registerEvent],
-    );
+  const refCallback = useCallback(
+    (node: HTMLElement | null) => {
+      ref.current = node;
+      registerEvent(eventId, node);
+      if (typeof forwardedRef === "function") forwardedRef(node);
+      else if (forwardedRef) forwardedRef.current = node;
+    },
+    [eventId, forwardedRef, registerEvent],
+  );
 
-    const handleFocusEvent = useCallback(() => {
-      setActiveId(eventId);
-    }, [eventId, setActiveId]);
+  const handleFocusEvent = useCallback(() => {
+    setActiveId(eventId);
+  }, [eventId, setActiveId]);
 
-    return (
-      /* Passive focus tracking: the container observes focus bubbling from
+  return (
+    /* Passive focus tracking: the container observes focus bubbling from
          its interactive children to drive the scroll-spy active state. */
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-      <article
-        aria-labelledby={`${eventId}-title`}
-        className={cn(
-          "group relative grid gap-4 py-6 md:grid-cols-[1fr_auto_1fr] md:gap-8",
-          className,
-        )}
-        data-event-id={eventId}
-        data-featured={featured ? "true" : undefined}
-        id={eventId}
-        onFocus={handleFocusEvent}
-        ref={refCallback}
-        {...rest}
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    <article
+      aria-labelledby={`${eventId}-title`}
+      className={cn(
+        "group relative grid gap-4 py-6 md:grid-cols-[1fr_auto_1fr] md:gap-8",
+        className,
+      )}
+      data-event-id={eventId}
+      data-featured={featured ? "true" : undefined}
+      id={eventId}
+      onFocus={handleFocusEvent}
+      ref={refCallback}
+      {...rest}
+    >
+      <DateColumn date={date} />
+      <RailColumn featured={featured} />
+      <EventCard
+        date={date}
+        eventId={eventId}
+        featured={featured}
+        media={media}
+        subtitle={subtitle}
+        title={title}
       >
-        <DateColumn date={date} />
-        <RailColumn featured={featured} />
-        <EventCard
-          date={date}
-          eventId={eventId}
-          featured={featured}
-          media={media}
-          subtitle={subtitle}
-          title={title}
-        >
-          {children}
-        </EventCard>
-      </article>
-    );
-  },
-);
+        {children}
+      </EventCard>
+    </article>
+  );
+};
 ChronoEvent.displayName = "ChronoEvent";
 
 type ProgressStripProps = {
@@ -480,10 +480,10 @@ function EventList({ activeId, children }: EventListProps): ReactNode {
  *
  * @public
  */
-export const ChronologicalTimeline = forwardRef<
-  HTMLElement,
-  ChronologicalTimelineProps
->((props, ref) => {
+export const ChronologicalTimeline = ({
+  ref,
+  ...props
+}: ChronologicalTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
   const {
     children,
     className,
@@ -523,7 +523,7 @@ export const ChronologicalTimeline = forwardRef<
       </section>
     </ChronoContext.Provider>
   );
-});
+};
 ChronologicalTimeline.displayName = "ChronologicalTimeline";
 
 function isReactElementWithEventId(

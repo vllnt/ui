@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-  useMemo,
-} from "react";
+import { type ComponentPropsWithoutRef, type ReactNode, useMemo } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -373,54 +368,55 @@ function TrackRow({ endYear, startYear, track }: TrackRowProps): ReactNode {
  *
  * @public
  */
-export const ParallelTimeline = forwardRef<HTMLElement, ParallelTimelineProps>(
-  (props, ref) => {
-    const {
-      className,
-      endYear,
-      eras = [],
-      labels,
-      startYear,
-      tickCount = DEFAULT_TICK_COUNT,
-      tracks,
-      ...rest
-    } = props;
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const ticks = useMemo(
-      () => buildTicks(startYear, endYear, tickCount),
-      [endYear, startYear, tickCount],
-    );
+export const ParallelTimeline = ({
+  ref,
+  ...props
+}: ParallelTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    className,
+    endYear,
+    eras = [],
+    labels,
+    startYear,
+    tickCount = DEFAULT_TICK_COUNT,
+    tracks,
+    ...rest
+  } = props;
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const ticks = useMemo(
+    () => buildTicks(startYear, endYear, tickCount),
+    [endYear, startYear, tickCount],
+  );
 
-    return (
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "flex w-full flex-col overflow-x-auto rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <div className="flex items-stretch gap-3 border-b border-border">
-          <div aria-hidden="true" className="w-32 shrink-0" />
-          <Axis ticks={ticks} />
-        </div>
-        <div className="relative">
-          <EraBands endYear={endYear} eras={eras} startYear={startYear} />
-          {tracks.map((track) => (
-            <TrackRow
-              endYear={endYear}
-              key={track.id}
-              startYear={startYear}
-              track={track}
-            />
-          ))}
-        </div>
-      </section>
-    );
-  },
-);
+  return (
+    <section
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "flex w-full flex-col overflow-x-auto rounded-2xl border bg-background text-foreground",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      <div className="flex items-stretch gap-3 border-b border-border">
+        <div aria-hidden="true" className="w-32 shrink-0" />
+        <Axis ticks={ticks} />
+      </div>
+      <div className="relative">
+        <EraBands endYear={endYear} eras={eras} startYear={startYear} />
+        {tracks.map((track) => (
+          <TrackRow
+            endYear={endYear}
+            key={track.id}
+            startYear={startYear}
+            track={track}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
 ParallelTimeline.displayName = "ParallelTimeline";

@@ -148,46 +148,42 @@ export type StatusIndicatorProps = React.HTMLAttributes<HTMLSpanElement> &
     showDot?: boolean;
   };
 
-const StatusIndicator = React.forwardRef<HTMLSpanElement, StatusIndicatorProps>(
-  (
-    {
-      children,
-      className,
-      label,
-      pulse = false,
-      showDot = true,
-      size,
-      tone,
-      variant,
-      ...props
-    },
-    reference,
-  ) => {
-    const content = children ?? label;
+const StatusIndicator = ({
+  children,
+  className,
+  label,
+  pulse = false,
+  ref: reference,
+  showDot = true,
+  size,
+  tone,
+  variant,
+  ...props
+}: StatusIndicatorProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  const content = children ?? label;
 
-    return (
-      <span
-        className={cn(
-          statusIndicatorVariants({ size, tone, variant }),
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        {showDot ? (
-          <span
-            aria-hidden="true"
-            className={cn(
-              dotVariants({ size, tone }),
-              pulse ? "animate-pulse" : undefined,
-            )}
-          />
-        ) : null}
-        {content}
-      </span>
-    );
-  },
-);
+  return (
+    <span
+      className={cn(
+        statusIndicatorVariants({ size, tone, variant }),
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      {showDot ? (
+        <span
+          aria-hidden="true"
+          className={cn(
+            dotVariants({ size, tone }),
+            pulse ? "animate-pulse" : undefined,
+          )}
+        />
+      ) : null}
+      {content}
+    </span>
+  );
+};
 
 StatusIndicator.displayName = "StatusIndicator";
 

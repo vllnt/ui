@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useState,
@@ -97,7 +96,7 @@ type QuizCtx = {
 const QuizContext = createContext<null | QuizCtx>(null);
 
 function useQuizContext(): QuizCtx {
-  const ctx = useContext(QuizContext);
+  const ctx = use(QuizContext);
   if (!ctx) {
     throw new Error("GeographyQuizMap subcomponent used outside its root.");
   }
@@ -142,7 +141,9 @@ export type GeographyQuizMapProps = {
   questions: QuizQuestion[];
   /** Region polygons. */
   regions: QuizRegion[];
-} & ComponentPropsWithoutRef<"section">;
+} & ComponentPropsWithoutRef<"section"> & {
+    ref?: React.Ref<HTMLElement>;
+  };
 
 type RegionPathProps = {
   disabled: boolean;
@@ -273,10 +274,11 @@ function Stage({
  *
  * @public
  */
-export const GeographyQuizMapPrompt = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ className, ...rest }, ref) => {
+export const GeographyQuizMapPrompt = ({
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
   const { current, phase } = useQuizContext();
   if (phase !== "playing" || !current) return null;
   return (
@@ -292,7 +294,7 @@ export const GeographyQuizMapPrompt = forwardRef<
       {current.prompt}
     </div>
   );
-});
+};
 GeographyQuizMapPrompt.displayName = "GeographyQuizMapPrompt";
 
 /**
@@ -300,10 +302,11 @@ GeographyQuizMapPrompt.displayName = "GeographyQuizMapPrompt";
  *
  * @public
  */
-export const GeographyQuizMapScore = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ className, ...rest }, ref) => {
+export const GeographyQuizMapScore = ({
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
   const { answers, totalQuestions } = useQuizContext();
   const correct = answers.filter((entry) => entry.correct).length;
   const accuracy =
@@ -321,7 +324,7 @@ export const GeographyQuizMapScore = forwardRef<
       {`${correct.toString()} / ${totalQuestions.toString()} · ${accuracy.toString()}%`}
     </div>
   );
-});
+};
 GeographyQuizMapScore.displayName = "GeographyQuizMapScore";
 
 /**
@@ -330,10 +333,11 @@ GeographyQuizMapScore.displayName = "GeographyQuizMapScore";
  *
  * @public
  */
-export const GeographyQuizMapResults = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ className, ...rest }, ref) => {
+export const GeographyQuizMapResults = ({
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => {
   const { answers, phase, totalQuestions } = useQuizContext();
   if (phase !== "complete") return null;
   const correct = answers.filter((entry) => entry.correct).length;
@@ -370,7 +374,7 @@ export const GeographyQuizMapResults = forwardRef<
       </ol>
     </div>
   );
-});
+};
 GeographyQuizMapResults.displayName = "GeographyQuizMapResults";
 
 type QuizState = {
@@ -477,77 +481,76 @@ function scheduleAdvance(
  *
  * @public
  */
-export const GeographyQuizMap = forwardRef<HTMLElement, GeographyQuizMapProps>(
-  (props, ref) => {
-    const {
-      backdrop,
-      backdropAlt,
-      children,
-      className,
-      labels,
-      onComplete,
-      questions,
-      regions,
-      ...rest
-    } = props;
-    const titleId = useId();
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const { handleSelect, state } = useQuizState({ onComplete, questions });
+export const GeographyQuizMap = (props: GeographyQuizMapProps) => {
+  const {
+    backdrop,
+    backdropAlt,
+    children,
+    className,
+    labels,
+    onComplete,
+    questions,
+    ref,
+    regions,
+    ...rest
+  } = props;
+  const titleId = useId();
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const { handleSelect, state } = useQuizState({ onComplete, questions });
 
-    const phase: Phase =
-      state.questionIndex >= questions.length ? "complete" : "playing";
-    const current = questions[state.questionIndex];
+  const phase: Phase =
+    state.questionIndex >= questions.length ? "complete" : "playing";
+  const current = questions[state.questionIndex];
 
-    const ctx = useMemo<QuizCtx>(
-      () => ({
-        answers: state.answers,
-        current,
-        feedback: state.feedback,
-        phase,
-        questionIndex: state.questionIndex,
-        totalQuestions: questions.length,
-      }),
-      [
-        current,
-        phase,
-        questions.length,
-        state.answers,
-        state.feedback,
-        state.questionIndex,
-      ],
-    );
+  const ctx = useMemo<QuizCtx>(
+    () => ({
+      answers: state.answers,
+      current,
+      feedback: state.feedback,
+      phase,
+      questionIndex: state.questionIndex,
+      totalQuestions: questions.length,
+    }),
+    [
+      current,
+      phase,
+      questions.length,
+      state.answers,
+      state.feedback,
+      state.questionIndex,
+    ],
+  );
 
-    return (
-      <QuizContext.Provider value={ctx}>
-        <section
-          aria-labelledby={titleId}
-          className={cn(
-            "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
-            className,
-          )}
-          ref={ref}
-          {...rest}
-        >
-          <span className="sr-only" id={titleId}>
-            {resolvedLabels.region}
-          </span>
-          <Stage
-            backdrop={backdrop}
-            backdropAlt={backdropAlt}
-            current={current}
-            disabled={phase === "complete" || Boolean(state.feedback)}
-            feedback={state.feedback}
-            onSelect={handleSelect}
-            regions={regions}
-            selectedRegionId={state.selectedRegionId}
-          />
-          {children}
-        </section>
-      </QuizContext.Provider>
-    );
-  },
-);
+  return (
+    <QuizContext.Provider value={ctx}>
+      <section
+        aria-labelledby={titleId}
+        className={cn(
+          "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
+          className,
+        )}
+        ref={ref}
+        {...rest}
+      >
+        <span className="sr-only" id={titleId}>
+          {resolvedLabels.region}
+        </span>
+        <Stage
+          backdrop={backdrop}
+          backdropAlt={backdropAlt}
+          current={current}
+          disabled={phase === "complete" || Boolean(state.feedback)}
+          feedback={state.feedback}
+          onSelect={handleSelect}
+          regions={regions}
+          selectedRegionId={state.selectedRegionId}
+        />
+        {children}
+      </section>
+    </QuizContext.Provider>
+  );
+};
 GeographyQuizMap.displayName = "GeographyQuizMap";

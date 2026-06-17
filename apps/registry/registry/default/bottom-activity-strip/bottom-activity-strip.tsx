@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -151,10 +147,10 @@ const Chip = (props: { event: ActivityEvent }): React.ReactElement => {
  *
  * @public
  */
-export const BottomActivityStrip = forwardRef<
-  HTMLElement,
-  BottomActivityStripProps
->((props, ref) => {
+export const BottomActivityStrip = ({
+  ref,
+  ...props
+}: BottomActivityStripProps & { ref?: React.Ref<HTMLElement> }) => {
   const { className, events, labels, maxEvents, ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const visible =
@@ -184,5 +180,5 @@ export const BottomActivityStrip = forwardRef<
       )}
     </section>
   );
-});
+};
 BottomActivityStrip.displayName = "BottomActivityStrip";

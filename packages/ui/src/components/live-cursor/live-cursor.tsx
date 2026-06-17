@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -59,55 +55,56 @@ export type LiveCursorProps = {
  *
  * @public
  */
-export const LiveCursor = forwardRef<HTMLDivElement, LiveCursorProps>(
-  (props, ref) => {
-    const { className, color, labels, name, status, x, y, ...rest } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const resolvedColor = color ?? "var(--foreground)";
-    return (
-      <div
-        aria-label={
-          typeof name === "string"
-            ? `${resolvedLabels.region}: ${name}`
-            : resolvedLabels.region
-        }
-        className={cn(
-          "pointer-events-none absolute z-30 flex items-start gap-1",
-          className,
-        )}
-        data-live-cursor
-        ref={ref}
-        role="img"
-        style={{ left: x, top: y }}
-        {...rest}
+export const LiveCursor = ({
+  ref,
+  ...props
+}: LiveCursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const { className, color, labels, name, status, x, y, ...rest } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const resolvedColor = color ?? "var(--foreground)";
+  return (
+    <div
+      aria-label={
+        typeof name === "string"
+          ? `${resolvedLabels.region}: ${name}`
+          : resolvedLabels.region
+      }
+      className={cn(
+        "pointer-events-none absolute z-30 flex items-start gap-1",
+        className,
+      )}
+      data-live-cursor
+      ref={ref}
+      role="img"
+      style={{ left: x, top: y }}
+      {...rest}
+    >
+      <svg
+        aria-hidden="true"
+        className="-ml-1 -mt-1 drop-shadow-sm"
+        data-live-cursor-pointer
+        fill={resolvedColor}
+        height={18}
+        viewBox="0 0 16 18"
+        width={16}
       >
-        <svg
-          aria-hidden="true"
-          className="-ml-1 -mt-1 drop-shadow-sm"
-          data-live-cursor-pointer
-          fill={resolvedColor}
-          height={18}
-          viewBox="0 0 16 18"
-          width={16}
+        <path d="M0 0 L0 14 L4 11 L7 17 L10 16 L7 10 L13 10 Z" />
+      </svg>
+      {name === null || name === undefined ? null : (
+        <span
+          className="ml-2 mt-2 inline-flex flex-col rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
+          data-live-cursor-chip
+          style={{ backgroundColor: resolvedColor }}
         >
-          <path d="M0 0 L0 14 L4 11 L7 17 L10 16 L7 10 L13 10 Z" />
-        </svg>
-        {name === null || name === undefined ? null : (
-          <span
-            className="ml-2 mt-2 inline-flex flex-col rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
-            data-live-cursor-chip
-            style={{ backgroundColor: resolvedColor }}
-          >
-            <span>{name}</span>
-            {status ? (
-              <span className="text-[9px] opacity-80" data-live-cursor-status>
-                {status}
-              </span>
-            ) : null}
-          </span>
-        )}
-      </div>
-    );
-  },
-);
+          <span>{name}</span>
+          {status ? (
+            <span className="text-[9px] opacity-80" data-live-cursor-status>
+              {status}
+            </span>
+          ) : null}
+        </span>
+      )}
+    </div>
+  );
+};
 LiveCursor.displayName = "LiveCursor";
