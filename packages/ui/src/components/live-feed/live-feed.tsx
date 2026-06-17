@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { normalizeDate } from "../../lib/format";
+import { useLiveDate } from "../../lib/use-live-date";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 import {
@@ -39,39 +41,6 @@ const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: LiveFeedProps["now"], tickMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, tickMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, tickMs]);
-
-  return liveNow;
-}
 
 function formatRelative(eventDate: Date, now: Date): string {
   const deltaMs = now.getTime() - eventDate.getTime();

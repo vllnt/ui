@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import type { HeadingTag } from "../../lib/types";
+import { useLiveDate } from "../../lib/use-live-date";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 
@@ -21,39 +22,6 @@ export type WorldClockBarProps = React.ComponentPropsWithoutRef<"div"> & {
   updateIntervalMs?: number;
   zones: WorldClockBarZone[];
 };
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: WorldClockBarProps["now"], updateIntervalMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, updateIntervalMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, updateIntervalMs]);
-
-  return liveNow;
-}
 
 const TIME_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
 function getTimeFormatter(

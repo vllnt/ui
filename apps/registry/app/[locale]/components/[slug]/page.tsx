@@ -30,20 +30,19 @@ import {
   getPlaygroundExample,
   getRegistryPackageVersion,
 } from "@/lib/playground";
+import { registry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
 import {
   getCategoryForComponent,
   getSidebarSections,
 } from "@/lib/sidebar-sections";
-import registryData from "@/registry.json";
-import type { Registry, RegistryComponent } from "@/types/registry";
+import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const registry = registryData as Registry;
 const metadata_map = componentMetadata as Record<
   string,
   {

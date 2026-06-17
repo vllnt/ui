@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
-
 import { Check, Code, Copy, FileCode } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Button } from "@vllnt/ui";
+import { useCopyToClipboard } from "@vllnt/ui";
 
 type CodeLineProps = {
   highlightLines: number[];
@@ -51,16 +50,12 @@ export function CodePlayground({
   showLineNumbers = false,
   title,
 }: CodePlaygroundProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   const code = typeof children === "string" ? children : "";
   const lines = code.split("\n");
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+  const handleCopy = () => {
+    void copy(code);
   };
 
   return (

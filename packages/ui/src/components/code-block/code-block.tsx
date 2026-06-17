@@ -14,6 +14,7 @@ import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
+import { useCopyToClipboard } from "../copy-button/copy-button";
 
 type PrismStyle = SyntaxHighlighterProps["style"];
 
@@ -67,7 +68,7 @@ export function CodeBlock({
   language = "typescript",
   showLanguage = false,
 }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   // react-syntax-highlighter (~10MB) is dynamic-imported on mount so the
   // @vllnt/ui barrel's static graph never reaches it — barrel consumers that
   // never render a CodeBlock ship zero bytes of it. Null until the chunk loads.
@@ -119,12 +120,8 @@ export function CodeBlock({
     };
   }, []);
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+  const handleCopy = () => {
+    void copy(code);
   };
 
   const SyntaxHighlighter = highlighter?.SyntaxHighlighter;
