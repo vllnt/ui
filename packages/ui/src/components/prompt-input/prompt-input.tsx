@@ -85,7 +85,7 @@ function usePromptInput({
   isControlled: boolean;
   onSubmit?: (value: string) => void;
   onValueChange?: (value: string) => void;
-  ref: React.Ref<HTMLTextAreaElement> | undefined;
+  ref?: React.Ref<HTMLTextAreaElement>;
   value?: string;
 }) {
   const { assignRef, innerRef } = useMergedRef(ref);
