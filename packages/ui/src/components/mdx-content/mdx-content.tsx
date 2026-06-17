@@ -14,6 +14,12 @@ type MDXContentProps = {
   enableMDX?: boolean;
 };
 
+function extractCodeText(node: React.ReactNode): string {
+  return typeof node === "string"
+    ? node.replace(/\n$/, "")
+    : String(node ?? "");
+}
+
 const MDXComponents: Components = {
   a: ({ children, href, ...props }: React.ComponentProps<"a">) => (
     <a
@@ -35,10 +41,7 @@ const MDXComponents: Components = {
   code: ({ children, className, ...props }: React.ComponentProps<"code">) => {
     if (typeof className === "string" && className.startsWith("language-")) {
       const language = className.replace(/^language-/, "");
-      const text =
-        typeof children === "string"
-          ? children.replace(/\n$/, "")
-          : String(children ?? "");
+      const text = extractCodeText(children);
       return <StaticCode code={text} language={language} />;
     }
     return (

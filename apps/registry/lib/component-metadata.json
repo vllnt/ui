@@ -732,6 +732,27 @@
     ],
     "title": "Category Filter"
   },
+  "chain-of-thought": {
+    "category": "ai",
+    "defaultStoryId": "ai-chainofthought--default",
+    "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
+    "name": "chain-of-thought",
+    "stories": [
+      {
+        "id": "ai-chainofthought--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chainofthought--with-error",
+        "name": "With Error"
+      },
+      {
+        "id": "ai-chainofthought--all-complete",
+        "name": "All Complete"
+      }
+    ],
+    "title": "Chain of Thought"
+  },
   "chat-dock-section": {
     "category": "ai",
     "defaultStoryId": "layout-chatdocksection--default",
@@ -2871,6 +2892,31 @@
     ],
     "title": "Progress Tracker"
   },
+  "prompt-input": {
+    "category": "ai",
+    "defaultStoryId": "ai-promptinput--default",
+    "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
+    "name": "prompt-input",
+    "stories": [
+      {
+        "id": "ai-promptinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-promptinput--loading",
+        "name": "Loading"
+      },
+      {
+        "id": "ai-promptinput--with-toolbar",
+        "name": "With Toolbar"
+      },
+      {
+        "id": "ai-promptinput--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Prompt Input"
+  },
   "prompt-templates": {
     "category": "ai",
     "defaultStoryId": "codereview--default",
@@ -2988,6 +3034,27 @@
       }
     ],
     "title": "Rating"
+  },
+  "reasoning": {
+    "category": "ai",
+    "defaultStoryId": "ai-reasoning--default",
+    "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
+    "name": "reasoning",
+    "stories": [
+      {
+        "id": "ai-reasoning--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-reasoning--streaming",
+        "name": "Streaming"
+      },
+      {
+        "id": "ai-reasoning--free-form",
+        "name": "Free Form"
+      }
+    ],
+    "title": "Reasoning"
   },
   "relationship-inspector": {
     "category": "content",

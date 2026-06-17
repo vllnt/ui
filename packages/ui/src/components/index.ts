@@ -1361,6 +1361,14 @@ export {
 } from "./model-selector";
 export { SidebarToggle, type SidebarToggleProps } from "./sidebar-toggle";
 export { ThinkingBlock, type ThinkingBlockProps } from "./thinking-block";
+export { Reasoning, type ReasoningProps } from "./reasoning";
+export {
+  ChainOfThought,
+  type ChainOfThoughtProps,
+  type ChainOfThoughtStatus,
+  type ChainOfThoughtStep,
+} from "./chain-of-thought";
+export { PromptInput, type PromptInputProps } from "./prompt-input";
 
 // Core primitives (#412)
 export {
