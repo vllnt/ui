@@ -1601,6 +1601,23 @@
     ],
     "title": "Globe 3D"
   },
+  "grid": {
+    "category": "core",
+    "defaultStoryId": "core-grid--default",
+    "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
+    "name": "grid",
+    "stories": [
+      {
+        "id": "core-grid--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-grid--responsive",
+        "name": "Responsive"
+      }
+    ],
+    "title": "Grid"
+  },
   "group-hull": {
     "category": "utility",
     "defaultStoryId": "canvas-grouphull--default",
@@ -2043,6 +2060,31 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "link": {
+    "category": "core",
+    "defaultStoryId": "core-link--default",
+    "description": "Styled anchor with emphasis variants and an external-link affordance.",
+    "name": "link",
+    "stories": [
+      {
+        "id": "core-link--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-link--muted",
+        "name": "Muted"
+      },
+      {
+        "id": "core-link--underline",
+        "name": "Underline"
+      },
+      {
+        "id": "core-link--external",
+        "name": "External"
+      }
+    ],
+    "title": "Link"
+  },
   "live-cursor": {
     "category": "utility",
     "defaultStoryId": "canvas-livecursor--default",
@@ -2202,6 +2244,27 @@
       }
     ],
     "title": "Menubar"
+  },
+  "meter": {
+    "category": "core",
+    "defaultStoryId": "core-meter--default",
+    "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
+    "name": "meter",
+    "stories": [
+      {
+        "id": "core-meter--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-meter--destructive",
+        "name": "Destructive"
+      },
+      {
+        "id": "core-meter--segmented",
+        "name": "Segmented"
+      }
+    ],
+    "title": "Meter"
   },
   "metric-cluster": {
     "category": "data",
@@ -2524,6 +2587,23 @@
       }
     ],
     "title": "Pagination"
+  },
+  "panel": {
+    "category": "core",
+    "defaultStoryId": "core-panel--default",
+    "description": "Bordered, titled content surface with header, body, and footer slots.",
+    "name": "panel",
+    "stories": [
+      {
+        "id": "core-panel--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-panel--header-and-body-only",
+        "name": "Header And Body Only"
+      }
+    ],
+    "title": "Panel"
   },
   "parallel-timeline": {
     "category": "educational",
@@ -2886,6 +2966,27 @@
       }
     ],
     "title": "Property Section"
+  },
+  "qr-code": {
+    "category": "core",
+    "defaultStoryId": "core-qrcode--default",
+    "description": "Renders a QR code from a string value as a theme-aware SVG.",
+    "name": "qr-code",
+    "stories": [
+      {
+        "id": "core-qrcode--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-qrcode--high-error-correction",
+        "name": "High Error Correction"
+      },
+      {
+        "id": "core-qrcode--small",
+        "name": "Small"
+      }
+    ],
+    "title": "QR Code"
   },
   "quiz": {
     "category": "learning",
@@ -4053,6 +4154,23 @@
     ],
     "title": "Toggle Group"
   },
+  "toolbar": {
+    "category": "core",
+    "defaultStoryId": "core-toolbar--default",
+    "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
+    "name": "toolbar",
+    "stories": [
+      {
+        "id": "core-toolbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-toolbar--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Toolbar"
+  },
   "tooltip": {
     "category": "overlay",
     "defaultStoryId": "overlay-tooltip--default",
@@ -4223,6 +4341,31 @@
       }
     ],
     "title": "Tutorial MDX"
+  },
+  "typography": {
+    "category": "core",
+    "defaultStoryId": "core-typography--headings",
+    "description": "Semantic text primitives: headings, paragraph, lead, muted, blockquote, inline code, and list.",
+    "name": "typography",
+    "stories": [
+      {
+        "id": "core-typography--headings",
+        "name": "Headings"
+      },
+      {
+        "id": "core-typography--body",
+        "name": "Body"
+      },
+      {
+        "id": "core-typography--quote",
+        "name": "Quote"
+      },
+      {
+        "id": "core-typography--bulleted-list",
+        "name": "Bulleted List"
+      }
+    ],
+    "title": "Typography"
   },
   "usage-breakdown": {
     "category": "data",
