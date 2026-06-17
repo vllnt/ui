@@ -1869,6 +1869,25 @@
       "stability": "stable"
     },
     {
+      "name": "grid",
+      "type": "registry:component",
+      "title": "Grid",
+      "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
+      "files": [
+        {
+          "path": "registry/default/grid/grid.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "group-hull",
       "type": "registry:component",
       "title": "Group Hull",
@@ -2310,6 +2329,26 @@
       "stability": "stable"
     },
     {
+      "name": "link",
+      "type": "registry:component",
+      "title": "Link",
+      "description": "Styled anchor with emphasis variants and an external-link affordance.",
+      "files": [
+        {
+          "path": "registry/default/link/link.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "live-cursor",
       "type": "registry:component",
       "title": "Live Cursor",
@@ -2461,6 +2500,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "navigation",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "meter",
+      "type": "registry:component",
+      "title": "Meter",
+      "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
+      "files": [
+        {
+          "path": "registry/default/meter/meter.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -2809,6 +2867,25 @@
       "stability": "stable"
     },
     {
+      "name": "panel",
+      "type": "registry:component",
+      "title": "Panel",
+      "description": "Bordered, titled content surface with header, body, and footer slots.",
+      "files": [
+        {
+          "path": "registry/default/panel/panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "parallel-timeline",
       "type": "registry:component",
       "title": "Parallel Timeline",
@@ -3130,6 +3207,26 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "qr-code",
+      "type": "registry:component",
+      "title": "QR Code",
+      "description": "Renders a QR code from a string value as a theme-aware SVG.",
+      "files": [
+        {
+          "path": "registry/default/qr-code/qr-code.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "qrcode"
+      ],
+      "category": "core",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4372,6 +4469,25 @@
       "stability": "stable"
     },
     {
+      "name": "toolbar",
+      "type": "registry:component",
+      "title": "Toolbar",
+      "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
+      "files": [
+        {
+          "path": "registry/default/toolbar/toolbar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "tooltip",
       "type": "registry:component",
       "title": "Tooltip",
@@ -4581,6 +4697,25 @@
       "stability": "stable"
     },
     {
+      "name": "typography",
+      "type": "registry:component",
+      "title": "Typography",
+      "description": "Semantic text primitives: headings, paragraph, lead, muted, blockquote, inline code, and list.",
+      "files": [
+        {
+          "path": "registry/default/typography/typography.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "usage-breakdown",
       "type": "registry:component",
       "title": "Usage Breakdown",
@@ -4773,5 +4908,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-06-15T19:29:07.199Z"
+  "generatedAt": "2026-06-17T01:21:01.740Z"
 }
