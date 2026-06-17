@@ -667,6 +667,25 @@
       ]
     },
     {
+      "name": "button-group",
+      "type": "registry:component",
+      "title": "Button Group",
+      "description": "Visually connected group of buttons that share borders.",
+      "files": [
+        {
+          "path": "registry/default/button-group/button-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "calendar",
       "type": "registry:component",
       "title": "Calendar",
@@ -819,6 +838,26 @@
       "stability": "stable"
     },
     {
+      "name": "chain-of-thought",
+      "type": "registry:component",
+      "title": "Chain of Thought",
+      "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
+      "files": [
+        {
+          "path": "registry/default/chain-of-thought/chain-of-thought.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "chat-dock-section",
       "type": "registry:component",
       "title": "Chat Dock Section",
@@ -853,6 +892,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "checkbox-group",
+      "type": "registry:component",
+      "title": "Checkbox Group",
+      "description": "Group of related checkboxes backed by an array of selected values.",
+      "files": [
+        {
+          "path": "registry/default/checkbox-group/checkbox-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -987,6 +1045,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:component",
+      "title": "Color Picker",
+      "description": "Popover color picker with swatches, a hue slider, and a hex input.",
+      "files": [
+        {
+          "path": "registry/default/color-picker/color-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -1440,6 +1517,25 @@
       "stability": "stable"
     },
     {
+      "name": "date-field",
+      "type": "registry:component",
+      "title": "Date Field",
+      "description": "Native date input styled to match the design system.",
+      "files": [
+        {
+          "path": "registry/default/date-field/date-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date Picker",
@@ -1447,6 +1543,25 @@
       "files": [
         {
           "path": "registry/default/date-picker/date-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:component",
+      "title": "Date Range Picker",
+      "description": "Popover calendar for selecting a start and end date.",
+      "files": [
+        {
+          "path": "registry/default/date-range-picker/date-range-picker.tsx",
           "type": "registry:component"
         }
       ],
@@ -1656,6 +1771,44 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "field",
+      "type": "registry:component",
+      "title": "Field",
+      "description": "Layout wrapper pairing a label, control, description, and error message.",
+      "files": [
+        {
+          "path": "registry/default/field/field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "fieldset",
+      "type": "registry:component",
+      "title": "Fieldset",
+      "description": "Groups related fields under a shared legend.",
+      "files": [
+        {
+          "path": "registry/default/fieldset/fieldset.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -1907,6 +2060,25 @@
       "stability": "stable"
     },
     {
+      "name": "grid",
+      "type": "registry:component",
+      "title": "Grid",
+      "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
+      "files": [
+        {
+          "path": "registry/default/grid/grid.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "group-hull",
       "type": "registry:component",
       "title": "Group Hull",
@@ -2118,6 +2290,25 @@
       "stability": "stable"
     },
     {
+      "name": "input-group",
+      "type": "registry:component",
+      "title": "Input Group",
+      "description": "Groups an input with leading or trailing addons.",
+      "files": [
+        {
+          "path": "registry/default/input-group/input-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "input-otp",
       "type": "registry:component",
       "title": "Input OTP",
@@ -2152,6 +2343,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "item",
+      "type": "registry:component",
+      "title": "Item",
+      "description": "Flexible row layout with leading media, content, and trailing actions.",
+      "files": [
+        {
+          "path": "registry/default/item/item.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -2348,6 +2558,45 @@
       "stability": "stable"
     },
     {
+      "name": "link",
+      "type": "registry:component",
+      "title": "Link",
+      "description": "Styled anchor with emphasis variants and an external-link affordance.",
+      "files": [
+        {
+          "path": "registry/default/link/link.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "list-box",
+      "type": "registry:component",
+      "title": "List Box",
+      "description": "Accessible single- or multi-select list of options.",
+      "files": [
+        {
+          "path": "registry/default/list-box/list-box.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "live-cursor",
       "type": "registry:component",
       "title": "Live Cursor",
@@ -2503,6 +2752,25 @@
       "stability": "stable"
     },
     {
+      "name": "meter",
+      "type": "registry:component",
+      "title": "Meter",
+      "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
+      "files": [
+        {
+          "path": "registry/default/meter/meter.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "metric-cluster",
       "type": "registry:component",
       "title": "Metric Cluster",
@@ -2633,6 +2901,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "utility",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "native-select",
+      "type": "registry:component",
+      "title": "Native Select",
+      "description": "Styled wrapper around the native select element.",
+      "files": [
+        {
+          "path": "registry/default/native-select/native-select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -2847,6 +3134,25 @@
       "stability": "stable"
     },
     {
+      "name": "panel",
+      "type": "registry:component",
+      "title": "Panel",
+      "description": "Bordered, titled content surface with header, body, and footer slots.",
+      "files": [
+        {
+          "path": "registry/default/panel/panel.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "parallel-timeline",
       "type": "registry:component",
       "title": "Parallel Timeline",
@@ -2873,6 +3179,25 @@
       "files": [
         {
           "path": "registry/default/password-input/password-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "phone-input",
+      "type": "registry:component",
+      "title": "Phone Input",
+      "description": "Phone number input with a country dialing-code selector.",
+      "files": [
+        {
+          "path": "registry/default/phone-input/phone-input.tsx",
           "type": "registry:component"
         }
       ],
@@ -3152,6 +3477,26 @@
       "stability": "stable"
     },
     {
+      "name": "prompt-input",
+      "type": "registry:component",
+      "title": "Prompt Input",
+      "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
+      "files": [
+        {
+          "path": "registry/default/prompt-input/prompt-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "prompt-templates",
       "type": "registry:component",
       "title": "Prompt Templates",
@@ -3187,6 +3532,26 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "qr-code",
+      "type": "registry:component",
+      "title": "QR Code",
+      "description": "Renders a QR code from a string value as a theme-aware SVG.",
+      "files": [
+        {
+          "path": "registry/default/qr-code/qr-code.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "qrcode"
+      ],
+      "category": "core",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -3248,6 +3613,25 @@
       "stability": "stable"
     },
     {
+      "name": "range-calendar",
+      "type": "registry:component",
+      "title": "Range Calendar",
+      "description": "Calendar that selects a start and end date as a range.",
+      "files": [
+        {
+          "path": "registry/default/range-calendar/range-calendar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "rating",
       "type": "registry:component",
       "title": "Rating",
@@ -3263,6 +3647,26 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "reasoning",
+      "type": "registry:component",
+      "title": "Reasoning",
+      "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
+      "files": [
+        {
+          "path": "registry/default/reasoning/reasoning.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1",
+        "lucide-react"
+      ],
+      "category": "ai",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -3510,6 +3914,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "search-field",
+      "type": "registry:component",
+      "title": "Search Field",
+      "description": "Search input with a leading icon and a clear button.",
+      "files": [
+        {
+          "path": "registry/default/search-field/search-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4142,6 +4565,25 @@
       "stability": "stable"
     },
     {
+      "name": "tag-group",
+      "type": "registry:component",
+      "title": "Tag Group",
+      "description": "Set of tags supporting selection and removal.",
+      "files": [
+        {
+          "path": "registry/default/tag-group/tag-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "tags-input",
       "type": "registry:component",
       "title": "Tags Input",
@@ -4176,6 +4618,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "text-field",
+      "type": "registry:component",
+      "title": "Text Field",
+      "description": "Labelled text input bundling description and error message.",
+      "files": [
+        {
+          "path": "registry/default/text-field/text-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4352,6 +4813,44 @@
       "stability": "stable"
     },
     {
+      "name": "time-field",
+      "type": "registry:component",
+      "title": "Time Field",
+      "description": "Native time input styled to match the design system.",
+      "files": [
+        {
+          "path": "registry/default/time-field/time-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "time-picker",
+      "type": "registry:component",
+      "title": "Time Picker",
+      "description": "Popover time selector built from hour and minute columns.",
+      "files": [
+        {
+          "path": "registry/default/time-picker/time-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "timeline",
       "type": "registry:component",
       "title": "Timeline",
@@ -4455,6 +4954,25 @@
       "files": [
         {
           "path": "registry/default/toggle-group/toggle-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "toolbar",
+      "type": "registry:component",
+      "title": "Toolbar",
+      "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
+      "files": [
+        {
+          "path": "registry/default/toolbar/toolbar.tsx",
           "type": "registry:component"
         }
       ],
@@ -4676,6 +5194,25 @@
       "stability": "stable"
     },
     {
+      "name": "typography",
+      "type": "registry:component",
+      "title": "Typography",
+      "description": "Semantic text primitives: headings, paragraph, lead, muted, blockquote, inline code, and list.",
+      "files": [
+        {
+          "path": "registry/default/typography/typography.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "usage-breakdown",
       "type": "registry:component",
       "title": "Usage Breakdown",
@@ -4868,5 +5405,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-06-17T01:29:45.593Z"
+  "generatedAt": "2026-06-17T20:07:25.571Z"
 }

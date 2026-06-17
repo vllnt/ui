@@ -620,6 +620,23 @@
     ],
     "title": "Button"
   },
+  "button-group": {
+    "category": "form",
+    "defaultStoryId": "form-buttongroup--default",
+    "description": "Visually connected group of buttons that share borders.",
+    "name": "button-group",
+    "stories": [
+      {
+        "id": "form-buttongroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-buttongroup--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Button Group"
+  },
   "calendar": {
     "category": "form",
     "defaultStoryId": "form-calendar--default",
@@ -732,6 +749,27 @@
     ],
     "title": "Category Filter"
   },
+  "chain-of-thought": {
+    "category": "ai",
+    "defaultStoryId": "ai-chainofthought--default",
+    "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
+    "name": "chain-of-thought",
+    "stories": [
+      {
+        "id": "ai-chainofthought--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chainofthought--with-error",
+        "name": "With Error"
+      },
+      {
+        "id": "ai-chainofthought--all-complete",
+        "name": "All Complete"
+      }
+    ],
+    "title": "Chain of Thought"
+  },
   "chat-dock-section": {
     "category": "ai",
     "defaultStoryId": "layout-chatdocksection--default",
@@ -757,6 +795,27 @@
       }
     ],
     "title": "Checkbox"
+  },
+  "checkbox-group": {
+    "category": "form",
+    "defaultStoryId": "form-checkboxgroup--default",
+    "description": "Group of related checkboxes backed by an array of selected values.",
+    "name": "checkbox-group",
+    "stories": [
+      {
+        "id": "form-checkboxgroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-checkboxgroup--horizontal",
+        "name": "Horizontal"
+      },
+      {
+        "id": "form-checkboxgroup--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Checkbox Group"
   },
   "checklist": {
     "category": "learning",
@@ -896,6 +955,23 @@
       }
     ],
     "title": "Collapsible"
+  },
+  "color-picker": {
+    "category": "form",
+    "defaultStoryId": "form-colorpicker--default",
+    "description": "Popover color picker with swatches, a hue slider, and a hex input.",
+    "name": "color-picker",
+    "stories": [
+      {
+        "id": "form-colorpicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-colorpicker--custom-default",
+        "name": "Custom Default"
+      }
+    ],
+    "title": "Color Picker"
   },
   "combobox": {
     "category": "form",
@@ -1211,6 +1287,23 @@
     ],
     "title": "Data Table"
   },
+  "date-field": {
+    "category": "form",
+    "defaultStoryId": "form-datefield--default",
+    "description": "Native date input styled to match the design system.",
+    "name": "date-field",
+    "stories": [
+      {
+        "id": "form-datefield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datefield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Field"
+  },
   "date-picker": {
     "category": "form",
     "defaultStoryId": "form-datepicker--default",
@@ -1227,6 +1320,23 @@
       }
     ],
     "title": "Date Picker"
+  },
+  "date-range-picker": {
+    "category": "form",
+    "defaultStoryId": "form-daterangepicker--default",
+    "description": "Popover calendar for selecting a start and end date.",
+    "name": "date-range-picker",
+    "stories": [
+      {
+        "id": "form-daterangepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-daterangepicker--preselected",
+        "name": "Preselected"
+      }
+    ],
+    "title": "Date Range Picker"
   },
   "dialog": {
     "category": "overlay",
@@ -1392,6 +1502,44 @@
       }
     ],
     "title": "FAQ"
+  },
+  "field": {
+    "category": "form",
+    "defaultStoryId": "form-field--default",
+    "description": "Layout wrapper pairing a label, control, description, and error message.",
+    "name": "field",
+    "stories": [
+      {
+        "id": "form-field--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-field--invalid",
+        "name": "Invalid"
+      },
+      {
+        "id": "form-field--horizontal",
+        "name": "Horizontal"
+      }
+    ],
+    "title": "Field"
+  },
+  "fieldset": {
+    "category": "form",
+    "defaultStoryId": "form-fieldset--default",
+    "description": "Groups related fields under a shared legend.",
+    "name": "fieldset",
+    "stories": [
+      {
+        "id": "form-fieldset--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-fieldset--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Fieldset"
   },
   "file-upload": {
     "category": "form",
@@ -1617,6 +1765,23 @@
       }
     ],
     "title": "Globe 3D"
+  },
+  "grid": {
+    "category": "core",
+    "defaultStoryId": "core-grid--default",
+    "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
+    "name": "grid",
+    "stories": [
+      {
+        "id": "core-grid--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-grid--responsive",
+        "name": "Responsive"
+      }
+    ],
+    "title": "Grid"
   },
   "group-hull": {
     "category": "utility",
@@ -1845,6 +2010,27 @@
     ],
     "title": "Input"
   },
+  "input-group": {
+    "category": "form",
+    "defaultStoryId": "form-inputgroup--leading-icon",
+    "description": "Groups an input with leading or trailing addons.",
+    "name": "input-group",
+    "stories": [
+      {
+        "id": "form-inputgroup--leading-icon",
+        "name": "Leading Icon"
+      },
+      {
+        "id": "form-inputgroup--trailing-text",
+        "name": "Trailing Text"
+      },
+      {
+        "id": "form-inputgroup--prefix-text",
+        "name": "Prefix Text"
+      }
+    ],
+    "title": "Input Group"
+  },
   "input-otp": {
     "category": "form",
     "defaultStoryId": "form-inputotp--default",
@@ -1882,6 +2068,23 @@
       }
     ],
     "title": "Interactive Timeline"
+  },
+  "item": {
+    "category": "form",
+    "defaultStoryId": "form-item--default",
+    "description": "Flexible row layout with leading media, content, and trailing actions.",
+    "name": "item",
+    "stories": [
+      {
+        "id": "form-item--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-item--outline",
+        "name": "Outline"
+      }
+    ],
+    "title": "Item"
   },
   "jarvis-dock": {
     "category": "navigation",
@@ -2060,6 +2263,48 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "link": {
+    "category": "core",
+    "defaultStoryId": "core-link--default",
+    "description": "Styled anchor with emphasis variants and an external-link affordance.",
+    "name": "link",
+    "stories": [
+      {
+        "id": "core-link--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-link--muted",
+        "name": "Muted"
+      },
+      {
+        "id": "core-link--underline",
+        "name": "Underline"
+      },
+      {
+        "id": "core-link--external",
+        "name": "External"
+      }
+    ],
+    "title": "Link"
+  },
+  "list-box": {
+    "category": "form",
+    "defaultStoryId": "form-listbox--single-select",
+    "description": "Accessible single- or multi-select list of options.",
+    "name": "list-box",
+    "stories": [
+      {
+        "id": "form-listbox--single-select",
+        "name": "Single Select"
+      },
+      {
+        "id": "form-listbox--multi-select",
+        "name": "Multi Select"
+      }
+    ],
+    "title": "List Box"
+  },
   "live-cursor": {
     "category": "utility",
     "defaultStoryId": "canvas-livecursor--default",
@@ -2220,6 +2465,27 @@
     ],
     "title": "Menubar"
   },
+  "meter": {
+    "category": "core",
+    "defaultStoryId": "core-meter--default",
+    "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
+    "name": "meter",
+    "stories": [
+      {
+        "id": "core-meter--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-meter--destructive",
+        "name": "Destructive"
+      },
+      {
+        "id": "core-meter--segmented",
+        "name": "Segmented"
+      }
+    ],
+    "title": "Meter"
+  },
   "metric-cluster": {
     "category": "data",
     "defaultStoryId": "research2025--default",
@@ -2358,6 +2624,23 @@
       }
     ],
     "title": "Multi Select Lasso"
+  },
+  "native-select": {
+    "category": "form",
+    "defaultStoryId": "form-nativeselect--default",
+    "description": "Styled wrapper around the native select element.",
+    "name": "native-select",
+    "stories": [
+      {
+        "id": "form-nativeselect--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-nativeselect--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Native Select"
   },
   "navbar-saas": {
     "category": "navigation",
@@ -2542,6 +2825,23 @@
     ],
     "title": "Pagination"
   },
+  "panel": {
+    "category": "core",
+    "defaultStoryId": "core-panel--default",
+    "description": "Bordered, titled content surface with header, body, and footer slots.",
+    "name": "panel",
+    "stories": [
+      {
+        "id": "core-panel--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-panel--header-and-body-only",
+        "name": "Header And Body Only"
+      }
+    ],
+    "title": "Panel"
+  },
   "parallel-timeline": {
     "category": "educational",
     "defaultStoryId": "augustusbecomesemperor--default",
@@ -2579,6 +2879,23 @@
       }
     ],
     "title": "Password Input"
+  },
+  "phone-input": {
+    "category": "form",
+    "defaultStoryId": "form-phoneinput--default",
+    "description": "Phone number input with a country dialing-code selector.",
+    "name": "phone-input",
+    "stories": [
+      {
+        "id": "form-phoneinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-phoneinput--default-country",
+        "name": "Default Country"
+      }
+    ],
+    "title": "Phone Input"
   },
   "pie-chart": {
     "category": "data",
@@ -2850,6 +3167,31 @@
     ],
     "title": "Progress Tracker"
   },
+  "prompt-input": {
+    "category": "ai",
+    "defaultStoryId": "ai-promptinput--default",
+    "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
+    "name": "prompt-input",
+    "stories": [
+      {
+        "id": "ai-promptinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-promptinput--loading",
+        "name": "Loading"
+      },
+      {
+        "id": "ai-promptinput--with-toolbar",
+        "name": "With Toolbar"
+      },
+      {
+        "id": "ai-promptinput--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Prompt Input"
+  },
   "prompt-templates": {
     "category": "ai",
     "defaultStoryId": "codereview--default",
@@ -2900,6 +3242,27 @@
     ],
     "title": "Property Section"
   },
+  "qr-code": {
+    "category": "core",
+    "defaultStoryId": "core-qrcode--default",
+    "description": "Renders a QR code from a string value as a theme-aware SVG.",
+    "name": "qr-code",
+    "stories": [
+      {
+        "id": "core-qrcode--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-qrcode--high-error-correction",
+        "name": "High Error Correction"
+      },
+      {
+        "id": "core-qrcode--small",
+        "name": "Small"
+      }
+    ],
+    "title": "QR Code"
+  },
   "quiz": {
     "category": "learning",
     "defaultStoryId": "learning-quiz--default",
@@ -2947,6 +3310,27 @@
     ],
     "title": "Radio Group"
   },
+  "range-calendar": {
+    "category": "form",
+    "defaultStoryId": "form-rangecalendar--default",
+    "description": "Calendar that selects a start and end date as a range.",
+    "name": "range-calendar",
+    "stories": [
+      {
+        "id": "form-rangecalendar--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-rangecalendar--single-month",
+        "name": "Single Month"
+      },
+      {
+        "id": "form-rangecalendar--preselected",
+        "name": "Preselected"
+      }
+    ],
+    "title": "Range Calendar"
+  },
   "rating": {
     "category": "learning",
     "defaultStoryId": "learning-rating--default",
@@ -2963,6 +3347,27 @@
       }
     ],
     "title": "Rating"
+  },
+  "reasoning": {
+    "category": "ai",
+    "defaultStoryId": "ai-reasoning--default",
+    "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
+    "name": "reasoning",
+    "stories": [
+      {
+        "id": "ai-reasoning--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-reasoning--streaming",
+        "name": "Streaming"
+      },
+      {
+        "id": "ai-reasoning--free-form",
+        "name": "Free Form"
+      }
+    ],
+    "title": "Reasoning"
   },
   "relationship-inspector": {
     "category": "content",
@@ -3208,6 +3613,23 @@
       }
     ],
     "title": "Search Dialog"
+  },
+  "search-field": {
+    "category": "form",
+    "defaultStoryId": "form-searchfield--default",
+    "description": "Search input with a leading icon and a clear button.",
+    "name": "search-field",
+    "stories": [
+      {
+        "id": "form-searchfield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-searchfield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Search Field"
   },
   "segmented-control": {
     "category": "form",
@@ -3774,6 +4196,23 @@
     ],
     "title": "Tabs"
   },
+  "tag-group": {
+    "category": "form",
+    "defaultStoryId": "form-taggroup--selectable",
+    "description": "Set of tags supporting selection and removal.",
+    "name": "tag-group",
+    "stories": [
+      {
+        "id": "form-taggroup--selectable",
+        "name": "Selectable"
+      },
+      {
+        "id": "form-taggroup--removable",
+        "name": "Removable"
+      }
+    ],
+    "title": "Tag Group"
+  },
   "tags-input": {
     "category": "form",
     "defaultStoryId": "form-tagsinput--default",
@@ -3807,6 +4246,27 @@
       }
     ],
     "title": "Terminal"
+  },
+  "text-field": {
+    "category": "form",
+    "defaultStoryId": "form-textfield--default",
+    "description": "Labelled text input bundling description and error message.",
+    "name": "text-field",
+    "stories": [
+      {
+        "id": "form-textfield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-textfield--with-error",
+        "name": "With Error"
+      },
+      {
+        "id": "form-textfield--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Text Field"
   },
   "textarea": {
     "category": "core",
@@ -3953,6 +4413,40 @@
     ],
     "title": "Ticker Tape"
   },
+  "time-field": {
+    "category": "form",
+    "defaultStoryId": "form-timefield--default",
+    "description": "Native time input styled to match the design system.",
+    "name": "time-field",
+    "stories": [
+      {
+        "id": "form-timefield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-timefield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Time Field"
+  },
+  "time-picker": {
+    "category": "form",
+    "defaultStoryId": "form-timepicker--default",
+    "description": "Popover time selector built from hour and minute columns.",
+    "name": "time-picker",
+    "stories": [
+      {
+        "id": "form-timepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-timepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Time Picker"
+  },
   "timeline": {
     "category": "content",
     "defaultStoryId": "content-timeline--default",
@@ -4074,6 +4568,23 @@
       }
     ],
     "title": "Toggle Group"
+  },
+  "toolbar": {
+    "category": "core",
+    "defaultStoryId": "core-toolbar--default",
+    "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
+    "name": "toolbar",
+    "stories": [
+      {
+        "id": "core-toolbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-toolbar--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Toolbar"
   },
   "tooltip": {
     "category": "overlay",
@@ -4245,6 +4756,31 @@
       }
     ],
     "title": "Tutorial MDX"
+  },
+  "typography": {
+    "category": "core",
+    "defaultStoryId": "core-typography--headings",
+    "description": "Semantic text primitives: headings, paragraph, lead, muted, blockquote, inline code, and list.",
+    "name": "typography",
+    "stories": [
+      {
+        "id": "core-typography--headings",
+        "name": "Headings"
+      },
+      {
+        "id": "core-typography--body",
+        "name": "Body"
+      },
+      {
+        "id": "core-typography--quote",
+        "name": "Quote"
+      },
+      {
+        "id": "core-typography--bulleted-list",
+        "name": "Bulleted List"
+      }
+    ],
+    "title": "Typography"
   },
   "usage-breakdown": {
     "category": "data",
