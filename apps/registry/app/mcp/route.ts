@@ -27,30 +27,9 @@
 
 import { NextResponse } from "next/server";
 
-import registry from "../../registry.json";
-
-type RegistryItem = {
-  readonly a11y?: unknown;
-  readonly category?: string;
-  readonly dependencies?: readonly string[];
-  readonly description?: string;
-  readonly examples?: unknown;
-  readonly name: string;
-  readonly props?: unknown;
-  readonly registryDependencies?: readonly string[];
-  readonly stability?: string;
-  readonly title: string;
-  readonly version?: string;
-};
-
-type Registry = {
-  readonly generatedAt?: string;
-  readonly items: readonly RegistryItem[];
-  readonly version?: string;
-};
+import { registry as REGISTRY, type RegistryComponent } from "@/lib/registry";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
-const REGISTRY = registry as Registry;
 const PROTOCOL_VERSION = "2025-06-18";
 
 type JsonRpcRequest = {
@@ -143,7 +122,7 @@ const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
 function searchComponents(arguments_: Record<string, unknown>): {
-  items: RegistryItem[];
+  items: RegistryComponent[];
   total: number;
 } {
   const query =
@@ -179,7 +158,7 @@ function searchComponents(arguments_: Record<string, unknown>): {
 
 function getComponent(
   arguments_: Record<string, unknown>,
-): null | RegistryItem {
+): null | RegistryComponent {
   const name = typeof arguments_.name === "string" ? arguments_.name : null;
   if (!name) return null;
   return REGISTRY.items.find((item) => item.name === name) ?? null;

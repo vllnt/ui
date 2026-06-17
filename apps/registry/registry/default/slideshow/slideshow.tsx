@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 import type { HeadingTag } from "@vllnt/ui";
+import { useBodyScrollLock } from "@vllnt/ui";
 import { useMounted } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { CompletionDialog } from "@vllnt/ui";
@@ -397,12 +398,7 @@ function SlideshowImpl({
   const canGoPrevious = currentIndex > 0;
   const progress = ((currentIndex + 1) / sections.length) * 100;
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
+  useBodyScrollLock(true);
 
   const goToSection = useCallback(
     (index: number, direction: "left" | "right") => {

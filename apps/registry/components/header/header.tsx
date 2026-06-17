@@ -26,10 +26,6 @@ import registryData from "@/registry.json";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
 
-type Registry = {
-  items: { description?: string; name: string; title: string; type: string }[];
-};
-
 type HeaderProps = {
   readonly locale: Locale;
 };
@@ -38,7 +34,6 @@ export function Header({ locale }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("header");
-  const registry = registryData as Registry;
 
   const navItems = [
     { href: localizePathname("/", locale), title: t("navGetStarted") },
@@ -60,7 +55,7 @@ export function Header({ locale }: HeaderProps) {
     },
   ];
 
-  const searchItems = registry.items.reduce<
+  const searchItems = registryData.items.reduce<
     { description?: string; href?: string; id: string; title: string }[]
   >((items, item) => {
     if (item.type !== "registry:component") return items;

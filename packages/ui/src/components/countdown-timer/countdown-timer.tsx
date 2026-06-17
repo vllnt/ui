@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { normalizeDate } from "../../lib/format";
+import { useLiveDate } from "../../lib/use-live-date";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 import {
@@ -26,39 +28,6 @@ type TimerSegment = {
   label: string;
   value: string;
 };
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: CountdownTimerProps["now"], tickMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, tickMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, tickMs]);
-
-  return liveNow;
-}
 
 function getRemainingMs(deadline: Date, now: Date): number {
   return deadline.getTime() - now.getTime();
