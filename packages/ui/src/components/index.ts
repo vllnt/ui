@@ -1451,3 +1451,54 @@ export {
 } from "./model-selector";
 export { SidebarToggle, type SidebarToggleProps } from "./sidebar-toggle";
 export { ThinkingBlock, type ThinkingBlockProps } from "./thinking-block";
+export { Reasoning, type ReasoningProps } from "./reasoning";
+export {
+  ChainOfThought,
+  type ChainOfThoughtProps,
+  type ChainOfThoughtStatus,
+  type ChainOfThoughtStep,
+} from "./chain-of-thought";
+export { PromptInput, type PromptInputProps } from "./prompt-input";
+
+// Core primitives (#412)
+export {
+  Blockquote,
+  type BlockquoteProps,
+  H1,
+  H2,
+  H3,
+  H4,
+  type HeadingProps,
+  InlineCode,
+  type InlineCodeProps,
+  Lead,
+  List,
+  type ListProps,
+  Muted,
+  P,
+  type ParagraphProps,
+  type TypographyVariant,
+  typographyVariants,
+} from "./typography";
+export { Link, type LinkProps, linkVariants } from "./link";
+export {
+  Toolbar,
+  type ToolbarOrientation,
+  type ToolbarProps,
+  ToolbarSeparator,
+  type ToolbarSeparatorProps,
+} from "./toolbar";
+export { Meter, meterFillVariants, type MeterProps } from "./meter";
+export { QrCode, type QrCodeLevel, type QrCodeProps } from "./qr-code";
+export { Grid, type GridColumns, type GridGap, type GridProps } from "./grid";
+export {
+  Panel,
+  PanelBody,
+  PanelDescription,
+  type PanelDescriptionProps,
+  PanelFooter,
+  PanelHeader,
+  type PanelProps,
+  PanelTitle,
+  type PanelTitleProps,
+} from "./panel";
