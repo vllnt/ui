@@ -1469,6 +1469,81 @@ export {
 } from "./model-selector";
 export { SidebarToggle, type SidebarToggleProps } from "./sidebar-toggle";
 export { ThinkingBlock, type ThinkingBlockProps } from "./thinking-block";
+
+// Motion / effect components (#413)
+export { AnimatedBeam, type AnimatedBeamProps } from "./animated-beam";
+export {
+  AnimatedGridPattern,
+  type AnimatedGridPatternProps,
+} from "./animated-grid-pattern";
+export { AnimatedList, type AnimatedListProps } from "./animated-list";
+export {
+  type AnimatedTab,
+  AnimatedTabs,
+  type AnimatedTabsProps,
+} from "./animated-tabs";
+export {
+  AnimatedTestimonials,
+  type AnimatedTestimonialsProps,
+  type Testimonial,
+} from "./animated-testimonials";
+export {
+  AnimatedTooltip,
+  type AnimatedTooltipProps,
+  type TooltipSide,
+} from "./animated-tooltip";
+export {
+  BentoCard,
+  type BentoCardProps,
+  BentoGrid,
+  type BentoGridProps,
+} from "./bento-grid";
+export { BlurReveal, type BlurRevealProps } from "./blur-reveal";
+export { CardFlip, type CardFlipProps } from "./card-flip";
+export { Cursor, type CursorProps } from "./cursor";
+export { Dock, DockIcon, type DockIconProps, type DockProps } from "./dock";
+export { DotPattern, type DotPatternProps } from "./dot-pattern";
+export {
+  type ExpandableCardItem,
+  ExpandableCards,
+  type ExpandableCardsProps,
+} from "./expandable-cards";
+export { FloatingNavbar, type FloatingNavbarProps } from "./floating-navbar";
+export { GlassCard, type GlassCardProps } from "./glass-card";
+export { GlassProgress, type GlassProgressProps } from "./glass-progress";
+export { LiquidGlass, type LiquidGlassProps } from "./liquid-glass";
+export { Magnetic, type MagneticProps } from "./magnetic";
+export { MagneticButton, type MagneticButtonProps } from "./magnetic-button";
+export { Meteors, type MeteorsProps } from "./meteors";
+export { Particles, type ParticlesProps } from "./particles";
+export {
+  ProgressiveBlur,
+  type ProgressiveBlurDirection,
+  type ProgressiveBlurProps,
+} from "./progressive-blur";
+export {
+  type RevealDirection,
+  RevealText,
+  type RevealTextProps,
+} from "./reveal-text";
+export { ScrambleText, type ScrambleTextProps } from "./scramble-text";
+export { ScrollProgress, type ScrollProgressProps } from "./scroll-progress";
+export { ShimmerButton, type ShimmerButtonProps } from "./shimmer-button";
+export { ShimmerText, type ShimmerTextProps } from "./shimmer-text";
+export { ShineBorder, type ShineBorderProps } from "./shine-border";
+export { ShinyButton, type ShinyButtonProps } from "./shiny-button";
+export { Sparkles, type SparklesProps } from "./sparkles";
+export { SpinningText, type SpinningTextProps } from "./spinning-text";
+export { SpotlightCard, type SpotlightCardProps } from "./spotlight-card";
+export {
+  TextAnimate,
+  type TextAnimateAnimation,
+  type TextAnimateProps,
+} from "./text-animate";
+export { TextReveal, type TextRevealProps } from "./text-reveal";
+export { TextShimmer, type TextShimmerProps } from "./text-shimmer";
+export { TiltCard, type TiltCardProps } from "./tilt-card";
+export { Typewriter, type TypewriterProps } from "./typewriter";
 export { Reasoning, type ReasoningProps } from "./reasoning";
 export {
   ChainOfThought,

@@ -274,6 +274,83 @@
     ],
     "title": "Anchor Port"
   },
+  "animated-beam": {
+    "category": "data-display",
+    "defaultStoryId": "effects-animatedbeam--default",
+    "description": "Animated gradient beam that connects two elements with a flowing light path.",
+    "name": "animated-beam",
+    "stories": [
+      {
+        "id": "effects-animatedbeam--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Animated Beam"
+  },
+  "animated-grid-pattern": {
+    "category": "utility",
+    "defaultStoryId": "effects-animatedgridpattern--default",
+    "description": "Decorative grid background with squares that fade in and out at random.",
+    "name": "animated-grid-pattern",
+    "stories": [
+      {
+        "id": "effects-animatedgridpattern--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-animatedgridpattern--dense",
+        "name": "Dense"
+      }
+    ],
+    "title": "Animated Grid Pattern"
+  },
+  "animated-list": {
+    "category": "content",
+    "defaultStoryId": "effects-animatedlist--default",
+    "description": "List whose items animate in sequentially with a staggered entrance.",
+    "name": "animated-list",
+    "stories": [
+      {
+        "id": "effects-animatedlist--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Animated List"
+  },
+  "animated-tabs": {
+    "category": "navigation",
+    "defaultStoryId": "effects-animatedtabs--default",
+    "description": "Tabs with a sliding indicator that animates to the active item.",
+    "name": "animated-tabs",
+    "stories": [
+      {
+        "id": "effects-animatedtabs--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-animatedtabs--second-active",
+        "name": "Second Active"
+      }
+    ],
+    "title": "Animated Tabs"
+  },
+  "animated-testimonials": {
+    "category": "content",
+    "defaultStoryId": "engineer--default",
+    "description": "Testimonial carousel with animated transitions between quotes.",
+    "name": "animated-testimonials",
+    "stories": [
+      {
+        "id": "engineer--default",
+        "name": "Default"
+      },
+      {
+        "id": "engineer--autoplay",
+        "name": "Autoplay"
+      }
+    ],
+    "title": "Animated Testimonials"
+  },
   "animated-text": {
     "category": "utility",
     "defaultStoryId": "utility-animatedtext--terminal",
@@ -330,6 +407,23 @@
       }
     ],
     "title": "Animated Text"
+  },
+  "animated-tooltip": {
+    "category": "overlay",
+    "defaultStoryId": "effects-animatedtooltip--default",
+    "description": "Tooltip that animates in on hover or focus with a scale-and-fade.",
+    "name": "animated-tooltip",
+    "stories": [
+      {
+        "id": "effects-animatedtooltip--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-animatedtooltip--bottom",
+        "name": "Bottom"
+      }
+    ],
+    "title": "Animated Tooltip"
   },
   "annotation": {
     "category": "learning",
@@ -494,6 +588,19 @@
     "stories": [],
     "title": "Bar Chart"
   },
+  "bento-grid": {
+    "category": "content",
+    "defaultStoryId": "effects-bentogrid--default",
+    "description": "Responsive bento-style grid layout with feature cards.",
+    "name": "bento-grid",
+    "stories": [
+      {
+        "id": "effects-bentogrid--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Bento Grid"
+  },
   "blog-card": {
     "category": "content",
     "defaultStoryId": "exampleblogpost--default",
@@ -506,6 +613,23 @@
       }
     ],
     "title": "Blog Card"
+  },
+  "blur-reveal": {
+    "category": "content",
+    "defaultStoryId": "effects-blurreveal--default",
+    "description": "Reveals content with a blur-to-sharp transition when it scrolls into view.",
+    "name": "blur-reveal",
+    "stories": [
+      {
+        "id": "effects-blurreveal--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-blurreveal--delayed",
+        "name": "Delayed"
+      }
+    ],
+    "title": "Blur Reveal"
   },
   "border-beam": {
     "category": "utility",
@@ -722,6 +846,23 @@
       }
     ],
     "title": "Card"
+  },
+  "card-flip": {
+    "category": "utility",
+    "defaultStoryId": "effects-cardflip--default",
+    "description": "Card that flips in 3D between a front and back face.",
+    "name": "card-flip",
+    "stories": [
+      {
+        "id": "effects-cardflip--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-cardflip--click-to-flip",
+        "name": "Click To Flip"
+      }
+    ],
+    "title": "Card Flip"
   },
   "carousel": {
     "category": "content",
@@ -1257,6 +1398,23 @@
     ],
     "title": "Curriculum"
   },
+  "cursor": {
+    "category": "utility",
+    "defaultStoryId": "effects-cursor--default",
+    "description": "Custom cursor follower that trails the pointer.",
+    "name": "cursor",
+    "stories": [
+      {
+        "id": "effects-cursor--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-cursor--large",
+        "name": "Large"
+      }
+    ],
+    "title": "Cursor"
+  },
   "data-list": {
     "category": "data",
     "defaultStoryId": "data-datalist--default",
@@ -1351,6 +1509,19 @@
     ],
     "title": "Dialog"
   },
+  "dock": {
+    "category": "navigation",
+    "defaultStoryId": "effects-dock--default",
+    "description": "macOS-style dock whose icons magnify near the pointer.",
+    "name": "dock",
+    "stories": [
+      {
+        "id": "effects-dock--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Dock"
+  },
   "document-sibling-nav": {
     "category": "content",
     "defaultStoryId": "whythinclientsareback--default",
@@ -1383,6 +1554,23 @@
       }
     ],
     "title": "Document Sibling Nav"
+  },
+  "dot-pattern": {
+    "category": "utility",
+    "defaultStoryId": "effects-dotpattern--default",
+    "description": "Decorative dotted background pattern built from token colors.",
+    "name": "dot-pattern",
+    "stories": [
+      {
+        "id": "effects-dotpattern--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-dotpattern--wide-spacing",
+        "name": "Wide Spacing"
+      }
+    ],
+    "title": "Dot Pattern"
   },
   "drawer": {
     "category": "overlay",
@@ -1485,6 +1673,19 @@
       }
     ],
     "title": "Exercise"
+  },
+  "expandable-cards": {
+    "category": "content",
+    "defaultStoryId": "gettingstarted--default",
+    "description": "Cards that expand on click to reveal additional content.",
+    "name": "expandable-cards",
+    "stories": [
+      {
+        "id": "gettingstarted--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Expandable Cards"
   },
   "faq": {
     "category": "content",
@@ -1592,6 +1793,19 @@
       }
     ],
     "title": "Floating Action Button"
+  },
+  "floating-navbar": {
+    "category": "navigation",
+    "defaultStoryId": "effects-floatingnavbar--default",
+    "description": "Floating navigation bar that hides on scroll down and reveals on scroll up.",
+    "name": "floating-navbar",
+    "stories": [
+      {
+        "id": "effects-floatingnavbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Floating Navbar"
   },
   "floating-toolbar": {
     "category": "data-display",
@@ -1732,6 +1946,19 @@
     ],
     "title": "Geography Quiz Map"
   },
+  "glass-card": {
+    "category": "utility",
+    "defaultStoryId": "effects-glasscard--default",
+    "description": "Frosted-glass card surface with backdrop blur and a translucent background.",
+    "name": "glass-card",
+    "stories": [
+      {
+        "id": "effects-glasscard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Glass Card"
+  },
   "glass-panel": {
     "category": "utility",
     "defaultStoryId": "layout-glasspanel--default",
@@ -1744,6 +1971,23 @@
       }
     ],
     "title": "Glass Panel"
+  },
+  "glass-progress": {
+    "category": "data-display",
+    "defaultStoryId": "effects-glassprogress--default",
+    "description": "Glass-styled progress bar with a translucent track and token-colored fill.",
+    "name": "glass-progress",
+    "stories": [
+      {
+        "id": "effects-glassprogress--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-glassprogress--full",
+        "name": "Full"
+      }
+    ],
+    "title": "Glass Progress"
   },
   "globe-3d": {
     "category": "data-display",
@@ -2288,6 +2532,19 @@
     ],
     "title": "Link"
   },
+  "liquid-glass": {
+    "category": "utility",
+    "defaultStoryId": "effects-liquidglass--default",
+    "description": "Glass surface with an animated liquid gradient sheen.",
+    "name": "liquid-glass",
+    "stories": [
+      {
+        "id": "effects-liquidglass--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Liquid Glass"
+  },
   "list-box": {
     "category": "form",
     "defaultStoryId": "form-listbox--single-select",
@@ -2346,6 +2603,40 @@
       }
     ],
     "title": "Live Feed"
+  },
+  "magnetic": {
+    "category": "utility",
+    "defaultStoryId": "effects-magnetic--default",
+    "description": "Wrapper that pulls its content toward the pointer for a magnetic effect.",
+    "name": "magnetic",
+    "stories": [
+      {
+        "id": "effects-magnetic--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-magnetic--strong",
+        "name": "Strong"
+      }
+    ],
+    "title": "Magnetic"
+  },
+  "magnetic-button": {
+    "category": "utility",
+    "defaultStoryId": "effects-magneticbutton--default",
+    "description": "Button that drifts toward the pointer for a magnetic hover effect.",
+    "name": "magnetic-button",
+    "stories": [
+      {
+        "id": "effects-magneticbutton--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-magneticbutton--strong",
+        "name": "Strong"
+      }
+    ],
+    "title": "Magnetic Button"
   },
   "map-2d": {
     "category": "data-display",
@@ -2464,6 +2755,23 @@
       }
     ],
     "title": "Menubar"
+  },
+  "meteors": {
+    "category": "utility",
+    "defaultStoryId": "effects-meteors--default",
+    "description": "Decorative meteor shower of streaks falling across the background.",
+    "name": "meteors",
+    "stories": [
+      {
+        "id": "effects-meteors--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-meteors--sparse",
+        "name": "Sparse"
+      }
+    ],
+    "title": "Meteors"
   },
   "meter": {
     "category": "core",
@@ -2867,6 +3175,23 @@
     ],
     "title": "Parallel Timeline"
   },
+  "particles": {
+    "category": "utility",
+    "defaultStoryId": "effects-particles--default",
+    "description": "Floating particle field that drifts gently in the background.",
+    "name": "particles",
+    "stories": [
+      {
+        "id": "effects-particles--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-particles--sparse",
+        "name": "Sparse"
+      }
+    ],
+    "title": "Particles"
+  },
   "password-input": {
     "category": "form",
     "defaultStoryId": "form-passwordinput--default",
@@ -3167,6 +3492,23 @@
     ],
     "title": "Progress Tracker"
   },
+  "progressive-blur": {
+    "category": "utility",
+    "defaultStoryId": "effects-progressiveblur--default",
+    "description": "Progressive blur overlay that fades focus toward one edge.",
+    "name": "progressive-blur",
+    "stories": [
+      {
+        "id": "effects-progressiveblur--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-progressiveblur--top-strong",
+        "name": "Top Strong"
+      }
+    ],
+    "title": "Progressive Blur"
+  },
   "prompt-input": {
     "category": "ai",
     "defaultStoryId": "ai-promptinput--default",
@@ -3407,6 +3749,27 @@
     ],
     "title": "Resizable"
   },
+  "reveal-text": {
+    "category": "content",
+    "defaultStoryId": "effects-revealtext--default",
+    "description": "Reveals text with a directional slide-and-fade when it enters the viewport.",
+    "name": "reveal-text",
+    "stories": [
+      {
+        "id": "effects-revealtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-revealtext--from-left",
+        "name": "From Left"
+      },
+      {
+        "id": "effects-revealtext--delayed",
+        "name": "Delayed"
+      }
+    ],
+    "title": "Reveal Text"
+  },
   "right-dock": {
     "category": "navigation",
     "defaultStoryId": "layout-rightdock--default",
@@ -3571,6 +3934,23 @@
     ],
     "title": "Scope Selector"
   },
+  "scramble-text": {
+    "category": "content",
+    "defaultStoryId": "effects-scrambletext--default",
+    "description": "Scrambles characters then resolves them into the final text.",
+    "name": "scramble-text",
+    "stories": [
+      {
+        "id": "effects-scrambletext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-scrambletext--slow",
+        "name": "Slow"
+      }
+    ],
+    "title": "Scramble Text"
+  },
   "scroll-area": {
     "category": "utility",
     "defaultStoryId": "utility-scrollarea--default",
@@ -3583,6 +3963,19 @@
       }
     ],
     "title": "Scroll Area"
+  },
+  "scroll-progress": {
+    "category": "data-display",
+    "defaultStoryId": "effects-scrollprogress--default",
+    "description": "Fixed bar that tracks reading progress down the page.",
+    "name": "scroll-progress",
+    "stories": [
+      {
+        "id": "effects-scrollprogress--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Scroll Progress"
   },
   "search-bar": {
     "category": "form",
@@ -3804,6 +4197,70 @@
     ],
     "title": "Sheet"
   },
+  "shimmer-button": {
+    "category": "utility",
+    "defaultStoryId": "effects-shimmerbutton--default",
+    "description": "Button with a light sheen that sweeps across its surface.",
+    "name": "shimmer-button",
+    "stories": [
+      {
+        "id": "effects-shimmerbutton--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-shimmerbutton--slow",
+        "name": "Slow"
+      }
+    ],
+    "title": "Shimmer Button"
+  },
+  "shimmer-text": {
+    "category": "content",
+    "defaultStoryId": "effects-shimmertext--default",
+    "description": "Text with a bright light band that sweeps across it.",
+    "name": "shimmer-text",
+    "stories": [
+      {
+        "id": "effects-shimmertext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-shimmertext--fast",
+        "name": "Fast"
+      }
+    ],
+    "title": "Shimmer Text"
+  },
+  "shine-border": {
+    "category": "utility",
+    "defaultStoryId": "effects-shineborder--default",
+    "description": "Wrapper that draws an animated gradient border around its content.",
+    "name": "shine-border",
+    "stories": [
+      {
+        "id": "effects-shineborder--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-shineborder--thick",
+        "name": "Thick"
+      }
+    ],
+    "title": "Shine Border"
+  },
+  "shiny-button": {
+    "category": "utility",
+    "defaultStoryId": "effects-shinybutton--default",
+    "description": "Button with a glossy gradient sheen that sweeps on a loop.",
+    "name": "shiny-button",
+    "stories": [
+      {
+        "id": "effects-shinybutton--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Shiny Button"
+  },
   "sidebar": {
     "category": "navigation",
     "defaultStoryId": "introduction--default",
@@ -3907,6 +4364,23 @@
     ],
     "title": "Snap Guides"
   },
+  "sparkles": {
+    "category": "utility",
+    "defaultStoryId": "effects-sparkles--default",
+    "description": "Decorative twinkling sparkles scattered behind content.",
+    "name": "sparkles",
+    "stories": [
+      {
+        "id": "effects-sparkles--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-sparkles--dense",
+        "name": "Dense"
+      }
+    ],
+    "title": "Sparkles"
+  },
   "sparkline-grid": {
     "category": "data",
     "defaultStoryId": "data-sparklinegrid--default",
@@ -3936,6 +4410,36 @@
       }
     ],
     "title": "Spinner"
+  },
+  "spinning-text": {
+    "category": "content",
+    "defaultStoryId": "effects-spinningtext--default",
+    "description": "Text laid out in a circle that rotates continuously.",
+    "name": "spinning-text",
+    "stories": [
+      {
+        "id": "effects-spinningtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-spinningtext--reverse-fast",
+        "name": "Reverse Fast"
+      }
+    ],
+    "title": "Spinning Text"
+  },
+  "spotlight-card": {
+    "category": "utility",
+    "defaultStoryId": "effects-spotlightcard--default",
+    "description": "Card with a radial spotlight that follows the pointer.",
+    "name": "spotlight-card",
+    "stories": [
+      {
+        "id": "effects-spotlightcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Spotlight Card"
   },
   "stat-card": {
     "category": "data",
@@ -4247,6 +4751,31 @@
     ],
     "title": "Terminal"
   },
+  "text-animate": {
+    "category": "content",
+    "defaultStoryId": "effects-textanimate--default",
+    "description": "Animates text in by word or character with configurable effects.",
+    "name": "text-animate",
+    "stories": [
+      {
+        "id": "effects-textanimate--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-textanimate--slide-up",
+        "name": "Slide Up"
+      },
+      {
+        "id": "effects-textanimate--blur",
+        "name": "Blur"
+      },
+      {
+        "id": "effects-textanimate--by-character",
+        "name": "By Character"
+      }
+    ],
+    "title": "Text Animate"
+  },
   "text-field": {
     "category": "form",
     "defaultStoryId": "form-textfield--default",
@@ -4267,6 +4796,36 @@
       }
     ],
     "title": "Text Field"
+  },
+  "text-reveal": {
+    "category": "content",
+    "defaultStoryId": "effects-textreveal--default",
+    "description": "Dims and brightens words as the text scrolls through the viewport.",
+    "name": "text-reveal",
+    "stories": [
+      {
+        "id": "effects-textreveal--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Text Reveal"
+  },
+  "text-shimmer": {
+    "category": "content",
+    "defaultStoryId": "effects-textshimmer--default",
+    "description": "Text with an animated gradient fill that shimmers.",
+    "name": "text-shimmer",
+    "stories": [
+      {
+        "id": "effects-textshimmer--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-textshimmer--slow",
+        "name": "Slow"
+      }
+    ],
+    "title": "Text Shimmer"
   },
   "textarea": {
     "category": "core",
@@ -4412,6 +4971,19 @@
       }
     ],
     "title": "Ticker Tape"
+  },
+  "tilt-card": {
+    "category": "utility",
+    "defaultStoryId": "effects-tiltcard--default",
+    "description": "Card that tilts in 3D toward the pointer for a parallax hover.",
+    "name": "tilt-card",
+    "stories": [
+      {
+        "id": "effects-tiltcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tilt Card"
   },
   "time-field": {
     "category": "form",
@@ -4756,6 +5328,27 @@
       }
     ],
     "title": "Tutorial MDX"
+  },
+  "typewriter": {
+    "category": "content",
+    "defaultStoryId": "effects-typewriter--default",
+    "description": "Types text out character by character with a blinking cursor.",
+    "name": "typewriter",
+    "stories": [
+      {
+        "id": "effects-typewriter--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-typewriter--fast",
+        "name": "Fast"
+      },
+      {
+        "id": "effects-typewriter--no-cursor",
+        "name": "No Cursor"
+      }
+    ],
+    "title": "Typewriter"
   },
   "typography": {
     "category": "core",

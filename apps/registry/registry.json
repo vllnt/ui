@@ -297,6 +297,101 @@
       "stability": "stable"
     },
     {
+      "name": "animated-beam",
+      "type": "registry:component",
+      "title": "Animated Beam",
+      "description": "Animated gradient beam that connects two elements with a flowing light path.",
+      "files": [
+        {
+          "path": "registry/default/animated-beam/animated-beam.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "animated-grid-pattern",
+      "type": "registry:component",
+      "title": "Animated Grid Pattern",
+      "description": "Decorative grid background with squares that fade in and out at random.",
+      "files": [
+        {
+          "path": "registry/default/animated-grid-pattern/animated-grid-pattern.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "animated-list",
+      "type": "registry:component",
+      "title": "Animated List",
+      "description": "List whose items animate in sequentially with a staggered entrance.",
+      "files": [
+        {
+          "path": "registry/default/animated-list/animated-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "animated-tabs",
+      "type": "registry:component",
+      "title": "Animated Tabs",
+      "description": "Tabs with a sliding indicator that animates to the active item.",
+      "files": [
+        {
+          "path": "registry/default/animated-tabs/animated-tabs.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "navigation",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "animated-testimonials",
+      "type": "registry:component",
+      "title": "Animated Testimonials",
+      "description": "Testimonial carousel with animated transitions between quotes.",
+      "files": [
+        {
+          "path": "registry/default/animated-testimonials/animated-testimonials.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "animated-text",
       "type": "registry:component",
       "title": "Animated Text",
@@ -314,6 +409,25 @@
       "category": "utility",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "animated-tooltip",
+      "type": "registry:component",
+      "title": "Animated Tooltip",
+      "description": "Tooltip that animates in on hover or focus with a scale-and-fade.",
+      "files": [
+        {
+          "path": "registry/default/animated-tooltip/animated-tooltip.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "overlay",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "annotation",
@@ -490,6 +604,25 @@
       "stability": "stable"
     },
     {
+      "name": "bento-grid",
+      "type": "registry:component",
+      "title": "Bento Grid",
+      "description": "Responsive bento-style grid layout with feature cards.",
+      "files": [
+        {
+          "path": "registry/default/bento-grid/bento-grid.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "blog-card",
       "type": "registry:component",
       "title": "Blog Card",
@@ -507,6 +640,25 @@
       "category": "content",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "blur-reveal",
+      "type": "registry:component",
+      "title": "Blur Reveal",
+      "description": "Reveals content with a blur-to-sharp transition when it scrolls into view.",
+      "files": [
+        {
+          "path": "registry/default/blur-reveal/blur-reveal.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "border-beam",
@@ -798,6 +950,25 @@
       "category": "content",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "card-flip",
+      "type": "registry:component",
+      "title": "Card Flip",
+      "description": "Card that flips in 3D between a front and back face.",
+      "files": [
+        {
+          "path": "registry/default/card-flip/card-flip.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "carousel",
@@ -1478,6 +1649,25 @@
       "stability": "stable"
     },
     {
+      "name": "cursor",
+      "type": "registry:component",
+      "title": "Cursor",
+      "description": "Custom cursor follower that trails the pointer.",
+      "files": [
+        {
+          "path": "registry/default/cursor/cursor.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "data-list",
       "type": "registry:component",
       "title": "Data List",
@@ -1613,6 +1803,25 @@
       }
     },
     {
+      "name": "dock",
+      "type": "registry:component",
+      "title": "Dock",
+      "description": "macOS-style dock whose icons magnify near the pointer.",
+      "files": [
+        {
+          "path": "registry/default/dock/dock.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "navigation",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "document-sibling-nav",
       "type": "registry:component",
       "title": "Document Sibling Nav",
@@ -1631,6 +1840,25 @@
       "category": "content",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "dot-pattern",
+      "type": "registry:component",
+      "title": "Dot Pattern",
+      "description": "Decorative dotted background pattern built from token colors.",
+      "files": [
+        {
+          "path": "registry/default/dot-pattern/dot-pattern.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "drawer",
@@ -1754,6 +1982,25 @@
       "category": "learning",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "expandable-cards",
+      "type": "registry:component",
+      "title": "Expandable Cards",
+      "description": "Cards that expand on click to reveal additional content.",
+      "files": [
+        {
+          "path": "registry/default/expandable-cards/expandable-cards.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "faq",
@@ -1889,6 +2136,25 @@
       "stability": "stable"
     },
     {
+      "name": "floating-navbar",
+      "type": "registry:component",
+      "title": "Floating Navbar",
+      "description": "Floating navigation bar that hides on scroll down and reveals on scroll up.",
+      "files": [
+        {
+          "path": "registry/default/floating-navbar/floating-navbar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "navigation",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "floating-toolbar",
       "type": "registry:component",
       "title": "Floating Toolbar",
@@ -2022,6 +2288,25 @@
       "stability": "stable"
     },
     {
+      "name": "glass-card",
+      "type": "registry:component",
+      "title": "Glass Card",
+      "description": "Frosted-glass card surface with backdrop blur and a translucent background.",
+      "files": [
+        {
+          "path": "registry/default/glass-card/glass-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "glass-panel",
       "type": "registry:component",
       "title": "Glass Panel",
@@ -2039,6 +2324,25 @@
       "category": "utility",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "glass-progress",
+      "type": "registry:component",
+      "title": "Glass Progress",
+      "description": "Glass-styled progress bar with a translucent track and token-colored fill.",
+      "files": [
+        {
+          "path": "registry/default/glass-progress/glass-progress.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "globe-3d",
@@ -2578,6 +2882,25 @@
       "stability": "stable"
     },
     {
+      "name": "liquid-glass",
+      "type": "registry:component",
+      "title": "Liquid Glass",
+      "description": "Glass surface with an animated liquid gradient sheen.",
+      "files": [
+        {
+          "path": "registry/default/liquid-glass/liquid-glass.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "list-box",
       "type": "registry:component",
       "title": "List Box",
@@ -2633,6 +2956,44 @@
       "category": "data",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "magnetic",
+      "type": "registry:component",
+      "title": "Magnetic",
+      "description": "Wrapper that pulls its content toward the pointer for a magnetic effect.",
+      "files": [
+        {
+          "path": "registry/default/magnetic/magnetic.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "magnetic-button",
+      "type": "registry:component",
+      "title": "Magnetic Button",
+      "description": "Button that drifts toward the pointer for a magnetic hover effect.",
+      "files": [
+        {
+          "path": "registry/default/magnetic-button/magnetic-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "map-2d",
@@ -2750,6 +3111,25 @@
       "category": "navigation",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "meteors",
+      "type": "registry:component",
+      "title": "Meteors",
+      "description": "Decorative meteor shower of streaks falling across the background.",
+      "files": [
+        {
+          "path": "registry/default/meteors/meteors.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "meter",
@@ -3172,6 +3552,25 @@
       "stability": "stable"
     },
     {
+      "name": "particles",
+      "type": "registry:component",
+      "title": "Particles",
+      "description": "Floating particle field that drifts gently in the background.",
+      "files": [
+        {
+          "path": "registry/default/particles/particles.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "password-input",
       "type": "registry:component",
       "title": "Password Input",
@@ -3477,6 +3876,25 @@
       "stability": "stable"
     },
     {
+      "name": "progressive-blur",
+      "type": "registry:component",
+      "title": "Progressive Blur",
+      "description": "Progressive blur overlay that fades focus toward one edge.",
+      "files": [
+        {
+          "path": "registry/default/progressive-blur/progressive-blur.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "prompt-input",
       "type": "registry:component",
       "title": "Prompt Input",
@@ -3709,6 +4127,25 @@
       "stability": "stable"
     },
     {
+      "name": "reveal-text",
+      "type": "registry:component",
+      "title": "Reveal Text",
+      "description": "Reveals text with a directional slide-and-fade when it enters the viewport.",
+      "files": [
+        {
+          "path": "registry/default/reveal-text/reveal-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "right-dock",
       "type": "registry:component",
       "title": "Right Dock",
@@ -3861,6 +4298,25 @@
       "stability": "stable"
     },
     {
+      "name": "scramble-text",
+      "type": "registry:component",
+      "title": "Scramble Text",
+      "description": "Scrambles characters then resolves them into the final text.",
+      "files": [
+        {
+          "path": "registry/default/scramble-text/scramble-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "scroll-area",
       "type": "registry:component",
       "title": "Scroll Area",
@@ -3878,6 +4334,25 @@
       "category": "utility",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "scroll-progress",
+      "type": "registry:component",
+      "title": "Scroll Progress",
+      "description": "Fixed bar that tracks reading progress down the page.",
+      "files": [
+        {
+          "path": "registry/default/scroll-progress/scroll-progress.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data-display",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "search-bar",
@@ -4108,6 +4583,82 @@
       "stability": "stable"
     },
     {
+      "name": "shimmer-button",
+      "type": "registry:component",
+      "title": "Shimmer Button",
+      "description": "Button with a light sheen that sweeps across its surface.",
+      "files": [
+        {
+          "path": "registry/default/shimmer-button/shimmer-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "shimmer-text",
+      "type": "registry:component",
+      "title": "Shimmer Text",
+      "description": "Text with a bright light band that sweeps across it.",
+      "files": [
+        {
+          "path": "registry/default/shimmer-text/shimmer-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "shine-border",
+      "type": "registry:component",
+      "title": "Shine Border",
+      "description": "Wrapper that draws an animated gradient border around its content.",
+      "files": [
+        {
+          "path": "registry/default/shine-border/shine-border.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "shiny-button",
+      "type": "registry:component",
+      "title": "Shiny Button",
+      "description": "Button with a glossy gradient sheen that sweeps on a loop.",
+      "files": [
+        {
+          "path": "registry/default/shiny-button/shiny-button.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "sidebar",
       "type": "registry:component",
       "title": "Sidebar",
@@ -4242,6 +4793,25 @@
       "stability": "stable"
     },
     {
+      "name": "sparkles",
+      "type": "registry:component",
+      "title": "Sparkles",
+      "description": "Decorative twinkling sparkles scattered behind content.",
+      "files": [
+        {
+          "path": "registry/default/sparkles/sparkles.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "sparkline-grid",
       "type": "registry:component",
       "title": "Sparkline Grid",
@@ -4278,6 +4848,44 @@
       "category": "utility",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "spinning-text",
+      "type": "registry:component",
+      "title": "Spinning Text",
+      "description": "Text laid out in a circle that rotates continuously.",
+      "files": [
+        {
+          "path": "registry/default/spinning-text/spinning-text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "spotlight-card",
+      "type": "registry:component",
+      "title": "Spotlight Card",
+      "description": "Card with a radial spotlight that follows the pointer.",
+      "files": [
+        {
+          "path": "registry/default/spotlight-card/spotlight-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "stat-card",
@@ -4622,6 +5230,25 @@
       "stability": "stable"
     },
     {
+      "name": "text-animate",
+      "type": "registry:component",
+      "title": "Text Animate",
+      "description": "Animates text in by word or character with configurable effects.",
+      "files": [
+        {
+          "path": "registry/default/text-animate/text-animate.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "text-field",
       "type": "registry:component",
       "title": "Text Field",
@@ -4639,6 +5266,44 @@
       "category": "form",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "text-reveal",
+      "type": "registry:component",
+      "title": "Text Reveal",
+      "description": "Dims and brightens words as the text scrolls through the viewport.",
+      "files": [
+        {
+          "path": "registry/default/text-reveal/text-reveal.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
+      "name": "text-shimmer",
+      "type": "registry:component",
+      "title": "Text Shimmer",
+      "description": "Text with an animated gradient fill that shimmers.",
+      "files": [
+        {
+          "path": "registry/default/text-shimmer/text-shimmer.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "textarea",
@@ -4811,6 +5476,25 @@
       "category": "data",
       "version": "0.2.1",
       "stability": "stable"
+    },
+    {
+      "name": "tilt-card",
+      "type": "registry:component",
+      "title": "Tilt Card",
+      "description": "Card that tilts in 3D toward the pointer for a parallax hover.",
+      "files": [
+        {
+          "path": "registry/default/tilt-card/tilt-card.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "utility",
+      "stability": "stable",
+      "version": "0.2.1"
     },
     {
       "name": "time-field",
@@ -5194,6 +5878,25 @@
       "stability": "stable"
     },
     {
+      "name": "typewriter",
+      "type": "registry:component",
+      "title": "Typewriter",
+      "description": "Types text out character by character with a blinking cursor.",
+      "files": [
+        {
+          "path": "registry/default/typewriter/typewriter.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "content",
+      "stability": "stable",
+      "version": "0.2.1"
+    },
+    {
       "name": "typography",
       "type": "registry:component",
       "title": "Typography",
@@ -5405,5 +6108,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-06-17T20:07:25.571Z"
+  "generatedAt": "2026-06-17T20:15:58.795Z"
 }
