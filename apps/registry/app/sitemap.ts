@@ -1,21 +1,17 @@
 import type { MetadataRoute } from "next";
 
 import { routing } from "@/i18n/routing";
+import { registry, type RegistryComponent } from "@/lib/registry";
 import { canonical } from "@/lib/seo";
 
 import { getAiComponentSlugs } from "../lib/ai-seo";
 import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import { getUseCasePath, USE_CASES } from "../lib/use-cases";
-import registry from "../registry.json";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
 const AI_COMPONENT_SLUGS = new Set(getAiComponentSlugs());
-
-type RegistryItem = {
-  readonly name: string;
-};
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 type ChangeFrequency = NonNullable<SitemapEntry["changeFrequency"]>;
@@ -31,8 +27,8 @@ type PageRouteInput = {
   readonly priority: number;
 };
 
-function getRegistryItems(): readonly RegistryItem[] {
-  return (registry as { readonly items: readonly RegistryItem[] }).items;
+function getRegistryItems(): readonly RegistryComponent[] {
+  return registry.items;
 }
 
 function entry({
@@ -122,7 +118,7 @@ function buildGuideRoutes(lastModified: Date): MetadataRoute.Sitemap {
 }
 
 function componentRoutes(
-  items: readonly RegistryItem[],
+  items: readonly RegistryComponent[],
   lastModified: Date,
 ): MetadataRoute.Sitemap {
   // Concentrate crawl budget on the AI wedge: AI components rank higher than
@@ -140,7 +136,7 @@ function componentRoutes(
 }
 
 function registryRoutes(
-  items: readonly RegistryItem[],
+  items: readonly RegistryComponent[],
   lastModified: Date,
 ): MetadataRoute.Sitemap {
   const rawRoutes = [

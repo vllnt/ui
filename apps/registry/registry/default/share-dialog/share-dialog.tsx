@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { cn } from "@vllnt/ui";
+import { useCopyToClipboard } from "@vllnt/ui";
 import {
   Dialog,
   DialogContent,
@@ -72,7 +73,7 @@ function CopyButton({
   labels: ShareDialogLabels;
   onCopy?: () => void;
 }) {
-  const [copied, setCopied] = React.useState(false);
+  const { copied, copy } = useCopyToClipboard();
 
   const handleCopy = React.useCallback(async () => {
     const url = buildCopyUrl
@@ -80,14 +81,10 @@ function CopyButton({
       : window.location.href;
     const text = `${document.title} - ${url}`;
 
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    onCopy?.();
-
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  }, [buildCopyUrl, onCopy]);
+    if (await copy(text)) {
+      onCopy?.();
+    }
+  }, [buildCopyUrl, copy, onCopy]);
 
   return (
     <button

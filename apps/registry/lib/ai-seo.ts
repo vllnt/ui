@@ -1,4 +1,4 @@
-import registry from "../registry.json";
+import { registry } from "@/lib/registry";
 
 /**
  * Single source of truth for the "UI for AI agents" SEO positioning.
@@ -189,14 +189,7 @@ export const AI_COMPONENT_GROUPS: readonly AiComponentGroup[] = [
   },
 ];
 
-type RegistryItem = {
-  readonly description?: string;
-  readonly name: string;
-  readonly title?: string;
-  readonly type?: string;
-};
-
-const ITEMS = (registry as { readonly items: readonly RegistryItem[] }).items;
+const ITEMS = registry.items;
 
 export type ResolvedAiComponent = {
   readonly description: string;

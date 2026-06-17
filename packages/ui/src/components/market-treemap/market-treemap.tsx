@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import { formatChange } from "../../lib/format";
 import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
@@ -81,8 +82,7 @@ function MarketTreemapTile({
             )}
           >
             <TrendIcon className="size-4" />
-            {item.change > 0 ? "+" : ""}
-            {item.change.toFixed(2)}%
+            {formatChange(item.change)}
           </div>
         </div>
       </div>

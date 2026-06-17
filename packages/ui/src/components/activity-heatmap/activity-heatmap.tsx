@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { normalizeDate } from "../../lib/format";
 import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
@@ -34,14 +35,6 @@ const LEVEL_CLASS_NAMES = [
   "bg-emerald-500/65",
   "bg-emerald-500",
 ];
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
 
 function toUtcDate(date: Date): Date {
   return new Date(
