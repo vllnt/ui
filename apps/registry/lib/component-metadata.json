@@ -620,6 +620,23 @@
     ],
     "title": "Button"
   },
+  "button-group": {
+    "category": "form",
+    "defaultStoryId": "form-buttongroup--default",
+    "description": "Visually connected group of buttons that share borders.",
+    "name": "button-group",
+    "stories": [
+      {
+        "id": "form-buttongroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-buttongroup--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Button Group"
+  },
   "calendar": {
     "category": "form",
     "defaultStoryId": "form-calendar--default",
@@ -779,6 +796,27 @@
     ],
     "title": "Checkbox"
   },
+  "checkbox-group": {
+    "category": "form",
+    "defaultStoryId": "form-checkboxgroup--default",
+    "description": "Group of related checkboxes backed by an array of selected values.",
+    "name": "checkbox-group",
+    "stories": [
+      {
+        "id": "form-checkboxgroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-checkboxgroup--horizontal",
+        "name": "Horizontal"
+      },
+      {
+        "id": "form-checkboxgroup--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Checkbox Group"
+  },
   "checklist": {
     "category": "learning",
     "defaultStoryId": "learning-checklist--default",
@@ -917,6 +955,23 @@
       }
     ],
     "title": "Collapsible"
+  },
+  "color-picker": {
+    "category": "form",
+    "defaultStoryId": "form-colorpicker--default",
+    "description": "Popover color picker with swatches, a hue slider, and a hex input.",
+    "name": "color-picker",
+    "stories": [
+      {
+        "id": "form-colorpicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-colorpicker--custom-default",
+        "name": "Custom Default"
+      }
+    ],
+    "title": "Color Picker"
   },
   "combobox": {
     "category": "form",
@@ -1215,6 +1270,23 @@
     ],
     "title": "Data Table"
   },
+  "date-field": {
+    "category": "form",
+    "defaultStoryId": "form-datefield--default",
+    "description": "Native date input styled to match the design system.",
+    "name": "date-field",
+    "stories": [
+      {
+        "id": "form-datefield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datefield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Field"
+  },
   "date-picker": {
     "category": "form",
     "defaultStoryId": "form-datepicker--default",
@@ -1231,6 +1303,23 @@
       }
     ],
     "title": "Date Picker"
+  },
+  "date-range-picker": {
+    "category": "form",
+    "defaultStoryId": "form-daterangepicker--default",
+    "description": "Popover calendar for selecting a start and end date.",
+    "name": "date-range-picker",
+    "stories": [
+      {
+        "id": "form-daterangepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-daterangepicker--preselected",
+        "name": "Preselected"
+      }
+    ],
+    "title": "Date Range Picker"
   },
   "dialog": {
     "category": "overlay",
@@ -1396,6 +1485,44 @@
       }
     ],
     "title": "FAQ"
+  },
+  "field": {
+    "category": "form",
+    "defaultStoryId": "form-field--default",
+    "description": "Layout wrapper pairing a label, control, description, and error message.",
+    "name": "field",
+    "stories": [
+      {
+        "id": "form-field--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-field--invalid",
+        "name": "Invalid"
+      },
+      {
+        "id": "form-field--horizontal",
+        "name": "Horizontal"
+      }
+    ],
+    "title": "Field"
+  },
+  "fieldset": {
+    "category": "form",
+    "defaultStoryId": "form-fieldset--default",
+    "description": "Groups related fields under a shared legend.",
+    "name": "fieldset",
+    "stories": [
+      {
+        "id": "form-fieldset--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-fieldset--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Fieldset"
   },
   "file-upload": {
     "category": "form",
@@ -1845,6 +1972,27 @@
     ],
     "title": "Input"
   },
+  "input-group": {
+    "category": "form",
+    "defaultStoryId": "form-inputgroup--leading-icon",
+    "description": "Groups an input with leading or trailing addons.",
+    "name": "input-group",
+    "stories": [
+      {
+        "id": "form-inputgroup--leading-icon",
+        "name": "Leading Icon"
+      },
+      {
+        "id": "form-inputgroup--trailing-text",
+        "name": "Trailing Text"
+      },
+      {
+        "id": "form-inputgroup--prefix-text",
+        "name": "Prefix Text"
+      }
+    ],
+    "title": "Input Group"
+  },
   "input-otp": {
     "category": "form",
     "defaultStoryId": "form-inputotp--default",
@@ -1882,6 +2030,23 @@
       }
     ],
     "title": "Interactive Timeline"
+  },
+  "item": {
+    "category": "form",
+    "defaultStoryId": "form-item--default",
+    "description": "Flexible row layout with leading media, content, and trailing actions.",
+    "name": "item",
+    "stories": [
+      {
+        "id": "form-item--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-item--outline",
+        "name": "Outline"
+      }
+    ],
+    "title": "Item"
   },
   "jarvis-dock": {
     "category": "navigation",
@@ -2084,6 +2249,23 @@
       }
     ],
     "title": "Link"
+  },
+  "list-box": {
+    "category": "form",
+    "defaultStoryId": "form-listbox--single-select",
+    "description": "Accessible single- or multi-select list of options.",
+    "name": "list-box",
+    "stories": [
+      {
+        "id": "form-listbox--single-select",
+        "name": "Single Select"
+      },
+      {
+        "id": "form-listbox--multi-select",
+        "name": "Multi Select"
+      }
+    ],
+    "title": "List Box"
   },
   "live-cursor": {
     "category": "utility",
@@ -2405,6 +2587,23 @@
     ],
     "title": "Multi Select Lasso"
   },
+  "native-select": {
+    "category": "form",
+    "defaultStoryId": "form-nativeselect--default",
+    "description": "Styled wrapper around the native select element.",
+    "name": "native-select",
+    "stories": [
+      {
+        "id": "form-nativeselect--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-nativeselect--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Native Select"
+  },
   "navbar-saas": {
     "category": "navigation",
     "defaultStoryId": "home--default",
@@ -2642,6 +2841,23 @@
       }
     ],
     "title": "Password Input"
+  },
+  "phone-input": {
+    "category": "form",
+    "defaultStoryId": "form-phoneinput--default",
+    "description": "Phone number input with a country dialing-code selector.",
+    "name": "phone-input",
+    "stories": [
+      {
+        "id": "form-phoneinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-phoneinput--default-country",
+        "name": "Default Country"
+      }
+    ],
+    "title": "Phone Input"
   },
   "plan-badge": {
     "category": "content",
@@ -3018,6 +3234,27 @@
     ],
     "title": "Radio Group"
   },
+  "range-calendar": {
+    "category": "form",
+    "defaultStoryId": "form-rangecalendar--default",
+    "description": "Calendar that selects a start and end date as a range.",
+    "name": "range-calendar",
+    "stories": [
+      {
+        "id": "form-rangecalendar--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-rangecalendar--single-month",
+        "name": "Single Month"
+      },
+      {
+        "id": "form-rangecalendar--preselected",
+        "name": "Preselected"
+      }
+    ],
+    "title": "Range Calendar"
+  },
   "rating": {
     "category": "learning",
     "defaultStoryId": "learning-rating--default",
@@ -3287,6 +3524,23 @@
       }
     ],
     "title": "Search Dialog"
+  },
+  "search-field": {
+    "category": "form",
+    "defaultStoryId": "form-searchfield--default",
+    "description": "Search input with a leading icon and a clear button.",
+    "name": "search-field",
+    "stories": [
+      {
+        "id": "form-searchfield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-searchfield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Search Field"
   },
   "segmented-control": {
     "category": "form",
@@ -3853,6 +4107,23 @@
     ],
     "title": "Tabs"
   },
+  "tag-group": {
+    "category": "form",
+    "defaultStoryId": "form-taggroup--selectable",
+    "description": "Set of tags supporting selection and removal.",
+    "name": "tag-group",
+    "stories": [
+      {
+        "id": "form-taggroup--selectable",
+        "name": "Selectable"
+      },
+      {
+        "id": "form-taggroup--removable",
+        "name": "Removable"
+      }
+    ],
+    "title": "Tag Group"
+  },
   "tags-input": {
     "category": "form",
     "defaultStoryId": "form-tagsinput--default",
@@ -3886,6 +4157,27 @@
       }
     ],
     "title": "Terminal"
+  },
+  "text-field": {
+    "category": "form",
+    "defaultStoryId": "form-textfield--default",
+    "description": "Labelled text input bundling description and error message.",
+    "name": "text-field",
+    "stories": [
+      {
+        "id": "form-textfield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-textfield--with-error",
+        "name": "With Error"
+      },
+      {
+        "id": "form-textfield--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Text Field"
   },
   "textarea": {
     "category": "core",
@@ -4031,6 +4323,40 @@
       }
     ],
     "title": "Ticker Tape"
+  },
+  "time-field": {
+    "category": "form",
+    "defaultStoryId": "form-timefield--default",
+    "description": "Native time input styled to match the design system.",
+    "name": "time-field",
+    "stories": [
+      {
+        "id": "form-timefield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-timefield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Time Field"
+  },
+  "time-picker": {
+    "category": "form",
+    "defaultStoryId": "form-timepicker--default",
+    "description": "Popover time selector built from hour and minute columns.",
+    "name": "time-picker",
+    "stories": [
+      {
+        "id": "form-timepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-timepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Time Picker"
   },
   "timeline": {
     "category": "content",

@@ -667,6 +667,25 @@
       ]
     },
     {
+      "name": "button-group",
+      "type": "registry:component",
+      "title": "Button Group",
+      "description": "Visually connected group of buttons that share borders.",
+      "files": [
+        {
+          "path": "registry/default/button-group/button-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "calendar",
       "type": "registry:component",
       "title": "Calendar",
@@ -877,6 +896,25 @@
       "stability": "stable"
     },
     {
+      "name": "checkbox-group",
+      "type": "registry:component",
+      "title": "Checkbox Group",
+      "description": "Group of related checkboxes backed by an array of selected values.",
+      "files": [
+        {
+          "path": "registry/default/checkbox-group/checkbox-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "checklist",
       "type": "registry:component",
       "title": "Checklist",
@@ -1007,6 +1045,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:component",
+      "title": "Color Picker",
+      "description": "Popover color picker with swatches, a hue slider, and a hex input.",
+      "files": [
+        {
+          "path": "registry/default/color-picker/color-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -1441,6 +1498,25 @@
       "stability": "stable"
     },
     {
+      "name": "date-field",
+      "type": "registry:component",
+      "title": "Date Field",
+      "description": "Native date input styled to match the design system.",
+      "files": [
+        {
+          "path": "registry/default/date-field/date-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date Picker",
@@ -1448,6 +1524,25 @@
       "files": [
         {
           "path": "registry/default/date-picker/date-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "date-range-picker",
+      "type": "registry:component",
+      "title": "Date Range Picker",
+      "description": "Popover calendar for selecting a start and end date.",
+      "files": [
+        {
+          "path": "registry/default/date-range-picker/date-range-picker.tsx",
           "type": "registry:component"
         }
       ],
@@ -1657,6 +1752,44 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "field",
+      "type": "registry:component",
+      "title": "Field",
+      "description": "Layout wrapper pairing a label, control, description, and error message.",
+      "files": [
+        {
+          "path": "registry/default/field/field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "fieldset",
+      "type": "registry:component",
+      "title": "Fieldset",
+      "description": "Groups related fields under a shared legend.",
+      "files": [
+        {
+          "path": "registry/default/fieldset/fieldset.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -2119,6 +2252,25 @@
       "stability": "stable"
     },
     {
+      "name": "input-group",
+      "type": "registry:component",
+      "title": "Input Group",
+      "description": "Groups an input with leading or trailing addons.",
+      "files": [
+        {
+          "path": "registry/default/input-group/input-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "input-otp",
       "type": "registry:component",
       "title": "Input OTP",
@@ -2153,6 +2305,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "data-display",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "item",
+      "type": "registry:component",
+      "title": "Item",
+      "description": "Flexible row layout with leading media, content, and trailing actions.",
+      "files": [
+        {
+          "path": "registry/default/item/item.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -2365,6 +2536,25 @@
         "lucide-react"
       ],
       "category": "core",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "list-box",
+      "type": "registry:component",
+      "title": "List Box",
+      "description": "Accessible single- or multi-select list of options.",
+      "files": [
+        {
+          "path": "registry/default/list-box/list-box.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -2677,6 +2867,25 @@
       "stability": "stable"
     },
     {
+      "name": "native-select",
+      "type": "registry:component",
+      "title": "Native Select",
+      "description": "Styled wrapper around the native select element.",
+      "files": [
+        {
+          "path": "registry/default/native-select/native-select.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "navbar-saas",
       "type": "registry:component",
       "title": "Navbar SaaS",
@@ -2932,6 +3141,25 @@
       "files": [
         {
           "path": "registry/default/password-input/password-input.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "phone-input",
+      "type": "registry:component",
+      "title": "Phone Input",
+      "description": "Phone number input with a country dialing-code selector.",
+      "files": [
+        {
+          "path": "registry/default/phone-input/phone-input.tsx",
           "type": "registry:component"
         }
       ],
@@ -3309,6 +3537,25 @@
       "stability": "stable"
     },
     {
+      "name": "range-calendar",
+      "type": "registry:component",
+      "title": "Range Calendar",
+      "description": "Calendar that selects a start and end date as a range.",
+      "files": [
+        {
+          "path": "registry/default/range-calendar/range-calendar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "rating",
       "type": "registry:component",
       "title": "Rating",
@@ -3572,6 +3819,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "learning",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "search-field",
+      "type": "registry:component",
+      "title": "Search Field",
+      "description": "Search input with a leading icon and a clear button.",
+      "files": [
+        {
+          "path": "registry/default/search-field/search-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4204,6 +4470,25 @@
       "stability": "stable"
     },
     {
+      "name": "tag-group",
+      "type": "registry:component",
+      "title": "Tag Group",
+      "description": "Set of tags supporting selection and removal.",
+      "files": [
+        {
+          "path": "registry/default/tag-group/tag-group.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "tags-input",
       "type": "registry:component",
       "title": "Tags Input",
@@ -4238,6 +4523,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "text-field",
+      "type": "registry:component",
+      "title": "Text Field",
+      "description": "Labelled text input bundling description and error message.",
+      "files": [
+        {
+          "path": "registry/default/text-field/text-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4410,6 +4714,44 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "time-field",
+      "type": "registry:component",
+      "title": "Time Field",
+      "description": "Native time input styled to match the design system.",
+      "files": [
+        {
+          "path": "registry/default/time-field/time-field.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "time-picker",
+      "type": "registry:component",
+      "title": "Time Picker",
+      "description": "Popover time selector built from hour and minute columns.",
+      "files": [
+        {
+          "path": "registry/default/time-picker/time-picker.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "form",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4968,5 +5310,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-06-17T19:40:53.816Z"
+  "generatedAt": "2026-06-17T19:59:18.516Z"
 }
