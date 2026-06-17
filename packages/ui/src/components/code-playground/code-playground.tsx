@@ -40,6 +40,10 @@ export type CodePlaygroundProps = {
 
 const EMPTY_HIGHLIGHT_LINES: number[] = [];
 
+function extractCode(node: ReactNode): string {
+  return typeof node === "string" ? node : "";
+}
+
 export function CodePlayground({
   as: Heading = "h4",
   children,
@@ -51,7 +55,7 @@ export function CodePlayground({
   title,
 }: CodePlaygroundProps) {
   const { copied, copy } = useCopyToClipboard();
-  const code = typeof children === "string" ? children : "";
+  const code = extractCode(children);
   const lines = code.split("\n");
 
   const handleCopy = () => {

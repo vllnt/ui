@@ -54,6 +54,14 @@ const DEFAULT_LABELS: Required<ContentIntroLabels> = {
 
 const EMPTY_CONTENT_INTRO_LABELS: ContentIntroLabels = {};
 
+type ContentIntroBodyProps = {
+  source: () => ReactNode;
+};
+
+function ContentIntroBody({ source }: ContentIntroBodyProps): ReactNode {
+  return source();
+}
+
 // eslint-disable-next-line max-lines-per-function -- Complex intro with TOC and sticky button
 function ContentIntroImpl({
   additionalContent,
@@ -100,7 +108,7 @@ function ContentIntroImpl({
             {title}
           </TitleHeading>
           <div className={cn("max-w-none", "[&_h2:first-of-type]:hidden")}>
-            {renderIntroContent()}
+            <ContentIntroBody source={renderIntroContent} />
           </div>
         </section>
 

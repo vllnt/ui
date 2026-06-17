@@ -274,6 +274,83 @@
     ],
     "title": "Anchor Port"
   },
+  "animated-beam": {
+    "category": "data-display",
+    "defaultStoryId": "effects-animatedbeam--default",
+    "description": "Animated gradient beam that connects two elements with a flowing light path.",
+    "name": "animated-beam",
+    "stories": [
+      {
+        "id": "effects-animatedbeam--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Animated Beam"
+  },
+  "animated-grid-pattern": {
+    "category": "utility",
+    "defaultStoryId": "effects-animatedgridpattern--default",
+    "description": "Decorative grid background with squares that fade in and out at random.",
+    "name": "animated-grid-pattern",
+    "stories": [
+      {
+        "id": "effects-animatedgridpattern--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-animatedgridpattern--dense",
+        "name": "Dense"
+      }
+    ],
+    "title": "Animated Grid Pattern"
+  },
+  "animated-list": {
+    "category": "content",
+    "defaultStoryId": "effects-animatedlist--default",
+    "description": "List whose items animate in sequentially with a staggered entrance.",
+    "name": "animated-list",
+    "stories": [
+      {
+        "id": "effects-animatedlist--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Animated List"
+  },
+  "animated-tabs": {
+    "category": "navigation",
+    "defaultStoryId": "effects-animatedtabs--default",
+    "description": "Tabs with a sliding indicator that animates to the active item.",
+    "name": "animated-tabs",
+    "stories": [
+      {
+        "id": "effects-animatedtabs--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-animatedtabs--second-active",
+        "name": "Second Active"
+      }
+    ],
+    "title": "Animated Tabs"
+  },
+  "animated-testimonials": {
+    "category": "content",
+    "defaultStoryId": "engineer--default",
+    "description": "Testimonial carousel with animated transitions between quotes.",
+    "name": "animated-testimonials",
+    "stories": [
+      {
+        "id": "engineer--default",
+        "name": "Default"
+      },
+      {
+        "id": "engineer--autoplay",
+        "name": "Autoplay"
+      }
+    ],
+    "title": "Animated Testimonials"
+  },
   "animated-text": {
     "category": "utility",
     "defaultStoryId": "utility-animatedtext--terminal",
@@ -330,6 +407,23 @@
       }
     ],
     "title": "Animated Text"
+  },
+  "animated-tooltip": {
+    "category": "overlay",
+    "defaultStoryId": "effects-animatedtooltip--default",
+    "description": "Tooltip that animates in on hover or focus with a scale-and-fade.",
+    "name": "animated-tooltip",
+    "stories": [
+      {
+        "id": "effects-animatedtooltip--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-animatedtooltip--bottom",
+        "name": "Bottom"
+      }
+    ],
+    "title": "Animated Tooltip"
   },
   "annotation": {
     "category": "learning",
@@ -494,6 +588,19 @@
     "stories": [],
     "title": "Bar Chart"
   },
+  "bento-grid": {
+    "category": "content",
+    "defaultStoryId": "effects-bentogrid--default",
+    "description": "Responsive bento-style grid layout with feature cards.",
+    "name": "bento-grid",
+    "stories": [
+      {
+        "id": "effects-bentogrid--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Bento Grid"
+  },
   "blog-card": {
     "category": "content",
     "defaultStoryId": "exampleblogpost--default",
@@ -506,6 +613,23 @@
       }
     ],
     "title": "Blog Card"
+  },
+  "blur-reveal": {
+    "category": "content",
+    "defaultStoryId": "effects-blurreveal--default",
+    "description": "Reveals content with a blur-to-sharp transition when it scrolls into view.",
+    "name": "blur-reveal",
+    "stories": [
+      {
+        "id": "effects-blurreveal--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-blurreveal--delayed",
+        "name": "Delayed"
+      }
+    ],
+    "title": "Blur Reveal"
   },
   "border-beam": {
     "category": "utility",
@@ -620,6 +744,23 @@
     ],
     "title": "Button"
   },
+  "button-group": {
+    "category": "form",
+    "defaultStoryId": "form-buttongroup--default",
+    "description": "Visually connected group of buttons that share borders.",
+    "name": "button-group",
+    "stories": [
+      {
+        "id": "form-buttongroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-buttongroup--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Button Group"
+  },
   "calendar": {
     "category": "form",
     "defaultStoryId": "form-calendar--default",
@@ -706,6 +847,23 @@
     ],
     "title": "Card"
   },
+  "card-flip": {
+    "category": "utility",
+    "defaultStoryId": "effects-cardflip--default",
+    "description": "Card that flips in 3D between a front and back face.",
+    "name": "card-flip",
+    "stories": [
+      {
+        "id": "effects-cardflip--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-cardflip--click-to-flip",
+        "name": "Click To Flip"
+      }
+    ],
+    "title": "Card Flip"
+  },
   "carousel": {
     "category": "content",
     "defaultStoryId": "content-carousel--default",
@@ -732,6 +890,27 @@
     ],
     "title": "Category Filter"
   },
+  "chain-of-thought": {
+    "category": "ai",
+    "defaultStoryId": "ai-chainofthought--default",
+    "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
+    "name": "chain-of-thought",
+    "stories": [
+      {
+        "id": "ai-chainofthought--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-chainofthought--with-error",
+        "name": "With Error"
+      },
+      {
+        "id": "ai-chainofthought--all-complete",
+        "name": "All Complete"
+      }
+    ],
+    "title": "Chain of Thought"
+  },
   "chat-dock-section": {
     "category": "ai",
     "defaultStoryId": "layout-chatdocksection--default",
@@ -757,6 +936,27 @@
       }
     ],
     "title": "Checkbox"
+  },
+  "checkbox-group": {
+    "category": "form",
+    "defaultStoryId": "form-checkboxgroup--default",
+    "description": "Group of related checkboxes backed by an array of selected values.",
+    "name": "checkbox-group",
+    "stories": [
+      {
+        "id": "form-checkboxgroup--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-checkboxgroup--horizontal",
+        "name": "Horizontal"
+      },
+      {
+        "id": "form-checkboxgroup--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Checkbox Group"
   },
   "checklist": {
     "category": "learning",
@@ -896,6 +1096,23 @@
       }
     ],
     "title": "Collapsible"
+  },
+  "color-picker": {
+    "category": "form",
+    "defaultStoryId": "form-colorpicker--default",
+    "description": "Popover color picker with swatches, a hue slider, and a hex input.",
+    "name": "color-picker",
+    "stories": [
+      {
+        "id": "form-colorpicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-colorpicker--custom-default",
+        "name": "Custom Default"
+      }
+    ],
+    "title": "Color Picker"
   },
   "combobox": {
     "category": "form",
@@ -1054,6 +1271,23 @@
     ],
     "title": "Context Menu"
   },
+  "contribution-graph": {
+    "category": "data",
+    "defaultStoryId": "data-contributiongraph--default",
+    "description": "GitHub-style heatmap of daily activity over time.",
+    "name": "contribution-graph",
+    "stories": [
+      {
+        "id": "data-contributiongraph--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-contributiongraph--last-twelve-weeks",
+        "name": "Last Twelve Weeks"
+      }
+    ],
+    "title": "Contribution Graph"
+  },
   "conversation-thread": {
     "category": "learning",
     "defaultStoryId": "ai-conversationthread--default",
@@ -1164,6 +1398,23 @@
     ],
     "title": "Curriculum"
   },
+  "cursor": {
+    "category": "utility",
+    "defaultStoryId": "effects-cursor--default",
+    "description": "Custom cursor follower that trails the pointer.",
+    "name": "cursor",
+    "stories": [
+      {
+        "id": "effects-cursor--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-cursor--large",
+        "name": "Large"
+      }
+    ],
+    "title": "Cursor"
+  },
   "data-list": {
     "category": "data",
     "defaultStoryId": "data-datalist--default",
@@ -1194,6 +1445,23 @@
     ],
     "title": "Data Table"
   },
+  "date-field": {
+    "category": "form",
+    "defaultStoryId": "form-datefield--default",
+    "description": "Native date input styled to match the design system.",
+    "name": "date-field",
+    "stories": [
+      {
+        "id": "form-datefield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-datefield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Date Field"
+  },
   "date-picker": {
     "category": "form",
     "defaultStoryId": "form-datepicker--default",
@@ -1211,6 +1479,23 @@
     ],
     "title": "Date Picker"
   },
+  "date-range-picker": {
+    "category": "form",
+    "defaultStoryId": "form-daterangepicker--default",
+    "description": "Popover calendar for selecting a start and end date.",
+    "name": "date-range-picker",
+    "stories": [
+      {
+        "id": "form-daterangepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-daterangepicker--preselected",
+        "name": "Preselected"
+      }
+    ],
+    "title": "Date Range Picker"
+  },
   "dialog": {
     "category": "overlay",
     "defaultStoryId": "overlay-dialog--default",
@@ -1223,6 +1508,19 @@
       }
     ],
     "title": "Dialog"
+  },
+  "dock": {
+    "category": "navigation",
+    "defaultStoryId": "effects-dock--default",
+    "description": "macOS-style dock whose icons magnify near the pointer.",
+    "name": "dock",
+    "stories": [
+      {
+        "id": "effects-dock--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Dock"
   },
   "document-sibling-nav": {
     "category": "content",
@@ -1256,6 +1554,23 @@
       }
     ],
     "title": "Document Sibling Nav"
+  },
+  "dot-pattern": {
+    "category": "utility",
+    "defaultStoryId": "effects-dotpattern--default",
+    "description": "Decorative dotted background pattern built from token colors.",
+    "name": "dot-pattern",
+    "stories": [
+      {
+        "id": "effects-dotpattern--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-dotpattern--wide-spacing",
+        "name": "Wide Spacing"
+      }
+    ],
+    "title": "Dot Pattern"
   },
   "drawer": {
     "category": "overlay",
@@ -1359,6 +1674,19 @@
     ],
     "title": "Exercise"
   },
+  "expandable-cards": {
+    "category": "content",
+    "defaultStoryId": "gettingstarted--default",
+    "description": "Cards that expand on click to reveal additional content.",
+    "name": "expandable-cards",
+    "stories": [
+      {
+        "id": "gettingstarted--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Expandable Cards"
+  },
   "faq": {
     "category": "content",
     "defaultStoryId": "content-faq--default",
@@ -1375,6 +1703,44 @@
       }
     ],
     "title": "FAQ"
+  },
+  "field": {
+    "category": "form",
+    "defaultStoryId": "form-field--default",
+    "description": "Layout wrapper pairing a label, control, description, and error message.",
+    "name": "field",
+    "stories": [
+      {
+        "id": "form-field--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-field--invalid",
+        "name": "Invalid"
+      },
+      {
+        "id": "form-field--horizontal",
+        "name": "Horizontal"
+      }
+    ],
+    "title": "Field"
+  },
+  "fieldset": {
+    "category": "form",
+    "defaultStoryId": "form-fieldset--default",
+    "description": "Groups related fields under a shared legend.",
+    "name": "fieldset",
+    "stories": [
+      {
+        "id": "form-fieldset--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-fieldset--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Fieldset"
   },
   "file-upload": {
     "category": "form",
@@ -1427,6 +1793,19 @@
       }
     ],
     "title": "Floating Action Button"
+  },
+  "floating-navbar": {
+    "category": "navigation",
+    "defaultStoryId": "effects-floatingnavbar--default",
+    "description": "Floating navigation bar that hides on scroll down and reveals on scroll up.",
+    "name": "floating-navbar",
+    "stories": [
+      {
+        "id": "effects-floatingnavbar--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Floating Navbar"
   },
   "floating-toolbar": {
     "category": "data-display",
@@ -1525,6 +1904,27 @@
     ],
     "title": "Gantt Chart"
   },
+  "gauge-chart": {
+    "category": "data",
+    "defaultStoryId": "data-gaugechart--default",
+    "description": "Semicircular gauge for a single value within a range.",
+    "name": "gauge-chart",
+    "stories": [
+      {
+        "id": "data-gaugechart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-gaugechart--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "data-gaugechart--full",
+        "name": "Full"
+      }
+    ],
+    "title": "Gauge Chart"
+  },
   "geography-quiz-map": {
     "category": "data-display",
     "defaultStoryId": "educational-geographyquizmap--default",
@@ -1546,6 +1946,19 @@
     ],
     "title": "Geography Quiz Map"
   },
+  "glass-card": {
+    "category": "utility",
+    "defaultStoryId": "effects-glasscard--default",
+    "description": "Frosted-glass card surface with backdrop blur and a translucent background.",
+    "name": "glass-card",
+    "stories": [
+      {
+        "id": "effects-glasscard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Glass Card"
+  },
   "glass-panel": {
     "category": "utility",
     "defaultStoryId": "layout-glasspanel--default",
@@ -1558,6 +1971,23 @@
       }
     ],
     "title": "Glass Panel"
+  },
+  "glass-progress": {
+    "category": "data-display",
+    "defaultStoryId": "effects-glassprogress--default",
+    "description": "Glass-styled progress bar with a translucent track and token-colored fill.",
+    "name": "glass-progress",
+    "stories": [
+      {
+        "id": "effects-glassprogress--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-glassprogress--full",
+        "name": "Full"
+      }
+    ],
+    "title": "Glass Progress"
   },
   "globe-3d": {
     "category": "data-display",
@@ -1579,6 +2009,23 @@
       }
     ],
     "title": "Globe 3D"
+  },
+  "grid": {
+    "category": "core",
+    "defaultStoryId": "core-grid--default",
+    "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
+    "name": "grid",
+    "stories": [
+      {
+        "id": "core-grid--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-grid--responsive",
+        "name": "Responsive"
+      }
+    ],
+    "title": "Grid"
   },
   "group-hull": {
     "category": "utility",
@@ -1807,6 +2254,27 @@
     ],
     "title": "Input"
   },
+  "input-group": {
+    "category": "form",
+    "defaultStoryId": "form-inputgroup--leading-icon",
+    "description": "Groups an input with leading or trailing addons.",
+    "name": "input-group",
+    "stories": [
+      {
+        "id": "form-inputgroup--leading-icon",
+        "name": "Leading Icon"
+      },
+      {
+        "id": "form-inputgroup--trailing-text",
+        "name": "Trailing Text"
+      },
+      {
+        "id": "form-inputgroup--prefix-text",
+        "name": "Prefix Text"
+      }
+    ],
+    "title": "Input Group"
+  },
   "input-otp": {
     "category": "form",
     "defaultStoryId": "form-inputotp--default",
@@ -1844,6 +2312,23 @@
       }
     ],
     "title": "Interactive Timeline"
+  },
+  "item": {
+    "category": "form",
+    "defaultStoryId": "form-item--default",
+    "description": "Flexible row layout with leading media, content, and trailing actions.",
+    "name": "item",
+    "stories": [
+      {
+        "id": "form-item--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-item--outline",
+        "name": "Outline"
+      }
+    ],
+    "title": "Item"
   },
   "jarvis-dock": {
     "category": "navigation",
@@ -2022,6 +2507,61 @@
     "stories": [],
     "title": "Line Chart"
   },
+  "link": {
+    "category": "core",
+    "defaultStoryId": "core-link--default",
+    "description": "Styled anchor with emphasis variants and an external-link affordance.",
+    "name": "link",
+    "stories": [
+      {
+        "id": "core-link--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-link--muted",
+        "name": "Muted"
+      },
+      {
+        "id": "core-link--underline",
+        "name": "Underline"
+      },
+      {
+        "id": "core-link--external",
+        "name": "External"
+      }
+    ],
+    "title": "Link"
+  },
+  "liquid-glass": {
+    "category": "utility",
+    "defaultStoryId": "effects-liquidglass--default",
+    "description": "Glass surface with an animated liquid gradient sheen.",
+    "name": "liquid-glass",
+    "stories": [
+      {
+        "id": "effects-liquidglass--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Liquid Glass"
+  },
+  "list-box": {
+    "category": "form",
+    "defaultStoryId": "form-listbox--single-select",
+    "description": "Accessible single- or multi-select list of options.",
+    "name": "list-box",
+    "stories": [
+      {
+        "id": "form-listbox--single-select",
+        "name": "Single Select"
+      },
+      {
+        "id": "form-listbox--multi-select",
+        "name": "Multi Select"
+      }
+    ],
+    "title": "List Box"
+  },
   "live-cursor": {
     "category": "utility",
     "defaultStoryId": "canvas-livecursor--default",
@@ -2063,6 +2603,40 @@
       }
     ],
     "title": "Live Feed"
+  },
+  "magnetic": {
+    "category": "utility",
+    "defaultStoryId": "effects-magnetic--default",
+    "description": "Wrapper that pulls its content toward the pointer for a magnetic effect.",
+    "name": "magnetic",
+    "stories": [
+      {
+        "id": "effects-magnetic--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-magnetic--strong",
+        "name": "Strong"
+      }
+    ],
+    "title": "Magnetic"
+  },
+  "magnetic-button": {
+    "category": "utility",
+    "defaultStoryId": "effects-magneticbutton--default",
+    "description": "Button that drifts toward the pointer for a magnetic hover effect.",
+    "name": "magnetic-button",
+    "stories": [
+      {
+        "id": "effects-magneticbutton--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-magneticbutton--strong",
+        "name": "Strong"
+      }
+    ],
+    "title": "Magnetic Button"
   },
   "map-2d": {
     "category": "data-display",
@@ -2181,6 +2755,44 @@
       }
     ],
     "title": "Menubar"
+  },
+  "meteors": {
+    "category": "utility",
+    "defaultStoryId": "effects-meteors--default",
+    "description": "Decorative meteor shower of streaks falling across the background.",
+    "name": "meteors",
+    "stories": [
+      {
+        "id": "effects-meteors--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-meteors--sparse",
+        "name": "Sparse"
+      }
+    ],
+    "title": "Meteors"
+  },
+  "meter": {
+    "category": "core",
+    "defaultStoryId": "core-meter--default",
+    "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
+    "name": "meter",
+    "stories": [
+      {
+        "id": "core-meter--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-meter--destructive",
+        "name": "Destructive"
+      },
+      {
+        "id": "core-meter--segmented",
+        "name": "Segmented"
+      }
+    ],
+    "title": "Meter"
   },
   "metric-cluster": {
     "category": "data",
@@ -2320,6 +2932,23 @@
       }
     ],
     "title": "Multi Select Lasso"
+  },
+  "native-select": {
+    "category": "form",
+    "defaultStoryId": "form-nativeselect--default",
+    "description": "Styled wrapper around the native select element.",
+    "name": "native-select",
+    "stories": [
+      {
+        "id": "form-nativeselect--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-nativeselect--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Native Select"
   },
   "navbar-saas": {
     "category": "navigation",
@@ -2504,6 +3133,23 @@
     ],
     "title": "Pagination"
   },
+  "panel": {
+    "category": "core",
+    "defaultStoryId": "core-panel--default",
+    "description": "Bordered, titled content surface with header, body, and footer slots.",
+    "name": "panel",
+    "stories": [
+      {
+        "id": "core-panel--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-panel--header-and-body-only",
+        "name": "Header And Body Only"
+      }
+    ],
+    "title": "Panel"
+  },
   "parallel-timeline": {
     "category": "educational",
     "defaultStoryId": "augustusbecomesemperor--default",
@@ -2529,6 +3175,23 @@
     ],
     "title": "Parallel Timeline"
   },
+  "particles": {
+    "category": "utility",
+    "defaultStoryId": "effects-particles--default",
+    "description": "Floating particle field that drifts gently in the background.",
+    "name": "particles",
+    "stories": [
+      {
+        "id": "effects-particles--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-particles--sparse",
+        "name": "Sparse"
+      }
+    ],
+    "title": "Particles"
+  },
   "password-input": {
     "category": "form",
     "defaultStoryId": "form-passwordinput--default",
@@ -2541,6 +3204,44 @@
       }
     ],
     "title": "Password Input"
+  },
+  "phone-input": {
+    "category": "form",
+    "defaultStoryId": "form-phoneinput--default",
+    "description": "Phone number input with a country dialing-code selector.",
+    "name": "phone-input",
+    "stories": [
+      {
+        "id": "form-phoneinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-phoneinput--default-country",
+        "name": "Default Country"
+      }
+    ],
+    "title": "Phone Input"
+  },
+  "pie-chart": {
+    "category": "data",
+    "defaultStoryId": "data-piechart--default",
+    "description": "Proportional pie or donut chart for part-to-whole comparisons.",
+    "name": "pie-chart",
+    "stories": [
+      {
+        "id": "data-piechart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-piechart--donut",
+        "name": "Donut"
+      },
+      {
+        "id": "data-piechart--custom-palette",
+        "name": "Custom Palette"
+      }
+    ],
+    "title": "Pie Chart"
   },
   "plan-badge": {
     "category": "content",
@@ -2791,6 +3492,48 @@
     ],
     "title": "Progress Tracker"
   },
+  "progressive-blur": {
+    "category": "utility",
+    "defaultStoryId": "effects-progressiveblur--default",
+    "description": "Progressive blur overlay that fades focus toward one edge.",
+    "name": "progressive-blur",
+    "stories": [
+      {
+        "id": "effects-progressiveblur--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-progressiveblur--top-strong",
+        "name": "Top Strong"
+      }
+    ],
+    "title": "Progressive Blur"
+  },
+  "prompt-input": {
+    "category": "ai",
+    "defaultStoryId": "ai-promptinput--default",
+    "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
+    "name": "prompt-input",
+    "stories": [
+      {
+        "id": "ai-promptinput--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-promptinput--loading",
+        "name": "Loading"
+      },
+      {
+        "id": "ai-promptinput--with-toolbar",
+        "name": "With Toolbar"
+      },
+      {
+        "id": "ai-promptinput--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Prompt Input"
+  },
   "prompt-templates": {
     "category": "ai",
     "defaultStoryId": "codereview--default",
@@ -2841,6 +3584,27 @@
     ],
     "title": "Property Section"
   },
+  "qr-code": {
+    "category": "core",
+    "defaultStoryId": "core-qrcode--default",
+    "description": "Renders a QR code from a string value as a theme-aware SVG.",
+    "name": "qr-code",
+    "stories": [
+      {
+        "id": "core-qrcode--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-qrcode--high-error-correction",
+        "name": "High Error Correction"
+      },
+      {
+        "id": "core-qrcode--small",
+        "name": "Small"
+      }
+    ],
+    "title": "QR Code"
+  },
   "quiz": {
     "category": "learning",
     "defaultStoryId": "learning-quiz--default",
@@ -2858,6 +3622,23 @@
     ],
     "title": "Quiz"
   },
+  "radar-chart": {
+    "category": "data",
+    "defaultStoryId": "data-radarchart--default",
+    "description": "Spider chart comparing several metrics on shared axes.",
+    "name": "radar-chart",
+    "stories": [
+      {
+        "id": "data-radarchart--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-radarchart--triangle",
+        "name": "Triangle"
+      }
+    ],
+    "title": "Radar Chart"
+  },
   "radio-group": {
     "category": "core",
     "defaultStoryId": "core-radiogroup--default",
@@ -2870,6 +3651,27 @@
       }
     ],
     "title": "Radio Group"
+  },
+  "range-calendar": {
+    "category": "form",
+    "defaultStoryId": "form-rangecalendar--default",
+    "description": "Calendar that selects a start and end date as a range.",
+    "name": "range-calendar",
+    "stories": [
+      {
+        "id": "form-rangecalendar--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-rangecalendar--single-month",
+        "name": "Single Month"
+      },
+      {
+        "id": "form-rangecalendar--preselected",
+        "name": "Preselected"
+      }
+    ],
+    "title": "Range Calendar"
   },
   "rating": {
     "category": "learning",
@@ -2887,6 +3689,27 @@
       }
     ],
     "title": "Rating"
+  },
+  "reasoning": {
+    "category": "ai",
+    "defaultStoryId": "ai-reasoning--default",
+    "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
+    "name": "reasoning",
+    "stories": [
+      {
+        "id": "ai-reasoning--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-reasoning--streaming",
+        "name": "Streaming"
+      },
+      {
+        "id": "ai-reasoning--free-form",
+        "name": "Free Form"
+      }
+    ],
+    "title": "Reasoning"
   },
   "relationship-inspector": {
     "category": "content",
@@ -2925,6 +3748,27 @@
       }
     ],
     "title": "Resizable"
+  },
+  "reveal-text": {
+    "category": "content",
+    "defaultStoryId": "effects-revealtext--default",
+    "description": "Reveals text with a directional slide-and-fade when it enters the viewport.",
+    "name": "reveal-text",
+    "stories": [
+      {
+        "id": "effects-revealtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-revealtext--from-left",
+        "name": "From Left"
+      },
+      {
+        "id": "effects-revealtext--delayed",
+        "name": "Delayed"
+      }
+    ],
+    "title": "Reveal Text"
   },
   "right-dock": {
     "category": "navigation",
@@ -3060,6 +3904,19 @@
     ],
     "title": "Runtime Overview Panel"
   },
+  "sankey-chart": {
+    "category": "data",
+    "defaultStoryId": "data-sankeychart--default",
+    "description": "Flow diagram showing weighted links between nodes.",
+    "name": "sankey-chart",
+    "stories": [
+      {
+        "id": "data-sankeychart--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Sankey Chart"
+  },
   "scope-selector": {
     "category": "form",
     "defaultStoryId": "analytics-scopeselector--default",
@@ -3077,6 +3934,23 @@
     ],
     "title": "Scope Selector"
   },
+  "scramble-text": {
+    "category": "content",
+    "defaultStoryId": "effects-scrambletext--default",
+    "description": "Scrambles characters then resolves them into the final text.",
+    "name": "scramble-text",
+    "stories": [
+      {
+        "id": "effects-scrambletext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-scrambletext--slow",
+        "name": "Slow"
+      }
+    ],
+    "title": "Scramble Text"
+  },
   "scroll-area": {
     "category": "utility",
     "defaultStoryId": "utility-scrollarea--default",
@@ -3089,6 +3963,19 @@
       }
     ],
     "title": "Scroll Area"
+  },
+  "scroll-progress": {
+    "category": "data-display",
+    "defaultStoryId": "effects-scrollprogress--default",
+    "description": "Fixed bar that tracks reading progress down the page.",
+    "name": "scroll-progress",
+    "stories": [
+      {
+        "id": "effects-scrollprogress--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Scroll Progress"
   },
   "search-bar": {
     "category": "form",
@@ -3119,6 +4006,23 @@
       }
     ],
     "title": "Search Dialog"
+  },
+  "search-field": {
+    "category": "form",
+    "defaultStoryId": "form-searchfield--default",
+    "description": "Search input with a leading icon and a clear button.",
+    "name": "search-field",
+    "stories": [
+      {
+        "id": "form-searchfield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-searchfield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Search Field"
   },
   "segmented-control": {
     "category": "form",
@@ -3293,6 +4197,70 @@
     ],
     "title": "Sheet"
   },
+  "shimmer-button": {
+    "category": "utility",
+    "defaultStoryId": "effects-shimmerbutton--default",
+    "description": "Button with a light sheen that sweeps across its surface.",
+    "name": "shimmer-button",
+    "stories": [
+      {
+        "id": "effects-shimmerbutton--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-shimmerbutton--slow",
+        "name": "Slow"
+      }
+    ],
+    "title": "Shimmer Button"
+  },
+  "shimmer-text": {
+    "category": "content",
+    "defaultStoryId": "effects-shimmertext--default",
+    "description": "Text with a bright light band that sweeps across it.",
+    "name": "shimmer-text",
+    "stories": [
+      {
+        "id": "effects-shimmertext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-shimmertext--fast",
+        "name": "Fast"
+      }
+    ],
+    "title": "Shimmer Text"
+  },
+  "shine-border": {
+    "category": "utility",
+    "defaultStoryId": "effects-shineborder--default",
+    "description": "Wrapper that draws an animated gradient border around its content.",
+    "name": "shine-border",
+    "stories": [
+      {
+        "id": "effects-shineborder--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-shineborder--thick",
+        "name": "Thick"
+      }
+    ],
+    "title": "Shine Border"
+  },
+  "shiny-button": {
+    "category": "utility",
+    "defaultStoryId": "effects-shinybutton--default",
+    "description": "Button with a glossy gradient sheen that sweeps on a loop.",
+    "name": "shiny-button",
+    "stories": [
+      {
+        "id": "effects-shinybutton--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Shiny Button"
+  },
   "sidebar": {
     "category": "navigation",
     "defaultStoryId": "introduction--default",
@@ -3396,6 +4364,23 @@
     ],
     "title": "Snap Guides"
   },
+  "sparkles": {
+    "category": "utility",
+    "defaultStoryId": "effects-sparkles--default",
+    "description": "Decorative twinkling sparkles scattered behind content.",
+    "name": "sparkles",
+    "stories": [
+      {
+        "id": "effects-sparkles--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-sparkles--dense",
+        "name": "Dense"
+      }
+    ],
+    "title": "Sparkles"
+  },
   "sparkline-grid": {
     "category": "data",
     "defaultStoryId": "data-sparklinegrid--default",
@@ -3425,6 +4410,36 @@
       }
     ],
     "title": "Spinner"
+  },
+  "spinning-text": {
+    "category": "content",
+    "defaultStoryId": "effects-spinningtext--default",
+    "description": "Text laid out in a circle that rotates continuously.",
+    "name": "spinning-text",
+    "stories": [
+      {
+        "id": "effects-spinningtext--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-spinningtext--reverse-fast",
+        "name": "Reverse Fast"
+      }
+    ],
+    "title": "Spinning Text"
+  },
+  "spotlight-card": {
+    "category": "utility",
+    "defaultStoryId": "effects-spotlightcard--default",
+    "description": "Card with a radial spotlight that follows the pointer.",
+    "name": "spotlight-card",
+    "stories": [
+      {
+        "id": "effects-spotlightcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Spotlight Card"
   },
   "stat-card": {
     "category": "data",
@@ -3685,6 +4700,23 @@
     ],
     "title": "Tabs"
   },
+  "tag-group": {
+    "category": "form",
+    "defaultStoryId": "form-taggroup--selectable",
+    "description": "Set of tags supporting selection and removal.",
+    "name": "tag-group",
+    "stories": [
+      {
+        "id": "form-taggroup--selectable",
+        "name": "Selectable"
+      },
+      {
+        "id": "form-taggroup--removable",
+        "name": "Removable"
+      }
+    ],
+    "title": "Tag Group"
+  },
   "tags-input": {
     "category": "form",
     "defaultStoryId": "form-tagsinput--default",
@@ -3718,6 +4750,82 @@
       }
     ],
     "title": "Terminal"
+  },
+  "text-animate": {
+    "category": "content",
+    "defaultStoryId": "effects-textanimate--default",
+    "description": "Animates text in by word or character with configurable effects.",
+    "name": "text-animate",
+    "stories": [
+      {
+        "id": "effects-textanimate--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-textanimate--slide-up",
+        "name": "Slide Up"
+      },
+      {
+        "id": "effects-textanimate--blur",
+        "name": "Blur"
+      },
+      {
+        "id": "effects-textanimate--by-character",
+        "name": "By Character"
+      }
+    ],
+    "title": "Text Animate"
+  },
+  "text-field": {
+    "category": "form",
+    "defaultStoryId": "form-textfield--default",
+    "description": "Labelled text input bundling description and error message.",
+    "name": "text-field",
+    "stories": [
+      {
+        "id": "form-textfield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-textfield--with-error",
+        "name": "With Error"
+      },
+      {
+        "id": "form-textfield--disabled",
+        "name": "Disabled"
+      }
+    ],
+    "title": "Text Field"
+  },
+  "text-reveal": {
+    "category": "content",
+    "defaultStoryId": "effects-textreveal--default",
+    "description": "Dims and brightens words as the text scrolls through the viewport.",
+    "name": "text-reveal",
+    "stories": [
+      {
+        "id": "effects-textreveal--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Text Reveal"
+  },
+  "text-shimmer": {
+    "category": "content",
+    "defaultStoryId": "effects-textshimmer--default",
+    "description": "Text with an animated gradient fill that shimmers.",
+    "name": "text-shimmer",
+    "stories": [
+      {
+        "id": "effects-textshimmer--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-textshimmer--slow",
+        "name": "Slow"
+      }
+    ],
+    "title": "Text Shimmer"
   },
   "textarea": {
     "category": "core",
@@ -3864,6 +4972,53 @@
     ],
     "title": "Ticker Tape"
   },
+  "tilt-card": {
+    "category": "utility",
+    "defaultStoryId": "effects-tiltcard--default",
+    "description": "Card that tilts in 3D toward the pointer for a parallax hover.",
+    "name": "tilt-card",
+    "stories": [
+      {
+        "id": "effects-tiltcard--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Tilt Card"
+  },
+  "time-field": {
+    "category": "form",
+    "defaultStoryId": "form-timefield--default",
+    "description": "Native time input styled to match the design system.",
+    "name": "time-field",
+    "stories": [
+      {
+        "id": "form-timefield--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-timefield--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Time Field"
+  },
+  "time-picker": {
+    "category": "form",
+    "defaultStoryId": "form-timepicker--default",
+    "description": "Popover time selector built from hour and minute columns.",
+    "name": "time-picker",
+    "stories": [
+      {
+        "id": "form-timepicker--default",
+        "name": "Default"
+      },
+      {
+        "id": "form-timepicker--with-value",
+        "name": "With Value"
+      }
+    ],
+    "title": "Time Picker"
+  },
   "timeline": {
     "category": "content",
     "defaultStoryId": "content-timeline--default",
@@ -3985,6 +5140,23 @@
       }
     ],
     "title": "Toggle Group"
+  },
+  "toolbar": {
+    "category": "core",
+    "defaultStoryId": "core-toolbar--default",
+    "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
+    "name": "toolbar",
+    "stories": [
+      {
+        "id": "core-toolbar--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-toolbar--vertical",
+        "name": "Vertical"
+      }
+    ],
+    "title": "Toolbar"
   },
   "tooltip": {
     "category": "overlay",
@@ -4156,6 +5328,52 @@
       }
     ],
     "title": "Tutorial MDX"
+  },
+  "typewriter": {
+    "category": "content",
+    "defaultStoryId": "effects-typewriter--default",
+    "description": "Types text out character by character with a blinking cursor.",
+    "name": "typewriter",
+    "stories": [
+      {
+        "id": "effects-typewriter--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-typewriter--fast",
+        "name": "Fast"
+      },
+      {
+        "id": "effects-typewriter--no-cursor",
+        "name": "No Cursor"
+      }
+    ],
+    "title": "Typewriter"
+  },
+  "typography": {
+    "category": "core",
+    "defaultStoryId": "core-typography--headings",
+    "description": "Semantic text primitives: headings, paragraph, lead, muted, blockquote, inline code, and list.",
+    "name": "typography",
+    "stories": [
+      {
+        "id": "core-typography--headings",
+        "name": "Headings"
+      },
+      {
+        "id": "core-typography--body",
+        "name": "Body"
+      },
+      {
+        "id": "core-typography--quote",
+        "name": "Quote"
+      },
+      {
+        "id": "core-typography--bulleted-list",
+        "name": "Bulleted List"
+      }
+    ],
+    "title": "Typography"
   },
   "usage-breakdown": {
     "category": "data",
