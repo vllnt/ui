@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
 import { Check, LoaderCircle, X } from "lucide-react";
 
@@ -114,18 +112,20 @@ function ChainOfThoughtItem({
  *   ]}
  * />
  */
-export const ChainOfThought = forwardRef<HTMLOListElement, ChainOfThoughtProps>(
-  ({ className, steps }, ref) => (
-    <ol className={cn("flex flex-col", className)} ref={ref}>
-      {steps.map((step, index) => (
-        <ChainOfThoughtItem
-          index={index}
-          isLast={index === steps.length - 1}
-          key={`${index}-${step.title}`}
-          step={step}
-        />
-      ))}
-    </ol>
-  ),
+export const ChainOfThought = ({
+  className,
+  ref,
+  steps,
+}: ChainOfThoughtProps & { ref?: React.Ref<HTMLOListElement> }) => (
+  <ol className={cn("flex flex-col", className)} ref={ref}>
+    {steps.map((step, index) => (
+      <ChainOfThoughtItem
+        index={index}
+        isLast={index === steps.length - 1}
+        key={`${index}-${step.title}`}
+        step={step}
+      />
+    ))}
+  </ol>
 );
 ChainOfThought.displayName = "ChainOfThought";

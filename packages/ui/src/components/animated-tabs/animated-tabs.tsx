@@ -73,60 +73,63 @@ function TabButton({
  * <AnimatedTabs tabs={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} />
  * ```
  */
-export const AnimatedTabs = React.forwardRef<HTMLDivElement, AnimatedTabsProps>(
-  ({ className, defaultValue, onValueChange, tabs, ...props }, ref) => {
-    const [active, setActive] = React.useState(defaultValue ?? tabs[0]?.value);
-    const [indicator, setIndicator] = React.useState<IndicatorStyle>({
-      left: 0,
-      width: 0,
-    });
-    const buttons = React.useRef(new Map<string, HTMLButtonElement>());
+export const AnimatedTabs = ({
+  className,
+  defaultValue,
+  onValueChange,
+  ref,
+  tabs,
+  ...props
+}: AnimatedTabsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [active, setActive] = React.useState(defaultValue ?? tabs[0]?.value);
+  const [indicator, setIndicator] = React.useState<IndicatorStyle>({
+    left: 0,
+    width: 0,
+  });
+  const buttons = React.useRef(new Map<string, HTMLButtonElement>());
 
-    React.useLayoutEffect(() => {
-      setIndicator(
-        indicatorPosition(buttons.current.get(active ?? "") ?? null),
-      );
-    }, [active]);
+  React.useLayoutEffect(() => {
+    setIndicator(indicatorPosition(buttons.current.get(active ?? "") ?? null));
+  }, [active]);
 
-    const handleSelect = (value: string): void => {
-      setActive(value);
-      onValueChange?.(value);
-    };
+  const handleSelect = (value: string): void => {
+    setActive(value);
+    onValueChange?.(value);
+  };
 
-    return (
-      <div
-        className={cn(
-          "relative inline-flex items-center gap-1 rounded-lg border border-border bg-muted p-1",
-          className,
-        )}
-        ref={ref}
-        role="tablist"
-        {...props}
-      >
-        <span
-          aria-hidden="true"
-          className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-all duration-300 ease-out motion-reduce:transition-none"
-          style={{ left: indicator.left, width: indicator.width }}
+  return (
+    <div
+      className={cn(
+        "relative inline-flex items-center gap-1 rounded-lg border border-border bg-muted p-1",
+        className,
+      )}
+      ref={ref}
+      role="tablist"
+      {...props}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-all duration-300 ease-out motion-reduce:transition-none"
+        style={{ left: indicator.left, width: indicator.width }}
+      />
+      {tabs.map((tab) => (
+        <TabButton
+          active={tab.value === active}
+          key={tab.value}
+          label={tab.label}
+          onSelect={() => {
+            handleSelect(tab.value);
+          }}
+          reference={(node) => {
+            if (node === null) {
+              buttons.current.delete(tab.value);
+            } else {
+              buttons.current.set(tab.value, node);
+            }
+          }}
         />
-        {tabs.map((tab) => (
-          <TabButton
-            active={tab.value === active}
-            key={tab.value}
-            label={tab.label}
-            onSelect={() => {
-              handleSelect(tab.value);
-            }}
-            reference={(node) => {
-              if (node === null) {
-                buttons.current.delete(tab.value);
-              } else {
-                buttons.current.set(tab.value, node);
-              }
-            }}
-          />
-        ))}
-      </div>
-    );
-  },
-);
+      ))}
+    </div>
+  );
+};
 AnimatedTabs.displayName = "AnimatedTabs";

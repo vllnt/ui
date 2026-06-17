@@ -20,10 +20,12 @@ function clampPercent(value: number): number {
  * <GlassProgress value={60} />
  * ```
  */
-export const GlassProgress = React.forwardRef<
-  HTMLDivElement,
-  GlassProgressProps
->(({ className, value, ...props }, ref) => {
+export const GlassProgress = ({
+  className,
+  ref,
+  value,
+  ...props
+}: GlassProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const clamped = clampPercent(value);
 
   return (
@@ -45,5 +47,5 @@ export const GlassProgress = React.forwardRef<
       />
     </div>
   );
-});
+};
 GlassProgress.displayName = "GlassProgress";

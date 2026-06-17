@@ -18,7 +18,7 @@ type FieldContextValue = {
 const FieldContext = React.createContext<FieldContextValue | null>(null);
 
 function useFieldContext(): FieldContextValue {
-  const context = React.useContext(FieldContext);
+  const context = React.use(FieldContext);
   if (!context) {
     throw new Error("Field subcomponents must be used within a Field");
   }
@@ -44,41 +44,46 @@ export type FieldProps = {
   invalid?: boolean;
 } & VariantProps<typeof fieldVariants>;
 
-const Field = React.forwardRef<HTMLDivElement, FieldProps>(
-  ({ children, className, invalid = false, orientation }, ref) => {
-    const id = React.useId();
-    const value = React.useMemo<FieldContextValue>(
-      () => ({
-        descriptionId: `${id}-description`,
-        errorId: `${id}-error`,
-        id: `${id}-control`,
-        invalid,
-      }),
-      [id, invalid],
-    );
+const Field = ({
+  children,
+  className,
+  invalid = false,
+  orientation,
+  ref,
+}: FieldProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const id = React.useId();
+  const value = React.useMemo<FieldContextValue>(
+    () => ({
+      descriptionId: `${id}-description`,
+      errorId: `${id}-error`,
+      id: `${id}-control`,
+      invalid,
+    }),
+    [id, invalid],
+  );
 
-    return (
-      <FieldContext.Provider value={value}>
-        <div
-          className={cn(fieldVariants({ orientation }), className)}
-          data-slot="field"
-          ref={ref}
-        >
-          {children}
-        </div>
-      </FieldContext.Provider>
-    );
-  },
-);
+  return (
+    <FieldContext.Provider value={value}>
+      <div
+        className={cn(fieldVariants({ orientation }), className)}
+        data-slot="field"
+        ref={ref}
+      >
+        {children}
+      </div>
+    </FieldContext.Provider>
+  );
+};
 Field.displayName = "Field";
 
 /** Label wired to the field control through htmlFor. */
 export type FieldLabelProps = React.ComponentPropsWithoutRef<typeof Label>;
 
-const FieldLabel = React.forwardRef<
-  React.ComponentRef<typeof Label>,
-  FieldLabelProps
->(({ className, ...props }, ref) => {
+const FieldLabel = ({
+  className,
+  ref,
+  ...props
+}: FieldLabelProps & { ref?: React.Ref<React.ComponentRef<typeof Label>> }) => {
   const { id, invalid } = useFieldContext();
 
   return (
@@ -89,7 +94,7 @@ const FieldLabel = React.forwardRef<
       {...props}
     />
   );
-});
+};
 FieldLabel.displayName = "FieldLabel";
 
 /** Wraps the control and injects id plus aria wiring from the Field. */
@@ -97,34 +102,36 @@ export type FieldControlProps = {
   children: React.ReactNode;
 };
 
-const FieldControl = React.forwardRef<HTMLElement, FieldControlProps>(
-  ({ children }, ref) => {
-    const { descriptionId, errorId, id, invalid } = useFieldContext();
-    const describedBy =
-      [descriptionId, invalid ? errorId : null].filter(Boolean).join(" ") ||
-      undefined;
+const FieldControl = ({
+  children,
+  ref,
+}: FieldControlProps & { ref?: React.Ref<HTMLElement> }) => {
+  const { descriptionId, errorId, id, invalid } = useFieldContext();
+  const describedBy =
+    [descriptionId, invalid ? errorId : null].filter(Boolean).join(" ") ||
+    undefined;
 
-    return (
-      <Slot
-        aria-describedby={describedBy}
-        aria-invalid={invalid || undefined}
-        id={id}
-        ref={ref}
-      >
-        {children}
-      </Slot>
-    );
-  },
-);
+  return (
+    <Slot
+      aria-describedby={describedBy}
+      aria-invalid={invalid || undefined}
+      id={id}
+      ref={ref}
+    >
+      {children}
+    </Slot>
+  );
+};
 FieldControl.displayName = "FieldControl";
 
 /** Helper text describing the field, announced to assistive tech. */
 export type FieldDescriptionProps = React.ComponentPropsWithoutRef<"p">;
 
-const FieldDescription = React.forwardRef<
-  HTMLParagraphElement,
-  FieldDescriptionProps
->(({ className, ...props }, ref) => {
+const FieldDescription = ({
+  className,
+  ref,
+  ...props
+}: FieldDescriptionProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
   const { descriptionId } = useFieldContext();
 
   return (
@@ -135,33 +142,36 @@ const FieldDescription = React.forwardRef<
       {...props}
     />
   );
-});
+};
 FieldDescription.displayName = "FieldDescription";
 
 /** Validation message that renders when children are present. */
 export type FieldErrorProps = React.ComponentPropsWithoutRef<"p">;
 
-const FieldError = React.forwardRef<HTMLParagraphElement, FieldErrorProps>(
-  ({ children, className, ...props }, ref) => {
-    const { errorId } = useFieldContext();
+const FieldError = ({
+  children,
+  className,
+  ref,
+  ...props
+}: FieldErrorProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
+  const { errorId } = useFieldContext();
 
-    if (!children) {
-      return null;
-    }
+  if (!children) {
+    return null;
+  }
 
-    return (
-      <p
-        className={cn("text-sm font-medium text-destructive", className)}
-        id={errorId}
-        ref={ref}
-        role="alert"
-        {...props}
-      >
-        {children}
-      </p>
-    );
-  },
-);
+  return (
+    <p
+      className={cn("text-sm font-medium text-destructive", className)}
+      id={errorId}
+      ref={ref}
+      role="alert"
+      {...props}
+    >
+      {children}
+    </p>
+  );
+};
 FieldError.displayName = "FieldError";
 
 export {

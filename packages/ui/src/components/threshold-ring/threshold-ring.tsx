@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -170,71 +166,72 @@ const Tick = (props: { geom: Geometry }): null | React.ReactElement => {
  *
  * @public
  */
-export const ThresholdRing = forwardRef<SVGSVGElement, ThresholdRingProps>(
-  (props, ref) => {
-    const {
-      centerLabel,
-      className,
-      labels,
-      max = 1,
-      size = 64,
-      stroke = 6,
-      threshold,
-      tone = "neutral",
-      value,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const geom = computeGeometry({ max, size, stroke, threshold, value });
-    const dash = `${geom.ratio * geom.circumference} ${geom.circumference}`;
-    return (
-      <svg
-        aria-label={resolvedLabels.region}
-        className={cn("inline-block", className)}
-        data-threshold-ring
-        data-threshold-tone={tone}
-        height={geom.size}
-        ref={ref}
-        role="img"
-        viewBox={`0 0 ${geom.size} ${geom.size}`}
-        width={geom.size}
-        {...rest}
-      >
-        <circle
-          className="stroke-muted"
-          cx={geom.cx}
-          cy={geom.cy}
-          fill="none"
-          r={geom.r}
-          strokeWidth={geom.stroke}
-        />
-        <circle
-          className={cn("transition-all duration-300", TONE_STROKE[tone])}
-          cx={geom.cx}
-          cy={geom.cy}
-          data-threshold-ring-arc
-          fill="none"
-          r={geom.r}
-          strokeDasharray={dash}
-          strokeLinecap="round"
-          strokeWidth={geom.stroke}
-          transform={`rotate(-90 ${geom.cx} ${geom.cy})`}
-        />
-        <Tick geom={geom} />
-        {centerLabel ? (
-          <text
-            className="fill-foreground text-[10px] font-semibold"
-            data-threshold-ring-label
-            dominantBaseline="central"
-            textAnchor="middle"
-            x={geom.cx}
-            y={geom.cy}
-          >
-            {centerLabel}
-          </text>
-        ) : null}
-      </svg>
-    );
-  },
-);
+export const ThresholdRing = ({
+  ref,
+  ...props
+}: ThresholdRingProps & { ref?: React.Ref<SVGSVGElement> }) => {
+  const {
+    centerLabel,
+    className,
+    labels,
+    max = 1,
+    size = 64,
+    stroke = 6,
+    threshold,
+    tone = "neutral",
+    value,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const geom = computeGeometry({ max, size, stroke, threshold, value });
+  const dash = `${geom.ratio * geom.circumference} ${geom.circumference}`;
+  return (
+    <svg
+      aria-label={resolvedLabels.region}
+      className={cn("inline-block", className)}
+      data-threshold-ring
+      data-threshold-tone={tone}
+      height={geom.size}
+      ref={ref}
+      role="img"
+      viewBox={`0 0 ${geom.size} ${geom.size}`}
+      width={geom.size}
+      {...rest}
+    >
+      <circle
+        className="stroke-muted"
+        cx={geom.cx}
+        cy={geom.cy}
+        fill="none"
+        r={geom.r}
+        strokeWidth={geom.stroke}
+      />
+      <circle
+        className={cn("transition-all duration-300", TONE_STROKE[tone])}
+        cx={geom.cx}
+        cy={geom.cy}
+        data-threshold-ring-arc
+        fill="none"
+        r={geom.r}
+        strokeDasharray={dash}
+        strokeLinecap="round"
+        strokeWidth={geom.stroke}
+        transform={`rotate(-90 ${geom.cx} ${geom.cy})`}
+      />
+      <Tick geom={geom} />
+      {centerLabel ? (
+        <text
+          className="fill-foreground text-[10px] font-semibold"
+          data-threshold-ring-label
+          dominantBaseline="central"
+          textAnchor="middle"
+          x={geom.cx}
+          y={geom.cy}
+        >
+          {centerLabel}
+        </text>
+      ) : null}
+    </svg>
+  );
+};
 ThresholdRing.displayName = "ThresholdRing";

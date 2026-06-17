@@ -47,44 +47,47 @@ function usePrefersReducedMotion(): boolean {
  * <Magnetic><img src="/logo.svg" alt="logo" /></Magnetic>
  * ```
  */
-export const Magnetic = React.forwardRef<HTMLDivElement, MagneticProps>(
-  ({ children, className, strength = 0.4, style, ...props }, ref) => {
-    const reduced = usePrefersReducedMotion();
-    const [transform, setTransform] = React.useState<string>();
+export const Magnetic = ({
+  children,
+  className,
+  ref,
+  strength = 0.4,
+  style,
+  ...props
+}: MagneticProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const reduced = usePrefersReducedMotion();
+  const [transform, setTransform] = React.useState<string>();
 
-    const handlePointerMove = (
-      event: React.PointerEvent<HTMLDivElement>,
-    ): void => {
-      if (reduced) {
-        return;
-      }
+  const handlePointerMove = (
+    event: React.PointerEvent<HTMLDivElement>,
+  ): void => {
+    if (reduced) {
+      return;
+    }
 
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const offsetX =
-        (event.clientX - bounds.left - bounds.width / 2) * strength;
-      const offsetY =
-        (event.clientY - bounds.top - bounds.height / 2) * strength;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const offsetX = (event.clientX - bounds.left - bounds.width / 2) * strength;
+    const offsetY = (event.clientY - bounds.top - bounds.height / 2) * strength;
 
-      setTransform(`translate(${offsetX}px, ${offsetY}px)`);
-    };
+    setTransform(`translate(${offsetX}px, ${offsetY}px)`);
+  };
 
-    return (
-      <div
-        className={cn(
-          "transition-transform duration-200 ease-out will-change-transform",
-          className,
-        )}
-        onPointerLeave={() => {
-          setTransform(undefined);
-        }}
-        onPointerMove={handlePointerMove}
-        ref={ref}
-        style={{ transform, ...style }}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      className={cn(
+        "transition-transform duration-200 ease-out will-change-transform",
+        className,
+      )}
+      onPointerLeave={() => {
+        setTransform(undefined);
+      }}
+      onPointerMove={handlePointerMove}
+      ref={ref}
+      style={{ transform, ...style }}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 Magnetic.displayName = "Magnetic";

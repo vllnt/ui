@@ -19,7 +19,7 @@ type TagGroupContextValue = {
 const TagGroupContext = React.createContext<null | TagGroupContextValue>(null);
 
 function useTagGroupContext(): TagGroupContextValue {
-  const context = React.useContext(TagGroupContext);
+  const context = React.use(TagGroupContext);
   if (!context) {
     throw new Error("TagGroupItem must be used within a TagGroup");
   }
@@ -84,45 +84,41 @@ export type TagGroupProps = {
   value?: string[];
 };
 
-const TagGroup = React.forwardRef<HTMLDivElement, TagGroupProps>(
-  (
-    {
-      children,
-      className,
-      defaultValue = [],
-      disabled = false,
-      label,
-      onValueChange,
-      selectionMode = "none",
-      value,
-    },
-    ref,
-  ) => {
-    const { select, selectedValues } = useTagSelection({
-      defaultValue,
-      onValueChange,
-      selectionMode,
-      value,
-    });
-    const context = React.useMemo<TagGroupContextValue>(
-      () => ({ disabled, select, selectedValues, selectionMode }),
-      [disabled, select, selectedValues, selectionMode],
-    );
+const TagGroup = ({
+  children,
+  className,
+  defaultValue = [],
+  disabled = false,
+  label,
+  onValueChange,
+  ref,
+  selectionMode = "none",
+  value,
+}: TagGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const { select, selectedValues } = useTagSelection({
+    defaultValue,
+    onValueChange,
+    selectionMode,
+    value,
+  });
+  const context = React.useMemo<TagGroupContextValue>(
+    () => ({ disabled, select, selectedValues, selectionMode }),
+    [disabled, select, selectedValues, selectionMode],
+  );
 
-    return (
-      <TagGroupContext.Provider value={context}>
-        <div
-          aria-label={label}
-          className={cn("flex flex-wrap items-center gap-2", className)}
-          ref={ref}
-          role="group"
-        >
-          {children}
-        </div>
-      </TagGroupContext.Provider>
-    );
-  },
-);
+  return (
+    <TagGroupContext.Provider value={context}>
+      <div
+        aria-label={label}
+        className={cn("flex flex-wrap items-center gap-2", className)}
+        ref={ref}
+        role="group"
+      >
+        {children}
+      </div>
+    </TagGroupContext.Provider>
+  );
+};
 TagGroup.displayName = "TagGroup";
 
 /** Single chip within a TagGroup, optionally selectable and removable. */
@@ -133,56 +129,60 @@ export type TagGroupItemProps = {
   value: string;
 };
 
-const TagGroupItem = React.forwardRef<HTMLSpanElement, TagGroupItemProps>(
-  ({ children, className, onRemove, value }, ref) => {
-    const { disabled, select, selectedValues, selectionMode } =
-      useTagGroupContext();
-    const selectable = selectionMode !== "none";
-    const selected = selectedValues.includes(value);
+const TagGroupItem = ({
+  children,
+  className,
+  onRemove,
+  ref,
+  value,
+}: TagGroupItemProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  const { disabled, select, selectedValues, selectionMode } =
+    useTagGroupContext();
+  const selectable = selectionMode !== "none";
+  const selected = selectedValues.includes(value);
 
-    return (
-      <span
-        className={cn(
-          "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-sm transition-colors",
-          selected
-            ? "border-transparent bg-primary text-primary-foreground"
-            : "border-border bg-muted text-foreground",
-          disabled && "pointer-events-none opacity-50",
-          className,
-        )}
-        data-selected={selected || undefined}
-        ref={ref}
-      >
-        {selectable ? (
-          <button
-            aria-pressed={selected}
-            className="outline-none focus-visible:underline"
-            disabled={disabled}
-            onClick={() => {
-              select(value);
-            }}
-            type="button"
-          >
-            {children}
-          </button>
-        ) : (
-          <span>{children}</span>
-        )}
-        {onRemove ? (
-          <button
-            aria-label="Remove tag"
-            className="rounded-sm opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
-            disabled={disabled}
-            onClick={onRemove}
-            type="button"
-          >
-            <X className="size-3.5" />
-          </button>
-        ) : null}
-      </span>
-    );
-  },
-);
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-sm transition-colors",
+        selected
+          ? "border-transparent bg-primary text-primary-foreground"
+          : "border-border bg-muted text-foreground",
+        disabled && "pointer-events-none opacity-50",
+        className,
+      )}
+      data-selected={selected || undefined}
+      ref={ref}
+    >
+      {selectable ? (
+        <button
+          aria-pressed={selected}
+          className="outline-none focus-visible:underline"
+          disabled={disabled}
+          onClick={() => {
+            select(value);
+          }}
+          type="button"
+        >
+          {children}
+        </button>
+      ) : (
+        <span>{children}</span>
+      )}
+      {onRemove ? (
+        <button
+          aria-label="Remove tag"
+          className="rounded-sm opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+          disabled={disabled}
+          onClick={onRemove}
+          type="button"
+        >
+          <X className="size-3.5" />
+        </button>
+      ) : null}
+    </span>
+  );
+};
 TagGroupItem.displayName = "TagGroupItem";
 
 export { TagGroup, TagGroupItem };

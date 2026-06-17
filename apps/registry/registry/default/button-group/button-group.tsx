@@ -33,16 +33,19 @@ const buttonGroupVariants = cva(
 export type ButtonGroupProps = React.ComponentPropsWithoutRef<"div"> &
   VariantProps<typeof buttonGroupVariants>;
 
-const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
-  ({ className, orientation, ...props }, ref) => (
-    <div
-      className={cn(buttonGroupVariants({ orientation }), className)}
-      data-slot="button-group"
-      ref={ref}
-      role="group"
-      {...props}
-    />
-  ),
+const ButtonGroup = ({
+  className,
+  orientation,
+  ref,
+  ...props
+}: ButtonGroupProps & { ref?: React.Ref<HTMLDivElement> }) => (
+  <div
+    className={cn(buttonGroupVariants({ orientation }), className)}
+    data-slot="button-group"
+    ref={ref}
+    role="group"
+    {...props}
+  />
 );
 ButtonGroup.displayName = "ButtonGroup";
 

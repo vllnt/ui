@@ -15,10 +15,12 @@ export type ShinyButtonProps = React.ComponentPropsWithoutRef<"button">;
  * <ShinyButton>Learn more</ShinyButton>
  * ```
  */
-export const ShinyButton = React.forwardRef<
-  HTMLButtonElement,
-  ShinyButtonProps
->(({ children, className, ...props }, ref) => {
+export const ShinyButton = ({
+  children,
+  className,
+  ref,
+  ...props
+}: ShinyButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   return (
     <button
       className={cn(
@@ -43,5 +45,5 @@ export const ShinyButton = React.forwardRef<
       </span>
     </button>
   );
-});
+};
 ShinyButton.displayName = "ShinyButton";

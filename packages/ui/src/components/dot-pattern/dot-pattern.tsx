@@ -22,29 +22,32 @@ const fadeMask = "radial-gradient(ellipse at center, black, transparent 75%)";
  * <DotPattern spacing={24} />
  * ```
  */
-export const DotPattern = React.forwardRef<HTMLDivElement, DotPatternProps>(
-  (
-    { className, dotRadius = 1, fade = true, spacing = 16, style, ...props },
-    ref,
-  ) => {
-    return (
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 text-muted-foreground/40",
-          className,
-        )}
-        ref={ref}
-        style={{
-          backgroundImage: `radial-gradient(currentColor ${dotRadius}px, transparent ${dotRadius}px)`,
-          backgroundSize: `${spacing}px ${spacing}px`,
-          maskImage: fade ? fadeMask : undefined,
-          WebkitMaskImage: fade ? fadeMask : undefined,
-          ...style,
-        }}
-        {...props}
-      />
-    );
-  },
-);
+export const DotPattern = ({
+  className,
+  dotRadius = 1,
+  fade = true,
+  ref,
+  spacing = 16,
+  style,
+  ...props
+}: DotPatternProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-0 text-muted-foreground/40",
+        className,
+      )}
+      ref={ref}
+      style={{
+        backgroundImage: `radial-gradient(currentColor ${dotRadius}px, transparent ${dotRadius}px)`,
+        backgroundSize: `${spacing}px ${spacing}px`,
+        maskImage: fade ? fadeMask : undefined,
+        WebkitMaskImage: fade ? fadeMask : undefined,
+        ...style,
+      }}
+      {...props}
+    />
+  );
+};
 DotPattern.displayName = "DotPattern";

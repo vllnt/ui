@@ -40,34 +40,38 @@ function createSparkles(count: number): Sparkle[] {
  * </Sparkles>
  * ```
  */
-export const Sparkles = React.forwardRef<HTMLDivElement, SparklesProps>(
-  ({ children, className, count = 20, ...props }, ref) => {
-    const [sparkles] = React.useState(() => createSparkles(count));
+export const Sparkles = ({
+  children,
+  className,
+  count = 20,
+  ref,
+  ...props
+}: SparklesProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [sparkles] = React.useState(() => createSparkles(count));
 
-    return (
-      <div className={cn("relative", className)} ref={ref} {...props}>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          {sparkles.map((sparkle, index) => (
-            <span
-              className="absolute rotate-45 rounded-[1px] bg-foreground motion-reduce:animate-none"
-              key={index}
-              style={{
-                animation: `vllnt-sparkle ${sparkle.duration}s linear infinite`,
-                animationDelay: `${sparkle.delay}s`,
-                height: `${sparkle.size}px`,
-                left: `${sparkle.left}%`,
-                top: `${sparkle.top}%`,
-                width: `${sparkle.size}px`,
-              }}
-            />
-          ))}
-        </div>
-        {children ? <div className="relative">{children}</div> : null}
+  return (
+    <div className={cn("relative", className)} ref={ref} {...props}>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        {sparkles.map((sparkle, index) => (
+          <span
+            className="absolute rotate-45 rounded-[1px] bg-foreground motion-reduce:animate-none"
+            key={index}
+            style={{
+              animation: `vllnt-sparkle ${sparkle.duration}s linear infinite`,
+              animationDelay: `${sparkle.delay}s`,
+              height: `${sparkle.size}px`,
+              left: `${sparkle.left}%`,
+              top: `${sparkle.top}%`,
+              width: `${sparkle.size}px`,
+            }}
+          />
+        ))}
       </div>
-    );
-  },
-);
+      {children ? <div className="relative">{children}</div> : null}
+    </div>
+  );
+};
 Sparkles.displayName = "Sparkles";

@@ -42,49 +42,45 @@ function characterStyle(
  * <SpinningText>vllnt design system</SpinningText>
  * ```
  */
-export const SpinningText = React.forwardRef<HTMLDivElement, SpinningTextProps>(
-  (
-    {
-      children,
-      className,
-      duration = 20,
-      radius = 80,
-      reverse = false,
-      style,
-      ...props
-    },
-    ref,
-  ) => {
-    const characters = splitCharacters(children);
+export const SpinningText = ({
+  children,
+  className,
+  duration = 20,
+  radius = 80,
+  ref,
+  reverse = false,
+  style,
+  ...props
+}: SpinningTextProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const characters = splitCharacters(children);
 
-    return (
-      <div
-        aria-label={children}
-        className={cn(
-          "relative animate-spin motion-reduce:animate-none",
-          className,
-        )}
-        ref={ref}
-        style={{
-          animationDirection: reverse ? "reverse" : "normal",
-          animationDuration: `${duration}s`,
-          height: radius * 2,
-          width: radius * 2,
-          ...style,
-        }}
-        {...props}
-      >
-        {characters.map((character, index) => (
-          <span
-            aria-hidden="true"
-            key={`${character}-${index.toString()}`}
-            style={characterStyle(index, characters.length, radius)}
-          >
-            {character}
-          </span>
-        ))}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      aria-label={children}
+      className={cn(
+        "relative animate-spin motion-reduce:animate-none",
+        className,
+      )}
+      ref={ref}
+      style={{
+        animationDirection: reverse ? "reverse" : "normal",
+        animationDuration: `${duration}s`,
+        height: radius * 2,
+        width: radius * 2,
+        ...style,
+      }}
+      {...props}
+    >
+      {characters.map((character, index) => (
+        <span
+          aria-hidden="true"
+          key={`${character}-${index.toString()}`}
+          style={characterStyle(index, characters.length, radius)}
+        >
+          {character}
+        </span>
+      ))}
+    </div>
+  );
+};
 SpinningText.displayName = "SpinningText";

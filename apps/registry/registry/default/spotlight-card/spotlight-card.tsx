@@ -17,10 +17,12 @@ type Point = { x: number; y: number };
  * <SpotlightCard>Hover me</SpotlightCard>
  * ```
  */
-export const SpotlightCard = React.forwardRef<
-  HTMLDivElement,
-  SpotlightCardProps
->(({ children, className, ...props }, ref) => {
+export const SpotlightCard = ({
+  children,
+  className,
+  ref,
+  ...props
+}: SpotlightCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [point, setPoint] = React.useState<Point | undefined>();
 
   const handlePointerMove = (
@@ -61,5 +63,5 @@ export const SpotlightCard = React.forwardRef<
       <div className="relative z-10">{children}</div>
     </div>
   );
-});
+};
 SpotlightCard.displayName = "SpotlightCard";

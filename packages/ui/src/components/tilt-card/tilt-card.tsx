@@ -51,46 +51,51 @@ function clamp(value: number, max: number): number {
  * <TiltCard className="rounded-xl border bg-card p-6">Hover me</TiltCard>
  * ```
  */
-export const TiltCard = React.forwardRef<HTMLDivElement, TiltCardProps>(
-  ({ children, className, maxTilt = 12, style, ...props }, ref) => {
-    const reduced = usePrefersReducedMotion();
-    const [transform, setTransform] = React.useState<string>();
+export const TiltCard = ({
+  children,
+  className,
+  maxTilt = 12,
+  ref,
+  style,
+  ...props
+}: TiltCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const reduced = usePrefersReducedMotion();
+  const [transform, setTransform] = React.useState<string>();
 
-    const handlePointerMove = (
-      event: React.PointerEvent<HTMLDivElement>,
-    ): void => {
-      if (reduced) {
-        return;
-      }
+  const handlePointerMove = (
+    event: React.PointerEvent<HTMLDivElement>,
+  ): void => {
+    if (reduced) {
+      return;
+    }
 
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const offsetX = (event.clientX - bounds.left) / bounds.width - 0.5;
-      const offsetY = (event.clientY - bounds.top) / bounds.height - 0.5;
-      const rotateY = clamp(offsetX * maxTilt * 2, maxTilt);
-      const rotateX = clamp(-offsetY * maxTilt * 2, maxTilt);
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const offsetX = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const offsetY = (event.clientY - bounds.top) / bounds.height - 0.5;
+    const rotateY = clamp(offsetX * maxTilt * 2, maxTilt);
+    const rotateX = clamp(-offsetY * maxTilt * 2, maxTilt);
 
-      setTransform(
-        `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
-      );
-    };
-
-    return (
-      <div
-        className={cn(
-          "transition-transform duration-200 ease-out will-change-transform",
-          className,
-        )}
-        onPointerLeave={() => {
-          setTransform(undefined);
-        }}
-        onPointerMove={handlePointerMove}
-        ref={ref}
-        style={{ transform, ...style }}
-        {...props}
-      >
-        {children}
-      </div>
+    setTransform(
+      `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
     );
-  },
-);
+  };
+
+  return (
+    <div
+      className={cn(
+        "transition-transform duration-200 ease-out will-change-transform",
+        className,
+      )}
+      onPointerLeave={() => {
+        setTransform(undefined);
+      }}
+      onPointerMove={handlePointerMove}
+      ref={ref}
+      style={{ transform, ...style }}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 TiltCard.displayName = "TiltCard";

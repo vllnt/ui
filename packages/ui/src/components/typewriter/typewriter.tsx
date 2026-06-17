@@ -51,52 +51,57 @@ function usePrefersReducedMotion(): boolean {
  * <Typewriter text="Hello, world" />
  * ```
  */
-export const Typewriter = React.forwardRef<HTMLSpanElement, TypewriterProps>(
-  ({ className, cursor = true, speed = 60, text, ...props }, ref) => {
-    const reduced = usePrefersReducedMotion();
-    const [count, setCount] = React.useState(() => (reduced ? text.length : 0));
-    const [animationKey, setAnimationKey] = React.useState({ reduced, text });
+export const Typewriter = ({
+  className,
+  cursor = true,
+  ref,
+  speed = 60,
+  text,
+  ...props
+}: TypewriterProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  const reduced = usePrefersReducedMotion();
+  const [count, setCount] = React.useState(() => (reduced ? text.length : 0));
+  const [animationKey, setAnimationKey] = React.useState({ reduced, text });
 
-    if (animationKey.reduced !== reduced || animationKey.text !== text) {
-      setAnimationKey({ reduced, text });
-      setCount(reduced ? text.length : 0);
+  if (animationKey.reduced !== reduced || animationKey.text !== text) {
+    setAnimationKey({ reduced, text });
+    setCount(reduced ? text.length : 0);
+  }
+
+  React.useEffect(() => {
+    if (reduced) {
+      return;
     }
 
-    React.useEffect(() => {
-      if (reduced) {
-        return;
-      }
+    const timer = setInterval(() => {
+      setCount((current) => {
+        if (current >= text.length) {
+          clearInterval(timer);
+          return current;
+        }
+        return current + 1;
+      });
+    }, speed);
 
-      const timer = setInterval(() => {
-        setCount((current) => {
-          if (current >= text.length) {
-            clearInterval(timer);
-            return current;
-          }
-          return current + 1;
-        });
-      }, speed);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [reduced, speed, text]);
 
-      return () => {
-        clearInterval(timer);
-      };
-    }, [reduced, speed, text]);
+  const typing = count < text.length;
 
-    const typing = count < text.length;
-
-    return (
-      <span aria-label={text} className={cn(className)} ref={ref} {...props}>
-        <span aria-hidden="true">{text.slice(0, count)}</span>
-        {cursor && typing ? (
-          <span
-            aria-hidden="true"
-            className="ml-0.5 inline-block w-[1ch] [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite] motion-reduce:animate-none"
-          >
-            |
-          </span>
-        ) : undefined}
-      </span>
-    );
-  },
-);
+  return (
+    <span aria-label={text} className={cn(className)} ref={ref} {...props}>
+      <span aria-hidden="true">{text.slice(0, count)}</span>
+      {cursor && typing ? (
+        <span
+          aria-hidden="true"
+          className="ml-0.5 inline-block w-[1ch] [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite] motion-reduce:animate-none"
+        >
+          |
+        </span>
+      ) : undefined}
+    </span>
+  );
+};
 Typewriter.displayName = "Typewriter";

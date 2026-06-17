@@ -13,7 +13,7 @@ export type DockIconProps = React.ComponentPropsWithoutRef<"div">;
 const DockPointerContext = React.createContext<null | number>(null);
 
 function assignRef(
-  ref: React.ForwardedRef<HTMLDivElement>,
+  ref: React.Ref<HTMLDivElement> | undefined,
   node: HTMLDivElement | null,
 ): void {
   if (typeof ref === "function") {
@@ -21,7 +21,7 @@ function assignRef(
     return;
   }
 
-  if (ref !== null) {
+  if (ref) {
     ref.current = node;
   }
 }
@@ -70,32 +70,35 @@ function magnify(distance: number): number {
  * </Dock>
  * ```
  */
-export const Dock = React.forwardRef<HTMLDivElement, DockProps>(
-  ({ children, className, ...props }, ref) => {
-    const [pointerX, setPointerX] = React.useState<null | number>(null);
+export const Dock = ({
+  children,
+  className,
+  ref,
+  ...props
+}: DockProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [pointerX, setPointerX] = React.useState<null | number>(null);
 
-    return (
-      <DockPointerContext.Provider value={pointerX}>
-        <div
-          className={cn(
-            "flex items-end gap-2 rounded-2xl border bg-card/60 p-2 backdrop-blur",
-            className,
-          )}
-          onPointerLeave={() => {
-            setPointerX(null);
-          }}
-          onPointerMove={(event) => {
-            setPointerX(event.clientX);
-          }}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </div>
-      </DockPointerContext.Provider>
-    );
-  },
-);
+  return (
+    <DockPointerContext.Provider value={pointerX}>
+      <div
+        className={cn(
+          "flex items-end gap-2 rounded-2xl border bg-card/60 p-2 backdrop-blur",
+          className,
+        )}
+        onPointerLeave={() => {
+          setPointerX(null);
+        }}
+        onPointerMove={(event) => {
+          setPointerX(event.clientX);
+        }}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </div>
+    </DockPointerContext.Provider>
+  );
+};
 Dock.displayName = "Dock";
 
 function useDockScale(
@@ -122,34 +125,38 @@ function useDockScale(
  * <DockIcon>Home</DockIcon>
  * ```
  */
-export const DockIcon = React.forwardRef<HTMLDivElement, DockIconProps>(
-  ({ children, className, style, ...props }, ref) => {
-    const pointerX = React.useContext(DockPointerContext);
-    const reduced = usePrefersReducedMotion();
-    const reference = React.useRef<HTMLDivElement>(null);
-    const scale = useDockScale(reference, pointerX, reduced);
+export const DockIcon = ({
+  children,
+  className,
+  ref,
+  style,
+  ...props
+}: DockIconProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const pointerX = React.use(DockPointerContext);
+  const reduced = usePrefersReducedMotion();
+  const reference = React.useRef<HTMLDivElement>(null);
+  const scale = useDockScale(reference, pointerX, reduced);
 
-    const setReferences = React.useCallback(
-      (node: HTMLDivElement | null): void => {
-        reference.current = node;
-        assignRef(ref, node);
-      },
-      [ref],
-    );
+  const setReferences = React.useCallback(
+    (node: HTMLDivElement | null): void => {
+      reference.current = node;
+      assignRef(ref, node);
+    },
+    [ref],
+  );
 
-    return (
-      <div
-        className={cn(
-          "flex aspect-square w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-transform",
-          className,
-        )}
-        ref={setReferences}
-        style={{ transform: `scale(${scale})`, ...style }}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      className={cn(
+        "flex aspect-square w-12 items-center justify-center rounded-xl bg-accent text-accent-foreground transition-transform",
+        className,
+      )}
+      ref={setReferences}
+      style={{ transform: `scale(${scale})`, ...style }}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 DockIcon.displayName = "DockIcon";

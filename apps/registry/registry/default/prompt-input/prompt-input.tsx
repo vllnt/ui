@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { LoaderCircle, SendHorizontal } from "lucide-react";
 
@@ -44,7 +44,7 @@ export type PromptInputProps = {
 };
 
 function applyRef(
-  ref: React.ForwardedRef<HTMLTextAreaElement>,
+  ref: React.Ref<HTMLTextAreaElement> | undefined,
   node: HTMLTextAreaElement | null,
 ): void {
   if (typeof ref === "function") {
@@ -56,7 +56,7 @@ function applyRef(
   }
 }
 
-function useMergedRef(ref: React.ForwardedRef<HTMLTextAreaElement>): {
+function useMergedRef(ref: React.Ref<HTMLTextAreaElement> | undefined): {
   assignRef: (node: HTMLTextAreaElement | null) => void;
   innerRef: React.RefObject<HTMLTextAreaElement | null>;
 } {
@@ -85,7 +85,7 @@ function usePromptInput({
   isControlled: boolean;
   onSubmit?: (value: string) => void;
   onValueChange?: (value: string) => void;
-  ref: React.ForwardedRef<HTMLTextAreaElement>;
+  ref: React.Ref<HTMLTextAreaElement> | undefined;
   value?: string;
 }) {
   const { assignRef, innerRef } = useMergedRef(ref);
@@ -183,73 +183,69 @@ function PromptInputActions({
  * @example
  * <PromptInput onSubmit={(text) => send(text)} />
  */
-export const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(
-  (
-    {
-      className,
-      defaultValue = "",
-      disabled = false,
-      isLoading = false,
-      maxRows = 8,
-      minRows = 1,
-      onSubmit,
-      onValueChange,
-      placeholder = "Send a message…",
-      submitLabel = "Send",
-      toolbar,
-      value,
-    },
+export const PromptInput = ({
+  className,
+  defaultValue = "",
+  disabled = false,
+  isLoading = false,
+  maxRows = 8,
+  minRows = 1,
+  onSubmit,
+  onValueChange,
+  placeholder = "Send a message…",
+  ref,
+  submitLabel = "Send",
+  toolbar,
+  value,
+}: PromptInputProps & { ref?: React.Ref<HTMLTextAreaElement> }) => {
+  const isControlled = value !== undefined;
+  const {
+    assignRef,
+    currentValue,
+    handleChange,
+    handleFormSubmit,
+    handleKeyDown,
+  } = usePromptInput({
+    defaultValue,
+    isControlled,
+    onSubmit,
+    onValueChange,
     ref,
-  ) => {
-    const isControlled = value !== undefined;
-    const {
-      assignRef,
-      currentValue,
-      handleChange,
-      handleFormSubmit,
-      handleKeyDown,
-    } = usePromptInput({
-      defaultValue,
-      isControlled,
-      onSubmit,
-      onValueChange,
-      ref,
-      value,
-    });
+    value,
+  });
 
-    const canSubmit = !disabled && !isLoading && currentValue.trim().length > 0;
+  const canSubmit = !disabled && !isLoading && currentValue.trim().length > 0;
 
-    return (
-      <form
-        className={cn(
-          "flex flex-col gap-2 rounded-2xl border border-border bg-background p-2 shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring",
-          className,
-        )}
-        onSubmit={handleFormSubmit}
-      >
-        <textarea
-          aria-label={placeholder}
-          className="w-full resize-none bg-transparent px-2 py-1.5 text-sm text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={disabled}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          ref={assignRef}
-          style={{
-            maxHeight: `${maxRows * REM_PER_ROW}rem`,
-            minHeight: `${minRows * REM_PER_ROW}rem`,
-            overflowY: "auto",
-          }}
-          value={currentValue}
-        />
-        <PromptInputActions
-          canSubmit={canSubmit}
-          isLoading={isLoading}
-          submitLabel={submitLabel}
-          toolbar={toolbar}
-        />
-      </form>
-    );
-  },
-);
+  return (
+    <form
+      className={cn(
+        "flex flex-col gap-2 rounded-2xl border border-border bg-background p-2 shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring",
+        className,
+      )}
+      onSubmit={handleFormSubmit}
+    >
+      <textarea
+        aria-label={placeholder}
+        className="w-full resize-none bg-transparent px-2 py-1.5 text-sm text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={disabled}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        ref={assignRef}
+        style={{
+          maxHeight: `${maxRows * REM_PER_ROW}rem`,
+          minHeight: `${minRows * REM_PER_ROW}rem`,
+          overflowY: "auto",
+        }}
+        value={currentValue}
+      />
+      <PromptInputActions
+        canSubmit={canSubmit}
+        isLoading={isLoading}
+        submitLabel={submitLabel}
+        toolbar={toolbar}
+      />
+    </form>
+  );
+};
 PromptInput.displayName = "PromptInput";

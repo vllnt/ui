@@ -26,10 +26,12 @@ function computeProgress(): number {
  * <ScrollProgress />
  * ```
  */
-export const ScrollProgress = React.forwardRef<
-  HTMLDivElement,
-  ScrollProgressProps
->(({ className, style, ...props }, ref) => {
+export const ScrollProgress = ({
+  className,
+  ref,
+  style,
+  ...props
+}: ScrollProgressProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
@@ -60,5 +62,5 @@ export const ScrollProgress = React.forwardRef<
       {...props}
     />
   );
-});
+};
 ScrollProgress.displayName = "ScrollProgress";

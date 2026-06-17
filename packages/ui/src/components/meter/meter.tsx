@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../lib/utils";
@@ -45,66 +43,62 @@ export type MeterProps = {
  * @example
  * <Meter label="Disk usage" value={72} valueText="72% used" />
  */
-const Meter = forwardRef<HTMLDivElement, MeterProps>(
-  (
-    {
-      className,
-      label,
-      max = 100,
-      min = 0,
-      segments,
-      value,
-      valueText,
-      variant,
-      ...props
-    },
-    ref,
-  ) => {
-    const safeMax = max > min ? max : min + 1;
-    const current = clamp(value, min, safeMax);
-    const ratio = (current - min) / (safeMax - min);
-    const percentage = ratio * 100;
-    const segmentCount = segments !== undefined && segments > 0 ? segments : 0;
-    const filledSegments = Math.round(ratio * segmentCount);
+const Meter = ({
+  className,
+  label,
+  max = 100,
+  min = 0,
+  ref,
+  segments,
+  value,
+  valueText,
+  variant,
+  ...props
+}: MeterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const safeMax = max > min ? max : min + 1;
+  const current = clamp(value, min, safeMax);
+  const ratio = (current - min) / (safeMax - min);
+  const percentage = ratio * 100;
+  const segmentCount = segments !== undefined && segments > 0 ? segments : 0;
+  const filledSegments = Math.round(ratio * segmentCount);
 
-    return (
-      <div
-        aria-label={label}
-        aria-valuemax={safeMax}
-        aria-valuemin={min}
-        aria-valuenow={current}
-        aria-valuetext={valueText}
-        className={cn(
-          "h-2 w-full overflow-hidden rounded-full bg-muted",
-          segmentCount > 0 && "flex gap-0.5 bg-transparent",
-          className,
-        )}
-        ref={ref}
-        role="meter"
-        {...props}
-      >
-        {segmentCount > 0 ? (
-          Array.from({ length: segmentCount }, (_cell, index) => (
-            <div
-              className={cn(
-                "h-full flex-1 rounded-full",
-                index < filledSegments
-                  ? meterFillVariants({ variant })
-                  : "bg-muted",
-              )}
-              key={`meter-segment-${index}`}
-            />
-          ))
-        ) : (
+  return (
+    <div
+      aria-label={label}
+      aria-valuemax={safeMax}
+      aria-valuemin={min}
+      aria-valuenow={current}
+      aria-valuetext={valueText}
+      className={cn(
+        "h-2 w-full overflow-hidden rounded-full bg-muted",
+        segmentCount > 0 && "flex gap-0.5 bg-transparent",
+        className,
+      )}
+      ref={ref}
+      role="meter"
+      {...props}
+    >
+      {segmentCount > 0 ? (
+        Array.from({ length: segmentCount }, (_cell, index) => (
           <div
-            className={meterFillVariants({ variant })}
-            style={{ width: `${percentage}%` }}
+            className={cn(
+              "h-full flex-1 rounded-full",
+              index < filledSegments
+                ? meterFillVariants({ variant })
+                : "bg-muted",
+            )}
+            key={`meter-segment-${index}`}
           />
-        )}
-      </div>
-    );
-  },
-);
+        ))
+      ) : (
+        <div
+          className={meterFillVariants({ variant })}
+          style={{ width: `${percentage}%` }}
+        />
+      )}
+    </div>
+  );
+};
 Meter.displayName = "Meter";
 
 export { Meter, meterFillVariants };

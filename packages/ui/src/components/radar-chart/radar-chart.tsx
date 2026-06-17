@@ -198,63 +198,59 @@ function RadarShape({
  *
  * @public
  */
-export const RadarChart = React.forwardRef<HTMLDivElement, RadarChartProps>(
-  (
-    {
-      className,
-      color = "currentColor",
-      data,
-      levels = DEFAULT_LEVELS,
-      max,
-      size = DEFAULT_SIZE,
-      ...props
-    },
-    ref,
-  ) => {
-    const count = data.length;
-    const scaleMax = max ?? Math.max(...data.map((point) => point.value), 0);
-    if (count < 3 || scaleMax <= 0) return null;
+export const RadarChart = ({
+  className,
+  color = "currentColor",
+  data,
+  levels = DEFAULT_LEVELS,
+  max,
+  ref,
+  size = DEFAULT_SIZE,
+  ...props
+}: RadarChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const count = data.length;
+  const scaleMax = max ?? Math.max(...data.map((point) => point.value), 0);
+  if (count < 3 || scaleMax <= 0) return null;
 
-    const center: Point = { x: size / 2, y: size / 2 };
-    const radius = size / 2 - LABEL_MARGIN;
-    const points = data.map((point, index) =>
-      vertex({
-        center,
-        count,
-        index,
-        radius: (point.value / scaleMax) * radius,
-      }),
-    );
+  const center: Point = { x: size / 2, y: size / 2 };
+  const radius = size / 2 - LABEL_MARGIN;
+  const points = data.map((point, index) =>
+    vertex({
+      center,
+      count,
+      index,
+      radius: (point.value / scaleMax) * radius,
+    }),
+  );
 
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-border bg-background/40 p-3",
-          className,
-        )}
-        ref={ref}
-        {...props}
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-background/40 p-3",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      <svg
+        aria-label="Radar chart"
+        className="h-full w-full"
+        height={size}
+        role="img"
+        viewBox={`0 0 ${size} ${size}`}
+        width={size}
       >
-        <svg
-          aria-label="Radar chart"
-          className="h-full w-full"
-          height={size}
-          role="img"
-          viewBox={`0 0 ${size} ${size}`}
-          width={size}
-        >
-          <RadarGrid
-            center={center}
-            count={count}
-            levels={Math.max(1, levels)}
-            radius={radius}
-          />
-          <RadarAxes center={center} data={data} radius={radius} />
-          <RadarShape color={color} data={data} points={points} />
-        </svg>
-      </div>
-    );
-  },
-);
+        <RadarGrid
+          center={center}
+          count={count}
+          levels={Math.max(1, levels)}
+          radius={radius}
+        />
+        <RadarAxes center={center} data={data} radius={radius} />
+        <RadarShape color={color} data={data} points={points} />
+      </svg>
+    </div>
+  );
+};
 
 RadarChart.displayName = "RadarChart";

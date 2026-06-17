@@ -26,16 +26,18 @@ const inputGroupAddonVariants = cva(
 /** Container that groups an input with leading or trailing addons. */
 export type InputGroupProps = React.ComponentPropsWithoutRef<"div">;
 
-const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
-  ({ className, ...props }, ref) => (
-    <div
-      className={cn(inputGroupVariants(), className)}
-      data-slot="input-group"
-      ref={ref}
-      role="group"
-      {...props}
-    />
-  ),
+const InputGroup = ({
+  className,
+  ref,
+  ...props
+}: InputGroupProps & { ref?: React.Ref<HTMLDivElement> }) => (
+  <div
+    className={cn(inputGroupVariants(), className)}
+    data-slot="input-group"
+    ref={ref}
+    role="group"
+    {...props}
+  />
 );
 InputGroup.displayName = "InputGroup";
 
@@ -43,25 +45,29 @@ InputGroup.displayName = "InputGroup";
 export type InputGroupAddonProps = React.ComponentPropsWithoutRef<"div"> &
   VariantProps<typeof inputGroupAddonVariants>;
 
-const InputGroupAddon = React.forwardRef<HTMLDivElement, InputGroupAddonProps>(
-  ({ align, className, ...props }, ref) => (
-    <div
-      className={cn(inputGroupAddonVariants({ align }), className)}
-      data-slot="input-group-addon"
-      ref={ref}
-      {...props}
-    />
-  ),
+const InputGroupAddon = ({
+  align,
+  className,
+  ref,
+  ...props
+}: InputGroupAddonProps & { ref?: React.Ref<HTMLDivElement> }) => (
+  <div
+    className={cn(inputGroupAddonVariants({ align }), className)}
+    data-slot="input-group-addon"
+    ref={ref}
+    {...props}
+  />
 );
 InputGroupAddon.displayName = "InputGroupAddon";
 
 /** Borderless input that fills the remaining space inside an InputGroup. */
 export type InputGroupInputProps = React.ComponentPropsWithoutRef<"input">;
 
-const InputGroupInput = React.forwardRef<
-  HTMLInputElement,
-  InputGroupInputProps
->(({ className, ...props }, ref) => (
+const InputGroupInput = ({
+  className,
+  ref,
+  ...props
+}: InputGroupInputProps & { ref?: React.Ref<HTMLInputElement> }) => (
   <input
     className={cn(
       "h-10 w-full flex-1 bg-transparent px-3 py-2 placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed",
@@ -70,7 +76,7 @@ const InputGroupInput = React.forwardRef<
     ref={ref}
     {...props}
   />
-));
+);
 InputGroupInput.displayName = "InputGroupInput";
 
 export {

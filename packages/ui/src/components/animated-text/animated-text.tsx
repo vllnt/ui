@@ -394,80 +394,73 @@ function AnimatedTextCursor({
   );
 }
 
-export const AnimatedText = React.forwardRef<
-  HTMLParagraphElement,
-  AnimatedTextProps
->(
-  (
-    {
-      className,
-      cursor = true,
-      cursorChar = "█",
-      direction = "start",
-      duration = 600,
-      randomCharacters,
-      randomCharactersPreset = "matrix",
-      randomness = 0,
-      splitBy = "word",
-      stagger = 70,
-      text,
-      variant = "terminal",
-      ...props
-    },
-    ref,
-  ) => {
-    const resolvedRandomCharacters = getResolvedRandomCharacters(
-      randomCharacters,
-      randomCharactersPreset,
-    );
-    const resolvedSplitBy = variant === "reveal" ? splitBy : "character";
-    const segments = React.useMemo(
-      () => getSegments(text, resolvedSplitBy),
-      [resolvedSplitBy, text],
-    );
-    const segmentFrames = useAnimatedTextFrames({
-      direction,
-      randomCharacters: resolvedRandomCharacters,
-      randomness,
-      segments,
-      stagger,
-      variant,
-    });
-    const showCursor =
-      cursor &&
-      variant !== "reveal" &&
-      segmentFrames.some((frame) => !frame.isRevealed);
-    const cursorToneClass = getCursorToneClass(variant);
+export const AnimatedText = ({
+  className,
+  cursor = true,
+  cursorChar = "█",
+  direction = "start",
+  duration = 600,
+  randomCharacters,
+  randomCharactersPreset = "matrix",
+  randomness = 0,
+  ref,
+  splitBy = "word",
+  stagger = 70,
+  text,
+  variant = "terminal",
+  ...props
+}: AnimatedTextProps & { ref?: React.Ref<HTMLParagraphElement> }) => {
+  const resolvedRandomCharacters = getResolvedRandomCharacters(
+    randomCharacters,
+    randomCharactersPreset,
+  );
+  const resolvedSplitBy = variant === "reveal" ? splitBy : "character";
+  const segments = React.useMemo(
+    () => getSegments(text, resolvedSplitBy),
+    [resolvedSplitBy, text],
+  );
+  const segmentFrames = useAnimatedTextFrames({
+    direction,
+    randomCharacters: resolvedRandomCharacters,
+    randomness,
+    segments,
+    stagger,
+    variant,
+  });
+  const showCursor =
+    cursor &&
+    variant !== "reveal" &&
+    segmentFrames.some((frame) => !frame.isRevealed);
+  const cursorToneClass = getCursorToneClass(variant);
 
-    return (
-      <p
-        aria-label={text}
-        className={cn(getContainerClasses(variant), className)}
-        ref={ref}
-        style={{
-          ["--vllnt-animated-text-duration" as string]: `${duration}ms`,
-        }}
-        {...props}
-      >
-        {segmentFrames.map((segmentFrame) => (
-          <span
-            aria-hidden="true"
-            className={getSegmentClasses(variant, segmentFrame.isRevealed)}
-            key={segmentFrame.key}
-            style={segmentFrame.style}
-          >
-            {segmentFrame.content}
-          </span>
-        ))}
-        {showCursor ? (
-          <AnimatedTextCursor
-            cursorChar={cursorChar}
-            cursorToneClass={cursorToneClass}
-          />
-        ) : null}
-      </p>
-    );
-  },
-);
+  return (
+    <p
+      aria-label={text}
+      className={cn(getContainerClasses(variant), className)}
+      ref={ref}
+      style={{
+        ["--vllnt-animated-text-duration" as string]: `${duration}ms`,
+      }}
+      {...props}
+    >
+      {segmentFrames.map((segmentFrame) => (
+        <span
+          aria-hidden="true"
+          className={getSegmentClasses(variant, segmentFrame.isRevealed)}
+          key={segmentFrame.key}
+          style={segmentFrame.style}
+        >
+          {segmentFrame.content}
+        </span>
+      ))}
+      {showCursor ? (
+        <AnimatedTextCursor
+          cursorChar={cursorChar}
+          cursorToneClass={cursorToneClass}
+        />
+      ) : null}
+    </p>
+  );
+};
 
 AnimatedText.displayName = "AnimatedText";

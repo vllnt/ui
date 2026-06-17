@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cn } from "../../lib/utils";
 
 const FOCUSABLE_SELECTOR = [
@@ -30,69 +28,70 @@ export type ToolbarProps = {
  *   <Button>Italic</Button>
  * </Toolbar>
  */
-const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
-  ({ className, onKeyDown, orientation = "horizontal", ...props }, ref) => {
-    function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
+const Toolbar = ({
+  className,
+  onKeyDown,
+  orientation = "horizontal",
+  ref,
+  ...props
+}: ToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+    onKeyDown?.(event);
+    if (event.defaultPrevented) return;
 
-      const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
-      const previousKey =
-        orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
-      const isNext = event.key === nextKey;
-      const isPrevious = event.key === previousKey;
-      const isHome = event.key === "Home";
-      const isEnd = event.key === "End";
+    const nextKey = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+    const previousKey = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
+    const isNext = event.key === nextKey;
+    const isPrevious = event.key === previousKey;
+    const isHome = event.key === "Home";
+    const isEnd = event.key === "End";
 
-      if (!isNext && !isPrevious && !isHome && !isEnd) return;
+    if (!isNext && !isPrevious && !isHome && !isEnd) return;
 
-      const items = [
-        ...event.currentTarget.querySelectorAll<HTMLElement>(
-          FOCUSABLE_SELECTOR,
-        ),
-      ];
-      if (items.length === 0) return;
+    const items = [
+      ...event.currentTarget.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+    ];
+    if (items.length === 0) return;
 
-      event.preventDefault();
-      const active =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
-      const currentIndex = active ? items.indexOf(active) : -1;
+    event.preventDefault();
+    const active =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    const currentIndex = active ? items.indexOf(active) : -1;
 
-      let nextIndex = 0;
-      if (isHome) {
-        nextIndex = 0;
-      } else if (isEnd) {
-        nextIndex = items.length - 1;
-      } else if (isNext) {
-        nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % items.length;
-      } else {
-        nextIndex =
-          currentIndex < 0
-            ? items.length - 1
-            : (currentIndex - 1 + items.length) % items.length;
-      }
-
-      items[nextIndex]?.focus();
+    let nextIndex = 0;
+    if (isHome) {
+      nextIndex = 0;
+    } else if (isEnd) {
+      nextIndex = items.length - 1;
+    } else if (isNext) {
+      nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % items.length;
+    } else {
+      nextIndex =
+        currentIndex < 0
+          ? items.length - 1
+          : (currentIndex - 1 + items.length) % items.length;
     }
 
-    return (
-      <div
-        aria-orientation={orientation}
-        className={cn(
-          "flex items-center gap-1 rounded-md border border-border bg-background p-1",
-          orientation === "vertical" ? "flex-col" : "flex-row",
-          className,
-        )}
-        onKeyDown={handleKeyDown}
-        ref={ref}
-        role="toolbar"
-        {...props}
-      />
-    );
-  },
-);
+    items[nextIndex]?.focus();
+  }
+
+  return (
+    <div
+      aria-orientation={orientation}
+      className={cn(
+        "flex items-center gap-1 rounded-md border border-border bg-background p-1",
+        orientation === "vertical" ? "flex-col" : "flex-row",
+        className,
+      )}
+      onKeyDown={handleKeyDown}
+      ref={ref}
+      role="toolbar"
+      {...props}
+    />
+  );
+};
 Toolbar.displayName = "Toolbar";
 
 /** Props for the {@link ToolbarSeparator}. */
@@ -102,20 +101,23 @@ export type ToolbarSeparatorProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 /** Visual and semantic divider between groups of toolbar controls. */
-const ToolbarSeparator = forwardRef<HTMLDivElement, ToolbarSeparatorProps>(
-  ({ className, orientation = "vertical", ...props }, ref) => (
-    <div
-      aria-orientation={orientation}
-      className={cn(
-        "shrink-0 bg-border",
-        orientation === "vertical" ? "mx-1 h-6 w-px" : "my-1 h-px w-full",
-        className,
-      )}
-      ref={ref}
-      role="separator"
-      {...props}
-    />
-  ),
+const ToolbarSeparator = ({
+  className,
+  orientation = "vertical",
+  ref,
+  ...props
+}: ToolbarSeparatorProps & { ref?: React.Ref<HTMLDivElement> }) => (
+  <div
+    aria-orientation={orientation}
+    className={cn(
+      "shrink-0 bg-border",
+      orientation === "vertical" ? "mx-1 h-6 w-px" : "my-1 h-px w-full",
+      className,
+    )}
+    ref={ref}
+    role="separator"
+    {...props}
+  />
 );
 ToolbarSeparator.displayName = "ToolbarSeparator";
 

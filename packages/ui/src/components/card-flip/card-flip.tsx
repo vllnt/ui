@@ -53,53 +53,48 @@ function Inner({
  * <CardFlip front={<p>Front</p>} back={<p>Back</p>} />
  * ```
  */
-export const CardFlip = React.forwardRef<HTMLDivElement, CardFlipProps>(
-  ({ back, className, flipOnHover = true, front, ...props }, ref) => {
-    const [flipped, setFlipped] = React.useState(false);
-    const base = cn(
-      "relative min-h-40 [perspective:1000px]",
-      flipOnHover && "group",
-      className,
-    );
+export const CardFlip = ({
+  back,
+  className,
+  flipOnHover = true,
+  front,
+  ref,
+  ...props
+}: CardFlipProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [flipped, setFlipped] = React.useState(false);
+  const base = cn(
+    "relative min-h-40 [perspective:1000px]",
+    flipOnHover && "group",
+    className,
+  );
 
-    if (flipOnHover) {
-      return (
-        <div className={base} ref={ref} {...props}>
-          <Inner
-            back={back}
-            flipOnHover={true}
-            flipped={flipped}
-            front={front}
-          />
-        </div>
-      );
-    }
-
+  if (flipOnHover) {
     return (
-      <div
-        className={base}
-        onClick={() => {
-          setFlipped((current) => !current);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            setFlipped((current) => !current);
-          }
-        }}
-        ref={ref}
-        role="button"
-        tabIndex={0}
-        {...props}
-      >
-        <Inner
-          back={back}
-          flipOnHover={false}
-          flipped={flipped}
-          front={front}
-        />
+      <div className={base} ref={ref} {...props}>
+        <Inner back={back} flipOnHover={true} flipped={flipped} front={front} />
       </div>
     );
-  },
-);
+  }
+
+  return (
+    <div
+      className={base}
+      onClick={() => {
+        setFlipped((current) => !current);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setFlipped((current) => !current);
+        }
+      }}
+      ref={ref}
+      role="button"
+      tabIndex={0}
+      {...props}
+    >
+      <Inner back={back} flipOnHover={false} flipped={flipped} front={front} />
+    </div>
+  );
+};
 CardFlip.displayName = "CardFlip";

@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useMemo,
   useState,
 } from "react";
@@ -83,7 +82,7 @@ const AISidebarContext = createContext<AISidebarContextValue>(DEFAULT_CONTEXT);
  * @public
  */
 export function useAISidebar(): AISidebarContextValue {
-  return useContext(AISidebarContext);
+  return use(AISidebarContext);
 }
 
 /**
@@ -217,41 +216,42 @@ export type AISidebarProps = {
  *
  * @public
  */
-export const AISidebar = forwardRef<HTMLElement, AISidebarProps>(
-  (props, ref) => {
-    const { children, className, closeOnEscape = true, ...rest } = props;
-    const { close, labels, openState, position, width } = useAISidebar();
-    useEscapeKey(close, {
-      enabled: closeOnEscape && openState,
-      target: "document",
-    });
+export const AISidebar = ({
+  ref,
+  ...props
+}: AISidebarProps & { ref?: React.Ref<HTMLElement> }) => {
+  const { children, className, closeOnEscape = true, ...rest } = props;
+  const { close, labels, openState, position, width } = useAISidebar();
+  useEscapeKey(close, {
+    enabled: closeOnEscape && openState,
+    target: "document",
+  });
 
-    return (
-      <aside
-        aria-hidden={!openState}
-        aria-label={labels.defaultTitle}
-        className={cn(
-          "fixed top-0 z-40 flex h-full flex-col border-border bg-background shadow-lg transition-transform duration-200 ease-out",
-          position === "right" ? "right-0 border-l" : "left-0 border-r",
-          openState
-            ? "translate-x-0"
-            : position === "right"
-              ? "translate-x-full"
-              : "-translate-x-full",
-          "max-w-full",
-          className,
-        )}
-        data-state={openState ? "open" : "closed"}
-        inert={!openState}
-        ref={ref}
-        style={{ width: `${width.toString()}px` }}
-        {...rest}
-      >
-        {children}
-      </aside>
-    );
-  },
-);
+  return (
+    <aside
+      aria-hidden={!openState}
+      aria-label={labels.defaultTitle}
+      className={cn(
+        "fixed top-0 z-40 flex h-full flex-col border-border bg-background shadow-lg transition-transform duration-200 ease-out",
+        position === "right" ? "right-0 border-l" : "left-0 border-r",
+        openState
+          ? "translate-x-0"
+          : position === "right"
+            ? "translate-x-full"
+            : "-translate-x-full",
+        "max-w-full",
+        className,
+      )}
+      data-state={openState ? "open" : "closed"}
+      inert={!openState}
+      ref={ref}
+      style={{ width: `${width.toString()}px` }}
+      {...rest}
+    >
+      {children}
+    </aside>
+  );
+};
 AISidebar.displayName = "AISidebar";
 
 /**
@@ -260,10 +260,12 @@ AISidebar.displayName = "AISidebar";
  *
  * @public
  */
-export const AISidebarHeader = forwardRef<
-  HTMLElement,
-  ComponentPropsWithoutRef<"header">
->(({ children, className, ...rest }, ref) => (
+export const AISidebarHeader = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"header"> & { ref?: React.Ref<HTMLElement> }) => (
   <header
     className={cn(
       "flex items-center gap-2 border-b border-border px-4 py-3",
@@ -274,7 +276,7 @@ export const AISidebarHeader = forwardRef<
   >
     {children}
   </header>
-));
+);
 AISidebarHeader.displayName = "AISidebarHeader";
 
 /**
@@ -283,10 +285,14 @@ AISidebarHeader.displayName = "AISidebarHeader";
  *
  * @public
  */
-export const AISidebarTitle = forwardRef<
-  HTMLHeadingElement,
-  ComponentPropsWithoutRef<"h2">
->(({ children, className, ...rest }, ref) => {
+export const AISidebarTitle = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"h2"> & {
+  ref?: React.Ref<HTMLHeadingElement>;
+}) => {
   const { labels } = useAISidebar();
   return (
     <h2
@@ -301,7 +307,7 @@ export const AISidebarTitle = forwardRef<
       {children ?? labels.defaultTitle}
     </h2>
   );
-});
+};
 AISidebarTitle.displayName = "AISidebarTitle";
 
 /**
@@ -309,10 +315,14 @@ AISidebarTitle.displayName = "AISidebarTitle";
  *
  * @public
  */
-export const AISidebarClose = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ className, onClick, ...rest }, ref) => {
+export const AISidebarClose = ({
+  className,
+  onClick,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
   const { close, labels } = useAISidebar();
   const handleCloseSidebar = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -336,7 +346,7 @@ export const AISidebarClose = forwardRef<
       <X aria-hidden="true" className="size-4" />
     </Button>
   );
-});
+};
 AISidebarClose.displayName = "AISidebarClose";
 
 /**
@@ -344,10 +354,12 @@ AISidebarClose.displayName = "AISidebarClose";
  *
  * @public
  */
-export const AISidebarContent = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ children, className, ...rest }, ref) => (
+export const AISidebarContent = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     className={cn("flex flex-1 flex-col gap-2 overflow-y-auto p-4", className)}
     ref={ref}
@@ -355,7 +367,7 @@ export const AISidebarContent = forwardRef<
   >
     {children}
   </div>
-));
+);
 AISidebarContent.displayName = "AISidebarContent";
 
 /**
@@ -363,10 +375,12 @@ AISidebarContent.displayName = "AISidebarContent";
  *
  * @public
  */
-export const AISidebarFooter = forwardRef<
-  HTMLElement,
-  ComponentPropsWithoutRef<"footer">
->(({ children, className, ...rest }, ref) => (
+export const AISidebarFooter = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"footer"> & { ref?: React.Ref<HTMLElement> }) => (
   <footer
     className={cn("border-t border-border bg-background px-4 py-3", className)}
     ref={ref}
@@ -374,7 +388,7 @@ export const AISidebarFooter = forwardRef<
   >
     {children}
   </footer>
-));
+);
 AISidebarFooter.displayName = "AISidebarFooter";
 
 /**
@@ -394,10 +408,13 @@ export type AISidebarTriggerProps = Omit<
  *
  * @public
  */
-export const AISidebarTrigger = forwardRef<
-  HTMLButtonElement,
-  AISidebarTriggerProps
->(({ children, className, onClick, ...rest }, ref) => {
+export const AISidebarTrigger = ({
+  children,
+  className,
+  onClick,
+  ref,
+  ...rest
+}: AISidebarTriggerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const { labels, openState, toggle } = useAISidebar();
   const handleToggleSidebar = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -423,5 +440,5 @@ export const AISidebarTrigger = forwardRef<
       {children ?? <MessageSquarePlus aria-hidden="true" className="size-4" />}
     </Button>
   );
-});
+};
 AISidebarTrigger.displayName = "AISidebarTrigger";

@@ -33,10 +33,13 @@ export type AnimatedTestimonialsProps =
  * <AnimatedTestimonials testimonials={items} autoplay />
  * ```
  */
-export const AnimatedTestimonials = React.forwardRef<
-  HTMLDivElement,
-  AnimatedTestimonialsProps
->(({ autoplay = false, className, testimonials, ...props }, ref) => {
+export const AnimatedTestimonials = ({
+  autoplay = false,
+  className,
+  ref,
+  testimonials,
+  ...props
+}: AnimatedTestimonialsProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const count = testimonials.length;
 
@@ -99,7 +102,7 @@ export const AnimatedTestimonials = React.forwardRef<
       </div>
     </div>
   );
-});
+};
 AnimatedTestimonials.displayName = "AnimatedTestimonials";
 
 function TestimonialCard({

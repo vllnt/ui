@@ -20,30 +20,35 @@ export type ShimmerTextProps = React.ComponentPropsWithoutRef<"span"> & {
  * <ShimmerText>Loading your workspace</ShimmerText>
  * ```
  */
-export const ShimmerText = React.forwardRef<HTMLSpanElement, ShimmerTextProps>(
-  ({ children, className, duration = 3, style, ...props }, ref) => {
-    return (
+export const ShimmerText = ({
+  children,
+  className,
+  duration = 3,
+  ref,
+  style,
+  ...props
+}: ShimmerTextProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  return (
+    <span
+      className={cn("relative inline-block text-muted-foreground", className)}
+      ref={ref}
+      {...props}
+    >
+      {children}
       <span
-        className={cn("relative inline-block text-muted-foreground", className)}
-        ref={ref}
-        {...props}
+        aria-hidden="true"
+        className="absolute inset-0 animate-[vllnt-text-shimmer_linear_infinite] bg-clip-text text-transparent motion-reduce:animate-none"
+        style={{
+          animationDuration: `${duration}s`,
+          background:
+            "linear-gradient(90deg, transparent 0%, oklch(var(--foreground)) 50%, transparent 100%)",
+          backgroundSize: "200% auto",
+          ...style,
+        }}
       >
         {children}
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 animate-[vllnt-text-shimmer_linear_infinite] bg-clip-text text-transparent motion-reduce:animate-none"
-          style={{
-            animationDuration: `${duration}s`,
-            background:
-              "linear-gradient(90deg, transparent 0%, oklch(var(--foreground)) 50%, transparent 100%)",
-            backgroundSize: "200% auto",
-            ...style,
-          }}
-        >
-          {children}
-        </span>
       </span>
-    );
-  },
-);
+    </span>
+  );
+};
 ShimmerText.displayName = "ShimmerText";

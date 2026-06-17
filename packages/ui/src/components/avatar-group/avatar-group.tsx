@@ -63,36 +63,42 @@ export type AvatarGroupProps = React.HTMLAttributes<HTMLDivElement> &
     overflowLabel?: (hiddenCount: number) => string;
   };
 
-const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
-  ({ className, items, max, overflowLabel, size, ...props }, reference) => {
-    const visibleItems = max === undefined ? items : items.slice(0, max);
-    const hiddenCount = max === undefined ? 0 : Math.max(items.length - max, 0);
+const AvatarGroup = ({
+  className,
+  items,
+  max,
+  overflowLabel,
+  ref: reference,
+  size,
+  ...props
+}: AvatarGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const visibleItems = max === undefined ? items : items.slice(0, max);
+  const hiddenCount = max === undefined ? 0 : Math.max(items.length - max, 0);
 
-    return (
-      <div
-        className={cn(avatarGroupVariants({ size }), className)}
-        ref={reference}
-        {...props}
-      >
-        {visibleItems.map((item, index) => (
-          <Avatar
-            className={avatarItemVariants({ size })}
-            key={item.src ?? item.alt}
-            style={{ zIndex: visibleItems.length - index }}
-          >
-            {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}
-            <AvatarFallback>{item.fallback}</AvatarFallback>
-          </Avatar>
-        ))}
-        {hiddenCount > 0 ? (
-          <span className={overflowBadgeVariants({ size })}>
-            {overflowLabel ? overflowLabel(hiddenCount) : `+${hiddenCount}`}
-          </span>
-        ) : null}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      className={cn(avatarGroupVariants({ size }), className)}
+      ref={reference}
+      {...props}
+    >
+      {visibleItems.map((item, index) => (
+        <Avatar
+          className={avatarItemVariants({ size })}
+          key={item.src ?? item.alt}
+          style={{ zIndex: visibleItems.length - index }}
+        >
+          {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}
+          <AvatarFallback>{item.fallback}</AvatarFallback>
+        </Avatar>
+      ))}
+      {hiddenCount > 0 ? (
+        <span className={overflowBadgeVariants({ size })}>
+          {overflowLabel ? overflowLabel(hiddenCount) : `+${hiddenCount}`}
+        </span>
+      ) : null}
+    </div>
+  );
+};
 
 AvatarGroup.displayName = "AvatarGroup";
 

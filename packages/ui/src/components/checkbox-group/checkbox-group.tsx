@@ -17,7 +17,7 @@ const CheckboxGroupContext =
   React.createContext<CheckboxGroupContextValue | null>(null);
 
 function useCheckboxGroupContext(): CheckboxGroupContextValue {
-  const context = React.useContext(CheckboxGroupContext);
+  const context = React.use(CheckboxGroupContext);
   if (!context) {
     throw new Error("CheckboxGroupItem must be used within a CheckboxGroup");
   }
@@ -62,47 +62,43 @@ export type CheckboxGroupProps = {
   value?: string[];
 };
 
-const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
-  (
-    {
-      children,
-      className,
-      defaultValue = [],
-      disabled = false,
-      name,
-      onValueChange,
-      orientation = "vertical",
-      value,
-    },
-    ref,
-  ) => {
-    const { toggle, values } = useCheckboxGroupValue(
-      value,
-      defaultValue,
-      onValueChange,
-    );
-    const context = React.useMemo<CheckboxGroupContextValue>(
-      () => ({ disabled, name, toggle, values }),
-      [disabled, name, toggle, values],
-    );
+const CheckboxGroup = ({
+  children,
+  className,
+  defaultValue = [],
+  disabled = false,
+  name,
+  onValueChange,
+  orientation = "vertical",
+  ref,
+  value,
+}: CheckboxGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const { toggle, values } = useCheckboxGroupValue(
+    value,
+    defaultValue,
+    onValueChange,
+  );
+  const context = React.useMemo<CheckboxGroupContextValue>(
+    () => ({ disabled, name, toggle, values }),
+    [disabled, name, toggle, values],
+  );
 
-    return (
-      <CheckboxGroupContext.Provider value={context}>
-        <div
-          className={cn(
-            "flex gap-3",
-            orientation === "vertical" ? "flex-col" : "flex-row flex-wrap",
-            className,
-          )}
-          ref={ref}
-          role="group"
-        >
-          {children}
-        </div>
-      </CheckboxGroupContext.Provider>
-    );
-  },
-);
+  return (
+    <CheckboxGroupContext.Provider value={context}>
+      <div
+        className={cn(
+          "flex gap-3",
+          orientation === "vertical" ? "flex-col" : "flex-row flex-wrap",
+          className,
+        )}
+        ref={ref}
+        role="group"
+      >
+        {children}
+      </div>
+    </CheckboxGroupContext.Provider>
+  );
+};
 CheckboxGroup.displayName = "CheckboxGroup";
 
 /** Single checkbox plus label wired into the parent CheckboxGroup. */
@@ -114,10 +110,14 @@ export type CheckboxGroupItemProps = {
   value: string;
 };
 
-const CheckboxGroupItem = React.forwardRef<
-  HTMLDivElement,
-  CheckboxGroupItemProps
->(({ children, className, disabled = false, id, value }, ref) => {
+const CheckboxGroupItem = ({
+  children,
+  className,
+  disabled = false,
+  id,
+  ref,
+  value,
+}: CheckboxGroupItemProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const generatedId = React.useId();
   const itemId = id ?? generatedId;
   const group = useCheckboxGroupContext();
@@ -138,7 +138,7 @@ const CheckboxGroupItem = React.forwardRef<
       {children ? <Label htmlFor={itemId}>{children}</Label> : null}
     </div>
   );
-});
+};
 CheckboxGroupItem.displayName = "CheckboxGroupItem";
 
 export { CheckboxGroup, CheckboxGroupItem };

@@ -1,8 +1,4 @@
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
@@ -211,59 +207,58 @@ export type TransactionListProps = {
   transactions: Transaction[];
 } & ComponentPropsWithoutRef<"div">;
 
-type TransactionListComponent = ReturnType<
-  typeof forwardRef<HTMLDivElement, TransactionListProps>
-> & {
+type TransactionListComponent = typeof TransactionListBase & {
   Pinned: typeof TransactionListPinned;
   SubscriptionRow: typeof TransactionListSubscriptionRow;
 };
 
-const TransactionListBase = forwardRef<HTMLDivElement, TransactionListProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      currency,
-      emptyMessage,
-      labels,
-      locale,
-      transactions,
-      ...rest
-    } = props;
-    const isEmpty = transactions.length === 0;
-    const hasPinned = Boolean(children);
-    return (
-      <div
-        className={cn(
-          "flex w-full flex-col gap-2 rounded-2xl border bg-background p-3",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        {children}
-        {isEmpty && !hasPinned && emptyMessage ? (
-          <p className="py-6 text-center text-sm text-muted-foreground">
-            {emptyMessage}
-          </p>
-        ) : null}
-        {isEmpty ? null : (
-          <ul className="flex flex-col gap-1.5">
-            {transactions.map((transaction) => (
-              <TransactionListItem
-                currency={currency}
-                key={transaction.id}
-                labels={labels}
-                locale={locale}
-                transaction={transaction}
-              />
-            ))}
-          </ul>
-        )}
-      </div>
-    );
-  },
-);
+const TransactionListBase = ({
+  ref,
+  ...props
+}: TransactionListProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const {
+    children,
+    className,
+    currency,
+    emptyMessage,
+    labels,
+    locale,
+    transactions,
+    ...rest
+  } = props;
+  const isEmpty = transactions.length === 0;
+  const hasPinned = Boolean(children);
+  return (
+    <div
+      className={cn(
+        "flex w-full flex-col gap-2 rounded-2xl border bg-background p-3",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      {children}
+      {isEmpty && !hasPinned && emptyMessage ? (
+        <p className="py-6 text-center text-sm text-muted-foreground">
+          {emptyMessage}
+        </p>
+      ) : null}
+      {isEmpty ? null : (
+        <ul className="flex flex-col gap-1.5">
+          {transactions.map((transaction) => (
+            <TransactionListItem
+              currency={currency}
+              key={transaction.id}
+              labels={labels}
+              locale={locale}
+              transaction={transaction}
+            />
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 TransactionListBase.displayName = "TransactionList";
 
 /**
@@ -279,14 +274,16 @@ export type TransactionListPinnedProps = ComponentPropsWithoutRef<"div">;
  *
  * @public
  */
-export const TransactionListPinned = forwardRef<
-  HTMLDivElement,
-  TransactionListPinnedProps
->(({ children, className, ...rest }, ref) => (
+export const TransactionListPinned = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: TransactionListPinnedProps & { ref?: React.Ref<HTMLDivElement> }) => (
   <div className={cn("flex flex-col gap-1.5", className)} ref={ref} {...rest}>
     {children}
   </div>
-));
+);
 TransactionListPinned.displayName = "TransactionList.Pinned";
 
 type TransactionListItemProps = {
@@ -398,10 +395,12 @@ function SubscriptionMeta({
  *
  * @public
  */
-export const TransactionListSubscriptionRow = forwardRef<
-  HTMLDivElement,
-  TransactionListSubscriptionRowProps
->((props, ref) => {
+export const TransactionListSubscriptionRow = ({
+  ref,
+  ...props
+}: TransactionListSubscriptionRowProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
   const {
     amountCents,
     className,
@@ -452,7 +451,7 @@ export const TransactionListSubscriptionRow = forwardRef<
       </span>
     </div>
   );
-});
+};
 TransactionListSubscriptionRow.displayName = "TransactionList.SubscriptionRow";
 
 /**

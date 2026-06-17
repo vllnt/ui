@@ -47,10 +47,14 @@ function Tooltip({
  * <AnimatedTooltip content="Copied!"><button>Copy</button></AnimatedTooltip>
  * ```
  */
-export const AnimatedTooltip = React.forwardRef<
-  HTMLDivElement,
-  AnimatedTooltipProps
->(({ children, className, content, side = "top", ...props }, ref) => {
+export const AnimatedTooltip = ({
+  children,
+  className,
+  content,
+  ref,
+  side = "top",
+  ...props
+}: AnimatedTooltipProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -75,5 +79,5 @@ export const AnimatedTooltip = React.forwardRef<
       {open ? <Tooltip content={content} side={side} /> : undefined}
     </div>
   );
-});
+};
 AnimatedTooltip.displayName = "AnimatedTooltip";

@@ -48,30 +48,34 @@ function usePointerPosition(): Point | undefined {
  * <Cursor size={32} />
  * ```
  */
-export const Cursor = React.forwardRef<HTMLDivElement, CursorProps>(
-  ({ className, size = 24, style, ...props }, ref) => {
-    const point = usePointerPosition();
+export const Cursor = ({
+  className,
+  ref,
+  size = 24,
+  style,
+  ...props
+}: CursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const point = usePointerPosition();
 
-    return (
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none fixed left-0 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-foreground bg-foreground/20 backdrop-invert transition-transform duration-100 ease-out motion-reduce:transition-none",
-          point ? "opacity-100" : "opacity-0",
-          className,
-        )}
-        ref={ref}
-        style={{
-          height: `${size}px`,
-          transform: point
-            ? `translate(${point.x}px, ${point.y}px) translate(-50%, -50%)`
-            : undefined,
-          width: `${size}px`,
-          ...style,
-        }}
-        {...props}
-      />
-    );
-  },
-);
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none fixed left-0 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-foreground bg-foreground/20 backdrop-invert transition-transform duration-100 ease-out motion-reduce:transition-none",
+        point ? "opacity-100" : "opacity-0",
+        className,
+      )}
+      ref={ref}
+      style={{
+        height: `${size}px`,
+        transform: point
+          ? `translate(${point.x}px, ${point.y}px) translate(-50%, -50%)`
+          : undefined,
+        width: `${size}px`,
+        ...style,
+      }}
+      {...props}
+    />
+  );
+};
 Cursor.displayName = "Cursor";

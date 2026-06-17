@@ -21,30 +21,30 @@ export type AnimatedListProps = React.ComponentPropsWithoutRef<"div"> & {
  * </AnimatedList>
  * ```
  */
-export const AnimatedList = React.forwardRef<HTMLDivElement, AnimatedListProps>(
-  ({ children, className, delay = 100, ...props }, ref) => {
-    const items = React.Children.toArray(children);
+export const AnimatedList = ({
+  children,
+  className,
+  delay = 100,
+  ref,
+  ...props
+}: AnimatedListProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const items = React.Children.toArray(children);
 
-    return (
-      <div
-        className={cn("flex flex-col gap-2", className)}
-        ref={ref}
-        {...props}
-      >
-        {items.map((child, index) => (
-          <span
-            className="block animate-in fade-in-0 slide-in-from-bottom-2 motion-reduce:animate-none"
-            key={index}
-            style={{
-              animationDelay: `${index * delay}ms`,
-              animationFillMode: "both",
-            }}
-          >
-            {child}
-          </span>
-        ))}
-      </div>
-    );
-  },
-);
+  return (
+    <div className={cn("flex flex-col gap-2", className)} ref={ref} {...props}>
+      {items.map((child, index) => (
+        <span
+          className="block animate-in fade-in-0 slide-in-from-bottom-2 motion-reduce:animate-none"
+          key={index}
+          style={{
+            animationDelay: `${index * delay}ms`,
+            animationFillMode: "both",
+          }}
+        >
+          {child}
+        </span>
+      ))}
+    </div>
+  );
+};
 AnimatedList.displayName = "AnimatedList";

@@ -32,10 +32,12 @@ export type ExpandableCardsProps = React.ComponentPropsWithoutRef<"div"> & {
  * <ExpandableCards cards={items} />
  * ```
  */
-export const ExpandableCards = React.forwardRef<
-  HTMLDivElement,
-  ExpandableCardsProps
->(({ cards, className, ...props }, ref) => {
+export const ExpandableCards = ({
+  cards,
+  className,
+  ref,
+  ...props
+}: ExpandableCardsProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [expandedId, setExpandedId] = React.useState<null | string>(null);
 
   const toggle = (id: string): void => {
@@ -54,7 +56,7 @@ export const ExpandableCards = React.forwardRef<
       ))}
     </div>
   );
-});
+};
 ExpandableCards.displayName = "ExpandableCards";
 
 function ExpandableCard({

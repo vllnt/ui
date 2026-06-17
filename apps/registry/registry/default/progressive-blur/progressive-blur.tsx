@@ -29,42 +29,41 @@ function layerMask(direction: ProgressiveBlurDirection, index: number): string {
  * <ProgressiveBlur direction="bottom" blur={12} />
  * ```
  */
-export const ProgressiveBlur = React.forwardRef<
-  HTMLDivElement,
-  ProgressiveBlurProps
->(
-  (
-    { blur = 8, className, direction = "bottom", layers = 5, ...props },
-    ref,
-  ) => {
-    const bands = Array.from({ length: layers }, (_, index) => index);
+export const ProgressiveBlur = ({
+  blur = 8,
+  className,
+  direction = "bottom",
+  layers = 5,
+  ref,
+  ...props
+}: ProgressiveBlurProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const bands = Array.from({ length: layers }, (_, index) => index);
 
-    return (
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 overflow-hidden",
-          className,
-        )}
-        ref={ref}
-        {...props}
-      >
-        {bands.map((index) => {
-          const mask = layerMask(direction, index);
-          return (
-            <div
-              className="absolute inset-0"
-              key={index}
-              style={{
-                backdropFilter: `blur(${((index + 1) / layers) * blur}px)`,
-                maskImage: mask,
-                WebkitMaskImage: mask,
-              }}
-            />
-          );
-        })}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-0 overflow-hidden",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      {bands.map((index) => {
+        const mask = layerMask(direction, index);
+        return (
+          <div
+            className="absolute inset-0"
+            key={index}
+            style={{
+              backdropFilter: `blur(${((index + 1) / layers) * blur}px)`,
+              maskImage: mask,
+              WebkitMaskImage: mask,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
 ProgressiveBlur.displayName = "ProgressiveBlur";

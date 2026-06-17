@@ -82,39 +82,42 @@ function wordOpacity(progress: number, total: number, index: number): number {
  * <TextReveal>Scroll to read this line word by word</TextReveal>
  * ```
  */
-export const TextReveal = React.forwardRef<HTMLDivElement, TextRevealProps>(
-  ({ children, className, ...props }, ref) => {
-    const reduced = usePrefersReducedMotion();
-    const nodeRef = React.useRef<HTMLDivElement>(null);
-    const progress = useScrollProgress(nodeRef, !reduced);
-    const words = children.split(" ");
+export const TextReveal = ({
+  children,
+  className,
+  ref,
+  ...props
+}: TextRevealProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const reduced = usePrefersReducedMotion();
+  const nodeRef = React.useRef<HTMLDivElement>(null);
+  const progress = useScrollProgress(nodeRef, !reduced);
+  const words = children.split(" ");
 
-    return (
-      <div
-        aria-label={children}
-        className={cn("flex flex-wrap gap-x-[0.25em]", className)}
-        ref={(node) => {
-          nodeRef.current = node;
-          if (typeof ref === "function") {
-            ref(node);
-          } else if (ref) {
-            ref.current = node;
-          }
-        }}
-        {...props}
-      >
-        {words.map((word, index) => (
-          <span
-            aria-hidden="true"
-            className="text-foreground transition-opacity duration-300"
-            key={`${word}-${index}`}
-            style={{ opacity: wordOpacity(progress, words.length, index) }}
-          >
-            {word}
-          </span>
-        ))}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      aria-label={children}
+      className={cn("flex flex-wrap gap-x-[0.25em]", className)}
+      ref={(node) => {
+        nodeRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      }}
+      {...props}
+    >
+      {words.map((word, index) => (
+        <span
+          aria-hidden="true"
+          className="text-foreground transition-opacity duration-300"
+          key={`${word}-${index}`}
+          style={{ opacity: wordOpacity(progress, words.length, index) }}
+        >
+          {word}
+        </span>
+      ))}
+    </div>
+  );
+};
 TextReveal.displayName = "TextReveal";

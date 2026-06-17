@@ -133,61 +133,57 @@ function useBeamGeometry(
  * <AnimatedBeam containerRef={box} fromRef={a} toRef={b} />
  * ```
  */
-export const AnimatedBeam = React.forwardRef<SVGSVGElement, AnimatedBeamProps>(
-  (
-    {
-      className,
-      containerRef,
-      curvature = 0,
-      duration = 3,
-      fromRef,
-      reverse = false,
-      toRef,
-      ...props
-    },
-    ref,
-  ) => {
-    const gradientId = React.useId();
-    const reduced = usePrefersReducedMotion();
-    const { height, path, width } = useBeamGeometry({
-      containerRef,
-      curvature,
-      fromRef,
-      toRef,
-    });
+export const AnimatedBeam = ({
+  className,
+  containerRef,
+  curvature = 0,
+  duration = 3,
+  fromRef,
+  ref,
+  reverse = false,
+  toRef,
+  ...props
+}: AnimatedBeamProps & { ref?: React.Ref<SVGSVGElement> }) => {
+  const gradientId = React.useId();
+  const reduced = usePrefersReducedMotion();
+  const { height, path, width } = useBeamGeometry({
+    containerRef,
+    curvature,
+    fromRef,
+    toRef,
+  });
 
-    return (
-      <svg
-        aria-hidden="true"
-        className={cn("pointer-events-none absolute inset-0", className)}
-        fill="none"
-        ref={ref}
-        {...props}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
-        width={width}
-      >
-        <path className="stroke-border" d={path} strokeWidth={2} />
-        <path d={path} stroke={`url(#${gradientId})`} strokeWidth={2} />
-        <defs>
-          <linearGradient
-            gradientUnits="objectBoundingBox"
-            id={gradientId}
-            x1="0%"
-            x2="20%"
-          >
-            <stop offset="0%" stopColor="oklch(var(--primary) / 0)" />
-            <stop offset="50%" stopColor="oklch(var(--primary))" />
-            <stop offset="100%" stopColor="oklch(var(--primary) / 0)" />
-            {reduced ? null : (
-              <BeamTravel duration={duration} reverse={reverse} />
-            )}
-          </linearGradient>
-        </defs>
-      </svg>
-    );
-  },
-);
+  return (
+    <svg
+      aria-hidden="true"
+      className={cn("pointer-events-none absolute inset-0", className)}
+      fill="none"
+      ref={ref}
+      {...props}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+    >
+      <path className="stroke-border" d={path} strokeWidth={2} />
+      <path d={path} stroke={`url(#${gradientId})`} strokeWidth={2} />
+      <defs>
+        <linearGradient
+          gradientUnits="objectBoundingBox"
+          id={gradientId}
+          x1="0%"
+          x2="20%"
+        >
+          <stop offset="0%" stopColor="oklch(var(--primary) / 0)" />
+          <stop offset="50%" stopColor="oklch(var(--primary))" />
+          <stop offset="100%" stopColor="oklch(var(--primary) / 0)" />
+          {reduced ? null : (
+            <BeamTravel duration={duration} reverse={reverse} />
+          )}
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
 AnimatedBeam.displayName = "AnimatedBeam";
 
 function BeamTravel({

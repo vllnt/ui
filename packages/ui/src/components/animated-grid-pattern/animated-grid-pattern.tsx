@@ -64,10 +64,14 @@ function GridSquare({
  * <AnimatedGridPattern squares={32} />
  * ```
  */
-export const AnimatedGridPattern = React.forwardRef<
-  SVGSVGElement,
-  AnimatedGridPatternProps
->(({ className, height = 40, squares = 24, width = 40, ...props }, ref) => {
+export const AnimatedGridPattern = ({
+  className,
+  height = 40,
+  ref,
+  squares = 24,
+  width = 40,
+  ...props
+}: AnimatedGridPatternProps & { ref?: React.Ref<SVGSVGElement> }) => {
   const [cells] = React.useState(() => createSquares(squares));
   const patternId = React.useId();
 
@@ -102,5 +106,5 @@ export const AnimatedGridPattern = React.forwardRef<
       ))}
     </svg>
   );
-});
+};
 AnimatedGridPattern.displayName = "AnimatedGridPattern";

@@ -96,10 +96,13 @@ function MarketTreemapTile({
   );
 }
 
-export const MarketTreemap = React.forwardRef<
-  HTMLDivElement,
-  MarketTreemapProps
->(({ as: Heading = "h2", className, items, ...props }, reference) => {
+export const MarketTreemap = ({
+  as: Heading = "h2",
+  className,
+  items,
+  ref: reference,
+  ...props
+}: MarketTreemapProps & { ref?: React.Ref<HTMLDivElement> }) => {
   if (items.length === 0) {
     return null;
   }
@@ -135,6 +138,6 @@ export const MarketTreemap = React.forwardRef<
       </div>
     </div>
   );
-});
+};
 
 MarketTreemap.displayName = "MarketTreemap";

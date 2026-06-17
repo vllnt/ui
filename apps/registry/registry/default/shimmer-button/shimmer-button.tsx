@@ -20,10 +20,13 @@ export type ShimmerButtonProps = React.ComponentPropsWithoutRef<"button"> & {
  * <ShimmerButton>Get started</ShimmerButton>
  * ```
  */
-export const ShimmerButton = React.forwardRef<
-  HTMLButtonElement,
-  ShimmerButtonProps
->(({ children, className, shimmerDuration = 2, ...props }, ref) => {
+export const ShimmerButton = ({
+  children,
+  className,
+  ref,
+  shimmerDuration = 2,
+  ...props
+}: ShimmerButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   return (
     <button
       className={cn(
@@ -48,5 +51,5 @@ export const ShimmerButton = React.forwardRef<
       </span>
     </button>
   );
-});
+};
 ShimmerButton.displayName = "ShimmerButton";

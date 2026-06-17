@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
@@ -58,122 +58,87 @@ export type CookieConsentProps = {
  * Positioned in bottom-left by default with minimal, clean design.
  * Shows accept button prominently, with optional decline and settings link.
  */
-const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
-  (
-    {
-      acceptText = "Accept",
-      className,
-      declineText,
-      message = "This site uses cookies to improve your experience.",
-      onAccept,
-      onDecline,
-      onOpenChange,
-      open = true,
-      position,
-      settingsHref,
-      settingsText = "Learn more",
-      showCloseButton = false,
-      ...props
-    },
-    reference,
-  ) => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+const CookieConsent = ({
+  acceptText = "Accept",
+  className,
+  declineText,
+  message = "This site uses cookies to improve your experience.",
+  onAccept,
+  onDecline,
+  onOpenChange,
+  open = true,
+  position,
+  ref: reference,
+  settingsHref,
+  settingsText = "Learn more",
+  showCloseButton = false,
+  ...props
+}: CookieConsentProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
-    // Handle visibility with animation
-    useEffect(() => {
-      if (open) {
-        // Small delay for mount animation
-        const timer = setTimeout(() => {
-          setIsVisible(true);
-        }, 50);
-        return () => {
-          clearTimeout(timer);
-        };
-      }
-      const rafId = requestAnimationFrame(() => {
-        setIsVisible(false);
-      });
+  // Handle visibility with animation
+  useEffect(() => {
+    if (open) {
+      // Small delay for mount animation
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 50);
       return () => {
-        cancelAnimationFrame(rafId);
+        clearTimeout(timer);
       };
-    }, [open]);
+    }
+    const rafId = requestAnimationFrame(() => {
+      setIsVisible(false);
+    });
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [open]);
 
-    const handleClose = useCallback(() => {
-      setIsAnimatingOut(true);
-      setTimeout(() => {
-        setIsAnimatingOut(false);
-        onOpenChange?.(false);
-      }, 200);
-    }, [onOpenChange]);
+  const handleClose = useCallback(() => {
+    setIsAnimatingOut(true);
+    setTimeout(() => {
+      setIsAnimatingOut(false);
+      onOpenChange?.(false);
+    }, 200);
+  }, [onOpenChange]);
 
-    const handleAccept = useCallback(() => {
-      onAccept?.();
-      handleClose();
-    }, [onAccept, handleClose]);
+  const handleAccept = useCallback(() => {
+    onAccept?.();
+    handleClose();
+  }, [onAccept, handleClose]);
 
-    const handleDecline = useCallback(() => {
-      onDecline?.();
-      handleClose();
-    }, [onDecline, handleClose]);
+  const handleDecline = useCallback(() => {
+    onDecline?.();
+    handleClose();
+  }, [onDecline, handleClose]);
 
-    if (!open && !isAnimatingOut) return null;
+  if (!open && !isAnimatingOut) return null;
 
-    return (
-      <div
-        aria-label="Cookie consent"
-        aria-live="polite"
-        className={cn(
-          cookieConsentVariants({ position }),
-          // Animation states
-          isVisible && !isAnimatingOut
-            ? "translate-y-0 opacity-100"
-            : "translate-y-4 opacity-0",
-          className,
-        )}
-        ref={reference}
-        role="dialog"
-        {...props}
-      >
-        {/* Mobile: stacked layout */}
-        <div className="flex flex-col gap-3 sm:hidden">
-          <p className="text-sm text-muted-foreground">{message}</p>
-          <div className="flex items-center gap-2">
-            {settingsHref ? (
-              <a
-                className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
-                href={settingsHref}
-              >
-                {settingsText}
-              </a>
-            ) : null}
-            {declineText ? (
-              <Button
-                onClick={handleDecline}
-                size="sm"
-                type="button"
-                variant="ghost"
-              >
-                {declineText}
-              </Button>
-            ) : null}
-            <Button
-              onClick={handleAccept}
-              size="sm"
-              type="button"
-              variant="default"
-            >
-              {acceptText}
-            </Button>
-          </div>
-        </div>
-
-        {/* Desktop: single line, all inline */}
-        <div className="hidden sm:flex sm:items-center sm:gap-3">
-          <p className="text-sm text-muted-foreground">{message}</p>
+  return (
+    <div
+      aria-label="Cookie consent"
+      aria-live="polite"
+      className={cn(
+        cookieConsentVariants({ position }),
+        // Animation states
+        isVisible && !isAnimatingOut
+          ? "translate-y-0 opacity-100"
+          : "translate-y-4 opacity-0",
+        className,
+      )}
+      ref={reference}
+      role="dialog"
+      {...props}
+    >
+      {/* Mobile: stacked layout */}
+      <div className="flex flex-col gap-3 sm:hidden">
+        <p className="text-sm text-muted-foreground">{message}</p>
+        <div className="flex items-center gap-2">
           {settingsHref ? (
             <a
-              className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground whitespace-nowrap"
+              className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
               href={settingsHref}
             >
               {settingsText}
@@ -181,8 +146,8 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
           ) : null}
           {declineText ? (
             <Button
-              className="h-7 px-3 text-xs"
               onClick={handleDecline}
+              size="sm"
               type="button"
               variant="ghost"
             >
@@ -190,29 +155,60 @@ const CookieConsent = forwardRef<HTMLDivElement, CookieConsentProps>(
             </Button>
           ) : null}
           <Button
-            className="h-7 px-3 text-xs"
             onClick={handleAccept}
+            size="sm"
             type="button"
             variant="default"
           >
             {acceptText}
           </Button>
         </div>
-
-        {showCloseButton ? (
-          <button
-            aria-label="Close cookie consent"
-            className="absolute -right-2 -top-2 rounded-full border bg-background p-1 text-muted-foreground hover:text-foreground"
-            onClick={handleClose}
-            type="button"
-          >
-            <X className="size-3" />
-          </button>
-        ) : null}
       </div>
-    );
-  },
-);
+
+      {/* Desktop: single line, all inline */}
+      <div className="hidden sm:flex sm:items-center sm:gap-3">
+        <p className="text-sm text-muted-foreground">{message}</p>
+        {settingsHref ? (
+          <a
+            className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground whitespace-nowrap"
+            href={settingsHref}
+          >
+            {settingsText}
+          </a>
+        ) : null}
+        {declineText ? (
+          <Button
+            className="h-7 px-3 text-xs"
+            onClick={handleDecline}
+            type="button"
+            variant="ghost"
+          >
+            {declineText}
+          </Button>
+        ) : null}
+        <Button
+          className="h-7 px-3 text-xs"
+          onClick={handleAccept}
+          type="button"
+          variant="default"
+        >
+          {acceptText}
+        </Button>
+      </div>
+
+      {showCloseButton ? (
+        <button
+          aria-label="Close cookie consent"
+          className="absolute -right-2 -top-2 rounded-full border bg-background p-1 text-muted-foreground hover:text-foreground"
+          onClick={handleClose}
+          type="button"
+        >
+          <X className="size-3" />
+        </button>
+      ) : null}
+    </div>
+  );
+};
 CookieConsent.displayName = "CookieConsent";
 
 export { CookieConsent, cookieConsentVariants };

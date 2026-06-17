@@ -1,10 +1,5 @@
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -116,47 +111,41 @@ export type EmptyStateProps = {
  *
  * @public
  */
-export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
-  (
-    {
-      children,
-      className,
-      description,
-      icon,
-      role: roleOverride,
-      size,
-      title,
-      ...rest
-    },
-    ref,
-  ) => {
-    return (
-      <div
-        className={cn(emptyStateVariants({ size }), className)}
-        ref={ref}
-        role={roleOverride ?? "status"}
-        {...rest}
-      >
-        {icon ? (
-          <span aria-hidden="true" className={cn(iconVariants({ size }))}>
-            {icon}
-          </span>
-        ) : null}
-        {title ? (
-          <h3 className={cn(titleVariants({ size }))}>{title}</h3>
-        ) : null}
-        {description ? (
-          <p className={cn(descriptionVariants({ size }))}>{description}</p>
-        ) : null}
-        {children ? (
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
-            {children}
-          </div>
-        ) : null}
-      </div>
-    );
-  },
-);
+export const EmptyState = ({
+  children,
+  className,
+  description,
+  icon,
+  ref,
+  role: roleOverride,
+  size,
+  title,
+  ...rest
+}: EmptyStateProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  return (
+    <div
+      className={cn(emptyStateVariants({ size }), className)}
+      ref={ref}
+      role={roleOverride ?? "status"}
+      {...rest}
+    >
+      {icon ? (
+        <span aria-hidden="true" className={cn(iconVariants({ size }))}>
+          {icon}
+        </span>
+      ) : null}
+      {title ? <h3 className={cn(titleVariants({ size }))}>{title}</h3> : null}
+      {description ? (
+        <p className={cn(descriptionVariants({ size }))}>{description}</p>
+      ) : null}
+      {children ? (
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+          {children}
+        </div>
+      ) : null}
+    </div>
+  );
+};
 EmptyState.displayName = "EmptyState";
 
 export { emptyStateVariants };

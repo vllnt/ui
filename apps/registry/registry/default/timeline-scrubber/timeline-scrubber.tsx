@@ -3,7 +3,6 @@
 import {
   type ChangeEvent,
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   useId,
 } from "react";
@@ -224,10 +223,10 @@ const TickMark = (props: {
  *
  * @public
  */
-export const TimelineScrubber = forwardRef<
-  HTMLDivElement,
-  TimelineScrubberProps
->((props, ref) => {
+export const TimelineScrubber = ({
+  ref,
+  ...props
+}: TimelineScrubberProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const {
     className,
     end,
@@ -288,5 +287,5 @@ export const TimelineScrubber = forwardRef<
       />
     </div>
   );
-});
+};
 TimelineScrubber.displayName = "TimelineScrubber";

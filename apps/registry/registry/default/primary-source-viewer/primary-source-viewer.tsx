@@ -3,10 +3,9 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useState,
@@ -117,7 +116,7 @@ type ViewerCtx = {
 const ViewerContext = createContext<null | ViewerCtx>(null);
 
 function useViewerContext(): ViewerCtx {
-  const ctx = useContext(ViewerContext);
+  const ctx = use(ViewerContext);
   if (!ctx) {
     throw new Error("PrimarySourceViewer subcomponent used outside its root.");
   }
@@ -162,10 +161,12 @@ function useViewerState(
  *
  * @public
  */
-export const PrimarySourceToolbar = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ children, className, ...rest }, ref) => (
+export const PrimarySourceToolbar = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     className={cn(
       "flex flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-4 py-2",
@@ -177,7 +178,7 @@ export const PrimarySourceToolbar = forwardRef<
   >
     {children}
   </div>
-));
+);
 PrimarySourceToolbar.displayName = "PrimarySourceToolbar";
 
 type ToolbarButtonProps = {
@@ -186,22 +187,27 @@ type ToolbarButtonProps = {
   onActivate: () => void;
 } & Omit<ComponentPropsWithoutRef<"button">, "aria-label" | "onClick" | "type">;
 
-const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
-  ({ ariaLabel, className, glyph, onActivate, ...rest }, ref) => (
-    <button
-      aria-label={ariaLabel}
-      className={cn(
-        "inline-flex h-8 min-w-8 items-center justify-center rounded-md border border-border bg-background px-2 text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        className,
-      )}
-      onClick={onActivate}
-      ref={ref}
-      type="button"
-      {...rest}
-    >
-      {glyph}
-    </button>
-  ),
+const ToolbarButton = ({
+  ariaLabel,
+  className,
+  glyph,
+  onActivate,
+  ref,
+  ...rest
+}: ToolbarButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => (
+  <button
+    aria-label={ariaLabel}
+    className={cn(
+      "inline-flex h-8 min-w-8 items-center justify-center rounded-md border border-border bg-background px-2 text-sm font-medium hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      className,
+    )}
+    onClick={onActivate}
+    ref={ref}
+    type="button"
+    {...rest}
+  >
+    {glyph}
+  </button>
 );
 ToolbarButton.displayName = "ToolbarButton";
 
@@ -210,10 +216,13 @@ ToolbarButton.displayName = "ToolbarButton";
  *
  * @public
  */
-export const PrimarySourceZoomIn = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "aria-label" | "onClick" | "type">
->(({ ...rest }, ref) => {
+export const PrimarySourceZoomIn = ({
+  ref,
+  ...rest
+}: Omit<
+  ComponentPropsWithoutRef<"button">,
+  "aria-label" | "onClick" | "type"
+> & { ref?: React.Ref<HTMLButtonElement> }) => {
   const { labels, zoomIn } = useViewerContext();
   return (
     <ToolbarButton
@@ -224,7 +233,7 @@ export const PrimarySourceZoomIn = forwardRef<
       {...rest}
     />
   );
-});
+};
 PrimarySourceZoomIn.displayName = "PrimarySourceZoomIn";
 
 /**
@@ -232,10 +241,13 @@ PrimarySourceZoomIn.displayName = "PrimarySourceZoomIn";
  *
  * @public
  */
-export const PrimarySourceZoomOut = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "aria-label" | "onClick" | "type">
->(({ ...rest }, ref) => {
+export const PrimarySourceZoomOut = ({
+  ref,
+  ...rest
+}: Omit<
+  ComponentPropsWithoutRef<"button">,
+  "aria-label" | "onClick" | "type"
+> & { ref?: React.Ref<HTMLButtonElement> }) => {
   const { labels, zoomOut } = useViewerContext();
   return (
     <ToolbarButton
@@ -246,7 +258,7 @@ export const PrimarySourceZoomOut = forwardRef<
       {...rest}
     />
   );
-});
+};
 PrimarySourceZoomOut.displayName = "PrimarySourceZoomOut";
 
 /**
@@ -254,10 +266,13 @@ PrimarySourceZoomOut.displayName = "PrimarySourceZoomOut";
  *
  * @public
  */
-export const PrimarySourceRotate = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "aria-label" | "onClick" | "type">
->(({ ...rest }, ref) => {
+export const PrimarySourceRotate = ({
+  ref,
+  ...rest
+}: Omit<
+  ComponentPropsWithoutRef<"button">,
+  "aria-label" | "onClick" | "type"
+> & { ref?: React.Ref<HTMLButtonElement> }) => {
   const { labels, rotate } = useViewerContext();
   return (
     <ToolbarButton
@@ -268,7 +283,7 @@ export const PrimarySourceRotate = forwardRef<
       {...rest}
     />
   );
-});
+};
 PrimarySourceRotate.displayName = "PrimarySourceRotate";
 
 /**
@@ -310,10 +325,12 @@ export type PrimarySourceAnnotationProps = {
  *
  * @public
  */
-export const PrimarySourceAnnotations = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ children, className, ...rest }, ref) => (
+export const PrimarySourceAnnotations = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     aria-label="Annotations"
     className={cn("pointer-events-none absolute inset-0 z-10", className)}
@@ -322,7 +339,7 @@ export const PrimarySourceAnnotations = forwardRef<
   >
     {children}
   </div>
-));
+);
 PrimarySourceAnnotations.displayName = "PrimarySourceAnnotations";
 
 type AnnotationTooltipProps = {
@@ -365,10 +382,10 @@ function AnnotationTooltip({
  *
  * @public
  */
-export const PrimarySourceAnnotation = forwardRef<
-  HTMLButtonElement,
-  PrimarySourceAnnotationProps
->((props, ref) => {
+export const PrimarySourceAnnotation = ({
+  ref,
+  ...props
+}: PrimarySourceAnnotationProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const {
     category,
     className,
@@ -412,7 +429,7 @@ export const PrimarySourceAnnotation = forwardRef<
       />
     </button>
   );
-});
+};
 PrimarySourceAnnotation.displayName = "PrimarySourceAnnotation";
 
 /**
@@ -420,10 +437,12 @@ PrimarySourceAnnotation.displayName = "PrimarySourceAnnotation";
  *
  * @public
  */
-export const PrimarySourceTranscription = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"aside">
->(({ children, className, ...rest }, ref) => (
+export const PrimarySourceTranscription = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"aside"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <aside
     aria-label="Transcription"
     className={cn(
@@ -438,7 +457,7 @@ export const PrimarySourceTranscription = forwardRef<
     </h3>
     <div className="space-y-2 text-foreground">{children}</div>
   </aside>
-));
+);
 PrimarySourceTranscription.displayName = "PrimarySourceTranscription";
 
 /**
@@ -446,10 +465,12 @@ PrimarySourceTranscription.displayName = "PrimarySourceTranscription";
  *
  * @public
  */
-export const PrimarySourceContext = forwardRef<
-  HTMLElement,
-  ComponentPropsWithoutRef<"footer">
->(({ children, className, ...rest }, ref) => (
+export const PrimarySourceContext = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"footer"> & { ref?: React.Ref<HTMLElement> }) => (
   <footer
     className={cn(
       "grid gap-6 border-t border-border bg-muted/30 p-4 md:grid-cols-2",
@@ -460,7 +481,7 @@ export const PrimarySourceContext = forwardRef<
   >
     {children}
   </footer>
-));
+);
 PrimarySourceContext.displayName = "PrimarySourceContext";
 
 /**
@@ -469,10 +490,12 @@ PrimarySourceContext.displayName = "PrimarySourceContext";
  *
  * @public
  */
-export const PrimarySourceMetadata = forwardRef<
-  HTMLDListElement,
-  ComponentPropsWithoutRef<"dl">
->(({ children, className, ...rest }, ref) => (
+export const PrimarySourceMetadata = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"dl"> & { ref?: React.Ref<HTMLDListElement> }) => (
   <dl
     aria-label="Metadata"
     className={cn(
@@ -484,7 +507,7 @@ export const PrimarySourceMetadata = forwardRef<
   >
     {children}
   </dl>
-));
+);
 PrimarySourceMetadata.displayName = "PrimarySourceMetadata";
 
 /**
@@ -492,10 +515,12 @@ PrimarySourceMetadata.displayName = "PrimarySourceMetadata";
  *
  * @public
  */
-export const PrimarySourceQuestions = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ children, className, ...rest }, ref) => (
+export const PrimarySourceQuestions = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     aria-label="Discussion questions"
     className={cn("space-y-2 text-sm", className)}
@@ -507,7 +532,7 @@ export const PrimarySourceQuestions = forwardRef<
     </h3>
     <div className="space-y-1 text-foreground">{children}</div>
   </div>
-));
+);
 PrimarySourceQuestions.displayName = "PrimarySourceQuestions";
 
 type ChildBuckets = {
@@ -639,10 +664,10 @@ export type PrimarySourceViewerProps = {
  *
  * @public
  */
-export const PrimarySourceViewer = forwardRef<
-  HTMLElement,
-  PrimarySourceViewerProps
->((props, ref) => {
+export const PrimarySourceViewer = ({
+  ref,
+  ...props
+}: PrimarySourceViewerProps & { ref?: React.Ref<HTMLElement> }) => {
   const {
     children,
     className,
@@ -697,5 +722,5 @@ export const PrimarySourceViewer = forwardRef<
       </section>
     </ViewerContext.Provider>
   );
-});
+};
 PrimarySourceViewer.displayName = "PrimarySourceViewer";

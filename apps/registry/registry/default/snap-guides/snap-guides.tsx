@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentPropsWithoutRef, forwardRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -69,43 +69,44 @@ export type SnapGuidesProps = {
  *
  * @public
  */
-export const SnapGuides = forwardRef<HTMLDivElement, SnapGuidesProps>(
-  (props, ref) => {
-    const { className, guides, labels, ...rest } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    return (
-      <div
-        aria-label={resolvedLabels.region}
-        className={cn("pointer-events-none absolute inset-0 z-30", className)}
-        data-snap-guide-count={guides.length}
-        ref={ref}
-        {...rest}
-      >
-        {guides.map((guide) => {
-          const isVertical = guide.orientation === "vertical";
-          const offset = isVertical ? guide.x : guide.y;
-          return (
-            <span
-              aria-hidden="true"
-              className={cn(
-                "absolute border-primary/70",
-                isVertical
-                  ? "inset-y-0 w-px border-l border-dashed"
-                  : "inset-x-0 h-px border-t border-dashed",
-              )}
-              data-snap-guide-id={guide.id}
-              data-snap-orientation={guide.orientation}
-              key={guide.id}
-              style={
-                isVertical
-                  ? { left: `${offset.toString()}px` }
-                  : { top: `${offset.toString()}px` }
-              }
-            />
-          );
-        })}
-      </div>
-    );
-  },
-);
+export const SnapGuides = ({
+  ref,
+  ...props
+}: SnapGuidesProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const { className, guides, labels, ...rest } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  return (
+    <div
+      aria-label={resolvedLabels.region}
+      className={cn("pointer-events-none absolute inset-0 z-30", className)}
+      data-snap-guide-count={guides.length}
+      ref={ref}
+      {...rest}
+    >
+      {guides.map((guide) => {
+        const isVertical = guide.orientation === "vertical";
+        const offset = isVertical ? guide.x : guide.y;
+        return (
+          <span
+            aria-hidden="true"
+            className={cn(
+              "absolute border-primary/70",
+              isVertical
+                ? "inset-y-0 w-px border-l border-dashed"
+                : "inset-x-0 h-px border-t border-dashed",
+            )}
+            data-snap-guide-id={guide.id}
+            data-snap-orientation={guide.orientation}
+            key={guide.id}
+            style={
+              isVertical
+                ? { left: `${offset.toString()}px` }
+                : { top: `${offset.toString()}px` }
+            }
+          />
+        );
+      })}
+    </div>
+  );
+};
 SnapGuides.displayName = "SnapGuides";

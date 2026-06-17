@@ -71,10 +71,12 @@ function useScrollVisibility(reduced: boolean): boolean {
  * </FloatingNavbar>
  * ```
  */
-export const FloatingNavbar = React.forwardRef<
-  HTMLElement,
-  FloatingNavbarProps
->(({ children, className, ...props }, ref) => {
+export const FloatingNavbar = ({
+  children,
+  className,
+  ref,
+  ...props
+}: FloatingNavbarProps & { ref?: React.Ref<HTMLElement> }) => {
   const reduced = usePrefersReducedMotion();
   const visible = useScrollVisibility(reduced);
 
@@ -91,5 +93,5 @@ export const FloatingNavbar = React.forwardRef<
       {children}
     </nav>
   );
-});
+};
 FloatingNavbar.displayName = "FloatingNavbar";

@@ -69,71 +69,67 @@ export type TimePickerProps = {
   value?: string;
 };
 
-const TimePicker = React.forwardRef<HTMLButtonElement, TimePickerProps>(
-  (
-    {
-      className,
-      defaultValue = "",
-      minuteStep = 5,
-      onValueChange,
-      placeholder = "Select time",
-      value,
-    },
-    ref,
-  ) => {
-    const [internalValue, setInternalValue] = React.useState(defaultValue);
-    const currentValue = value ?? internalValue;
-    const { hour, minute } = splitTime(currentValue);
+const TimePicker = ({
+  className,
+  defaultValue = "",
+  minuteStep = 5,
+  onValueChange,
+  placeholder = "Select time",
+  ref,
+  value,
+}: TimePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const [internalValue, setInternalValue] = React.useState(defaultValue);
+  const currentValue = value ?? internalValue;
+  const { hour, minute } = splitTime(currentValue);
 
-    const commit = (nextHour: string, nextMinute: string) => {
-      const next = `${nextHour || "00"}:${nextMinute || "00"}`;
-      if (value === undefined) {
-        setInternalValue(next);
-      }
+  const commit = (nextHour: string, nextMinute: string) => {
+    const next = `${nextHour || "00"}:${nextMinute || "00"}`;
+    if (value === undefined) {
+      setInternalValue(next);
+    }
 
-      onValueChange?.(next);
-    };
+    onValueChange?.(next);
+  };
 
-    return (
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            className={cn(
-              "w-full justify-start text-left font-normal",
-              !currentValue && "text-muted-foreground",
-              className,
-            )}
-            ref={ref}
-            variant="outline"
-          >
-            <Clock className="mr-2 size-4" />
-            {currentValue || placeholder}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" className="w-auto p-2">
-          <div className="flex gap-2">
-            <TimeColumn
-              label="Hour"
-              onSelect={(nextHour) => {
-                commit(nextHour, minute);
-              }}
-              options={buildOptions(24, 1)}
-              selected={hour}
-            />
-            <TimeColumn
-              label="Minute"
-              onSelect={(nextMinute) => {
-                commit(hour, nextMinute);
-              }}
-              options={buildOptions(60, minuteStep)}
-              selected={minute}
-            />
-          </div>
-        </PopoverContent>
-      </Popover>
-    );
-  },
-);
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !currentValue && "text-muted-foreground",
+            className,
+          )}
+          ref={ref}
+          variant="outline"
+        >
+          <Clock className="mr-2 size-4" />
+          {currentValue || placeholder}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-auto p-2">
+        <div className="flex gap-2">
+          <TimeColumn
+            label="Hour"
+            onSelect={(nextHour) => {
+              commit(nextHour, minute);
+            }}
+            options={buildOptions(24, 1)}
+            selected={hour}
+          />
+          <TimeColumn
+            label="Minute"
+            onSelect={(nextMinute) => {
+              commit(hour, nextMinute);
+            }}
+            options={buildOptions(60, minuteStep)}
+            selected={minute}
+          />
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
 TimePicker.displayName = "TimePicker";
 
 export { TimePicker };

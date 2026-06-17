@@ -105,65 +105,58 @@ function WalletActions({
   );
 }
 
-export const WalletCard = React.forwardRef<
-  React.ComponentRef<typeof Card>,
-  WalletCardProps
->(
-  (
-    {
-      availableLabel,
-      balanceLabel,
-      className,
-      note,
-      pendingLabel,
-      primaryActionLabel,
-      renewsLabel,
-      secondaryActionLabel,
-      status,
-      ...props
-    },
-    reference,
-  ) => {
-    return (
-      <Card
-        className={cn(
-          "w-full max-w-md border-border/70 bg-card shadow-sm",
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <CardHeader className="space-y-4 pb-4">
-          <div className="space-y-1">
-            <CardTitle className="text-lg">Wallet</CardTitle>
-            <CardDescription>
-              Track credits, pending top-ups, and replenishment timing.
-            </CardDescription>
+export const WalletCard = ({
+  availableLabel,
+  balanceLabel,
+  className,
+  note,
+  pendingLabel,
+  primaryActionLabel,
+  ref: reference,
+  renewsLabel,
+  secondaryActionLabel,
+  status,
+  ...props
+}: WalletCardProps & { ref?: React.Ref<React.ComponentRef<typeof Card>> }) => {
+  return (
+    <Card
+      className={cn(
+        "w-full max-w-md border-border/70 bg-card shadow-sm",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <CardHeader className="space-y-4 pb-4">
+        <div className="space-y-1">
+          <CardTitle className="text-lg">Wallet</CardTitle>
+          <CardDescription>
+            Track credits, pending top-ups, and replenishment timing.
+          </CardDescription>
+        </div>
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
+          <div>
+            <p className="text-sm font-medium">Available balance</p>
+            <p className="text-xs text-muted-foreground">
+              {renewsLabel ?? "Credits refresh automatically when enabled."}
+            </p>
           </div>
-          <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
-            <div>
-              <p className="text-sm font-medium">Available balance</p>
-              <p className="text-xs text-muted-foreground">
-                {renewsLabel ?? "Credits refresh automatically when enabled."}
-              </p>
-            </div>
-            <CreditBadge amount={balanceLabel} status={status} />
-          </div>
-        </CardHeader>
-        <WalletDetails
-          availableLabel={availableLabel}
-          balanceLabel={balanceLabel}
-          note={note}
-          pendingLabel={pendingLabel}
-          renewsLabel={renewsLabel}
-        />
-        <WalletActions
-          primaryActionLabel={primaryActionLabel}
-          secondaryActionLabel={secondaryActionLabel}
-        />
-      </Card>
-    );
-  },
-);
+          <CreditBadge amount={balanceLabel} status={status} />
+        </div>
+      </CardHeader>
+      <WalletDetails
+        availableLabel={availableLabel}
+        balanceLabel={balanceLabel}
+        note={note}
+        pendingLabel={pendingLabel}
+        renewsLabel={renewsLabel}
+      />
+      <WalletActions
+        primaryActionLabel={primaryActionLabel}
+        secondaryActionLabel={secondaryActionLabel}
+      />
+    </Card>
+  );
+};
 
 WalletCard.displayName = "WalletCard";

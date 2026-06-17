@@ -24,66 +24,62 @@ export type DatePickerProps = {
   value?: Date;
 };
 
-const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
-  (
-    {
-      buttonClassName,
-      calendarProps,
-      className,
-      onValueChange,
-      placeholder = "Pick a date",
-      value,
-    },
-    reference,
-  ) => {
-    const [open, setOpen] = React.useState(false);
-    const [internalValue, setInternalValue] = React.useState<Date | undefined>(
-      value,
-    );
-    const selectedDate = value ?? internalValue;
+const DatePicker = ({
+  buttonClassName,
+  calendarProps,
+  className,
+  onValueChange,
+  placeholder = "Pick a date",
+  ref: reference,
+  value,
+}: DatePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const [open, setOpen] = React.useState(false);
+  const [internalValue, setInternalValue] = React.useState<Date | undefined>(
+    value,
+  );
+  const selectedDate = value ?? internalValue;
 
-    const handleSelect = (nextDate: Date | undefined) => {
-      if (value === undefined) {
-        setInternalValue(nextDate);
-      }
+  const handleSelect = (nextDate: Date | undefined) => {
+    if (value === undefined) {
+      setInternalValue(nextDate);
+    }
 
-      onValueChange?.(nextDate);
+    onValueChange?.(nextDate);
 
-      if (nextDate) {
-        setOpen(false);
-      }
-    };
+    if (nextDate) {
+      setOpen(false);
+    }
+  };
 
-    return (
-      <Popover onOpenChange={setOpen} open={open}>
-        <PopoverTrigger asChild>
-          <Button
-            className={cn(
-              "w-full justify-start text-left font-normal",
-              !selectedDate && "text-muted-foreground",
-              buttonClassName,
-            )}
-            ref={reference}
-            variant="outline"
-          >
-            <CalendarIcon className="mr-2 size-4" />
-            {selectedDate
-              ? defaultDateFormatter.format(selectedDate)
-              : placeholder}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" className={cn("w-auto p-0", className)}>
-          <Calendar
-            mode="single"
-            onSelect={handleSelect}
-            selected={selectedDate}
-            {...calendarProps}
-          />
-        </PopoverContent>
-      </Popover>
-    );
-  },
-);
+  return (
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger asChild>
+        <Button
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !selectedDate && "text-muted-foreground",
+            buttonClassName,
+          )}
+          ref={reference}
+          variant="outline"
+        >
+          <CalendarIcon className="mr-2 size-4" />
+          {selectedDate
+            ? defaultDateFormatter.format(selectedDate)
+            : placeholder}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className={cn("w-auto p-0", className)}>
+        <Calendar
+          mode="single"
+          onSelect={handleSelect}
+          selected={selectedDate}
+          {...calendarProps}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};
 DatePicker.displayName = "DatePicker";
 
 export { DatePicker };

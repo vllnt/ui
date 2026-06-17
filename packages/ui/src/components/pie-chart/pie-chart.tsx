@@ -162,63 +162,59 @@ function PieSlice({
  *
  * @public
  */
-export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
-  (
-    {
-      className,
-      color = "currentColor",
-      colors,
-      data,
-      innerRadius = 0,
-      size = DEFAULT_SIZE,
-      ...props
-    },
-    ref,
-  ) => {
-    const slices = buildSlices(data);
-    if (slices.length === 0) return null;
+export const PieChart = ({
+  className,
+  color = "currentColor",
+  colors,
+  data,
+  innerRadius = 0,
+  ref,
+  size = DEFAULT_SIZE,
+  ...props
+}: PieChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const slices = buildSlices(data);
+  if (slices.length === 0) return null;
 
-    const outer = size / 2 - 1;
-    const geom: SliceGeom = {
-      center: { x: size / 2, y: size / 2 },
-      inner: Math.max(0, Math.min(innerRadius, 0.95)) * outer,
-      outer,
-    };
-    const fullCircle = slices.length === 1;
+  const outer = size / 2 - 1;
+  const geom: SliceGeom = {
+    center: { x: size / 2, y: size / 2 },
+    inner: Math.max(0, Math.min(innerRadius, 0.95)) * outer,
+    outer,
+  };
+  const fullCircle = slices.length === 1;
 
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-border bg-background/40 p-3",
-          className,
-        )}
-        ref={ref}
-        {...props}
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-border bg-background/40 p-3",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      <svg
+        aria-label="Pie chart"
+        className="h-full w-full"
+        height={size}
+        role="img"
+        viewBox={`0 0 ${size} ${size}`}
+        width={size}
       >
-        <svg
-          aria-label="Pie chart"
-          className="h-full w-full"
-          height={size}
-          role="img"
-          viewBox={`0 0 ${size} ${size}`}
-          width={size}
-        >
-          {slices.map((slice, index) => (
-            <PieSlice
-              fill={colors?.[index] ?? slice.color ?? color}
-              fillOpacity={
-                colors || slice.color ? 1 : sliceOpacity(index, slices.length)
-              }
-              fullCircle={fullCircle}
-              geom={geom}
-              key={`${slice.label}-${index}`}
-              slice={slice}
-            />
-          ))}
-        </svg>
-      </div>
-    );
-  },
-);
+        {slices.map((slice, index) => (
+          <PieSlice
+            fill={colors?.[index] ?? slice.color ?? color}
+            fillOpacity={
+              colors || slice.color ? 1 : sliceOpacity(index, slices.length)
+            }
+            fullCircle={fullCircle}
+            geom={geom}
+            key={`${slice.label}-${index}`}
+            slice={slice}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+};
 
 PieChart.displayName = "PieChart";

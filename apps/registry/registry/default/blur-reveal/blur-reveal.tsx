@@ -75,36 +75,41 @@ function useInView(): [React.RefObject<HTMLDivElement | null>, boolean] {
  * <BlurReveal delay={150}>Content</BlurReveal>
  * ```
  */
-export const BlurReveal = React.forwardRef<HTMLDivElement, BlurRevealProps>(
-  ({ children, className, delay = 0, style, ...props }, ref) => {
-    const reduced = usePrefersReducedMotion();
-    const [elementRef, inView] = useInView();
-    const revealed = reduced || inView;
-    const setReferences = (node: HTMLDivElement | null): void => {
-      elementRef.current = node;
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
-    };
+export const BlurReveal = ({
+  children,
+  className,
+  delay = 0,
+  ref,
+  style,
+  ...props
+}: BlurRevealProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const reduced = usePrefersReducedMotion();
+  const [elementRef, inView] = useInView();
+  const revealed = reduced || inView;
+  const setReferences = (node: HTMLDivElement | null): void => {
+    elementRef.current = node;
+    if (typeof ref === "function") {
+      ref(node);
+    } else if (ref) {
+      ref.current = node;
+    }
+  };
 
-    return (
-      <div
-        className={cn(
-          "transition-all duration-700",
-          revealed
-            ? "opacity-100 [filter:blur(0)]"
-            : "opacity-0 [filter:blur(12px)]",
-          className,
-        )}
-        ref={setReferences}
-        style={{ transitionDelay: `${delay}ms`, ...style }}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      className={cn(
+        "transition-all duration-700",
+        revealed
+          ? "opacity-100 [filter:blur(0)]"
+          : "opacity-0 [filter:blur(12px)]",
+        className,
+      )}
+      ref={setReferences}
+      style={{ transitionDelay: `${delay}ms`, ...style }}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 BlurReveal.displayName = "BlurReveal";

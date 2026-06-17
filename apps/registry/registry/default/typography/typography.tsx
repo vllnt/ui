@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@vllnt/ui";
@@ -54,130 +52,154 @@ export type ListProps = React.HTMLAttributes<HTMLUListElement>;
  * @example
  * <H1>Page title</H1>
  */
-const H1 = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ children, className, ...props }, ref) => (
-    <h1
-      className={cn(typographyVariants({ variant: "h1" }), className)}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </h1>
-  ),
+const H1 = ({
+  children,
+  className,
+  ref,
+  ...props
+}: HeadingProps & { ref?: React.Ref<HTMLHeadingElement> }) => (
+  <h1
+    className={cn(typographyVariants({ variant: "h1" }), className)}
+    ref={ref}
+    {...props}
+  >
+    {children}
+  </h1>
 );
 H1.displayName = "H1";
 
 /** Section heading. */
-const H2 = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ children, className, ...props }, ref) => (
-    <h2
-      className={cn(typographyVariants({ variant: "h2" }), className)}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </h2>
-  ),
+const H2 = ({
+  children,
+  className,
+  ref,
+  ...props
+}: HeadingProps & { ref?: React.Ref<HTMLHeadingElement> }) => (
+  <h2
+    className={cn(typographyVariants({ variant: "h2" }), className)}
+    ref={ref}
+    {...props}
+  >
+    {children}
+  </h2>
 );
 H2.displayName = "H2";
 
 /** Subsection heading. */
-const H3 = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ children, className, ...props }, ref) => (
-    <h3
-      className={cn(typographyVariants({ variant: "h3" }), className)}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </h3>
-  ),
+const H3 = ({
+  children,
+  className,
+  ref,
+  ...props
+}: HeadingProps & { ref?: React.Ref<HTMLHeadingElement> }) => (
+  <h3
+    className={cn(typographyVariants({ variant: "h3" }), className)}
+    ref={ref}
+    {...props}
+  >
+    {children}
+  </h3>
 );
 H3.displayName = "H3";
 
 /** Minor heading. */
-const H4 = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ children, className, ...props }, ref) => (
-    <h4
-      className={cn(typographyVariants({ variant: "h4" }), className)}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </h4>
-  ),
+const H4 = ({
+  children,
+  className,
+  ref,
+  ...props
+}: HeadingProps & { ref?: React.Ref<HTMLHeadingElement> }) => (
+  <h4
+    className={cn(typographyVariants({ variant: "h4" }), className)}
+    ref={ref}
+    {...props}
+  >
+    {children}
+  </h4>
 );
 H4.displayName = "H4";
 
 /** Body paragraph with sensible vertical rhythm. */
-const P = forwardRef<HTMLParagraphElement, ParagraphProps>(
-  ({ className, ...props }, ref) => (
-    <p
-      className={cn(typographyVariants({ variant: "p" }), className)}
-      ref={ref}
-      {...props}
-    />
-  ),
+const P = ({
+  className,
+  ref,
+  ...props
+}: ParagraphProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
+  <p
+    className={cn(typographyVariants({ variant: "p" }), className)}
+    ref={ref}
+    {...props}
+  />
 );
 P.displayName = "P";
 
 /** Emphasised introductory paragraph. */
-const Lead = forwardRef<HTMLParagraphElement, ParagraphProps>(
-  ({ className, ...props }, ref) => (
-    <p
-      className={cn(typographyVariants({ variant: "lead" }), className)}
-      ref={ref}
-      {...props}
-    />
-  ),
+const Lead = ({
+  className,
+  ref,
+  ...props
+}: ParagraphProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
+  <p
+    className={cn(typographyVariants({ variant: "lead" }), className)}
+    ref={ref}
+    {...props}
+  />
 );
 Lead.displayName = "Lead";
 
 /** De-emphasised secondary text. */
-const Muted = forwardRef<HTMLParagraphElement, ParagraphProps>(
-  ({ className, ...props }, ref) => (
-    <p
-      className={cn(typographyVariants({ variant: "muted" }), className)}
-      ref={ref}
-      {...props}
-    />
-  ),
+const Muted = ({
+  className,
+  ref,
+  ...props
+}: ParagraphProps & { ref?: React.Ref<HTMLParagraphElement> }) => (
+  <p
+    className={cn(typographyVariants({ variant: "muted" }), className)}
+    ref={ref}
+    {...props}
+  />
 );
 Muted.displayName = "Muted";
 
 /** Quoted passage with a leading rule. */
-const Blockquote = forwardRef<HTMLQuoteElement, BlockquoteProps>(
-  ({ className, ...props }, ref) => (
-    <blockquote
-      className={cn(typographyVariants({ variant: "blockquote" }), className)}
-      ref={ref}
-      {...props}
-    />
-  ),
+const Blockquote = ({
+  className,
+  ref,
+  ...props
+}: BlockquoteProps & { ref?: React.Ref<HTMLQuoteElement> }) => (
+  <blockquote
+    className={cn(typographyVariants({ variant: "blockquote" }), className)}
+    ref={ref}
+    {...props}
+  />
 );
 Blockquote.displayName = "Blockquote";
 
 /** Inline monospaced code span. */
-const InlineCode = forwardRef<HTMLElement, InlineCodeProps>(
-  ({ className, ...props }, ref) => (
-    <code
-      className={cn(typographyVariants({ variant: "inlineCode" }), className)}
-      ref={ref}
-      {...props}
-    />
-  ),
+const InlineCode = ({
+  className,
+  ref,
+  ...props
+}: InlineCodeProps & { ref?: React.Ref<HTMLElement> }) => (
+  <code
+    className={cn(typographyVariants({ variant: "inlineCode" }), className)}
+    ref={ref}
+    {...props}
+  />
 );
 InlineCode.displayName = "InlineCode";
 
 /** Bulleted list with indentation and item spacing. */
-const List = forwardRef<HTMLUListElement, ListProps>(
-  ({ className, ...props }, ref) => (
-    <ul
-      className={cn(typographyVariants({ variant: "list" }), className)}
-      ref={ref}
-      {...props}
-    />
-  ),
+const List = ({
+  className,
+  ref,
+  ...props
+}: ListProps & { ref?: React.Ref<HTMLUListElement> }) => (
+  <ul
+    className={cn(typographyVariants({ variant: "list" }), className)}
+    ref={ref}
+    {...props}
+  />
 );
 List.displayName = "List";
 

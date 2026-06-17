@@ -47,10 +47,14 @@ function usePrefersReducedMotion(): boolean {
  * <MagneticButton>Hover me</MagneticButton>
  * ```
  */
-export const MagneticButton = React.forwardRef<
-  HTMLButtonElement,
-  MagneticButtonProps
->(({ children, className, strength = 0.4, style, ...props }, ref) => {
+export const MagneticButton = ({
+  children,
+  className,
+  ref,
+  strength = 0.4,
+  style,
+  ...props
+}: MagneticButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const reduced = usePrefersReducedMotion();
   const [transform, setTransform] = React.useState<string>();
 
@@ -86,5 +90,5 @@ export const MagneticButton = React.forwardRef<
       {children}
     </button>
   );
-});
+};
 MagneticButton.displayName = "MagneticButton";

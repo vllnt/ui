@@ -40,28 +40,33 @@ function getStatusClasses(status: CreditBadgeStatus): string {
   }
 }
 
-export const CreditBadge = React.forwardRef<HTMLSpanElement, CreditBadgeProps>(
-  ({ amount, className, label, status, ...props }, reference) => {
-    return (
-      <span
-        className={cn(
-          badgeVariants({ variant: "outline" }),
-          "gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
-          getStatusClasses(status),
-          className,
-        )}
-        ref={reference}
-        {...props}
-      >
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
-        <span>
-          {amount
-            ? `${amount} • ${label ?? getStatusLabel(status)}`
-            : (label ?? getStatusLabel(status))}
-        </span>
+export const CreditBadge = ({
+  amount,
+  className,
+  label,
+  ref: reference,
+  status,
+  ...props
+}: CreditBadgeProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  return (
+    <span
+      className={cn(
+        badgeVariants({ variant: "outline" }),
+        "gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium shadow-none",
+        getStatusClasses(status),
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+      <span>
+        {amount
+          ? `${amount} • ${label ?? getStatusLabel(status)}`
+          : (label ?? getStatusLabel(status))}
       </span>
-    );
-  },
-);
+    </span>
+  );
+};
 
 CreditBadge.displayName = "CreditBadge";

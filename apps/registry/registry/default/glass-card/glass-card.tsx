@@ -13,20 +13,23 @@ export type GlassCardProps = React.ComponentPropsWithoutRef<"div">;
  * <GlassCard>Content</GlassCard>
  * ```
  */
-export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
-  ({ children, className, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          "rounded-xl border border-border/50 bg-card/60 p-6 text-card-foreground shadow-lg backdrop-blur-md",
-          className,
-        )}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  },
-);
+export const GlassCard = ({
+  children,
+  className,
+  ref,
+  ...props
+}: GlassCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  return (
+    <div
+      className={cn(
+        "rounded-xl border border-border/50 bg-card/60 p-6 text-card-foreground shadow-lg backdrop-blur-md",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 GlassCard.displayName = "GlassCard";

@@ -39,64 +39,57 @@ export type DateRangePickerProps = {
   value?: DateRange;
 };
 
-const DateRangePicker = React.forwardRef<
-  HTMLButtonElement,
-  DateRangePickerProps
->(
-  (
-    {
-      buttonClassName,
-      className,
-      defaultValue,
-      numberOfMonths = 2,
-      onValueChange,
-      placeholder = "Pick a date range",
-      value,
-    },
-    ref,
-  ) => {
-    const [internalValue, setInternalValue] = React.useState<
-      DateRange | undefined
-    >(defaultValue);
-    const selected = value ?? internalValue;
-    const label = formatRange(selected);
+const DateRangePicker = ({
+  buttonClassName,
+  className,
+  defaultValue,
+  numberOfMonths = 2,
+  onValueChange,
+  placeholder = "Pick a date range",
+  ref,
+  value,
+}: DateRangePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const [internalValue, setInternalValue] = React.useState<
+    DateRange | undefined
+  >(defaultValue);
+  const selected = value ?? internalValue;
+  const label = formatRange(selected);
 
-    const handleSelect = (range: DateRange | undefined) => {
-      if (value === undefined) {
-        setInternalValue(range);
-      }
+  const handleSelect = (range: DateRange | undefined) => {
+    if (value === undefined) {
+      setInternalValue(range);
+    }
 
-      onValueChange?.(range);
-    };
+    onValueChange?.(range);
+  };
 
-    return (
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            className={cn(
-              "w-full justify-start text-left font-normal",
-              !label && "text-muted-foreground",
-              buttonClassName,
-            )}
-            ref={ref}
-            variant="outline"
-          >
-            <CalendarIcon className="mr-2 size-4" />
-            {label ?? placeholder}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" className={cn("w-auto p-0", className)}>
-          <Calendar
-            mode="range"
-            numberOfMonths={numberOfMonths}
-            onSelect={handleSelect}
-            selected={selected}
-          />
-        </PopoverContent>
-      </Popover>
-    );
-  },
-);
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !label && "text-muted-foreground",
+            buttonClassName,
+          )}
+          ref={ref}
+          variant="outline"
+        >
+          <CalendarIcon className="mr-2 size-4" />
+          {label ?? placeholder}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className={cn("w-auto p-0", className)}>
+        <Calendar
+          mode="range"
+          numberOfMonths={numberOfMonths}
+          onSelect={handleSelect}
+          selected={selected}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};
 DateRangePicker.displayName = "DateRangePicker";
 
 export { DateRangePicker };

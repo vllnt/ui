@@ -38,36 +38,39 @@ function createParticles(count: number): Particle[] {
  * <Particles count={40} />
  * ```
  */
-export const Particles = React.forwardRef<HTMLDivElement, ParticlesProps>(
-  ({ className, count = 30, ...props }, ref) => {
-    const [particles] = React.useState(() => createParticles(count));
+export const Particles = ({
+  className,
+  count = 30,
+  ref,
+  ...props
+}: ParticlesProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [particles] = React.useState(() => createParticles(count));
 
-    return (
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 overflow-hidden",
-          className,
-        )}
-        ref={ref}
-        {...props}
-      >
-        {particles.map((particle, index) => (
-          <span
-            className="absolute rounded-full bg-foreground/30 motion-reduce:animate-none"
-            key={index}
-            style={{
-              animation: `vllnt-particle-float ${particle.duration}s linear infinite`,
-              animationDelay: `${particle.delay}s`,
-              height: `${particle.size}px`,
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
-              width: `${particle.size}px`,
-            }}
-          />
-        ))}
-      </div>
-    );
-  },
-);
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute inset-0 overflow-hidden",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      {particles.map((particle, index) => (
+        <span
+          className="absolute rounded-full bg-foreground/30 motion-reduce:animate-none"
+          key={index}
+          style={{
+            animation: `vllnt-particle-float ${particle.duration}s linear infinite`,
+            animationDelay: `${particle.delay}s`,
+            height: `${particle.size}px`,
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
+            width: `${particle.size}px`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 Particles.displayName = "Particles";

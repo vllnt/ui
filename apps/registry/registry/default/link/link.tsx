@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ExternalLink } from "lucide-react";
@@ -43,45 +41,41 @@ export type LinkProps = {
  * <Link href="/docs">Read the docs</Link>
  * <Link href="https://example.com" external>Visit example</Link>
  */
-const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  (
-    {
-      asChild = false,
-      children,
-      className,
-      external = false,
-      rel,
-      showExternalIcon = true,
-      target,
-      variant,
-      ...props
-    },
-    ref,
-  ) => {
-    const Comp = asChild ? Slot : "a";
+const Link = ({
+  asChild = false,
+  children,
+  className,
+  external = false,
+  ref,
+  rel,
+  showExternalIcon = true,
+  target,
+  variant,
+  ...props
+}: LinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => {
+  const Comp = asChild ? Slot : "a";
 
-    return (
-      <Comp
-        className={cn(linkVariants({ variant }), className)}
-        ref={ref}
-        rel={external ? (rel ?? "noreferrer noopener") : rel}
-        target={external ? (target ?? "_blank") : target}
-        {...props}
-      >
-        {asChild ? (
-          children
-        ) : (
-          <>
-            {children}
-            {external && showExternalIcon ? (
-              <ExternalLink aria-hidden="true" className="size-3.5 shrink-0" />
-            ) : null}
-          </>
-        )}
-      </Comp>
-    );
-  },
-);
+  return (
+    <Comp
+      className={cn(linkVariants({ variant }), className)}
+      ref={ref}
+      rel={external ? (rel ?? "noreferrer noopener") : rel}
+      target={external ? (target ?? "_blank") : target}
+      {...props}
+    >
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {children}
+          {external && showExternalIcon ? (
+            <ExternalLink aria-hidden="true" className="size-3.5 shrink-0" />
+          ) : null}
+        </>
+      )}
+    </Comp>
+  );
+};
 Link.displayName = "Link";
 
 export { Link, linkVariants };
