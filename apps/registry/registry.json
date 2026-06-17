@@ -1267,6 +1267,25 @@
       "stability": "stable"
     },
     {
+      "name": "contribution-graph",
+      "type": "registry:component",
+      "title": "Contribution Graph",
+      "description": "GitHub-style heatmap of daily activity over time.",
+      "files": [
+        {
+          "path": "registry/default/contribution-graph/contribution-graph.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "conversation-thread",
       "type": "registry:component",
       "title": "Conversation Thread",
@@ -1800,6 +1819,25 @@
       "files": [
         {
           "path": "registry/default/gantt-chart/gantt-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "gauge-chart",
+      "type": "registry:component",
+      "title": "Gauge Chart",
+      "description": "Semicircular gauge for a single value within a range.",
+      "files": [
+        {
+          "path": "registry/default/gauge-chart/gauge-chart.tsx",
           "type": "registry:component"
         }
       ],
@@ -2847,6 +2885,25 @@
       "stability": "stable"
     },
     {
+      "name": "pie-chart",
+      "type": "registry:component",
+      "title": "Pie Chart",
+      "description": "Proportional pie or donut chart for part-to-whole comparisons.",
+      "files": [
+        {
+          "path": "registry/default/pie-chart/pie-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "plan-badge",
       "type": "registry:component",
       "title": "Plan Badge",
@@ -3153,6 +3210,25 @@
       "stability": "stable"
     },
     {
+      "name": "radar-chart",
+      "type": "registry:component",
+      "title": "Radar Chart",
+      "description": "Spider chart comparing several metrics on shared axes.",
+      "files": [
+        {
+          "path": "registry/default/radar-chart/radar-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
       "name": "radio-group",
       "type": "registry:component",
       "title": "Radio Group",
@@ -3339,6 +3415,25 @@
         "@vllnt/ui@^0.2.1"
       ],
       "category": "content",
+      "version": "0.2.1",
+      "stability": "stable"
+    },
+    {
+      "name": "sankey-chart",
+      "type": "registry:component",
+      "title": "Sankey Chart",
+      "description": "Flow diagram showing weighted links between nodes.",
+      "files": [
+        {
+          "path": "registry/default/sankey-chart/sankey-chart.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.2.1"
+      ],
+      "category": "data",
       "version": "0.2.1",
       "stability": "stable"
     },
@@ -4773,5 +4868,5 @@
     }
   ],
   "version": "0.2.1",
-  "generatedAt": "2026-06-15T19:29:07.199Z"
+  "generatedAt": "2026-06-17T01:29:45.593Z"
 }

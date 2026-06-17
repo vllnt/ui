@@ -755,6 +755,24 @@ export {
 } from "./watchlist";
 export { BarChart, LineChart } from "./chart";
 export { AreaChart } from "./chart";
+export {
+  type ContributionDay,
+  ContributionGraph,
+  type ContributionGraphProps,
+} from "./contribution-graph";
+export { GaugeChart, type GaugeChartProps } from "./gauge-chart";
+export { PieChart, type PieChartProps, type PieDatum } from "./pie-chart";
+export {
+  RadarChart,
+  type RadarChartProps,
+  type RadarDatum,
+} from "./radar-chart";
+export {
+  SankeyChart,
+  type SankeyChartProps,
+  type SankeyLink,
+  type SankeyNode,
+} from "./sankey-chart";
 export { LiveFeed, type LiveFeedEvent, type LiveFeedProps } from "./live-feed";
 export {
   MetricGauge,
