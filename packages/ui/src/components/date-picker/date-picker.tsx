@@ -35,7 +35,7 @@ const DatePicker = ({
 }: DatePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [open, setOpen] = React.useState(false);
   const [internalValue, setInternalValue] = React.useState<Date | undefined>(
-    value,
+    () => value,
   );
   const selectedDate = value ?? internalValue;
 
