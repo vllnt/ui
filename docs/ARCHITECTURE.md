@@ -7,7 +7,7 @@ vllnt/ui/
 ├── packages/
 │   └── ui/                   # @vllnt/ui — the shipped library
 │       ├── src/
-│       │   ├── components/   # 225 component folders
+│       │   ├── components/   # 295 component folders
 │       │   ├── hooks/        # shared hooks (useDebounce, etc.)
 │       │   ├── lib/          # utilities (cn, registry helpers)
 │       │   └── index.ts      # barrel — the public surface

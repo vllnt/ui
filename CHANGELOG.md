@@ -12,7 +12,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 _Nothing yet._
 
-## [0.3.0] - 2026-06-16
+## [0.3.0] - 2026-06-17
 
 ### Added
 
@@ -72,7 +72,26 @@ _Nothing yet._
   `ContextLens`.
 - **Time navigation** - `TimelineScrubber`, `PlaybackGhost`,
   `BottomActivityStrip`, and `RunTimeline`.
-- Total component count: **225** (up from 140).
+- **Form primitives (18)** - `ButtonGroup`, `InputGroup`, `Field`, `Fieldset`,
+  `Item`, `ColorPicker`, `CheckboxGroup`, `NativeSelect`, `ListBox`,
+  `SearchField`, `TextField`, `PhoneInput`, `TimePicker`, `TimeField`,
+  `DateField`, `DateRangePicker`, `RangeCalendar`, and `TagGroup`.
+- **Charts / dataviz (5)** - `PieChart`, `RadarChart`, `GaugeChart`,
+  `SankeyChart`, and `ContributionGraph` (joining the existing `BarChart` /
+  `LineChart` / `AreaChart`).
+- **AI primitives (3)** - `Reasoning`, `ChainOfThought`, and `PromptInput`.
+- **Core primitives (7)** - `Typography`, `Link`, `Toolbar`, `Meter`, `QrCode`,
+  `Grid`, and `Panel`.
+- **Motion / effects (37)** - `BentoGrid`, `Sparkles`, `Typewriter`,
+  `AnimatedList`, `Dock`, `MagneticButton`, `TextShimmer`, `AnimatedBeam`,
+  `AnimatedTabs`, `ScrollProgress`, `ShimmerButton`, `ShimmerText`,
+  `AnimatedGridPattern`, `AnimatedTestimonials`, `AnimatedTooltip`, `BlurReveal`,
+  `CardFlip`, `Cursor`, `DotPattern`, `ExpandableCards`, `FloatingNavbar`,
+  `GlassCard`, `GlassProgress`, `LiquidGlass`, `Magnetic`, `Meteors`,
+  `Particles`, `ProgressiveBlur`, `RevealText`, `ScrambleText`, `ShineBorder`,
+  `ShinyButton`, `SpinningText`, `SpotlightCard`, `TextAnimate`, `TextReveal`,
+  and `TiltCard`.
+- Total component count: **295** (up from 140).
 - **OKLCH theming system** - color tokens migrated to the OKLCH color space, with
   13 runtime theme presets, a `/themes` web theme editor route, and a `/r/themes`
   endpoint. New public theme exports from `@vllnt/ui` (`THEME_PRESETS`,
@@ -99,12 +118,29 @@ _Nothing yet._
 
 ### Changed
 
+- **BREAKING - React 19 required.** The peer dependency moved to `react` /
+  `react-dom` `>=19`; **React 18 is no longer supported**. Components migrated
+  from `React.forwardRef` to the React 19 ref-as-prop pattern, and `useContext`
+  → `use()`. React-18 consumers must upgrade to React 19.
+- **Internal quality sweep** - cleared the react-doctor backlog:
+  `no-react19-deprecated-apis` 456 → 0, plus state/effect warnings
+  (`useEffectEvent` for effect-captured handlers, derived-state, cascading
+  `setState`) and structural warnings (giant-component splits, render-in-render,
+  polymorphic children, passive listeners).
+- **Shared internals** - extracted reusable hooks/utilities (reference-counted
+  body-scroll-lock fixing a multi-overlay unlock bug, escape-key, live-date,
+  cached `Intl` formatters, clipboard migration) and a Zod parse seam for the
+  registry shape.
 - Registry installs use a **hybrid CLI strategy** - leaf component source is
   inlined, sibling registry items resolve via `@vllnt/ui` to keep installs
   minimal and dedupe shared primitives.
 
 ### Fixed
 
+- **Docs sidebar dropped components** - the registry category union omitted four
+  categories (`ai`, `billing`, `data-display`, `educational`), silently hiding
+  ~32 components from the docs sidebar; all now render, with a structural
+  fallback so a missing category can no longer regress.
 - **Theme-adaptive chart colors** - `CandlestickChart` and `SparklineGrid`
   series colors now follow the active theme and dark mode instead of hardcoded
   values.

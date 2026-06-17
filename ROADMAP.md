@@ -16,7 +16,7 @@
 
 ## Components — canary → release (+85)
 
-Counts taken from `registry.json` at `v0.2.1` (140) vs `HEAD` (225).
+Counts taken from `registry.json` at `v0.2.1` (140) vs `HEAD` (295).
 
 ### Hooks + utility primitives
 - `CopyButton` + `useCopyToClipboard` hook (#159)
