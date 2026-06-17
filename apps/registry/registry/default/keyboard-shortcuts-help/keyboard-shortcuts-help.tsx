@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useEffectEvent, useRef } from "react";
 
 import type { ReactNode } from "react";
 
@@ -37,6 +37,10 @@ function KeyboardShortcutsHelpImpl({
 }: KeyboardShortcutsHelpProps): React.ReactNode {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
+  const onEscape = useEffectEvent(() => {
+    onClose();
+  });
+
   // Focus trap and close on Escape
   useEffect(() => {
     if (!isOpen) return;
@@ -46,7 +50,7 @@ function KeyboardShortcutsHelpImpl({
     const handleKeyDown = (event: KeyboardEvent): void => {
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        onEscape();
       }
     };
 
@@ -54,7 +58,7 @@ function KeyboardShortcutsHelpImpl({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   // Prevent body scroll when open
   useEffect(() => {

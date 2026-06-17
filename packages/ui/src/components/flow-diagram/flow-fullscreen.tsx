@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect } from "react";
+import { memo, useEffect, useEffectEvent } from "react";
 
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -14,13 +14,17 @@ export const FlowFullscreen = memo(function FlowFullscreen({
   isOpen,
   onClose,
 }: FlowFullscreenProps) {
+  const onEscape = useEffectEvent(() => {
+    onClose();
+  });
+
   // Handle keyboard shortcuts
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose();
+        onEscape();
       }
     };
 
@@ -28,7 +32,7 @@ export const FlowFullscreen = memo(function FlowFullscreen({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

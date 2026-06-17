@@ -38,7 +38,7 @@ export const NumberTicker = ({
   value,
   ...props
 }: NumberTickerProps & { ref?: React.Ref<HTMLSpanElement> }) => {
-  const [currentValue, setCurrentValue] = React.useState(from);
+  const [currentValue, setCurrentValue] = React.useState(() => from);
 
   React.useEffect(() => {
     const reducedMotion =

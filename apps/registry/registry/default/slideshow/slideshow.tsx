@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useEffectEvent, useState } from "react";
 
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -157,35 +157,39 @@ function SlideshowImpl({
     [currentIndex, goToSection],
   );
 
+  const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    if (isCompletionDialogOpen) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      if (isTocOpen) setIsTocOpen(false);
+      else onExit();
+      return;
+    }
+    if (event.key === "t" || event.key === "T") {
+      event.preventDefault();
+      setIsTocOpen((p) => !p);
+      return;
+    }
+    if (event.key === "ArrowRight" || event.key === "j") {
+      event.preventDefault();
+      handleNext();
+      return;
+    }
+    if (event.key === "ArrowLeft" || event.key === "k") {
+      event.preventDefault();
+      handlePrevious();
+    }
+  });
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent): void => {
-      if (isCompletionDialogOpen) return;
-      if (event.key === "Escape") {
-        event.preventDefault();
-        if (isTocOpen) setIsTocOpen(false);
-        else onExit();
-        return;
-      }
-      if (event.key === "t" || event.key === "T") {
-        event.preventDefault();
-        setIsTocOpen((p) => !p);
-        return;
-      }
-      if (event.key === "ArrowRight" || event.key === "j") {
-        event.preventDefault();
-        handleNext();
-        return;
-      }
-      if (event.key === "ArrowLeft" || event.key === "k") {
-        event.preventDefault();
-        handlePrevious();
-      }
+      onKeyDown(event);
     };
     document.addEventListener("keydown", handleKeyDown, true);
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [handleNext, handlePrevious, onExit, isTocOpen, isCompletionDialogOpen]);
+  }, []);
 
   if (!currentSection || !mounted) return null;
 

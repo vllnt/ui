@@ -20,7 +20,7 @@ export function ThinkingBlock({
   isStreaming = false,
   thinking,
 }: ThinkingBlockProps) {
-  const [isExpanded, setIsExpanded] = useState(isStreaming);
+  const [isExpanded, setIsExpanded] = useState(() => isStreaming);
   const contentId = useId();
 
   // Auto-open when streaming starts
