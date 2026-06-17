@@ -6,13 +6,13 @@ import {
   type ReactNode,
   use,
   useCallback,
-  useEffect,
   useMemo,
   useState,
 } from "react";
 
 import { Bot, MessageSquarePlus, X } from "lucide-react";
 
+import { useEscapeKey } from "../../lib/use-escape-key";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 
@@ -192,24 +192,6 @@ export type AISidebarProps = {
   closeOnEscape?: boolean;
 } & ComponentPropsWithoutRef<"aside">;
 
-function useEscapeToClose(
-  enabled: boolean,
-  isOpen: boolean,
-  onClose: () => void,
-): void {
-  useEffect(() => {
-    if (!enabled || !isOpen) return;
-    const handler = (event: KeyboardEvent): void => {
-      if (event.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handler);
-
-    return () => {
-      document.removeEventListener("keydown", handler);
-    };
-  }, [enabled, isOpen, onClose]);
-}
-
 /**
  * Slide-out AI assistant panel anchored to the left or right edge. Renders
  * an `<aside role="complementary">` so screen readers announce it as a
@@ -240,7 +222,10 @@ export const AISidebar = ({
 }: AISidebarProps & { ref?: React.Ref<HTMLElement> }) => {
   const { children, className, closeOnEscape = true, ...rest } = props;
   const { close, labels, openState, position, width } = useAISidebar();
-  useEscapeToClose(closeOnEscape, openState, close);
+  useEscapeKey(close, {
+    enabled: closeOnEscape && openState,
+    target: "document",
+  });
 
   return (
     <aside

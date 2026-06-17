@@ -1,10 +1,11 @@
 "use client";
 
-import { memo, useEffect, useEffectEvent } from "react";
+import { memo } from "react";
 
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 
+import { useEscapeKey } from "../../lib/use-escape-key";
 import { cn } from "../../lib/utils";
 
 import type { FlowFullscreenProps } from "./types";
@@ -14,25 +15,7 @@ export const FlowFullscreen = memo(function FlowFullscreen({
   isOpen,
   onClose,
 }: FlowFullscreenProps) {
-  const onEscape = useEffectEvent(() => {
-    onClose();
-  });
-
-  // Handle keyboard shortcuts
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onEscape();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen]);
+  useEscapeKey(onClose, { enabled: isOpen, target: "document" });
 
   if (!isOpen) return null;
 

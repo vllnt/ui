@@ -14,6 +14,7 @@ import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
+import { useCopyToClipboard } from "../copy-button/copy-button";
 
 type PrismStyle = SyntaxHighlighterProps["style"];
 
@@ -30,27 +31,27 @@ type CodeBlockProps = {
   showLanguage?: boolean;
 };
 
-function extractTextFromChildren(children: ReactNode): string {
-  if (typeof children === "string") {
-    return children;
+function extractTextFromChildren(node: ReactNode): string {
+  if (typeof node === "string") {
+    return node;
   }
-  if (typeof children === "number") {
-    return String(children);
+  if (typeof node === "number") {
+    return String(node);
   }
-  if (Array.isArray(children)) {
-    return children.map(extractTextFromChildren).join("");
+  if (Array.isArray(node)) {
+    return node.map(extractTextFromChildren).join("");
   }
   if (
-    children &&
-    typeof children === "object" &&
-    "props" in children &&
-    children.props &&
-    typeof children.props === "object" &&
-    "children" in children.props
+    node &&
+    typeof node === "object" &&
+    "props" in node &&
+    node.props &&
+    typeof node.props === "object" &&
+    "children" in node.props
   ) {
-    return extractTextFromChildren(children.props.children as ReactNode);
+    return extractTextFromChildren(node.props.children as ReactNode);
   }
-  return String(children ?? "");
+  return String(node ?? "");
 }
 
 function findScrollableParent(
@@ -67,7 +68,7 @@ export function CodeBlock({
   language = "typescript",
   showLanguage = false,
 }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard();
   // react-syntax-highlighter (~10MB) is dynamic-imported on mount so the
   // @vllnt/ui barrel's static graph never reaches it — barrel consumers that
   // never render a CodeBlock ship zero bytes of it. Null until the chunk loads.
@@ -119,12 +120,8 @@ export function CodeBlock({
     };
   }, []);
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
+  const handleCopy = () => {
+    void copy(code);
   };
 
   const SyntaxHighlighter = highlighter?.SyntaxHighlighter;

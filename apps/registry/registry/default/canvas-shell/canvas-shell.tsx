@@ -233,10 +233,13 @@ function renderLegacyCanvasShell(
   );
 }
 
-function renderFloatingContent(
-  children: ReactNode,
-  contentStyle: CSSProperties,
-) {
+function CanvasShellContent({
+  content,
+  contentStyle,
+}: {
+  content: ReactNode;
+  contentStyle: CSSProperties;
+}) {
   return (
     <div
       className="relative z-0 h-full w-full min-h-0 min-w-0"
@@ -244,7 +247,7 @@ function renderFloatingContent(
       style={contentStyle}
     >
       <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
-        {children}
+        {content}
       </div>
     </div>
   );
@@ -312,7 +315,7 @@ function renderFloatingCanvasShell(
         leftBar={hasLeftBar ? resolvedLeftBar : undefined}
         topBar={hasTopBar ? topBar : undefined}
       />
-      {renderFloatingContent(children, contentStyle)}
+      <CanvasShellContent content={children} contentStyle={contentStyle} />
       <CanvasShellChromeAfter
         bottomBar={hasBottomBar ? resolvedBottomBar : undefined}
         inset={inset}

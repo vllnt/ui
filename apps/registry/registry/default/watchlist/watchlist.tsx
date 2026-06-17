@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight, Star } from "lucide-react";
 
+import { formatChange } from "@vllnt/ui";
 import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
@@ -29,11 +30,6 @@ function formatPrice(price: number | string): string {
         minimumFractionDigits: 2,
       })
     : price;
-}
-
-function formatChange(change: number): string {
-  const sign = change > 0 ? "+" : "";
-  return `${sign}${change.toFixed(2)}%`;
 }
 
 function WatchlistRow({ item }: { item: WatchlistItem }): React.JSX.Element {
