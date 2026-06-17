@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { forwardRef, useCallback, useEffect, useId, useState } from "react";
 
 import { Brain, ChevronDown } from "lucide-react";
 
@@ -16,8 +16,6 @@ export type ReasoningProps = {
   isStreaming?: boolean;
   /** Called whenever the expanded state changes. */
   onOpenChange?: (open: boolean) => void;
-  /** Ref forwarded to the root element. */
-  ref?: React.Ref<HTMLDivElement>;
   /** Reasoning steps rendered as an ordered list when expanded. */
   steps?: string[];
 };
@@ -110,55 +108,53 @@ function ReasoningContent({
  * @example
  * <Reasoning duration={4} steps={["Parse the request", "Check the cache"]} />
  */
-export function Reasoning({
-  children,
-  className,
-  duration,
-  isStreaming = false,
-  onOpenChange,
-  ref,
-  steps,
-}: ReasoningProps) {
-  const [isOpen, setIsOpen] = useState(isStreaming);
-  const contentId = useId();
+export const Reasoning = forwardRef<HTMLDivElement, ReasoningProps>(
+  (
+    { children, className, duration, isStreaming = false, onOpenChange, steps },
+    ref,
+  ) => {
+    const [isOpen, setIsOpen] = useState(isStreaming);
+    const contentId = useId();
 
-  useEffect(() => {
-    if (isStreaming) {
-      requestAnimationFrame(() => {
-        setIsOpen(true);
+    useEffect(() => {
+      if (isStreaming) {
+        requestAnimationFrame(() => {
+          setIsOpen(true);
+        });
+      }
+    }, [isStreaming]);
+
+    const handleToggle = useCallback(() => {
+      setIsOpen((previous) => {
+        const next = !previous;
+        onOpenChange?.(next);
+        return next;
       });
-    }
-  }, [isStreaming]);
+    }, [onOpenChange]);
 
-  const handleToggle = useCallback(() => {
-    setIsOpen((previous) => {
-      const next = !previous;
-      onOpenChange?.(next);
-      return next;
-    });
-  }, [onOpenChange]);
-
-  return (
-    <div
-      className={cn("rounded-lg border border-border bg-muted/30", className)}
-      ref={ref}
-    >
-      <ReasoningTrigger
-        contentId={contentId}
-        duration={duration}
-        isOpen={isOpen}
-        isStreaming={isStreaming}
-        onToggle={handleToggle}
-      />
-      {isOpen ? (
-        <ReasoningContent
+    return (
+      <div
+        className={cn("rounded-lg border border-border bg-muted/30", className)}
+        ref={ref}
+      >
+        <ReasoningTrigger
           contentId={contentId}
+          duration={duration}
+          isOpen={isOpen}
           isStreaming={isStreaming}
-          steps={steps}
-        >
-          {children}
-        </ReasoningContent>
-      ) : null}
-    </div>
-  );
-}
+          onToggle={handleToggle}
+        />
+        {isOpen ? (
+          <ReasoningContent
+            contentId={contentId}
+            isStreaming={isStreaming}
+            steps={steps}
+          >
+            {children}
+          </ReasoningContent>
+        ) : null}
+      </div>
+    );
+  },
+);
+Reasoning.displayName = "Reasoning";
