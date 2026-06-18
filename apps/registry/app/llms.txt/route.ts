@@ -1,3 +1,9 @@
+import {
+  generateLlmsText,
+  type LlmsLink,
+  type LlmsSection,
+} from "@vllnt/next-llms";
+
 import { registry, type RegistryComponent } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
@@ -41,6 +47,92 @@ const CATEGORY_LABEL = new Map<string, string>([
   ["utility", "Utility"],
 ]);
 
+const INSTALL_DETAILS =
+  "Install any component with the shadcn CLI: " +
+  `\`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\``;
+
+const DOCS_SECTION: LlmsSection = {
+  links: [
+    {
+      notes: "install and use any component",
+      title: "Get Started",
+      url: `${SITE_URL}/`,
+    },
+    {
+      notes: "theming, registry usage, conventions",
+      title: "Documentation",
+      url: `${SITE_URL}/docs`,
+    },
+    ...DOCS_PAGES.map((page) => ({
+      notes: page.description,
+      title: page.title,
+      url: `${SITE_URL}${getDocsPath(page)}`,
+    })),
+    {
+      notes: "design principles and component patterns",
+      title: "Philosophy",
+      url: `${SITE_URL}/philosophy`,
+    },
+    {
+      notes: "brand, tokens, accessibility, and UI rules",
+      title: "Design guide",
+      url: `${SITE_URL}/design`,
+    },
+    {
+      notes: "browse all components by category",
+      title: "Components index",
+      url: `${SITE_URL}/components`,
+    },
+    {
+      notes: "starter kits for full VLLNT UI apps",
+      title: "Templates",
+      url: `${SITE_URL}/templates`,
+    },
+    {
+      notes: "canonical Keep a Changelog release history",
+      title: "Changelog",
+      url: `${SITE_URL}/changelog`,
+    },
+    {
+      notes: "versioned release cards, GitHub notes, and RSS links",
+      title: "Releases",
+      url: `${SITE_URL}/releases`,
+    },
+    {
+      notes: "release feed for notification and agent polling",
+      title: "RSS feed",
+      url: `${SITE_URL}/rss.xml`,
+    },
+  ],
+  title: "Docs",
+};
+
+const REGISTRY_SECTION: LlmsSection = {
+  links: [
+    {
+      notes: "full machine-readable list of all components",
+      title: "Registry index",
+      url: `${SITE_URL}/r/registry.json`,
+    },
+    {
+      notes: "machine-readable VLLNT UI token contract",
+      title: "Design tokens",
+      url: `${SITE_URL}/r/design.json`,
+    },
+    {
+      notes: "canonical brand and design rules as raw markdown",
+      title: "Design guide (raw)",
+      url: `${SITE_URL}/DESIGN.md`,
+    },
+    {
+      notes: "every public route, refreshed per deploy",
+      title: "Sitemap",
+      url: `${SITE_URL}/sitemap.xml`,
+    },
+  ],
+  title: "Registry API",
+};
+
 function getRegistryComponents(): readonly RegistryComponent[] {
   return registry.items;
 }
@@ -67,89 +159,45 @@ function getSortedCategories(
   ];
 }
 
-function buildIntroLines(
-  items: readonly RegistryComponent[],
-): readonly string[] {
-  return [
-    "# VLLNT UI",
-    "",
-    "> Agent-first React component registry. " +
-      `${items.length} accessible components built on Radix UI, Tailwind CSS, and CVA. ` +
-      "Install via the shadcn CLI against any /r/<name>.json endpoint.",
-    "",
-  ];
-}
-
-function buildDocumentationLines(): readonly string[] {
-  return [
-    "## Docs",
-    "",
-    `- [Get Started](${SITE_URL}/): install and use any component`,
-    `- [Documentation](${SITE_URL}/docs): theming, registry usage, conventions`,
-    ...DOCS_PAGES.map(
-      (page) =>
-        `- [${page.title}](${SITE_URL}${getDocsPath(page)}): ${page.description}`,
-    ),
-    `- [Philosophy](${SITE_URL}/philosophy): design principles and component patterns`,
-    `- [Design guide](${SITE_URL}/design): brand, tokens, accessibility, and UI rules`,
-    `- [Components index](${SITE_URL}/components): browse all components by category`,
-    `- [Templates](${SITE_URL}/templates): starter kits for full VLLNT UI apps`,
-    `- [Changelog](${SITE_URL}/changelog): canonical Keep a Changelog release history`,
-    `- [Releases](${SITE_URL}/releases): versioned release cards, GitHub notes, and RSS links`,
-    `- [RSS feed](${SITE_URL}/rss.xml): release feed for notification and agent polling`,
-    "",
-  ];
-}
-
-function buildRegistryLines(): readonly string[] {
-  return [
-    "## Registry API",
-    "",
-    `- [Registry index](${SITE_URL}/r/registry.json): full machine-readable list of all components`,
-    `- [Design tokens](${SITE_URL}/r/design.json): machine-readable VLLNT UI token contract`,
-    `- [Design guide (raw)](${SITE_URL}/DESIGN.md): canonical brand and design rules as raw markdown`,
-    `- [Sitemap](${SITE_URL}/sitemap.xml): every public route, refreshed per deploy`,
-    "- Install command: `pnpm dlx shadcn@latest add " +
-      `${SITE_URL}/r/<name>.json` +
-      "`",
-    "",
-  ];
-}
-
-function buildCategoryLines(
-  category: string,
-  grouped: ReadonlyMap<string, readonly RegistryComponent[]>,
-): readonly string[] {
-  const bucket = grouped.get(category);
-  if (!bucket || bucket.length === 0) return [];
-  const label = CATEGORY_LABEL.get(category) ?? category;
-  const itemLines = [...bucket]
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map(
-      (item) =>
-        `- [${item.title}](${SITE_URL}/components/${item.name}): ${item.description ?? ""}`,
-    );
-
-  return [`## Components - ${label}`, "", ...itemLines, ""];
-}
-
-function buildComponentLines(
-  items: readonly RegistryComponent[],
-): readonly string[] {
-  const grouped = groupItems(items);
-  return getSortedCategories(grouped).flatMap((category) =>
-    buildCategoryLines(category, grouped),
+function buildSummary(items: readonly RegistryComponent[]): string {
+  return (
+    "Agent-first React component registry. " +
+    `${items.length} accessible components built on Radix UI, Tailwind CSS, and CVA. ` +
+    "Install via the shadcn CLI against any /r/<name>.json endpoint."
   );
+}
+
+function buildComponentSections(
+  items: readonly RegistryComponent[],
+): readonly LlmsSection[] {
+  const grouped = groupItems(items);
+  return getSortedCategories(grouped).flatMap((category) => {
+    const bucket = grouped.get(category);
+    if (!bucket || bucket.length === 0) return [];
+    const label = CATEGORY_LABEL.get(category) ?? category;
+    const links: LlmsLink[] = [...bucket]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((item) => ({
+        notes: item.description,
+        title: item.title,
+        url: `${SITE_URL}/components/${item.name}`,
+      }));
+    return [{ links, title: `Components - ${label}` }];
+  });
 }
 
 function buildLlmsTxt(): string {
   const items = getRegistryComponents();
-  return [
-    ...buildIntroLines(items),
-    ...buildDocumentationLines(),
-    ...buildRegistryLines(),
-    ...buildComponentLines(items),
-  ].join("\n");
+  return generateLlmsText({
+    details: INSTALL_DETAILS,
+    sections: [
+      DOCS_SECTION,
+      REGISTRY_SECTION,
+      ...buildComponentSections(items),
+    ],
+    summary: buildSummary(items),
+    title: "VLLNT UI",
+  });
 }
 
 export const dynamic = "force-static";

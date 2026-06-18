@@ -1,6 +1,12 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  generateLlmsFullText,
+  type LlmsFullPage,
+  type LlmsFullSection,
+} from "@vllnt/next-llms";
+
 import { getLatestReleaseRecords } from "@/lib/changelog";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
 import { registry, type RegistryComponent } from "@/lib/registry";
@@ -55,151 +61,126 @@ async function readDocumentPage(slug: string): Promise<string> {
   }
 }
 
-function buildIntroLines(
-  items: readonly RegistryComponent[],
-): readonly string[] {
-  return [
-    "# VLLNT UI - Full Reference",
-    "",
-    "> One-fetch, complete agent context for the VLLNT UI registry. " +
-      `${items.length} components, install via shadcn CLI against /r/<name>.json. ` +
-      `Site: ${SITE_URL}`,
-    "",
-  ];
-}
-
-function buildInstallLines(): readonly string[] {
-  return [
-    "## Install",
-    "",
-    "```bash",
-    `pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json`,
-    `# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`,
-    "```",
-    "",
-  ];
-}
-
-async function buildDocumentLines(): Promise<readonly string[]> {
-  const pageSections = await Promise.all(
-    REFERENCE_PAGES.map(async (page) => {
-      const body = await readDocumentPage(page.slug);
-      if (!body) return [];
-      const source = `${SITE_URL}${page.href}`;
-      return [`## ${page.title}`, "", `Source: ${source}`, "", body, ""];
-    }),
+function buildSummary(items: readonly RegistryComponent[]): string {
+  return (
+    "One-fetch, complete agent context for the VLLNT UI registry. " +
+    `${items.length} components, install via shadcn CLI against /r/<name>.json. ` +
+    `Site: ${SITE_URL}`
   );
-
-  return pageSections.flat();
 }
 
-async function buildDesignLines(): Promise<readonly string[]> {
+const INSTALL_DETAILS = [
+  "## Install",
+  "",
+  "```bash",
+  `pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json`,
+  `# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`,
+  "```",
+].join("\n");
+
+async function buildGuidePages(): Promise<LlmsFullPage[]> {
+  const entries = await Promise.all(
+    REFERENCE_PAGES.map(async (page) => ({
+      content: await readDocumentPage(page.slug),
+      title: page.title,
+      url: `${SITE_URL}${page.href}`,
+    })),
+  );
+  return entries.filter((entry) => entry.content.length > 0);
+}
+
+async function buildDesignPage(): Promise<LlmsFullPage> {
   const designGuide = await getDesignGuideMarkdown();
-  return [
-    "## Design Guide",
-    "",
-    `Source: ${SITE_URL}/design`,
-    `Raw: ${SITE_URL}/DESIGN.md`,
-    `Tokens: ${SITE_URL}/r/design.json`,
-    "",
-    designGuide,
-    "",
-  ];
+  return {
+    content: [
+      `Raw: ${SITE_URL}/DESIGN.md`,
+      `Tokens: ${SITE_URL}/r/design.json`,
+      "",
+      designGuide,
+    ].join("\n"),
+    title: "Design Guide",
+    url: `${SITE_URL}/design`,
+  };
 }
 
-async function buildReleaseLines(): Promise<readonly string[]> {
+async function buildReleasePages(): Promise<LlmsFullPage[]> {
   const releases = await getLatestReleaseRecords(5);
-  if (releases.length === 0) return [];
-
-  return [
-    "## Latest Release Notes",
-    "",
-    `Full release cards are available at ${SITE_URL}/releases and feeds at ${SITE_URL}/rss.xml or ${SITE_URL}/atom.xml.`,
-    "",
-    ...releases.flatMap((release) => [
-      `### ${release.title}`,
-      "",
+  return releases.map((release) => ({
+    content: [
       `- Version: \`${release.version}\``,
       `- Page: ${SITE_URL}/releases#${release.anchor}`,
       `- GitHub: ${release.url}`,
       ...(release.date ? [`- Date: ${release.date}`] : []),
       "",
       release.notes,
-      "",
-    ]),
-  ];
+    ].join("\n"),
+    title: release.title,
+  }));
 }
 
-function buildTemplateLines(): readonly string[] {
-  if (TEMPLATES.length === 0) return [];
-
-  return [
-    "## Templates",
-    "",
-    "Starter kits pairing complete app shapes with component lists and source paths.",
-    "",
-    ...TEMPLATES.flatMap((template) => [
-      `### ${template.title}`,
-      "",
+function buildTemplatePages(): LlmsFullPage[] {
+  return TEMPLATES.map((template) => ({
+    content: [
       `- Slug: \`${template.slug}\``,
       `- Page: ${SITE_URL}${getTemplatePath(template)}`,
       `- Audience: ${template.audience}`,
       `- Components: ${template.components.join(", ")}`,
-      "",
-    ]),
-  ];
+    ].join("\n"),
+    title: template.title,
+  }));
 }
 
-function buildComponentLines(item: RegistryComponent): readonly string[] {
-  return [
-    `### ${item.title}`,
-    "",
-    `- Slug: \`${item.name}\``,
-    `- Category: \`${item.category ?? ""}\``,
-    `- Description: ${item.description ?? ""}`,
-    `- Page: ${SITE_URL}/components/${item.name}`,
-    `- Schema: ${SITE_URL}/r/${item.name}.json`,
-    ...(item.dependencies?.length
-      ? [`- npm deps: ${item.dependencies.join(", ")}`]
-      : []),
-    ...(item.registryDependencies?.length
-      ? [`- registry deps: ${item.registryDependencies.join(", ")}`]
-      : []),
-    `- Install: \`pnpm dlx shadcn@latest add ${SITE_URL}/r/${item.name}.json\``,
-    "",
-  ];
-}
-
-function buildComponentsReferenceLines(
+function buildComponentPages(
   items: readonly RegistryComponent[],
-): readonly string[] {
-  return [
-    "## Components",
-    "",
-    `${items.length} components total. Each entry links to a machine-readable JSON descriptor at /r/<name>.json.`,
-    "",
-    ...[...items]
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .flatMap(buildComponentLines),
-  ];
+): LlmsFullPage[] {
+  return [...items]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((item) => ({
+      content: [
+        `- Slug: \`${item.name}\``,
+        `- Category: \`${item.category ?? ""}\``,
+        `- Description: ${item.description ?? ""}`,
+        `- Page: ${SITE_URL}/components/${item.name}`,
+        `- Schema: ${SITE_URL}/r/${item.name}.json`,
+        ...(item.dependencies?.length
+          ? [`- npm deps: ${item.dependencies.join(", ")}`]
+          : []),
+        ...(item.registryDependencies?.length
+          ? [`- registry deps: ${item.registryDependencies.join(", ")}`]
+          : []),
+        `- Install: \`pnpm dlx shadcn@latest add ${SITE_URL}/r/${item.name}.json\``,
+      ].join("\n"),
+      title: item.title,
+    }));
 }
 
 async function buildLlmsFullTxt(): Promise<string> {
   const items = getRegistryComponents();
-  const documentLines = await buildDocumentLines();
-  const designLines = await buildDesignLines();
-  const releaseLines = await buildReleaseLines();
-  const templateLines = buildTemplateLines();
+  const [guidePages, designPage, releasePages] = await Promise.all([
+    buildGuidePages(),
+    buildDesignPage(),
+    buildReleasePages(),
+  ]);
+  const templatePages = buildTemplatePages();
 
-  return [
-    ...buildIntroLines(items),
-    ...buildInstallLines(),
-    ...documentLines,
-    ...designLines,
-    ...releaseLines,
-    ...templateLines,
-    ...buildComponentsReferenceLines(items),
-  ].join("\n");
+  const sections: LlmsFullSection[] = [
+    ...(guidePages.length > 0 ? [{ pages: guidePages, title: "Guides" }] : []),
+    { pages: [designPage], title: "Design" },
+    ...(releasePages.length > 0
+      ? [{ pages: releasePages, title: "Latest Release Notes" }]
+      : []),
+    ...(templatePages.length > 0
+      ? [{ pages: templatePages, title: "Templates" }]
+      : []),
+    { pages: buildComponentPages(items), title: "Components" },
+  ];
+
+  return generateLlmsFullText({
+    details: INSTALL_DETAILS,
+    sections,
+    summary: buildSummary(items),
+    title: "VLLNT UI - Full Reference",
+  });
 }
 
 export const dynamic = "force-static";
