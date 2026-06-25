@@ -202,3 +202,30 @@
   }
 }
 
+/*
+ * Safari < 15.4 lacks oklch(): every `oklch(var(--token) / a)` color drops to
+ * its initial value, leaving the sticky navbar (and body) illegible. Give the
+ * core chrome a solid sRGB fallback, theme-aware. Gated so any browser with
+ * oklch() support ignores this block entirely.
+ */
+@supports not (color: oklch(0 0 0)) {
+  body {
+    background-color: #ffffff;
+    color: #1a1a1a;
+  }
+  .dark body {
+    background-color: #000000;
+    color: #fafafa;
+  }
+  header[data-slot="navbar-saas"] {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border-color: #ebebeb;
+  }
+  .dark header[data-slot="navbar-saas"] {
+    background-color: #000000;
+    color: #fafafa;
+    border-color: #2a2a2a;
+  }
+}
+
