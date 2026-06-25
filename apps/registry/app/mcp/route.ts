@@ -249,7 +249,7 @@ function dispatch(request: JsonRpcRequest): JsonRpcError | JsonRpcSuccess {
           tools: { listChanged: false },
         },
         instructions:
-          "VLLNT UI registry MCP server. Use search_components / get_component / list_categories to discover and read 225 React components. Source of truth: " +
+          `VLLNT UI registry MCP server. Use search_components / get_component / list_categories to discover and read ${REGISTRY.items.length} React components. Source of truth: ` +
           SITE_URL +
           "/r/registry.json",
         protocolVersion: PROTOCOL_VERSION,
