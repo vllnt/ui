@@ -72,7 +72,7 @@ Release automation can regenerate this file from Conventional Commits with
   `ContextLens`.
 - **Time navigation** - `TimelineScrubber`, `PlaybackGhost`,
   `BottomActivityStrip`, and `RunTimeline`.
-- Total component count: **225** (up from 140).
+- Total component count: **309** (up from 140).
 - **OKLCH theming system** - color tokens migrated to the OKLCH color space, with
   13 runtime theme presets, a `/themes` web theme editor route, and a `/r/themes`
   endpoint. New public theme exports from `@vllnt/ui` (`THEME_PRESETS`,
