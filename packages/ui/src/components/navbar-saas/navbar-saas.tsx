@@ -34,7 +34,11 @@ export function NavbarSaas({
   const { open, setOpen } = useSidebar();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
+    <header
+      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0"
+      data-slot="navbar-saas"
+      style={{ WebkitBackdropFilter: "blur(8px)" }}
+    >
       <div className="w-full">
         <div className="mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
