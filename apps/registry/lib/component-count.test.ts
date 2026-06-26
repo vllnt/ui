@@ -33,9 +33,9 @@ describe("component count stays consistent with the registry", () => {
   it("the newest CHANGELOG component-count snapshot matches the live count", () => {
     const changelog = read(path.join(repoRoot, "CHANGELOG.md"));
     // The count snapshot lives in the newest section that declares one:
-    // [Unreleased] while changes are pending, or the just-cut release section
-    // immediately after a release. The file is newest-first, so the first
-    // match is always the current snapshot.
+    // [Unreleased] while changes are pending, or the dated release section
+    // after a release cut. The file is newest-first, so the first match
+    // is the current snapshot.
     const match = /total component count:\s*\*\*(\d+)\*\*/i.exec(changelog);
     expect(
       match,
