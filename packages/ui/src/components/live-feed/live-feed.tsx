@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { normalizeDate } from "../../lib/format";
+import { useLiveDate } from "../../lib/use-live-date";
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 import {
@@ -39,39 +41,6 @@ const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;
 const DAY_MS = 24 * HOUR_MS;
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: LiveFeedProps["now"], tickMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, tickMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, tickMs]);
-
-  return liveNow;
-}
 
 function formatRelative(eventDate: Date, now: Date): string {
   const deltaMs = now.getTime() - eventDate.getTime();
@@ -169,68 +138,64 @@ function LiveFeedRow({
   );
 }
 
-export const LiveFeed = React.forwardRef<HTMLDivElement, LiveFeedProps>(
-  (
-    {
-      className,
-      description,
-      emptyLabel = "No events yet",
-      events,
-      maxItems = 50,
-      now,
-      tickMs = 30_000,
-      title = "Live feed",
-      ...props
-    },
-    ref,
-  ) => {
-    const liveNow = useLiveDate(now, tickMs);
-    const visibleEvents = React.useMemo(
-      () => sortEventsDesc(events).slice(0, maxItems),
-      [events, maxItems],
-    );
+export const LiveFeed = ({
+  className,
+  description,
+  emptyLabel = "No events yet",
+  events,
+  maxItems = 50,
+  now,
+  ref,
+  tickMs = 30_000,
+  title = "Live feed",
+  ...props
+}: LiveFeedProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const liveNow = useLiveDate(now, tickMs);
+  const visibleEvents = React.useMemo(
+    () => sortEventsDesc(events).slice(0, maxItems),
+    [events, maxItems],
+  );
 
-    return (
-      <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
-        <CardHeader className="flex flex-row items-start justify-between gap-3 gap-y-0 pb-3">
-          <div className="space-y-1">
-            <CardTitle className="text-base">{title}</CardTitle>
-            {description ? (
-              <CardDescription>{description}</CardDescription>
-            ) : null}
+  return (
+    <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
+      <CardHeader className="flex flex-row items-start justify-between gap-3 gap-y-0 pb-3">
+        <div className="space-y-1">
+          <CardTitle className="text-base">{title}</CardTitle>
+          {description ? (
+            <CardDescription>{description}</CardDescription>
+          ) : null}
+        </div>
+        <Badge variant="outline">
+          <span
+            aria-hidden="true"
+            className="relative mr-1.5 inline-flex size-2"
+          >
+            <span className="absolute inline-flex size-2 animate-ping rounded-full bg-emerald-500 opacity-70" />
+            <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+          </span>{" "}
+          Live
+        </Badge>
+      </CardHeader>
+      <CardContent className="pt-0">
+        {visibleEvents.length === 0 ? (
+          <div className="py-8 text-center text-sm text-muted-foreground">
+            {emptyLabel}
           </div>
-          <Badge variant="outline">
-            <span
-              aria-hidden="true"
-              className="relative mr-1.5 inline-flex size-2"
-            >
-              <span className="absolute inline-flex size-2 animate-ping rounded-full bg-emerald-500 opacity-70" />
-              <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-            </span>{" "}
-            Live
-          </Badge>
-        </CardHeader>
-        <CardContent className="pt-0">
-          {visibleEvents.length === 0 ? (
-            <div className="py-8 text-center text-sm text-muted-foreground">
-              {emptyLabel}
-            </div>
-          ) : (
-            <ul className="max-h-[360px] divide-y divide-border/60 overflow-y-auto">
-              {visibleEvents.map((event, index) => (
-                <LiveFeedRow
-                  event={event}
-                  isLatest={index === 0}
-                  key={event.id}
-                  now={liveNow}
-                />
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-    );
-  },
-);
+        ) : (
+          <ul className="max-h-[360px] divide-y divide-border/60 overflow-y-auto">
+            {visibleEvents.map((event, index) => (
+              <LiveFeedRow
+                event={event}
+                isLatest={index === 0}
+                key={event.id}
+                now={liveNow}
+              />
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
 LiveFeed.displayName = "LiveFeed";

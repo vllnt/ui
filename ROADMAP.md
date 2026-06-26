@@ -1,12 +1,12 @@
 # Roadmap — 0.3.0
 
-> Status: **release prep** · Previous release: `v0.2.1` · Current canary: `0.3.0-canary.<sha>` (+85 components) · Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
+> Status: **release prep** · Previous release: `v0.2.1` · Current canary: `0.3.0-canary.<sha>` (+169 components) · Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 ## TLDR
 
 `0.3.0` is the **agent-first surface** release. Three themes:
 
-1. **+85 new components** already in canary, finally published.
+1. **+169 new components** already in canary, finally published.
 2. **Discoverability** — full SEO + AI-agent surface (`/llms.txt`, `/mcp`, sitemap, JSON-LD, manifest, structured data on every page).
 3. **Codebase health gate** — `react-doctor` CI + tooling so we ship and stay green.
 
@@ -14,9 +14,9 @@
 
 ---
 
-## Components — canary → release (+85)
+## Components — canary → release (+169)
 
-Counts taken from `registry.json` at `v0.2.1` (140) vs `HEAD` (295).
+Counts taken from `registry.json` at `v0.2.1` (140) vs `HEAD` (**309**, +169 net). The curated list below highlights the headline additions; the full set is in the changelog.
 
 ### Hooks + utility primitives
 - `CopyButton` + `useCopyToClipboard` hook (#159)
@@ -112,7 +112,7 @@ Counts taken from `registry.json` at `v0.2.1` (140) vs `HEAD` (295).
 | Order | Issue | Type | Notes |
 |---|---|---|---|
 | 6 | [#233](https://github.com/vllnt/ui/issues/233) | Feature | `app/robots.ts` (allow all AI crawlers + sitemap link) |
-| 7 | [#234](https://github.com/vllnt/ui/issues/234) | Feature | `app/sitemap.ts` (all routes + 225 components) |
+| 7 | [#234](https://github.com/vllnt/ui/issues/234) | Feature | `app/sitemap.ts` (all routes + 309 components) |
 | 8 | [#237](https://github.com/vllnt/ui/issues/237) | Feature | Canonical URLs per page |
 | 9 | [#241](https://github.com/vllnt/ui/issues/241) | Feature | Keywords + verification + author metadata |
 | 10 | [#235](https://github.com/vllnt/ui/issues/235) | Feature | `/llms.txt` |

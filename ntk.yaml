@@ -16,6 +16,14 @@ apps:
   - name: ui-registry
     cell: apps   # T1 (vllnt-apps) — prod promote MUST target the cell, else defaults to mgmt
     path: apps/registry
+    paths:
+      # Trigger-scope: rebuild the registry preview when ITS dir OR the shared
+      # @vllnt/ui library changes (a packages/ui change is a registry change).
+      # Without packages/ui here, a PR touching only packages/ui fell outside scope
+      # → the deployer posted a fake-pass `ntk / preview` with no build (#452).
+      - apps/registry
+      - packages/ui
+      - ntk.yaml
     port: 3000
     healthcheck: /
     domains:
@@ -66,6 +74,12 @@ apps:
   - name: storybook
     cell: apps   # T1 (vllnt-apps) — prod promote MUST target the cell, else defaults to mgmt
     path: apps/storybook
+    paths:
+      # Rebuild the storybook preview on its dir OR a shared @vllnt/ui change
+      # (storybook renders @vllnt/ui components, so packages/ui IS in scope).
+      - apps/storybook
+      - packages/ui
+      - ntk.yaml
     port: 8080
     healthcheck: /healthz
     domains:

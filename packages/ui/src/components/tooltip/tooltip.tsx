@@ -1,7 +1,5 @@
 "use client";
 
-import { forwardRef } from "react";
-
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "../../lib/utils";
@@ -12,10 +10,14 @@ const Tooltip = TooltipPrimitive.Root;
 
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
-const TooltipContent = forwardRef<
-  React.ComponentRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+const TooltipContent = ({
+  className,
+  ref,
+  sideOffset = 4,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> & {
+  ref?: React.Ref<React.ComponentRef<typeof TooltipPrimitive.Content>>;
+}) => (
   <TooltipPrimitive.Portal>
     <TooltipPrimitive.Content
       className={cn(
@@ -27,7 +29,7 @@ const TooltipContent = forwardRef<
       {...props}
     />
   </TooltipPrimitive.Portal>
-));
+);
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };

@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import type { CSSProperties, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
@@ -206,7 +204,7 @@ function renderLegacyCanvasShell(
     topBar,
     ...props
   }: CanvasShellProps,
-  ref: React.ForwardedRef<HTMLElement>,
+  ref: React.Ref<HTMLElement> | undefined,
 ) {
   return (
     <section
@@ -235,10 +233,13 @@ function renderLegacyCanvasShell(
   );
 }
 
-function renderFloatingContent(
-  children: ReactNode,
-  contentStyle: CSSProperties,
-) {
+function CanvasShellContent({
+  content,
+  contentStyle,
+}: {
+  content: ReactNode;
+  contentStyle: CSSProperties;
+}) {
   return (
     <div
       className="relative z-0 h-full w-full min-h-0 min-w-0"
@@ -246,7 +247,7 @@ function renderFloatingContent(
       style={contentStyle}
     >
       <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
-        {children}
+        {content}
       </div>
     </div>
   );
@@ -268,7 +269,7 @@ function renderFloatingCanvasShell(
     topBar,
     ...props
   }: CanvasShellProps,
-  ref: React.ForwardedRef<HTMLElement>,
+  ref: React.Ref<HTMLElement> | undefined,
 ) {
   const inset = toInsetValue(chromeInset) ?? "16px";
   const resolvedBottomBar = bottomBar ?? bottomSlot;
@@ -314,7 +315,7 @@ function renderFloatingCanvasShell(
         leftBar={hasLeftBar ? resolvedLeftBar : undefined}
         topBar={hasTopBar ? topBar : undefined}
       />
-      {renderFloatingContent(children, contentStyle)}
+      <CanvasShellContent content={children} contentStyle={contentStyle} />
       <CanvasShellChromeAfter
         bottomBar={hasBottomBar ? resolvedBottomBar : undefined}
         inset={inset}
@@ -324,7 +325,10 @@ function renderFloatingCanvasShell(
   );
 }
 
-const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
+const CanvasShell = ({
+  ref,
+  ...props
+}: CanvasShellProps & { ref?: React.Ref<HTMLElement> }) => {
   const { bottomBar, chromeInset, contentPadding, leftBar, rightBar } = props;
   const hasExplicitChromeInset = Object.prototype.hasOwnProperty.call(
     props,
@@ -342,7 +346,7 @@ const CanvasShell = forwardRef<HTMLElement, CanvasShellProps>((props, ref) => {
   }
 
   return renderFloatingCanvasShell(props, ref);
-});
+};
 
 CanvasShell.displayName = "CanvasShell";
 

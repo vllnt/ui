@@ -9,6 +9,9 @@ import {
 } from "@xyflow/react";
 import { toPng } from "html-to-image";
 
+import { useBodyScrollLock } from "../../lib/use-body-scroll-lock";
+import { useEscapeKey } from "../../lib/use-escape-key";
+
 import type {
   CopyStatus,
   UseFlowDiagramOptions,
@@ -64,29 +67,11 @@ function useFullscreenState(allowFullscreen: boolean) {
     setIsFullscreen(false);
   }, []);
 
-  // Handle ESC key to close fullscreen
-  useEffect(() => {
-    if (!isFullscreen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        closeFullscreen();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isFullscreen, closeFullscreen]);
-
-  // Prevent body scroll when fullscreen
-  useEffect(() => {
-    document.body.style.overflow = isFullscreen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isFullscreen]);
+  useEscapeKey(closeFullscreen, {
+    enabled: isFullscreen,
+    target: "document",
+  });
+  useBodyScrollLock(isFullscreen);
 
   return { closeFullscreen, isFullscreen, toggleFullscreen };
 }

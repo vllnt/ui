@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -171,10 +167,10 @@ const Group = (props: {
  *
  * @public
  */
-export const RelationshipInspector = forwardRef<
-  HTMLElement,
-  RelationshipInspectorProps
->((props, ref) => {
+export const RelationshipInspector = ({
+  ref,
+  ...props
+}: RelationshipInspectorProps & { ref?: React.Ref<HTMLElement> }) => {
   const { className, edges, labels, title = "Relationships", ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const inbound = edges.filter((edge) => edge.direction === "inbound");
@@ -210,5 +206,5 @@ export const RelationshipInspector = forwardRef<
       )}
     </section>
   );
-});
+};
 RelationshipInspector.displayName = "RelationshipInspector";

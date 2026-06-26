@@ -1,15 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 
 type TLDRSectionProps = {
   children: React.ReactNode;
   label: string;
 };
 
+type SkeletonAction = "hide" | "show";
+
+function skeletonReducer(_state: boolean, action: SkeletonAction): boolean {
+  return action === "show";
+}
+
 export function TLDRSection({ children, label }: TLDRSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [showSkeleton, setShowSkeleton] = useState(false);
+  const [showSkeleton, dispatchSkeleton] = useReducer(skeletonReducer, false);
   const hasBeenOpenedRef = useRef(false);
   const timerReference = useRef<NodeJS.Timeout | null>(null);
 
@@ -21,13 +27,13 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       }
 
       const rafId = requestAnimationFrame(() => {
-        setShowSkeleton(true);
+        dispatchSkeleton("show");
         hasBeenOpenedRef.current = true;
       });
 
       // Simulate loading with skeleton
       timerReference.current = setTimeout(() => {
-        setShowSkeleton(false);
+        dispatchSkeleton("hide");
         timerReference.current = null;
       }, 800);
 
@@ -37,7 +43,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
           clearTimeout(timerReference.current);
           timerReference.current = null;
         }
-        setShowSkeleton(false);
+        dispatchSkeleton("hide");
       };
     }
 
@@ -46,7 +52,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
         clearTimeout(timerReference.current);
         timerReference.current = null;
       }
-      setShowSkeleton(false);
+      dispatchSkeleton("hide");
     };
   }, [isExpanded]);
 

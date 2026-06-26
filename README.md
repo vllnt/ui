@@ -2,7 +2,7 @@
 
 # @vllnt/ui
 
-**295 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
+**309 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org)
@@ -16,7 +16,7 @@
 
 ## Features
 
-- **295 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
+- **309 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
 - **Accessible by default** — Radix UI handles focus, keyboard nav, and ARIA
 - **Tailwind CSS + CVA** — variant-driven styling with full theme override via CSS variables
 - **shadcn-compatible registry** — install individual components with `shadcn add`
@@ -112,7 +112,7 @@ Override CSS variables after importing styles:
 ## Components
 
 <details>
-<summary>All 295 components</summary>
+<summary>All 309 components</summary>
 
 | Category | Components |
 |----------|------------|

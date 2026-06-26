@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { normalizeDate } from "@vllnt/ui";
+import { useLiveDate } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 import {
@@ -26,39 +28,6 @@ type TimerSegment = {
   label: string;
   value: string;
 };
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: CountdownTimerProps["now"], tickMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, tickMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, tickMs]);
-
-  return liveNow;
-}
 
 function getRemainingMs(deadline: Date, now: Date): number {
   return deadline.getTime() - now.getTime();
@@ -192,64 +161,54 @@ function TimerProgress({
   );
 }
 
-export const CountdownTimer = React.forwardRef<
-  HTMLDivElement,
-  CountdownTimerProps
->(
-  (
-    {
-      className,
-      deadline,
-      description,
-      now,
-      startedAt,
-      tickMs = 1000,
-      title = "Countdown timer",
-      warningThresholdMs = 15 * 60 * 1000,
-      ...props
-    },
-    ref,
-  ) => {
-    const deadlineDate = React.useMemo(
-      () => normalizeDate(deadline),
-      [deadline],
-    );
-    const startedAtDate = React.useMemo(
-      () => (startedAt ? normalizeDate(startedAt) : undefined),
-      [startedAt],
-    );
-    const liveNow = useLiveDate(now, tickMs);
-    const remainingMs = getRemainingMs(deadlineDate, liveNow);
-    const status = getStatus(remainingMs, warningThresholdMs);
-    const segments = formatSegments(Math.abs(remainingMs));
-    const progress = getProgress(deadlineDate, liveNow, startedAtDate);
+export const CountdownTimer = ({
+  className,
+  deadline,
+  description,
+  now,
+  ref,
+  startedAt,
+  tickMs = 1000,
+  title = "Countdown timer",
+  warningThresholdMs = 15 * 60 * 1000,
+  ...props
+}: CountdownTimerProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const deadlineDate = React.useMemo(() => normalizeDate(deadline), [deadline]);
+  const startedAtDate = React.useMemo(
+    () => (startedAt ? normalizeDate(startedAt) : undefined),
+    [startedAt],
+  );
+  const liveNow = useLiveDate(now, tickMs);
+  const remainingMs = getRemainingMs(deadlineDate, liveNow);
+  const status = getStatus(remainingMs, warningThresholdMs);
+  const segments = formatSegments(Math.abs(remainingMs));
+  const progress = getProgress(deadlineDate, liveNow, startedAtDate);
 
-    return (
-      <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
-        <CardHeader className="space-y-2 pb-3">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <CardTitle className="text-base">{title}</CardTitle>
-              <CardDescription>
-                {description ?? `Deadline ${formatDeadline(deadlineDate)}`}
-              </CardDescription>
-            </div>
-            <Badge variant={status.badgeVariant}>{status.label}</Badge>
+  return (
+    <Card className={cn("shadow-sm", className)} ref={ref} {...props}>
+      <CardHeader className="space-y-2 pb-3">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <CardTitle className="text-base">{title}</CardTitle>
+            <CardDescription>
+              {description ?? `Deadline ${formatDeadline(deadlineDate)}`}
+            </CardDescription>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <TimerSegments segments={segments} />
-          <TimerProgress
-            progress={progress}
-            remainingMs={remainingMs}
-            segments={segments}
-            startedAt={startedAtDate}
-            toneClassName={status.toneClassName}
-          />
-        </CardContent>
-      </Card>
-    );
-  },
-);
+          <Badge variant={status.badgeVariant}>{status.label}</Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <TimerSegments segments={segments} />
+        <TimerProgress
+          progress={progress}
+          remainingMs={remainingMs}
+          segments={segments}
+          startedAt={startedAtDate}
+          toneClassName={status.toneClassName}
+        />
+      </CardContent>
+    </Card>
+  );
+};
 
 CountdownTimer.displayName = "CountdownTimer";

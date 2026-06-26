@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -112,70 +108,71 @@ const Message = (props: { message: ThreadMessage }): React.ReactElement => {
  *
  * @public
  */
-export const ThreadBubble = forwardRef<HTMLElement, ThreadBubbleProps>(
-  (props, ref) => {
-    const { className, footer, labels, messages, onResolve, title, ...rest } =
-      props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const handleResolve = (): void => {
-      onResolve?.();
-    };
-    return (
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "flex w-72 flex-col gap-2 rounded-lg border border-border bg-background p-3 text-foreground shadow-md",
-          className,
-        )}
-        data-thread-bubble
-        ref={ref}
-        {...rest}
-      >
-        {title || onResolve ? (
-          <header className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-wide text-muted-foreground">
-            {title ? (
-              <span className="truncate font-semibold" data-thread-bubble-title>
-                {title}
-              </span>
-            ) : (
-              <span aria-hidden="true" />
-            )}
-            {onResolve ? (
-              <button
-                className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                data-thread-bubble-resolve
-                onClick={handleResolve}
-                type="button"
-              >
-                Resolve
-              </button>
-            ) : null}
-          </header>
-        ) : null}
-        {messages.length === 0 ? (
-          <p
-            className="px-1 py-2 text-center text-[11px] text-muted-foreground"
-            data-thread-bubble-state="empty"
-          >
-            {resolvedLabels.empty}
-          </p>
-        ) : (
-          <ul className="space-y-2 overflow-y-auto" data-thread-bubble-list>
-            {messages.map((message) => (
-              <Message key={message.id} message={message} />
-            ))}
-          </ul>
-        )}
-        {footer ? (
-          <footer
-            className="border-t border-border pt-2"
-            data-thread-bubble-footer
-          >
-            {footer}
-          </footer>
-        ) : null}
-      </section>
-    );
-  },
-);
+export const ThreadBubble = ({
+  ref,
+  ...props
+}: ThreadBubbleProps & { ref?: React.Ref<HTMLElement> }) => {
+  const { className, footer, labels, messages, onResolve, title, ...rest } =
+    props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const handleResolve = (): void => {
+    onResolve?.();
+  };
+  return (
+    <section
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "flex w-72 flex-col gap-2 rounded-lg border border-border bg-background p-3 text-foreground shadow-md",
+        className,
+      )}
+      data-thread-bubble
+      ref={ref}
+      {...rest}
+    >
+      {title || onResolve ? (
+        <header className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-wide text-muted-foreground">
+          {title ? (
+            <span className="truncate font-semibold" data-thread-bubble-title>
+              {title}
+            </span>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          {onResolve ? (
+            <button
+              className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              data-thread-bubble-resolve
+              onClick={handleResolve}
+              type="button"
+            >
+              Resolve
+            </button>
+          ) : null}
+        </header>
+      ) : null}
+      {messages.length === 0 ? (
+        <p
+          className="px-1 py-2 text-center text-[11px] text-muted-foreground"
+          data-thread-bubble-state="empty"
+        >
+          {resolvedLabels.empty}
+        </p>
+      ) : (
+        <ul className="space-y-2 overflow-y-auto" data-thread-bubble-list>
+          {messages.map((message) => (
+            <Message key={message.id} message={message} />
+          ))}
+        </ul>
+      )}
+      {footer ? (
+        <footer
+          className="border-t border-border pt-2"
+          data-thread-bubble-footer
+        >
+          {footer}
+        </footer>
+      ) : null}
+    </section>
+  );
+};
 ThreadBubble.displayName = "ThreadBubble";

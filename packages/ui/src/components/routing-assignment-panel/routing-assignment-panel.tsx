@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -173,10 +169,10 @@ const Row = (props: { assignment: RoutingAssignment }): React.ReactElement => {
  *
  * @public
  */
-export const RoutingAssignmentPanel = forwardRef<
-  HTMLElement,
-  RoutingAssignmentPanelProps
->((props, ref) => {
+export const RoutingAssignmentPanel = ({
+  ref,
+  ...props
+}: RoutingAssignmentPanelProps & { ref?: React.Ref<HTMLElement> }) => {
   const { assignments, className, labels, title = "Routing", ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   return (
@@ -213,5 +209,5 @@ export const RoutingAssignmentPanel = forwardRef<
       )}
     </section>
   );
-});
+};
 RoutingAssignmentPanel.displayName = "RoutingAssignmentPanel";

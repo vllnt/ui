@@ -1,15 +1,17 @@
 "use client";
 
-import { forwardRef } from "react";
-
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 
 import { cn } from "../../lib/utils";
 
-const ScrollArea = forwardRef<
-  React.ComponentRef<typeof ScrollAreaPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
->(({ children, className, ...props }, ref) => (
+const ScrollArea = ({
+  children,
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
+  ref?: React.Ref<React.ComponentRef<typeof ScrollAreaPrimitive.Root>>;
+}) => (
   <ScrollAreaPrimitive.Root
     className={cn("relative overflow-hidden", className)}
     ref={ref}
@@ -21,13 +23,21 @@ const ScrollArea = forwardRef<
     <ScrollBar />
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
-));
+);
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 
-const ScrollBar = forwardRef<
-  React.ComponentRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
->(({ className, orientation = "vertical", ...props }, ref) => (
+const ScrollBar = ({
+  className,
+  orientation = "vertical",
+  ref,
+  ...props
+}: React.ComponentPropsWithoutRef<
+  typeof ScrollAreaPrimitive.ScrollAreaScrollbar
+> & {
+  ref?: React.Ref<
+    React.ComponentRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
+  >;
+}) => (
   <ScrollAreaPrimitive.ScrollAreaScrollbar
     className={cn(
       "flex touch-none select-none transition-colors",
@@ -43,7 +53,7 @@ const ScrollBar = forwardRef<
   >
     <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border" />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
-));
+);
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 
 export { ScrollArea, ScrollBar };

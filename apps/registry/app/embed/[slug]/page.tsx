@@ -4,16 +4,15 @@ import { notFound } from "next/navigation";
 
 import { ComponentPreview } from "@/components/component-preview/component-preview";
 import componentMetadata from "@/lib/component-metadata.json";
+import { registry } from "@/lib/registry";
 import { componentUrl, withRef } from "@/lib/share";
-import registryData from "@/registry.json";
-import type { Registry, RegistryComponent } from "@/types/registry";
+import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ theme?: string }>;
 };
 
-const registry = registryData as Registry;
 const metadataMap = componentMetadata as Record<
   string,
   { description: string; title: string }

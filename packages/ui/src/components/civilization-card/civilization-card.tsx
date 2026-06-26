@@ -1,10 +1,5 @@
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
-
 import { Globe } from "lucide-react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
@@ -395,54 +390,55 @@ function CivilizationBody({
   );
 }
 
-export const CivilizationCard = forwardRef<HTMLElement, CivilizationCardProps>(
-  (props, ref) => {
-    const {
-      achievements,
-      actionHref,
-      capital,
-      className,
-      color = "neutral",
-      era,
-      image,
-      labels,
-      leaders,
-      name,
-      peakPopulation,
-      region,
-      ...rest
-    } = props;
+export const CivilizationCard = ({
+  ref,
+  ...props
+}: CivilizationCardProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    achievements,
+    actionHref,
+    capital,
+    className,
+    color = "neutral",
+    era,
+    image,
+    labels,
+    leaders,
+    name,
+    peakPopulation,
+    region,
+    ...rest
+  } = props;
 
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const palette = CIVILIZATION_COLOR_VARIANTS[color];
-    const altName = typeof name === "string" ? name : undefined;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const palette = CIVILIZATION_COLOR_VARIANTS[color];
+  const altName = typeof name === "string" ? name : undefined;
 
-    return (
-      <article
-        className={cn(
-          "flex flex-col overflow-hidden rounded-2xl border bg-background text-foreground shadow-sm ring-1",
-          palette.ring,
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <CivilizationHero color={color} image={image} imageAlt={altName} />
-        <CivilizationBody
-          achievements={achievements}
-          actionHref={actionHref}
-          capital={capital}
-          era={era}
-          labels={resolvedLabels}
-          leaders={leaders}
-          name={name}
-          peakPopulation={peakPopulation}
-          region={region}
-        />
-      </article>
-    );
-  },
-);
+  return (
+    <article
+      className={cn(
+        "flex flex-col overflow-hidden rounded-2xl border bg-background text-foreground shadow-sm ring-1",
+        palette.ring,
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      <CivilizationHero color={color} image={image} imageAlt={altName} />
+      <CivilizationBody
+        achievements={achievements}
+        actionHref={actionHref}
+        capital={capital}
+        era={era}
+        labels={resolvedLabels}
+        leaders={leaders}
+        name={name}
+        peakPopulation={peakPopulation}
+        region={region}
+      />
+    </article>
+  );
+};
 CivilizationCard.displayName = "CivilizationCard";
 
 /**
@@ -459,10 +455,12 @@ export type CivilizationComparisonProps = ComponentPropsWithoutRef<"div">;
  *
  * @public
  */
-export const CivilizationComparison = forwardRef<
-  HTMLDivElement,
-  CivilizationComparisonProps
->(({ children, className, ...rest }, ref) => {
+export const CivilizationComparison = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: CivilizationComparisonProps & { ref?: React.Ref<HTMLDivElement> }) => {
   return (
     <div
       className={cn(
@@ -475,5 +473,5 @@ export const CivilizationComparison = forwardRef<
       {children}
     </div>
   );
-});
+};
 CivilizationComparison.displayName = "CivilizationComparison";

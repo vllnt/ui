@@ -2,7 +2,6 @@
 
 import {
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   useId,
   useMemo,
@@ -452,7 +451,10 @@ function Stage(props: StageProps): ReactNode {
  *
  * @public
  */
-export const RouteMap = forwardRef<HTMLElement, RouteMapProps>((props, ref) => {
+export const RouteMap = ({
+  ref,
+  ...props
+}: RouteMapProps & { ref?: React.Ref<HTMLElement> }) => {
   const {
     animated = false,
     animationDurationSeconds = 4,
@@ -508,5 +510,5 @@ export const RouteMap = forwardRef<HTMLElement, RouteMapProps>((props, ref) => {
       <DataSummary titleId={titleId} waypoints={waypoints} />
     </section>
   );
-});
+};
 RouteMap.displayName = "RouteMap";

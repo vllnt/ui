@@ -1,5 +1,3 @@
-import { forwardRef } from "react";
-
 import { AlertCircle, ArrowRight, Inbox, ListTodo, Siren } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -30,64 +28,60 @@ const toneAccentClassNames: Record<OverviewCardTone, string> = {
   warning: "text-amber-600 dark:text-amber-300",
 };
 
-const OverviewCard = forwardRef<HTMLElement, OverviewCardProps>(
-  (
-    {
+const OverviewCard = ({
+  className,
+  ctaLabel,
+  description,
+  handleCtaClick,
+  heading,
+  icon,
+  metric,
+  ref,
+  tone = "default",
+  ...props
+}: OverviewCardProps & { ref?: React.Ref<HTMLElement> }) => (
+  <section
+    className={cn(
+      "flex min-h-[172px] flex-col gap-4 rounded-2xl border p-5 shadow-[0_8px_30px_oklch(var(--foreground)/0.06)] backdrop-blur-xl",
+      toneClassNames[tone],
       className,
-      ctaLabel,
-      description,
-      handleCtaClick,
-      heading,
-      icon,
-      metric,
-      tone = "default",
-      ...props
-    },
-    ref,
-  ) => (
-    <section
-      className={cn(
-        "flex min-h-[172px] flex-col gap-4 rounded-2xl border p-5 shadow-[0_8px_30px_oklch(var(--foreground)/0.06)] backdrop-blur-xl",
-        toneClassNames[tone],
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="space-y-2">
-          <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
-            {heading}
-          </div>
-          <div className="text-3xl font-semibold tracking-tight text-foreground">
-            {metric}
-          </div>
+    )}
+    ref={ref}
+    {...props}
+  >
+    <div className="flex items-start justify-between gap-3">
+      <div className="space-y-2">
+        <div className="text-[11px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
+          {heading}
         </div>
-        <div
-          className={cn(
-            "flex size-10 items-center justify-center rounded-xl bg-background/80",
-            toneAccentClassNames[tone],
-          )}
-        >
-          {icon}
+        <div className="text-3xl font-semibold tracking-tight text-foreground">
+          {metric}
         </div>
       </div>
-      <p className="text-sm leading-6 text-muted-foreground">{description}</p>
-      {ctaLabel ? (
-        <div>
-          <Button
-            onClick={handleCtaClick}
-            size="sm"
-            type="button"
-            variant="ghost"
-          >
-            {ctaLabel}
-            <ArrowRight className="size-4" />
-          </Button>
-        </div>
-      ) : null}
-    </section>
-  ),
+      <div
+        className={cn(
+          "flex size-10 items-center justify-center rounded-xl bg-background/80",
+          toneAccentClassNames[tone],
+        )}
+      >
+        {icon}
+      </div>
+    </div>
+    <p className="text-sm leading-6 text-muted-foreground">{description}</p>
+    {ctaLabel ? (
+      <div>
+        <Button
+          onClick={handleCtaClick}
+          size="sm"
+          type="button"
+          variant="ghost"
+        >
+          {ctaLabel}
+          <ArrowRight className="size-4" />
+        </Button>
+      </div>
+    ) : null}
+  </section>
 );
 
 OverviewCard.displayName = "OverviewCard";
@@ -130,50 +124,56 @@ function getDefaultIcon(heading: ReactNode) {
   return <Inbox className="size-5" />;
 }
 
-const OverviewBoard = forwardRef<HTMLElement, OverviewBoardProps>(
-  ({ className, eyebrow, heading, items, subtitle, ...props }, ref) => (
-    <section
-      className={cn("mx-auto flex w-full max-w-6xl flex-col gap-6", className)}
-      ref={ref}
-      {...props}
-    >
-      <div className="space-y-3">
-        {eyebrow ? (
-          <div className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
-            {eyebrow}
-          </div>
-        ) : null}
-        <div className="space-y-2">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground">
-            {heading}
-          </h2>
-          {subtitle ? (
-            <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
-              {subtitle}
-            </p>
-          ) : null}
+const OverviewBoard = ({
+  className,
+  eyebrow,
+  heading,
+  items,
+  ref,
+  subtitle,
+  ...props
+}: OverviewBoardProps & { ref?: React.Ref<HTMLElement> }) => (
+  <section
+    className={cn("mx-auto flex w-full max-w-6xl flex-col gap-6", className)}
+    ref={ref}
+    {...props}
+  >
+    <div className="space-y-3">
+      {eyebrow ? (
+        <div className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+          {eyebrow}
         </div>
+      ) : null}
+      <div className="space-y-2">
+        <h2 className="text-3xl font-semibold tracking-tight text-foreground">
+          {heading}
+        </h2>
+        {subtitle ? (
+          <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
+            {subtitle}
+          </p>
+        ) : null}
       </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((item) => {
-          const handleCtaClick = item.handleCtaClick;
+    </div>
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {items.map((item) => {
+        const handleCtaClick = item.handleCtaClick;
 
-          return (
-            <OverviewCard
-              ctaLabel={item.ctaLabel}
-              description={item.description}
-              handleCtaClick={handleCtaClick}
-              heading={item.heading}
-              icon={item.icon ?? getDefaultIcon(item.heading)}
-              key={item.id}
-              metric={item.metric}
-              tone={item.tone}
-            />
-          );
-        })}
-      </div>
-    </section>
-  ),
+        return (
+          <OverviewCard
+            ctaLabel={item.ctaLabel}
+            description={item.description}
+            handleCtaClick={handleCtaClick}
+            heading={item.heading}
+            icon={item.icon ?? getDefaultIcon(item.heading)}
+            key={item.id}
+            metric={item.metric}
+            tone={item.tone}
+          />
+        );
+      })}
+    </div>
+  </section>
 );
 
 OverviewBoard.displayName = "OverviewBoard";

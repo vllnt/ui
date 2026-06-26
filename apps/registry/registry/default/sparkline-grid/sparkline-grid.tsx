@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import { formatChange } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
 export type SparklineGridItem = {
@@ -14,7 +15,9 @@ export type SparklineGridItem = {
 export type SparklineGridProps = {
   columns?: 2 | 3 | 4;
   items: SparklineGridItem[];
-} & React.HTMLAttributes<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement> & {
+    ref?: React.Ref<HTMLDivElement>;
+  };
 
 function buildSparklinePath(data: number[], width: number, height: number) {
   const min = Math.min(...data);
@@ -37,10 +40,8 @@ const gridColumns = {
   4: "md:grid-cols-2 xl:grid-cols-4",
 };
 
-export const SparklineGrid = React.forwardRef<
-  HTMLDivElement,
-  SparklineGridProps
->(({ className, columns = 2, items, ...props }, reference) => {
+export const SparklineGrid = (props: SparklineGridProps) => {
+  const { className, columns = 2, items, ref: reference, ...rest } = props;
   if (items.length === 0) {
     return null;
   }
@@ -49,7 +50,7 @@ export const SparklineGrid = React.forwardRef<
     <div
       className={cn("grid grid-cols-1 gap-4", gridColumns[columns], className)}
       ref={reference}
-      {...props}
+      {...rest}
     >
       {items.map((item) => {
         const isPositive = item.change >= 0;
@@ -81,8 +82,7 @@ export const SparklineGrid = React.forwardRef<
                 )}
               >
                 <TrendIcon className="size-3.5" />
-                {item.change > 0 ? "+" : ""}
-                {item.change.toFixed(2)}%
+                {formatChange(item.change)}
               </div>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
@@ -109,6 +109,6 @@ export const SparklineGrid = React.forwardRef<
       })}
     </div>
   );
-});
+};
 
 SparklineGrid.displayName = "SparklineGrid";

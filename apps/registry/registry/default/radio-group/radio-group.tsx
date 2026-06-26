@@ -1,16 +1,17 @@
 "use client";
 
-import { forwardRef } from "react";
-
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Circle } from "lucide-react";
 
 import { cn } from "@vllnt/ui";
 
-const RadioGroup = forwardRef<
-  React.ComponentRef<typeof RadioGroupPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
->(({ className, ...props }, ref) => {
+const RadioGroup = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> & {
+  ref?: React.Ref<React.ComponentRef<typeof RadioGroupPrimitive.Root>>;
+}) => {
   return (
     <RadioGroupPrimitive.Root
       className={cn("grid gap-2", className)}
@@ -18,13 +19,16 @@ const RadioGroup = forwardRef<
       ref={ref}
     />
   );
-});
+};
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
-const RadioGroupItem = forwardRef<
-  React.ComponentRef<typeof RadioGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(({ className, ...props }, ref) => {
+const RadioGroupItem = ({
+  className,
+  ref,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> & {
+  ref?: React.Ref<React.ComponentRef<typeof RadioGroupPrimitive.Item>>;
+}) => {
   return (
     <RadioGroupPrimitive.Item
       className={cn(
@@ -39,7 +43,7 @@ const RadioGroupItem = forwardRef<
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   );
-});
+};
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 
 export { RadioGroup, RadioGroupItem };

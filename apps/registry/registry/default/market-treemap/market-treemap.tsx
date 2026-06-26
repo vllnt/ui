@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
+import { formatChange } from "@vllnt/ui";
 import type { HeadingTag } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 
@@ -81,8 +82,7 @@ function MarketTreemapTile({
             )}
           >
             <TrendIcon className="size-4" />
-            {item.change > 0 ? "+" : ""}
-            {item.change.toFixed(2)}%
+            {formatChange(item.change)}
           </div>
         </div>
       </div>
@@ -96,10 +96,13 @@ function MarketTreemapTile({
   );
 }
 
-export const MarketTreemap = React.forwardRef<
-  HTMLDivElement,
-  MarketTreemapProps
->(({ as: Heading = "h2", className, items, ...props }, reference) => {
+export const MarketTreemap = ({
+  as: Heading = "h2",
+  className,
+  items,
+  ref: reference,
+  ...props
+}: MarketTreemapProps & { ref?: React.Ref<HTMLDivElement> }) => {
   if (items.length === 0) {
     return null;
   }
@@ -135,6 +138,6 @@ export const MarketTreemap = React.forwardRef<
       </div>
     </div>
   );
-});
+};
 
 MarketTreemap.displayName = "MarketTreemap";

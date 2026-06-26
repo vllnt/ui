@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { ReactNode } from "react";
 
@@ -22,7 +16,7 @@ type AccordionContextValue = {
 const AccordionContext = createContext<AccordionContextValue | null>(null);
 
 function useAccordionContext(): AccordionContextValue {
-  const context = useContext(AccordionContext);
+  const context = use(AccordionContext);
   if (!context) {
     throw new Error("AccordionItem must be used within an Accordion");
   }

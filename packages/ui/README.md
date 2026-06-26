@@ -1,6 +1,6 @@
 # @vllnt/ui
 
-React component library — 295 components built on Radix UI primitives, Tailwind CSS, and CVA.
+React component library — 309 components built on Radix UI primitives, Tailwind CSS, and CVA.
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history.
 

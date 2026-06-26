@@ -30,8 +30,12 @@ export {
   type ThemePreset,
   type ThemePresetName,
 } from "./lib/theme-presets";
+export { formatChange, normalizeDate } from "./lib/format";
+export { useBodyScrollLock } from "./lib/use-body-scroll-lock";
 export { useDebounce } from "./lib/use-debounce";
+export { useEscapeKey } from "./lib/use-escape-key";
 export { useHorizontalScroll } from "./lib/use-horizontal-scroll";
+export { useLiveDate } from "./lib/use-live-date";
 export { useMounted } from "./lib/use-mounted";
 export {
   type CustomTheme,

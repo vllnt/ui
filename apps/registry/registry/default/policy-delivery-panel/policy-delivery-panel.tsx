@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -153,10 +149,10 @@ const Row = (props: { policy: PolicyEntry }): React.ReactElement => {
  *
  * @public
  */
-export const PolicyDeliveryPanel = forwardRef<
-  HTMLElement,
-  PolicyDeliveryPanelProps
->((props, ref) => {
+export const PolicyDeliveryPanel = ({
+  ref,
+  ...props
+}: PolicyDeliveryPanelProps & { ref?: React.Ref<HTMLElement> }) => {
   const { className, labels, policies, title = "Policies", ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   return (
@@ -193,5 +189,5 @@ export const PolicyDeliveryPanel = forwardRef<
       )}
     </section>
   );
-});
+};
 PolicyDeliveryPanel.displayName = "PolicyDeliveryPanel";

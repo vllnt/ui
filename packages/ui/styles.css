@@ -115,6 +115,63 @@
     }
   }
 
+  @keyframes vllnt-text-shimmer {
+    from {
+      background-position: 200% center;
+    }
+    to {
+      background-position: 0% center;
+    }
+  }
+
+  @keyframes vllnt-sparkle {
+    0%,
+    100% {
+      opacity: 0;
+      transform: scale(0) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1) rotate(90deg);
+    }
+  }
+
+  @keyframes vllnt-meteor {
+    0% {
+      opacity: 1;
+      transform: rotate(var(--vllnt-meteor-angle, 215deg)) translateX(0);
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(var(--vllnt-meteor-angle, 215deg)) translateX(-500px);
+    }
+  }
+
+  @keyframes vllnt-particle-float {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    50% {
+      opacity: 0.85;
+      transform: translateY(-24px);
+    }
+  }
+
+  @keyframes vllnt-liquid-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
   .ml-safe {
     margin-left: env(safe-area-inset-left, 0);
   }
@@ -142,6 +199,33 @@
   /* Combined bottom padding for sticky CTAs */
   .safe-bottom {
     padding-bottom: max(1rem, env(safe-area-inset-bottom, 0));
+  }
+}
+
+/*
+ * Safari < 15.4 lacks oklch(): every `oklch(var(--token) / a)` color drops to
+ * its initial value, leaving the sticky navbar (and body) illegible. Give the
+ * core chrome a solid sRGB fallback, theme-aware. Gated so any browser with
+ * oklch() support ignores this block entirely.
+ */
+@supports not (color: oklch(0 0 0)) {
+  body {
+    background-color: #ffffff;
+    color: #1a1a1a;
+  }
+  .dark body {
+    background-color: #000000;
+    color: #fafafa;
+  }
+  header[data-slot="navbar-saas"] {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    border-color: #ebebeb;
+  }
+  .dark header[data-slot="navbar-saas"] {
+    background-color: #000000;
+    color: #fafafa;
+    border-color: #2a2a2a;
   }
 }
 

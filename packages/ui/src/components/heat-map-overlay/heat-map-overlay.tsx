@@ -2,7 +2,6 @@
 
 import {
   type ComponentPropsWithoutRef,
-  forwardRef,
   type ReactNode,
   useId,
   useMemo,
@@ -290,60 +289,61 @@ function Stage({
  *
  * @public
  */
-export const HeatMapOverlay = forwardRef<HTMLElement, HeatMapOverlayProps>(
-  (props, ref) => {
-    const {
-      backdrop,
-      backdropAlt,
-      blur = 12,
-      children,
-      className,
-      data,
-      gradient = DEFAULT_GRADIENT,
-      labels,
-      opacity = 0.7,
-      radius = 30,
-      ...rest
-    } = props;
-    const titleId = useId();
-    const gradientId = useId();
-    const blurId = useId();
+export const HeatMapOverlay = ({
+  ref,
+  ...props
+}: HeatMapOverlayProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    backdrop,
+    backdropAlt,
+    blur = 12,
+    children,
+    className,
+    data,
+    gradient = DEFAULT_GRADIENT,
+    labels,
+    opacity = 0.7,
+    radius = 30,
+    ...rest
+  } = props;
+  const titleId = useId();
+  const gradientId = useId();
+  const blurId = useId();
 
-    const resolvedLabels = useMemo(
-      () => ({ ...DEFAULT_LABELS, ...labels }),
-      [labels],
-    );
-    const projected = useMemo(() => projectPoints(data), [data]);
+  const resolvedLabels = useMemo(
+    () => ({ ...DEFAULT_LABELS, ...labels }),
+    [labels],
+  );
+  const projected = useMemo(() => projectPoints(data), [data]);
 
-    return (
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn(
-          "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      >
-        <Stage
-          backdrop={backdrop}
-          backdropAlt={backdropAlt}
-          blur={blur}
-          blurId={blurId}
-          data={projected}
-          gradient={gradient}
-          gradientId={gradientId}
-          opacity={opacity}
-          radius={radius}
-        />
-        {children ? (
-          <div className="absolute bottom-3 left-3 z-10 max-w-xs rounded-md border bg-background/95 px-3 py-2 text-xs text-foreground shadow-sm backdrop-blur">
-            {children}
-          </div>
-        ) : null}
-        <DataSummary data={data} titleId={titleId} />
-      </section>
-    );
-  },
-);
+  return (
+    <section
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "relative aspect-[2/1] w-full overflow-hidden rounded-2xl border bg-background text-foreground",
+        className,
+      )}
+      ref={ref}
+      {...rest}
+    >
+      <Stage
+        backdrop={backdrop}
+        backdropAlt={backdropAlt}
+        blur={blur}
+        blurId={blurId}
+        data={projected}
+        gradient={gradient}
+        gradientId={gradientId}
+        opacity={opacity}
+        radius={radius}
+      />
+      {children ? (
+        <div className="absolute bottom-3 left-3 z-10 max-w-xs rounded-md border bg-background/95 px-3 py-2 text-xs text-foreground shadow-sm backdrop-blur">
+          {children}
+        </div>
+      ) : null}
+      <DataSummary data={data} titleId={titleId} />
+    </section>
+  );
+};
 HeatMapOverlay.displayName = "HeatMapOverlay";

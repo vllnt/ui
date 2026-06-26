@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useEffectEvent, useRef, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -63,6 +63,13 @@ function SearchBarInner({
   const lastSetSearchParameterReference = useRef<string>("");
   const lastDebouncedQueryReference = useRef<string>("");
 
+  // Notify parent without making `onSearch` a reactive effect dependency:
+  // an Effect Event always sees the latest prop but never re-triggers the
+  // effect, so a parent passing a fresh callback can't drive an update loop.
+  const emitSearch = useEffectEvent((nextQuery: string) => {
+    onSearch?.(nextQuery);
+  });
+
   // Sync query with URL search params (e.g., on browser back/forward)
   // Sync when user is not actively typing and URL changed externally
   useEffect(() => {
@@ -103,7 +110,7 @@ function SearchBarInner({
     lastDebouncedQueryReference.current = trimmedQuery;
 
     if (onSearch) {
-      onSearch(trimmedQuery);
+      emitSearch(trimmedQuery);
       return;
     }
 

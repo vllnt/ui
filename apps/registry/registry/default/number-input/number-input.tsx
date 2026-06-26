@@ -105,7 +105,7 @@ function NumberInputField({
   ...props
 }: React.ComponentPropsWithoutRef<"input"> & {
   onValueChange: (value?: number) => void;
-  reference: React.ForwardedRef<HTMLInputElement>;
+  reference?: React.Ref<HTMLInputElement>;
   resolvedValue?: number;
 }) {
   return (
@@ -133,21 +133,19 @@ function NumberInputField({
   );
 }
 
-function NumberInputComponent(
-  {
-    className,
-    defaultValue,
-    disabled,
-    max,
-    min,
-    onValueChange,
-    placeholder,
-    step = 1,
-    value,
-    ...props
-  }: NumberInputProps,
-  reference: React.ForwardedRef<HTMLInputElement>,
-) {
+function NumberInputComponent({
+  className,
+  defaultValue,
+  disabled,
+  max,
+  min,
+  onValueChange,
+  placeholder,
+  ref: reference,
+  step = 1,
+  value,
+  ...props
+}: NumberInputProps & { ref?: React.Ref<HTMLInputElement> }) {
   const { commitValue, resolvedValue } = useNumberInputState(
     value,
     defaultValue,
@@ -203,7 +201,7 @@ function NumberInputComponent(
   );
 }
 
-const NumberInput = React.forwardRef(NumberInputComponent);
-NumberInput.displayName = "NumberInput";
+NumberInputComponent.displayName = "NumberInput";
+const NumberInput = NumberInputComponent;
 
 export { NumberInput };

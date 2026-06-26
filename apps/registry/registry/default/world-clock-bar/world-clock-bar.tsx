@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import type { HeadingTag } from "@vllnt/ui";
+import { useLiveDate } from "@vllnt/ui";
 import { cn } from "@vllnt/ui";
 import { Badge } from "@vllnt/ui";
 
@@ -21,39 +22,6 @@ export type WorldClockBarProps = React.ComponentPropsWithoutRef<"div"> & {
   updateIntervalMs?: number;
   zones: WorldClockBarZone[];
 };
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
-
-function useLiveDate(now: WorldClockBarProps["now"], updateIntervalMs: number) {
-  const fixedNow = React.useMemo(
-    () => (now ? normalizeDate(now) : undefined),
-    [now],
-  );
-  const [liveNow, setLiveNow] = React.useState<Date>(fixedNow ?? new Date());
-
-  React.useEffect(() => {
-    if (fixedNow) {
-      setLiveNow(fixedNow);
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setLiveNow(new Date());
-    }, updateIntervalMs);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fixedNow, updateIntervalMs]);
-
-  return liveNow;
-}
 
 const TIME_FORMATTER_CACHE = new Map<string, Intl.DateTimeFormat>();
 function getTimeFormatter(
@@ -137,52 +105,45 @@ function WorldClockCard({
   );
 }
 
-export const WorldClockBar = React.forwardRef<
-  HTMLDivElement,
-  WorldClockBarProps
->(
-  (
-    {
-      as: Heading = "h2",
-      className,
-      now,
-      showDate = true,
-      title = "World clock",
-      updateIntervalMs = 60_000,
-      zones,
-      ...props
-    },
-    ref,
-  ) => {
-    const liveNow = useLiveDate(now, updateIntervalMs);
+export const WorldClockBar = ({
+  as: Heading = "h2",
+  className,
+  now,
+  ref,
+  showDate = true,
+  title = "World clock",
+  updateIntervalMs = 60_000,
+  zones,
+  ...props
+}: WorldClockBarProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const liveNow = useLiveDate(now, updateIntervalMs);
 
-    return (
-      <div className={cn("space-y-3", className)} ref={ref} {...props}>
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <Heading className="text-lg font-semibold tracking-tight">
-              {title}
-            </Heading>
-            <p className="text-sm text-muted-foreground">
-              Synchronized time across distributed teams and regions.
-            </p>
-          </div>
-          <Badge variant="outline">{zones.length} zones</Badge>
+  return (
+    <div className={cn("space-y-3", className)} ref={ref} {...props}>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <Heading className="text-lg font-semibold tracking-tight">
+            {title}
+          </Heading>
+          <p className="text-sm text-muted-foreground">
+            Synchronized time across distributed teams and regions.
+          </p>
         </div>
-
-        <div className="flex gap-3 overflow-x-auto pb-1">
-          {zones.map((zone) => (
-            <WorldClockCard
-              date={liveNow}
-              key={`${zone.city}-${zone.timeZone}`}
-              showDate={showDate}
-              zone={zone}
-            />
-          ))}
-        </div>
+        <Badge variant="outline">{zones.length} zones</Badge>
       </div>
-    );
-  },
-);
+
+      <div className="flex gap-3 overflow-x-auto pb-1">
+        {zones.map((zone) => (
+          <WorldClockCard
+            date={liveNow}
+            key={`${zone.city}-${zone.timeZone}`}
+            showDate={showDate}
+            zone={zone}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 WorldClockBar.displayName = "WorldClockBar";

@@ -58,75 +58,69 @@ function getDuration(
   }
 }
 
-export const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
-  (
-    {
-      children,
-      className,
-      duration,
-      fade = true,
-      gap = "1rem",
-      pauseOnHover = false,
-      repeat = 1,
-      reverse = false,
-      speed = "normal",
-      style,
-      vertical = false,
-      ...props
-    },
-    ref,
-  ) => {
-    const resolvedGap = getGapValue(gap);
-    const resolvedDuration = getDuration(duration, speed);
-    const trackItems = getTrackItems(children, repeat);
+export const Marquee = ({
+  children,
+  className,
+  duration,
+  fade = true,
+  gap = "1rem",
+  pauseOnHover = false,
+  ref,
+  repeat = 1,
+  reverse = false,
+  speed = "normal",
+  style,
+  vertical = false,
+  ...props
+}: MarqueeProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const resolvedGap = getGapValue(gap);
+  const resolvedDuration = getDuration(duration, speed);
+  const trackItems = getTrackItems(children, repeat);
 
-    const animationStyle: React.CSSProperties = {
-      animationDirection: reverse ? "reverse" : "normal",
-      animationDuration: `${resolvedDuration}s`,
-      animationIterationCount: "infinite",
-      animationName: vertical ? "vllnt-marquee-y" : "vllnt-marquee-x",
-      animationTimingFunction: "linear",
-    };
-    const maskImage = getMaskImage(vertical);
+  const animationStyle: React.CSSProperties = {
+    animationDirection: reverse ? "reverse" : "normal",
+    animationDuration: `${resolvedDuration}s`,
+    animationIterationCount: "infinite",
+    animationName: vertical ? "vllnt-marquee-y" : "vllnt-marquee-x",
+    animationTimingFunction: "linear",
+  };
+  const maskImage = getMaskImage(vertical);
 
-    return (
+  return (
+    <div
+      className={cn(
+        "group relative overflow-hidden",
+        vertical ? "flex h-full flex-col" : "flex w-full flex-row",
+        className,
+      )}
+      ref={ref}
+      style={fade ? { ...style, maskImage, WebkitMaskImage: maskImage } : style}
+      {...props}
+    >
       <div
         className={cn(
-          "group relative overflow-hidden",
-          vertical ? "flex h-full flex-col" : "flex w-full flex-row",
-          className,
+          "flex shrink-0 will-change-transform motion-reduce:animate-none motion-reduce:transform-none",
+          pauseOnHover && "group-hover:[animation-play-state:paused]",
+          vertical ? "min-h-full flex-col" : "min-w-full flex-row",
         )}
-        ref={ref}
-        style={
-          fade ? { ...style, maskImage, WebkitMaskImage: maskImage } : style
-        }
-        {...props}
+        style={animationStyle}
       >
-        <div
-          className={cn(
-            "flex shrink-0 will-change-transform motion-reduce:animate-none motion-reduce:transform-none",
-            pauseOnHover && "group-hover:[animation-play-state:paused]",
-            vertical ? "min-h-full flex-col" : "min-w-full flex-row",
-          )}
-          style={animationStyle}
-        >
-          {[0, 1].map((groupIndex) => (
-            <div
-              aria-hidden={groupIndex === 1}
-              className={cn(
-                "flex shrink-0",
-                vertical ? "flex-col items-stretch" : "flex-row items-center",
-              )}
-              key={groupIndex}
-              style={{ gap: resolvedGap }}
-            >
-              {trackItems}
-            </div>
-          ))}
-        </div>
+        {[0, 1].map((groupIndex) => (
+          <div
+            aria-hidden={groupIndex === 1}
+            className={cn(
+              "flex shrink-0",
+              vertical ? "flex-col items-stretch" : "flex-row items-center",
+            )}
+            key={groupIndex}
+            style={{ gap: resolvedGap }}
+          >
+            {trackItems}
+          </div>
+        ))}
       </div>
-    );
-  },
-);
+    </div>
+  );
+};
 
 Marquee.displayName = "Marquee";

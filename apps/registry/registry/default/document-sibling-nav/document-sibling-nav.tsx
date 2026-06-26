@@ -1,11 +1,9 @@
-import {
-  type AnchorHTMLAttributes,
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
-
 import { cva, type VariantProps } from "class-variance-authority";
+import type {
+  AnchorHTMLAttributes,
+  ComponentPropsWithoutRef,
+  ReactNode,
+} from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -167,10 +165,15 @@ function buildAriaLabel(
  *
  * @public
  */
-export const DocumentSiblingNav = forwardRef<
-  HTMLElement,
-  DocumentSiblingNavProps
->(({ className, labels, next, previous, variant, ...rest }, ref) => {
+export const DocumentSiblingNav = ({
+  className,
+  labels,
+  next,
+  previous,
+  ref,
+  variant,
+  ...rest
+}: DocumentSiblingNavProps & { ref?: React.Ref<HTMLElement> }) => {
   if (!previous && !next) return null;
 
   const resolvedVariant: DocumentSiblingNavVariant = variant ?? "with-title";
@@ -211,7 +214,7 @@ export const DocumentSiblingNav = forwardRef<
       )}
     </nav>
   );
-});
+};
 DocumentSiblingNav.displayName = "DocumentSiblingNav";
 
 export { navVariants as documentSiblingNavVariants };

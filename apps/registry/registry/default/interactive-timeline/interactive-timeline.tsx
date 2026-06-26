@@ -3,12 +3,11 @@
 import {
   type ComponentPropsWithoutRef,
   createContext,
-  forwardRef,
   type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
+  use,
   useCallback,
-  useContext,
   useId,
   useMemo,
   useRef,
@@ -181,7 +180,9 @@ export type InteractiveTimelineProps = {
   startDate: Date;
   /** Track / lane definitions. Falls back to a single anonymous lane. */
   tracks?: InteractiveTimelineTrack[];
-} & ComponentPropsWithoutRef<"section">;
+} & ComponentPropsWithoutRef<"section"> & {
+    ref?: React.Ref<HTMLElement>;
+  };
 
 type TimelineCtx = {
   centerToday: () => void;
@@ -196,7 +197,7 @@ type TimelineCtx = {
 const TimelineContext = createContext<null | TimelineCtx>(null);
 
 function useTimelineContext(): TimelineCtx {
-  const ctx = useContext(TimelineContext);
+  const ctx = use(TimelineContext);
   if (!ctx) {
     throw new Error("InteractiveTimeline subcomponent used outside its root.");
   }
@@ -660,10 +661,12 @@ function ScrollArea({
  *
  * @public
  */
-export const InteractiveTimelineToolbar = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<"div">
->(({ children, className, ...rest }, ref) => (
+export const InteractiveTimelineToolbar = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
     className={cn(
       "flex flex-wrap items-center gap-2 border-b border-border bg-muted/30 px-3 py-2",
@@ -675,7 +678,7 @@ export const InteractiveTimelineToolbar = forwardRef<
   >
     {children}
   </div>
-));
+);
 InteractiveTimelineToolbar.displayName = "InteractiveTimelineToolbar";
 
 /**
@@ -683,10 +686,13 @@ InteractiveTimelineToolbar.displayName = "InteractiveTimelineToolbar";
  *
  * @public
  */
-export const InteractiveTimelineZoomIn = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ className, ...rest }, ref) => {
+export const InteractiveTimelineZoomIn = ({
+  className,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
   const { labels, zoomIn } = useTimelineContext();
   return (
     <button
@@ -703,7 +709,7 @@ export const InteractiveTimelineZoomIn = forwardRef<
       <span aria-hidden="true">+</span>
     </button>
   );
-});
+};
 InteractiveTimelineZoomIn.displayName = "InteractiveTimelineZoomIn";
 
 /**
@@ -711,10 +717,13 @@ InteractiveTimelineZoomIn.displayName = "InteractiveTimelineZoomIn";
  *
  * @public
  */
-export const InteractiveTimelineZoomOut = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ className, ...rest }, ref) => {
+export const InteractiveTimelineZoomOut = ({
+  className,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
   const { labels, zoomOut } = useTimelineContext();
   return (
     <button
@@ -731,7 +740,7 @@ export const InteractiveTimelineZoomOut = forwardRef<
       <span aria-hidden="true">−</span>
     </button>
   );
-});
+};
 InteractiveTimelineZoomOut.displayName = "InteractiveTimelineZoomOut";
 
 /**
@@ -740,10 +749,14 @@ InteractiveTimelineZoomOut.displayName = "InteractiveTimelineZoomOut";
  *
  * @public
  */
-export const InteractiveTimelineToday = forwardRef<
-  HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<"button">, "type">
->(({ children, className, ...rest }, ref) => {
+export const InteractiveTimelineToday = ({
+  children,
+  className,
+  ref,
+  ...rest
+}: Omit<ComponentPropsWithoutRef<"button">, "type"> & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
   const { centerToday, labels } = useTimelineContext();
   return (
     <button
@@ -760,7 +773,7 @@ export const InteractiveTimelineToday = forwardRef<
       {children ?? "Today"}
     </button>
   );
-});
+};
 InteractiveTimelineToday.displayName = "InteractiveTimelineToday";
 
 /**
@@ -772,10 +785,12 @@ export type InteractiveTimelineFilterProps = {
   categories: InteractiveTimelineCategory[];
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-export const InteractiveTimelineFilter = forwardRef<
-  HTMLDivElement,
-  InteractiveTimelineFilterProps
->(({ categories, className, ...rest }, ref) => {
+export const InteractiveTimelineFilter = ({
+  categories,
+  className,
+  ref,
+  ...rest
+}: InteractiveTimelineFilterProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const { toggleCategory, visibleCategories } = useTimelineContext();
   return (
     <div
@@ -807,7 +822,7 @@ export const InteractiveTimelineFilter = forwardRef<
       })}
     </div>
   );
-});
+};
 InteractiveTimelineFilter.displayName = "InteractiveTimelineFilter";
 
 const FALLBACK_TRACK: InteractiveTimelineTrack = {
@@ -1014,10 +1029,7 @@ function useTimelineFilter(
  *
  * @public
  */
-export const InteractiveTimeline = forwardRef<
-  HTMLElement,
-  InteractiveTimelineProps
->((props, ref) => {
+export const InteractiveTimeline = (props: InteractiveTimelineProps) => {
   const {
     categories = [],
     children,
@@ -1026,6 +1038,7 @@ export const InteractiveTimeline = forwardRef<
     events = [],
     labels,
     onEventClick = noop,
+    ref,
     startDate,
     tracks: trackProperty,
     ...rest
@@ -1092,5 +1105,5 @@ export const InteractiveTimeline = forwardRef<
       </section>
     </TimelineContext.Provider>
   );
-});
+};
 InteractiveTimeline.displayName = "InteractiveTimeline";

@@ -2,16 +2,15 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import componentMetadata from "@/lib/component-metadata.json";
+import { registry } from "@/lib/registry";
 import {
   buildEmbedSnippet,
   EMBED_DEFAULT_HEIGHT,
   EMBED_DEFAULT_WIDTH,
   SITE_URL,
 } from "@/lib/share";
-import registryData from "@/registry.json";
-import type { Registry, RegistryComponent } from "@/types/registry";
+import type { RegistryComponent } from "@/types/registry";
 
-const registry = registryData as Registry;
 const metadataMap = componentMetadata as Record<
   string,
   { category?: string; description?: string; title?: string }

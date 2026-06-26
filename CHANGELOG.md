@@ -12,7 +12,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 _Nothing yet._
 
-## [0.3.0] - 2026-06-17
+## [0.3.0] - 2026-06-26
 
 ### Added
 
@@ -91,7 +91,7 @@ _Nothing yet._
   `Particles`, `ProgressiveBlur`, `RevealText`, `ScrambleText`, `ShineBorder`,
   `ShinyButton`, `SpinningText`, `SpotlightCard`, `TextAnimate`, `TextReveal`,
   and `TiltCard`.
-- Total component count: **295** (up from 140).
+- Total component count: **309** (up from 140).
 - **OKLCH theming system** - color tokens migrated to the OKLCH color space, with
   13 runtime theme presets, a `/themes` web theme editor route, and a `/r/themes`
   endpoint. New public theme exports from `@vllnt/ui` (`THEME_PRESETS`,

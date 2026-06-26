@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { normalizeDate } from "../../lib/format";
 import type { HeadingTag } from "../../lib/types";
 import { cn } from "../../lib/utils";
 
@@ -34,14 +35,6 @@ const LEVEL_CLASS_NAMES = [
   "bg-emerald-500/65",
   "bg-emerald-500",
 ];
-
-function normalizeDate(input: Date | number | string): Date {
-  if (input instanceof Date) {
-    return new Date(input.getTime());
-  }
-
-  return new Date(input);
-}
 
 function toUtcDate(date: Date): Date {
   return new Date(
@@ -207,43 +200,36 @@ function HeatmapGrid({
   );
 }
 
-export const ActivityHeatmap = React.forwardRef<
-  HTMLDivElement,
-  ActivityHeatmapProps
->(
-  (
-    {
-      as: Heading = "h2",
-      className,
-      data,
-      description,
-      endDate = new Date(),
-      title = "Activity heatmap",
-      weeks = 12,
-      ...props
-    },
-    ref,
-  ) => {
-    const normalizedEndDate = normalizeDate(endDate);
-    const gridData = getGridData(data, normalizedEndDate, weeks);
+export const ActivityHeatmap = ({
+  as: Heading = "h2",
+  className,
+  data,
+  description,
+  endDate = new Date(),
+  ref,
+  title = "Activity heatmap",
+  weeks = 12,
+  ...props
+}: ActivityHeatmapProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const normalizedEndDate = normalizeDate(endDate);
+  const gridData = getGridData(data, normalizedEndDate, weeks);
 
-    return (
-      <div className={cn("space-y-4", className)} ref={ref} {...props}>
-        <div className="space-y-1">
-          <Heading className="text-lg font-semibold tracking-tight">
-            {title}
-          </Heading>
-          {description ? (
-            <p className="text-sm text-muted-foreground">{description}</p>
-          ) : null}
-        </div>
-
-        <div className="overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
-          <HeatmapGrid gridData={gridData} weeks={weeks} />
-        </div>
+  return (
+    <div className={cn("space-y-4", className)} ref={ref} {...props}>
+      <div className="space-y-1">
+        <Heading className="text-lg font-semibold tracking-tight">
+          {title}
+        </Heading>
+        {description ? (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        ) : null}
       </div>
-    );
-  },
-);
+
+      <div className="overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
+        <HeatmapGrid gridData={gridData} weeks={weeks} />
+      </div>
+    </div>
+  );
+};
 
 ActivityHeatmap.displayName = "ActivityHeatmap";

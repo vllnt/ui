@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -141,10 +137,10 @@ const Tile = (props: { metric: RuntimeMetric }): React.ReactElement => {
  *
  * @public
  */
-export const RuntimeOverviewPanel = forwardRef<
-  HTMLElement,
-  RuntimeOverviewPanelProps
->((props, ref) => {
+export const RuntimeOverviewPanel = ({
+  ref,
+  ...props
+}: RuntimeOverviewPanelProps & { ref?: React.Ref<HTMLElement> }) => {
   const { className, labels, metrics, title = "Runtime", ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   return (
@@ -179,5 +175,5 @@ export const RuntimeOverviewPanel = forwardRef<
       )}
     </section>
   );
-});
+};
 RuntimeOverviewPanel.displayName = "RuntimeOverviewPanel";

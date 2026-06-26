@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -307,54 +303,55 @@ const resolveLanes = (
  *
  * @public
  */
-export const RunTimeline = forwardRef<HTMLElement, RunTimelineProps>(
-  (props, ref) => {
-    const {
-      className,
-      cursor,
-      end,
-      formatValue,
-      labels,
-      lanes,
-      phases,
-      start,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const safeEnd = end <= start ? start + 1 : end;
-    const resolvedLanes = resolveLanes(lanes);
-    return (
-      <section
-        aria-label={resolvedLabels.region}
-        className={cn("flex w-full flex-col gap-2", className)}
-        data-run-timeline
-        ref={ref}
-        {...rest}
-      >
-        <Endpoints
+export const RunTimeline = ({
+  ref,
+  ...props
+}: RunTimelineProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    className,
+    cursor,
+    end,
+    formatValue,
+    labels,
+    lanes,
+    phases,
+    start,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const safeEnd = end <= start ? start + 1 : end;
+  const resolvedLanes = resolveLanes(lanes);
+  return (
+    <section
+      aria-label={resolvedLabels.region}
+      className={cn("flex w-full flex-col gap-2", className)}
+      data-run-timeline
+      ref={ref}
+      {...rest}
+    >
+      <Endpoints
+        cursor={cursor}
+        end={safeEnd}
+        format={formatValue}
+        start={start}
+      />
+      {phases.length === 0 ? (
+        <p
+          className="rounded-md border border-border bg-muted/20 px-2 py-3 text-center text-[11px] text-muted-foreground"
+          data-run-timeline-state="empty"
+        >
+          {resolvedLabels.empty}
+        </p>
+      ) : (
+        <TrackBody
           cursor={cursor}
           end={safeEnd}
-          format={formatValue}
+          lanes={resolvedLanes}
+          phases={phases}
           start={start}
         />
-        {phases.length === 0 ? (
-          <p
-            className="rounded-md border border-border bg-muted/20 px-2 py-3 text-center text-[11px] text-muted-foreground"
-            data-run-timeline-state="empty"
-          >
-            {resolvedLabels.empty}
-          </p>
-        ) : (
-          <TrackBody
-            cursor={cursor}
-            end={safeEnd}
-            lanes={resolvedLanes}
-            phases={phases}
-            start={start}
-          />
-        )}
-      </section>
-    );
-  },
-);
+      )}
+    </section>
+  );
+};
 RunTimeline.displayName = "RunTimeline";

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -173,56 +169,57 @@ const Header = (props: {
  *
  * @public
  */
-export const ObjectInspector = forwardRef<HTMLElement, ObjectInspectorProps>(
-  (props, ref) => {
-    const {
-      children,
-      className,
-      kind,
-      labels,
-      status = "idle",
-      subtitle,
-      title,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    if (!kind || !title) {
-      return (
-        <section
-          aria-label={resolvedLabels.region}
-          className={cn(
-            "flex w-full flex-col items-center justify-center gap-1 rounded-2xl border bg-background p-6 text-center text-xs text-muted-foreground",
-            className,
-          )}
-          data-object-inspector
-          data-object-state="empty"
-          ref={ref}
-          {...rest}
-        >
-          <span aria-hidden="true" className="text-lg">
-            ◇
-          </span>
-          <span>{resolvedLabels.empty}</span>
-        </section>
-      );
-    }
+export const ObjectInspector = ({
+  ref,
+  ...props
+}: ObjectInspectorProps & { ref?: React.Ref<HTMLElement> }) => {
+  const {
+    children,
+    className,
+    kind,
+    labels,
+    status = "idle",
+    subtitle,
+    title,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  if (!kind || !title) {
     return (
       <section
         aria-label={resolvedLabels.region}
         className={cn(
-          "flex w-full flex-col gap-3 rounded-2xl border bg-background p-3 text-foreground",
+          "flex w-full flex-col items-center justify-center gap-1 rounded-2xl border bg-background p-6 text-center text-xs text-muted-foreground",
           className,
         )}
         data-object-inspector
-        data-object-kind={kind}
-        data-object-status={status}
+        data-object-state="empty"
         ref={ref}
         {...rest}
       >
-        <Header kind={kind} status={status} subtitle={subtitle} title={title} />
-        {children ? <div className="space-y-2">{children}</div> : null}
+        <span aria-hidden="true" className="text-lg">
+          ◇
+        </span>
+        <span>{resolvedLabels.empty}</span>
       </section>
     );
-  },
-);
+  }
+  return (
+    <section
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "flex w-full flex-col gap-3 rounded-2xl border bg-background p-3 text-foreground",
+        className,
+      )}
+      data-object-inspector
+      data-object-kind={kind}
+      data-object-status={status}
+      ref={ref}
+      {...rest}
+    >
+      <Header kind={kind} status={status} subtitle={subtitle} title={title} />
+      {children ? <div className="space-y-2">{children}</div> : null}
+    </section>
+  );
+};
 ObjectInspector.displayName = "ObjectInspector";

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -105,57 +101,58 @@ const clamp01 = (v: number): number => {
  *
  * @public
  */
-export const PlaybackGhost = forwardRef<HTMLDivElement, PlaybackGhostProps>(
-  (props, ref) => {
-    const {
-      className,
-      kind,
-      label,
-      labels,
-      opacity = 0.4,
-      size = 40,
-      x,
-      y,
-      ...rest
-    } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    const safeOpacity = clamp01(opacity);
-    const safeSize = size < 16 ? 16 : size;
-    const ariaLabel = kind
-      ? `${resolvedLabels.region}: ${KIND_LABEL[kind]}`
-      : resolvedLabels.region;
-    return (
-      <div
-        aria-label={ariaLabel}
-        className={cn(
-          "pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-md border border-dashed border-border/70 bg-background/40 px-2 py-1 text-xs text-foreground backdrop-blur-sm",
-          className,
-        )}
-        data-playback-ghost
-        data-playback-kind={kind ?? "unknown"}
-        ref={ref}
-        role="img"
-        style={{
-          left: x,
-          minHeight: safeSize,
-          minWidth: safeSize,
-          opacity: safeOpacity,
-          top: y,
-        }}
-        {...rest}
-      >
-        {kind ? (
-          <span aria-hidden="true" className="text-muted-foreground">
-            {KIND_GLYPH[kind]}
-          </span>
-        ) : null}
-        {label ? (
-          <span className="truncate" data-playback-ghost-label>
-            {label}
-          </span>
-        ) : null}
-      </div>
-    );
-  },
-);
+export const PlaybackGhost = ({
+  ref,
+  ...props
+}: PlaybackGhostProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const {
+    className,
+    kind,
+    label,
+    labels,
+    opacity = 0.4,
+    size = 40,
+    x,
+    y,
+    ...rest
+  } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const safeOpacity = clamp01(opacity);
+  const safeSize = size < 16 ? 16 : size;
+  const ariaLabel = kind
+    ? `${resolvedLabels.region}: ${KIND_LABEL[kind]}`
+    : resolvedLabels.region;
+  return (
+    <div
+      aria-label={ariaLabel}
+      className={cn(
+        "pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-md border border-dashed border-border/70 bg-background/40 px-2 py-1 text-xs text-foreground backdrop-blur-sm",
+        className,
+      )}
+      data-playback-ghost
+      data-playback-kind={kind ?? "unknown"}
+      ref={ref}
+      role="img"
+      style={{
+        left: x,
+        minHeight: safeSize,
+        minWidth: safeSize,
+        opacity: safeOpacity,
+        top: y,
+      }}
+      {...rest}
+    >
+      {kind ? (
+        <span aria-hidden="true" className="text-muted-foreground">
+          {KIND_GLYPH[kind]}
+        </span>
+      ) : null}
+      {label ? (
+        <span className="truncate" data-playback-ghost-label>
+          {label}
+        </span>
+      ) : null}
+    </div>
+  );
+};
 PlaybackGhost.displayName = "PlaybackGhost";

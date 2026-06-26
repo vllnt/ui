@@ -3,10 +3,8 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
-import registryData from "@/registry.json";
-import type { Registry, RegistryComponent } from "@/types/registry";
-
-const registry = registryData as Registry;
+import { registry } from "@/lib/registry";
+import type { RegistryComponent } from "@/types/registry";
 
 type RouteParameters = {
   params: Promise<{ name: string }>;

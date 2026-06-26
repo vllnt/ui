@@ -46,80 +46,76 @@ function buildCoordinates(data: Datum[], dimensions: ChartDimensions) {
   });
 }
 
-export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
-  (
-    {
-      className,
-      color = "currentColor",
-      data,
-      gradientId = "line-chart-gradient",
-      height = DEFAULT_HEIGHT,
-      strokeWidth = DEFAULT_STROKE_WIDTH,
-      width = DEFAULT_WIDTH,
-      ...props
-    },
-    reference,
-  ) => {
-    const canvasData = React.useMemo(
-      () => buildCoordinates(data, { height, strokeWidth, width }),
-      [data, width, height, strokeWidth],
-    );
+export const LineChart = ({
+  className,
+  color = "currentColor",
+  data,
+  gradientId = "line-chart-gradient",
+  height = DEFAULT_HEIGHT,
+  ref: reference,
+  strokeWidth = DEFAULT_STROKE_WIDTH,
+  width = DEFAULT_WIDTH,
+  ...props
+}: LineChartProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const canvasData = React.useMemo(
+    () => buildCoordinates(data, { height, strokeWidth, width }),
+    [data, width, height, strokeWidth],
+  );
 
-    if (canvasData.length === 0) {
-      return null;
-    }
+  if (canvasData.length === 0) {
+    return null;
+  }
 
-    const linePath = canvasData
-      .map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`)
-      .join(" ");
+  const linePath = canvasData
+    .map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`)
+    .join(" ");
 
-    const areaPath =
-      canvasData.length === 0
-        ? ""
-        : `M${canvasData[0]?.x ?? 0},${height} ${linePath} L${canvasData.at(-1)?.x ?? 0},${height}Z`;
+  const areaPath =
+    canvasData.length === 0
+      ? ""
+      : `M${canvasData[0]?.x ?? 0},${height} ${linePath} L${canvasData.at(-1)?.x ?? 0},${height}Z`;
 
-    return (
-      <div
-        className={cn(
-          "rounded-lg border border-border bg-background/40 p-3",
-          className,
-        )}
-        ref={reference}
-        {...props}
+  return (
+    <div
+      className={cn(
+        "rounded-lg border border-border bg-background/40 p-3",
+        className,
+      )}
+      ref={reference}
+      {...props}
+    >
+      <svg
+        aria-label="Line chart"
+        className="h-full w-full"
+        height={height}
+        role="img"
+        viewBox={`0 0 ${width} ${height}`}
+        width={width}
       >
-        <svg
-          aria-label="Line chart"
-          className="h-full w-full"
-          height={height}
-          role="img"
-          viewBox={`0 0 ${width} ${height}`}
-          width={width}
-        >
-          <defs>
-            <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity="0.45" />
-              <stop offset="100%" stopColor={color} stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <path
-            d={areaPath}
-            fill={`url(#${gradientId})`}
-            stroke="none"
-            vectorEffect="non-scaling-stroke"
-          />
-          <path
-            d={linePath}
-            fill="none"
-            stroke={color}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={strokeWidth}
-            vectorEffect="non-scaling-stroke"
-          />
-        </svg>
-      </div>
-    );
-  },
-);
+        <defs>
+          <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.45" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path
+          d={areaPath}
+          fill={`url(#${gradientId})`}
+          stroke="none"
+          vectorEffect="non-scaling-stroke"
+        />
+        <path
+          d={linePath}
+          fill="none"
+          stroke={color}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={strokeWidth}
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
+  );
+};
 
 LineChart.displayName = "LineChart";

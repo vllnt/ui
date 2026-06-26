@@ -127,68 +127,64 @@ function ComboboxListPanel({
   );
 }
 
-const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
-  (
-    {
-      className,
-      commandClassName,
-      emptyText = "No option found.",
-      onValueChange,
-      options,
-      placeholder = "Select an option",
-      searchPlaceholder = "Search options...",
-      triggerClassName,
-      value,
-    },
-    reference,
-  ) => {
-    const [open, setOpen] = React.useState(false);
-    const listboxId = React.useId();
-    const { resolvedValue, setResolvedValue } = useComboboxValue(
-      value,
-      onValueChange,
-    );
-    const selectedOption = options.find(
-      (option) => option.value === resolvedValue,
-    );
+const Combobox = ({
+  className,
+  commandClassName,
+  emptyText = "No option found.",
+  onValueChange,
+  options,
+  placeholder = "Select an option",
+  ref: reference,
+  searchPlaceholder = "Search options...",
+  triggerClassName,
+  value,
+}: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const [open, setOpen] = React.useState(false);
+  const listboxId = React.useId();
+  const { resolvedValue, setResolvedValue } = useComboboxValue(
+    value,
+    onValueChange,
+  );
+  const selectedOption = options.find(
+    (option) => option.value === resolvedValue,
+  );
 
-    const handleSelect = (nextValue: string) => {
-      setResolvedValue(nextValue === resolvedValue ? "" : nextValue);
-      setOpen(false);
-    };
+  const handleSelect = (nextValue: string) => {
+    setResolvedValue(nextValue === resolvedValue ? "" : nextValue);
+    setOpen(false);
+  };
 
-    return (
-      <Popover onOpenChange={setOpen} open={open}>
-        <PopoverTrigger asChild>
-          <Button
-            aria-controls={listboxId}
-            aria-expanded={open}
-            aria-haspopup="listbox"
-            className={cn("w-full justify-between", triggerClassName)}
-            ref={reference}
-            role="combobox"
-            variant="outline"
-          >
-            <span className="truncate">
-              {selectedOption ? selectedOption.label : placeholder}
-            </span>
-            <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <ComboboxListPanel
-          className={className}
-          commandClassName={commandClassName}
-          emptyText={emptyText}
-          listboxId={listboxId}
-          onSelect={handleSelect}
-          options={options}
-          resolvedValue={resolvedValue}
-          searchPlaceholder={searchPlaceholder}
-        />
-      </Popover>
-    );
-  },
-);
+  return (
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger asChild>
+        <Button
+          aria-controls={listboxId}
+          aria-expanded={open}
+          aria-haspopup="listbox"
+          className={cn("w-full justify-between", triggerClassName)}
+          ref={reference}
+          role="combobox"
+          variant="outline"
+        >
+          <span className="truncate">
+            {selectedOption ? selectedOption.label : placeholder}
+          </span>
+          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <ComboboxListPanel
+        className={className}
+        commandClassName={commandClassName}
+        emptyText={emptyText}
+        listboxId={listboxId}
+        onSelect={handleSelect}
+        options={options}
+        resolvedValue={resolvedValue}
+        searchPlaceholder={searchPlaceholder}
+      />
+    </Popover>
+  );
+};
 Combobox.displayName = "Combobox";
 
 export { Combobox };

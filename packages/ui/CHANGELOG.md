@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 _Nothing yet._
 
-## [0.3.0] - 2026-06-17
+## [0.3.0] - 2026-06-26
 
 ### Added
 
@@ -35,7 +35,7 @@ _Nothing yet._
 - **AI primitives (3)** — `Reasoning`, `ChainOfThought`, `PromptInput`.
 - **Core primitives (7)** — `Typography`, `Link`, `Toolbar`, `Meter`, `QrCode`, `Grid`, `Panel`.
 - **Motion / effects (37)** — `BentoGrid`, `Sparkles`, `Typewriter`, `AnimatedList`, `Dock`, `MagneticButton`, `TextShimmer`, `AnimatedBeam`, `AnimatedTabs`, `ScrollProgress`, `ShimmerButton`, `ShimmerText`, `AnimatedGridPattern`, `AnimatedTestimonials`, `AnimatedTooltip`, `BlurReveal`, `CardFlip`, `Cursor`, `DotPattern`, `ExpandableCards`, `FloatingNavbar`, `GlassCard`, `GlassProgress`, `LiquidGlass`, `Magnetic`, `Meteors`, `Particles`, `ProgressiveBlur`, `RevealText`, `ScrambleText`, `ShineBorder`, `ShinyButton`, `SpinningText`, `SpotlightCard`, `TextAnimate`, `TextReveal`, `TiltCard`.
-- Total component count: **295** (up from 140).
+- Total component count: **309** (up from 140).
 
 - **OKLCH theming system** — color tokens migrated to the OKLCH color space, with 13 runtime theme presets (`default`, `matrix`, `dracula`, `synthwave`, `tron`, `cyberpunk`, `nord`, `claude`, `chatgpt`, `gemini`, `dusk`, `cyberlime`, `aura`). New public theme exports from `@vllnt/ui`: `THEME_PRESETS`, `DEFAULT_THEME_PRESET`, `CUSTOM_THEME_NAME`, `isThemePresetName`, the `ThemePreset` and `ThemePresetName` types, plus the `useThemePreset` hook (with `UseThemePresetResult`), `setThemePreset`, and `setCustomTheme` for runtime preset switching and user-supplied custom themes.
 

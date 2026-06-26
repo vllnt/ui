@@ -25,7 +25,7 @@ Open a PR that:
 - Updates `packages/ui/package.json` `"version"` to the new target (follow SemVer — see below).
 - Updates `apps/registry/package.json` `"version"` to match.
 - Moves the matching entry in root `CHANGELOG.md` and `packages/ui/CHANGELOG.md` from `[Unreleased]` to a dated `[x.y.z]` section. Root `CHANGELOG.md` is the source used for the website, feeds, and GitHub Release notes.
-- Syncs docs that name a count or version: component count in `README.md` + `packages/ui/README.md`, `docs/ARCHITECTURE.md`, and the ROADMAP status line.
+- Syncs docs that name a count or version: component count in `README.md` + `packages/ui/README.md`, the `packages/ui/package.json` `"description"`, `docs/ARCHITECTURE.md`, and the ROADMAP status line. The count is `registry.items.length`; `apps/registry/lib/component-count.test.ts` guards the enforced surfaces (changelog snapshot, home copy, PWA manifest).
 
 Do **not** touch `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-source.ts` here — that pins the shadcn install target and must only advance **after** the new version is live on npm `latest` (see step 3). Bumping it before publish makes the deployed registry advertise `@vllnt/ui@^{x.y.z}` while npm `latest` is still the previous version, breaking `npx shadcn add`.
 

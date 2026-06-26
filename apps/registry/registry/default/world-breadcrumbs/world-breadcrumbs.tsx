@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type ComponentPropsWithoutRef,
-  forwardRef,
-  type ReactNode,
-} from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@vllnt/ui";
 
@@ -147,58 +143,59 @@ const Crumb = (props: {
  *
  * @public
  */
-export const WorldBreadcrumbs = forwardRef<HTMLElement, WorldBreadcrumbsProps>(
-  (props, ref) => {
-    const { className, crumbs, labels, onSelect, ...rest } = props;
-    const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-    if (crumbs.length === 0) {
-      return (
-        <nav
-          aria-label={resolvedLabels.region}
-          className={cn(
-            "inline-flex items-center text-xs text-muted-foreground",
-            className,
-          )}
-          data-world-breadcrumbs
-          data-world-breadcrumbs-state="empty"
-          ref={ref}
-          {...rest}
-        >
-          {resolvedLabels.empty}
-        </nav>
-      );
-    }
+export const WorldBreadcrumbs = ({
+  ref,
+  ...props
+}: WorldBreadcrumbsProps & { ref?: React.Ref<HTMLElement> }) => {
+  const { className, crumbs, labels, onSelect, ...rest } = props;
+  const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  if (crumbs.length === 0) {
     return (
       <nav
         aria-label={resolvedLabels.region}
         className={cn(
-          "inline-flex items-center gap-1.5 text-xs text-muted-foreground",
+          "inline-flex items-center text-xs text-muted-foreground",
           className,
         )}
         data-world-breadcrumbs
+        data-world-breadcrumbs-state="empty"
         ref={ref}
         {...rest}
       >
-        {crumbs.map((crumb, index) => (
-          <span className="inline-flex items-center gap-1.5" key={crumb.id}>
-            <Crumb
-              crumb={crumb}
-              isLast={index === crumbs.length - 1}
-              onSelect={onSelect}
-            />
-            {index < crumbs.length - 1 ? (
-              <span
-                aria-hidden="true"
-                className="text-muted-foreground/60"
-                data-world-breadcrumb-sep
-              >
-                ›
-              </span>
-            ) : null}
-          </span>
-        ))}
+        {resolvedLabels.empty}
       </nav>
     );
-  },
-);
+  }
+  return (
+    <nav
+      aria-label={resolvedLabels.region}
+      className={cn(
+        "inline-flex items-center gap-1.5 text-xs text-muted-foreground",
+        className,
+      )}
+      data-world-breadcrumbs
+      ref={ref}
+      {...rest}
+    >
+      {crumbs.map((crumb, index) => (
+        <span className="inline-flex items-center gap-1.5" key={crumb.id}>
+          <Crumb
+            crumb={crumb}
+            isLast={index === crumbs.length - 1}
+            onSelect={onSelect}
+          />
+          {index < crumbs.length - 1 ? (
+            <span
+              aria-hidden="true"
+              className="text-muted-foreground/60"
+              data-world-breadcrumb-sep
+            >
+              ›
+            </span>
+          ) : null}
+        </span>
+      ))}
+    </nav>
+  );
+};
 WorldBreadcrumbs.displayName = "WorldBreadcrumbs";
