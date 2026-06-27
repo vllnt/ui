@@ -19,6 +19,7 @@ export type SidebarSection = {
   collapsible?: boolean;
   defaultOpen?: boolean;
   family?: boolean;
+  href?: string;
   items: SidebarItem[];
   title?: string;
 };
@@ -143,10 +144,29 @@ type FamilyNavProps = {
   sections: SidebarSection[];
 };
 
+const FAMILY_ROW_CLASS =
+  "flex w-full items-center justify-between px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors";
+
+function FamilyRowLabel({ section }: { section: SidebarSection }) {
+  return (
+    <>
+      <span>{section.title}</span>
+      <span className="flex items-center gap-1 text-xs">
+        {section.items.length}
+        <ChevronRight className="size-3" />
+      </span>
+    </>
+  );
+}
+
 function FamilyList({
+  isMobile,
+  onNavigate,
   onOpen,
   sections,
 }: {
+  isMobile: boolean;
+  onNavigate: () => void;
   onOpen: (title: string) => void;
   sections: SidebarSection[];
 }) {
@@ -156,22 +176,33 @@ function FamilyList({
         Components
       </div>
       <div className="space-y-0.5">
-        {sections.map((section) => (
-          <button
-            className="flex w-full items-center justify-between px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-            key={section.title}
-            onClick={() => {
-              onOpen(section.title ?? "");
-            }}
-            type="button"
-          >
-            <span>{section.title}</span>
-            <span className="flex items-center gap-1 text-xs">
-              {section.items.length}
-              <ChevronRight className="size-3" />
-            </span>
-          </button>
-        ))}
+        {sections.map((section) =>
+          section.href ? (
+            <Link
+              className={FAMILY_ROW_CLASS}
+              href={section.href}
+              key={section.title}
+              onClick={() => {
+                if (isMobile) {
+                  onNavigate();
+                }
+              }}
+            >
+              <FamilyRowLabel section={section} />
+            </Link>
+          ) : (
+            <button
+              className={FAMILY_ROW_CLASS}
+              key={section.title}
+              onClick={() => {
+                onOpen(section.title ?? "");
+              }}
+              type="button"
+            >
+              <FamilyRowLabel section={section} />
+            </button>
+          ),
+        )}
       </div>
     </div>
   );
@@ -201,7 +232,21 @@ function FamilyItems({
         <span>All families</span>
       </button>
       <div className="flex items-center justify-between px-3 pb-1">
-        <span className="text-sm font-semibold">{section.title}</span>
+        {section.href ? (
+          <Link
+            className="text-sm font-semibold hover:underline"
+            href={section.href}
+            onClick={() => {
+              if (isMobile) {
+                onNavigate();
+              }
+            }}
+          >
+            {section.title}
+          </Link>
+        ) : (
+          <span className="text-sm font-semibold">{section.title}</span>
+        )}
         <span className="text-xs text-muted-foreground">
           {section.items.length}
         </span>
@@ -248,8 +293,10 @@ function FamilyNav({
   sections,
 }: FamilyNavProps) {
   const activeTitle =
-    sections.find((section) =>
-      section.items.some((item) => item.href === pathname),
+    sections.find(
+      (section) =>
+        section.href === pathname ||
+        section.items.some((item) => item.href === pathname),
     )?.title ?? null;
 
   const [routeKey, setRouteKey] = useState(pathname);
@@ -281,6 +328,8 @@ function FamilyNav({
 
   return (
     <FamilyList
+      isMobile={isMobile}
+      onNavigate={onNavigate}
       onOpen={(title) => {
         setOpenTitle(title);
       }}
