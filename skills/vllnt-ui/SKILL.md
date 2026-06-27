@@ -20,6 +20,10 @@ allowed-tools:
 
 # VLLNT UI — usage + design system
 
+**Core values**: @_shared/vllnt-core-values.md
+**Operating principles**: @_shared/vllnt-operating-principles.md
+**Web quality**: @_shared/web-quality.md
+
 `@vllnt/ui` (brand name **VLLNT UI**, always two words) is a React component
 library: 200+ accessible components built on **Radix UI** primitives,
 **Tailwind CSS**, and **CVA** (class-variance-authority). Shipped on public npm
@@ -223,6 +227,11 @@ Keyboard-reachable interactions; visible focus ring (`--ring`, never bare
 `outline-none`); inputs labelled (`<label>`/`aria-label`); live regions for async
 state (`aria-live="polite"` toasts, `assertive` errors); color is never the only
 signal — pair with icon/text.
+
+The **enforcement gate** for consuming apps — axe-core zero violations + a
+keyboard-only pass + the Lighthouse a11y score — is owned by the `accessibility`
+skill (`@_shared/web-quality.md` → Accessibility). VLLNT UI ships accessible
+primitives; that skill verifies the app keeps them accessible in use.
 
 ### Copy / voice
 
