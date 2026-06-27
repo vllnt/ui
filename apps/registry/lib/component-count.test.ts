@@ -30,22 +30,16 @@ function read(filePath: string): string {
 }
 
 describe("component count stays consistent with the registry", () => {
-  it("the CHANGELOG [Unreleased] snapshot matches the live count", () => {
+  it("the newest CHANGELOG component-count snapshot matches the live count", () => {
     const changelog = read(path.join(repoRoot, "CHANGELOG.md"));
-    const unreleased = changelog
-      .split(/^## \[/m)
-      .find((section) => section.startsWith("Unreleased]"));
-    expect(
-      unreleased,
-      "CHANGELOG.md has no [Unreleased] section",
-    ).toBeDefined();
-
-    const match = /total component count:\s*\*\*(\d+)\*\*/i.exec(
-      unreleased ?? "",
-    );
+    // The count snapshot lives in the newest section that declares one:
+    // [Unreleased] while changes are pending, or the dated release section
+    // after a release cut. The file is newest-first, so the first match
+    // is the current snapshot.
+    const match = /total component count:\s*\*\*(\d+)\*\*/i.exec(changelog);
     expect(
       match,
-      "[Unreleased] section is missing a 'Total component count' line",
+      "CHANGELOG.md is missing a 'Total component count' line",
     ).not.toBeNull();
     expect(Number(match?.[1])).toBe(liveCount);
   });

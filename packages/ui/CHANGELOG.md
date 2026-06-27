@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-> Target version: **`0.3.0`** — shipping as `0.3.0-canary.<sha>` on the npm `canary` tag on every merge to main. The stable `latest` release is gated on the [ROADMAP.md](../../ROADMAP.md) shipping criteria and is not yet published.
+_Nothing yet._
+
+## [0.3.0] - 2026-06-26
 
 ### Added
 
@@ -28,7 +30,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Inspector + dock panels** — `PropertySection`, `ObjectInspector`, `RelationshipInspector`, `RuntimeOverviewPanel`, `RoutingAssignmentPanel`, `PolicyDeliveryPanel`.
 - **Runtime overlays** — `AlertPulse`, `ThresholdRing`, `StickyMetric`, `HeatOverlay`, `StateBadgeOverlay`, `MetricCluster`, `JarvisDock`, `ContextLens`.
 - **Time navigation** — `TimelineScrubber`, `PlaybackGhost`, `BottomActivityStrip`, `RunTimeline`.
-- Total component count: **225** (up from 140).
+- **Form primitives (18)** — `ButtonGroup`, `InputGroup`, `Field`, `Fieldset`, `Item`, `ColorPicker`, `CheckboxGroup`, `NativeSelect`, `ListBox`, `SearchField`, `TextField`, `PhoneInput`, `TimePicker`, `TimeField`, `DateField`, `DateRangePicker`, `RangeCalendar`, `TagGroup`.
+- **Charts / dataviz (5)** — `PieChart`, `RadarChart`, `GaugeChart`, `SankeyChart`, `ContributionGraph` (joining the existing `BarChart` / `LineChart` / `AreaChart`).
+- **AI primitives (3)** — `Reasoning`, `ChainOfThought`, `PromptInput`.
+- **Core primitives (7)** — `Typography`, `Link`, `Toolbar`, `Meter`, `QrCode`, `Grid`, `Panel`.
+- **Motion / effects (37)** — `BentoGrid`, `Sparkles`, `Typewriter`, `AnimatedList`, `Dock`, `MagneticButton`, `TextShimmer`, `AnimatedBeam`, `AnimatedTabs`, `ScrollProgress`, `ShimmerButton`, `ShimmerText`, `AnimatedGridPattern`, `AnimatedTestimonials`, `AnimatedTooltip`, `BlurReveal`, `CardFlip`, `Cursor`, `DotPattern`, `ExpandableCards`, `FloatingNavbar`, `GlassCard`, `GlassProgress`, `LiquidGlass`, `Magnetic`, `Meteors`, `Particles`, `ProgressiveBlur`, `RevealText`, `ScrambleText`, `ShineBorder`, `ShinyButton`, `SpinningText`, `SpotlightCard`, `TextAnimate`, `TextReveal`, `TiltCard`.
+- Total component count: **309** (up from 140).
 
 - **OKLCH theming system** — color tokens migrated to the OKLCH color space, with 13 runtime theme presets (`default`, `matrix`, `dracula`, `synthwave`, `tron`, `cyberpunk`, `nord`, `claude`, `chatgpt`, `gemini`, `dusk`, `cyberlime`, `aura`). New public theme exports from `@vllnt/ui`: `THEME_PRESETS`, `DEFAULT_THEME_PRESET`, `CUSTOM_THEME_NAME`, `isThemePresetName`, the `ThemePreset` and `ThemePresetName` types, plus the `useThemePreset` hook (with `UseThemePresetResult`), `setThemePreset`, and `setCustomTheme` for runtime preset switching and user-supplied custom themes.
 
@@ -36,12 +43,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- **BREAKING — React 19 required.** The peer dependency moved to `react` / `react-dom` `>=19`; **React 18 is no longer supported**. Components migrated from `React.forwardRef` to the React 19 ref-as-prop pattern, and `useContext` → `use()`. React-18 consumers must upgrade to React 19.
+- **Internal quality sweep** — cleared the react-doctor backlog: `no-react19-deprecated-apis` 456 → 0, plus state/effect warnings (`useEffectEvent` for effect-captured handlers, derived-state, cascading `setState`) and structural warnings (giant-component splits, render-in-render, polymorphic children, passive listeners).
+- **Shared internals** — extracted reusable hooks/utilities (reference-counted body-scroll-lock that fixes a multi-overlay unlock bug, escape-key, live-date, cached `Intl` formatters, clipboard migration) and a Zod parse seam for the registry shape.
 - Registry installs use a **hybrid CLI strategy** — leaf component source is inlined, sibling registry items resolve via `@vllnt/ui` to keep installs minimal and dedupe shared primitives.
 
-### Notes
+### Fixed
 
-- `ROADMAP.md` added at repo root tracking 50 open issues across 8 phases gating the `0.3.0` cut.
-- `0.3.0` requires the codebase-health gate (`react-doctor` CI + 0 errors), the agent-first surface (`/llms.txt`, `/mcp`, sitemap, JSON-LD), and the rebuilt landing page before shipping.
+- **Docs sidebar dropped components** — the registry category union omitted four categories (`ai`, `billing`, `data-display`, `educational`), silently hiding ~32 components from the docs sidebar; all now render, with a structural fallback so a missing category can no longer regress.
+- **Theme-adaptive chart colors** — `CandlestickChart` and `SparklineGrid` series colors now follow the active theme and dark mode instead of hardcoded values.
 
 ## [0.2.1] - 2026-04-21
 
@@ -145,6 +155,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Initial public publish to the public npm registry.
 
+[0.3.0]: https://github.com/vllnt/ui/releases/tag/v0.3.0
 [0.2.1]: https://github.com/vllnt/ui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/vllnt/ui/releases/tag/v0.2.0
 [0.1.11]: https://github.com/vllnt/ui/releases/tag/v0.1.11
