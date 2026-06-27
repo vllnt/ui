@@ -107,6 +107,31 @@ export function breadcrumbLd(
   };
 }
 
+export function collectionPageLd(page: {
+  readonly description: string;
+  readonly items: readonly { readonly name: string; readonly url: string }[];
+  readonly title: string;
+  readonly url: string;
+}): JsonLdNode {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    description: page.description,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: page.items.map((item, index) => ({
+        "@type": "ListItem",
+        name: item.name,
+        position: index + 1,
+        url: item.url,
+      })),
+      numberOfItems: page.items.length,
+    },
+    name: page.title,
+    url: page.url,
+  };
+}
+
 export function techArticleLd(article: {
   readonly description: string;
   readonly title: string;

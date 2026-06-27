@@ -82,4 +82,58 @@ function getCategoryForComponent(
   return component?.category;
 }
 
-export { components, getCategoryForComponent, groupedComponents };
+const categoryDescriptions = new Map<ComponentCategory, string>([
+  [
+    "ai",
+    "Chat, agents, reasoning, and tool-call UI for building AI-native apps.",
+  ],
+  ["billing", "Pricing tables, plans, and transaction UI for billing flows."],
+  ["content", "Layout and content primitives for presenting rich information."],
+  ["core", "The foundational building blocks every interface starts from."],
+  ["data", "Tables, lists, and inputs for working with structured records."],
+  ["data-display", "Charts, metrics, and visualizations for surfacing data."],
+  [
+    "educational",
+    "Lesson, quiz, and knowledge-check UI for learning products.",
+  ],
+  ["form", "Inputs, controls, and validation for accessible forms."],
+  ["learning", "Tutorials, timelines, and progress UI for guided experiences."],
+  [
+    "navigation",
+    "Menus, breadcrumbs, and wayfinding for moving through an app.",
+  ],
+  ["overlay", "Dialogs, popovers, and sheets that layer above the page."],
+  [
+    "utility",
+    "Indicators, helpers, and small primitives that glue UIs together.",
+  ],
+]);
+
+/**
+ * Human-readable blurb for a component family, used on family landing pages.
+ *
+ * @param category - the component category
+ * @returns a one-line description, or an empty string when none exists
+ */
+function getCategoryDescription(category: ComponentCategory): string {
+  return categoryDescriptions.get(category) ?? "";
+}
+
+/**
+ * Canonical site path for a component family. The `ai` family resolves to the
+ * curated `/ai` landing; every other family resolves to `/families/<category>`.
+ *
+ * @param category - the component category
+ * @returns the locale-agnostic family path (pass through `localizePathname`)
+ */
+function familyPath(category: ComponentCategory): string {
+  return category === "ai" ? "/ai" : `/families/${category}`;
+}
+
+export {
+  components,
+  familyPath,
+  getCategoryDescription,
+  getCategoryForComponent,
+  groupedComponents,
+};

@@ -11,6 +11,7 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import {
   components,
+  familyPath,
   getSidebarSections,
   groupedComponents,
 } from "@/lib/sidebar-sections";
@@ -75,7 +76,14 @@ export default async function ComponentsPage({ params }: Props) {
 
           {groupedComponents.map((group) => (
             <section className="mb-12" key={group.category}>
-              <h2 className="text-2xl font-semibold mb-6">{group.label}</h2>
+              <h2 className="text-2xl font-semibold mb-6">
+                <Link
+                  className="hover:underline"
+                  href={localizePathname(familyPath(group.category), locale)}
+                >
+                  {group.label}
+                </Link>
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {group.items.map((component) => {
                   const meta = metadata_map[component.name];

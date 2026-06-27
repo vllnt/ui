@@ -5,6 +5,7 @@ import { registry, type RegistryComponent } from "@/lib/registry";
 import { canonical } from "@/lib/seo";
 
 import { getAiComponentSlugs } from "../lib/ai-seo";
+import { groupedComponents } from "../lib/component-categories";
 import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import { getUseCasePath, USE_CASES } from "../lib/use-cases";
@@ -76,6 +77,21 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
   ] satisfies readonly PageRouteInput[];
 
   return routes.flatMap((route) => localizedEntries(route, lastModified));
+}
+
+function familyRoutes(lastModified: Date): MetadataRoute.Sitemap {
+  return groupedComponents
+    .filter((group) => group.category !== "ai")
+    .flatMap((group) =>
+      localizedEntries(
+        {
+          changeFrequency: "weekly",
+          path: `/families/${group.category}`,
+          priority: 0.7,
+        },
+        lastModified,
+      ),
+    );
 }
 
 function docsRoutes(lastModified: Date): MetadataRoute.Sitemap {
@@ -172,6 +188,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticRoutes(lastModified),
+    ...familyRoutes(lastModified),
     ...docsRoutes(lastModified),
     ...templateRoutes(lastModified),
     ...buildGuideRoutes(lastModified),

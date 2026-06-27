@@ -53,6 +53,8 @@ export function getSidebarSections(
 
 export {
   components,
+  familyPath,
+  getCategoryDescription,
   getCategoryForComponent,
   groupedComponents,
 } from "@/lib/component-categories";
