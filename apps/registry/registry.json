@@ -16,10 +16,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -35,10 +35,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -54,10 +54,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -73,11 +73,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -93,11 +93,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -113,11 +113,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -133,11 +133,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "class-variance-authority"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -153,11 +153,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -173,11 +173,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -193,10 +193,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -212,12 +212,12 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "class-variance-authority",
         "lucide-react"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -233,10 +233,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -252,10 +252,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -271,10 +271,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -290,10 +290,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -309,11 +309,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "animated-grid-pattern",
@@ -328,11 +328,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "animated-list",
@@ -347,11 +347,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "animated-tabs",
@@ -366,11 +366,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "animated-testimonials",
@@ -385,11 +385,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "animated-text",
@@ -404,10 +404,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -423,11 +423,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "annotation",
@@ -442,10 +442,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -461,10 +461,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -480,10 +480,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -499,10 +499,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "billing",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -518,10 +518,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -537,10 +537,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -556,10 +556,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -575,13 +575,13 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react",
         "class-variance-authority",
         "@radix-ui/react-slot"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -597,10 +597,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -616,11 +616,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "blog-card",
@@ -635,10 +635,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -654,11 +654,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "border-beam",
@@ -673,10 +673,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -692,10 +692,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -711,10 +711,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -730,10 +730,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -749,10 +749,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable",
       "examples": [
         {
@@ -831,10 +831,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -850,10 +850,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -869,10 +869,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -888,10 +888,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -907,10 +907,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -926,10 +926,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -945,10 +945,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -964,11 +964,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "carousel",
@@ -983,10 +983,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1002,10 +1002,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1021,11 +1021,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1041,10 +1041,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1060,10 +1060,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1079,10 +1079,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1098,10 +1098,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1117,10 +1117,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1136,10 +1136,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1155,11 +1155,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "educational",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1175,10 +1175,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1194,10 +1194,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1213,10 +1213,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1232,10 +1232,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1251,10 +1251,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable",
       "a11y": {
         "role": "combobox",
@@ -1375,10 +1375,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1394,10 +1394,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1413,10 +1413,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1432,10 +1432,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1451,10 +1451,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1470,10 +1470,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1489,10 +1489,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1508,10 +1508,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1527,10 +1527,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1546,10 +1546,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1565,10 +1565,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1584,11 +1584,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1604,10 +1604,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1623,10 +1623,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1642,10 +1642,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1661,11 +1661,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "data-list",
@@ -1680,10 +1680,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1699,11 +1699,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "@tanstack/react-table"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1719,10 +1719,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1738,10 +1738,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1757,10 +1757,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1776,10 +1776,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable",
       "a11y": {
         "role": "dialog",
@@ -1815,11 +1815,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "document-sibling-nav",
@@ -1834,11 +1834,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "class-variance-authority"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1854,11 +1854,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "drawer",
@@ -1873,10 +1873,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1892,10 +1892,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1911,10 +1911,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1930,11 +1930,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "class-variance-authority"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable",
       "examples": [
         {
@@ -1958,10 +1958,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "educational",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1977,10 +1977,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -1996,11 +1996,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "faq",
@@ -2015,10 +2015,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2034,10 +2034,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2053,10 +2053,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2072,10 +2072,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2091,10 +2091,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2110,10 +2110,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2129,10 +2129,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2148,11 +2148,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "floating-toolbar",
@@ -2167,10 +2167,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2186,10 +2186,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2205,10 +2205,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2224,10 +2224,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2243,10 +2243,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2262,10 +2262,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2281,10 +2281,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2300,11 +2300,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "glass-panel",
@@ -2319,10 +2319,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2338,11 +2338,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "globe-3d",
@@ -2357,10 +2357,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2376,10 +2376,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2395,10 +2395,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2414,10 +2414,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2433,10 +2433,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2452,10 +2452,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2471,10 +2471,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2490,11 +2490,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "educational",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2510,11 +2510,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2530,10 +2530,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2549,10 +2549,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2568,10 +2568,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2587,10 +2587,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2606,10 +2606,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2625,10 +2625,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2644,10 +2644,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2663,10 +2663,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2682,10 +2682,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2701,11 +2701,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "class-variance-authority"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2721,10 +2721,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2740,10 +2740,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2759,11 +2759,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "educational",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2779,10 +2779,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2798,10 +2798,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2817,10 +2817,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2836,10 +2836,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2855,10 +2855,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2874,11 +2874,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2894,11 +2894,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "list-box",
@@ -2913,10 +2913,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2932,10 +2932,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2951,10 +2951,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -2970,11 +2970,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "magnetic-button",
@@ -2989,11 +2989,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "map-2d",
@@ -3008,10 +3008,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3027,10 +3027,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3046,10 +3046,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3065,10 +3065,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3084,13 +3084,13 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "@mdx-js/mdx@^3.1.1",
         "react-markdown@^10.1.0",
         "remark-gfm@^4.0.1"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3106,10 +3106,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3125,11 +3125,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "meter",
@@ -3144,10 +3144,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3163,10 +3163,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3182,10 +3182,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3201,10 +3201,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3220,11 +3220,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3240,10 +3240,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3259,10 +3259,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3278,10 +3278,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3297,10 +3297,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3316,10 +3316,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3335,10 +3335,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3354,11 +3354,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3374,10 +3374,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3393,10 +3393,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3412,10 +3412,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3431,10 +3431,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3450,10 +3450,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3469,10 +3469,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3488,10 +3488,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3507,10 +3507,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3526,10 +3526,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3545,10 +3545,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "educational",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3564,11 +3564,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "password-input",
@@ -3583,10 +3583,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3602,10 +3602,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3621,10 +3621,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3640,10 +3640,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3659,10 +3659,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3678,10 +3678,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3697,10 +3697,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3716,10 +3716,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3735,10 +3735,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3754,11 +3754,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "billing",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3774,10 +3774,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3793,10 +3793,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3812,10 +3812,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3831,10 +3831,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3850,10 +3850,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3869,10 +3869,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3888,11 +3888,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "prompt-input",
@@ -3907,11 +3907,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3927,11 +3927,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3947,10 +3947,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3966,11 +3966,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "qrcode"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -3986,10 +3986,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4005,10 +4005,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4024,10 +4024,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4043,10 +4043,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4062,10 +4062,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4081,11 +4081,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "ai",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4101,10 +4101,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4120,10 +4120,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4139,11 +4139,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "right-dock",
@@ -4158,10 +4158,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4177,10 +4177,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4196,10 +4196,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4215,10 +4215,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4234,10 +4234,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4253,10 +4253,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4272,10 +4272,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4291,10 +4291,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4310,11 +4310,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "scroll-area",
@@ -4329,10 +4329,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4348,11 +4348,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "search-bar",
@@ -4367,10 +4367,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4386,10 +4386,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4405,10 +4405,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4424,10 +4424,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4443,10 +4443,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4462,10 +4462,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4481,10 +4481,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4500,10 +4500,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4519,10 +4519,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4538,10 +4538,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4557,10 +4557,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4576,10 +4576,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4595,11 +4595,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "shimmer-text",
@@ -4614,11 +4614,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "shine-border",
@@ -4633,11 +4633,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "shiny-button",
@@ -4652,11 +4652,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "sidebar",
@@ -4671,10 +4671,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4690,10 +4690,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4709,11 +4709,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4729,10 +4729,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4748,10 +4748,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4767,10 +4767,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4786,10 +4786,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4805,11 +4805,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "sparkline-grid",
@@ -4824,10 +4824,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4843,10 +4843,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4862,11 +4862,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "spotlight-card",
@@ -4881,11 +4881,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "stat-card",
@@ -4900,10 +4900,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4919,10 +4919,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4938,10 +4938,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4957,10 +4957,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4976,10 +4976,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -4995,10 +4995,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5014,10 +5014,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5033,10 +5033,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5052,10 +5052,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5071,10 +5071,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5090,10 +5090,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5109,10 +5109,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5128,10 +5128,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5147,10 +5147,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5166,10 +5166,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5185,10 +5185,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5204,10 +5204,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5223,10 +5223,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5242,11 +5242,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "text-field",
@@ -5261,10 +5261,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5280,11 +5280,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "text-shimmer",
@@ -5299,11 +5299,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "textarea",
@@ -5318,10 +5318,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5337,10 +5337,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5356,10 +5356,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5375,10 +5375,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5394,10 +5394,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5413,11 +5413,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5433,10 +5433,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5452,10 +5452,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5471,10 +5471,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5490,11 +5490,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "time-field",
@@ -5509,10 +5509,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5528,10 +5528,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5547,11 +5547,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "class-variance-authority"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5567,10 +5567,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "form",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5586,10 +5586,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5605,10 +5605,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5624,10 +5624,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5643,10 +5643,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5662,10 +5662,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5681,10 +5681,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5700,10 +5700,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5719,10 +5719,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5738,10 +5738,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "billing",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5757,10 +5757,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5776,10 +5776,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "utility",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5795,10 +5795,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5814,10 +5814,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5833,10 +5833,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5852,10 +5852,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5871,10 +5871,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5890,11 +5890,11 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.2.1"
+      "version": "0.3.0"
     },
     {
       "name": "typography",
@@ -5909,10 +5909,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "core",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5928,10 +5928,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5947,10 +5947,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5966,10 +5966,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -5985,10 +5985,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -6004,10 +6004,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "content",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -6023,10 +6023,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -6042,10 +6042,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -6061,10 +6061,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "navigation",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -6080,10 +6080,10 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1"
+        "@vllnt/ui@^0.3.0"
       ],
       "category": "data",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     },
     {
@@ -6099,14 +6099,14 @@
       ],
       "registryDependencies": [],
       "dependencies": [
-        "@vllnt/ui@^0.2.1",
+        "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
       "category": "overlay",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "stability": "stable"
     }
   ],
-  "version": "0.2.1",
-  "generatedAt": "2026-06-25T23:17:33.550Z"
+  "version": "0.3.0",
+  "generatedAt": "2026-06-27T14:54:05.915Z"
 }
