@@ -41,8 +41,7 @@ export function getSidebarSections(
       title: "Documentation",
     },
     ...groupedComponents.map((group) => ({
-      collapsible: true,
-      defaultOpen: true,
+      family: true,
       items: group.items.map((item) => ({
         href: localizePathname(`/components/${item.name}`, locale),
         title: item.title,

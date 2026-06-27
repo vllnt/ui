@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -18,6 +18,7 @@ export type SidebarItem = {
 export type SidebarSection = {
   collapsible?: boolean;
   defaultOpen?: boolean;
+  family?: boolean;
   items: SidebarItem[];
   title?: string;
 };
@@ -135,6 +136,159 @@ function CollapsibleSection({
   );
 }
 
+type FamilyNavProps = {
+  isMobile: boolean;
+  onNavigate: () => void;
+  pathname: string;
+  sections: SidebarSection[];
+};
+
+function FamilyList({
+  onOpen,
+  sections,
+}: {
+  onOpen: (title: string) => void;
+  sections: SidebarSection[];
+}) {
+  return (
+    <div className="space-y-1">
+      <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        Components
+      </div>
+      <div className="space-y-0.5">
+        {sections.map((section) => (
+          <button
+            className="flex w-full items-center justify-between px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+            key={section.title}
+            onClick={() => {
+              onOpen(section.title ?? "");
+            }}
+            type="button"
+          >
+            <span>{section.title}</span>
+            <span className="flex items-center gap-1 text-xs">
+              {section.items.length}
+              <ChevronRight className="size-3" />
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FamilyItems({
+  isMobile,
+  onBack,
+  onNavigate,
+  pathname,
+  section,
+}: {
+  isMobile: boolean;
+  onBack: () => void;
+  onNavigate: () => void;
+  pathname: string;
+  section: SidebarSection;
+}) {
+  return (
+    <div className="space-y-1">
+      <button
+        className="flex w-full items-center gap-1.5 px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors"
+        onClick={onBack}
+        type="button"
+      >
+        <ChevronLeft className="size-3" />
+        <span>All families</span>
+      </button>
+      <div className="flex items-center justify-between px-3 pb-1">
+        <span className="text-sm font-semibold">{section.title}</span>
+        <span className="text-xs text-muted-foreground">
+          {section.items.length}
+        </span>
+      </div>
+      <div className="space-y-0.5">
+        {section.items.map((item) => (
+          <Link
+            aria-current={pathname === item.href ? "page" : undefined}
+            className={cn(
+              "block px-3 py-1.5 rounded-md text-sm transition-colors",
+              pathname === item.href
+                ? "bg-accent text-accent-foreground font-medium"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+            )}
+            href={item.href}
+            key={item.href}
+            onClick={() => {
+              if (isMobile) {
+                onNavigate();
+              }
+            }}
+          >
+            {item.title}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Single-pane drill-down for grouped component families: the family list (ROOT)
+ * or one family's items (FAMILY), so a long flat list never renders at once.
+ * Auto-drills into the family that contains the active route, re-syncing on
+ * navigation while still allowing manual drill / back between routes.
+ *
+ * @param sections - family-tagged sidebar sections (each `title` is a family)
+ * @param pathname - current route, used to detect + auto-open the active family
+ */
+function FamilyNav({
+  isMobile,
+  onNavigate,
+  pathname,
+  sections,
+}: FamilyNavProps) {
+  const activeTitle =
+    sections.find((section) =>
+      section.items.some((item) => item.href === pathname),
+    )?.title ?? null;
+
+  const [routeKey, setRouteKey] = useState(pathname);
+  const [openTitle, setOpenTitle] = useState<null | string>(activeTitle);
+
+  if (routeKey !== pathname) {
+    setRouteKey(pathname);
+    setOpenTitle(activeTitle);
+  }
+
+  const openSection =
+    openTitle === null
+      ? null
+      : (sections.find((section) => section.title === openTitle) ?? null);
+
+  if (openSection) {
+    return (
+      <FamilyItems
+        isMobile={isMobile}
+        onBack={() => {
+          setOpenTitle(null);
+        }}
+        onNavigate={onNavigate}
+        pathname={pathname}
+        section={openSection}
+      />
+    );
+  }
+
+  return (
+    <FamilyList
+      onOpen={(title) => {
+        setOpenTitle(title);
+      }}
+      sections={sections}
+    />
+  );
+}
+
 // eslint-disable-next-line max-lines-per-function
 export function Sidebar({ sections }: SidebarProps) {
   const pathname = usePathname();
@@ -147,6 +301,9 @@ export function Sidebar({ sections }: SidebarProps) {
   );
 
   const collapsed = mounted && !isMobile && !open;
+
+  const familySections = sections.filter((section) => section.family);
+  const otherSections = sections.filter((section) => !section.family);
 
   return (
     <>
@@ -199,7 +356,7 @@ export function Sidebar({ sections }: SidebarProps) {
             ref={scrollContainerReference}
           >
             <div className="space-y-4">
-              {sections.map((section, sectionIndex) => {
+              {otherSections.map((section, sectionIndex) => {
                 const sectionItems = (
                   <div className={section.title ? "space-y-0.5" : "space-y-1"}>
                     {section.items.map((item) => (
@@ -251,6 +408,16 @@ export function Sidebar({ sections }: SidebarProps) {
                   </div>
                 );
               })}
+              {familySections.length > 0 ? (
+                <FamilyNav
+                  isMobile={isMobile}
+                  onNavigate={() => {
+                    setOpen(false);
+                  }}
+                  pathname={pathname}
+                  sections={familySections}
+                />
+              ) : null}
             </div>
           </nav>
         </div>
