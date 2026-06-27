@@ -1,216 +1,134 @@
 # Roadmap
 
-> Status: **0.4.0 canary** · Latest release: `v0.3.0` (2026-06-26) · Current canary: `0.4.0-canary.<sha>` · 0.4.0 scope below: AI Elements parity · react-doctor sweep · Agent UI CLI · 0.3.0 sections are the shipped baseline · Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
+> **Goal:** the most complete, agent-ready React component registry on the @vllnt design system — every component documented, typed, installable via the shadcn CLI, and discoverable by humans and agents.
+> **Now:** `component-sidebar` (0.4.0 canary cycle).
+> **Last updated:** 2026-06-27
+> **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
-## TLDR
-
-`0.3.0` is the **agent-first surface** release. Three themes:
-
-1. **+169 new components** already in canary, finally published.
-2. **Discoverability** — full SEO + AI-agent surface (`/llms.txt`, `/mcp`, sitemap, JSON-LD, manifest, structured data on every page).
-3. **Codebase health gate** — `react-doctor` CI + tooling so we ship and stay green.
-
-50 open issues, organized below in shipping order. Items marked **(stretch)** are nice-to-have but can roll to `0.4.0` if scope pressure.
+Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.
 
 ---
 
-## Components — canary → release (+169)
+## component-library [DONE 2026-06]
 
-Counts taken from `registry.json` at `v0.2.1` (140) vs `HEAD` (**309**, +169 net). The curated list below highlights the headline additions; the full set is in the changelog.
+**Goal:** Grow the registry into a comprehensive set spanning forms, data, content, AI, maps, canvas, and timelines.
+**Exit criteria:** `registry.json` carries 309 components, each with a story + test; `@vllnt/ui@0.3.0` published to npm.
+**Verify:** `npm i @vllnt/ui@latest` resolves 0.3.0; `/components` lists 309; `npx shadcn add @vllnt/<c>` installs a leaf + its siblings.
 
-### Hooks + utility primitives
-- `CopyButton` + `useCopyToClipboard` hook (#159)
-- `Banner` + `BannerAction` (#160)
-- `Kbd` (#161)
-- `EmptyState` (#162)
-- `DocumentSiblingNav` (#163)
+- [x] component-library.1 Ship +169 components → 309 total (full list in CHANGELOG `[0.3.0]`) — #159–#204
+- [x] component-library.2 Hybrid CLI installs: leaf source + `@vllnt/ui` for siblings — #232
+- [x] component-library.3 Registry-item richness: `version`, `stability`, `a11y` schema, inline `examples`, TSDoc props per `/r/<name>.json` — #242, #253–#255
+- [x] component-library.4 Validate: component-count guard + per-component story/test green
 
-### Pricing + identity cards
-- `PricingTable` + `PricingPlan` (#164)
-- `HistoricalFigureCard` (#165)
-- `CivilizationCard` + `CivilizationComparison` (#166)
+## agent-surface [DONE 2026-06]
 
-### Newsletter + signup
-- `NewsletterSignup` (state machine) (#167)
+**Goal:** Full SEO + AI-agent discoverability for the registry site.
+**Exit criteria:** robots, sitemap, canonical URLs, `/llms.txt` + `/llms-full.txt`, JSON-LD on every page, PWA manifest, breadcrumbs, custom 404, MCP server live; Lighthouse SEO ≥ 95.
+**Verify:** `/llms.txt` validates (llmstxt.org); Google Rich Results clean on `/components/[slug]` + `/design`; MCP smoke-tested in Claude Desktop.
 
-### AI compound families
-- `ModelComparison` + `Column` + `Meta` + `Vote` (#168)
-- `PromptTemplates` (#169)
-- `AgentActivity` (#170)
-- `AISidebar` (#171)
-- `AIArtifact` (#172)
+- [x] agent-surface.1 `robots.ts` (11 AI crawlers) + `sitemap.ts` — #233, #234
+- [x] agent-surface.2 Canonical URLs + keywords / verification / author metadata — #237, #241
+- [x] agent-surface.3 `/llms.txt` + `/llms-full.txt` — #235, #236
+- [x] agent-surface.4 JSON-LD (Organization, WebSite, SoftwareSourceCode, ItemList, BreadcrumbList) + manifest + custom 404 + breadcrumbs — #238, #239, #240, #251
+- [x] agent-surface.5 Release-intelligence surface: `/changelog`, `/releases`, `/rss.xml`, `/atom.xml` — #260
+- [x] agent-surface.6 `@vllnt/mcp` server at `ui.vllnt.ai/mcp` — #246
+- [x] agent-surface.7 Community paths: footer, header GitHub icon, `/request-component`, `/report`, FUNDING, shadcn-CLI install path — #243–#247, #261, #265
+- [x] agent-surface.8 Brand: DESIGN.md + `/design` + `design.tokens.json` — #250
+- [x] agent-surface.9 Landing rebuild to OSS-library best practices — #264
 
-### Era / financial
-- `EraComparison` (#173)
-- `TransactionList` (#174)
+## codebase-health [DONE 2026-06]
 
-### Forms
-- `AutoReload` toggle + form (#175)
+**Goal:** A `react-doctor` CI gate so the library ships and stays green.
+**Exit criteria:** react-doctor workflow + PR annotations; 0 BLOCKING errors; warning sweep 1769 → under 100 (epic #279).
+**Verify:** `pnpm doctor:errors` exits 0 on main; CI annotates PRs.
+**Caveat:** local `.react-doctor.json` score reads **71** (epic target was 90) → carried to Later: `react-doctor-90`.
 
-### Educational
-- `KnowledgeCheck` inline question runner (#176)
+- [x] codebase-health.1 CI: enforce issue `type` + react-doctor workflow + `pnpm doctor*` scripts + pre-commit — #278, #280, #282
+- [x] codebase-health.2 Fix 7 BLOCKING errors (rules-of-hooks + combobox a11y) — #266
+- [x] codebase-health.3 Warning sweep across 12 categories (design system, React 19, perf, correctness, a11y, …) — #231, #267–#277
+- [x] codebase-health.4 README count + `package.json` repo fields — #249
 
-### Charts + timelines
-- `GanttChart` (#177)
-- `ParallelTimeline` (#178)
-- `Timeline` + `TimelineItem` (#179)
-- `HistoricTimeline` (#180)
-- `InteractiveTimeline` (#181)
-- `ChronologicalTimeline` (#182)
-- `TreeView` (#183)
+## release-pipeline [DONE 2026-06]
 
-### Document + reading
-- `PrimarySourceViewer` compound family (#184)
+**Goal:** A canary → stable publish model with hard safeguards.
+**Exit criteria:** every merge to main publishes `@canary`; stable via manual `workflow_dispatch`; 0.3.0 published; 0.4.0 canary cycle started.
+**Verify:** `npm view @vllnt/ui dist-tags` → `latest: 0.3.0`, `canary: 0.4.0-canary.<sha>`.
 
-### Maps + geography
-- `Map2D` compound family (#185)
-- `ChoroplethMap` (#186)
-- `RouteMap` (#187)
-- `HeatMapOverlay` (#188)
-- `GeographyQuizMap` (#189)
-- `MapTimeline` compound family (#190)
-- `StoryMap` compound family (#191)
-- `Globe3D` compound family (#192)
-
-### Canvas / spatial
-- `LiveCursor` + `CommentPin` + `PresenceSyncIndicator`
-- `PresenceStack` + `SelectionPresence` + `ThreadBubble`
-- `InfinitePlane` + `ViewportBookmarks` + `WorldBreadcrumbs`
-- `SelectionHalo` + `SnapGuides` + `FloatingToolbar` (#197)
-- `FollowMode` + `HandoffBeacon` (#196)
-- `PropertySection` + `ObjectInspector` + `RelationshipInspector`
-- `RuntimeOverview` + `RoutingAssignment` + `PolicyDelivery`
-- `JarvisDock` + `MultiSelectLasso` + `ContextLens`
-
-### Runtime overlays
-- `AlertPulse` + `ThresholdRing` + `StickyMetric`
-- `HeatOverlay` + `StateBadgeOverlay` + `MetricCluster`
-
-### Time navigation
-- `TimelineScrubber` + `PlaybackGhost` + `BottomActivity`
-- `RunTimeline` (#204)
-
-### Registry / install pipeline
-- Hybrid CLI installs — leaf source + `@vllnt/ui` for siblings (#232)
+- [x] release-pipeline.1 Stable 0.3.0 publish (changelog + counts) — #433
+- [x] release-pipeline.2 Advance install target to `@vllnt/ui@0.3.0` (post-publish) — #458
+- [x] release-pipeline.3 Start 0.4.0 canary cycle (version bump + roadmap) — #459 (PR #460), verified `0.4.0-canary.cb3c196` on npm
 
 ---
 
-## Sequencing — critical path to ship
+## component-sidebar [ACTIVE]
 
-**Phase 0 — Codebase health (BLOCKS regressions during the rest of the release)**
+**Goal:** Navigate 309 components via a single-pane **drill-down** — families list ⇄ one family's components — synced to the breadcrumb, so the sidebar never shows more than one family at once.
+**Exit criteria:** On `/components/[slug]` the sidebar auto-drills to the component's family (pinned docs-essentials on top, that family's components only, active item marked) with a "← All families" back; breadcrumb reads `Components / Family / Component`; a global filter + ⌘K jump to any component cross-family; last-family + scroll persist; keyboard-only + mobile pass.
+**Verify:** a dev opening `/components/button` sees the sidebar drilled into **Form** (Button active) and breadcrumb `Components › Form › Button`; "← All families" returns to the 12-family list; filter "globe" (cross-family) drills to Globe3D; reload keeps Form drilled. Personas: browsing dev (desktop + mobile, keyboard-only); maintainer adding a categorized component (auto-appears in its family).
 
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 1 | [#282](https://github.com/vllnt/ui/issues/282) | Task | CI: enforce `type` field on every issue |
-| 2 | [#280](https://github.com/vllnt/ui/issues/280) | Task | CI: react-doctor workflow (PR annotations) |
-| 3 | [#278](https://github.com/vllnt/ui/issues/278) | Task | DX: `pnpm doctor*` scripts + pre-commit |
-| 4 | [#266](https://github.com/vllnt/ui/issues/266) | Bug | Fix 7 BLOCKING errors (rules-of-hooks + combobox a11y) |
-| 5 | [#249](https://github.com/vllnt/ui/issues/249) | Task | Fix README count + package.json repo fields |
+Single-pane drill-down (chosen over accordion-single-open and a two-pane family rail — it matches the breadcrumb model and only ever shows one family). Grouping derives from the existing `category` enum (12 families: utility 51, data 45, content 43, form 38, learning 30, core 26, navigation 23, data-display 21, overlay 15, ai 9, educational 5, billing 3), so it stays zero-maintenance. UI-layer only — no schema change. Locked UX decisions: pinned top = docs-essentials (Overview, Getting Started, Theming); filter + ⌘K = global cross-family; ROOT = families-only list.
 
-**Phase 1 — Crawler + AI agent surface**
+- [ ] component-sidebar.1 Two-level drill-down state (`ROOT` ⇄ `FAMILY`): ROOT = families list (count + chevron), FAMILY = one family's components only (`apps/registry/lib/sidebar-sections.ts` + `@vllnt/ui` Sidebar)
+- [ ] component-sidebar.2 Auto-drill from route: `/components/[slug]` opens `FAMILY(category)` with the active item; "← All families" + breadcrumb `Components` pop to ROOT
+- [ ] component-sidebar.3 Pin docs-essentials (Overview, Getting Started, Theming) above both levels
+- [ ] component-sidebar.4 Breadcrumb sync: `Components / Family / Component`; the Family + Components segments drive the sidebar level
+- [ ] component-sidebar.5 Global filter + ⌘K (reuse the existing Command + SearchDialog/pagefind index): a cross-family match drills to its family; virtualize families > 25 items
+- [ ] component-sidebar.6 Directional slide transition with `prefers-reduced-motion` instant fallback; persist last-family + scroll (localStorage)
+- [ ] component-sidebar.7 Validate component-sidebar.1–6: Playwright E2E (desktop + mobile + keyboard) — auto-drill, back, breadcrumb sync, global filter, ⌘K, persistence (E2E)
 
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 6 | [#233](https://github.com/vllnt/ui/issues/233) | Feature | `app/robots.ts` (allow all AI crawlers + sitemap link) |
-| 7 | [#234](https://github.com/vllnt/ui/issues/234) | Feature | `app/sitemap.ts` (all routes + 309 components) |
-| 8 | [#237](https://github.com/vllnt/ui/issues/237) | Feature | Canonical URLs per page |
-| 9 | [#241](https://github.com/vllnt/ui/issues/241) | Feature | Keywords + verification + author metadata |
-| 10 | [#235](https://github.com/vllnt/ui/issues/235) | Feature | `/llms.txt` |
-| 11 | [#236](https://github.com/vllnt/ui/issues/236) | Feature | `/llms-full.txt` |
+## ai-elements-parity [PLANNED]
 
-**Phase 2 — Rich results + structured data**
+**Goal:** Close the gap vs shadcn AI Elements (~48 components); ship the chat/agent-core set we lack.
+**Exit criteria:** Tier-1 (7) shipped with story + test + registry entry; a demo composes them end-to-end.
+**Verify:** a demo page renders Message + Context + Task + Plan + Confirmation + Attachments + MessageActions + MessageBranch in one chat flow.
 
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 12 | [#238](https://github.com/vllnt/ui/issues/238) | Feature | JSON-LD (Organization, WebSite, SoftwareSourceCode, ItemList) |
-| 13 | [#239](https://github.com/vllnt/ui/issues/239) | Feature | `app/manifest.ts` (PWA) |
-| 14 | [#240](https://github.com/vllnt/ui/issues/240) | Feature | Custom 404 |
-| 15 | [#251](https://github.com/vllnt/ui/issues/251) | Feature | Breadcrumbs UI + `BreadcrumbList` JSON-LD |
+- [ ] ai-elements-parity.1 `Context` — token / context-window usage meter
+- [ ] ai-elements-parity.2 `Task` — atomic work-item card (we have the chain, not the unit)
+- [ ] ai-elements-parity.3 `Plan` — structured plan with an approve step
+- [ ] ai-elements-parity.4 `Confirmation` — approve-before-action gate (wraps `AlertDialog`)
+- [ ] ai-elements-parity.5 `Attachments` — file / media upload in the prompt composer
+- [ ] ai-elements-parity.6 `MessageActions` — per-message action bar (copy / retry / edit)
+- [ ] ai-elements-parity.7 `MessageBranch` — message version switcher
+- [ ] ai-elements-parity.8 Tier-2 stretch: `Checkpoint`, `RequestQueue`, `OpenInChat`, `AIImage`
+- [ ] ai-elements-parity.9 Validate ai-elements-parity.1–7: story + test per component + composed chat E2E (E2E)
 
-**Phase 3 — Site UX + community paths**
+Deferred families (Later): voice (6), IDE code surfaces (9), workflow canvas (5).
 
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 16 | [#243](https://github.com/vllnt/ui/issues/243) | Feature | Footer (GitHub / Storybook / Sponsor / Contribute) |
-| 17 | [#244](https://github.com/vllnt/ui/issues/244) | Feature | Header GitHub icon |
-| 18 | [#245](https://github.com/vllnt/ui/issues/245) | Feature | `/request-component` page + CTA → prefilled GH issue |
-| 19 | [#265](https://github.com/vllnt/ui/issues/265) | Feature | `/report` bug page + per-component "Report a bug" button |
-| 20 | [#261](https://github.com/vllnt/ui/issues/261) | Task | `.github/FUNDING.yml` (Sponsor button) |
-| 21 | [#247](https://github.com/vllnt/ui/issues/247) | Task | Surface shadcn-CLI install path prominently |
+## agent-ui-cli [PLANNED]
 
-**Phase 4 — Brand + release artifacts**
+**Goal:** One fast-installing command for any agent or dev to manage the whole client side + design system on `@vllnt/ui`. Four pillars: single entry · extremely fast install · common across projects · covers the whole client side.
+**Exit criteria (MVP):** `gate` returns an identical pass/fail locally and in CI on a sample consumer; `theme check` fails a deliberately broken-contrast preset and passes the 16 shipped; `tokens check` fails on CSS-var drift and passes when `tokens.json` is the sole source; `init` wires pre-commit + CI to `vllnt-ui gate` with no hand-edits; cold `npx <cli>@latest gate` runs with no component-lib download.
+**Verify:** run it like a consumer — a sample repo's pre-commit + PR both call `vllnt-ui gate`; an off-token color fails `check`. Full command spec in the appendix.
 
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 22 | [#250](https://github.com/vllnt/ui/issues/250) | Feature | DESIGN.md + `/design` page + `design.tokens.json` |
-| 23 | [#260](https://github.com/vllnt/ui/issues/260) | Feature | CHANGELOG.md + `/changelog` + `/releases` + `/rss.xml` |
-
-**Phase 5 — Registry-item richness (agents need this to be useful)**
-
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 24 | [#253](https://github.com/vllnt/ui/issues/253) | Feature | `version` + `stability` fields in `/r/<name>.json` |
-| 25 | [#254](https://github.com/vllnt/ui/issues/254) | Feature | Inline usage examples in `/r/<name>.json` |
-| 26 | [#242](https://github.com/vllnt/ui/issues/242) | Feature | TSDoc props extraction → `/r/<name>.json` + props table |
-| 27 | [#255](https://github.com/vllnt/ui/issues/255) | Feature | Per-component a11y schema in `/r/<name>.json` |
-
-**Phase 6 — Agent-first integration**
-
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 28 | [#246](https://github.com/vllnt/ui/issues/246) | Feature | `@vllnt/mcp` MCP server at `ui.vllnt.ai/mcp` |
-
-**Phase 7 — Landing rebuild (depends on Phases 1–6)**
-
-| Order | Issue | Type | Notes |
-|---|---|---|---|
-| 29 | [#264](https://github.com/vllnt/ui/issues/264) | Feature | Rebuild landing page to OSS-library best practices (auto-updating stats, releases strip) |
+- [ ] agent-ui-cli.1 `context` — emit rules + tokens + component index as JSON
+- [ ] agent-ui-cli.2 `check` — design-lint on usage (off-token color, missing `use client`, off-scale spacing); `--fix`
+- [ ] agent-ui-cli.3 `tokens check` (L0, owned) — token-system correctness + single-source sync + OKLCH gamut
+- [ ] agent-ui-cli.4 `theme check` (L0, owned) — WCAG contrast + token parity across 16 presets × light/dark
+- [ ] agent-ui-cli.5 reduced-motion lint (L0, owned)
+- [ ] agent-ui-cli.6 `gate` — compose L0 + L1 (lint) + L2 (tsc); one verdict; `--staged` / `--scope changed`
+- [ ] agent-ui-cli.7 `init` / `sync` — scaffold + version-pin the shared config bundle
+- [ ] agent-ui-cli.8 `fix` / no-arg default — bare `vllnt-ui` auto-detects + runs `gate`
+- [ ] agent-ui-cli.9 Validate MVP gate (see Exit criteria) on a sample consumer repo (E2E)
 
 ---
 
-## Stretch — in scope if time permits, else `0.4.0`
+## Later
 
-| Issue | Type | Why stretch |
-|---|---|---|
-| [#248](https://github.com/vllnt/ui/issues/248) | Feature | `/docs` expansion (9 pages) — large content effort |
-| [#257](https://github.com/vllnt/ui/issues/257) | Feature | Pagefind full-text search — cosmetic without #248 |
-| [#256](https://github.com/vllnt/ui/issues/256) | Feature | Sandpack playground — meaty bundle work |
-| [#258](https://github.com/vllnt/ui/issues/258) | Feature | `/vs` comparison pages — copy-heavy |
-| [#259](https://github.com/vllnt/ui/issues/259) | Feature | `/templates` starter kits — separate engineering |
-| [#281](https://github.com/vllnt/ui/issues/281) | Feature | i18n via `next-intl` + per-locale MDX — 2-3 days alone |
-| [#262](https://github.com/vllnt/ui/issues/262) | Task | Hero rewrite — superseded by #264, close on merge |
+Unscheduled — pull into a phase when prioritized.
 
----
-
-## react-doctor warning sweep — `0.4.0`
-
-Errors fixed in `0.3.0` (#266). Warning categories addressed sequentially as standalone PRs:
-
-| Issue | Type | Warnings | Approach |
-|---|---|---|---|
-| [#279](https://github.com/vllnt/ui/issues/279) | Task | — | EPIC: react-doctor sweep (62 → 90 score) |
-| [#267](https://github.com/vllnt/ui/issues/267) | Task | ~638 | Design system audit — depends on #250 |
-| [#268](https://github.com/vllnt/ui/issues/268) | Task | ~439 | React 19 migration — codemod-able |
-| [#269](https://github.com/vllnt/ui/issues/269) | Task | ~336 | Files / exports / types structure |
-| [#270](https://github.com/vllnt/ui/issues/270) | Task | ~112 | JS performance (hoist Intl, combine iterations) |
-| [#276](https://github.com/vllnt/ui/issues/276) | Task | ~51 | Generic handler names |
-| [#272](https://github.com/vllnt/ui/issues/272) | Bug | ~61 | Correctness — array-index keys, hydration, localStorage |
-| [#271](https://github.com/vllnt/ui/issues/271) | Bug | ~41 | State & effects (derived state, cascading setState) |
-| [#277](https://github.com/vllnt/ui/issues/277) | Task | ~40 | Misc — giant components, render-in-render |
-| [#273](https://github.com/vllnt/ui/issues/273) | Task | ~34 | Re-render hygiene |
-| [#274](https://github.com/vllnt/ui/issues/274) | Task | ~15 | Next.js rules |
-| [#275](https://github.com/vllnt/ui/issues/275) | Bug | ~8 | A11y warnings |
-| [#231](https://github.com/vllnt/ui/issues/231) | Task | — | Backfill Vitest coverage (pre-existing) |
-
-Total: 1769 warnings → target < 100.
+- **react-doctor-90** — push score 71 → 90 (sweep issues closed but target not fully met; see `codebase-health` caveat).
+- **ai-elements-voice** (6) — AudioPlayer, MicSelector, Persona, SpeechInput, Transcription, VoiceSelector.
+- **ai-elements-ide** (9) — Commit, EnvironmentVariables, FileTree, PackageInfo, SchemaDisplay, Snippet, StackTrace, Terminal, TestResults.
+- **ai-elements-canvas** (5) — Canvas, Connection, Controls, Node, Panel (verify against existing `@xyflow`-based components first).
+- **agent-ui-cli-v1** — config bundle, `doctor` wrapper, `add`, `ci` reusable workflow, `list`/`info`/`why`/`search`, `vllnt.config`, `upgrade`.
+- **agent-ui-cli-v2** — `audit` (knip + size-limit), `audit --browser` (axe / Web Vitals), baseline gating, i18n lint, client security, `new`/scaffold, `theme new`/`edit`, `remove`/`diff`, `watch`/`report`.
+- **docs + search** — `/docs` expansion (#248), Pagefind full-text (#257), Sandpack playground (#256), `/vs` pages (#258), `/templates` (#259), i18n via next-intl (#281).
 
 ---
 
-## Agent UI CLI — `0.4.0`
+## Appendix — agent-ui-cli full spec
 
-**Goal:** one fast-installing command, common across projects, that lets any agent or dev manage the entire client side + design system on `@vllnt/ui`. Four pillars: **single entry · extremely fast install · common across projects · covers the whole client side**.
-
-Harness-agnostic CLI. **Package shape is an open decision** (see *Open architecture decisions* below): the brand-faithful `npx @vllnt/ui@latest <cmd>` (bin on `@vllnt/ui`) drags the heavy component lib onto the install path and fights the fast-install pillar — the leading alternative is a tiny zero-dep `@vllnt/cli` that *reads* `@vllnt/ui` data without depending on it (`@vllnt/ui/cli` as a subpath is not a valid npm spec either way). Ships the @vllnt design-system **agent contract** (rules + tokens + component index) and a **standardized client-side gate** that runs identically locally and in CI. Orchestrates wrappable OSS tools (eslint / stylelint / knip / size-limit / playwright); hand-writes the checks no OSS tool covers — chief among them **design-token correctness + coherence**: `tokens.json` is the single source of truth, and every CSS var, theme preset, and Tailwind value must derive from it without drift.
+Preserved design detail for the `agent-ui-cli` phase. Harness-agnostic CLI that ships the @vllnt design-system **agent contract** (rules + tokens + component index) and a **standardized client-side gate** that runs identically locally and in CI. Orchestrates wrappable OSS tools (eslint / stylelint / knip / size-limit / playwright); hand-writes the checks no OSS tool covers — chief among them **design-token correctness + coherence**: `tokens.json` is the single source of truth, and every CSS var, theme preset, and Tailwind value must derive from it without drift.
 
 | Ship | Item | Type | Scope |
 |---|---|---|---|
@@ -299,92 +217,31 @@ Resolve before building — each gates one of the four pillars:
 - `init` produces a repo whose pre-commit hook + CI both call `vllnt-ui gate` with no hand-edits.
 - cold `npx <cli>@latest gate` runs on a clean machine with **no component-lib download** (fast-install pillar).
 
-Issues to be filed (repo enforces issue-linked PRs). The L4 browser-audit tier may roll to a later `0.4.x` / `0.5.0` under scope pressure.
-
----
-
-## AI Elements parity — `0.4.0`
-
-We ship ~16 of shadcn **AI Elements** ([elements.ai-sdk.dev](https://elements.ai-sdk.dev), ~48 components across Chatbot / Code / Voice / Workflow / Utility). Already covered: `AIMessageBubble`, `PromptInput` + `AIChatInput`, `Reasoning`, `ChainOfThought`, `AIToolCallDisplay`, `AIArtifact`, `AISourceCitation`, `CodeBlock`, `ModelSelector` — plus ours they lack (`ModelComparison`, `AIStreamingText`, `AISidebar`, `PromptTemplates`, `ChatDockSection`). The gaps below complete a standard chat/agent loop; voice + IDE-code surfaces are deferred (narrow ROI for a general design system).
-
-**Tier 1 — chat/agent core (target `0.4.0`)**
-
-| Component | Type | Fills (shadcn name) |
-|---|---|---|
-| `Context` | Feature | token / context-window usage meter (Context) |
-| `Task` | Feature | atomic work-item card — we have the chain, not the unit (Task) |
-| `Plan` | Feature | structured plan with an approve step (Plan) |
-| `Confirmation` | Feature | approve-before-action gate; wraps `AlertDialog` (Confirmation) |
-| `Attachments` | Feature | file / media upload in the prompt composer (Attachments) |
-| `MessageActions` | Feature | per-message action bar — copy / retry / edit (Actions) |
-| `MessageBranch` | Feature | message version switcher (Branch) |
-
-**Tier 2 — agent session UX (stretch)**
-
-| Component | Type | Fills (shadcn name) |
-|---|---|---|
-| `Checkpoint` | Feature | save / restore conversation state (Checkpoint) |
-| `RequestQueue` | Feature | pending tasks / requests list (Queue) |
-| `OpenInChat` | Feature | launch content into a conversation (Open In Chat) |
-| `AIImage` | Feature | AI-generated image with loading / error states (Image) |
-
-**Deferred — narrow ROI, revisit after `0.4.0`**
-
-- IDE code surfaces (9): Commit, EnvironmentVariables, FileTree, PackageInfo, SchemaDisplay, Snippet, StackTrace, Terminal, TestResults
-- Voice (6): AudioPlayer, MicSelector, Persona, SpeechInput, Transcription, VoiceSelector
-- Workflow canvas (5): Canvas, Connection, Controls, Node, Panel — verify against existing `@xyflow`-based components (`EdgeLabel`, `FloatingToolbar`, the canvas/spatial family) before filing
-
-Issues to be filed (repo enforces issue-linked PRs). Tier 1 = 7 components; Tier 2 = 4 (stretch). Minor bump per versioning policy (new components).
-
----
-
-## Cut criteria for `0.3.0`
-
-Ship only when **all** of the following hold:
-
-- [ ] All 85 canary components present in `registry.json`, each with story + test.
-- [ ] Phase 0–7 issues closed (29 issues).
-- [ ] `react-doctor` reports **0 errors**, score **≥ 75** (full ≥ 90 in `0.4.0`).
-- [ ] Lighthouse Performance + SEO + Accessibility **≥ 95** on `/`, `/components`, `/components/[slug]` (sample 3), `/design`, `/changelog`.
-- [ ] `/llms.txt` validates against [llmstxt.org](https://llmstxt.org).
-- [ ] MCP server at `ui.vllnt.ai/mcp` smoke-tested in Claude Desktop end-to-end.
-- [ ] Google Rich Results Test: zero errors on `/components/[slug]` and `/design`.
-- [ ] CHANGELOG entry written, `/releases` shows `0.3.0` with notes.
-- [ ] `package.json` versions bumped:
-  - [x] `packages/ui` → `0.3.0` (drives `0.3.0-canary.<sha>` on each merge to main)
-  - [x] `apps/registry` → `0.3.0`
-  - [ ] root → `0.3.0` (optional — private monorepo root, left at `0.1.0`)
-- [ ] At release, flip the registry's shadcn install target off the last published version:
-  - [ ] `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-source.ts` → `0.3.0` (stamps `@vllnt/ui@^0.3.0` + item/registry `version` into `registry.json`; kept at `0.2.1` during canary so `npx shadcn add` resolves to a published release)
-- [ ] Every closed issue is `Type`-tagged.
-- [ ] PR template in place (linked issue requirement enforced — already shipped via #152).
-
----
-
-## Out of scope for `0.3.0`
-
-- React Compiler adoption.
-- Right-to-left language support.
-- Backend services for `/report` or `/request-component` (we use prefilled GitHub URLs — no backend).
-- New design tokens beyond DESIGN.md baseline.
-- Versioned docs (deferred until breaking changes appear).
-- Component analytics (privacy-respecting telemetry — separate decision).
+The L4 browser-audit tier may roll to a later `0.4.x` / `0.5.0` under scope pressure.
 
 ---
 
 ## Versioning policy
 
 - **Patch** (`0.3.x`) — bug fixes, content updates, non-breaking docs.
-- **Minor** (`0.x.0`) — new components, new public APIs, new sites surfaces.
+- **Minor** (`0.x.0`) — new components, new public APIs, new site surfaces.
 - **Major** (`x.0.0`) — breaking API changes (`@vllnt/ui` exports), removed components, registry schema changes.
 
 Semver discipline starts hard at `1.0.0`. Until then, `0.x.0` may include breaking changes documented in CHANGELOG.
+
+## Out of scope (this cycle)
+
+- React Compiler adoption.
+- Right-to-left language support.
+- Backend services for `/report` or `/request-component` (prefilled GitHub URLs — no backend).
+- New design tokens beyond DESIGN.md baseline.
+- Versioned docs (deferred until breaking changes appear).
+- Component analytics (privacy-respecting telemetry — separate decision).
 
 ---
 
 ## Tracking
 
-- Epic: [#252](https://github.com/vllnt/ui/issues/252) (SEO + AI-agent surface)
-- Epic: [#279](https://github.com/vllnt/ui/issues/279) (react-doctor sweep)
-- Open issues: `gh issue list -R vllnt/ui --state open`
-- Score: `pnpm doctor:score` (after #278 lands)
+- Open issues: `gh issue list -R vllnt/ui --state open` (currently 0 — file issues per phase as work starts; the repo enforces issue-linked PRs).
+- react-doctor score: `pnpm doctor:score`.
+- Channels: `npm view @vllnt/ui dist-tags`.
