@@ -36,6 +36,7 @@ import { oembedUrl, withRef } from "@/lib/share";
 import {
   getCategoryForComponent,
   getSidebarSections,
+  groupedComponents,
 } from "@/lib/sidebar-sections";
 import type { RegistryComponent } from "@/types/registry";
 
@@ -188,6 +189,11 @@ export default async function ComponentPage(props: Props) {
 
   const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/${component.name}.json`;
 
+  const componentCategory = getCategoryForComponent(slug);
+  const familyGroup = componentCategory
+    ? groupedComponents.find((group) => group.category === componentCategory)
+    : undefined;
+
   const sections = [
     { id: "installation", title: "Installation" },
     ...(meta?.defaultStoryId ? [{ id: "preview", title: "Preview" }] : []),
@@ -236,6 +242,7 @@ export default async function ComponentPage(props: Props) {
                       href: localizePathname("/components", locale),
                       label: "Components",
                     },
+                    ...(familyGroup ? [{ label: familyGroup.label }] : []),
                     { label: displayTitle },
                   ]}
                 />
