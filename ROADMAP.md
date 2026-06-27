@@ -1,6 +1,6 @@
-# Roadmap — 0.3.0
+# Roadmap
 
-> Status: **release prep** · Previous release: `v0.2.1` · Current canary: `0.3.0-canary.<sha>` (+169 components) · Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
+> Status: **0.4.0 canary** · Latest release: `v0.3.0` (2026-06-26) · Current canary: `0.4.0-canary.<sha>` · 0.4.0 scope below: AI Elements parity · react-doctor sweep · Agent UI CLI · 0.3.0 sections are the shipped baseline · Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 ## TLDR
 
@@ -300,6 +300,41 @@ Resolve before building — each gates one of the four pillars:
 - cold `npx <cli>@latest gate` runs on a clean machine with **no component-lib download** (fast-install pillar).
 
 Issues to be filed (repo enforces issue-linked PRs). The L4 browser-audit tier may roll to a later `0.4.x` / `0.5.0` under scope pressure.
+
+---
+
+## AI Elements parity — `0.4.0`
+
+We ship ~16 of shadcn **AI Elements** ([elements.ai-sdk.dev](https://elements.ai-sdk.dev), ~48 components across Chatbot / Code / Voice / Workflow / Utility). Already covered: `AIMessageBubble`, `PromptInput` + `AIChatInput`, `Reasoning`, `ChainOfThought`, `AIToolCallDisplay`, `AIArtifact`, `AISourceCitation`, `CodeBlock`, `ModelSelector` — plus ours they lack (`ModelComparison`, `AIStreamingText`, `AISidebar`, `PromptTemplates`, `ChatDockSection`). The gaps below complete a standard chat/agent loop; voice + IDE-code surfaces are deferred (narrow ROI for a general design system).
+
+**Tier 1 — chat/agent core (target `0.4.0`)**
+
+| Component | Type | Fills (shadcn name) |
+|---|---|---|
+| `Context` | Feature | token / context-window usage meter (Context) |
+| `Task` | Feature | atomic work-item card — we have the chain, not the unit (Task) |
+| `Plan` | Feature | structured plan with an approve step (Plan) |
+| `Confirmation` | Feature | approve-before-action gate; wraps `AlertDialog` (Confirmation) |
+| `Attachments` | Feature | file / media upload in the prompt composer (Attachments) |
+| `MessageActions` | Feature | per-message action bar — copy / retry / edit (Actions) |
+| `MessageBranch` | Feature | message version switcher (Branch) |
+
+**Tier 2 — agent session UX (stretch)**
+
+| Component | Type | Fills (shadcn name) |
+|---|---|---|
+| `Checkpoint` | Feature | save / restore conversation state (Checkpoint) |
+| `RequestQueue` | Feature | pending tasks / requests list (Queue) |
+| `OpenInChat` | Feature | launch content into a conversation (Open In Chat) |
+| `AIImage` | Feature | AI-generated image with loading / error states (Image) |
+
+**Deferred — narrow ROI, revisit after `0.4.0`**
+
+- IDE code surfaces (9): Commit, EnvironmentVariables, FileTree, PackageInfo, SchemaDisplay, Snippet, StackTrace, Terminal, TestResults
+- Voice (6): AudioPlayer, MicSelector, Persona, SpeechInput, Transcription, VoiceSelector
+- Workflow canvas (5): Canvas, Connection, Controls, Node, Panel — verify against existing `@xyflow`-based components (`EdgeLabel`, `FloatingToolbar`, the canvas/spatial family) before filing
+
+Issues to be filed (repo enforces issue-linked PRs). Tier 1 = 7 components; Tier 2 = 4 (stretch). Minor bump per versioning policy (new components).
 
 ---
 
