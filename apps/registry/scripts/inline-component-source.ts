@@ -128,7 +128,7 @@ type Registry = {
 // .github/workflows/publish.yml). Deriving the range from the canary version
 // would point installs at an unpublished version. Bump this only when a release
 // is published (see the release checklist in ROADMAP.md).
-const PUBLISHED_VERSION = "0.2.1";
+const PUBLISHED_VERSION = "0.3.0";
 const PACKAGE_VERSION_RANGE = `^${PUBLISHED_VERSION}`;
 const PACKAGE_DEP = `${PACKAGE_NAME}@${PACKAGE_VERSION_RANGE}`;
 
@@ -220,6 +220,16 @@ for (const item of registry.items) {
 
   const sourcePath = join(componentsRoot, item.name, `${item.name}.tsx`);
   if (!existsSync(sourcePath)) {
+    // No canonical `<name>/<name>.tsx` to inline (e.g. bar/line/area-chart are
+    // exported from a shared chart module with a hand-maintained shim). Still
+    // stamp the published-version range + version so the registry-integrity
+    // invariant — one uniform @vllnt/ui range across every item — survives a
+    // version bump; otherwise these frozen items drift behind the rest.
+    const skippedOtherDeps = (item.dependencies ?? []).filter(
+      (dep) => !dep.startsWith(`${PACKAGE_NAME}@`) && dep !== PACKAGE_NAME,
+    );
+    item.dependencies = [PACKAGE_DEP, ...skippedOtherDeps];
+    item.version = PUBLISHED_VERSION;
     skipped += 1;
     continue;
   }
