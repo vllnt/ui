@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
+import { ComponentCard } from "@/components/component-card";
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
 import {
@@ -11,7 +12,12 @@ import {
   getAiComponentSlugs,
   resolveAiComponent,
 } from "@/lib/ai-seo";
-import { breadcrumbLd, faqPageLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import {
+  breadcrumbLd,
+  collectionPageLd,
+  faqPageLd,
+  jsonLdScriptAttributes,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -73,35 +79,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function ComponentCard({ locale, slug }: { locale: Locale; slug: string }) {
-  const resolved = resolveAiComponent(slug);
-  if (!resolved) {
-    return null;
-  }
-  return (
-    <li>
-      <Link
-        className="group flex h-full flex-col rounded-lg border border-border p-5 hover:border-foreground/40"
-        href={localizePathname(`/components/${resolved.name}`, locale)}
-      >
-        <p className="font-medium">{resolved.title}</p>
-        <p className="mt-2 flex-1 text-sm text-muted-foreground">
-          {resolved.description}
-        </p>
-        <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-foreground">
-          View component
-          <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
-        </span>
-      </Link>
-    </li>
-  );
-}
-
 export default async function AiHubPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const componentCount = getAiComponentSlugs().length;
+  const aiComponents = getAiComponentSlugs().flatMap((slug) => {
+    const resolved = resolveAiComponent(slug);
+    return resolved ? [resolved] : [];
+  });
+  const componentCount = aiComponents.length;
 
   return (
     <>
@@ -111,6 +97,15 @@ export default async function AiHubPage({ params }: Props) {
             { name: "Home", url: SITE_URL },
             { name: "AI components", url: `${SITE_URL}${PATHNAME}` },
           ]),
+          collectionPageLd({
+            description: DESCRIPTION,
+            items: aiComponents.map((component) => ({
+              name: component.title,
+              url: `${SITE_URL}/components/${component.name}`,
+            })),
+            title: TITLE,
+            url: `${SITE_URL}${PATHNAME}`,
+          }),
           faqPageLd(FAQ),
         ])}
       />
@@ -167,11 +162,23 @@ export default async function AiHubPage({ params }: Props) {
                   <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
                     {group.blurb}
                   </p>
-                  <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {group.slugs.map((slug) => (
-                      <ComponentCard key={slug} locale={locale} slug={slug} />
-                    ))}
-                  </ul>
+                  <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {group.slugs.map((slug) => {
+                      const resolved = resolveAiComponent(slug);
+                      if (!resolved) {
+                        return null;
+                      }
+                      return (
+                        <ComponentCard
+                          description={resolved.description}
+                          key={slug}
+                          locale={locale}
+                          slug={resolved.name}
+                          title={resolved.title}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               ))}
             </div>

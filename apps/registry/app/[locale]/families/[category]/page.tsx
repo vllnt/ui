@@ -1,12 +1,10 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
-import { ComponentThumbnail } from "@/components/component-thumbnail";
+import { ComponentCard } from "@/components/component-card";
 import { type Locale, routing } from "@/i18n/routing";
-import componentMetadata from "@/lib/component-metadata.json";
 import {
   breadcrumbLd,
   collectionPageLd,
@@ -24,15 +22,6 @@ import type { ComponentCategory } from "@/types/registry";
 type Props = {
   readonly params: Promise<{ category: string; locale: Locale }>;
 };
-
-const metadata_map = componentMetadata as Record<
-  string,
-  {
-    description: string;
-    stories: { id: string; name: string }[];
-    title: string;
-  }
->;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
 
@@ -149,38 +138,13 @@ export default async function FamilyPage({ params }: Props) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {group.items.map((component) => {
-              const meta = metadata_map[component.name];
-              const storyCount = meta?.stories?.length ?? 0;
-
-              return (
-                <Link
-                  className="group flex flex-col rounded-lg border bg-card hover:border-foreground/20 transition-colors overflow-hidden"
-                  href={localizePathname(
-                    `/components/${component.name}`,
-                    locale,
-                  )}
-                  key={component.name}
-                >
-                  <ComponentThumbnail componentName={component.name} />
-                  <div className="flex flex-1 flex-col p-4">
-                    <h2 className="text-sm font-medium group-hover:text-foreground transition-colors">
-                      {component.title}
-                    </h2>
-                    {meta?.description ? (
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                        {meta.description}
-                      </p>
-                    ) : null}
-                    {storyCount > 0 ? (
-                      <span className="mt-3 text-xs text-muted-foreground">
-                        {`${storyCount} ${storyCount === 1 ? "story" : "stories"}`}
-                      </span>
-                    ) : null}
-                  </div>
-                </Link>
-              );
-            })}
+            {group.items.map((component) => (
+              <ComponentCard
+                key={component.name}
+                locale={locale}
+                slug={component.name}
+              />
+            ))}
           </div>
         </div>
       </main>
