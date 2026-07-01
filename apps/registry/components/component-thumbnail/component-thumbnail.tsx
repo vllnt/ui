@@ -22,6 +22,64 @@ type ComponentThumbnailProps = {
  *
  * @param componentName - Registry slug used to resolve the matching preview.
  */
+/**
+ * Scales its child down (never up) so the whole preview fits the card without
+ * clipping or overflow. Measures the natural content size with a ResizeObserver
+ * and applies a centered `transform: scale` — `contain` behaviour for a live
+ * component. Large components render small but complete; the detail page shows
+ * them full size.
+ */
+function FitPreview({ children }: { children: React.ReactNode }) {
+  const boxRef = React.useRef<HTMLDivElement>(null);
+  const stageRef = React.useRef<HTMLDivElement>(null);
+  const [scale, setScale] = React.useState(1);
+
+  React.useEffect(() => {
+    const box = boxRef.current;
+    const stage = stageRef.current;
+    if (!box || !stage) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      const availableWidth = box.clientWidth - 32;
+      const availableHeight = box.clientHeight - 32;
+      const contentWidth = stage.scrollWidth;
+      const contentHeight = stage.scrollHeight;
+      if (contentWidth === 0 || contentHeight === 0) {
+        return;
+      }
+      const next = Math.min(
+        availableWidth / contentWidth,
+        availableHeight / contentHeight,
+        1,
+      );
+      setScale(next > 0 ? next : 1);
+    });
+
+    observer.observe(box);
+    observer.observe(stage);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <div
+      className="flex h-full w-full items-center justify-center overflow-hidden"
+      ref={boxRef}
+    >
+      <div
+        className="shrink-0"
+        ref={stageRef}
+        style={{ transform: `scale(${scale})` }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function ComponentThumbnail({
   componentName,
 }: ComponentThumbnailProps): React.ReactElement {
@@ -53,11 +111,15 @@ export function ComponentThumbnail({
 
   return (
     <div
-      className="pointer-events-none flex h-44 items-center justify-center overflow-hidden border-b bg-muted/30 p-4 [contain:layout]"
+      className="pointer-events-none h-44 overflow-hidden border-b bg-muted/30 [contain:layout]"
       inert
       ref={containerRef}
     >
-      {isVisible ? <ComponentPreview componentName={componentName} /> : null}
+      {isVisible ? (
+        <FitPreview>
+          <ComponentPreview componentName={componentName} />
+        </FitPreview>
+      ) : null}
     </div>
   );
 }
