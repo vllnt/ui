@@ -2,9 +2,10 @@ import type { ComponentCategory } from "@/types/registry";
 
 /**
  * SEO sub-groups for each component family landing page. Each group lists the
- * slugs it holds, and the build checks these lists against the registry so every
- * family member appears once and no slug repeats. Families without an entry fall
- * back to a single flat grid.
+ * slugs it holds; `family-groups.test.ts` asserts these slugs stay a complete,
+ * non-overlapping cover of each family's registry members, so the hero count and
+ * the rendered grid never diverge. Families without an entry fall back to a
+ * single flat grid.
  */
 export type FamilyGroup = {
   readonly blurb: string;

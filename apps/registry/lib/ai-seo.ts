@@ -7,9 +7,11 @@ import { registry } from "@/lib/registry";
  * 1. The component page (`/components/[slug]`) — overrides the document title +
  *    meta description for AI components and renders a "When to use in an AI app"
  *    block, so both Google and answer engines understand the use-case.
- * 2. The AI category hub (`/ai`) — groups the AI component family by
- *    job-to-be-done and links to every member, concentrating internal-link
- *    equity on the wedge.
+ * 2. The sitemap (`app/sitemap.ts`) — `getAiComponentSlugs()` (derived from
+ *    `AI_COMPONENT_GROUPS`) marks the AI wedge for higher crawl priority. That
+ *    curated set is a marketing grouping, separate from the registry `ai` family
+ *    in `family-groups.ts` (which drives the `/families/ai` landing); it also
+ *    lists components from other families.
  *
  * Keep SEO copy here, not in the generated `component-metadata.json` (that file
  * is rebuilt by `registry:build` and would overwrite hand-written copy).
@@ -143,8 +145,10 @@ export type AiComponentGroup = {
 };
 
 /**
- * The AI component family grouped by job-to-be-done. Drives the `/ai` hub and
- * the internal-linking structure that concentrates equity on AI components.
+ * The AI component family grouped by job-to-be-done — a curated marketing set
+ * that feeds `getAiComponentSlugs()` and the sitemap's AI-wedge crawl priority.
+ * Separate from the registry `ai` family in `family-groups.ts`; it also lists
+ * components from other families.
  */
 export const AI_COMPONENT_GROUPS: readonly AiComponentGroup[] = [
   {

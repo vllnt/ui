@@ -26,8 +26,8 @@ type ComponentCardProps = {
 
 /**
  * Shared gallery card: a live component preview above its title, description, and
- * story count, linking to the component page. Used by the components index, the
- * per-family landing pages, and the AI hub so every surface looks identical.
+ * story count, linking to the component page. Used by the components index and
+ * the per-family landing pages so every surface looks identical.
  *
  * @param slug - registry component slug
  * @param locale - active locale for the link
