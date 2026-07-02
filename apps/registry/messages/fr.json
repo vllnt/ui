@@ -537,6 +537,23 @@
       "description": "Ajoutez ceci a votre README ou pied de page. Le lien renvoie vers VLLNT UI, donc chaque projet qui l'affiche aide les autres a decouvrir la bibliotheque.",
       "title": "Vous avez construit quelque chose ? Ajoutez le badge"
     },
+    "quickAdd": {
+      "addToV0": "Ajouter a v0.dev",
+      "copied": "Copie !",
+      "copyInstall": "Copier la commande d'installation"
+    },
+    "shareEmbed": {
+      "copied": "Copie !",
+      "copyEmbedCode": "Copier le code d'integration",
+      "copyLink": "Copier le lien",
+      "embed": "Integrer",
+      "embedDescription": "Collez ceci dans un blog ou une page de docs pour integrer un apercu en direct avec un lien vers VLLNT UI.",
+      "embedTitle": "Integrer {title}",
+      "linkCopied": "Lien copie !",
+      "share": "Partager",
+      "shareDescription": "Partager le composant {title}",
+      "shareTitle": "Partager {title}"
+    },
     "storybookEmbed": {
       "dark": "Sombre",
       "darkLabel": "Apercu sombre",

@@ -537,6 +537,23 @@
       "description": "Drop this into your README or site footer. The link points back to VLLNT UI, so every project that ships it helps others discover the library.",
       "title": "Built something? Add the badge"
     },
+    "quickAdd": {
+      "addToV0": "Add to v0.dev",
+      "copied": "Copied!",
+      "copyInstall": "Copy install command"
+    },
+    "shareEmbed": {
+      "copied": "Copied!",
+      "copyEmbedCode": "Copy embed code",
+      "copyLink": "Copy link",
+      "embed": "Embed",
+      "embedDescription": "Paste this into any blog or docs page to embed a live preview with a link back to VLLNT UI.",
+      "embedTitle": "Embed {title}",
+      "linkCopied": "Link copied!",
+      "share": "Share",
+      "shareDescription": "Share the {title} component",
+      "shareTitle": "Share {title}"
+    },
     "storybookEmbed": {
       "dark": "Dark",
       "darkLabel": "Dark preview",

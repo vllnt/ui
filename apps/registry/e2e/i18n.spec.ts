@@ -11,6 +11,7 @@ import { expect, type Page, test } from "@playwright/test";
 const ROUTES = [
   "/",
   "/components",
+  "/components/button",
   "/families",
   "/families/ai",
   "/docs",
