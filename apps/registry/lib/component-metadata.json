@@ -14,20 +14,20 @@
   },
   "activity-heatmap": {
     "category": "data",
-    "defaultStoryId": "deploymentactivity--default",
+    "defaultStoryId": "data-activityheatmap--default",
     "description": "Contribution-style grid for visualizing operational activity over time.",
     "name": "activity-heatmap",
     "stories": [
       {
-        "id": "deploymentactivity--default",
+        "id": "data-activityheatmap--default",
         "name": "Default"
       },
       {
-        "id": "deploymentactivity--two-weeks",
+        "id": "data-activityheatmap--two-weeks",
         "name": "Two Weeks"
       },
       {
-        "id": "deploymentactivity--heading-override",
+        "id": "data-activityheatmap--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -35,16 +35,16 @@
   },
   "activity-log": {
     "category": "data",
-    "defaultStoryId": "activitylog--default",
+    "defaultStoryId": "analytics-activitylog--default",
     "description": "Paginated activity feed for audit history and analytics changes.",
     "name": "activity-log",
     "stories": [
       {
-        "id": "activitylog--default",
+        "id": "analytics-activitylog--default",
         "name": "Default"
       },
       {
-        "id": "activitylog--empty",
+        "id": "analytics-activitylog--empty",
         "name": "Empty"
       }
     ],
@@ -77,24 +77,24 @@
   },
   "ai-artifact": {
     "category": "ai",
-    "defaultStoryId": "generatedcomponent--default",
+    "defaultStoryId": "ai-aiartifact--default",
     "description": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips.",
     "name": "ai-artifact",
     "stories": [
       {
-        "id": "generatedcomponent--default",
+        "id": "ai-aiartifact--default",
         "name": "Default"
       },
       {
-        "id": "generatedcomponent--read-only",
+        "id": "ai-aiartifact--read-only",
         "name": "Read Only"
       },
       {
-        "id": "generatedcomponent--document",
+        "id": "ai-aiartifact--document",
         "name": "Document"
       },
       {
-        "id": "generatedcomponent--minimal",
+        "id": "ai-aiartifact--minimal",
         "name": "Minimal"
       }
     ],
@@ -161,12 +161,12 @@
   },
   "ai-source-citation": {
     "category": "learning",
-    "defaultStoryId": "designingreadableaiconversations--default",
+    "defaultStoryId": "ai-sourcecitation--default",
     "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
     "name": "ai-source-citation",
     "stories": [
       {
-        "id": "designingreadableaiconversations--default",
+        "id": "ai-sourcecitation--default",
         "name": "Default"
       }
     ],
@@ -336,16 +336,16 @@
   },
   "animated-testimonials": {
     "category": "content",
-    "defaultStoryId": "engineer--default",
+    "defaultStoryId": "effects-animatedtestimonials--default",
     "description": "Testimonial carousel with animated transitions between quotes.",
     "name": "animated-testimonials",
     "stories": [
       {
-        "id": "engineer--default",
+        "id": "effects-animatedtestimonials--default",
         "name": "Default"
       },
       {
-        "id": "engineer--autoplay",
+        "id": "effects-animatedtestimonials--autoplay",
         "name": "Autoplay"
       }
     ],
@@ -603,12 +603,12 @@
   },
   "blog-card": {
     "category": "content",
-    "defaultStoryId": "exampleblogpost--default",
+    "defaultStoryId": "content-blogcard--default",
     "description": "Card layout for displaying blog post previews.",
     "name": "blog-card",
     "stories": [
       {
-        "id": "exampleblogpost--default",
+        "id": "content-blogcard--default",
         "name": "Default"
       }
     ],
@@ -1002,24 +1002,24 @@
   },
   "chronological-timeline": {
     "category": "data-display",
-    "defaultStoryId": "thespacerace--default",
+    "defaultStoryId": "educational-chronologicaltimeline--default",
     "description": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip.",
     "name": "chronological-timeline",
     "stories": [
       {
-        "id": "thespacerace--default",
+        "id": "educational-chronologicaltimeline--default",
         "name": "Default"
       },
       {
-        "id": "thespacerace--with-image-media",
+        "id": "educational-chronologicaltimeline--with-image-media",
         "name": "With Image Media"
       },
       {
-        "id": "thespacerace--compact",
+        "id": "educational-chronologicaltimeline--compact",
         "name": "Compact"
       },
       {
-        "id": "thespacerace--untitled",
+        "id": "educational-chronologicaltimeline--untitled",
         "name": "Untitled"
       }
     ],
@@ -1171,16 +1171,16 @@
   },
   "comparison": {
     "category": "data",
-    "defaultStoryId": "exampletitle--default",
+    "defaultStoryId": "data-comparison--default",
     "description": "Side-by-side comparison layout for content or features.",
     "name": "comparison",
     "stories": [
       {
-        "id": "exampletitle--default",
+        "id": "data-comparison--default",
         "name": "Default"
       },
       {
-        "id": "exampletitle--heading-override",
+        "id": "data-comparison--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -1188,16 +1188,16 @@
   },
   "completion-dialog": {
     "category": "learning",
-    "defaultStoryId": "congratulations--default",
+    "defaultStoryId": "learning-completiondialog--default",
     "description": "Dialog displayed upon completing a task or workflow.",
     "name": "completion-dialog",
     "stories": [
       {
-        "id": "congratulations--default",
+        "id": "learning-completiondialog--default",
         "name": "Default"
       },
       {
-        "id": "congratulations--heading-override",
+        "id": "learning-completiondialog--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -1218,16 +1218,16 @@
   },
   "content-intro": {
     "category": "content",
-    "defaultStoryId": "introduction--default",
+    "defaultStoryId": "content-contentintro--default",
     "description": "Introductory section for content pages with title and description.",
     "name": "content-intro",
     "stories": [
       {
-        "id": "introduction--default",
+        "id": "content-contentintro--default",
         "name": "Default"
       },
       {
-        "id": "introduction--heading-override",
+        "id": "content-contentintro--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -1349,16 +1349,16 @@
   },
   "countdown-timer": {
     "category": "data",
-    "defaultStoryId": "slatimer--default",
+    "defaultStoryId": "data-countdowntimer--default",
     "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
     "name": "countdown-timer",
     "stories": [
       {
-        "id": "slatimer--default",
+        "id": "data-countdowntimer--default",
         "name": "Default"
       },
       {
-        "id": "slatimer--breached",
+        "id": "data-countdowntimer--breached",
         "name": "Breached"
       }
     ],
@@ -1366,16 +1366,16 @@
   },
   "credit-badge": {
     "category": "content",
-    "defaultStoryId": "accountbilling-creditbadge--default",
+    "defaultStoryId": "account-billing-creditbadge--default",
     "description": "Balance status pill for credits, wallet states, and billing health.",
     "name": "credit-badge",
     "stories": [
       {
-        "id": "accountbilling-creditbadge--default",
+        "id": "account-billing-creditbadge--default",
         "name": "Default"
       },
       {
-        "id": "accountbilling-creditbadge--states",
+        "id": "account-billing-creditbadge--states",
         "name": "States"
       }
     ],
@@ -1383,16 +1383,16 @@
   },
   "curriculum": {
     "category": "learning",
-    "defaultStoryId": "fullstackdevelopment--default",
+    "defaultStoryId": "learning-curriculum--default",
     "description": "Course-layout container for a sequence of lessons or modules with title, progress, optional intro, and a stack of lesson rows.",
     "name": "curriculum",
     "stories": [
       {
-        "id": "fullstackdevelopment--default",
+        "id": "learning-curriculum--default",
         "name": "Default"
       },
       {
-        "id": "fullstackdevelopment--expanded",
+        "id": "learning-curriculum--expanded",
         "name": "Expanded"
       }
     ],
@@ -1524,32 +1524,32 @@
   },
   "document-sibling-nav": {
     "category": "content",
-    "defaultStoryId": "whythinclientsareback--default",
+    "defaultStoryId": "content-documentsiblingnav--default",
     "description": "Newer/older navigator: links to the previous and next item in an ordered series.",
     "name": "document-sibling-nav",
     "stories": [
       {
-        "id": "whythinclientsareback--default",
+        "id": "content-documentsiblingnav--default",
         "name": "Default"
       },
       {
-        "id": "whythinclientsareback--only-previous",
+        "id": "content-documentsiblingnav--only-previous",
         "name": "Only Previous"
       },
       {
-        "id": "whythinclientsareback--only-next",
+        "id": "content-documentsiblingnav--only-next",
         "name": "Only Next"
       },
       {
-        "id": "whythinclientsareback--compact",
+        "id": "content-documentsiblingnav--compact",
         "name": "Compact"
       },
       {
-        "id": "whythinclientsareback--with-meta",
+        "id": "content-documentsiblingnav--with-meta",
         "name": "With Meta"
       },
       {
-        "id": "whythinclientsareback--localized",
+        "id": "content-documentsiblingnav--localized",
         "name": "Localized"
       }
     ],
@@ -1613,24 +1613,24 @@
   },
   "empty-state": {
     "category": "core",
-    "defaultStoryId": "noresultsfound--default",
+    "defaultStoryId": "core-emptystate--default",
     "description": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes.",
     "name": "empty-state",
     "stories": [
       {
-        "id": "noresultsfound--default",
+        "id": "core-emptystate--default",
         "name": "Default"
       },
       {
-        "id": "noresultsfound--size-sm",
+        "id": "core-emptystate--size-sm",
         "name": "Size Sm"
       },
       {
-        "id": "noresultsfound--size-lg",
+        "id": "core-emptystate--size-lg",
         "name": "Size Lg"
       },
       {
-        "id": "noresultsfound--with-action",
+        "id": "core-emptystate--with-action",
         "name": "With Action"
       }
     ],
@@ -1659,16 +1659,16 @@
   },
   "exercise": {
     "category": "learning",
-    "defaultStoryId": "reverseastring--default",
+    "defaultStoryId": "learning-exercise--default",
     "description": "Interactive exercise block for learning content.",
     "name": "exercise",
     "stories": [
       {
-        "id": "reverseastring--default",
+        "id": "learning-exercise--default",
         "name": "Default"
       },
       {
-        "id": "reverseastring--heading-override",
+        "id": "learning-exercise--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -1676,12 +1676,12 @@
   },
   "expandable-cards": {
     "category": "content",
-    "defaultStoryId": "gettingstarted--default",
+    "defaultStoryId": "effects-expandablecards--default",
     "description": "Cards that expand on click to reveal additional content.",
     "name": "expandable-cards",
     "stories": [
       {
-        "id": "gettingstarted--default",
+        "id": "effects-expandablecards--default",
         "name": "Default"
       }
     ],
@@ -1770,12 +1770,12 @@
   },
   "flashcard": {
     "category": "learning",
-    "defaultStoryId": "partsofspeech--default",
+    "defaultStoryId": "learning-flashcard--default",
     "description": "Study card for active recall with prompt and answer states.",
     "name": "flashcard",
     "stories": [
       {
-        "id": "partsofspeech--default",
+        "id": "learning-flashcard--default",
         "name": "Default"
       }
     ],
@@ -1881,24 +1881,24 @@
   },
   "gantt-chart": {
     "category": "data",
-    "defaultStoryId": "designsystem--default",
+    "defaultStoryId": "data-ganttchart--default",
     "description": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales.",
     "name": "gantt-chart",
     "stories": [
       {
-        "id": "designsystem--default",
+        "id": "data-ganttchart--default",
         "name": "Default"
       },
       {
-        "id": "designsystem--quarter-scale",
+        "id": "data-ganttchart--quarter-scale",
         "name": "Quarter Scale"
       },
       {
-        "id": "designsystem--single-group",
+        "id": "data-ganttchart--single-group",
         "name": "Single Group"
       },
       {
-        "id": "designsystem--no-milestones",
+        "id": "data-ganttchart--no-milestones",
         "name": "No Milestones"
       }
     ],
@@ -2121,24 +2121,24 @@
   },
   "historic-timeline": {
     "category": "data-display",
-    "defaultStoryId": "firstolympics--default",
+    "defaultStoryId": "educational-historictimeline--default",
     "description": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers.",
     "name": "historic-timeline",
     "stories": [
       {
-        "id": "firstolympics--default",
+        "id": "educational-historictimeline--default",
         "name": "Default"
       },
       {
-        "id": "firstolympics--tight-window",
+        "id": "educational-historictimeline--tight-window",
         "name": "Tight Window"
       },
       {
-        "id": "firstolympics--no-categories",
+        "id": "educational-historictimeline--no-categories",
         "name": "No Categories"
       },
       {
-        "id": "firstolympics--periods-only",
+        "id": "educational-historictimeline--periods-only",
         "name": "Periods Only"
       }
     ],
@@ -2146,28 +2146,28 @@
   },
   "historical-figure-card": {
     "category": "educational",
-    "defaultStoryId": "polymath--default",
+    "defaultStoryId": "educational-historicalfigurecard--default",
     "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
     "name": "historical-figure-card",
     "stories": [
       {
-        "id": "polymath--default",
+        "id": "educational-historicalfigurecard--default",
         "name": "Default"
       },
       {
-        "id": "polymath--with-connections",
+        "id": "educational-historicalfigurecard--with-connections",
         "name": "With Connections"
       },
       {
-        "id": "polymath--with-biography",
+        "id": "educational-historicalfigurecard--with-biography",
         "name": "With Biography"
       },
       {
-        "id": "polymath--antiquity",
+        "id": "educational-historicalfigurecard--antiquity",
         "name": "Antiquity"
       },
       {
-        "id": "polymath--minimal",
+        "id": "educational-historicalfigurecard--minimal",
         "name": "Minimal"
       }
     ],
@@ -2290,24 +2290,24 @@
   },
   "interactive-timeline": {
     "category": "data-display",
-    "defaultStoryId": "v10--default",
+    "defaultStoryId": "timeline-interactivetimeline--default",
     "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
     "name": "interactive-timeline",
     "stories": [
       {
-        "id": "v10--default",
+        "id": "timeline-interactivetimeline--default",
         "name": "Default"
       },
       {
-        "id": "v10--no-toolbar",
+        "id": "timeline-interactivetimeline--no-toolbar",
         "name": "No Toolbar"
       },
       {
-        "id": "v10--single-track",
+        "id": "timeline-interactivetimeline--single-track",
         "name": "Single Track"
       },
       {
-        "id": "v10--tight-window",
+        "id": "timeline-interactivetimeline--tight-window",
         "name": "Tight Window"
       }
     ],
@@ -2424,20 +2424,20 @@
   },
   "knowledge-check": {
     "category": "educational",
-    "defaultStoryId": "checkyourunderstanding--default",
+    "defaultStoryId": "educational-knowledgecheck--default",
     "description": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary.",
     "name": "knowledge-check",
     "stories": [
       {
-        "id": "checkyourunderstanding--default",
+        "id": "educational-knowledgecheck--default",
         "name": "Default"
       },
       {
-        "id": "checkyourunderstanding--single-question",
+        "id": "educational-knowledgecheck--single-question",
         "name": "Single Question"
       },
       {
-        "id": "checkyourunderstanding--multiple-choice-only",
+        "id": "educational-knowledgecheck--multiple-choice-only",
         "name": "Multiple Choice Only"
       }
     ],
@@ -2589,16 +2589,16 @@
   },
   "live-feed": {
     "category": "data",
-    "defaultStoryId": "latencybreachongateway--default",
+    "defaultStoryId": "data-livefeed--default",
     "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
     "name": "live-feed",
     "stories": [
       {
-        "id": "latencybreachongateway--default",
+        "id": "data-livefeed--default",
         "name": "Default"
       },
       {
-        "id": "latencybreachongateway--empty",
+        "id": "data-livefeed--empty",
         "name": "Empty"
       }
     ],
@@ -2796,24 +2796,24 @@
   },
   "metric-cluster": {
     "category": "data",
-    "defaultStoryId": "research2025--default",
+    "defaultStoryId": "canvas-metriccluster--default",
     "description": "Compact stack of related metrics pinned to a canvas object's corner.",
     "name": "metric-cluster",
     "stories": [
       {
-        "id": "research2025--default",
+        "id": "canvas-metriccluster--default",
         "name": "Default"
       },
       {
-        "id": "research2025--untitled",
+        "id": "canvas-metriccluster--untitled",
         "name": "Untitled"
       },
       {
-        "id": "research2025--bottom-left",
+        "id": "canvas-metriccluster--bottom-left",
         "name": "Bottom Left"
       },
       {
-        "id": "research2025--healthy",
+        "id": "canvas-metriccluster--healthy",
         "name": "Healthy"
       }
     ],
@@ -2952,12 +2952,12 @@
   },
   "navbar-saas": {
     "category": "navigation",
-    "defaultStoryId": "home--default",
+    "defaultStoryId": "navigation-navbarsaas--default",
     "description": "SaaS-style navigation bar with branding and links.",
     "name": "navbar-saas",
     "stories": [
       {
-        "id": "home--default",
+        "id": "navigation-navbarsaas--default",
         "name": "Default"
       }
     ],
@@ -3063,24 +3063,24 @@
   },
   "object-inspector": {
     "category": "content",
-    "defaultStoryId": "claude37128kctx--default",
+    "defaultStoryId": "canvas-objectinspector--default",
     "description": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots.",
     "name": "object-inspector",
     "stories": [
       {
-        "id": "claude37128kctx--default",
+        "id": "canvas-objectinspector--default",
         "name": "Default"
       },
       {
-        "id": "claude37128kctx--empty",
+        "id": "canvas-objectinspector--empty",
         "name": "Empty"
       },
       {
-        "id": "claude37128kctx--with-body",
+        "id": "canvas-objectinspector--with-body",
         "name": "With Body"
       },
       {
-        "id": "claude37128kctx--failed",
+        "id": "canvas-objectinspector--failed",
         "name": "Failed"
       }
     ],
@@ -3109,12 +3109,12 @@
   },
   "overview-board": {
     "category": "data",
-    "defaultStoryId": "acompactsummaryboardforthefloatingcanvasshellrightrailoroverviewroute--default",
+    "defaultStoryId": "layout-overviewboard--default",
     "description": "Grid of overview cards for at-a-glance dashboards — a row of headline metrics with consistent spacing and tone.",
     "name": "overview-board",
     "stories": [
       {
-        "id": "acompactsummaryboardforthefloatingcanvasshellrightrailoroverviewroute--default",
+        "id": "layout-overviewboard--default",
         "name": "Default"
       }
     ],
@@ -3152,24 +3152,24 @@
   },
   "parallel-timeline": {
     "category": "educational",
-    "defaultStoryId": "augustusbecomesemperor--default",
+    "defaultStoryId": "educational-paralleltimeline--default",
     "description": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history.",
     "name": "parallel-timeline",
     "stories": [
       {
-        "id": "augustusbecomesemperor--default",
+        "id": "educational-paralleltimeline--default",
         "name": "Default"
       },
       {
-        "id": "augustusbecomesemperor--with-era",
+        "id": "educational-paralleltimeline--with-era",
         "name": "With Era"
       },
       {
-        "id": "augustusbecomesemperor--two-tracks",
+        "id": "educational-paralleltimeline--two-tracks",
         "name": "Two Tracks"
       },
       {
-        "id": "augustusbecomesemperor--tight-window",
+        "id": "educational-paralleltimeline--tight-window",
         "name": "Tight Window"
       }
     ],
@@ -3245,20 +3245,20 @@
   },
   "plan-badge": {
     "category": "content",
-    "defaultStoryId": "accountbilling-planbadge--default",
+    "defaultStoryId": "account-billing-planbadge--default",
     "description": "Subscription tier indicator for pricing, billing, and account summaries.",
     "name": "plan-badge",
     "stories": [
       {
-        "id": "accountbilling-planbadge--default",
+        "id": "account-billing-planbadge--default",
         "name": "Default"
       },
       {
-        "id": "accountbilling-planbadge--all-tiers",
+        "id": "account-billing-planbadge--all-tiers",
         "name": "All Tiers"
       },
       {
-        "id": "accountbilling-planbadge--trial",
+        "id": "account-billing-planbadge--trial",
         "name": "Trial"
       }
     ],
@@ -3400,20 +3400,20 @@
   },
   "primary-source-viewer": {
     "category": "data-display",
-    "defaultStoryId": "magnacarta1215--default",
+    "defaultStoryId": "educational-primarysourceviewer--default",
     "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
     "name": "primary-source-viewer",
     "stories": [
       {
-        "id": "magnacarta1215--default",
+        "id": "educational-primarysourceviewer--default",
         "name": "Default"
       },
       {
-        "id": "magnacarta1215--minimal",
+        "id": "educational-primarysourceviewer--minimal",
         "name": "Minimal"
       },
       {
-        "id": "magnacarta1215--no-transcription",
+        "id": "educational-primarysourceviewer--no-transcription",
         "name": "No Transcription"
       }
     ],
@@ -3477,16 +3477,16 @@
   },
   "progress-tracker": {
     "category": "learning",
-    "defaultStoryId": "javascriptbasics--default",
+    "defaultStoryId": "learning-progresstracker--default",
     "description": "Curriculum-level learning dashboard for modules, lessons, exercises, streaks, and earned skills.",
     "name": "progress-tracker",
     "stories": [
       {
-        "id": "javascriptbasics--default",
+        "id": "learning-progresstracker--default",
         "name": "Default"
       },
       {
-        "id": "javascriptbasics--compact-dashboard",
+        "id": "learning-progresstracker--compact-dashboard",
         "name": "Compact Dashboard"
       }
     ],
@@ -3536,24 +3536,24 @@
   },
   "prompt-templates": {
     "category": "ai",
-    "defaultStoryId": "codereview--default",
+    "defaultStoryId": "ai-prompttemplates--default",
     "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
     "name": "prompt-templates",
     "stories": [
       {
-        "id": "codereview--default",
+        "id": "ai-prompttemplates--default",
         "name": "Default"
       },
       {
-        "id": "codereview--no-categories",
+        "id": "ai-prompttemplates--no-categories",
         "name": "No Categories"
       },
       {
-        "id": "codereview--empty",
+        "id": "ai-prompttemplates--empty",
         "name": "Empty"
       },
       {
-        "id": "codereview--custom-labels",
+        "id": "ai-prompttemplates--custom-labels",
         "name": "Custom Labels"
       }
     ],
@@ -3561,24 +3561,24 @@
   },
   "property-section": {
     "category": "content",
-    "defaultStoryId": "layout--default",
+    "defaultStoryId": "canvas-propertysection--default",
     "description": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse.",
     "name": "property-section",
     "stories": [
       {
-        "id": "layout--default",
+        "id": "canvas-propertysection--default",
         "name": "Default"
       },
       {
-        "id": "layout--with-sublabels",
+        "id": "canvas-propertysection--with-sublabels",
         "name": "With Sublabels"
       },
       {
-        "id": "layout--collapsible",
+        "id": "canvas-propertysection--collapsible",
         "name": "Collapsible"
       },
       {
-        "id": "layout--untitled",
+        "id": "canvas-propertysection--untitled",
         "name": "Untitled"
       }
     ],
@@ -3785,16 +3785,16 @@
   },
   "role-badge": {
     "category": "content",
-    "defaultStoryId": "accountbilling-rolebadge--default",
+    "defaultStoryId": "account-billing-rolebadge--default",
     "description": "Account role indicator for owners, admins, members, and billing contacts.",
     "name": "role-badge",
     "stories": [
       {
-        "id": "accountbilling-rolebadge--default",
+        "id": "account-billing-rolebadge--default",
         "name": "Default"
       },
       {
-        "id": "accountbilling-rolebadge--team-roles",
+        "id": "account-billing-rolebadge--team-roles",
         "name": "Team Roles"
       }
     ],
@@ -4263,12 +4263,12 @@
   },
   "sidebar": {
     "category": "navigation",
-    "defaultStoryId": "introduction--default",
+    "defaultStoryId": "navigation-sidebar--default",
     "description": "Collapsible sidebar navigation layout.",
     "name": "sidebar",
     "stories": [
       {
-        "id": "introduction--default",
+        "id": "navigation-sidebar--default",
         "name": "Default"
       }
     ],
@@ -4328,16 +4328,16 @@
   },
   "slideshow": {
     "category": "content",
-    "defaultStoryId": "introduction--default",
+    "defaultStoryId": "content-slideshow--default",
     "description": "Step-through slideshow for presenting content sequentially.",
     "name": "slideshow",
     "stories": [
       {
-        "id": "introduction--default",
+        "id": "content-slideshow--default",
         "name": "Default"
       },
       {
-        "id": "introduction--heading-override",
+        "id": "content-slideshow--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -4485,20 +4485,20 @@
   },
   "status-board": {
     "category": "data",
-    "defaultStoryId": "servicehealth--default",
+    "defaultStoryId": "data-statusboard--default",
     "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
     "name": "status-board",
     "stories": [
       {
-        "id": "servicehealth--default",
+        "id": "data-statusboard--default",
         "name": "Default"
       },
       {
-        "id": "servicehealth--compact",
+        "id": "data-statusboard--compact",
         "name": "Compact"
       },
       {
-        "id": "servicehealth--heading-override",
+        "id": "data-statusboard--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -4523,12 +4523,12 @@
   },
   "step-by-step": {
     "category": "learning",
-    "defaultStoryId": "gettingstarted--default",
+    "defaultStoryId": "learning-stepbystep--default",
     "description": "Numbered step guide with optional interactive completion tracking.",
     "name": "step-by-step",
     "stories": [
       {
-        "id": "gettingstarted--default",
+        "id": "learning-stepbystep--default",
         "name": "Default"
       }
     ],
@@ -4549,16 +4549,16 @@
   },
   "stepper": {
     "category": "learning",
-    "defaultStoryId": "introduction--default",
+    "defaultStoryId": "learning-stepper--default",
     "description": "Sequenced steps with complete, current, and upcoming states.",
     "name": "stepper",
     "stories": [
       {
-        "id": "introduction--default",
+        "id": "learning-stepper--default",
         "name": "Default"
       },
       {
-        "id": "introduction--vertical",
+        "id": "learning-stepper--vertical",
         "name": "Vertical"
       }
     ],
@@ -4612,16 +4612,16 @@
   },
   "subscription-card": {
     "category": "content",
-    "defaultStoryId": "accountbilling-subscriptioncard--default",
+    "defaultStoryId": "account-billing-subscriptioncard--default",
     "description": "Subscription status and management card for plan, renewal, and usage details.",
     "name": "subscription-card",
     "stories": [
       {
-        "id": "accountbilling-subscriptioncard--default",
+        "id": "account-billing-subscriptioncard--default",
         "name": "Default"
       },
       {
-        "id": "accountbilling-subscriptioncard--trialing",
+        "id": "account-billing-subscriptioncard--trialing",
         "name": "Trialing"
       }
     ],
@@ -4672,16 +4672,16 @@
   },
   "table-of-contents-panel": {
     "category": "utility",
-    "defaultStoryId": "introduction--default",
+    "defaultStoryId": "utility-tableofcontentspanel--default",
     "description": "Side panel rendering a table of contents for page navigation.",
     "name": "table-of-contents-panel",
     "stories": [
       {
-        "id": "introduction--default",
+        "id": "utility-tableofcontentspanel--default",
         "name": "Default"
       },
       {
-        "id": "introduction--heading-override",
+        "id": "utility-tableofcontentspanel--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -4907,24 +4907,24 @@
   },
   "thread-bubble": {
     "category": "utility",
-    "defaultStoryId": "research2025--default",
+    "defaultStoryId": "canvas-threadbubble--default",
     "description": "Expanded discussion bubble for an anchored canvas comment thread.",
     "name": "thread-bubble",
     "stories": [
       {
-        "id": "research2025--default",
+        "id": "canvas-threadbubble--default",
         "name": "Default"
       },
       {
-        "id": "research2025--empty",
+        "id": "canvas-threadbubble--empty",
         "name": "Empty"
       },
       {
-        "id": "research2025--with-footer",
+        "id": "canvas-threadbubble--with-footer",
         "name": "With Footer"
       },
       {
-        "id": "research2025--read-only",
+        "id": "canvas-threadbubble--read-only",
         "name": "Read Only"
       }
     ],
@@ -5186,12 +5186,12 @@
   },
   "tour": {
     "category": "learning",
-    "defaultStoryId": "overview--default",
+    "defaultStoryId": "learning-tour--default",
     "description": "Guided onboarding flow for introducing content or interface patterns.",
     "name": "tour",
     "stories": [
       {
-        "id": "overview--default",
+        "id": "learning-tour--default",
         "name": "Default"
       }
     ],
@@ -5224,24 +5224,24 @@
   },
   "tree-view": {
     "category": "data-display",
-    "defaultStoryId": "datadisplay-treeview--default",
+    "defaultStoryId": "data-display-treeview--default",
     "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
     "name": "tree-view",
     "stories": [
       {
-        "id": "datadisplay-treeview--default",
+        "id": "data-display-treeview--default",
         "name": "Default"
       },
       {
-        "id": "datadisplay-treeview--multi-select",
+        "id": "data-display-treeview--multi-select",
         "name": "Multi Select"
       },
       {
-        "id": "datadisplay-treeview--collapsed",
+        "id": "data-display-treeview--collapsed",
         "name": "Collapsed"
       },
       {
-        "id": "datadisplay-treeview--single-level",
+        "id": "data-display-treeview--single-level",
         "name": "Single Level"
       }
     ],
@@ -5262,12 +5262,12 @@
   },
   "tutorial-card": {
     "category": "learning",
-    "defaultStoryId": "exampletitle--default",
+    "defaultStoryId": "learning-tutorialcard--default",
     "description": "Card for displaying tutorial previews with metadata.",
     "name": "tutorial-card",
     "stories": [
       {
-        "id": "exampletitle--default",
+        "id": "learning-tutorialcard--default",
         "name": "Default"
       }
     ],
@@ -5275,16 +5275,16 @@
   },
   "tutorial-complete": {
     "category": "learning",
-    "defaultStoryId": "nextsteps--default",
+    "defaultStoryId": "learning-tutorialcomplete--default",
     "description": "Completion screen displayed when a tutorial is finished.",
     "name": "tutorial-complete",
     "stories": [
       {
-        "id": "nextsteps--default",
+        "id": "learning-tutorialcomplete--default",
         "name": "Default"
       },
       {
-        "id": "nextsteps--heading-override",
+        "id": "learning-tutorialcomplete--heading-override",
         "name": "Heading Override"
       }
     ],
@@ -5305,12 +5305,12 @@
   },
   "tutorial-intro-content": {
     "category": "learning",
-    "defaultStoryId": "reactfundamentals--default",
+    "defaultStoryId": "learning-tutorialintrocontent--default",
     "description": "Introduction section for tutorial pages with overview and prerequisites.",
     "name": "tutorial-intro-content",
     "stories": [
       {
-        "id": "reactfundamentals--default",
+        "id": "learning-tutorialintrocontent--default",
         "name": "Default"
       }
     ],
@@ -5377,20 +5377,20 @@
   },
   "usage-breakdown": {
     "category": "data",
-    "defaultStoryId": "usagebreakdown--default",
+    "defaultStoryId": "analytics-usagebreakdown--default",
     "description": "Ranked resource consumption list with relative share and trend cues.",
     "name": "usage-breakdown",
     "stories": [
       {
-        "id": "usagebreakdown--default",
+        "id": "analytics-usagebreakdown--default",
         "name": "Default"
       },
       {
-        "id": "usagebreakdown--top-two-only",
+        "id": "analytics-usagebreakdown--top-two-only",
         "name": "Top Two Only"
       },
       {
-        "id": "usagebreakdown--empty",
+        "id": "analytics-usagebreakdown--empty",
         "name": "Empty"
       }
     ],
@@ -5398,12 +5398,12 @@
   },
   "video-embed": {
     "category": "content",
-    "defaultStoryId": "tutorialvideo--default",
+    "defaultStoryId": "content-videoembed--default",
     "description": "Responsive video embed for YouTube and other providers.",
     "name": "video-embed",
     "stories": [
       {
-        "id": "tutorialvideo--default",
+        "id": "content-videoembed--default",
         "name": "Default"
       }
     ],
@@ -5449,16 +5449,16 @@
   },
   "wallet-card": {
     "category": "content",
-    "defaultStoryId": "accountbilling-walletcard--default",
+    "defaultStoryId": "account-billing-walletcard--default",
     "description": "Credit balance display card for available, pending, and refresh details.",
     "name": "wallet-card",
     "stories": [
       {
-        "id": "accountbilling-walletcard--default",
+        "id": "account-billing-walletcard--default",
         "name": "Default"
       },
       {
-        "id": "accountbilling-walletcard--depleted",
+        "id": "account-billing-walletcard--depleted",
         "name": "Depleted"
       }
     ],
@@ -5525,20 +5525,20 @@
   },
   "world-clock-bar": {
     "category": "data",
-    "defaultStoryId": "followthesunhandoff--default",
+    "defaultStoryId": "data-worldclockbar--default",
     "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
     "name": "world-clock-bar",
     "stories": [
       {
-        "id": "followthesunhandoff--default",
+        "id": "data-worldclockbar--default",
         "name": "Default"
       },
       {
-        "id": "followthesunhandoff--time-only",
+        "id": "data-worldclockbar--time-only",
         "name": "Time Only"
       },
       {
-        "id": "followthesunhandoff--heading-override",
+        "id": "data-worldclockbar--heading-override",
         "name": "Heading Override"
       }
     ],

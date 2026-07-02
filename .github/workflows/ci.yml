@@ -3,10 +3,12 @@ name: CI
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
 
 concurrency:
-  group: ci-${{ github.head_ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   quality:
@@ -57,6 +59,9 @@ jobs:
       - name: Build Storybook
         working-directory: packages/ui
         run: pnpm build-storybook
+
+      - name: Verify component previews resolve to real stories
+        run: pnpm -F @vllnt/ui-registry registry:verify-previews
 
   e2e:
     name: E2E (Playwright)
