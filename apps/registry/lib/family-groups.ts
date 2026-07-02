@@ -67,6 +67,12 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         heading: "Content & Display",
         slugs: ["avatar", "typography", "link", "qr-code", "kbd"],
       },
+      {
+        blurb:
+          "Text, heading, display, and prose primitives with token-driven font family, weight, and type scale for consistent typography.",
+        heading: "Typography",
+        slugs: ["text", "heading", "display", "prose"],
+      },
     ],
   },
   {
