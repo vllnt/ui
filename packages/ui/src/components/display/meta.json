@@ -1,0 +1,5 @@
+{
+  "a11y": {
+    "notes": "Non-semantic by default (a div); set `as` to h1 for a hero heading. The optional reveal animation is gated behind prefers-reduced-motion, so it does not play when the user requests reduced motion."
+  }
+}

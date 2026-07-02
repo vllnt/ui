@@ -371,6 +371,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.24(postcss@8.5.10)
+      axe-core:
+        specifier: 4.11.1
+        version: 4.11.1
       eslint:
         specifier: ^9.39.1
         version: 9.39.2(jiti@1.21.7)

@@ -89,6 +89,20 @@ One registry, not two — platform is resolved by the bundler (Metro picks `<c>.
 - [ ] native-parity.11 Validate native-parity.5–10: one `shadcn add @vllnt/<c>` from `ui.vllnt.ai` → identical import renders on Next web + Expo device across all 12 families; parity badges accurate (E2E)
 - [ ] native-parity.12 Validate native-parity.4: an off-token native color fails; `tokens.json` stays the sole source across web CSS + RN theme (E2E)
 
+## typography-primitives [DONE 2026-07]
+
+**Goal:** Foundation typographic primitives (`Text`, `Heading`, `Display`, `Prose`) whose font family, weight, and scale are theme-overridable design tokens — a brand adopts its own type identity by overriding tokens alone, no library fork. Closes #465 (PR #468).
+**Exit criteria:** `Text`/`Heading`/`Display`/`Prose` in the `core` family with story + test + registry entry; `--font-sans` + new `--font-display`, `--font-weight-heading`/`--font-weight-display`, `--font-mono`, and a `--font-size-*` scale wired + documented (DESIGN.md, tokens.json); default house style unchanged (sans, 600) when tokens aren't overridden.
+**Verify:** CT E2E — overriding `--font-display`/`--font-weight-heading` restyles a `Heading` with no code change; `Display` reveal gated behind `prefers-reduced-motion`; WCAG AA contrast (canvas readback) holds in light + dark.
+
+- [x] typography-primitives.1 Token layer: `--font-sans`/`--font-display`/`--font-mono`, weight + `--font-size-*` scale CSS vars (styles.css + themes/default.css); DESIGN.md + tokens.json baseline — #465
+- [x] typography-primitives.2 `Heading` (semantic h1–h6, token family/weight/scale, `size`-decoupled visual scale) — #465
+- [x] typography-primitives.3 `Text` (polymorphic body + `ref`, size/tone/weight variants) — #465
+- [x] typography-primitives.4 `Display` (hero scale + `ref`, reduced-motion-safe reveal) + `Prose` (long-form wrapper) — #465
+- [x] typography-primitives.5 Registry entries + barrel exports (`HeadingProps`) + count/prose surfaces (313) — #465
+- [x] typography-primitives.6 Validate: unit + Playwright CT (token override, reduced-motion, axe + AA contrast) (E2E) — #465
+- [x] typography-primitives.7 Code review (PR #468): ref-forwarding on `Text`/`Display`, `HeadingProps` disambiguation, robust axe resolution + oklch-safe contrast test — #465
+
 ## ai-elements-parity [PLANNED]
 
 **Goal:** Close the gap vs shadcn AI Elements (~48 components); ship the chat/agent-core set we lack.
@@ -517,7 +531,7 @@ Semver discipline starts hard at `1.0.0`. Until then, `0.x.0` may include breaki
 
 ## Tracking
 
-- Open issues: `gh issue list -R vllnt/ui --state open` (2 open: #463 `family-pages` — code-complete on `feat/family-homepage`, pending merge; #465 `typography-primitives` — needs triage, see Later. Repo enforces issue-linked PRs).
+- Open issues: `gh issue list -R vllnt/ui --state open` (#465 typography-primitives closed via PR #468; file issues per phase as work starts — the repo enforces issue-linked PRs).
 - react-doctor score: `pnpm doctor:score`.
 - Channels: `npm view @vllnt/ui dist-tags`.
 

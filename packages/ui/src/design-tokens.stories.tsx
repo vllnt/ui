@@ -98,6 +98,48 @@ function DesignTokensDocs() {
           </div>
         </div>
       </section>
+
+      <section>
+        <h2 className="text-xl font-semibold">Typography</h2>
+        <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+          Font family, weight, and scale are theme-overridable CSS variables — a
+          brand restyles the Text / Heading / Display / Prose primitives by
+          overriding these tokens alone, no library edits.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          {Object.entries(tokens.typography.fontFamily).map(([name, token]) => (
+            <div
+              className="rounded-lg border border-border bg-card p-4"
+              key={name}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="font-medium">{name}</h3>
+                <code className="rounded bg-muted px-2 py-1 text-xs">
+                  {token.cssVariable}
+                </code>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">{token.value}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 overflow-hidden rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <tbody>
+              {Object.entries(tokens.typography.scale).map(([name, step]) => (
+                <tr
+                  className="border-b border-border last:border-b-0"
+                  key={name}
+                >
+                  <th className="bg-muted p-3 text-left font-medium">{name}</th>
+                  <td className="p-3 font-mono text-xs">{step.cssVariable}</td>
+                  <td className="p-3 font-mono text-xs">{step.fontSize}</td>
+                  <td className="p-3 font-mono text-xs">{step.lineHeight}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }

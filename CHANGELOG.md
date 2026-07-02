@@ -19,6 +19,14 @@ Release automation can regenerate this file from Conventional Commits with
   (`/llms.txt`, `/llms-full.txt`, `/r/<name>.json`), and a FAQ. Each page ships
   `CollectionPage`/`ItemList`, `FAQPage`, and `BreadcrumbList` JSON-LD and is
   listed in the sitemap.
+- **Typography foundation primitives** — `Text`, `Heading`, `Display`, and
+  `Prose` in the `core` family. Font family (`--font-sans` + a new
+  `--font-display`), heading/display weight (`--font-weight-heading`,
+  `--font-weight-display`), and the type scale (`--font-size-*`) are
+  theme-overridable design tokens, so a brand restyles headings and body via
+  token overrides alone — no library edits. `Heading` also takes a `size` prop
+  to decouple visual scale from the semantic `level`. (#465)
+- Total component count: **313** (up from 309).
 
 ### Changed
 
@@ -26,6 +34,9 @@ Release automation can regenerate this file from Conventional Commits with
   gone; `/ai` now permanently redirects to `/families/ai`, which renders through
   the same family template. AI components are recategorized out of the
   `learning` family into `ai`.
+- `HeadingProps` exported from `@vllnt/ui` now refers to the `Heading` primitive
+  (adds optional `level`/`size`/`ref`); the plain heading-element alias is
+  available as `TypographyHeadingProps`. (#465)
 
 ## [0.3.0] - 2026-06-26
 

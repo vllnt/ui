@@ -85,20 +85,34 @@ WCAG **AA** minimum. Body text against any surface ≥ **4.5:1**, large text ≥
 
 ## 4. Typography
 
-| Token | Size | Weight | Line height |
-|-------|------|--------|-------------|
-| Display (H1) | 3rem (48px) | 600 (semibold) | 1.1 |
-| H2 | 2rem (32px) | 600 | 1.2 |
-| H3 | 1.5rem (24px) | 600 | 1.25 |
-| H4 | 1.25rem (20px) | 600 | 1.3 |
-| Body large | 1.125rem (18px) | 400 | 1.6 |
-| Body | 1rem (16px) | 400 | 1.6 |
-| Body small | 0.875rem (14px) | 400 | 1.5 |
-| Caption | 0.75rem (12px) | 500 | 1.4 |
-| Code | inherit | 400 mono | 1.5 |
+**Font families** — theme-overridable CSS variables. A brand adopts a different type identity by overriding these on a theme scope; nothing in the library is edited.
+
+| Family | CSS variable | Default | Role |
+|--------|--------------|---------|------|
+| Sans | `--font-sans` | system sans stack | Body + UI text (`Text`, `Prose`) |
+| Display | `--font-display` | `var(--font-sans)` | Headings + hero (`Heading`, `Display`) — set a serif/display face here for a brand identity |
+| Mono | `--font-mono` | system mono stack | Code, tabular |
+
+**Type scale** — each step is a token (`--font-size-*`); heading/display weight is a token too (`--font-weight-heading`, `--font-weight-display`). Overriding any of these restyles the foundation primitives.
+
+| Token | CSS variable | Size | Weight | Line height |
+|-------|--------------|------|--------|-------------|
+| Display | `--font-size-display` | 3.75rem (60px) | 600 (`--font-weight-display`) | 1.05 |
+| H1 | `--font-size-h1` | 3rem (48px) | 600 (`--font-weight-heading`) | 1.1 |
+| H2 | `--font-size-h2` | 2.25rem (36px) | 600 | 1.2 |
+| H3 | `--font-size-h3` | 1.875rem (30px) | 600 | 1.25 |
+| H4 | `--font-size-h4` | 1.5rem (24px) | 600 | 1.3 |
+| H5 | `--font-size-h5` | 1.25rem (20px) | 600 | 1.4 |
+| H6 | `--font-size-h6` | 1.125rem (18px) | 600 | 1.5 |
+| Body large | `--font-size-body-lg` | 1.125rem (18px) | 400 | 1.7 |
+| Body | `--font-size-body` | 1rem (16px) | 400 | 1.6 |
+| Body small | `--font-size-body-sm` | 0.875rem (14px) | 400 | 1.5 |
+| Caption | `--font-size-caption` | 0.75rem (12px) | 500 | 1.4 |
+| Code | inherit | inherit | 400 mono | 1.5 |
 
 **Rules**
-- Headings use `font-semibold` (600), **never** `font-bold` (700+) at display sizes — letter shapes crush.
+- The `Text` / `Heading` / `Display` / `Prose` foundation primitives consume the tokens above — style them by overriding tokens, not by forking the components.
+- Headings use `font-semibold` (600), **never** `font-bold` (700+) at display sizes — letter shapes crush. The heading weight token defaults to 600.
 - Code uses the system mono stack via `font-mono`.
 - Tabular numerals for data tables, charts, transactions: `font-variant-numeric: tabular-nums`.
 
