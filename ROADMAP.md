@@ -4,6 +4,7 @@
 > **Now:** `component-sidebar` — finish `.5`/`.6`, then ship `@vllnt/ui@0.4.0`.
 > **Next:** `agent-ui-cli` (MVP) · `ai-elements-parity`.
 > **Horizon (gated):** `native-parity` (needs an RN consumer) · the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
+> **Visibility track:** SEO/GEO phases — `search-consolidation` → `ai-toolchain-registration` → `visibility-measurement` → `seo-content-engine` → `backlink-authority`. Diagnosis: infra is DONE (`agent-surface`) but GSC shows indexed-yet-buried (141 pages, 2 clicks/90d, 0 AI-query visibility) + a dead `.com` twin outranking the live `.ai`. Full plan: [strategy dossier](https://claude.ai/code/artifact/6e2359db-a626-4226-aa54-a9e53ecfd766).
 > **Last updated:** 2026-07-02
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
@@ -180,6 +181,72 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] studio-hub.4 Multi-agent, multi-role — concurrent dev + review agents over API/MCP; role-scoped tools (dev → implement intents; review → verify / score / request-changes); no lock-step, the artifacts arbitrate
 - [ ] studio-hub.5 Worktree awareness — attribute every artifact to its worktree/branch; register-on-launch from a worktree's dev server (`vllnt-ui studio --register`)
 - [ ] studio-hub.6 Validate studio-hub.1–5: two worktrees (same app, ports A/B) + a 2nd project register to one studio; a dev agent authors in A while a review agent verifies B concurrently, artifacts isolated; the dashboard shows all three (E2E, real agents)
+
+## search-consolidation [PLANNED]
+
+**Goal:** Stop the silent ranking leaks — kill the dead-domain cannibalization and fix the canonical / schema / analytics gaps capping the already-indexed pages.
+**Exit criteria:** `ui.vllnt.com/*` 301s to `ui.vllnt.ai/*`; GSC shows `.com` pages dropping and `.ai` positions rising; every localized page self-canonicals to its resolved (non-307) URL; zero console errors on load; Rich Results clean for BreadcrumbList + SoftwareApplication.
+**Verify:** a visitor landing on a stale `ui.vllnt.com/components/*` URL is 301'd to the live `.ai` page; Google Rich Results Test passes on `/components/[slug]` (Breadcrumb) and `/` (SoftwareApplication); DevTools console is clean on `/` + `/components/[slug]`. Personas: search visitor on a stale URL; Googlebot recrawling duplicates.
+
+- [ ] search-consolidation.1 301-redirect all `ui.vllnt.com/*` → `ui.vllnt.ai/*` at the host/DNS edge (restore the subdomain only to serve the redirect) (cmd: `curl -sI https://ui.vllnt.com/components/calendar | grep -Ei '301|location: https://ui.vllnt.ai'`)
+- [ ] search-consolidation.2 Self-referencing canonical + hreflang per locale in `apps/registry/app/[locale]/layout.tsx` + `lib/seo.ts` — canonical targets the resolved URL, not the 307 (cmd: `curl -s https://ui.vllnt.ai/components/button | grep -c 'rel="canonical".*/components/button'`)
+- [ ] search-consolidation.3 Replace the `@vercel/analytics` + `@vercel/speed-insights` 404s in `layout.tsx` with a portable web-vitals beacon (cmd: agent-browser `/` → 0 console errors, no `/_vercel/insights` 404)
+- [ ] search-consolidation.4 Add `BreadcrumbList` JSON-LD to `/components/[slug]` + `/docs/[slug]`, `SoftwareApplication` `featureList` on `/`, and a `blogPostingLd()` helper in `lib/jsonld.ts` (cmd: Rich Results Test clean on `/components/button`)
+- [ ] search-consolidation.5 Exclude 307/redirecting locale URLs from `sitemap.ts` + request re-index of the AI-wedge pages in GSC (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.ai --dimensions page --filter 'page contains /components/ai-'`)
+- [ ] search-consolidation.6 Validate search-consolidation.1–5: E2E — stale `.com` URL 301s to `.ai`; Rich Results clean (Breadcrumb + SoftwareApplication); console clean; canonical resolves (E2E: `pnpm test:e2e seo-consolidation`)
+
+## ai-toolchain-registration [PLANNED]
+
+**Goal:** Make VLLNT UI installable by name inside AI coding tools — register the registry, MCP server, and docs in the indexes agents actually query. Highest-ROI, do-first (converts the DONE `agent-surface` infra into installs).
+**Exit criteria:** `@vllnt` resolves in `ui.shadcn.com/r/registries.json`; a shadcn-MCP-connected agent installs `@vllnt/ai-chat-input` by name; Context7 serves `ui.vllnt.ai` docs; `@vllnt/mcp` is on npm + the official MCP Registry; the GitHub repo carries the AI topics.
+**Verify:** in a fresh app with `"@vllnt": "https://ui.vllnt.ai/r/{name}"` in `components.json`, an agent prompted "add an AI chat thread" installs a VLLNT component; Context7 returns VLLNT docs for a Cursor query. Personas: dev scaffolding in Cursor/Claude Code/v0; agent resolving a component by name.
+
+- [ ] ai-toolchain-registration.1 PR `@vllnt` into the shadcn registry directory (`apps/v4/registry/directory.json`) + verify the earlier index PR is live in `registries.json` (cmd: `curl -s https://ui.shadcn.com/r/registries.json | grep -c '@vllnt'`)
+- [ ] ai-toolchain-registration.2 Submit `ui.vllnt.ai` to Context7 + add `context7.json` to repo root (cmd: `curl -s https://context7.com/vllnt/ui | grep -ci vllnt`)
+- [ ] ai-toolchain-registration.3 Publish a distributable `@vllnt/mcp` stdio bridge (wrapping the hosted `/mcp`) to npm (cmd: `npm view @vllnt/mcp version`)
+- [ ] ai-toolchain-registration.4 Register the MCP server in the official MCP Registry (`mcp-publisher`) + Registry Discovery MCP (cmd: `curl -s https://registry.modelcontextprotocol.io/v0/servers | grep -ci vllnt`)
+- [ ] ai-toolchain-registration.5 Add GitHub topics `ai, ai-agents, llm, generative-ui, shadcn, shadcn-registry` + document the `components.json` `@vllnt` snippet in `/docs/installation` (cmd: `gh repo view vllnt/ui --json repositoryTopics | grep -E 'ai-agents|shadcn-registry'`)
+- [ ] ai-toolchain-registration.6 Validate ai-toolchain-registration.1–5: E2E — in a scratch app with the `@vllnt` namespace, `npx shadcn add @vllnt/ai-chat-input` resolves + installs; MCP `tools/call search_components` returns hits (E2E: `pnpm test:e2e registry-install`)
+
+## visibility-measurement [PLANNED]
+
+**Goal:** Instrument human + AI-agent traffic and share-of-voice before investing in content, so every later phase is judged on real signal. Stand up first-week even though sequenced here.
+**Exit criteria:** GA4 shows an "AI Assistant" channel with sessions; a SOV tracker reports VLLNT mention-rate across "best AI UI" prompts; server logs surface GPTBot/ClaudeBot/Claude-Code fetches; a scheduled GSC review runs.
+**Verify:** N/A — ops/config phase (dashboards + scripts, no app-code surface); each task carries its own runnable check. Persona served: maintainer reading the weekly visibility report.
+
+- [ ] visibility-measurement.1 Configure the GA4 AI-Assistant channel + a referrer/UTM filter `chatgpt.com|perplexity.ai|claude.ai|gemini.google.com|copilot.microsoft.com` (cmd: GA4 realtime shows the channel on a test referral)
+- [ ] visibility-measurement.2 Stand up a share-of-voice tracker (Profound/Otterly/Peec/Ahrefs Brand Radar) on the AI-UI prompt set (cmd: tracker dashboard returns a baseline mention rate)
+- [ ] visibility-measurement.3 Add server-log crawler monitoring for GPTBot/ClaudeBot/Claude-Code/PerplexityBot/OAI-SearchBot — proves llms.txt consumption (cmd: `grep -Ec 'GPTBot|ClaudeBot|Claude-Code' access.log`)
+- [ ] visibility-measurement.4 Script a recurring GSC position/impressions review via `gsc.py` (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.ai --dimensions query --days 28`)
+
+## seo-content-engine [PLANNED]
+
+**Goal:** Build the content flywheel — an MDX blog plus programmatic integration / alternative / comparison pages that capture long-tail install intent and definitional AI-wedge queries.
+**Exit criteria:** `/blog` + `/blog/[slug]` render MDX posts with BlogPosting JSON-LD, Shiki highlighting, per-post OG + RSS; `/integrations/{tool}` + `/alternatives/{competitor}` pages ship and are in the sitemap; 3 flagship guides live; each `/components/[slug]` has unique copy + live demo + install command.
+**Verify:** a dev searching "how to build a chat ui with the vercel ai sdk" finds a VLLNT guide; `/alternatives/assistant-ui` renders a comparison table; a blog post shows correct BlogPosting rich data. Personas: dev in organic search; dev comparing libraries; AI answer engine extracting a table. (needs: search-consolidation done first)
+
+- [ ] seo-content-engine.1 Add the MDX blog: `content/blog/{slug}/{locale}.mdx` + `lib/blog.ts` (Content Collections `@content-collections/mdx`, Zod frontmatter — NOT Contentlayer; Velite fallback) mirroring `lib/content.ts` (needs: search-consolidation.4) → docs/specs/blog-system.md
+- [ ] seo-content-engine.2 Routes `/blog` + `/blog/[slug]` with `generateMetadata` + BlogPosting/Breadcrumb JSON-LD + Shiki build-time highlighting + per-post OG via `ImageResponse` (cmd: `curl -s https://ui.vllnt.ai/blog/<post> | grep -c '"@type":"BlogPosting"'`)
+- [ ] seo-content-engine.3 Blog RSS + sitemap + llms.txt entries (extend `app/rss.xml`, `sitemap.ts`, `llms.txt/route.ts`) (cmd: `curl -s https://ui.vllnt.ai/sitemap.xml | grep -c /blog/`)
+- [ ] seo-content-engine.4 Programmatic `/integrations/{tool}` pages (vercel-ai-sdk, langgraph, convex, openai, anthropic), data-driven like `lib/use-cases.ts` (cmd: `curl -sI https://ui.vllnt.ai/integrations/vercel-ai-sdk | grep -c 200`)
+- [ ] seo-content-engine.5 Programmatic `/alternatives/{competitor}` pages (assistant-ui, copilotkit, ai-elements) with a comparison table + FAQPage LD (cmd: `curl -s https://ui.vllnt.ai/alternatives/assistant-ui | grep -c '<table'`)
+- [ ] seo-content-engine.6 Per-component uniqueness pass: unique copy + live demo + install command on each `/components/[slug]` → docs/specs/component-page-uniqueness.md
+- [ ] seo-content-engine.7 Publish 3 flagship guides (best react components for AI agents; assistant-ui vs ai-elements vs vllnt; render tool calls in react) — answer-first, stats + tables, TechArticle LD (cmd: `curl -s https://ui.vllnt.ai/blog/best-react-components-for-ai-agents | grep -c '<table'`)
+- [ ] seo-content-engine.8 Validate seo-content-engine.1–7: E2E — blog post renders with BlogPosting rich data; integration + alternative pages return 200 with tables; component page shows demo + install; RSS/sitemap include blog (E2E: `pnpm test:e2e content-engine`)
+
+## backlink-authority [PLANNED]
+
+**Goal:** Manufacture the off-domain gravity — the referring domains and brand mentions that lift rankings and feed AI recall — from zero.
+**Exit criteria:** VLLNT is listed in ≥5 awesome-lists/directories; a Show HN + Product Hunt launch shipped; ≥3 syndicated posts with canonical-home; one original-data link magnet published and earning links.
+**Verify:** a target awesome-list README shows the VLLNT entry; the GSC Links report shows ≥3 external referring domains to the magnet. Personas: dev discovering VLLNT via a listicle/HN; author citing the benchmark. (needs: seo-content-engine for the syndicated posts + magnet)
+
+- [ ] backlink-authority.1 PRs to awesome-shadcn-ui + awesome-react-components + awesome-nextjs + awesome-generative-ui (cmd: PR merged + entry visible in the list README)
+- [ ] backlink-authority.2 Show HN launch + Product Hunt launch (cmd: live HN + PH post URLs)
+- [ ] backlink-authority.3 Submit to OSS aggregators: OpenAlternative, LibHunt, AlternativeTo, SaaSHub, DevHunt (cmd: listing URLs live)
+- [ ] backlink-authority.4 Syndicate 3 guides to dev.to/Hashnode with `canonical` → ui.vllnt.ai (needs: seo-content-engine.7) (cmd: syndicated post `rel=canonical` points home)
+- [ ] backlink-authority.5 Newsletter sponsorship (React Status / Bytes / JS Weekly) timed to the magnet (cmd: placement confirmed live)
+- [ ] backlink-authority.6 Ship one original-data link magnet: AI chat UI benchmark or "State of AI UI 2026" survey (needs: seo-content-engine.1) → docs/specs/link-magnet.md
+- [ ] backlink-authority.7 Validate backlink-authority.1–6: GSC Links report shows ≥3 new referring domains to the magnet + ≥5 directory/list entries live (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.ai --dimensions page --filter 'page contains /blog/'` + GSC Links export)
 
 ---
 
