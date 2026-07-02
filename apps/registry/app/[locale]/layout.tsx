@@ -128,10 +128,9 @@ export default async function LocaleLayout({ children, params }: Props) {
           title="VLLNT UI releases"
           type="application/atom+xml"
         />
-        <script {...jsonLdScriptAttributes(organizationLd())} />
-        <script {...jsonLdScriptAttributes(websiteLd())} />
       </head>
       <body className="h-full overflow-hidden">
+        <script {...jsonLdScriptAttributes([organizationLd(), websiteLd()])} />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
