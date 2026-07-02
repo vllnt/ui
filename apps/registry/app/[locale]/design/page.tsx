@@ -2,7 +2,7 @@ import React, { type ComponentProps, type ReactNode } from "react";
 
 import { MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import {
@@ -91,6 +91,7 @@ function DesignHeadingThree({ children, ...props }: ComponentProps<"h3">) {
 export default async function DesignPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "pages.design" });
   const markdown = await getDesignGuideMarkdown();
   const sections = extractDesignGuideSections(markdown);
   const semanticColorCount = Object.keys(designTokens.color.semantic).length;
@@ -125,12 +126,11 @@ export default async function DesignPage({ params }: Props) {
           <article className="min-w-0">
             <div className="mb-8 border-b border-border pb-8">
               <p className="mb-3 text-sm font-medium text-muted-foreground">
-                Agent-consumable brand guide
+                {t("eyebrow")}
               </p>
-              <h1 className="text-4xl font-semibold">VLLNT UI Design Guide</h1>
+              <h1 className="text-4xl font-semibold">{t("title")}</h1>
               <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">
-                The canonical rules for brand, tokens, layout, motion,
-                accessibility, and component composition across the library.
+                {t("description")}
               </p>
             </div>
             <MDXContent
@@ -144,8 +144,8 @@ export default async function DesignPage({ params }: Props) {
 
           <aside className="lg:sticky lg:top-8 lg:self-start">
             <div className="rounded-lg border border-border bg-card p-4">
-              <h2 className="text-sm font-semibold">Contents</h2>
-              <nav aria-label="Design guide sections" className="mt-4">
+              <h2 className="text-sm font-semibold">{t("contents")}</h2>
+              <nav aria-label={t("sectionsNavLabel")} className="mt-4">
                 <ol className="space-y-2">
                   {sections.map((section) => (
                     <li key={section.id}>
@@ -162,22 +162,22 @@ export default async function DesignPage({ params }: Props) {
             </div>
 
             <div className="mt-4 rounded-lg border border-border bg-card p-4">
-              <h2 className="text-sm font-semibold">Token contract</h2>
+              <h2 className="text-sm font-semibold">{t("tokenContract")}</h2>
               <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <dt className="text-muted-foreground">Version</dt>
+                  <dt className="text-muted-foreground">{t("version")}</dt>
                   <dd className="font-medium">{designTokens.version}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Colors</dt>
+                  <dt className="text-muted-foreground">{t("colors")}</dt>
                   <dd className="font-medium">{semanticColorCount}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Spacing</dt>
+                  <dt className="text-muted-foreground">{t("spacing")}</dt>
                   <dd className="font-medium">{spacingCount}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Icons</dt>
+                  <dt className="text-muted-foreground">{t("icons")}</dt>
                   <dd className="font-medium">
                     {designTokens.iconography.library}
                   </dd>
@@ -187,7 +187,7 @@ export default async function DesignPage({ params }: Props) {
                 className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4"
                 href="/r/design.json"
               >
-                View design tokens JSON
+                {t("viewTokensJson")}
               </a>
             </div>
           </aside>

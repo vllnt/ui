@@ -74,6 +74,44 @@ with `git commit --no-verify`.
 
 ---
 
+## Internationalization (registry app)
+
+The registry site (`apps/registry`) is multilingual via
+[next-intl](https://next-intl.dev). Locales live in one place —
+[`i18n/locales.ts`](./apps/registry/i18n/locales.ts) — and everything derives
+from `routing.locales`. The default locale (`en`) is unprefixed; others are path
+-prefixed (`/fr/...`) under the `as-needed` strategy.
+
+**Two content tracks — pick by shape, never mix them for the same string:**
+
+| Track | For | Where |
+|-------|-----|-------|
+| next-intl messages | UI chrome: nav, buttons, labels, form fields, breadcrumbs, stat labels, structured-page prose | [`messages/<locale>.json`](./apps/registry/messages), consumed with `useTranslations` (client) / `getTranslations` (server) |
+| MDX per locale | Long-form document pages: docs, philosophy | `content/pages/<slug>/<locale>.mdx`, loaded by `lib/content.ts` |
+
+**Rules for agents touching the registry UI:**
+
+- Never hardcode a user-facing string in JSX. Add a key to `messages/en.json` +
+  every other locale, and read it via `t(...)`.
+- Internal links use `import { Link } from "@/i18n/routing"` (auto-prefixes the
+  locale). Keep plain `<a>` only for external URLs and non-localized assets
+  (`/r/*`, `/llms.txt`, `/rss.xml`, `/mcp`).
+- French house style is **diacritic-stripped** (no accented characters) — match
+  the existing catalog and MDX.
+
+**Drift gate — `pnpm -F @vllnt/ui-registry i18n:check`**
+([`scripts/check-i18n.ts`](./apps/registry/scripts/check-i18n.ts)) fails when the
+locales drift apart: message-key parity, MDX coverage (every content page in
+every locale), and dead/undefined message namespaces. E2E proof lives in
+[`e2e/i18n.spec.ts`](./apps/registry/e2e/i18n.spec.ts).
+
+**Add a language** (e.g. `es`): (1) add it to `locales` in `i18n/locales.ts`;
+(2) copy `messages/en.json` to `messages/es.json` and translate the values;
+(3) add `content/pages/<slug>/es.mdx` for every content page; (4) run
+`i18n:check` until green.
+
+---
+
 ## Agent rule index
 
 Read these in order. Each is BLOCKING — violations keep a PR in draft.

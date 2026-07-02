@@ -1,0 +1,61 @@
+---
+title: Themes
+description: Personnalisez les tokens de design, les variables CSS, le mode sombre et les themes locaux pour VLLNT UI.
+type: docs
+og:
+  title: Themes
+  description: Tokens de design, variables CSS et mode sombre pour VLLNT UI
+  type: docs
+---
+
+# Themes
+
+Les composants VLLNT UI sont stylises avec des utilitaires Tailwind qui lisent des variables CSS semantiques. L'objectif est de garder le code source des composants portable tout en permettant a chaque application de definir sa propre surface de marque.
+
+## Modele de tokens
+
+Utilisez des tokens semantiques pour l'intention des composants :
+
+- `background` et `foreground` pour les surfaces de page.
+- `card` et `card-foreground` pour les panneaux contenus.
+- `primary`, `secondary`, `muted` et `accent` pour les etats d'interaction.
+- `border`, `input` et `ring` pour l'habillage des controles.
+- `destructive` pour les actions destructrices.
+
+Evitez de coder en dur les couleurs du produit a l'interieur des composants. Preferez mapper les decisions de couleur de marque dans des variables une seule fois.
+
+## Mode sombre
+
+Utilisez une strategie de mode sombre basee sur les classes pour que le balisage rendu cote serveur et l'hydratation cote client concordent :
+
+```tsx
+<html className="dark">
+  <body>{children}</body>
+</html>
+```
+
+Le site utilise `ThemeProvider` pour l'application de registre, mais les composants copies n'ont besoin que des variables et des utilitaires Tailwind disponibles dans leur application hote.
+
+## Themes personnalises
+
+Definissez les variables de theme a la limite de l'application :
+
+```css
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+}
+```
+
+Gardez les themes personnalises semantiques. Si un composant a besoin d'une nouvelle intention recurrente, ajoutez un token pour cette intention au lieu de disperser des couleurs utilitaires ponctuelles.
+
+## Mouvement et densite
+
+Les composants doivent rester utilisables dans des surfaces de produit denses. Utilisez le mouvement pour communiquer les changements d'etat, pas comme decoration. Respectez `prefers-reduced-motion` lorsque vous ajoutez une nouvelle animation.

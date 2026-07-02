@@ -1,13 +1,12 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { GitHubMark } from "@/components/github-mark";
-import { type Locale, routing } from "@/i18n/routing";
+import { Link, type Locale, routing } from "@/i18n/routing";
 import {
   breadcrumbLd,
   jsonLdScriptAttributes,
@@ -74,6 +73,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function TemplatePage(props: Props) {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "pages.templates" });
+  const common = await getTranslations({ locale, namespace: "common" });
   const template = getTemplate(slug);
 
   if (!template) {
@@ -107,10 +108,10 @@ export default async function TemplatePage(props: Props) {
           <Breadcrumb
             className="mb-6 text-muted-foreground"
             items={[
-              { href: localizePathname("/", locale), label: "Home" },
+              { href: localizePathname("/", locale), label: common("home") },
               {
                 href: localizePathname("/templates", locale),
-                label: "Templates",
+                label: t("title"),
               },
               { label: template.title },
             ]}
@@ -119,7 +120,7 @@ export default async function TemplatePage(props: Props) {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
             <section>
               <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                Template
+                {t("detailEyebrow")}
               </p>
               <h1 className="mt-2 text-4xl font-semibold">{template.title}</h1>
               <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
@@ -128,7 +129,7 @@ export default async function TemplatePage(props: Props) {
 
               <div className="mt-8 overflow-hidden rounded-md border border-border bg-muted/30">
                 <Image
-                  alt={`${template.title} template screenshot`}
+                  alt={t("screenshotAlt", { name: template.title })}
                   className="aspect-video w-full object-cover"
                   height={720}
                   priority
@@ -138,16 +139,16 @@ export default async function TemplatePage(props: Props) {
               </div>
 
               <section className="mt-10">
-                <h2 className="text-2xl font-semibold">Source</h2>
+                <h2 className="text-2xl font-semibold">{t("sourceTitle")}</h2>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  This template is available as source in the VLLNT UI
-                  repository. Copy or adapt the files from the template source
-                  until a supported template CLI is available.
+                  {t("sourceDescription")}
                 </p>
               </section>
 
               <section className="mt-10">
-                <h2 className="text-2xl font-semibold">What is included</h2>
+                <h2 className="text-2xl font-semibold">
+                  {t("whatIsIncluded")}
+                </h2>
                 <ul className="mt-4 grid gap-3 md:grid-cols-2">
                   {template.highlights.map((highlight) => (
                     <li
@@ -161,16 +162,13 @@ export default async function TemplatePage(props: Props) {
               </section>
 
               <section className="mt-10">
-                <h2 className="text-2xl font-semibold">Components</h2>
+                <h2 className="text-2xl font-semibold">{t("components")}</h2>
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {template.components.map((component) => (
                     <li key={component}>
                       <Link
                         className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm hover:bg-muted"
-                        href={localizePathname(
-                          `/components/${component}`,
-                          locale,
-                        )}
+                        href={`/components/${component}`}
                       >
                         {component}
                       </Link>
@@ -182,7 +180,7 @@ export default async function TemplatePage(props: Props) {
 
             <aside className="space-y-6">
               <section className="rounded-md border border-border bg-card p-5">
-                <h2 className="text-lg font-semibold">Links</h2>
+                <h2 className="text-lg font-semibold">{t("links")}</h2>
                 <div className="mt-4 grid gap-3">
                   <a
                     className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
@@ -191,20 +189,20 @@ export default async function TemplatePage(props: Props) {
                     target="_blank"
                   >
                     <GitHubMark className="size-4" />
-                    GitHub source
+                    {t("githubSource")}
                   </a>
                 </div>
               </section>
 
               <section className="rounded-md border border-border bg-card p-5">
-                <h2 className="text-lg font-semibold">Fit</h2>
+                <h2 className="text-lg font-semibold">{t("fit")}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {template.audience}
                 </p>
               </section>
 
               <section className="rounded-md border border-border bg-card p-5">
-                <h2 className="text-lg font-semibold">Pages</h2>
+                <h2 className="text-lg font-semibold">{t("pages")}</h2>
                 <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                   {template.pages.map((page) => (
                     <li key={page}>{page}</li>
@@ -213,7 +211,7 @@ export default async function TemplatePage(props: Props) {
               </section>
 
               <section className="rounded-md border border-border bg-card p-5">
-                <h2 className="text-lg font-semibold">Stack</h2>
+                <h2 className="text-lg font-semibold">{t("stack")}</h2>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {template.stack.map((item) => (
                     <li

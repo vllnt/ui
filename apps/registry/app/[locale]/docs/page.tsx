@@ -1,10 +1,9 @@
 import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import type { Locale } from "@/i18n/routing";
+import { Link, type Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import {
@@ -54,6 +53,8 @@ export default async function DocumentationPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const { content } = await getPageContent("docs", locale);
+  const t = await getTranslations("pages.docs");
+  const c = await getTranslations("common");
 
   return (
     <>
@@ -79,17 +80,15 @@ export default async function DocumentationPage({ params }: Props) {
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
-                { label: "Docs" },
+                { href: localizePathname("/", locale), label: c("home") },
+                { label: c("docs") },
               ]}
             />
-            <h1 className="text-4xl font-semibold mb-4">Documentation</h1>
-            <p className="text-muted-foreground text-lg">
-              Learn how to use VLLNT UI components in your projects.
-            </p>
+            <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
+            <p className="text-muted-foreground text-lg">{t("description")}</p>
           </div>
 
-          <nav aria-label="Documentation pages" className="mb-12">
+          <nav aria-label={t("nav")} className="mb-12">
             <ul className="grid gap-4 md:grid-cols-2">
               {DOCS_PAGES.map((page) => (
                 <li
@@ -98,7 +97,7 @@ export default async function DocumentationPage({ params }: Props) {
                 >
                   <Link
                     className="font-medium text-foreground underline underline-offset-4"
-                    href={localizePathname(getDocsPath(page), locale)}
+                    href={getDocsPath(page)}
                   >
                     {page.title}
                   </Link>

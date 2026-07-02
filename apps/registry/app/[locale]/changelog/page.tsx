@@ -1,9 +1,8 @@
 import { Badge, Breadcrumb, Button, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import type { Locale } from "@/i18n/routing";
+import { Link, type Locale } from "@/i18n/routing";
 import { type ChangelogTypeFilter, getChangelogEntries } from "@/lib/changelog";
 import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -23,13 +22,13 @@ type LocaleParameters = {
 };
 
 const CHANGELOG_TYPES: readonly {
-  readonly label: string;
+  readonly labelKey: string;
   readonly value: ChangelogTypeFilter;
 }[] = [
-  { label: "All changes", value: "all" },
-  { label: "Features", value: "feat" },
-  { label: "Fixes", value: "fix" },
-  { label: "Breaking", value: "breaking" },
+  { labelKey: "filterAll", value: "all" },
+  { labelKey: "filterFeatures", value: "feat" },
+  { labelKey: "filterFixes", value: "fix" },
+  { labelKey: "filterBreaking", value: "breaking" },
 ];
 
 const DESCRIPTION =
@@ -39,25 +38,28 @@ export async function generateMetadata({
   params,
 }: LocaleParameters): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "pages.changelog" });
+  const title = t("metaTitle");
+  const description = t("metaDescription");
 
   return {
     alternates: {
       canonical: canonical("/changelog", locale),
       languages: languageAlternates("/changelog"),
     },
-    description: DESCRIPTION,
+    description,
     openGraph: generateOGMetadata(
       {
-        description: DESCRIPTION,
-        title: "Changelog · VLLNT UI",
+        description,
+        title,
         type: "docs",
       },
       { locale, pathname: "/changelog" },
     ),
-    title: "Changelog · VLLNT UI",
+    title,
     twitter: generateTwitterMetadata({
-      description: DESCRIPTION,
-      title: "Changelog · VLLNT UI",
+      description,
+      title,
       type: "docs",
     }),
   };
@@ -70,7 +72,7 @@ function normalizeType(value?: string): ChangelogTypeFilter {
   return "all";
 }
 
-function FilterControls({
+async function FilterControls({
   from,
   locale,
   to,
@@ -81,6 +83,7 @@ function FilterControls({
   readonly to?: string;
   readonly type: ChangelogTypeFilter;
 }) {
+  const t = await getTranslations("pages.changelog");
   return (
     <form
       action={localizePathname("/changelog", locale)}
@@ -88,7 +91,7 @@ function FilterControls({
     >
       <div className="grid gap-2">
         <label className="text-sm font-medium" htmlFor="changelog-type">
-          Type
+          {t("filterType")}
         </label>
         <select
           className="h-10 rounded-md border border-input bg-background px-3 text-sm font-normal"
@@ -98,14 +101,14 @@ function FilterControls({
         >
           {CHANGELOG_TYPES.map((option) => (
             <option key={option.value} value={option.value}>
-              {option.label}
+              {t(option.labelKey)}
             </option>
           ))}
         </select>
       </div>
       <div className="grid gap-2">
         <label className="text-sm font-medium" htmlFor="changelog-from">
-          From
+          {t("filterFrom")}
         </label>
         <input
           className="h-10 rounded-md border border-input bg-background px-3 text-sm font-normal"
@@ -117,7 +120,7 @@ function FilterControls({
       </div>
       <div className="grid gap-2">
         <label className="text-sm font-medium" htmlFor="changelog-to">
-          To
+          {t("filterTo")}
         </label>
         <input
           className="h-10 rounded-md border border-input bg-background px-3 text-sm font-normal"
@@ -129,7 +132,7 @@ function FilterControls({
       </div>
       <div className="flex items-end gap-2">
         <Button className="w-full sm:w-auto" type="submit">
-          Apply
+          {t("filterApply")}
         </Button>
       </div>
     </form>
@@ -144,6 +147,8 @@ export default async function ChangelogPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.changelog");
+  const common = await getTranslations("common");
   const parameters = await searchParams;
   const type = normalizeType(parameters.type);
   const entries = await getChangelogEntries({
@@ -186,23 +191,22 @@ export default async function ChangelogPage({
           <Breadcrumb
             className="mb-4 text-muted-foreground"
             items={[
-              { href: localizePathname("/", locale), label: "Home" },
-              { label: "Changelog" },
+              { href: localizePathname("/", locale), label: common("home") },
+              { label: t("heading") },
             ]}
           />
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                Release history
+                {t("eyebrow")}
               </p>
-              <h1 className="mt-2 text-4xl font-semibold">Changelog</h1>
+              <h1 className="mt-2 text-4xl font-semibold">{t("heading")}</h1>
               <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                The canonical release log for VLLNT UI, generated from
-                Conventional Commits into Keep a Changelog format.
+                {t("intro")}
               </p>
             </div>
             <Button asChild variant="outline">
-              <Link href="/rss.xml">RSS feed</Link>
+              <a href="/rss.xml">{t("rssLink")}</a>
             </Button>
           </div>
 
@@ -227,9 +231,9 @@ export default async function ChangelogPage({
                       <Badge variant="secondary">{entry.date}</Badge>
                     ) : null}
                     <Link
-                      aria-label={`Permalink to ${entry.title}`}
+                      aria-label={t("permalinkTo", { title: entry.title })}
                       className="text-sm text-muted-foreground hover:text-foreground"
-                      href={`${localizePathname("/changelog", locale)}#${entry.anchor}`}
+                      href={`/changelog#${entry.anchor}`}
                     >
                       #{entry.anchor}
                     </Link>
@@ -251,9 +255,9 @@ export default async function ChangelogPage({
               ))
             ) : (
               <div className="border border-border p-8">
-                <h2 className="text-xl font-semibold">No changes found</h2>
+                <h2 className="text-xl font-semibold">{t("emptyTitle")}</h2>
                 <p className="mt-2 text-muted-foreground">
-                  Adjust the filters to include more release notes.
+                  {t("emptyDescription")}
                 </p>
               </div>
             )}

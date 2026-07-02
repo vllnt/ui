@@ -1,10 +1,11 @@
 import { Badge, StaticCode } from "@vllnt/ui";
 import { ArrowRight, Sparkles, Terminal } from "lucide-react";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
 import { GitHubMark } from "@/components/github-mark";
 import { VersionChannels } from "@/components/landing/version-channels";
+import { Link } from "@/i18n/routing";
 import { getLatestReleaseRecords } from "@/lib/changelog";
 import { getNpmDistributionTags } from "@/lib/npm-version";
 import {
@@ -21,40 +22,36 @@ const REQUEST_URL =
 const INSTALL_COMMAND =
   "pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json";
 
-const TRUST_BADGES = [
-  { label: "MIT" },
-  { label: "TypeScript" },
-  { label: "RSC compatible" },
-  { label: "Tailwind v4 ready" },
-];
+const TRUST_BADGE_KEYS = ["mit", "typescript", "rsc", "tailwind"] as const;
 
-function HeroActions({ componentCount }: { componentCount: number }) {
+async function HeroActions({ componentCount }: { componentCount: number }) {
+  const t = await getTranslations("landing.hero");
   return (
     <div className="mt-6 flex flex-wrap gap-3">
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
         href="/families/ai"
       >
-        Explore AI components
+        {t("exploreAi")}
         <ArrowRight className="size-4" />
       </Link>
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
         href="/components"
       >
-        Browse all {componentCount}
+        {t("browseAll", { count: componentCount })}
       </Link>
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
         href="/templates"
       >
-        Browse templates
+        {t("browseTemplates")}
       </Link>
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
         href="/docs"
       >
-        Read the docs
+        {t("readDocs")}
       </Link>
       <a
         className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -63,36 +60,35 @@ function HeroActions({ componentCount }: { componentCount: number }) {
         target="_blank"
       >
         <GitHubMark className="size-4" />
-        GitHub
+        {t("github")}
       </a>
     </div>
   );
 }
 
-function Hero({
+async function Hero({
   componentCount,
   version,
 }: {
   componentCount: number;
   version: string;
 }) {
+  const t = await getTranslations("landing.hero");
+  const badges = await getTranslations("landing.trustBadges");
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-20 lg:px-8">
         <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          v{version} / MIT
+          {t("kicker", { version })}
         </p>
         <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl">
-          The UI design system for AI agents.
+          {t("titleLead")}
           <br />
-          <span className="text-muted-foreground">Copy, paste, ship.</span>
+          <span className="text-muted-foreground">{t("titleAccent")}</span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-          {componentCount} open-source React components for building AI apps —
-          chat, streaming, tool calls, citations, agents, and artifacts. Every
-          component is also a machine-readable JSON descriptor: agents (Claude,
-          Cursor, Cline, Continue) read the registry directly without scraping
-          HTML.
+          {t("description", { count: componentCount })}
         </p>
 
         <div className="mt-8">
@@ -102,12 +98,12 @@ function Hero({
         <HeroActions componentCount={componentCount} />
 
         <ul className="mt-8 flex flex-wrap gap-3 text-xs text-muted-foreground">
-          {TRUST_BADGES.map((badge) => (
+          {TRUST_BADGE_KEYS.map((key) => (
             <li
               className="rounded-full border border-border bg-muted/40 px-3 py-1"
-              key={badge.label}
+              key={key}
             >
-              {badge.label}
+              {badges(key)}
             </li>
           ))}
         </ul>
@@ -116,7 +112,7 @@ function Hero({
   );
 }
 
-function Stats({
+async function Stats({
   categoryCount,
   componentCount,
   generatedAt,
@@ -127,15 +123,16 @@ function Stats({
   generatedAt?: string;
   version: string;
 }) {
+  const t = await getTranslations("landing.stats");
   const generatedDate = generatedAt?.slice(0, 10) ?? "—";
 
   return (
     <section className="border-b border-border bg-muted/30">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-12 lg:grid-cols-4 lg:px-8">
-        <Stat label="Components" value={String(componentCount)} />
-        <Stat label="Categories" value={String(categoryCount)} />
-        <Stat label="Library version" value={`v${version}`} />
-        <Stat label="Last build" value={generatedDate} />
+        <Stat label={t("components")} value={String(componentCount)} />
+        <Stat label={t("categories")} value={String(categoryCount)} />
+        <Stat label={t("libraryVersion")} value={`v${version}`} />
+        <Stat label={t("lastBuild")} value={generatedDate} />
       </div>
     </section>
   );
@@ -150,37 +147,38 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function AgentCallout() {
+async function AgentCallout() {
+  const t = await getTranslations("landing.agent");
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
           <Sparkles className="size-4" />
-          Agent-first
+          {t("eyebrow")}
         </div>
-        <h2 className="mt-2 text-3xl font-semibold">
-          Built so AI coding agents can use it directly.
-        </h2>
+        <h2 className="mt-2 text-3xl font-semibold">{t("title")}</h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Every component ships as a machine-readable JSON descriptor with name,
-          version, stability, accessibility schema, usage examples, and prop
-          definitions. Agents discover the registry through three surfaces.
+          {t("description")}
         </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           <AgentCard
-            description="Concise index per the llmstxt.org spec - sections, links, descriptions."
+            description={t("llmsDescription")}
             href="/llms.txt"
+            open={t("open")}
             title="/llms.txt"
           />
           <AgentCard
-            description="Full registry context in one fetch - docs + per-component descriptors."
+            description={t("llmsFullDescription")}
             href="/llms-full.txt"
+            open={t("open")}
             title="/llms-full.txt"
           />
           <AgentCard
-            description="Streamable HTTP MCP server. Tools: search_components, get_component, list_categories."
+            description={t("mcpDescription")}
             href="/mcp"
+            open={t("open")}
             title="/mcp"
           />
         </div>
@@ -192,10 +190,12 @@ function AgentCallout() {
 function AgentCard({
   description,
   href,
+  open,
   title,
 }: {
   description: string;
   href: string;
+  open: string;
   title: string;
 }) {
   return (
@@ -211,22 +211,24 @@ function AgentCard({
       </div>
       <p className="mt-3 text-sm text-muted-foreground">{description}</p>
       <p className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-foreground">
-        Open
+        {open}
         <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
       </p>
     </a>
   );
 }
 
-function FeaturedComponents() {
+async function FeaturedComponents() {
   const featured = getFeaturedComponents();
   if (featured.length === 0) return null;
+  const t = await getTranslations("landing.featured");
+
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-        <h2 className="text-2xl font-semibold">Featured components</h2>
+        <h2 className="text-2xl font-semibold">{t("title")}</h2>
         <p className="mt-2 text-muted-foreground">
-          A few favourites. Browse all {getComponentCount()} from{" "}
+          {t("descriptionLead", { count: getComponentCount() })}{" "}
           <Link
             className="font-medium text-foreground underline"
             href="/components"
@@ -245,7 +247,7 @@ function FeaturedComponents() {
               >
                 <p className="font-medium">{component.name}</p>
                 <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
-                  {component.category ?? "uncategorized"}
+                  {component.category ?? t("uncategorized")}
                 </p>
               </Link>
             </li>
@@ -259,23 +261,23 @@ function FeaturedComponents() {
 async function ReleasesStrip() {
   const releases = await getLatestReleaseRecords(3);
   if (releases.length === 0) return null;
+  const t = await getTranslations("landing.releases");
 
   return (
     <section className="border-b border-border bg-muted/20">
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold">Latest releases</h2>
+            <h2 className="text-2xl font-semibold">{t("title")}</h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Follow what changed across the component library, registry, and
-              release pipeline.
+              {t("description")}
             </p>
           </div>
           <Link
             className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
             href="/releases"
           >
-            View all releases
+            {t("viewAll")}
             <ArrowRight className="size-4" />
           </Link>
         </div>
@@ -289,7 +291,7 @@ async function ReleasesStrip() {
               <div className="flex flex-wrap items-center gap-2">
                 <Badge>{release.version}</Badge>
                 {index === 0 ? (
-                  <Badge variant="secondary">What&apos;s new</Badge>
+                  <Badge variant="secondary">{t("whatsNew")}</Badge>
                 ) : null}
               </div>
               <h3 className="mt-4 font-semibold">{release.title}</h3>
@@ -300,7 +302,7 @@ async function ReleasesStrip() {
                 className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
                 href={`/releases#${release.anchor}`}
               >
-                Read notes
+                {t("readNotes")}
                 <ArrowRight className="size-3" />
               </Link>
             </li>
@@ -311,14 +313,15 @@ async function ReleasesStrip() {
   );
 }
 
-function CommunityCTA() {
+async function CommunityCTA() {
+  const t = await getTranslations("landing.community");
+
   return (
     <section>
       <div className="mx-auto max-w-7xl px-4 py-20 lg:px-8">
-        <h2 className="text-3xl font-semibold">Build with the community.</h2>
+        <h2 className="text-3xl font-semibold">{t("title")}</h2>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          MIT licensed. No tracking. No backend. Issues, ideas, and pull
-          requests welcome.
+          {t("description")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a
@@ -328,7 +331,7 @@ function CommunityCTA() {
             target="_blank"
           >
             <GitHubMark className="size-4" />
-            Star on GitHub
+            {t("starGithub")}
           </a>
           <a
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -336,7 +339,7 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            Request a component
+            {t("requestComponent")}
           </a>
           <a
             className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -344,7 +347,7 @@ function CommunityCTA() {
             rel="noreferrer"
             target="_blank"
           >
-            Open Storybook
+            {t("openStorybook")}
           </a>
         </div>
       </div>

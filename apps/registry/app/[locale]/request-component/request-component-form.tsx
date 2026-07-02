@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { useTranslations } from "next-intl";
 import type * as React from "react";
 
 const REPO = "vllnt/ui";
@@ -108,6 +109,7 @@ function TextField({
 }
 
 export function RequestComponentForm() {
+  const t = useTranslations("forms.requestComponent");
   const [name, setName] = useState("");
   const [problem, setProblem] = useState("");
   const [similar, setSimilar] = useState("");
@@ -123,37 +125,37 @@ export function RequestComponentForm() {
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <Field
-        label="Component name"
+        label={t("nameLabel")}
         onChange={setName}
-        placeholder="e.g. ToastStack"
+        placeholder={t("namePlaceholder")}
         required
         value={name}
       />
       <TextField
-        label="What problem does it solve?"
+        label={t("problemLabel")}
         onChange={setProblem}
-        placeholder="The user-facing need, not the implementation."
+        placeholder={t("problemPlaceholder")}
         required
         rows={3}
         value={problem}
       />
       <Field
-        label="Similar to (optional)"
+        label={t("similarLabel")}
         onChange={setSimilar}
-        placeholder="shadcn Toast, Radix Toast, etc."
+        placeholder={t("similarPlaceholder")}
         value={similar}
       />
       <TextField
-        label="Use case"
+        label={t("useCaseLabel")}
         onChange={setUseCase}
-        placeholder="The concrete scenario where you'd reach for this."
+        placeholder={t("useCasePlaceholder")}
         rows={3}
         value={useCase}
       />
       <TextField
-        label="References / prior art (optional)"
+        label={t("referenceLabel")}
         onChange={setReference}
-        placeholder="Links, screenshots, design references…"
+        placeholder={t("referencePlaceholder")}
         rows={3}
         value={reference}
       />
@@ -161,11 +163,9 @@ export function RequestComponentForm() {
         className="inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
         type="submit"
       >
-        Open prefilled GitHub issue
+        {t("submit")}
       </button>
-      <p className="text-xs text-muted-foreground">
-        Submitting opens a new GitHub issue tab. Nothing is sent to a server.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("note")}</p>
     </form>
   );
 }

@@ -2,15 +2,14 @@ import { ShareSection, Sidebar } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { BadgeSnippets } from "@/components/badge-snippets";
-import type { Locale } from "@/i18n/routing";
+import { Link, type Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, languageAlternates } from "@/lib/seo";
 import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
@@ -54,6 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TemplatesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "pages.templates" });
 
   return (
     <>
@@ -74,12 +74,11 @@ export default async function TemplatesPage({ params }: Props) {
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="max-w-3xl">
             <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-              Starter kits
+              {t("eyebrow")}
             </p>
-            <h1 className="mt-2 text-4xl font-semibold">Templates</h1>
+            <h1 className="mt-2 text-4xl font-semibold">{t("title")}</h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Curated app blueprints that show how VLLNT UI components work in
-              finished product surfaces, not only isolated component examples.
+              {t("description")}
             </p>
           </div>
 
@@ -89,13 +88,10 @@ export default async function TemplatesPage({ params }: Props) {
                 className="overflow-hidden rounded-md border border-border bg-card"
                 key={template.slug}
               >
-                <Link
-                  className="group block"
-                  href={localizePathname(getTemplatePath(template), locale)}
-                >
+                <Link className="group block" href={getTemplatePath(template)}>
                   <div className="border-b border-border bg-muted/30">
                     <Image
-                      alt={`${template.title} template screenshot`}
+                      alt={t("screenshotAlt", { name: template.title })}
                       className="aspect-video w-full object-cover"
                       height={720}
                       src={template.screenshot}
@@ -117,7 +113,7 @@ export default async function TemplatesPage({ params }: Props) {
                     <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
                       <div>
                         <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                          Pages
+                          {t("pages")}
                         </dt>
                         <dd className="mt-1 font-medium">
                           {template.pages.length}
@@ -125,7 +121,7 @@ export default async function TemplatesPage({ params }: Props) {
                       </div>
                       <div>
                         <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                          Components
+                          {t("components")}
                         </dt>
                         <dd className="mt-1 font-medium">
                           {template.components.length}
@@ -133,7 +129,7 @@ export default async function TemplatesPage({ params }: Props) {
                       </div>
                       <div>
                         <dt className="text-xs uppercase tracking-wide text-muted-foreground">
-                          Stack
+                          {t("stack")}
                         </dt>
                         <dd className="mt-1 font-medium">
                           {template.stack[0]}
@@ -149,9 +145,9 @@ export default async function TemplatesPage({ params }: Props) {
           <BadgeSnippets />
 
           <ShareSection
-            shareOn="Share on"
-            shareTitle="Share these templates"
-            title="VLLNT UI Templates"
+            shareOn={t("shareOn")}
+            shareTitle={t("shareTitle")}
+            title={t("shareCardTitle")}
             url={withRef(canonical("/templates", locale), "share")}
           />
         </div>

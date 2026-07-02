@@ -12,6 +12,7 @@
     "lint:fix": "eslint . --fix",
     "test:once": "vitest run",
     "test:e2e": "playwright test",
+    "i18n:check": "tsx scripts/check-i18n.ts",
     "registry:build": "tsx scripts/inline-component-source.ts && shadcn build && tsx scripts/stamp-registry-metadata.ts && tsx scripts/generate-component-metadata.ts",
     "registry:sync-shims": "tsx scripts/inline-component-source.ts",
     "registry:check": "tsx scripts/check-registry-drift.ts",
