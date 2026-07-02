@@ -58,6 +58,9 @@ jobs:
         working-directory: packages/ui
         run: pnpm build-storybook
 
+      - name: Verify component previews resolve to real stories
+        run: pnpm -F @vllnt/ui-registry registry:verify-previews
+
   e2e:
     name: E2E (Playwright)
     runs-on: ubuntu-latest
