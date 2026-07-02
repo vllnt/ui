@@ -10,7 +10,22 @@ Release automation can regenerate this file from Conventional Commits with
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Component family landing pages** - every component family has a standalone,
+  SEO-oriented landing at `/families/[category]`, plus a `/families` index. One
+  shared template renders a hero with CTAs, per-family SEO sub-groups with
+  editorial copy and live component previews, an agent-readable surface
+  (`/llms.txt`, `/llms-full.txt`, `/r/<name>.json`), and a FAQ. Each page ships
+  `CollectionPage`/`ItemList`, `FAQPage`, and `BreadcrumbList` JSON-LD and is
+  listed in the sitemap.
+
+### Changed
+
+- **AI family consolidated onto the shared template** - the bespoke `/ai` hub is
+  gone; `/ai` now permanently redirects to `/families/ai`, which renders through
+  the same family template. AI components are recategorized out of the
+  `learning` family into `ai`.
 
 ## [0.3.0] - 2026-06-26
 
