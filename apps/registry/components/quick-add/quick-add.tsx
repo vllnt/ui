@@ -4,12 +4,14 @@ import { useState } from "react";
 
 import { Button } from "@vllnt/ui";
 import { Check, Copy, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type QuickAddProps = {
   componentName: string;
 };
 
 export function QuickAdd({ componentName }: QuickAddProps) {
+  const t = useTranslations("shared.quickAdd");
   const registryUrl = `https://ui.vllnt.ai/r/${componentName}.json`;
   const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`;
   const v0Url = `https://v0.dev/chat?q=add+component+from+${encodeURIComponent(registryUrl)}`;
@@ -34,12 +36,12 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         {copied ? (
           <>
             <Check className="size-3" />
-            Copied!
+            {t("copied")}
           </>
         ) : (
           <>
             <Copy className="size-3" />
-            Copy install command
+            {t("copyInstall")}
           </>
         )}
       </Button>
@@ -49,7 +51,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         size="sm"
         variant="outline"
       >
-        Add to v0.dev
+        {t("addToV0")}
         <ExternalLink className="size-3" />
       </Button>
     </div>

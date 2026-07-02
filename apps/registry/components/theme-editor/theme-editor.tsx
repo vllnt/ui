@@ -8,6 +8,7 @@ import {
   setCustomTheme,
   setThemePreset,
 } from "@vllnt/ui";
+import { useTranslations } from "next-intl";
 
 import { EDITOR_PRESETS, type EditorPreset } from "@/lib/editor-presets";
 import { decodeTheme, encodeTheme } from "@/lib/theme-serialize";
@@ -46,6 +47,7 @@ function readActiveTheme(): ThemeData | undefined {
  * the export panel and a focused preview of the chosen mode.
  */
 export function ThemeEditor() {
+  const t = useTranslations("pages.themes.editor");
   const [theme, setTheme] = useState<ThemeData>(DEFAULT_THEME);
   const [mode, setMode] = useState<ThemeMode>("dark");
   const isFirstRender = useRef(true);
@@ -112,7 +114,7 @@ export function ThemeEditor() {
     <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,28rem)]">
       <div className="min-w-0 space-y-6">
         <div className="space-y-2">
-          <span className="text-sm font-semibold">Theme</span>
+          <span className="text-sm font-semibold">{t("theme")}</span>
           <div className="flex flex-wrap gap-2">
             {EDITOR_PRESETS.map((preset) => (
               <button
@@ -131,10 +133,7 @@ export function ThemeEditor() {
               </button>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Pick a theme to recolor the entire site, then fine-tune the tokens
-            below. Your choice is saved across the site.
-          </p>
+          <p className="text-xs text-muted-foreground">{t("intro")}</p>
         </div>
 
         <div className="flex items-center justify-between">
@@ -161,7 +160,7 @@ export function ThemeEditor() {
             size="sm"
             variant="ghost"
           >
-            Reset
+            {t("reset")}
           </Button>
         </div>
 

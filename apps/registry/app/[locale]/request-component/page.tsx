@@ -1,6 +1,6 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -15,10 +15,13 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({
+    locale,
+    namespace: "pages.requestComponent",
+  });
   const ogParameters = {
-    description:
-      "Request a new VLLNT UI component. The form opens a prefilled GitHub issue — no backend.",
-    title: "Request a component",
+    description: t("metaDescription"),
+    title: t("title"),
     type: "page" as const,
   };
 
@@ -33,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       pathname: "/request-component",
     }),
     robots: { follow: true, index: false },
-    title: "Request a component · VLLNT UI",
+    title: `${t("title")} · VLLNT UI`,
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
@@ -41,16 +44,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function RequestComponentPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.requestComponent");
 
   return (
     <>
       <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-2xl px-4 py-16 lg:px-8">
-          <h1 className="text-4xl font-semibold mb-3">Request a component</h1>
+          <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>
           <p className="text-muted-foreground text-lg mb-8">
-            Don&rsquo;t see what you need? Fill out the fields and we&rsquo;ll
-            open a prefilled GitHub issue with the right labels and template.
+            {t("description")}
           </p>
           <RequestComponentForm />
         </div>

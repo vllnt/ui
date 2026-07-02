@@ -1,16 +1,15 @@
 import { CodeBlock, Sidebar } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
-import { type Locale, routing } from "@/i18n/routing";
+import { Link, type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
 import { breadcrumbLd, faqPageLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getUseCase, USE_CASES } from "@/lib/use-cases";
 
@@ -56,6 +55,8 @@ export default async function UseCasePage({ params }: Props) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
+  const t = await getTranslations("pages.build");
+
   const useCase = getUseCase(slug);
   if (!useCase) {
     notFound();
@@ -92,11 +93,8 @@ export default async function UseCasePage({ params }: Props) {
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
           <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            <Link
-              className="hover:text-foreground"
-              href={localizePathname("/families/ai", locale)}
-            >
-              UI for AI agents
+            <Link className="hover:text-foreground" href="/families/ai">
+              {t("breadcrumb")}
             </Link>
           </p>
           <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
@@ -106,17 +104,14 @@ export default async function UseCasePage({ params }: Props) {
 
           {/* Components used */}
           <h2 className="mt-14 text-2xl font-semibold">
-            Components you&apos;ll use
+            {t("componentsHeading")}
           </h2>
           <ul className="mt-6 space-y-3">
             {components.map((component) => (
               <li key={component.name}>
                 <Link
                   className="group flex flex-col rounded-lg border border-border p-5 hover:border-foreground/40"
-                  href={localizePathname(
-                    `/components/${component.name}`,
-                    locale,
-                  )}
+                  href={`/components/${component.name}`}
                 >
                   <span className="flex items-center justify-between gap-2">
                     <span className="font-medium">{component.title}</span>
@@ -131,17 +126,18 @@ export default async function UseCasePage({ params }: Props) {
           </ul>
 
           {/* Install */}
-          <h2 className="mt-14 text-2xl font-semibold">Install</h2>
+          <h2 className="mt-14 text-2xl font-semibold">
+            {t("installHeading")}
+          </h2>
           <p className="mt-2 text-muted-foreground">
-            Add every component above with the shadcn CLI. You own the source
-            after install.
+            {t("installDescription")}
           </p>
           <div className="mt-4">
             <CodeBlock language="bash">{installCommand}</CodeBlock>
           </div>
 
           {/* FAQ */}
-          <h2 className="mt-14 text-2xl font-semibold">Frequently asked</h2>
+          <h2 className="mt-14 text-2xl font-semibold">{t("faqHeading")}</h2>
           <dl className="mt-6 space-y-6">
             {useCase.faq.map((item) => (
               <div key={item.question}>
@@ -154,9 +150,9 @@ export default async function UseCasePage({ params }: Props) {
           <div className="mt-14 border-t border-border pt-8">
             <Link
               className="inline-flex items-center gap-1 font-medium text-foreground underline"
-              href={localizePathname("/families/ai", locale)}
+              href="/families/ai"
             >
-              Browse all AI agent components
+              {t("browseAll")}
               <ArrowRight className="size-4" />
             </Link>
           </div>

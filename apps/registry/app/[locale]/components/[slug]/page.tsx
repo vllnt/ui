@@ -10,14 +10,13 @@ import {
 } from "@vllnt/ui";
 import { ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
 import { ShareEmbedBar } from "@/components/share-embed-bar";
-import { type Locale, routing } from "@/i18n/routing";
+import { Link, type Locale, routing } from "@/i18n/routing";
 import { getAiSeo } from "@/lib/ai-seo";
 import componentMetadata from "@/lib/component-metadata.json";
 import {
@@ -121,6 +120,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ComponentPage(props: Props) {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.component");
+  const common = await getTranslations("common");
   const component = registry.items.find(
     (item): item is RegistryComponent =>
       item.name === slug && item.type === "registry:component",
@@ -217,8 +218,8 @@ export default async function ComponentPage(props: Props) {
             title: displayTitle,
           }),
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Components", url: `${SITE_URL}/components` },
+            { name: common("home"), url: SITE_URL },
+            { name: common("components"), url: `${SITE_URL}/components` },
             {
               name: displayTitle,
               url: `${SITE_URL}/components/${component.name}`,
@@ -238,10 +239,13 @@ export default async function ComponentPage(props: Props) {
                 <Breadcrumb
                   className="mb-4 text-muted-foreground"
                   items={[
-                    { href: localizePathname("/", locale), label: "Home" },
+                    {
+                      href: localizePathname("/", locale),
+                      label: common("home"),
+                    },
                     {
                       href: localizePathname("/components", locale),
-                      label: "Components",
+                      label: common("components"),
                     },
                     ...(familyGroup
                       ? [
@@ -270,12 +274,9 @@ export default async function ComponentPage(props: Props) {
                   />
                   <Link
                     className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-                    href={localizePathname(
-                      `/report?component=${component.name}`,
-                      locale,
-                    )}
+                    href={`/report?component=${component.name}`}
                   >
-                    Report a bug
+                    {t("reportBug")}
                   </Link>
                 </div>
               </div>
@@ -284,16 +285,16 @@ export default async function ComponentPage(props: Props) {
               {aiSeo?.whenToUse ? (
                 <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
                   <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                    When to use this in an AI app
+                    {t("whenToUseTitle")}
                   </h2>
                   <p className="mt-3 text-base leading-relaxed">
                     {aiSeo.whenToUse}
                   </p>
                   <Link
                     className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                    href={localizePathname("/families/ai", locale)}
+                    href="/families/ai"
                   >
-                    Browse all AI agent components
+                    {t("browseAiComponents")}
                     <ExternalLink className="size-3" />
                   </Link>
                 </div>
@@ -311,35 +312,38 @@ export default async function ComponentPage(props: Props) {
 
               {/* Installation */}
               <div className="mb-8 scroll-mt-8" id="installation">
-                <h2 className="text-2xl font-semibold mb-4">Installation</h2>
+                <h2 className="text-2xl font-semibold mb-4">
+                  {t("installation")}
+                </h2>
                 <StaticCode code={installCommand} language="bash" />
               </div>
 
               {/* Storybook link */}
               {meta?.defaultStoryId ? (
                 <div className="mb-8 scroll-mt-8" id="storybook">
-                  <h2 className="text-2xl font-semibold mb-4">Storybook</h2>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    {t("storybook")}
+                  </h2>
                   <p className="text-muted-foreground mb-4">
-                    Explore all variants, controls, and accessibility checks in
-                    the interactive Storybook playground.
+                    {t("storybookDescription")}
                   </p>
-                  <Link
+                  <a
                     className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                     href={`${STORYBOOK_URL}/?path=/story/${meta.defaultStoryId}`}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    View in Storybook
+                    {t("viewInStorybook")}
                     <ExternalLink className="size-4" />
-                  </Link>
+                  </a>
                   {meta.stories.length > 1 ? (
                     <div className="mt-4">
                       <p className="text-sm text-muted-foreground mb-2">
-                        {meta.stories.length} stories available:
+                        {t("storiesAvailable", { count: meta.stories.length })}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {meta.stories.map((story) => (
-                          <Link
+                          <a
                             className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-muted"
                             href={`${STORYBOOK_URL}/?path=/story/${story.id}`}
                             key={story.id}
@@ -347,7 +351,7 @@ export default async function ComponentPage(props: Props) {
                             target="_blank"
                           >
                             {story.name}
-                          </Link>
+                          </a>
                         ))}
                       </div>
                     </div>
@@ -358,7 +362,7 @@ export default async function ComponentPage(props: Props) {
               {/* Code */}
               {componentCode ? (
                 <div className="mb-8 scroll-mt-8" id="code">
-                  <h2 className="text-2xl font-semibold mb-4">Code</h2>
+                  <h2 className="text-2xl font-semibold mb-4">{t("code")}</h2>
                   <StaticCode code={componentCode} language="typescript" />
                 </div>
               ) : null}
@@ -366,7 +370,9 @@ export default async function ComponentPage(props: Props) {
               {/* Dependencies */}
               {component.dependencies && component.dependencies.length > 0 ? (
                 <div className="mb-8 scroll-mt-8" id="dependencies">
-                  <h2 className="text-2xl font-semibold mb-4">Dependencies</h2>
+                  <h2 className="text-2xl font-semibold mb-4">
+                    {t("dependencies")}
+                  </h2>
                   <div className="rounded-lg border bg-card p-6">
                     <ul className="space-y-2">
                       {component.dependencies.map((dep) => {
@@ -376,15 +382,15 @@ export default async function ComponentPage(props: Props) {
                             <code className="bg-muted px-2 py-1 rounded text-sm">
                               {dep}
                             </code>
-                            <Link
-                              aria-label={`View ${dep} on npm`}
+                            <a
+                              aria-label={t("viewOnNpm", { dep })}
                               className="text-muted-foreground hover:text-foreground transition-colors"
                               href={npmUrl}
                               rel="noopener noreferrer"
                               target="_blank"
                             >
                               <ExternalLink className="size-3" />
-                            </Link>
+                            </a>
                           </li>
                         );
                       })}
@@ -394,8 +400,8 @@ export default async function ComponentPage(props: Props) {
               ) : null}
 
               <ShareSection
-                shareOn="Share on"
-                shareTitle="Share this component"
+                shareOn={t("shareOn")}
+                shareTitle={t("shareTitle")}
                 title={`${displayTitle} — VLLNT UI`}
                 url={withRef(
                   canonical(`/components/${component.name}`, locale),

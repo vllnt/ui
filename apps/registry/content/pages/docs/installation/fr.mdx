@@ -1,0 +1,96 @@
+---
+title: Installation
+description: Installez VLLNT UI avec pnpm, Tailwind CSS, la CLI shadcn et votre premier composant de registre.
+type: docs
+og:
+  title: Installation
+  description: Installez les composants VLLNT UI avec la CLI shadcn
+  type: docs
+---
+
+# Installation
+
+VLLNT UI est distribue a la fois comme paquet npm et comme registre compatible shadcn. La plupart des equipes devraient installer les composants individuellement depuis le registre afin que le code source arrive dans leur application et puisse etre adapte localement.
+
+## Prerequis
+
+- Node.js 20 ou une version plus recente.
+- pnpm pour ce depot et pour les exemples de cette documentation.
+- Une application React avec TypeScript.
+- Tailwind CSS configure dans l'application.
+
+## Installer le paquet
+
+Utilisez le paquet lorsque vous voulez importer des exports pre-construits depuis `@vllnt/ui` :
+
+```bash
+pnpm add @vllnt/ui
+```
+
+Ensuite, importez une seule fois la feuille de style complete du paquet depuis le point d'entree de votre application, comme `app/layout.tsx` ou `src/main.tsx` :
+
+```tsx
+import "@vllnt/ui/styles.css";
+```
+
+Ajoutez le preset Tailwind de VLLNT UI et gardez le code source de votre application dans l'analyse de contenu de Tailwind :
+
+```ts
+// tailwind.config.ts
+import uiPreset from "@vllnt/ui/tailwind-preset";
+
+export default {
+  presets: [uiPreset],
+  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+};
+```
+
+Ensuite, importez un composant :
+
+```tsx
+import { Button } from "@vllnt/ui";
+
+export function SaveButton() {
+  return <Button>Save</Button>;
+}
+```
+
+## Ajouter un composant du registre
+
+Utilisez la CLI shadcn lorsque vous voulez que le code source du composant soit copie dans votre projet :
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
+
+Remplacez `button` par n'importe quel slug de composant depuis l'[index des composants](/fr/components).
+
+## Configuration de Tailwind
+
+Les installations par paquet et les installations par registre necessitent une configuration legerement differente :
+
+- Les installations par paquet importent `@vllnt/ui/styles.css` une seule fois, utilisent `@vllnt/ui/tailwind-preset` et analysent les fichiers source de votre application dans `content`.
+- Les installations par registre copient le code source du composant dans votre application. Gardez Tailwind configure pour les styles de votre application et assurez-vous que l'analyse de contenu de Tailwind inclut les chemins de destination ou la CLI shadcn ecrit ces composants copies.
+
+```ts
+// tailwind.config.ts
+export default {
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./registry/**/*.{ts,tsx}",
+  ],
+};
+```
+
+Les chemins exacts du registre dependent des alias de votre `components.json` shadcn. Incluez tous les repertoires locaux qui recoivent des composants VLLNT UI copies.
+
+Utilisez `@vllnt/ui/themes/default.css` au lieu de `@vllnt/ui/styles.css` uniquement lorsque vous voulez intentionnellement les variables de theme du paquet sans les styles de la couche de base de Tailwind. Le fichier de theme ne contient que des variables ; il ne remplace pas la feuille de style complete du paquet. Gardez intactes les classes utilitaires generees par le registre, sauf si vous savez que les etats rendus n'en ont plus besoin.
+
+## Liste de verification du premier composant
+
+- Installez un petit composant, comme `button` ou `badge`.
+- Importez-le depuis le chemin local copie ou depuis `@vllnt/ui`, selon le mode d'installation que vous avez choisi.
+- Affichez-le dans une page avec les modes clair et sombre actives.
+- Executez le lint et la verification de types de votre application avant d'ajouter d'autres composants.

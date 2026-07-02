@@ -1,0 +1,45 @@
+---
+title: Agents
+description: Utilisez llms.txt, llms-full.txt, MCP et le JSON du registre depuis des agents de codage IA.
+type: docs
+og:
+  title: Agents
+  description: Guide de consommation par les agents IA pour VLLNT UI
+  type: docs
+---
+
+# Agents
+
+VLLNT UI expose des surfaces lisibles par les agents afin que les agents de codage puissent decouvrir les composants, inspecter les contrats d'installation et citer la documentation actuelle sans extraire le contenu du site rendu.
+
+## llms.txt
+
+Utilisez `/llms.txt` pour un apercu compact du registre. Il inclut des conseils d'installation, des liens vers la documentation principale et des liens vers les composants regroupes par categorie.
+
+```text
+https://ui.vllnt.ai/llms.txt
+```
+
+## llms-full.txt
+
+Utilisez `/llms-full.txt` lorsque l'agent a besoin d'un seul contexte texte plus large. Il inclut les principales pages de documentation et des resumes de metadonnees des composants.
+
+```text
+https://ui.vllnt.ai/llms-full.txt
+```
+
+## JSON du registre
+
+Utilisez `/r/registry.json` pour la decouverte et `/r/[name].json` pour les descripteurs d'installation exacts. Le JSON est la source la plus fiable pour les chemins de fichiers, les dependances et les dependances de registre.
+
+## MCP
+
+La route `/mcp` est reservee aux flux de travail d'agents qui necessitent un point de terminaison de protocole structure. Traitez le JSON du registre comme le contrat d'installation canonique et le MCP comme une surface d'integration.
+
+## Flux de travail d'agent securise
+
+- Recuperez `/llms.txt` pour vous orienter.
+- Recuperez `/r/registry.json` pour choisir les composants.
+- Recuperez les descripteurs individuels `/r/[name].json` avant de modifier le code.
+- Preferez le code source du paquet aux fichiers de registre generes lorsque vous contribuez en amont.
+- Executez les controles qualite du projet avant d'ouvrir une PR.

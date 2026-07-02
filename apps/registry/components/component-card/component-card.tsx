@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { ComponentThumbnail } from "@/components/component-thumbnail";
 import type { Locale } from "@/i18n/routing";
@@ -32,12 +33,13 @@ type ComponentCardProps = {
  * @param slug - registry component slug
  * @param locale - active locale for the link
  */
-export function ComponentCard({
+export async function ComponentCard({
   description,
   locale,
   slug,
   title,
 }: ComponentCardProps) {
+  const t = await getTranslations("pages.components");
   const meta = META[slug];
   const displayTitle = title ?? meta?.title ?? slug;
   const displayDescription = description ?? meta?.description;
@@ -60,7 +62,7 @@ export function ComponentCard({
         ) : null}
         {storyCount > 0 ? (
           <span className="mt-3 text-xs text-muted-foreground">
-            {`${storyCount} ${storyCount === 1 ? "story" : "stories"}`}
+            {t("stories", { count: storyCount })}
           </span>
         ) : null}
       </div>

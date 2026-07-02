@@ -1,0 +1,60 @@
+---
+title: CLI
+description: Utilisez la CLI shadcn avec les URL du registre VLLNT UI, les alias et des workflows d'equipe reproductibles.
+type: docs
+og:
+  title: CLI
+  description: Guide pratique de la CLI shadcn pour VLLNT UI
+  type: docs
+---
+
+# CLI
+
+Le registre VLLNT UI utilise la meme forme de descripteur JSON que celle attendue par la CLI shadcn. Vous pouvez installer les composants directement depuis des URL publiques sans ajouter de dependance de paquet personnalisee.
+
+## Ajouter un composant
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+```
+
+La CLI lit le descripteur, installe les dependances et ecrit les fichiers source dans le repertoire de composants que vous avez configure.
+
+## Ajouter plusieurs composants
+
+Installez les composants un par un pour que les diffs soient faciles a relire :
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/dialog.json
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/toast.json
+pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/form.json
+```
+
+## Inspecter d'abord le registre
+
+Utilisez l'index du registre lorsque vous ecrivez des scripts :
+
+```bash
+curl https://ui.vllnt.ai/r/registry.json
+```
+
+Chaque element inclut son slug, son titre, sa description, sa categorie, ses dependances et sa liste de fichiers. Les descripteurs par composant se trouvent a :
+
+```text
+https://ui.vllnt.ai/r/<name>.json
+```
+
+## Workflow d'equipe
+
+- Epinglez les ajouts de composants dans les pull requests au lieu de les installer pendant le deploiement.
+- Relisez les fichiers generes comme du code applicatif normal.
+- Gardez les modifications locales proches du composant copie pour que les futures mises a jour soient faciles a reconcilier.
+- Relancez la CLI uniquement lorsque vous acceptez intentionnellement les changements en amont.
+
+## Registres personnalises
+
+Si vous construisez un registre prive au-dessus de VLLNT UI, gardez les memes champs de descripteur et la meme forme d'URL stable. Les consommateurs devraient pouvoir remplacer uniquement l'hote :
+
+```bash
+pnpm dlx shadcn@latest add https://your-registry.example.com/r/button.json
+```

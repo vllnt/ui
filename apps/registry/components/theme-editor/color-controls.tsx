@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { hexToOklchChannels, oklchChannelsToHex } from "@/lib/oklch";
 import { THEME_TOKENS, type ThemeColors } from "@/lib/theme-tokens";
 
@@ -61,10 +63,11 @@ export function ColorControls({
   onRadiusChange,
   radius,
 }: ColorControlsProps) {
+  const t = useTranslations("pages.themes.editor");
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <span className="text-sm font-semibold">Border radius</span>
+        <span className="text-sm font-semibold">{t("borderRadius")}</span>
         <div className="flex flex-wrap gap-2">
           {RADIUS_OPTIONS.map((option) => (
             <button

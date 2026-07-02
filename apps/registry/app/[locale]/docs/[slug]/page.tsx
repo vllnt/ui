@@ -5,7 +5,7 @@ import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
@@ -124,6 +124,7 @@ export default async function DocsSlugPage(props: Props) {
       ? `${content}\n\n${await readChangelog()}`
       : content;
   const pageUrl = `${SITE_URL}${getDocsPath(docsPage)}`;
+  const c = await getTranslations("common");
 
   return (
     <>
@@ -149,8 +150,8 @@ export default async function DocsSlugPage(props: Props) {
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
-                { href: localizePathname("/docs", locale), label: "Docs" },
+                { href: localizePathname("/", locale), label: c("home") },
+                { href: localizePathname("/docs", locale), label: c("docs") },
                 { label: frontmatter.title },
               ]}
             />
