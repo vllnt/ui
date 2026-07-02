@@ -5,9 +5,11 @@ import { setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import { type Locale, routing } from "@/i18n/routing";
+import { getFamilyCopy } from "@/lib/family-copy";
 import {
   breadcrumbLd,
   collectionPageLd,
+  faqPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -56,7 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const pathname = `/families/${category}`;
   const title = `${group.label} components`;
-  const description = getCategoryDescription(group.category);
+  const copy = getFamilyCopy(group.category);
+  const description = copy?.intro ?? getCategoryDescription(group.category);
 
   return {
     alternates: {
@@ -88,7 +91,8 @@ export default async function FamilyPage({ params }: Props) {
     notFound();
   }
 
-  const description = getCategoryDescription(group.category);
+  const copy = getFamilyCopy(group.category);
+  const description = copy?.intro ?? getCategoryDescription(group.category);
   const pathname = `/families/${category}`;
 
   return (
@@ -109,6 +113,7 @@ export default async function FamilyPage({ params }: Props) {
             title: `${group.label} components`,
             url: `${SITE_URL}${pathname}`,
           }),
+          ...(copy && copy.faq.length > 0 ? [faqPageLd(copy.faq)] : []),
         ])}
       />
       <Sidebar sections={getSidebarSections(group.category, locale)} />
@@ -146,6 +151,22 @@ export default async function FamilyPage({ params }: Props) {
               />
             ))}
           </div>
+
+          {copy && copy.faq.length > 0 ? (
+            <section className="mt-16">
+              <h2 className="text-2xl font-semibold">Frequently asked</h2>
+              <dl className="mt-6 space-y-6">
+                {copy.faq.map((item) => (
+                  <div className="max-w-3xl" key={item.question}>
+                    <dt className="font-medium">{item.question}</dt>
+                    <dd className="mt-2 text-muted-foreground">
+                      {item.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : null}
         </div>
       </main>
     </>
