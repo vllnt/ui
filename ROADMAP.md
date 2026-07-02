@@ -1,8 +1,8 @@
 # Roadmap
 
 > **Goal:** the most complete, agent-ready React component registry on the @vllnt design system — every component documented, typed, installable via the shadcn CLI, and discoverable by humans and agents.
-> **Now:** `component-sidebar` (0.4.0 canary cycle).
-> **Last updated:** 2026-06-27
+> **Now:** `typography-primitives` shipped (#465 / PR #468); 0.4.0 canary cycle.
+> **Last updated:** 2026-07-02
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.
@@ -76,18 +76,19 @@ Single-pane drill-down (chosen over accordion-single-open and a two-pane family 
 - [ ] component-sidebar.6 Directional slide transition with `prefers-reduced-motion` instant fallback; persist last-family + scroll (localStorage)
 - [ ] component-sidebar.7 Validate component-sidebar.1–6: Playwright E2E (desktop + mobile + keyboard) — auto-drill, back, breadcrumb sync, global filter, ⌘K, persistence (E2E)
 
-## typography-primitives [ACTIVE — code-complete on `feat/typography-primitives`, pending merge]
+## typography-primitives [DONE 2026-07]
 
-**Goal:** Foundation typographic primitives (`Text`, `Heading`, `Display`, `Prose`) whose font family, weight, and scale are theme-overridable design tokens — a brand adopts its own type identity by overriding tokens alone, no library fork. Closes #465.
-**Exit criteria:** `Text`/`Heading`/`Display`/`Prose` in the `core` family with story + test + registry entry; `--font-sans` + new `--font-display`, `--font-weight-heading`/`--font-weight-display`, and a `--font-size-*` scale wired + documented (DESIGN.md, tokens.json); default house style unchanged (sans, 600) when tokens aren't overridden.
-**Verify:** CT E2E — overriding `--font-display`/`--font-weight-heading` on a scope restyles a `Heading` with no code change; `Display` reveal is gated behind `prefers-reduced-motion`. Moves to the DONE cluster on merge + canary publish.
+**Goal:** Foundation typographic primitives (`Text`, `Heading`, `Display`, `Prose`) whose font family, weight, and scale are theme-overridable design tokens — a brand adopts its own type identity by overriding tokens alone, no library fork. Closes #465 (PR #468).
+**Exit criteria:** `Text`/`Heading`/`Display`/`Prose` in the `core` family with story + test + registry entry; `--font-sans` + new `--font-display`, `--font-weight-heading`/`--font-weight-display`, `--font-mono`, and a `--font-size-*` scale wired + documented (DESIGN.md, tokens.json); default house style unchanged (sans, 600) when tokens aren't overridden.
+**Verify:** CT E2E — overriding `--font-display`/`--font-weight-heading` restyles a `Heading` with no code change; `Display` reveal gated behind `prefers-reduced-motion`; WCAG AA contrast (canvas readback) holds in light + dark.
 
-- [x] typography-primitives.1 Token layer: `--font-sans`/`--font-display`, weight + `--font-size-*` scale CSS vars (styles.css + themes/default.css); DESIGN.md + tokens.json baseline — #465
-- [x] typography-primitives.2 `Heading` (semantic h1–h6, token family/weight/scale) — #465
-- [x] typography-primitives.3 `Text` (polymorphic body, size/tone/weight variants) — #465
-- [x] typography-primitives.4 `Display` (hero scale, reduced-motion-safe reveal) + `Prose` (long-form wrapper) — #465
-- [x] typography-primitives.5 Registry entries + barrel exports + count/prose surfaces (313) — #465
-- [x] typography-primitives.6 Validate: unit tests + Playwright CT (token override + reduced-motion) (E2E) — #465
+- [x] typography-primitives.1 Token layer: `--font-sans`/`--font-display`/`--font-mono`, weight + `--font-size-*` scale CSS vars (styles.css + themes/default.css); DESIGN.md + tokens.json baseline — #465
+- [x] typography-primitives.2 `Heading` (semantic h1–h6, token family/weight/scale, `size`-decoupled visual scale) — #465
+- [x] typography-primitives.3 `Text` (polymorphic body + `ref`, size/tone/weight variants) — #465
+- [x] typography-primitives.4 `Display` (hero scale + `ref`, reduced-motion-safe reveal) + `Prose` (long-form wrapper) — #465
+- [x] typography-primitives.5 Registry entries + barrel exports (`HeadingProps`) + count/prose surfaces (313) — #465
+- [x] typography-primitives.6 Validate: unit + Playwright CT (token override, reduced-motion, axe + AA contrast) (E2E) — #465
+- [x] typography-primitives.7 Code review (PR #468): ref-forwarding on `Text`/`Display`, `HeadingProps` disambiguation, robust axe resolution + oklch-safe contrast test — #465
 
 ## ai-elements-parity [PLANNED]
 
@@ -255,6 +256,6 @@ Semver discipline starts hard at `1.0.0`. Until then, `0.x.0` may include breaki
 
 ## Tracking
 
-- Open issues: `gh issue list -R vllnt/ui --state open` (currently 0 — file issues per phase as work starts; the repo enforces issue-linked PRs).
+- Open issues: `gh issue list -R vllnt/ui --state open` (#465 typography-primitives closed via PR #468; file issues per phase as work starts — the repo enforces issue-linked PRs).
 - react-doctor score: `pnpm doctor:score`.
 - Channels: `npm view @vllnt/ui dist-tags`.
