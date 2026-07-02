@@ -1,0 +1,6 @@
+{
+  "a11y": {
+    "role": "heading",
+    "notes": "Renders a native h1–h6 chosen by `level` for a correct document outline. `size` restyles the visual scale without changing the semantic rank, so the outline stays intact. No ARIA required."
+  }
+}

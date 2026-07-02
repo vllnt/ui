@@ -26,6 +26,17 @@ describe("Heading", () => {
     expect(heading).toHaveClass("[font-weight:var(--font-weight-heading)]");
   });
 
+  it("decouples visual size from semantic level via `size`", () => {
+    render(
+      <Heading level={2} size={1}>
+        Big h2
+      </Heading>,
+    );
+
+    const heading = screen.getByRole("heading", { level: 2 });
+    expect(heading).toHaveClass("text-[length:var(--font-size-h1)]");
+  });
+
   it("merges a custom className", () => {
     render(
       <Heading className="custom-class" level={2}>

@@ -28,3 +28,11 @@ export const Levels: Story = {
     </div>
   ),
 };
+
+export const DecoupledSize: Story = {
+  args: {
+    children: "An h2 rendered at h1 size",
+    level: 2,
+    size: 1,
+  },
+};

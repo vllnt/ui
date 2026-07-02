@@ -2099,6 +2099,10 @@
       {
         "id": "core-heading--levels",
         "name": "Levels"
+      },
+      {
+        "id": "core-heading--decoupled-size",
+        "name": "Decoupled Size"
       }
     ],
     "title": "Heading"

@@ -1,0 +1,5 @@
+{
+  "a11y": {
+    "notes": "Styling-only wrapper that preserves the semantics of the HTML you nest (headings, lists, quotes, code), so document structure and reading order come from your content."
+  }
+}
