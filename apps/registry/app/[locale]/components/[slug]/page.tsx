@@ -291,7 +291,7 @@ export default async function ComponentPage(props: Props) {
                   </p>
                   <Link
                     className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                    href={localizePathname("/ai", locale)}
+                    href={localizePathname("/families/ai", locale)}
                   >
                     Browse all AI agent components
                     <ExternalLink className="size-3" />

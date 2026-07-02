@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
+import { Footer } from "@/components/footer/footer";
 import { type Locale, routing } from "@/i18n/routing";
 import { getFamilyCopy } from "@/lib/family-copy";
 import {
@@ -181,6 +182,7 @@ export default async function FamilyPage({ params }: Props) {
             </section>
           ) : null}
         </div>
+        <Footer />
       </main>
     </>
   );

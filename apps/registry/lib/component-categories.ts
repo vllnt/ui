@@ -120,14 +120,14 @@ function getCategoryDescription(category: ComponentCategory): string {
 }
 
 /**
- * Canonical site path for a component family. The `ai` family resolves to the
- * curated `/ai` landing; every other family resolves to `/families/<category>`.
+ * Canonical site path for a component family — `/families/<category>` for every
+ * family, including the AI family's curated landing at `/families/ai`.
  *
  * @param category - the component category
  * @returns the locale-agnostic family path (pass through `localizePathname`)
  */
 function familyPath(category: ComponentCategory): string {
-  return category === "ai" ? "/ai" : `/families/${category}`;
+  return `/families/${category}`;
 }
 
 export {

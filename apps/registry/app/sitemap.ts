@@ -63,7 +63,7 @@ function localizedEntries(
 function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
   const routes = [
     { changeFrequency: "weekly", path: "/", priority: 1 },
-    { changeFrequency: "weekly", path: "/ai", priority: 0.9 },
+    { changeFrequency: "weekly", path: "/families", priority: 0.9 },
     { changeFrequency: "weekly", path: "/components", priority: 1 },
     { changeFrequency: "weekly", path: "/templates", priority: 0.8 },
     { changeFrequency: "weekly", path: "/changelog", priority: 0.8 },
@@ -80,18 +80,16 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
 }
 
 function familyRoutes(lastModified: Date): MetadataRoute.Sitemap {
-  return groupedComponents
-    .filter((group) => group.category !== "ai")
-    .flatMap((group) =>
-      localizedEntries(
-        {
-          changeFrequency: "weekly",
-          path: `/families/${group.category}`,
-          priority: 0.7,
-        },
-        lastModified,
-      ),
-    );
+  return groupedComponents.flatMap((group) =>
+    localizedEntries(
+      {
+        changeFrequency: "weekly",
+        path: `/families/${group.category}`,
+        priority: group.category === "ai" ? 0.9 : 0.7,
+      },
+      lastModified,
+    ),
+  );
 }
 
 function docsRoutes(lastModified: Date): MetadataRoute.Sitemap {
