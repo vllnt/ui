@@ -1561,7 +1561,6 @@ export {
   H2,
   H3,
   H4,
-  type HeadingProps,
   InlineCode,
   type InlineCodeProps,
   Lead,
@@ -1573,6 +1572,9 @@ export {
   type TypographyVariant,
   typographyVariants,
 } from "./typography";
+// The plain heading-element props alias — the canonical `HeadingProps` now
+// belongs to the `Heading` primitive (below).
+export { type HeadingProps as TypographyHeadingProps } from "./typography";
 export { Link, type LinkProps, linkVariants } from "./link";
 export {
   Toolbar,
@@ -1595,7 +1597,7 @@ export {
   PanelTitle,
   type PanelTitleProps,
 } from "./panel";
-export { Heading, type HeadingLevel } from "./heading";
+export { Heading, type HeadingLevel, type HeadingProps } from "./heading";
 export { Text, type TextElement, type TextProps, textVariants } from "./text";
 export { Display, type DisplayElement, type DisplayProps } from "./display";
 export { Prose, type ProseProps } from "./prose";

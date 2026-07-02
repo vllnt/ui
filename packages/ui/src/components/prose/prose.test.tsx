@@ -14,7 +14,7 @@ describe("Prose", () => {
     expect(screen.getByText("Paragraph")).toBeInTheDocument();
   });
 
-  it("applies the sans body token to the container", () => {
+  it("applies the sans body token class to the container", () => {
     const { container } = render(
       <Prose>
         <p>Body</p>

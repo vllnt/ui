@@ -1,5 +1,5 @@
 {
   "a11y": {
-    "notes": "Renders a semantic element (p, span, div, or label) chosen by `as`, and inherits the design-system foreground contrast tokens. For a real form label use the Label component, which wires the htmlFor association."
+    "notes": "Renders a semantic element (p, span, div, or label) chosen by `as`, forwards `ref`, and inherits the design-system foreground contrast tokens. Use `tone=\"muted\"` on the default `background` — on `muted`/`card` surfaces the muted foreground can fall below WCAG AA. For a real form label use the Label component, which wires the htmlFor association."
   }
 }

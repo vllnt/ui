@@ -1,3 +1,5 @@
+import { createElement } from "react";
+
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../lib/utils";
@@ -12,6 +14,7 @@ export const textVariants = cva(
     defaultVariants: {
       size: "base",
       tone: "default",
+      weight: "normal",
     },
     variants: {
       size: {
@@ -42,13 +45,16 @@ export type TextElement = "div" | "label" | "p" | "span";
 export type TextProps = React.HTMLAttributes<HTMLElement> &
   VariantProps<typeof textVariants> & {
     as?: TextElement;
+    ref?: React.Ref<HTMLElement>;
   };
 
 /**
- * Body text whose family and scale come from theme-overridable tokens
- * (`--font-sans`, `--font-size-body*`). Polymorphic via `as` — the dynamic
- * element type means this primitive is not ref-forwarding; wrap it if you need
- * an imperative handle.
+ * Body text whose family, scale, and weight come from theme-overridable tokens
+ * (`--font-sans`, `--font-size-body*`). Polymorphic via `as`. Forwards `ref` to
+ * the rendered element.
+ *
+ * Use `tone="muted"` on the default `background`; on `muted`/`card` surfaces the
+ * muted foreground can fall below WCAG AA contrast for body text.
  *
  * @example
  * <Text size="lead" tone="muted">Intro copy</Text>
@@ -56,20 +62,17 @@ export type TextProps = React.HTMLAttributes<HTMLElement> &
 const Text = ({
   as = "p",
   className,
+  ref,
   size,
   tone,
   weight,
   ...props
-}: TextProps) => {
-  const Component: React.ElementType = as;
-
-  return (
-    <Component
-      className={cn(textVariants({ size, tone, weight }), className)}
-      {...props}
-    />
-  );
-};
+}: TextProps) =>
+  createElement(as, {
+    className: cn(textVariants({ size, tone, weight }), className),
+    ref,
+    ...props,
+  });
 Text.displayName = "Text";
 
 export { Text };

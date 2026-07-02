@@ -18,7 +18,7 @@ describe("Heading", () => {
     expect(screen.getByRole("heading", { level: 2 })).toBeInTheDocument();
   });
 
-  it("drives the family and weight from tokens", () => {
+  it("applies the token-driven family + weight classes", () => {
     render(<Heading level={1}>Token-driven</Heading>);
 
     const heading = screen.getByRole("heading", { level: 1 });

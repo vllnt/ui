@@ -5316,7 +5316,7 @@
       "version": "0.3.0",
       "stability": "stable",
       "a11y": {
-        "notes": "Renders a semantic element (p, span, div, or label) chosen by `as`, and inherits the design-system foreground contrast tokens. For a real form label use the Label component, which wires the htmlFor association."
+        "notes": "Renders a semantic element (p, span, div, or label) chosen by `as`, forwards `ref`, and inherits the design-system foreground contrast tokens. Use `tone=\"muted\"` on the default `background` — on `muted`/`card` surfaces the muted foreground can fall below WCAG AA. For a real form label use the Label component, which wires the htmlFor association."
       }
     },
     {
@@ -6198,5 +6198,5 @@
     }
   ],
   "version": "0.3.0",
-  "generatedAt": "2026-07-02T16:24:20.250Z"
+  "generatedAt": "2026-07-02T19:20:42.087Z"
 }

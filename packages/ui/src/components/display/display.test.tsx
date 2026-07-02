@@ -16,7 +16,25 @@ describe("Display", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Hero");
   });
 
-  it("uses the display family and size tokens", () => {
+  it("forwards a ref to the rendered element", () => {
+    let node: HTMLElement | null = null;
+    render(
+      <Display
+        as="h1"
+        ref={(element) => {
+          node = element;
+        }}
+      >
+        Ref
+      </Display>,
+    );
+
+    expect(node).toBeInstanceOf(HTMLHeadingElement);
+  });
+
+  // Class-recipe assertions — typography-tokens.visual.tsx exercises the runtime
+  // token resolution in a browser; these pin the class contract.
+  it("applies the display family + size token classes", () => {
     render(<Display>Token</Display>);
 
     const node = screen.getByText("Token");

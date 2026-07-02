@@ -17,8 +17,15 @@ Release automation can regenerate this file from Conventional Commits with
   `--font-display`), heading/display weight (`--font-weight-heading`,
   `--font-weight-display`), and the type scale (`--font-size-*`) are
   theme-overridable design tokens, so a brand restyles headings and body via
-  token overrides alone — no library edits. (#465)
+  token overrides alone — no library edits. `Heading` also takes a `size` prop
+  to decouple visual scale from the semantic `level`. (#465)
 - Total component count: **313** (up from 309).
+
+### Changed
+
+- `HeadingProps` exported from `@vllnt/ui` now refers to the `Heading` primitive
+  (adds optional `level`/`size`/`ref`); the plain heading-element alias is
+  available as `TypographyHeadingProps`. (#465)
 
 ## [0.3.0] - 2026-06-26
 

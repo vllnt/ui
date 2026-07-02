@@ -1,3 +1,5 @@
+import { createElement } from "react";
+
 import { cn } from "@vllnt/ui";
 
 /** HTML element the {@link Display} primitive renders as. */
@@ -11,6 +13,7 @@ export type DisplayProps = React.HTMLAttributes<HTMLElement> & {
    */
   animated?: boolean;
   as?: DisplayElement;
+  ref?: React.Ref<HTMLElement>;
 };
 
 const displayBase =
@@ -21,7 +24,7 @@ const displayBase =
  * `--font-weight-display`, `--font-size-display`). Renders a non-semantic `div`
  * by default — pass `as="h1"` for a hero heading. With `animated`, a rise-in
  * reveal runs when the user permits motion; `prefers-reduced-motion` skips it.
- * Polymorphic via `as`, so it does not forward a ref.
+ * Polymorphic via `as`; forwards `ref` to the rendered element.
  *
  * @example
  * <Display as="h1" animated>Ship faster</Display>
@@ -30,22 +33,19 @@ const Display = ({
   animated = false,
   as = "div",
   className,
+  ref,
   ...props
-}: DisplayProps) => {
-  const Component: React.ElementType = as;
-
-  return (
-    <Component
-      className={cn(
-        displayBase,
-        animated &&
-          "motion-safe:animate-[vllnt-animated-text-reveal_0.6s_ease-out_both]",
-        className,
-      )}
-      {...props}
-    />
-  );
-};
+}: DisplayProps) =>
+  createElement(as, {
+    className: cn(
+      displayBase,
+      animated &&
+        "motion-safe:animate-[vllnt-animated-text-reveal_0.6s_ease-out_both]",
+      className,
+    ),
+    ref,
+    ...props,
+  });
 Display.displayName = "Display";
 
 export { Display };
