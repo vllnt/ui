@@ -139,7 +139,7 @@ export default async function VsAssistantUiPage({ params }: Props) {
           <div className="mt-12 border-t border-border pt-8">
             <Link
               className="inline-flex items-center gap-1 font-medium text-foreground underline"
-              href={localizePathname("/ai", locale)}
+              href={localizePathname("/families/ai", locale)}
             >
               Explore all AI agent components
             </Link>

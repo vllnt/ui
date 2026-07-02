@@ -94,7 +94,7 @@ export default async function UseCasePage({ params }: Props) {
           <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
             <Link
               className="hover:text-foreground"
-              href={localizePathname("/ai", locale)}
+              href={localizePathname("/families/ai", locale)}
             >
               UI for AI agents
             </Link>
@@ -154,7 +154,7 @@ export default async function UseCasePage({ params }: Props) {
           <div className="mt-14 border-t border-border pt-8">
             <Link
               className="inline-flex items-center gap-1 font-medium text-foreground underline"
-              href={localizePathname("/ai", locale)}
+              href={localizePathname("/families/ai", locale)}
             >
               Browse all AI agent components
               <ArrowRight className="size-4" />

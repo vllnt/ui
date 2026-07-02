@@ -1,5 +1,5 @@
 import { type Locale, routing } from "@/i18n/routing";
-import { groupedComponents } from "@/lib/component-categories";
+import { familyPath, groupedComponents } from "@/lib/component-categories";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import { localizePathname } from "@/lib/seo";
 import type { ComponentCategory } from "@/types/registry";
@@ -42,6 +42,7 @@ export function getSidebarSections(
     },
     ...groupedComponents.map((group) => ({
       family: true,
+      href: localizePathname(familyPath(group.category), locale),
       items: group.items.map((item) => ({
         href: localizePathname(`/components/${item.name}`, locale),
         title: item.title,
@@ -53,6 +54,8 @@ export function getSidebarSections(
 
 export {
   components,
+  familyPath,
+  getCategoryDescription,
   getCategoryForComponent,
   groupedComponents,
 } from "@/lib/component-categories";

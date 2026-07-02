@@ -116,7 +116,7 @@
         "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -136,7 +136,7 @@
         "@vllnt/ui@^0.3.0",
         "class-variance-authority"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -176,7 +176,7 @@
         "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -195,7 +195,7 @@
       "dependencies": [
         "@vllnt/ui@^0.3.0"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -216,7 +216,7 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -1548,7 +1548,7 @@
       "dependencies": [
         "@vllnt/ui@^0.3.0"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -3287,7 +3287,7 @@
       "dependencies": [
         "@vllnt/ui@^0.3.0"
       ],
-      "category": "form",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -5506,7 +5506,7 @@
         "@vllnt/ui@^0.3.0",
         "lucide-react"
       ],
-      "category": "learning",
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -6198,5 +6198,5 @@
     }
   ],
   "version": "0.3.0",
-  "generatedAt": "2026-07-02T19:20:42.087Z"
+  "generatedAt": "2026-07-02T20:13:54.208Z"
 }

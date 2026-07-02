@@ -37,7 +37,7 @@ test.describe("component sidebar drill-down", () => {
     await expect(breadcrumb.getByText("Core", { exact: true })).toBeVisible();
   });
 
-  test("back returns to the family list; selecting a family drills in", async ({
+  test("selecting a family navigates to its homepage and drills the sidebar", async ({
     page,
   }) => {
     await page.goto("/components/button");
@@ -45,19 +45,19 @@ test.describe("component sidebar drill-down", () => {
 
     await sidebar.getByRole("button", { name: "All families" }).click();
 
-    // ROOT: families are listed; the previous family's items are gone.
-    await expect(sidebar.getByRole("button", { name: /^Form/ })).toBeVisible();
+    // ROOT: families are links now; the previous family's items are gone.
+    const formLink = sidebar.getByRole("link", { name: /^Form/ });
+    await expect(formLink).toBeVisible();
     await expect(
       sidebar.getByRole("link", { exact: true, name: "Button" }),
     ).toHaveCount(0);
 
-    // Drill into Form: the back control returns and the family's items render.
-    await sidebar.getByRole("button", { name: /^Form/ }).click();
+    // Clicking a family navigates to its homepage and auto-drills the sidebar.
+    await formLink.click();
+    await expect(page).toHaveURL(/\/families\/form$/);
     await expect(
       sidebar.getByRole("button", { name: "All families" }),
     ).toBeVisible();
-    await expect(
-      sidebar.locator('a[href$="/components/form"]'),
-    ).toBeVisible();
+    await expect(sidebar.locator('a[href$="/components/form"]')).toBeVisible();
   });
 });

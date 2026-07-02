@@ -33,7 +33,7 @@ function HeroActions({ componentCount }: { componentCount: number }) {
     <div className="mt-6 flex flex-wrap gap-3">
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-        href="/ai"
+        href="/families/ai"
       >
         Explore AI components
         <ArrowRight className="size-4" />

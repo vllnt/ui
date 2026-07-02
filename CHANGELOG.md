@@ -12,6 +12,13 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Added
 
+- **Component family landing pages** - every component family has a standalone,
+  SEO-oriented landing at `/families/[category]`, plus a `/families` index. One
+  shared template renders a hero with CTAs, per-family SEO sub-groups with
+  editorial copy and live component previews, an agent-readable surface
+  (`/llms.txt`, `/llms-full.txt`, `/r/<name>.json`), and a FAQ. Each page ships
+  `CollectionPage`/`ItemList`, `FAQPage`, and `BreadcrumbList` JSON-LD and is
+  listed in the sitemap.
 - **Typography foundation primitives** — `Text`, `Heading`, `Display`, and
   `Prose` in the `core` family. Font family (`--font-sans` + a new
   `--font-display`), heading/display weight (`--font-weight-heading`,
@@ -23,6 +30,10 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Changed
 
+- **AI family consolidated onto the shared template** - the bespoke `/ai` hub is
+  gone; `/ai` now permanently redirects to `/families/ai`, which renders through
+  the same family template. AI components are recategorized out of the
+  `learning` family into `ai`.
 - `HeadingProps` exported from `@vllnt/ui` now refers to the `Heading` primitive
   (adds optional `level`/`size`/`ref`); the plain heading-element alias is
   available as `TypographyHeadingProps`. (#465)

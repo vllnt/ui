@@ -34,6 +34,7 @@ import { registry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
 import {
+  familyPath,
   getCategoryForComponent,
   getSidebarSections,
   groupedComponents,
@@ -242,7 +243,17 @@ export default async function ComponentPage(props: Props) {
                       href: localizePathname("/components", locale),
                       label: "Components",
                     },
-                    ...(familyGroup ? [{ label: familyGroup.label }] : []),
+                    ...(familyGroup
+                      ? [
+                          {
+                            href: localizePathname(
+                              familyPath(familyGroup.category),
+                              locale,
+                            ),
+                            label: familyGroup.label,
+                          },
+                        ]
+                      : []),
                     { label: displayTitle },
                   ]}
                 />
@@ -280,7 +291,7 @@ export default async function ComponentPage(props: Props) {
                   </p>
                   <Link
                     className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                    href={localizePathname("/ai", locale)}
+                    href={localizePathname("/families/ai", locale)}
                   >
                     Browse all AI agent components
                     <ExternalLink className="size-3" />

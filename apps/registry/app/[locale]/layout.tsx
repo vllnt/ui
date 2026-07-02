@@ -128,8 +128,6 @@ export default async function LocaleLayout({ children, params }: Props) {
           title="VLLNT UI releases"
           type="application/atom+xml"
         />
-        <script {...jsonLdScriptAttributes(organizationLd())} />
-        <script {...jsonLdScriptAttributes(websiteLd())} />
       </head>
       <body className="h-full overflow-hidden">
         <ThemeProvider
@@ -143,7 +141,12 @@ export default async function LocaleLayout({ children, params }: Props) {
             <div className="flex h-full flex-col overflow-hidden">
               <NextIntlClientProvider>
                 <Header locale={locale} />
-                <div className="flex flex-1 overflow-hidden">{children}</div>
+                <div className="flex flex-1 overflow-hidden">
+                  <script
+                    {...jsonLdScriptAttributes([organizationLd(), websiteLd()])}
+                  />
+                  {children}
+                </div>
               </NextIntlClientProvider>
             </div>
           </SidebarProvider>
