@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Local config
 .mcp.json
+
+# codebase-intelligence cache
+.code-visualizer/
