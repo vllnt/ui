@@ -3,10 +3,10 @@ import { expect, test } from "@playwright/test";
 /**
  * Component family homepages (component-family phase).
  *
- * Each non-AI category has a landing page at /families/[category] with a hero,
- * a component grid, and a breadcrumb. The /components index family headings and
- * the component-page family crumb both link here. The `ai` family is excluded —
- * its curated landing lives at /ai.
+ * Every category — `ai` included — shares one landing template at
+ * /families/[category] with a hero, SEO sub-groups, a component grid, and a
+ * breadcrumb. The /components index family headings and the component-page
+ * family crumb both link here. `/ai` permanently redirects to /families/ai.
  */
 
 test.describe("component family homepage", () => {
@@ -23,6 +23,21 @@ test.describe("component family homepage", () => {
     // The grid links into individual component pages.
     await expect(
       page.locator('main a[href*="/components/"]').first(),
+    ).toBeVisible();
+  });
+
+  test("the ai family uses the shared grouped landing template", async ({
+    page,
+  }) => {
+    await page.goto("/families/ai");
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: "AI components" }),
+    ).toBeVisible();
+
+    // SEO sub-groups render — the shared template, not the old bespoke hub.
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Chat & Conversation" }),
     ).toBeVisible();
   });
 

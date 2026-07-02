@@ -2,9 +2,9 @@ import type { ComponentCategory } from "@/types/registry";
 
 /**
  * Editorial copy for a component family landing page — an SEO-oriented intro and
- * a short FAQ. Families without an entry fall back to the one-line
- * `getCategoryDescription`. The `ai` family has its own curated page at `/ai`,
- * so this map skips it.
+ * a short FAQ. Every family (including `ai`) shares the one landing template at
+ * `/families/[category]`. Families without an entry fall back to the one-line
+ * `getCategoryDescription`.
  */
 export type FamilyCopy = {
   readonly category: ComponentCategory;
@@ -16,6 +16,34 @@ export type FamilyCopy = {
 };
 
 const FAMILY_COPY: readonly FamilyCopy[] = [
+  {
+    category: "ai",
+    faq: [
+      {
+        answer:
+          "An agent-first design system gives you the UI primitives that AI products actually need — chat input, message bubbles, streaming text, tool-call displays, source citations, agent activity timelines, and artifacts — and also ships every component as machine-readable JSON so AI coding agents can install it without scraping HTML. VLLNT UI is open source (MIT) and installs with the shadcn CLI.",
+        question: "What is an agent-first UI design system?",
+      },
+      {
+        answer:
+          "At minimum: AI Chat Input for the composer, AI Message Bubble to render each turn, and AI Streaming Text for token-by-token output. Add AI Tool Call Display and Agent Activity for agentic flows, AI Source Citation for RAG, and AI Artifact for canvas-style output.",
+        question:
+          "Which components do I need to build an AI chat app in React?",
+      },
+      {
+        answer:
+          "Three surfaces: /llms.txt (a concise index per the llmstxt.org spec), /llms-full.txt (the full registry context in one fetch), and /r/[name].json (a machine-readable descriptor per component with props, accessibility schema, and examples). Coding agents like Claude, Cursor, Cline, and Continue read these directly.",
+        question: "How do AI agents consume VLLNT UI?",
+      },
+      {
+        answer:
+          "Yes. VLLNT UI is open source under the MIT license. You own the source after install, with no backend and no tracking.",
+        question: "Is VLLNT UI free to use?",
+      },
+    ],
+    intro:
+      "Chat, agents, reasoning, tool calls, citations, and artifacts — the UI surfaces every AI product needs. Accessible React components you own after install, each also readable by AI coding agents as JSON.",
+  },
   {
     category: "core",
     faq: [

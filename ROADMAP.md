@@ -1,8 +1,8 @@
 # Roadmap
 
 > **Goal:** the most complete, agent-ready React component registry on the @vllnt design system — every component documented, typed, installable via the shadcn CLI, and discoverable by humans and agents.
-> **Now:** `component-sidebar` (0.4.0 canary cycle).
-> **Last updated:** 2026-06-27
+> **Now:** `family-pages` code-complete on `feat/family-homepage` (pending merge); `component-sidebar` next. 0.4.0 canary cycle.
+> **Last updated:** 2026-07-02
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.
@@ -59,6 +59,20 @@ Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLA
 - [x] release-pipeline.3 Start 0.4.0 canary cycle (version bump + roadmap) — #459 (PR #460), verified `0.4.0-canary.cb3c196` on npm
 
 ---
+
+## family-pages [ACTIVE — code-complete on `feat/family-homepage`, pending merge]
+
+**Goal:** A per-family landing at `/families/[category]` — the SEO / agent-surface destination for the Family breadcrumb crumb (#461) and the sidebar drill-down.
+**Exit criteria:** 12 family landings on one shared `/families/[category]` template (`ai` included), each hero + CTAs + count + SEO sub-groups (`family-groups.ts`) + editorial copy + FAQ + agent surface; sitemap'd; `CollectionPage`/`ItemList` + `FAQPage` JSON-LD; `/components` headings + component-page family crumb link in via `familyPath`.
+**Verify:** `/families/form` renders the Form grid + FAQ; `/ai` permanently redirects to `/families/ai`; Google Rich Results clean on a family page. Moves to the DONE cluster on merge to main + canary publish.
+
+- [x] family-pages.1 `/families/[category]` route: hero + description + count + data-driven grid, zero nav maintenance — #463
+- [x] family-pages.2 Internal links: `/components` family headings + component-page family crumb → family page via `familyPath` — #463
+- [x] family-pages.3 sitemap `familyRoutes()` + `collectionPageLd` (CollectionPage/ItemList) + `faqPageLd` — #463
+- [x] family-pages.4 `ai` reconciled: consolidated under `/families/ai` (shared template, grouped), `/ai` → permanent redirect, `familyPath` helper — #463
+- [x] family-pages.5 Per-family SEO copy + FAQ (`family-copy.ts`) + branded titles / keywords — #463
+- [x] family-pages.6 Validate: e2e `family-homepage.spec.ts` + unit `component-categories.test.ts` (E2E)
+- [x] family-pages.7 One shared landing template for every family incl. `ai` (hero + CTAs + agent surface); per-family SEO sub-groups (`family-groups.ts`); `/families` index — #463
 
 ## component-sidebar [ACTIVE]
 
@@ -117,6 +131,7 @@ Deferred families (Later): voice (6), IDE code surfaces (9), workflow canvas (5)
 Unscheduled — pull into a phase when prioritized.
 
 - **react-doctor-90** — push score 71 → 90 (sweep issues closed but target not fully met; see `codebase-health` caveat).
+- **typography-primitives** (#465) — foundation `Text` / `Heading` / `Display` (/`Prose`) with token-driven font-family, heading-weight, and type-scale, all theme-overridable. Feasible (~12–18 files; an existing `typography` component — H1–H4/P/Lead/… — to model or extend), **but needs 3 triage decisions before scheduling**: (1) `--font-display` is a net-new token → conflicts with "no new design tokens beyond DESIGN.md baseline" (Out of scope) — resolve by adding a display family to the DESIGN.md baseline, or drop `--font-display` and map `Display` to `--font-sans`; (2) wire `--font-sans` as the actual default — today the body font is `font-mono` (`packages/ui/src/styles.css`), not sans, so "default stays semibold sans" isn't literally true; (3) reconcile the default heading weight — existing `typography.tsx` h1 uses `font-extrabold` (800) vs DESIGN.md's 600 semibold.
 - **ai-elements-voice** (6) — AudioPlayer, MicSelector, Persona, SpeechInput, Transcription, VoiceSelector.
 - **ai-elements-ide** (9) — Commit, EnvironmentVariables, FileTree, PackageInfo, SchemaDisplay, Snippet, StackTrace, Terminal, TestResults.
 - **ai-elements-canvas** (5) — Canvas, Connection, Controls, Node, Panel (verify against existing `@xyflow`-based components first).
@@ -234,7 +249,7 @@ Semver discipline starts hard at `1.0.0`. Until then, `0.x.0` may include breaki
 - React Compiler adoption.
 - Right-to-left language support.
 - Backend services for `/report` or `/request-component` (prefilled GitHub URLs — no backend).
-- New design tokens beyond DESIGN.md baseline.
+- New design tokens beyond DESIGN.md baseline (this is what gates `typography-primitives` #465's `--font-display` — see Later).
 - Versioned docs (deferred until breaking changes appear).
 - Component analytics (privacy-respecting telemetry — separate decision).
 
@@ -242,6 +257,6 @@ Semver discipline starts hard at `1.0.0`. Until then, `0.x.0` may include breaki
 
 ## Tracking
 
-- Open issues: `gh issue list -R vllnt/ui --state open` (currently 0 — file issues per phase as work starts; the repo enforces issue-linked PRs).
+- Open issues: `gh issue list -R vllnt/ui --state open` (2 open: #463 `family-pages` — code-complete on `feat/family-homepage`, pending merge; #465 `typography-primitives` — needs triage, see Later. Repo enforces issue-linked PRs).
 - react-doctor score: `pnpm doctor:score`.
 - Channels: `npm view @vllnt/ui dist-tags`.
