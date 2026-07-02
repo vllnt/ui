@@ -57,9 +57,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const pathname = `/families/${category}`;
-  const title = `${group.label} components`;
   const copy = getFamilyCopy(group.category);
   const description = copy?.intro ?? getCategoryDescription(group.category);
+  const ogTitle = `${group.label} components`;
+  const lower = group.label.toLowerCase();
+  const keywords = [
+    `${lower} components`,
+    `react ${lower} components`,
+    `${lower} ui components`,
+    `${lower} component library`,
+    `shadcn ${lower} components`,
+    `accessible ${lower} components`,
+    ...group.items
+      .slice(0, 6)
+      .map((item) => `${item.title.toLowerCase()} component`),
+  ];
 
   return {
     alternates: {
@@ -67,15 +79,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       languages: languageAlternates(pathname),
     },
     description,
+    keywords,
     openGraph: generateOGMetadata(
-      { category: group.label, description, title, type: "page" },
+      { category: group.label, description, title: ogTitle, type: "page" },
       { locale, pathname },
     ),
-    title,
+    title: `${group.label} Components — VLLNT UI`,
     twitter: generateTwitterMetadata({
       category: group.label,
       description,
-      title,
+      title: ogTitle,
       type: "page",
     }),
   };
