@@ -31,7 +31,7 @@ const headingBase =
   "font-[family-name:var(--font-display)] [font-weight:var(--font-weight-heading)] text-balance tracking-tight text-foreground";
 
 /**
- * Semantic heading whose font family, weight, and size are driven by
+ * Semantic heading that reads its font family, weight, and size from
  * theme-overridable design tokens (`--font-display`, `--font-weight-heading`,
  * `--font-size-h{n}`). `level` sets both the element (`h1`–`h6`) and the scale
  * step, so a brand restyles every heading by overriding tokens — no fork.

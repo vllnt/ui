@@ -19,9 +19,9 @@ const displayBase =
 /**
  * Oversized hero/display text driven by the display tokens (`--font-display`,
  * `--font-weight-display`, `--font-size-display`). Renders a non-semantic `div`
- * by default — pass `as="h1"` for a hero heading. When `animated`, a rise-in
- * reveal plays only if motion is allowed (`prefers-reduced-motion` disables it).
- * Polymorphic via `as`, so it is not ref-forwarding.
+ * by default — pass `as="h1"` for a hero heading. With `animated`, a rise-in
+ * reveal runs when the user permits motion; `prefers-reduced-motion` skips it.
+ * Polymorphic via `as`, so it does not forward a ref.
  *
  * @example
  * <Display as="h1" animated>Ship faster</Display>
