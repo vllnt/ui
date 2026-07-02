@@ -66,32 +66,111 @@ const outputPath = join(
   "component-metadata.json",
 );
 
-const TITLE_PATTERN = /title\s*:\s*["'`]([^"'`]+)["'`]/;
 const NAMED_EXPORT_PATTERN = /^export\s+const\s+([A-Z][\w$]*)\s*[:=]/gm;
+const TITLE_KEY_PATTERN = /^["']?title["']?\s*:\s*["'`]([^"'`]*)["'`]/;
+const META_OBJECT_PATTERN = /\b(?:const|let|var)\s+meta\b[^=]*=\s*\{/;
 
-function slugifyTitleSegment(segment: string): string {
-  return segment
+/**
+ * Mirror of Storybook's `sanitize` (from @storybook/csf): lowercase, collapse
+ * every run of non-alphanumerics to a single "-", trim leading/trailing "-".
+ * Storybook derives story IDs from the title + story name with this exact rule,
+ * so the metadata IDs must be produced the same way or the preview iframe 404s
+ * ("Couldn't find story matching …"). verify-preview-stories.ts cross-checks the
+ * result against the real built index.json — the authoritative guard for any
+ * exotic title Storybook happens to slug differently.
+ */
+function sanitize(input: string): string {
+  return input
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "")
-    .replace(/^-+|-+$/g, "");
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
 }
 
-function titleToStoryIdPrefix(title: string): string {
-  const segments: string[] = [];
-  for (const segment of title.split("/")) {
-    const slug = slugifyTitleSegment(segment);
-    if (slug) {
-      segments.push(slug);
+/**
+ * Split a PascalCase story export into words the way Storybook's
+ * `storyNameFromExport` (lodash startCase) does, then sanitize — so
+ * `WithLongText` → `with-long-text` matches the built story id.
+ */
+function exportNameToStorySlug(exportName: string): string {
+  const spaced = exportName
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2");
+  return sanitize(spaced);
+}
+
+function skipStringLiteral(source: string, start: number): number {
+  const quote = source[start];
+  let index = start + 1;
+  while (index < source.length) {
+    const char = source[index];
+    if (char === "\\") {
+      index += 2;
+      continue;
     }
+    if (char === quote) return index + 1;
+    index += 1;
   }
-  return segments.join("-");
+  return source.length;
 }
 
-function exportNameToSlug(exportName: string): string {
-  return exportName
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1-$2")
-    .toLowerCase();
+function isWordBoundaryBefore(source: string, index: number): boolean {
+  return index === 0 || !/[\w$]/.test(source[index - 1]!);
+}
+
+/**
+ * Extract the Storybook meta `title` — the object's OWN top-level property.
+ * A naive `title:` regex matches the first occurrence, which is frequently a
+ * nested `args.title` (sample content), producing a bogus story id such as
+ * `designingreadableaiconversations--default`. This walks the `const meta = {}`
+ * object literal and only reads `title:` at brace depth 1, skipping strings and
+ * comments so nested braces/quotes never confuse the depth count.
+ */
+function extractMetaTitle(source: string): string | undefined {
+  const declaration = META_OBJECT_PATTERN.exec(source);
+  const openBraceIndex = declaration
+    ? declaration.index + declaration[0].length - 1
+    : source.indexOf("{", source.indexOf("export default"));
+  if (openBraceIndex < 0) return undefined;
+
+  let depth = 0;
+  let index = openBraceIndex;
+  while (index < source.length) {
+    const char = source[index];
+
+    if (char === "/" && source[index + 1] === "/") {
+      const newline = source.indexOf("\n", index);
+      index = newline === -1 ? source.length : newline;
+      continue;
+    }
+    if (char === "/" && source[index + 1] === "*") {
+      const end = source.indexOf("*/", index + 2);
+      index = end === -1 ? source.length : end + 2;
+      continue;
+    }
+    if (char === '"' || char === "'" || char === "`") {
+      index = skipStringLiteral(source, index);
+      continue;
+    }
+    if (char === "{") {
+      depth += 1;
+      index += 1;
+      continue;
+    }
+    if (char === "}") {
+      depth -= 1;
+      index += 1;
+      if (depth === 0) break;
+      continue;
+    }
+    if (depth === 1 && isWordBoundaryBefore(source, index)) {
+      const keyValue = TITLE_KEY_PATTERN.exec(source.slice(index));
+      if (keyValue?.[1] !== undefined) return keyValue[1];
+    }
+    index += 1;
+  }
+
+  return undefined;
 }
 
 function findStoryFile(componentName: string): string | undefined {
@@ -110,10 +189,9 @@ function parseStoriesFromFile(
   filePath: string,
 ): { title: string; exportNames: string[] } | undefined {
   const source = readFileSync(filePath, "utf8");
-  const titleMatch = TITLE_PATTERN.exec(source);
-  if (!titleMatch?.[1]) return;
+  const title = extractMetaTitle(source);
+  if (!title) return;
 
-  const title = titleMatch[1];
   const exportNames: string[] = [];
   let match: RegExpExecArray | null;
 
@@ -132,10 +210,10 @@ function buildEntries(
   componentName: string,
   parsed: { title: string; exportNames: string[] },
 ): { defaultStoryId: string; stories: StoryEntry[] } {
-  const prefix = titleToStoryIdPrefix(parsed.title);
+  const prefix = sanitize(parsed.title);
 
   const stories: StoryEntry[] = parsed.exportNames.map((exportName) => ({
-    id: `${prefix}--${exportNameToSlug(exportName)}`,
+    id: `${prefix}--${exportNameToStorySlug(exportName)}`,
     name: exportName.replace(/([a-z])([A-Z])/g, "$1 $2"),
   }));
 
