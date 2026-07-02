@@ -1509,6 +1509,27 @@
     ],
     "title": "Dialog"
   },
+  "display": {
+    "category": "core",
+    "defaultStoryId": "core-display--default",
+    "description": "Oversized hero/display text driven by the display tokens, with an optional reduced-motion-safe reveal.",
+    "name": "display",
+    "stories": [
+      {
+        "id": "core-display--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-display--as-hero-heading",
+        "name": "As Hero Heading"
+      },
+      {
+        "id": "core-display--animated",
+        "name": "Animated"
+      }
+    ],
+    "title": "Display"
+  },
   "dock": {
     "category": "navigation",
     "defaultStoryId": "effects-dock--default",
@@ -2064,6 +2085,23 @@
       }
     ],
     "title": "Handoff Beacon"
+  },
+  "heading": {
+    "category": "core",
+    "defaultStoryId": "core-heading--default",
+    "description": "Semantic heading (h1–h6) with theme-overridable font-family, weight, and size design tokens.",
+    "name": "heading",
+    "stories": [
+      {
+        "id": "core-heading--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-heading--levels",
+        "name": "Levels"
+      }
+    ],
+    "title": "Heading"
   },
   "heat-map-overlay": {
     "category": "data-display",
@@ -3584,6 +3622,19 @@
     ],
     "title": "Property Section"
   },
+  "prose": {
+    "category": "core",
+    "defaultStoryId": "core-prose--article",
+    "description": "Long-form content wrapper that styles raw HTML descendants with the token-driven type scale.",
+    "name": "prose",
+    "stories": [
+      {
+        "id": "core-prose--article",
+        "name": "Article"
+      }
+    ],
+    "title": "Prose"
+  },
   "qr-code": {
     "category": "core",
     "defaultStoryId": "core-qrcode--default",
@@ -4750,6 +4801,23 @@
       }
     ],
     "title": "Terminal"
+  },
+  "text": {
+    "category": "core",
+    "defaultStoryId": "core-text--default",
+    "description": "Body-text primitive with token-driven sans family and a size/tone/weight scale; polymorphic via `as`.",
+    "name": "text",
+    "stories": [
+      {
+        "id": "core-text--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-text--sizes",
+        "name": "Sizes"
+      }
+    ],
+    "title": "Text"
   },
   "text-animate": {
     "category": "content",

@@ -31,6 +31,35 @@
     --input: 0.9219 0 0;
     --ring: 0.1445 0 0;
     --radius: 0.5rem;
+    /* Typography — theme-overridable font tokens (issue #465). Override any of
+       these on a theme scope to restyle the Text/Heading/Display/Prose primitives
+       without editing the library. Defaults reproduce the house style (sans, 600). */
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-display: var(--font-sans);
+    --font-weight-heading: 600;
+    --font-weight-display: 600;
+    --font-size-display: 3.75rem;
+    --line-height-display: 1.05;
+    --font-size-h1: 3rem;
+    --line-height-h1: 1.1;
+    --font-size-h2: 2.25rem;
+    --line-height-h2: 1.2;
+    --font-size-h3: 1.875rem;
+    --line-height-h3: 1.25;
+    --font-size-h4: 1.5rem;
+    --line-height-h4: 1.3;
+    --font-size-h5: 1.25rem;
+    --line-height-h5: 1.4;
+    --font-size-h6: 1.125rem;
+    --line-height-h6: 1.5;
+    --font-size-body-lg: 1.125rem;
+    --line-height-body-lg: 1.7;
+    --font-size-body: 1rem;
+    --line-height-body: 1.6;
+    --font-size-body-sm: 0.875rem;
+    --line-height-body-sm: 1.5;
+    --font-size-caption: 0.75rem;
+    --line-height-caption: 1.4;
   }
   .dark {
     --background: 0 0 0;

@@ -1595,3 +1595,7 @@ export {
   PanelTitle,
   type PanelTitleProps,
 } from "./panel";
+export { Heading, type HeadingLevel } from "./heading";
+export { Text, type TextElement, type TextProps, textVariants } from "./text";
+export { Display, type DisplayElement, type DisplayProps } from "./display";
+export { Prose, type ProseProps } from "./prose";

@@ -76,6 +76,19 @@ Single-pane drill-down (chosen over accordion-single-open and a two-pane family 
 - [ ] component-sidebar.6 Directional slide transition with `prefers-reduced-motion` instant fallback; persist last-family + scroll (localStorage)
 - [ ] component-sidebar.7 Validate component-sidebar.1–6: Playwright E2E (desktop + mobile + keyboard) — auto-drill, back, breadcrumb sync, global filter, ⌘K, persistence (E2E)
 
+## typography-primitives [ACTIVE — code-complete on `feat/typography-primitives`, pending merge]
+
+**Goal:** Foundation typographic primitives (`Text`, `Heading`, `Display`, `Prose`) whose font family, weight, and scale are theme-overridable design tokens — a brand adopts its own type identity by overriding tokens alone, no library fork. Closes #465.
+**Exit criteria:** `Text`/`Heading`/`Display`/`Prose` in the `core` family with story + test + registry entry; `--font-sans` + new `--font-display`, `--font-weight-heading`/`--font-weight-display`, and a `--font-size-*` scale wired + documented (DESIGN.md, tokens.json); default house style unchanged (sans, 600) when tokens aren't overridden.
+**Verify:** CT E2E — overriding `--font-display`/`--font-weight-heading` on a scope restyles a `Heading` with no code change; `Display` reveal is gated behind `prefers-reduced-motion`. Moves to the DONE cluster on merge + canary publish.
+
+- [x] typography-primitives.1 Token layer: `--font-sans`/`--font-display`, weight + `--font-size-*` scale CSS vars (styles.css + themes/default.css); DESIGN.md + tokens.json baseline — #465
+- [x] typography-primitives.2 `Heading` (semantic h1–h6, token family/weight/scale) — #465
+- [x] typography-primitives.3 `Text` (polymorphic body, size/tone/weight variants) — #465
+- [x] typography-primitives.4 `Display` (hero scale, reduced-motion-safe reveal) + `Prose` (long-form wrapper) — #465
+- [x] typography-primitives.5 Registry entries + barrel exports + count/prose surfaces (313) — #465
+- [x] typography-primitives.6 Validate: unit tests + Playwright CT (token override + reduced-motion) (E2E) — #465
+
 ## ai-elements-parity [PLANNED]
 
 **Goal:** Close the gap vs shadcn AI Elements (~48 components); ship the chat/agent-core set we lack.

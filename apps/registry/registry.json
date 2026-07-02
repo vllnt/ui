@@ -1803,6 +1803,25 @@
       }
     },
     {
+      "name": "display",
+      "type": "registry:component",
+      "title": "Display",
+      "description": "Oversized hero/display text driven by the display tokens, with an optional reduced-motion-safe reveal.",
+      "files": [
+        {
+          "path": "registry/default/display/display.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "core",
+      "version": "0.3.0",
+      "stability": "stable"
+    },
+    {
       "name": "dock",
       "type": "registry:component",
       "title": "Dock",
@@ -2417,6 +2436,25 @@
         "@vllnt/ui@^0.3.0"
       ],
       "category": "data-display",
+      "version": "0.3.0",
+      "stability": "stable"
+    },
+    {
+      "name": "heading",
+      "type": "registry:component",
+      "title": "Heading",
+      "description": "Semantic heading (h1–h6) with theme-overridable font-family, weight, and size design tokens.",
+      "files": [
+        {
+          "path": "registry/default/heading/heading.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "core",
       "version": "0.3.0",
       "stability": "stable"
     },
@@ -3954,6 +3992,25 @@
       "stability": "stable"
     },
     {
+      "name": "prose",
+      "type": "registry:component",
+      "title": "Prose",
+      "description": "Long-form content wrapper that styles raw HTML descendants with the token-driven type scale.",
+      "files": [
+        {
+          "path": "registry/default/prose/prose.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "core",
+      "version": "0.3.0",
+      "stability": "stable"
+    },
+    {
       "name": "qr-code",
       "type": "registry:component",
       "title": "QR Code",
@@ -5230,6 +5287,26 @@
       "stability": "stable"
     },
     {
+      "name": "text",
+      "type": "registry:component",
+      "title": "Text",
+      "description": "Body-text primitive with token-driven sans family and a size/tone/weight scale; polymorphic via `as`.",
+      "files": [
+        {
+          "path": "registry/default/text/text.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0",
+        "class-variance-authority"
+      ],
+      "category": "core",
+      "version": "0.3.0",
+      "stability": "stable"
+    },
+    {
       "name": "text-animate",
       "type": "registry:component",
       "title": "Text Animate",
@@ -6108,5 +6185,5 @@
     }
   ],
   "version": "0.3.0",
-  "generatedAt": "2026-06-27T19:33:13.346Z"
+  "generatedAt": "2026-07-02T15:07:20.651Z"
 }

@@ -10,7 +10,15 @@ Release automation can regenerate this file from Conventional Commits with
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Typography foundation primitives** — `Text`, `Heading`, `Display`, and
+  `Prose` in the `core` family. Font family (`--font-sans` + a new
+  `--font-display`), heading/display weight (`--font-weight-heading`,
+  `--font-weight-display`), and the type scale (`--font-size-*`) are
+  theme-overridable design tokens, so a brand restyles headings and body via
+  token overrides alone — no library edits. (#465)
+- Total component count: **313** (up from 309).
 
 ## [0.3.0] - 2026-06-26
 
