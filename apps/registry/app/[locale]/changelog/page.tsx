@@ -5,7 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { type ChangelogTypeFilter, getChangelogEntries } from "@/lib/changelog";
-import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
+import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -156,9 +156,8 @@ export default async function ChangelogPage({
       <script
         dangerouslySetInnerHTML={{
           __html: jsonLdScript([
-            breadcrumbLd([
-              { name: "Home", url: canonical("/", locale) },
-              { name: "Changelog", url: canonical("/changelog", locale) },
+            breadcrumbTrailLd(locale, [
+              { name: "Changelog", path: "/changelog" },
             ]),
             {
               "@context": "https://schema.org",

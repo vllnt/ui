@@ -8,7 +8,11 @@ import { setRequestLocale } from "next-intl/server";
 import { Footer } from "@/components/footer/footer";
 import { type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
-import { breadcrumbLd, faqPageLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import {
+  breadcrumbTrailLd,
+  faqPageLd,
+  jsonLdScriptAttributes,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -75,13 +79,9 @@ export default async function UseCasePage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "AI components", url: canonical("/ai", locale) },
-            {
-              name: useCase.title,
-              url: canonical(`/build/${useCase.slug}`, locale),
-            },
+          breadcrumbTrailLd(locale, [
+            { name: "AI components", path: "/ai" },
+            { name: useCase.title, path: `/build/${useCase.slug}` },
           ]),
           faqPageLd(useCase.faq),
         ])}

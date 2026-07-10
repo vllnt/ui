@@ -22,7 +22,7 @@ import { getAiSeo } from "@/lib/ai-seo";
 import componentMetadata from "@/lib/component-metadata.json";
 import { getComponentSeo } from "@/lib/component-seo";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   faqPageLd,
   jsonLdScriptAttributes,
   softwareSourceCodeLd,
@@ -246,13 +246,9 @@ export default async function ComponentPage(props: Props) {
             name: component.name,
             title: displayTitle,
           }),
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Components", url: canonical("/components", locale) },
-            {
-              name: displayTitle,
-              url: canonical(`/components/${component.name}`, locale),
-            },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: displayTitle, path: `/components/${component.name}` },
           ]),
           ...(componentSeo?.faqs.length ? [faqPageLd(componentSeo.faqs)] : []),
         ])}

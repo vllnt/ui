@@ -5,7 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
-import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -89,12 +89,8 @@ export default async function VsAssistantUiPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes(
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            {
-              name: "VLLNT UI vs assistant-ui",
-              url: canonical(PATHNAME, locale),
-            },
+          breadcrumbTrailLd(locale, [
+            { name: "VLLNT UI vs assistant-ui", path: PATHNAME },
           ]),
         )}
       />

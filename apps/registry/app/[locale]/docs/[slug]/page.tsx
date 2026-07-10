@@ -11,7 +11,7 @@ import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPage, getDocsPath } from "@/lib/docs-pages";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
@@ -128,10 +128,9 @@ export default async function DocsSlugPage(props: Props) {
       <Script
         id={`docs-${docsPage.slug}-json-ld`}
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Docs", url: canonical("/docs", locale) },
-            { name: frontmatter.title, url: pageUrl },
+          breadcrumbTrailLd(locale, [
+            { name: "Docs", path: "/docs" },
+            { name: frontmatter.title, path: getDocsPath(docsPage) },
           ]),
           techArticleLd({
             description: frontmatter.description,

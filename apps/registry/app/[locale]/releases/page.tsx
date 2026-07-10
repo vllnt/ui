@@ -5,7 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getReleaseRecords } from "@/lib/changelog";
-import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
+import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -171,9 +171,8 @@ export default async function ReleasesPage({ params }: Props) {
       <script
         dangerouslySetInnerHTML={{
           __html: jsonLdScript([
-            breadcrumbLd([
-              { name: "Home", url: canonical("/", locale) },
-              { name: "Releases", url: canonical("/releases", locale) },
+            breadcrumbTrailLd(locale, [
+              { name: "Releases", path: "/releases" },
             ]),
             {
               "@context": "https://schema.org",

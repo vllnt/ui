@@ -11,7 +11,7 @@ import { type Locale, routing } from "@/i18n/routing";
 import { getFamilyCopy } from "@/lib/family-copy";
 import { getFamilyGroups } from "@/lib/family-groups";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   collectionPageLd,
   faqPageLd,
   jsonLdScriptAttributes,
@@ -107,10 +107,9 @@ export default async function FamilyPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Components", url: canonical("/components", locale) },
-            { name: group.label, url: canonical(pathname, locale) },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: group.label, path: pathname },
           ]),
           collectionPageLd({
             description,

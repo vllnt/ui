@@ -8,7 +8,7 @@ import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
@@ -58,10 +58,7 @@ export default async function DocumentationPage({ params }: Props) {
       <Script
         id="docs-json-ld"
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Docs", url: canonical("/docs", locale) },
-          ]),
+          breadcrumbTrailLd(locale, [{ name: "Docs", path: "/docs" }]),
           techArticleLd({
             description:
               "Learn how to use VLLNT UI components in your projects.",

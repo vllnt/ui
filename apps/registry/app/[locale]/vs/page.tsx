@@ -5,7 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
@@ -79,10 +79,7 @@ export default async function VsIndexPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Comparisons", url: canonical("/vs", locale) },
-          ]),
+          breadcrumbTrailLd(locale, [{ name: "Comparisons", path: "/vs" }]),
           collectionPageLd({
             description:
               "Honest, evidence-based comparisons of VLLNT UI against shadcn/ui, Radix UI, HeadlessUI, and NextUI.",

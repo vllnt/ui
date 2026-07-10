@@ -6,7 +6,7 @@ import { setRequestLocale } from "next-intl/server";
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
@@ -58,10 +58,9 @@ export default async function FamiliesPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Components", url: canonical("/components", locale) },
-            { name: "Families", url: canonical(PATHNAME, locale) },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: "Families", path: PATHNAME },
           ]),
           collectionPageLd({
             description: DESCRIPTION,

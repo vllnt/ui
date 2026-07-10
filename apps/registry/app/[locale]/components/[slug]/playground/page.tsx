@@ -8,7 +8,7 @@ import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import { type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
-import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   getPlaygroundExample,
@@ -114,19 +114,12 @@ export default async function ComponentPlaygroundPage(props: Props) {
     <>
       <script
         {...jsonLdScriptAttributes(
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Components", url: canonical("/components", locale) },
-            {
-              name: displayTitle,
-              url: canonical(`/components/${component.name}`, locale),
-            },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: displayTitle, path: `/components/${component.name}` },
             {
               name: "Playground",
-              url: canonical(
-                `/components/${component.name}/playground`,
-                locale,
-              ),
+              path: `/components/${component.name}/playground`,
             },
           ]),
         )}

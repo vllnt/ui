@@ -9,7 +9,7 @@ import { setRequestLocale } from "next-intl/server";
 import { GitHubMark } from "@/components/github-mark";
 import { type Locale, routing } from "@/i18n/routing";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   softwareApplicationLd,
 } from "@/lib/jsonld";
@@ -87,10 +87,9 @@ export default async function TemplatePage(props: Props) {
       <Script
         id={`template-${template.slug}-json-ld`}
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Templates", url: canonical("/templates", locale) },
-            { name: template.title, url: templateUrl },
+          breadcrumbTrailLd(locale, [
+            { name: "Templates", path: "/templates" },
+            { name: template.title, path: templatePath },
           ]),
           softwareApplicationLd({
             description: template.description,

@@ -7,7 +7,7 @@ import { ComponentCard } from "@/components/component-card";
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
@@ -60,9 +60,8 @@ export default async function ComponentsPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Components", url: canonical("/components", locale) },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
           ]),
           collectionPageLd({
             description: `Browse all ${components.length} accessible React components in VLLNT UI — installable with the shadcn CLI.`,

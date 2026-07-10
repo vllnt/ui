@@ -5,7 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
@@ -54,9 +54,8 @@ export default async function PhilosophyPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: canonical("/", locale) },
-            { name: "Philosophy", url: canonical("/philosophy", locale) },
+          breadcrumbTrailLd(locale, [
+            { name: "Philosophy", path: "/philosophy" },
           ]),
           techArticleLd({
             description: frontmatter.description,
