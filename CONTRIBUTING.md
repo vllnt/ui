@@ -7,7 +7,7 @@ Thanks for wanting to contribute. This repo welcomes issues, bug reports, and PR
 - Be respectful. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 - Security-sensitive reports go through [SECURITY.md](SECURITY.md), **not** public issues.
 - Every change keeps the repo shippable: lint, typecheck, tests, and build pass on `main`.
-- UI changes must follow [DESIGN.md](DESIGN.md) (live at <https://ui.vllnt.ai/DESIGN.md>) and the token contract in [packages/design/tokens.json](packages/design/tokens.json). Document intentional deviations in the PR body.
+- UI changes must follow [DESIGN.md](DESIGN.md) (live at <https://ui.vllnt.com/DESIGN.md>) and the token contract in [packages/design/tokens.json](packages/design/tokens.json). Document intentional deviations in the PR body.
 
 ## Development setup
 

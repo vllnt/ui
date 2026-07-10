@@ -38,7 +38,7 @@ In scope:
 
 - The published `@vllnt/ui` package on the public npm registry.
 - Source in `packages/ui/` and `apps/registry/`.
-- The published registry API (`https://ui.vllnt.ai/r/*.json`).
+- The published registry API (`https://ui.vllnt.com/r/*.json`).
 - CI workflows that touch publishing or release provenance.
 
 Out of scope:

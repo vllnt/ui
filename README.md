@@ -8,7 +8,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org)
 [![npm](https://img.shields.io/npm/v/@vllnt/ui)](https://www.npmjs.com/package/@vllnt/ui)
 
-[Documentation](https://ui.vllnt.ai) · [Storybook](https://storybook.vllnt.ai) · [Registry](https://ui.vllnt.ai/components) · [GitHub](https://github.com/vllnt/ui)
+[Documentation](https://ui.vllnt.com) · [Storybook](https://storybook.vllnt.ai) · [Registry](https://ui.vllnt.com/components) · [GitHub](https://github.com/vllnt/ui)
 
 </div>
 
@@ -36,10 +36,10 @@ pnpm add @vllnt/ui
 Install individual components with the [shadcn](https://ui.shadcn.com) CLI — no package dependency, you own the code:
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
-Or by `@vllnt` namespace once it's in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt": "https://ui.vllnt.ai/r/{name}.json"` to your `components.json` `registries`):
+Or by `@vllnt` namespace once it's in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt": "https://ui.vllnt.com/r/{name}.json"` to your `components.json` `registries`):
 
 ```bash
 pnpm dlx shadcn@latest add @vllnt/button
@@ -78,7 +78,7 @@ export default {
 Install individual components directly:
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
 ## Development
@@ -134,7 +134,7 @@ Override CSS variables after importing styles:
 
 ## AI agents
 
-Building with an AI coding agent? Install the [`vllnt-ui` skill](skills/vllnt-ui/SKILL.md) — it gives agents the component set, design tokens, and usage patterns, pointing to the live registry and [`DESIGN.md`](https://ui.vllnt.ai/DESIGN.md) for current detail. Agents working *in this repo* should read [AGENTS.md](AGENTS.md).
+Building with an AI coding agent? Install the [`vllnt-ui` skill](skills/vllnt-ui/SKILL.md) — it gives agents the component set, design tokens, and usage patterns, pointing to the live registry and [`DESIGN.md`](https://ui.vllnt.com/DESIGN.md) for current detail. Agents working *in this repo* should read [AGENTS.md](AGENTS.md).
 
 ## Contributing
 

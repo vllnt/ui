@@ -62,7 +62,7 @@ The `registry:check` and `registry:integrity` CI guards confirm the regenerated 
 
 - `CHANGELOG.md` has an `[Unreleased]` section describing user-facing changes. Use `cliff.toml` with git-cliff if you need to regenerate it from Conventional Commits.
 - The canary built from the same commit passes and lists the expected components (check logs for the tarball manifest).
-- Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.ai` / `storybook.vllnt.ai`).
+- Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.com` / `storybook.vllnt.ai`).
 
 ## Post-release verification
 

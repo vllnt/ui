@@ -18,6 +18,6 @@ This template is published as source in the VLLNT UI repository. Copy or adapt t
 
 ## Demo and assets
 
-- Demo: https://ui.vllnt.ai/templates/dashboard
+- Demo: https://ui.vllnt.com/templates/dashboard
 - Screenshot: ./screenshots/preview.svg
 - Source path: templates/dashboard

@@ -1,13 +1,13 @@
 # @vllnt/ui
 
 > React component library — 144 accessible components built on Radix UI primitives, Tailwind CSS, and CVA.
-> Distributed via the public npm registry and a shadcn-compatible registry at https://ui.vllnt.ai/r.
+> Distributed via the public npm registry and a shadcn-compatible registry at https://ui.vllnt.com/r.
 
 ## Package
 
 - npm: https://www.npmjs.com/package/@vllnt/ui
 - Source: https://github.com/vllnt/ui/tree/main/packages/ui
-- Docs: https://ui.vllnt.ai
+- Docs: https://ui.vllnt.com
 - Storybook: https://storybook.vllnt.ai
 
 ## Install
@@ -33,7 +33,7 @@ import { Button } from "@vllnt/ui";
 ## Key docs
 
 - [Root README](https://github.com/vllnt/ui/blob/main/README.md) — overview + component index
-- [DESIGN](https://ui.vllnt.ai/DESIGN.md) — canonical brand, tokens, and design system rules
+- [DESIGN](https://ui.vllnt.com/DESIGN.md) — canonical brand, tokens, and design system rules
 - [Package README](https://github.com/vllnt/ui/blob/main/packages/ui/README.md) — setup, theming, full component tables
 - [CHANGELOG](https://github.com/vllnt/ui/blob/main/packages/ui/CHANGELOG.md) — version history
 - [CONTRIBUTING](https://github.com/vllnt/ui/blob/main/CONTRIBUTING.md) — dev + PR workflow
@@ -62,5 +62,5 @@ import { Button } from "@vllnt/ui";
 Install a single component:
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/{component}.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/{component}.json
 ```

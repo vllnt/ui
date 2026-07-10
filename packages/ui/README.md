@@ -134,7 +134,7 @@ which set `data-theme` on the document root. Render `<ThemePresetProvider />`
 once near the root to restore the saved preset before paint.
 
 To design and export your own theme, use the visual editor at
-[`/themes`](https://ui.vllnt.ai/themes) — it exports a CSS block, a
+[`/themes`](https://ui.vllnt.com/themes) — it exports a CSS block, a
 `npx shadcn add` command, or design tokens.
 
 ## Component Patterns

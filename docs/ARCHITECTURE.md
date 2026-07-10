@@ -15,7 +15,7 @@ vllnt/ui/
 │       ├── styles.css
 │       └── themes/
 ├── apps/
-│   └── registry/             # Next.js site at ui.vllnt.ai
+│   └── registry/             # Next.js site at ui.vllnt.com
 │       ├── app/              # app-router routes (components/[slug], etc.)
 │       ├── content/          # MDX pages
 │       ├── lib/              # registry + OG utilities
@@ -30,7 +30,7 @@ vllnt/ui/
 | Package | Purpose | Published |
 |---------|---------|-----------|
 | `@vllnt/ui` | Component library | Yes, public npm |
-| `@vllnt/ui-registry` (registry app) | Docs + shadcn registry | No, deployed to `ui.vllnt.ai` |
+| `@vllnt/ui-registry` (registry app) | Docs + shadcn registry | No, deployed to `ui.vllnt.com` |
 
 External shared configs consumed as dev deps from npm:
 
@@ -91,4 +91,4 @@ Beyond light/dark, a runtime **preset** layer (`themes/presets.css`) applies nam
 
 ## Registry feed
 
-The shadcn-compatible registry at `https://ui.vllnt.ai/r/{component}.json` is generated from `apps/registry/registry.ts` and served by the Next.js app. Each component resolves to a JSON payload consumable by `shadcn add`.
+The shadcn-compatible registry at `https://ui.vllnt.com/r/{component}.json` is generated from `apps/registry/registry.ts` and served by the Next.js app. Each component resolves to a JSON payload consumable by `shadcn add`.

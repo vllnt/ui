@@ -216,7 +216,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Changed
 
-- Documentation domain moved to `ui.vllnt.ai` / `storybook.vllnt.ai`.
+- Documentation domain moved to `ui.vllnt.com` / `storybook.vllnt.ai`.
 - Default package registry is the public npm registry (no longer GitHub
   Packages).
 - README component tables expanded to cover all 144 components organized by
