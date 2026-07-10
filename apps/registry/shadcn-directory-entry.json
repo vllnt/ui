@@ -1,5 +1,5 @@
 {
-  "name": "@vllnt",
+  "name": "@vllnt-ui",
   "homepage": "https://ui.vllnt.com",
   "url": "https://ui.vllnt.com/r/{name}.json",
   "description": "VLLNT UI — agent-first React components for AI-native products, from UI primitives to finance and ops domains. Accessible, Radix + Tailwind, you own the code.",

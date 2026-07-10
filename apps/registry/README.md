@@ -77,12 +77,12 @@ This builds the Next.js app and generates registry JSON files to `public/r/` usi
 pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
-Namespaced install (once `@vllnt` is listed in the [shadcn registry index](https://ui.shadcn.com/r/registries.json)) — add the registry to your app's `components.json`:
+Namespaced install (once `@vllnt-ui` is listed in the [shadcn registry index](https://ui.shadcn.com/r/registries.json)) — add the registry to your app's `components.json`:
 
 ```json
 {
   "registries": {
-    "@vllnt": "https://ui.vllnt.com/r/{name}.json"
+    "@vllnt-ui": "https://ui.vllnt.com/r/{name}.json"
   }
 }
 ```
@@ -90,7 +90,7 @@ Namespaced install (once `@vllnt` is listed in the [shadcn registry index](https
 Then install by namespace:
 
 ```bash
-pnpm dlx shadcn@latest add @vllnt/button
+pnpm dlx shadcn@latest add @vllnt-ui/button
 ```
 
 ## Adding Components
