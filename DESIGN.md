@@ -6,9 +6,9 @@
 This is the **canonical** brand & design guideline for the library. Read it on
 the web at three public surfaces, all generated from this one file:
 
-- [`/DESIGN.md`](https://ui.vllnt.ai/DESIGN.md) — this file as raw markdown (canonical for agents).
-- [`/design`](https://ui.vllnt.ai/design) — human-browsable rendering with a contents nav.
-- [`/r/design.json`](https://ui.vllnt.ai/r/design.json) — machine-readable token set.
+- [`/DESIGN.md`](https://ui.vllnt.com/DESIGN.md) — this file as raw markdown (canonical for agents).
+- [`/design`](https://ui.vllnt.com/design) — human-browsable rendering with a contents nav.
+- [`/r/design.json`](https://ui.vllnt.com/r/design.json) — machine-readable token set.
 
 The full token set lives in `packages/design/tokens.json` and is documented in
 `packages/design/README.md`.
@@ -273,9 +273,9 @@ No coloured shadows. No multi-layered glow effects.
 This document is the **v1 brand baseline** for VLLNT UI. It ships on these
 surfaces today:
 
-- [`/DESIGN.md`](https://ui.vllnt.ai/DESIGN.md) — this file as raw markdown.
-- [`/design`](https://ui.vllnt.ai/design) — human-browsable rendering with a contents nav.
-- [`/r/design.json`](https://ui.vllnt.ai/r/design.json) — JSON token set, mirroring `packages/design/tokens.json`.
+- [`/DESIGN.md`](https://ui.vllnt.com/DESIGN.md) — this file as raw markdown.
+- [`/design`](https://ui.vllnt.com/design) — human-browsable rendering with a contents nav.
+- [`/r/design.json`](https://ui.vllnt.com/r/design.json) — JSON token set, mirroring `packages/design/tokens.json`.
 
 Still planned:
 

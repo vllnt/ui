@@ -68,25 +68,25 @@ Single-pane drill-down (chosen over accordion-single-open and a two-pane family 
 
 ## native-parity [PLANNED]
 
-**Goal:** Make all 309 @vllnt/ui components iso web↔native — install once from the single `ui.vllnt.ai` registry, one import, platform-correct render — with no second registry.
-**Exit criteria:** Every component ships a `<c>.native.tsx` twin + a shared `<c>.variants.ts`; one `npx shadcn add @vllnt/<c>` from `ui.vllnt.ai/r/<c>.json` installs both files; each renders correctly on a Next.js web app AND an Expo device; each is stamped `parity: full|api-only` in `meta.json` with the badge shown on the site.
+**Goal:** Make all 309 @vllnt/ui components iso web↔native — install once from the single `ui.vllnt.com` registry, one import, platform-correct render — with no second registry.
+**Exit criteria:** Every component ships a `<c>.native.tsx` twin + a shared `<c>.variants.ts`; one `npx shadcn add @vllnt/<c>` from `ui.vllnt.com/r/<c>.json` installs both files; each renders correctly on a Next.js web app AND an Expo device; each is stamped `parity: full|api-only` in `meta.json` with the badge shown on the site.
 **Verify:** a consumer dev runs `npx shadcn add @vllnt/button` once → `import { Button }` renders on web (Radix/DOM) and on an Expo device (rn-primitives) with an identical variant API across all 12 families; the overlay family is documented `api-only` where Portal/keyboard can't map. Personas: consumer dev (web + Expo device, keyboard), maintainer (adds a native twin + variants contract), agent (reads `parity` from the registry JSON).
 
 **Gated by:** a confirmed Expo/RN consumer (`native-parity.1`) — **Horizon** until resolved (flagged since 2026-06; still open).
 
-One registry, not two — platform is resolved by the bundler (Metro picks `<c>.native.tsx`, web picks `<c>.tsx`), so `ui.vllnt.ai` stays the single source. Stack maps 1:1: Radix → @rn-primitives, Tailwind `className` → NativeWind, CVA + `cn()` unchanged, lucide-react → lucide-react-native. Only the render body forks; `<c>.variants.ts` (CVA + a platform-neutral prop contract) is shared. Iso *API* is always achievable; iso *visual result* is a per-component property (the `parity` badge) — overlays / hover / keyboard degrade to api-only. Proven prior art: **react-native-reusables** (@rn-primitives + NativeWind, 8.4k★, active 2026) already publishes a shadcn-format `registry.json` for RN — one schema spans web+native, validating the single-registry bet. Open gate: a confirmed Expo consumer (`.1`); OKLCH-on-native is resolved — NativeWind v4 (stable) has no on-device `oklch()`, so an HSL fallback is required (`.2`).
+One registry, not two — platform is resolved by the bundler (Metro picks `<c>.native.tsx`, web picks `<c>.tsx`), so `ui.vllnt.com` stays the single source. Stack maps 1:1: Radix → @rn-primitives, Tailwind `className` → NativeWind, CVA + `cn()` unchanged, lucide-react → lucide-react-native. Only the render body forks; `<c>.variants.ts` (CVA + a platform-neutral prop contract) is shared. Iso *API* is always achievable; iso *visual result* is a per-component property (the `parity` badge) — overlays / hover / keyboard degrade to api-only. Proven prior art: **react-native-reusables** (@rn-primitives + NativeWind, 8.4k★, active 2026) already publishes a shadcn-format `registry.json` for RN — one schema spans web+native, validating the single-registry bet. Open gate: a confirmed Expo consumer (`.1`); OKLCH-on-native is resolved — NativeWind v4 (stable) has no on-device `oklch()`, so an HSL fallback is required (`.2`).
 
 - [ ] native-parity.1 Decide: confirm an Expo/RN consumer app + the native stack (NativeWind + @rn-primitives + lucide-react-native)
 - [ ] native-parity.2 Emit an HSL fallback channel for the native theme (RESEARCHED 2026-07): NativeWind v4 (stable) has no on-device `oklch()` — RNR themes in HSL; native OKLCH is gated on NativeWind v5 (preview). Spike confirms the down-convert on a device; tweakcn already exports OKLCH+HSL from one source
-- [ ] native-parity.3 Decide: one registry, multi-file items (`<c>.tsx` + `<c>.native.tsx`, bundler-resolved) — single `ui.vllnt.ai`, no second namespace
+- [ ] native-parity.3 Decide: one registry, multi-file items (`<c>.tsx` + `<c>.native.tsx`, bundler-resolved) — single `ui.vllnt.com`, no second namespace
 - [ ] native-parity.4 Token codegen: emit the RN/NativeWind theme from `tokens.json` alongside the web CSS vars (single source)
 - [ ] native-parity.5 Establish the iso pattern: extract `<c>.variants.ts` (CVA + platform-neutral prop contract) + ship a 5-component reference set (button, input, card, badge, dialog)
-- [ ] native-parity.6 Extend `apps/registry/scripts/inline-component-source.ts` to emit `<c>.native.tsx` + the shared variants per registry item; stamp `parity: full|api-only` in `meta.json`; surface the badge on `ui.vllnt.ai`
+- [ ] native-parity.6 Extend `apps/registry/scripts/inline-component-source.ts` to emit `<c>.native.tsx` + the shared variants per registry item; stamp `parity: full|api-only` in `meta.json`; surface the badge on `ui.vllnt.com`
 - [ ] native-parity.7 Port core + form + utility families (115) to native twins
 - [ ] native-parity.8 Port data + data-display + content families (109) to native twins
 - [ ] native-parity.9 Port navigation + learning + educational + billing + ai families (70) to native twins
 - [ ] native-parity.10 Port overlay family (15) — api-only parity where Portal/keyboard can't map; document the degradation
-- [ ] native-parity.11 Validate native-parity.5–10: one `shadcn add @vllnt/<c>` from `ui.vllnt.ai` → identical import renders on Next web + Expo device across all 12 families; parity badges accurate (E2E)
+- [ ] native-parity.11 Validate native-parity.5–10: one `shadcn add @vllnt/<c>` from `ui.vllnt.com` → identical import renders on Next web + Expo device across all 12 families; parity badges accurate (E2E)
 - [ ] native-parity.12 Validate native-parity.4: an off-token native color fails; `tokens.json` stays the sole source across web CSS + RN theme (E2E)
 
 ## typography-primitives [DONE 2026-07]
@@ -213,24 +213,24 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 ## search-consolidation [PLANNED]
 
 **Goal:** Stop the silent ranking leaks — kill the dead-domain cannibalization and fix the canonical / schema / analytics gaps capping the already-indexed pages.
-**Exit criteria:** `ui.vllnt.com/*` 301s to `ui.vllnt.ai/*`; GSC shows `.com` pages dropping and `.ai` positions rising; every localized page self-canonicals to its resolved (non-307) URL; zero console errors on load; Rich Results clean for BreadcrumbList + SoftwareApplication.
+**Exit criteria:** `ui.vllnt.com/*` 301s to `ui.vllnt.com/*`; GSC shows `.com` pages dropping and `.ai` positions rising; every localized page self-canonicals to its resolved (non-307) URL; zero console errors on load; Rich Results clean for BreadcrumbList + SoftwareApplication.
 **Verify:** a visitor landing on a stale `ui.vllnt.com/components/*` URL is 301'd to the live `.ai` page; Google Rich Results Test passes on `/components/[slug]` (Breadcrumb) and `/` (SoftwareApplication); DevTools console is clean on `/` + `/components/[slug]`. Personas: search visitor on a stale URL; Googlebot recrawling duplicates.
 
-- [ ] search-consolidation.1 301-redirect all `ui.vllnt.com/*` → `ui.vllnt.ai/*` at the host/DNS edge (restore the subdomain only to serve the redirect) (cmd: `curl -sI https://ui.vllnt.com/components/calendar | grep -Ei '301|location: https://ui.vllnt.ai'`)
-- [ ] search-consolidation.2 Self-referencing canonical + hreflang per locale in `apps/registry/app/[locale]/layout.tsx` + `lib/seo.ts` — canonical targets the resolved URL, not the 307 (cmd: `curl -s https://ui.vllnt.ai/components/button | grep -c 'rel="canonical".*/components/button'`)
+- [ ] search-consolidation.1 301-redirect all `ui.vllnt.com/*` → `ui.vllnt.com/*` at the host/DNS edge (restore the subdomain only to serve the redirect) (cmd: `curl -sI https://ui.vllnt.com/components/calendar | grep -Ei '301|location: https://ui.vllnt.com'`)
+- [ ] search-consolidation.2 Self-referencing canonical + hreflang per locale in `apps/registry/app/[locale]/layout.tsx` + `lib/seo.ts` — canonical targets the resolved URL, not the 307 (cmd: `curl -s https://ui.vllnt.com/components/button | grep -c 'rel="canonical".*/components/button'`)
 - [ ] search-consolidation.3 Replace the `@vercel/analytics` + `@vercel/speed-insights` 404s in `layout.tsx` with a portable web-vitals beacon (cmd: agent-browser `/` → 0 console errors, no `/_vercel/insights` 404)
 - [ ] search-consolidation.4 Add `BreadcrumbList` JSON-LD to `/components/[slug]` + `/docs/[slug]`, `SoftwareApplication` `featureList` on `/`, and a `blogPostingLd()` helper in `lib/jsonld.ts` (cmd: Rich Results Test clean on `/components/button`)
-- [ ] search-consolidation.5 Exclude 307/redirecting locale URLs from `sitemap.ts` + request re-index of the AI-wedge pages in GSC (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.ai --dimensions page --filter 'page contains /components/ai-'`)
+- [ ] search-consolidation.5 Exclude 307/redirecting locale URLs from `sitemap.ts` + request re-index of the AI-wedge pages in GSC (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.com --dimensions page --filter 'page contains /components/ai-'`)
 - [ ] search-consolidation.6 Validate search-consolidation.1–5: E2E — stale `.com` URL 301s to `.ai`; Rich Results clean (Breadcrumb + SoftwareApplication); console clean; canonical resolves (E2E: `pnpm test:e2e seo-consolidation`)
 
 ## ai-toolchain-registration [PLANNED]
 
 **Goal:** Make VLLNT UI installable by name inside AI coding tools — register the registry, MCP server, and docs in the indexes agents actually query. Highest-ROI, do-first (converts the DONE `agent-surface` infra into installs).
-**Exit criteria:** `@vllnt` resolves in `ui.shadcn.com/r/registries.json`; a shadcn-MCP-connected agent installs `@vllnt/ai-chat-input` by name; Context7 serves `ui.vllnt.ai` docs; `@vllnt/mcp` is on npm + the official MCP Registry; the GitHub repo carries the AI topics.
-**Verify:** in a fresh app with `"@vllnt": "https://ui.vllnt.ai/r/{name}"` in `components.json`, an agent prompted "add an AI chat thread" installs a VLLNT component; Context7 returns VLLNT docs for a Cursor query. Personas: dev scaffolding in Cursor/Claude Code/v0; agent resolving a component by name.
+**Exit criteria:** `@vllnt` resolves in `ui.shadcn.com/r/registries.json`; a shadcn-MCP-connected agent installs `@vllnt/ai-chat-input` by name; Context7 serves `ui.vllnt.com` docs; `@vllnt/mcp` is on npm + the official MCP Registry; the GitHub repo carries the AI topics.
+**Verify:** in a fresh app with `"@vllnt": "https://ui.vllnt.com/r/{name}"` in `components.json`, an agent prompted "add an AI chat thread" installs a VLLNT component; Context7 returns VLLNT docs for a Cursor query. Personas: dev scaffolding in Cursor/Claude Code/v0; agent resolving a component by name.
 
 - [ ] ai-toolchain-registration.1 PR `@vllnt` into the shadcn registry directory (`apps/v4/registry/directory.json`) + verify the earlier index PR is live in `registries.json` (cmd: `curl -s https://ui.shadcn.com/r/registries.json | grep -c '@vllnt'`)
-- [ ] ai-toolchain-registration.2 Submit `ui.vllnt.ai` to Context7 + add `context7.json` to repo root (cmd: `curl -s https://context7.com/vllnt/ui | grep -ci vllnt`)
+- [ ] ai-toolchain-registration.2 Submit `ui.vllnt.com` to Context7 + add `context7.json` to repo root (cmd: `curl -s https://context7.com/vllnt/ui | grep -ci vllnt`)
 - [ ] ai-toolchain-registration.3 Publish a distributable `@vllnt/mcp` stdio bridge (wrapping the hosted `/mcp`) to npm (cmd: `npm view @vllnt/mcp version`)
 - [ ] ai-toolchain-registration.4 Register the MCP server in the official MCP Registry (`mcp-publisher`) + Registry Discovery MCP (cmd: `curl -s https://registry.modelcontextprotocol.io/v0/servers | grep -ci vllnt`)
 - [ ] ai-toolchain-registration.5 Add GitHub topics `ai, ai-agents, llm, generative-ui, shadcn, shadcn-registry` + document the `components.json` `@vllnt` snippet in `/docs/installation` (cmd: `gh repo view vllnt/ui --json repositoryTopics | grep -E 'ai-agents|shadcn-registry'`)
@@ -245,7 +245,7 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] visibility-measurement.1 Configure the GA4 AI-Assistant channel + a referrer/UTM filter `chatgpt.com|perplexity.ai|claude.ai|gemini.google.com|copilot.microsoft.com` (cmd: GA4 realtime shows the channel on a test referral)
 - [ ] visibility-measurement.2 Stand up a share-of-voice tracker (Profound/Otterly/Peec/Ahrefs Brand Radar) on the AI-UI prompt set (cmd: tracker dashboard returns a baseline mention rate)
 - [ ] visibility-measurement.3 Add server-log crawler monitoring for GPTBot/ClaudeBot/Claude-Code/PerplexityBot/OAI-SearchBot — proves llms.txt consumption (cmd: `grep -Ec 'GPTBot|ClaudeBot|Claude-Code' access.log`)
-- [ ] visibility-measurement.4 Script a recurring GSC position/impressions review via `gsc.py` (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.ai --dimensions query --days 28`)
+- [ ] visibility-measurement.4 Script a recurring GSC position/impressions review via `gsc.py` (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.com --dimensions query --days 28`)
 
 ## seo-content-engine [PLANNED]
 
@@ -254,12 +254,12 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 **Verify:** a dev searching "how to build a chat ui with the vercel ai sdk" finds a VLLNT guide; `/alternatives/assistant-ui` renders a comparison table; a blog post shows correct BlogPosting rich data. Personas: dev in organic search; dev comparing libraries; AI answer engine extracting a table. (needs: search-consolidation done first)
 
 - [ ] seo-content-engine.1 Add the MDX blog: `content/blog/{slug}/{locale}.mdx` + `lib/blog.ts` (Content Collections `@content-collections/mdx`, Zod frontmatter — NOT Contentlayer; Velite fallback) mirroring `lib/content.ts` (needs: search-consolidation.4) → docs/specs/blog-system.md
-- [ ] seo-content-engine.2 Routes `/blog` + `/blog/[slug]` with `generateMetadata` + BlogPosting/Breadcrumb JSON-LD + Shiki build-time highlighting + per-post OG via `ImageResponse` (cmd: `curl -s https://ui.vllnt.ai/blog/<post> | grep -c '"@type":"BlogPosting"'`)
-- [ ] seo-content-engine.3 Blog RSS + sitemap + llms.txt entries (extend `app/rss.xml`, `sitemap.ts`, `llms.txt/route.ts`) (cmd: `curl -s https://ui.vllnt.ai/sitemap.xml | grep -c /blog/`)
-- [ ] seo-content-engine.4 Programmatic `/integrations/{tool}` pages (vercel-ai-sdk, langgraph, convex, openai, anthropic), data-driven like `lib/use-cases.ts` (cmd: `curl -sI https://ui.vllnt.ai/integrations/vercel-ai-sdk | grep -c 200`)
-- [ ] seo-content-engine.5 Programmatic `/alternatives/{competitor}` pages (assistant-ui, copilotkit, ai-elements) with a comparison table + FAQPage LD (cmd: `curl -s https://ui.vllnt.ai/alternatives/assistant-ui | grep -c '<table'`)
+- [ ] seo-content-engine.2 Routes `/blog` + `/blog/[slug]` with `generateMetadata` + BlogPosting/Breadcrumb JSON-LD + Shiki build-time highlighting + per-post OG via `ImageResponse` (cmd: `curl -s https://ui.vllnt.com/blog/<post> | grep -c '"@type":"BlogPosting"'`)
+- [ ] seo-content-engine.3 Blog RSS + sitemap + llms.txt entries (extend `app/rss.xml`, `sitemap.ts`, `llms.txt/route.ts`) (cmd: `curl -s https://ui.vllnt.com/sitemap.xml | grep -c /blog/`)
+- [ ] seo-content-engine.4 Programmatic `/integrations/{tool}` pages (vercel-ai-sdk, langgraph, convex, openai, anthropic), data-driven like `lib/use-cases.ts` (cmd: `curl -sI https://ui.vllnt.com/integrations/vercel-ai-sdk | grep -c 200`)
+- [ ] seo-content-engine.5 Programmatic `/alternatives/{competitor}` pages (assistant-ui, copilotkit, ai-elements) with a comparison table + FAQPage LD (cmd: `curl -s https://ui.vllnt.com/alternatives/assistant-ui | grep -c '<table'`)
 - [ ] seo-content-engine.6 Per-component uniqueness pass: unique copy + live demo + install command on each `/components/[slug]` → docs/specs/component-page-uniqueness.md
-- [ ] seo-content-engine.7 Publish 3 flagship guides (best react components for AI agents; assistant-ui vs ai-elements vs vllnt; render tool calls in react) — answer-first, stats + tables, TechArticle LD (cmd: `curl -s https://ui.vllnt.ai/blog/best-react-components-for-ai-agents | grep -c '<table'`)
+- [ ] seo-content-engine.7 Publish 3 flagship guides (best react components for AI agents; assistant-ui vs ai-elements vs vllnt; render tool calls in react) — answer-first, stats + tables, TechArticle LD (cmd: `curl -s https://ui.vllnt.com/blog/best-react-components-for-ai-agents | grep -c '<table'`)
 - [ ] seo-content-engine.8 Validate seo-content-engine.1–7: E2E — blog post renders with BlogPosting rich data; integration + alternative pages return 200 with tables; component page shows demo + install; RSS/sitemap include blog (E2E: `pnpm test:e2e content-engine`)
 
 ## backlink-authority [PLANNED]
@@ -271,10 +271,10 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] backlink-authority.1 PRs to awesome-shadcn-ui + awesome-react-components + awesome-nextjs + awesome-generative-ui (cmd: PR merged + entry visible in the list README)
 - [ ] backlink-authority.2 Show HN launch + Product Hunt launch (cmd: live HN + PH post URLs)
 - [ ] backlink-authority.3 Submit to OSS aggregators: OpenAlternative, LibHunt, AlternativeTo, SaaSHub, DevHunt (cmd: listing URLs live)
-- [ ] backlink-authority.4 Syndicate 3 guides to dev.to/Hashnode with `canonical` → ui.vllnt.ai (needs: seo-content-engine.7) (cmd: syndicated post `rel=canonical` points home)
+- [ ] backlink-authority.4 Syndicate 3 guides to dev.to/Hashnode with `canonical` → ui.vllnt.com (needs: seo-content-engine.7) (cmd: syndicated post `rel=canonical` points home)
 - [ ] backlink-authority.5 Newsletter sponsorship (React Status / Bytes / JS Weekly) timed to the magnet (cmd: placement confirmed live)
 - [ ] backlink-authority.6 Ship one original-data link magnet: AI chat UI benchmark or "State of AI UI 2026" survey (needs: seo-content-engine.1) → docs/specs/link-magnet.md
-- [ ] backlink-authority.7 Validate backlink-authority.1–6: GSC Links report shows ≥3 new referring domains to the magnet + ≥5 directory/list entries live (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.ai --dimensions page --filter 'page contains /blog/'` + GSC Links export)
+- [ ] backlink-authority.7 Validate backlink-authority.1–6: GSC Links report shows ≥3 new referring domains to the magnet + ≥5 directory/list entries live (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.com --dimensions page --filter 'page contains /blog/'` + GSC Links export)
 
 ---
 
@@ -561,7 +561,7 @@ Full task detail for completed phases — collapsed above to keep the active roa
 - [x] agent-surface.3 `/llms.txt` + `/llms-full.txt` — #235, #236
 - [x] agent-surface.4 JSON-LD (Organization, WebSite, SoftwareSourceCode, ItemList, BreadcrumbList) + manifest + custom 404 + breadcrumbs — #238, #239, #240, #251
 - [x] agent-surface.5 Release-intelligence surface: `/changelog`, `/releases`, `/rss.xml`, `/atom.xml` — #260
-- [x] agent-surface.6 `@vllnt/mcp` server at `ui.vllnt.ai/mcp` — #246
+- [x] agent-surface.6 `@vllnt/mcp` server at `ui.vllnt.com/mcp` — #246
 - [x] agent-surface.7 Community paths: footer, header GitHub icon, `/request-component`, `/report`, FUNDING, shadcn-CLI install path — #243–#247, #261, #265
 - [x] agent-surface.8 Brand: DESIGN.md + `/design` + `design.tokens.json` — #250
 - [x] agent-surface.9 Landing rebuild to OSS-library best practices — #264

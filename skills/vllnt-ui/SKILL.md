@@ -23,9 +23,9 @@ allowed-tools:
 `@vllnt/ui` (brand name **VLLNT UI**, always two words) is a React component
 library: 200+ accessible components built on **Radix UI** primitives,
 **Tailwind CSS**, and **CVA** (class-variance-authority). Shipped on public npm
-and as a shadcn-compatible registry at `https://ui.vllnt.ai/r`.
+and as a shadcn-compatible registry at `https://ui.vllnt.com/r`.
 
-- Docs: https://ui.vllnt.ai · Storybook: https://storybook.vllnt.ai
+- Docs: https://ui.vllnt.com · Storybook: https://storybook.vllnt.ai
 - npm: https://www.npmjs.com/package/@vllnt/ui
 - Machine docs: `llms.txt` / `llms-full.txt` at repo root
 
@@ -42,19 +42,19 @@ The component set changes; the design rules don't. Hardcoded lists go stale —
 
 | Need | URL | Form |
 |------|-----|------|
-| Full component list / TOC | `https://ui.vllnt.ai/r/registry.json` | JSON — `items[]` with `name`, `title`, `description` |
-| Browse a component (props, demos) | `https://ui.vllnt.ai/components` · `…/components/{slug}` | HTML |
-| Install one component | `https://ui.vllnt.ai/r/{name}.json` | JSON (shadcn) |
-| Design system (canonical) | `https://ui.vllnt.ai/DESIGN.md` | Markdown (raw) |
-| AI orientation (short) | `https://ui.vllnt.ai/llms.txt` | text |
-| AI deep reference (full) | `https://ui.vllnt.ai/llms-full.txt` | text |
+| Full component list / TOC | `https://ui.vllnt.com/r/registry.json` | JSON — `items[]` with `name`, `title`, `description` |
+| Browse a component (props, demos) | `https://ui.vllnt.com/components` · `…/components/{slug}` | HTML |
+| Install one component | `https://ui.vllnt.com/r/{name}.json` | JSON (shadcn) |
+| Design system (canonical) | `https://ui.vllnt.com/DESIGN.md` | Markdown (raw) |
+| AI orientation (short) | `https://ui.vllnt.com/llms.txt` | text |
+| AI deep reference (full) | `https://ui.vllnt.com/llms-full.txt` | text |
 
 Rules:
 - "What components exist?" / "is there an X component?" → fetch `/r/registry.json`
   and read `items[].name`. **Do not answer the component list from memory.**
 - Need exact props / a11y map / examples → fetch the component page or its `.tsx`.
-- Need a design decision not covered below → fetch `https://ui.vllnt.ai/DESIGN.md`.
-- For human-readable browsing use `https://ui.vllnt.ai/design`. If `/DESIGN.md` is
+- Need a design decision not covered below → fetch `https://ui.vllnt.com/DESIGN.md`.
+- For human-readable browsing use `https://ui.vllnt.com/design`. If `/DESIGN.md` is
   unreachable, fall back to `https://raw.githubusercontent.com/vllnt/ui/main/DESIGN.md`.
 
 ---
@@ -168,7 +168,7 @@ Pick by intent, not by looks (from `DESIGN.md` §10):
 | Empty state | `EmptyState` |
 
 This table is the **common picks**, not the full set — fetch
-`https://ui.vllnt.ai/r/registry.json` (`items[].name`) for everything. Families:
+`https://ui.vllnt.com/r/registry.json` (`items[].name`) for everything. Families:
 Primitives, Layout, Forms, Feedback, Navigation, Data/Charts, AI, Financial,
 Ops/Status, Billing & Plans, Animation, Content, Tutorial/Educational, App Shell.
 
@@ -235,7 +235,7 @@ in shipped UI.
 ## shadcn registry (copy a single component)
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/{component}.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/{component}.json
 ```
 
 Copy-paste model: you own the resulting file. Still obey the design tokens above.

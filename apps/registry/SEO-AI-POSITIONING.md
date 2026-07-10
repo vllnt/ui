@@ -1,4 +1,4 @@
-# SEO: repositioning ui.vllnt.ai as the UI design system for AI agents
+# SEO: repositioning ui.vllnt.com as the UI design system for AI agents
 
 GSC-grounded change set that shifts the site from "agent-readable shadcn clone"
 (unwinnable on generic component terms) to category owner of **UI for AI agents
@@ -32,7 +32,7 @@ These are off-platform / require account access:
    - Track a saved query group filtering `chat|ai|agent|tool|citation|streaming`.
 2. **Off-page / authority**
    - List in awesome-lists (`awesome-ai`, `awesome-react-components`, `awesome-llm-apps`), add npm keywords + GitHub topics (`ai-ui`, `agent-ui`, `llm-ui`, `generative-ui`).
-   - Cross-post guides (dev.to / Hashnode) with canonical back to ui.vllnt.ai; Show HN / r/reactjs launch with the AI-UI angle.
+   - Cross-post guides (dev.to / Hashnode) with canonical back to ui.vllnt.com; Show HN / r/reactjs launch with the AI-UI angle.
 3. **Deploy note**: the storybook noindex only takes effect after `apps/storybook` is rebuilt/redeployed.
 
 ## KPIs to watch

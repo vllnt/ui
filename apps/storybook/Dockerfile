@@ -1,4 +1,4 @@
-# Storybook static build for ui.vllnt.ai monorepo.
+# Storybook static build for ui.vllnt.com monorepo.
 # Build from repo root so pnpm workspace links resolve.
 # Final image: nginx-unprivileged serving the static export.
 

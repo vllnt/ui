@@ -37,7 +37,7 @@ export const Inline: Story = {
 export const ButtonVariant: Story = {
   args: {
     label: "Copy link",
-    value: "https://ui.vllnt.ai",
+    value: "https://ui.vllnt.com",
     variant: "button",
   },
 };

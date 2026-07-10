@@ -1,6 +1,6 @@
 # @vllnt/ui — full reference for AI consumption
 
-> React component library — 144 accessible components built on Radix UI primitives, Tailwind CSS, and CVA. Distributed via the public npm registry with OIDC-signed provenance, and via a shadcn-compatible registry at https://ui.vllnt.ai/r.
+> React component library — 144 accessible components built on Radix UI primitives, Tailwind CSS, and CVA. Distributed via the public npm registry with OIDC-signed provenance, and via a shadcn-compatible registry at https://ui.vllnt.com/r.
 
 ---
 
@@ -14,9 +14,9 @@
 - **Runtime targets:** React 18+, Tailwind CSS 3+
 - **Distribution:**
   - Public npm: https://www.npmjs.com/package/@vllnt/ui
-  - shadcn registry: https://ui.vllnt.ai/r
-  - Docs: https://ui.vllnt.ai
-  - Design system: https://ui.vllnt.ai/DESIGN.md
+  - shadcn registry: https://ui.vllnt.com/r
+  - Docs: https://ui.vllnt.com
+  - Design system: https://ui.vllnt.com/DESIGN.md
   - Storybook: https://storybook.vllnt.ai
 
 ## Install
@@ -196,7 +196,7 @@ import { cn } from "@vllnt/ui";
 ```
 vllnt/ui/
   packages/ui/                # @vllnt/ui source
-  apps/registry/              # Next.js registry at ui.vllnt.ai
+  apps/registry/              # Next.js registry at ui.vllnt.com
   .github/workflows/          # CI, publish, storybook
   AGENTS.md                   # canonical agent instructions
   CONTRIBUTING.md             # contributor guide
@@ -211,7 +211,7 @@ vllnt/ui/
 
 ## References
 
-- Project homepage — https://ui.vllnt.ai
+- Project homepage — https://ui.vllnt.com
 - Storybook — https://storybook.vllnt.ai
 - Changelog — https://github.com/vllnt/ui/blob/main/packages/ui/CHANGELOG.md
 - Contributing — https://github.com/vllnt/ui/blob/main/CONTRIBUTING.md

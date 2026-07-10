@@ -1,4 +1,4 @@
-# ui.vllnt.ai — component registry/docs site (standalone output).
+# ui.vllnt.com — component registry/docs site (standalone output).
 # Built from vllnt/ui monorepo, app: apps/registry. Workspace dep: @vllnt/ui.
 
 FROM node:22-alpine@sha256:968df39aedcea65eeb078fb336ed7191baf48f972b4479711397108be0966920 AS builder

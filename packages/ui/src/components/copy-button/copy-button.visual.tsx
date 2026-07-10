@@ -17,7 +17,7 @@ test.describe("CopyButton Visual", () => {
 
   test("variant-button", async ({ mount }) => {
     const component = await mount(
-      <CopyButton label="Copy link" value="https://ui.vllnt.ai" variant="button" />,
+      <CopyButton label="Copy link" value="https://ui.vllnt.com" variant="button" />,
     );
     await expect(component).toHaveScreenshot("copy-button-variant-button.png");
   });

@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/vllnt/ui/security/advisories/new
     about: Report security issues privately (do NOT open a public issue).
   - name: Documentation
-    url: https://ui.vllnt.ai
+    url: https://ui.vllnt.com
     about: Component docs + registry.
   - name: Storybook
     url: https://storybook.vllnt.ai

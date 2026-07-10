@@ -18,6 +18,6 @@ This template is published as source in the VLLNT UI repository. Copy or adapt t
 
 ## Demo and assets
 
-- Demo: https://ui.vllnt.ai/templates/ai-chat
+- Demo: https://ui.vllnt.com/templates/ai-chat
 - Screenshot: ./screenshots/preview.svg
 - Source path: templates/ai-chat
