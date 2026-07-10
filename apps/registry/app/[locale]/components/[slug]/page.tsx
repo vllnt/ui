@@ -20,8 +20,10 @@ import { ShareEmbedBar } from "@/components/share-embed-bar";
 import { type Locale, routing } from "@/i18n/routing";
 import { getAiSeo } from "@/lib/ai-seo";
 import componentMetadata from "@/lib/component-metadata.json";
+import { getComponentSeo } from "@/lib/component-seo";
 import {
   breadcrumbLd,
+  faqPageLd,
   jsonLdScriptAttributes,
   softwareSourceCodeLd,
 } from "@/lib/jsonld";
@@ -91,9 +93,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const meta = metadata_map[slug];
   const category = getCategoryForComponent(slug);
   const aiSeo = getAiSeo(slug);
+  const componentSeo = getComponentSeo(slug);
   const title = meta?.title ?? component.title;
   const description =
-    aiSeo?.description ?? meta?.description ?? component.description;
+    aiSeo?.description ??
+    componentSeo?.description ??
+    meta?.description ??
+    component.description;
   const pathname = `/components/${slug}`;
 
   const ogParameters = {
@@ -113,7 +119,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     description,
     openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
-    title: aiSeo?.title ?? `${title} - VLLNT UI`,
+    title: aiSeo?.title ?? componentSeo?.title ?? `${title} - VLLNT UI`,
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
@@ -132,9 +138,14 @@ export default async function ComponentPage(props: Props) {
 
   const meta = metadata_map[slug];
   const aiSeo = getAiSeo(slug);
+  const componentSeo = getComponentSeo(slug);
   const displayTitle = meta?.title ?? component.title ?? component.name;
   const displayDescription =
-    aiSeo?.description ?? meta?.description ?? component.description ?? "";
+    aiSeo?.description ??
+    componentSeo?.description ??
+    meta?.description ??
+    component.description ??
+    "";
   const playgroundExample = getPlaygroundExample(component);
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
 
@@ -195,6 +206,23 @@ export default async function ComponentPage(props: Props) {
     ? groupedComponents.find((group) => group.category === componentCategory)
     : undefined;
 
+  const relatedSlugs = (
+    componentSeo && componentSeo.related.length > 0
+      ? componentSeo.related
+      : (familyGroup?.items ?? []).map((item) => item.name)
+  )
+    .filter((name) => name !== component.name)
+    .slice(0, 6);
+  const relatedComponents = relatedSlugs
+    .map((name) =>
+      registry.items.find(
+        (item): item is RegistryComponent =>
+          item.name === name && item.type === "registry:component",
+      ),
+    )
+    .filter((item): item is RegistryComponent => item !== undefined)
+    .map((item) => ({ name: item.name, title: item.title ?? item.name }));
+
   const sections = [
     { id: "installation", title: "Installation" },
     ...(meta?.defaultStoryId ? [{ id: "preview", title: "Preview" }] : []),
@@ -202,6 +230,10 @@ export default async function ComponentPage(props: Props) {
     ...(componentCode ? [{ id: "code", title: "Code" }] : []),
     ...(component.dependencies && component.dependencies.length > 0
       ? [{ id: "dependencies", title: "Dependencies" }]
+      : []),
+    ...(componentSeo?.faqs.length ? [{ id: "faq", title: "FAQ" }] : []),
+    ...(relatedComponents.length > 0
+      ? [{ id: "related", title: "Related" }]
       : []),
   ] as { id: string; title: string }[];
 
@@ -224,6 +256,7 @@ export default async function ComponentPage(props: Props) {
               url: `${SITE_URL}/components/${component.name}`,
             },
           ]),
+          ...(componentSeo?.faqs.length ? [faqPageLd(componentSeo.faqs)] : []),
         ])}
       />
       <Sidebar
@@ -296,6 +329,30 @@ export default async function ComponentPage(props: Props) {
                     Browse all AI agent components
                     <ExternalLink className="size-3" />
                   </Link>
+                </div>
+              ) : null}
+
+              {/* Usage block for non-AI components */}
+              {!aiSeo?.whenToUse && componentSeo?.whatItIs ? (
+                <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
+                  <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+                    What it is &amp; when to use
+                  </h2>
+                  <p className="mt-3 text-base leading-relaxed">
+                    {componentSeo.whatItIs}
+                  </p>
+                  {familyGroup ? (
+                    <Link
+                      className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
+                      href={localizePathname(
+                        familyPath(familyGroup.category),
+                        locale,
+                      )}
+                    >
+                      Browse all {familyGroup.label}
+                      <ExternalLink className="size-3" />
+                    </Link>
+                  ) : null}
                 </div>
               ) : null}
 
@@ -389,6 +446,48 @@ export default async function ComponentPage(props: Props) {
                         );
                       })}
                     </ul>
+                  </div>
+                </div>
+              ) : null}
+
+              {/* FAQ (visible content backing FAQPage structured data) */}
+              {componentSeo?.faqs.length ? (
+                <div className="mb-8 scroll-mt-8" id="faq">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Frequently asked questions
+                  </h2>
+                  <dl className="space-y-6">
+                    {componentSeo.faqs.map((faq) => (
+                      <div key={faq.question}>
+                        <dt className="font-medium">{faq.question}</dt>
+                        <dd className="mt-2 leading-relaxed text-muted-foreground">
+                          {faq.answer}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              ) : null}
+
+              {/* Related components (internal linking) */}
+              {relatedComponents.length > 0 ? (
+                <div className="mb-8 scroll-mt-8" id="related">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Related components
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {relatedComponents.map((related) => (
+                      <Link
+                        className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-muted"
+                        href={localizePathname(
+                          `/components/${related.name}`,
+                          locale,
+                        )}
+                        key={related.name}
+                      >
+                        {related.title}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               ) : null}
