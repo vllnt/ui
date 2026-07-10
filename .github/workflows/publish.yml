@@ -81,8 +81,7 @@ jobs:
           CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
           npm version "$CANARY_VERSION" --no-git-tag-version
           TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
-          npm install -g npm@latest
-          npm publish "$TARBALL" --tag canary --provenance --access public
+          npx --yes npm@11.18.0 publish "$TARBALL" --tag canary --provenance --access public
 
   release:
     name: Publish Release
@@ -170,8 +169,7 @@ jobs:
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
           TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
-          npm install -g npm@latest
-          npm publish "$TARBALL" --tag latest --provenance --access public
+          npx --yes npm@11.18.0 publish "$TARBALL" --tag latest --provenance --access public
 
       - name: Create GitHub Release
         env:
