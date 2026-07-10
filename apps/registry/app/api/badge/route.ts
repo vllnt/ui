@@ -21,7 +21,7 @@ function segmentWidth(text: string): number {
  * Static "Built with VLLNT UI" badge served as SVG (same pattern as /api/og).
  *
  * The badge image carries no link equity on its own — consumers wrap it in an
- * `<a href="https://ui.vllnt.ai?ref=badge">` (see buildBadgeSnippets), and
+ * `<a href="https://ui.vllnt.com?ref=badge">` (see buildBadgeSnippets), and
  * that anchor in their page DOM is the backlink.
  */
 export function GET(): Response {

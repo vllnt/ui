@@ -84,7 +84,7 @@ export default async function VsShadcnPage({ params }: Props) {
     {
       attribute: "MCP server",
       shadcn: "No",
-      vllnt: "Yes — ui.vllnt.ai/mcp (search/get/list tools)",
+      vllnt: "Yes — ui.vllnt.com/mcp (search/get/list tools)",
       winner: "vllnt",
     },
     {

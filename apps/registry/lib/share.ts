@@ -10,7 +10,7 @@ import { canonical } from "@/lib/seo";
  */
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 /** Attribution source tags appended as `?ref=` so referrals stay measurable. */
 export type ShareRef = "badge" | "embed" | "oembed" | "permalink" | "share";

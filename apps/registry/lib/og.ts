@@ -7,7 +7,7 @@ import { alternateOgLocales, canonical, ogLocale } from "@/lib/seo";
 export const OG_IMAGE_WIDTH = 2400;
 export const OG_IMAGE_HEIGHT = 1260;
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 const ogImageParametersSchema = z.object({
   category: z.string().max(100).optional(),

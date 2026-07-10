@@ -83,8 +83,8 @@ describe("theme-serialize exports", () => {
   });
 
   it("builds an install URL pointing at /r/themes", () => {
-    const url = themeInstallUrl("https://ui.vllnt.ai", DEFAULT_THEME, "demo");
-    expect(url.startsWith("https://ui.vllnt.ai/r/themes?t=")).toBe(true);
+    const url = themeInstallUrl("https://ui.vllnt.com", DEFAULT_THEME, "demo");
+    expect(url.startsWith("https://ui.vllnt.com/r/themes?t=")).toBe(true);
     expect(url).toContain("name=demo");
   });
 });

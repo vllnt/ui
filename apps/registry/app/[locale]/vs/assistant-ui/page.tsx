@@ -14,7 +14,7 @@ type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PATHNAME = "/vs/assistant-ui";
 
 type Row = {

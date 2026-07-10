@@ -29,7 +29,7 @@ type Props = {
   readonly params: Promise<{ category: string; locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 function findFamily(category: string) {
   return groupedComponents.find((group) => group.category === category);

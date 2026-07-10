@@ -15,7 +15,7 @@ import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 const title = "Templates - VLLNT UI";
 const description =

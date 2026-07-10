@@ -188,7 +188,7 @@ export default async function ComponentPage(props: Props) {
     // Source file not found — skip code section
   }
 
-  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/${component.name}.json`;
+  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
 
   const componentCategory = getCategoryForComponent(slug);
   const familyGroup = componentCategory
@@ -205,7 +205,7 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
   return (
     <>

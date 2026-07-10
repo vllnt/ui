@@ -10,7 +10,7 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 const DESCRIPTION =
   "Read VLLNT UI releases, including latest notes, component count deltas, breaking change counts, migration links, and GitHub release links.";

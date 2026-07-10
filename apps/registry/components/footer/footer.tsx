@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
-const STORYBOOK_URL = "https://storybook.vllnt.ai";
+const STORYBOOK_URL = "https://storybook.vllnt.com";
 const SPONSOR_URL = "https://github.com/sponsors/bntvllnt";
 const REPORT_URL =
   "https://github.com/vllnt/ui/issues/new?template=bug_report.yml&labels=bug";

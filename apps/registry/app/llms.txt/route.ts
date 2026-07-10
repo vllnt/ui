@@ -8,7 +8,7 @@ import { registry, type RegistryComponent } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const TEXT_HEADERS = new Headers([
   [
     "Cache-Control",

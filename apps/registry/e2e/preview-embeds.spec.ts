@@ -13,7 +13,7 @@
  * Where it runs (playwright.config.ts reads PLAYWRIGHT_BASE_URL):
  *   - ntk promote gate — `PLAYWRIGHT_BASE_URL=$NTK_PREVIEW_URL … test:e2e`
  *     runs this against the live PR preview before a prod promote (ntk.yaml).
- *   - production — `PLAYWRIGHT_BASE_URL=https://ui.vllnt.ai pnpm -F
+ *   - production — `PLAYWRIGHT_BASE_URL=https://ui.vllnt.com pnpm -F
  *     @vllnt/ui-registry test:e2e`.
  *   - local / GH Actions e2e job — no PLAYWRIGHT_BASE_URL, so it hits the dev
  *     server whose Storybook origin (localhost:6006) is not running; the live

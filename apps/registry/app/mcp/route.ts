@@ -1,5 +1,5 @@
 /**
- * MCP server at ui.vllnt.ai/mcp — Model Context Protocol endpoint.
+ * MCP server at ui.vllnt.com/mcp — Model Context Protocol endpoint.
  *
  * Speaks JSON-RPC 2.0 over POST. Implements the smallest protocol surface
  * an MCP client needs to discover and use VLLNT UI tools:
@@ -29,7 +29,7 @@ import { NextResponse } from "next/server";
 
 import { registry as REGISTRY, type RegistryComponent } from "@/lib/registry";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PROTOCOL_VERSION = "2025-06-18";
 
 type JsonRpcRequest = {

@@ -15,11 +15,11 @@ import {
 } from "@/lib/stats";
 
 const GITHUB_URL = "https://github.com/vllnt/ui";
-const STORYBOOK_URL = "https://storybook.vllnt.ai";
+const STORYBOOK_URL = "https://storybook.vllnt.com";
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
 const INSTALL_COMMAND =
-  "pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json";
+  "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json";
 
 const TRUST_BADGES = [
   { label: "MIT" },

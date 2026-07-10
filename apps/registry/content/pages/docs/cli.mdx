@@ -15,7 +15,7 @@ The VLLNT UI registry uses the same JSON descriptor shape expected by the shadcn
 ## Add one component
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
 The CLI reads the descriptor, installs dependencies, and writes source files into your configured component directory.
@@ -25,9 +25,9 @@ The CLI reads the descriptor, installs dependencies, and writes source files int
 Install components one at a time so diffs are easy to review:
 
 ```bash
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/dialog.json
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/toast.json
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/form.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/dialog.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/toast.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/form.json
 ```
 
 ## Inspect the registry first
@@ -35,13 +35,13 @@ pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/form.json
 Use the registry index when scripting:
 
 ```bash
-curl https://ui.vllnt.ai/r/registry.json
+curl https://ui.vllnt.com/r/registry.json
 ```
 
 Each item includes its slug, title, description, category, dependencies, and file list. Per-component descriptors live at:
 
 ```text
-https://ui.vllnt.ai/r/<name>.json
+https://ui.vllnt.com/r/<name>.json
 ```
 
 ## Team workflow

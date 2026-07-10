@@ -10,7 +10,7 @@ import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import { getUseCasePath, USE_CASES } from "../lib/use-cases";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 const AI_COMPONENT_SLUGS = new Set(getAiComponentSlugs());
 
