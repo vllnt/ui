@@ -4,6 +4,7 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
+import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -164,6 +165,17 @@ export default async function VsShadcnPage({ params }: Props) {
 
   return (
     <>
+      <script
+        {...jsonLdScriptAttributes(
+          breadcrumbLd([
+            { name: "Home", url: canonical("/", locale) },
+            {
+              name: "VLLNT UI vs shadcn/ui",
+              url: canonical("/vs/shadcn", locale),
+            },
+          ]),
+        )}
+      />
       <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-4xl px-4 py-16 lg:px-8">

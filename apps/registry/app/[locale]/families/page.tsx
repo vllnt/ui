@@ -23,7 +23,6 @@ type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PATHNAME = "/families";
 const TITLE = "Component families";
 const DESCRIPTION =
@@ -60,18 +59,18 @@ export default async function FamiliesPage({ params }: Props) {
       <script
         {...jsonLdScriptAttributes([
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Components", url: `${SITE_URL}/components` },
-            { name: "Families", url: `${SITE_URL}${PATHNAME}` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Components", url: canonical("/components", locale) },
+            { name: "Families", url: canonical(PATHNAME, locale) },
           ]),
           collectionPageLd({
             description: DESCRIPTION,
             items: groupedComponents.map((group) => ({
               name: `${group.label} components`,
-              url: `${SITE_URL}${familyPath(group.category)}`,
+              url: canonical(familyPath(group.category), locale),
             })),
             title: TITLE,
-            url: `${SITE_URL}${PATHNAME}`,
+            url: canonical(PATHNAME, locale),
           }),
         ])}
       />

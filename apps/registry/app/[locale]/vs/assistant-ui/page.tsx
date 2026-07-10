@@ -14,7 +14,6 @@ type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PATHNAME = "/vs/assistant-ui";
 
 type Row = {
@@ -91,8 +90,11 @@ export default async function VsAssistantUiPage({ params }: Props) {
       <script
         {...jsonLdScriptAttributes(
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "VLLNT UI vs assistant-ui", url: `${SITE_URL}${PATHNAME}` },
+            { name: "Home", url: canonical("/", locale) },
+            {
+              name: "VLLNT UI vs assistant-ui",
+              url: canonical(PATHNAME, locale),
+            },
           ]),
         )}
       />

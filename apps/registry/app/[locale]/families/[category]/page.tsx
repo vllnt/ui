@@ -29,8 +29,6 @@ type Props = {
   readonly params: Promise<{ category: string; locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 function findFamily(category: string) {
   return groupedComponents.find((group) => group.category === category);
 }
@@ -110,18 +108,18 @@ export default async function FamilyPage({ params }: Props) {
       <script
         {...jsonLdScriptAttributes([
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Components", url: `${SITE_URL}/components` },
-            { name: group.label, url: `${SITE_URL}${pathname}` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Components", url: canonical("/components", locale) },
+            { name: group.label, url: canonical(pathname, locale) },
           ]),
           collectionPageLd({
             description,
             items: group.items.map((item) => ({
               name: item.title,
-              url: `${SITE_URL}/components/${item.name}`,
+              url: canonical(`/components/${item.name}`, locale),
             })),
             title: `${group.label} components`,
-            url: `${SITE_URL}${pathname}`,
+            url: canonical(pathname, locale),
           }),
           ...(copy && copy.faq.length > 0 ? [faqPageLd(copy.faq)] : []),
         ])}

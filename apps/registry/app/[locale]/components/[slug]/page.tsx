@@ -237,8 +237,6 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
   return (
     <>
       <script
@@ -249,11 +247,11 @@ export default async function ComponentPage(props: Props) {
             title: displayTitle,
           }),
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Components", url: `${SITE_URL}/components` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Components", url: canonical("/components", locale) },
             {
               name: displayTitle,
-              url: `${SITE_URL}/components/${component.name}`,
+              url: canonical(`/components/${component.name}`, locale),
             },
           ]),
           ...(componentSeo?.faqs.length ? [faqPageLd(componentSeo.faqs)] : []),

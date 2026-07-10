@@ -15,8 +15,6 @@ import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 const title = "Templates - VLLNT UI";
 const description =
   "Starter kits for Next.js apps, dashboards, SaaS products, AI chat, and documentation sites built with VLLNT UI.";
@@ -64,7 +62,7 @@ export default async function TemplatesPage({ params }: Props) {
             softwareApplicationLd({
               description: template.description,
               name: template.title,
-              url: `${SITE_URL}${getTemplatePath(template)}`,
+              url: canonical(getTemplatePath(template), locale),
             }),
           ),
         )}

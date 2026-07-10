@@ -10,8 +10,6 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 type SearchParameters = {
   readonly from?: string;
   readonly to?: string;
@@ -159,8 +157,8 @@ export default async function ChangelogPage({
         dangerouslySetInnerHTML={{
           __html: jsonLdScript([
             breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Changelog", url: `${SITE_URL}/changelog` },
+              { name: "Home", url: canonical("/", locale) },
+              { name: "Changelog", url: canonical("/changelog", locale) },
             ]),
             {
               "@context": "https://schema.org",
@@ -170,7 +168,7 @@ export default async function ChangelogPage({
                 : {}),
               description: DESCRIPTION,
               headline: "VLLNT UI Changelog",
-              mainEntityOfPage: `${SITE_URL}/changelog`,
+              mainEntityOfPage: canonical("/changelog", locale),
               publisher: {
                 "@type": "Organization",
                 name: "VLLNT",

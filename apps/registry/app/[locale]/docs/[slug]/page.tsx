@@ -19,8 +19,6 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
@@ -123,7 +121,7 @@ export default async function DocsSlugPage(props: Props) {
     docsPage.slug === "changelog"
       ? `${content}\n\n${await readChangelog()}`
       : content;
-  const pageUrl = `${SITE_URL}${getDocsPath(docsPage)}`;
+  const pageUrl = canonical(getDocsPath(docsPage), locale);
 
   return (
     <>
@@ -131,8 +129,8 @@ export default async function DocsSlugPage(props: Props) {
         id={`docs-${docsPage.slug}-json-ld`}
         {...jsonLdScriptAttributes([
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Docs", url: `${SITE_URL}/docs` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Docs", url: canonical("/docs", locale) },
             { name: frontmatter.title, url: pageUrl },
           ]),
           techArticleLd({

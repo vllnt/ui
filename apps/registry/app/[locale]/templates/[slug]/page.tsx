@@ -23,8 +23,6 @@ import {
   TEMPLATES,
 } from "@/lib/templates";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
@@ -81,7 +79,7 @@ export default async function TemplatePage(props: Props) {
   }
 
   const templatePath = getTemplatePath(template);
-  const templateUrl = `${SITE_URL}${templatePath}`;
+  const templateUrl = canonical(templatePath, locale);
   const githubUrl = getTemplateGithubUrl(template);
 
   return (
@@ -90,8 +88,8 @@ export default async function TemplatePage(props: Props) {
         id={`template-${template.slug}-json-ld`}
         {...jsonLdScriptAttributes([
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Templates", url: `${SITE_URL}/templates` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Templates", url: canonical("/templates", locale) },
             { name: template.title, url: templateUrl },
           ]),
           softwareApplicationLd({

@@ -18,8 +18,6 @@ type Props = {
   readonly params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     USE_CASES.map((useCase) => ({ locale, slug: useCase.slug })),
@@ -78,11 +76,11 @@ export default async function UseCasePage({ params }: Props) {
       <script
         {...jsonLdScriptAttributes([
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "AI components", url: `${SITE_URL}/ai` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "AI components", url: canonical("/ai", locale) },
             {
               name: useCase.title,
-              url: `${SITE_URL}/build/${useCase.slug}`,
+              url: canonical(`/build/${useCase.slug}`, locale),
             },
           ]),
           faqPageLd(useCase.faq),

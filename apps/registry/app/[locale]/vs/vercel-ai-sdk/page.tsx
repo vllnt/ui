@@ -14,7 +14,6 @@ type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PATHNAME = "/vs/vercel-ai-sdk";
 
 type Row = {
@@ -90,10 +89,10 @@ export default async function VsVercelAiSdkPage({ params }: Props) {
       <script
         {...jsonLdScriptAttributes(
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
+            { name: "Home", url: canonical("/", locale) },
             {
               name: "VLLNT UI vs Vercel AI SDK",
-              url: `${SITE_URL}${PATHNAME}`,
+              url: canonical(PATHNAME, locale),
             },
           ]),
         )}

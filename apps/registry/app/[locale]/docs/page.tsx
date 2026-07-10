@@ -16,8 +16,6 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
@@ -61,14 +59,14 @@ export default async function DocumentationPage({ params }: Props) {
         id="docs-json-ld"
         {...jsonLdScriptAttributes([
           breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Docs", url: `${SITE_URL}/docs` },
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Docs", url: canonical("/docs", locale) },
           ]),
           techArticleLd({
             description:
               "Learn how to use VLLNT UI components in your projects.",
             title: "Documentation",
-            url: `${SITE_URL}/docs`,
+            url: canonical("/docs", locale),
           }),
         ])}
       />

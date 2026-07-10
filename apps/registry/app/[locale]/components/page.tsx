@@ -6,6 +6,11 @@ import { setRequestLocale } from "next-intl/server";
 import { ComponentCard } from "@/components/component-card";
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
+import {
+  breadcrumbLd,
+  collectionPageLd,
+  jsonLdScriptAttributes,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import {
@@ -53,6 +58,25 @@ export default async function ComponentsPage({ params }: Props) {
 
   return (
     <>
+      <script
+        {...jsonLdScriptAttributes([
+          breadcrumbLd([
+            { name: "Home", url: canonical("/", locale) },
+            { name: "Components", url: canonical("/components", locale) },
+          ]),
+          collectionPageLd({
+            description: `Browse all ${components.length} accessible React components in VLLNT UI — installable with the shadcn CLI.`,
+            items: groupedComponents.flatMap((group) =>
+              group.items.map((item) => ({
+                name: item.title,
+                url: canonical(`/components/${item.name}`, locale),
+              })),
+            ),
+            title: "Components",
+            url: canonical("/components", locale),
+          }),
+        ])}
+      />
       <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">

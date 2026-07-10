@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import { ThemeEditor } from "@/components/theme-editor";
 import type { Locale } from "@/i18n/routing";
+import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -47,6 +48,14 @@ export default async function ThemesPage({ params }: Props) {
 
   return (
     <>
+      <script
+        {...jsonLdScriptAttributes(
+          breadcrumbLd([
+            { name: "Home", url: canonical("/", locale) },
+            { name: TITLE, url: canonical("/themes", locale) },
+          ]),
+        )}
+      />
       <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
