@@ -23,7 +23,7 @@ import {
   TEMPLATES,
 } from "@/lib/templates";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;

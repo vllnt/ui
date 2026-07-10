@@ -4824,7 +4824,7 @@ function CopyButtonPreview() {
       <CopyButton value="EXAMPLE_API_KEY" />
       <CopyButton
         label="Copy link"
-        value="https://ui.vllnt.ai"
+        value="https://ui.vllnt.com"
         variant="button"
       />
     </div>

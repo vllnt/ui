@@ -65,7 +65,7 @@ function buildThumbnailUrl(input: {
   if (input.category) {
     url.searchParams.set("category", input.category);
   }
-  url.searchParams.set("url", `ui.vllnt.ai/components/${input.slug}`);
+  url.searchParams.set("url", `ui.vllnt.com/components/${input.slug}`);
   return url.toString();
 }
 
@@ -104,7 +104,7 @@ function buildPayload(
 /**
  * oEmbed provider endpoint (https://oembed.com). Lets WordPress, Ghost,
  * Discourse, dev.to, and similar tools auto-unfurl any
- * `ui.vllnt.ai/components/*` URL into a rich embed. The returned `html`
+ * `ui.vllnt.com/components/*` URL into a rich embed. The returned `html`
  * carries the live-preview iframe and a caption anchor — that anchor lands in
  * the host's DOM and becomes the backlink.
  */

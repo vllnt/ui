@@ -30,7 +30,7 @@ function useOrigin(): string {
   return useSyncExternalStore(
     subscribeNever,
     () => window.location.origin,
-    () => "https://ui.vllnt.ai",
+    () => "https://ui.vllnt.com",
   );
 }
 

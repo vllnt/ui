@@ -16,7 +16,7 @@ import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;

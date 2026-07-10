@@ -18,7 +18,7 @@ type Props = {
   readonly params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -69,7 +69,7 @@ export default async function UseCasePage({ params }: Props) {
   const installCommand = components
     .map(
       (component) =>
-        `pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/${component.name}.json`,
+        `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`,
     )
     .join("\n");
 

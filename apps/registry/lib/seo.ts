@@ -1,6 +1,6 @@
 import { type Locale, routing } from "@/i18n/routing";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 export function localizePathname(
   pathname: string,

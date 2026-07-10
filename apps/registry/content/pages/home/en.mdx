@@ -3,36 +3,36 @@ title: VLLNT UI - Component Registry
 description: 313 agent-first React components. Install with the shadcn CLI — no library to import, no version lock-in.
 type: home
 og:
-  title: ui.vllnt.ai
+  title: ui.vllnt.com
   description: Agent-first React component registry — install with the shadcn CLI
   type: home
 ---
 
 # Install any component in one line
 
-Pick a component, copy its install command, run it. The CLI fetches the source from `ui.vllnt.ai/r/<name>.json` and writes it directly into your repo — you own the code.
+Pick a component, copy its install command, run it. The CLI fetches the source from `ui.vllnt.com/r/<name>.json` and writes it directly into your repo — you own the code.
 
 ## Install (pick your package manager)
 
 ```bash
 # pnpm
-pnpm dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 
 # npm
-npx shadcn@latest add https://ui.vllnt.ai/r/button.json
+npx shadcn@latest add https://ui.vllnt.com/r/button.json
 
 # yarn
-yarn dlx shadcn@latest add https://ui.vllnt.ai/r/button.json
+yarn dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 
 # bun
-bunx --bun shadcn@latest add https://ui.vllnt.ai/r/button.json
+bunx --bun shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
 Replace `button.json` with any component name from the [registry](/components).
 
 ## No CLI to install
 
-There is no `@vllnt/cli`. The shadcn CLI already speaks the registry format — running it against `ui.vllnt.ai/r/<name>.json` is the supported install path. Same UX, less to maintain.
+There is no `@vllnt/cli`. The shadcn CLI already speaks the registry format — running it against `ui.vllnt.com/r/<name>.json` is the supported install path. Same UX, less to maintain.
 
 ## Usage after install
 
@@ -50,10 +50,10 @@ The CLI installs source files into your project under `components/ui/` (configur
 
 Every component is also exposed as a machine-readable JSON descriptor. AI coding agents can read them directly:
 
-- `https://ui.vllnt.ai/r/registry.json` — index of all 313 components
-- `https://ui.vllnt.ai/r/<name>.json` — one component
-- `https://ui.vllnt.ai/llms.txt` — concise index per the [llmstxt.org](https://llmstxt.org) spec
-- `https://ui.vllnt.ai/llms-full.txt` — full agent context in one fetch
+- `https://ui.vllnt.com/r/registry.json` — index of all 313 components
+- `https://ui.vllnt.com/r/<name>.json` — one component
+- `https://ui.vllnt.com/llms.txt` — concise index per the [llmstxt.org](https://llmstxt.org) spec
+- `https://ui.vllnt.com/llms-full.txt` — full agent context in one fetch
 
 ## Next steps
 

@@ -4,7 +4,7 @@ import {
   releasePageUrl,
 } from "@/lib/changelog";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const ATOM_HEADERS = new Headers([
   [
     "Cache-Control",

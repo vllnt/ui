@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "open source",
     ],
     metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.ai",
+      process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com",
     ),
     openGraph: {
       alternateLocale: alternateOgLocales(locale),
