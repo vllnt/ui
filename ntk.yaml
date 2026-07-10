@@ -47,8 +47,8 @@ apps:
       limits:   { cpu: 1000m, memory: 1024Mi }
     env:
       production:
-        SITE_URL: https://ui.vllnt.ai
-        NEXT_PUBLIC_SITE_URL: https://ui.vllnt.ai
+        SITE_URL: https://ui.vllnt.com
+        NEXT_PUBLIC_SITE_URL: https://ui.vllnt.com
     build:
       dockerfile: Dockerfile         # repo-root Dockerfile builds @vllnt/ui-registry
       context: .
