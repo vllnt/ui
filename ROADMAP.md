@@ -69,8 +69,8 @@ Single-pane drill-down (chosen over accordion-single-open and a two-pane family 
 ## native-parity [PLANNED]
 
 **Goal:** Make all 309 @vllnt/ui components iso web↔native — install once from the single `ui.vllnt.com` registry, one import, platform-correct render — with no second registry.
-**Exit criteria:** Every component ships a `<c>.native.tsx` twin + a shared `<c>.variants.ts`; one `npx shadcn add @vllnt/<c>` from `ui.vllnt.com/r/<c>.json` installs both files; each renders correctly on a Next.js web app AND an Expo device; each is stamped `parity: full|api-only` in `meta.json` with the badge shown on the site.
-**Verify:** a consumer dev runs `npx shadcn add @vllnt/button` once → `import { Button }` renders on web (Radix/DOM) and on an Expo device (rn-primitives) with an identical variant API across all 12 families; the overlay family is documented `api-only` where Portal/keyboard can't map. Personas: consumer dev (web + Expo device, keyboard), maintainer (adds a native twin + variants contract), agent (reads `parity` from the registry JSON).
+**Exit criteria:** Every component ships a `<c>.native.tsx` twin + a shared `<c>.variants.ts`; one `npx shadcn add @vllnt-ui/<c>` from `ui.vllnt.com/r/<c>.json` installs both files; each renders correctly on a Next.js web app AND an Expo device; each is stamped `parity: full|api-only` in `meta.json` with the badge shown on the site.
+**Verify:** a consumer dev runs `npx shadcn add @vllnt-ui/button` once → `import { Button }` renders on web (Radix/DOM) and on an Expo device (rn-primitives) with an identical variant API across all 12 families; the overlay family is documented `api-only` where Portal/keyboard can't map. Personas: consumer dev (web + Expo device, keyboard), maintainer (adds a native twin + variants contract), agent (reads `parity` from the registry JSON).
 
 **Gated by:** a confirmed Expo/RN consumer (`native-parity.1`) — **Horizon** until resolved (flagged since 2026-06; still open).
 
@@ -86,7 +86,7 @@ One registry, not two — platform is resolved by the bundler (Metro picks `<c>.
 - [ ] native-parity.8 Port data + data-display + content families (109) to native twins
 - [ ] native-parity.9 Port navigation + learning + educational + billing + ai families (70) to native twins
 - [ ] native-parity.10 Port overlay family (15) — api-only parity where Portal/keyboard can't map; document the degradation
-- [ ] native-parity.11 Validate native-parity.5–10: one `shadcn add @vllnt/<c>` from `ui.vllnt.com` → identical import renders on Next web + Expo device across all 12 families; parity badges accurate (E2E)
+- [ ] native-parity.11 Validate native-parity.5–10: one `shadcn add @vllnt-ui/<c>` from `ui.vllnt.com` → identical import renders on Next web + Expo device across all 12 families; parity badges accurate (E2E)
 - [ ] native-parity.12 Validate native-parity.4: an off-token native color fails; `tokens.json` stays the sole source across web CSS + RN theme (E2E)
 
 ## typography-primitives [DONE 2026-07]
@@ -226,15 +226,15 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 ## ai-toolchain-registration [PLANNED]
 
 **Goal:** Make VLLNT UI installable by name inside AI coding tools — register the registry, MCP server, and docs in the indexes agents actually query. Highest-ROI, do-first (converts the DONE `agent-surface` infra into installs).
-**Exit criteria:** `@vllnt` resolves in `ui.shadcn.com/r/registries.json`; a shadcn-MCP-connected agent installs `@vllnt/ai-chat-input` by name; Context7 serves `ui.vllnt.com` docs; `@vllnt/mcp` is on npm + the official MCP Registry; the GitHub repo carries the AI topics.
-**Verify:** in a fresh app with `"@vllnt": "https://ui.vllnt.com/r/{name}"` in `components.json`, an agent prompted "add an AI chat thread" installs a VLLNT component; Context7 returns VLLNT docs for a Cursor query. Personas: dev scaffolding in Cursor/Claude Code/v0; agent resolving a component by name.
+**Exit criteria:** `@vllnt-ui` resolves in `ui.shadcn.com/r/registries.json`; a shadcn-MCP-connected agent installs `@vllnt-ui/ai-chat-input` by name; Context7 serves `ui.vllnt.com` docs; `@vllnt/mcp` is on npm + the official MCP Registry; the GitHub repo carries the AI topics.
+**Verify:** in a fresh app with `"@vllnt-ui": "https://ui.vllnt.com/r/{name}"` in `components.json`, an agent prompted "add an AI chat thread" installs a VLLNT component; Context7 returns VLLNT docs for a Cursor query. Personas: dev scaffolding in Cursor/Claude Code/v0; agent resolving a component by name.
 
-- [ ] ai-toolchain-registration.1 PR `@vllnt` into the shadcn registry directory (`apps/v4/registry/directory.json`) + verify the earlier index PR is live in `registries.json` (cmd: `curl -s https://ui.shadcn.com/r/registries.json | grep -c '@vllnt'`)
+- [ ] ai-toolchain-registration.1 PR `@vllnt-ui` into the shadcn registry directory (`apps/v4/registry/directory.json`) + verify the earlier index PR is live in `registries.json` (cmd: `curl -s https://ui.shadcn.com/r/registries.json | grep -c '@vllnt-ui'`)
 - [ ] ai-toolchain-registration.2 Submit `ui.vllnt.com` to Context7 + add `context7.json` to repo root (cmd: `curl -s https://context7.com/vllnt/ui | grep -ci vllnt`)
 - [ ] ai-toolchain-registration.3 Publish a distributable `@vllnt/mcp` stdio bridge (wrapping the hosted `/mcp`) to npm (cmd: `npm view @vllnt/mcp version`)
 - [ ] ai-toolchain-registration.4 Register the MCP server in the official MCP Registry (`mcp-publisher`) + Registry Discovery MCP (cmd: `curl -s https://registry.modelcontextprotocol.io/v0/servers | grep -ci vllnt`)
-- [ ] ai-toolchain-registration.5 Add GitHub topics `ai, ai-agents, llm, generative-ui, shadcn, shadcn-registry` + document the `components.json` `@vllnt` snippet in `/docs/installation` (cmd: `gh repo view vllnt/ui --json repositoryTopics | grep -E 'ai-agents|shadcn-registry'`)
-- [ ] ai-toolchain-registration.6 Validate ai-toolchain-registration.1–5: E2E — in a scratch app with the `@vllnt` namespace, `npx shadcn add @vllnt/ai-chat-input` resolves + installs; MCP `tools/call search_components` returns hits (E2E: `pnpm test:e2e registry-install`)
+- [ ] ai-toolchain-registration.5 Add GitHub topics `ai, ai-agents, llm, generative-ui, shadcn, shadcn-registry` + document the `components.json` `@vllnt-ui` snippet in `/docs/installation` (cmd: `gh repo view vllnt/ui --json repositoryTopics | grep -E 'ai-agents|shadcn-registry'`)
+- [ ] ai-toolchain-registration.6 Validate ai-toolchain-registration.1–5: E2E — in a scratch app with the `@vllnt-ui` namespace, `npx shadcn add @vllnt-ui/ai-chat-input` resolves + installs; MCP `tools/call search_components` returns hits (E2E: `pnpm test:e2e registry-install`)
 
 ## visibility-measurement [PLANNED]
 
@@ -417,7 +417,7 @@ Disciplines (or API-first rots): **one core, many adapters** — REST / WS / MCP
 | MVP | `fix` / no-arg default | Feature | Single entry: bare `vllnt-ui` auto-detects + runs `gate`; `fix` runs every autofixer (eslint / stylelint / tokens / prettier-tw) |
 | v1 | config bundle | Task | Extend `@vllnt/eslint-config`; add stylelint / knip / size-limit / playwright presets, pinned |
 | v1 | `doctor` | Task | react-doctor wrapper — version-pinned + flag-normalized (insulates consumers from CLI drift) |
-| v1 | `add` | Task | `shadcn add @vllnt/<c>` passthrough, registry URL pinned |
+| v1 | `add` | Task | `shadcn add @vllnt-ui/<c>` passthrough, registry URL pinned |
 | v1 | `ci` + reusable workflow | Feature | `dx.yml` (on `workflow_call`); consumers reference `uses: vllnt/ui/...@v1` |
 | v1 | `list` / `info` / `why` / `search` | Task | Granular context reads (props, a11y, examples, explain-finding) |
 | v1 | `vllnt.config` | Task | Zod-schema config: budgets, enabled checks, theme list, framework, monorepo `--project`, per-repo overrides |
@@ -462,10 +462,10 @@ Disciplines (or API-first rots): **one core, many adapters** — REST / WS / MCP
 
 **Setup / standardize**
 
-- `init` — scaffold the standard files (components.json @vllnt registry, Tailwind preset, tokens css, `doctor.config`, pre-commit hook, CI caller); idempotent.
+- `init` — scaffold the standard files (components.json @vllnt-ui registry, Tailwind preset, tokens css, `doctor.config`, pre-commit hook, CI caller); idempotent.
 - `sync` — re-pin every preset + the config bundle to the installed `@vllnt/ui` version; report + fix drift. Upgrading `@vllnt/ui` propagates the DX baseline to all repos.
 - `ci` — emit the reusable-workflow caller (`uses: vllnt/ui/.github/workflows/dx.yml@vN`).
-- `add <c…>` — `shadcn add @vllnt/<c>` passthrough, registry URL pinned.
+- `add <c…>` — `shadcn add @vllnt-ui/<c>` passthrough, registry URL pinned.
 
 **Audit (heavy — its own CI job, never in the fast gate)**
 
@@ -544,7 +544,7 @@ Full task detail for completed phases — collapsed above to keep the active roa
 ### component-library [DONE 2026-06]
 
 **Exit criteria:** `registry.json` carries 309 components, each with a story + test; `@vllnt/ui@0.3.0` published to npm.
-**Verify:** `npm i @vllnt/ui@latest` resolves 0.3.0; `/components` lists 309; `npx shadcn add @vllnt/<c>` installs a leaf + its siblings.
+**Verify:** `npm i @vllnt/ui@latest` resolves 0.3.0; `/components` lists 309; `npx shadcn add @vllnt-ui/<c>` installs a leaf + its siblings.
 
 - [x] component-library.1 Ship +169 components → 309 total (full list in CHANGELOG `[0.3.0]`) — #159–#204
 - [x] component-library.2 Hybrid CLI installs: leaf source + `@vllnt/ui` for siblings — #232
