@@ -39,10 +39,10 @@ Install individual components with the [shadcn](https://ui.shadcn.com) CLI — n
 pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
-Or by `@vllnt` namespace once it's in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt": "https://ui.vllnt.com/r/{name}.json"` to your `components.json` `registries`):
+Or by `@vllnt-ui` namespace once it's in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt-ui": "https://ui.vllnt.com/r/{name}.json"` to your `components.json` `registries`):
 
 ```bash
-pnpm dlx shadcn@latest add @vllnt/button
+pnpm dlx shadcn@latest add @vllnt-ui/button
 ```
 
 ## Quick Start
