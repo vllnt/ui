@@ -83,7 +83,7 @@ apps:
     port: 8080
     healthcheck: /healthz
     domains:
-      production: storybook.vllnt.ai
+      production: storybook.vllnt.com
     tls:
       # T1 cell (ADR-090e) has no shared *.vllnt.ai wildcard secret;
       # without this the renderer defaults to the absent
@@ -91,7 +91,7 @@ apps:
       # (site DOWN — incident 2026-06-10). Per-host DNS-01 cert,
       # in-ns + auto-renewing.
       production:
-        secretName: storybook-tls
+        secretName: storybook-vllnt-com-tls
     visibility:
       production: public
       preview:    tailnet
