@@ -5,12 +5,10 @@ import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getReleaseRecords } from "@/lib/changelog";
-import { breadcrumbLd, jsonLdScript } from "@/lib/jsonld";
+import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 const DESCRIPTION =
   "Read VLLNT UI releases, including latest notes, component count deltas, breaking change counts, migration links, and GitHub release links.";
@@ -146,6 +144,7 @@ function ReleaseCard({
 function releaseJsonLdItem(
   release: Awaited<ReturnType<typeof getReleaseRecords>>[number],
   index: number,
+  locale: Locale,
 ) {
   return {
     "@type": "ListItem",
@@ -156,7 +155,7 @@ function releaseJsonLdItem(
       name: release.version,
       programmingLanguage: "TypeScript",
       runtimePlatform: "React",
-      url: `${SITE_URL}/releases#${release.anchor}`,
+      url: `${canonical("/releases", locale)}#${release.anchor}`,
     },
     position: index + 1,
   };
@@ -172,14 +171,15 @@ export default async function ReleasesPage({ params }: Props) {
       <script
         dangerouslySetInnerHTML={{
           __html: jsonLdScript([
-            breadcrumbLd([
-              { name: "Home", url: SITE_URL },
-              { name: "Releases", url: `${SITE_URL}/releases` },
+            breadcrumbTrailLd(locale, [
+              { name: "Releases", path: "/releases" },
             ]),
             {
               "@context": "https://schema.org",
               "@type": "ItemList",
-              itemListElement: releases.map(releaseJsonLdItem),
+              itemListElement: releases.map((release, index) =>
+                releaseJsonLdItem(release, index, locale),
+              ),
               name: "VLLNT UI Releases",
               numberOfItems: releases.length,
             },

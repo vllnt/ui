@@ -9,7 +9,7 @@ import { setRequestLocale } from "next-intl/server";
 import { GitHubMark } from "@/components/github-mark";
 import { type Locale, routing } from "@/i18n/routing";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   softwareApplicationLd,
 } from "@/lib/jsonld";
@@ -22,8 +22,6 @@ import {
   getTemplatePath,
   TEMPLATES,
 } from "@/lib/templates";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -81,7 +79,7 @@ export default async function TemplatePage(props: Props) {
   }
 
   const templatePath = getTemplatePath(template);
-  const templateUrl = `${SITE_URL}${templatePath}`;
+  const templateUrl = canonical(templatePath, locale);
   const githubUrl = getTemplateGithubUrl(template);
 
   return (
@@ -89,10 +87,9 @@ export default async function TemplatePage(props: Props) {
       <Script
         id={`template-${template.slug}-json-ld`}
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Templates", url: `${SITE_URL}/templates` },
-            { name: template.title, url: templateUrl },
+          breadcrumbTrailLd(locale, [
+            { name: "Templates", path: "/templates" },
+            { name: template.title, path: templatePath },
           ]),
           softwareApplicationLd({
             description: template.description,

@@ -8,6 +8,7 @@ import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import { type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
+import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import {
   getPlaygroundExample,
@@ -111,6 +112,18 @@ export default async function ComponentPlaygroundPage(props: Props) {
 
   return (
     <>
+      <script
+        {...jsonLdScriptAttributes(
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: displayTitle, path: `/components/${component.name}` },
+            {
+              name: "Playground",
+              path: `/components/${component.name}/playground`,
+            },
+          ]),
+        )}
+      />
       <Sidebar
         sections={getSidebarSections(getCategoryForComponent(slug), locale)}
       />

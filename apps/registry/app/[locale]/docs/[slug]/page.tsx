@@ -11,15 +11,13 @@ import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPage, getDocsPath } from "@/lib/docs-pages";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -123,17 +121,16 @@ export default async function DocsSlugPage(props: Props) {
     docsPage.slug === "changelog"
       ? `${content}\n\n${await readChangelog()}`
       : content;
-  const pageUrl = `${SITE_URL}${getDocsPath(docsPage)}`;
+  const pageUrl = canonical(getDocsPath(docsPage), locale);
 
   return (
     <>
       <Script
         id={`docs-${docsPage.slug}-json-ld`}
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Docs", url: `${SITE_URL}/docs` },
-            { name: frontmatter.title, url: pageUrl },
+          breadcrumbTrailLd(locale, [
+            { name: "Docs", path: "/docs" },
+            { name: frontmatter.title, path: getDocsPath(docsPage) },
           ]),
           techArticleLd({
             description: frontmatter.description,

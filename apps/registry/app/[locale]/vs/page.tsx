@@ -4,6 +4,11 @@ import Link from "next/link";
 import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
+import {
+  breadcrumbTrailLd,
+  collectionPageLd,
+  jsonLdScriptAttributes,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -72,6 +77,23 @@ export default async function VsIndexPage({ params }: Props) {
 
   return (
     <>
+      <script
+        {...jsonLdScriptAttributes([
+          breadcrumbTrailLd(locale, [{ name: "Comparisons", path: "/vs" }]),
+          collectionPageLd({
+            description:
+              "Honest, evidence-based comparisons of VLLNT UI against shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+            items: COMPARISONS.filter((entry) => entry.available).map(
+              (entry) => ({
+                name: `VLLNT UI vs ${entry.name}`,
+                url: canonical(`/vs/${entry.slug}`, locale),
+              }),
+            ),
+            title: "VLLNT UI vs the rest",
+            url: canonical("/vs", locale),
+          }),
+        ])}
+      />
       <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-3xl px-4 py-16 lg:px-8">

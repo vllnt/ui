@@ -22,7 +22,7 @@ import { getAiSeo } from "@/lib/ai-seo";
 import componentMetadata from "@/lib/component-metadata.json";
 import { getComponentSeo } from "@/lib/component-seo";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   faqPageLd,
   jsonLdScriptAttributes,
   softwareSourceCodeLd,
@@ -237,24 +237,19 @@ export default async function ComponentPage(props: Props) {
       : []),
   ] as { id: string; title: string }[];
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-
   return (
     <>
       <script
         {...jsonLdScriptAttributes([
           softwareSourceCodeLd({
             description: displayDescription,
+            locale,
             name: component.name,
             title: displayTitle,
           }),
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Components", url: `${SITE_URL}/components` },
-            {
-              name: displayTitle,
-              url: `${SITE_URL}/components/${component.name}`,
-            },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: displayTitle, path: `/components/${component.name}` },
           ]),
           ...(componentSeo?.faqs.length ? [faqPageLd(componentSeo.faqs)] : []),
         ])}

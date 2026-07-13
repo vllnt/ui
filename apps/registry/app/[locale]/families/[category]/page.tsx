@@ -11,7 +11,7 @@ import { type Locale, routing } from "@/i18n/routing";
 import { getFamilyCopy } from "@/lib/family-copy";
 import { getFamilyGroups } from "@/lib/family-groups";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   collectionPageLd,
   faqPageLd,
   jsonLdScriptAttributes,
@@ -28,8 +28,6 @@ import type { ComponentCategory } from "@/types/registry";
 type Props = {
   readonly params: Promise<{ category: string; locale: Locale }>;
 };
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 function findFamily(category: string) {
   return groupedComponents.find((group) => group.category === category);
@@ -109,19 +107,18 @@ export default async function FamilyPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Components", url: `${SITE_URL}/components` },
-            { name: group.label, url: `${SITE_URL}${pathname}` },
+          breadcrumbTrailLd(locale, [
+            { name: "Components", path: "/components" },
+            { name: group.label, path: pathname },
           ]),
           collectionPageLd({
             description,
             items: group.items.map((item) => ({
               name: item.title,
-              url: `${SITE_URL}/components/${item.name}`,
+              url: canonical(`/components/${item.name}`, locale),
             })),
             title: `${group.label} components`,
-            url: `${SITE_URL}${pathname}`,
+            url: canonical(pathname, locale),
           }),
           ...(copy && copy.faq.length > 0 ? [faqPageLd(copy.faq)] : []),
         ])}

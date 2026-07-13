@@ -4,6 +4,11 @@ import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
+import {
+  breadcrumbTrailLd,
+  jsonLdScriptAttributes,
+  techArticleLd,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -43,10 +48,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PhilosophyPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { content } = await getPageContent("philosophy", locale);
+  const { content, frontmatter } = await getPageContent("philosophy", locale);
 
   return (
     <>
+      <script
+        {...jsonLdScriptAttributes([
+          breadcrumbTrailLd(locale, [
+            { name: "Philosophy", path: "/philosophy" },
+          ]),
+          techArticleLd({
+            description: frontmatter.description,
+            title: frontmatter.title,
+            url: canonical("/philosophy", locale),
+          }),
+        ])}
+      />
       <Sidebar sections={getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">

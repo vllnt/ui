@@ -5,7 +5,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
-import { breadcrumbLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -14,7 +14,6 @@ type Props = {
   readonly params: Promise<{ locale: Locale }>;
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PATHNAME = "/vs/vercel-ai-sdk";
 
 type Row = {
@@ -89,12 +88,8 @@ export default async function VsVercelAiSdkPage({ params }: Props) {
     <>
       <script
         {...jsonLdScriptAttributes(
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            {
-              name: "VLLNT UI vs Vercel AI SDK",
-              url: `${SITE_URL}${PATHNAME}`,
-            },
+          breadcrumbTrailLd(locale, [
+            { name: "VLLNT UI vs Vercel AI SDK", path: PATHNAME },
           ]),
         )}
       />

@@ -1,3 +1,6 @@
+import type { Locale } from "@/i18n/routing";
+import { canonical } from "@/lib/seo";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type JsonLdValue =
@@ -42,6 +45,7 @@ export function websiteLd(): JsonLdNode {
 
 export function softwareSourceCodeLd(component: {
   readonly description: string;
+  readonly locale: Locale;
   readonly name: string;
   readonly title: string;
 }): JsonLdNode {
@@ -54,7 +58,7 @@ export function softwareSourceCodeLd(component: {
     name: component.title,
     programmingLanguage: "TypeScript",
     runtimePlatform: "React",
-    url: `${SITE_URL}/components/${component.name}`,
+    url: canonical(`/components/${component.name}`, component.locale),
   };
 }
 
@@ -105,6 +109,32 @@ export function breadcrumbLd(
       position: index + 1,
     })),
   };
+}
+
+/**
+ * Locale-aware breadcrumb. Callers pass locale-relative paths; {@link canonical}
+ * turns each into an absolute URL that matches the page's own locale canonical
+ * (e.g. `/fr/docs`). This helper adds the site root ("Home") as the first crumb.
+ * Prefer it over hand-building absolute URLs in a page.
+ *
+ * @param locale - active request locale
+ * @param trail - crumbs after Home, each `{ name, path }` where `path` is
+ *   locale-relative (leading slash), e.g. `{ name: "Docs", path: "/docs" }`
+ */
+export function breadcrumbTrailLd(
+  locale: Locale,
+  trail: readonly {
+    readonly name: string;
+    readonly path: string;
+  }[],
+): JsonLdNode {
+  return breadcrumbLd([
+    { name: "Home", url: canonical("/", locale) },
+    ...trail.map((step) => ({
+      name: step.name,
+      url: canonical(step.path, locale),
+    })),
+  ]);
 }
 
 export function collectionPageLd(page: {
