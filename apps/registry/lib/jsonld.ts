@@ -45,6 +45,7 @@ export function websiteLd(): JsonLdNode {
 
 export function softwareSourceCodeLd(component: {
   readonly description: string;
+  readonly locale: Locale;
   readonly name: string;
   readonly title: string;
 }): JsonLdNode {
@@ -57,7 +58,7 @@ export function softwareSourceCodeLd(component: {
     name: component.title,
     programmingLanguage: "TypeScript",
     runtimePlatform: "React",
-    url: `${SITE_URL}/components/${component.name}`,
+    url: canonical(`/components/${component.name}`, component.locale),
   };
 }
 

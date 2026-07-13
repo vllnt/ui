@@ -7,7 +7,7 @@ vi.mock("@/i18n/routing", () => ({
   routing: { defaultLocale: "en", locales: ["en", "fr"] },
 }));
 
-import { breadcrumbTrailLd } from "./jsonld";
+import { breadcrumbTrailLd, softwareSourceCodeLd } from "./jsonld";
 
 /**
  * Regression guard for the locale-JSON-LD bug: page structured-data URLs were
@@ -60,5 +60,39 @@ describe("breadcrumbTrailLd", () => {
     expect(json).toMatch(
       /"item":"https:\/\/[^"]*\/fr\/components\/button","name":"Button","position":3/,
     );
+  });
+});
+
+/**
+ * softwareSourceCodeLd builds the component page URL itself, so it carries the
+ * same locale hazard as the breadcrumb trail: a /fr component page must not
+ * advertise the English URL as its SoftwareSourceCode url.
+ */
+describe("softwareSourceCodeLd", () => {
+  it("points at the locale URL of the component page", () => {
+    const json = JSON.stringify(
+      softwareSourceCodeLd({
+        description: "A button.",
+        locale: "fr",
+        name: "button",
+        title: "Button",
+      }),
+    );
+
+    expect(json).toMatch(/"url":"https:\/\/[^"]*\/fr\/components\/button"/);
+  });
+
+  it("omits the locale segment for the default locale", () => {
+    const json = JSON.stringify(
+      softwareSourceCodeLd({
+        description: "A button.",
+        locale: "en",
+        name: "button",
+        title: "Button",
+      }),
+    );
+
+    expect(json).not.toContain("/fr");
+    expect(json).toMatch(/"url":"https:\/\/[^"]*\/components\/button"/);
   });
 });

@@ -243,6 +243,7 @@ export default async function ComponentPage(props: Props) {
         {...jsonLdScriptAttributes([
           softwareSourceCodeLd({
             description: displayDescription,
+            locale,
             name: component.name,
             title: displayTitle,
           }),
