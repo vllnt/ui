@@ -5,6 +5,7 @@ import * as React from "react";
 import { track } from "@vercel/analytics";
 import { Button } from "@vllnt/ui";
 import { Check, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { BADGE_SVG_PATH, buildBadgeSnippets } from "@/lib/share";
 
@@ -17,6 +18,7 @@ const FORMATS: readonly { label: string; value: SnippetFormat }[] = [
 ];
 
 export function BadgeSnippets(): React.ReactElement {
+  const t = useTranslations("shared.badge");
   const snippets = React.useMemo(() => buildBadgeSnippets(), []);
   const [format, setFormat] = React.useState<SnippetFormat>("html");
   const [copied, setCopied] = React.useState(false);
@@ -32,15 +34,14 @@ export function BadgeSnippets(): React.ReactElement {
 
   return (
     <section className="mt-16 rounded-md border border-border bg-card p-6">
-      <h2 className="text-xl font-semibold">Built something? Add the badge</h2>
+      <h2 className="text-xl font-semibold">{t("title")}</h2>
       <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-        Drop this into your README or site footer. The link points back to VLLNT
-        UI, so every project that ships it helps others discover the library.
+        {t("description")}
       </p>
 
       <div className="mt-5 flex items-center gap-3">
         {/* eslint-disable-next-line @next/next/no-img-element -- external badge endpoint, intentionally unoptimized */}
-        <img alt="Built with VLLNT UI" height={28} src={BADGE_SVG_PATH} />
+        <img alt={t("alt")} height={28} src={BADGE_SVG_PATH} />
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
@@ -70,12 +71,12 @@ export function BadgeSnippets(): React.ReactElement {
           {copied ? (
             <>
               <Check className="size-3" />
-              Copied!
+              {t("copied")}
             </>
           ) : (
             <>
               <Copy className="size-3" />
-              Copy
+              {t("copy")}
             </>
           )}
         </Button>

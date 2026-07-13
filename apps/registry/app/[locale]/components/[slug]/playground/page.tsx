@@ -1,12 +1,11 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
-import { type Locale, routing } from "@/i18n/routing";
+import { Link, type Locale, routing } from "@/i18n/routing";
 import componentMetadata from "@/lib/component-metadata.json";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -65,13 +64,15 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     return {};
   }
 
+  const t = await getTranslations({ locale, namespace: "pages.playground" });
   const meta = metadata_map[slug];
   const title = meta?.title ?? component.title;
   const description =
-    meta?.description ??
-    component.description ??
-    "Preview a VLLNT UI component and copy its example.";
+    meta?.description ?? component.description ?? t("metaDescriptionFallback");
   const pathname = `/components/${slug}/playground`;
+  // Canonicalize to the parent component page: the playground is an interactive
+  // variant of the same content, not a distinct indexable document.
+  const canonicalPath = `/components/${slug}`;
 
   const ogParameters = {
     category: getCategoryForComponent(slug),
@@ -82,12 +83,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   return {
     alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
+      canonical: canonical(canonicalPath, locale),
+      languages: languageAlternates(canonicalPath),
     },
     description,
     openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
-    title: `${title} Playground - VLLNT UI`,
+    title: t("metaTitle", { title }),
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
@@ -95,6 +96,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function ComponentPlaygroundPage(props: Props) {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.playground");
+  const common = await getTranslations("common");
   const component = findComponent(slug);
 
   if (!component) {
@@ -104,9 +107,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
   const meta = metadata_map[slug];
   const displayTitle = meta?.title ?? component.title ?? component.name;
   const displayDescription =
-    meta?.description ??
-    component.description ??
-    "Preview this component and copy its example.";
+    meta?.description ?? component.description ?? t("descriptionFallback");
   const playgroundExample = getPlaygroundExample(component);
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
 
@@ -125,29 +126,32 @@ export default async function ComponentPlaygroundPage(props: Props) {
         )}
       />
       <Sidebar
-        sections={getSidebarSections(getCategoryForComponent(slug), locale)}
+        sections={await getSidebarSections(
+          getCategoryForComponent(slug),
+          locale,
+        )}
       />
       <main className="flex-1 overflow-y-auto overflow-x-hidden bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <Breadcrumb
             className="mb-4 text-muted-foreground"
             items={[
-              { href: localizePathname("/", locale), label: "Home" },
+              { href: localizePathname("/", locale), label: common("home") },
               {
                 href: localizePathname("/components", locale),
-                label: "Components",
+                label: common("components"),
               },
               {
                 href: localizePathname(`/components/${component.name}`, locale),
                 label: displayTitle,
               },
-              { label: "Playground" },
+              { label: t("title") },
             ]}
           />
           <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <h1 className="text-4xl font-semibold mb-2">
-                {displayTitle} Playground
+                {t("heading", { title: displayTitle })}
               </h1>
               <p className="max-w-3xl text-lg text-muted-foreground">
                 {displayDescription}
@@ -155,9 +159,9 @@ export default async function ComponentPlaygroundPage(props: Props) {
             </div>
             <Link
               className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-              href={localizePathname(`/components/${component.name}`, locale)}
+              href={`/components/${component.name}`}
             >
-              Back to component
+              {t("backToComponent")}
             </Link>
           </div>
           <div className="space-y-6">

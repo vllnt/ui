@@ -31,7 +31,7 @@ export default async function NotFound() {
 
   return (
     <>
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-24 lg:px-8 max-w-3xl">
           <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">

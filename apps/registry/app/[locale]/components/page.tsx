@@ -1,7 +1,7 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import type { Locale } from "@/i18n/routing";
@@ -55,6 +55,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ComponentsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.components");
+  const common = await getTranslations("common");
 
   return (
     <>
@@ -76,14 +78,13 @@ export default async function ComponentsPage({ params }: Props) {
           }),
         ])}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-12">
-            <h1 className="text-4xl font-semibold mb-4">Components</h1>
+            <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
             <p className="text-muted-foreground text-lg">
-              Explore all {components.length} components available in the
-              library.
+              {t("description", { count: components.length })}
             </p>
           </div>
 
@@ -110,18 +111,15 @@ export default async function ComponentsPage({ params }: Props) {
           ))}
 
           <section className="mt-4 flex flex-col items-center gap-3 rounded-lg border border-dashed bg-card px-6 py-12 text-center">
-            <h2 className="text-xl font-semibold">
-              Don&rsquo;t see what you need?
-            </h2>
+            <h2 className="text-xl font-semibold">{t("ctaTitle")}</h2>
             <p className="text-muted-foreground max-w-md">
-              Request a new component and we&rsquo;ll open a prefilled GitHub
-              issue with the right labels and template.
+              {t("ctaDescription")}
             </p>
             <Link
               className="mt-2 inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
               href={localizePathname("/request-component", locale)}
             >
-              Request a component
+              {common("requestComponent")}
             </Link>
           </section>
         </div>

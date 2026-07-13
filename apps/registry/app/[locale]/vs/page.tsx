@@ -1,16 +1,15 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import type { Locale } from "@/i18n/routing";
+import { Link, type Locale } from "@/i18n/routing";
 import {
   breadcrumbTrailLd,
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -19,10 +18,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "pages.vs.index" });
   const ogParameters = {
-    description:
-      "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
-    title: "VLLNT UI vs · Comparisons",
+    description: t("metaDescription"),
+    title: t("metaTitle"),
     type: "page" as const,
   };
 
@@ -42,38 +41,38 @@ const COMPARISONS: readonly {
   readonly available: boolean;
   readonly name: string;
   readonly slug: string;
-  readonly tagline: string;
+  readonly taglineKey: string;
 }[] = [
   {
     available: true,
     name: "shadcn/ui",
     slug: "shadcn",
-    tagline:
-      "Closest sibling. Same registry format. Different component count and agent surface.",
+    taglineKey: "shadcn",
   },
   {
     available: false,
     name: "Radix UI",
     slug: "radix",
-    tagline: "Accessible primitives — VLLNT UI is built on top of these.",
+    taglineKey: "radix",
   },
   {
     available: false,
     name: "HeadlessUI",
     slug: "headless-ui",
-    tagline: "Tailwind Labs primitives — different ecosystem.",
+    taglineKey: "headlessUi",
   },
   {
     available: false,
     name: "NextUI",
     slug: "nextui",
-    tagline: "Component library with its own design language.",
+    taglineKey: "nextui",
   },
 ];
 
 export default async function VsIndexPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.vs.index");
 
   return (
     <>
@@ -94,15 +93,11 @@ export default async function VsIndexPage({ params }: Props) {
           }),
         ])}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-3xl px-4 py-16 lg:px-8">
-          <h1 className="text-4xl font-semibold mb-3">VLLNT UI vs the rest</h1>
-          <p className="text-muted-foreground text-lg mb-10">
-            Honest comparisons. We call out where alternatives are stronger,
-            where VLLNT UI fits better, and where the gap is small enough to not
-            matter.
-          </p>
+          <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>
+          <p className="text-muted-foreground text-lg mb-10">{t("intro")}</p>
 
           <ul className="space-y-3">
             {COMPARISONS.map((entry) =>
@@ -110,13 +105,13 @@ export default async function VsIndexPage({ params }: Props) {
                 <li key={entry.slug}>
                   <Link
                     className="block rounded-lg border border-border p-5 hover:border-foreground/40"
-                    href={localizePathname(`/vs/${entry.slug}`, locale)}
+                    href={`/vs/${entry.slug}`}
                   >
                     <p className="text-lg font-semibold">
-                      VLLNT UI vs {entry.name}
+                      {t("cardTitle", { name: entry.name })}
                     </p>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {entry.tagline}
+                      {t(`taglines.${entry.taglineKey}`)}
                     </p>
                   </Link>
                 </li>
@@ -126,10 +121,10 @@ export default async function VsIndexPage({ params }: Props) {
                   key={entry.slug}
                 >
                   <p className="text-lg font-semibold">
-                    VLLNT UI vs {entry.name}
+                    {t("cardTitle", { name: entry.name })}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {entry.tagline}. Page coming soon.
+                    {t(`taglines.${entry.taglineKey}`)}. {t("comingSoon")}
                   </p>
                 </li>
               ),
