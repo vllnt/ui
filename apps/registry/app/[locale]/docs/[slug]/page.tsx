@@ -5,7 +5,7 @@ import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
@@ -122,6 +122,7 @@ export default async function DocsSlugPage(props: Props) {
       ? `${content}\n\n${await readChangelog()}`
       : content;
   const pageUrl = canonical(getDocsPath(docsPage), locale);
+  const c = await getTranslations("common");
 
   return (
     <>
@@ -139,15 +140,15 @@ export default async function DocsSlugPage(props: Props) {
           }),
         ])}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
-                { href: localizePathname("/docs", locale), label: "Docs" },
+                { href: localizePathname("/", locale), label: c("home") },
+                { href: localizePathname("/docs", locale), label: c("docs") },
                 { label: frontmatter.title },
               ]}
             />

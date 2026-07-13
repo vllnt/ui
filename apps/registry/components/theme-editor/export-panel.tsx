@@ -3,6 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from "react";
 
 import { Button } from "@vllnt/ui";
+import { useTranslations } from "next-intl";
 
 import {
   themeInstallUrl,
@@ -48,6 +49,7 @@ function download(filename: string, content: string): void {
 
 /** Copy/download the theme as CSS, a shadcn CLI command, or tokens.json. */
 export function ExportPanel({ theme }: ExportPanelProps) {
+  const t = useTranslations("pages.themes.editor");
   const [tab, setTab] = useState<ExportTab>("css");
   const [copied, setCopied] = useState(false);
   const origin = useOrigin();
@@ -94,7 +96,7 @@ export function ExportPanel({ theme }: ExportPanelProps) {
         ))}
         <div className="ml-auto flex gap-2">
           <Button onClick={copy} size="sm" variant="outline">
-            {copied ? "Copied" : "Copy"}
+            {copied ? t("copied") : t("copy")}
           </Button>
           {tab === "cli" ? undefined : (
             <Button
@@ -104,7 +106,7 @@ export function ExportPanel({ theme }: ExportPanelProps) {
               size="sm"
               variant="outline"
             >
-              Download
+              {t("download")}
             </Button>
           )}
         </div>

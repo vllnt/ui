@@ -24,7 +24,7 @@ type PageMetadataOptions = {
   pathname?: string;
 };
 
-function generateOGImageURL(parameters: OGImageParametersInput): string {
+export function generateOGImageURL(parameters: OGImageParametersInput): string {
   const validated = ogImageParametersSchema.parse(parameters);
 
   const searchParameters = new URLSearchParams({

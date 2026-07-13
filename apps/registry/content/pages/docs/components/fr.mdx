@@ -1,0 +1,45 @@
+---
+title: Composants
+description: Apprenez l'anatomie des composants, les attentes en matiere d'accessibilite, les modeles de composition et la couverture de tests.
+type: docs
+og:
+  title: Composants
+  description: Anatomie des composants et attentes de qualite pour VLLNT UI
+  type: docs
+---
+
+# Composants
+
+Les composants VLLNT UI sont concus comme des primitives accessibles pour de vraies surfaces applicatives. Chaque composant devrait exposer un DOM previsible, un etat semantique et suffisamment de points de composition pour s'adapter aux flux de travail produit.
+
+## Anatomie
+
+La plupart des composants se trouvent sous :
+
+```text
+packages/ui/src/components/<name>/
+```
+
+Les fichiers courants incluent :
+
+- `[name].tsx` pour le code source.
+- `[name].test.tsx` pour la couverture Vitest.
+- `[name].stories.tsx` pour les exemples Storybook.
+- `[name].visual.tsx` pour les captures d'ecran de test de composant lorsque cela s'applique.
+- `index.ts` pour les exports.
+
+## Composition
+
+Preferez des sous-composants explicites lorsqu'un composant comporte plusieurs regions. Gardez les elements racines semantiques : les boites de dialogue sont des boites de dialogue, les listes sont des listes, la navigation est de la navigation, et les controles exposent un comportement natif de bouton ou de champ de saisie chaque fois que possible.
+
+## Accessibilite
+
+Chaque composant interactif devrait prendre en charge l'utilisation au clavier, un focus visible, l'ARIA uniquement lorsque la semantique native ne suffit pas, et des libelles stables pour les technologies d'assistance. Les composants construits sur les primitives Radix devraient preserver le contrat d'accessibilite de la primitive.
+
+## Tests
+
+Les tests devraient couvrir le rendu, la transmission des props, les interactions cles et l'etat critique pour l'accessibilite. Lorsqu'un composant conserve un etat ou ecoute des evenements du navigateur, incluez des tests de regression pour le stockage et le comportement des evenements.
+
+## Copies du registre
+
+Les fichiers du registre sont generes a partir du code source du paquet. Corrigez d'abord la source, puis regenerez la sortie du registre au lieu de modifier manuellement `apps/registry/registry/default`.

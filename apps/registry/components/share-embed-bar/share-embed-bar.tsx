@@ -14,6 +14,7 @@ import {
   type ShareDialogPlatform,
 } from "@vllnt/ui";
 import { Check, Code2, Copy, Link2, Share2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { buildEmbedSnippet, withRef } from "@/lib/share";
 
@@ -63,6 +64,7 @@ function CopyLinkButton({
   pageUrl: string;
   slug: string;
 }): React.ReactElement {
+  const t = useTranslations("shared.shareEmbed");
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = React.useCallback(async () => {
@@ -79,12 +81,12 @@ function CopyLinkButton({
       {copied ? (
         <>
           <Check className="size-3" />
-          Link copied!
+          {t("linkCopied")}
         </>
       ) : (
         <>
           <Link2 className="size-3" />
-          Copy link
+          {t("copyLink")}
         </>
       )}
     </Button>
@@ -102,6 +104,7 @@ function EmbedDialog({
   slug: string;
   title: string;
 }): React.ReactElement {
+  const t = useTranslations("shared.shareEmbed");
   const [copied, setCopied] = React.useState(false);
   const snippet = React.useMemo(
     () => buildEmbedSnippet(slug, title),
@@ -121,11 +124,8 @@ function EmbedDialog({
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Embed {title}</DialogTitle>
-          <DialogDescription>
-            Paste this into any blog or docs page to embed a live preview with a
-            link back to VLLNT UI.
-          </DialogDescription>
+          <DialogTitle>{t("embedTitle", { title })}</DialogTitle>
+          <DialogDescription>{t("embedDescription")}</DialogDescription>
         </DialogHeader>
         <textarea
           className="h-32 w-full resize-none rounded-md border border-border bg-muted/30 p-3 font-mono text-xs text-foreground"
@@ -137,12 +137,12 @@ function EmbedDialog({
           {copied ? (
             <>
               <Check className="size-3" />
-              Copied!
+              {t("copied")}
             </>
           ) : (
             <>
               <Copy className="size-3" />
-              Copy embed code
+              {t("copyEmbedCode")}
             </>
           )}
         </Button>
@@ -156,6 +156,7 @@ export function ShareEmbedBar({
   slug,
   title,
 }: ShareEmbedBarProps): React.ReactElement {
+  const t = useTranslations("shared.shareEmbed");
   const [shareOpen, setShareOpen] = React.useState(false);
   const [embedOpen, setEmbedOpen] = React.useState(false);
 
@@ -171,7 +172,7 @@ export function ShareEmbedBar({
         variant="outline"
       >
         <Share2 className="size-3" />
-        Share
+        {t("share")}
       </Button>
       <Button
         className="gap-2"
@@ -182,20 +183,20 @@ export function ShareEmbedBar({
         variant="outline"
       >
         <Code2 className="size-3" />
-        Embed
+        {t("embed")}
       </Button>
       <CopyLinkButton pageUrl={pageUrl} slug={slug} />
 
       <ShareDialog
         buildCopyUrl={(url) => withRef(url, "share")}
-        description={`Share the ${title} component`}
+        description={t("shareDescription", { title })}
         onOpenChange={setShareOpen}
         onShare={(platform) => {
           track("share_click", { component: slug, platform });
         }}
         open={shareOpen}
         platforms={SHARE_PLATFORMS}
-        title={`Share ${title}`}
+        title={t("shareTitle", { title })}
       />
 
       <EmbedDialog

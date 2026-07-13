@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { ToggleGroup, ToggleGroupItem } from "@vllnt/ui";
+import { useTranslations } from "next-intl";
 
 const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
@@ -77,17 +78,15 @@ function PreviewThemeControls({
   onValueChange,
   value,
 }: PreviewThemeControlsProps): React.ReactElement {
+  const t = useTranslations("shared.storybookEmbed");
   return (
     <div className="flex items-center justify-between gap-4 border-b bg-muted/30 px-4 py-3">
       <div>
-        <p className="text-sm font-medium">Preview</p>
-        <p className="text-xs text-muted-foreground">
-          Switch between light and dark to inspect the embedded Storybook
-          preview.
-        </p>
+        <p className="text-sm font-medium">{t("preview")}</p>
+        <p className="text-xs text-muted-foreground">{t("description")}</p>
       </div>
       <ToggleGroup
-        aria-label="Preview theme"
+        aria-label={t("themeLabel")}
         onValueChange={(nextValue) => {
           if (nextValue !== "light" && nextValue !== "dark") {
             return;
@@ -100,11 +99,11 @@ function PreviewThemeControls({
         value={value ?? undefined}
         variant="outline"
       >
-        <ToggleGroupItem aria-label="Light preview" value="light">
-          Light
+        <ToggleGroupItem aria-label={t("lightLabel")} value="light">
+          {t("light")}
         </ToggleGroupItem>
-        <ToggleGroupItem aria-label="Dark preview" value="dark">
-          Dark
+        <ToggleGroupItem aria-label={t("darkLabel")} value="dark">
+          {t("dark")}
         </ToggleGroupItem>
       </ToggleGroup>
     </div>

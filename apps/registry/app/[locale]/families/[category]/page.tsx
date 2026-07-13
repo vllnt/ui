@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import { Footer } from "@/components/footer/footer";
@@ -102,6 +102,8 @@ export default async function FamilyPage({ params }: Props) {
   const description = copy?.intro ?? getCategoryDescription(group.category);
   const groups = getFamilyGroups(group.category);
   const pathname = `/families/${category}`;
+  const t = await getTranslations("pages.families");
+  const common = await getTranslations("common");
 
   return (
     <>
@@ -123,26 +125,26 @@ export default async function FamilyPage({ params }: Props) {
           ...(copy && copy.faq.length > 0 ? [faqPageLd(copy.faq)] : []),
         ])}
       />
-      <Sidebar sections={getSidebarSections(group.category, locale)} />
+      <Sidebar sections={await getSidebarSections(group.category, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
             <Breadcrumb
               className="mb-6 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
+                { href: localizePathname("/", locale), label: common("home") },
                 {
                   href: localizePathname("/components", locale),
-                  label: "Components",
+                  label: common("components"),
                 },
                 { label: group.label },
               ]}
             />
             <p className="text-sm font-medium text-muted-foreground">
-              VLLNT UI · Component family
+              VLLNT UI · {t("eyebrow")}
             </p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-              {group.label} components
+              {t("familyTitle", { label: group.label })}
             </h1>
             {description ? (
               <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
@@ -154,17 +156,17 @@ export default async function FamilyPage({ params }: Props) {
                 className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
                 href={localizePathname("/components", locale)}
               >
-                Browse all components
+                {t("browseAll")}
                 <ArrowRight className="size-4" />
               </Link>
               <Link
                 className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
                 href={localizePathname("/docs/agents", locale)}
               >
-                How agents consume the registry
+                {t("agentsDocs")}
               </Link>
               <span className="text-sm text-muted-foreground">
-                {`${group.items.length} ${group.items.length === 1 ? "component" : "components"}`}
+                {t("componentCount", { count: group.items.length })}
               </span>
             </div>
           </div>
@@ -207,14 +209,11 @@ export default async function FamilyPage({ params }: Props) {
         <section className="border-b border-border bg-muted/30">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
             <p className="text-sm font-medium text-muted-foreground">
-              Readable by agents
+              {t("agentEyebrow")}
             </p>
-            <h2 className="mt-2 text-2xl font-semibold">
-              Your AI agent can install these too.
-            </h2>
+            <h2 className="mt-2 text-2xl font-semibold">{t("agentTitle")}</h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              The registry is exposed as structured data, so coding agents pick
-              the right component without scraping HTML.
+              {t("agentDescription")}
             </p>
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               <a
@@ -225,8 +224,7 @@ export default async function FamilyPage({ params }: Props) {
               >
                 <p className="font-mono text-sm">/llms.txt</p>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Concise index per the llmstxt.org spec — sections, links, and
-                  descriptions.
+                  {t("llmsDescription")}
                 </p>
               </a>
               <a
@@ -237,8 +235,7 @@ export default async function FamilyPage({ params }: Props) {
               >
                 <p className="font-mono text-sm">/llms-full.txt</p>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Full registry context in one fetch — docs plus every component
-                  descriptor.
+                  {t("llmsFullDescription")}
                 </p>
               </a>
               <Link
@@ -247,8 +244,7 @@ export default async function FamilyPage({ params }: Props) {
               >
                 <p className="font-mono text-sm">{"/r/<name>.json"}</p>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Per-component descriptor: props, accessibility schema, and
-                  usage examples.
+                  {t("registryJsonDescription")}
                 </p>
               </Link>
             </div>
@@ -258,7 +254,7 @@ export default async function FamilyPage({ params }: Props) {
         {copy && copy.faq.length > 0 ? (
           <section>
             <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-              <h2 className="text-2xl font-semibold">Frequently asked</h2>
+              <h2 className="text-2xl font-semibold">{t("faqTitle")}</h2>
               <dl className="mt-8 space-y-8">
                 {copy.faq.map((item) => (
                   <div className="max-w-3xl" key={item.question}>

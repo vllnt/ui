@@ -56,13 +56,34 @@ async function resolveFlat(
   return { locale: routing.defaultLocale, raw: await readMdxFile(flatPath) };
 }
 
-export async function getPageContent(
-  slug: string,
-  locale: Locale = routing.defaultLocale,
-): Promise<PageContent> {
+/**
+ * Content is immutable for the lifetime of a build, and the sidebar resolves
+ * every docs page on every route. Cache parsed pages so the 300+ statically
+ * generated routes read each MDX file once instead of once per page.
+ */
+const pageCache = new Map<string, Promise<PageContent>>();
+
+async function parsePage(slug: string, locale: Locale): Promise<PageContent> {
   const resolved = await resolveRaw(slug, locale);
   const { content, data } = matter(resolved.raw);
   const frontmatter = pageFrontmatterSchema.parse(data);
 
   return { content, frontmatter, locale: resolved.locale };
+}
+
+export async function getPageContent(
+  slug: string,
+  locale: Locale = routing.defaultLocale,
+): Promise<PageContent> {
+  const key = `${locale}:${slug}`;
+  const cached = pageCache.get(key);
+
+  if (cached) {
+    return cached;
+  }
+
+  const pending = parsePage(slug, locale);
+  pageCache.set(key, pending);
+
+  return pending;
 }

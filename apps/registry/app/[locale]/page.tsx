@@ -52,12 +52,14 @@ export default async function HomePage({ params }: Props) {
         {...jsonLdScriptAttributes(
           softwareApplicationLd({
             description: `Open-source React UI components and design system for building AI apps — ${componentCount} accessible components installable with the shadcn CLI and readable by AI agents via llms.txt.`,
+            installCommand:
+              "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[name].json",
             name: "VLLNT UI",
             url: canonical("/", locale),
           }),
         )}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <Landing />
       </main>

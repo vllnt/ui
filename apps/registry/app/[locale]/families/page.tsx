@@ -1,7 +1,7 @@
 import { Breadcrumb, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
 import type { Locale } from "@/i18n/routing";
@@ -53,6 +53,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function FamiliesPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("pages.families");
+  const common = await getTranslations("common");
 
   return (
     <>
@@ -73,25 +75,25 @@ export default async function FamiliesPage({ params }: Props) {
           }),
         ])}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <Breadcrumb
             className="mb-4 text-muted-foreground"
             items={[
-              { href: localizePathname("/", locale), label: "Home" },
+              { href: localizePathname("/", locale), label: common("home") },
               {
                 href: localizePathname("/components", locale),
-                label: "Components",
+                label: common("components"),
               },
-              { label: "Families" },
+              { label: t("breadcrumb") },
             ]}
           />
           <div className="mb-12">
-            <h1 className="text-4xl font-semibold mb-4">Component families</h1>
-            <p className="text-muted-foreground text-lg">{DESCRIPTION}</p>
+            <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
+            <p className="text-muted-foreground text-lg">{t("description")}</p>
             <p className="text-muted-foreground text-sm mt-2">
-              {`${groupedComponents.length} families`}
+              {t("familyCount", { count: groupedComponents.length })}
             </p>
           </div>
 

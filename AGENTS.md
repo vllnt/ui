@@ -20,7 +20,7 @@ This file is the **index**. Detailed rules live in [`docs/agents/`](./docs/agent
 | Path | Purpose | Published |
 |------|---------|-----------|
 | `packages/ui/` | `@vllnt/ui` component library | npm (public) |
-| `apps/registry/` | `ui.vllnt.com` — Next.js registry + docs site | deployed (Vercel) |
+| `apps/registry/` | `ui.vllnt.ai` — Next.js registry + docs site | deployed (Vercel) |
 | `skills/` | Agent skills (e.g. `vllnt-ui` — how to consume `@vllnt/ui` + the design system) | — |
 | `.github/workflows/` | CI: `ci.yml`, `publish.yml`, `storybook.yml`, `pr-issue-link.yml` | — |
 
@@ -74,6 +74,44 @@ with `git commit --no-verify`.
 
 ---
 
+## Internationalization (registry app)
+
+The registry site (`apps/registry`) is multilingual via
+[next-intl](https://next-intl.dev). Locales live in one place —
+[`i18n/locales.ts`](./apps/registry/i18n/locales.ts) — and everything derives
+from `routing.locales`. The default locale (`en`) is unprefixed; others are path
+-prefixed (`/fr/...`) under the `as-needed` strategy.
+
+**Two content tracks — pick by shape, never mix them for the same string:**
+
+| Track | For | Where |
+|-------|-----|-------|
+| next-intl messages | UI chrome: nav, buttons, labels, form fields, breadcrumbs, stat labels, structured-page prose | [`messages/<locale>.json`](./apps/registry/messages), consumed with `useTranslations` (client) / `getTranslations` (server) |
+| MDX per locale | Long-form document pages: docs, philosophy | `content/pages/<slug>/<locale>.mdx`, loaded by `lib/content.ts` |
+
+**Rules for agents touching the registry UI:**
+
+- Never hardcode a user-facing string in JSX. Add a key to `messages/en.json` +
+  every other locale, and read it via `t(...)`.
+- Internal links use `import { Link } from "@/i18n/routing"` (auto-prefixes the
+  locale). Keep plain `<a>` only for external URLs and non-localized assets
+  (`/r/*`, `/llms.txt`, `/rss.xml`, `/mcp`).
+- French house style is **diacritic-stripped** (no accented characters) — match
+  the existing catalog and MDX.
+
+**Drift gate — `pnpm -F @vllnt/ui-registry i18n:check`**
+([`scripts/check-i18n.ts`](./apps/registry/scripts/check-i18n.ts)) fails when the
+locales drift apart: message-key parity, MDX coverage (every content page in
+every locale), and dead/undefined message namespaces. E2E proof lives in
+[`e2e/i18n.spec.ts`](./apps/registry/e2e/i18n.spec.ts).
+
+**Add a language** (e.g. `es`): (1) add it to `locales` in `i18n/locales.ts`;
+(2) copy `messages/en.json` to `messages/es.json` and translate the values;
+(3) add `content/pages/<slug>/es.mdx` for every content page; (4) run
+`i18n:check` until green.
+
+---
+
 ## Agent rule index
 
 Read these in order. Each is BLOCKING — violations keep a PR in draft.
@@ -101,7 +139,7 @@ Repository-wide docs (audience = contributors, not just agents):
 
 The most-violated rules in PR review history:
 
-0. **Design rules are mandatory for UI work.** Any UI suggestion or component/site change must follow [`DESIGN.md`](./DESIGN.md) (live at `https://ui.vllnt.com/DESIGN.md`) and the machine-readable tokens in [`packages/design/tokens.json`](./packages/design/tokens.json). List any intentional deviation in the PR body.
+0. **Design rules are mandatory for UI work.** Any UI suggestion or component/site change must follow [`DESIGN.md`](./DESIGN.md) (live at `https://ui.vllnt.ai/DESIGN.md`) and the machine-readable tokens in [`packages/design/tokens.json`](./packages/design/tokens.json). List any intentional deviation in the PR body.
 1. **Workspace gates green at HEAD** ([R6](./docs/agents/RULES.md#r6--workspace-gates-green-at-head)). Touched-file passes alone are not ship-OK. Run `pnpm -F @vllnt/ui lint && pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json && pnpm build && pnpm test:once` — all must be green.
 2. **PR body matches HEAD** ([R3](./docs/agents/RULES.md#r3--pr-body-matches-head)). After every push, rewrite the body to match the current head. Stale claims block ship.
 3. **Linked issue required** ([R5](./docs/agents/RULES.md#r5--linked-issue-required)). Every PR must reference a GitHub issue. Accepted keywords: `close` / `closes` / `closed`, `fix` / `fixes` / `fixed`, `resolve` / `resolves` / `resolved`, or repo phrases `Part of` / `Related to` — all case-insensitive, optional colon — followed by `#123` or `owner/repo#123`.

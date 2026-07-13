@@ -8,6 +8,8 @@ import { cn } from "@vllnt/ui";
 type TableOfContentsProps = {
   /** Heading tag for the "On This Page" label. Defaults to `h3`. */
   as?: HeadingTag;
+  /** Heading label. Override to translate it. Defaults to `On This Page`. */
+  label?: string;
   sections: { id: string; title: string }[];
 };
 
@@ -44,12 +46,7 @@ function useActiveSection(sections: { id: string; title: string }[]) {
     });
 
     return () => {
-      sections.forEach((section) => {
-        const element = document.querySelector(`#${section.id}`);
-        if (element) {
-          observer.unobserve(element);
-        }
-      });
+      observer.disconnect();
     };
   }, [sections]);
 
@@ -58,6 +55,7 @@ function useActiveSection(sections: { id: string; title: string }[]) {
 
 export function TableOfContents({
   as: Heading = "h3",
+  label = "On This Page",
   sections,
 }: TableOfContentsProps) {
   const activeSection = useActiveSection(sections);
@@ -71,7 +69,7 @@ export function TableOfContents({
       <div className="sticky top-8">
         <div className="border-l-2 border-border pl-4">
           <Heading className="text-sm font-semibold mb-4 text-muted-foreground uppercase tracking-wider">
-            On This Page
+            {label}
           </Heading>
           <nav className="space-y-2">
             {sections.map((section) => (
