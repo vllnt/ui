@@ -31,7 +31,7 @@
     "doctor:score": "npx --yes react-doctor . --offline --score"
   },
   "devDependencies": {
-    "turbo": "^2.4.4"
+    "turbo": "^2.9.14"
   },
   "pnpm": {
     "overrides": {
