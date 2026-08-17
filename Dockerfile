@@ -23,7 +23,13 @@ RUN pnpm --filter @vllnt/ui-registry build
 FROM node:22-alpine@sha256:968df39aedcea65eeb078fb336ed7191baf48f972b4479711397108be0966920 AS runtime
 WORKDIR /app
 
-RUN addgroup -S -g 65532 app && adduser -S -u 65532 -G app app
+# npm is build tooling only. Removing it from the final image also removes its
+# bundled tar package, so runtime admission cannot regress on CVE-2026-59873.
+RUN addgroup -S -g 65532 app \
+  && adduser -S -u 65532 -G app app \
+  && rm -rf /usr/local/lib/node_modules/npm \
+  && rm -f /usr/local/bin/npm /usr/local/bin/npx \
+  && test ! -e /usr/local/lib/node_modules/npm
 
 # Standalone monorepo layout: standalone dir contains workspace tree.
 # server.js lives at .next/standalone/apps/registry/server.js
