@@ -1,0 +1,250 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+
+import type { Ref } from "react";
+import {
+  Animated,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  type ViewProps,
+} from "react-native";
+
+import { useControllableState } from "../../primitives/use-controllable-state";
+import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
+import { useReducedMotion } from "../../primitives/use-reduced-motion";
+import { useTheme } from "../../theme/theme-provider";
+
+/** Caller-identified testimonial. */
+export type AnimatedTestimonial = {
+  readonly id: string;
+  readonly name: string;
+  readonly quote: string;
+  readonly title: string;
+};
+
+/** Localized labels for testimonial navigation. */
+export type AnimatedTestimonialsLabels = {
+  readonly next: string;
+  readonly position: (index: number, total: number) => string;
+  readonly previous: string;
+  readonly region: string;
+};
+
+/** Props for controlled or uncontrolled native testimonial rotation. */
+export type AnimatedTestimonialsProps = Omit<ViewProps, "children" | "ref"> & {
+  readonly autoplay?: boolean;
+  readonly autoplayInterval?: number;
+  readonly defaultSelectedId?: string;
+  readonly labels: AnimatedTestimonialsLabels;
+  readonly onSelectedIdChange?: (id: string) => void;
+  readonly reducedMotionService?: ReducedMotionService;
+  readonly ref?: Ref<View>;
+  readonly selectedId?: string;
+  readonly testimonials: readonly AnimatedTestimonial[];
+};
+
+const styles = StyleSheet.create({
+  action: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 44,
+  },
+  actions: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  root: { borderWidth: 1 },
+});
+
+function TestimonialCard({
+  reduceMotion,
+  testimonial,
+}: {
+  readonly reduceMotion: boolean;
+  readonly testimonial: AnimatedTestimonial;
+}) {
+  const theme = useTheme();
+  const [progress, setProgress] = useState(
+    () => new Animated.Value(reduceMotion ? 1 : 0),
+  );
+  void setProgress;
+  useEffect(() => {
+    Animated.timing(progress, {
+      duration: reduceMotion ? 0 : 100,
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  }, [progress, reduceMotion]);
+  return (
+    <Animated.View
+      accessibilityLiveRegion="polite"
+      style={{
+        gap: theme.spacing[2],
+        opacity: progress,
+        transform: [
+          {
+            translateX: progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [4, 0],
+            }),
+          },
+        ],
+      }}
+    >
+      <Text
+        style={[
+          theme.typography.scale.bodyLarge,
+          { color: theme.colors.cardForeground },
+        ]}
+      >
+        {testimonial.quote}
+      </Text>
+      <Text
+        style={[
+          theme.typography.scale.bodySmall,
+          {
+            color: theme.colors.cardForeground,
+            fontWeight: theme.typography.fontWeight.caption,
+          },
+        ]}
+      >
+        {testimonial.name}
+      </Text>
+      <Text
+        style={[
+          theme.typography.scale.caption,
+          { color: theme.colors.mutedForeground },
+        ]}
+      >
+        {testimonial.title}
+      </Text>
+    </Animated.View>
+  );
+}
+TestimonialCard.displayName = "TestimonialCard";
+
+/** Native testimonial pager that disables automatic movement for reduced motion. */
+function AnimatedTestimonials({
+  autoplay = false,
+  autoplayInterval = 5000,
+  defaultSelectedId,
+  labels,
+  onSelectedIdChange,
+  reducedMotionService,
+  ref,
+  selectedId,
+  style,
+  testimonials,
+  ...props
+}: AnimatedTestimonialsProps) {
+  const theme = useTheme();
+  const reduceMotion = useReducedMotion(reducedMotionService);
+  const [selection, setSelection] = useControllableState(
+    selectedId === undefined
+      ? {
+          defaultValue: defaultSelectedId ?? testimonials[0]?.id ?? "",
+          mode: "uncontrolled",
+          onChange: onSelectedIdChange,
+        }
+      : { mode: "controlled", onChange: onSelectedIdChange, value: selectedId },
+  );
+  const selectedIndex = Math.max(
+    0,
+    testimonials.findIndex((item) => item.id === selection),
+  );
+  const active = testimonials[selectedIndex];
+  const move = useCallback(
+    (step: number) => {
+      if (testimonials.length === 0) return;
+      const nextIndex =
+        (selectedIndex + step + testimonials.length) % testimonials.length;
+      const next = testimonials[nextIndex];
+      if (next) setSelection(next.id);
+    },
+    [selectedIndex, setSelection, testimonials],
+  );
+
+  useEffect(() => {
+    if (!autoplay || reduceMotion || testimonials.length <= 1) return;
+    const timer = setInterval(
+      () => {
+        move(1);
+      },
+      Math.max(1000, autoplayInterval),
+    );
+    return () => {
+      clearInterval(timer);
+    };
+  }, [autoplay, autoplayInterval, move, reduceMotion, testimonials.length]);
+
+  if (!active) return null;
+  const controlsDisabled = testimonials.length <= 1;
+  return (
+    <View
+      {...props}
+      accessibilityLabel={labels.region}
+      ref={ref}
+      style={[
+        styles.root,
+        {
+          backgroundColor: theme.colors.card,
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.lg,
+          gap: theme.spacing[4],
+          padding: theme.spacing[6],
+        },
+        style,
+      ]}
+    >
+      <TestimonialCard
+        key={active.id}
+        reduceMotion={reduceMotion}
+        testimonial={active}
+      />
+      <View style={styles.actions}>
+        <Pressable
+          accessibilityLabel={labels.previous}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: controlsDisabled }}
+          disabled={controlsDisabled}
+          onPress={() => {
+            move(-1);
+          }}
+          style={styles.action}
+        >
+          <Text style={{ color: theme.colors.foreground }}>
+            {labels.previous}
+          </Text>
+        </Pressable>
+        <Text
+          style={[
+            theme.typography.scale.caption,
+            { color: theme.colors.mutedForeground },
+          ]}
+        >
+          {labels.position(selectedIndex + 1, testimonials.length)}
+        </Text>
+        <Pressable
+          accessibilityLabel={labels.next}
+          accessibilityRole="button"
+          accessibilityState={{ disabled: controlsDisabled }}
+          disabled={controlsDisabled}
+          onPress={() => {
+            move(1);
+          }}
+          style={styles.action}
+        >
+          <Text style={{ color: theme.colors.foreground }}>{labels.next}</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+AnimatedTestimonials.displayName = "AnimatedTestimonials";
+
+export { AnimatedTestimonials };
