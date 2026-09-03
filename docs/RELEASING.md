@@ -41,7 +41,7 @@ CI will:
 - Read the version from `packages/ui/package.json`. **Fails fast** if a matching `v{x.y.z}` tag already exists — catches dispatches against stale main.
 - Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes.
 - Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
-- `pnpm pack` and `npx --yes npm@latest publish --tag latest --provenance --access public`. OIDC trusted publishing signs the provenance attestation.
+- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`. The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
 - Create the GitHub Release for the new tag.
 
 ### 3. Point the registry at the published version (post-publish)
@@ -52,6 +52,29 @@ Once `@vllnt/ui@{x.y.z}` is live on npm `latest`, open a small follow-up PR that
 - Runs `pnpm -F @vllnt/ui-registry registry:build` and commits the regenerated `registry.json` + `registry/default` shims (the install target becomes `@vllnt/ui@^{x.y.z}` and item versions update).
 
 The `registry:check` and `registry:integrity` CI guards confirm the regenerated registry is in sync and pins a real (non-prerelease) published version. Until this lands, `npx shadcn add` keeps resolving to the previous published version — harmless, just one release behind.
+
+## Experimental native canaries
+
+`@vllnt/ui-core` and `@vllnt/ui-native` have a separate safety boundary in `.github/workflows/native-canary.yml`:
+
+- A push to `main` that changes native/core/token surfaces runs `pnpm ci:native`.
+- Both packages receive the same `0.1.0-canary.<run>.sha<commit>` version.
+- Core publishes first under a run-scoped staging tag; native publishes only after that exact core version is visible.
+- Reruns skip immutable versions already present and reuse the run-scoped tag, allowing recovery from a partial pair.
+- The workflow verifies packed names, versions, the rewritten core dependency, and absence of `workspace:` protocols.
+- Only after both versions are visible does the workflow promote both `canary` tags. Ordinary failures restore the prior pair and clean up staging tags.
+- Publication never targets `latest`; fail-closed registry reads verify that neither `latest` tag moves.
+- No workflow dispatch, Git tag, GitHub Release, or stable publication path exists.
+
+Native publication is fail-closed behind the repository variable `NATIVE_CANARY_PUBLISH_ENABLED`. Before setting it to `true`, reserve both package names on npm, configure trusted-publisher entries, and create a protected GitHub environment named `npm-native-canary`. Until that setup is complete, the workflow still runs native quality gates but skips publication.
+
+Consume the pilot explicitly:
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+A stable native channel requires a separate PR that defines versioning, migration, device-validation, and rollback policy. It must not be added to the web package's release matrix.
 
 ## Versioning policy
 

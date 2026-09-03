@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VLLNT UI portable component contracts",
+  "type": "object",
+  "required": ["version", "components"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "components": {
+      "type": "object",
+      "required": ["badge", "button", "card", "heading", "text"],
+      "properties": {
+        "badge": { "$ref": "#/$defs/variants" },
+        "button": {
+          "type": "object",
+          "required": ["sizes", "variants"],
+          "properties": {
+            "sizes": { "$ref": "#/$defs/stringList" },
+            "variants": { "$ref": "#/$defs/stringList" }
+          },
+          "additionalProperties": false
+        },
+        "card": {
+          "type": "object",
+          "required": ["parts"],
+          "properties": {
+            "parts": { "$ref": "#/$defs/stringList" }
+          },
+          "additionalProperties": false
+        },
+        "heading": {
+          "type": "object",
+          "required": ["levels"],
+          "properties": {
+            "levels": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 1, "maximum": 6 },
+              "minItems": 6,
+              "maxItems": 6,
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "text": {
+          "type": "object",
+          "required": ["sizes", "tones", "weights"],
+          "properties": {
+            "sizes": { "$ref": "#/$defs/stringList" },
+            "tones": { "$ref": "#/$defs/stringList" },
+            "weights": { "$ref": "#/$defs/stringList" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "variants": {
+      "type": "object",
+      "required": ["variants"],
+      "properties": {
+        "variants": { "$ref": "#/$defs/stringList" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

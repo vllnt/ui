@@ -5,6 +5,7 @@
  */
 export type {
   ComponentCategory,
+  ComponentPlatform,
   Registry,
   RegistryComponent,
   UsageExample,

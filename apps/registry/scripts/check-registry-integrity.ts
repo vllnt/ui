@@ -28,6 +28,7 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDir, "../../..");
 const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
+const nativeRegistryPath = join(repoRoot, "packages/ui-native/registry.json");
 
 /**
  * Components that legitimately have a story + test but are NOT registry items.
@@ -41,15 +42,28 @@ const EXCLUDED = new Set<string>([
 ]);
 
 type RegistryItem = {
-  name: string;
-  version?: string;
-  stability?: string;
   dependencies?: string[];
+  name: string;
+  native?: {
+    channel?: string;
+    package?: string;
+    parity?: string;
+    status?: string;
+  };
+  platforms?: string[];
+  stability?: string;
+  version?: string;
 };
 
 type Registry = { items: RegistryItem[] };
+type NativeRegistry = {
+  components: { name: string; parity: "api-only" | "full" }[];
+};
 
 const registry = JSON.parse(readFileSync(registryJsonPath, "utf8")) as Registry;
+const nativeRegistry = JSON.parse(
+  readFileSync(nativeRegistryPath, "utf8"),
+) as NativeRegistry;
 const itemNames = new Set(registry.items.map((item) => item.name));
 const errors: string[] = [];
 
@@ -76,6 +90,34 @@ for (const item of registry.items) {
   if (!item.stability) {
     errors.push(`Item "${item.name}" is missing "stability".`);
   }
+  const platforms = item.platforms ?? [];
+  const platformSet = new Set(platforms);
+  if (platforms.length === 0) {
+    errors.push(`Item "${item.name}" is missing "platforms".`);
+  }
+  if (platformSet.size !== platforms.length) {
+    errors.push(`Item "${item.name}" has duplicate platforms.`);
+  }
+  if (platforms.some((platform) => platform !== "web" && platform !== "native")) {
+    errors.push(`Item "${item.name}" has an unsupported platform.`);
+  }
+  if (platforms[0] !== "web") {
+    errors.push(`Item "${item.name}" must list "web" first.`);
+  }
+  if (platformSet.has("native") !== Boolean(item.native)) {
+    errors.push(
+      `Item "${item.name}" must include native metadata exactly when native is supported.`,
+    );
+  }
+  if (
+    item.native &&
+    (item.native.package !== "@vllnt/ui-native" ||
+      item.native.channel !== "canary" ||
+      item.native.status !== "experimental" ||
+      !["api-only", "full"].includes(item.native.parity ?? ""))
+  ) {
+    errors.push(`Item "${item.name}" has invalid native renderer metadata.`);
+  }
   const uiDep = (item.dependencies ?? []).find((dep) =>
     dep.startsWith("@vllnt/ui@"),
   );
@@ -90,6 +132,23 @@ for (const item of registry.items) {
       `Item "${item.name}" pins a prerelease "${uiDep}". The registry must ` +
         `advertise a published release, never a canary.`,
     );
+  }
+}
+
+const nativeManifest = new Map(
+  nativeRegistry.components.map((component) => [component.name, component.parity]),
+);
+const nativeItems = registry.items.filter((item) =>
+  item.platforms?.includes("native"),
+);
+for (const item of nativeItems) {
+  if (nativeManifest.get(item.name) !== item.native?.parity) {
+    errors.push(`Item "${item.name}" has drifted from packages/ui-native/registry.json.`);
+  }
+}
+for (const name of nativeManifest.keys()) {
+  if (!nativeItems.some((item) => item.name === name)) {
+    errors.push(`Native manifest component "${name}" is absent from registry metadata.`);
   }
 }
 

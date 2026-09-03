@@ -39,6 +39,7 @@ import { fileURLToPath } from "node:url";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDir, "../../..");
 const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
+const nativeRegistryPath = join(repoRoot, "packages/ui-native/registry.json");
 const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const shimsRoot = join(repoRoot, "apps/registry/registry/default");
 
@@ -57,6 +58,22 @@ type RegistryFile = {
 };
 
 type Stability = "stable" | "beta" | "experimental" | "deprecated";
+type ComponentPlatform = "native" | "web";
+type NativeParity = "api-only" | "full";
+
+type NativeRenderer = {
+  channel: "canary";
+  package: "@vllnt/ui-native";
+  parity: NativeParity;
+  status: "experimental";
+};
+
+type NativeRegistry = {
+  channel: "canary";
+  components: { name: string; parity: NativeParity }[];
+  package: "@vllnt/ui-native";
+  status: "experimental";
+};
 
 type A11yKeyboardBinding = {
   keys: string;
@@ -75,7 +92,7 @@ type UsageExample = {
   title: string;
   description?: string;
   code: string;
-  framework?: "react" | "next";
+  framework?: "next" | "react" | "react-native";
   storyId?: string;
 };
 
@@ -102,6 +119,8 @@ type RegistryItem = {
   examples?: UsageExample[];
   files: RegistryFile[];
   name: string;
+  native?: NativeRenderer;
+  platforms: ComponentPlatform[];
   props?: PropDefinition[];
   registryDependencies?: string[];
   replacedBy?: string;
@@ -208,6 +227,12 @@ const rewriteImports = (source: string): string => {
 };
 
 const registry = JSON.parse(readFileSync(registryJsonPath, "utf8")) as Registry;
+const nativeRegistry = JSON.parse(
+  readFileSync(nativeRegistryPath, "utf8"),
+) as NativeRegistry;
+const nativeComponents = new Map(
+  nativeRegistry.components.map((component) => [component.name, component]),
+);
 
 let processed = 0;
 let skipped = 0;
@@ -216,6 +241,19 @@ for (const item of registry.items) {
   if (RESERVED_REGISTRY_NAMES.has(item.name)) {
     // Lib/hook entries from a previous run — drop them (now redundant with @vllnt/ui)
     continue;
+  }
+
+  const nativeComponent = nativeComponents.get(item.name);
+  item.platforms = nativeComponent ? ["web", "native"] : ["web"];
+  if (nativeComponent) {
+    item.native = {
+      channel: nativeRegistry.channel,
+      package: nativeRegistry.package,
+      parity: nativeComponent.parity,
+      status: nativeRegistry.status,
+    };
+  } else {
+    delete item.native;
   }
 
   const sourcePath = join(componentsRoot, item.name, `${item.name}.tsx`);
@@ -315,12 +353,29 @@ for (const name of RESERVED_REGISTRY_NAMES) {
   }
 }
 
+const registryNames = new Set(registry.items.map((item) => item.name));
+const missingNativeComponents = nativeRegistry.components.filter(
+  (component) => !registryNames.has(component.name),
+);
+if (missingNativeComponents.length > 0) {
+  console.error(
+    `Native components missing from the web registry: ${missingNativeComponents
+      .map((component) => component.name)
+      .join(", ")}`,
+  );
+  process.exitCode = 1;
+}
+
 // Sort items alphabetically for deterministic output
 registry.items.sort((a, b) => a.name.localeCompare(b.name));
 
-// Stamp top-level version + generatedAt so agents can detect schema/library changes.
+// Refresh generatedAt only when the published registry version changes; normal
+// deterministic rebuilds must not dirty the tree.
+if (registry.version !== PUBLISHED_VERSION) {
+  registry.generatedAt = new Date().toISOString();
+}
 registry.version = PUBLISHED_VERSION;
-registry.generatedAt = new Date().toISOString();
+registry.generatedAt ??= new Date().toISOString();
 
 // Validate: any deprecated component must declare replacedBy.
 const deprecatedWithoutReplacement = registry.items.filter(

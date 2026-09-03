@@ -16,6 +16,7 @@ const ROUTES = [
   "/families/ai",
   "/docs",
   "/docs/installation",
+  "/docs/native",
   "/docs/theming",
   "/philosophy",
   "/templates",

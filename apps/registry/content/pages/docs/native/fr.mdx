@@ -1,0 +1,84 @@
+---
+title: React Native
+description: Construisez des applications Expo avec le renderer React Native experimental et les jetons partages de VLLNT UI.
+type: docs
+og:
+  title: React Native
+  description: Composants VLLNT UI experimentaux pour Expo et React Native
+  type: docs
+---
+
+# React Native
+
+`@vllnt/ui-native` est un renderer React Native separe, construit avec les memes jetons de design et contrats d'options portables que `@vllnt/ui`. Le paquet web stable reste inchange : le web utilise le DOM, Radix UI, Tailwind CSS et CVA ; le natif utilise les primitives React Native et `StyleSheet`.
+
+Le paquet natif est experimental et publie uniquement sur le tag `canary`. Ne dependez pas encore d'une version sans tag ou `latest`.
+
+## Installer
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+React 19 et React Native 0.81 ou plus recent sont des peer dependencies. Le catalogue du depot cible Expo SDK 57 et valide les bundles Metro Android et iOS.
+
+## Configurer un theme
+
+```tsx
+import { ThemeProvider } from "@vllnt/ui-native"
+
+export function Root() {
+  return (
+    <ThemeProvider colorScheme="system">
+      <App />
+    </ThemeProvider>
+  )
+}
+```
+
+Le provider suit le theme de l'appareil par defaut. Choisissez `light` ou `dark` pour un mode fixe, ou transmettez des remplacements semantiques via `override`. Les valeurs sRGB natives sont generees depuis la source OKLCH canonique dans `packages/design/tokens.json`, avec des ajustements deterministes de contraste et de fond presque noir pour l'accessibilite native.
+
+## Composants pilotes
+
+Le premier catalogue inclut :
+
+- `Button` avec les noms de variante et de taille du renderer web et un libelle texte ou numerique.
+- `Text` avec les noms partages de taille, ton et poids.
+- `Heading` avec un `level` semantique et une `size` visuelle independants.
+- `Badge` avec les variantes semantiques partagees.
+- `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent` et `CardFooter`.
+
+```tsx
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Text,
+} from "@vllnt/ui-native"
+
+export function Example() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Compte</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Text tone="muted">Jetons semantiques natifs.</Text>
+        <Button onPress={() => {}}>Enregistrer</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+Utilisez les props React Native comme `onPress`, `style` et `accessibilityLabel`. Les props web comme `className`, `onClick` et `asChild` ne font volontairement pas partie de l'API native.
+
+## Decouvrir la prise en charge
+
+Chaque element du registre inclut maintenant `platforms`. Les entrees pilotes compatibles avec le natif incluent aussi un objet `native` avec les metadonnees de paquet, canal, statut et parite. Filtrez la page des composants avec `/fr/components?platform=native`, ou appelez MCP `search_components` avec `{ "platform": "native" }`.
+
+## Limite actuelle
+
+Le pilote utilise directement les primitives React Native. Il n'ajoute ni NativeWind ni `@rn-primitives`, ce qui evite une configuration Babel obligatoire chez le consommateur pour les composants fondamentaux. Les overlays complexes pourront introduire des dependances d'adaptation plus tard, apres validation du comportement et de l'accessibilite sur appareil reel.

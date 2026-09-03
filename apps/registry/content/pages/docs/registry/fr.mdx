@@ -27,7 +27,9 @@ Les elements du registre incluent :
 - `description` : resume court pour la recherche, les agents et la documentation.
 - `type` : type d'element du registre.
 - `category` : categorie du composant.
-- `files` : fichiers source installes par la CLI.
+- `platforms` : liste non vide de renderers, avec `web`, `native` ou les deux.
+- `native` : metadonnees experimentales de paquet, canal, statut et parite quand `native` est pris en charge.
+- `files` : fichiers source installes par la CLI web.
 - `dependencies` : dependances npm requises par le composant.
 - `registryDependencies` : autres composants du registre necessaires a l'execution.
 - `version` et `stability` : metadonnees de version apposees pendant la construction du registre.
@@ -42,4 +44,4 @@ L'application du registre genere des shims et des metadonnees a partir du code s
 
 ## Utilisation par les agents
 
-Les agents devraient preferer `/r/registry.json` pour la decouverte et `/r/[name].json` pour les details d'implementation. Utilisez `/llms-full.txt` lorsqu'un seul contexte texte est plus pratique que la recuperation de nombreux points de terminaison JSON.
+Les agents devraient preferer `/r/registry.json` pour la decouverte et `/r/[name].json` pour les details d'implementation. Verifiez `platforms` avant de choisir une methode d'installation. Les descripteurs web s'installent avec shadcn ; les composants pilotes natifs s'installent depuis `@vllnt/ui-native@canary`. Utilisez `/llms-full.txt` lorsqu'un seul contexte texte est plus pratique que la recuperation de nombreux points de terminaison JSON.

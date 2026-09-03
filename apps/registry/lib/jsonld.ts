@@ -1,3 +1,5 @@
+import type { ComponentPlatform } from "@vllnt/ui-core";
+
 import type { Locale } from "@/i18n/routing";
 import { canonical } from "@/lib/seo";
 
@@ -49,8 +51,13 @@ export function softwareSourceCodeLd(component: {
   readonly keywords?: readonly string[];
   readonly locale: Locale;
   readonly name: string;
+  readonly platforms: readonly ComponentPlatform[];
   readonly title: string;
 }): JsonLdNode {
+  const runtimes = component.platforms.map((platform) =>
+    platform === "native" ? "React Native" : "React",
+  );
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -63,7 +70,7 @@ export function softwareSourceCodeLd(component: {
     license: "https://opensource.org/license/mit",
     name: component.title,
     programmingLanguage: "TypeScript",
-    runtimePlatform: "React",
+    runtimePlatform: runtimes.length === 1 ? runtimes.join("") : runtimes,
     url: canonical(`/components/${component.name}`, component.locale),
   };
 }

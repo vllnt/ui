@@ -1,0 +1,84 @@
+---
+title: React Native
+description: Build Expo apps with the experimental React Native renderer and shared VLLNT UI tokens.
+type: docs
+og:
+  title: React Native
+  description: Experimental VLLNT UI components for Expo and React Native
+  type: docs
+---
+
+# React Native
+
+`@vllnt/ui-native` is a separate React Native renderer built on the same authored design tokens and portable option contracts as `@vllnt/ui`. The stable web package remains unchanged: web uses DOM, Radix UI, Tailwind CSS, and CVA; native uses React Native primitives and `StyleSheet`.
+
+The native package is experimental and publishes only to the `canary` tag. Do not depend on an unqualified or `latest` release yet.
+
+## Install
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+React 19 and React Native 0.81 or newer are peer dependencies. The repository catalog targets Expo SDK 57 and validates Android and iOS Metro bundles.
+
+## Set up a theme
+
+```tsx
+import { ThemeProvider } from "@vllnt/ui-native"
+
+export function Root() {
+  return (
+    <ThemeProvider colorScheme="system">
+      <App />
+    </ThemeProvider>
+  )
+}
+```
+
+The provider follows the device theme by default. Choose `light` or `dark` for a fixed mode, or pass semantic overrides through `override`. Native sRGB values are generated from the canonical OKLCH source in `packages/design/tokens.json`, with deterministic contrast and near-black adjustments for native accessibility.
+
+## Pilot components
+
+The first catalog includes:
+
+- `Button` with the web renderer's variant and size names and a plain text or numeric label.
+- `Text` with shared size, tone, and weight names.
+- `Heading` with independent semantic `level` and visual `size`.
+- `Badge` with shared semantic variants.
+- `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, and `CardFooter`.
+
+```tsx
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Text,
+} from "@vllnt/ui-native"
+
+export function Example() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Account</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Text tone="muted">Native semantic tokens.</Text>
+        <Button onPress={() => {}}>Save changes</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+Use React Native props such as `onPress`, `style`, and `accessibilityLabel`. Web-only props such as `className`, `onClick`, and `asChild` are intentionally not part of the native API.
+
+## Discover support
+
+Every registry item now includes `platforms`. Native-capable pilot entries also include a `native` object with package, channel, status, and parity metadata. Filter the components page with `/components?platform=native`, or call MCP `search_components` with `{ "platform": "native" }`.
+
+## Current boundary
+
+The pilot uses React Native primitives directly. It does not add NativeWind or `@rn-primitives`, avoiding mandatory Babel and consumer configuration for foundational components. Complex overlays may introduce adapter dependencies later, after real-device behavior and accessibility are validated.

@@ -20,7 +20,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "activity-heatmap",
@@ -39,7 +42,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "activity-log",
@@ -58,7 +64,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "agent-activity",
@@ -78,7 +87,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-artifact",
@@ -98,7 +110,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-chat-input",
@@ -118,7 +133,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-message-bubble",
@@ -138,7 +156,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-sidebar",
@@ -158,7 +179,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-source-citation",
@@ -178,7 +202,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-streaming-text",
@@ -197,7 +224,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ai-tool-call-display",
@@ -218,7 +248,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "alert",
@@ -237,7 +270,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "alert-dialog",
@@ -256,7 +292,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "alert-pulse",
@@ -275,7 +314,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "anchor-port",
@@ -294,7 +336,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-beam",
@@ -313,7 +358,10 @@
       ],
       "category": "data-display",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-grid-pattern",
@@ -332,7 +380,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-list",
@@ -351,7 +402,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-tabs",
@@ -370,7 +424,10 @@
       ],
       "category": "navigation",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-testimonials",
@@ -389,7 +446,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-text",
@@ -408,7 +468,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "animated-tooltip",
@@ -427,7 +490,10 @@
       ],
       "category": "overlay",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "annotation",
@@ -446,7 +512,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "area-chart",
@@ -465,7 +534,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "aspect-ratio",
@@ -484,7 +556,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "auto-reload",
@@ -503,7 +578,10 @@
       ],
       "category": "billing",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "avatar",
@@ -522,7 +600,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "avatar-group",
@@ -541,7 +622,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "badge",
@@ -560,7 +644,17 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web",
+        "native"
+      ],
+      "native": {
+        "channel": "canary",
+        "package": "@vllnt/ui-native",
+        "parity": "full",
+        "status": "experimental"
+      }
     },
     {
       "name": "banner",
@@ -582,7 +676,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "bar-chart",
@@ -601,7 +698,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "bento-grid",
@@ -620,7 +720,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "blog-card",
@@ -639,7 +742,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "blur-reveal",
@@ -658,7 +764,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "border-beam",
@@ -677,7 +786,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "bottom-activity-strip",
@@ -696,7 +808,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "bottom-bar",
@@ -715,7 +830,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "breadcrumb",
@@ -734,7 +852,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "button",
@@ -816,7 +937,17 @@
           "required": false,
           "description": "All native <button> attributes are forwarded."
         }
-      ]
+      ],
+      "platforms": [
+        "web",
+        "native"
+      ],
+      "native": {
+        "channel": "canary",
+        "package": "@vllnt/ui-native",
+        "parity": "full",
+        "status": "experimental"
+      }
     },
     {
       "name": "button-group",
@@ -835,7 +966,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "calendar",
@@ -854,7 +988,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "callout",
@@ -873,7 +1010,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "candlestick-chart",
@@ -892,7 +1032,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "canvas-shell",
@@ -911,7 +1054,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "canvas-view",
@@ -930,7 +1076,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "card",
@@ -949,7 +1098,17 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web",
+        "native"
+      ],
+      "native": {
+        "channel": "canary",
+        "package": "@vllnt/ui-native",
+        "parity": "full",
+        "status": "experimental"
+      }
     },
     {
       "name": "card-flip",
@@ -968,7 +1127,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "carousel",
@@ -987,7 +1149,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "category-filter",
@@ -1006,7 +1171,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "chain-of-thought",
@@ -1026,7 +1194,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "chat-dock-section",
@@ -1045,7 +1216,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "checkbox",
@@ -1064,7 +1238,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "checkbox-group",
@@ -1083,7 +1260,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "checklist",
@@ -1102,7 +1282,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "choropleth-map",
@@ -1121,7 +1304,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "chronological-timeline",
@@ -1140,7 +1326,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "civilization-card",
@@ -1160,7 +1349,10 @@
       ],
       "category": "educational",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "code-block",
@@ -1179,7 +1371,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "code-playground",
@@ -1198,7 +1393,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "collapsible",
@@ -1217,7 +1415,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "color-picker",
@@ -1236,7 +1437,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "combobox",
@@ -1360,6 +1564,9 @@
           "required": false,
           "description": "Class applied to the inner Command element."
         }
+      ],
+      "platforms": [
+        "web"
       ]
     },
     {
@@ -1379,7 +1586,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "comment-pin",
@@ -1398,7 +1608,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "comparison",
@@ -1417,7 +1630,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "completion-dialog",
@@ -1436,7 +1652,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "connector-edge",
@@ -1455,7 +1674,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "content-intro",
@@ -1474,7 +1696,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "context-lens",
@@ -1493,7 +1718,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "context-menu",
@@ -1512,7 +1740,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "contribution-graph",
@@ -1531,7 +1762,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "conversation-thread",
@@ -1550,7 +1784,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "cookie-consent",
@@ -1569,7 +1806,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "copy-button",
@@ -1589,7 +1829,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "countdown-timer",
@@ -1608,7 +1851,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "credit-badge",
@@ -1627,7 +1873,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "curriculum",
@@ -1646,7 +1895,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "cursor",
@@ -1665,7 +1917,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "data-list",
@@ -1684,7 +1939,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "data-table",
@@ -1704,7 +1962,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "date-field",
@@ -1723,7 +1984,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "date-picker",
@@ -1742,7 +2006,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "date-range-picker",
@@ -1761,7 +2028,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "dialog",
@@ -1800,7 +2070,10 @@
         ],
         "focusManagement": "auto",
         "notes": "Built on Radix Dialog: focus trap + restore on close + scroll lock are automatic."
-      }
+      },
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "display",
@@ -1822,7 +2095,10 @@
       "stability": "stable",
       "a11y": {
         "notes": "Non-semantic by default (a div); set `as` to h1 for a hero heading. The optional reveal animation is gated behind prefers-reduced-motion, so it does not play when the user requests reduced motion."
-      }
+      },
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "dock",
@@ -1841,7 +2117,10 @@
       ],
       "category": "navigation",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "document-sibling-nav",
@@ -1861,7 +2140,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "dot-pattern",
@@ -1880,7 +2162,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "drawer",
@@ -1899,7 +2184,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "dropdown-menu",
@@ -1918,7 +2206,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "edge-label",
@@ -1937,7 +2228,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "empty-state",
@@ -1965,6 +2259,9 @@
           "code": "import { Button, EmptyState } from \"@vllnt/ui\";\nimport { Inbox } from \"lucide-react\";\n\nexport function Demo() {\n  return (\n    <EmptyState\n      icon={<Inbox className=\"h-8 w-8\" />}\n      title=\"No tickets yet\"\n      description=\"Create your first support ticket to start tracking conversations.\"\n      action={<Button>Create ticket</Button>}\n    />\n  );\n}\n",
           "framework": "react"
         }
+      ],
+      "platforms": [
+        "web"
       ]
     },
     {
@@ -1984,7 +2281,10 @@
       ],
       "category": "educational",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "exercise",
@@ -2003,7 +2303,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "expandable-cards",
@@ -2022,7 +2325,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "faq",
@@ -2041,7 +2347,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "field",
@@ -2060,7 +2369,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "fieldset",
@@ -2079,7 +2391,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "file-upload",
@@ -2098,7 +2413,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "filter-bar",
@@ -2117,7 +2435,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "flashcard",
@@ -2136,7 +2457,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "floating-action-button",
@@ -2155,7 +2479,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "floating-navbar",
@@ -2174,7 +2501,10 @@
       ],
       "category": "navigation",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "floating-toolbar",
@@ -2193,7 +2523,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "flow-diagram",
@@ -2212,7 +2545,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "follow-mode",
@@ -2231,7 +2567,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "form",
@@ -2250,7 +2589,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "gantt-chart",
@@ -2269,7 +2611,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "gauge-chart",
@@ -2288,7 +2633,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "geography-quiz-map",
@@ -2307,7 +2655,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "glass-card",
@@ -2326,7 +2677,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "glass-panel",
@@ -2345,7 +2699,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "glass-progress",
@@ -2364,7 +2721,10 @@
       ],
       "category": "data-display",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "globe-3d",
@@ -2383,7 +2743,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "grid",
@@ -2402,7 +2765,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "group-hull",
@@ -2421,7 +2787,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "handoff-beacon",
@@ -2440,7 +2809,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "heading",
@@ -2463,6 +2835,16 @@
       "a11y": {
         "role": "heading",
         "notes": "Renders a native h1–h6 chosen by `level` for a correct document outline. `size` restyles the visual scale without changing the semantic rank, so the outline stays intact. No ARIA required."
+      },
+      "platforms": [
+        "web",
+        "native"
+      ],
+      "native": {
+        "channel": "canary",
+        "package": "@vllnt/ui-native",
+        "parity": "full",
+        "status": "experimental"
       }
     },
     {
@@ -2482,7 +2864,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "heat-overlay",
@@ -2501,7 +2886,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "historic-timeline",
@@ -2520,7 +2908,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "historical-figure-card",
@@ -2540,7 +2931,10 @@
       ],
       "category": "educational",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "horizontal-scroll-row",
@@ -2560,7 +2954,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "hover-card",
@@ -2579,7 +2976,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "infinite-plane",
@@ -2598,7 +2998,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "inline-input",
@@ -2617,7 +3020,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "input",
@@ -2636,7 +3042,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "input-group",
@@ -2655,7 +3064,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "input-otp",
@@ -2674,7 +3086,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "interactive-timeline",
@@ -2693,7 +3108,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "item",
@@ -2712,7 +3130,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "jarvis-dock",
@@ -2731,7 +3152,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "kbd",
@@ -2751,7 +3175,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "key-concept",
@@ -2770,7 +3197,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "keyboard-shortcuts-help",
@@ -2789,7 +3219,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "knowledge-check",
@@ -2809,7 +3242,10 @@
       ],
       "category": "educational",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "label",
@@ -2828,7 +3264,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "lang-provider",
@@ -2847,7 +3286,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "learning-objectives",
@@ -2866,7 +3308,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "left-rail",
@@ -2885,7 +3330,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "line-chart",
@@ -2904,7 +3352,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "link",
@@ -2924,7 +3375,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "liquid-glass",
@@ -2943,7 +3397,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "list-box",
@@ -2962,7 +3419,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "live-cursor",
@@ -2981,7 +3441,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "live-feed",
@@ -3000,7 +3463,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "magnetic",
@@ -3019,7 +3485,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "magnetic-button",
@@ -3038,7 +3507,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "map-2d",
@@ -3057,7 +3529,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "map-timeline",
@@ -3076,7 +3551,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "market-treemap",
@@ -3095,7 +3573,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "marquee",
@@ -3114,7 +3595,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "mdx-content",
@@ -3136,7 +3620,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "menubar",
@@ -3155,7 +3642,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "meteors",
@@ -3174,7 +3664,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "meter",
@@ -3193,7 +3686,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "metric-cluster",
@@ -3212,7 +3708,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "metric-gauge",
@@ -3231,7 +3730,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "mini-map-panel",
@@ -3250,7 +3752,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "model-comparison",
@@ -3270,7 +3775,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "model-selector",
@@ -3289,7 +3797,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "multi-select",
@@ -3308,7 +3819,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "multi-select-lasso",
@@ -3327,7 +3841,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "native-select",
@@ -3346,7 +3863,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "navbar-saas",
@@ -3365,7 +3885,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "navigation-menu",
@@ -3384,7 +3907,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "newsletter-signup",
@@ -3404,7 +3930,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "number-input",
@@ -3423,7 +3952,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "number-ticker",
@@ -3442,7 +3974,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "object-card",
@@ -3461,7 +3996,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "object-handle",
@@ -3480,7 +4018,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "object-inspector",
@@ -3499,7 +4040,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "order-book",
@@ -3518,7 +4062,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "overview-board",
@@ -3537,7 +4084,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "pagination",
@@ -3556,7 +4106,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "panel",
@@ -3575,7 +4128,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "parallel-timeline",
@@ -3594,7 +4150,10 @@
       ],
       "category": "educational",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "particles",
@@ -3613,7 +4172,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "password-input",
@@ -3632,7 +4194,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "phone-input",
@@ -3651,7 +4216,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "pie-chart",
@@ -3670,7 +4238,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "plan-badge",
@@ -3689,7 +4260,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "playback-ghost",
@@ -3708,7 +4282,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "policy-delivery-panel",
@@ -3727,7 +4304,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "popover",
@@ -3746,7 +4326,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "presence-stack",
@@ -3765,7 +4348,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "presence-sync-indicator",
@@ -3784,7 +4370,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "pricing-table",
@@ -3804,7 +4393,10 @@
       ],
       "category": "billing",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "primary-source-viewer",
@@ -3823,7 +4415,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "pro-tip",
@@ -3842,7 +4437,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "profile-section",
@@ -3861,7 +4459,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "progress-bar",
@@ -3880,7 +4481,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "progress-card",
@@ -3899,7 +4503,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "progress-tracker",
@@ -3918,7 +4525,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "progressive-blur",
@@ -3937,7 +4547,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "prompt-input",
@@ -3957,7 +4570,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "prompt-templates",
@@ -3977,7 +4593,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "property-section",
@@ -3996,7 +4615,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "prose",
@@ -4018,7 +4640,10 @@
       "stability": "stable",
       "a11y": {
         "notes": "Styling-only wrapper that preserves the semantics of the HTML you nest (headings, lists, quotes, code), so document structure and reading order come from your content."
-      }
+      },
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "qr-code",
@@ -4038,7 +4663,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "quiz",
@@ -4057,7 +4685,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "radar-chart",
@@ -4076,7 +4707,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "radio-group",
@@ -4095,7 +4729,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "range-calendar",
@@ -4114,7 +4751,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "rating",
@@ -4133,7 +4773,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "reasoning",
@@ -4153,7 +4796,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "relationship-inspector",
@@ -4172,7 +4818,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "resizable",
@@ -4191,7 +4840,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "reveal-text",
@@ -4210,7 +4862,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "right-dock",
@@ -4229,7 +4884,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "role-badge",
@@ -4248,7 +4906,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "route-map",
@@ -4267,7 +4928,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "routing-assignment-panel",
@@ -4286,7 +4950,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "run-timeline",
@@ -4305,7 +4972,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "runtime-overview-panel",
@@ -4324,7 +4994,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sankey-chart",
@@ -4343,7 +5016,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "scope-selector",
@@ -4362,7 +5038,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "scramble-text",
@@ -4381,7 +5060,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "scroll-area",
@@ -4400,7 +5082,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "scroll-progress",
@@ -4419,7 +5104,10 @@
       ],
       "category": "data-display",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "search-bar",
@@ -4438,7 +5126,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "search-dialog",
@@ -4457,7 +5148,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "search-field",
@@ -4476,7 +5170,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "segmented-control",
@@ -4495,7 +5192,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "select",
@@ -4514,7 +5214,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "selection-halo",
@@ -4533,7 +5236,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "selection-presence",
@@ -4552,7 +5258,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "separator",
@@ -4571,7 +5280,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "severity-badge",
@@ -4590,7 +5302,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "share-dialog",
@@ -4609,7 +5324,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "share-section",
@@ -4628,7 +5346,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sheet",
@@ -4647,7 +5368,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "shimmer-button",
@@ -4666,7 +5390,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "shimmer-text",
@@ -4685,7 +5412,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "shine-border",
@@ -4704,7 +5434,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "shiny-button",
@@ -4723,7 +5456,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sidebar",
@@ -4742,7 +5478,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sidebar-provider",
@@ -4761,7 +5500,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sidebar-toggle",
@@ -4781,7 +5523,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "skeleton",
@@ -4800,7 +5545,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "slider",
@@ -4819,7 +5567,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "slideshow",
@@ -4838,7 +5589,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "snap-guides",
@@ -4857,7 +5611,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sparkles",
@@ -4876,7 +5633,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sparkline-grid",
@@ -4895,7 +5655,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "spinner",
@@ -4914,7 +5677,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "spinning-text",
@@ -4933,7 +5699,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "spotlight-card",
@@ -4952,7 +5721,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "stat-card",
@@ -4971,7 +5743,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "state-badge-overlay",
@@ -4990,7 +5765,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "status-board",
@@ -5009,7 +5787,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "status-indicator",
@@ -5028,7 +5809,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "step-by-step",
@@ -5047,7 +5831,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "step-navigation",
@@ -5066,7 +5853,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "stepper",
@@ -5085,7 +5875,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "sticky-metric",
@@ -5104,7 +5897,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "story-map",
@@ -5123,7 +5919,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "subscription-card",
@@ -5142,7 +5941,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "switch",
@@ -5161,7 +5963,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "table",
@@ -5180,7 +5985,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "table-of-contents",
@@ -5199,7 +6007,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "table-of-contents-panel",
@@ -5218,7 +6029,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tabs",
@@ -5237,7 +6051,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tag-group",
@@ -5256,7 +6073,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tags-input",
@@ -5275,7 +6095,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "terminal",
@@ -5294,7 +6117,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "text",
@@ -5317,6 +6143,16 @@
       "stability": "stable",
       "a11y": {
         "notes": "Renders a semantic element (p, span, div, or label) chosen by `as`, forwards `ref`, and inherits the design-system foreground contrast tokens. Use `tone=\"muted\"` on the default `background` — on `muted`/`card` surfaces the muted foreground can fall below WCAG AA. For a real form label use the Label component, which wires the htmlFor association."
+      },
+      "platforms": [
+        "web",
+        "native"
+      ],
+      "native": {
+        "channel": "canary",
+        "package": "@vllnt/ui-native",
+        "parity": "full",
+        "status": "experimental"
       }
     },
     {
@@ -5336,7 +6172,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "text-field",
@@ -5355,7 +6194,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "text-reveal",
@@ -5374,7 +6216,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "text-shimmer",
@@ -5393,7 +6238,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "textarea",
@@ -5412,7 +6260,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "theme-preset-provider",
@@ -5431,7 +6282,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "theme-provider",
@@ -5450,7 +6304,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "theme-switcher",
@@ -5469,7 +6326,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "theme-toggle",
@@ -5488,7 +6348,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "thinking-block",
@@ -5508,7 +6371,10 @@
       ],
       "category": "ai",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "thread-bubble",
@@ -5527,7 +6393,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "threshold-ring",
@@ -5546,7 +6415,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "ticker-tape",
@@ -5565,7 +6437,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tilt-card",
@@ -5584,7 +6459,10 @@
       ],
       "category": "utility",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "time-field",
@@ -5603,7 +6481,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "time-picker",
@@ -5622,7 +6503,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "timeline",
@@ -5642,7 +6526,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "timeline-scrubber",
@@ -5661,7 +6548,10 @@
       ],
       "category": "form",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tldr-section",
@@ -5680,7 +6570,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "toast",
@@ -5699,7 +6592,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "toggle",
@@ -5718,7 +6614,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "toggle-group",
@@ -5737,7 +6636,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "toolbar",
@@ -5756,7 +6658,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tooltip",
@@ -5775,7 +6680,10 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "top-bar",
@@ -5794,7 +6702,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tour",
@@ -5813,7 +6724,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "transaction-list",
@@ -5832,7 +6746,10 @@
       ],
       "category": "billing",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tree-view",
@@ -5851,7 +6768,10 @@
       ],
       "category": "data-display",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "truncated-text",
@@ -5870,7 +6790,10 @@
       ],
       "category": "utility",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tutorial-card",
@@ -5889,7 +6812,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tutorial-complete",
@@ -5908,7 +6834,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tutorial-filters",
@@ -5927,7 +6856,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tutorial-intro-content",
@@ -5946,7 +6878,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "tutorial-mdx",
@@ -5965,7 +6900,10 @@
       ],
       "category": "learning",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "typewriter",
@@ -5984,7 +6922,10 @@
       ],
       "category": "content",
       "stability": "stable",
-      "version": "0.3.0"
+      "version": "0.3.0",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "typography",
@@ -6003,7 +6944,10 @@
       ],
       "category": "core",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "usage-breakdown",
@@ -6022,7 +6966,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "video-embed",
@@ -6041,7 +6988,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "view-switcher",
@@ -6060,7 +7010,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "viewport-bookmarks",
@@ -6079,7 +7032,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "wallet-card",
@@ -6098,7 +7054,10 @@
       ],
       "category": "content",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "watchlist",
@@ -6117,7 +7076,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "workspace-switcher",
@@ -6136,7 +7098,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "world-breadcrumbs",
@@ -6155,7 +7120,10 @@
       ],
       "category": "navigation",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "world-clock-bar",
@@ -6174,7 +7142,10 @@
       ],
       "category": "data",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "zoom-hud",
@@ -6194,9 +7165,12 @@
       ],
       "category": "overlay",
       "version": "0.3.0",
-      "stability": "stable"
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     }
   ],
   "version": "0.3.0",
-  "generatedAt": "2026-07-13T15:22:06.484Z"
+  "generatedAt": "2026-09-03T18:10:12.887Z"
 }

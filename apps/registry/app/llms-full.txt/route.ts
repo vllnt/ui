@@ -54,9 +54,9 @@ async function readDocumentPage(slug: string): Promise<string> {
 
 function buildSummary(items: readonly RegistryComponent[]): string {
   return (
-    "One-fetch, complete agent context for the VLLNT UI registry. " +
-    `${items.length} components, install via shadcn CLI against /r/<name>.json. ` +
-    `Site: ${SITE_URL}`
+    "One-fetch, complete agent context for the platform-aware VLLNT UI registry. " +
+    `${items.length} component descriptors for web and React Native. ` +
+    `Inspect platforms before installation. Site: ${SITE_URL}`
   );
 }
 
@@ -66,6 +66,12 @@ const INSTALL_DETAILS = [
   "```bash",
   `pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json`,
   `# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`,
+  "```",
+  "",
+  "Experimental React Native renderer:",
+  "",
+  "```bash",
+  "pnpm add @vllnt/ui-native@canary",
   "```",
 ].join("\n");
 
@@ -130,6 +136,12 @@ function buildComponentPages(
       content: [
         `- Slug: \`${item.name}\``,
         `- Category: \`${item.category ?? ""}\``,
+        `- Platforms: ${item.platforms.join(", ")}`,
+        ...(item.native
+          ? [
+              `- Native package: \`${item.native.package}@${item.native.channel}\` (${item.native.status}, ${item.native.parity} parity)`,
+            ]
+          : []),
         `- Description: ${item.description ?? ""}`,
         `- Page: ${SITE_URL}/components/${item.name}`,
         `- Schema: ${SITE_URL}/r/${item.name}.json`,

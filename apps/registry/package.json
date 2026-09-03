@@ -31,6 +31,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "@vllnt/next-llms": "canary",
     "@vllnt/ui": "workspace:*",
+    "@vllnt/ui-core": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",

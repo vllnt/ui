@@ -2,10 +2,10 @@
 
 > **Goal:** the design-system foundation for building UI fast — the @vllnt/ui component registry (web + native), the `@vllnt/ui-cli` DX gate, and `@vllnt/front-studio` + `@vllnt/ui-toolbar` (verify · review · author, API-first) — for humans and agents alike.
 > **Now:** `component-sidebar` — finish `.5`/`.6`, then ship `@vllnt/ui@0.4.0`.
-> **Next:** `agent-ui-cli` (MVP) · `ai-elements-parity`.
-> **Horizon (gated):** `native-parity` (needs an RN consumer) · the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
+> **Next:** `native-parity` pilot validation · `agent-ui-cli` (MVP) · `ai-elements-parity`.
+> **Horizon (gated):** the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
 > **Visibility track:** SEO/GEO phases — `search-consolidation` → `ai-toolchain-registration` → `visibility-measurement` → `seo-content-engine` → `backlink-authority`. Diagnosis: infra is DONE (`agent-surface`) but GSC shows indexed-yet-buried (141 pages, 2 clicks/90d, 0 AI-query visibility) + a dead `.com` twin outranking the live `.ai`. Full plan: [strategy dossier](https://claude.ai/code/artifact/6e2359db-a626-4226-aa54-a9e53ecfd766).
-> **Last updated:** 2026-07-02
+> **Last updated:** 2026-09-03
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.
@@ -66,28 +66,24 @@ Single-pane drill-down (chosen over accordion-single-open and a two-pane family 
 - [ ] component-sidebar.6 Directional slide transition with `prefers-reduced-motion` instant fallback; persist last-family + scroll (localStorage)
 - [~] component-sidebar.7 Validate component-sidebar.1–6: Playwright E2E (desktop + mobile + keyboard) — auto-drill, back, breadcrumb sync, global filter, ⌘K, persistence (E2E); core drill-down (`.1`/`.2`/`.4`) covered by `sidebar-drilldown.spec.ts` — pending `.5`/`.6`
 
-## native-parity [PLANNED]
+## native-parity [ACTIVE — experimental package pilot]
 
-**Goal:** Make all 309 @vllnt/ui components iso web↔native — install once from the single `ui.vllnt.com` registry, one import, platform-correct render — with no second registry.
-**Exit criteria:** Every component ships a `<c>.native.tsx` twin + a shared `<c>.variants.ts`; one `npx shadcn add @vllnt-ui/<c>` from `ui.vllnt.com/r/<c>.json` installs both files; each renders correctly on a Next.js web app AND an Expo device; each is stamped `parity: full|api-only` in `meta.json` with the badge shown on the site.
-**Verify:** a consumer dev runs `npx shadcn add @vllnt-ui/button` once → `import { Button }` renders on web (Radix/DOM) and on an Expo device (rn-primitives) with an identical variant API across all 12 families; the overlay family is documented `api-only` where Portal/keyboard can't map. Personas: consumer dev (web + Expo device, keyboard), maintainer (adds a native twin + variants contract), agent (reads `parity` from the registry JSON).
+**Goal:** Add a platform-correct React Native renderer without changing the stable `@vllnt/ui` web contract. Shared tokens and semantic option contracts live in framework-free `@vllnt/ui-core`; implementations remain separate in `@vllnt/ui` and `@vllnt/ui-native`.
+**Exit criteria:** the canonical token source generates unchanged web CSS and native-safe values; an Expo catalog bundles the native pilot on Android and iOS; registry JSON, docs, search, and MCP expose renderer availability; native packages can publish synchronized canaries but cannot publish `latest`.
+**Verify:** existing web gates and exports stay green; `pnpm ci:native` passes contract tests, package boundaries, Expo Doctor, and both Metro exports; `/components?platform=native` and `search_components({ platform: "native" })` return the same pilot set.
 
-**Gated by:** a confirmed Expo/RN consumer (`native-parity.1`) — **Horizon** until resolved (flagged since 2026-06; still open).
+The earlier co-located `.native.tsx` proposal is superseded by the package boundary tracked in #479. Separate renderers prevent DOM/Radix dependencies from entering Metro and let native APIs use `onPress`, `style`, and native accessibility semantics. The shared layer contains data and portable option names, not renderer props. Foundational native components use React Native primitives and `StyleSheet`; NativeWind and `@rn-primitives` remain possible adapters for later complex families when a demonstrated need justifies their consumer configuration and runtime cost.
 
-One registry, not two — platform is resolved by the bundler (Metro picks `<c>.native.tsx`, web picks `<c>.tsx`), so `ui.vllnt.com` stays the single source. Stack maps 1:1: Radix → @rn-primitives, Tailwind `className` → NativeWind, CVA + `cn()` unchanged, lucide-react → lucide-react-native. Only the render body forks; `<c>.variants.ts` (CVA + a platform-neutral prop contract) is shared. Iso *API* is always achievable; iso *visual result* is a per-component property (the `parity` badge) — overlays / hover / keyboard degrade to api-only. Proven prior art: **react-native-reusables** (@rn-primitives + NativeWind, 8.4k★, active 2026) already publishes a shadcn-format `registry.json` for RN — one schema spans web+native, validating the single-registry bet. Open gate: a confirmed Expo consumer (`.1`); OKLCH-on-native is resolved — NativeWind v4 (stable) has no on-device `oklch()`, so an HSL fallback is required (`.2`).
-
-- [ ] native-parity.1 Decide: confirm an Expo/RN consumer app + the native stack (NativeWind + @rn-primitives + lucide-react-native)
-- [ ] native-parity.2 Emit an HSL fallback channel for the native theme (RESEARCHED 2026-07): NativeWind v4 (stable) has no on-device `oklch()` — RNR themes in HSL; native OKLCH is gated on NativeWind v5 (preview). Spike confirms the down-convert on a device; tweakcn already exports OKLCH+HSL from one source
-- [ ] native-parity.3 Decide: one registry, multi-file items (`<c>.tsx` + `<c>.native.tsx`, bundler-resolved) — single `ui.vllnt.com`, no second namespace
-- [ ] native-parity.4 Token codegen: emit the RN/NativeWind theme from `tokens.json` alongside the web CSS vars (single source)
-- [ ] native-parity.5 Establish the iso pattern: extract `<c>.variants.ts` (CVA + platform-neutral prop contract) + ship a 5-component reference set (button, input, card, badge, dialog)
-- [ ] native-parity.6 Extend `apps/registry/scripts/inline-component-source.ts` to emit `<c>.native.tsx` + the shared variants per registry item; stamp `parity: full|api-only` in `meta.json`; surface the badge on `ui.vllnt.com`
-- [ ] native-parity.7 Port core + form + utility families (115) to native twins
-- [ ] native-parity.8 Port data + data-display + content families (109) to native twins
-- [ ] native-parity.9 Port navigation + learning + educational + billing + ai families (70) to native twins
-- [ ] native-parity.10 Port overlay family (15) — api-only parity where Portal/keyboard can't map; document the degradation
-- [ ] native-parity.11 Validate native-parity.5–10: one `shadcn add @vllnt-ui/<c>` from `ui.vllnt.com` → identical import renders on Next web + Expo device across all 12 families; parity badges accurate (E2E)
-- [ ] native-parity.12 Validate native-parity.4: an off-token native color fails; `tokens.json` stays the sole source across web CSS + RN theme (E2E)
+- [x] native-parity.1 Establish `@vllnt/ui-core` and separate `@vllnt/ui-native` package boundaries while keeping `@vllnt/ui` dependency-free from canary packages
+- [x] native-parity.2 Generate web CSS and native sRGB/point tokens from `packages/design/tokens.json`; fail CI on drift
+- [x] native-parity.3 Define portable Button, Text, Heading, Badge, and Card contracts and verify web compatibility at compile time
+- [x] native-parity.4 Ship the five-component React Native pilot plus light/dark/system theme support and an Expo catalog
+- [x] native-parity.5 Add explicit `platforms` and native status/parity metadata across registry JSON, docs, search, JSON-LD, llms surfaces, and MCP
+- [x] native-parity.6 Add native quality gates and a separate synchronized canary-only workflow with no stable publish path
+- [~] native-parity.7 Validate the pilot on CI and a physical Expo device; keep native experimental until both pass
+- [ ] native-parity.8 Expand foundational form and utility components based on real consumer demand
+- [ ] native-parity.9 Add complex primitive adapters only where native behavior and accessibility tests require them
+- [ ] native-parity.10 Define stable-version policy and migration notes in a separately reviewed release change
 
 ## typography-primitives [DONE 2026-07]
 

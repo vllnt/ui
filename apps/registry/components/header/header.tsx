@@ -56,7 +56,13 @@ export function Header({ locale }: HeaderProps) {
   ];
 
   const searchItems = registryData.items.reduce<
-    { description?: string; href?: string; id: string; title: string }[]
+    {
+      description?: string;
+      href?: string;
+      id: string;
+      keywords?: string;
+      title: string;
+    }[]
   >((items, item) => {
     if (item.type !== "registry:component") return items;
 
@@ -64,6 +70,7 @@ export function Header({ locale }: HeaderProps) {
       description: item.description,
       href: localizePathname(`/components/${item.name}`, locale),
       id: item.name,
+      keywords: [item.category, ...(item.platforms ?? ["web"])].join(" "),
       title: item.title,
     });
 

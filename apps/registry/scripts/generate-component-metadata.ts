@@ -33,6 +33,7 @@ type RegistryItem = {
   description?: string;
   files: { path: string; type: string }[];
   name: string;
+  platforms: ("native" | "web")[];
   title?: string;
   type: string;
 };
@@ -51,6 +52,7 @@ type ComponentMetadata = {
   defaultStoryId: string;
   description: string;
   name: string;
+  platforms: ("native" | "web")[];
   stories: StoryEntry[];
   title: string;
 };
@@ -257,6 +259,7 @@ for (const item of registry.items) {
     defaultStoryId: entries.defaultStoryId,
     description: item.description ?? "",
     name: item.name,
+    platforms: item.platforms,
     stories: entries.stories,
     title: item.title ?? item.name,
   };

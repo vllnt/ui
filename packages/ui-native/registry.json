@@ -1,0 +1,13 @@
+{
+  "$schema": "./registry.schema.json",
+  "package": "@vllnt/ui-native",
+  "channel": "canary",
+  "status": "experimental",
+  "components": [
+    { "name": "badge", "parity": "full" },
+    { "name": "button", "parity": "full" },
+    { "name": "card", "parity": "full" },
+    { "name": "heading", "parity": "full" },
+    { "name": "text", "parity": "full" }
+  ]
+}

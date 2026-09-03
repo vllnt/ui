@@ -75,6 +75,7 @@ describe("softwareSourceCodeLd", () => {
         description: "A button.",
         locale: "fr",
         name: "button",
+        platforms: ["web"],
         title: "Button",
       }),
     );
@@ -88,11 +89,24 @@ describe("softwareSourceCodeLd", () => {
         description: "A button.",
         locale: "en",
         name: "button",
+        platforms: ["web"],
         title: "Button",
       }),
     );
 
     expect(json).not.toContain("/fr");
     expect(json).toMatch(/"url":"https:\/\/[^"]*\/components\/button"/);
+  });
+
+  it("describes both renderer runtimes for a dual-platform component", () => {
+    const result = softwareSourceCodeLd({
+      description: "A button.",
+      locale: "en",
+      name: "button",
+      platforms: ["web", "native"],
+      title: "Button",
+    });
+
+    expect(result.runtimePlatform).toEqual(["React", "React Native"]);
   });
 });

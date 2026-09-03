@@ -9,7 +9,7 @@
  *   - tools/call      → invoke a tool by name
  *
  * Tools (UI registry scope — see #246 scope decision):
- *   - search_components({ query, category?, limit? })
+ *   - search_components({ query, category?, platform?, limit? })
  *   - get_component({ name })
  *   - list_categories()
  *
@@ -25,6 +25,7 @@
  * source of truth as /r/registry.json. No DB, no auth, no writes.
  */
 
+import { isComponentPlatform } from "@vllnt/ui-core";
 import { NextResponse } from "next/server";
 
 import { registry as REGISTRY, type RegistryComponent } from "@/lib/registry";
@@ -71,10 +72,10 @@ const error_ = (
   jsonrpc: "2.0",
 });
 
-const TOOLS = [
+export const TOOLS = [
   {
     description:
-      "Search VLLNT UI components by name / title / description. Filter by category.",
+      "Search VLLNT UI components by name / title / description. Filter by category or platform.",
     inputSchema: {
       properties: {
         category: {
@@ -86,9 +87,14 @@ const TOOLS = [
           description: "Maximum results (default 25, capped at 100).",
           type: "number",
         },
+        platform: {
+          description: "Optional renderer filter.",
+          enum: ["web", "native"],
+          type: "string",
+        },
         query: {
           description:
-            "Free-text query matched against name, title, description (case-insensitive).",
+            "Free-text query matched against name, title, description, category, and platform (case-insensitive).",
           type: "string",
         },
       },
@@ -121,7 +127,7 @@ const TOOLS = [
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
-function searchComponents(arguments_: Record<string, unknown>): {
+export function searchComponents(arguments_: Record<string, unknown>): {
   items: RegistryComponent[];
   total: number;
 } {
@@ -130,6 +136,10 @@ function searchComponents(arguments_: Record<string, unknown>): {
   const category =
     typeof arguments_.category === "string"
       ? arguments_.category.toLowerCase()
+      : null;
+  const platform =
+    typeof arguments_.platform === "string"
+      ? arguments_.platform.toLowerCase()
       : null;
   const requested =
     typeof arguments_.limit === "number" && arguments_.limit > 0
@@ -141,12 +151,19 @@ function searchComponents(arguments_: Record<string, unknown>): {
     if (category && (item.category ?? "").toLowerCase() !== category) {
       return false;
     }
+    if (
+      platform &&
+      (!isComponentPlatform(platform) || !item.platforms.includes(platform))
+    ) {
+      return false;
+    }
     if (!query) return true;
     const haystack = [
       item.name,
       item.title,
       item.description ?? "",
       item.category ?? "",
+      ...item.platforms,
     ]
       .join(" ")
       .toLowerCase();
@@ -156,7 +173,7 @@ function searchComponents(arguments_: Record<string, unknown>): {
   return { items: items.slice(0, limit), total: items.length };
 }
 
-function getComponent(
+export function getComponent(
   arguments_: Record<string, unknown>,
 ): null | RegistryComponent {
   const name = typeof arguments_.name === "string" ? arguments_.name : null;
@@ -194,7 +211,7 @@ function callTool(
         "",
         ...items.map(
           (item) =>
-            `- ${item.name} (${item.category ?? "uncategorized"}): ${item.title}${
+            `- ${item.name} (${item.category ?? "uncategorized"}; ${item.platforms.join(", ")}): ${item.title}${
               item.description ? ` — ${item.description}` : ""
             }`,
         ),
@@ -249,7 +266,7 @@ function dispatch(request: JsonRpcRequest): JsonRpcError | JsonRpcSuccess {
           tools: { listChanged: false },
         },
         instructions:
-          `VLLNT UI registry MCP server. Use search_components / get_component / list_categories to discover and read ${REGISTRY.items.length} React components. Source of truth: ` +
+          `VLLNT UI registry MCP server. Use search_components / get_component / list_categories to discover and read ${REGISTRY.items.length} web and React Native component descriptors. Source of truth: ` +
           SITE_URL +
           "/r/registry.json",
         protocolVersion: PROTOCOL_VERSION,
@@ -303,7 +320,7 @@ function dispatch(request: JsonRpcRequest): JsonRpcError | JsonRpcSuccess {
 const SERVER_INFO = {
   capabilities: { tools: { listChanged: false } },
   description:
-    "MCP server for the VLLNT UI component registry. Tools: search_components, get_component, list_categories.",
+    "MCP server for the platform-aware VLLNT UI component registry. Tools: search_components, get_component, list_categories. Native entries are experimental.",
   endpoint: `${SITE_URL}/mcp`,
   name: "vllnt-ui",
   protocol: PROTOCOL_VERSION,

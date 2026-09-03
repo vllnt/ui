@@ -30,11 +30,11 @@ https://ui.vllnt.com/llms-full.txt
 
 ## Registry JSON
 
-Use `/r/registry.json` for discovery and `/r/<name>.json` for exact install descriptors. JSON is the most reliable source for file paths, dependencies, and registry dependencies.
+Use `/r/registry.json` for discovery and `/r/<name>.json` for exact install descriptors. JSON is the most reliable source for platforms, file paths, dependencies, and registry dependencies. Native-capable entries identify `@vllnt/ui-native`, its canary channel, experimental status, and parity level.
 
 ## MCP
 
-The `/mcp` route is reserved for agent workflows that need a structured protocol endpoint. Treat registry JSON as the canonical install contract and MCP as an integration surface.
+The `/mcp` route is reserved for agent workflows that need a structured protocol endpoint. Treat registry JSON as the canonical install contract and MCP as an integration surface. Use `search_components` with `{ "platform": "native" }` to discover the native pilot without scraping pages.
 
 ## Safe agent workflow
 

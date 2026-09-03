@@ -1,0 +1,75 @@
+{
+  "name": "@vllnt/ui-core",
+  "version": "0.1.0",
+  "description": "Platform-neutral design tokens and component contracts for VLLNT UI renderers",
+  "license": "MIT",
+  "author": "vllnt",
+  "homepage": "https://ui.vllnt.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vllnt/ui.git",
+    "directory": "packages/ui-core"
+  },
+  "bugs": {
+    "url": "https://github.com/vllnt/ui/issues"
+  },
+  "keywords": ["design-system", "design-tokens", "typescript", "ui"],
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./tokens.json": "./tokens.json",
+    "./contracts.json": "./component-contracts.json"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public",
+    "tag": "canary",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./tokens.json": "./tokens.json",
+      "./contracts.json": "./component-contracts.json"
+    }
+  },
+  "files": [
+    "dist",
+    "tokens.json",
+    "tokens.schema.json",
+    "component-contracts.json",
+    "component-contracts.schema.json",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "pnpm tokens:check && tsup",
+    "clean": "rm -rf dist node_modules coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "pack:check": "node scripts/check-packed-package.mjs",
+    "test": "vitest",
+    "test:once": "vitest run",
+    "tokens:check": "node ../design/scripts/generate-tokens.mjs --check",
+    "tokens:generate": "node ../design/scripts/generate-tokens.mjs",
+    "typecheck": "tsc --noEmit --project tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@vllnt/eslint-config": "^1.0.0",
+    "@vllnt/typescript": "^1.0.0",
+    "eslint": "^9.39.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
+  }
+}

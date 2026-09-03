@@ -12,6 +12,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Added
 
+- **Cross-platform foundation** — added the framework-free `@vllnt/ui-core` token/contract package, an experimental canary-only `@vllnt/ui-native` renderer with Button, Text, Heading, Badge, and Card, plus a private Expo catalog that validates Android and iOS Metro bundles. The registry, component pages, search, llms surfaces, JSON-LD, and MCP now expose web/native availability. Existing `@vllnt/ui` exports and stable publishing remain unchanged. (#479)
 - **Component family landing pages** - every component family has a standalone,
   SEO-oriented landing at `/families/[category]`, plus a `/families` index. One
   shared template renders a hero with CTAs, per-family SEO sub-groups with

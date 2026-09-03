@@ -47,9 +47,11 @@ const CATEGORY_LABEL = new Map<string, string>([
   ["utility", "Utility"],
 ]);
 
-const INSTALL_DETAILS =
-  "Install any component with the shadcn CLI: " +
-  `\`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\``;
+const INSTALL_DETAILS = [
+  "Web: install a component with the shadcn CLI: " +
+    `\`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\`.`,
+  "Native (experimental): `pnpm add @vllnt/ui-native@canary`; check an item's `platforms` and `native` metadata first.",
+].join(" ");
 
 const DOCS_SECTION: LlmsSection = {
   links: [
@@ -161,9 +163,9 @@ function getSortedCategories(
 
 function buildSummary(items: readonly RegistryComponent[]): string {
   return (
-    "Agent-first React component registry. " +
-    `${items.length} accessible components built on Radix UI, Tailwind CSS, and CVA. ` +
-    "Install via the shadcn CLI against any /r/<name>.json endpoint."
+    "Agent-first, platform-aware component registry. " +
+    `${items.length} accessible descriptors for the stable web renderer and experimental React Native renderer. ` +
+    "Inspect each item's platforms before choosing an install path."
   );
 }
 
@@ -178,7 +180,7 @@ function buildComponentSections(
     const links: LlmsLink[] = [...bucket]
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item) => ({
-        notes: item.description,
+        notes: `${item.description ?? ""} Platforms: ${item.platforms.join(", ")}.`,
         title: item.title,
         url: `${SITE_URL}/components/${item.name}`,
       }));

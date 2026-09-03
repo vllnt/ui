@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { ComponentThumbnail } from "@/components/component-thumbnail";
+import { PlatformBadges } from "@/components/platform-badges";
 import type { Locale } from "@/i18n/routing";
 import { getComponentContent } from "@/lib/component-content";
 import componentMetadata from "@/lib/component-metadata.json";
@@ -11,6 +12,7 @@ const META = componentMetadata as Record<
   string,
   {
     description?: string;
+    platforms?: ("native" | "web")[];
     stories?: { id: string; name: string }[];
     title?: string;
   }
@@ -64,6 +66,10 @@ export async function ComponentCard({
             {displayDescription}
           </p>
         ) : null}
+        <PlatformBadges
+          className="mt-3 flex flex-wrap items-center gap-2"
+          platforms={meta?.platforms ?? ["web"]}
+        />
         {storyCount > 0 ? (
           <span className="mt-3 text-xs text-muted-foreground">
             {t("stories", { count: storyCount })}

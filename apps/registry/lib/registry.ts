@@ -1,3 +1,4 @@
+import { componentPlatforms } from "@vllnt/ui-core";
 import { z } from "zod";
 
 import registryData from "@/registry.json";
@@ -27,6 +28,22 @@ export const componentCategorySchema = z.enum([
 
 export type ComponentCategory = z.infer<typeof componentCategorySchema>;
 
+export const componentPlatformSchema = z.enum(componentPlatforms);
+
+const componentPlatformsSchema = z
+  .array(componentPlatformSchema)
+  .min(1)
+  .refine((platforms) => new Set(platforms).size === platforms.length, {
+    message: "Component platforms must be unique.",
+  });
+
+const nativeRendererSchema = z.object({
+  channel: z.literal("canary"),
+  package: z.literal("@vllnt/ui-native"),
+  parity: z.enum(["api-only", "full"]),
+  status: z.literal("experimental"),
+});
+
 const stabilitySchema = z.enum([
   "beta",
   "deprecated",
@@ -55,7 +72,7 @@ const a11ySchema = z.object({
 export const usageExampleSchema = z.object({
   code: z.string(),
   description: z.string().optional(),
-  framework: z.enum(["next", "react"]).optional(),
+  framework: z.enum(["next", "react", "react-native"]).optional(),
   storyId: z.string().optional(),
   title: z.string(),
 });
@@ -71,22 +88,36 @@ const componentPropertyDefinitionSchema = z.object({
   type: z.string(),
 });
 
-export const registryComponentSchema = z.object({
-  a11y: a11ySchema.optional(),
-  category: componentCategorySchema.optional(),
-  dependencies: z.array(z.string()).optional(),
-  description: z.string().optional(),
-  examples: z.array(usageExampleSchema).optional(),
-  files: z.array(registryFileSchema),
-  name: z.string(),
-  props: z.array(componentPropertyDefinitionSchema).optional(),
-  registryDependencies: z.array(z.string()).optional(),
-  replacedBy: z.string().optional(),
-  stability: stabilitySchema.optional(),
-  title: z.string(),
-  type: z.literal("registry:component"),
-  version: z.string().optional(),
-});
+export const registryComponentSchema = z
+  .object({
+    a11y: a11ySchema.optional(),
+    category: componentCategorySchema.optional(),
+    dependencies: z.array(z.string()).optional(),
+    description: z.string().optional(),
+    examples: z.array(usageExampleSchema).optional(),
+    files: z.array(registryFileSchema),
+    name: z.string(),
+    native: nativeRendererSchema.optional(),
+    platforms: componentPlatformsSchema,
+    props: z.array(componentPropertyDefinitionSchema).optional(),
+    registryDependencies: z.array(z.string()).optional(),
+    replacedBy: z.string().optional(),
+    stability: stabilitySchema.optional(),
+    title: z.string(),
+    type: z.literal("registry:component"),
+    version: z.string().optional(),
+  })
+  .superRefine((component, context) => {
+    const supportsNative = component.platforms.includes("native");
+    if (supportsNative !== Boolean(component.native)) {
+      context.addIssue({
+        code: "custom",
+        message:
+          'A component must include native metadata exactly when platforms contains "native".',
+        path: ["native"],
+      });
+    }
+  });
 
 export type RegistryComponent = z.infer<typeof registryComponentSchema>;
 
@@ -102,3 +133,5 @@ export const registrySchema = z.object({
 export type Registry = z.infer<typeof registrySchema>;
 
 export const registry: Registry = registrySchema.parse(registryData);
+
+export { type ComponentPlatform } from "@vllnt/ui-core";

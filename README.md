@@ -22,6 +22,7 @@
 - **shadcn-compatible registry** — install individual components with `shadcn add`
 - **TypeScript strict** — fully typed with exported prop interfaces
 - **Tested** — unit tests (Vitest) + visual regression (Playwright CT) + Storybook
+- **React Native pilot** — five experimental components in a separate canary-only renderer with shared tokens and contracts
 
 ## Install
 
@@ -44,6 +45,28 @@ Or by `@vllnt-ui` namespace once it's in the [shadcn registry index](https://ui.
 ```bash
 pnpm dlx shadcn@latest add @vllnt-ui/button
 ```
+
+## React Native pilot
+
+The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. Install the explicit canary channel:
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+```tsx
+import { Button, ThemeProvider } from "@vllnt/ui-native";
+
+export function NativeExample() {
+  return (
+    <ThemeProvider colorScheme="system">
+      <Button onPress={() => {}}>Save changes</Button>
+    </ThemeProvider>
+  );
+}
+```
+
+The pilot includes Button, Text, Heading, Badge, and Card. See the [React Native guide](https://ui.vllnt.com/docs/native). `@vllnt/ui` remains the stable web renderer with its existing API and release path.
 
 ## Quick Start
 
@@ -97,6 +120,8 @@ pnpm dev
 | `pnpm lint` | Lint all packages |
 | `pnpm test:once` | Run tests (single run) |
 | `pnpm check:circular` | Detect circular imports |
+| `pnpm ci:native` | Verify core/native packages and Expo bundles |
+| `pnpm tokens:check` | Check generated web/native token drift |
 
 ## Theming
 
@@ -104,8 +129,8 @@ Override CSS variables after importing styles:
 
 ```css
 :root {
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 0.45 0.16 255;
+  --primary-foreground: 0.98 0 0;
 }
 ```
 

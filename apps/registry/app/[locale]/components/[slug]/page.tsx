@@ -16,6 +16,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import { buildComponentMdxKit } from "@/components/component-mdx";
+import { PlatformBadges } from "@/components/platform-badges";
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
 import { ShareEmbedBar } from "@/components/share-embed-bar";
@@ -63,6 +64,7 @@ const metadata_map = componentMetadata as Record<
     defaultStoryId: string;
     description: string;
     name: string;
+    platforms: ("native" | "web")[];
     stories: { id: string; name: string }[];
     title: string;
   }
@@ -180,6 +182,7 @@ export default async function ComponentPage(props: Props) {
     "";
   const playgroundExample = getPlaygroundExample(component);
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
+  const supportsNative = component.platforms.includes("native");
 
   // Read component source for code display
   let componentCode = "";
@@ -264,9 +267,12 @@ export default async function ComponentPage(props: Props) {
   const sections = [
     ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
     { id: "installation", title: t("installation") },
-    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
     ...(meta?.defaultStoryId
       ? [{ id: "storybook", title: t("storybook") }]
+      : []),
+    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
+    ...(supportsNative
+      ? [{ id: "native-installation", title: t("nativeInstallation") }]
       : []),
     ...(component.dependencies && component.dependencies.length > 0
       ? [{ id: "dependencies", title: t("dependencies") }]
@@ -300,6 +306,7 @@ export default async function ComponentPage(props: Props) {
             keywords: componentMdx?.frontmatter.keywords,
             locale,
             name: component.name,
+            platforms: component.platforms,
             title: articleTitle,
           }),
           techArticleLd({
@@ -363,9 +370,13 @@ export default async function ComponentPage(props: Props) {
                   ]}
                 />
                 <h1 className="text-4xl font-semibold mb-2">{articleTitle}</h1>
-                <p className="text-muted-foreground text-lg mb-6">
+                <p className="text-muted-foreground text-lg mb-4">
                   {articleDescription}
                 </p>
+                <PlatformBadges
+                  className="mb-6 flex flex-wrap items-center gap-2"
+                  platforms={component.platforms}
+                />
                 <div className="flex flex-wrap items-center gap-3">
                   <QuickAdd componentName={component.name} />
                   <ShareEmbedBar
@@ -503,6 +514,27 @@ export default async function ComponentPage(props: Props) {
                   ) : null}
                 </>
               )}
+
+              {supportsNative ? (
+                <section className="mb-8 scroll-mt-8" id="native-installation">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    {t("nativeInstallation")}
+                  </h2>
+                  <p className="mb-4 text-muted-foreground">
+                    {t("nativeInstallDescription")}
+                  </p>
+                  <StaticCode
+                    code="pnpm add @vllnt/ui-native@canary"
+                    language="bash"
+                  />
+                  <Link
+                    className="mt-4 inline-flex text-sm font-medium underline"
+                    href="/docs/native"
+                  >
+                    {t("nativeReadGuide")}
+                  </Link>
+                </section>
+              ) : null}
 
               {/* Dependencies */}
               {component.dependencies && component.dependencies.length > 0 ? (

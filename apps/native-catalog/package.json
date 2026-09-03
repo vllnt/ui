@@ -1,0 +1,52 @@
+{
+  "name": "@vllnt/ui-native-catalog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.ts",
+  "expo": {
+    "install": {
+      "exclude": ["typescript"]
+    }
+  },
+  "scripts": {
+    "android": "expo start --android",
+    "build": "expo export --platform android --output-dir dist/android && expo export --platform ios --output-dir dist/ios",
+    "build:renderer": "pnpm --filter '@vllnt/ui-native...' build",
+    "clean": "rm -rf .expo dist node_modules coverage",
+    "dev": "expo start",
+    "doctor": "expo-doctor",
+    "ios": "expo start --ios",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "preandroid": "pnpm build:renderer",
+    "prebuild": "pnpm build:renderer",
+    "predev": "pnpm build:renderer",
+    "preios": "pnpm build:renderer",
+    "test:once": "jest --runInBand",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vllnt/ui-native": "workspace:*",
+    "expo": "~57.0.19",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-web": "^0.21.2"
+  },
+  "devDependencies": {
+    "@react-native/babel-preset": "0.86.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^29.5.14",
+    "@types/react": "19.2.13",
+    "@vllnt/eslint-config": "^1.0.0",
+    "@vllnt/typescript": "^1.0.0",
+    "babel-jest": "^29.7.0",
+    "eslint": "^9.39.1",
+    "expo-doctor": "^1.20.4",
+    "jest": "^29.7.0",
+    "react-test-renderer": "19.2.3",
+    "typescript": "^5.9.3"
+  }
+}

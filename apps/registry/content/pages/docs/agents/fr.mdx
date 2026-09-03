@@ -30,11 +30,11 @@ https://ui.vllnt.com/llms-full.txt
 
 ## JSON du registre
 
-Utilisez `/r/registry.json` pour la decouverte et `/r/[name].json` pour les descripteurs d'installation exacts. Le JSON est la source la plus fiable pour les chemins de fichiers, les dependances et les dependances de registre.
+Utilisez `/r/registry.json` pour la decouverte et `/r/[name].json` pour les descripteurs d'installation exacts. Le JSON est la source la plus fiable pour les plateformes, les chemins de fichiers, les dependances et les dependances de registre. Les entrees compatibles avec le natif identifient `@vllnt/ui-native`, son canal canary, son statut experimental et son niveau de parite.
 
 ## MCP
 
-La route `/mcp` est reservee aux flux de travail d'agents qui necessitent un point de terminaison de protocole structure. Traitez le JSON du registre comme le contrat d'installation canonique et le MCP comme une surface d'integration.
+La route `/mcp` est reservee aux flux de travail d'agents qui necessitent un point de terminaison de protocole structure. Traitez le JSON du registre comme le contrat d'installation canonique et le MCP comme une surface d'integration. Utilisez `search_components` avec `{ "platform": "native" }` pour decouvrir le pilote natif sans extraire les pages.
 
 ## Flux de travail d'agent securise
 

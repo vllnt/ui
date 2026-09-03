@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VLLNT UI native catalog",
+  "type": "object",
+  "required": ["package", "channel", "status", "components"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "package": { "const": "@vllnt/ui-native" },
+    "channel": { "const": "canary" },
+    "status": { "const": "experimental" },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "parity"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "parity": { "enum": ["full", "api-only"] }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}
