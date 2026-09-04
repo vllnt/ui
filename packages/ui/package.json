@@ -71,7 +71,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "clean": "rm -rf dist node_modules coverage .snapshots playwright-report test-results storybook-static",
+    "clean": "rm -rf dist node_modules coverage playwright-report test-results storybook-static",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check:circular": "madge --circular --extensions ts,tsx src",

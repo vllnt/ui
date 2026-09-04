@@ -9,7 +9,7 @@ export default defineConfig({
   testDir: './src/components',
   testMatch: '**/*.visual.tsx',
   snapshotDir: './.snapshots',
-  snapshotPathTemplate: '{snapshotDir}/{testFileDir}/{testFileName}-{projectName}/{arg}{ext}',
+  snapshotPathTemplate: '{snapshotDir}/{platform}/{testFileDir}/{testFileName}-{projectName}/{arg}{ext}',
 
   // Retry failed tests once
   retries: 1,
@@ -24,6 +24,9 @@ export default defineConfig({
   },
 
   use: {
+    reducedMotion: 'reduce',
+    locale: 'en-US',
+    timezoneId: 'UTC',
     ctPort: 3100,
     ctViteConfig: {
       resolve: {
