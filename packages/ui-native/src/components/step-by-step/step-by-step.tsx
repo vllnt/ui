@@ -1,6 +1,12 @@
 "use client";
 
-import { Children, isValidElement, type ReactNode, type Ref } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type ReactNode,
+  type Ref,
+} from "react";
 
 import {
   Pressable,
@@ -176,13 +182,10 @@ function StepByStepRoot({
       {steps.map((step, index) => {
         const completed = completedIds.includes(step.props.id);
         if (!interactive) {
-          return (
-            <Step
-              {...step.props}
-              key={step.props.id}
-              number={step.props.number ?? index + 1}
-            />
-          );
+          return cloneElement(step, {
+            key: step.props.id,
+            number: step.props.number ?? index + 1,
+          });
         }
         return (
           <View

@@ -174,7 +174,9 @@ export function DataSection() {
         <AlertTitle>Build ready</AlertTitle>
         <AlertDescription>Android and iOS bundles are queued.</AlertDescription>
       </Alert>
-      <Banner>Source preview · npm canary publication is still gated.</Banner>
+      <Banner>
+        <Text>Source preview · npm canary publication is still gated.</Text>
+      </Banner>
       <ProgressBar
         accessibilityLabel="Catalog coverage"
         max={171}
@@ -199,8 +201,12 @@ export function NavigationSection() {
     <Section title="Navigation">
       <Tabs accessibilityLabel="Catalog views" defaultValue="components">
         <TabsList accessibilityLabel="Catalog views">
-          <TabsTrigger value="components">Components</TabsTrigger>
-          <TabsTrigger value="contracts">Contracts</TabsTrigger>
+          <TabsTrigger value="components">
+            <Text>Components</Text>
+          </TabsTrigger>
+          <TabsTrigger value="contracts">
+            <Text>Contracts</Text>
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="components">
           <Text>171 native modules</Text>
