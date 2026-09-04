@@ -160,7 +160,7 @@ async function RendererChoices() {
             </p>
             <Link
               className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              href="/native?platform=native"
+              href="/components?platform=native"
             >
               {t("browseNative")}
               <ArrowRight className="size-4" />

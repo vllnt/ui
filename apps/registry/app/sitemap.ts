@@ -65,7 +65,11 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
     { changeFrequency: "weekly", path: "/", priority: 1 },
     { changeFrequency: "weekly", path: "/families", priority: 0.9 },
     { changeFrequency: "weekly", path: "/components", priority: 1 },
-    { changeFrequency: "weekly", path: "/native", priority: 0.9 },
+    {
+      changeFrequency: "weekly",
+      path: "/components?platform=native",
+      priority: 0.9,
+    },
     { changeFrequency: "weekly", path: "/templates", priority: 0.8 },
     { changeFrequency: "weekly", path: "/changelog", priority: 0.8 },
     { changeFrequency: "weekly", path: "/docs", priority: 0.8 },

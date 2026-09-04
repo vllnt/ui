@@ -118,6 +118,21 @@ describe("softwareSourceCodeLd", () => {
     expect(json).toMatch(/"url":"https:\/\/[^"]*\/components\/button"/);
   });
 
+  it("accepts an explicit filtered component URL", () => {
+    const result = softwareSourceCodeLd({
+      description: "A button.",
+      locale: "en",
+      name: "button",
+      platforms: ["web", "native"],
+      title: "Button",
+      url: "https://ui.vllnt.com/components/button?platform=native",
+    });
+
+    expect(result.url).toBe(
+      "https://ui.vllnt.com/components/button?platform=native",
+    );
+  });
+
   it("describes both renderer runtimes for a dual-platform component", () => {
     const result = softwareSourceCodeLd({
       description: "A button.",

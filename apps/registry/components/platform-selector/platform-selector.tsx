@@ -12,7 +12,7 @@ type PlatformSelectorProps = {
   readonly includeAll?: boolean;
 };
 
-/** URL-backed renderer navigation shared by the global header and catalogs. */
+/** URL-backed filter for component implementation availability. */
 export function PlatformSelector({
   className,
   includeAll = false,

@@ -11,7 +11,7 @@
     "philosophy": "Philosophie",
     "platformAll": "Tous",
     "platformNative": "Natif",
-    "platformSelectorLabel": "Choisir un renderer",
+    "platformSelectorLabel": "Filtrer par implementation",
     "platforms": "Plateformes prises en charge",
     "platformWeb": "Web",
     "readDocs": "Lire la documentation",
@@ -213,10 +213,8 @@
       "faq": "FAQ",
       "installation": "Installation",
       "nativeAvailableAfterCanary": "Disponible apres le premier canary synchronise",
-      "nativeCapabilityDescription": "Ce composant a une implementation React Native disponible en source. Le site ne presente pas un apercu ou un source web comme contenu natif.",
+      "nativeCapabilityDescription": "Ce composant a une implementation React Native associee avec un source et des contrats runtime separes.",
       "nativeCapabilityTitle": "Capacite native",
-      "nativeInstallDescription": "Le renderer React Native est disponible en source, mais son paquet npm n'est pas encore publie.",
-      "nativeInstallation": "Disponibilite React Native",
       "nativeReadGuide": "Lire le guide React Native",
       "nativeSourceDescription": "Le source natif est disponible dans le depot. Un paquet canary synchronise rendra la commande prevue actionnable.",
       "nativeSourceTitle": "Disponibilite du source",
@@ -233,6 +231,8 @@
       "viewWebComponent": "Voir le composant Web",
       "webOnlyDescription": "Ce composant n'a pas de renderer Natif. Choisissez un composant Natif pris en charge ou revenez a sa page Web.",
       "webOnlyTitle": "Composant Web uniquement",
+      "webPreviewNotice": "Natif est le filtre de capacite actif. L'apercu, les exemples, les actions d'installation Web et le source Web utilisent l'implementation Web isolee ; la compatibilite et le source Natifs apparaissent dans leur propre section.",
+      "webPreviewOnlyNotice": "Cette route n'a pas d'implementation Native. L'apercu, les exemples, les actions d'installation et le source utilisent l'implementation Web.",
       "whatItIsTitle": "Ce que c'est et quand l'utiliser",
       "whenToUseTitle": "Quand utiliser ceci dans une application IA",
       "nativeCompatibilityLabel": "Compatibilite",
@@ -245,17 +245,21 @@
       "ctaDescription": "Demandez un nouveau composant et nous ouvrirons une issue GitHub pre-remplie avec les bons labels et le bon template.",
       "ctaTitle": "Vous ne trouvez pas ce dont vous avez besoin ?",
       "description": "Explorez les {count} composants disponibles dans la bibliotheque.",
+      "nativeFilterDescription": "Filtrez selon la disponibilite de l'implementation. Les resultats Natifs ont un source Web et React Native associe.",
+      "nativeFilterNotice": "Les cartes affichent l'implementation Web isolee comme reference visuelle, car React Native ne peut pas s'executer dans ce navigateur. Ouvrez un composant pour consulter sa compatibilite et son source Natifs separes.",
+      "nativeFilterTitle": "{count} composants avec une implementation Native",
+      "nativeGuide": "Lire le guide React Native",
+      "nativeManifest": "Ouvrir le manifeste Natif",
       "noPlatformResults": "Aucun composant ne prend encore en charge cette plateforme.",
-      "nativePreviewUnavailable": "Les apercus Web ne sont pas montes dans le contexte Natif.",
-      "nativeRenderer": "Renderer Natif",
-      "noPreview": "Aucun apercu",
       "platformAll": "Tous",
       "platformFilterLabel": "Filtrer par plateforme",
       "platformNative": "Natif",
       "platformWeb": "Web",
       "stories": "{count, plural, one {# story} other {# stories}}",
       "title": "Composants",
-      "viewComponent": "Voir le composant"
+      "viewComponent": "Voir le composant",
+      "webPreview": "Apercu Web",
+      "webPreviewTitle": "Apercu Web de {name}"
     },
     "design": {
       "colors": "Couleurs",
@@ -584,32 +588,6 @@
           }
         }
       }
-    },
-    "native": {
-      "metaTitle": "React Native · VLLNT UI",
-      "metaDescription": "Explorez le renderer React Native disponible uniquement en source, ses composants, ses exigences et son modele de compatibilite.",
-      "eyebrow": "React Native",
-      "title": "Une UI native sans faire passer le web pour du natif.",
-      "description": "Un renderer React Native separe partage les tokens de design semantiques de VLLNT UI tout en gardant des props, une accessibilite, une mise en page et des interactions natives.",
-      "sourceNotice": "Le source du depot est pret pour la validation locale. Le package npm n'est pas publie, donc la commande canary prevue n'est pas encore utilisable.",
-      "statusLabel": "Statut",
-      "statusValue": "Pre-version",
-      "availabilityLabel": "Disponibilite",
-      "availabilityValue": "Apercu source",
-      "componentsLabel": "Composants natifs",
-      "requirementsLabel": "Exigences",
-      "requirementsValue": "React 19 · React Native 0.81+",
-      "browseComponents": "Parcourir les composants natifs",
-      "readGuide": "Lire le guide de configuration",
-      "viewManifest": "Ouvrir le manifeste natif",
-      "contractTitle": "Un design system, des contrats propres au renderer",
-      "contractDescription": "Les options portables s'alignent quand la semantique correspond. Les props DOM et React Native, le source, les dependances, les exemples, les apercus et l'installation restent separes.",
-      "accessibilityTitle": "Accessibilite native d'abord",
-      "accessibilityDescription": "Les composants utilisent les roles, etats, actions, annonces, preferences de mouvement et services React Native au lieu des hypotheses ARIA ou clavier du navigateur.",
-      "releaseTitle": "Canary avant stable",
-      "releaseDescription": "Native reste hors du tag latest tant que les controles Android, iOS, VoiceOver, TalkBack, package et publication synchronisee ne passent pas.",
-      "installTitle": "Commande canary prevue",
-      "installDescription": "Utilisez cette commande seulement quand le manifeste indique la disponibilite du package."
     }
   },
   "shared": {
@@ -652,17 +630,14 @@
   },
   "sidebar": {
     "closeNavigation": "Fermer la navigation",
-    "components": "Tous les composants",
+    "components": "Composants",
     "documentation": "Documentation",
     "getStarted": "Demarrer",
-    "nativeRenderer": "Natif",
     "navigationLabel": "Navigation du site",
     "overview": "Vue d ensemble",
     "philosophy": "Philosophie",
-    "renderers": "Renderers",
     "requestComponent": "Demander un composant",
     "templates": "Modeles",
-    "themes": "Themes",
-    "webRenderer": "Web"
+    "themes": "Themes"
   }
 }

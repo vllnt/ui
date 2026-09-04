@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     category: "Developer Tools",
     creator: "VLLNT",
     description:
-      "The accessible UI design system for AI-first apps: a stable React web renderer and an experimental, source-only React Native renderer with machine-readable registry metadata.",
+      "The accessible UI design system for AI-first apps: a stable React web renderer and a source-only React Native renderer with machine-readable registry metadata.",
     formatDetection: {
       address: false,
       email: false,

@@ -12,81 +12,71 @@ const nativeComponents = (
 ).components.map((component) => component.name);
 
 test.describe("platform-aware component discovery", () => {
-  test("keeps renderer navigation out of the global header", async ({
+  test("redirects the retired native route into the filtered catalog", async ({
     page,
   }) => {
-    await page.goto("/native?platform=native&ref=e2e");
+    const redirect = await page.request.get("/native?platform=web&ref=e2e", {
+      maxRedirects: 0,
+    });
+    expect(redirect.status()).toBe(308);
+    expect(redirect.headers().location).toBe(
+      "/components?platform=native&ref=e2e",
+    );
 
+    await page.goto("/native?platform=web&ref=e2e");
+    await expect(page).toHaveURL("/components?platform=native&ref=e2e");
     await expect(
-      page.getByRole("navigation", { name: "Choose a renderer" }),
-    ).toHaveCount(0);
+      page.getByRole("navigation", { name: "Filter by implementation" }),
+    ).toBeVisible();
 
     const sidebar = page.getByRole("complementary");
-    await expect(
-      sidebar.getByRole("link", { name: "Web", exact: true }),
-    ).toHaveAttribute("href", "/components?ref=e2e&platform=web");
+    await expect(sidebar.getByText("Renderers", { exact: true })).toHaveCount(0);
     await expect(
       sidebar.getByRole("link", { name: "Native", exact: true }),
-    ).toHaveAttribute("href", "/native?ref=e2e&platform=native");
-    await expect(
-      sidebar.getByRole("link", { name: "Native", exact: true }),
-    ).toHaveAttribute("aria-current", "true");
-
-    await page.goto("/components");
-    await expect(
-      page.locator("header").getByRole("navigation", {
-        name: "Choose a renderer",
-      }),
     ).toHaveCount(0);
     await expect(
-      page.locator("main").getByRole("navigation", {
-        name: "Choose a renderer",
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: "All components", exact: true }),
-    ).toHaveAttribute("aria-current", "page");
-
-    await page.goto("/components?platform=web");
-    await expect(
-      page
-        .getByRole("complementary")
-        .getByRole("link", { name: "Web", exact: true }),
-    ).toHaveAttribute("aria-current", "true");
-
-    await page.goto("/docs/native");
-    await expect(
-      page
-        .getByRole("complementary")
-        .getByRole("link", { name: "Native", exact: true }),
-    ).toHaveAttribute("aria-current", "true");
-
-    await page.goto("/docs?platform=web&ref=e2e");
-    const nativeGuide = page
-      .getByRole("complementary")
-      .getByRole("link", { name: "React Native", exact: true });
-    await expect(nativeGuide).toHaveAttribute(
-      "href",
-      "/docs/native?platform=native&ref=e2e",
-    );
-    await nativeGuide.click();
-    await expect(page).toHaveURL("/docs/native?platform=native&ref=e2e");
-
-    await page.goto("/docs/native?platform=web");
-    await expect(
-      page
-        .getByRole("complementary")
-        .getByRole("link", { name: "Web", exact: true }),
-    ).toHaveAttribute("aria-current", "true");
+      sidebar.locator('a[aria-current="page"]'),
+    ).toHaveText("Components");
   });
 
-  test("filters the catalog without mounting web previews", async ({ page }) => {
+  test("filters Native capability while mounting isolated Web previews", async ({
+    page,
+  }) => {
     await page.goto("/components?platform=native&ref=e2e");
 
     const main = page.locator("main");
     await expect(
       main.getByRole("link", { name: "Native", exact: true }),
     ).toHaveAttribute("aria-current", "page");
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      /\/components\?platform=native$/,
+    );
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      /Native results have paired Web and React Native source/,
+    );
+    const structuredData = (
+      await page.locator('script[type="application/ld+json"]').allTextContents()
+    ).flatMap(
+      (content) =>
+        JSON.parse(content) as { "@type"?: string; url?: string }[],
+    );
+    expect(
+      structuredData.find((entry) => entry["@type"] === "CollectionPage")?.url,
+    ).toMatch(/\/components\?platform=native$/);
+    expect(
+      (
+        structuredData.find((entry) => entry["@type"] === "BreadcrumbList") as
+          | { itemListElement?: { item: string }[] }
+          | undefined
+      )?.itemListElement?.at(-1)?.item,
+    ).toMatch(/\/components\?platform=native$/);
+    await expect(
+      main.getByText(
+        `${nativeComponents.length} components with Native implementations`,
+      ),
+    ).toBeVisible();
 
     for (const component of nativeComponents) {
       await expect(
@@ -96,15 +86,33 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.locator('a[href*="/components/mdx-content"]'),
     ).toHaveCount(0);
-    await expect(main.getByText("Native renderer")).toHaveCount(
+    await expect(main.getByText("Web preview", { exact: true })).toHaveCount(
       nativeComponents.length,
     );
-    await expect(main.locator("[inert]")).toHaveCount(0);
-    await expect(
-      page
-        .getByRole("complementary")
-        .getByRole("link", { name: "Native", exact: true }),
-    ).toHaveAttribute("aria-current", "true");
+
+    const previewRoots = main.locator("article > div");
+    const isolatedPreviews = main.locator("article [inert]");
+    expect(await main.locator("article iframe").count()).toBeLessThan(
+      nativeComponents.length,
+    );
+    await expect(previewRoots.first()).toHaveClass(/\[contain:strict\]/);
+    await expect(isolatedPreviews).toHaveCount(nativeComponents.length);
+    const firstPreviewFrame = isolatedPreviews.first().locator("iframe");
+    await expect(firstPreviewFrame).toHaveAttribute(
+      "sandbox",
+      /^allow-scripts(?: allow-same-origin)?$/,
+    );
+    const [catalogUrl, previewSource, sandbox] = await Promise.all([
+      page.url(),
+      firstPreviewFrame.getAttribute("src"),
+      firstPreviewFrame.getAttribute("sandbox"),
+    ]);
+    if (sandbox?.includes("allow-same-origin")) {
+      expect(new URL(previewSource ?? "", catalogUrl).origin).not.toBe(
+        new URL(catalogUrl).origin,
+      );
+    }
+    await expect(firstPreviewFrame.contentFrame().locator("body")).not.toBeEmpty();
   });
 
   test("preserves platform and unrelated query state across navigation", async ({
@@ -139,27 +147,29 @@ test.describe("platform-aware component discovery", () => {
     await expect(page).toHaveURL("/fr/components?platform=native&ref=e2e");
   });
 
-  test("presents the source-only native hub truthfully", async ({ page }) => {
-    await page.goto("/native?platform=native&ref=e2e");
+  test("derives Native sidebar links from the React Native guide", async ({
+    page,
+  }) => {
+    await page.goto("/docs/native");
+    await expect(
+      page
+        .getByRole("complementary")
+        .locator('a[href$="/components?platform=native"]')
+        .first(),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("complementary")
+        .locator('a[href$="/families/core?platform=native"]'),
+    ).toHaveCount(1);
 
-    const main = page.locator("main");
+    await page.goto("/docs/native?platform=web");
     await expect(
-      main.getByRole("heading", {
-        name: "Native UI without pretending the web is native.",
-      }),
+      page
+        .getByRole("complementary")
+        .locator('a[href$="/components?platform=web"]')
+        .first(),
     ).toBeVisible();
-    await expect(
-      main.getByText(String(nativeComponents.length), { exact: true }),
-    ).toBeVisible();
-    await expect(main.getByText("Pre-release", { exact: true })).toBeVisible();
-    await expect(main.getByText(/experimental/i)).toHaveCount(0);
-    await expect(
-      main.getByText("pnpm add @vllnt/ui-native@canary"),
-    ).toBeVisible();
-    await expect(
-      main.getByRole("link", { name: "Browse native components" }),
-    ).toHaveAttribute("href", "/components?platform=native&ref=e2e");
-    await expect(main.getByRole("button")).toHaveCount(0);
   });
 
   test("keeps the web install action as the default", async ({ page }) => {
@@ -175,7 +185,7 @@ test.describe("platform-aware component discovery", () => {
     ).toHaveAttribute("aria-current", "page");
   });
 
-  test("shows honest source availability instead of an install action", async ({
+  test("pairs Native capability data with an isolated Web rendering", async ({
     page,
   }) => {
     await page.goto("/components/button?platform=native");
@@ -195,18 +205,48 @@ test.describe("platform-aware component discovery", () => {
       main.getByText("src/components/button/button.tsx"),
     ).toBeVisible();
     await expect(
-      main.getByRole("button", { name: "Copy install command" }),
-    ).toHaveCount(0);
-    await expect(main.getByRole("button", { name: "Add to v0.dev" })).toHaveCount(
-      0,
-    );
-    await expect(
-      main.getByRole("link", { name: "Browse native catalog" }),
+      main.getByText(/Native is the active capability filter/),
     ).toBeVisible();
-    await expect(main.getByText("Storybook")).toHaveCount(0);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      /\/components\/button\?platform=native$/,
+    );
+    const detailStructuredData = (
+      await page.locator('script[type="application/ld+json"]').allTextContents()
+    ).flatMap(
+      (content) =>
+        JSON.parse(content) as {
+          "@type"?: string;
+          itemListElement?: { item: string }[];
+          url?: string;
+        }[],
+    );
+    expect(
+      detailStructuredData.find(
+        (entry) => entry["@type"] === "SoftwareSourceCode",
+      )?.url,
+    ).toMatch(/\/components\/button\?platform=native$/);
+    expect(
+      detailStructuredData
+        .find((entry) => entry["@type"] === "BreadcrumbList")
+        ?.itemListElement?.at(-1)?.item,
+    ).toMatch(/\/components\/button\?platform=native$/);
+
+    await expect(
+      main.getByRole("button", { name: "Copy install command" }),
+    ).toBeVisible();
+    await expect(main.getByRole("button", { name: "Add to v0.dev" })).toBeVisible();
+    await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
+    await expect(main.getByText("Storybook", { exact: true })).toBeVisible();
+    await expect(main.locator('iframe[title="button preview"]').first()).toHaveAttribute(
+      "sandbox",
+      "allow-scripts allow-same-origin",
+    );
   });
 
-  test("localizes native availability", async ({ page }) => {
+  test("localizes Native capability and the retired route redirect", async ({
+    page,
+  }) => {
     await page.goto("/fr/components/button?platform=native");
 
     const main = page.locator("main");
@@ -216,14 +256,13 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.getByText("Disponible apres le premier canary synchronise"),
     ).toBeVisible();
-    await expect(
-      page
-        .getByRole("complementary")
-        .getByRole("link", { name: "Natif", exact: true }),
-    ).toHaveAttribute("href", "/fr/native?platform=native");
+    await expect(main.getByText(/implementation Web isolee/)).toBeVisible();
+
+    await page.goto("/fr/native?ref=e2e");
+    await expect(page).toHaveURL("/fr/components?ref=e2e&platform=native");
   });
 
-  test("does not silently revert unsupported native components", async ({
+  test("keeps Web-only routes honest while still showing the Web preview", async ({
     page,
   }) => {
     await page.goto("/components/mdx-content?platform=native");
@@ -238,14 +277,17 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.getByRole("link", { name: "View Web component" }),
     ).toHaveAttribute("href", "/components/mdx-content?platform=web");
-    await expect(main.getByText("Storybook")).toHaveCount(0);
+    await expect(
+      main.getByRole("button", { name: "Copy install command" }),
+    ).toBeVisible();
+    await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
   });
 
   test("uses an inline desktop sidebar and bounded tablet drawer", async ({
     page,
   }) => {
     await page.setViewportSize({ height: 800, width: 1280 });
-    await page.goto("/native?platform=native");
+    await page.goto("/components?platform=native");
 
     const sidebar = page.getByRole("complementary");
     await expect(sidebar).toBeVisible();
@@ -273,7 +315,7 @@ test.describe("platform-aware component discovery", () => {
     await expect(trigger).toBeFocused();
   });
 
-  test("keeps the mobile header within a 320px viewport", async ({ page }) => {
+  test("keeps the capability filter within a 320px viewport", async ({ page }) => {
     await page.setViewportSize({ height: 720, width: 320 });
     await page.goto("/components?platform=native");
 
@@ -282,7 +324,7 @@ test.describe("platform-aware component discovery", () => {
     );
     expect(overflow).toBeLessThanOrEqual(0);
     await expect(
-      page.getByRole("navigation", { name: "Choose a renderer" }).first(),
+      page.getByRole("navigation", { name: "Filter by implementation" }),
     ).toBeVisible();
   });
 });

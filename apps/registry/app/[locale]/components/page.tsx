@@ -12,7 +12,11 @@ import {
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { type PlatformQuery, withPlatformQuery } from "@/lib/platform";
+import {
+  getPlatform,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
 import { componentPlatformSchema, registry } from "@/lib/registry";
 import { canonical, languageAlternates } from "@/lib/seo";
 import {
@@ -26,28 +30,41 @@ type Props = {
   readonly searchParams: Promise<PlatformQuery>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params;
+export async function generateMetadata({
+  params,
+  searchParams,
+}: Props): Promise<Metadata> {
+  const [{ locale }, query] = await Promise.all([params, searchParams]);
   const { frontmatter } = await getPageContent("components", locale);
   const og = frontmatter.og;
+  const nativeFilter = getPlatform(query.platform, "all") === "native";
+  const pathname = nativeFilter ? "/components?platform=native" : "/components";
+  const description = nativeFilter
+    ? (await getTranslations({ locale, namespace: "pages.components" }))(
+        "nativeFilterDescription",
+      )
+    : frontmatter.description;
+  const socialDescription = nativeFilter
+    ? description
+    : (og?.description ?? description);
 
   return {
     alternates: {
-      canonical: canonical("/components", locale),
-      languages: languageAlternates("/components"),
+      canonical: canonical(pathname, locale),
+      languages: languageAlternates(pathname),
     },
-    description: frontmatter.description,
+    description,
     openGraph: generateOGMetadata(
       {
-        description: og?.description ?? frontmatter.description,
+        description: socialDescription,
         title: og?.title ?? frontmatter.title,
         type: og?.type ?? frontmatter.type,
       },
-      { locale, pathname: "/components" },
+      { locale, pathname },
     ),
     title: frontmatter.title,
     twitter: generateTwitterMetadata({
-      description: og?.description ?? frontmatter.description,
+      description: socialDescription,
       title: og?.title ?? frontmatter.title,
       type: og?.type ?? frontmatter.type,
     }),
@@ -80,23 +97,36 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
     (count, group) => count + group.items.length,
     0,
   );
+  const nativeFilter = selectedPlatform === "native";
+  const catalogPathname = nativeFilter
+    ? "/components?platform=native"
+    : "/components";
+  const catalogDescription = nativeFilter
+    ? t("nativeFilterDescription")
+    : t("description", { count: visibleCount });
+
   return (
     <>
       <script
         {...jsonLdScriptAttributes([
           breadcrumbTrailLd(locale, [
-            { name: "Components", path: "/components" },
+            { name: t("title"), path: catalogPathname },
           ]),
           collectionPageLd({
-            description: t("description", { count: visibleCount }),
+            description: catalogDescription,
             items: visibleGroups.flatMap((group) =>
               group.items.map((item) => ({
                 name: item.title,
-                url: canonical(`/components/${item.name}`, locale),
+                url: canonical(
+                  nativeFilter
+                    ? `/components/${item.name}?platform=native`
+                    : `/components/${item.name}`,
+                  locale,
+                ),
               })),
             ),
             title: t("title"),
-            url: canonical("/components", locale),
+            url: canonical(catalogPathname, locale),
           }),
         ])}
       />
@@ -106,12 +136,36 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
           <div className="mb-12">
             <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
             <p className="text-muted-foreground text-lg">
-              {t("description", { count: visibleCount })}
+              {catalogDescription}
             </p>
             <PlatformSelector
               className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
               includeAll
             />
+            {nativeFilter ? (
+              <div className="mt-6 max-w-3xl rounded-lg border border-border bg-muted/30 p-5">
+                <p className="font-medium">
+                  {t("nativeFilterTitle", { count: visibleCount })}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  {t("nativeFilterNotice")}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
+                  <Link
+                    className="underline underline-offset-4"
+                    href={withPlatformQuery("/docs/native", query, "native")}
+                  >
+                    {t("nativeGuide")}
+                  </Link>
+                  <a
+                    className="underline underline-offset-4"
+                    href="/r/native/registry.json"
+                  >
+                    {t("nativeManifest")}
+                  </a>
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {visibleGroups.map((group) => (

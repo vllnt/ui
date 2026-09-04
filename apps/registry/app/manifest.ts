@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     background_color: "#0a0a0a",
     categories: ["developer", "productivity", "design"],
-    description: `Agent-first UI registry with ${getComponentCount()} stable React web components and ${nativeRegistry.components.length} experimental React Native source modules.`,
+    description: `Agent-first UI registry with ${getComponentCount()} stable React web components and ${nativeRegistry.components.length} source-only React Native modules.`,
     dir: "ltr",
     display: "standalone",
     icons: [

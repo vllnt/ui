@@ -45,6 +45,13 @@ export function websiteLd(): JsonLdNode {
   };
 }
 
+function getRuntimePlatforms(platforms: readonly ComponentPlatform[]) {
+  const runtimes = platforms.map((platform) =>
+    platform === "native" ? "React Native" : "React",
+  );
+  return runtimes.length === 1 ? runtimes.join("") : runtimes;
+}
+
 export function softwareSourceCodeLd(component: {
   readonly description: string;
   readonly image?: string;
@@ -53,10 +60,11 @@ export function softwareSourceCodeLd(component: {
   readonly name: string;
   readonly platforms: readonly ComponentPlatform[];
   readonly title: string;
+  readonly url?: string;
 }): JsonLdNode {
-  const runtimes = component.platforms.map((platform) =>
-    platform === "native" ? "React Native" : "React",
-  );
+  const url =
+    component.url ??
+    canonical(`/components/${component.name}`, component.locale);
 
   return {
     "@context": "https://schema.org",
@@ -70,8 +78,8 @@ export function softwareSourceCodeLd(component: {
     license: "https://opensource.org/license/mit",
     name: component.title,
     programmingLanguage: "TypeScript",
-    runtimePlatform: runtimes.length === 1 ? runtimes.join("") : runtimes,
-    url: canonical(`/components/${component.name}`, component.locale),
+    runtimePlatform: getRuntimePlatforms(component.platforms),
+    url,
   };
 }
 

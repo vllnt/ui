@@ -31,7 +31,7 @@ export const DOCS_PAGES: readonly DocsPage[] = [
   },
   {
     description:
-      "Build Expo apps with the experimental React Native renderer and shared VLLNT UI tokens.",
+      "Build Expo apps with the source-only React Native renderer and shared VLLNT UI tokens.",
     slug: "native",
     title: "React Native",
   },

@@ -17,13 +17,18 @@ describe("native renderer manifest", () => {
     });
   });
 
-  it("maps every entry to native source and web catalog metadata", () => {
-    const webNames = new Set(registry.items.map((item) => item.name));
-    const entriesAreValid = nativeRegistry.components.every(
-      (component) =>
-        webNames.has(component.name) &&
-        existsSync(resolve("../../packages/ui-native", component.source)),
-    );
+  it("pairs every native source with browser-safe Web catalog metadata", () => {
+    const webEntries = new Map(registry.items.map((item) => [item.name, item]));
+    const entriesAreValid = nativeRegistry.components.every((component) => {
+      const webEntry = webEntries.get(component.name);
+
+      return (
+        webEntry?.platforms.includes("web") === true &&
+        webEntry.platforms.includes("native") &&
+        webEntry.native?.source === component.source &&
+        existsSync(resolve("../../packages/ui-native", component.source))
+      );
+    });
 
     expect(entriesAreValid).toBe(true);
   });

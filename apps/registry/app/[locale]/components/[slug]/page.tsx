@@ -99,7 +99,10 @@ function getNpmUrl(packageName: string): string {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { locale, slug } = await props.params;
+  const [{ locale, slug }, query] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
   const component = registry.items.find(
     (item): item is RegistryComponent =>
       item.name === slug && item.type === "registry:component",
@@ -131,7 +134,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     componentMdx?.frontmatter.description ??
     meta?.description ??
     component.description;
-  const pathname = `/components/${slug}`;
+  const pathname =
+    getPlatform(query.platform) === "native"
+      ? `/components/${slug}?platform=native`
+      : `/components/${slug}`;
 
   const ogParameters = {
     category,
@@ -195,47 +201,18 @@ export default async function ComponentPage(props: Props) {
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
   const supportsNative = component.platforms.includes("native");
   const platform = getPlatform(query.platform) ?? "web";
-  const isNative = platform === "native";
-  const supportsActivePlatform = component.platforms.includes(platform);
+  const nativeFilter = platform === "native";
 
-  // Read component source for code display
+  // The browser catalog always renders the Web implementation. Native remains
+  // a capability filter with separate contract and source metadata.
   let componentCode = "";
-  if (!isNative) {
-    try {
-      const isChartComponent = [
-        "area-chart",
-        "bar-chart",
-        "line-chart",
-      ].includes(component.name);
+  try {
+    const isChartComponent = ["area-chart", "bar-chart", "line-chart"].includes(
+      component.name,
+    );
 
-      const sourcePath = isChartComponent
-        ? path.join(
-            process.cwd(),
-            "..",
-            "..",
-            "packages",
-            "ui",
-            "src",
-            "components",
-            "chart",
-            `${component.name}.tsx`,
-          )
-        : path.join(
-            process.cwd(),
-            "..",
-            "..",
-            "packages",
-            "ui",
-            "src",
-            "components",
-            component.name,
-            `${component.name}.tsx`,
-          );
-
-      try {
-        componentCode = await readFile(sourcePath, "utf8");
-      } catch {
-        const directPath = path.join(
+    const sourcePath = isChartComponent
+      ? path.join(
           process.cwd(),
           "..",
           "..",
@@ -243,19 +220,44 @@ export default async function ComponentPage(props: Props) {
           "ui",
           "src",
           "components",
+          "chart",
+          `${component.name}.tsx`,
+        )
+      : path.join(
+          process.cwd(),
+          "..",
+          "..",
+          "packages",
+          "ui",
+          "src",
+          "components",
+          component.name,
           `${component.name}.tsx`,
         );
-        componentCode = await readFile(directPath, "utf8");
-      }
+
+    try {
+      componentCode = await readFile(sourcePath, "utf8");
     } catch {
-      // Source file not found — skip code section
+      const directPath = path.join(
+        process.cwd(),
+        "..",
+        "..",
+        "packages",
+        "ui",
+        "src",
+        "components",
+        `${component.name}.tsx`,
+      );
+      componentCode = await readFile(directPath, "utf8");
     }
+  } catch {
+    // Source file not found — skip code section
   }
 
   const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
 
   const localizedComponent = await getComponentContent(slug, locale);
-  const componentMdx = isNative ? undefined : localizedComponent;
+  const componentMdx = localizedComponent;
   const mdxKit = buildComponentMdxKit({
     componentCode,
     componentName: component.name,
@@ -287,37 +289,39 @@ export default async function ComponentPage(props: Props) {
   );
 
   const sections = [
-    ...(!isNative && meta?.defaultStoryId
-      ? [{ id: "preview", title: t("preview") }]
-      : []),
-    ...(supportsActivePlatform
+    ...(nativeFilter
       ? [
           {
-            id: "installation",
-            title: isNative ? t("nativeCapabilityTitle") : t("installation"),
+            id: "native",
+            title: supportsNative
+              ? t("nativeCapabilityTitle")
+              : t("webOnlyTitle"),
           },
         ]
       : []),
-    ...(!isNative && meta?.defaultStoryId
+    ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
+    { id: "installation", title: t("installation") },
+    ...(meta?.defaultStoryId
       ? [{ id: "storybook", title: t("storybook") }]
       : []),
-    ...(!isNative && componentCode ? [{ id: "code", title: t("code") }] : []),
-    ...(!isNative && component.dependencies && component.dependencies.length > 0
+    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
+    ...(component.dependencies && component.dependencies.length > 0
       ? [{ id: "dependencies", title: t("dependencies") }]
-      : []),
-    ...(!isNative && seoCopy?.faqs.length
-      ? [{ id: "faq", title: t("faq") }]
       : []),
     ...(relatedComponents.length > 0
       ? [{ id: "related", title: t("related") }]
       : []),
+    ...(seoCopy?.faqs.length ? [{ id: "faq", title: t("faq") }] : []),
   ] as { id: string; title: string }[];
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
   const articleTitle = localizedComponent?.frontmatter.title ?? displayTitle;
   const articleDescription =
     localizedComponent?.frontmatter.description ?? displayDescription;
-  const componentUrl = canonical(`/components/${component.name}`, locale);
+  const componentPath = nativeFilter
+    ? `/components/${component.name}?platform=native`
+    : `/components/${component.name}`;
+  const componentUrl = canonical(componentPath, locale);
   const ogImage = `${SITE_URL}${generateOGImageURL({
     category: componentCategory ?? undefined,
     description: articleDescription,
@@ -338,6 +342,7 @@ export default async function ComponentPage(props: Props) {
             name: component.name,
             platforms: component.platforms,
             title: articleTitle,
+            url: componentUrl,
           }),
           techArticleLd({
             dateModified: registryGeneratedAt,
@@ -352,11 +357,13 @@ export default async function ComponentPage(props: Props) {
           breadcrumbTrailLd(
             locale,
             [
-              { name: common("components"), path: "/components" },
               {
-                name: articleTitle,
-                path: `/components/${component.name}`,
+                name: common("components"),
+                path: nativeFilter
+                  ? "/components?platform=native"
+                  : "/components",
               },
+              { name: articleTitle, path: componentPath },
             ],
             common("home"),
           ),
@@ -420,29 +427,22 @@ export default async function ComponentPage(props: Props) {
                   platforms={component.platforms}
                 />
                 <PlatformSelector className="mb-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
+                {nativeFilter ? (
+                  <p className="mb-6 max-w-3xl rounded-md border border-border bg-muted/30 p-4 text-sm leading-6 text-muted-foreground">
+                    {t(
+                      supportsNative
+                        ? "webPreviewNotice"
+                        : "webPreviewOnlyNotice",
+                    )}
+                  </p>
+                ) : null}
                 <div className="flex flex-wrap items-center gap-3">
-                  {isNative ? (
-                    supportsNative ? (
-                      <Link
-                        className="inline-flex min-h-11 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                        href={withPlatformQuery("/components", query, "native")}
-                      >
-                        {t("browseNativeCatalog")}
-                      </Link>
-                    ) : null
-                  ) : (
-                    <QuickAdd componentName={component.name} />
-                  )}
-                  {isNative ? null : (
-                    <ShareEmbedBar
-                      pageUrl={canonical(
-                        `/components/${component.name}`,
-                        locale,
-                      )}
-                      slug={component.name}
-                      title={articleTitle}
-                    />
-                  )}
+                  <QuickAdd componentName={component.name} />
+                  <ShareEmbedBar
+                    pageUrl={componentUrl}
+                    slug={component.name}
+                    title={articleTitle}
+                  />
                   <Link
                     className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
                     href={withPlatformQuery(
@@ -457,7 +457,7 @@ export default async function ComponentPage(props: Props) {
               </div>
 
               {/* When to use in an AI app */}
-              {!isNative && whenToUse ? (
+              {whenToUse ? (
                 <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
                   <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                     {t("whenToUseTitle")}
@@ -474,7 +474,7 @@ export default async function ComponentPage(props: Props) {
               ) : null}
 
               {/* Usage block for non-AI components */}
-              {!isNative && !whenToUse && seoCopy?.whatItIs ? (
+              {!whenToUse && seoCopy?.whatItIs ? (
                 <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
                   <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                     {t("whatItIsTitle")}
@@ -498,11 +498,11 @@ export default async function ComponentPage(props: Props) {
                 </div>
               ) : null}
 
-              {isNative ? (
+              {nativeFilter ? (
                 supportsNative ? (
                   <section
                     className="mb-8 rounded-lg border border-border bg-card p-6 scroll-mt-8"
-                    id="installation"
+                    id="native"
                   >
                     <h2 className="text-2xl font-semibold">
                       {t("nativeCapabilityTitle")}
@@ -567,7 +567,10 @@ export default async function ComponentPage(props: Props) {
                     </Link>
                   </section>
                 ) : (
-                  <section className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
+                  <section
+                    className="mb-8 scroll-mt-8 rounded-lg border border-border bg-muted/30 p-6"
+                    id="native"
+                  >
                     <h2 className="text-2xl font-semibold">
                       {t("webOnlyTitle")}
                     </h2>
@@ -594,7 +597,9 @@ export default async function ComponentPage(props: Props) {
                     </div>
                   </section>
                 )
-              ) : componentMdx ? (
+              ) : null}
+
+              {componentMdx ? (
                 <MDXContent
                   components={mdxKit}
                   content={componentMdx.content}
@@ -672,9 +677,7 @@ export default async function ComponentPage(props: Props) {
               )}
 
               {/* Dependencies */}
-              {!isNative &&
-              component.dependencies &&
-              component.dependencies.length > 0 ? (
+              {component.dependencies && component.dependencies.length > 0 ? (
                 <div className="mb-8 scroll-mt-8" id="dependencies">
                   <h2 className="text-2xl font-semibold mb-4">
                     {t("dependencies")}
@@ -724,7 +727,7 @@ export default async function ComponentPage(props: Props) {
                 </section>
               ) : null}
 
-              {!isNative && seoCopy?.faqs.length ? (
+              {seoCopy?.faqs.length ? (
                 <section className="mb-8 scroll-mt-8" id="faq">
                   <h2 className="text-2xl font-semibold mb-4">{t("faq")}</h2>
                   <dl className="space-y-6">
@@ -740,17 +743,12 @@ export default async function ComponentPage(props: Props) {
                 </section>
               ) : null}
 
-              {isNative ? null : (
-                <ShareSection
-                  shareOn={t("shareOn")}
-                  shareTitle={t("shareTitle")}
-                  title={`${articleTitle} — VLLNT UI`}
-                  url={withRef(
-                    canonical(`/components/${component.name}`, locale),
-                    "share",
-                  )}
-                />
-              )}
+              <ShareSection
+                shareOn={t("shareOn")}
+                shareTitle={t("shareTitle")}
+                title={`${articleTitle} — VLLNT UI`}
+                url={withRef(componentUrl, "share")}
+              />
             </div>
 
             {/* Table of Contents */}

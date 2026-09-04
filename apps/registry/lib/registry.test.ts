@@ -12,6 +12,15 @@ const baseComponent = {
   type: "registry:component" as const,
 };
 
+const nativeMetadata = {
+  availability: "source",
+  channel: "canary",
+  compatibility: "portable-options",
+  package: "@vllnt/ui-native",
+  source: "src/components/button/button.tsx",
+  status: "experimental",
+} as const;
+
 describe("registry component platforms", () => {
   it("accepts a web-only descriptor", () => {
     expect(registryComponentSchema.parse(baseComponent).platforms).toEqual([
@@ -29,14 +38,7 @@ describe("registry component platforms", () => {
           title: "Native button",
         },
       ],
-      native: {
-        availability: "source",
-        channel: "canary",
-        compatibility: "portable-options",
-        package: "@vllnt/ui-native",
-        source: "src/components/button/button.tsx",
-        status: "experimental",
-      },
+      native: nativeMetadata,
       platforms: ["web", "native"],
     });
 
@@ -49,17 +51,8 @@ describe("registry component platforms", () => {
     { ...baseComponent, platforms: ["web", "web"] },
     { ...baseComponent, platforms: ["desktop"] },
     { ...baseComponent, platforms: ["web", "native"] },
-    {
-      ...baseComponent,
-      native: {
-        availability: "source",
-        channel: "canary",
-        compatibility: "portable-options",
-        package: "@vllnt/ui-native",
-        source: "src/components/button/button.tsx",
-        status: "experimental",
-      },
-    },
+    { ...baseComponent, native: nativeMetadata },
+    { ...baseComponent, native: nativeMetadata, platforms: ["native"] },
   ])("rejects inconsistent platform metadata", (component) => {
     expect(registryComponentSchema.safeParse(component).success).toBe(false);
   });

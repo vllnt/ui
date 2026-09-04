@@ -119,6 +119,14 @@ export const registryComponentSchema = z
         path: ["native"],
       });
     }
+    if (supportsNative && !component.platforms.includes("web")) {
+      context.addIssue({
+        code: "custom",
+        message:
+          "Native catalog entries require a paired Web implementation for browser previews.",
+        path: ["platforms"],
+      });
+    }
   });
 
 export type RegistryComponent = z.infer<typeof registryComponentSchema>;

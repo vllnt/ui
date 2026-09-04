@@ -11,7 +11,7 @@
     "philosophy": "Philosophy",
     "platformAll": "All",
     "platformNative": "Native",
-    "platformSelectorLabel": "Choose a renderer",
+    "platformSelectorLabel": "Filter by implementation",
     "platforms": "Supported platforms",
     "platformWeb": "Web",
     "readDocs": "Read the docs",
@@ -213,10 +213,8 @@
       "faq": "FAQ",
       "installation": "Installation",
       "nativeAvailableAfterCanary": "Available after the first synchronized canary",
-      "nativeCapabilityDescription": "This component has a React Native implementation available in source. The website does not render a web preview or web source as if it were native.",
+      "nativeCapabilityDescription": "This component has a paired React Native implementation with separate source and runtime contracts.",
       "nativeCapabilityTitle": "Native capability",
-      "nativeInstallDescription": "The React Native renderer is source-available, but its npm package is not published yet.",
-      "nativeInstallation": "React Native availability",
       "nativeReadGuide": "Read the React Native guide",
       "nativeSourceDescription": "Native source is available in the repository. A synchronized canary package will make the planned command actionable.",
       "nativeSourceTitle": "Source availability",
@@ -233,6 +231,8 @@
       "viewWebComponent": "View Web component",
       "webOnlyDescription": "This component does not have a Native renderer. Choose a supported Native component or return to its Web page.",
       "webOnlyTitle": "Web-only component",
+      "webPreviewNotice": "Native is the active capability filter. Preview, examples, Web install actions, and Web source use the isolated Web implementation; Native compatibility and source details appear in their own section.",
+      "webPreviewOnlyNotice": "This route has no Native implementation. Preview, examples, install actions, and source use the Web implementation.",
       "whatItIsTitle": "What it is and when to use",
       "whenToUseTitle": "When to use this in an AI app",
       "nativeCompatibilityLabel": "Compatibility",
@@ -245,17 +245,21 @@
       "ctaDescription": "Request a new component and we'll open a prefilled GitHub issue with the right labels and template.",
       "ctaTitle": "Don't see what you need?",
       "description": "Explore all {count} components available in the library.",
+      "nativeFilterDescription": "Filter by implementation availability. Native results have paired Web and React Native source.",
+      "nativeFilterNotice": "Cards render the isolated Web implementation for visual reference because React Native cannot run in this browser. Open a component for its separate Native compatibility and source details.",
+      "nativeFilterTitle": "{count} components with Native implementations",
+      "nativeGuide": "Read the React Native guide",
+      "nativeManifest": "Open the Native manifest",
       "noPlatformResults": "No components support this platform yet.",
-      "nativePreviewUnavailable": "Web previews are not mounted in Native context.",
-      "nativeRenderer": "Native renderer",
-      "noPreview": "No preview",
       "platformAll": "All",
       "platformFilterLabel": "Filter by platform",
       "platformNative": "Native",
       "platformWeb": "Web",
       "stories": "{count, plural, one {# story} other {# stories}}",
       "title": "Components",
-      "viewComponent": "View component"
+      "viewComponent": "View component",
+      "webPreview": "Web preview",
+      "webPreviewTitle": "{name} Web preview"
     },
     "design": {
       "colors": "Colors",
@@ -584,32 +588,6 @@
           }
         }
       }
-    },
-    "native": {
-      "metaTitle": "React Native · VLLNT UI",
-      "metaDescription": "Explore the source-only React Native renderer, supported components, requirements, and compatibility model.",
-      "eyebrow": "React Native",
-      "title": "Native UI without pretending the web is native.",
-      "description": "A separate React Native renderer shares semantic design tokens with VLLNT UI while keeping native props, accessibility, layout, and interaction contracts.",
-      "sourceNotice": "Repository source is ready for local validation. The npm package has not been published, so the planned canary command is not actionable yet.",
-      "statusLabel": "Status",
-      "statusValue": "Pre-release",
-      "availabilityLabel": "Availability",
-      "availabilityValue": "Source preview",
-      "componentsLabel": "Native components",
-      "requirementsLabel": "Requirements",
-      "requirementsValue": "React 19 · React Native 0.81+",
-      "browseComponents": "Browse native components",
-      "readGuide": "Read setup guide",
-      "viewManifest": "Open native manifest",
-      "contractTitle": "One design system, renderer-specific contracts",
-      "contractDescription": "Portable options align where semantics match. DOM props, React Native props, source, dependencies, examples, previews, and installation remain separate.",
-      "accessibilityTitle": "Native accessibility first",
-      "accessibilityDescription": "Components use React Native roles, states, actions, live regions, reduced-motion preferences, and platform services instead of browser ARIA or keyboard assumptions.",
-      "releaseTitle": "Canary before stable",
-      "releaseDescription": "Native remains off the latest tag until Android, iOS, VoiceOver, TalkBack, packed-package, and synchronized release checks pass.",
-      "installTitle": "Planned canary command",
-      "installDescription": "Use this command only after the manifest reports package availability."
     }
   },
   "shared": {
@@ -652,17 +630,14 @@
   },
   "sidebar": {
     "closeNavigation": "Close navigation",
-    "components": "All components",
+    "components": "Components",
     "documentation": "Documentation",
     "getStarted": "Get Started",
-    "nativeRenderer": "Native",
     "navigationLabel": "Site navigation",
     "overview": "Overview",
     "philosophy": "Philosophy",
-    "renderers": "Renderers",
     "requestComponent": "Request a component",
     "templates": "Templates",
-    "themes": "Themes",
-    "webRenderer": "Web"
+    "themes": "Themes"
   }
 }

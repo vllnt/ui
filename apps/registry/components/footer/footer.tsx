@@ -35,7 +35,11 @@ const COLUMNS: readonly FooterColumn[] = [
   {
     links: [
       { href: "/components", kind: "route", labelKey: "components" },
-      { href: "/native", kind: "route", labelKey: "native" },
+      {
+        href: "/components?platform=native",
+        kind: "route",
+        labelKey: "native",
+      },
       { href: "/docs", kind: "route", labelKey: "docs" },
       { href: "/philosophy", kind: "route", labelKey: "philosophy" },
       { href: "/design", kind: "route", labelKey: "design" },

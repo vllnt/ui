@@ -1,124 +1,170 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
-import { ComponentPreview } from "@/components/component-preview/component-preview";
+import { useTranslations } from "next-intl";
+
+import type { ComponentPlatform } from "@/lib/registry";
 
 type ComponentThumbnailProps = {
-  componentName: string;
+  readonly componentName: string;
+  readonly platform?: ComponentPlatform;
+  readonly title: string;
 };
 
-/**
- * Renders a live, non-interactive preview of a component for gallery cards.
- *
- * Defers mounting the heavy, client-side {@link ComponentPreview} until the card
- * scrolls into view, so the 200+ component grid does not render and animate every
- * preview up front. Mounting in the browser also keeps previews that depend on
- * browser APIs (e.g. `useSearchParams`, `window`) out of the static build.
- *
- * `[contain:layout]` makes the card the containing block for `position: fixed`
- * previews (e.g. StepNavigation, ContentIntro) so they render clipped inside the
- * card instead of escaping to float over the whole viewport.
- *
- * @param componentName - Registry slug used to resolve the matching preview.
- */
-/**
- * Scales its child down (never up) so the whole preview fits the card without
- * clipping or overflow. Measures the natural content size with a ResizeObserver
- * and applies a centered `transform: scale` — `contain` behaviour for a live
- * component. Large components render small but complete; the detail page shows
- * them full size.
- */
-function FitPreview({ children }: { children: React.ReactNode }) {
-  const boxRef = React.useRef<HTMLDivElement>(null);
-  const stageRef = React.useRef<HTMLDivElement>(null);
-  const [scale, setScale] = React.useState(1);
+type Theme = "dark" | "light";
 
-  React.useEffect(() => {
-    const box = boxRef.current;
-    const stage = stageRef.current;
-    if (!box || !stage) {
+const themeListeners = new Set<() => void>();
+let themeObserver: MutationObserver | undefined;
+
+function getThemeSnapshot(): Theme {
+  return typeof document !== "undefined" &&
+    document.documentElement.classList.contains("light")
+    ? "light"
+    : "dark";
+}
+
+function subscribeToTheme(listener: () => void) {
+  themeListeners.add(listener);
+  if (!themeObserver) {
+    themeObserver = new MutationObserver(() => {
+      themeListeners.forEach((notify) => {
+        notify();
+      });
+    });
+    themeObserver.observe(document.documentElement, {
+      attributeFilter: ["class"],
+      attributes: true,
+    });
+  }
+
+  return () => {
+    themeListeners.delete(listener);
+    if (themeListeners.size === 0) {
+      themeObserver?.disconnect();
+      themeObserver = undefined;
+    }
+  };
+}
+
+function getServerThemeSnapshot(): Theme {
+  return "dark";
+}
+
+function getPreviewOriginSnapshot(): string {
+  if (process.env.NODE_ENV !== "development") return "";
+
+  const origin = new URL(window.location.href);
+  if (origin.hostname === "localhost") {
+    origin.hostname = "127.0.0.1";
+  } else if (origin.hostname === "127.0.0.1") {
+    origin.hostname = "localhost";
+  } else {
+    return "";
+  }
+
+  return origin.origin;
+}
+
+function getServerPreviewOriginSnapshot(): string {
+  return "";
+}
+
+function noopUnsubscribe() {
+  return;
+}
+
+function subscribeToLocation() {
+  return noopUnsubscribe;
+}
+
+function getSandbox(previewOrigin: string): string {
+  return previewOrigin ? "allow-scripts allow-same-origin" : "allow-scripts";
+}
+
+/**
+ * Mounts each Web preview in a sandboxed document while its card is near the
+ * viewport, then releases that document outside the observer buffer. The iframe
+ * boundary contains component CSS, portals, and runtime effects.
+ *
+ * Production grants script execution to an opaque iframe origin. Local
+ * development uses the alternate loopback host so Turbopack can serve assets
+ * while the preview remains cross-origin from the catalog. Navigation, forms,
+ * popups, and parent interaction remain blocked in both modes.
+ */
+export function ComponentThumbnail({
+  componentName,
+  platform,
+  title,
+}: ComponentThumbnailProps) {
+  const t = useTranslations("pages.components");
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
+  const previewOrigin = useSyncExternalStore(
+    subscribeToLocation,
+    getPreviewOriginSnapshot,
+    getServerPreviewOriginSnapshot,
+  );
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [isNearViewport, setIsNearViewport] = useState(false);
+
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
+
+    if (!("IntersectionObserver" in window)) {
+      // Compatibility fallback: mount once after hydration when observation is unavailable.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsNearViewport(true);
       return;
     }
 
-    const observer = new ResizeObserver(() => {
-      const availableWidth = box.clientWidth - 32;
-      const availableHeight = box.clientHeight - 32;
-      const contentWidth = stage.scrollWidth;
-      const contentHeight = stage.scrollHeight;
-      if (contentWidth === 0 || contentHeight === 0) {
-        return;
-      }
-      const next = Math.min(
-        availableWidth / contentWidth,
-        availableHeight / contentHeight,
-        1,
-      );
-      setScale(next > 0 ? next : 1);
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsNearViewport(Boolean(entry?.isIntersecting));
+      },
+      { rootMargin: "300px" },
+    );
 
-    observer.observe(box);
-    observer.observe(stage);
+    observer.observe(node);
     return () => {
       observer.disconnect();
     };
   }, []);
 
+  const previewUrl = `${previewOrigin}/embed/${encodeURIComponent(componentName)}?mode=thumbnail&theme=${theme}`;
+  const sandbox = getSandbox(previewOrigin);
+
   return (
     <div
-      className="flex h-full w-full items-center justify-center overflow-hidden"
-      ref={boxRef}
+      className="relative flex h-48 w-full isolate items-center justify-center overflow-hidden bg-muted/30 [contain:strict]"
+      ref={rootRef}
     >
       <div
-        className="shrink-0"
-        ref={stageRef}
-        style={{ transform: `scale(${scale})` }}
+        aria-hidden="true"
+        className="size-full overflow-hidden pointer-events-none select-none"
+        inert
       >
-        {children}
+        {isNearViewport ? (
+          <iframe
+            className="size-full border-0 bg-background"
+            loading="lazy"
+            sandbox={sandbox}
+            src={previewUrl}
+            tabIndex={-1}
+            title={t("webPreviewTitle", { name: title })}
+          />
+        ) : (
+          <div className="size-full animate-pulse bg-muted" />
+        )}
       </div>
-    </div>
-  );
-}
-
-export function ComponentThumbnail({
-  componentName,
-}: ComponentThumbnailProps): React.ReactElement {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = React.useState(false);
-
-  React.useEffect(() => {
-    const element = containerRef.current;
-    if (!element || isVisible) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-
-    observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [isVisible]);
-
-  return (
-    <div
-      className="pointer-events-none h-44 overflow-hidden border-b bg-muted/30 [contain:layout]"
-      inert
-      ref={containerRef}
-    >
-      {isVisible ? (
-        <FitPreview>
-          <ComponentPreview componentName={componentName} />
-        </FitPreview>
+      {platform === "native" ? (
+        <span className="pointer-events-none absolute inset-x-0 bottom-0 border-t border-border/80 bg-background/95 px-3 py-1.5 text-center text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-muted-foreground backdrop-blur-sm">
+          {t("webPreview")}
+        </span>
       ) : null}
     </div>
   );

@@ -25,7 +25,7 @@ type ComponentCardProps = {
   /** Optional description override (e.g. AI-SEO copy); falls back to registry metadata. */
   readonly description?: string;
   readonly locale: Locale;
-  /** Active URL renderer context. All/undefined continues to show web previews. */
+  /** Active URL capability filter. Card previews always use the Web renderer. */
   readonly platform?: PlatformContext;
   /** Current URL query values retained by the component link. */
   readonly query?: PlatformQuery;
@@ -64,21 +64,16 @@ export async function ComponentCard({
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-colors hover:border-foreground/20">
-      {platform === "native" ? (
-        <div className="flex h-44 flex-col items-center justify-center border-b bg-muted/30 px-6 text-center">
-          <p className="text-sm font-medium">{t("nativeRenderer")}</p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {t("nativePreviewUnavailable")}
-          </p>
-        </div>
-      ) : (
-        <ComponentThumbnail componentName={slug} />
-      )}
+      <ComponentThumbnail
+        componentName={slug}
+        platform={platform}
+        title={displayTitle}
+      />
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-medium transition-colors group-hover:text-foreground">
           {displayTitle}
         </h3>
-        {platform !== "native" && displayDescription ? (
+        {displayDescription ? (
           <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
             {displayDescription}
           </p>
@@ -87,7 +82,7 @@ export async function ComponentCard({
           className="mt-3 flex flex-wrap items-center gap-2"
           platforms={meta?.platforms ?? ["web"]}
         />
-        {platform !== "native" && storyCount > 0 ? (
+        {storyCount > 0 ? (
           <span className="mt-3 text-xs text-muted-foreground">
             {t("stories", { count: storyCount })}
           </span>
