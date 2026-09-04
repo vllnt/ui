@@ -12,6 +12,18 @@ const nativeComponents = (
 ).components.map((component) => component.name);
 
 test.describe("platform-aware component discovery", () => {
+  test("keeps the renderer tabs off the homepage", async ({ page }) => {
+    await page.goto("/");
+    await expect(
+      page.getByRole("navigation", { name: "Choose a renderer" }),
+    ).toHaveCount(0);
+
+    await page.goto("/components");
+    await expect(
+      page.getByRole("navigation", { name: "Choose a renderer" }).first(),
+    ).toBeVisible();
+  });
+
   test("filters the catalog without mounting web previews", async ({ page }) => {
     await page.goto("/components?platform=native&ref=e2e");
 

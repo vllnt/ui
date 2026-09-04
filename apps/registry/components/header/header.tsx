@@ -208,12 +208,14 @@ function HeaderContent({ locale }: HeaderProps) {
           </div>
         }
       />
-      <div className="flex min-h-11 items-center justify-center border-b border-border bg-background px-2">
-        <PlatformSelector
-          className="flex min-h-11 max-w-full items-center gap-1 overflow-x-auto p-1"
-          includeAll={pathname === "/components"}
-        />
-      </div>
+      {pathname === "/" ? null : (
+        <div className="flex min-h-11 items-center justify-center border-b border-border bg-background px-2">
+          <PlatformSelector
+            className="flex min-h-11 max-w-full items-center gap-1 overflow-x-auto p-1"
+            includeAll={pathname === "/components"}
+          />
+        </div>
+      )}
     </>
   );
 }
