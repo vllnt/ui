@@ -34,7 +34,7 @@ export function PlatformSelector({
   }[] = [
     { label: t("platformWeb"), platform: "web" },
     {
-      label: t("platformNativeExperimental"),
+      label: t("platformNative"),
       platform: "native",
     },
   ];

@@ -12,16 +12,72 @@ const nativeComponents = (
 ).components.map((component) => component.name);
 
 test.describe("platform-aware component discovery", () => {
-  test("keeps the renderer tabs off the homepage", async ({ page }) => {
-    await page.goto("/");
+  test("keeps renderer navigation out of the global header", async ({
+    page,
+  }) => {
+    await page.goto("/native?platform=native&ref=e2e");
+
     await expect(
       page.getByRole("navigation", { name: "Choose a renderer" }),
     ).toHaveCount(0);
 
+    const sidebar = page.getByRole("complementary");
+    await expect(
+      sidebar.getByRole("link", { name: "Web", exact: true }),
+    ).toHaveAttribute("href", "/components?ref=e2e&platform=web");
+    await expect(
+      sidebar.getByRole("link", { name: "Native", exact: true }),
+    ).toHaveAttribute("href", "/native?ref=e2e&platform=native");
+    await expect(
+      sidebar.getByRole("link", { name: "Native", exact: true }),
+    ).toHaveAttribute("aria-current", "true");
+
     await page.goto("/components");
     await expect(
-      page.getByRole("navigation", { name: "Choose a renderer" }).first(),
+      page.locator("header").getByRole("navigation", {
+        name: "Choose a renderer",
+      }),
+    ).toHaveCount(0);
+    await expect(
+      page.locator("main").getByRole("navigation", {
+        name: "Choose a renderer",
+      }),
     ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "All components", exact: true }),
+    ).toHaveAttribute("aria-current", "page");
+
+    await page.goto("/components?platform=web");
+    await expect(
+      page
+        .getByRole("complementary")
+        .getByRole("link", { name: "Web", exact: true }),
+    ).toHaveAttribute("aria-current", "true");
+
+    await page.goto("/docs/native");
+    await expect(
+      page
+        .getByRole("complementary")
+        .getByRole("link", { name: "Native", exact: true }),
+    ).toHaveAttribute("aria-current", "true");
+
+    await page.goto("/docs?platform=web&ref=e2e");
+    const nativeGuide = page
+      .getByRole("complementary")
+      .getByRole("link", { name: "React Native", exact: true });
+    await expect(nativeGuide).toHaveAttribute(
+      "href",
+      "/docs/native?platform=native&ref=e2e",
+    );
+    await nativeGuide.click();
+    await expect(page).toHaveURL("/docs/native?platform=native&ref=e2e");
+
+    await page.goto("/docs/native?platform=web");
+    await expect(
+      page
+        .getByRole("complementary")
+        .getByRole("link", { name: "Web", exact: true }),
+    ).toHaveAttribute("aria-current", "true");
   });
 
   test("filters the catalog without mounting web previews", async ({ page }) => {
@@ -29,7 +85,7 @@ test.describe("platform-aware component discovery", () => {
 
     const main = page.locator("main");
     await expect(
-      main.getByRole("link", { name: "Native · Experimental", exact: true }),
+      main.getByRole("link", { name: "Native", exact: true }),
     ).toHaveAttribute("aria-current", "page");
 
     for (const component of nativeComponents) {
@@ -44,6 +100,11 @@ test.describe("platform-aware component discovery", () => {
       nativeComponents.length,
     );
     await expect(main.locator("[inert]")).toHaveCount(0);
+    await expect(
+      page
+        .getByRole("complementary")
+        .getByRole("link", { name: "Native", exact: true }),
+    ).toHaveAttribute("aria-current", "true");
   });
 
   test("preserves platform and unrelated query state across navigation", async ({
@@ -90,6 +151,8 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.getByText(String(nativeComponents.length), { exact: true }),
     ).toBeVisible();
+    await expect(main.getByText("Pre-release", { exact: true })).toBeVisible();
+    await expect(main.getByText(/experimental/i)).toHaveCount(0);
     await expect(
       main.getByText("pnpm add @vllnt/ui-native@canary"),
     ).toBeVisible();
@@ -153,6 +216,11 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.getByText("Disponible apres le premier canary synchronise"),
     ).toBeVisible();
+    await expect(
+      page
+        .getByRole("complementary")
+        .getByRole("link", { name: "Natif", exact: true }),
+    ).toHaveAttribute("href", "/fr/native?platform=native");
   });
 
   test("does not silently revert unsupported native components", async ({
@@ -171,6 +239,38 @@ test.describe("platform-aware component discovery", () => {
       main.getByRole("link", { name: "View Web component" }),
     ).toHaveAttribute("href", "/components/mdx-content?platform=web");
     await expect(main.getByText("Storybook")).toHaveCount(0);
+  });
+
+  test("uses an inline desktop sidebar and bounded tablet drawer", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 800, width: 1280 });
+    await page.goto("/native?platform=native");
+
+    const sidebar = page.getByRole("complementary");
+    await expect(sidebar).toBeVisible();
+    expect((await sidebar.boundingBox())?.width).toBeCloseTo(256, 2);
+    await expect(page.getByTestId("sidebar-overlay")).toHaveCount(0);
+
+    await page.setViewportSize({ height: 800, width: 768 });
+    const trigger = page.getByRole("button", { name: "Open navigation" });
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await trigger.click();
+
+    await expect(sidebar).toBeVisible();
+    expect((await sidebar.boundingBox())?.width).toBeCloseTo(320, 2);
+    await expect(sidebar).not.toHaveAttribute("inert");
+    await expect(page.getByTestId("sidebar-overlay")).toBeVisible();
+
+    const drawerLinks = sidebar.getByRole("link");
+    await drawerLinks.last().focus();
+    await page.keyboard.press("Tab");
+    await expect(drawerLinks.first()).toBeFocused();
+
+    await page.keyboard.press("Escape");
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(sidebar).toHaveAttribute("inert", "");
+    await expect(trigger).toBeFocused();
   });
 
   test("keeps the mobile header within a 320px viewport", async ({ page }) => {

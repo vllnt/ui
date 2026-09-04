@@ -4,6 +4,7 @@ import { type Locale, routing } from "@/i18n/routing";
 import { familyPath, groupedComponents } from "@/lib/component-categories";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
+import { withPlatformQuery } from "@/lib/platform";
 import { localizePathname } from "@/lib/seo";
 import type { ComponentCategory } from "@/types/registry";
 
@@ -34,6 +35,30 @@ export async function getSidebarSections(
   return [
     {
       items: [
+        {
+          href: withPlatformQuery(
+            localizePathname("/components", locale),
+            {},
+            "web",
+          ),
+          platform: "web" as const,
+          title: t("webRenderer"),
+        },
+        {
+          href: withPlatformQuery(
+            localizePathname("/native", locale),
+            {},
+            "native",
+          ),
+          platform: "native" as const,
+          title: t("nativeRenderer"),
+        },
+      ],
+      renderer: true,
+      title: t("renderers"),
+    },
+    {
+      items: [
         { href: localizePathname("/", locale), title: t("getStarted") },
         {
           href: localizePathname("/philosophy", locale),
@@ -43,7 +68,6 @@ export async function getSidebarSections(
           href: localizePathname("/components", locale),
           title: t("components"),
         },
-        { href: localizePathname("/native", locale), title: t("native") },
         { href: localizePathname("/templates", locale), title: t("templates") },
         { href: localizePathname("/themes", locale), title: t("themes") },
         {

@@ -153,7 +153,7 @@ async function RendererChoices() {
                 <Smartphone className="size-5" />
                 <h3 className="text-xl font-semibold">{t("nativeTitle")}</h3>
               </div>
-              <Badge variant="secondary">{t("experimental")}</Badge>
+              <Badge variant="secondary">{t("sourcePreview")}</Badge>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
               {t("nativeDescription")}

@@ -117,10 +117,43 @@ describe("Sidebar", () => {
       "bg-accent",
       "text-accent-foreground",
     );
+    expect(screen.getByRole("link", { name: "Components" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
     expect(screen.getByRole("link", { name: "Forms" })).toHaveAttribute(
       "href",
       "/docs/forms",
     );
+  });
+
+  it("supports explicit current state for query-backed navigation", async () => {
+    renderSidebar([
+      {
+        items: [
+          {
+            current: true,
+            href: "/native?platform=native",
+            title: "React Native",
+          },
+          {
+            current: false,
+            href: "/docs/components",
+            title: "Components",
+          },
+        ],
+        title: "Renderers",
+      },
+    ]);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("link", { name: "React Native" }),
+      ).toHaveAttribute("aria-current", "true");
+    });
+    expect(
+      screen.getByRole("link", { name: "Components" }),
+    ).not.toHaveAttribute("aria-current");
   });
 
   it("honors collapsible section default state and toggles it", () => {
@@ -167,6 +200,36 @@ describe("Sidebar", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
+    });
+  });
+
+  it("uses a bounded drawer, closes on Escape, and restores focus", async () => {
+    setViewportWidth(768);
+    const { container } = renderSidebar();
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
+      expect(container.querySelector("aside")).toHaveAttribute("inert");
+    });
+
+    const openButton = screen.getByRole("button", { name: "Open sidebar" });
+    openButton.focus();
+    fireEvent.click(openButton);
+
+    await waitFor(() => {
+      expect(container.querySelector("aside")).toHaveClass(
+        "w-[calc(100%-3rem)]",
+        "max-w-80",
+      );
+      expect(container.querySelector("aside")).not.toHaveAttribute("inert");
+      expect(screen.getByRole("navigation")).toHaveFocus();
+    });
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
+      expect(openButton).toHaveFocus();
     });
   });
 

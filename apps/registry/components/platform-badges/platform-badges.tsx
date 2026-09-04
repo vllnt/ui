@@ -26,7 +26,7 @@ export async function PlatformBadges({
         <Badge variant="outline">{t("platformWeb")}</Badge>
       ) : null}
       {platforms.includes("native") ? (
-        <Badge variant="secondary">{t("platformNativeExperimental")}</Badge>
+        <Badge variant="secondary">{t("platformNative")}</Badge>
       ) : null}
     </div>
   );

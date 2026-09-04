@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -17,18 +17,28 @@ export type NavItem = {
 
 export type NavbarSaasProps = {
   brand?: ReactNode;
+  closeSidebarLabel?: string;
   navItems?: NavItem[];
+  openSidebarLabel?: string;
   rightSlot?: ReactNode;
   showMobileMenu?: boolean;
+  sidebarId?: string;
 };
 
 const EMPTY_NAV_ITEMS: NavItem[] = [];
 
+function getHrefPathname(href: string): string {
+  return href.split(/[#?]/, 1)[0] ?? href;
+}
+
 export function NavbarSaas({
   brand,
+  closeSidebarLabel = "Close sidebar",
   navItems = EMPTY_NAV_ITEMS,
+  openSidebarLabel = "Open sidebar",
   rightSlot,
   showMobileMenu = true,
+  sidebarId = "site-sidebar",
 }: NavbarSaasProps) {
   const pathname = usePathname();
   const { open, setOpen } = useSidebar();
@@ -44,8 +54,9 @@ export function NavbarSaas({
           <div className="flex items-center gap-4">
             {showMobileMenu ? (
               <Button
+                aria-controls={sidebarId}
                 aria-expanded={open}
-                aria-label="Toggle sidebar"
+                aria-label={open ? closeSidebarLabel : openSidebarLabel}
                 data-testid="navbar-saas-mobile-trigger"
                 onClick={() => {
                   setOpen(!open);
@@ -53,7 +64,17 @@ export function NavbarSaas({
                 size="icon"
                 variant="ghost"
               >
-                {open ? <X className="size-4" /> : <Menu className="size-4" />}
+                {open ? (
+                  <>
+                    <X className="size-4 lg:hidden" />
+                    <PanelLeftClose className="hidden size-4 lg:block" />
+                  </>
+                ) : (
+                  <>
+                    <Menu className="size-4 lg:hidden" />
+                    <PanelLeftOpen className="hidden size-4 lg:block" />
+                  </>
+                )}
               </Button>
             ) : null}
             {brand ? (
@@ -69,9 +90,14 @@ export function NavbarSaas({
               <nav className="hidden lg:flex gap-6">
                 {navItems.map((item) => (
                   <Link
+                    aria-current={
+                      pathname === getHrefPathname(item.href)
+                        ? "page"
+                        : undefined
+                    }
                     className={cn(
                       "text-sm font-medium transition-colors hover:text-foreground/80",
-                      pathname === item.href
+                      pathname === getHrefPathname(item.href)
                         ? "text-foreground"
                         : "text-foreground/60",
                     )}
