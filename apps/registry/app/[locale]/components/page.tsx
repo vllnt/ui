@@ -39,14 +39,8 @@ export async function generateMetadata({
   const og = frontmatter.og;
   const nativeFilter = getPlatform(query.platform, "all") === "native";
   const pathname = nativeFilter ? "/components?platform=native" : "/components";
-  const description = nativeFilter
-    ? (await getTranslations({ locale, namespace: "pages.components" }))(
-        "nativeFilterDescription",
-      )
-    : frontmatter.description;
-  const socialDescription = nativeFilter
-    ? description
-    : (og?.description ?? description);
+  const description = frontmatter.description;
+  const socialDescription = og?.description ?? description;
 
   return {
     alternates: {
@@ -101,9 +95,7 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
   const catalogPathname = nativeFilter
     ? "/components?platform=native"
     : "/components";
-  const catalogDescription = nativeFilter
-    ? t("nativeFilterDescription")
-    : t("description", { count: visibleCount });
+  const catalogDescription = t("description", { count: visibleCount });
 
   return (
     <>
@@ -117,12 +109,7 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
             items: visibleGroups.flatMap((group) =>
               group.items.map((item) => ({
                 name: item.title,
-                url: canonical(
-                  nativeFilter
-                    ? `/components/${item.name}?platform=native`
-                    : `/components/${item.name}`,
-                  locale,
-                ),
+                url: canonical(`/components/${item.name}`, locale),
               })),
             ),
             title: t("title"),
@@ -142,30 +129,6 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
               className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
               includeAll
             />
-            {nativeFilter ? (
-              <div className="mt-6 max-w-3xl rounded-lg border border-border bg-muted/30 p-5">
-                <p className="font-medium">
-                  {t("nativeFilterTitle", { count: visibleCount })}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {t("nativeFilterNotice")}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
-                  <Link
-                    className="underline underline-offset-4"
-                    href={withPlatformQuery("/docs/native", query, "native")}
-                  >
-                    {t("nativeGuide")}
-                  </Link>
-                  <a
-                    className="underline underline-offset-4"
-                    href="/r/native/registry.json"
-                  >
-                    {t("nativeManifest")}
-                  </a>
-                </div>
-              </div>
-            ) : null}
           </div>
 
           {visibleGroups.map((group) => (

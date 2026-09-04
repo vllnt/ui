@@ -64,11 +64,7 @@ export async function ComponentCard({
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-colors hover:border-foreground/20">
-      <ComponentThumbnail
-        componentName={slug}
-        platform={platform}
-        title={displayTitle}
-      />
+      <ComponentThumbnail componentName={slug} title={displayTitle} />
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-sm font-medium transition-colors group-hover:text-foreground">
           {displayTitle}

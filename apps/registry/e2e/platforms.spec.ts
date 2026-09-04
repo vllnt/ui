@@ -39,7 +39,7 @@ test.describe("platform-aware component discovery", () => {
     ).toHaveText("Components");
   });
 
-  test("filters Native capability while mounting isolated Web previews", async ({
+  test("filters the component list without changing its preview layout", async ({
     page,
   }) => {
     await page.goto("/components?platform=native&ref=e2e");
@@ -54,7 +54,7 @@ test.describe("platform-aware component discovery", () => {
     );
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      /Native results have paired Web and React Native source/,
+      "Explore all components available in the VLLNT UI library.",
     );
     const structuredData = (
       await page.locator('script[type="application/ld+json"]').allTextContents()
@@ -72,11 +72,7 @@ test.describe("platform-aware component discovery", () => {
           | undefined
       )?.itemListElement?.at(-1)?.item,
     ).toMatch(/\/components\?platform=native$/);
-    await expect(
-      main.getByText(
-        `${nativeComponents.length} components with Native implementations`,
-      ),
-    ).toBeVisible();
+    const nativeFirstSection = await main.locator("section").first().boundingBox();
 
     for (const component of nativeComponents) {
       await expect(
@@ -86,9 +82,7 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.locator('a[href*="/components/mdx-content"]'),
     ).toHaveCount(0);
-    await expect(main.getByText("Web preview", { exact: true })).toHaveCount(
-      nativeComponents.length,
-    );
+    await expect(main.getByText("Web preview", { exact: true })).toHaveCount(0);
 
     const previewRoots = main.locator("article > div");
     const isolatedPreviews = main.locator("article [inert]");
@@ -113,6 +107,11 @@ test.describe("platform-aware component discovery", () => {
       );
     }
     await expect(firstPreviewFrame.contentFrame().locator("body")).not.toBeEmpty();
+
+    await main.getByRole("link", { name: "Web", exact: true }).click();
+    await expect(page).toHaveURL("/components?platform=web&ref=e2e");
+    const webFirstSection = await main.locator("section").first().boundingBox();
+    expect(webFirstSection?.y).toBeCloseTo(nativeFirstSection?.y ?? 0, 2);
   });
 
   test("preserves platform and unrelated query state across navigation", async ({
@@ -181,11 +180,11 @@ test.describe("platform-aware component discovery", () => {
     ).toBeVisible();
     await expect(main.getByRole("button", { name: "Add to v0.dev" })).toBeVisible();
     await expect(
-      main.getByRole("link", { name: "Web", exact: true }),
-    ).toHaveAttribute("aria-current", "page");
+      main.getByRole("navigation", { name: "Filter by implementation" }),
+    ).toHaveCount(0);
   });
 
-  test("pairs Native capability data with an isolated Web rendering", async ({
+  test("compares platforms and exposes paired source without changing preview", async ({
     page,
   }) => {
     await page.goto("/components/button?platform=native");
@@ -193,44 +192,34 @@ test.describe("platform-aware component discovery", () => {
     const main = page.locator("main");
     await expect(
       main.getByRole("heading", { name: "Native capability" }),
-    ).toBeVisible();
-    await expect(
-      main.getByText("Available after the first synchronized canary"),
-    ).toBeVisible();
-    await expect(
-      main.getByText("pnpm add @vllnt/ui-native@canary"),
-    ).toBeVisible();
-    await expect(main.getByText("Portable semantic options")).toBeVisible();
-    await expect(
-      main.getByText("src/components/button/button.tsx"),
-    ).toBeVisible();
-    await expect(
-      main.getByText(/Native is the active capability filter/),
-    ).toBeVisible();
+    ).toHaveCount(0);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
-      /\/components\/button\?platform=native$/,
+      /\/components\/button$/,
     );
-    const detailStructuredData = (
-      await page.locator('script[type="application/ld+json"]').allTextContents()
-    ).flatMap(
-      (content) =>
-        JSON.parse(content) as {
-          "@type"?: string;
-          itemListElement?: { item: string }[];
-          url?: string;
-        }[],
+
+    const comparison = main.locator("#platform-comparison");
+    await expect(
+      comparison.getByRole("heading", { name: "Platform comparison" }),
+    ).toBeVisible();
+    await expect(
+      comparison.getByRole("row", {
+        name: /Web.*@vllnt\/ui.*Browser rendering, DOM events, and ARIA semantics/,
+      }),
+    ).toBeVisible();
+    await expect(
+      comparison.getByRole("row", {
+        name: /Native.*@vllnt\/ui-native, react-native.*Portable semantic options and native interaction/,
+      }),
+    ).toBeVisible();
+
+    const source = main.locator("#code");
+    await expect(source.getByRole("tab", { name: "Web" })).toHaveAttribute(
+      "aria-selected",
+      "true",
     );
-    expect(
-      detailStructuredData.find(
-        (entry) => entry["@type"] === "SoftwareSourceCode",
-      )?.url,
-    ).toMatch(/\/components\/button\?platform=native$/);
-    expect(
-      detailStructuredData
-        .find((entry) => entry["@type"] === "BreadcrumbList")
-        ?.itemListElement?.at(-1)?.item,
-    ).toMatch(/\/components\/button\?platform=native$/);
+    await source.getByRole("tab", { name: "Native" }).click();
+    await expect(source).toContainText("Pressable");
 
     await expect(
       main.getByRole("button", { name: "Copy install command" }),
@@ -244,39 +233,35 @@ test.describe("platform-aware component discovery", () => {
     );
   });
 
-  test("localizes Native capability and the retired route redirect", async ({
+  test("localizes platform comparison and the retired route redirect", async ({
     page,
   }) => {
     await page.goto("/fr/components/button?platform=native");
 
     const main = page.locator("main");
     await expect(
-      main.getByRole("heading", { name: "Capacite native" }),
+      main.getByRole("heading", { name: "Comparaison des plateformes" }),
     ).toBeVisible();
-    await expect(
-      main.getByText("Disponible apres le premier canary synchronise"),
-    ).toBeVisible();
-    await expect(main.getByText(/implementation Web isolee/)).toBeVisible();
+    await expect(main.locator("#code").getByRole("tab", { name: "Natif" })).toBeVisible();
 
     await page.goto("/fr/native?ref=e2e");
     await expect(page).toHaveURL("/fr/components?ref=e2e&platform=native");
   });
 
-  test("keeps Web-only routes honest while still showing the Web preview", async ({
+  test("shows a simple unavailable Native row for Web-only components", async ({
     page,
   }) => {
     await page.goto("/components/mdx-content?platform=native");
 
     const main = page.locator("main");
     await expect(
-      main.getByRole("heading", { name: "Web-only component" }),
+      main.locator("#platform-comparison").getByRole("row", {
+        name: /Native.*Not available/,
+      }),
     ).toBeVisible();
     await expect(
-      main.getByRole("link", { name: "Browse native catalog" }),
-    ).toHaveAttribute("href", "/components?platform=native");
-    await expect(
-      main.getByRole("link", { name: "View Web component" }),
-    ).toHaveAttribute("href", "/components/mdx-content?platform=web");
+      main.locator("#code").getByRole("tab", { name: "Native" }),
+    ).toHaveCount(0);
     await expect(
       main.getByRole("button", { name: "Copy install command" }),
     ).toBeVisible();
@@ -326,5 +311,12 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       page.getByRole("navigation", { name: "Filter by implementation" }),
     ).toBeVisible();
+
+    await page.goto("/components/button?platform=native");
+    const detailOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(detailOverflow).toBeLessThanOrEqual(0);
+    await expect(page.locator("#platform-comparison")).toBeVisible();
   });
 });

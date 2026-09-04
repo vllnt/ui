@@ -19,7 +19,7 @@ type StorybookEmbedProps = {
 
 type PreviewThemeControlsProps = {
   onValueChange: (value: PreviewTheme) => void;
-  value: null | PreviewTheme;
+  value: PreviewTheme;
 };
 
 function toStoryId(componentName: string): string {
@@ -96,7 +96,7 @@ function PreviewThemeControls({
         }}
         size="sm"
         type="single"
-        value={value ?? undefined}
+        value={value}
         variant="outline"
       >
         <ToggleGroupItem aria-label={t("lightLabel")} value="light">
@@ -214,7 +214,7 @@ export function StorybookEmbed({
           hasManualThemeSelectionRef.current = true;
           setPreviewTheme(value);
         }}
-        value={previewTheme}
+        value={previewTheme ?? "light"}
       />
       {iframeSource ? (
         <StorybookIframe

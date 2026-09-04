@@ -4,11 +4,8 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { useTranslations } from "next-intl";
 
-import type { ComponentPlatform } from "@/lib/registry";
-
 type ComponentThumbnailProps = {
   readonly componentName: string;
-  readonly platform?: ComponentPlatform;
   readonly title: string;
 };
 
@@ -94,7 +91,6 @@ function getSandbox(previewOrigin: string): string {
  */
 export function ComponentThumbnail({
   componentName,
-  platform,
   title,
 }: ComponentThumbnailProps) {
   const t = useTranslations("pages.components");
@@ -155,17 +151,12 @@ export function ComponentThumbnail({
             sandbox={sandbox}
             src={previewUrl}
             tabIndex={-1}
-            title={t("webPreviewTitle", { name: title })}
+            title={t("previewTitle", { name: title })}
           />
         ) : (
           <div className="size-full animate-pulse bg-muted" />
         )}
       </div>
-      {platform === "native" ? (
-        <span className="pointer-events-none absolute inset-x-0 bottom-0 border-t border-border/80 bg-background/95 px-3 py-1.5 text-center text-[0.6875rem] font-medium uppercase tracking-[0.08em] text-muted-foreground backdrop-blur-sm">
-          {t("webPreview")}
-        </span>
-      ) : null}
     </div>
   );
 }
