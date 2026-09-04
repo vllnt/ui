@@ -82,7 +82,9 @@ function AnimatedTabTrigger({
       accessibilityRole="tab"
       accessibilityState={{ disabled: tab.disabled, selected }}
       aria-controls={
-        tab.panel === undefined ? undefined : `${baseId}-panel-${tab.value}`
+        selected && tab.panel !== undefined
+          ? `${baseId}-panel-${tab.value}`
+          : undefined
       }
       disabled={tab.disabled}
       id={`${baseId}-tab-${tab.value}`}
@@ -190,7 +192,6 @@ function AnimatedTabs({
       </View>
       {selectedTab?.panel === undefined ? null : (
         <View
-          accessibilityRole="summary"
           aria-labelledby={`${baseId}-tab-${selectedTab.value}`}
           id={`${baseId}-panel-${selectedTab.value}`}
           style={{ paddingTop: theme.spacing[4] }}

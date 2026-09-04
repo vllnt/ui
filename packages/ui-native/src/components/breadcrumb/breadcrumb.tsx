@@ -7,7 +7,10 @@ import {
   type ViewProps,
 } from "react-native";
 
-import type { LinkingService } from "../../primitives/platform-services";
+import {
+  defaultLinkingService,
+  type LinkingService,
+} from "../../primitives/platform-services";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -26,6 +29,7 @@ export type BreadcrumbProps = Omit<ViewProps, "children" | "ref"> & {
   readonly label?: string;
   readonly linking?: LinkingService;
   readonly onNavigate?: (item: BreadcrumbItem) => void;
+  readonly onOpenError?: (error: unknown, item: BreadcrumbItem) => void;
   readonly ref?: Ref<View>;
   readonly separator?: string;
 };
@@ -39,8 +43,9 @@ const styles = StyleSheet.create({
 function Breadcrumb({
   items,
   label = "Breadcrumb",
-  linking,
+  linking = defaultLinkingService,
   onNavigate,
+  onOpenError,
   ref,
   separator = "›",
   style,
@@ -83,7 +88,13 @@ function Breadcrumb({
                   disabled={item.disabled}
                   onPress={() => {
                     onNavigate?.(item);
-                    if (item.href && linking) void linking.openUrl(item.href);
+                    if (item.href) {
+                      void linking
+                        .openUrl(item.href)
+                        .then(undefined, (error: unknown) => {
+                          onOpenError?.(error, item);
+                        });
+                    }
                   }}
                   style={({ pressed }) => [
                     styles.item,

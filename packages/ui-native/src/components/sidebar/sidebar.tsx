@@ -7,7 +7,10 @@ import {
   type ViewProps,
 } from "react-native";
 
-import type { LinkingService } from "../../primitives/platform-services";
+import {
+  defaultLinkingService,
+  type LinkingService,
+} from "../../primitives/platform-services";
 import { isSingleSelected } from "../../primitives/selection";
 import { useTheme } from "../../theme/theme-provider";
 import { useSidebar } from "../sidebar-provider/sidebar-provider";
@@ -34,6 +37,7 @@ export type SidebarProps = Omit<ViewProps, "children" | "ref"> & {
   readonly label?: string;
   readonly linking?: LinkingService;
   readonly onNavigate?: (item: SidebarItem) => void;
+  readonly onOpenError?: (error: unknown, item: SidebarItem) => void;
   readonly ref?: Ref<View>;
   readonly sections: readonly SidebarSection[];
 };
@@ -47,8 +51,9 @@ const styles = StyleSheet.create({
 function Sidebar({
   currentId,
   label = "Sidebar navigation",
-  linking,
+  linking = defaultLinkingService,
   onNavigate,
+  onOpenError,
   ref,
   sections,
   style,
@@ -102,7 +107,13 @@ function Sidebar({
                   key={item.id}
                   onPress={() => {
                     onNavigate?.(item);
-                    if (item.href && linking) void linking.openUrl(item.href);
+                    if (item.href) {
+                      void linking
+                        .openUrl(item.href)
+                        .then(undefined, (error: unknown) => {
+                          onOpenError?.(error, item);
+                        });
+                    }
                   }}
                   style={({ pressed }) => [
                     styles.item,

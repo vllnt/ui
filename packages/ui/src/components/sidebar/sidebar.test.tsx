@@ -284,6 +284,14 @@ describe("Sidebar", () => {
 
     await waitFor(() => {
       expect(container.querySelector("aside")).toHaveClass("w-0", "border-r-0");
+      expect(container.querySelector("aside")).toHaveAttribute("inert");
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
+
+    await waitFor(() => {
+      expect(container.querySelector("aside")).toHaveClass("w-64");
+      expect(container.querySelector("aside")).not.toHaveAttribute("inert");
     });
   });
 });

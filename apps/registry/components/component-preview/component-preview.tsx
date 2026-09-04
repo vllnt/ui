@@ -386,7 +386,6 @@ import {
   ShimmerText,
   ShineBorder,
   ShinyButton,
-  Sidebar,
   SidebarProvider,
   SidebarToggle,
   Skeleton,
@@ -1449,17 +1448,12 @@ function LineChartPreview() {
 function SidebarPreview() {
   return (
     <div className="w-64 border rounded-lg overflow-hidden">
-      <Sidebar
-        sections={[
-          {
-            items: [
-              { href: "/", title: "Introduction" },
-              { href: "/install", title: "Installation" },
-            ],
-            title: "Getting Started",
-          },
-        ]}
-      />
+      <div className="space-y-2 bg-background p-4">
+        <div className="h-3 w-20 rounded bg-muted-foreground/30" />
+        <div className="h-8 rounded bg-muted" />
+        <div className="h-8 rounded border border-border" />
+        <div className="h-8 rounded border border-border" />
+      </div>
     </div>
   );
 }

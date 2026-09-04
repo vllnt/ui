@@ -17,6 +17,7 @@ export type AISourceCitationProps = Omit<
 > & {
   readonly href: string;
   readonly onOpen?: (href: string) => void;
+  readonly onOpenError?: (error: unknown, href: string) => void;
   readonly ref?: Ref<View>;
   readonly snippet?: string;
   readonly source: string;
@@ -34,6 +35,7 @@ function AISourceCitation({
   disabled = false,
   href,
   onOpen,
+  onOpenError,
   ref,
   snippet,
   source,
@@ -56,7 +58,9 @@ function AISourceCitation({
           onOpen(href);
           return;
         }
-        void Linking.openURL(href);
+        void Linking.openURL(href).then(undefined, (error: unknown) => {
+          onOpenError?.(error, href);
+        });
       }}
       ref={ref}
       style={(state) => [

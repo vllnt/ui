@@ -86,6 +86,12 @@ const DOCS_SECTION: LlmsSection = {
       url: `${SITE_URL}/components`,
     },
     {
+      notes:
+        "React Native support in 0.4.0; source-only until canary publication",
+      title: "React Native component catalog",
+      url: `${SITE_URL}/components?platform=native`,
+    },
+    {
       notes: "starter kits for full VLLNT UI apps",
       title: "Templates",
       url: `${SITE_URL}/templates`,
@@ -188,7 +194,7 @@ function buildComponentSections(
       .map((item) => ({
         notes: `${item.description ?? ""} Platforms: ${item.platforms.join(", ")}.`,
         title: item.title,
-        url: `${SITE_URL}/components/${item.name}?platform=web`,
+        url: `${SITE_URL}/components/${item.name}`,
       }));
     return [{ links, title: `Components - ${label}` }];
   });
@@ -202,7 +208,7 @@ function buildNativeSection(items: readonly RegistryComponent[]): LlmsSection {
       .map((item) => ({
         notes: `${item.description ?? ""} Experimental ${item.native?.compatibility ?? "native-adapted"} renderer; ${item.native?.availability ?? "source"} availability.`,
         title: item.title,
-        url: `${SITE_URL}/components/${item.name}?platform=native`,
+        url: `${SITE_URL}/components/${item.name}`,
       })),
     title: "React Native components - Experimental",
   };

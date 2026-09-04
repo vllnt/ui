@@ -41,7 +41,16 @@ export function PreviewPlaygroundTabs({
   return (
     <div className="relative mb-8 scroll-mt-8" id="preview">
       {code ? <span className="absolute -top-8" id="code" /> : null}
-      <Tabs className="my-0" onValueChange={setActiveTab} value={activeTab}>
+      <Tabs
+        className="my-0"
+        onValueChange={(value) => {
+          setActiveTab(value);
+          if (["#code", "#preview"].includes(window.location.hash)) {
+            window.history.replaceState(null, "", `#${value}`);
+          }
+        }}
+        value={activeTab}
+      >
         <div className="flex items-center justify-between gap-4 border-b">
           <TabsList className="border-b-0">
             <TabsTrigger value="preview">{t("preview")}</TabsTrigger>

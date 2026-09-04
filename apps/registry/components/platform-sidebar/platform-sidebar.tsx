@@ -96,7 +96,11 @@ export function PlatformSidebar({ sections }: PlatformSidebarProps) {
   return (
     <Suspense
       fallback={
-        <Sidebar ariaLabel={ariaLabel} closeLabel={closeLabel} sections={[]} />
+        <Sidebar
+          ariaLabel={ariaLabel}
+          closeLabel={closeLabel}
+          sections={sections}
+        />
       }
     >
       <SidebarWithQuery

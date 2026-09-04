@@ -35,12 +35,21 @@ export async function generateMetadata({
   searchParams,
 }: Props): Promise<Metadata> {
   const [{ locale }, query] = await Promise.all([params, searchParams]);
-  const { frontmatter } = await getPageContent("components", locale);
+  const [{ frontmatter }, t] = await Promise.all([
+    getPageContent("components", locale),
+    getTranslations({ locale, namespace: "pages.components" }),
+  ]);
   const og = frontmatter.og;
   const nativeFilter = getPlatform(query.platform, "all") === "native";
   const pathname = nativeFilter ? "/components?platform=native" : "/components";
-  const description = frontmatter.description;
-  const socialDescription = og?.description ?? description;
+  const title = nativeFilter ? t("nativeMetaTitle") : frontmatter.title;
+  const description = nativeFilter
+    ? t("nativeMetaDescription")
+    : frontmatter.description;
+  const socialTitle = nativeFilter ? title : (og?.title ?? title);
+  const socialDescription = nativeFilter
+    ? description
+    : (og?.description ?? description);
 
   return {
     alternates: {
@@ -51,15 +60,15 @@ export async function generateMetadata({
     openGraph: generateOGMetadata(
       {
         description: socialDescription,
-        title: og?.title ?? frontmatter.title,
+        title: socialTitle,
         type: og?.type ?? frontmatter.type,
       },
       { locale, pathname },
     ),
-    title: frontmatter.title,
+    title,
     twitter: generateTwitterMetadata({
       description: socialDescription,
-      title: og?.title ?? frontmatter.title,
+      title: socialTitle,
       type: og?.type ?? frontmatter.type,
     }),
   };
@@ -105,14 +114,16 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
             { name: t("title"), path: catalogPathname },
           ]),
           collectionPageLd({
-            description: catalogDescription,
+            description: nativeFilter
+              ? t("nativeMetaDescription")
+              : catalogDescription,
             items: visibleGroups.flatMap((group) =>
               group.items.map((item) => ({
                 name: item.title,
                 url: canonical(`/components/${item.name}`, locale),
               })),
             ),
-            title: t("title"),
+            title: nativeFilter ? t("nativeMetaTitle") : t("title"),
             url: canonical(catalogPathname, locale),
           }),
         ])}

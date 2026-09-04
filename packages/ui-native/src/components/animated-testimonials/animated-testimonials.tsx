@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { Ref } from "react";
 import {
@@ -62,24 +62,43 @@ const styles = StyleSheet.create({
 });
 
 function TestimonialCard({
+  animate,
   reduceMotion,
   testimonial,
 }: {
+  readonly animate: boolean;
   readonly reduceMotion: boolean;
   readonly testimonial: AnimatedTestimonial;
 }) {
   const theme = useTheme();
+  const [animateOnMount, setAnimateOnMount] = useState(animate);
   const [progress, setProgress] = useState(
-    () => new Animated.Value(reduceMotion ? 1 : 0),
+    () => new Animated.Value(animate && !reduceMotion ? 0 : 1),
   );
+  void setAnimateOnMount;
   void setProgress;
+  const animationConsumed = useRef(false);
+
   useEffect(() => {
-    Animated.timing(progress, {
-      duration: reduceMotion ? 0 : 100,
+    if (reduceMotion) {
+      animationConsumed.current = true;
+      progress.stopAnimation();
+      progress.setValue(1);
+      return;
+    }
+    if (!animateOnMount || animationConsumed.current) return;
+
+    animationConsumed.current = true;
+    const animation = Animated.timing(progress, {
+      duration: 100,
       toValue: 1,
       useNativeDriver: true,
-    }).start();
-  }, [progress, reduceMotion]);
+    });
+    animation.start();
+    return () => {
+      animation.stop();
+    };
+  }, [animateOnMount, progress, reduceMotion]);
   return (
     <Animated.View
       accessibilityLiveRegion="polite"
@@ -128,7 +147,10 @@ function TestimonialCard({
 }
 TestimonialCard.displayName = "TestimonialCard";
 
-/** Native testimonial pager that disables automatic movement for reduced motion. */
+/**
+ * Keeps the initial testimonial visible and animates later selections only
+ * after a non-reduced motion preference is known.
+ */
 function AnimatedTestimonials({
   autoplay = false,
   autoplayInterval = 5000,
@@ -202,6 +224,7 @@ function AnimatedTestimonials({
       ]}
     >
       <TestimonialCard
+        animate={!reduceMotion}
         key={active.id}
         reduceMotion={reduceMotion}
         testimonial={active}

@@ -23,6 +23,7 @@ function InlineInput({
   onCancel,
   onChangeText,
   onCommit,
+  onFocus,
   onSubmitEditing,
   ref,
   value,
@@ -43,6 +44,11 @@ function InlineInput({
         onBlur?.(event);
       }}
       onChangeText={onChangeText}
+      onFocus={(event) => {
+        initialValue.current = value;
+        committed.current = false;
+        onFocus?.(event);
+      }}
       onSubmitEditing={(event) => {
         committed.current = true;
         onCommit(value);

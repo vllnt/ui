@@ -120,21 +120,20 @@ function StorybookIframe({
   iframeSource: string;
 }): React.ReactElement {
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const t = useTranslations("shared.storybookEmbed");
 
   return (
     <div style={{ minHeight: height, position: "relative" }}>
       {isLoaded ? null : (
         <div
-          className="flex animate-pulse items-center justify-center rounded-b-lg bg-muted"
+          className="flex animate-pulse items-center justify-center rounded-b-lg bg-muted motion-reduce:animate-none"
           style={{ height, inset: 0, position: "absolute", zIndex: 1 }}
         >
-          <p className="text-sm text-muted-foreground">
-            Loading preview&hellip;
-          </p>
+          <p className="text-sm text-muted-foreground">{t("loading")}</p>
         </div>
       )}
       <iframe
-        className="w-full rounded-b-lg border-0"
+        className="w-full rounded-b-lg border-0 transition-opacity duration-100 motion-reduce:transition-none"
         loading="lazy"
         onLoad={() => {
           setIsLoaded(true);
@@ -144,7 +143,6 @@ function StorybookIframe({
         style={{
           height,
           opacity: isLoaded ? 1 : 0,
-          transition: "opacity 0.3s ease-in",
         }}
         title={`${componentName} preview`}
       />
@@ -223,7 +221,9 @@ export function StorybookEmbed({
           iframeSource={iframeSource}
           key={iframeSource}
         />
-      ) : null}
+      ) : (
+        <div aria-hidden="true" className="bg-muted" style={{ height }} />
+      )}
     </div>
   );
 }

@@ -214,6 +214,8 @@
       "installation": "Installation",
       "nativeCapabilitiesAdapted": "Native-adapted interaction and accessibility",
       "nativeCapabilitiesPortable": "Portable semantic options and native interaction",
+      "nativeMetaDescription": "Compare {title} for React and React Native in VLLNT UI 0.4.0. Explore source, dependencies and native capabilities. Native is source-only; npm publication is pending.",
+      "nativeMetaTitle": "{title} for React and React Native",
       "notAvailable": "Not available",
       "platform": "Platform",
       "platformComparison": "Platform comparison",
@@ -240,6 +242,8 @@
       "ctaDescription": "Request a new component and we'll open a prefilled GitHub issue with the right labels and template.",
       "ctaTitle": "Don't see what you need?",
       "description": "Explore all {count} components available in the library.",
+      "nativeMetaDescription": "Explore React Native components in VLLNT UI 0.4.0 for iOS and Android. Compare React and native source and capabilities. Source-only pending canary publication.",
+      "nativeMetaTitle": "React Native components for iOS and Android",
       "noPlatformResults": "No components support this platform yet.",
       "platformAll": "All",
       "platformFilterLabel": "Filter by platform",
@@ -613,6 +617,7 @@
       "description": "Switch between light and dark to inspect the embedded Storybook preview.",
       "light": "Light",
       "lightLabel": "Light preview",
+      "loading": "Loading preview…",
       "preview": "Preview",
       "themeLabel": "Preview theme"
     }

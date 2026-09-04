@@ -13,7 +13,10 @@ import {
   ModalLayer,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
-import type { LinkingService } from "../../primitives/platform-services";
+import {
+  defaultLinkingService,
+  type LinkingService,
+} from "../../primitives/platform-services";
 import { isSingleSelected } from "../../primitives/selection";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -44,6 +47,11 @@ export type MenubarProps = Omit<ViewProps, "children" | "ref"> & {
   readonly menus: readonly MenubarMenu[];
   readonly modalProps?: ModalLayerPresentationProps;
   readonly onItemSelect?: (item: MenubarItem, menu: MenubarMenu) => void;
+  readonly onOpenError?: (
+    error: unknown,
+    item: MenubarItem,
+    menu: MenubarMenu,
+  ) => void;
   readonly onOpenMenuChange?: (id: string) => void;
   readonly openMenuId?: string;
   readonly ref?: Ref<View>;
@@ -61,10 +69,11 @@ const styles = StyleSheet.create({
 function Menubar({
   defaultOpenMenuId = "",
   label = "Menu bar",
-  linking,
+  linking = defaultLinkingService,
   menus,
   modalProps,
   onItemSelect,
+  onOpenError,
   onOpenMenuChange,
   openMenuId,
   ref,
@@ -177,7 +186,13 @@ function Menubar({
                 key={item.id}
                 onPress={() => {
                   onItemSelect?.(item, activeMenu);
-                  if (item.href && linking) void linking.openUrl(item.href);
+                  if (item.href) {
+                    void linking
+                      .openUrl(item.href)
+                      .then(undefined, (error: unknown) => {
+                        onOpenError?.(error, item, activeMenu);
+                      });
+                  }
                   setActiveId("");
                 }}
                 style={({ pressed }) => [

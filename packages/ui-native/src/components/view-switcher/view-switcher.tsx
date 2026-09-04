@@ -96,9 +96,9 @@ function ViewSwitcher({
                 selected: active,
               }}
               aria-controls={
-                option.panel === undefined
-                  ? undefined
-                  : `${baseId}-panel-${option.key}`
+                active && option.panel !== undefined
+                  ? `${baseId}-panel-${option.key}`
+                  : undefined
               }
               disabled={option.disabled}
               id={`${baseId}-tab-${option.key}`}
@@ -134,7 +134,6 @@ function ViewSwitcher({
       </View>
       {selected?.panel === undefined ? null : (
         <View
-          accessibilityRole="summary"
           aria-labelledby={`${baseId}-tab-${selected.key}`}
           id={`${baseId}-panel-${selected.key}`}
           style={{ paddingTop: theme.spacing[4] }}

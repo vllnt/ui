@@ -75,6 +75,11 @@ type InternalResizableHandleProps = ResizableHandleProps & {
   readonly handleIndex?: number;
 };
 
+type ResizableSizeState = {
+  readonly configSignature: string;
+  readonly sizes: readonly number[];
+};
+
 const ResizableContext = createContext<null | ResizableContextValue>(null);
 
 const styles = StyleSheet.create({
@@ -230,17 +235,26 @@ function ResizablePanelGroup({
   ...props
 }: ResizablePanelGroupProps) {
   const configs = useMemo(() => getPanelConfigs(children), [children]);
-  const [sizes, setSizes] = useState<readonly number[]>(() =>
-    normalizeSizes(configs),
-  );
+  const configSignature = JSON.stringify(configs);
+  const [sizeState, setSizeState] = useState<ResizableSizeState>(() => ({
+    configSignature,
+    sizes: normalizeSizes(configs),
+  }));
+  const sizes =
+    sizeState.configSignature === configSignature
+      ? sizeState.sizes
+      : normalizeSizes(configs);
+  if (sizeState.configSignature !== configSignature) {
+    setSizeState({ configSignature, sizes });
+  }
   const adjust = useCallback(
     (handleIndex: number, amount: number) => {
       const nextSizes = resizePanels({ amount, configs, handleIndex, sizes });
       if (nextSizes === sizes) return;
-      setSizes(nextSizes);
+      setSizeState({ configSignature, sizes: nextSizes });
       onSizesChange?.(nextSizes);
     },
-    [configs, onSizesChange, sizes],
+    [configSignature, configs, onSizesChange, sizes],
   );
   const context = useMemo<ResizableContextValue>(
     () => ({ adjust, configs, direction, sizes }),

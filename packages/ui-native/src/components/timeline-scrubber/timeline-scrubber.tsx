@@ -27,7 +27,16 @@ export type TimelineScrubberLabels = {
   readonly region: string;
 };
 /** Props for the RN-core timeline scrubber model. */
-export type TimelineScrubberProps = Omit<ViewProps, "children"> & {
+export type TimelineScrubberProps = Omit<
+  ViewProps,
+  | "accessibilityActions"
+  | "accessibilityLabel"
+  | "accessibilityRole"
+  | "accessibilityValue"
+  | "children"
+  | "onAccessibilityAction"
+  | "ref"
+> & {
   readonly end: number;
   readonly formatValue: (value: number) => string;
   readonly labels: TimelineScrubberLabels;
@@ -80,6 +89,7 @@ function TimelineScrubber({
   };
   return (
     <View
+      {...props}
       accessibilityActions={[
         { label: labels.decrement, name: "decrement" },
         { label: labels.increment, name: "increment" },
@@ -98,7 +108,6 @@ function TimelineScrubber({
       }}
       ref={ref}
       style={[{ gap: theme.spacing[1] }, style]}
-      {...props}
     >
       <NativeText
         style={[

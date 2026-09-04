@@ -7,7 +7,10 @@ import {
   type ViewProps,
 } from "react-native";
 
-import type { LinkingService } from "../../primitives/platform-services";
+import {
+  defaultLinkingService,
+  type LinkingService,
+} from "../../primitives/platform-services";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -26,6 +29,7 @@ export type PaginationProps = Omit<ViewProps, "children" | "ref"> & {
   readonly labels?: PaginationLabels;
   readonly linking?: LinkingService;
   readonly maxVisiblePages?: number;
+  readonly onOpenError?: (error: unknown, page: number) => void;
   readonly onPageChange?: (page: number) => void;
   readonly ref?: Ref<View>;
   readonly totalPages: number;
@@ -46,8 +50,9 @@ function Pagination({
   currentPage,
   getHref,
   labels,
-  linking,
+  linking = defaultLinkingService,
   maxVisiblePages = 5,
+  onOpenError,
   onPageChange,
   ref,
   style,
@@ -73,7 +78,11 @@ function Pagination({
   const activate = (page: number) => {
     onPageChange?.(page);
     const href = getHref?.(page);
-    if (href && linking) void linking.openUrl(href);
+    if (href) {
+      void linking.openUrl(href).then(undefined, (error: unknown) => {
+        onOpenError?.(error, page);
+      });
+    }
   };
   const action = (
     page: number,

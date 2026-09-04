@@ -108,7 +108,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const category = getCategoryForComponent(slug);
   const aiSeo = getAiSeo(slug);
   const componentSeo = getComponentSeo(slug);
-  const componentMdx = await getComponentContent(slug, locale);
+  const [componentMdx, t] = await Promise.all([
+    getComponentContent(slug, locale),
+    getTranslations({ locale, namespace: "pages.component" }),
+  ]);
   // Hand-written copy (ai-seo / component-seo) is English and outranks the
   // templated MDX on the default locale. Other locales must use the localized
   // MDX frontmatter, never English copy.
@@ -121,17 +124,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     : undefined;
   const title =
     componentMdx?.frontmatter.title ?? meta?.title ?? component.title;
-  const description =
-    handWrittenDescription ??
-    componentMdx?.frontmatter.description ??
-    meta?.description ??
-    component.description;
+  const description = component.native
+    ? t("nativeMetaDescription", { title })
+    : (handWrittenDescription ??
+      componentMdx?.frontmatter.description ??
+      meta?.description ??
+      component.description);
   const pathname = `/components/${slug}`;
 
   const ogParameters = {
     category,
     description,
-    title,
+    title: component.native ? t("nativeMetaTitle", { title }) : title,
     type: "component" as const,
   };
 
@@ -146,7 +150,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     description,
     keywords: componentMdx?.frontmatter.keywords,
     openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
-    title: handWrittenTitle ?? `${title} - VLLNT UI`,
+    title: component.native
+      ? t("nativeMetaTitle", { title })
+      : (handWrittenTitle ?? `${title} - VLLNT UI`),
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
@@ -314,7 +320,9 @@ export default async function ComponentPage(props: Props) {
     ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
     { id: "platform-comparison", title: t("platformComparison") },
     { id: "installation", title: t("installation") },
-    ...(hasSources ? [{ id: "code", title: t("code") }] : []),
+    ...(hasSources && !meta?.defaultStoryId
+      ? [{ id: "code", title: t("code") }]
+      : []),
     ...(meta?.defaultStoryId
       ? [{ id: "storybook", title: t("storybook") }]
       : []),
@@ -326,8 +334,9 @@ export default async function ComponentPage(props: Props) {
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
   const articleTitle = localizedComponent?.frontmatter.title ?? displayTitle;
-  const articleDescription =
-    localizedComponent?.frontmatter.description ?? displayDescription;
+  const articleDescription = component.native
+    ? t("nativeMetaDescription", { title: articleTitle })
+    : (localizedComponent?.frontmatter.description ?? displayDescription);
   const componentPath = `/components/${component.name}`;
   const componentUrl = canonical(componentPath, locale);
   const ogImage = `${SITE_URL}${generateOGImageURL({

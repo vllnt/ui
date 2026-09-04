@@ -214,6 +214,8 @@
       "installation": "Installation",
       "nativeCapabilitiesAdapted": "Interactions et accessibilite adaptees au natif",
       "nativeCapabilitiesPortable": "Options semantiques portables et interactions natives",
+      "nativeMetaDescription": "Comparez {title} pour React et React Native dans VLLNT UI 0.4.0 : source, dependances et capacites natives. Source uniquement, publication npm en attente.",
+      "nativeMetaTitle": "{title} pour React et React Native",
       "notAvailable": "Indisponible",
       "platform": "Plateforme",
       "platformComparison": "Comparaison des plateformes",
@@ -240,6 +242,8 @@
       "ctaDescription": "Demandez un nouveau composant et nous ouvrirons une issue GitHub pre-remplie avec les bons labels et le bon template.",
       "ctaTitle": "Vous ne trouvez pas ce dont vous avez besoin ?",
       "description": "Explorez les {count} composants disponibles dans la bibliotheque.",
+      "nativeMetaDescription": "Explorez les composants React Native de VLLNT UI 0.4.0 pour iOS et Android. Comparez source et capacites. Source uniquement, publication canary en attente.",
+      "nativeMetaTitle": "Composants React Native pour iOS et Android",
       "noPlatformResults": "Aucun composant ne prend encore en charge cette plateforme.",
       "platformAll": "Tous",
       "platformFilterLabel": "Filtrer par plateforme",
@@ -613,6 +617,7 @@
       "description": "Basculez entre clair et sombre pour inspecter l'apercu Storybook integre.",
       "light": "Clair",
       "lightLabel": "Apercu clair",
+      "loading": "Chargement de l'apercu…",
       "preview": "Apercu",
       "themeLabel": "Theme de l'apercu"
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, type Ref, useEffect, useState } from "react";
+import { type ReactNode, type Ref, useEffect, useRef, useState } from "react";
 
 import { Animated, StyleSheet, View, type ViewProps } from "react-native";
 
@@ -26,28 +26,47 @@ export type AnimatedListProps = Omit<ViewProps, "children" | "ref"> & {
 const styles = StyleSheet.create({ root: { width: "100%" } });
 
 function AnimatedListRow({
+  animate,
   content,
   delay,
   index,
   reduceMotion,
 }: {
+  readonly animate: boolean;
   readonly content: ReactNode;
   readonly delay: number;
   readonly index: number;
   readonly reduceMotion: boolean;
 }) {
+  const [animateOnMount, setAnimateOnMount] = useState(animate);
   const [progress, setProgress] = useState(
-    () => new Animated.Value(reduceMotion ? 1 : 0),
+    () => new Animated.Value(animate && !reduceMotion ? 0 : 1),
   );
+  void setAnimateOnMount;
   void setProgress;
+  const animationConsumed = useRef(false);
+
   useEffect(() => {
-    Animated.timing(progress, {
-      delay: reduceMotion ? 0 : index * delay,
-      duration: reduceMotion ? 0 : 100,
+    if (reduceMotion) {
+      animationConsumed.current = true;
+      progress.stopAnimation();
+      progress.setValue(1);
+      return;
+    }
+    if (!animateOnMount || animationConsumed.current) return;
+
+    animationConsumed.current = true;
+    const animation = Animated.timing(progress, {
+      delay: index * delay,
+      duration: 100,
       toValue: 1,
       useNativeDriver: true,
-    }).start();
-  }, [delay, index, progress, reduceMotion]);
+    });
+    animation.start();
+    return () => {
+      animation.stop();
+    };
+  }, [animateOnMount, delay, index, progress, reduceMotion]);
 
   return (
     <Animated.View
@@ -69,7 +88,10 @@ function AnimatedListRow({
 }
 AnimatedListRow.displayName = "AnimatedListRow";
 
-/** Purposeful one-time list entrances that collapse to no motion when requested. */
+/**
+ * Keeps initial rows visible and animates rows inserted after resolving a
+ * non-reduced motion preference.
+ */
 function AnimatedList({
   delay = 40,
   items,
@@ -91,6 +113,7 @@ function AnimatedList({
     >
       {items.map((item, index) => (
         <AnimatedListRow
+          animate={!reduceMotion}
           content={item.content}
           delay={Math.max(0, delay)}
           index={index}

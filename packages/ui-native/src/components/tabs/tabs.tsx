@@ -173,7 +173,7 @@ function TabsTrigger({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="tab"
       accessibilityState={{ disabled: disabled ?? undefined, selected }}
-      aria-controls={`${tabs.baseId}-panel-${value}`}
+      aria-controls={selected ? `${tabs.baseId}-panel-${value}` : undefined}
       disabled={disabled}
       id={`${tabs.baseId}-tab-${value}`}
       onPress={() => {

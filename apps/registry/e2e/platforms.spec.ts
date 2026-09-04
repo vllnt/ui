@@ -69,7 +69,7 @@ test.describe("platform-aware component discovery", () => {
     );
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      "Explore all components available in the VLLNT UI library.",
+      /React Native.*0\.4\.0.*Source-only/,
     );
     const structuredData = (
       await page.locator('script[type="application/ld+json"]').allTextContents()
@@ -241,6 +241,14 @@ test.describe("platform-aware component discovery", () => {
     await expect(nativeTab).toBeFocused();
     await expect(nativeTab).toHaveAttribute("aria-selected", "true");
     await expect(source).toContainText("Pressable");
+    await main.getByRole("link", { name: "View source above" }).click();
+    await expect(page).toHaveURL(/#code$/);
+    await main.getByRole("tab", { name: "Preview", exact: true }).click();
+    await expect(page).toHaveURL(/#preview$/);
+    await main.getByRole("link", { name: "View source above" }).click();
+    await expect(main.getByRole("tab", { name: "Code", exact: true })).toHaveAttribute(
+      "aria-selected", "true",
+    );
 
     await expect(
       main.getByRole("button", { name: "Copy install command" }),

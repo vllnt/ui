@@ -84,6 +84,7 @@ export async function ComponentCard({
           </span>
         ) : null}
         <Link
+          aria-label={`${t("viewComponent")}: ${displayTitle}`}
           className="mt-4 inline-flex min-h-11 items-center self-start rounded-md text-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           href={href}
         >

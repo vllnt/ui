@@ -9,7 +9,10 @@ import {
   type ViewProps,
 } from "react-native";
 
-import type { LinkingService } from "../../primitives/platform-services";
+import {
+  defaultLinkingService,
+  type LinkingService,
+} from "../../primitives/platform-services";
 import { isSingleSelected } from "../../primitives/selection";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -34,6 +37,7 @@ export type NavigationMenuProps = Omit<ViewProps, "children" | "ref"> & {
   readonly linking?: LinkingService;
   readonly onNavigate?: (item: NavigationMenuItem) => void;
   readonly onOpenChange?: (id: string) => void;
+  readonly onOpenError?: (error: unknown, item: NavigationMenuItem) => void;
   readonly openId?: string;
   readonly ref?: Ref<View>;
 };
@@ -54,9 +58,10 @@ function NavigationMenu({
   defaultOpenId = "",
   items,
   label = "Primary navigation",
-  linking,
+  linking = defaultLinkingService,
   onNavigate,
   onOpenChange,
+  onOpenError,
   openId,
   ref,
   style,
@@ -86,7 +91,11 @@ function NavigationMenu({
       setExpandedId(expanded ? "" : item.id);
     }
     onNavigate?.(item);
-    if (item.href && linking) void linking.openUrl(item.href);
+    if (item.href) {
+      void linking.openUrl(item.href).then(undefined, (error: unknown) => {
+        onOpenError?.(error, item);
+      });
+    }
   };
 
   return (

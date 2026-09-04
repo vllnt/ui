@@ -59,7 +59,11 @@ export function ComponentSourceTabs({
         >
           {sources.map((source) => (
             <TabsTrigger
-              aria-controls={`${instanceId}-${source.id}-panel`}
+              aria-controls={
+                activeSource === source.id
+                  ? `${instanceId}-${source.id}-panel`
+                  : undefined
+              }
               id={`${instanceId}-${source.id}-tab`}
               key={source.id}
               tabIndex={activeSource === source.id ? 0 : -1}

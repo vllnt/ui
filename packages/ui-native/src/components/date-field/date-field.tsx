@@ -94,7 +94,13 @@ function DateField({
         ref={ref}
         returnKeyType="done"
         style={[{ minHeight: 44 }, style]}
-        value={editing ? draft : (value ?? draft)}
+        value={
+          editing
+            ? draft
+            : valueState.mode === "controlled"
+              ? (value ?? "")
+              : (value ?? draft)
+        }
       />
       {invalid ? (
         <NativeText

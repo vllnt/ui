@@ -36,9 +36,51 @@ type HeaderProps = {
 
 export function Header(props: HeaderProps) {
   return (
-    <Suspense fallback={<div aria-hidden="true" className="h-16 border-b" />}>
+    <Suspense fallback={<HeaderFallback {...props} />}>
       <HeaderContent {...props} />
     </Suspense>
+  );
+}
+
+function HeaderFallback({ locale }: HeaderProps) {
+  const t = useTranslations("header");
+  const navItems = [
+    { href: localizePathname("/", locale), title: t("navGetStarted") },
+    { href: localizePathname("/docs", locale), title: t("navDocs") },
+    {
+      href: localizePathname("/philosophy", locale),
+      title: t("navPhilosophy"),
+    },
+    { href: localizePathname("/design", locale), title: t("navDesign") },
+    {
+      href: localizePathname("/components", locale),
+      title: t("navComponents"),
+    },
+    {
+      href: localizePathname("/templates", locale),
+      title: t("navTemplates"),
+    },
+    { href: localizePathname("/themes", locale), title: t("navThemes") },
+    {
+      href: localizePathname("/request-component", locale),
+      title: t("navRequest"),
+    },
+  ];
+
+  return (
+    <NavbarSaas
+      brand={
+        <Link
+          className="truncate text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          href={localizePathname("/", locale)}
+        >
+          VLLNT UI
+        </Link>
+      }
+      closeSidebarLabel={t("closeNavigation")}
+      navItems={navItems}
+      openSidebarLabel={t("openNavigation")}
+    />
   );
 }
 
@@ -46,6 +88,7 @@ function HeaderContent({ locale }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParameters = useSearchParams();
+  const common = useTranslations("common");
   const t = useTranslations("header");
   const activePlatform = getPlatform(
     searchParameters.get("platform") ?? undefined,
@@ -130,7 +173,7 @@ function HeaderContent({ locale }: HeaderProps) {
       openSidebarLabel={t("openNavigation")}
       rightSlot={
         <div className="flex min-w-0 items-center gap-1 sm:gap-2">
-          <div className="hidden sm:block">
+          <div className="w-9 shrink-0 max-sm:[&_button]:size-9 max-sm:[&_button]:justify-center max-sm:[&_button]:px-0 max-sm:[&_button_span]:sr-only max-sm:[&_button_svg]:mr-0 sm:w-auto">
             <SearchDialog
               buttonText={t("searchButton")}
               buttonTextMobile={t("searchButton")}
@@ -174,6 +217,33 @@ function HeaderContent({ locale }: HeaderProps) {
                 <DropdownMenuItem asChild>
                   <a href="/rss.xml">{t("rssFeed")}</a>
                 </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  aria-label={`${common("locale")}: ${locale.toUpperCase()}`}
+                  className="size-9"
+                  size="icon"
+                  variant="outline"
+                >
+                  <Languages aria-hidden="true" className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {routing.locales.map((entry) => (
+                  <DropdownMenuItem asChild key={entry}>
+                    <Link
+                      aria-current={entry === locale ? "page" : undefined}
+                      href={preserveQuery(pathname)}
+                      locale={entry}
+                    >
+                      {entry.toUpperCase()}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

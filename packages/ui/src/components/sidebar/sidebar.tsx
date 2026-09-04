@@ -488,7 +488,7 @@ export function Sidebar({
           !isMobile && collapsed && "-translate-x-full",
         )}
         id={id}
-        inert={isMobile && !open ? true : undefined}
+        inert={(isMobile && !open) || collapsed ? true : undefined}
         ref={sidebarReference}
       >
         <div className="relative flex-1 overflow-hidden">
