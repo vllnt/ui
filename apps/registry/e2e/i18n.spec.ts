@@ -127,7 +127,7 @@ test.describe("i18n renders real French", () => {
   test("home hero + footer are French", async ({ page }) => {
     await page.goto("/fr");
     await expect(
-      page.getByText("Le systeme de design UI pour les agents IA."),
+      page.getByText("UI Web et native pour les agents IA."),
     ).toBeVisible();
     // Footer column title from the `footer` namespace.
     await expect(page.getByText("Bibliotheque", { exact: true })).toBeVisible();
