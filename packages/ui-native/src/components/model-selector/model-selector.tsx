@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  type Ref,
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useState,
-} from "react";
+import { type Ref, useCallback, useId, useMemo, useState } from "react";
 
 import {
-  AccessibilityInfo,
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -22,6 +13,8 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { ModalLayer } from "../../primitives/modal-layer";
+import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Explicit service availability for one selectable model. */
@@ -74,21 +67,6 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.8 },
   search: { borderWidth: 1, minHeight: 44 },
 });
-
-function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    void AccessibilityInfo.isReduceMotionEnabled().then(setReduced);
-    const subscription = AccessibilityInfo.addEventListener(
-      "reduceMotionChanged",
-      setReduced,
-    );
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-  return reduced;
-}
 
 function modelMatches(model: ModelInfo, query: string): boolean {
   const normalized = query.trim().toLocaleLowerCase();
@@ -448,7 +426,6 @@ function SelectorPanel({
     <View
       {...viewProps}
       accessibilityLabel={labels.description}
-      accessibilityViewIsModal
       ref={reference}
       style={[
         styles.panel,
@@ -518,32 +495,30 @@ function ModelSelector({
     style,
   });
   const reducedMotion = useReducedMotion();
+  const modalStyle = [
+    styles.modal,
+    { backgroundColor: theme.colors.muted, padding: theme.spacing[4] },
+  ];
   return (
-    <Modal
+    <ModalLayer
       animationType={reducedMotion ? "none" : "fade"}
-      onRequestClose={() => {
+      contentProps={{ style: modalStyle }}
+      keyboardAvoidingViewProps={{ style: styles.modal }}
+      onClose={() => {
         state.changeOpen(false);
       }}
-      transparent
       visible={state.isOpen}
     >
-      <View
-        style={[
-          styles.modal,
-          { backgroundColor: theme.colors.muted, padding: theme.spacing[4] },
-        ]}
-      >
-        <SelectorPanel
-          formatPricing={formatPricing}
-          labels={labels}
-          reference={ref}
-          searchInputProps={searchInputProps}
-          state={state}
-          style={style}
-          viewProps={viewProps}
-        />
-      </View>
-    </Modal>
+      <SelectorPanel
+        formatPricing={formatPricing}
+        labels={labels}
+        reference={ref}
+        searchInputProps={searchInputProps}
+        state={state}
+        style={style}
+        viewProps={viewProps}
+      />
+    </ModalLayer>
   );
 }
 ModelSelector.displayName = "ModelSelector";

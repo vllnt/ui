@@ -7,7 +7,11 @@ vi.mock("@/i18n/routing", () => ({
   routing: { defaultLocale: "en", locales: ["en", "fr"] },
 }));
 
-import { breadcrumbTrailLd, softwareSourceCodeLd } from "./jsonld";
+import {
+  breadcrumbTrailLd,
+  softwareApplicationLd,
+  softwareSourceCodeLd,
+} from "./jsonld";
 
 /**
  * Regression guard for the locale-JSON-LD bug: page structured-data URLs were
@@ -68,6 +72,22 @@ describe("breadcrumbTrailLd", () => {
  * same locale hazard as the breadcrumb trail: a /fr component page must not
  * advertise the English URL as its SoftwareSourceCode url.
  */
+describe("softwareApplicationLd", () => {
+  it("accepts renderer-specific runtime requirements without an install action", () => {
+    const result = softwareApplicationLd({
+      description: "Experimental native renderer.",
+      name: "@vllnt/ui-native",
+      operatingSystem: ["Android", "iOS"],
+      softwareRequirements: "React 19 and React Native 0.81+",
+      url: "https://ui.vllnt.com/native",
+    });
+
+    expect(result.operatingSystem).toEqual(["Android", "iOS"]);
+    expect(result.softwareRequirements).toBe("React 19 and React Native 0.81+");
+    expect(result).not.toHaveProperty("potentialAction");
+  });
+});
+
 describe("softwareSourceCodeLd", () => {
   it("points at the locale URL of the component page", () => {
     const json = JSON.stringify(

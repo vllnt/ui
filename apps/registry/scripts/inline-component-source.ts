@@ -59,18 +59,26 @@ type RegistryFile = {
 
 type Stability = "stable" | "beta" | "experimental" | "deprecated";
 type ComponentPlatform = "native" | "web";
-type NativeParity = "api-only" | "full";
+type NativeCompatibility = "native-adapted" | "portable-options";
+type NativeAvailability = "package" | "source";
 
 type NativeRenderer = {
+  availability: NativeAvailability;
   channel: "canary";
+  compatibility: NativeCompatibility;
   package: "@vllnt/ui-native";
-  parity: NativeParity;
+  source: string;
   status: "experimental";
 };
 
 type NativeRegistry = {
+  availability: NativeAvailability;
   channel: "canary";
-  components: { name: string; parity: NativeParity }[];
+  components: {
+    compatibility: NativeCompatibility;
+    name: string;
+    source: string;
+  }[];
   package: "@vllnt/ui-native";
   status: "experimental";
 };
@@ -247,9 +255,11 @@ for (const item of registry.items) {
   item.platforms = nativeComponent ? ["web", "native"] : ["web"];
   if (nativeComponent) {
     item.native = {
+      availability: nativeRegistry.availability,
       channel: nativeRegistry.channel,
+      compatibility: nativeComponent.compatibility,
       package: nativeRegistry.package,
-      parity: nativeComponent.parity,
+      source: nativeComponent.source,
       status: nativeRegistry.status,
     };
   } else {

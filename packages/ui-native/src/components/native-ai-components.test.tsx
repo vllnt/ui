@@ -93,6 +93,7 @@ describe("native AI components", () => {
 
   it("exposes unavailable services and blocks unavailable actions", () => {
     const onChatSubmit = jest.fn();
+    const onModelOpenChange = jest.fn();
     const onPromptSubmit = jest.fn();
     const onSelectModel = jest.fn();
     render(
@@ -135,6 +136,7 @@ describe("native AI components", () => {
               },
             },
           ]}
+          onOpenChange={onModelOpenChange}
           onSelectModel={onSelectModel}
           testID="model-selector"
         />
@@ -154,6 +156,12 @@ describe("native AI components", () => {
     expect(onChatSubmit).not.toHaveBeenCalled();
     expect(onPromptSubmit).not.toHaveBeenCalled();
     expect(onSelectModel).not.toHaveBeenCalled();
+
+    fireEvent(
+      screen.UNSAFE_getByProps({ accessibilityViewIsModal: true }),
+      "accessibilityEscape",
+    );
+    expect(onModelOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("renders stable ordered reasoning and controlled disclosures", () => {
@@ -201,6 +209,40 @@ describe("native AI components", () => {
     expect(onThinkingExpandedChange).toHaveBeenCalledWith(true);
     expect(screen.queryByText("Check constraints")).not.toBeOnTheScreen();
     expect(screen.queryByText("Private trace")).not.toBeOnTheScreen();
+  });
+
+  it("preserves conversation scroll position while reading history", () => {
+    render(
+      <ConversationThread
+        labels={conversationLabels}
+        messages={[
+          { content: "Older message", id: "assistant-1", role: "assistant" },
+        ]}
+        thinkingLabels={thinkingLabels}
+      >
+        <ConversationMessages />
+      </ConversationThread>,
+    );
+
+    const messageList = screen.UNSAFE_getByProps({
+      accessibilityLabel: "Assistant message",
+      accessibilityRole: "list",
+    });
+    expect(messageList.props.onContentSizeChange).toEqual(expect.any(Function));
+    fireEvent.scroll(messageList, {
+      nativeEvent: {
+        contentOffset: { x: 0, y: 0 },
+        contentSize: { height: 1000, width: 320 },
+        layoutMeasurement: { height: 320, width: 320 },
+      },
+    });
+
+    expect(
+      screen.UNSAFE_getByProps({
+        accessibilityLabel: "Assistant message",
+        accessibilityRole: "list",
+      }).props.onContentSizeChange,
+    ).toBeUndefined();
   });
 
   it("renders conversation and agent activity compound parts", () => {

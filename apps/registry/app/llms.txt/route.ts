@@ -50,7 +50,7 @@ const CATEGORY_LABEL = new Map<string, string>([
 const INSTALL_DETAILS = [
   "Web: install a component with the shadcn CLI: " +
     `\`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\`.`,
-  "Native (experimental): `pnpm add @vllnt/ui-native@canary`; check an item's `platforms` and `native` metadata first.",
+  "Native is experimental and currently available from repository source only. The planned `pnpm add @vllnt/ui-native@canary` command becomes valid after the first synchronized canary is published. Check `/r/native/registry.json` first.",
 ].join(" ");
 
 const DOCS_SECTION: LlmsSection = {
@@ -115,6 +115,12 @@ const REGISTRY_SECTION: LlmsSection = {
       notes: "full machine-readable list of all components",
       title: "Registry index",
       url: `${SITE_URL}/r/registry.json`,
+    },
+    {
+      notes:
+        "native renderer status, requirements, source, and supported components",
+      title: "Native renderer manifest",
+      url: `${SITE_URL}/r/native/registry.json`,
     },
     {
       notes: "machine-readable VLLNT UI token contract",
@@ -182,10 +188,24 @@ function buildComponentSections(
       .map((item) => ({
         notes: `${item.description ?? ""} Platforms: ${item.platforms.join(", ")}.`,
         title: item.title,
-        url: `${SITE_URL}/components/${item.name}`,
+        url: `${SITE_URL}/components/${item.name}?platform=web`,
       }));
     return [{ links, title: `Components - ${label}` }];
   });
+}
+
+function buildNativeSection(items: readonly RegistryComponent[]): LlmsSection {
+  return {
+    links: items
+      .filter((item) => item.platforms.includes("native"))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((item) => ({
+        notes: `${item.description ?? ""} Experimental ${item.native?.compatibility ?? "native-adapted"} renderer; ${item.native?.availability ?? "source"} availability.`,
+        title: item.title,
+        url: `${SITE_URL}/components/${item.name}?platform=native`,
+      })),
+    title: "React Native components - Experimental",
+  };
 }
 
 function buildLlmsTxt(): string {
@@ -196,6 +216,7 @@ function buildLlmsTxt(): string {
       DOCS_SECTION,
       REGISTRY_SECTION,
       ...buildComponentSections(items),
+      buildNativeSection(items),
     ],
     summary: buildSummary(items),
     title: "VLLNT UI",

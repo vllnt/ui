@@ -58,9 +58,11 @@ Web components remain self-contained under `packages/ui/src/components/{name}` w
 
 ### React Native
 
-`@vllnt/ui-native` targets React 19 and React Native 0.81 or newer. The pilot includes Button, Text, Heading, Badge, and the Card compound family. Components consume the generated theme through `ThemeProvider`, expose React Native props, meet native touch-target and accessibility requirements, and have no DOM, Radix, Tailwind, or NativeWind dependency.
+`@vllnt/ui-native` targets React 19 and React Native 0.81 or newer. Its source manifest currently lists 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Components consume the generated theme through `ThemeProvider`, expose React Native props, meet native touch-target and accessibility requirements, and have no DOM, Radix, Tailwind, NativeWind, or browser-global dependency.
 
-NativeWind and `@rn-primitives` are intentionally absent from the foundational pilot. This avoids mandatory consumer Babel configuration and unnecessary runtime dependencies. Complex interaction families can add narrowly scoped adapters after real-device validation proves the need.
+Interaction infrastructure supplies controlled/uncontrolled state, caller-owned selection IDs, reduced-motion observation, native modal layering, safe-area injection, and typed platform services. Clipboard and file picking stay host-injected; linking and sharing use React Native adapters. Browser-only behavior is omitted or adapted rather than simulated.
+
+NativeWind and `@rn-primitives` remain intentionally absent. This avoids mandatory consumer Babel configuration and unnecessary runtime dependencies. Any future adapter must be justified by behavior and real-device accessibility evidence.
 
 ## Theming
 
@@ -98,14 +100,16 @@ Turborepo orders package builds through workspace dependencies. The native CI jo
     "package": "@vllnt/ui-native",
     "channel": "canary",
     "status": "experimental",
-    "parity": "full"
+    "availability": "source",
+    "compatibility": "native-adapted",
+    "source": "src/components/button/button.tsx"
   }
 }
 ```
 
-`shadcn build` strips extension fields, so `stamp-registry-metadata.ts` restores them in generated public descriptors. The website exposes platform badges and filtering; `/llms.txt`, `/llms-full.txt`, JSON routes, search, JSON-LD, and MCP return the same availability contract.
+`shadcn build` strips extension fields, so `stamp-registry-metadata.ts` restores them in generated public descriptors. The website exposes URL-driven platform selection, a dedicated `/native` hub, platform badges, filtering, source-aware component detail pages, and a native manifest at `/r/native/registry.json`; `/llms.txt`, `/llms-full.txt`, JSON routes, search, JSON-LD, and MCP project the same availability contract.
 
-Web installation remains shadcn-based. Native installation is package-based during the pilot. Registry metadata is discovery information, not a claim that the web shim runs on React Native.
+Web installation remains shadcn-based. Native installation is unavailable while the manifest says `availability: "source"` and `installation.available: false`; the planned canary command is displayed as non-actionable documentation. Registry metadata is discovery information, not a claim that the web shim runs on React Native.
 
 ## Release boundaries
 

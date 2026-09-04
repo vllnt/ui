@@ -5,7 +5,6 @@ import {
   Breadcrumb,
   MDXContent,
   ShareSection,
-  Sidebar,
   StaticCode,
   TableOfContents,
 } from "@vllnt/ui";
@@ -17,6 +16,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ComponentCard } from "@/components/component-card";
 import { buildComponentMdxKit } from "@/components/component-mdx";
 import { PlatformBadges } from "@/components/platform-badges";
+import { PlatformSelector } from "@/components/platform-selector";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
 import { ShareEmbedBar } from "@/components/share-embed-bar";
@@ -32,11 +33,17 @@ import {
   softwareSourceCodeLd,
   techArticleLd,
 } from "@/lib/jsonld";
+import { nativeRegistry } from "@/lib/native-registry";
 import {
   generateOGImageURL,
   generateOGMetadata,
   generateTwitterMetadata,
 } from "@/lib/og";
+import {
+  getPlatform,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
 import {
   getPlaygroundExample,
   getRegistryPackageVersion,
@@ -55,6 +62,7 @@ import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
+  searchParams: Promise<PlatformQuery>;
 };
 
 const metadata_map = componentMetadata as Record<
@@ -149,7 +157,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ComponentPage(props: Props) {
-  const { locale, slug } = await props.params;
+  const [{ locale, slug }, query] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
   setRequestLocale(locale);
   const t = await getTranslations("pages.component");
   const common = await getTranslations("common");
@@ -183,16 +194,48 @@ export default async function ComponentPage(props: Props) {
   const playgroundExample = getPlaygroundExample(component);
   const registryPackageVersion = getRegistryPackageVersion(registry.version);
   const supportsNative = component.platforms.includes("native");
+  const platform = getPlatform(query.platform) ?? "web";
+  const isNative = platform === "native";
+  const supportsActivePlatform = component.platforms.includes(platform);
 
   // Read component source for code display
   let componentCode = "";
-  try {
-    const isChartComponent = ["area-chart", "bar-chart", "line-chart"].includes(
-      component.name,
-    );
+  if (!isNative) {
+    try {
+      const isChartComponent = [
+        "area-chart",
+        "bar-chart",
+        "line-chart",
+      ].includes(component.name);
 
-    const sourcePath = isChartComponent
-      ? path.join(
+      const sourcePath = isChartComponent
+        ? path.join(
+            process.cwd(),
+            "..",
+            "..",
+            "packages",
+            "ui",
+            "src",
+            "components",
+            "chart",
+            `${component.name}.tsx`,
+          )
+        : path.join(
+            process.cwd(),
+            "..",
+            "..",
+            "packages",
+            "ui",
+            "src",
+            "components",
+            component.name,
+            `${component.name}.tsx`,
+          );
+
+      try {
+        componentCode = await readFile(sourcePath, "utf8");
+      } catch {
+        const directPath = path.join(
           process.cwd(),
           "..",
           "..",
@@ -200,43 +243,19 @@ export default async function ComponentPage(props: Props) {
           "ui",
           "src",
           "components",
-          "chart",
-          `${component.name}.tsx`,
-        )
-      : path.join(
-          process.cwd(),
-          "..",
-          "..",
-          "packages",
-          "ui",
-          "src",
-          "components",
-          component.name,
           `${component.name}.tsx`,
         );
-
-    try {
-      componentCode = await readFile(sourcePath, "utf8");
+        componentCode = await readFile(directPath, "utf8");
+      }
     } catch {
-      const directPath = path.join(
-        process.cwd(),
-        "..",
-        "..",
-        "packages",
-        "ui",
-        "src",
-        "components",
-        `${component.name}.tsx`,
-      );
-      componentCode = await readFile(directPath, "utf8");
+      // Source file not found — skip code section
     }
-  } catch {
-    // Source file not found — skip code section
   }
 
   const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
 
-  const componentMdx = await getComponentContent(slug, locale);
+  const localizedComponent = await getComponentContent(slug, locale);
+  const componentMdx = isNative ? undefined : localizedComponent;
   const mdxKit = buildComponentMdxKit({
     componentCode,
     componentName: component.name,
@@ -260,33 +279,44 @@ export default async function ComponentPage(props: Props) {
     .slice(0, 6);
   const relatedComponents = relatedSlugs.filter((name) =>
     registry.items.some(
-      (item) => item.name === name && item.type === "registry:component",
+      (item) =>
+        item.name === name &&
+        item.type === "registry:component" &&
+        item.platforms.includes(platform),
     ),
   );
 
   const sections = [
-    ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
-    { id: "installation", title: t("installation") },
-    ...(meta?.defaultStoryId
+    ...(!isNative && meta?.defaultStoryId
+      ? [{ id: "preview", title: t("preview") }]
+      : []),
+    ...(supportsActivePlatform
+      ? [
+          {
+            id: "installation",
+            title: isNative ? t("nativeCapabilityTitle") : t("installation"),
+          },
+        ]
+      : []),
+    ...(!isNative && meta?.defaultStoryId
       ? [{ id: "storybook", title: t("storybook") }]
       : []),
-    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
-    ...(supportsNative
-      ? [{ id: "native-installation", title: t("nativeInstallation") }]
-      : []),
-    ...(component.dependencies && component.dependencies.length > 0
+    ...(!isNative && componentCode ? [{ id: "code", title: t("code") }] : []),
+    ...(!isNative && component.dependencies && component.dependencies.length > 0
       ? [{ id: "dependencies", title: t("dependencies") }]
       : []),
-    ...(seoCopy?.faqs.length ? [{ id: "faq", title: t("faq") }] : []),
+    ...(!isNative && seoCopy?.faqs.length
+      ? [{ id: "faq", title: t("faq") }]
+      : []),
     ...(relatedComponents.length > 0
       ? [{ id: "related", title: t("related") }]
       : []),
   ] as { id: string; title: string }[];
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-  const articleTitle = componentMdx?.frontmatter.title ?? displayTitle;
+  const articleTitle = localizedComponent?.frontmatter.title ?? displayTitle;
   const articleDescription =
-    componentMdx?.frontmatter.description ?? displayDescription;
+    localizedComponent?.frontmatter.description ?? displayDescription;
   const componentUrl = canonical(`/components/${component.name}`, locale);
   const ogImage = `${SITE_URL}${generateOGImageURL({
     category: componentCategory ?? undefined,
@@ -303,7 +333,7 @@ export default async function ComponentPage(props: Props) {
           softwareSourceCodeLd({
             description: articleDescription,
             image: ogImage,
-            keywords: componentMdx?.frontmatter.keywords,
+            keywords: localizedComponent?.frontmatter.keywords,
             locale,
             name: component.name,
             platforms: component.platforms,
@@ -314,7 +344,7 @@ export default async function ComponentPage(props: Props) {
             description: articleDescription,
             image: ogImage,
             inLanguage: locale,
-            keywords: componentMdx?.frontmatter.keywords,
+            keywords: localizedComponent?.frontmatter.keywords,
             title: articleTitle,
             url: componentUrl,
           }),
@@ -332,7 +362,7 @@ export default async function ComponentPage(props: Props) {
           ),
         ])}
       />
-      <Sidebar
+      <PlatformSidebar
         sections={await getSidebarSections(
           getCategoryForComponent(slug),
           locale,
@@ -348,19 +378,31 @@ export default async function ComponentPage(props: Props) {
                   className="mb-4 text-muted-foreground"
                   items={[
                     {
-                      href: localizePathname("/", locale),
+                      href: withPlatformQuery(
+                        localizePathname("/", locale),
+                        query,
+                        platform,
+                      ),
                       label: common("home"),
                     },
                     {
-                      href: localizePathname("/components", locale),
+                      href: withPlatformQuery(
+                        localizePathname("/components", locale),
+                        query,
+                        platform,
+                      ),
                       label: common("components"),
                     },
                     ...(familyGroup
                       ? [
                           {
-                            href: localizePathname(
-                              familyPath(familyGroup.category),
-                              locale,
+                            href: withPlatformQuery(
+                              localizePathname(
+                                familyPath(familyGroup.category),
+                                locale,
+                              ),
+                              query,
+                              platform,
                             ),
                             label: familyGroup.label,
                           },
@@ -370,23 +412,44 @@ export default async function ComponentPage(props: Props) {
                   ]}
                 />
                 <h1 className="text-4xl font-semibold mb-2">{articleTitle}</h1>
-                <p className="text-muted-foreground text-lg mb-4">
+                <p className="mb-4 text-lg text-muted-foreground">
                   {articleDescription}
                 </p>
                 <PlatformBadges
-                  className="mb-6 flex flex-wrap items-center gap-2"
+                  className="mb-4 flex flex-wrap items-center gap-2"
                   platforms={component.platforms}
                 />
+                <PlatformSelector className="mb-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
                 <div className="flex flex-wrap items-center gap-3">
-                  <QuickAdd componentName={component.name} />
-                  <ShareEmbedBar
-                    pageUrl={canonical(`/components/${component.name}`, locale)}
-                    slug={component.name}
-                    title={articleTitle}
-                  />
+                  {isNative ? (
+                    supportsNative ? (
+                      <Link
+                        className="inline-flex min-h-11 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        href={withPlatformQuery("/components", query, "native")}
+                      >
+                        {t("browseNativeCatalog")}
+                      </Link>
+                    ) : null
+                  ) : (
+                    <QuickAdd componentName={component.name} />
+                  )}
+                  {isNative ? null : (
+                    <ShareEmbedBar
+                      pageUrl={canonical(
+                        `/components/${component.name}`,
+                        locale,
+                      )}
+                      slug={component.name}
+                      title={articleTitle}
+                    />
+                  )}
                   <Link
-                    className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-                    href={`/report?component=${component.name}`}
+                    className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+                    href={withPlatformQuery(
+                      `/report?component=${component.name}`,
+                      query,
+                      platform,
+                    )}
                   >
                     {t("reportBug")}
                   </Link>
@@ -394,7 +457,7 @@ export default async function ComponentPage(props: Props) {
               </div>
 
               {/* When to use in an AI app */}
-              {whenToUse ? (
+              {!isNative && whenToUse ? (
                 <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
                   <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                     {t("whenToUseTitle")}
@@ -402,7 +465,7 @@ export default async function ComponentPage(props: Props) {
                   <p className="mt-3 text-base leading-relaxed">{whenToUse}</p>
                   <Link
                     className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                    href="/families/ai"
+                    href={withPlatformQuery("/families/ai", query, platform)}
                   >
                     {t("browseAiComponents")}
                     <ExternalLink className="size-3" />
@@ -411,7 +474,7 @@ export default async function ComponentPage(props: Props) {
               ) : null}
 
               {/* Usage block for non-AI components */}
-              {!whenToUse && seoCopy?.whatItIs ? (
+              {!isNative && !whenToUse && seoCopy?.whatItIs ? (
                 <div className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
                   <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
                     {t("whatItIsTitle")}
@@ -422,9 +485,10 @@ export default async function ComponentPage(props: Props) {
                   {familyGroup ? (
                     <Link
                       className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                      href={localizePathname(
+                      href={withPlatformQuery(
                         familyPath(familyGroup.category),
-                        locale,
+                        query,
+                        platform,
                       )}
                     >
                       {familyGroup.label}
@@ -434,7 +498,103 @@ export default async function ComponentPage(props: Props) {
                 </div>
               ) : null}
 
-              {componentMdx ? (
+              {isNative ? (
+                supportsNative ? (
+                  <section
+                    className="mb-8 rounded-lg border border-border bg-card p-6 scroll-mt-8"
+                    id="installation"
+                  >
+                    <h2 className="text-2xl font-semibold">
+                      {t("nativeCapabilityTitle")}
+                    </h2>
+                    <p className="mt-3 text-muted-foreground">
+                      {t("nativeCapabilityDescription")}
+                    </p>
+                    <div
+                      aria-disabled="true"
+                      className="mt-6 rounded-md border border-dashed border-border bg-muted/30 p-4"
+                    >
+                      <p className="text-sm font-medium">
+                        {t("nativeAvailableAfterCanary")}
+                      </p>
+                      <code className="mt-3 block overflow-x-auto font-mono text-sm text-muted-foreground">
+                        {nativeRegistry.installation.command}
+                      </code>
+                    </div>
+                    {component.native ? (
+                      <dl className="mt-6 grid gap-px overflow-hidden rounded-md border border-border bg-border sm:grid-cols-2">
+                        <div className="bg-background p-4">
+                          <dt className="text-sm text-muted-foreground">
+                            {t("nativeCompatibilityLabel")}
+                          </dt>
+                          <dd className="mt-1 font-medium">
+                            {component.native.compatibility ===
+                            "portable-options"
+                              ? t("nativeCompatibilityPortable")
+                              : t("nativeCompatibilityAdapted")}
+                          </dd>
+                        </div>
+                        <div className="bg-background p-4">
+                          <dt className="text-sm text-muted-foreground">
+                            {t("nativeRequirementsLabel")}
+                          </dt>
+                          <dd className="mt-1 font-medium">
+                            React {nativeRegistry.minimumReact}+ · React Native{" "}
+                            {nativeRegistry.minimumReactNative}+
+                          </dd>
+                        </div>
+                        <div className="bg-background p-4 sm:col-span-2">
+                          <dt className="text-sm text-muted-foreground">
+                            {t("nativeSourcePathLabel")}
+                          </dt>
+                          <dd className="mt-1 overflow-x-auto font-mono text-sm">
+                            {component.native.source}
+                          </dd>
+                        </div>
+                      </dl>
+                    ) : null}
+                    <h3 className="mt-6 text-lg font-semibold">
+                      {t("nativeSourceTitle")}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {t("nativeSourceDescription")}
+                    </p>
+                    <Link
+                      className="mt-6 inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      href={withPlatformQuery("/docs/native", query, "native")}
+                    >
+                      {t("nativeReadGuide")}
+                    </Link>
+                  </section>
+                ) : (
+                  <section className="mb-8 rounded-lg border border-border bg-muted/30 p-6">
+                    <h2 className="text-2xl font-semibold">
+                      {t("webOnlyTitle")}
+                    </h2>
+                    <p className="mt-3 text-muted-foreground">
+                      {t("webOnlyDescription")}
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <Link
+                        className="inline-flex min-h-11 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        href={withPlatformQuery("/components", query, "native")}
+                      >
+                        {t("browseNativeCatalog")}
+                      </Link>
+                      <Link
+                        className="inline-flex min-h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        href={withPlatformQuery(
+                          `/components/${component.name}`,
+                          query,
+                          "web",
+                        )}
+                      >
+                        {t("viewWebComponent")}
+                      </Link>
+                    </div>
+                  </section>
+                )
+              ) : componentMdx ? (
                 <MDXContent
                   components={mdxKit}
                   content={componentMdx.content}
@@ -442,7 +602,6 @@ export default async function ComponentPage(props: Props) {
                 />
               ) : (
                 <>
-                  {/* Preview + Playground */}
                   {meta?.defaultStoryId ? (
                     <PreviewPlaygroundTabs
                       componentName={component.name}
@@ -452,7 +611,6 @@ export default async function ComponentPage(props: Props) {
                     />
                   ) : null}
 
-                  {/* Installation */}
                   <div className="mb-8 scroll-mt-8" id="installation">
                     <h2 className="text-2xl font-semibold mb-4">
                       {t("installation")}
@@ -460,7 +618,6 @@ export default async function ComponentPage(props: Props) {
                     <StaticCode code={installCommand} language="bash" />
                   </div>
 
-                  {/* Storybook link */}
                   {meta?.defaultStoryId ? (
                     <div className="mb-8 scroll-mt-8" id="storybook">
                       <h2 className="text-2xl font-semibold mb-4">
@@ -470,7 +627,7 @@ export default async function ComponentPage(props: Props) {
                         {t("storybookDescription")}
                       </p>
                       <a
-                        className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                         href={`${STORYBOOK_URL}/?path=/story/${meta.defaultStoryId}`}
                         rel="noopener noreferrer"
                         target="_blank"
@@ -488,7 +645,7 @@ export default async function ComponentPage(props: Props) {
                           <div className="flex flex-wrap gap-2">
                             {meta.stories.map((story) => (
                               <a
-                                className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-muted"
+                                className="inline-flex min-h-11 items-center rounded-md border px-3 text-sm transition-colors hover:bg-muted"
                                 href={`${STORYBOOK_URL}/?path=/story/${story.id}`}
                                 key={story.id}
                                 rel="noopener noreferrer"
@@ -503,7 +660,6 @@ export default async function ComponentPage(props: Props) {
                     </div>
                   ) : null}
 
-                  {/* Code */}
                   {componentCode ? (
                     <div className="mb-8 scroll-mt-8" id="code">
                       <h2 className="text-2xl font-semibold mb-4">
@@ -515,29 +671,10 @@ export default async function ComponentPage(props: Props) {
                 </>
               )}
 
-              {supportsNative ? (
-                <section className="mb-8 scroll-mt-8" id="native-installation">
-                  <h2 className="text-2xl font-semibold mb-4">
-                    {t("nativeInstallation")}
-                  </h2>
-                  <p className="mb-4 text-muted-foreground">
-                    {t("nativeInstallDescription")}
-                  </p>
-                  <StaticCode
-                    code="pnpm add @vllnt/ui-native@canary"
-                    language="bash"
-                  />
-                  <Link
-                    className="mt-4 inline-flex text-sm font-medium underline"
-                    href="/docs/native"
-                  >
-                    {t("nativeReadGuide")}
-                  </Link>
-                </section>
-              ) : null}
-
               {/* Dependencies */}
-              {component.dependencies && component.dependencies.length > 0 ? (
+              {!isNative &&
+              component.dependencies &&
+              component.dependencies.length > 0 ? (
                 <div className="mb-8 scroll-mt-8" id="dependencies">
                   <h2 className="text-2xl font-semibold mb-4">
                     {t("dependencies")}
@@ -578,6 +715,8 @@ export default async function ComponentPage(props: Props) {
                       <ComponentCard
                         key={relatedSlug}
                         locale={locale}
+                        platform={platform}
+                        query={query}
                         slug={relatedSlug}
                       />
                     ))}
@@ -585,7 +724,7 @@ export default async function ComponentPage(props: Props) {
                 </section>
               ) : null}
 
-              {seoCopy?.faqs.length ? (
+              {!isNative && seoCopy?.faqs.length ? (
                 <section className="mb-8 scroll-mt-8" id="faq">
                   <h2 className="text-2xl font-semibold mb-4">{t("faq")}</h2>
                   <dl className="space-y-6">
@@ -601,15 +740,17 @@ export default async function ComponentPage(props: Props) {
                 </section>
               ) : null}
 
-              <ShareSection
-                shareOn={t("shareOn")}
-                shareTitle={t("shareTitle")}
-                title={`${articleTitle} — VLLNT UI`}
-                url={withRef(
-                  canonical(`/components/${component.name}`, locale),
-                  "share",
-                )}
-              />
+              {isNative ? null : (
+                <ShareSection
+                  shareOn={t("shareOn")}
+                  shareTitle={t("shareTitle")}
+                  title={`${articleTitle} — VLLNT UI`}
+                  url={withRef(
+                    canonical(`/components/${component.name}`, locale),
+                    "share",
+                  )}
+                />
+              )}
             </div>
 
             {/* Table of Contents */}

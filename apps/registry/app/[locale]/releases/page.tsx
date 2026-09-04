@@ -1,7 +1,8 @@
-import { Badge, Breadcrumb, Button, MDXContent, Sidebar } from "@vllnt/ui";
+import { Badge, Breadcrumb, Button, MDXContent } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { getReleaseRecords } from "@/lib/changelog";
 import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
@@ -191,7 +192,7 @@ export default async function ReleasesPage({ params }: Props) {
         }}
         type="application/ld+json"
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-5xl px-4 py-16 lg:px-8">
           <Breadcrumb

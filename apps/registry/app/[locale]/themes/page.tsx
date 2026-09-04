@@ -1,8 +1,8 @@
-import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { ThemeEditor } from "@/components/theme-editor";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
@@ -63,7 +63,7 @@ export default async function ThemesPage({ params }: Props) {
           ),
         )}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
           <div className="mb-8 border-b border-border pb-8">

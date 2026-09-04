@@ -45,9 +45,11 @@ type RegistryItem = {
   dependencies?: string[];
   name: string;
   native?: {
+    availability?: string;
     channel?: string;
+    compatibility?: string;
     package?: string;
-    parity?: string;
+    source?: string;
     status?: string;
   };
   platforms?: string[];
@@ -57,7 +59,13 @@ type RegistryItem = {
 
 type Registry = { items: RegistryItem[] };
 type NativeRegistry = {
-  components: { name: string; parity: "api-only" | "full" }[];
+  availability: "package" | "source";
+  components: {
+    compatibility: "native-adapted" | "portable-options";
+    name: string;
+    source: string;
+  }[];
+  installation: { available: boolean };
 };
 
 const registry = JSON.parse(readFileSync(registryJsonPath, "utf8")) as Registry;
@@ -114,7 +122,11 @@ for (const item of registry.items) {
     (item.native.package !== "@vllnt/ui-native" ||
       item.native.channel !== "canary" ||
       item.native.status !== "experimental" ||
-      !["api-only", "full"].includes(item.native.parity ?? ""))
+      item.native.availability !== nativeRegistry.availability ||
+      !["native-adapted", "portable-options"].includes(
+        item.native.compatibility ?? "",
+      ) ||
+      !item.native.source)
   ) {
     errors.push(`Item "${item.name}" has invalid native renderer metadata.`);
   }
@@ -136,14 +148,36 @@ for (const item of registry.items) {
 }
 
 const nativeManifest = new Map(
-  nativeRegistry.components.map((component) => [component.name, component.parity]),
+  nativeRegistry.components.map((component) => [component.name, component]),
 );
+if (nativeManifest.size !== nativeRegistry.components.length) {
+  errors.push("Native manifest contains duplicate component names.");
+}
+if (
+  (nativeRegistry.availability === "package") !==
+  nativeRegistry.installation.available
+) {
+  errors.push("Native availability and installation status disagree.");
+}
+
 const nativeItems = registry.items.filter((item) =>
   item.platforms?.includes("native"),
 );
 for (const item of nativeItems) {
-  if (nativeManifest.get(item.name) !== item.native?.parity) {
-    errors.push(`Item "${item.name}" has drifted from packages/ui-native/registry.json.`);
+  const nativeComponent = nativeManifest.get(item.name);
+  if (
+    nativeComponent?.compatibility !== item.native?.compatibility ||
+    nativeComponent?.source !== item.native?.source
+  ) {
+    errors.push(
+      `Item "${item.name}" has drifted from packages/ui-native/registry.json.`,
+    );
+  }
+  if (
+    nativeComponent &&
+    !existsSync(join(repoRoot, "packages/ui-native", nativeComponent.source))
+  ) {
+    errors.push(`Native source for "${item.name}" does not exist.`);
   }
 }
 for (const name of nativeManifest.keys()) {

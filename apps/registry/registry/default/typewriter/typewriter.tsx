@@ -73,14 +73,14 @@ export const Typewriter = ({
       return;
     }
 
+    let current = 0;
     const timer = setInterval(() => {
-      setCount((current) => {
-        if (current >= text.length) {
-          clearInterval(timer);
-          return current;
-        }
-        return current + 1;
-      });
+      if (current >= text.length) {
+        clearInterval(timer);
+        return;
+      }
+      current += 1;
+      setCount(current);
     }, speed);
 
     return () => {

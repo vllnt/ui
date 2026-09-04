@@ -68,11 +68,14 @@ const INSTALL_DETAILS = [
   `# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`,
   "```",
   "",
-  "Experimental React Native renderer:",
+  "Experimental React Native renderer (source preview only; no npm release yet):",
   "",
   "```bash",
+  "# Planned after the first synchronized canary is published:",
   "pnpm add @vllnt/ui-native@canary",
   "```",
+  "",
+  `Native manifest: ${SITE_URL}/r/native/registry.json`,
 ].join("\n");
 
 async function buildGuidePages(): Promise<LlmsFullPage[]> {
@@ -127,6 +130,15 @@ function buildTemplatePages(): LlmsFullPage[] {
   }));
 }
 
+function buildNativeComponentDetails(item: RegistryComponent): string[] {
+  if (!item.native) return [];
+  return [
+    `- Native renderer: \`${item.native.package}\` (${item.native.status}; ${item.native.compatibility}; availability: ${item.native.availability})`,
+    `- Native source: \`${item.native.source}\``,
+    `- Native page: ${SITE_URL}/components/${item.name}?platform=native`,
+  ];
+}
+
 function buildComponentPages(
   items: readonly RegistryComponent[],
 ): LlmsFullPage[] {
@@ -137,11 +149,7 @@ function buildComponentPages(
         `- Slug: \`${item.name}\``,
         `- Category: \`${item.category ?? ""}\``,
         `- Platforms: ${item.platforms.join(", ")}`,
-        ...(item.native
-          ? [
-              `- Native package: \`${item.native.package}@${item.native.channel}\` (${item.native.status}, ${item.native.parity} parity)`,
-            ]
-          : []),
+        ...buildNativeComponentDetails(item),
         `- Description: ${item.description ?? ""}`,
         `- Page: ${SITE_URL}/components/${item.name}`,
         `- Schema: ${SITE_URL}/r/${item.name}.json`,

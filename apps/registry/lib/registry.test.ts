@@ -30,9 +30,11 @@ describe("registry component platforms", () => {
         },
       ],
       native: {
+        availability: "source",
         channel: "canary",
+        compatibility: "portable-options",
         package: "@vllnt/ui-native",
-        parity: "full",
+        source: "src/components/button/button.tsx",
         status: "experimental",
       },
       platforms: ["web", "native"],
@@ -50,9 +52,11 @@ describe("registry component platforms", () => {
     {
       ...baseComponent,
       native: {
+        availability: "source",
         channel: "canary",
+        compatibility: "portable-options",
         package: "@vllnt/ui-native",
-        parity: "full",
+        source: "src/components/button/button.tsx",
         status: "experimental",
       },
     },

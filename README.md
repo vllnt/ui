@@ -22,7 +22,7 @@
 - **shadcn-compatible registry** — install individual components with `shadcn add`
 - **TypeScript strict** — fully typed with exported prop interfaces
 - **Tested** — unit tests (Vitest) + visual regression (Playwright CT) + Storybook
-- **React Native pilot** — five experimental components in a separate canary-only renderer with shared tokens and contracts
+- **React Native source preview** — 171 experimental native component modules in a separate renderer with shared tokens, native accessibility, and no web runtime dependency
 
 ## Install
 
@@ -46,9 +46,9 @@ Or by `@vllnt-ui` namespace once it's in the [shadcn registry index](https://ui.
 pnpm dlx shadcn@latest add @vllnt-ui/button
 ```
 
-## React Native pilot
+## React Native source preview
 
-The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. Install the explicit canary channel:
+The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. It currently exists in repository source only; `@vllnt/ui-native` has not been published to npm. The planned command becomes actionable only after the native manifest reports package availability:
 
 ```bash
 pnpm add @vllnt/ui-native@canary
@@ -66,7 +66,7 @@ export function NativeExample() {
 }
 ```
 
-The pilot includes Button, Text, Heading, Badge, and Card. See the [React Native guide](https://ui.vllnt.com/docs/native). `@vllnt/ui` remains the stable web renderer with its existing API and release path.
+The source catalog contains 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Browse the [React Native hub](https://ui.vllnt.com/native), [React Native guide](https://ui.vllnt.com/docs/native), or [machine-readable native manifest](https://ui.vllnt.com/r/native/registry.json). `@vllnt/ui` remains the stable web renderer with its existing API and release path.
 
 ## Quick Start
 

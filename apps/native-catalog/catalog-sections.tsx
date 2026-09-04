@@ -1,31 +1,49 @@
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  AIChatInput,
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Avatar,
+  AvatarFallback,
   Badge,
+  Banner,
   Button,
-  type ButtonSize,
-  type ButtonVariant,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
+  Checkbox,
+  Checklist,
+  DataList,
+  Dialog,
+  EmptyState,
   Heading,
+  Input,
+  NumberTicker,
+  ProgressBar,
+  SearchBar,
+  Separator,
+  Spinner,
+  StatusIndicator,
+  Switch,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   Text,
+  Textarea,
   type ThemeSelection,
   useTheme,
 } from "@vllnt/ui-native";
 import type { ReactNode } from "react";
 import { View } from "react-native";
 
-const buttonVariants: readonly ButtonVariant[] = [
-  "default",
-  "secondary",
-  "outline",
-  "ghost",
-  "link",
-  "destructive",
-];
-const buttonSizes: readonly ButtonSize[] = ["sm", "default", "lg", "icon"];
 const themeSelections: readonly ThemeSelection[] = ["system", "light", "dark"];
 
 function Row({ children }: { readonly children: ReactNode }) {
@@ -91,7 +109,7 @@ export function ThemeSection({
   );
 }
 
-export function ButtonSection({
+export function FoundationSection({
   onPress,
   presses,
 }: {
@@ -99,59 +117,175 @@ export function ButtonSection({
   readonly presses: number;
 }) {
   return (
-    <Section title="Buttons">
+    <Section title="Foundation">
       <Row>
-        {buttonVariants.map((variant) => (
-          <Button key={variant} onPress={onPress} variant={variant}>
-            {variant[0]?.toUpperCase() + variant.slice(1)}
-          </Button>
-        ))}
+        <Button onPress={onPress}>Primary action</Button>
+        <Badge variant="secondary">Experimental</Badge>
+        <Avatar accessibilityLabel="Ada Lovelace">
+          <AvatarFallback>
+            <Text>AL</Text>
+          </AvatarFallback>
+        </Avatar>
+        <StatusIndicator label="Operational" tone="success" />
+        <Spinner accessibilityLabel="Loading" />
       </Row>
-      <Row>
-        {buttonSizes.map((size) => (
-          <Button
-            accessibilityLabel={size === "icon" ? "Add item" : undefined}
-            key={size}
-            onPress={onPress}
-            size={size}
-          >
-            {size === "icon" ? "+" : size}
-          </Button>
-        ))}
-      </Row>
+      <Text size="lead">Native semantic tokens</Text>
       <Text size="small" tone="muted">
-        Button presses: {presses}
+        Interaction count: {presses}
+      </Text>
+      <Separator />
+    </Section>
+  );
+}
+
+export function FormSection({
+  enabled,
+  onEnabledChange,
+}: {
+  readonly enabled: boolean;
+  readonly onEnabledChange: (value: boolean) => void;
+}) {
+  return (
+    <Section title="Forms and selection">
+      <Input accessibilityLabel="Project name" placeholder="Project name" />
+      <Textarea accessibilityLabel="Project notes" placeholder="Notes" />
+      <SearchBar
+        buttonLabel="Search components"
+        onSearch={(query) => {
+          void query;
+        }}
+      />
+      <Row>
+        <Switch
+          accessibilityLabel="Enable alerts"
+          checked={enabled}
+          onCheckedChange={onEnabledChange}
+        />
+        <Checkbox accessibilityLabel="Include archived" defaultChecked />
+      </Row>
+    </Section>
+  );
+}
+
+export function DataSection() {
+  return (
+    <Section title="Data and feedback">
+      <Alert>
+        <AlertTitle>Build ready</AlertTitle>
+        <AlertDescription>Android and iOS bundles are queued.</AlertDescription>
+      </Alert>
+      <Banner>Source preview · npm canary publication is still gated.</Banner>
+      <ProgressBar
+        accessibilityLabel="Catalog coverage"
+        max={171}
+        value={171}
+      />
+      <DataList
+        items={[
+          { id: "renderer", label: "Renderer", value: "React Native" },
+          {
+            id: "availability",
+            label: "Availability",
+            value: "Repository source",
+          },
+        ]}
+      />
+    </Section>
+  );
+}
+
+export function NavigationSection() {
+  return (
+    <Section title="Navigation">
+      <Tabs accessibilityLabel="Catalog views" defaultValue="components">
+        <TabsList accessibilityLabel="Catalog views">
+          <TabsTrigger value="components">Components</TabsTrigger>
+          <TabsTrigger value="contracts">Contracts</TabsTrigger>
+        </TabsList>
+        <TabsContent value="components">
+          <Text>171 native modules</Text>
+        </TabsContent>
+        <TabsContent value="contracts">
+          <Text>Portable and native-adapted</Text>
+        </TabsContent>
+      </Tabs>
+    </Section>
+  );
+}
+
+export function OverlaySection() {
+  return (
+    <Section title="Overlay">
+      <Dialog
+        closeLabel="Close details"
+        open={false}
+        title="Native modal contract"
+      >
+        <Text>
+          Back handling, accessibility escape, and safe-area injection.
+        </Text>
+      </Dialog>
+      <Text size="small" tone="muted">
+        Overlay behavior is exercised by the native Jest suite.
       </Text>
     </Section>
   );
 }
 
-export function TypeSection() {
+export function CompositeSection() {
   return (
-    <Section title="Type">
-      <Heading level={3} size={1}>
-        Semantic h3 at h1 size
-      </Heading>
-      <Text size="lead">Lead body text</Text>
-      <Text>Default body text</Text>
-      <Text size="small" tone="muted">
-        Muted small text
-      </Text>
-      <Text size="caption" weight="semibold">
-        Semibold caption
-      </Text>
-    </Section>
-  );
-}
-
-export function BadgeSection() {
-  return (
-    <Section title="Badges">
+    <Section title="Interactive composites">
+      <Accordion defaultOpenIds={["coverage"]}>
+        <AccordionItem id="coverage">
+          <AccordionTrigger label="What does native support cover?" />
+          <AccordionContent>
+            <Text>
+              Forms, navigation, overlays, AI workflows, learning, and motion.
+            </Text>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem id="boundary">
+          <AccordionTrigger label="Is this the web renderer?" />
+          <AccordionContent>
+            <Text>No. Every module uses React Native primitives.</Text>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <Checklist
+        defaultCheckedIds={["tokens"]}
+        items={[
+          {
+            description: "Shared semantic values, generated per renderer.",
+            id: "tokens",
+            label: "Design tokens",
+          },
+          {
+            description: "Roles, state, labels, and 44-point controls.",
+            id: "accessibility",
+            label: "Native accessibility",
+          },
+        ]}
+        labels={{
+          allCompleted: "Catalog review complete",
+          item: (item, checked) =>
+            `${checked ? "Reopen" : "Complete"} ${item.label}`,
+          progress: (checked, total) =>
+            `${checked} of ${total} modules reviewed`,
+        }}
+        title="Release review"
+      />
+      <AIChatInput
+        defaultValue="Summarize native support"
+        helperText="Submission stays in the host application."
+        inputLabel="Message"
+        onSubmit={(message) => {
+          void message;
+        }}
+        submitLabel="Send message"
+      />
       <Row>
-        <Badge>Default</Badge>
-        <Badge variant="secondary">Secondary</Badge>
-        <Badge variant="outline">Outline</Badge>
-        <Badge variant="destructive">Destructive</Badge>
+        <Text tone="muted">Animated module count</Text>
+        <NumberTicker accessibilityLabel="171 native modules" value={171} />
       </Row>
     </Section>
   );
@@ -162,18 +296,17 @@ export function CardSection({ onPress }: { readonly onPress: () => void }) {
   return (
     <Card>
       <CardHeader>
-        <Badge variant="secondary">Experimental</Badge>
-        <CardTitle>Separate native renderer</CardTitle>
+        <CardTitle>Renderer boundary</CardTitle>
         <CardDescription>
-          The web API remains intact while native uses platform-correct
-          primitives.
+          Native components share tokens without importing the web renderer.
         </CardDescription>
       </CardHeader>
       <CardContent style={{ gap: theme.spacing[2] }}>
-        <Text>Five pilot components share canonical design tokens.</Text>
-        <Text size="small" tone="muted">
-          No DOM, Radix, Tailwind, or NativeWind runtime is required.
-        </Text>
+        <Text>React Native core primitives and accessibility APIs.</Text>
+        <EmptyState
+          description="No DOM, Radix, Tailwind, or browser globals."
+          title="Platform correct"
+        />
       </CardContent>
       <CardFooter>
         <Button onPress={onPress}>Try interaction</Button>

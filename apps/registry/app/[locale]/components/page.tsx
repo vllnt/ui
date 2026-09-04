@@ -1,8 +1,9 @@
-import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
+import { PlatformSelector } from "@/components/platform-selector";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import {
@@ -11,11 +12,8 @@ import {
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import {
-  type ComponentPlatform,
-  componentPlatformSchema,
-  registry,
-} from "@/lib/registry";
+import { type PlatformQuery, withPlatformQuery } from "@/lib/platform";
+import { componentPlatformSchema, registry } from "@/lib/registry";
 import { canonical, languageAlternates } from "@/lib/seo";
 import {
   familyPath,
@@ -25,7 +23,7 @@ import {
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
-  readonly searchParams: Promise<{ platform?: string }>;
+  readonly searchParams: Promise<PlatformQuery>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -82,24 +80,6 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
     (count, group) => count + group.items.length,
     0,
   );
-  const filters: readonly {
-    href: string;
-    label: string;
-    platform?: ComponentPlatform;
-  }[] = [
-    { href: "/components", label: t("platformAll") },
-    {
-      href: "/components?platform=web",
-      label: t("platformWeb"),
-      platform: "web",
-    },
-    {
-      href: "/components?platform=native",
-      label: t("platformNative"),
-      platform: "native",
-    },
-  ];
-
   return (
     <>
       <script
@@ -120,7 +100,7 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
           }),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-12">
@@ -128,24 +108,10 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
             <p className="text-muted-foreground text-lg">
               {t("description", { count: visibleCount })}
             </p>
-            <nav
-              aria-label={t("platformFilterLabel")}
-              className="mt-6 flex flex-wrap items-center gap-2"
-            >
-              {filters.map((filter) => {
-                const selected = filter.platform === selectedPlatform;
-                return (
-                  <Link
-                    aria-current={selected ? "page" : undefined}
-                    className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted aria-[current=page]:bg-foreground aria-[current=page]:text-background"
-                    href={filter.href}
-                    key={filter.href}
-                  >
-                    {filter.label}
-                  </Link>
-                );
-              })}
-            </nav>
+            <PlatformSelector
+              className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
+              includeAll
+            />
           </div>
 
           {visibleGroups.map((group) => (
@@ -153,7 +119,11 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
               <h2 className="text-2xl font-semibold mb-6">
                 <Link
                   className="hover:underline"
-                  href={familyPath(group.category)}
+                  href={withPlatformQuery(
+                    familyPath(group.category),
+                    query,
+                    selectedPlatform,
+                  )}
                 >
                   {group.label}
                 </Link>
@@ -163,6 +133,8 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
                   <ComponentCard
                     key={component.name}
                     locale={locale}
+                    platform={selectedPlatform}
+                    query={query}
                     slug={component.name}
                   />
                 ))}
@@ -183,7 +155,11 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
             </p>
             <Link
               className="mt-2 inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-              href="/request-component"
+              href={withPlatformQuery(
+                "/request-component",
+                query,
+                selectedPlatform,
+              )}
             >
               {common("requestComponent")}
             </Link>

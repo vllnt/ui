@@ -43,6 +43,7 @@ export async function getSidebarSections(
           href: localizePathname("/components", locale),
           title: t("components"),
         },
+        { href: localizePathname("/native", locale), title: t("native") },
         { href: localizePathname("/templates", locale), title: t("templates") },
         { href: localizePathname("/themes", locale), title: t("themes") },
         {

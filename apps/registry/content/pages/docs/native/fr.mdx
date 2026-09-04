@@ -1,26 +1,32 @@
 ---
 title: React Native
-description: Construisez des applications Expo avec le renderer React Native experimental et les jetons partages de VLLNT UI.
+description: Evaluez le renderer React Native disponible en source, ses contrats natifs, son catalogue et ses controles de publication.
 type: docs
 og:
   title: React Native
-  description: Composants VLLNT UI experimentaux pour Expo et React Native
+  description: Composants VLLNT UI experimentaux disponibles en source pour React Native
   type: docs
 ---
 
 # React Native
 
-`@vllnt/ui-native` est un renderer React Native separe, construit avec les memes jetons de design et contrats d'options portables que `@vllnt/ui`. Le paquet web stable reste inchange : le web utilise le DOM, Radix UI, Tailwind CSS et CVA ; le natif utilise les primitives React Native et `StyleSheet`.
+`@vllnt/ui-native` est un renderer separe, construit avec les memes jetons de design et contrats d'options portables que `@vllnt/ui`. Le paquet web stable reste inchange : le web utilise le DOM, Radix UI, Tailwind CSS et CVA ; le natif utilise les primitives React Native, `StyleSheet`, les API d'accessibilite natives et des services de plateforme injectes.
 
-Le paquet natif est experimental et publie uniquement sur le tag `canary`. Ne dependez pas encore d'une version sans tag ou `latest`.
+## Disponibilite actuelle
 
-## Installer
+Le renderer est **experimental et disponible uniquement en source**. Son paquet npm n'est pas publie. La commande prevue ci-dessous est de la documentation, pas une action d'installation fonctionnelle :
 
 ```bash
 pnpm add @vllnt/ui-native@canary
 ```
 
-React 19 et React Native 0.81 ou plus recent sont des peer dependencies. Le catalogue du depot cible Expo SDK 57 et valide les bundles Metro Android et iOS.
+Utilisez-la seulement quand le manifeste natif indique `availability: "package"` et `installation.available: true`. D'ici la, evaluez localement le source du depot et le catalogue Expo prive.
+
+- Paquet : `@vllnt/ui-native`
+- Canal : `canary` prevu ; aucun chemin `latest`
+- Exigences : React 19 et React Native 0.81+
+- Inventaire : 171 modules source
+- Manifeste : [`/r/native/registry.json`](/r/native/registry.json)
 
 ## Configurer un theme
 
@@ -36,35 +42,24 @@ export function Root() {
 }
 ```
 
-Le provider suit le theme de l'appareil par defaut. Choisissez `light` ou `dark` pour un mode fixe, ou transmettez des remplacements semantiques via `override`. Les valeurs sRGB natives sont generees depuis la source OKLCH canonique dans `packages/design/tokens.json`, avec des ajustements deterministes de contraste et de fond presque noir pour l'accessibilite native.
+Le provider suit le theme de l'appareil par defaut. Choisissez `light` ou `dark` pour un mode fixe, ou transmettez des remplacements semantiques via `override`. Les valeurs sRGB et dimensions en points sont generees depuis la source OKLCH canonique dans `packages/design/tokens.json`.
 
-## Composants pilotes
-
-Le premier catalogue inclut :
-
-- `Button` avec les noms de variante et de taille du renderer web et un libelle texte ou numerique.
-- `Text` avec les noms partages de taille, ton et poids.
-- `Heading` avec un `level` semantique et une `size` visuelle independants.
-- `Badge` avec les variantes semantiques partagees.
-- `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent` et `CardFooter`.
+## Utiliser les contrats natifs
 
 ```tsx
 import {
   Button,
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
+  Heading,
   Text,
 } from "@vllnt/ui-native"
 
 export function Example() {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Compte</CardTitle>
-      </CardHeader>
       <CardContent>
+        <Heading level={2}>Compte</Heading>
         <Text tone="muted">Jetons semantiques natifs.</Text>
         <Button onPress={() => {}}>Enregistrer</Button>
       </CardContent>
@@ -73,12 +68,34 @@ export function Example() {
 }
 ```
 
-Utilisez les props React Native comme `onPress`, `style` et `accessibilityLabel`. Les props web comme `className`, `onClick` et `asChild` ne font volontairement pas partie de l'API native.
+Utilisez les props React Native comme `onPress`, `style`, `accessibilityLabel`, `accessibilityState` et les actions d'accessibilite. Les props web comme `className`, `onClick` et `asChild` sont volontairement absentes.
+
+Le manifeste classe chaque composant dans une categorie :
+
+- `portable-options` : les options semantiques correspondent au renderer web tandis que les props et l'implementation restent natives.
+- `native-adapted` : le composant natif conserve l'intention mais adapte l'interaction, la mise en page ou la capacite a la plateforme.
+
+Il ne pretend jamais que le source web fonctionne dans React Native.
+
+## Limites des interactions et services
+
+Les controles utilisent un etat controle ou non controle et des identifiants de selection fournis par l'appelant. Les surfaces modales prennent en charge le retour natif, l'echappement d'accessibilite, le mouvement reduit et les wrappers de safe area fournis par l'hote. Le presse-papiers et la selection de fichiers exigent des services injectes. Les liens et le partage utilisent des adaptateurs React Native types. Un service indisponible reste visiblement indisponible au lieu d'utiliser une API navigateur.
+
+Native omet ou adapte les comportements propres au navigateur : portails DOM, dependance au hover, tables HTML, presse-papiers, telechargement ou plein ecran navigateur, rendu Markdown, coloration syntaxique, graphiques SVG et controle du routage web.
 
 ## Decouvrir la prise en charge
 
-Chaque element du registre inclut maintenant `platforms`. Les entrees pilotes compatibles avec le natif incluent aussi un objet `native` avec les metadonnees de paquet, canal, statut et parite. Filtrez la page des composants avec `/fr/components?platform=native`, ou appelez MCP `search_components` avec `{ "platform": "native" }`.
+Parcourez `/fr/components?platform=native`. Le choix de plateforme reste dans l'URL et est conserve dans la navigation des composants, familles, docs, langues, entete et barre laterale. Les cartes natives ne montent pas d'apercus web.
 
-## Limite actuelle
+Les clients machine peuvent utiliser :
 
-Le pilote utilise directement les primitives React Native. Il n'ajoute ni NativeWind ni `@rn-primitives`, ce qui evite une configuration Babel obligatoire chez le consommateur pour les composants fondamentaux. Les overlays complexes pourront introduire des dependances d'adaptation plus tard, apres validation du comportement et de l'accessibilite sur appareil reel.
+- `/r/native/registry.json` pour le manifeste du paquet natif
+- `/r/registry.json` pour les descripteurs web et leurs projections de plateforme
+- `/llms.txt` et `/llms-full.txt`
+- MCP `search_components` avec `{ "platform": "native" }`
+
+## Limite de validation
+
+Les controles du depot incluent le lint, le typecheck strict, les tests Jest d'interaction, les limites du renderer, la derive entre exports et manifeste, la resolution du paquet archive, Expo Doctor et les exports Metro Android/iOS. La version native stable reste bloquee tant que les preuves sur appareil physique, VoiceOver, TalkBack, migration, observabilite et retour arriere n'existent pas.
+
+Le paquet ne depend ni du DOM, ni de Radix UI, ni de Tailwind CSS, ni de NativeWind, ni des globales navigateur. `@vllnt/ui` reste le renderer web stable avec son API et son chemin de publication existants.

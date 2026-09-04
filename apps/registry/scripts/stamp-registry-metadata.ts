@@ -24,9 +24,11 @@ type Stability = "stable" | "beta" | "experimental" | "deprecated";
 type ComponentPlatform = "native" | "web";
 
 type NativeRenderer = {
+  availability: "package" | "source";
   channel: "canary";
+  compatibility: "native-adapted" | "portable-options";
   package: "@vllnt/ui-native";
-  parity: "api-only" | "full";
+  source: string;
   status: "experimental";
 };
 

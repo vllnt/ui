@@ -30,6 +30,55 @@ const styles = StyleSheet.create({
   value: { fontVariant: ["tabular-nums"] },
 });
 
+type NumberAnimationOptions = {
+  readonly animatedValue: Animated.Value;
+  readonly delay: number;
+  readonly duration: number;
+  readonly from: number;
+  readonly reduceMotion: boolean;
+  readonly setCurrentValue: (value: number) => void;
+  readonly value: number;
+};
+
+function startNumberAnimation({
+  animatedValue,
+  delay,
+  duration,
+  from,
+  reduceMotion,
+  setCurrentValue,
+  value,
+}: NumberAnimationOptions): () => void {
+  animatedValue.stopAnimation();
+  if (reduceMotion || duration <= 0) {
+    animatedValue.setValue(value);
+    setCurrentValue(value);
+    return () => {
+      animatedValue.stopAnimation();
+    };
+  }
+
+  animatedValue.setValue(from);
+  setCurrentValue(from);
+  const listenerId = animatedValue.addListener(({ value: nextValue }) => {
+    setCurrentValue(nextValue);
+  });
+  const animation = Animated.sequence([
+    Animated.delay(Math.max(0, delay) * 1000),
+    Animated.timing(animatedValue, {
+      duration: Math.max(0, duration) * 1000,
+      toValue: value,
+      useNativeDriver: false,
+    }),
+  ]);
+  animation.start();
+
+  return () => {
+    animation.stop();
+    animatedValue.removeListener(listenerId);
+  };
+}
+
 /** Animated native metric text with immediate reduced-motion state. */
 function NumberTicker({
   accessibilityLabel,
@@ -53,34 +102,19 @@ function NumberTicker({
     [formatOptions, locale],
   );
 
-  useEffect(() => {
-    animatedValue.stopAnimation();
-    if (reduceMotion || duration <= 0) {
-      animatedValue.setValue(value);
-      setCurrentValue(value);
-      return;
-    }
-
-    animatedValue.setValue(from);
-    setCurrentValue(from);
-    const listenerId = animatedValue.addListener(({ value: nextValue }) => {
-      setCurrentValue(nextValue);
-    });
-    const animation = Animated.sequence([
-      Animated.delay(Math.max(0, delay) * 1000),
-      Animated.timing(animatedValue, {
-        duration: Math.max(0, duration) * 1000,
-        toValue: value,
-        useNativeDriver: false,
+  useEffect(
+    () =>
+      startNumberAnimation({
+        animatedValue,
+        delay,
+        duration,
+        from,
+        reduceMotion,
+        setCurrentValue,
+        value,
       }),
-    ]);
-    animation.start();
-
-    return () => {
-      animation.stop();
-      animatedValue.removeListener(listenerId);
-    };
-  }, [animatedValue, delay, duration, from, reduceMotion, value]);
+    [animatedValue, delay, duration, from, reduceMotion, value],
+  );
 
   const finalLabel = formatter.format(value);
   const displayedValue = reduceMotion ? value : currentValue;

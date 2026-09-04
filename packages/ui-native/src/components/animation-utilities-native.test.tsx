@@ -69,6 +69,27 @@ describe("native animation utilities", () => {
     expect(screen.getAllByText("Alpha")).toHaveLength(1);
   });
 
+  it("keeps normalized defaults inside every panel constraint", () => {
+    render(
+      <ResizablePanelGroup>
+        <ResizablePanel
+          defaultSize={30}
+          minSize={30}
+          testID="constrained-first"
+        />
+        <ResizableHandle accessibilityLabel="Resize constrained workspace" />
+        <ResizablePanel defaultSize={90} testID="constrained-second" />
+      </ResizablePanelGroup>,
+    );
+
+    expect(screen.getByTestId("constrained-first")).toHaveStyle({
+      flexGrow: 30,
+    });
+    expect(screen.getByTestId("constrained-second")).toHaveStyle({
+      flexGrow: 70,
+    });
+  });
+
   it("resizes adjacent panels through 44-point adjustable actions", () => {
     const onSizesChange = jest.fn();
     render(

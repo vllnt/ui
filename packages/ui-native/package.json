@@ -58,6 +58,8 @@
     "boundaries:check": "node scripts/check-boundaries.mjs",
     "build": "tsup",
     "clean": "rm -rf dist node_modules coverage",
+    "generate:index": "node scripts/generate-index.mjs",
+    "generate:index:check": "node scripts/generate-index.mjs --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "pack:check": "node scripts/check-packed-package.mjs",

@@ -9,7 +9,9 @@
     "home": "Home",
     "locale": "Language",
     "philosophy": "Philosophy",
+    "platformAll": "All",
     "platformNativeExperimental": "Native · Experimental",
+    "platformSelectorLabel": "Choose a renderer",
     "platforms": "Supported platforms",
     "platformWeb": "Web",
     "readDocs": "Read the docs",
@@ -40,7 +42,9 @@
     "resources": "Resources",
     "rssFeed": "RSS feed",
     "sponsor": "Sponsor",
-    "storybook": "Storybook"
+    "storybook": "Storybook",
+    "native": "React Native",
+    "nativeRegistryJson": "Native registry JSON"
   },
   "forms": {
     "report": {
@@ -128,14 +132,28 @@
     },
     "hero": {
       "browseAll": "Browse all {count}",
+      "browseNative": "Browse Native",
       "browseTemplates": "Browse templates",
-      "description": "{count} open-source React components for building AI apps — chat, streaming, tool calls, citations, agents, and artifacts. Every component is also a machine-readable JSON descriptor: agents (Claude, Cursor, Cline, Continue) read the registry directly without scraping HTML.",
+      "browseWeb": "Browse Web",
+      "description": "{count} stable React web components plus an experimental React Native source catalog for AI apps. Both renderers publish machine-readable availability and contracts, so agents choose platform-correct source instead of scraping HTML.",
       "exploreAi": "Explore AI components",
       "github": "GitHub",
       "kicker": "v{version} / MIT",
       "readDocs": "Read the docs",
-      "titleAccent": "Copy, paste, ship.",
-      "titleLead": "The UI design system for AI agents."
+      "titleAccent": "One design system. Platform-correct renderers.",
+      "titleLead": "Web and native UI for AI agents."
+    },
+    "renderers": {
+      "browseNative": "Browse Native components",
+      "browseWeb": "Browse Web components",
+      "description": "Choose the renderer that matches your product. Platform stays in the URL as you browse.",
+      "experimental": "Experimental",
+      "nativeDescription": "A focused React Native renderer. Source is available in the repository while the first synchronized canary package is prepared.",
+      "nativeTitle": "Native renderer",
+      "stable": "Stable",
+      "title": "Two renderers, one design system",
+      "webDescription": "The complete React renderer with shadcn installation, live previews, source, and Storybook.",
+      "webTitle": "Web renderer"
     },
     "releases": {
       "description": "Follow what changed across the component library, registry, and release pipeline.",
@@ -187,13 +205,19 @@
     },
     "component": {
       "browseAiComponents": "Browse all AI agent components",
+      "browseNativeCatalog": "Browse native catalog",
       "code": "Code",
       "dependencies": "Dependencies",
       "faq": "FAQ",
       "installation": "Installation",
-      "nativeInstallDescription": "Install the experimental React Native renderer from the canary channel. The stable web package and its API remain unchanged.",
-      "nativeInstallation": "React Native installation",
+      "nativeAvailableAfterCanary": "Available after the first synchronized canary",
+      "nativeCapabilityDescription": "This component has an experimental React Native implementation. The website does not render a web preview or web source as if it were native.",
+      "nativeCapabilityTitle": "Native capability",
+      "nativeInstallDescription": "The experimental React Native renderer is source-available, but its npm package is not published yet.",
+      "nativeInstallation": "React Native availability",
       "nativeReadGuide": "Read the React Native guide",
+      "nativeSourceDescription": "Native source is available in the repository. A synchronized canary package will make the planned command actionable.",
+      "nativeSourceTitle": "Source availability",
       "preview": "Preview",
       "related": "Related components",
       "reportBug": "Report a bug",
@@ -204,21 +228,32 @@
       "storybookDescription": "Explore all variants, controls, and accessibility checks in the interactive Storybook playground.",
       "viewInStorybook": "View in Storybook",
       "viewOnNpm": "View {dep} on npm",
+      "viewWebComponent": "View Web component",
+      "webOnlyDescription": "This component does not have a Native renderer. Choose a supported Native component or return to its Web page.",
+      "webOnlyTitle": "Web-only component",
       "whatItIsTitle": "What it is and when to use",
-      "whenToUseTitle": "When to use this in an AI app"
+      "whenToUseTitle": "When to use this in an AI app",
+      "nativeCompatibilityLabel": "Compatibility",
+      "nativeCompatibilityPortable": "Portable semantic options",
+      "nativeCompatibilityAdapted": "Native-adapted behavior",
+      "nativeRequirementsLabel": "Minimum requirements",
+      "nativeSourcePathLabel": "Repository source path"
     },
     "components": {
       "ctaDescription": "Request a new component and we'll open a prefilled GitHub issue with the right labels and template.",
       "ctaTitle": "Don't see what you need?",
       "description": "Explore all {count} components available in the library.",
       "noPlatformResults": "No components support this platform yet.",
+      "nativePreviewUnavailable": "Web previews are not mounted in Native context.",
+      "nativeRenderer": "Native renderer",
       "noPreview": "No preview",
       "platformAll": "All",
       "platformFilterLabel": "Filter by platform",
       "platformNative": "Native",
       "platformWeb": "Web",
       "stories": "{count, plural, one {# story} other {# stories}}",
-      "title": "Components"
+      "title": "Components",
+      "viewComponent": "View component"
     },
     "design": {
       "colors": "Colors",
@@ -253,6 +288,9 @@
       "faqTitle": "Frequently asked",
       "llmsDescription": "Concise index per the llmstxt.org spec — sections, links, and descriptions.",
       "llmsFullDescription": "Full registry context in one fetch — docs plus every component descriptor.",
+      "nativeDescription": "Browse the component families currently covered by the experimental Native renderer. Availability is smaller than Web and source-first until the first synchronized canary.",
+      "nativeFamilyDescription": "Browse the {label} components currently implemented for the experimental Native renderer.",
+      "noPlatformResults": "No components in this family support the selected renderer.",
       "registryJsonDescription": "Per-component descriptor: props, accessibility schema, and usage examples.",
       "title": "Component families"
     },
@@ -544,6 +582,32 @@
           }
         }
       }
+    },
+    "native": {
+      "metaTitle": "React Native · VLLNT UI",
+      "metaDescription": "Explore the experimental React Native renderer, supported components, source availability, requirements, and compatibility model.",
+      "eyebrow": "React Native · Experimental",
+      "title": "Native UI without pretending the web is native.",
+      "description": "A separate React Native renderer shares semantic design tokens with VLLNT UI while keeping native props, accessibility, layout, and interaction contracts.",
+      "sourceNotice": "Repository source is ready for local validation. The npm package has not been published, so the planned canary command is not actionable yet.",
+      "statusLabel": "Status",
+      "statusValue": "Experimental",
+      "availabilityLabel": "Availability",
+      "availabilityValue": "Source preview",
+      "componentsLabel": "Native components",
+      "requirementsLabel": "Requirements",
+      "requirementsValue": "React 19 · React Native 0.81+",
+      "browseComponents": "Browse native components",
+      "readGuide": "Read setup guide",
+      "viewManifest": "Open native manifest",
+      "contractTitle": "One design system, renderer-specific contracts",
+      "contractDescription": "Portable options align where semantics match. DOM props, React Native props, source, dependencies, examples, previews, and installation remain separate.",
+      "accessibilityTitle": "Native accessibility first",
+      "accessibilityDescription": "Components use React Native roles, states, actions, live regions, reduced-motion preferences, and platform services instead of browser ARIA or keyboard assumptions.",
+      "releaseTitle": "Canary before stable",
+      "releaseDescription": "Native remains off the latest tag until Android, iOS, VoiceOver, TalkBack, packed-package, and synchronized release checks pass.",
+      "installTitle": "Planned canary command",
+      "installDescription": "Use this command only after the manifest reports package availability."
     }
   },
   "shared": {
@@ -592,6 +656,7 @@
     "philosophy": "Philosophy",
     "requestComponent": "Request a component",
     "templates": "Templates",
-    "themes": "Themes"
+    "themes": "Themes",
+    "native": "React Native"
   }
 }

@@ -115,9 +115,35 @@ function getPanelConfigs(children: ReactNode): PanelConfig[] {
 
 function normalizeSizes(configs: readonly PanelConfig[]): number[] {
   if (configs.length === 0) return [];
-  const total = configs.reduce((sum, config) => sum + config.defaultSize, 0);
-  if (total <= 0) return configs.map(() => 100 / configs.length);
-  return configs.map((config) => (config.defaultSize / total) * 100);
+  const minimumTotal = configs.reduce((sum, config) => sum + config.minSize, 0);
+  const maximumTotal = configs.reduce((sum, config) => sum + config.maxSize, 0);
+  if (minimumTotal > 100 || maximumTotal < 100) {
+    throw new Error(
+      "Resizable panel constraints must allow the group to total 100 percent.",
+    );
+  }
+
+  const defaults = configs.map((config) => config.defaultSize);
+  const defaultTotal = defaults.reduce((sum, size) => sum + size, 0);
+  const difference = 100 - defaultTotal;
+  if (Math.abs(difference) < Number.EPSILON) return defaults;
+
+  const capacities = configs.map((config, index) =>
+    difference > 0
+      ? config.maxSize - (defaults[index] ?? 0)
+      : (defaults[index] ?? 0) - config.minSize,
+  );
+  const totalCapacity = capacities.reduce((sum, capacity) => sum + capacity, 0);
+  if (totalCapacity < Math.abs(difference)) {
+    throw new Error(
+      "Resizable panel defaults cannot be normalized within their constraints.",
+    );
+  }
+
+  return defaults.map(
+    (size, index) =>
+      size + difference * ((capacities[index] ?? 0) / totalCapacity),
+  );
 }
 
 function resizePanels({

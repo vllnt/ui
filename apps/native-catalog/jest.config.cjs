@@ -1,6 +1,9 @@
 /** @type {import('jest').Config} */
 module.exports = {
   preset: "react-native",
+  setupFilesAfterEnv: [
+    "<rootDir>/../../packages/ui-native/jest.setup.cjs",
+  ],
   moduleNameMapper: {
     "^@vllnt/ui-core$": "<rootDir>/../../packages/ui-core/src/index.ts",
     "^@vllnt/ui-native$": "<rootDir>/../../packages/ui-native/src/index.ts",

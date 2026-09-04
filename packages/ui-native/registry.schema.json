@@ -2,25 +2,76 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "VLLNT UI native catalog",
   "type": "object",
-  "required": ["package", "channel", "status", "components"],
+  "required": [
+    "schemaVersion",
+    "package",
+    "channel",
+    "status",
+    "availability",
+    "minimumReact",
+    "minimumReactNative",
+    "installation",
+    "peerDependencies",
+    "components"
+  ],
   "properties": {
     "$schema": { "type": "string" },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
     "package": { "const": "@vllnt/ui-native" },
     "channel": { "const": "canary" },
     "status": { "const": "experimental" },
+    "availability": {
+      "enum": ["source", "package"],
+      "description": "source means the renderer exists in the repository but has no installable npm release."
+    },
+    "minimumReact": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "minimumReactNative": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "installation": {
+      "type": "object",
+      "required": ["available", "command", "reason"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "command": { "const": "pnpm add @vllnt/ui-native@canary" },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "peerDependencies": {
+      "type": "object",
+      "required": ["react", "react-native"],
+      "properties": {
+        "react": { "type": "string", "minLength": 1 },
+        "react-native": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
     "components": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "parity"],
+        "required": ["name", "compatibility", "source"],
         "properties": {
           "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-          "parity": { "enum": ["full", "api-only"] }
+          "compatibility": {
+            "enum": ["portable-options", "native-adapted"]
+          },
+          "source": {
+            "type": "string",
+            "pattern": "^src/components/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*\\.tsx$"
+          }
         },
         "additionalProperties": false
       },
-      "minItems": 1,
-      "uniqueItems": true
+      "minItems": 1
     }
   },
   "additionalProperties": false

@@ -1,12 +1,15 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { ComponentThumbnail } from "@/components/component-thumbnail";
 import { PlatformBadges } from "@/components/platform-badges";
-import type { Locale } from "@/i18n/routing";
+import { Link, type Locale } from "@/i18n/routing";
 import { getComponentContent } from "@/lib/component-content";
 import componentMetadata from "@/lib/component-metadata.json";
-import { localizePathname } from "@/lib/seo";
+import {
+  type PlatformContext,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
 
 const META = componentMetadata as Record<
   string,
@@ -22,6 +25,10 @@ type ComponentCardProps = {
   /** Optional description override (e.g. AI-SEO copy); falls back to registry metadata. */
   readonly description?: string;
   readonly locale: Locale;
+  /** Active URL renderer context. All/undefined continues to show web previews. */
+  readonly platform?: PlatformContext;
+  /** Current URL query values retained by the component link. */
+  readonly query?: PlatformQuery;
   /** Registry slug — links to `/components/<slug>` and resolves the preview. */
   readonly slug: string;
   /** Optional title override; falls back to registry metadata. */
@@ -39,6 +46,8 @@ type ComponentCardProps = {
 export async function ComponentCard({
   description,
   locale,
+  platform,
+  query = {},
   slug,
   title,
 }: ComponentCardProps) {
@@ -51,17 +60,25 @@ export async function ComponentCard({
     description ?? localized?.frontmatter.description ?? meta?.description;
   const storyCount = meta?.stories?.length ?? 0;
 
+  const href = withPlatformQuery(`/components/${slug}`, query, platform);
+
   return (
-    <Link
-      className="group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors hover:border-foreground/20"
-      href={localizePathname(`/components/${slug}`, locale)}
-    >
-      <ComponentThumbnail componentName={slug} />
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-colors hover:border-foreground/20">
+      {platform === "native" ? (
+        <div className="flex h-44 flex-col items-center justify-center border-b bg-muted/30 px-6 text-center">
+          <p className="text-sm font-medium">{t("nativeRenderer")}</p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {t("nativePreviewUnavailable")}
+          </p>
+        </div>
+      ) : (
+        <ComponentThumbnail componentName={slug} />
+      )}
       <div className="flex flex-1 flex-col p-4">
-        <p className="text-sm font-medium transition-colors group-hover:text-foreground">
+        <h3 className="text-sm font-medium transition-colors group-hover:text-foreground">
           {displayTitle}
-        </p>
-        {displayDescription ? (
+        </h3>
+        {platform !== "native" && displayDescription ? (
           <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
             {displayDescription}
           </p>
@@ -70,12 +87,18 @@ export async function ComponentCard({
           className="mt-3 flex flex-wrap items-center gap-2"
           platforms={meta?.platforms ?? ["web"]}
         />
-        {storyCount > 0 ? (
+        {platform !== "native" && storyCount > 0 ? (
           <span className="mt-3 text-xs text-muted-foreground">
             {t("stories", { count: storyCount })}
           </span>
         ) : null}
+        <Link
+          className="mt-4 inline-flex min-h-11 items-center self-start rounded-md text-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          href={href}
+        >
+          {t("viewComponent")}
+        </Link>
       </div>
-    </Link>
+    </article>
   );
 }

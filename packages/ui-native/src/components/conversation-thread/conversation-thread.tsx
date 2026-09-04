@@ -475,8 +475,14 @@ function ConversationMessages({
   ...props
 }: ConversationMessagesProps) {
   const theme = useTheme();
-  const { labels, messages, onScroll, scrollToBottom, scrollViewRef } =
-    useConversation();
+  const {
+    isAtBottom,
+    labels,
+    messages,
+    onScroll,
+    scrollToBottom,
+    scrollViewRef,
+  } = useConversation();
   return (
     <View {...props} ref={ref} style={[styles.messages, style]}>
       <ScrollView
@@ -484,7 +490,7 @@ function ConversationMessages({
         accessibilityLiveRegion="polite"
         accessibilityRole="list"
         keyboardShouldPersistTaps="handled"
-        onContentSizeChange={scrollToBottom}
+        onContentSizeChange={isAtBottom ? scrollToBottom : undefined}
         onScroll={onScroll}
         ref={scrollViewRef}
         scrollEventThrottle={32}

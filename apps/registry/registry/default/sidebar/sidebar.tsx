@@ -208,6 +208,10 @@ function FamilyList({
   );
 }
 
+function getHrefPathname(href: string): string {
+  return href.split(/[#?]/, 1)[0] ?? href;
+}
+
 function FamilyItems({
   isMobile,
   onBack,
@@ -254,10 +258,12 @@ function FamilyItems({
       <div className="space-y-0.5">
         {section.items.map((item) => (
           <Link
-            aria-current={pathname === item.href ? "page" : undefined}
+            aria-current={
+              pathname === getHrefPathname(item.href) ? "page" : undefined
+            }
             className={cn(
               "block px-3 py-1.5 rounded-md text-sm transition-colors",
-              pathname === item.href
+              pathname === getHrefPathname(item.href)
                 ? "bg-accent text-accent-foreground font-medium"
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
             )}
@@ -295,8 +301,8 @@ function FamilyNav({
   const activeTitle =
     sections.find(
       (section) =>
-        section.href === pathname ||
-        section.items.some((item) => item.href === pathname),
+        (section.href && getHrefPathname(section.href) === pathname) ||
+        section.items.some((item) => getHrefPathname(item.href) === pathname),
     )?.title ?? null;
 
   const [routeKey, setRouteKey] = useState(pathname);

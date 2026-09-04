@@ -22,8 +22,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/accordion/accordion.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "activity-heatmap",
@@ -66,8 +75,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/activity-log/activity-log.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "agent-activity",
@@ -89,8 +107,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/agent-activity/agent-activity.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "ai-artifact",
@@ -112,8 +139,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/ai-artifact/ai-artifact.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "ai-chat-input",
@@ -135,8 +171,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/ai-chat-input/ai-chat-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "ai-message-bubble",
@@ -158,8 +203,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/ai-message-bubble/ai-message-bubble.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "ai-sidebar",
@@ -204,8 +258,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/ai-source-citation/ai-source-citation.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "ai-streaming-text",
@@ -226,8 +289,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/ai-streaming-text/ai-streaming-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "ai-tool-call-display",
@@ -250,8 +322,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/ai-tool-call-display/ai-tool-call-display.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "alert",
@@ -272,8 +353,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/alert/alert.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "alert-dialog",
@@ -294,8 +384,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/alert-dialog/alert-dialog.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "alert-pulse",
@@ -404,8 +503,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/animated-list/animated-list.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "animated-tabs",
@@ -426,8 +534,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/animated-tabs/animated-tabs.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "animated-testimonials",
@@ -448,8 +565,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/animated-testimonials/animated-testimonials.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "animated-text",
@@ -470,8 +596,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/animated-text/animated-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "animated-tooltip",
@@ -558,8 +693,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/aspect-ratio/aspect-ratio.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "auto-reload",
@@ -602,8 +746,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/avatar/avatar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "avatar-group",
@@ -624,8 +777,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/avatar-group/avatar-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "badge",
@@ -650,9 +812,11 @@
         "native"
       ],
       "native": {
+        "availability": "source",
         "channel": "canary",
+        "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "parity": "full",
+        "source": "src/components/badge/badge.tsx",
         "status": "experimental"
       }
     },
@@ -678,8 +842,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/banner/banner.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "bar-chart",
@@ -766,8 +939,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/blur-reveal/blur-reveal.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "border-beam",
@@ -832,8 +1014,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/bottom-bar/bottom-bar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "breadcrumb",
@@ -854,8 +1045,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/breadcrumb/breadcrumb.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "button",
@@ -943,9 +1143,11 @@
         "native"
       ],
       "native": {
+        "availability": "source",
         "channel": "canary",
+        "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "parity": "full",
+        "source": "src/components/button/button.tsx",
         "status": "experimental"
       }
     },
@@ -968,8 +1170,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/button-group/button-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "calendar",
@@ -990,8 +1201,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/calendar/calendar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "callout",
@@ -1012,8 +1232,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/callout/callout.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "candlestick-chart",
@@ -1104,9 +1333,11 @@
         "native"
       ],
       "native": {
+        "availability": "source",
         "channel": "canary",
+        "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "parity": "full",
+        "source": "src/components/card/card.tsx",
         "status": "experimental"
       }
     },
@@ -1151,8 +1382,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/carousel/carousel.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "category-filter",
@@ -1173,8 +1413,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/category-filter/category-filter.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "chain-of-thought",
@@ -1196,8 +1445,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/chain-of-thought/chain-of-thought.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "chat-dock-section",
@@ -1240,8 +1498,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/checkbox/checkbox.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "checkbox-group",
@@ -1262,8 +1529,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/checkbox-group/checkbox-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "checklist",
@@ -1284,8 +1560,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/checklist/checklist.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "choropleth-map",
@@ -1373,8 +1658,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/code-block/code-block.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "code-playground",
@@ -1417,8 +1711,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/collapsible/collapsible.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "color-picker",
@@ -1439,8 +1742,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/color-picker/color-picker.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "combobox",
@@ -1566,8 +1878,17 @@
         }
       ],
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/combobox/combobox.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "command",
@@ -1588,8 +1909,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/command/command.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "comment-pin",
@@ -1654,8 +1984,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/completion-dialog/completion-dialog.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "connector-edge",
@@ -1698,8 +2037,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/content-intro/content-intro.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "context-lens",
@@ -1742,8 +2090,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/context-menu/context-menu.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "contribution-graph",
@@ -1786,8 +2143,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/conversation-thread/conversation-thread.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "cookie-consent",
@@ -1831,8 +2197,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/copy-button/copy-button.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "countdown-timer",
@@ -1853,8 +2228,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/countdown-timer/countdown-timer.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "credit-badge",
@@ -1875,8 +2259,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/credit-badge/credit-badge.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "curriculum",
@@ -1941,8 +2334,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/data-list/data-list.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "data-table",
@@ -1986,8 +2388,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/date-field/date-field.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "date-picker",
@@ -2008,8 +2419,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/date-picker/date-picker.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "date-range-picker",
@@ -2030,8 +2450,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/date-range-picker/date-range-picker.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "dialog",
@@ -2072,8 +2501,17 @@
         "notes": "Built on Radix Dialog: focus trap + restore on close + scroll lock are automatic."
       },
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/dialog/dialog.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "display",
@@ -2142,8 +2580,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/document-sibling-nav/document-sibling-nav.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "dot-pattern",
@@ -2186,8 +2633,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/drawer/drawer.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "dropdown-menu",
@@ -2208,8 +2664,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/dropdown-menu/dropdown-menu.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "edge-label",
@@ -2261,8 +2726,17 @@
         }
       ],
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/empty-state/empty-state.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "era-comparison",
@@ -2305,8 +2779,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/exercise/exercise.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "expandable-cards",
@@ -2327,8 +2810,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/expandable-cards/expandable-cards.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "faq",
@@ -2349,8 +2841,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/faq/faq.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "field",
@@ -2371,8 +2872,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/field/field.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "fieldset",
@@ -2393,8 +2903,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/fieldset/fieldset.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "file-upload",
@@ -2415,8 +2934,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/file-upload/file-upload.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "filter-bar",
@@ -2437,8 +2965,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/filter-bar/filter-bar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "flashcard",
@@ -2459,8 +2996,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/flashcard/flashcard.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "floating-action-button",
@@ -2481,8 +3027,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/floating-action-button/floating-action-button.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "floating-navbar",
@@ -2525,8 +3080,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/floating-toolbar/floating-toolbar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "flow-diagram",
@@ -2591,8 +3155,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/form/form.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "gantt-chart",
@@ -2723,8 +3296,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/glass-progress/glass-progress.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "globe-3d",
@@ -2767,8 +3349,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/grid/grid.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "group-hull",
@@ -2841,9 +3432,11 @@
         "native"
       ],
       "native": {
+        "availability": "source",
         "channel": "canary",
+        "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "parity": "full",
+        "source": "src/components/heading/heading.tsx",
         "status": "experimental"
       }
     },
@@ -2956,8 +3549,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/horizontal-scroll-row/horizontal-scroll-row.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "hover-card",
@@ -3022,8 +3624,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/inline-input/inline-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "input",
@@ -3044,8 +3655,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/input/input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "input-group",
@@ -3066,8 +3686,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/input-group/input-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "input-otp",
@@ -3088,8 +3717,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/input-otp/input-otp.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "interactive-timeline",
@@ -3110,8 +3748,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/interactive-timeline/interactive-timeline.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "item",
@@ -3132,8 +3779,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/item/item.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "jarvis-dock",
@@ -3221,8 +3877,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "knowledge-check",
@@ -3266,8 +3931,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/label/label.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "lang-provider",
@@ -3377,8 +4051,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/link/link.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "liquid-glass",
@@ -3421,8 +4104,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/list-box/list-box.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "live-cursor",
@@ -3465,8 +4157,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/live-feed/live-feed.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "magnetic",
@@ -3597,8 +4298,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/marquee/marquee.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "mdx-content",
@@ -3644,8 +4354,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/menubar/menubar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "meteors",
@@ -3688,8 +4407,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/meter/meter.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "metric-cluster",
@@ -3710,8 +4438,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/metric-cluster/metric-cluster.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "metric-gauge",
@@ -3799,8 +4536,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/model-selector/model-selector.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "multi-select",
@@ -3821,8 +4567,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/multi-select/multi-select.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "multi-select-lasso",
@@ -3865,8 +4620,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/native-select/native-select.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "navbar-saas",
@@ -3909,8 +4673,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/navigation-menu/navigation-menu.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "newsletter-signup",
@@ -3954,8 +4727,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/number-input/number-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "number-ticker",
@@ -3976,8 +4758,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/number-ticker/number-ticker.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "object-card",
@@ -4086,8 +4877,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/overview-board/overview-board.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "pagination",
@@ -4108,8 +4908,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/pagination/pagination.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "panel",
@@ -4130,8 +4939,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/panel/panel.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "parallel-timeline",
@@ -4196,8 +5014,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/password-input/password-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "phone-input",
@@ -4218,8 +5045,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/phone-input/phone-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "pie-chart",
@@ -4262,8 +5098,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/plan-badge/plan-badge.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "playback-ghost",
@@ -4328,8 +5173,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/popover/popover.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "presence-stack",
@@ -4350,8 +5204,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/presence-stack/presence-stack.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "presence-sync-indicator",
@@ -4372,8 +5235,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/presence-sync-indicator/presence-sync-indicator.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "pricing-table",
@@ -4483,8 +5355,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/progress-bar/progress-bar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "progress-card",
@@ -4505,8 +5386,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/progress-card/progress-card.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "progress-tracker",
@@ -4527,8 +5417,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/progress-tracker/progress-tracker.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "progressive-blur",
@@ -4572,8 +5471,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/prompt-input/prompt-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "prompt-templates",
@@ -4687,8 +5595,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/quiz/quiz.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "radar-chart",
@@ -4731,8 +5648,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/radio-group/radio-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "range-calendar",
@@ -4753,8 +5679,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/range-calendar/range-calendar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "rating",
@@ -4775,8 +5710,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/rating/rating.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "reasoning",
@@ -4798,8 +5742,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/reasoning/reasoning.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "relationship-inspector",
@@ -4842,8 +5795,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/resizable/resizable.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "reveal-text",
@@ -4864,8 +5826,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/reveal-text/reveal-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "right-dock",
@@ -4908,8 +5879,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/role-badge/role-badge.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "route-map",
@@ -5062,8 +6042,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/scramble-text/scramble-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "scroll-area",
@@ -5106,8 +6095,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/scroll-progress/scroll-progress.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "search-bar",
@@ -5128,8 +6126,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/search-bar/search-bar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "search-dialog",
@@ -5150,8 +6157,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/search-dialog/search-dialog.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "search-field",
@@ -5172,8 +6188,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/search-field/search-field.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "segmented-control",
@@ -5194,8 +6219,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/segmented-control/segmented-control.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "select",
@@ -5216,8 +6250,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/select/select.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "selection-halo",
@@ -5282,8 +6325,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/separator/separator.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "severity-badge",
@@ -5304,8 +6356,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/severity-badge/severity-badge.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "share-dialog",
@@ -5326,8 +6387,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/share-dialog/share-dialog.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "share-section",
@@ -5348,8 +6418,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/share-section/share-section.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "sheet",
@@ -5370,8 +6449,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/sheet/sheet.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "shimmer-button",
@@ -5414,8 +6502,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/shimmer-text/shimmer-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "shine-border",
@@ -5480,8 +6577,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/sidebar/sidebar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "sidebar-provider",
@@ -5502,8 +6608,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/sidebar-provider/sidebar-provider.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "sidebar-toggle",
@@ -5525,8 +6640,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/sidebar-toggle/sidebar-toggle.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "skeleton",
@@ -5547,8 +6671,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/skeleton/skeleton.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "slider",
@@ -5569,8 +6702,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/slider/slider.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "slideshow",
@@ -5591,8 +6733,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/slideshow/slideshow.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "snap-guides",
@@ -5679,8 +6830,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/spinner/spinner.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "spinning-text",
@@ -5701,8 +6861,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/spinning-text/spinning-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "spotlight-card",
@@ -5745,8 +6914,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/stat-card/stat-card.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "state-badge-overlay",
@@ -5789,8 +6967,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/status-board/status-board.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "status-indicator",
@@ -5811,8 +6998,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/status-indicator/status-indicator.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "step-by-step",
@@ -5833,8 +7029,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/step-by-step/step-by-step.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "step-navigation",
@@ -5855,8 +7060,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/step-navigation/step-navigation.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "stepper",
@@ -5877,8 +7091,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/stepper/stepper.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "sticky-metric",
@@ -5899,8 +7122,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/sticky-metric/sticky-metric.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "story-map",
@@ -5965,8 +7197,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/switch/switch.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "table",
@@ -6053,8 +7294,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tabs/tabs.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tag-group",
@@ -6075,8 +7325,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tag-group/tag-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tags-input",
@@ -6097,8 +7356,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tags-input/tags-input.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "terminal",
@@ -6119,8 +7387,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/terminal/terminal.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "text",
@@ -6149,9 +7426,11 @@
         "native"
       ],
       "native": {
+        "availability": "source",
         "channel": "canary",
+        "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "parity": "full",
+        "source": "src/components/text/text.tsx",
         "status": "experimental"
       }
     },
@@ -6174,8 +7453,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/text-animate/text-animate.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "text-field",
@@ -6196,8 +7484,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/text-field/text-field.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "text-reveal",
@@ -6218,8 +7515,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/text-reveal/text-reveal.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "text-shimmer",
@@ -6240,8 +7546,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/text-shimmer/text-shimmer.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "textarea",
@@ -6262,8 +7577,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/textarea/textarea.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "theme-preset-provider",
@@ -6373,8 +7697,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/thinking-block/thinking-block.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "thread-bubble",
@@ -6483,8 +7816,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/time-field/time-field.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "time-picker",
@@ -6505,8 +7847,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/time-picker/time-picker.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "timeline",
@@ -6550,8 +7901,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/timeline-scrubber/timeline-scrubber.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tldr-section",
@@ -6572,8 +7932,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tldr-section/tldr-section.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "toast",
@@ -6594,8 +7963,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/toast/toast.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "toggle",
@@ -6616,8 +7994,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/toggle/toggle.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "toggle-group",
@@ -6638,8 +8025,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/toggle-group/toggle-group.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "toolbar",
@@ -6660,8 +8056,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/toolbar/toolbar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tooltip",
@@ -6682,8 +8087,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tooltip/tooltip.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "top-bar",
@@ -6704,8 +8118,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/top-bar/top-bar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tour",
@@ -6726,8 +8149,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tour/tour.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "transaction-list",
@@ -6770,8 +8202,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tree-view/tree-view.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "truncated-text",
@@ -6792,8 +8233,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/truncated-text/truncated-text.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tutorial-card",
@@ -6836,8 +8286,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tutorial-complete/tutorial-complete.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tutorial-filters",
@@ -6858,8 +8317,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/tutorial-filters/tutorial-filters.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "tutorial-intro-content",
@@ -6924,8 +8392,17 @@
       "stability": "stable",
       "version": "0.3.0",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/typewriter/typewriter.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "typography",
@@ -7012,8 +8489,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/view-switcher/view-switcher.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "viewport-bookmarks",
@@ -7100,8 +8586,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/workspace-switcher/workspace-switcher.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "world-breadcrumbs",
@@ -7144,8 +8639,17 @@
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
-        "web"
-      ]
+        "web",
+        "native"
+      ],
+      "native": {
+        "availability": "source",
+        "channel": "canary",
+        "compatibility": "native-adapted",
+        "package": "@vllnt/ui-native",
+        "source": "src/components/world-clock-bar/world-clock-bar.tsx",
+        "status": "experimental"
+      }
     },
     {
       "name": "zoom-hud",

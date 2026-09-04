@@ -68,13 +68,15 @@ The `registry:check` and `registry:integrity` CI guards confirm the regenerated 
 
 Native publication is fail-closed behind the repository variable `NATIVE_CANARY_PUBLISH_ENABLED`. Before setting it to `true`, reserve both package names on npm, configure trusted-publisher entries, and create a protected GitHub environment named `npm-native-canary`. Until that setup is complete, the workflow still runs native quality gates but skips publication.
 
-Consume the pilot explicitly:
+No native npm release exists yet. While `packages/ui-native/registry.json` reports `availability: "source"` and `installation.available: false`, the planned command below is documentation and must not be presented as a working install action:
 
 ```bash
 pnpm add @vllnt/ui-native@canary
 ```
 
-A stable native channel requires a separate PR that defines versioning, migration, device-validation, and rollback policy. It must not be added to the web package's release matrix.
+After the first synchronized pair is visible and both `canary` tags are promoted, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
+
+A stable native channel requires a separate PR that defines versioning, migration, physical Android/iOS plus VoiceOver/TalkBack validation, observability, and rollback policy. It must not be added to the web package's release matrix.
 
 ## Versioning policy
 

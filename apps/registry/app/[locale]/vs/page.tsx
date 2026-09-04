@@ -1,7 +1,7 @@
-import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import {
   breadcrumbTrailLd,
@@ -93,7 +93,7 @@ export default async function VsIndexPage({ params }: Props) {
           }),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-3xl px-4 py-16 lg:px-8">
           <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>

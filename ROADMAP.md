@@ -66,24 +66,25 @@ Single-pane drill-down (chosen over accordion-single-open and a two-pane family 
 - [ ] component-sidebar.6 Directional slide transition with `prefers-reduced-motion` instant fallback; persist last-family + scroll (localStorage)
 - [~] component-sidebar.7 Validate component-sidebar.1–6: Playwright E2E (desktop + mobile + keyboard) — auto-drill, back, breadcrumb sync, global filter, ⌘K, persistence (E2E); core drill-down (`.1`/`.2`/`.4`) covered by `sidebar-drilldown.spec.ts` — pending `.5`/`.6`
 
-## native-parity [ACTIVE — experimental package pilot]
+## native-parity [ACTIVE — experimental source preview]
 
 **Goal:** Add a platform-correct React Native renderer without changing the stable `@vllnt/ui` web contract. Shared tokens and semantic option contracts live in framework-free `@vllnt/ui-core`; implementations remain separate in `@vllnt/ui` and `@vllnt/ui-native`.
-**Exit criteria:** the canonical token source generates unchanged web CSS and native-safe values; an Expo catalog bundles the native pilot on Android and iOS; registry JSON, docs, search, and MCP expose renderer availability; native packages can publish synchronized canaries but cannot publish `latest`.
-**Verify:** existing web gates and exports stay green; `pnpm ci:native` passes contract tests, package boundaries, Expo Doctor, and both Metro exports; `/components?platform=native` and `search_components({ platform: "native" })` return the same pilot set.
+**Exit criteria:** the canonical token source generates unchanged web CSS and native-safe values; an Expo catalog bundles the native source catalog on Android and iOS; registry JSON, docs, search, and MCP expose renderer availability; native packages can publish synchronized canaries but cannot publish `latest`.
+**Verify:** existing web gates and exports stay green; `pnpm ci:native` passes contract tests, package boundaries, generated export/manifest drift, Expo Doctor, and both Metro exports; `/components?platform=native`, `/r/native/registry.json`, and `search_components({ platform: "native" })` return the same catalog set.
 
 The earlier co-located `.native.tsx` proposal is superseded by the package boundary tracked in #479. Separate renderers prevent DOM/Radix dependencies from entering Metro and let native APIs use `onPress`, `style`, and native accessibility semantics. The shared layer contains data and portable option names, not renderer props. Foundational native components use React Native primitives and `StyleSheet`; NativeWind and `@rn-primitives` remain possible adapters for later complex families when a demonstrated need justifies their consumer configuration and runtime cost.
 
 - [x] native-parity.1 Establish `@vllnt/ui-core` and separate `@vllnt/ui-native` package boundaries while keeping `@vllnt/ui` dependency-free from canary packages
 - [x] native-parity.2 Generate web CSS and native sRGB/point tokens from `packages/design/tokens.json`; fail CI on drift
 - [x] native-parity.3 Define portable Button, Text, Heading, Badge, and Card contracts and verify web compatibility at compile time
-- [x] native-parity.4 Ship the five-component React Native pilot plus light/dark/system theme support and an Expo catalog
-- [x] native-parity.5 Add explicit `platforms` and native status/parity metadata across registry JSON, docs, search, JSON-LD, llms surfaces, and MCP
+- [x] native-parity.4 Ship the initial five-component React Native slice plus light/dark/system theme support and an Expo catalog
+- [x] native-parity.5 Add explicit `platforms`, compatibility, source, and availability metadata across registry JSON, docs, search, JSON-LD, llms surfaces, and MCP
 - [x] native-parity.6 Add native quality gates and a separate synchronized canary-only workflow with no stable publish path
-- [~] native-parity.7 Validate the pilot on CI and a physical Expo device; keep native experimental until both pass
-- [ ] native-parity.8 Expand foundational form and utility components based on real consumer demand
-- [ ] native-parity.9 Add complex primitive adapters only where native behavior and accessibility tests require them
-- [ ] native-parity.10 Define stable-version policy and migration notes in a separately reviewed release change
+- [~] native-parity.7 Validate the renderer on CI and physical Expo devices; keep native source-only and experimental until publication plus Android/iOS/VoiceOver/TalkBack gates pass
+- [x] native-parity.8 Expand the source catalog to 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules
+- [x] native-parity.9 Add native interaction infrastructure and adapters only where platform behavior requires them
+- [ ] native-parity.10 Complete physical-device and assistive-technology validation, then enable the first synchronized canary without moving `latest`
+- [ ] native-parity.11 Define stable-version policy and migration notes in a separately reviewed release change
 
 ## typography-primitives [DONE 2026-07]
 

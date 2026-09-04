@@ -7,7 +7,7 @@ import { Check, Copy, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 type QuickAddProps = {
-  componentName: string;
+  readonly componentName: string;
 };
 
 export function QuickAdd({ componentName }: QuickAddProps) {
@@ -28,7 +28,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
   return (
     <div className="flex flex-wrap gap-2">
       <Button
-        className="gap-2"
+        className="min-h-11 gap-2"
         onClick={handleCopy}
         size="sm"
         variant="outline"
@@ -46,7 +46,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         )}
       </Button>
       <Button
-        className="gap-2"
+        className="min-h-11 gap-2"
         onClick={() => window.open(v0Url, "_blank")}
         size="sm"
         variant="outline"

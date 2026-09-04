@@ -5,7 +5,8 @@
     "description": "Collapsible content sections supporting single or multiple open items.",
     "name": "accordion",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -45,7 +46,8 @@
     "description": "Paginated activity feed for audit history and analytics changes.",
     "name": "activity-log",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -65,7 +67,8 @@
     "description": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress.",
     "name": "agent-activity",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -93,7 +96,8 @@
     "description": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips.",
     "name": "ai-artifact",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -121,7 +125,8 @@
     "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
     "name": "ai-chat-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -141,7 +146,8 @@
     "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
     "name": "ai-message-bubble",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -189,7 +195,8 @@
     "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
     "name": "ai-source-citation",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -205,7 +212,8 @@
     "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
     "name": "ai-streaming-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -225,7 +233,8 @@
     "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
     "name": "ai-tool-call-display",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -245,7 +254,8 @@
     "description": "Displays an alert message to the user.",
     "name": "alert",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -265,7 +275,8 @@
     "description": "Modal dialog for confirming destructive or important actions.",
     "name": "alert-dialog",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -361,7 +372,8 @@
     "description": "List whose items animate in sequentially with a staggered entrance.",
     "name": "animated-list",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -377,7 +389,8 @@
     "description": "Tabs with a sliding indicator that animates to the active item.",
     "name": "animated-tabs",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -397,7 +410,8 @@
     "description": "Testimonial carousel with animated transitions between quotes.",
     "name": "animated-testimonials",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -417,7 +431,8 @@
     "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
     "name": "animated-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -528,7 +543,8 @@
     "description": "Constrains content to a specified aspect ratio.",
     "name": "aspect-ratio",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -576,7 +592,8 @@
     "description": "Displays a user avatar image with fallback initials.",
     "name": "avatar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -592,7 +609,8 @@
     "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
     "name": "avatar-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -641,7 +659,8 @@
     "description": "Full-width announcement bar with variants, dismissal, and an optional action slot.",
     "name": "banner",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -720,7 +739,8 @@
     "description": "Reveals content with a blur-to-sharp transition when it scrolls into view.",
     "name": "blur-reveal",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -788,7 +808,8 @@
     "description": "Slim chrome strip pinned to the bottom of a canvas shell as a calm host for activity strips, status pills, and ambient indicators.",
     "name": "bottom-bar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -804,7 +825,8 @@
     "description": "Navigation breadcrumb trail showing the current page hierarchy.",
     "name": "breadcrumb",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -869,7 +891,8 @@
     "description": "Visually connected group of buttons that share borders.",
     "name": "button-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -889,7 +912,8 @@
     "description": "Date picker calendar for selecting dates.",
     "name": "calendar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -905,7 +929,8 @@
     "description": "Highlighted content block with variant styles for info, warning, danger, and more.",
     "name": "callout",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1014,7 +1039,8 @@
     "description": "Scrollable content carousel with navigation controls.",
     "name": "carousel",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1030,7 +1056,8 @@
     "description": "Filterable category selection for content lists.",
     "name": "category-filter",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1046,7 +1073,8 @@
     "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
     "name": "chain-of-thought",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1086,7 +1114,8 @@
     "description": "Toggle control for boolean input.",
     "name": "checkbox",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1102,7 +1131,8 @@
     "description": "Group of related checkboxes backed by an array of selected values.",
     "name": "checkbox-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1126,7 +1156,8 @@
     "description": "Interactive checklist with progress tracking and toggleable items.",
     "name": "checklist",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1234,7 +1265,8 @@
     "description": "Syntax-highlighted code display with copy support.",
     "name": "code-block",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1270,7 +1302,8 @@
     "description": "Expandable and collapsible content section.",
     "name": "collapsible",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1286,7 +1319,8 @@
     "description": "Popover color picker with swatches, a hue slider, and a hex input.",
     "name": "color-picker",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1306,7 +1340,8 @@
     "description": "Searchable select input for choosing from a list of options.",
     "name": "combobox",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1326,7 +1361,8 @@
     "description": "Command palette with search, groups, and keyboard navigation.",
     "name": "command",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1390,7 +1426,8 @@
     "description": "Dialog displayed upon completing a task or workflow.",
     "name": "completion-dialog",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1426,7 +1463,8 @@
     "description": "Introductory section for content pages with title and description.",
     "name": "content-intro",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1474,7 +1512,8 @@
     "description": "Right-click context menu with items and submenus.",
     "name": "context-menu",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1510,7 +1549,8 @@
     "description": "Compound component family for AI chat UIs that orchestrates auto-scroll, streaming indicators, empty states, and message rendering.",
     "name": "conversation-thread",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1550,7 +1590,8 @@
     "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
     "name": "copy-button",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1578,7 +1619,8 @@
     "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
     "name": "countdown-timer",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1598,7 +1640,8 @@
     "description": "Balance status pill for credits, wallet states, and billing health.",
     "name": "credit-badge",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1658,7 +1701,8 @@
     "description": "Semantic key-value metadata layout for displaying labels with values.",
     "name": "data-list",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1694,7 +1738,8 @@
     "description": "Native date input styled to match the design system.",
     "name": "date-field",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1714,7 +1759,8 @@
     "description": "Single-date picker built with the shared calendar and popover primitives.",
     "name": "date-picker",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1734,7 +1780,8 @@
     "description": "Popover calendar for selecting a start and end date.",
     "name": "date-range-picker",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1754,7 +1801,8 @@
     "description": "Modal dialog overlay for focused content and actions.",
     "name": "dialog",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1810,7 +1858,8 @@
     "description": "Newer/older navigator: links to the previous and next item in an ordered series.",
     "name": "document-sibling-nav",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1866,7 +1915,8 @@
     "description": "Slide-out panel anchored to the screen edge.",
     "name": "drawer",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1882,7 +1932,8 @@
     "description": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus.",
     "name": "dropdown-menu",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1914,7 +1965,8 @@
     "description": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes.",
     "name": "empty-state",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1966,7 +2018,8 @@
     "description": "Interactive exercise block for learning content.",
     "name": "exercise",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -1986,7 +2039,8 @@
     "description": "Cards that expand on click to reveal additional content.",
     "name": "expandable-cards",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2002,7 +2056,8 @@
     "description": "Frequently asked questions section with expandable answers.",
     "name": "faq",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2022,7 +2077,8 @@
     "description": "Layout wrapper pairing a label, control, description, and error message.",
     "name": "field",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2046,7 +2102,8 @@
     "description": "Groups related fields under a shared legend.",
     "name": "fieldset",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2066,7 +2123,8 @@
     "description": "Dropzone-style file picker with previews for selected files.",
     "name": "file-upload",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2082,7 +2140,8 @@
     "description": "Horizontal bar with filter controls for content lists.",
     "name": "filter-bar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2098,7 +2157,8 @@
     "description": "Study card for active recall with prompt and answer states.",
     "name": "flashcard",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2114,7 +2174,8 @@
     "description": "Fixed-position action button for primary actions.",
     "name": "floating-action-button",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2146,7 +2207,8 @@
     "description": "Compact action bar that floats above a selection — primary / ghost / destructive variants.",
     "name": "floating-toolbar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2210,7 +2272,8 @@
     "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
     "name": "form",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2338,7 +2401,8 @@
     "description": "Glass-styled progress bar with a translucent track and token-colored fill.",
     "name": "glass-progress",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2382,7 +2446,8 @@
     "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
     "name": "grid",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2591,7 +2656,8 @@
     "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
     "name": "horizontal-scroll-row",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2655,7 +2721,8 @@
     "description": "Inline text input with keyboard commit and cancel support.",
     "name": "inline-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2671,7 +2738,8 @@
     "description": "Text input field for forms.",
     "name": "input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2687,7 +2755,8 @@
     "description": "Groups an input with leading or trailing addons.",
     "name": "input-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2711,7 +2780,8 @@
     "description": "One-time password input with segmented fields.",
     "name": "input-otp",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2727,7 +2797,8 @@
     "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
     "name": "interactive-timeline",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2755,7 +2826,8 @@
     "description": "Flexible row layout with leading media, content, and trailing actions.",
     "name": "item",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2859,7 +2931,8 @@
     "description": "Displays available keyboard shortcuts to the user.",
     "name": "keyboard-shortcuts-help",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2903,7 +2976,8 @@
     "description": "Accessible form label that associates descriptive text with an input control.",
     "name": "label",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -2982,7 +3056,8 @@
     "description": "Styled anchor with emphasis variants and an external-link affordance.",
     "name": "link",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3026,7 +3101,8 @@
     "description": "Accessible single- or multi-select list of options.",
     "name": "list-box",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3074,7 +3150,8 @@
     "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
     "name": "live-feed",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3206,7 +3283,8 @@
     "description": "Continuously scrolling content lane for badges, logos, and status chips.",
     "name": "marquee",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3254,7 +3332,8 @@
     "description": "Horizontal menu bar with dropdown menus.",
     "name": "menubar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3290,7 +3369,8 @@
     "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
     "name": "meter",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3314,7 +3394,8 @@
     "description": "Compact stack of related metrics pinned to a canvas object's corner.",
     "name": "metric-cluster",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3406,7 +3487,8 @@
     "description": "Dropdown selector for choosing AI models.",
     "name": "model-selector",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3422,7 +3504,8 @@
     "description": "Popover-based multi-selection input with selected-value badges and optional search.",
     "name": "multi-select",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3474,7 +3557,8 @@
     "description": "Styled wrapper around the native select element.",
     "name": "native-select",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3510,7 +3594,8 @@
     "description": "Accessible navigation menu with links and sub-navigation.",
     "name": "navigation-menu",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3558,7 +3643,8 @@
     "description": "Numeric input with increment and decrement controls.",
     "name": "number-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3574,7 +3660,8 @@
     "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
     "name": "number-ticker",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3678,7 +3765,8 @@
     "description": "Grid of overview cards for at-a-glance dashboards — a row of headline metrics with consistent spacing and tone.",
     "name": "overview-board",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3694,7 +3782,8 @@
     "description": "Page navigation controls with previous, next, and page links.",
     "name": "pagination",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3710,7 +3799,8 @@
     "description": "Bordered, titled content surface with header, body, and footer slots.",
     "name": "panel",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3778,7 +3868,8 @@
     "description": "Password field with a built-in visibility toggle.",
     "name": "password-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3794,7 +3885,8 @@
     "description": "Phone number input with a country dialing-code selector.",
     "name": "phone-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3838,7 +3930,8 @@
     "description": "Subscription tier indicator for pricing, billing, and account summaries.",
     "name": "plan-badge",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3918,7 +4011,8 @@
     "description": "Floating content panel anchored to a trigger element.",
     "name": "popover",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3934,7 +4028,8 @@
     "description": "Overlapping live-presence avatars with status dots and a sane overflow chip.",
     "name": "presence-stack",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -3962,7 +4057,8 @@
     "description": "Compact pill that surfaces live connection + sync health for a collaborative canvas.",
     "name": "presence-sync-indicator",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4074,7 +4170,8 @@
     "description": "Visual progress indicator with labels and completion state.",
     "name": "progress-bar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4090,7 +4187,8 @@
     "description": "Card displaying progress metrics and status.",
     "name": "progress-card",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4106,7 +4204,8 @@
     "description": "Curriculum-level learning dashboard for modules, lessons, exercises, streaks, and earned skills.",
     "name": "progress-tracker",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4146,7 +4245,8 @@
     "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
     "name": "prompt-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4270,7 +4370,8 @@
     "description": "Interactive multiple-choice quiz with hints, explanations, and scoring.",
     "name": "quiz",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4310,7 +4411,8 @@
     "description": "Group of radio buttons for single-selection input.",
     "name": "radio-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4326,7 +4428,8 @@
     "description": "Calendar that selects a start and end date as a range.",
     "name": "range-calendar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4350,7 +4453,8 @@
     "description": "Inline star rating for lightweight learner feedback.",
     "name": "rating",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4370,7 +4474,8 @@
     "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
     "name": "reasoning",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4422,7 +4527,8 @@
     "description": "Resizable panel layout with draggable handles.",
     "name": "resizable",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4438,7 +4544,8 @@
     "description": "Reveals text with a directional slide-and-fade when it enters the viewport.",
     "name": "reveal-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4478,7 +4585,8 @@
     "description": "Account role indicator for owners, admins, members, and billing contacts.",
     "name": "role-badge",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4650,7 +4758,8 @@
     "description": "Scrambles characters then resolves them into the final text.",
     "name": "scramble-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4686,7 +4795,8 @@
     "description": "Fixed bar that tracks reading progress down the page.",
     "name": "scroll-progress",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4702,7 +4812,8 @@
     "description": "Text search input with icon and clear functionality.",
     "name": "search-bar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4718,7 +4829,8 @@
     "description": "Full-screen search dialog with keyboard navigation.",
     "name": "search-dialog",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4738,7 +4850,8 @@
     "description": "Search input with a leading icon and a clear button.",
     "name": "search-field",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4758,7 +4871,8 @@
     "description": "Single-choice segmented selector for switching modes, views, or filters.",
     "name": "segmented-control",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4782,7 +4896,8 @@
     "description": "Dropdown select input for choosing from a list of options.",
     "name": "select",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4850,7 +4965,8 @@
     "description": "Visual divider between content sections.",
     "name": "separator",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4866,7 +4982,8 @@
     "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
     "name": "severity-badge",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4898,7 +5015,8 @@
     "description": "Modal dialog for sharing a page across social platforms with a copy-link action and overridable labels.",
     "name": "share-dialog",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4914,7 +5032,8 @@
     "description": "Social sharing buttons and link copy section.",
     "name": "share-section",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4934,7 +5053,8 @@
     "description": "Slide-over panel from the edge of the screen.",
     "name": "sheet",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -4978,7 +5098,8 @@
     "description": "Text with a bright light band that sweeps across it.",
     "name": "shimmer-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5034,7 +5155,8 @@
     "description": "Collapsible sidebar navigation layout.",
     "name": "sidebar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5050,7 +5172,8 @@
     "description": "Context provider for managing sidebar open/close state.",
     "name": "sidebar-provider",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5066,7 +5189,8 @@
     "description": "Responsive toggle button for opening and closing the sidebar.",
     "name": "sidebar-toggle",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5082,7 +5206,8 @@
     "description": "Placeholder loading animation for content.",
     "name": "skeleton",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5098,7 +5223,8 @@
     "description": "Range slider input for selecting numeric values.",
     "name": "slider",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5114,7 +5240,8 @@
     "description": "Step-through slideshow for presenting content sequentially.",
     "name": "slideshow",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5198,7 +5325,8 @@
     "description": "Animated loading spinner indicator.",
     "name": "spinner",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5214,7 +5342,8 @@
     "description": "Text laid out in a circle that rotates continuously.",
     "name": "spinning-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5250,7 +5379,8 @@
     "description": "Headline KPI card for metrics, trends, and supporting context.",
     "name": "stat-card",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5298,7 +5428,8 @@
     "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
     "name": "status-board",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5322,7 +5453,8 @@
     "description": "Compact status label with tone, variant, and activity dot options.",
     "name": "status-indicator",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5342,7 +5474,8 @@
     "description": "Numbered step guide with optional interactive completion tracking.",
     "name": "step-by-step",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5358,7 +5491,8 @@
     "description": "Navigation controls for stepping through multi-page content.",
     "name": "step-navigation",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5374,7 +5508,8 @@
     "description": "Sequenced steps with complete, current, and upcoming states.",
     "name": "stepper",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5394,7 +5529,8 @@
     "description": "Pinned metric pill that sticks to a canvas object's corner.",
     "name": "sticky-metric",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5466,7 +5602,8 @@
     "description": "Toggle switch control for binary on/off state.",
     "name": "switch",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5538,7 +5675,8 @@
     "description": "Tabbed content panels with keyboard-accessible tab triggers.",
     "name": "tabs",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5554,7 +5692,8 @@
     "description": "Set of tags supporting selection and removal.",
     "name": "tag-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5574,7 +5713,8 @@
     "description": "Keyboard-friendly tag editor for adding and removing string values.",
     "name": "tags-input",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5598,7 +5738,8 @@
     "description": "Terminal-style display for command output.",
     "name": "terminal",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5635,7 +5776,8 @@
     "description": "Animates text in by word or character with configurable effects.",
     "name": "text-animate",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5663,7 +5805,8 @@
     "description": "Labelled text input bundling description and error message.",
     "name": "text-field",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5687,7 +5830,8 @@
     "description": "Dims and brightens words as the text scrolls through the viewport.",
     "name": "text-reveal",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5703,7 +5847,8 @@
     "description": "Text with an animated gradient fill that shimmers.",
     "name": "text-shimmer",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5723,7 +5868,8 @@
     "description": "Multi-line text input field.",
     "name": "textarea",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5803,7 +5949,8 @@
     "description": "Collapsible block showing AI thinking/reasoning with streaming support.",
     "name": "thinking-block",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5911,7 +6058,8 @@
     "description": "Native time input styled to match the design system.",
     "name": "time-field",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5931,7 +6079,8 @@
     "description": "Popover time selector built from hour and minute columns.",
     "name": "time-picker",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -5979,7 +6128,8 @@
     "description": "Range slider for scrubbing through canvas state playback, with optional milestone ticks.",
     "name": "timeline-scrubber",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6007,7 +6157,8 @@
     "description": "Summary section for quick content overview.",
     "name": "tldr-section",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6023,7 +6174,8 @@
     "description": "Temporary notification messages with action support.",
     "name": "toast",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6047,7 +6199,8 @@
     "description": "Two-state toggle button.",
     "name": "toggle",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6075,7 +6228,8 @@
     "description": "Group of toggle buttons for single or multiple selection.",
     "name": "toggle-group",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6091,7 +6245,8 @@
     "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
     "name": "toolbar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6111,7 +6266,8 @@
     "description": "Informational popup displayed on hover or focus.",
     "name": "tooltip",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6127,7 +6283,8 @@
     "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
     "name": "top-bar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6143,7 +6300,8 @@
     "description": "Guided onboarding flow for introducing content or interface patterns.",
     "name": "tour",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6187,7 +6345,8 @@
     "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
     "name": "tree-view",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6215,7 +6374,8 @@
     "description": "Single-line text that truncates with an ellipsis when it exceeds a configurable max width.",
     "name": "truncated-text",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6247,7 +6407,8 @@
     "description": "Completion screen displayed when a tutorial is finished.",
     "name": "tutorial-complete",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6267,7 +6428,8 @@
     "description": "Filter controls for browsing tutorials by category or difficulty.",
     "name": "tutorial-filters",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6315,7 +6477,8 @@
     "description": "Types text out character by character with a blinking cursor.",
     "name": "typewriter",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6407,7 +6570,8 @@
     "description": "URL param-based toggle between named views with pill/tab styling.",
     "name": "view-switcher",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6495,7 +6659,8 @@
     "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
     "name": "workspace-switcher",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {
@@ -6539,7 +6704,8 @@
     "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
     "name": "world-clock-bar",
     "platforms": [
-      "web"
+      "web",
+      "native"
     ],
     "stories": [
       {

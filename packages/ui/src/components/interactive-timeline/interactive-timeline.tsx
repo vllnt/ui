@@ -583,6 +583,27 @@ function useScrollDrag(
   };
 }
 
+function useMeasuredScrollArea() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [containerWidth, setContainerWidth] = useState(800);
+  const handleRef = useCallback((node: HTMLDivElement | null) => {
+    ref.current = node;
+    if (!node) return;
+    setContainerWidth(node.clientWidth);
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => {
+      setContainerWidth(node.clientWidth);
+    });
+    observer.observe(node);
+    const cleanup = () => {
+      observer.disconnect();
+      if (ref.current === node) ref.current = null;
+    };
+    return cleanup;
+  }, []);
+  return { containerWidth, handleRef, ref };
+}
+
 function ScrollArea({
   categories,
   endTime,
@@ -594,25 +615,8 @@ function ScrollArea({
   tracks,
   zoom,
 }: ScrollAreaProps): ReactNode {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const observerRef = useRef<null | ResizeObserver>(null);
-  const [containerWidth, setContainerWidth] = useState(800);
+  const { containerWidth, handleRef, ref } = useMeasuredScrollArea();
   const dragHandlers = useScrollDrag(ref);
-
-  const handleRef = useCallback((node: HTMLDivElement | null) => {
-    ref.current = node;
-    observerRef.current?.disconnect();
-    observerRef.current = null;
-    if (!node) return;
-    setContainerWidth(node.clientWidth);
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(() => {
-      setContainerWidth(node.clientWidth);
-    });
-    observer.observe(node);
-    observerRef.current = observer;
-  }, []);
-
   const innerWidth = `${(zoom * 100).toString()}%`;
   const ticks = useMemo(
     () => buildTicks(startTime, endTime, containerWidth * zoom),

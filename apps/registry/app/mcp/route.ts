@@ -10,8 +10,9 @@
  *
  * Tools (UI registry scope — see #246 scope decision):
  *   - search_components({ query, category?, platform?, limit? })
- *   - get_component({ name })
+ *   - get_component({ name, platform? })
  *   - list_categories()
+ *   - list_platforms()
  *
  * Out of scope for this PR (tracked separately):
  *   - SSE streaming responses (Streamable HTTP transport — text/event-stream)
@@ -25,9 +26,10 @@
  * source of truth as /r/registry.json. No DB, no auth, no writes.
  */
 
-import { isComponentPlatform } from "@vllnt/ui-core";
+import { type ComponentPlatform, isComponentPlatform } from "@vllnt/ui-core";
 import { NextResponse } from "next/server";
 
+import { nativeRegistry as NATIVE_REGISTRY } from "@/lib/native-registry";
 import { registry as REGISTRY, type RegistryComponent } from "@/lib/registry";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
@@ -104,11 +106,16 @@ export const TOOLS = [
   },
   {
     description:
-      "Get the full registry descriptor for one component (name, title, description, deps, version, stability, a11y, examples, props).",
+      "Get one component descriptor. Pass platform for renderer-specific installation, source, examples, props, and compatibility; omit it for the legacy combined descriptor.",
     inputSchema: {
       properties: {
         name: {
           description: "Component slug (e.g. 'button', 'data-table').",
+          type: "string",
+        },
+        platform: {
+          description: "Optional renderer projection.",
+          enum: ["web", "native"],
           type: "string",
         },
       },
@@ -121,6 +128,12 @@ export const TOOLS = [
     description: "List the 12 component categories with item counts.",
     inputSchema: { properties: {}, type: "object" },
     name: "list_categories",
+  },
+  {
+    description:
+      "List renderer packages, release status, availability, requirements, and component counts.",
+    inputSchema: { properties: {}, type: "object" },
+    name: "list_platforms",
   },
 ] as const;
 
@@ -137,10 +150,18 @@ export function searchComponents(arguments_: Record<string, unknown>): {
     typeof arguments_.category === "string"
       ? arguments_.category.toLowerCase()
       : null;
-  const platform =
+  const platformValue =
     typeof arguments_.platform === "string"
       ? arguments_.platform.toLowerCase()
-      : null;
+      : undefined;
+  let platform: ComponentPlatform | undefined;
+  if (platformValue) {
+    if (!isComponentPlatform(platformValue)) {
+      throw new Error(`Unsupported platform: ${platformValue}`);
+    }
+    platform = platformValue;
+  }
+
   const requested =
     typeof arguments_.limit === "number" && arguments_.limit > 0
       ? arguments_.limit
@@ -151,12 +172,7 @@ export function searchComponents(arguments_: Record<string, unknown>): {
     if (category && (item.category ?? "").toLowerCase() !== category) {
       return false;
     }
-    if (
-      platform &&
-      (!isComponentPlatform(platform) || !item.platforms.includes(platform))
-    ) {
-      return false;
-    }
+    if (platform && !item.platforms.includes(platform)) return false;
     if (!query) return true;
     const haystack = [
       item.name,
@@ -173,12 +189,97 @@ export function searchComponents(arguments_: Record<string, unknown>): {
   return { items: items.slice(0, limit), total: items.length };
 }
 
+type RendererComponentProjection = {
+  category?: string;
+  compatibility?: string;
+  description?: string;
+  examples: RegistryComponent["examples"];
+  install: {
+    available: boolean;
+    command: string;
+    kind: "package" | "shadcn";
+    reason?: string;
+  };
+  name: string;
+  package: string;
+  platform: ComponentPlatform;
+  props: RegistryComponent["props"];
+  source: unknown;
+  status: string;
+  title: string;
+};
+
+function projectComponent(
+  item: RegistryComponent,
+  platform: ComponentPlatform,
+): null | RendererComponentProjection {
+  if (!item.platforms.includes(platform)) return null;
+  if (platform === "native") {
+    if (!item.native) return null;
+    return {
+      category: item.category,
+      compatibility: item.native.compatibility,
+      description: item.description,
+      examples: item.examples?.filter(
+        (example) => example.framework === "react-native",
+      ),
+      install: {
+        available: NATIVE_REGISTRY.installation.available,
+        command: NATIVE_REGISTRY.installation.command,
+        kind: "package",
+        reason: NATIVE_REGISTRY.installation.reason,
+      },
+      name: item.name,
+      package: item.native.package,
+      platform,
+      props: undefined,
+      source: {
+        manifest: `${SITE_URL}/r/native/registry.json`,
+        path: item.native.source,
+      },
+      status: item.native.status,
+      title: item.title,
+    };
+  }
+
+  return {
+    category: item.category,
+    description: item.description,
+    examples: item.examples?.filter(
+      (example) => example.framework !== "react-native",
+    ),
+    install: {
+      available: true,
+      command: `pnpm dlx shadcn@latest add ${SITE_URL}/r/${item.name}.json`,
+      kind: "shadcn",
+    },
+    name: item.name,
+    package: "@vllnt/ui",
+    platform,
+    props: item.props,
+    source: item.files,
+    status: item.stability ?? "stable",
+    title: item.title,
+  };
+}
+
 export function getComponent(
   arguments_: Record<string, unknown>,
-): null | RegistryComponent {
+): null | RegistryComponent | RendererComponentProjection {
   const name = typeof arguments_.name === "string" ? arguments_.name : null;
   if (!name) return null;
-  return REGISTRY.items.find((item) => item.name === name) ?? null;
+  const item = REGISTRY.items.find((component) => component.name === name);
+  if (!item) return null;
+
+  const requestedPlatform = arguments_.platform;
+  if (requestedPlatform === undefined) return item;
+  if (
+    typeof requestedPlatform !== "string" ||
+    !isComponentPlatform(requestedPlatform)
+  ) {
+    throw new Error(`Unsupported platform: ${String(requestedPlatform)}`);
+  }
+  return projectComponent(item, requestedPlatform);
 }
 
 function listCategories(): {
@@ -194,7 +295,7 @@ function listCategories(): {
     .map(([category, count]) => ({
       category,
       count,
-      pageUrl: `${SITE_URL}/components?category=${encodeURIComponent(category)}`,
+      pageUrl: `${SITE_URL}/families/${encodeURIComponent(category)}`,
     }))
     .sort((a, b) => a.category.localeCompare(b.category));
 }
@@ -242,9 +343,46 @@ function callTool(
       const lines = [
         `${REGISTRY.items.length} components across ${rows.length} categories. Library version ${REGISTRY.version ?? "unknown"} (generated ${REGISTRY.generatedAt ?? "?"}).`,
         "",
-        ...rows.map((row) => `- ${row.category}: ${row.count}`),
+        ...rows.map(
+          (row) => `- ${row.category}: ${row.count} — ${row.pageUrl}`,
+        ),
       ];
       return { content: [{ text: lines.join("\n"), type: "text" }] };
+    }
+    case "list_platforms": {
+      const nativeCount = REGISTRY.items.filter((item) =>
+        item.platforms.includes("native"),
+      ).length;
+      return {
+        content: [
+          {
+            text: JSON.stringify(
+              [
+                {
+                  availability: "package",
+                  componentCount: REGISTRY.items.length,
+                  package: "@vllnt/ui",
+                  platform: "web",
+                  status: "stable",
+                },
+                {
+                  availability: NATIVE_REGISTRY.availability,
+                  channel: NATIVE_REGISTRY.channel,
+                  componentCount: nativeCount,
+                  installation: NATIVE_REGISTRY.installation,
+                  package: NATIVE_REGISTRY.package,
+                  platform: "native",
+                  requirements: NATIVE_REGISTRY.peerDependencies,
+                  status: NATIVE_REGISTRY.status,
+                },
+              ],
+              null,
+              2,
+            ),
+            type: "text",
+          },
+        ],
+      };
     }
     default:
       return {
@@ -266,7 +404,7 @@ function dispatch(request: JsonRpcRequest): JsonRpcError | JsonRpcSuccess {
           tools: { listChanged: false },
         },
         instructions:
-          `VLLNT UI registry MCP server. Use search_components / get_component / list_categories to discover and read ${REGISTRY.items.length} web and React Native component descriptors. Source of truth: ` +
+          `VLLNT UI registry MCP server. Use search_components / get_component / list_categories / list_platforms to discover and read ${REGISTRY.items.length} renderer-aware descriptors. Source of truth: ` +
           SITE_URL +
           "/r/registry.json",
         protocolVersion: PROTOCOL_VERSION,
@@ -320,7 +458,7 @@ function dispatch(request: JsonRpcRequest): JsonRpcError | JsonRpcSuccess {
 const SERVER_INFO = {
   capabilities: { tools: { listChanged: false } },
   description:
-    "MCP server for the platform-aware VLLNT UI component registry. Tools: search_components, get_component, list_categories. Native entries are experimental.",
+    "MCP server for the platform-aware VLLNT UI component registry. Tools: search_components, get_component, list_categories, list_platforms. Native entries are experimental and source-only until their first canary is published.",
   endpoint: `${SITE_URL}/mcp`,
   name: "vllnt-ui",
   protocol: PROTOCOL_VERSION,

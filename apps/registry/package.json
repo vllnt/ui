@@ -20,7 +20,7 @@
     "registry:check": "tsx scripts/check-registry-drift.ts",
     "registry:integrity": "tsx scripts/check-registry-integrity.ts",
     "registry:verify-previews": "tsx scripts/verify-preview-stories.ts",
-    "search:index": "pagefind --site .next/server/app --output-path public/_pagefind --root-selector main --force-language en",
+    "search:index": "pagefind --site .next/server/app --output-path public/_pagefind --root-selector main",
     "sync-storybook": "tsx scripts/generate-component-metadata.ts"
   },
   "dependencies": {

@@ -11,11 +11,14 @@ import { StatusBar } from "expo-status-bar";
 import { ScrollView, View } from "react-native";
 
 import {
-  BadgeSection,
-  ButtonSection,
   CardSection,
+  CompositeSection,
+  DataSection,
+  FormSection,
+  FoundationSection,
+  NavigationSection,
+  OverlaySection,
   ThemeSection,
-  TypeSection,
 } from "./catalog-sections";
 
 function CatalogContent({
@@ -27,6 +30,7 @@ function CatalogContent({
 }) {
   const theme = useTheme();
   const [presses, setPresses] = useState(0);
+  const [alertsEnabled, setAlertsEnabled] = useState(true);
   const incrementPresses = () => {
     setPresses((value) => value + 1);
   };
@@ -50,13 +54,19 @@ function CatalogContent({
             VLLNT UI Native
           </Heading>
           <Text tone="muted">
-            Shared tokens and contracts. React Native renderer.
+            Source-only experimental renderer · 171 native component modules.
           </Text>
         </View>
         <ThemeSection onChange={onThemeChange} selection={themeSelection} />
-        <ButtonSection onPress={incrementPresses} presses={presses} />
-        <TypeSection />
-        <BadgeSection />
+        <FoundationSection onPress={incrementPresses} presses={presses} />
+        <FormSection
+          enabled={alertsEnabled}
+          onEnabledChange={setAlertsEnabled}
+        />
+        <DataSection />
+        <NavigationSection />
+        <OverlaySection />
+        <CompositeSection />
         <CardSection onPress={incrementPresses} />
       </View>
     </ScrollView>

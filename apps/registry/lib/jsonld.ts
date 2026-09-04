@@ -75,12 +75,18 @@ export function softwareSourceCodeLd(component: {
   };
 }
 
-export function softwareApplicationLd(application: {
+type SoftwareApplicationInput = {
   readonly description: string;
   readonly installCommand?: string;
   readonly name: string;
+  readonly operatingSystem?: readonly string[] | string;
+  readonly softwareRequirements?: string;
   readonly url: string;
-}): JsonLdNode {
+};
+
+export function softwareApplicationLd(
+  application: SoftwareApplicationInput,
+): JsonLdNode {
   const node: JsonLdNode = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -88,11 +94,11 @@ export function softwareApplicationLd(application: {
     codeRepository: "https://github.com/vllnt/ui",
     description: application.description,
     name: application.name,
-    operatingSystem: "Web",
-    softwareRequirements: "Node.js, pnpm, React, Tailwind CSS",
+    operatingSystem: application.operatingSystem ?? "Web",
+    softwareRequirements:
+      application.softwareRequirements ?? "Node.js, pnpm, React, Tailwind CSS",
     url: application.url,
   };
-
   if (application.installCommand) {
     return {
       ...node,

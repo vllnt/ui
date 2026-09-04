@@ -1,12 +1,13 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
+import { Breadcrumb, MDXContent } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPage, getDocsPath } from "@/lib/docs-pages";
@@ -140,7 +141,7 @@ export default async function DocsSlugPage(props: Props) {
           }),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">

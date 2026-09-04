@@ -38,9 +38,11 @@ const componentPlatformsSchema = z
   });
 
 const nativeRendererSchema = z.object({
+  availability: z.enum(["package", "source"]),
   channel: z.literal("canary"),
+  compatibility: z.enum(["native-adapted", "portable-options"]),
   package: z.literal("@vllnt/ui-native"),
-  parity: z.enum(["api-only", "full"]),
+  source: z.string(),
   status: z.literal("experimental"),
 });
 
