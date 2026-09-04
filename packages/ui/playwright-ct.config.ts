@@ -5,6 +5,10 @@ import { defineConfig, devices } from '@playwright/experimental-ct-react'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
+if (process.platform === 'linux') {
+  process.env.FONTCONFIG_FILE = resolve(__dirname, './playwright/fonts.conf')
+}
+
 export default defineConfig({
   testDir: './src/components',
   testMatch: '**/*.visual.tsx',
