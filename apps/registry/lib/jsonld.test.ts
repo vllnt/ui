@@ -9,9 +9,41 @@ vi.mock("@/i18n/routing", () => ({
 
 import {
   breadcrumbTrailLd,
+  jsonLdScript,
   softwareApplicationLd,
   softwareSourceCodeLd,
 } from "./jsonld";
+
+describe("jsonLdScript", () => {
+  it("wraps multiple nodes in a standards-compliant graph document", () => {
+    const script = jsonLdScript([
+      Object.fromEntries([
+        ["@context", "https://schema.org"],
+        ["@type", "Organization"],
+      ]),
+      Object.fromEntries([
+        ["@context", "https://schema.org"],
+        ["@type", "WebSite"],
+      ]),
+    ]);
+    const document = JSON.parse(script) as Record<string, unknown>;
+
+    expect(document["@context"]).toBe("https://schema.org");
+    expect(document["@graph"]).toEqual([
+      Object.fromEntries([["@type", "Organization"]]),
+      Object.fromEntries([["@type", "WebSite"]]),
+    ]);
+  });
+
+  it("leaves a single node unwrapped", () => {
+    const node = Object.fromEntries([
+      ["@context", "https://schema.org"],
+      ["@type", "WebSite"],
+    ]);
+
+    expect(JSON.parse(jsonLdScript(node))).toEqual(node);
+  });
+});
 
 /**
  * Regression guard for the locale-JSON-LD bug: page structured-data URLs were

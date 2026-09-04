@@ -242,8 +242,29 @@ export function faqPageLd(
   };
 }
 
+function isJsonLdNodeList(
+  node: JsonLdNode | readonly JsonLdNode[],
+): node is readonly JsonLdNode[] {
+  return Array.isArray(node);
+}
+
+function jsonLdDocument(node: JsonLdNode | readonly JsonLdNode[]): JsonLdNode {
+  if (!isJsonLdNodeList(node)) return node;
+
+  const graph = node.map((entry) =>
+    Object.fromEntries(
+      Object.entries(entry).filter(([key]) => key !== "@context"),
+    ),
+  ) as JsonLdNode[];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 export function jsonLdScript(node: JsonLdNode | readonly JsonLdNode[]): string {
-  return JSON.stringify(node).replaceAll("<", "\\u003c");
+  return JSON.stringify(jsonLdDocument(node)).replaceAll("<", "\\u003c");
 }
 
 export function jsonLdScriptAttributes(
