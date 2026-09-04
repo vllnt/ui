@@ -1,30 +1,51 @@
 import { StaticCode } from "@vllnt/ui";
-import { getTranslations } from "next-intl/server";
 
 import { ComponentSourceTabs } from "./component-source-tabs";
 
-type ComponentSourceCodeProps = {
-  readonly nativeCode?: string;
-  readonly webCode: string;
+export type ComponentSource = {
+  readonly code: string;
+  readonly id: string;
+  readonly label: string;
+  readonly language?: string;
 };
 
-export async function ComponentSourceCode({
-  nativeCode,
-  webCode,
-}: ComponentSourceCodeProps) {
-  if (!nativeCode) {
-    return <StaticCode code={webCode} language="typescript" />;
-  }
+type ComponentSourceCodeProps = {
+  readonly label: string;
+  readonly sources: readonly ComponentSource[];
+};
 
-  const t = await getTranslations("pages.component");
+function renderSource(source: ComponentSource) {
+  return (
+    <StaticCode
+      className="max-h-[25rem]"
+      code={source.code}
+      language={source.language ?? "typescript"}
+    />
+  );
+}
+
+export function ComponentSourceCode({
+  label,
+  sources,
+}: ComponentSourceCodeProps) {
+  const [firstSource, ...additionalSources] = sources;
+  if (!firstSource) return null;
 
   return (
     <ComponentSourceTabs
-      native={<StaticCode code={nativeCode} language="typescript" />}
-      nativeLabel={t("platformNative")}
-      tabListLabel={t("sourcePlatformLabel")}
-      web={<StaticCode code={webCode} language="typescript" />}
-      webLabel={t("platformWeb")}
+      label={label}
+      sources={[
+        {
+          content: renderSource(firstSource),
+          id: firstSource.id,
+          label: firstSource.label,
+        },
+        ...additionalSources.map((source) => ({
+          content: renderSource(source),
+          id: source.id,
+          label: source.label,
+        })),
+      ]}
     />
   );
 }

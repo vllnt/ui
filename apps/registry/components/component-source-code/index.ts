@@ -1,1 +1,4 @@
-export { ComponentSourceCode } from "./component-source-code";
+export {
+  type ComponentSource,
+  ComponentSourceCode,
+} from "./component-source-code";

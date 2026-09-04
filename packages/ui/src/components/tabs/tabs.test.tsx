@@ -81,4 +81,51 @@ describe("Tabs", () => {
 
     expect(container.querySelector("[role='tablist']")).toBeInTheDocument();
   });
+
+  it("forwards tab stops and panel relationships", () => {
+    render(
+      <Tabs defaultValue="a">
+        <TabsList aria-label="Choose a source implementation">
+          <TabsTrigger
+            aria-controls="panel-a"
+            id="tab-a"
+            tabIndex={0}
+            value="a"
+          >
+            A
+          </TabsTrigger>
+          <TabsTrigger
+            aria-controls="panel-b"
+            id="tab-b"
+            tabIndex={-1}
+            value="b"
+          >
+            B
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent aria-labelledby="tab-a" id="panel-a" value="a">
+          Panel A
+        </TabsContent>
+        <TabsContent aria-labelledby="tab-b" id="panel-b" value="b">
+          Panel B
+        </TabsContent>
+      </Tabs>,
+    );
+
+    expect(screen.getByRole("tablist")).toHaveAccessibleName(
+      "Choose a source implementation",
+    );
+    expect(screen.getByRole("tab", { name: "A" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+    expect(screen.getByRole("tab", { name: "B" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+    expect(screen.getByRole("tabpanel")).toHaveAttribute(
+      "aria-labelledby",
+      "tab-a",
+    );
+  });
 });

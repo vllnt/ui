@@ -15,7 +15,10 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import { buildComponentMdxKit } from "@/components/component-mdx";
-import { ComponentSourceCode } from "@/components/component-source-code";
+import {
+  type ComponentSource,
+  ComponentSourceCode,
+} from "@/components/component-source-code";
 import { PlatformBadges } from "@/components/platform-badges";
 import { PlatformComparison } from "@/components/platform-comparison";
 import { PlatformSidebar } from "@/components/platform-sidebar";
@@ -44,10 +47,6 @@ import {
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
-import {
-  getPlaygroundExample,
-  getRegistryPackageVersion,
-} from "@/lib/playground";
 import { registry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
@@ -187,8 +186,6 @@ export default async function ComponentPage(props: Props) {
     meta?.description ??
     component.description ??
     "";
-  const playgroundExample = getPlaygroundExample(component);
-  const registryPackageVersion = getRegistryPackageVersion(registry.version);
   const platform = getPlatform(query.platform, "all");
 
   // The browser preview stays on the Web implementation. Paired Native source
@@ -261,18 +258,34 @@ export default async function ComponentPage(props: Props) {
     }
   }
 
+  const sources: ComponentSource[] = componentCode
+    ? [
+        {
+          code: componentCode,
+          id: "react",
+          label: t("sourceReact"),
+        },
+      ]
+    : [];
+  if (nativeCode) {
+    sources.push({
+      code: nativeCode,
+      id: "react-native",
+      label: t("sourceReactNative"),
+    });
+  }
+
   const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
 
   const localizedComponent = await getComponentContent(slug, locale);
   const componentMdx = localizedComponent;
+  const hasSources = sources.length > 0;
   const mdxKit = buildComponentMdxKit({
     component,
-    componentCode,
-    componentName: component.name,
-    example: playgroundExample,
+    hasSources,
     installCommand,
-    nativeCode,
-    packageVersion: registryPackageVersion,
+    sourceLinkLabel: t("viewSource"),
+    storybookLabel: t("viewInStorybook"),
     storyId: meta?.defaultStoryId,
   });
 
@@ -301,7 +314,7 @@ export default async function ComponentPage(props: Props) {
     ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
     { id: "platform-comparison", title: t("platformComparison") },
     { id: "installation", title: t("installation") },
-    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
+    ...(hasSources ? [{ id: "code", title: t("code") }] : []),
     ...(meta?.defaultStoryId
       ? [{ id: "storybook", title: t("storybook") }]
       : []),
@@ -477,6 +490,28 @@ export default async function ComponentPage(props: Props) {
                 </div>
               ) : null}
 
+              {meta?.defaultStoryId ? (
+                <PreviewPlaygroundTabs
+                  code={
+                    sources.length > 0 ? (
+                      <ComponentSourceCode
+                        label={t("sourceImplementationLabel")}
+                        sources={sources}
+                      />
+                    ) : null
+                  }
+                  componentName={component.name}
+                  storyId={meta.defaultStoryId}
+                />
+              ) : hasSources ? (
+                <div className="mb-8 scroll-mt-8" id="code">
+                  <ComponentSourceCode
+                    label={t("sourceImplementationLabel")}
+                    sources={sources}
+                  />
+                </div>
+              ) : null}
+
               {componentMdx ? (
                 <MDXContent
                   components={mdxKit}
@@ -485,15 +520,6 @@ export default async function ComponentPage(props: Props) {
                 />
               ) : (
                 <>
-                  {meta?.defaultStoryId ? (
-                    <PreviewPlaygroundTabs
-                      componentName={component.name}
-                      example={playgroundExample}
-                      packageVersion={registryPackageVersion}
-                      storyId={meta.defaultStoryId}
-                    />
-                  ) : null}
-
                   <PlatformComparison component={component} />
 
                   <div className="mb-8 scroll-mt-8" id="installation">
@@ -542,18 +568,6 @@ export default async function ComponentPage(props: Props) {
                           </div>
                         </div>
                       ) : null}
-                    </div>
-                  ) : null}
-
-                  {componentCode ? (
-                    <div className="mb-8 scroll-mt-8" id="code">
-                      <h2 className="text-2xl font-semibold mb-4">
-                        {t("code")}
-                      </h2>
-                      <ComponentSourceCode
-                        nativeCode={nativeCode}
-                        webCode={componentCode}
-                      />
                     </div>
                   ) : null}
                 </>

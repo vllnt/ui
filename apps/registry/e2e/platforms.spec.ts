@@ -2,6 +2,21 @@ import { readFileSync } from "node:fs";
 
 import { expect, test } from "@playwright/test";
 
+type StructuredData = {
+  readonly "@graph"?: StructuredData[];
+  readonly "@type"?: string;
+  readonly itemListElement?: { item: string }[];
+  readonly url?: string;
+};
+
+function flattenStructuredData(content: string): StructuredData[] {
+  const document = JSON.parse(content) as StructuredData | StructuredData[];
+  const nodes = Array.isArray(document) ? document : [document];
+  return nodes.flatMap((node) =>
+    node["@graph"] ? flattenStructuredData(JSON.stringify(node["@graph"])) : node,
+  );
+}
+
 const nativeComponents = (
   JSON.parse(
     readFileSync(
@@ -58,10 +73,7 @@ test.describe("platform-aware component discovery", () => {
     );
     const structuredData = (
       await page.locator('script[type="application/ld+json"]').allTextContents()
-    ).flatMap(
-      (content) =>
-        JSON.parse(content) as { "@type"?: string; url?: string }[],
-    );
+    ).flatMap(flattenStructuredData);
     expect(
       structuredData.find((entry) => entry["@type"] === "CollectionPage")?.url,
     ).toMatch(/\/components\?platform=native$/);
@@ -213,12 +225,21 @@ test.describe("platform-aware component discovery", () => {
       }),
     ).toBeVisible();
 
-    const source = main.locator("#code");
-    await expect(source.getByRole("tab", { name: "Web" })).toHaveAttribute(
-      "aria-selected",
-      "true",
+    await expect(main.locator("#preview")).toHaveCount(1);
+    await expect(main.locator("iframe")).toHaveCount(1);
+    await expect(main.locator('iframe[title="button preview"]')).toHaveAttribute(
+      "sandbox",
+      "allow-scripts allow-same-origin",
     );
-    await source.getByRole("tab", { name: "Native" }).click();
+    await main.getByRole("tab", { name: "Code", exact: true }).click();
+    const source = main.locator("#preview");
+    const reactTab = source.getByRole("tab", { name: "React", exact: true });
+    const nativeTab = source.getByRole("tab", { name: "React Native" });
+    await expect(reactTab).toHaveAttribute("aria-selected", "true");
+    await reactTab.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(nativeTab).toBeFocused();
+    await expect(nativeTab).toHaveAttribute("aria-selected", "true");
     await expect(source).toContainText("Pressable");
 
     await expect(
@@ -227,10 +248,9 @@ test.describe("platform-aware component discovery", () => {
     await expect(main.getByRole("button", { name: "Add to v0.dev" })).toBeVisible();
     await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
     await expect(main.getByText("Storybook", { exact: true })).toBeVisible();
-    await expect(main.locator('iframe[title="button preview"]').first()).toHaveAttribute(
-      "sandbox",
-      "allow-scripts allow-same-origin",
-    );
+    await expect(
+      main.getByRole("link", { name: "View in Storybook" }),
+    ).toBeVisible();
   });
 
   test("localizes platform comparison and the retired route redirect", async ({
@@ -242,7 +262,10 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.getByRole("heading", { name: "Comparaison des plateformes" }),
     ).toBeVisible();
-    await expect(main.locator("#code").getByRole("tab", { name: "Natif" })).toBeVisible();
+    await main.getByRole("tab", { name: "Code", exact: true }).click();
+    await expect(
+      main.locator("#preview").getByRole("tab", { name: "React Native" }),
+    ).toBeVisible();
 
     await page.goto("/fr/native?ref=e2e");
     await expect(page).toHaveURL("/fr/components?ref=e2e&platform=native");
@@ -259,13 +282,35 @@ test.describe("platform-aware component discovery", () => {
         name: /Native.*Not available/,
       }),
     ).toBeVisible();
+    await main.getByRole("tab", { name: "Code", exact: true }).click();
     await expect(
-      main.locator("#code").getByRole("tab", { name: "Native" }),
+      main.locator("#preview").getByRole("tab", {
+        name: "React",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      main.locator("#preview").getByRole("tab", { name: "React Native" }),
     ).toHaveCount(0);
     await expect(
       main.getByRole("button", { name: "Copy install command" }),
     ).toBeVisible();
     await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
+  });
+
+  test("keeps source navigation valid when a component has no preview", async ({
+    page,
+  }) => {
+    await page.goto("/components/area-chart");
+
+    const main = page.locator("main");
+    await expect(main.locator("#preview")).toHaveCount(0);
+    await expect(main.locator("#code")).toHaveCount(1);
+    await expect(
+      main.locator("#code").getByRole("tab", { name: "React", exact: true }),
+    ).toBeVisible();
+    await main.getByRole("link", { name: "View source above" }).click();
+    await expect(page).toHaveURL(/\/components\/area-chart#code$/);
   });
 
   test("uses an inline desktop sidebar and bounded tablet drawer", async ({

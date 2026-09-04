@@ -5,23 +5,17 @@ import * as React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@vllnt/ui";
 import { useTranslations } from "next-intl";
 
-import type { PlaygroundExample } from "@/lib/playground";
-
 import { StorybookEmbed } from "../storybook-embed";
 
-import { PlaygroundCodePanel } from "./playground-code-panel";
-
 type PreviewPlaygroundTabsProps = {
+  code?: React.ReactNode;
   componentName: string;
-  example: PlaygroundExample;
-  packageVersion: string;
   storyId: string;
 };
 
 export function PreviewPlaygroundTabs({
+  code,
   componentName,
-  example,
-  packageVersion,
   storyId,
 }: PreviewPlaygroundTabsProps): React.ReactElement {
   const t = useTranslations("shared");
@@ -29,9 +23,9 @@ export function PreviewPlaygroundTabs({
 
   React.useEffect(() => {
     function selectHashTab(): void {
-      if (window.location.hash === "#code") {
+      if (window.location.hash === "#code" && code) {
         setActiveTab("code");
-      } else if (window.location.hash === "#preview") {
+      } else if (window.location.hash === "#preview" || !code) {
         setActiveTab("preview");
       }
     }
@@ -42,15 +36,16 @@ export function PreviewPlaygroundTabs({
     return () => {
       window.removeEventListener("hashchange", selectHashTab);
     };
-  }, []);
+  }, [code]);
 
   return (
-    <div className="mb-8 scroll-mt-8" id="preview">
+    <div className="relative mb-8 scroll-mt-8" id="preview">
+      {code ? <span className="absolute -top-8" id="code" /> : null}
       <Tabs className="my-0" onValueChange={setActiveTab} value={activeTab}>
         <div className="flex items-center justify-between gap-4 border-b">
           <TabsList className="border-b-0">
             <TabsTrigger value="preview">{t("preview")}</TabsTrigger>
-            <TabsTrigger value="code">{t("code")}</TabsTrigger>
+            {code ? <TabsTrigger value="code">{t("code")}</TabsTrigger> : null}
           </TabsList>
         </div>
         <TabsContent className="pt-4" value="preview">
@@ -58,14 +53,11 @@ export function PreviewPlaygroundTabs({
             <StorybookEmbed componentName={componentName} storyId={storyId} />
           </div>
         </TabsContent>
-        <TabsContent className="pt-4" value="code">
-          <PlaygroundCodePanel
-            componentName={componentName}
-            example={example}
-            packageVersion={packageVersion}
-            surface="inline"
-          />
-        </TabsContent>
+        {code ? (
+          <TabsContent className="pt-4" value="code">
+            {code}
+          </TabsContent>
+        ) : null}
       </Tabs>
     </div>
   );

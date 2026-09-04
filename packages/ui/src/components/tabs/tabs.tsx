@@ -62,15 +62,25 @@ function Tabs({
 }
 
 export type TabsListProps = {
+  "aria-label"?: string;
   children: ReactNode;
   className?: string;
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 };
 
-function TabsList({ children, className }: TabsListProps): React.ReactNode {
+function TabsList({
+  "aria-label": ariaLabel,
+  children,
+  className,
+  onKeyDown,
+}: TabsListProps): React.ReactNode {
   return (
     <div
+      aria-label={ariaLabel}
       className={cn("flex border-b border-border overflow-x-auto", className)}
+      onKeyDown={onKeyDown}
       role="tablist"
+      tabIndex={-1}
     >
       {children}
     </div>
@@ -78,17 +88,21 @@ function TabsList({ children, className }: TabsListProps): React.ReactNode {
 }
 
 export type TabsTriggerProps = {
+  "aria-controls"?: string;
   "aria-hidden"?: "false" | "true" | boolean;
   children: ReactNode;
   className?: string;
+  id?: string;
   tabIndex?: number;
   value: string;
 };
 
 function TabsTrigger({
+  "aria-controls": ariaControls,
   "aria-hidden": ariaHidden,
   children,
   className,
+  id,
   tabIndex,
   value,
 }: TabsTriggerProps): React.ReactNode {
@@ -97,6 +111,7 @@ function TabsTrigger({
 
   return (
     <button
+      aria-controls={ariaControls}
       aria-hidden={ariaHidden}
       aria-selected={isActive}
       className={cn(
@@ -107,6 +122,7 @@ function TabsTrigger({
           : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50",
         className,
       )}
+      id={id}
       onClick={() => {
         setActiveTab(value);
       }}
@@ -121,15 +137,19 @@ function TabsTrigger({
 
 export type TabsContentProps = {
   "aria-hidden"?: "false" | "true" | boolean;
+  "aria-labelledby"?: string;
   children: ReactNode;
   className?: string;
+  id?: string;
   value: string;
 };
 
 function TabsContent({
   "aria-hidden": ariaHidden,
+  "aria-labelledby": ariaLabelledBy,
   children,
   className,
+  id,
   value,
 }: TabsContentProps): React.ReactNode {
   const { activeTab } = useTabsContext();
@@ -139,7 +159,9 @@ function TabsContent({
   return (
     <div
       aria-hidden={ariaHidden}
+      aria-labelledby={ariaLabelledBy}
       className={cn("pt-4", className)}
+      id={id}
       role="tabpanel"
     >
       {children}
