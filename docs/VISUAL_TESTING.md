@@ -1,8 +1,8 @@
 # Visual regression testing
 
-The canonical screenshots live in `packages/ui/.snapshots/linux/`. Generate and compare them in `mcr.microsoft.com/playwright:v1.58.2-noble`, matching the Playwright version in the lockfile and the CI container. CI pins the image manifest digest `sha256:6446946a1d9fd62d9ae501312a2d76a43ee688542b21622056a372959b65d63d`. The suite fixes locale to `en-US`, timezone to `UTC`, and reduced motion to make layout comparisons reproducible. Animation behavior remains covered by component unit tests.
+The canonical screenshots live in `packages/ui/.snapshots/linux/`. Generate and compare them on **Linux ARM64** in `mcr.microsoft.com/playwright:v1.58.2-noble`, matching the Playwright version in the lockfile and the CI container. The visual job uses `ubuntu-24.04-arm`; other jobs retain x86 runners. CI pins the image manifest digest `sha256:6446946a1d9fd62d9ae501312a2d76a43ee688542b21622056a372959b65d63d`. The suite fixes locale to `en-US`, timezone to `UTC`, and reduced motion to make layout comparisons reproducible. Animation behavior remains covered by component unit tests.
 
-Do not compare macOS screenshots with the Linux baseline set. The snapshot path includes the operating system to prevent accidental cross-platform updates.
+Do not compare macOS or Linux x86 screenshots with the Linux ARM64 baseline set. Even a shared container manifest can resolve to architecture-specific images with different font rendering. The snapshot path includes the operating system; use `--platform linux/arm64` when starting the container to also match the canonical architecture.
 
 ## Compare
 
