@@ -5,6 +5,7 @@ import {
   AIArtifact,
   AIArtifactContent,
   AIArtifactCopyButton,
+  AIArtifactDownloadButton,
   AIArtifactToolbar,
   AIArtifactVersion,
   AIArtifactVersions,
@@ -26,6 +27,23 @@ import { TLDRSection } from "./tldr-section/tldr-section";
 import { TruncatedText } from "./truncated-text/truncated-text";
 
 describe("native content, AI, and utility components", () => {
+  it.each([
+    [
+      `${"-".repeat(20_000)}Report title${"!".repeat(20_000)}`,
+      "report-title.txt",
+    ],
+    ["-".repeat(20_000), "artifact.txt"],
+  ])("normalizes long artifact titles for download (%#)", (title, filename) => {
+    const onDownload = jest.fn();
+    render(
+      <AIArtifact onDownload={onDownload} title={title} value="content">
+        <AIArtifactDownloadButton />
+      </AIArtifact>,
+    );
+    fireEvent.press(screen.getByRole("button", { name: "Download" }));
+    expect(onDownload).toHaveBeenCalledWith("content", filename);
+  });
+
   it("renders semantic badges and content surfaces", () => {
     render(
       <View>

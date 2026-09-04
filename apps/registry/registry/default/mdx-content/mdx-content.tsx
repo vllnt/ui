@@ -146,14 +146,18 @@ function removeImportStatements(
   content: string,
   componentNames: string[],
 ): string {
-  let processed = content.replaceAll(/^import\s+.*CodeBlock.*from.*$/gm, "");
-  componentNames.forEach((name) => {
-    processed = processed.replaceAll(
-      new RegExp(`^import\\s+.*${name}.*from.*$`, "gm"),
-      "",
-    );
-  });
-  return processed;
+  const names = ["CodeBlock", ...componentNames];
+  return content
+    .split("\n")
+    .map((line) => {
+      if (!line.startsWith("import") || !/\s/.test(line[6] ?? "")) return line;
+      const fromIndex = line.lastIndexOf("from");
+      if (fromIndex < 7) return line;
+      return names.some((name) => line.slice(7, fromIndex).includes(name))
+        ? ""
+        : line;
+    })
+    .join("\n");
 }
 
 function buildCustomComponents(

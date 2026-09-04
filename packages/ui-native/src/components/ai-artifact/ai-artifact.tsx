@@ -76,7 +76,8 @@ const styles = StyleSheet.create({
 });
 
 const invalidFilenameCharacters = /[^\da-z]+/g;
-const filenameDashes = /^-+|-+$/g;
+// Normalization collapses every punctuation run to one dash.
+const filenameDashes = /^-|-$/g;
 
 function extensionFor(type: AIArtifactType, language: string): string {
   if (language) return language;
