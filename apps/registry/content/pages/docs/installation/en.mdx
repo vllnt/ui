@@ -10,9 +10,12 @@ og:
 
 # Installation
 
-VLLNT UI ships as both an npm package and a shadcn-compatible registry. Most teams should install individual components from the registry so the source lands in their app and can be adapted locally.
+Choose the renderer that matches your application before installing anything.
 
-## Prerequisites
+- **Web:** use the published `@vllnt/ui` package or copy individual components from the shadcn-compatible registry. Continue below for the web setup.
+- **React Native · Experimental:** the renderer is currently source-only and has no working npm installation. Review the [React Native guide](/docs/native?platform=native) and [native catalog](/components?platform=native); do not run the planned canary command until the native manifest reports package availability.
+
+## Web prerequisites
 
 - Node.js 20 or newer.
 - pnpm for this repository and for examples in this documentation.

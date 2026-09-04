@@ -19,7 +19,9 @@ export async function PlatformBadges({
     <div
       aria-label={t("platforms")}
       className={className ?? "flex flex-wrap items-center gap-2"}
+      role="group"
     >
+      <span className="sr-only">{t("platforms")}:</span>
       {platforms.includes("web") ? (
         <Badge variant="outline">{t("platformWeb")}</Badge>
       ) : null}
