@@ -28,6 +28,8 @@ pnpm -F @vllnt/ui test:visual sidebar --workers=1 --update-snapshots
 pnpm -F @vllnt/ui test:visual sidebar --workers=1 --update-snapshots=none
 ```
 
+Keep fixture images local or inline rather than depending on third-party placeholder hosts. Wait for the image's intrinsic dimensions before capturing it; screenshot stability alone does not guarantee a remote image has loaded.
+
 Inspect expected/actual/diff images and commit only intentional changes together with their source changes. Never update snapshots in CI to make a failing comparison pass. When upgrading Playwright, upgrade the container version and review regenerated screenshots together.
 
 The initial Linux baseline set was generated from `main` at `38db630`, not from the Native feature branch. Snapshot equality proves the states exercised by the existing visual fixtures; it does not replace keyboard, accessibility, reduced-motion behavior, or physical-device tests.
