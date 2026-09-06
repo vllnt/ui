@@ -165,7 +165,7 @@ function ModelRow({
     <Pressable
       accessibilityLabel={model.name}
       accessibilityRole="radio"
-      accessibilityState={{ disabled: unavailable, selected }}
+      accessibilityState={{ checked: selected, disabled: unavailable }}
       disabled={unavailable}
       onPress={() => {
         onSelect(model.id);

@@ -38,6 +38,7 @@ export type MarqueeProps = Omit<ViewProps, "children"> & {
   readonly vertical?: boolean;
 };
 
+const MAX_REPEAT = 100;
 const styles = StyleSheet.create({
   root: { overflow: "hidden", width: "100%" },
   row: { alignItems: "center", flexDirection: "row" },
@@ -49,7 +50,8 @@ function getDuration(
   duration: number | undefined,
   speed: MarqueeSpeed,
 ): number {
-  if (duration !== undefined) return duration;
+  if (duration !== undefined)
+    return Number.isFinite(duration) ? Math.max(0, duration) : 0;
   if (speed === "fast") return 10;
   if (speed === "slow") return 32;
   return 20;
@@ -63,12 +65,13 @@ function MarqueeItems({
   readonly repeat: number;
 }) {
   const items = Children.toArray(children);
-  return Array.from(
-    { length: Math.max(1, Math.floor(repeat)) },
-    (_, copyIndex) =>
-      items.map((item, itemIndex) => (
-        <View key={`${copyIndex}-${itemIndex}`}>{item}</View>
-      )),
+  const repeatCount = Number.isFinite(repeat)
+    ? Math.min(MAX_REPEAT, Math.max(1, Math.floor(repeat)))
+    : 1;
+  return Array.from({ length: repeatCount }, (_, copyIndex) =>
+    items.map((item, itemIndex) => (
+      <View key={`${copyIndex}-${itemIndex}`}>{item}</View>
+    )),
   );
 }
 MarqueeItems.displayName = "MarqueeItems";
@@ -182,7 +185,10 @@ function Marquee({
   const reduceMotion = useReducedMotion(reducedMotionService);
   const [laneSize, setLaneSize] = useState(0);
   const [viewportSize, setViewportSize] = useState(0);
-  const resolvedGap = gap ?? theme.spacing[4];
+  const resolvedGap =
+    gap !== undefined && Number.isFinite(gap) && gap >= 0
+      ? gap
+      : theme.spacing[4];
   const resolvedDuration = getDuration(duration, speed);
   const offset = useMarqueeOffset({
     duration: resolvedDuration,

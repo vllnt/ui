@@ -192,6 +192,7 @@ function CodeBlock({
       setCopiedCode(code);
       onCopySuccess?.();
     } catch (error: unknown) {
+      setCopiedCode(undefined);
       onCopyError?.(error);
     }
   };

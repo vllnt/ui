@@ -46,8 +46,12 @@ for (const locale of ["en", "fr"]) {
       /React Native/,
     );
 
-    await page.goto(`${prefix}/docs/native`);
+    await page.goto(`${prefix}/docs/installation?platform=native`);
     await expect(page).toHaveTitle(/React Native.*0\.4\.0/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      new RegExp(`${prefix}/docs/installation\\?platform=native$`),
+    );
     await expect(
       page.locator('main a[href$="/components?platform=native"]').first(),
     ).toHaveAttribute("href", `${prefix}/components?platform=native`);

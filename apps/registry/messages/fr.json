@@ -135,7 +135,6 @@
     "hero": {
       "browseAll": "Parcourir les {count}",
       "browseNative": "Parcourir Natif",
-      "browseTemplates": "Parcourir les modeles",
       "browseWeb": "Parcourir Web",
       "description": "{count} composants React Web stables et un catalogue React Native disponible uniquement en source pour les applications IA. Les deux renderers publient leur disponibilite et leurs contrats pour que les agents choisissent un source adapte a la plateforme sans scraper le HTML.",
       "exploreAi": "Explorer les composants IA",
@@ -214,7 +213,7 @@
       "installation": "Installation",
       "nativeCapabilitiesAdapted": "Interactions et accessibilite adaptees au natif",
       "nativeCapabilitiesPortable": "Options semantiques portables et interactions natives",
-      "nativeMetaDescription": "Comparez {title} pour React et React Native dans VLLNT UI 0.4.0 : source, dependances et capacites natives. Source uniquement, publication npm en attente.",
+      "nativeMetaDescription": "{description} La source React Native de {title} est incluse dans VLLNT UI 0.4.0 pour iOS et Android. Elle est disponible uniquement comme source ; la publication npm est en attente.",
       "nativeMetaTitle": "{title} pour React et React Native",
       "notAvailable": "Indisponible",
       "platform": "Plateforme",
@@ -229,6 +228,7 @@
       "sourceImplementationLabel": "Choisir une implementation source",
       "sourceReact": "React",
       "sourceReactNative": "React Native",
+      "nativeSourceOnlyCommand": "# React Native est disponible uniquement comme source ; copiez la source ci-dessus",
       "storiesAvailable": "{count, plural, one {# story disponible :} other {# stories disponibles :}}",
       "storybook": "Storybook",
       "storybookDescription": "Explorez les variantes, controles et verifications d'accessibilite dans le playground Storybook interactif.",
@@ -597,7 +597,8 @@
     "quickAdd": {
       "addToV0": "Ajouter a v0.dev",
       "copied": "Copie !",
-      "copyInstall": "Copier la commande d'installation"
+      "copyInstall": "Copier la commande d'installation",
+      "copyWebInstall": "Copier la commande d'installation Web"
     },
     "shareEmbed": {
       "copied": "Copie !",

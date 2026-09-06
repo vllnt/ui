@@ -57,7 +57,6 @@ function Toolbar({
     <View
       {...props}
       accessibilityRole="toolbar"
-      accessible
       ref={ref}
       style={[
         orientation === "horizontal" ? styles.horizontal : styles.vertical,
@@ -125,7 +124,7 @@ function ToolbarSeparator({
     <View
       {...props}
       accessibilityRole="none"
-      accessible
+      accessible={false}
       ref={ref}
       style={[
         orientation === "vertical"

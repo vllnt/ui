@@ -124,12 +124,15 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     : undefined;
   const title =
     componentMdx?.frontmatter.title ?? meta?.title ?? component.title;
+  const purposeDescription =
+    handWrittenDescription ??
+    componentMdx?.frontmatter.description ??
+    meta?.description ??
+    component.description ??
+    title;
   const description = component.native
-    ? t("nativeMetaDescription", { title })
-    : (handWrittenDescription ??
-      componentMdx?.frontmatter.description ??
-      meta?.description ??
-      component.description);
+    ? t("nativeMetaDescription", { description: purposeDescription, title })
+    : purposeDescription;
   const pathname = `/components/${slug}`;
 
   const ogParameters = {
@@ -264,24 +267,30 @@ export default async function ComponentPage(props: Props) {
     }
   }
 
-  const sources: ComponentSource[] = componentCode
-    ? [
-        {
-          code: componentCode,
-          id: "react",
-          label: t("sourceReact"),
-        },
-      ]
-    : [];
-  if (nativeCode) {
-    sources.push({
-      code: nativeCode,
-      id: "react-native",
-      label: t("sourceReactNative"),
-    });
-  }
+  const webSource: ComponentSource | undefined = componentCode
+    ? {
+        code: componentCode,
+        id: "react",
+        label: t("sourceReact"),
+      }
+    : undefined;
+  const nativeSource: ComponentSource | undefined = nativeCode
+    ? {
+        code: nativeCode,
+        id: "react-native",
+        label: t("sourceReactNative"),
+      }
+    : undefined;
+  const sources = (
+    platform === "native"
+      ? [nativeSource, webSource]
+      : [webSource, nativeSource]
+  ).filter((source): source is ComponentSource => source !== undefined);
 
-  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
+  const installCommand =
+    platform === "native" && component.native
+      ? t("nativeSourceOnlyCommand")
+      : `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
 
   const localizedComponent = await getComponentContent(slug, locale);
   const componentMdx = localizedComponent;
@@ -334,9 +343,14 @@ export default async function ComponentPage(props: Props) {
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
   const articleTitle = localizedComponent?.frontmatter.title ?? displayTitle;
+  const purposeDescription =
+    localizedComponent?.frontmatter.description ?? displayDescription;
   const articleDescription = component.native
-    ? t("nativeMetaDescription", { title: articleTitle })
-    : (localizedComponent?.frontmatter.description ?? displayDescription);
+    ? t("nativeMetaDescription", {
+        description: purposeDescription,
+        title: articleTitle,
+      })
+    : purposeDescription;
   const componentPath = `/components/${component.name}`;
   const componentUrl = canonical(componentPath, locale);
   const ogImage = `${SITE_URL}${generateOGImageURL({
@@ -438,7 +452,10 @@ export default async function ComponentPage(props: Props) {
                   platforms={component.platforms}
                 />
                 <div className="flex flex-wrap items-center gap-3">
-                  <QuickAdd componentName={component.name} />
+                  <QuickAdd
+                    componentName={component.name}
+                    platform={platform}
+                  />
                   <ShareEmbedBar
                     pageUrl={componentUrl}
                     slug={component.name}

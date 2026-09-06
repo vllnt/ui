@@ -1,4 +1,15 @@
-import { createContext, type ReactNode, type Ref, use, useMemo } from "react";
+"use client";
+
+import {
+  createContext,
+  type ReactNode,
+  type Ref,
+  use,
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 
 import {
   StyleSheet,
@@ -15,7 +26,11 @@ import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 import { Label } from "../label/label";
 
-type FieldContextValue = { readonly invalid: boolean };
+type FieldContextValue = {
+  readonly invalid: boolean;
+  readonly labelId?: string;
+  readonly setLabelId: (id?: string) => void;
+};
 const FieldContext = createContext<FieldContextValue | null>(null);
 
 function useField(): FieldContextValue {
@@ -64,7 +79,11 @@ function Field({
   ...props
 }: FieldProps) {
   const theme = useTheme();
-  const value = useMemo(() => ({ invalid }), [invalid]);
+  const [labelId, setLabelId] = useState<string>();
+  const value = useMemo(
+    () => ({ invalid, labelId, setLabelId }),
+    [invalid, labelId],
+  );
   return (
     <FieldContext value={value}>
       <View
@@ -89,16 +108,31 @@ function Field({
 Field.displayName = "Field";
 
 /** Visible label that reflects its field's invalid state. */
-function FieldLabel({ ref, ...props }: FieldLabelProps) {
-  const { invalid } = useField();
-  return <Label {...props} invalid={invalid} ref={ref} />;
+function FieldLabel({ nativeID, ref, ...props }: FieldLabelProps) {
+  const { invalid, setLabelId } = useField();
+  const generatedId = useId();
+  const resolvedId = nativeID ?? generatedId;
+  useEffect(() => {
+    setLabelId(resolvedId);
+    return () => {
+      setLabelId(undefined);
+    };
+  }, [resolvedId, setLabelId]);
+  return <Label {...props} invalid={invalid} nativeID={resolvedId} ref={ref} />;
 }
 FieldLabel.displayName = "FieldLabel";
 
 /** Native text input that reflects its field's invalid state. */
 function FieldControl({ ref, ...props }: FieldControlProps) {
-  const { invalid } = useField();
-  return <Input {...props} aria-invalid={invalid} ref={ref} />;
+  const { invalid, labelId } = useField();
+  return (
+    <Input
+      {...props}
+      accessibilityLabelledBy={props.accessibilityLabelledBy ?? labelId}
+      aria-invalid={invalid}
+      ref={ref}
+    />
+  );
 }
 FieldControl.displayName = "FieldControl";
 

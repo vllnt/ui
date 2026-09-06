@@ -16,6 +16,7 @@ export type MeterProps = Omit<ViewProps, "children"> & {
   readonly variant?: MeterVariant;
 };
 
+const MAX_SEGMENTS = 100;
 const styles = StyleSheet.create({
   fill: { height: "100%" },
   root: { flexDirection: "row", height: 8, overflow: "hidden", width: "100%" },
@@ -24,6 +25,30 @@ const styles = StyleSheet.create({
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
+}
+
+function getMeterValues(value: number, min: number, max: number) {
+  const safeMin = Number.isFinite(min) ? min : 0;
+  const proposedMax = Number.isFinite(max) ? max : safeMin + 100;
+  const safeMax = proposedMax > safeMin ? proposedMax : safeMin + 1;
+  const current = Number.isFinite(value)
+    ? clamp(value, safeMin, safeMax)
+    : safeMin;
+  return {
+    current,
+    max: safeMax,
+    min: safeMin,
+    ratio: (current - safeMin) / (safeMax - safeMin),
+  };
+}
+
+function getFillColor(
+  variant: MeterVariant,
+  colors: ReturnType<typeof useTheme>["colors"],
+): string {
+  if (variant === "destructive") return colors.destructive;
+  if (variant === "secondary") return colors.secondaryForeground;
+  return colors.primary;
 }
 
 /** Static range measurement exposed through React Native's progress-bar semantics. */
@@ -40,25 +65,25 @@ function Meter({
   ...props
 }: MeterProps) {
   const theme = useTheme();
-  const safeMax = max > min ? max : min + 1;
-  const current = clamp(value, min, safeMax);
-  const ratio = (current - min) / (safeMax - min);
+  const meter = getMeterValues(value, min, max);
   const segmentCount =
-    segments !== undefined && segments > 0 ? Math.floor(segments) : 0;
-  const filledSegments = Math.round(ratio * segmentCount);
-  const fillColor =
-    variant === "destructive"
-      ? theme.colors.destructive
-      : variant === "secondary"
-        ? theme.colors.secondaryForeground
-        : theme.colors.primary;
+    segments !== undefined && Number.isFinite(segments) && segments > 0
+      ? Math.min(MAX_SEGMENTS, Math.floor(segments))
+      : 0;
+  const filledSegments = Math.round(meter.ratio * segmentCount);
+  const fillColor = getFillColor(variant, theme.colors);
 
   return (
     <View
       {...props}
       accessibilityLabel={label}
       accessibilityRole="progressbar"
-      accessibilityValue={{ max: safeMax, min, now: current, text: valueText }}
+      accessibilityValue={{
+        max: meter.max,
+        min: meter.min,
+        now: meter.current,
+        text: valueText,
+      }}
       accessible
       ref={ref}
       style={[
@@ -90,7 +115,7 @@ function Meter({
         <View
           style={[
             styles.fill,
-            { backgroundColor: fillColor, width: `${ratio * 100}%` },
+            { backgroundColor: fillColor, width: `${meter.ratio * 100}%` },
           ]}
         />
       )}

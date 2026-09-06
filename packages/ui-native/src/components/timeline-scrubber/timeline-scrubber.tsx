@@ -81,6 +81,7 @@ function TimelineScrubber({
   const theme = useTheme();
   useReducedMotion();
   const safeEnd = end > start ? end : start + 1;
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const [value, setValue] = useControllableState(valueState);
   const current = clamp(value, start, safeEnd);
   const ratio = (current - start) / (safeEnd - start);
@@ -103,8 +104,8 @@ function TimelineScrubber({
         text: formatValue(current),
       }}
       onAccessibilityAction={(event) => {
-        if (event.nativeEvent.actionName === "decrement") change(-step);
-        if (event.nativeEvent.actionName === "increment") change(step);
+        if (event.nativeEvent.actionName === "decrement") change(-safeStep);
+        if (event.nativeEvent.actionName === "increment") change(safeStep);
       }}
       ref={ref}
       style={[{ gap: theme.spacing[1] }, style]}
@@ -122,7 +123,7 @@ function TimelineScrubber({
           accessibilityLabel={labels.decrement}
           accessibilityRole="button"
           onPress={() => {
-            change(-step);
+            change(-safeStep);
           }}
           style={styles.action}
         >
@@ -156,7 +157,7 @@ function TimelineScrubber({
           accessibilityLabel={labels.increment}
           accessibilityRole="button"
           onPress={() => {
-            change(step);
+            change(safeStep);
           }}
           style={styles.action}
         >

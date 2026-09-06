@@ -2,13 +2,17 @@
 
 Platform-neutral design tokens and portable component contracts shared by the VLLNT UI web and React Native renderers.
 
-> Experimental. This package is published only on the `canary` npm tag while the native renderer is validated.
+> Experimental and source-only. The first synchronized `canary` publication with `@vllnt/ui-native` is planned but is not available yet.
 
-## Install
+## Planned install
+
+After the first canary publication:
 
 ```bash
 pnpm add @vllnt/ui-core@canary
 ```
+
+Until then, use this package only from the repository workspace.
 
 ## Use
 

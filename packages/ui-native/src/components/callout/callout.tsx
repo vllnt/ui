@@ -61,7 +61,6 @@ function Callout({
     <View
       {...props}
       accessibilityLabel={accessibilityLabel ?? displayTitle}
-      accessibilityRole="alert"
       accessible
       ref={ref}
       style={[

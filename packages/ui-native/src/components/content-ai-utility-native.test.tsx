@@ -57,7 +57,8 @@ describe("native content, AI, and utility components", () => {
       </View>,
     );
 
-    expect(screen.getByRole("alert", { name: "Danger" })).toBeOnTheScreen();
+    expect(screen.getByLabelText("Danger")).toBeOnTheScreen();
+    expect(screen.queryByRole("alert")).toBeNull();
     expect(screen.getByText("12 • Credits running low")).toBeOnTheScreen();
     expect(screen.getByText("Growth • Trial")).toBeOnTheScreen();
     expect(screen.getByText("Owner")).toBeOnTheScreen();

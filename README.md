@@ -66,7 +66,7 @@ export function NativeExample() {
 }
 ```
 
-The source catalog contains 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Browse the [React Native hub](https://ui.vllnt.com/native), [React Native guide](https://ui.vllnt.com/docs/native), or [machine-readable native manifest](https://ui.vllnt.com/r/native/registry.json). `@vllnt/ui` remains the stable web renderer with its existing API and release path.
+The source catalog contains 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Browse the [React Native catalog](https://ui.vllnt.com/components?platform=native), switch to Native on the [unified installation guide](https://ui.vllnt.com/docs/installation?platform=native), or inspect the [machine-readable native manifest](https://ui.vllnt.com/r/native/registry.json). `@vllnt/ui` remains the stable Web renderer with its existing API and release path.
 
 ## Quick Start
 

@@ -85,6 +85,7 @@ function Carousel({
   items,
   labels,
   loop = false,
+  onLayout,
   onSelectedIdChange,
   reducedMotionService,
   ref,
@@ -155,6 +156,7 @@ function Carousel({
       }}
       onLayout={(event) => {
         setWidth(event.nativeEvent.layout.width);
+        onLayout?.(event);
       }}
       ref={ref}
       style={[styles.root, style]}

@@ -38,7 +38,7 @@ export function NavbarSaas({
   openSidebarLabel = "Open sidebar",
   rightSlot,
   showMobileMenu = true,
-  sidebarId = "site-sidebar",
+  sidebarId,
 }: NavbarSaasProps) {
   const pathname = usePathname();
   const { open, setOpen } = useSidebar();

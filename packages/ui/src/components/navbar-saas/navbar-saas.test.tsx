@@ -141,7 +141,7 @@ describe("NavbarSaas", () => {
     });
 
     const trigger = screen.getByTestId("navbar-saas-mobile-trigger");
-    expect(trigger).toHaveAttribute("aria-controls", "site-sidebar");
+    expect(trigger).not.toHaveAttribute("aria-controls");
     expect(trigger).toHaveAttribute("aria-label", "Open sidebar");
 
     fireEvent.click(trigger);

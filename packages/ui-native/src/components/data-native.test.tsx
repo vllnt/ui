@@ -180,7 +180,9 @@ describe("native data and status components", () => {
     );
 
     expect(
-      screen.getByRole("timer", { name: "Countdown timer: On track" }),
+      screen.getByRole("timer", {
+        name: "Countdown timer: On track, 00 Days, 01 Hours, 01 Minutes, 02 Seconds",
+      }),
     ).toBeOnTheScreen();
     expect(screen.getAllByText("01")).toHaveLength(2);
     expect(screen.getByText("02")).toBeOnTheScreen();
@@ -246,6 +248,25 @@ describe("native data and status components", () => {
     fireEvent.press(screen.getByRole("button", { name: "Next, page 2" }));
     expect(onPageChange).toHaveBeenCalledWith(2);
     expect(screen.getByText("Lin · updated")).toBeOnTheScreen();
+  });
+
+  it("renders an empty state instead of throwing for invalid dates and zones", () => {
+    render(
+      <WorldClockBar
+        emptyLabel="No valid time zones"
+        now="not-a-date"
+        zones={[
+          {
+            city: "Unknown",
+            id: "unknown",
+            timeZone: "Not/A_Time_Zone",
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("No valid time zones")).toBeOnTheScreen();
+    expect(screen.getByText("0 zones")).toBeOnTheScreen();
   });
 
   it("renders deterministic zones and participant overflow interactions", () => {

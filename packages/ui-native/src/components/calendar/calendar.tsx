@@ -27,6 +27,7 @@ export type CalendarLabels = {
 export type CalendarProps = Omit<ViewProps, "children"> & {
   readonly disabled?: boolean;
   readonly isDateDisabled?: (date: Date) => boolean;
+  readonly isDateSelected?: (date: Date) => boolean;
   readonly labels: CalendarLabels;
   readonly month?: Date;
   readonly onMonthChange?: (month: Date) => void;
@@ -94,6 +95,7 @@ function buildMonthDays(month: Date): readonly (Date | undefined)[] {
 function Calendar({
   disabled = false,
   isDateDisabled,
+  isDateSelected,
   labels,
   month,
   onMonthChange,
@@ -137,6 +139,7 @@ function Calendar({
         <Pressable
           accessibilityLabel={labels.previousMonth}
           accessibilityRole="button"
+          accessibilityState={{ disabled }}
           disabled={disabled}
           onPress={() => {
             changeMonth(-1);
@@ -160,6 +163,7 @@ function Calendar({
         <Pressable
           accessibilityLabel={labels.nextMonth}
           accessibilityRole="button"
+          accessibilityState={{ disabled }}
           disabled={disabled}
           onPress={() => {
             changeMonth(1);
@@ -182,16 +186,20 @@ function Calendar({
             </NativeText>
           </View>
         ))}
-        {days.map((date, index) =>
-          date ? (
+        {days.map((date, index) => {
+          if (!date) return <View key={`empty-${index}`} style={styles.day} />;
+          const dateDisabled = disabled || isDateDisabled?.(date) === true;
+          const dateSelected =
+            isDateSelected?.(date) ?? sameDay(date, selectedDate);
+          return (
             <Pressable
               accessibilityLabel={labels.formatDayAccessibilityLabel(date)}
               accessibilityRole="button"
               accessibilityState={{
-                disabled: disabled || isDateDisabled?.(date),
-                selected: sameDay(date, selectedDate),
+                disabled: dateDisabled,
+                selected: dateSelected,
               }}
-              disabled={disabled || isDateDisabled?.(date)}
+              disabled={dateDisabled}
               key={`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`}
               onPress={() => {
                 setSelectedDate(date);
@@ -199,11 +207,11 @@ function Calendar({
               style={[
                 styles.day,
                 {
-                  backgroundColor: sameDay(date, selectedDate)
+                  backgroundColor: dateSelected
                     ? theme.colors.primary
                     : theme.colors.background,
                   borderRadius: theme.radius.full,
-                  opacity: isDateDisabled?.(date) ? 0.5 : 1,
+                  opacity: dateDisabled ? 0.5 : 1,
                 },
               ]}
             >
@@ -211,7 +219,7 @@ function Calendar({
                 style={[
                   theme.typography.scale.bodySmall,
                   {
-                    color: sameDay(date, selectedDate)
+                    color: dateSelected
                       ? theme.colors.primaryForeground
                       : theme.colors.foreground,
                   },
@@ -220,10 +228,8 @@ function Calendar({
                 {date.getDate()}
               </NativeText>
             </Pressable>
-          ) : (
-            <View key={`empty-${index}`} style={styles.day} />
-          ),
-        )}
+          );
+        })}
       </View>
     </View>
   );

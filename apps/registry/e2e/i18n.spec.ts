@@ -16,7 +16,6 @@ const ROUTES = [
   "/families/ai",
   "/docs",
   "/docs/installation",
-  "/docs/native",
   "/docs/theming",
   "/philosophy",
   "/templates",
@@ -34,7 +33,6 @@ const ROUTES = [
 const SINGLE_H1_ROUTES = new Set([
   "/docs",
   "/docs/installation",
-  "/docs/native",
   "/docs/theming",
   "/philosophy",
 ]);

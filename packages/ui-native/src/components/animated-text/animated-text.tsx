@@ -4,7 +4,9 @@ import {
   type ComponentRef,
   type Ref,
   useEffect,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -127,12 +129,21 @@ function useTextAnimation({
   const [completedValues, setCompletedValues] = useState<
     readonly Animated.Value[]
   >([]);
+  const completedValuesRef = useRef<readonly Animated.Value[]>([]);
+  const onCompleteRef = useRef(onComplete);
+  useLayoutEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
   useEffect(() => {
     if (reduceMotion || values.length === 0) {
       values.forEach((value) => {
         value.stopAnimation();
         value.setValue(1);
       });
+      if (completedValuesRef.current !== values) {
+        completedValuesRef.current = values;
+        onCompleteRef.current?.();
+      }
       return;
     }
     values.forEach((value) => {
@@ -151,15 +162,16 @@ function useTextAnimation({
       ),
     );
     animation.start(({ finished }) => {
-      if (finished) {
+      if (finished && completedValuesRef.current !== values) {
+        completedValuesRef.current = values;
         setCompletedValues(values);
-        onComplete?.();
+        onCompleteRef.current?.();
       }
     });
     return () => {
       animation.stop();
     };
-  }, [duration, onComplete, ranks, reduceMotion, stagger, values]);
+  }, [duration, ranks, reduceMotion, stagger, values]);
   return reduceMotion || completedValues === values;
 }
 

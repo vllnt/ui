@@ -14,9 +14,11 @@ import { AnimatedTestimonials } from "./animated-testimonials/animated-testimoni
 
 const labels = {
   next: "Next testimonial",
+  pause: "Pause testimonials",
   position: (index: number, total: number) => `${index} of ${total}`,
   previous: "Previous testimonial",
   region: "Testimonials",
+  resume: "Resume testimonials",
 };
 
 function ignorePreference(_enabled: boolean) {}

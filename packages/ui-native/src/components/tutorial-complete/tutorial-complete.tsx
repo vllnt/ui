@@ -133,11 +133,7 @@ function TutorialComplete({
   const complete = percent === 100;
   return (
     <View {...props} ref={ref} style={[{ gap: theme.spacing[6] }, style]}>
-      <View
-        accessibilityLabel={labels.completionSummary(title, percent)}
-        accessible
-        style={[styles.centered, { gap: theme.spacing[3] }]}
-      >
+      <View style={[styles.centered, { gap: theme.spacing[3] }]}>
         <View
           style={[
             styles.centered,

@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import Script from "next/script";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { PlatformSelector } from "@/components/platform-selector";
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
@@ -18,11 +19,17 @@ import {
 } from "@/lib/jsonld";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import {
+  getPlatform,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
+  searchParams: Promise<PlatformQuery>;
 };
 
 export function generateStaticParams(): { locale: Locale; slug: string }[] {
@@ -70,7 +77,10 @@ async function readChangelog(): Promise<string> {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { locale, slug } = await props.params;
+  const [{ locale, slug }, searchParameters] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
   const docsPage = getDocsPage(slug);
 
   if (!docsPage) {
@@ -79,9 +89,15 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     };
   }
 
-  const { frontmatter } = await getPageContent(`docs/${docsPage.slug}`, locale);
+  const platform =
+    docsPage.slug === "installation"
+      ? getPlatform(searchParameters.platform, "web")
+      : undefined;
+  const contentSlug = platform === "native" ? "native" : docsPage.slug;
+  const { frontmatter } = await getPageContent(`docs/${contentSlug}`, locale);
   const og = frontmatter.og;
-  const href = getDocsPath(docsPage);
+  const baseHref = getDocsPath(docsPage);
+  const href = withPlatformQuery(baseHref, {}, platform);
 
   return {
     alternates: {
@@ -107,16 +123,25 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function DocsSlugPage(props: Props) {
-  const { locale, slug } = await props.params;
+  const [{ locale, slug }, searchParameters] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
   setRequestLocale(locale);
+
   const docsPage = getDocsPage(slug);
 
   if (!docsPage) {
     notFound();
   }
 
+  const platform =
+    docsPage.slug === "installation"
+      ? getPlatform(searchParameters.platform, "web")
+      : undefined;
+  const contentSlug = platform === "native" ? "native" : docsPage.slug;
   const { content, frontmatter } = await getPageContent(
-    `docs/${docsPage.slug}`,
+    `docs/${contentSlug}`,
     locale,
   );
   const contentWithoutDuplicateTitle = stripLeadingMarkdownHeading(content);
@@ -124,17 +149,18 @@ export default async function DocsSlugPage(props: Props) {
     docsPage.slug === "changelog"
       ? `${contentWithoutDuplicateTitle}\n\n${await readChangelog()}`
       : contentWithoutDuplicateTitle;
-  const pageUrl = canonical(getDocsPath(docsPage), locale);
+  const docsPath = withPlatformQuery(getDocsPath(docsPage), {}, platform);
+  const pageUrl = canonical(docsPath, locale);
   const c = await getTranslations("common");
 
   return (
     <>
       <Script
-        id={`docs-${docsPage.slug}-json-ld`}
+        id={`docs-${contentSlug}-json-ld`}
         {...jsonLdScriptAttributes([
           breadcrumbTrailLd(locale, [
             { name: "Docs", path: "/docs" },
-            { name: frontmatter.title, path: getDocsPath(docsPage) },
+            { name: frontmatter.title, path: docsPath },
           ]),
           techArticleLd({
             description: frontmatter.description,
@@ -159,6 +185,9 @@ export default async function DocsSlugPage(props: Props) {
             <p className="text-muted-foreground text-lg">
               {frontmatter.description}
             </p>
+            {docsPage.slug === "installation" ? (
+              <PlatformSelector className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
+            ) : null}
           </div>
 
           <MDXContent content={pageContent} />

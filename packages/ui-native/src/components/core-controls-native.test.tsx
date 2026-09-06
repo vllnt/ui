@@ -190,15 +190,16 @@ describe("native core controls", () => {
       </Toolbar>,
     );
 
-    expect(screen.getByLabelText("Formatting")).toHaveProp(
-      "accessibilityRole",
-      "toolbar",
-    );
+    const toolbar = screen.getByLabelText("Formatting");
+    expect(toolbar).toHaveProp("accessibilityRole", "toolbar");
+    expect(toolbar).not.toHaveProp("accessible", true);
     const bold = screen.getByRole("button", { name: "Bold" });
     expect(bold).toHaveStyle({ minHeight: 44, minWidth: 44 });
     fireEvent.press(bold);
     expect(onPress).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole("none")).toBeOnTheScreen();
+    expect(
+      screen.UNSAFE_getByProps({ accessibilityRole: "none" }).props.accessible,
+    ).toBe(false);
     expect(screen.getByRole("button", { name: "Italic" })).toBeDisabled();
   });
 

@@ -10,9 +10,10 @@ import {
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
 import {
-  defaultPlatformServices,
+  createPlatformServices,
   type PlatformServiceOverrides,
   type ShareResult,
+  type ShareService,
 } from "../../primitives/platform-services";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -35,6 +36,7 @@ export type ShareDialogProps = ModalLayerPresentationProps & {
   readonly safeArea?: (content: ReactNode) => ReactNode;
   readonly services?: PlatformServiceOverrides;
   readonly shareLabel: string;
+  readonly shareService?: null | ShareService;
   readonly title: string;
   readonly unavailableLabel: string;
 };
@@ -63,6 +65,7 @@ function ShareDialog({
   safeArea,
   services,
   shareLabel,
+  shareService,
   title,
   unavailableLabel,
   ...presentationProps
@@ -78,17 +81,19 @@ function ShareDialog({
         }
       : { mode: "controlled", onChange: onOpenChange, value: open },
   );
-  const shareService =
-    services === undefined ? defaultPlatformServices.share : services.share;
-  const available = shareService !== undefined;
+  const service =
+    shareService === undefined
+      ? createPlatformServices(services).share
+      : shareService;
+  const available = service !== null;
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
   };
   const share = async () => {
-    if (!shareService) return;
+    if (!service) return;
     try {
-      const result = await shareService.share(content, options);
+      const result = await service.share(content, options);
       onShareResult?.(result);
       setVisible(false);
     } catch (error: unknown) {

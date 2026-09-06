@@ -33,28 +33,10 @@ async function HeroActions({ componentCount }: { componentCount: number }) {
     <div className="mt-6 flex flex-wrap gap-3">
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        href="/components?platform=web"
-      >
-        {t("browseWeb")}
-        <ArrowRight className="size-4" />
-      </Link>
-      <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        href="/components?platform=native"
-      >
-        {t("browseNative")}
-      </Link>
-      <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         href="/components"
       >
         {t("browseAll", { count: componentCount })}
-      </Link>
-      <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
-        href="/templates"
-      >
-        {t("browseTemplates")}
+        <ArrowRight className="size-4" />
       </Link>
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"

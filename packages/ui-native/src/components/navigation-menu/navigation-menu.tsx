@@ -52,6 +52,11 @@ const styles = StyleSheet.create({
   },
 });
 
+function navigationRole(item: NavigationMenuItem): "button" | "link" {
+  if (item.panel !== undefined) return "button";
+  return item.href ? "link" : "button";
+}
+
 /** Native navigation menu using callbacks or an injected link service. */
 function NavigationMenu({
   currentId,
@@ -89,6 +94,7 @@ function NavigationMenu({
         (candidate) => candidate.id,
       );
       setExpandedId(expanded ? "" : item.id);
+      return;
     }
     onNavigate?.(item);
     if (item.href) {
@@ -123,7 +129,7 @@ function NavigationMenu({
           return (
             <Pressable
               accessibilityLabel={item.label}
-              accessibilityRole={item.href ? "link" : "button"}
+              accessibilityRole={navigationRole(item)}
               accessibilityState={{
                 disabled: item.disabled,
                 expanded: item.panel === undefined ? undefined : expanded,

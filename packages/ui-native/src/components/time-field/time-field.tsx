@@ -42,6 +42,7 @@ function isISOTime(value: string): value is ISOTimeString {
 function TimeField({
   labels,
   onBlur,
+  onSubmitEditing,
   ref,
   style,
   valueState,
@@ -84,7 +85,10 @@ function TimeField({
           setEditing(true);
           props.onFocus?.(event);
         }}
-        onSubmitEditing={commit}
+        onSubmitEditing={(event) => {
+          commit();
+          onSubmitEditing?.(event);
+        }}
         placeholder={labels.placeholder}
         ref={ref}
         returnKeyType="done"

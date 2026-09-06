@@ -20,13 +20,19 @@ export type RangeCalendarProps = Omit<ViewProps, "children"> & {
   readonly ref?: Ref<View>;
 };
 
+function normalizeRange(range?: DateRange): DateRange | undefined {
+  if (!range?.end || range.start.getTime() <= range.end.getTime()) return range;
+  return { end: range.start, start: range.end };
+}
+
 /** Native calendar that chooses an ordered start/end Date range. */
 function RangeCalendar({
   range: rangeState,
   ref,
   ...props
 }: RangeCalendarProps) {
-  const [range, setRange] = useControllableState(rangeState);
+  const [rangeValue, setRange] = useControllableState(rangeState);
+  const range = normalizeRange(rangeValue);
   const choose = (date?: Date) => {
     if (!date) return;
     if (!range || range.end) {
@@ -37,9 +43,16 @@ function RangeCalendar({
       setRange({ end: range.start, start: date });
     else setRange({ end: date, start: range.start });
   };
+  const isDateSelected = (date: Date) => {
+    if (!range) return false;
+    const timestamp = date.getTime();
+    const end = range.end?.getTime() ?? range.start.getTime();
+    return timestamp >= range.start.getTime() && timestamp <= end;
+  };
   return (
     <Calendar
       {...props}
+      isDateSelected={isDateSelected}
       ref={ref}
       selection={{
         mode: "controlled",

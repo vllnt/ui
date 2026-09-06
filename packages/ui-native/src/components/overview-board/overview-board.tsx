@@ -98,7 +98,7 @@ function OverviewCard({
       <Text size="small" tone="muted">
         {description}
       </Text>
-      {ctaLabel ? (
+      {ctaLabel && onCtaPress ? (
         <View style={{ alignItems: "flex-start" }}>
           <Button onPress={onCtaPress} size="sm" variant="ghost">
             {ctaLabel}
@@ -153,9 +153,13 @@ function OverviewBoard({
             icon={item.icon}
             key={item.id}
             metric={item.metric}
-            onCtaPress={() => {
-              item.onCtaPress?.();
-            }}
+            onCtaPress={
+              item.onCtaPress
+                ? () => {
+                    item.onCtaPress?.();
+                  }
+                : undefined
+            }
             tone={item.tone}
           />
         ))

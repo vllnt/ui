@@ -211,11 +211,12 @@ function indexResizableChildren(children: ReactNode): ReactNode {
       isValidElement<InternalResizableHandleProps>(child) &&
       child.type === ResizableHandle
     ) {
-      const handleIndex = preceding.filter(
-        (candidate) =>
-          isValidElement<InternalResizableHandleProps>(candidate) &&
-          candidate.type === ResizableHandle,
-      ).length;
+      const handleIndex =
+        preceding.filter(
+          (candidate) =>
+            isValidElement<InternalResizablePanelProps>(candidate) &&
+            candidate.type === ResizablePanel,
+        ).length - 1;
       return cloneElement(child, { handleIndex });
     }
     return child;
@@ -362,8 +363,15 @@ function ResizableHandle({
   const direction = context?.direction ?? "horizontal";
   const config = context?.configs[handleIndex];
   const size = context?.sizes[handleIndex];
+  const afterConfig = context?.configs[handleIndex + 1];
+  const afterSize = context?.sizes[handleIndex + 1];
   const isDisabled =
-    disabled || !context || config === undefined || size === undefined;
+    disabled ||
+    !context ||
+    config === undefined ||
+    size === undefined ||
+    afterConfig === undefined ||
+    afterSize === undefined;
   const change = (amount: number) => {
     if (!isDisabled) context.adjust(handleIndex, amount);
   };

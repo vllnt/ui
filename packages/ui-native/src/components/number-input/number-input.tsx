@@ -55,8 +55,29 @@ const styles = StyleSheet.create({
   step: { alignItems: "center", justifyContent: "center", minWidth: 44 },
 });
 
+function getBounds(min?: number, max?: number) {
+  const safeMin = min !== undefined && Number.isFinite(min) ? min : undefined;
+  const proposedMax =
+    max !== undefined && Number.isFinite(max) ? max : undefined;
+  const safeMax =
+    safeMin !== undefined && proposedMax !== undefined
+      ? Math.max(safeMin, proposedMax)
+      : proposedMax;
+  return { max: safeMax, min: safeMin };
+}
+
 function clamp(value: number, min?: number, max?: number): number {
   return Math.min(Math.max(value, min ?? value), max ?? value);
+}
+
+function normalizeValue(
+  value: number | undefined,
+  min?: number,
+  max?: number,
+): number | undefined {
+  return value !== undefined && Number.isFinite(value)
+    ? clamp(value, min, max)
+    : undefined;
 }
 
 function useNumberState(options: NumberStateOptions) {
@@ -69,29 +90,43 @@ function useNumberState(options: NumberStateOptions) {
     step = 1,
     value,
   } = options;
-  const [internalValue, setInternalValue] = useState(defaultValue);
-  const current = value ?? internalValue;
+  const bounds = getBounds(min, max);
+  const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
+  const [internalValue, setInternalValue] = useState(() =>
+    normalizeValue(defaultValue, bounds.min, bounds.max),
+  );
+  const current = normalizeValue(
+    value ?? internalValue,
+    bounds.min,
+    bounds.max,
+  );
   const update = (next?: number) => {
-    const bounded = next === undefined ? undefined : clamp(next, min, max);
+    const bounded = normalizeValue(next, bounds.min, bounds.max);
     if (value === undefined) setInternalValue(bounded);
     onValueChange?.(bounded);
   };
   const decrement = () => {
-    update((current ?? min ?? 0) - step);
+    update((current ?? bounds.min ?? 0) - safeStep);
   };
   const increment = () => {
-    update((current ?? min ?? 0) + step);
+    update((current ?? bounds.min ?? 0) + safeStep);
   };
   return {
     current,
     decrementDisabled:
       disabled === true ||
-      (current !== undefined && min !== undefined && current <= min),
+      (current !== undefined &&
+        bounds.min !== undefined &&
+        current <= bounds.min),
     handleDecrement: decrement,
     handleIncrement: increment,
     incrementDisabled:
       disabled === true ||
-      (current !== undefined && max !== undefined && current >= max),
+      (current !== undefined &&
+        bounds.max !== undefined &&
+        current >= bounds.max),
+    max: bounds.max,
+    min: bounds.min,
     update,
   };
 }
@@ -161,7 +196,7 @@ function NumberControls({
           if (text.length === 0) state.update();
           else {
             const parsed = Number(text);
-            if (!Number.isNaN(parsed)) state.update(parsed);
+            if (Number.isFinite(parsed)) state.update(parsed);
           }
         }}
         ref={inputRef}
@@ -178,6 +213,16 @@ function NumberControls({
   );
 }
 NumberControls.displayName = "NumberControls";
+
+function performAccessibilityAction(
+  actionName: string,
+  disabled: boolean,
+  state: ReturnType<typeof useNumberState>,
+) {
+  if (disabled) return;
+  if (actionName === "decrement") state.handleDecrement();
+  if (actionName === "increment") state.handleIncrement();
+}
 
 /** Controlled or uncontrolled native number editor with bounded step actions. */
 function NumberInput({
@@ -216,15 +261,17 @@ function NumberInput({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="spinbutton"
       accessibilityState={{ disabled }}
-      accessibilityValue={{ max, min, now: state.current }}
+      accessibilityValue={{
+        max: state.max,
+        min: state.min,
+        now: state.current,
+      }}
       onAccessibilityAction={(event) => {
-        if (disabled) return;
-        if (event.nativeEvent.actionName === "decrement") {
-          state.handleDecrement();
-        }
-        if (event.nativeEvent.actionName === "increment") {
-          state.handleIncrement();
-        }
+        performAccessibilityAction(
+          event.nativeEvent.actionName,
+          disabled,
+          state,
+        );
       }}
       style={[
         styles.root,

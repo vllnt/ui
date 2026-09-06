@@ -68,27 +68,31 @@ function useRevealCount({
       text,
     });
   }
-  useEffect(() => {
-    if (reduceMotion || text.length === 0 || pool.length === 0) return;
-    const timer = setInterval(
-      () => {
-        setState((current) =>
-          current.revealed >= text.length
-            ? current
-            : { ...current, revealed: current.revealed + 1 },
-        );
-      },
-      Math.max(1, Math.floor(duration / text.length)),
-    );
-    return () => {
-      clearInterval(timer);
-    };
-  }, [duration, pool, reduceMotion, text]);
   const current =
     state.pool === pool &&
     state.reduceMotion === reduceMotion &&
     state.text === text;
-  return current ? state.revealed : reduceMotion ? text.length : 0;
+  const revealed = current ? state.revealed : reduceMotion ? text.length : 0;
+  useEffect(() => {
+    if (
+      reduceMotion ||
+      revealed >= text.length ||
+      text.length === 0 ||
+      pool.length === 0
+    ) {
+      return;
+    }
+    const timer = setTimeout(
+      () => {
+        setState((value) => ({ ...value, revealed: value.revealed + 1 }));
+      },
+      Math.max(1, Math.floor(duration / text.length)),
+    );
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [duration, pool.length, reduceMotion, revealed, text.length]);
+  return revealed;
 }
 
 /** Resolves a deterministic glyph sequence without randomness or browser APIs. */

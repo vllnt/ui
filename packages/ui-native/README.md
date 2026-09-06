@@ -76,4 +76,4 @@ pnpm -F @vllnt/ui-native generate:index:check
 pnpm -F @vllnt/ui-native pack:check
 ```
 
-See the website's React Native hub and guide for catalog browsing, source availability, and the release boundary.
+Browse the [Native component catalog](https://ui.vllnt.com/components?platform=native) and switch to Native on the [unified installation guide](https://ui.vllnt.com/docs/installation?platform=native) for source availability and the release boundary.

@@ -56,7 +56,6 @@ function HorizontalScrollRow({
         {...props}
         accessibilityLabel={accessibilityLabel ?? title}
         accessibilityRole="list"
-        accessible
         contentContainerStyle={[
           styles.row,
           { gap: theme.spacing[4] },

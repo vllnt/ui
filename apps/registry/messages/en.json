@@ -135,7 +135,6 @@
     "hero": {
       "browseAll": "Browse all {count}",
       "browseNative": "Browse Native",
-      "browseTemplates": "Browse templates",
       "browseWeb": "Browse Web",
       "description": "{count} stable React web components plus a source-only React Native catalog for AI apps. Both renderers publish machine-readable availability and contracts, so agents choose platform-correct source instead of scraping HTML.",
       "exploreAi": "Explore AI components",
@@ -214,7 +213,7 @@
       "installation": "Installation",
       "nativeCapabilitiesAdapted": "Native-adapted interaction and accessibility",
       "nativeCapabilitiesPortable": "Portable semantic options and native interaction",
-      "nativeMetaDescription": "Compare {title} for React and React Native in VLLNT UI 0.4.0. Explore source, dependencies and native capabilities. Native is source-only; npm publication is pending.",
+      "nativeMetaDescription": "{description} React Native source for {title} is included in VLLNT UI 0.4.0 for iOS and Android. It is source-only; npm publication is pending.",
       "nativeMetaTitle": "{title} for React and React Native",
       "notAvailable": "Not available",
       "platform": "Platform",
@@ -229,6 +228,7 @@
       "sourceImplementationLabel": "Choose a source implementation",
       "sourceReact": "React",
       "sourceReactNative": "React Native",
+      "nativeSourceOnlyCommand": "# React Native is source-only; copy the React Native source above",
       "storiesAvailable": "{count, plural, one {# story available:} other {# stories available:}}",
       "storybook": "Storybook",
       "storybookDescription": "Explore all variants, controls, and accessibility checks in the interactive Storybook playground.",
@@ -597,7 +597,8 @@
     "quickAdd": {
       "addToV0": "Add to v0.dev",
       "copied": "Copied!",
-      "copyInstall": "Copy install command"
+      "copyInstall": "Copy install command",
+      "copyWebInstall": "Copy Web install command"
     },
     "shareEmbed": {
       "copied": "Copied!",

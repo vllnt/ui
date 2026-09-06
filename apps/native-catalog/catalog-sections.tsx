@@ -44,6 +44,8 @@ import {
 import type { ReactNode } from "react";
 import { View } from "react-native";
 
+import { nativeComponentCount } from "./catalog-metadata";
+
 const themeSelections: readonly ThemeSelection[] = ["system", "light", "dark"];
 
 function Row({ children }: { readonly children: ReactNode }) {
@@ -178,9 +180,9 @@ export function DataSection() {
         <Text>Source preview · npm canary publication is still gated.</Text>
       </Banner>
       <ProgressBar
-        accessibilityLabel="Catalog coverage"
-        max={171}
-        value={171}
+        accessibilityLabel="Native manifest inventory"
+        max={nativeComponentCount}
+        value={nativeComponentCount}
       />
       <DataList
         items={[
@@ -209,7 +211,7 @@ export function NavigationSection() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="components">
-          <Text>171 native modules</Text>
+          <Text>{nativeComponentCount} native modules in the manifest</Text>
         </TabsContent>
         <TabsContent value="contracts">
           <Text>Portable and native-adapted</Text>
@@ -291,7 +293,10 @@ export function CompositeSection() {
       />
       <Row>
         <Text tone="muted">Animated module count</Text>
-        <NumberTicker accessibilityLabel="171 native modules" value={171} />
+        <NumberTicker
+          accessibilityLabel={`${nativeComponentCount} native modules`}
+          value={nativeComponentCount}
+        />
       </Row>
     </Section>
   );

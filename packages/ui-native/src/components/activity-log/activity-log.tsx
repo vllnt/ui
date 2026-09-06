@@ -47,6 +47,10 @@ const styles = StyleSheet.create({
   item: { borderTopWidth: 1 },
 });
 
+function positiveInteger(value: number, fallback: number): number {
+  return Number.isFinite(value) ? Math.max(1, Math.floor(value)) : fallback;
+}
+
 function ActivityHeader({
   currentPage,
   description,
@@ -184,13 +188,13 @@ function ActivityLog({
   ...props
 }: ActivityLogProps) {
   const theme = useTheme();
-  const safePageSize = Math.max(1, Math.floor(pageSize));
+  const safePageSize = positiveInteger(pageSize, 5);
   const totalPages = Math.max(1, Math.ceil(items.length / safePageSize));
-  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
-  const currentPage = Math.min(
-    Math.max(page ?? uncontrolledPage, 1),
-    totalPages,
+  const [uncontrolledPage, setUncontrolledPage] = useState(() =>
+    positiveInteger(defaultPage, 1),
   );
+  const requestedPage = positiveInteger(page ?? uncontrolledPage, 1);
+  const currentPage = Math.min(requestedPage, totalPages);
   const start = (currentPage - 1) * safePageSize;
   const visibleItems = items.slice(start, start + safePageSize);
   const changePage = (nextPage: number) => {

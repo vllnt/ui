@@ -44,4 +44,4 @@ L'application du registre genere des shims et des metadonnees a partir du code s
 
 ## Utilisation par les agents
 
-Les agents devraient preferer `/r/registry.json` pour la decouverte et `/r/[name].json` pour les details d'implementation. Verifiez `platforms` avant de choisir une methode d'installation. Les descripteurs web s'installent avec shadcn ; les composants pilotes natifs s'installent depuis `@vllnt/ui-native@canary`. Utilisez `/llms-full.txt` lorsqu'un seul contexte texte est plus pratique que la recuperation de nombreux points de terminaison JSON.
+Les agents devraient preferer `/r/registry.json` pour la decouverte et `/r/[name].json` pour les details d'implementation. Verifiez `platforms` et `native.availability` avant de choisir une methode d'installation. Les descripteurs web s'installent avec shadcn. Les entrees pilotes natives exposent actuellement uniquement des metadonnees de source ; `@vllnt/ui-native@canary` est prevu mais pas publie. Utilisez `/llms-full.txt` lorsqu'un seul contexte texte est plus pratique que la recuperation de nombreux points de terminaison JSON.

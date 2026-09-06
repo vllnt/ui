@@ -39,7 +39,7 @@ The initial audit found a correct package boundary and a five-component native p
 - Audit-time `/components?platform=native` showed five cards and dropped platform state; current links preserve it.
 - Native-capable details show web Storybook/source/MDX first.
 - Runtime review found invalid nested anchors in live gallery previews.
-- Desktop/mobile screenshots and Axe scans covered `/`, `/components`, native filtering, Button detail, and `/docs/native`.
+- Desktop/mobile screenshots and Axe scans covered `/`, `/components`, native filtering, Button detail, and `/docs/installation?platform=native`.
 
 ## Product and URL contract
 
@@ -154,8 +154,8 @@ Rules:
 
 - Hero language becomes “Web and native UI for AI agents.”
 - Give Web and Native separate status/install cards and browse actions.
-- Add an indexable localized `/native` hub; keep `/docs/native` as setup detail.
-- Installation docs begin with platform selection.
+- Keep one indexable `/components?platform=native` catalog instead of a separate Native hub.
+- Keep one installation URL with platform selection; `?platform=native` renders Native setup in place.
 - Remove duplicate document H1s and replace raw black/white/zinc classes with semantic tokens.
 - Show the native package as unavailable until a real synchronized canary exists.
 
@@ -188,7 +188,7 @@ Rules:
 ### `llms.txt` and `llms-full.txt`
 
 - Split Web and Native installation sections.
-- Add `/native`, `/docs/native`, and `/r/native/registry.json`.
+- Add `/r/native/registry.json`; redirect legacy `/native` and `/docs/native` URLs into the unified platform-aware catalog and installation routes.
 - Native detail links include `?platform=native`.
 - State native channel, status, peer matrix, compatibility meaning, and exact supported exports.
 - Never present a shadcn command as native installation.

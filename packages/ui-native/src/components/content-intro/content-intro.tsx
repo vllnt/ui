@@ -253,6 +253,12 @@ function ContentIntro({
     tableOfContentsLabel:
       labels?.tableOfContentsLabel ?? defaultLabels.tableOfContentsLabel,
   };
+  const completedCount = isLoading
+    ? 0
+    : sections.reduce(
+        (count, section) => count + (completedSections.has(section.id) ? 1 : 0),
+        0,
+      );
 
   return (
     <View
@@ -275,7 +281,7 @@ function ContentIntro({
       />
       {additionalContent}
       <ContentIntroFooter
-        completedCount={completedSections.size}
+        completedCount={completedCount}
         estimatedTime={estimatedTime}
         labels={resolvedLabels}
         onStart={onStart}

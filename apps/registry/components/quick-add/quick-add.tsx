@@ -8,9 +8,10 @@ import { useTranslations } from "next-intl";
 
 type QuickAddProps = {
   readonly componentName: string;
+  readonly platform?: "all" | "native" | "web";
 };
 
-export function QuickAdd({ componentName }: QuickAddProps) {
+export function QuickAdd({ componentName, platform }: QuickAddProps) {
   const t = useTranslations("shared.quickAdd");
   const registryUrl = `https://ui.vllnt.com/r/${componentName}.json`;
   const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`;
@@ -41,7 +42,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         ) : (
           <>
             <Copy className="size-3" />
-            {t("copyInstall")}
+            {t(platform === "native" ? "copyWebInstall" : "copyInstall")}
           </>
         )}
       </Button>

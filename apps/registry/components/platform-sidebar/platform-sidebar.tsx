@@ -3,7 +3,7 @@
 import { Suspense, useMemo } from "react";
 
 import { Sidebar, type SidebarSection } from "@vllnt/ui";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { getPlatform, withPlatformQuery } from "@/lib/platform";
@@ -23,16 +23,11 @@ type SidebarWithQueryProps = PlatformSidebarProps & {
   readonly closeLabel: string;
 };
 
-function getHrefPathname(href: string): string {
-  return href.split(/[#?]/, 1)[0] ?? href;
-}
-
 function SidebarWithQuery({
   ariaLabel,
   closeLabel,
   sections,
 }: SidebarWithQueryProps) {
-  const pathname = usePathname();
   const searchParameters = useSearchParams();
   const query = searchParameters.toString();
   const platformSections = useMemo(() => {
@@ -41,19 +36,13 @@ function SidebarWithQuery({
       parameters.get("platform") ?? undefined,
       "all",
     );
-    const nativeGuidePath = sections
-      .flatMap((section) => section.items)
-      .map((item) => getHrefPathname(item.href))
-      .find((itemPathname) => itemPathname.endsWith("/docs/native"));
-    const effectivePlatform =
-      selectedPlatform ?? (pathname === nativeGuidePath ? "native" : undefined);
-    const nativeMode = effectivePlatform === "native";
+    const nativeMode = selectedPlatform === "native";
 
     return sections
       .map((section) => ({
         ...section,
         href: section.href
-          ? withPlatformQuery(section.href, parameters, effectivePlatform)
+          ? withPlatformQuery(section.href, parameters, selectedPlatform)
           : undefined,
         items: section.items
           .filter(
@@ -62,20 +51,13 @@ function SidebarWithQuery({
               !section.family ||
               NATIVE_COMPONENT_NAMES.has(item.href.split("/").at(-1) ?? ""),
           )
-          .map((item) => {
-            const itemPathname = getHrefPathname(item.href);
-            return {
-              ...item,
-              href: withPlatformQuery(
-                item.href,
-                parameters,
-                itemPathname === nativeGuidePath ? "native" : effectivePlatform,
-              ),
-            };
-          }),
+          .map((item) => ({
+            ...item,
+            href: withPlatformQuery(item.href, parameters, selectedPlatform),
+          })),
       }))
       .filter((section) => !section.family || section.items.length > 0);
-  }, [pathname, query, sections]);
+  }, [query, sections]);
 
   return (
     <Sidebar

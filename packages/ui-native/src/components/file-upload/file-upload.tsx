@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useState } from "react";
+import { type Ref, useLayoutEffect, useRef, useState } from "react";
 
 import {
   Pressable,
@@ -78,6 +78,14 @@ function FileUpload({
 }: FileUploadProps) {
   const theme = useTheme();
   const [files, setFiles] = useControllableState(fileState);
+  const filesRef = useRef(files);
+  useLayoutEffect(() => {
+    filesRef.current = files;
+  }, [files]);
+  const updateFiles = (next: readonly PickedFile[]) => {
+    filesRef.current = next;
+    setFiles(next);
+  };
   const [failure, setFailure] = useState<string>();
   const unavailable = filePicker === undefined;
   const choose = async () => {
@@ -89,8 +97,10 @@ function FileUpload({
           ? { allowMultiple }
           : { allowMultiple, mimeTypes },
       );
-      setFiles(
-        uniqueFiles(allowMultiple ? [...files, ...picked] : picked.slice(0, 1)),
+      updateFiles(
+        uniqueFiles(
+          allowMultiple ? [...filesRef.current, ...picked] : picked.slice(0, 1),
+        ),
       );
     } catch {
       setFailure(labels.failed);
@@ -162,7 +172,9 @@ function FileUpload({
               accessibilityRole="button"
               disabled={disabled}
               onPress={() => {
-                setFiles(files.filter((item) => item.uri !== file.uri));
+                updateFiles(
+                  filesRef.current.filter((item) => item.uri !== file.uri),
+                );
               }}
               style={styles.remove}
             >

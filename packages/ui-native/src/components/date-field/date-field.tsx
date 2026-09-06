@@ -47,6 +47,7 @@ function isISODate(value: string): value is ISODateString {
 function DateField({
   labels,
   onBlur,
+  onSubmitEditing,
   ref,
   style,
   valueState,
@@ -89,7 +90,10 @@ function DateField({
           setEditing(true);
           props.onFocus?.(event);
         }}
-        onSubmitEditing={commit}
+        onSubmitEditing={(event) => {
+          commit();
+          onSubmitEditing?.(event);
+        }}
         placeholder={labels.placeholder}
         ref={ref}
         returnKeyType="done"

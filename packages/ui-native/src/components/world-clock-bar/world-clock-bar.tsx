@@ -50,6 +50,10 @@ function normalizeDate(value: WorldClockDateValue): Date {
   return value instanceof Date ? new Date(value.getTime()) : new Date(value);
 }
 
+function isValidDate(value: Date): boolean {
+  return !Number.isNaN(value.getTime());
+}
+
 function useCurrentDate(now: undefined | WorldClockDateValue, tickMs: number) {
   const [timestamp, setTimestamp] = useState(() => Date.now());
   useEffect(() => {
@@ -71,23 +75,28 @@ function formatZone(
   zone: WorldClockBarZone,
   date: Date,
   showDate: boolean,
-): FormattedZone {
-  const locale = zone.locale ?? "en-US";
-  const formattedDate = showDate
-    ? new Intl.DateTimeFormat(locale, {
-        day: "numeric",
-        month: "short",
-        timeZone: zone.timeZone,
-        weekday: "short",
-      }).format(date)
-    : undefined;
-  const time = new Intl.DateTimeFormat(locale, {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: zone.timeZone,
-    timeZoneName: "short",
-  }).format(date);
-  return { date: formattedDate, time, zone };
+): FormattedZone | undefined {
+  if (!isValidDate(date)) return undefined;
+  try {
+    const locale = zone.locale ?? "en-US";
+    const formattedDate = showDate
+      ? new Intl.DateTimeFormat(locale, {
+          day: "numeric",
+          month: "short",
+          timeZone: zone.timeZone,
+          weekday: "short",
+        }).format(date)
+      : undefined;
+    const time = new Intl.DateTimeFormat(locale, {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: zone.timeZone,
+      timeZoneName: "short",
+    }).format(date);
+    return { date: formattedDate, time, zone };
+  } catch {
+    return undefined;
+  }
 }
 
 function WorldClockHeader({
@@ -205,7 +214,11 @@ function WorldClockBar({
   const theme = useTheme();
   const liveNow = useCurrentDate(now, updateIntervalMs);
   const formattedZones = useMemo(
-    () => zones.map((zone) => formatZone(zone, liveNow, showDate)),
+    () =>
+      zones.flatMap((zone) => {
+        const formatted = formatZone(zone, liveNow, showDate);
+        return formatted ? [formatted] : [];
+      }),
     [liveNow, showDate, zones],
   );
 
@@ -214,7 +227,7 @@ function WorldClockBar({
       <WorldClockHeader
         description={description}
         title={title}
-        zoneCount={zones.length}
+        zoneCount={formattedZones.length}
       />
       <WorldClockList
         emptyLabel={emptyLabel}

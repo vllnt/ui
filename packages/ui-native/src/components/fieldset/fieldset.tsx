@@ -12,6 +12,7 @@ import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a native group of related fields. */
 export type FieldsetProps = ViewProps & {
+  /** Marks the group unavailable. Native does not cascade this state; disable child controls individually. */
   readonly disabled?: boolean;
   readonly ref?: Ref<View>;
 };
@@ -38,7 +39,6 @@ function Fieldset({
       {...props}
       accessibilityRole="none"
       accessibilityState={{ ...accessibilityState, disabled }}
-      accessible
       ref={ref}
       style={[
         styles.root,

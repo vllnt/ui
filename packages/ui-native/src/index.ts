@@ -169,6 +169,44 @@ export * from "./components/typewriter/typewriter";
 export * from "./components/view-switcher/view-switcher";
 export * from "./components/workspace-switcher/workspace-switcher";
 export * from "./components/world-clock-bar/world-clock-bar";
+export type {
+  ModalLayerCloseReason,
+  ModalLayerPresentationProps,
+} from "./primitives/modal-layer";
+export {
+  createPlatformServices,
+  defaultLinkingService,
+  defaultPlatformServices,
+  defaultShareService,
+} from "./primitives/platform-services";
+export type {
+  ClipboardService,
+  FilePickerService,
+  FilePickOptions,
+  LinkingService,
+  OpenUrlResult,
+  PickedFile,
+  PlatformServiceOverrides,
+  PlatformServices,
+  ShareResult,
+  ShareService,
+} from "./primitives/platform-services";
+export type {
+  SelectionKey,
+  SelectionKeyExtractor,
+} from "./primitives/selection";
+export { useControllableState } from "./primitives/use-controllable-state";
+export type {
+  ControllableStateChangeHandler,
+  ControllableStateOptions,
+  ControllableStateResult,
+  ControllableStateSetter,
+} from "./primitives/use-controllable-state";
+export {
+  defaultReducedMotionService,
+  useReducedMotion,
+} from "./primitives/use-reduced-motion";
+export type { ReducedMotionService } from "./primitives/use-reduced-motion";
 export { ThemeProvider, useTheme } from "./theme/theme-provider";
 export type {
   ThemeProviderProps,

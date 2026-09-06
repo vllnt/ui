@@ -1,4 +1,5 @@
-import type { Ref } from "react";
+import { type Ref, useState } from "react";
+
 import {
   Image,
   type ImageSourcePropType,
@@ -56,6 +57,7 @@ function AvatarItem({
 }) {
   const theme = useTheme();
   const dimensions = getDimensions(size);
+  const [failedSource, setFailedSource] = useState<ImageSourcePropType>();
   return (
     <View
       accessibilityLabel={item.accessibilityLabel}
@@ -74,8 +76,14 @@ function AvatarItem({
         },
       ]}
     >
-      {item.source ? (
-        <Image source={item.source} style={styles.image} />
+      {item.source && item.source !== failedSource ? (
+        <Image
+          onError={() => {
+            setFailedSource(item.source);
+          }}
+          source={item.source}
+          style={styles.image}
+        />
       ) : (
         <Text size="caption" tone="muted" weight="semibold">
           {item.fallback}

@@ -62,6 +62,9 @@ function DateRangePicker({
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
+        accessibilityValue={{
+          text: range ? labels.formatValue(range) : labels.placeholder,
+        }}
         disabled={disabled}
         onPress={() => {
           setOpen(true);

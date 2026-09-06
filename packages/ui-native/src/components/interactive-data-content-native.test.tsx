@@ -41,9 +41,11 @@ const reducedMotionService: ReducedMotionService = {
 
 const pagingLabels = {
   next: "Next item",
+  pause: "Pause items",
   position: (index: number, total: number) => `${index} of ${total}`,
   previous: "Previous item",
   region: "Featured items",
+  resume: "Resume items",
 };
 
 describe("native interactive data and content components", () => {

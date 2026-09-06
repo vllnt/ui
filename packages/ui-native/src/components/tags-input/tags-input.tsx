@@ -60,6 +60,7 @@ function normalize(tags: readonly string[]): readonly string[] {
 function TagsInput({
   disabled = false,
   labels,
+  onSubmitEditing,
   placeholder,
   ref,
   style,
@@ -130,7 +131,10 @@ function TagsInput({
         accessibilityLabel={labels.input}
         editable={!disabled}
         onChangeText={setDraft}
-        onSubmitEditing={commit}
+        onSubmitEditing={(event) => {
+          commit();
+          onSubmitEditing?.(event);
+        }}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.mutedForeground}
         ref={ref}

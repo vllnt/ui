@@ -12,15 +12,25 @@ import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 import { Label } from "../label/label";
 
+type TextFieldAccessibleLabel =
+  | {
+      readonly accessibilityLabel: string;
+      readonly label?: ReactNode;
+    }
+  | {
+      readonly accessibilityLabel?: string;
+      readonly label: string;
+    };
+
 /** Props for a labelled native text input with helper and error text. */
-export type TextFieldProps = TextInputProps & {
-  readonly description?: string;
-  readonly disabled?: boolean;
-  readonly error?: string;
-  readonly label?: ReactNode;
-  readonly ref?: Ref<TextInput>;
-  readonly rootProps?: ViewProps;
-};
+export type TextFieldProps = Omit<TextInputProps, "accessibilityLabel"> &
+  TextFieldAccessibleLabel & {
+    readonly description?: string;
+    readonly disabled?: boolean;
+    readonly error?: string;
+    readonly ref?: Ref<TextInput>;
+    readonly rootProps?: ViewProps;
+  };
 
 const styles = StyleSheet.create({ root: { width: "100%" } });
 

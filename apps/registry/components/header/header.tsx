@@ -80,6 +80,7 @@ function HeaderFallback({ locale }: HeaderProps) {
       closeSidebarLabel={t("closeNavigation")}
       navItems={navItems}
       openSidebarLabel={t("openNavigation")}
+      sidebarId="site-sidebar"
     />
   );
 }
@@ -275,6 +276,7 @@ function HeaderContent({ locale }: HeaderProps) {
           </a>
         </div>
       }
+      sidebarId="site-sidebar"
     />
   );
 }

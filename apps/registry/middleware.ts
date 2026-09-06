@@ -6,6 +6,22 @@ import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
 
 const intlMiddleware = createMiddleware(routing);
 
+function nativeDocsRedirect(request: NextRequest): NextResponse | undefined {
+  const { pathname } = request.nextUrl;
+  const locale = routing.locales.find(
+    (entry) =>
+      entry !== routing.defaultLocale && pathname === `/${entry}/docs/native`,
+  );
+  if (pathname !== "/docs/native" && !locale) return undefined;
+
+  const target = request.nextUrl.clone();
+  target.pathname = locale
+    ? `/${locale}/docs/installation`
+    : "/docs/installation";
+  target.searchParams.set("platform", "native");
+  return NextResponse.redirect(target, 308);
+}
+
 export default function middleware(request: NextRequest): NextResponse {
   const canonicalUrl = legacyHostRedirectUrl(
     request.headers.get("x-forwarded-host") ??
@@ -18,8 +34,10 @@ export default function middleware(request: NextRequest): NextResponse {
     return NextResponse.redirect(canonicalUrl, 301);
   }
 
-  const { pathname } = request.nextUrl;
+  const nativeRedirect = nativeDocsRedirect(request);
+  if (nativeRedirect) return nativeRedirect;
 
+  const { pathname } = request.nextUrl;
   // Case-sensitive redirect for the lowercase guess of the design guide.
   // Can't use a route folder (tsc rejects design.md colliding with DESIGN.md)
   // nor next.config redirects() (matches case-insensitively -> loops /DESIGN.md).

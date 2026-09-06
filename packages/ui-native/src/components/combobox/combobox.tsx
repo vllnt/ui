@@ -106,6 +106,9 @@ function Combobox({
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
+        accessibilityValue={{
+          text: selectedOption?.label ?? labels.placeholder,
+        }}
         disabled={disabled}
         onPress={() => {
           setModalOpen(true);

@@ -327,8 +327,12 @@ describe("native navigation components", () => {
 
     expect(safeArea).toHaveBeenCalledTimes(2);
     expect(screen.getAllByTestId("safe-area")).toHaveLength(2);
-    const row = screen.getByRole("list", { name: "Workspaces" });
-    expect(row).toHaveProp("horizontal", true);
+    const row = screen.UNSAFE_getByProps({
+      accessibilityLabel: "Workspaces",
+      accessibilityRole: "list",
+    });
+    expect(row.props.accessible).not.toBe(true);
+    expect(row.props.horizontal).toBe(true);
     fireEvent.scroll(row, { nativeEvent: { contentOffset: { x: 120, y: 0 } } });
     expect(screen.getByText("Alpha")).toBeOnTheScreen();
   });

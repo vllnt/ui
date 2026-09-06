@@ -5,6 +5,7 @@ import {
   Modal,
   type ModalProps,
   Platform,
+  StyleSheet,
   View,
   type ViewProps,
 } from "react-native";
@@ -43,6 +44,8 @@ export type ModalLayerProps = ModalLayerPresentationProps & {
   readonly visible: boolean;
 };
 
+const styles = StyleSheet.create({ fill: { flex: 1 } });
+
 /**
  * Central native modal contract for accessibility escape, Android hardware
  * back, keyboard avoidance, transparent presentation, and host safe areas.
@@ -73,6 +76,7 @@ function ModalLayer({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         enabled
         {...keyboardAvoidingViewProps}
+        style={[styles.fill, keyboardAvoidingViewProps?.style]}
       >
         <View
           {...contentProps}
@@ -81,6 +85,7 @@ function ModalLayer({
             onClose("accessibilityEscape");
           }}
           ref={ref}
+          style={[styles.fill, contentProps?.style]}
         >
           {content}
         </View>

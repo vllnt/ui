@@ -128,8 +128,8 @@ describe("native overlays", () => {
         cancelLabel="Cancel"
         content={{ message: "Native UI" }}
         defaultOpen
-        services={{}}
         shareLabel="Share now"
+        shareService={null}
         title="Share"
         unavailableLabel="Sharing unavailable"
       />,
@@ -140,6 +140,27 @@ describe("native overlays", () => {
       screen.getByRole("button", { name: "Sharing unavailable" }),
     ).toBeDisabled();
     unavailable.unmount();
+
+    const partialOverride = render(
+      <ShareDialog
+        cancelLabel="Cancel"
+        content={{ message: "Native UI" }}
+        defaultOpen
+        services={{
+          clipboard: {
+            getText: async () => "",
+            setText: async () => {},
+          },
+        }}
+        shareLabel="Share now"
+        title="Share"
+        unavailableLabel="Sharing unavailable"
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Share now" }),
+    ).not.toBeDisabled();
+    partialOverride.unmount();
 
     render(
       <ShareDialog
@@ -266,7 +287,10 @@ describe("native overlays", () => {
       </Tooltip>,
     );
 
-    fireEvent.press(screen.getByRole("button", { name: "Show account help" }));
+    const trigger = screen.getByRole("button", { name: "Show account help" });
+    fireEvent(trigger, "focus");
+    expect(screen.queryByText("Use your work email.")).toBeNull();
+    fireEvent.press(trigger);
     expect(screen.getByText("Use your work email.")).toBeOnTheScreen();
     fireEvent.press(screen.getByRole("button", { name: "Close help" }));
   });

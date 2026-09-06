@@ -1,4 +1,11 @@
-import { createContext, type Ref, use, useMemo, useState } from "react";
+import {
+  createContext,
+  type Ref,
+  use,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import {
   Image,
@@ -79,10 +86,17 @@ function AvatarImage({
   onError,
   onLoad,
   ref,
+  source,
   style,
   ...props
 }: AvatarImageProps) {
   const { setImageLoaded } = useAvatar();
+  useEffect(() => {
+    setImageLoaded(false);
+    return () => {
+      setImageLoaded(false);
+    };
+  }, [setImageLoaded, source]);
   return (
     <Image
       {...props}
@@ -97,6 +111,7 @@ function AvatarImage({
         onLoad?.(event);
       }}
       ref={ref}
+      source={source}
       style={[styles.image, style]}
     />
   );

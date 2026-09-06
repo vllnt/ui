@@ -94,8 +94,9 @@ describe("native advanced form controls", () => {
     expect([...onChange.mock.calls[0][0]]).toEqual(["alpha", "beta"]);
   });
 
-  it("announces invalid date text and accepts numeric OTP input", () => {
+  it("announces invalid date text, composes submission, and accepts numeric OTP input", () => {
     const onDateChange = jest.fn();
+    const onDateSubmit = jest.fn();
     const onCodeChange = jest.fn();
     render(
       <ThemeProvider colorScheme="light">
@@ -105,6 +106,7 @@ describe("native advanced form controls", () => {
             input: "Start date",
             placeholder: "YYYY-MM-DD",
           }}
+          onSubmitEditing={onDateSubmit}
           valueState={{
             defaultValue: undefined,
             mode: "uncontrolled",
@@ -124,7 +126,10 @@ describe("native advanced form controls", () => {
     );
 
     fireEvent.changeText(screen.getByLabelText("Start date"), "2025-02-31");
-    fireEvent(screen.getByLabelText("Start date"), "blur", { nativeEvent: {} });
+    fireEvent(screen.getByLabelText("Start date"), "submitEditing", {
+      nativeEvent: { text: "2025-02-31" },
+    });
+    expect(onDateSubmit).toHaveBeenCalledTimes(1);
     expect(
       screen.getByRole("alert", { name: "Enter a valid date" }),
     ).toBeOnTheScreen();

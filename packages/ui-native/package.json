@@ -4,7 +4,7 @@
   "description": "Accessible React Native renderer for VLLNT UI",
   "license": "MIT",
   "author": "vllnt",
-  "homepage": "https://ui.vllnt.com/docs/native",
+  "homepage": "https://ui.vllnt.com/docs/installation?platform=native",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vllnt/ui.git",

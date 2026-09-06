@@ -62,6 +62,9 @@ function DatePicker({
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
+        accessibilityValue={{
+          text: date ? labels.formatValue(date) : labels.placeholder,
+        }}
         disabled={disabled}
         onPress={() => {
           setOpen(true);

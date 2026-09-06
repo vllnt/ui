@@ -36,24 +36,21 @@ function useTypedCount(
   if (state.reduceMotion !== reduceMotion || state.text !== text) {
     setState({ count: reduceMotion ? text.length : 0, reduceMotion, text });
   }
+  const current = state.reduceMotion === reduceMotion && state.text === text;
+  const count = current ? state.count : reduceMotion ? text.length : 0;
   useEffect(() => {
-    if (reduceMotion || text.length === 0) return;
-    const timer = setInterval(
+    if (reduceMotion || count >= text.length) return;
+    const timer = setTimeout(
       () => {
-        setState((current) =>
-          current.count >= text.length
-            ? current
-            : { ...current, count: current.count + 1 },
-        );
+        setState((value) => ({ ...value, count: value.count + 1 }));
       },
       Math.max(1, speed),
     );
     return () => {
-      clearInterval(timer);
+      clearTimeout(timer);
     };
-  }, [reduceMotion, speed, text]);
-  const current = state.reduceMotion === reduceMotion && state.text === text;
-  return current ? state.count : reduceMotion ? text.length : 0;
+  }, [count, reduceMotion, speed, text.length]);
+  return count;
 }
 
 /** Types characters on a fixed interval and exposes the complete accessible text. */

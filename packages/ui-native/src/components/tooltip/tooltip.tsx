@@ -11,7 +11,7 @@ import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
-/** Props for explicit press, focus, and accessibility-help tooltip semantics. */
+/** Props for explicit press and accessibility-help tooltip semantics. */
 export type TooltipProps = {
   readonly children: ReactNode;
   readonly closeLabel: string;
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
 });
 
 /**
- * Native help disclosure opened by press or focus. It deliberately does not
- * claim hover behavior on platforms where hover is absent.
+ * Native help disclosure opened by press. It deliberately does not claim
+ * focus or hover behavior when a modal would immediately move focus away.
  */
 function Tooltip({
   children,
@@ -78,12 +78,6 @@ function Tooltip({
         accessibilityLabel={triggerLabel}
         accessibilityRole="button"
         accessibilityState={{ expanded: visible }}
-        onBlur={() => {
-          setVisible(false);
-        }}
-        onFocus={() => {
-          setVisible(true);
-        }}
         onPress={() => {
           setVisible(!visible);
         }}

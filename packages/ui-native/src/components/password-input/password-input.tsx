@@ -75,7 +75,7 @@ function PasswordInput({
             },
           ]}
         >
-          {visible ? "Hide" : "Show"}
+          {label}
         </NativeText>
       </Pressable>
     </View>

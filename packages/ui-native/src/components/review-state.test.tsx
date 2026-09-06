@@ -148,7 +148,7 @@ describe("reviewed native state correctness", () => {
     expect(screen.queryByRole("summary")).toBeNull();
   });
 
-  it("keeps timeline accessibility invariants ahead of extra view props", () => {
+  it("keeps timeline invariants and normalizes a nonpositive step", () => {
     const onChange = jest.fn();
     const callerAction = jest.fn();
     const extraViewProps: ViewProps = {
@@ -170,6 +170,7 @@ describe("reviewed native state correctness", () => {
           region: "Playback position",
         }}
         start={0}
+        step={0}
         valueState={{
           defaultValue: 5,
           mode: "uncontrolled",

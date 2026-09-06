@@ -1,3 +1,5 @@
+"use client";
+
 import { type Ref, useState } from "react";
 
 import {
@@ -44,6 +46,7 @@ function SearchField({
   accessibilityLabel,
   clearLabel = "Clear search",
   defaultValue = "",
+  disabled = false,
   onValueChange,
   placeholder = "Search…",
   ref,
@@ -64,6 +67,7 @@ function SearchField({
       <Input
         {...props}
         accessibilityLabel={accessibilityLabel ?? placeholder}
+        disabled={disabled}
         inputMode="search"
         onChangeText={update}
         placeholder={placeholder}
@@ -76,6 +80,8 @@ function SearchField({
         <Pressable
           accessibilityLabel={clearLabel}
           accessibilityRole="button"
+          accessibilityState={{ disabled }}
+          disabled={disabled}
           onPress={() => {
             update("");
           }}

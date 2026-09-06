@@ -158,29 +158,45 @@ test.describe("platform-aware component discovery", () => {
     await expect(page).toHaveURL("/fr/components?platform=native&ref=e2e");
   });
 
-  test("derives Native sidebar links from the React Native guide", async ({
-    page,
-  }) => {
-    await page.goto("/docs/native");
+  test("switches renderer setup on one installation route", async ({ page }) => {
+    await page.goto("/docs/installation?platform=native&ref=e2e");
+    await expect(page).toHaveURL(
+      "/docs/installation?platform=native&ref=e2e",
+    );
     await expect(
-      page
-        .getByRole("complementary")
-        .locator('a[href$="/components?platform=native"]')
-        .first(),
+      page.getByRole("heading", { name: "Current availability" }),
     ).toBeVisible();
     await expect(
       page
         .getByRole("complementary")
-        .locator('a[href$="/families/core?platform=native"]'),
-    ).toHaveCount(1);
+        .locator('a[href*="/components?platform=native"]')
+        .first(),
+    ).toBeVisible();
 
-    await page.goto("/docs/native?platform=web");
+    await page
+      .getByRole("navigation", { name: "Filter by implementation" })
+      .getByRole("link", { name: "Web", exact: true })
+      .click();
+    await expect(page).toHaveURL("/docs/installation?platform=web&ref=e2e");
     await expect(
-      page
-        .getByRole("complementary")
-        .locator('a[href$="/components?platform=web"]')
-        .first(),
+      page.getByRole("heading", { name: "Web prerequisites" }),
     ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Current availability" }),
+    ).toHaveCount(0);
+  });
+
+  test("redirects the retired Native guide to unified installation", async ({
+    request,
+  }) => {
+    const response = await request.get("/docs/native?ref=e2e", {
+      maxRedirects: 0,
+    });
+
+    expect(response.status()).toBe(308);
+    expect(response.headers().location).toBe(
+      "/docs/installation?ref=e2e&platform=native",
+    );
   });
 
   test("keeps the web install action as the default", async ({ page }) => {
@@ -235,8 +251,11 @@ test.describe("platform-aware component discovery", () => {
     const source = main.locator("#preview");
     const reactTab = source.getByRole("tab", { name: "React", exact: true });
     const nativeTab = source.getByRole("tab", { name: "React Native" });
+    await expect(nativeTab).toHaveAttribute("aria-selected", "true");
+    await nativeTab.focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(reactTab).toBeFocused();
     await expect(reactTab).toHaveAttribute("aria-selected", "true");
-    await reactTab.focus();
     await page.keyboard.press("ArrowRight");
     await expect(nativeTab).toBeFocused();
     await expect(nativeTab).toHaveAttribute("aria-selected", "true");
@@ -251,7 +270,7 @@ test.describe("platform-aware component discovery", () => {
     );
 
     await expect(
-      main.getByRole("button", { name: "Copy install command" }),
+      main.getByRole("button", { name: "Copy Web install command" }),
     ).toBeVisible();
     await expect(main.getByRole("button", { name: "Add to v0.dev" })).toBeVisible();
     await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
@@ -301,7 +320,7 @@ test.describe("platform-aware component discovery", () => {
       main.locator("#preview").getByRole("tab", { name: "React Native" }),
     ).toHaveCount(0);
     await expect(
-      main.getByRole("button", { name: "Copy install command" }),
+      main.getByRole("button", { name: "Copy Web install command" }),
     ).toBeVisible();
     await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
   });

@@ -33,6 +33,7 @@ export type RatingProps = Omit<ViewProps, "children"> & {
   readonly value?: number;
 };
 
+const MAX_OPTIONS = 100;
 const styles = StyleSheet.create({
   option: {
     alignItems: "center",
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
 });
 
 function normalize(value: number, max: number): number {
+  if (!Number.isFinite(value)) return 0;
   return Math.min(Math.max(0, Math.round(value)), max);
 }
 
@@ -116,7 +118,9 @@ function Rating({
 }: RatingProps) {
   const theme = useTheme();
   const generatedId = useId();
-  const safeMax = Math.max(1, Math.round(max));
+  const safeMax = Number.isFinite(max)
+    ? Math.min(MAX_OPTIONS, Math.max(1, Math.round(max)))
+    : 5;
   const [currentValue, setCurrentValue] = useControllableState(
     value === undefined
       ? {

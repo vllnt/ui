@@ -28,9 +28,11 @@ export type AnimatedTestimonial = {
 /** Localized labels for testimonial navigation. */
 export type AnimatedTestimonialsLabels = {
   readonly next: string;
+  readonly pause: string;
   readonly position: (index: number, total: number) => string;
   readonly previous: string;
   readonly region: string;
+  readonly resume: string;
 };
 
 /** Props for controlled or uncontrolled native testimonial rotation. */
@@ -46,6 +48,7 @@ export type AnimatedTestimonialsProps = Omit<ViewProps, "children" | "ref"> & {
   readonly testimonials: readonly AnimatedTestimonial[];
 };
 
+const MAX_TIMER_DELAY = 2_147_483_647;
 const styles = StyleSheet.create({
   action: {
     alignItems: "center",
@@ -166,6 +169,7 @@ function AnimatedTestimonials({
 }: AnimatedTestimonialsProps) {
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
+  const [autoplayPaused, setAutoplayPaused] = useState(false);
   const [selection, setSelection] = useControllableState(
     selectedId === undefined
       ? {
@@ -192,17 +196,25 @@ function AnimatedTestimonials({
   );
 
   useEffect(() => {
-    if (!autoplay || reduceMotion || testimonials.length <= 1) return;
-    const timer = setInterval(
-      () => {
-        move(1);
-      },
-      Math.max(1000, autoplayInterval),
-    );
+    if (!autoplay || autoplayPaused || reduceMotion || testimonials.length <= 1)
+      return;
+    const safeInterval = Number.isFinite(autoplayInterval)
+      ? Math.min(MAX_TIMER_DELAY, Math.max(1000, autoplayInterval))
+      : 5000;
+    const timer = setInterval(() => {
+      move(1);
+    }, safeInterval);
     return () => {
       clearInterval(timer);
     };
-  }, [autoplay, autoplayInterval, move, reduceMotion, testimonials.length]);
+  }, [
+    autoplay,
+    autoplayInterval,
+    autoplayPaused,
+    move,
+    reduceMotion,
+    testimonials.length,
+  ]);
 
   if (!active) return null;
   const controlsDisabled = testimonials.length <= 1;
@@ -236,6 +248,7 @@ function AnimatedTestimonials({
           accessibilityState={{ disabled: controlsDisabled }}
           disabled={controlsDisabled}
           onPress={() => {
+            if (autoplay) setAutoplayPaused(true);
             move(-1);
           }}
           style={styles.action}
@@ -252,12 +265,27 @@ function AnimatedTestimonials({
         >
           {labels.position(selectedIndex + 1, testimonials.length)}
         </Text>
+        {autoplay && !reduceMotion && !controlsDisabled ? (
+          <Pressable
+            accessibilityLabel={autoplayPaused ? labels.resume : labels.pause}
+            accessibilityRole="button"
+            onPress={() => {
+              setAutoplayPaused((paused) => !paused);
+            }}
+            style={styles.action}
+          >
+            <Text style={{ color: theme.colors.foreground }}>
+              {autoplayPaused ? labels.resume : labels.pause}
+            </Text>
+          </Pressable>
+        ) : null}
         <Pressable
           accessibilityLabel={labels.next}
           accessibilityRole="button"
           accessibilityState={{ disabled: controlsDisabled }}
           disabled={controlsDisabled}
           onPress={() => {
+            if (autoplay) setAutoplayPaused(true);
             move(1);
           }}
           style={styles.action}

@@ -320,6 +320,7 @@ describe("native learning composites direct imports", () => {
 
     fireEvent.changeText(screen.getByLabelText("Search tutorials"), "forms");
     expect(onFilter).toHaveBeenCalledWith({ search: "forms" });
+    expect(screen.getByRole("button", { name: "Restart" })).toBeOnTheScreen();
     fireEvent.press(screen.getByRole("button", { name: "Introduction done" }));
     expect(onSection).toHaveBeenCalledWith(
       expect.objectContaining({ id: "intro" }),

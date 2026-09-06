@@ -35,6 +35,7 @@ export type PaginationProps = Omit<ViewProps, "children" | "ref"> & {
   readonly totalPages: number;
 };
 
+const MAX_VISIBLE_PAGES = 100;
 const styles = StyleSheet.create({
   action: {
     alignItems: "center",
@@ -60,10 +61,16 @@ function Pagination({
   ...props
 }: PaginationProps) {
   const theme = useTheme();
-  if (totalPages <= 1) return null;
-  const visibleCount = Math.max(1, Math.floor(maxVisiblePages));
-  let start = Math.max(1, currentPage - Math.floor(visibleCount / 2));
-  const end = Math.min(totalPages, start + visibleCount - 1);
+  if (!Number.isFinite(totalPages) || totalPages <= 1) return null;
+  const safeTotal = Math.floor(totalPages);
+  const safeCurrent = Number.isFinite(currentPage)
+    ? Math.min(safeTotal, Math.max(1, Math.floor(currentPage)))
+    : 1;
+  const visibleCount = Number.isFinite(maxVisiblePages)
+    ? Math.min(MAX_VISIBLE_PAGES, Math.max(1, Math.floor(maxVisiblePages)))
+    : 5;
+  let start = Math.max(1, safeCurrent - Math.floor(visibleCount / 2));
+  const end = Math.min(safeTotal, start + visibleCount - 1);
   start = Math.max(1, end - visibleCount + 1);
   const pages = Array.from(
     { length: end - start + 1 },
@@ -145,18 +152,18 @@ function Pagination({
         showsHorizontalScrollIndicator={false}
       >
         {action(
-          Math.max(1, currentPage - 1),
+          Math.max(1, safeCurrent - 1),
           resolved.previous,
-          currentPage <= 1,
+          safeCurrent <= 1,
           false,
         )}
         {pages.map((page) =>
-          action(page, String(page), false, page === currentPage),
+          action(page, String(page), false, page === safeCurrent),
         )}
         {action(
-          Math.min(totalPages, currentPage + 1),
+          Math.min(safeTotal, safeCurrent + 1),
           resolved.next,
-          currentPage >= totalPages,
+          safeCurrent >= safeTotal,
           false,
         )}
       </ScrollView>

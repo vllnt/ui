@@ -1,3 +1,5 @@
+"use client";
+
 import { type Ref, useEffect, useMemo, useState } from "react";
 
 import { StyleSheet, View, type ViewProps } from "react-native";
@@ -18,6 +20,7 @@ export type CountdownTimerLabels = {
   readonly days?: string;
   readonly deadline?: string;
   readonly hours?: string;
+  readonly invalidDate?: string;
   readonly minutes?: string;
   readonly onTrack?: string;
   readonly seconds?: string;
@@ -63,23 +66,29 @@ function normalizeDate(value: CountdownTimerDateValue): Date {
   return value instanceof Date ? new Date(value.getTime()) : new Date(value);
 }
 
+function isValidDate(date: Date): boolean {
+  return Number.isFinite(date.getTime());
+}
+
 function useCurrentDate(
   now: CountdownTimerDateValue | undefined,
   tickMs: number,
+  ticking: boolean,
 ): Date {
   const [timestamp, setTimestamp] = useState(() => Date.now());
   useEffect(() => {
-    if (now !== undefined) return;
-    const interval = setInterval(
-      () => {
-        setTimestamp(Date.now());
-      },
-      Math.max(100, tickMs),
-    );
+    if (now !== undefined || !ticking) return;
+    const safeTickMs =
+      Number.isFinite(tickMs) && tickMs >= 100
+        ? Math.min(2_147_483_647, tickMs)
+        : 1000;
+    const interval = setInterval(() => {
+      setTimestamp(Date.now());
+    }, safeTickMs);
     return () => {
       clearInterval(interval);
     };
-  }, [now, tickMs]);
+  }, [now, tickMs, ticking]);
   return now === undefined ? new Date(timestamp) : normalizeDate(now);
 }
 
@@ -130,10 +139,14 @@ function getSegments(
 }
 
 function TimerHeader({
+  accessibilityLabel,
+  accessibilityRole,
   description,
   status,
   title,
 }: {
+  readonly accessibilityLabel: string;
+  readonly accessibilityRole: "alert" | "timer";
   readonly description: string;
   readonly status: TimerStatus;
   readonly title: string;
@@ -142,7 +155,14 @@ function TimerHeader({
   return (
     <View style={[styles.top, { gap: theme.spacing[3] }]}>
       <View style={{ flex: 1, gap: theme.spacing[1] }}>
-        <Text weight="semibold">{title}</Text>
+        <Text
+          accessibilityLabel={accessibilityLabel}
+          accessibilityLiveRegion="polite"
+          accessibilityRole={accessibilityRole}
+          weight="semibold"
+        >
+          {title}
+        </Text>
         <Text size="small" tone="muted">
           {description}
         </Text>
@@ -208,6 +228,61 @@ function getProgress({
   return { max, value };
 }
 
+function getTimerPresentation({
+  deadline,
+  description,
+  labels,
+  now,
+  startedAt,
+  warningThresholdMs,
+}: {
+  readonly deadline: Date;
+  readonly description?: string;
+  readonly labels?: CountdownTimerLabels;
+  readonly now: Date;
+  readonly startedAt?: Date;
+  readonly warningThresholdMs: number;
+}) {
+  const validDeadline = isValidDate(deadline) && isValidDate(now);
+  const remainingMs = validDeadline ? deadline.getTime() - now.getTime() : 0;
+  const safeWarningThreshold =
+    Number.isFinite(warningThresholdMs) && warningThresholdMs >= 0
+      ? warningThresholdMs
+      : 15 * 60 * 1000;
+  const status = validDeadline
+    ? getTimerStatus(remainingMs, safeWarningThreshold, labels)
+    : {
+        label: labels?.invalidDate ?? "Invalid date",
+        variant: "destructive" as const,
+      };
+  const validStart =
+    validDeadline && startedAt && isValidDate(startedAt)
+      ? startedAt
+      : undefined;
+  const segments = getSegments(remainingMs, labels);
+  return {
+    description:
+      description ??
+      (validDeadline
+        ? `${labels?.deadline ?? "Deadline"} ${deadline.toLocaleString()}`
+        : (labels?.invalidDate ?? "Invalid date")),
+    durationLabel: segments
+      .map((segment) => `${segment.value} ${segment.label}`)
+      .join(", "),
+    progress: getProgress({
+      deadline,
+      now,
+      remainingMs,
+      startedAt: validStart,
+    }),
+    remainingMs,
+    segments,
+    showProgressLabels: validStart !== undefined,
+    status,
+    validDeadline,
+  };
+}
+
 /** Native countdown card with fixed-time injection for deterministic rendering. */
 function CountdownTimer({
   deadline,
@@ -228,42 +303,37 @@ function CountdownTimer({
     () => (startedAt === undefined ? undefined : normalizeDate(startedAt)),
     [startedAt],
   );
-  const liveNow = useCurrentDate(now, tickMs);
-  const remainingMs = deadlineDate.getTime() - liveNow.getTime();
-  const status = getTimerStatus(remainingMs, warningThresholdMs, labels);
-  const progress = getProgress({
+  const liveNow = useCurrentDate(now, tickMs, isValidDate(deadlineDate));
+  const timer = getTimerPresentation({
     deadline: deadlineDate,
+    description,
+    labels,
     now: liveNow,
-    remainingMs,
     startedAt: startedAtDate,
+    warningThresholdMs,
   });
-  const resolvedDescription =
-    description ??
-    `${labels?.deadline ?? "Deadline"} ${deadlineDate.toLocaleString()}`;
 
   return (
     <Card
       {...props}
-      accessibilityLabel={`${title}: ${status.label}`}
-      accessibilityLiveRegion="polite"
-      accessibilityRole="timer"
-      accessible
       ref={ref}
       style={[{ gap: theme.spacing[4], padding: theme.spacing[4] }, style]}
     >
       <TimerHeader
-        description={resolvedDescription}
-        status={status}
+        accessibilityLabel={`${title}: ${timer.status.label}, ${timer.durationLabel}`}
+        accessibilityRole={timer.validDeadline ? "timer" : "alert"}
+        description={timer.description}
+        status={timer.status}
         title={title}
       />
-      <TimerSegments segments={getSegments(remainingMs, labels)} />
+      <TimerSegments segments={timer.segments} />
       <ProgressBar
         completedLabel=""
         currentLabel={labels?.timeRemaining ?? "Time remaining"}
-        isComplete={remainingMs <= 0}
-        max={progress.max}
-        showLabels={startedAtDate !== undefined}
-        value={progress.value}
+        isComplete={timer.remainingMs <= 0}
+        max={timer.progress.max}
+        showLabels={timer.showProgressLabels}
+        value={timer.progress.value}
       />
     </Card>
   );

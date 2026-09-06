@@ -112,7 +112,10 @@ describe("native foundation and form components", () => {
     expect(screen.queryByText("AL")).not.toBeOnTheScreen();
     expect(screen.getByTestId("grid")).toBeOnTheScreen();
     expect(screen.getByRole("header", { name: "Settings" })).toBeOnTheScreen();
-    expect(screen.getByRole("summary")).toHaveTextContent(/No results/);
+    expect(screen.getByText("No results")).toHaveProp(
+      "accessibilityRole",
+      "header",
+    );
     expect(screen.getByRole("separator")).toBeOnTheScreen();
     expect(screen.getByLabelText("Loading profile")).toBeOnTheScreen();
     expect(screen.getByText("Profile details")).toBeOnTheScreen();
@@ -138,6 +141,11 @@ describe("native foundation and form components", () => {
           valueText="7 GB"
         />
         <TextField error="Required" label="Name" value="" />
+        <TextField
+          accessibilityLabel="Display name"
+          label={<NativeText>Name shown to teammates</NativeText>}
+          value="Ada"
+        />
         <Field invalid>
           <FieldLabel>Username</FieldLabel>
           <FieldControl accessibilityLabel="Username" value="ada" />
@@ -221,6 +229,12 @@ describe("native foundation and form components", () => {
           onValueChange={onSearchValue}
           value="Ada"
         />
+        <SearchField
+          accessibilityLabel="Disabled filter"
+          clearLabel="Clear disabled search"
+          disabled
+          value="Locked"
+        />
         <SearchBar defaultValue="  native  " onSearch={onSearch} />
       </ThemeProvider>,
     );
@@ -261,6 +275,10 @@ describe("native foundation and form components", () => {
     expect(onPhoneCountry).toHaveBeenCalledTimes(1);
     fireEvent.press(screen.getByRole("button", { name: "Clear search" }));
     expect(onSearchValue).toHaveBeenCalledWith("");
+    expect(screen.getByLabelText("Disabled filter")).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "Clear disabled search" }),
+    ).toBeDisabled();
     fireEvent.press(screen.getByRole("button", { name: "Search" }));
     expect(onSearch).toHaveBeenCalledWith("native");
   });

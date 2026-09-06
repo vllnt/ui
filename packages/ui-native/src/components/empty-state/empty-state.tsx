@@ -127,7 +127,6 @@ function EmptyState({
     <View
       {...props}
       accessibilityRole="summary"
-      accessible
       ref={ref}
       style={[styles.root, { gap: theme.spacing[3], padding }, style]}
     >

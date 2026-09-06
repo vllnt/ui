@@ -44,4 +44,4 @@ The registry app generates shims and metadata from the package source. Do not ha
 
 ## Agent usage
 
-Agents should prefer `/r/registry.json` for discovery and `/r/<name>.json` for implementation details. Check `platforms` before selecting an installation path. Web descriptors install through shadcn; native pilot components install from `@vllnt/ui-native@canary`. Use `/llms-full.txt` when a single text context is easier than fetching many JSON endpoints.
+Agents should prefer `/r/registry.json` for discovery and `/r/<name>.json` for implementation details. Check `platforms` and `native.availability` before selecting an installation path. Web descriptors install through shadcn. Native pilot entries currently expose source metadata only; `@vllnt/ui-native@canary` is planned but not published. Use `/llms-full.txt` when a single text context is easier than fetching many JSON endpoints.

@@ -54,8 +54,9 @@ function ListBox({
 
   return (
     <View
+      {...props}
       accessibilityLabel={label}
-      accessibilityRole="list"
+      accessibilityRole={mode === "single" ? "radiogroup" : "list"}
       accessibilityState={{ disabled }}
       ref={ref}
       style={[
@@ -67,7 +68,6 @@ function ListBox({
         },
         style,
       ]}
-      {...props}
     >
       {options.map((option) => {
         const selected = selectedIds.has(option.id);

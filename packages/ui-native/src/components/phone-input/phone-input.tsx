@@ -45,6 +45,60 @@ const styles = StyleSheet.create({
   },
 });
 
+function PhoneCountryPrefix({
+  accessibilityLabel,
+  country,
+  disabled,
+  onPress,
+}: {
+  readonly accessibilityLabel: string;
+  readonly country: PhoneCountry;
+  readonly disabled: boolean;
+  readonly onPress?: () => void;
+}) {
+  const theme = useTheme();
+  const style = [
+    styles.country,
+    {
+      borderColor: theme.colors.input,
+      paddingHorizontal: theme.spacing[3],
+    },
+  ];
+  const content = (
+    <NativeText
+      style={[
+        theme.typography.scale.bodySmall,
+        { color: theme.colors.foreground },
+      ]}
+    >
+      {country.dialCode}
+    </NativeText>
+  );
+
+  return onPress ? (
+    <Pressable
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      disabled={disabled}
+      onPress={onPress}
+      style={style}
+    >
+      {content}
+    </Pressable>
+  ) : (
+    <View
+      accessibilityLabel={`${country.label}, ${country.dialCode}`}
+      accessibilityRole="text"
+      accessible
+      style={style}
+    >
+      {content}
+    </View>
+  );
+}
+PhoneCountryPrefix.displayName = "PhoneCountryPrefix";
+
 /** Native phone input that delegates country selection to an application-owned picker. */
 function PhoneInput({
   country,
@@ -69,31 +123,12 @@ function PhoneInput({
       ]}
     >
       {country ? (
-        <Pressable
+        <PhoneCountryPrefix
           accessibilityLabel={countryAccessibilityLabel}
-          accessibilityRole={onPressCountry ? "button" : "text"}
-          accessibilityState={{
-            disabled: disabled || onPressCountry === undefined,
-          }}
-          disabled={disabled || onPressCountry === undefined}
+          country={country}
+          disabled={disabled}
           onPress={onPressCountry}
-          style={[
-            styles.country,
-            {
-              borderColor: theme.colors.input,
-              paddingHorizontal: theme.spacing[3],
-            },
-          ]}
-        >
-          <NativeText
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.foreground },
-            ]}
-          >
-            {country.dialCode}
-          </NativeText>
-        </Pressable>
+        />
       ) : null}
       <Input
         {...props}

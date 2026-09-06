@@ -7,6 +7,12 @@ describe("native catalog", () => {
     render(<App />);
 
     expect(screen.getByText("VLLNT UI Native")).toBeOnTheScreen();
+    expect(
+      screen.getByText(/representative interaction sample/),
+    ).toBeOnTheScreen();
+    expect(
+      screen.getByLabelText("Native manifest inventory"),
+    ).toBeOnTheScreen();
     expect(screen.getByText("Renderer boundary")).toBeOnTheScreen();
     expect(screen.getByText("Interactive composites")).toBeOnTheScreen();
     expect(screen.getByText("1 of 2 modules reviewed")).toBeOnTheScreen();

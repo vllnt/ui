@@ -10,6 +10,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, View } from "react-native";
 
+import { nativeComponentCount } from "./catalog-metadata";
 import {
   CardSection,
   CompositeSection,
@@ -54,7 +55,9 @@ function CatalogContent({
             VLLNT UI Native
           </Heading>
           <Text tone="muted">
-            Source-only experimental renderer · 171 native component modules.
+            Source-only experimental renderer · {nativeComponentCount} native
+            component modules. This catalog is a representative interaction
+            sample, not a full visual or device-accessibility audit.
           </Text>
         </View>
         <ThemeSection onChange={onThemeChange} selection={themeSelection} />

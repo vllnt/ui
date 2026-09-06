@@ -1,4 +1,5 @@
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -19,6 +20,20 @@ import { TextAnimate } from "./text-animate/text-animate";
 import { TextReveal } from "./text-reveal/text-reveal";
 import { TextShimmer } from "./text-shimmer/text-shimmer";
 import { Typewriter } from "./typewriter/typewriter";
+
+const motionService = {
+  addEventListener(
+    eventName: "reduceMotionChanged",
+    listener: (enabled: boolean) => void,
+  ) {
+    void eventName;
+    void listener;
+    return { remove() {} };
+  },
+  async isReduceMotionEnabled() {
+    return false;
+  },
+};
 
 const reducedMotionService = {
   addEventListener(
@@ -81,6 +96,35 @@ describe("native motion and content utilities", () => {
     expect(screen.getByLabelText("Native ring")).toBeOnTheScreen();
     expect(screen.getByLabelText("Animated words")).toBeOnTheScreen();
     expect(screen.getByLabelText("Readable words")).toBeOnTheScreen();
+  });
+
+  it("stops text motion timers after completion", async () => {
+    jest.useFakeTimers();
+    render(
+      <View>
+        <ScrambleText
+          duration={20}
+          reducedMotionService={motionService}
+          text="AB"
+        />
+        <Typewriter reducedMotionService={motionService} speed={10} text="CD" />
+      </View>,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+
+    expect(screen.getByText("AB")).toBeOnTheScreen();
+    expect(screen.getByText("CD")).toBeOnTheScreen();
+    expect(jest.getTimerCount()).toBe(0);
+    jest.useRealTimers();
   });
 
   it("keeps code plain unless a renderer is injected and uses an explicit clipboard", async () => {

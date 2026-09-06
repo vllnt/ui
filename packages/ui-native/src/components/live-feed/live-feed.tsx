@@ -113,9 +113,11 @@ function LiveFeedHeader({
 LiveFeedHeader.displayName = "LiveFeedHeader";
 
 function LiveFeedRow({
+  announce,
   event,
   now,
 }: {
+  readonly announce: boolean;
   readonly event: LiveFeedEvent;
   readonly now: Date;
 }) {
@@ -136,7 +138,11 @@ function LiveFeedRow({
       ]}
     >
       <View style={[styles.itemTop, { gap: theme.spacing[2] }]}>
-        <Text style={{ flex: 1 }} weight="medium">
+        <Text
+          accessibilityLiveRegion={announce ? "polite" : undefined}
+          style={{ flex: 1 }}
+          weight="medium"
+        >
           {event.title}
         </Text>
         <Text size="caption" tone="muted">
@@ -190,7 +196,6 @@ function LiveFeed({
   return (
     <Card
       {...props}
-      accessibilityLiveRegion="polite"
       ref={ref}
       style={[{ gap: theme.spacing[3], padding: theme.spacing[4] }, style]}
     >
@@ -205,8 +210,13 @@ function LiveFeed({
         </Text>
       ) : (
         <ScrollView accessibilityLabel={title} accessibilityRole="list">
-          {visibleEvents.map((event) => (
-            <LiveFeedRow event={event} key={event.id} now={liveNow} />
+          {visibleEvents.map((event, index) => (
+            <LiveFeedRow
+              announce={index === 0}
+              event={event}
+              key={event.id}
+              now={liveNow}
+            />
           ))}
         </ScrollView>
       )}
