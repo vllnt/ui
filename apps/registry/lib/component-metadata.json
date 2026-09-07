@@ -783,6 +783,14 @@
       {
         "id": "content-callout--default",
         "name": "Default"
+      },
+      {
+        "id": "content-callout--neutral",
+        "name": "Neutral"
+      },
+      {
+        "id": "content-callout--composable",
+        "name": "Composable"
       }
     ],
     "title": "Callout"
