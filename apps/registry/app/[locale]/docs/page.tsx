@@ -1,22 +1,19 @@
 import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import type { Locale } from "@/i18n/routing";
+import { Link, type Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPath } from "@/lib/docs-pages";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -54,51 +51,60 @@ export default async function DocumentationPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const { content } = await getPageContent("docs", locale);
+  const t = await getTranslations("pages.docs");
+  const c = await getTranslations("common");
+  // Localize each doc card from the page's own MDX frontmatter (en/fr).
+  const documentLinks = await Promise.all(
+    DOCS_PAGES.map(async (page) => {
+      const { frontmatter } = await getPageContent(`docs/${page.slug}`, locale);
+      return {
+        description: frontmatter.description,
+        href: getDocsPath(page),
+        slug: page.slug,
+        title: frontmatter.title,
+      };
+    }),
+  );
 
   return (
     <>
       <Script
         id="docs-json-ld"
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Docs", url: `${SITE_URL}/docs` },
-          ]),
+          breadcrumbTrailLd(locale, [{ name: "Docs", path: "/docs" }]),
           techArticleLd({
             description:
               "Learn how to use VLLNT UI components in your projects.",
             title: "Documentation",
-            url: `${SITE_URL}/docs`,
+            url: canonical("/docs", locale),
           }),
         ])}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
-                { label: "Docs" },
+                { href: localizePathname("/", locale), label: c("home") },
+                { label: c("docs") },
               ]}
             />
-            <h1 className="text-4xl font-semibold mb-4">Documentation</h1>
-            <p className="text-muted-foreground text-lg">
-              Learn how to use VLLNT UI components in your projects.
-            </p>
+            <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
+            <p className="text-muted-foreground text-lg">{t("description")}</p>
           </div>
 
-          <nav aria-label="Documentation pages" className="mb-12">
+          <nav aria-label={t("nav")} className="mb-12">
             <ul className="grid gap-4 md:grid-cols-2">
-              {DOCS_PAGES.map((page) => (
+              {documentLinks.map((page) => (
                 <li
                   className="rounded-lg border border-border bg-card p-4"
                   key={page.slug}
                 >
                   <Link
                     className="font-medium text-foreground underline underline-offset-4"
-                    href={localizePathname(getDocsPath(page), locale)}
+                    href={page.href}
                   >
                     {page.title}
                   </Link>

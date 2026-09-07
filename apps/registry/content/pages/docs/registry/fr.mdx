@@ -1,0 +1,45 @@
+---
+title: Registre
+description: Comprenez le schema de /r/registry.json et comment construire une surface de registre compatible.
+type: docs
+og:
+  title: Registre
+  description: Schema du registre VLLNT UI et guide d'extension
+  type: docs
+---
+
+# Registre
+
+Le registre public est le contrat lisible par machine derriere le site des composants. Il expose un index de premier niveau et un descripteur par composant.
+
+## Points de terminaison
+
+- `/r/registry.json` liste chaque composant et les metadonnees au niveau du registre.
+- `/r/[name].json` renvoie le descripteur d'installation pour un seul composant.
+- `/fr/components/[name]` est la page de documentation destinee aux humains pour ce meme composant.
+
+## Forme d'un element
+
+Les elements du registre incluent :
+
+- `name` : slug stable utilise dans les URL.
+- `title` : nom du composant lisible par un humain.
+- `description` : resume court pour la recherche, les agents et la documentation.
+- `type` : type d'element du registre.
+- `category` : categorie du composant.
+- `files` : fichiers source installes par la CLI.
+- `dependencies` : dependances npm requises par le composant.
+- `registryDependencies` : autres composants du registre necessaires a l'execution.
+- `version` et `stability` : metadonnees de version apposees pendant la construction du registre.
+
+## Construire par-dessus
+
+Un registre compatible doit conserver des slugs de composants stables, servir du JSON avec des URL compatibles avec la mise en cache, et preserver le contrat `files` attendu par la CLI shadcn. Si vous encapsulez VLLNT UI dans un registre prive, gardez vos metadonnees personnalisees additives afin que l'outillage standard puisse toujours lire le descripteur.
+
+## Fichiers generes
+
+L'application du registre genere des shims et des metadonnees a partir du code source du paquet. Ne modifiez pas manuellement la sortie generee. Modifiez le composant source, puis executez la construction documentee du registre ou le script de synchronisation des shims.
+
+## Utilisation par les agents
+
+Les agents devraient preferer `/r/registry.json` pour la decouverte et `/r/[name].json` pour les details d'implementation. Utilisez `/llms-full.txt` lorsqu'un seul contexte texte est plus pratique que la recuperation de nombreux points de terminaison JSON.

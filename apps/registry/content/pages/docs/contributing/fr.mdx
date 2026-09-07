@@ -1,0 +1,47 @@
+---
+title: Contribuer
+description: Configurez le depot, executez la boucle de developpement, suivez les conventions de stories et preparez les PRs.
+type: docs
+og:
+  title: Contribuer
+  description: Flux de travail des contributeurs pour VLLNT UI
+  type: docs
+---
+
+# Contribuer
+
+Le depot est un espace de travail pnpm et Turborepo. Le code source du package se trouve dans `packages/ui`, et le site de registre/documentation se trouve dans `apps/registry`.
+
+## Configuration
+
+```bash
+pnpm install --frozen-lockfile
+```
+
+Utilisez uniquement pnpm. N'utilisez pas npm, yarn ou bun pour les commandes de l'espace de travail.
+
+## Boucle de developpement locale
+
+Commandes utiles depuis la racine du depot :
+
+```bash
+pnpm -F @vllnt/ui lint
+pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
+pnpm build
+pnpm test:once
+pnpm check:circular
+```
+
+Executez des tests plus cibles pendant le developpement, puis executez l'ensemble des controles avant d'ouvrir ou de mettre a jour une PR.
+
+## Stories
+
+Les stories doivent demontrer des etats realistes, pas seulement le rendu par defaut. Incluez les etats desactive, en chargement, vide, en erreur et a contenu long lorsque ces etats existent.
+
+## Sortie du registre
+
+Ne modifiez pas manuellement les fichiers de registre generes. Mettez a jour les fichiers source dans `packages/ui/src/components`, puis regenerez la sortie du registre a l'aide des scripts documentes.
+
+## Pull requests
+
+Chaque PR doit lier une issue, garder le corps aligne avec le head actuel et inclure des preuves de validation. Gardez les refactorisations non liees hors des PRs de fonctionnalite afin que la revue puisse se concentrer sur l'issue en cours de fermeture.

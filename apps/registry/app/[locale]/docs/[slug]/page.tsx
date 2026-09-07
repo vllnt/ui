@@ -5,21 +5,19 @@ import { Breadcrumb, MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { type Locale, routing } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { DOCS_PAGES, getDocsPage, getDocsPath } from "@/lib/docs-pages";
 import {
-  breadcrumbLd,
+  breadcrumbTrailLd,
   jsonLdScriptAttributes,
   techArticleLd,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
@@ -123,17 +121,17 @@ export default async function DocsSlugPage(props: Props) {
     docsPage.slug === "changelog"
       ? `${content}\n\n${await readChangelog()}`
       : content;
-  const pageUrl = `${SITE_URL}${getDocsPath(docsPage)}`;
+  const pageUrl = canonical(getDocsPath(docsPage), locale);
+  const c = await getTranslations("common");
 
   return (
     <>
       <Script
         id={`docs-${docsPage.slug}-json-ld`}
         {...jsonLdScriptAttributes([
-          breadcrumbLd([
-            { name: "Home", url: SITE_URL },
-            { name: "Docs", url: `${SITE_URL}/docs` },
-            { name: frontmatter.title, url: pageUrl },
+          breadcrumbTrailLd(locale, [
+            { name: "Docs", path: "/docs" },
+            { name: frontmatter.title, path: getDocsPath(docsPage) },
           ]),
           techArticleLd({
             description: frontmatter.description,
@@ -142,15 +140,15 @@ export default async function DocsSlugPage(props: Props) {
           }),
         ])}
       />
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
             <Breadcrumb
               className="mb-4 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: "Home" },
-                { href: localizePathname("/docs", locale), label: "Docs" },
+                { href: localizePathname("/", locale), label: c("home") },
+                { href: localizePathname("/docs", locale), label: c("docs") },
                 { label: frontmatter.title },
               ]}
             />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { useTranslations } from "next-intl";
 import type * as React from "react";
 
 const REPO = "vllnt/ui";
@@ -128,6 +129,7 @@ export function ReportBugForm({
 }: {
   initialComponent?: string;
 }) {
+  const t = useTranslations("forms.report");
   const [component, setComponent] = useState(initialComponent);
   const [summary, setSummary] = useState("");
   const [repro, setRepro] = useState("");
@@ -143,37 +145,37 @@ export function ReportBugForm({
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
       <Field
-        label="Component (optional)"
+        label={t("componentLabel")}
         onChange={setComponent}
-        placeholder="e.g. button, combobox, ai-chat-input"
+        placeholder={t("componentPlaceholder")}
         value={component}
       />
       <Field
-        label="One-line summary"
+        label={t("summaryLabel")}
         onChange={setSummary}
-        placeholder="Concise headline for the issue title."
+        placeholder={t("summaryPlaceholder")}
         required
         value={summary}
       />
       <TextField
-        label="Reproduction"
+        label={t("reproLabel")}
         onChange={setRepro}
-        placeholder="Minimal repo / sandbox link / runnable snippet."
+        placeholder={t("reproPlaceholder")}
         required
         rows={4}
         value={repro}
       />
       <TextField
-        label="Expected behavior"
+        label={t("expectedLabel")}
         onChange={setExpected}
-        placeholder="What you expected to happen."
+        placeholder={t("expectedPlaceholder")}
         required
         value={expected}
       />
       <TextField
-        label="Actual behavior"
+        label={t("actualLabel")}
         onChange={setActual}
-        placeholder="What actually happened. Include console output or screenshots if useful."
+        placeholder={t("actualPlaceholder")}
         required
         rows={4}
         value={actual}
@@ -182,11 +184,9 @@ export function ReportBugForm({
         className="inline-flex h-10 items-center rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
         type="submit"
       >
-        Open prefilled GitHub issue
+        {t("submit")}
       </button>
-      <p className="text-xs text-muted-foreground">
-        Submitting opens a new GitHub issue tab. Nothing is sent to a server.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("note")}</p>
     </form>
   );
 }

@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@vllnt/ui";
+import { useTranslations } from "next-intl";
 
 import type { PlaygroundExample } from "@/lib/playground";
 
@@ -23,6 +24,7 @@ export function PreviewPlaygroundTabs({
   packageVersion,
   storyId,
 }: PreviewPlaygroundTabsProps): React.ReactElement {
+  const t = useTranslations("shared");
   const [activeTab, setActiveTab] = React.useState("preview");
 
   React.useEffect(() => {
@@ -47,8 +49,8 @@ export function PreviewPlaygroundTabs({
       <Tabs className="my-0" onValueChange={setActiveTab} value={activeTab}>
         <div className="flex items-center justify-between gap-4 border-b">
           <TabsList className="border-b-0">
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-            <TabsTrigger value="code">Code</TabsTrigger>
+            <TabsTrigger value="preview">{t("preview")}</TabsTrigger>
+            <TabsTrigger value="code">{t("code")}</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent className="pt-4" value="preview">

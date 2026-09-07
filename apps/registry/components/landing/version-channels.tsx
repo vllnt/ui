@@ -1,11 +1,17 @@
 import { Badge } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import type { ReactNode } from "react";
 
+import { Link } from "@/i18n/routing";
 import { type ChangelogEntry, getChangelogEntries } from "@/lib/changelog";
 import { getNpmDistributionTags } from "@/lib/npm-version";
 
 const COMING_LIMIT = 5;
+
+const codeChunk = (chunks: ReactNode) => (
+  <code className="font-mono text-sm">{chunks}</code>
+);
 
 function bulletHeadline(text: string): string {
   const bold = /^\*\*(.+?)\*\*/.exec(text);
@@ -27,45 +33,73 @@ function comingItems(
     .slice(0, limit);
 }
 
-function StableChannel({ latest }: { latest: string }) {
+/**
+ * Homepage "release channels" surface: the latest tagged release (stable) and
+ * the current canary build, plus a preview of the unreleased changelog entry so
+ * visitors can see what is shipping next. A missing canary or empty changelog
+ * hides that detail.
+ */
+export async function VersionChannels() {
+  const t = await getTranslations("landing.channels");
+  const [{ canary, latest }, entries] = await Promise.all([
+    getNpmDistributionTags(),
+    getChangelogEntries({ type: "all" }),
+  ]);
+  const unreleased = entries.find((entry) => entry.version === "Unreleased");
+  const coming = comingItems(unreleased, COMING_LIMIT);
+
   return (
-    <div className="border border-border bg-background p-5">
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge>Stable</Badge>
-        <span className="font-mono text-sm">v{latest}</span>
+    <section className="border-b border-border bg-muted/20">
+      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
+        <div>
+          <h2 className="text-2xl font-semibold">{t("title")}</h2>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            {t.rich("description", { code: codeChunk })}
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-3 md:grid-cols-2">
+          <div className="border border-border bg-background p-5">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge>{t("stable")}</Badge>
+              <span className="font-mono text-sm">v{latest}</span>
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {t.rich("stableDescription", { code: codeChunk })}
+            </p>
+            <Link
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
+              href="/releases"
+            >
+              {t("releaseNotes")}
+              <ArrowRight className="size-3" />
+            </Link>
+          </div>
+
+          <CanaryCard canary={canary} coming={coming} />
+        </div>
       </div>
-      <p className="mt-3 text-sm text-muted-foreground">
-        The latest tagged release on the npm{" "}
-        <code className="font-mono">latest</code> tag — what a default install
-        resolves to.
-      </p>
-      <Link
-        className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
-        href="/releases"
-      >
-        Release notes
-        <ArrowRight className="size-3" />
-      </Link>
-    </div>
+    </section>
   );
 }
 
-function CanaryChannel({
+async function CanaryCard({
   canary,
   coming,
 }: {
   canary?: string;
   coming: readonly string[];
 }) {
+  const t = await getTranslations("landing.channels");
   return (
     <div className="border border-border bg-background p-5">
       <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="secondary">Canary</Badge>
+        <Badge variant="secondary">{t("canary")}</Badge>
         <span className="font-mono text-sm">{canary ?? "—"}</span>
       </div>
       {coming.length > 0 ? (
         <>
-          <p className="mt-3 text-sm font-medium">What&apos;s coming</p>
+          <p className="mt-3 text-sm font-medium">{t("whatsComing")}</p>
           <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
             {coming.map((item) => (
               <li className="flex gap-2" key={item}>
@@ -79,52 +113,16 @@ function CanaryChannel({
         </>
       ) : (
         <p className="mt-3 text-sm text-muted-foreground">
-          Auto-published from <code className="font-mono">main</code> on every
-          commit.
+          {t.rich("canaryDescription", { code: codeChunk })}
         </p>
       )}
       <Link
         className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
         href="/changelog#unreleased"
       >
-        View changelog
+        {t("viewChangelog")}
         <ArrowRight className="size-3" />
       </Link>
     </div>
-  );
-}
-
-/**
- * Homepage "release channels" surface: the latest tagged release (stable) and
- * the current canary build, plus a preview of the unreleased changelog entry so
- * visitors can see what is shipping next. A missing canary or empty changelog
- * hides that detail.
- */
-export async function VersionChannels() {
-  const [{ canary, latest }, entries] = await Promise.all([
-    getNpmDistributionTags(),
-    getChangelogEntries({ type: "all" }),
-  ]);
-  const unreleased = entries.find((entry) => entry.version === "Unreleased");
-  const coming = comingItems(unreleased, COMING_LIMIT);
-
-  return (
-    <section className="border-b border-border bg-muted/20">
-      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-        <div>
-          <h2 className="text-2xl font-semibold">Release channels</h2>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
-            The site tracks the latest tagged release. Canary ships from{" "}
-            <code className="font-mono text-sm">main</code> on every commit —
-            see what is coming next.
-          </p>
-        </div>
-
-        <div className="mt-8 grid gap-3 md:grid-cols-2">
-          <StableChannel latest={latest} />
-          <CanaryChannel canary={canary} coming={coming} />
-        </div>
-      </div>
-    </section>
   );
 }

@@ -71,9 +71,11 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
     { changeFrequency: "monthly", path: "/philosophy", priority: 0.6 },
     { changeFrequency: "monthly", path: "/design", priority: 0.8 },
     { changeFrequency: "weekly", path: "/releases", priority: 0.8 },
+    { changeFrequency: "monthly", path: "/vs", priority: 0.7 },
     { changeFrequency: "monthly", path: "/vs/shadcn", priority: 0.7 },
     { changeFrequency: "monthly", path: "/vs/vercel-ai-sdk", priority: 0.7 },
     { changeFrequency: "monthly", path: "/vs/assistant-ui", priority: 0.7 },
+    { changeFrequency: "monthly", path: "/themes", priority: 0.7 },
   ] satisfies readonly PageRouteInput[];
 
   return routes.flatMap((route) => localizedEntries(route, lastModified));
@@ -93,15 +95,18 @@ function familyRoutes(lastModified: Date): MetadataRoute.Sitemap {
 }
 
 function docsRoutes(lastModified: Date): MetadataRoute.Sitemap {
-  return DOCS_PAGES.flatMap((page) =>
-    localizedEntries(
-      {
-        changeFrequency: "monthly",
-        path: getDocsPath(page),
-        priority: 0.75,
-      },
-      lastModified,
-    ),
+  // `/docs/changelog` permanently redirects to `/changelog` (already listed) —
+  // exclude the 3xx URL from the sitemap.
+  return DOCS_PAGES.filter((page) => page.slug !== "changelog").flatMap(
+    (page) =>
+      localizedEntries(
+        {
+          changeFrequency: "monthly",
+          path: getDocsPath(page),
+          priority: 0.75,
+        },
+        lastModified,
+      ),
   );
 }
 

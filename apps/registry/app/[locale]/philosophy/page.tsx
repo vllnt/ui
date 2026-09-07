@@ -1,9 +1,14 @@
 import { MDXContent, Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
+import {
+  breadcrumbTrailLd,
+  jsonLdScriptAttributes,
+  techArticleLd,
+} from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
@@ -43,18 +48,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PhilosophyPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const { content } = await getPageContent("philosophy", locale);
+  const { content, frontmatter } = await getPageContent("philosophy", locale);
+  const t = await getTranslations("pages.philosophy");
+  const common = await getTranslations("common");
 
   return (
     <>
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <script
+        {...jsonLdScriptAttributes([
+          breadcrumbTrailLd(
+            locale,
+            [{ name: frontmatter.title, path: "/philosophy" }],
+            common("home"),
+          ),
+          techArticleLd({
+            description: frontmatter.description,
+            inLanguage: locale,
+            title: frontmatter.title,
+            url: canonical("/philosophy", locale),
+          }),
+        ])}
+      />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-semibold mb-4">Philosophy</h1>
-            <p className="text-muted-foreground text-lg">
-              The principles that guide VLLNT UI design and development.
-            </p>
+            <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
+            <p className="text-muted-foreground text-lg">{t("description")}</p>
           </div>
 
           <div className="prose prose-lg dark:prose-invert max-w-none">

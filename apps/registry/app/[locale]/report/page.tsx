@@ -1,6 +1,6 @@
 import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -17,10 +17,10 @@ export async function generateMetadata({
   params,
 }: LocaleParameters): Promise<Metadata> {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "pages.report" });
   const ogParameters = {
-    description:
-      "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue — no backend.",
-    title: "Report a bug",
+    description: t("metaDescription"),
+    title: t("title"),
     type: "page" as const,
   };
 
@@ -35,7 +35,7 @@ export async function generateMetadata({
       pathname: "/report",
     }),
     robots: { follow: true, index: false },
-    title: "Report a bug · VLLNT UI",
+    title: `${t("title")} · VLLNT UI`,
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
@@ -53,16 +53,16 @@ export default async function ReportBugPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const { component } = await searchParams;
+  const t = await getTranslations("pages.report");
 
   return (
     <>
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto max-w-2xl px-4 py-16 lg:px-8">
-          <h1 className="text-4xl font-semibold mb-3">Report a bug</h1>
+          <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>
           <p className="text-muted-foreground text-lg mb-8">
-            Found something broken? Fill out the fields and we&rsquo;ll open a
-            prefilled GitHub issue with the right labels and template.
+            {t("description")}
           </p>
           <ReportBugForm initialComponent={component ?? ""} />
         </div>

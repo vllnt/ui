@@ -12,112 +12,32 @@
     "readDocs": "Read the docs",
     "requestComponent": "Request a component"
   },
-  "header": {
-    "githubLabel": "VLLNT UI on GitHub",
-    "navComponents": "Components",
-    "navGetStarted": "Get Started",
-    "navPhilosophy": "Philosophy",
-    "searchButton": "Search components...",
-    "searchEmpty": "No components found.",
-    "searchGroup": "Components",
-    "searchPlaceholder": "Search components..."
-  },
   "footer": {
     "builtWith": "VLLNT UI · MIT licensed · Built with Radix UI, Tailwind CSS, and CVA",
+    "changelog": "Changelog",
+    "codeOfConduct": "Code of Conduct",
     "community": "Community",
+    "components": "Components",
+    "design": "Design",
+    "designTokens": "Design tokens",
     "discussions": "Discussions",
+    "docs": "Docs",
+    "github": "GitHub",
     "legal": "Legal",
     "library": "Library",
+    "license": "License (MIT)",
+    "llmsTxt": "llms.txt",
     "maintainedBy": "Maintained by",
+    "mcp": "MCP",
+    "philosophy": "Philosophy",
     "registryJson": "Registry JSON",
+    "releases": "Releases",
     "reportBug": "Report a bug",
+    "requestComponent": "Request a component",
     "resources": "Resources",
+    "rssFeed": "RSS feed",
     "sponsor": "Sponsor",
     "storybook": "Storybook"
-  },
-  "pages": {
-    "components": {
-      "description": "Explore all {count} components available in the library.",
-      "noPreview": "No preview",
-      "stories": "{count, plural, one {# story} other {# stories}}",
-      "title": "Components"
-    },
-    "docs": {
-      "description": "Learn how to use VLLNT UI components in your projects.",
-      "title": "Documentation"
-    },
-    "home": {
-      "description": "Install any of {count} accessible React components with the shadcn CLI. Built on Radix UI, Tailwind CSS, and CVA. Every component is a machine-readable JSON descriptor agents can consume directly. v{version}, MIT licensed.",
-      "title": "VLLNT UI - {count} agent-first React components"
-    },
-    "notFound": {
-      "description": "That route does not exist. Try one of the popular components below, or jump back to the index.",
-      "popular": "Popular components",
-      "title": "Page not found"
-    },
-    "philosophy": {
-      "description": "The principles that guide VLLNT UI design and development.",
-      "title": "Philosophy"
-    },
-    "report": {
-      "description": "Found something broken? Fill out the fields and we'll open a prefilled GitHub issue with the right labels and template.",
-      "metaDescription": "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue - no backend.",
-      "title": "Report a bug"
-    },
-    "requestComponent": {
-      "description": "Don't see what you need? Fill out the fields and we'll open a prefilled GitHub issue with the right labels and template.",
-      "metaDescription": "Request a new VLLNT UI component. The form opens a prefilled GitHub issue - no backend.",
-      "title": "Request a component"
-    },
-    "component": {
-      "code": "Code",
-      "dependencies": "Dependencies",
-      "installation": "Installation",
-      "reportBug": "Report a bug",
-      "storybook": "Storybook",
-      "storybookDescription": "Explore all variants, controls, and accessibility checks in the interactive Storybook playground.",
-      "storiesAvailable": "{count, plural, one {# story available:} other {# stories available:}}",
-      "viewInStorybook": "View in Storybook"
-    }
-  },
-  "landing": {
-    "agent": {
-      "description": "Every component ships as a machine-readable JSON descriptor with name, version, stability, accessibility schema, usage examples, and prop definitions. Agents discover the registry through three surfaces.",
-      "eyebrow": "Agent-first",
-      "llmsDescription": "Concise index per the llmstxt.org spec: sections, links, descriptions.",
-      "llmsFullDescription": "Full registry context in one fetch: docs plus per-component descriptors.",
-      "mcpDescription": "Streamable HTTP MCP server. Tools: search_components, get_component, list_categories.",
-      "open": "Open",
-      "title": "Built so AI coding agents can use it directly."
-    },
-    "community": {
-      "description": "MIT licensed. No tracking. No backend. Issues, ideas, and pull requests welcome.",
-      "openStorybook": "Open Storybook",
-      "requestComponent": "Request a component",
-      "starGithub": "Star on GitHub",
-      "title": "Build with the community."
-    },
-    "featured": {
-      "description": "A few favourites. Browse all {count} from",
-      "title": "Featured components"
-    },
-    "hero": {
-      "browseComponents": "Browse {count} components",
-      "description": "Built on Radix UI, Tailwind CSS, and CVA. Every component is also a machine-readable JSON descriptor: agents read the registry directly without scraping HTML.",
-      "github": "GitHub",
-      "kicker": "v{version} - MIT",
-      "readDocs": "Read the docs",
-      "rscCompatible": "RSC compatible",
-      "subtitle": "Copy, paste, ship.",
-      "tailwindReady": "Tailwind v4 ready",
-      "title": "{count} agent-first React components."
-    },
-    "stats": {
-      "categories": "Categories",
-      "components": "Components",
-      "lastBuild": "Last build",
-      "libraryVersion": "Library version"
-    }
   },
   "forms": {
     "report": {
@@ -148,5 +68,519 @@
       "useCaseLabel": "Use case",
       "useCasePlaceholder": "The concrete scenario where you'd reach for this."
     }
+  },
+  "header": {
+    "changelog": "Changelog",
+    "githubLabel": "VLLNT UI on GitHub",
+    "navComponents": "Components",
+    "navDesign": "Design",
+    "navDocs": "Docs",
+    "navGetStarted": "Get Started",
+    "navPhilosophy": "Philosophy",
+    "navRequest": "Request",
+    "navTemplates": "Templates",
+    "navThemes": "Themes",
+    "releases": "Releases",
+    "rssFeed": "RSS feed",
+    "searchButton": "Search...",
+    "searchDocsEmpty": "No docs found.",
+    "searchDocsGroup": "Docs",
+    "searchEmpty": "No results found.",
+    "searchGroup": "Components",
+    "searchPlaceholder": "Search docs and components...",
+    "whatsNew": "What's new"
+  },
+  "landing": {
+    "agent": {
+      "description": "Every component ships as a machine-readable JSON descriptor with name, version, stability, accessibility schema, usage examples, and prop definitions. Agents discover the registry through three surfaces.",
+      "eyebrow": "Agent-first",
+      "llmsDescription": "Concise index per the llmstxt.org spec - sections, links, descriptions.",
+      "llmsFullDescription": "Full registry context in one fetch - docs + per-component descriptors.",
+      "mcpDescription": "Streamable HTTP MCP server. Tools: search_components, get_component, list_categories.",
+      "open": "Open",
+      "title": "Built so AI coding agents can use it directly."
+    },
+    "channels": {
+      "canary": "Canary",
+      "canaryDescription": "Auto-published from <code>main</code> on every commit.",
+      "description": "The site tracks the latest tagged release. Canary ships from <code>main</code> on every commit — see what is coming next.",
+      "releaseNotes": "Release notes",
+      "stable": "Stable",
+      "stableDescription": "The latest tagged release on the npm <code>latest</code> tag — what a default install resolves to.",
+      "title": "Release channels",
+      "viewChangelog": "View changelog",
+      "whatsComing": "What's coming"
+    },
+    "community": {
+      "description": "MIT licensed. No tracking. No backend. Issues, ideas, and pull requests welcome.",
+      "openStorybook": "Open Storybook",
+      "requestComponent": "Request a component",
+      "starGithub": "Star on GitHub",
+      "title": "Build with the community."
+    },
+    "featured": {
+      "descriptionLead": "A few favourites. Browse all {count} from",
+      "title": "Featured components",
+      "uncategorized": "uncategorized"
+    },
+    "hero": {
+      "browseAll": "Browse all {count}",
+      "browseTemplates": "Browse templates",
+      "description": "{count} open-source React components for building AI apps — chat, streaming, tool calls, citations, agents, and artifacts. Every component is also a machine-readable JSON descriptor: agents (Claude, Cursor, Cline, Continue) read the registry directly without scraping HTML.",
+      "exploreAi": "Explore AI components",
+      "github": "GitHub",
+      "kicker": "v{version} / MIT",
+      "readDocs": "Read the docs",
+      "titleAccent": "Copy, paste, ship.",
+      "titleLead": "The UI design system for AI agents."
+    },
+    "releases": {
+      "description": "Follow what changed across the component library, registry, and release pipeline.",
+      "readNotes": "Read notes",
+      "title": "Latest releases",
+      "viewAll": "View all releases",
+      "whatsNew": "What's new"
+    },
+    "stats": {
+      "categories": "Categories",
+      "components": "Components",
+      "lastBuild": "Last build",
+      "libraryVersion": "Library version"
+    },
+    "trustBadges": {
+      "mit": "MIT",
+      "rsc": "RSC compatible",
+      "tailwind": "Tailwind v4 ready",
+      "typescript": "TypeScript"
+    }
+  },
+  "pages": {
+    "build": {
+      "breadcrumb": "UI for AI agents",
+      "browseAll": "Browse all AI agent components",
+      "componentsHeading": "Components you'll use",
+      "faqHeading": "Frequently asked",
+      "installDescription": "Add every component above with the shadcn CLI. You own the source after install.",
+      "installHeading": "Install"
+    },
+    "changelog": {
+      "emptyDescription": "Adjust the filters to include more release notes.",
+      "emptyTitle": "No changes found",
+      "eyebrow": "Release history",
+      "filterAll": "All changes",
+      "filterApply": "Apply",
+      "filterBreaking": "Breaking",
+      "filterFeatures": "Features",
+      "filterFixes": "Fixes",
+      "filterFrom": "From",
+      "filterTo": "To",
+      "filterType": "Type",
+      "heading": "Changelog",
+      "intro": "The canonical release log for VLLNT UI, generated from Conventional Commits into Keep a Changelog format.",
+      "metaDescription": "Browse VLLNT UI release notes from the canonical Keep a Changelog source, with filters for features, fixes, breaking changes, and release date.",
+      "metaTitle": "Changelog · VLLNT UI",
+      "permalinkTo": "Permalink to {title}",
+      "rssLink": "RSS feed"
+    },
+    "component": {
+      "browseAiComponents": "Browse all AI agent components",
+      "code": "Code",
+      "dependencies": "Dependencies",
+      "faq": "FAQ",
+      "installation": "Installation",
+      "preview": "Preview",
+      "related": "Related components",
+      "reportBug": "Report a bug",
+      "shareOn": "Share on",
+      "shareTitle": "Share this component",
+      "storiesAvailable": "{count, plural, one {# story available:} other {# stories available:}}",
+      "storybook": "Storybook",
+      "storybookDescription": "Explore all variants, controls, and accessibility checks in the interactive Storybook playground.",
+      "viewInStorybook": "View in Storybook",
+      "viewOnNpm": "View {dep} on npm",
+      "whatItIsTitle": "What it is and when to use",
+      "whenToUseTitle": "When to use this in an AI app"
+    },
+    "components": {
+      "ctaDescription": "Request a new component and we'll open a prefilled GitHub issue with the right labels and template.",
+      "ctaTitle": "Don't see what you need?",
+      "description": "Explore all {count} components available in the library.",
+      "noPreview": "No preview",
+      "stories": "{count, plural, one {# story} other {# stories}}",
+      "title": "Components"
+    },
+    "design": {
+      "colors": "Colors",
+      "contents": "Contents",
+      "description": "The canonical rules for brand, tokens, layout, motion, accessibility, and component composition across the library.",
+      "eyebrow": "Agent-consumable brand guide",
+      "icons": "Icons",
+      "sectionsNavLabel": "Design guide sections",
+      "spacing": "Spacing",
+      "title": "VLLNT UI Design Guide",
+      "tokenContract": "Token contract",
+      "version": "Version",
+      "viewTokensJson": "View design tokens JSON"
+    },
+    "docs": {
+      "description": "Learn how to use VLLNT UI components in your projects.",
+      "nav": "Documentation pages",
+      "title": "Documentation"
+    },
+    "families": {
+      "agentDescription": "The registry is exposed as structured data, so coding agents pick the right component without scraping HTML.",
+      "agentEyebrow": "Readable by agents",
+      "agentTitle": "Your AI agent can install these too.",
+      "agentsDocs": "How agents consume the registry",
+      "breadcrumb": "Families",
+      "browseAll": "Browse all components",
+      "componentCount": "{count, plural, one {# component} other {# components}}",
+      "description": "Browse VLLNT UI by family — AI, forms, data, overlays, navigation, content, and more. Every component installs independently with the shadcn CLI.",
+      "eyebrow": "Component family",
+      "familyCount": "{count, plural, one {# family} other {# families}}",
+      "familyTitle": "{label} components",
+      "faqTitle": "Frequently asked",
+      "llmsDescription": "Concise index per the llmstxt.org spec — sections, links, and descriptions.",
+      "llmsFullDescription": "Full registry context in one fetch — docs plus every component descriptor.",
+      "registryJsonDescription": "Per-component descriptor: props, accessibility schema, and usage examples.",
+      "title": "Component families"
+    },
+    "home": {
+      "description": "Install any of {count} accessible React components with the shadcn CLI. Built on Radix UI, Tailwind CSS, and CVA. Every component is a machine-readable JSON descriptor agents can consume directly. v{version}, MIT licensed.",
+      "title": "VLLNT UI - {count} agent-first React components"
+    },
+    "notFound": {
+      "description": "That route does not exist. Try one of the popular components below, or jump back to the index.",
+      "popular": "Popular components",
+      "title": "Page not found"
+    },
+    "philosophy": {
+      "description": "The principles that guide VLLNT UI design and development.",
+      "title": "Philosophy"
+    },
+    "playground": {
+      "backToComponent": "Back to component",
+      "descriptionFallback": "Preview this component and copy its example.",
+      "heading": "{title} Playground",
+      "metaDescriptionFallback": "Preview a VLLNT UI component and copy its example.",
+      "metaTitle": "{title} Playground - VLLNT UI",
+      "title": "Playground"
+    },
+    "releases": {
+      "atomLink": "Atom",
+      "breakingChanges": "Breaking changes",
+      "changelogLink": "Changelog",
+      "componentDelta": "{delta} components",
+      "components": "Components",
+      "componentsNotRecorded": "Not recorded",
+      "eyebrow": "What's new",
+      "fullReleaseNotes": "Full release notes",
+      "heading": "Releases",
+      "intro": "Versioned release cards from GitHub Releases, backed by the canonical changelog when the API is unavailable.",
+      "metaDescription": "Read VLLNT UI releases, including latest notes, component count deltas, breaking change counts, migration links, and GitHub release links.",
+      "metaTitle": "Releases · VLLNT UI",
+      "migration": "Migration",
+      "none": "None",
+      "openGuide": "Open guide",
+      "viewOnGithub": "View on GitHub",
+      "whatsNew": "What's new"
+    },
+    "report": {
+      "description": "Found something broken? Fill out the fields and we'll open a prefilled GitHub issue with the right labels and template.",
+      "metaDescription": "Report a bug in VLLNT UI. The form opens a prefilled GitHub issue - no backend.",
+      "title": "Report a bug"
+    },
+    "requestComponent": {
+      "description": "Don't see what you need? Fill out the fields and we'll open a prefilled GitHub issue with the right labels and template.",
+      "metaDescription": "Request a new VLLNT UI component. The form opens a prefilled GitHub issue - no backend.",
+      "title": "Request a component"
+    },
+    "templates": {
+      "components": "Components",
+      "description": "Curated app blueprints that show how VLLNT UI components work in finished product surfaces, not only isolated component examples.",
+      "detailEyebrow": "Template",
+      "eyebrow": "Starter kits",
+      "fit": "Fit",
+      "githubSource": "GitHub source",
+      "links": "Links",
+      "pages": "Pages",
+      "screenshotAlt": "{name} template screenshot",
+      "shareCardTitle": "VLLNT UI Templates",
+      "shareOn": "Share on",
+      "shareTitle": "Share these templates",
+      "sourceDescription": "This template is available as source in the VLLNT UI repository. Copy or adapt the files from the template source until a supported template CLI is available.",
+      "sourceTitle": "Source",
+      "stack": "Stack",
+      "title": "Templates",
+      "whatIsIncluded": "What is included"
+    },
+    "themes": {
+      "description": "Customize the OKLCH color tokens and radius, preview the change on real components, then export the theme as a CSS variables block, a <code>npx shadcn add</code> command, or design tokens. Your theme is saved to the URL so you can share it.",
+      "editor": {
+        "borderRadius": "Border radius",
+        "copied": "Copied",
+        "copy": "Copy",
+        "download": "Download",
+        "intro": "Pick a theme to recolor the entire site, then fine-tune the tokens below. Your choice is saved across the site.",
+        "reset": "Reset",
+        "theme": "Theme"
+      },
+      "eyebrow": "Theme generator",
+      "metaDescription": "Design a custom VLLNT UI theme in OKLCH — tweak colors and radius, preview live, then export as CSS, a shadcn CLI command, or design tokens.",
+      "metaTitle": "Theme Generator",
+      "title": "Create a theme"
+    },
+    "vs": {
+      "assistantUi": {
+        "colAttribute": "Attribute",
+        "exploreAi": "Explore all AI agent components",
+        "heading": "VLLNT UI vs assistant-ui",
+        "intro": "assistant-ui gives you an opinionated chat thread fast. VLLNT UI is a broader, agent-first design system: the same chat surfaces, plus the tool calls, agent activity, citations, artifacts, and product UI an AI-first app needs — all installed via the shadcn CLI so you own the source.",
+        "metaDescription": "VLLNT UI vs assistant-ui: a full AI-first design system you own via the shadcn CLI vs a focused chat-thread library. Honest comparison of scope, install, and theming.",
+        "metaTitle": "VLLNT UI vs assistant-ui",
+        "rows": {
+          "agentRegistry": {
+            "attribute": "Agent-readable registry",
+            "other": "No",
+            "vllnt": "Yes — llms.txt, llms-full.txt, per-component JSON, MCP"
+          },
+          "beyondChat": {
+            "attribute": "Beyond chat",
+            "other": "Primarily conversation-centric",
+            "vllnt": "Tool calls, agent activity, citations, model comparison, artifacts, dashboards"
+          },
+          "installModel": {
+            "attribute": "Install model",
+            "other": "npm dependency with a runtime",
+            "vllnt": "shadcn CLI — source copied into your repo, yours to edit"
+          },
+          "scope": {
+            "attribute": "Scope",
+            "other": "Focused on the chat/assistant thread experience",
+            "vllnt": "Full design system — chat plus agents, artifacts, and 200+ UI components"
+          },
+          "theming": {
+            "attribute": "Theming",
+            "other": "Themeable chat primitives",
+            "vllnt": "CSS variables + design tokens shared across the whole product"
+          },
+          "whenToPick": {
+            "attribute": "When to pick it",
+            "other": "You want an opinionated chat thread fast",
+            "vllnt": "You're building a whole AI-first product, not just a chat box"
+          }
+        }
+      },
+      "index": {
+        "cardTitle": "VLLNT UI vs {name}",
+        "comingSoon": "Page coming soon.",
+        "intro": "Honest comparisons. We call out where alternatives are stronger, where VLLNT UI fits better, and where the gap is small enough to not matter.",
+        "metaDescription": "Honest, evidence-based comparison of VLLNT UI vs shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+        "metaTitle": "VLLNT UI vs · Comparisons",
+        "taglines": {
+          "headlessUi": "Tailwind Labs primitives — different ecosystem.",
+          "nextui": "Component library with its own design language.",
+          "radix": "Accessible primitives — VLLNT UI is built on top of these.",
+          "shadcn": "Closest sibling. Same registry format. Different component count and agent surface."
+        },
+        "title": "VLLNT UI vs the rest"
+      },
+      "shadcn": {
+        "colAttribute": "Attribute",
+        "eyebrow": "Comparison · v{version}",
+        "metaDescription": "VLLNT UI vs shadcn/ui — registry format, component count, agent surface, theming, accessibility. Honest comparison.",
+        "metaTitle": "VLLNT UI vs shadcn/ui",
+        "rows": {
+          "a11yPrimitives": {
+            "attribute": "Accessibility primitives",
+            "shadcn": "Radix UI",
+            "vllnt": "Radix UI"
+          },
+          "a11ySchema": {
+            "attribute": "Per-component a11y schema in JSON",
+            "shadcn": "No",
+            "vllnt": "Yes — keyboard map, ARIA roles, focus model"
+          },
+          "communitySize": {
+            "attribute": "Community size",
+            "shadcn": "Massive — millions of installs",
+            "vllnt": "Smaller, growing"
+          },
+          "componentCount": {
+            "attribute": "Component count",
+            "shadcn": "~50 components",
+            "vllnt": "{count} components"
+          },
+          "examplesJson": {
+            "attribute": "Per-component examples in JSON",
+            "shadcn": "No",
+            "vllnt": "Yes — code-as-data, agent-readable"
+          },
+          "installModel": {
+            "attribute": "Install model",
+            "shadcn": "shadcn CLI against ui.shadcn.com/r",
+            "vllnt": "shadcn CLI against /r/'<name>'.json"
+          },
+          "license": {
+            "attribute": "License",
+            "shadcn": "MIT",
+            "vllnt": "MIT"
+          },
+          "llmsIndex": {
+            "attribute": "/llms.txt agent index",
+            "shadcn": "No",
+            "vllnt": "Yes — llmstxt.org compliant"
+          },
+          "mcpServer": {
+            "attribute": "MCP server",
+            "shadcn": "No",
+            "vllnt": "Yes — ui.vllnt.com/mcp (search/get/list tools)"
+          },
+          "namespaceRecognition": {
+            "attribute": "Namespace recognition",
+            "shadcn": "shadcn (industry standard)",
+            "vllnt": "@vllnt/ui (newer)"
+          },
+          "ownSource": {
+            "attribute": "You own the source after install",
+            "shadcn": "Yes",
+            "vllnt": "Yes"
+          },
+          "propsSchema": {
+            "attribute": "Per-component props schema in JSON",
+            "shadcn": "No",
+            "vllnt": "Yes — TSDoc-shaped"
+          },
+          "siblingResolution": {
+            "attribute": "Sibling-component resolution",
+            "shadcn": "All source inlined per component",
+            "vllnt": "Hybrid: leaf source + @vllnt/ui peer dep for siblings"
+          },
+          "templates": {
+            "attribute": "Templates / starter kits",
+            "shadcn": "Many official + community templates",
+            "vllnt": "Curated app templates for Next.js, dashboards, SaaS, AI chat, and docs"
+          },
+          "theming": {
+            "attribute": "Theming",
+            "shadcn": "CSS variables",
+            "vllnt": "CSS variables + design tokens (DESIGN.md)"
+          },
+          "tutorials": {
+            "attribute": "Tutorials + content",
+            "shadcn": "Extensive — countless videos, blogs, courses",
+            "vllnt": "Limited (young project)"
+          },
+          "variantSystem": {
+            "attribute": "Variant system",
+            "shadcn": "CVA",
+            "vllnt": "CVA"
+          },
+          "versionStability": {
+            "attribute": "version + stability per component",
+            "shadcn": "No",
+            "vllnt": "Yes (stable / beta / experimental / deprecated)"
+          }
+        },
+        "sideBySide": "Side-by-side",
+        "title": "VLLNT UI vs shadcn/ui",
+        "tldr1": "shadcn/ui is the industry standard. VLLNT UI is a younger sibling that takes the same registry idea further: more components, an agent-first surface (<code>/llms.txt</code>, <code>/mcp</code>, richer JSON descriptors), and a hybrid install model that dedupes shared primitives via <code>@vllnt/ui</code>.",
+        "tldr2": "If you want maximum community signal and the largest pool of third-party tutorials and templates, shadcn/ui wins. If you want the broadest curated component set and a registry that AI agents can read directly, VLLNT UI wins.",
+        "tldr3": "VLLNT UI now includes a <link>starter kit gallery</link> for finished app shells built from the registry.",
+        "tldrHeading": "TLDR",
+        "when1": "<strong>Pick shadcn/ui</strong> when you want the most-validated choice, need a large pool of tutorials, or are building something that benefits from being “just shadcn”.",
+        "when2": "<strong>Pick VLLNT UI</strong> when you need components beyond the shadcn core (timelines, maps, AI compounds, runtime overlays, canvas primitives), when AI agents are part of your authoring flow, or when you want the registry data structured enough to query programmatically.",
+        "when3": "The honest answer: many projects use both. shadcn/ui as the baseline, VLLNT UI for the families shadcn doesn’t cover. Same install model: they coexist cleanly.",
+        "whenHeading": "When to pick which"
+      },
+      "vercelAiSdk": {
+        "buildCta": "Build an AI chat UI with VLLNT UI",
+        "colAttribute": "Attribute",
+        "heading": "VLLNT UI vs Vercel AI SDK",
+        "intro": "These aren't competitors — they're layers. The Vercel AI SDK is the data layer that streams tokens and talks to model providers. VLLNT UI is the design system that renders the result: chat input, message bubbles, streaming text, tool calls, citations, and artifacts. Most AI apps want both.",
+        "metaDescription": "VLLNT UI vs the Vercel AI SDK: a UI design system you own vs a model/streaming runtime. They solve different problems and compose together. Honest comparison.",
+        "metaTitle": "VLLNT UI vs Vercel AI SDK",
+        "rows": {
+          "agentRegistry": {
+            "attribute": "Agent-readable registry",
+            "other": "No",
+            "vllnt": "Yes — llms.txt, llms-full.txt, per-component JSON"
+          },
+          "bestTogether": {
+            "attribute": "Best together?",
+            "other": "Use the AI SDK for the data layer — they compose cleanly",
+            "vllnt": "Use VLLNT UI for the interface"
+          },
+          "componentBreadth": {
+            "attribute": "Component breadth",
+            "other": "Focused on chat/conversation primitives",
+            "vllnt": "Full design system — chat plus the rest of the product UI"
+          },
+          "ownSource": {
+            "attribute": "You own the source",
+            "other": "Consumed as an npm dependency",
+            "vllnt": "Yes — installed via shadcn CLI into your repo"
+          },
+          "primaryJob": {
+            "attribute": "Primary job",
+            "other": "How the AI app talks to models and streams responses",
+            "vllnt": "How the AI app looks and behaves (chat, tools, citations, artifacts)"
+          },
+          "whatItIs": {
+            "attribute": "What it is",
+            "other": "A runtime/data layer — streaming, useChat, model providers",
+            "vllnt": "A UI design system — presentational React components you own"
+          }
+        }
+      }
+    }
+  },
+  "shared": {
+    "badge": {
+      "alt": "Built with VLLNT UI",
+      "copied": "Copied!",
+      "copy": "Copy",
+      "description": "Drop this into your README or site footer. The link points back to VLLNT UI, so every project that ships it helps others discover the library.",
+      "title": "Built something? Add the badge"
+    },
+    "code": "Code",
+    "onThisPage": "On This Page",
+    "preview": "Preview",
+    "quickAdd": {
+      "addToV0": "Add to v0.dev",
+      "copied": "Copied!",
+      "copyInstall": "Copy install command"
+    },
+    "shareEmbed": {
+      "copied": "Copied!",
+      "copyEmbedCode": "Copy embed code",
+      "copyLink": "Copy link",
+      "embed": "Embed",
+      "embedDescription": "Paste this into any blog or docs page to embed a live preview with a link back to VLLNT UI.",
+      "embedTitle": "Embed {title}",
+      "linkCopied": "Link copied!",
+      "share": "Share",
+      "shareDescription": "Share the {title} component",
+      "shareTitle": "Share {title}"
+    },
+    "storybookEmbed": {
+      "dark": "Dark",
+      "darkLabel": "Dark preview",
+      "description": "Switch between light and dark to inspect the embedded Storybook preview.",
+      "light": "Light",
+      "lightLabel": "Light preview",
+      "preview": "Preview",
+      "themeLabel": "Preview theme"
+    }
+  },
+  "sidebar": {
+    "components": "Components",
+    "documentation": "Documentation",
+    "getStarted": "Get Started",
+    "overview": "Overview",
+    "philosophy": "Philosophy",
+    "requestComponent": "Request a component",
+    "templates": "Templates",
+    "themes": "Themes"
   }
 }

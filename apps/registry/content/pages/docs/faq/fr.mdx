@@ -1,0 +1,51 @@
+---
+title: FAQ
+description: Reponses aux questions courantes sur les licences, les dependances de pair, les RSC, Tailwind et le support.
+type: docs
+og:
+  title: FAQ
+  description: Questions courantes sur VLLNT UI
+  type: docs
+---
+
+# FAQ
+
+## Quelle licence VLLNT UI utilise-t-elle ?
+
+Le projet est publie sous la licence du depot. Consultez `LICENSE` dans le depot pour le texte de licence canonique.
+
+## Est-ce un package ou un registre shadcn ?
+
+Les deux. Vous pouvez importer depuis `@vllnt/ui`, ou copier le code source des composants dans votre application avec la CLI shadcn et les descripteurs `/r/[name].json`.
+
+## Quelles sont les dependances de pair ?
+
+React, React DOM, Tailwind CSS et les primitives Radix sont les attentes importantes a l'execution. Chaque descripteur de registre liste ses dependances npm.
+
+## Prend-il en charge les React Server Components ?
+
+Les composants qui utilisent des hooks ou des API du navigateur sont des composants client. Les exports surs cote serveur peuvent etre rendus depuis des composants serveur, mais les composants interactifs doivent conserver leur directive `"use client"`.
+
+## Prend-il en charge Tailwind v4 ?
+
+Le site de registre utilise des classes utilitaires compatibles avec Tailwind et des variables semantiques. Verifiez le code source des composants et la configuration Tailwind de votre application lorsque vous copiez des composants dans un projet Tailwind v4.
+
+## Puis-je personnaliser le code source des composants ?
+
+Oui. L'installation depuis le registre copie le code source dans votre application. Gardez les modifications locales et relancez la CLI uniquement lorsque vous reconciliez intentionnellement les mises a jour en amont.
+
+## Les composants sont-ils accessibles ?
+
+L'accessibilite est une exigence fondamentale. Les composants utilisent la semantique native et les primitives Radix lorsque c'est approprie, et les tests couvrent les roles et interactions importants.
+
+## Comment signaler un bug ?
+
+Utilisez le lien de signalement sur la page du composant ou ouvrez une issue GitHub avec les details de reproduction, le comportement attendu et les informations sur l'environnement.
+
+## Les agents IA peuvent-ils utiliser le registre ?
+
+Oui. Utilisez `/llms.txt`, `/llms-full.txt`, `/r/registry.json` et `/r/[name].json` pour un contexte adapte aux agents.
+
+## A quelle frequence le registre est-il mis a jour ?
+
+Le registre est reconstruit lors du deploiement du site. Le JSON du registre inclut la version et des metadonnees generees afin que les consommateurs puissent comparer les changements.

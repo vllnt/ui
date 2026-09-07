@@ -1,13 +1,12 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
 import {
   generateLlmsFullText,
   type LlmsFullPage,
   type LlmsFullSection,
 } from "@vllnt/next-llms";
 
+import { routing } from "@/i18n/routing";
 import { getLatestReleaseRecords } from "@/lib/changelog";
+import { getPageContent } from "@/lib/content";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
 import { registry, type RegistryComponent } from "@/lib/registry";
 
@@ -43,20 +42,12 @@ function getRegistryComponents(): readonly RegistryComponent[] {
   return registry.items;
 }
 
-function stripFrontmatter(source: string): string {
-  if (!source.startsWith("---")) return source;
-  const end = source.indexOf("\n---", 3);
-  if (end === -1) return source;
-  return source.slice(end + 4).replace(/^\n+/, "");
-}
-
 async function readDocumentPage(slug: string): Promise<string> {
-  const file = path.join(process.cwd(), "content", "pages", `${slug}.mdx`);
   try {
-    const raw = await readFile(file, "utf8");
-    return stripFrontmatter(raw).trim();
+    const { content } = await getPageContent(slug, routing.defaultLocale);
+    return content.trim();
   } catch (error) {
-    console.error(`[llms-full.txt] failed to read ${file}`, error);
+    console.error(`[llms-full.txt] failed to read page "${slug}"`, error);
     return "";
   }
 }

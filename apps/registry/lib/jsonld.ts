@@ -1,3 +1,6 @@
+import type { Locale } from "@/i18n/routing";
+import { canonical } from "@/lib/seo";
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
 type JsonLdValue =
@@ -42,6 +45,9 @@ export function websiteLd(): JsonLdNode {
 
 export function softwareSourceCodeLd(component: {
   readonly description: string;
+  readonly image?: string;
+  readonly keywords?: readonly string[];
+  readonly locale: Locale;
   readonly name: string;
   readonly title: string;
 }): JsonLdNode {
@@ -50,11 +56,15 @@ export function softwareSourceCodeLd(component: {
     "@type": "SoftwareSourceCode",
     codeRepository: "https://github.com/vllnt/ui",
     description: component.description,
+    ...(component.image ? { image: component.image } : {}),
+    ...(component.keywords?.length
+      ? { keywords: component.keywords.join(", ") }
+      : {}),
     license: "https://opensource.org/license/mit",
     name: component.title,
     programmingLanguage: "TypeScript",
     runtimePlatform: "React",
-    url: `${SITE_URL}/components/${component.name}`,
+    url: canonical(`/components/${component.name}`, component.locale),
   };
 }
 
@@ -107,6 +117,35 @@ export function breadcrumbLd(
   };
 }
 
+/**
+ * Locale-aware breadcrumb. Callers pass locale-relative paths; {@link canonical}
+ * turns each into an absolute URL that matches the page's own locale canonical
+ * (e.g. `/fr/docs`). This helper adds the site root ("Home") as the first crumb.
+ * Prefer it over hand-building absolute URLs in a page.
+ *
+ * @param locale - active request locale
+ * @param trail - crumbs after Home, each `{ name, path }` where `path` is
+ *   locale-relative (leading slash), e.g. `{ name: "Docs", path: "/docs" }`
+ * @param homeName - label for the root crumb. Pass the translated string on a
+ *   localized page; defaults to `Home`.
+ */
+export function breadcrumbTrailLd(
+  locale: Locale,
+  trail: readonly {
+    readonly name: string;
+    readonly path: string;
+  }[],
+  homeName = "Home",
+): JsonLdNode {
+  return breadcrumbLd([
+    { name: homeName, url: canonical("/", locale) },
+    ...trail.map((step) => ({
+      name: step.name,
+      url: canonical(step.path, locale),
+    })),
+  ]);
+}
+
 export function collectionPageLd(page: {
   readonly description: string;
   readonly items: readonly { readonly name: string; readonly url: string }[];
@@ -133,27 +172,31 @@ export function collectionPageLd(page: {
 }
 
 export function techArticleLd(article: {
+  readonly dateModified?: string;
   readonly description: string;
+  readonly image?: string;
+  readonly inLanguage?: string;
+  readonly keywords?: readonly string[];
   readonly title: string;
   readonly url: string;
 }): JsonLdNode {
+  const org = { "@type": "Organization", name: "VLLNT", url: SITE_URL };
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
     about: "React component library documentation",
-    author: {
-      "@type": "Organization",
-      name: "VLLNT",
-      url: SITE_URL,
-    },
+    author: org,
     description: article.description,
     headline: article.title,
+    ...(article.dateModified ? { dateModified: article.dateModified } : {}),
+    ...(article.image ? { image: article.image } : {}),
+    ...(article.inLanguage ? { inLanguage: article.inLanguage } : {}),
+    ...(article.keywords?.length
+      ? { keywords: article.keywords.join(", ") }
+      : {}),
+    mainEntityOfPage: { "@id": article.url, "@type": "WebPage" },
     programmingLanguage: "TypeScript",
-    publisher: {
-      "@type": "Organization",
-      name: "VLLNT",
-      url: SITE_URL,
-    },
+    publisher: org,
     url: article.url,
   };
 }

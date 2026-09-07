@@ -37,21 +37,21 @@ export function Header({ locale }: HeaderProps) {
 
   const navItems = [
     { href: localizePathname("/", locale), title: t("navGetStarted") },
-    { href: localizePathname("/docs", locale), title: "Docs" },
+    { href: localizePathname("/docs", locale), title: t("navDocs") },
     {
       href: localizePathname("/philosophy", locale),
       title: t("navPhilosophy"),
     },
-    { href: localizePathname("/design", locale), title: "Design" },
+    { href: localizePathname("/design", locale), title: t("navDesign") },
     {
       href: localizePathname("/components", locale),
       title: t("navComponents"),
     },
-    { href: localizePathname("/templates", locale), title: "Templates" },
-    { href: localizePathname("/themes", locale), title: "Themes" },
+    { href: localizePathname("/templates", locale), title: t("navTemplates") },
+    { href: localizePathname("/themes", locale), title: t("navThemes") },
     {
       href: localizePathname("/request-component", locale),
-      title: "Request",
+      title: t("navRequest"),
     },
   ];
 
@@ -77,12 +77,13 @@ export function Header({ locale }: HeaderProps) {
       rightSlot={
         <div className="flex items-center gap-2">
           <SearchDialog
-            buttonText="Search..."
-            docsEmptyText="No docs found."
-            docsGroupHeading="Docs"
+            buttonText={t("searchButton")}
+            buttonTextMobile={t("searchButton")}
+            docsEmptyText={t("searchDocsEmpty")}
+            docsGroupHeading={t("searchDocsGroup")}
             docsSearch={searchPagefind}
-            emptyText="No results found."
-            groupHeading="Components"
+            emptyText={t("searchEmpty")}
+            groupHeading={t("searchGroup")}
             items={searchItems}
             onDocsSelect={(item) => {
               router.push(item.href ?? item.id);
@@ -92,24 +93,24 @@ export function Header({ locale }: HeaderProps) {
                 item.href ?? localizePathname(`/components/${item.id}`, locale),
               );
             }}
-            searchPlaceholder="Search docs and components..."
+            searchPlaceholder={t("searchPlaceholder")}
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline">
-                What&apos;s new
+                {t("whatsNew")}
                 <ChevronDown className="size-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link href="/releases">Releases</Link>
+                <Link href="/releases">{t("releases")}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/changelog">Changelog</Link>
+                <Link href="/changelog">{t("changelog")}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <a href="/rss.xml">RSS feed</a>
+                <a href="/rss.xml">{t("rssFeed")}</a>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

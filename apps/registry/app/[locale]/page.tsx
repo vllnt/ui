@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 
 import { Landing } from "@/components/landing/landing";
 import type { Locale } from "@/i18n/routing";
+import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { getNpmDistributionTags } from "@/lib/npm-version";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
@@ -43,10 +44,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const componentCount = getComponentCount();
 
   return (
     <>
-      <Sidebar sections={getSidebarSections(undefined, locale)} />
+      <script
+        {...jsonLdScriptAttributes(
+          softwareApplicationLd({
+            description: `Open-source React UI components and design system for building AI apps — ${componentCount} accessible components installable with the shadcn CLI and readable by AI agents via llms.txt.`,
+            installCommand:
+              "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[name].json",
+            name: "VLLNT UI",
+            url: canonical("/", locale),
+          }),
+        )}
+      />
+      <Sidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <Landing />
       </main>
