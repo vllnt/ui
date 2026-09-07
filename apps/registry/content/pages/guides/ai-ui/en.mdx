@@ -1,0 +1,41 @@
+---
+title: Build an AI interface with React components
+description: Compose AI message presentation with VLLNT UI while keeping model calls, persistence, and permissions in your application.
+type: docs
+---
+
+## Separate presentation from execution
+
+An AI interface needs more than a text box. It must distinguish user input, assistant output, tool activity, and failures. VLLNT UI provides presentation components; it does not supply a model backend, conversation database, or authorization policy. Keep credentials and permission checks on your server. Treat generated text and tool results as untrusted data.
+
+Start with the [installation guide](/docs/installation). Package consumers import `@vllnt/ui/styles.css` once and configure the Tailwind preset. Source-copy consumers should keep the copied component directories in their Tailwind content scan. The library targets React 19.
+
+## Render messages explicitly
+
+`AIMessageBubble` accepts `messageRole`, `author`, `status`, and children. The role selects visual presentation; it is not a provider message schema and does not grant authority to execute anything.
+
+```tsx
+import { AIMessageBubble } from "@vllnt/ui";
+
+export function AssistantReply({ text }: { text: string }) {
+  return (
+    <AIMessageBubble messageRole="assistant" author="Assistant">
+      {text}
+    </AIMessageBubble>
+  );
+}
+```
+
+Pass plain text as children when rich formatting is unnecessary. React escapes that text. If you introduce markdown or HTML, review the renderer's URL and HTML handling separately. Keep a stable application-generated identifier for each message rather than using changing text as a React key.
+
+## Model the request lifecycle
+
+Track idle, pending, complete, cancelled, and failed states in application code. A pending response is not an empty successful response. Preserve the user's draft when a request fails, show an actionable error, and make retry an explicit action. Avoid sending duplicate requests on repeated button presses.
+
+Tool results should remain distinct from assistant prose. Require confirmation before consequential operations and validate tool arguments on the server. A styled status badge is feedback, not a security boundary.
+
+## Verify before shipping
+
+Test keyboard submission, labelled inputs, long messages, narrow screens, and light and dark themes. Check that focus stays predictable after sending and that errors are announced without repeating the whole conversation. Do not log private prompts in client analytics.
+
+Continue with [streaming response rendering](/guides/streaming-ui), inspect [AIMessageBubble](/components/ai-message-bubble), or apply [semantic design tokens](/guides/design-tokens).

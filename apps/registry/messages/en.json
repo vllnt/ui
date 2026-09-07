@@ -1,4 +1,9 @@
 {
+  "guides": {
+    "title": "Implementation guides",
+    "description": "Practical React guides for AI interfaces, streaming responses, and semantic design tokens with VLLNT UI.",
+    "installation": "Install VLLNT UI"
+  },
   "common": {
     "backToHome": "Back home",
     "browseComponents": "Browse all components",

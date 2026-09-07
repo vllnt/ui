@@ -6,6 +6,7 @@ import { canonical } from "@/lib/seo";
 
 import { getAiComponentSlugs } from "../lib/ai-seo";
 import { groupedComponents } from "../lib/component-categories";
+import { getGuideSlugs } from "../lib/content-routes";
 import { DOCS_PAGES, getDocsPath } from "../lib/docs-pages";
 import { getTemplatePath, TEMPLATES } from "../lib/templates";
 import { getUseCasePath, USE_CASES } from "../lib/use-cases";
@@ -185,12 +186,21 @@ function registryRoutes(
   ];
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
   const items = getRegistryItems();
 
   return [
     ...staticRoutes(lastModified),
+    ...[
+      "/guides",
+      ...(await getGuideSlugs()).map((slug) => `/guides/${slug}`),
+    ].flatMap((path) =>
+      localizedEntries(
+        { changeFrequency: "monthly", path, priority: 0.75 },
+        lastModified,
+      ),
+    ),
     ...familyRoutes(lastModified),
     ...docsRoutes(lastModified),
     ...templateRoutes(lastModified),
