@@ -463,6 +463,31 @@
     ],
     "title": "Aspect Ratio"
   },
+  "audio-player": {
+    "category": "content",
+    "defaultStoryId": "components-audioplayer--default",
+    "description": "URL-backed audio controls with accessible seeking, optional transcript disclosure, and playback speed.",
+    "name": "audio-player",
+    "stories": [
+      {
+        "id": "components-audioplayer--default",
+        "name": "Default"
+      },
+      {
+        "id": "components-audioplayer--with-transcript",
+        "name": "With Transcript"
+      },
+      {
+        "id": "components-audioplayer--missing-source",
+        "name": "Missing Source"
+      },
+      {
+        "id": "components-audioplayer--unavailable-source",
+        "name": "Unavailable Source"
+      }
+    ],
+    "title": "Audio player"
+  },
   "auto-reload": {
     "category": "billing",
     "defaultStoryId": "billing-autoreload--default",
