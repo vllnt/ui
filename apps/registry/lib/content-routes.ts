@@ -37,8 +37,10 @@ export async function getGuideContent(slug: string, locale: Locale) {
 
 export async function getGuides(locale: Locale) {
   const slugs = await getGuideSlugs();
-  return Promise.all(slugs.map(async (slug) => {
-    const { frontmatter } = await getPageContent(`guides/${slug}`, locale);
-    return { slug, ...frontmatter };
-  }));
+  return Promise.all(
+    slugs.map(async (slug) => {
+      const { frontmatter } = await getPageContent(`guides/${slug}`, locale);
+      return { slug, ...frontmatter };
+    }),
+  );
 }

@@ -189,17 +189,16 @@ function registryRoutes(
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
   const items = getRegistryItems();
+  const guideSlugs = await getGuideSlugs();
 
   return [
     ...staticRoutes(lastModified),
-    ...[
-      "/guides",
-      ...(await getGuideSlugs()).map((slug) => `/guides/${slug}`),
-    ].flatMap((path) =>
-      localizedEntries(
-        { changeFrequency: "monthly", path, priority: 0.75 },
-        lastModified,
-      ),
+    ...["/guides", ...guideSlugs.map((slug) => `/guides/${slug}`)].flatMap(
+      (path) =>
+        localizedEntries(
+          { changeFrequency: "monthly", path, priority: 0.75 },
+          lastModified,
+        ),
     ),
     ...familyRoutes(lastModified),
     ...docsRoutes(lastModified),

@@ -1,4 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@/i18n/routing", () => ({
+  routing: { defaultLocale: "en", locales: ["en", "fr"] },
+}));
 
 import { routing } from "@/i18n/routing";
 import {
@@ -14,18 +18,22 @@ describe("guide content routes", () => {
       "design-tokens",
       "streaming-ui",
     ]);
-    for (const locale of routing.locales) {
-      const guides = await getGuides(locale);
-      expect(guides).toHaveLength(3);
-      for (const guide of guides) {
-        const page = await getGuideContent(guide.slug, locale);
-        expect(page?.locale).toBe(locale);
-        expect(page?.frontmatter.title).toBe(guide.title);
-        expect(page?.content.length).toBeGreaterThan(1500);
-        if (locale === "fr")
-          expect(page?.content).not.toMatch(/[\u00C0-\u017F]/);
-      }
-    }
+    await Promise.all(
+      routing.locales.map(async (locale) => {
+        const guides = await getGuides(locale);
+        expect(guides).toHaveLength(3);
+        await Promise.all(
+          guides.map(async (guide) => {
+            const page = await getGuideContent(guide.slug, locale);
+            expect(page?.locale).toBe(locale);
+            expect(page?.frontmatter.title).toBe(guide.title);
+            expect(page?.content.length).toBeGreaterThan(1500);
+            if (locale === "fr")
+              expect(page?.content).not.toMatch(/[\u00C0-\u017F]/);
+          }),
+        );
+      }),
+    );
   });
 
   it.each([
