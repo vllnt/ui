@@ -1,0 +1,44 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './audio-player.stories'
+
+<Meta of={Stories} />
+
+# Audio player
+
+URL-backed audio with native media events, accessible seeking and optional transcript and playback speed.
+
+<Primary />
+
+```tsx
+import { AudioPlayer } from '@vllnt/ui'
+
+<AudioPlayer
+  src="/interview.mp3"
+  title="Interview"
+  transcript="The complete spoken transcript…"
+  showPlaybackRate
+/>
+```
+
+<Canvas of={Stories.WithTranscript} />
+
+## Behavior
+
+The browser owns playback, buffering, duration and position. Playback rejection and media errors show actionable messages; play retries the source. Changing `src` stops the old audio and resets position, duration, speed and errors. There is no autoplay. Metadata is preloaded; unknown or infinite duration disables seeking. URLs must point to browser-supported audio, not an embed page.
+
+## Keyboard and accessibility
+
+Tab reaches the native controls. Space or Enter on the playback button plays or pauses. On that button, + / Right and - / Left seek five seconds; Home / End seek to the beginning / end. The native range supports arrows and Home / End, and announces elapsed and total time. Shortcuts never intercept the speed select or transcript. Source changes remount controls and may lose focus; consumers managing source selection should keep focus on their source selector.
+
+Provide `transcript` for spoken audio. It uses native details/summary disclosure. Optional `captionsSrc` accepts a WebVTT URL for the native text track; this custom audio UI does not display timed captions. There is no waveform, recording or download behavior.
+
+## Props
+
+<Controls />
+
+- `src`: required audio URL.
+- `title`: required player accessible name and visible title.
+- `transcript`: optional React content.
+- `captionsSrc`: optional WebVTT URL.
+- `showPlaybackRate`: show 0.5×–2× speed options; default false.
+- Root div props and React 19 `ref` are forwarded.

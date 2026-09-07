@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- `AudioPlayer` — URL-backed audio with keyboard controls, accessible seeking, playback speed, transcript disclosure, and native loading/error state.
 
 ## [0.3.0] - 2026-06-26
 

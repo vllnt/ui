@@ -1,3 +1,5 @@
+export { AudioPlayer, type AudioPlayerProps } from "./audio-player";
+
 // Core UI primitives
 export { Badge, type BadgeProps, badgeVariants } from "./badge";
 export {

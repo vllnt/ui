@@ -1,0 +1,16 @@
+{
+  "a11y": {
+    "role": "group",
+    "keyboard": [
+      { "keys": "Tab / Shift+Tab", "action": "move through playback, seek, optional speed and transcript controls" },
+      { "keys": "Space / Enter", "action": "play or pause when the playback button is focused; toggle transcript when its summary is focused" },
+      { "keys": "+ / ArrowRight", "action": "seek forward five seconds from the playback button" },
+      { "keys": "- / ArrowLeft", "action": "seek backward five seconds from the playback button" },
+      { "keys": "Home / End", "action": "seek to beginning or end from the playback button or slider" },
+      { "keys": "Arrow keys", "action": "adjust the native seek slider or playback speed select" }
+    ],
+    "aria": ["aria-label", "aria-valuetext", "aria-live"],
+    "focusManagement": "manual",
+    "notes": "Native button, range, select and details semantics. Shortcuts are scoped to the playback button and never intercept descendant input. Supply a transcript for spoken audio; source replacement resets the media session."
+  }
+}
