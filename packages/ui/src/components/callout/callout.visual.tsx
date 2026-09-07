@@ -8,8 +8,12 @@ test.describe("Callout Visual", () => {
       const component = await mount(
         <div className={theme}>
           <Callout composable variant="neutral" role="note">
-            <CalloutHeader><h2>Before you begin</h2></CalloutHeader>
-            <CalloutBody><p>Neutral content inherits consumer typography.</p></CalloutBody>
+            <CalloutHeader>
+              <h2>Before you begin</h2>
+            </CalloutHeader>
+            <CalloutBody>
+              <p>Neutral content inherits consumer typography.</p>
+            </CalloutBody>
           </Callout>
         </div>,
       );

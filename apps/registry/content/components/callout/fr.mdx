@@ -22,6 +22,27 @@ code, prete a etre adaptee :
 
 <Install />
 
+## Variante neutre et contenu libre
+
+Utilisez `variant="neutral"` pour une surface basee sur les tokens. Ajoutez
+`composable` pour rendre les enfants directement, sans titre, icone ou
+typographie de corps imposes. `CalloutHeader` et `CalloutBody` acceptent les
+props natives, les refs et `className`.
+
+```tsx
+import { Callout, CalloutBody, CalloutHeader } from "@vllnt/ui";
+
+<Callout composable variant="neutral" role="note" className="border-accent">
+  <CalloutHeader><h2>Note de lecture</h2></CalloutHeader>
+  <CalloutBody><p>Votre contenu et votre typographie.</p></CalloutBody>
+</Callout>
+```
+
+Utilisez `role="note"` pour un contenu editorial statique. Le role alert, les
+variantes colorees et la disposition existante restent inchanges sans
+remplacement explicite. En mode composable, fournissez les titres et icones
+comme enfants ; les props raccourcies `title` et `icon` ne sont pas rendues.
+
 ## Source
 
 <Code />
