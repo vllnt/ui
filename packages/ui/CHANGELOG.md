@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-_Nothing yet._
+### Added
+
+- **Callout composition** — semantic-token `neutral` variant, explicit `composable` opt-in, and typography-free `CalloutHeader` / `CalloutBody` with React 19 refs. Existing colored variants, default titles, layout, and alert role remain unchanged. The root now accepts native div props and refs (#474).
 
 ## [0.3.0] - 2026-06-26
 
