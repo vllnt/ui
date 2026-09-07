@@ -27,7 +27,7 @@ function metadata(audio: HTMLAudioElement, duration = 120) {
 describe("AudioPlayer", () => {
   beforeEach(() => {
     vi.spyOn(HTMLMediaElement.prototype, "play").mockResolvedValue();
-    vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(() => {});
+    vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(vi.fn());
   });
   afterEach(() => {
     cleanup();

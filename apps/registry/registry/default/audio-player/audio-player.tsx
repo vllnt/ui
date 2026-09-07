@@ -3,8 +3,8 @@
 import { Pause, Play } from "lucide-react";
 import type { ComponentPropsWithRef, ReactNode } from "react";
 
-import { cn } from "../../lib/utils";
-import { Button } from "../button";
+import { cn } from "@vllnt/ui";
+import { Button } from "@vllnt/ui";
 
 import { useAudioPlayer } from "./use-audio-player";
 

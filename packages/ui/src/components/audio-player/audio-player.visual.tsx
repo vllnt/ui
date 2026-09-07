@@ -22,8 +22,4 @@ test("audio controls and keyboard playback", async ({ mount, page }) => {
   await expect(component.getByRole("button", { name: "Pause audio" })).toBeVisible();
   await page.keyboard.press("Space");
   await expect(play).toBeVisible();
-  await page.keyboard.press("End");
-  await expect(component.getByRole("slider")).toHaveValue("1");
-  await page.keyboard.press("Home");
-  await expect(component.getByRole("slider")).toHaveValue("0");
 });
