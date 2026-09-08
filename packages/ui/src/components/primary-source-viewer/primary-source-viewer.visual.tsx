@@ -22,7 +22,12 @@ test.describe("PrimarySourceViewer Visual", () => {
         period="Medieval"
         source={{
           alt: "Historical document",
-          src: "https://placehold.co/800x500/0d1117/d0d0d0/png?text=Primary+Source",
+          src: `data:image/svg+xml,${encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500">' +
+              '<rect width="800" height="500" fill="#0d1117"/>' +
+              '<text x="400" y="250" text-anchor="middle" dominant-baseline="middle" ' +
+              'font-family="Arial, sans-serif" font-size="64" fill="#d0d0d0">Primary Source</text></svg>',
+          )}`,
           type: "image",
         }}
         title="Magna Carta (1215)"
@@ -65,6 +70,9 @@ test.describe("PrimarySourceViewer Visual", () => {
         </PrimarySourceContext>
       </PrimarySourceViewer>,
     );
+    await expect(
+      component.getByRole("img", { name: "Historical document" }),
+    ).toHaveJSProperty("naturalWidth", 800);
     await expect(component).toHaveScreenshot(
       "primary-source-viewer-default.png",
     );
