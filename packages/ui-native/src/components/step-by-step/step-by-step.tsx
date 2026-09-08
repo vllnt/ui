@@ -3,6 +3,7 @@
 import {
   Children,
   cloneElement,
+  Fragment,
   isValidElement,
   type ReactNode,
   type Ref,
@@ -200,75 +201,76 @@ function StepByStepRoot({
           ...stepProps
         } = step.props;
         return (
-          <View
-            {...stepProps}
-            id={id}
-            key={id}
-            ref={stepRef}
-            style={[
-              styles.row,
-              { gap: theme.spacing[4], opacity: completed ? 0.65 : 1 },
-              stepStyle,
-            ]}
-          >
-            <Pressable
-              accessibilityLabel={labels?.toggleStep(stepTitle, completed)}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: completed }}
-              nativeID={`step-by-step-${id}`}
-              onPress={() => {
-                const next = completed
-                  ? completedIds.filter((completedId) => completedId !== id)
-                  : [...completedIds, id];
-                setCompletedIds(next);
-              }}
-              style={styles.toggle}
+          <Fragment key={id}>
+            <View
+              {...stepProps}
+              id={id}
+              ref={stepRef}
+              style={[
+                styles.row,
+                { gap: theme.spacing[4], opacity: completed ? 0.65 : 1 },
+                stepStyle,
+              ]}
             >
-              <View
-                style={[
-                  styles.marker,
-                  {
-                    backgroundColor: theme.colors.primary,
-                    borderRadius: theme.radius.full,
-                  },
-                ]}
+              <Pressable
+                accessibilityLabel={labels?.toggleStep(stepTitle, completed)}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: completed }}
+                nativeID={`step-by-step-${id}`}
+                onPress={() => {
+                  const next = completed
+                    ? completedIds.filter((completedId) => completedId !== id)
+                    : [...completedIds, id];
+                  setCompletedIds(next);
+                }}
+                style={styles.toggle}
               >
-                <Text
+                <View
                   style={[
-                    theme.typography.scale.bodySmall,
+                    styles.marker,
                     {
-                      color: theme.colors.primaryForeground,
-                      fontWeight: theme.typography.fontWeight.heading,
+                      backgroundColor: theme.colors.primary,
+                      borderRadius: theme.radius.full,
                     },
                   ]}
                 >
-                  {completed ? "✓" : (number ?? index + 1)}
-                </Text>
-              </View>
-            </Pressable>
-            <View
-              style={{
-                flex: 1,
-                gap: theme.spacing[2],
-                paddingBottom: theme.spacing[8],
-              }}
-            >
-              <Text
-                accessibilityRole="header"
-                style={[
-                  theme.typography.scale.bodyLarge,
-                  {
-                    color: theme.colors.foreground,
-                    fontWeight: theme.typography.fontWeight.heading,
-                    textDecorationLine: completed ? "line-through" : "none",
-                  },
-                ]}
+                  <Text
+                    style={[
+                      theme.typography.scale.bodySmall,
+                      {
+                        color: theme.colors.primaryForeground,
+                        fontWeight: theme.typography.fontWeight.heading,
+                      },
+                    ]}
+                  >
+                    {completed ? "✓" : (number ?? index + 1)}
+                  </Text>
+                </View>
+              </Pressable>
+              <View
+                style={{
+                  flex: 1,
+                  gap: theme.spacing[2],
+                  paddingBottom: theme.spacing[8],
+                }}
               >
-                {stepTitle}
-              </Text>
-              {stepChildren}
+                <Text
+                  accessibilityRole="header"
+                  style={[
+                    theme.typography.scale.bodyLarge,
+                    {
+                      color: theme.colors.foreground,
+                      fontWeight: theme.typography.fontWeight.heading,
+                      textDecorationLine: completed ? "line-through" : "none",
+                    },
+                  ]}
+                >
+                  {stepTitle}
+                </Text>
+                {stepChildren}
+              </View>
             </View>
-          </View>
+          </Fragment>
         );
       })}
     </View>

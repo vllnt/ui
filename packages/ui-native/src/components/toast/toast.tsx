@@ -73,6 +73,7 @@ function Toast({
     new Map<
       SelectionKey,
       {
+        readonly deadline: number;
         readonly duration: number;
         readonly timer: ReturnType<typeof setTimeout>;
       }
@@ -125,26 +126,25 @@ function Toast({
         announcedIds.current.add(toast.id);
       }
       if (
-        !timerMap.has(toast.id) &&
         !dismissedIds.current.has(toast.id) &&
         toast.duration !== undefined &&
         toast.duration > 0
       ) {
-        const timer = setTimeout(() => {
-          dismiss(toast.id);
-        }, toast.duration);
-        timerMap.set(toast.id, { duration: toast.duration, timer });
+        const deadline =
+          timerMap.get(toast.id)?.deadline ?? Date.now() + toast.duration;
+        const timer = setTimeout(
+          () => {
+            dismiss(toast.id);
+          },
+          Math.max(0, deadline - Date.now()),
+        );
+        timerMap.set(toast.id, { deadline, duration: toast.duration, timer });
       }
     }
+    return () => {
+      for (const entry of timerMap.values()) clearTimeout(entry.timer);
+    };
   }, [toasts]);
-
-  useEffect(
-    () => () => {
-      for (const entry of timers.current.values()) clearTimeout(entry.timer);
-      timers.current.clear();
-    },
-    [],
-  );
 
   return (
     <View
