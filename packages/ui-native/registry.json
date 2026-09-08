@@ -1,0 +1,876 @@
+{
+  "$schema": "./registry.schema.json",
+  "schemaVersion": "1.0.0",
+  "package": "@vllnt/ui-native",
+  "channel": "canary",
+  "status": "experimental",
+  "availability": "source",
+  "minimumReact": "19.0.0",
+  "minimumReactNative": "0.81.0",
+  "installation": {
+    "available": false,
+    "command": "pnpm add @vllnt/ui-native@canary",
+    "reason": "The first synchronized native canary has not been published."
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0 <20",
+    "react-native": ">=0.81.0 <1"
+  },
+  "components": [
+    {
+      "name": "accordion",
+      "compatibility": "native-adapted",
+      "source": "src/components/accordion/accordion.tsx"
+    },
+    {
+      "name": "activity-log",
+      "compatibility": "native-adapted",
+      "source": "src/components/activity-log/activity-log.tsx"
+    },
+    {
+      "name": "agent-activity",
+      "compatibility": "native-adapted",
+      "source": "src/components/agent-activity/agent-activity.tsx"
+    },
+    {
+      "name": "ai-artifact",
+      "compatibility": "native-adapted",
+      "source": "src/components/ai-artifact/ai-artifact.tsx"
+    },
+    {
+      "name": "ai-chat-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/ai-chat-input/ai-chat-input.tsx"
+    },
+    {
+      "name": "ai-message-bubble",
+      "compatibility": "native-adapted",
+      "source": "src/components/ai-message-bubble/ai-message-bubble.tsx"
+    },
+    {
+      "name": "ai-source-citation",
+      "compatibility": "native-adapted",
+      "source": "src/components/ai-source-citation/ai-source-citation.tsx"
+    },
+    {
+      "name": "ai-streaming-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/ai-streaming-text/ai-streaming-text.tsx"
+    },
+    {
+      "name": "ai-tool-call-display",
+      "compatibility": "native-adapted",
+      "source": "src/components/ai-tool-call-display/ai-tool-call-display.tsx"
+    },
+    {
+      "name": "alert",
+      "compatibility": "native-adapted",
+      "source": "src/components/alert/alert.tsx"
+    },
+    {
+      "name": "alert-dialog",
+      "compatibility": "native-adapted",
+      "source": "src/components/alert-dialog/alert-dialog.tsx"
+    },
+    {
+      "name": "animated-list",
+      "compatibility": "native-adapted",
+      "source": "src/components/animated-list/animated-list.tsx"
+    },
+    {
+      "name": "animated-tabs",
+      "compatibility": "native-adapted",
+      "source": "src/components/animated-tabs/animated-tabs.tsx"
+    },
+    {
+      "name": "animated-testimonials",
+      "compatibility": "native-adapted",
+      "source": "src/components/animated-testimonials/animated-testimonials.tsx"
+    },
+    {
+      "name": "animated-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/animated-text/animated-text.tsx"
+    },
+    {
+      "name": "aspect-ratio",
+      "compatibility": "native-adapted",
+      "source": "src/components/aspect-ratio/aspect-ratio.tsx"
+    },
+    {
+      "name": "avatar",
+      "compatibility": "native-adapted",
+      "source": "src/components/avatar/avatar.tsx"
+    },
+    {
+      "name": "avatar-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/avatar-group/avatar-group.tsx"
+    },
+    {
+      "name": "badge",
+      "compatibility": "portable-options",
+      "source": "src/components/badge/badge.tsx"
+    },
+    {
+      "name": "banner",
+      "compatibility": "native-adapted",
+      "source": "src/components/banner/banner.tsx"
+    },
+    {
+      "name": "blur-reveal",
+      "compatibility": "native-adapted",
+      "source": "src/components/blur-reveal/blur-reveal.tsx"
+    },
+    {
+      "name": "bottom-bar",
+      "compatibility": "native-adapted",
+      "source": "src/components/bottom-bar/bottom-bar.tsx"
+    },
+    {
+      "name": "breadcrumb",
+      "compatibility": "native-adapted",
+      "source": "src/components/breadcrumb/breadcrumb.tsx"
+    },
+    {
+      "name": "button",
+      "compatibility": "portable-options",
+      "source": "src/components/button/button.tsx"
+    },
+    {
+      "name": "button-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/button-group/button-group.tsx"
+    },
+    {
+      "name": "calendar",
+      "compatibility": "native-adapted",
+      "source": "src/components/calendar/calendar.tsx"
+    },
+    {
+      "name": "callout",
+      "compatibility": "native-adapted",
+      "source": "src/components/callout/callout.tsx"
+    },
+    {
+      "name": "card",
+      "compatibility": "portable-options",
+      "source": "src/components/card/card.tsx"
+    },
+    {
+      "name": "carousel",
+      "compatibility": "native-adapted",
+      "source": "src/components/carousel/carousel.tsx"
+    },
+    {
+      "name": "category-filter",
+      "compatibility": "native-adapted",
+      "source": "src/components/category-filter/category-filter.tsx"
+    },
+    {
+      "name": "chain-of-thought",
+      "compatibility": "native-adapted",
+      "source": "src/components/chain-of-thought/chain-of-thought.tsx"
+    },
+    {
+      "name": "checkbox",
+      "compatibility": "native-adapted",
+      "source": "src/components/checkbox/checkbox.tsx"
+    },
+    {
+      "name": "checkbox-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/checkbox-group/checkbox-group.tsx"
+    },
+    {
+      "name": "checklist",
+      "compatibility": "native-adapted",
+      "source": "src/components/checklist/checklist.tsx"
+    },
+    {
+      "name": "code-block",
+      "compatibility": "native-adapted",
+      "source": "src/components/code-block/code-block.tsx"
+    },
+    {
+      "name": "collapsible",
+      "compatibility": "native-adapted",
+      "source": "src/components/collapsible/collapsible.tsx"
+    },
+    {
+      "name": "color-picker",
+      "compatibility": "native-adapted",
+      "source": "src/components/color-picker/color-picker.tsx"
+    },
+    {
+      "name": "combobox",
+      "compatibility": "native-adapted",
+      "source": "src/components/combobox/combobox.tsx"
+    },
+    {
+      "name": "command",
+      "compatibility": "native-adapted",
+      "source": "src/components/command/command.tsx"
+    },
+    {
+      "name": "completion-dialog",
+      "compatibility": "native-adapted",
+      "source": "src/components/completion-dialog/completion-dialog.tsx"
+    },
+    {
+      "name": "content-intro",
+      "compatibility": "native-adapted",
+      "source": "src/components/content-intro/content-intro.tsx"
+    },
+    {
+      "name": "context-menu",
+      "compatibility": "native-adapted",
+      "source": "src/components/context-menu/context-menu.tsx"
+    },
+    {
+      "name": "conversation-thread",
+      "compatibility": "native-adapted",
+      "source": "src/components/conversation-thread/conversation-thread.tsx"
+    },
+    {
+      "name": "copy-button",
+      "compatibility": "native-adapted",
+      "source": "src/components/copy-button/copy-button.tsx"
+    },
+    {
+      "name": "countdown-timer",
+      "compatibility": "native-adapted",
+      "source": "src/components/countdown-timer/countdown-timer.tsx"
+    },
+    {
+      "name": "credit-badge",
+      "compatibility": "native-adapted",
+      "source": "src/components/credit-badge/credit-badge.tsx"
+    },
+    {
+      "name": "data-list",
+      "compatibility": "native-adapted",
+      "source": "src/components/data-list/data-list.tsx"
+    },
+    {
+      "name": "date-field",
+      "compatibility": "native-adapted",
+      "source": "src/components/date-field/date-field.tsx"
+    },
+    {
+      "name": "date-picker",
+      "compatibility": "native-adapted",
+      "source": "src/components/date-picker/date-picker.tsx"
+    },
+    {
+      "name": "date-range-picker",
+      "compatibility": "native-adapted",
+      "source": "src/components/date-range-picker/date-range-picker.tsx"
+    },
+    {
+      "name": "dialog",
+      "compatibility": "native-adapted",
+      "source": "src/components/dialog/dialog.tsx"
+    },
+    {
+      "name": "document-sibling-nav",
+      "compatibility": "native-adapted",
+      "source": "src/components/document-sibling-nav/document-sibling-nav.tsx"
+    },
+    {
+      "name": "drawer",
+      "compatibility": "native-adapted",
+      "source": "src/components/drawer/drawer.tsx"
+    },
+    {
+      "name": "dropdown-menu",
+      "compatibility": "native-adapted",
+      "source": "src/components/dropdown-menu/dropdown-menu.tsx"
+    },
+    {
+      "name": "empty-state",
+      "compatibility": "native-adapted",
+      "source": "src/components/empty-state/empty-state.tsx"
+    },
+    {
+      "name": "exercise",
+      "compatibility": "native-adapted",
+      "source": "src/components/exercise/exercise.tsx"
+    },
+    {
+      "name": "expandable-cards",
+      "compatibility": "native-adapted",
+      "source": "src/components/expandable-cards/expandable-cards.tsx"
+    },
+    {
+      "name": "faq",
+      "compatibility": "native-adapted",
+      "source": "src/components/faq/faq.tsx"
+    },
+    {
+      "name": "field",
+      "compatibility": "native-adapted",
+      "source": "src/components/field/field.tsx"
+    },
+    {
+      "name": "fieldset",
+      "compatibility": "native-adapted",
+      "source": "src/components/fieldset/fieldset.tsx"
+    },
+    {
+      "name": "file-upload",
+      "compatibility": "native-adapted",
+      "source": "src/components/file-upload/file-upload.tsx"
+    },
+    {
+      "name": "filter-bar",
+      "compatibility": "native-adapted",
+      "source": "src/components/filter-bar/filter-bar.tsx"
+    },
+    {
+      "name": "flashcard",
+      "compatibility": "native-adapted",
+      "source": "src/components/flashcard/flashcard.tsx"
+    },
+    {
+      "name": "floating-action-button",
+      "compatibility": "native-adapted",
+      "source": "src/components/floating-action-button/floating-action-button.tsx"
+    },
+    {
+      "name": "floating-toolbar",
+      "compatibility": "native-adapted",
+      "source": "src/components/floating-toolbar/floating-toolbar.tsx"
+    },
+    {
+      "name": "form",
+      "compatibility": "native-adapted",
+      "source": "src/components/form/form.tsx"
+    },
+    {
+      "name": "glass-progress",
+      "compatibility": "native-adapted",
+      "source": "src/components/glass-progress/glass-progress.tsx"
+    },
+    {
+      "name": "grid",
+      "compatibility": "native-adapted",
+      "source": "src/components/grid/grid.tsx"
+    },
+    {
+      "name": "heading",
+      "compatibility": "portable-options",
+      "source": "src/components/heading/heading.tsx"
+    },
+    {
+      "name": "horizontal-scroll-row",
+      "compatibility": "native-adapted",
+      "source": "src/components/horizontal-scroll-row/horizontal-scroll-row.tsx"
+    },
+    {
+      "name": "inline-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/inline-input/inline-input.tsx"
+    },
+    {
+      "name": "input",
+      "compatibility": "native-adapted",
+      "source": "src/components/input/input.tsx"
+    },
+    {
+      "name": "input-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/input-group/input-group.tsx"
+    },
+    {
+      "name": "input-otp",
+      "compatibility": "native-adapted",
+      "source": "src/components/input-otp/input-otp.tsx"
+    },
+    {
+      "name": "interactive-timeline",
+      "compatibility": "native-adapted",
+      "source": "src/components/interactive-timeline/interactive-timeline.tsx"
+    },
+    {
+      "name": "item",
+      "compatibility": "native-adapted",
+      "source": "src/components/item/item.tsx"
+    },
+    {
+      "name": "keyboard-shortcuts-help",
+      "compatibility": "native-adapted",
+      "source": "src/components/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx"
+    },
+    {
+      "name": "label",
+      "compatibility": "native-adapted",
+      "source": "src/components/label/label.tsx"
+    },
+    {
+      "name": "link",
+      "compatibility": "native-adapted",
+      "source": "src/components/link/link.tsx"
+    },
+    {
+      "name": "list-box",
+      "compatibility": "native-adapted",
+      "source": "src/components/list-box/list-box.tsx"
+    },
+    {
+      "name": "live-feed",
+      "compatibility": "native-adapted",
+      "source": "src/components/live-feed/live-feed.tsx"
+    },
+    {
+      "name": "marquee",
+      "compatibility": "native-adapted",
+      "source": "src/components/marquee/marquee.tsx"
+    },
+    {
+      "name": "menubar",
+      "compatibility": "native-adapted",
+      "source": "src/components/menubar/menubar.tsx"
+    },
+    {
+      "name": "meter",
+      "compatibility": "native-adapted",
+      "source": "src/components/meter/meter.tsx"
+    },
+    {
+      "name": "metric-cluster",
+      "compatibility": "native-adapted",
+      "source": "src/components/metric-cluster/metric-cluster.tsx"
+    },
+    {
+      "name": "model-selector",
+      "compatibility": "native-adapted",
+      "source": "src/components/model-selector/model-selector.tsx"
+    },
+    {
+      "name": "multi-select",
+      "compatibility": "native-adapted",
+      "source": "src/components/multi-select/multi-select.tsx"
+    },
+    {
+      "name": "native-select",
+      "compatibility": "native-adapted",
+      "source": "src/components/native-select/native-select.tsx"
+    },
+    {
+      "name": "navigation-menu",
+      "compatibility": "native-adapted",
+      "source": "src/components/navigation-menu/navigation-menu.tsx"
+    },
+    {
+      "name": "number-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/number-input/number-input.tsx"
+    },
+    {
+      "name": "number-ticker",
+      "compatibility": "native-adapted",
+      "source": "src/components/number-ticker/number-ticker.tsx"
+    },
+    {
+      "name": "overview-board",
+      "compatibility": "native-adapted",
+      "source": "src/components/overview-board/overview-board.tsx"
+    },
+    {
+      "name": "pagination",
+      "compatibility": "native-adapted",
+      "source": "src/components/pagination/pagination.tsx"
+    },
+    {
+      "name": "panel",
+      "compatibility": "native-adapted",
+      "source": "src/components/panel/panel.tsx"
+    },
+    {
+      "name": "password-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/password-input/password-input.tsx"
+    },
+    {
+      "name": "phone-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/phone-input/phone-input.tsx"
+    },
+    {
+      "name": "plan-badge",
+      "compatibility": "native-adapted",
+      "source": "src/components/plan-badge/plan-badge.tsx"
+    },
+    {
+      "name": "popover",
+      "compatibility": "native-adapted",
+      "source": "src/components/popover/popover.tsx"
+    },
+    {
+      "name": "presence-stack",
+      "compatibility": "native-adapted",
+      "source": "src/components/presence-stack/presence-stack.tsx"
+    },
+    {
+      "name": "presence-sync-indicator",
+      "compatibility": "native-adapted",
+      "source": "src/components/presence-sync-indicator/presence-sync-indicator.tsx"
+    },
+    {
+      "name": "progress-bar",
+      "compatibility": "native-adapted",
+      "source": "src/components/progress-bar/progress-bar.tsx"
+    },
+    {
+      "name": "progress-card",
+      "compatibility": "native-adapted",
+      "source": "src/components/progress-card/progress-card.tsx"
+    },
+    {
+      "name": "progress-tracker",
+      "compatibility": "native-adapted",
+      "source": "src/components/progress-tracker/progress-tracker.tsx"
+    },
+    {
+      "name": "prompt-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/prompt-input/prompt-input.tsx"
+    },
+    {
+      "name": "quiz",
+      "compatibility": "native-adapted",
+      "source": "src/components/quiz/quiz.tsx"
+    },
+    {
+      "name": "radio-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/radio-group/radio-group.tsx"
+    },
+    {
+      "name": "range-calendar",
+      "compatibility": "native-adapted",
+      "source": "src/components/range-calendar/range-calendar.tsx"
+    },
+    {
+      "name": "rating",
+      "compatibility": "native-adapted",
+      "source": "src/components/rating/rating.tsx"
+    },
+    {
+      "name": "reasoning",
+      "compatibility": "native-adapted",
+      "source": "src/components/reasoning/reasoning.tsx"
+    },
+    {
+      "name": "resizable",
+      "compatibility": "native-adapted",
+      "source": "src/components/resizable/resizable.tsx"
+    },
+    {
+      "name": "reveal-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/reveal-text/reveal-text.tsx"
+    },
+    {
+      "name": "role-badge",
+      "compatibility": "native-adapted",
+      "source": "src/components/role-badge/role-badge.tsx"
+    },
+    {
+      "name": "scramble-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/scramble-text/scramble-text.tsx"
+    },
+    {
+      "name": "scroll-progress",
+      "compatibility": "native-adapted",
+      "source": "src/components/scroll-progress/scroll-progress.tsx"
+    },
+    {
+      "name": "search-bar",
+      "compatibility": "native-adapted",
+      "source": "src/components/search-bar/search-bar.tsx"
+    },
+    {
+      "name": "search-dialog",
+      "compatibility": "native-adapted",
+      "source": "src/components/search-dialog/search-dialog.tsx"
+    },
+    {
+      "name": "search-field",
+      "compatibility": "native-adapted",
+      "source": "src/components/search-field/search-field.tsx"
+    },
+    {
+      "name": "segmented-control",
+      "compatibility": "native-adapted",
+      "source": "src/components/segmented-control/segmented-control.tsx"
+    },
+    {
+      "name": "select",
+      "compatibility": "native-adapted",
+      "source": "src/components/select/select.tsx"
+    },
+    {
+      "name": "separator",
+      "compatibility": "native-adapted",
+      "source": "src/components/separator/separator.tsx"
+    },
+    {
+      "name": "severity-badge",
+      "compatibility": "native-adapted",
+      "source": "src/components/severity-badge/severity-badge.tsx"
+    },
+    {
+      "name": "share-dialog",
+      "compatibility": "native-adapted",
+      "source": "src/components/share-dialog/share-dialog.tsx"
+    },
+    {
+      "name": "share-section",
+      "compatibility": "native-adapted",
+      "source": "src/components/share-section/share-section.tsx"
+    },
+    {
+      "name": "sheet",
+      "compatibility": "native-adapted",
+      "source": "src/components/sheet/sheet.tsx"
+    },
+    {
+      "name": "shimmer-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/shimmer-text/shimmer-text.tsx"
+    },
+    {
+      "name": "sidebar",
+      "compatibility": "native-adapted",
+      "source": "src/components/sidebar/sidebar.tsx"
+    },
+    {
+      "name": "sidebar-provider",
+      "compatibility": "native-adapted",
+      "source": "src/components/sidebar-provider/sidebar-provider.tsx"
+    },
+    {
+      "name": "sidebar-toggle",
+      "compatibility": "native-adapted",
+      "source": "src/components/sidebar-toggle/sidebar-toggle.tsx"
+    },
+    {
+      "name": "skeleton",
+      "compatibility": "native-adapted",
+      "source": "src/components/skeleton/skeleton.tsx"
+    },
+    {
+      "name": "slider",
+      "compatibility": "native-adapted",
+      "source": "src/components/slider/slider.tsx"
+    },
+    {
+      "name": "slideshow",
+      "compatibility": "native-adapted",
+      "source": "src/components/slideshow/slideshow.tsx"
+    },
+    {
+      "name": "spinner",
+      "compatibility": "native-adapted",
+      "source": "src/components/spinner/spinner.tsx"
+    },
+    {
+      "name": "spinning-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/spinning-text/spinning-text.tsx"
+    },
+    {
+      "name": "stat-card",
+      "compatibility": "native-adapted",
+      "source": "src/components/stat-card/stat-card.tsx"
+    },
+    {
+      "name": "status-board",
+      "compatibility": "native-adapted",
+      "source": "src/components/status-board/status-board.tsx"
+    },
+    {
+      "name": "status-indicator",
+      "compatibility": "native-adapted",
+      "source": "src/components/status-indicator/status-indicator.tsx"
+    },
+    {
+      "name": "step-by-step",
+      "compatibility": "native-adapted",
+      "source": "src/components/step-by-step/step-by-step.tsx"
+    },
+    {
+      "name": "step-navigation",
+      "compatibility": "native-adapted",
+      "source": "src/components/step-navigation/step-navigation.tsx"
+    },
+    {
+      "name": "stepper",
+      "compatibility": "native-adapted",
+      "source": "src/components/stepper/stepper.tsx"
+    },
+    {
+      "name": "sticky-metric",
+      "compatibility": "native-adapted",
+      "source": "src/components/sticky-metric/sticky-metric.tsx"
+    },
+    {
+      "name": "switch",
+      "compatibility": "native-adapted",
+      "source": "src/components/switch/switch.tsx"
+    },
+    {
+      "name": "tabs",
+      "compatibility": "native-adapted",
+      "source": "src/components/tabs/tabs.tsx"
+    },
+    {
+      "name": "tag-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/tag-group/tag-group.tsx"
+    },
+    {
+      "name": "tags-input",
+      "compatibility": "native-adapted",
+      "source": "src/components/tags-input/tags-input.tsx"
+    },
+    {
+      "name": "terminal",
+      "compatibility": "native-adapted",
+      "source": "src/components/terminal/terminal.tsx"
+    },
+    {
+      "name": "text",
+      "compatibility": "portable-options",
+      "source": "src/components/text/text.tsx"
+    },
+    {
+      "name": "text-animate",
+      "compatibility": "native-adapted",
+      "source": "src/components/text-animate/text-animate.tsx"
+    },
+    {
+      "name": "text-field",
+      "compatibility": "native-adapted",
+      "source": "src/components/text-field/text-field.tsx"
+    },
+    {
+      "name": "text-reveal",
+      "compatibility": "native-adapted",
+      "source": "src/components/text-reveal/text-reveal.tsx"
+    },
+    {
+      "name": "text-shimmer",
+      "compatibility": "native-adapted",
+      "source": "src/components/text-shimmer/text-shimmer.tsx"
+    },
+    {
+      "name": "textarea",
+      "compatibility": "native-adapted",
+      "source": "src/components/textarea/textarea.tsx"
+    },
+    {
+      "name": "thinking-block",
+      "compatibility": "native-adapted",
+      "source": "src/components/thinking-block/thinking-block.tsx"
+    },
+    {
+      "name": "time-field",
+      "compatibility": "native-adapted",
+      "source": "src/components/time-field/time-field.tsx"
+    },
+    {
+      "name": "time-picker",
+      "compatibility": "native-adapted",
+      "source": "src/components/time-picker/time-picker.tsx"
+    },
+    {
+      "name": "timeline-scrubber",
+      "compatibility": "native-adapted",
+      "source": "src/components/timeline-scrubber/timeline-scrubber.tsx"
+    },
+    {
+      "name": "tldr-section",
+      "compatibility": "native-adapted",
+      "source": "src/components/tldr-section/tldr-section.tsx"
+    },
+    {
+      "name": "toast",
+      "compatibility": "native-adapted",
+      "source": "src/components/toast/toast.tsx"
+    },
+    {
+      "name": "toggle",
+      "compatibility": "native-adapted",
+      "source": "src/components/toggle/toggle.tsx"
+    },
+    {
+      "name": "toggle-group",
+      "compatibility": "native-adapted",
+      "source": "src/components/toggle-group/toggle-group.tsx"
+    },
+    {
+      "name": "toolbar",
+      "compatibility": "native-adapted",
+      "source": "src/components/toolbar/toolbar.tsx"
+    },
+    {
+      "name": "tooltip",
+      "compatibility": "native-adapted",
+      "source": "src/components/tooltip/tooltip.tsx"
+    },
+    {
+      "name": "top-bar",
+      "compatibility": "native-adapted",
+      "source": "src/components/top-bar/top-bar.tsx"
+    },
+    {
+      "name": "tour",
+      "compatibility": "native-adapted",
+      "source": "src/components/tour/tour.tsx"
+    },
+    {
+      "name": "tree-view",
+      "compatibility": "native-adapted",
+      "source": "src/components/tree-view/tree-view.tsx"
+    },
+    {
+      "name": "truncated-text",
+      "compatibility": "native-adapted",
+      "source": "src/components/truncated-text/truncated-text.tsx"
+    },
+    {
+      "name": "tutorial-complete",
+      "compatibility": "native-adapted",
+      "source": "src/components/tutorial-complete/tutorial-complete.tsx"
+    },
+    {
+      "name": "tutorial-filters",
+      "compatibility": "native-adapted",
+      "source": "src/components/tutorial-filters/tutorial-filters.tsx"
+    },
+    {
+      "name": "typewriter",
+      "compatibility": "native-adapted",
+      "source": "src/components/typewriter/typewriter.tsx"
+    },
+    {
+      "name": "view-switcher",
+      "compatibility": "native-adapted",
+      "source": "src/components/view-switcher/view-switcher.tsx"
+    },
+    {
+      "name": "workspace-switcher",
+      "compatibility": "native-adapted",
+      "source": "src/components/workspace-switcher/workspace-switcher.tsx"
+    },
+    {
+      "name": "world-clock-bar",
+      "compatibility": "native-adapted",
+      "source": "src/components/world-clock-bar/world-clock-bar.tsx"
+    }
+  ]
+}

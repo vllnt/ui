@@ -30,6 +30,13 @@ const ROUTES = [
   "/report",
 ] as const;
 
+const SINGLE_H1_ROUTES = new Set([
+  "/docs",
+  "/docs/installation",
+  "/docs/theming",
+  "/philosophy",
+]);
+
 /**
  * Off-Vercel analytics/speed-insights scripts 404 on this platform (expected
  * noise). Resource-load failures surface as a generic "Failed to load resource"
@@ -81,6 +88,9 @@ test.describe("i18n route coverage", () => {
       await expect(page.locator('link[hreflang="x-default"]')).toHaveCount(1, {
         timeout: 20_000,
       });
+      if (SINGLE_H1_ROUTES.has(route)) {
+        await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+      }
     });
 
     test(`fr ${frPath(route)} renders lang=fr`, async ({ page }) => {
@@ -90,6 +100,9 @@ test.describe("i18n route coverage", () => {
         400,
       );
       await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+      if (SINGLE_H1_ROUTES.has(route)) {
+        await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+      }
       expect(errors, `console errors on ${frPath(route)}`).toEqual([]);
     });
   }
@@ -126,7 +139,7 @@ test.describe("i18n renders real French", () => {
   test("home hero + footer are French", async ({ page }) => {
     await page.goto("/fr");
     await expect(
-      page.getByText("Le systeme de design UI pour les agents IA."),
+      page.getByText("UI Web et native pour les agents IA."),
     ).toBeVisible();
     // Footer column title from the `footer` namespace.
     await expect(page.getByText("Bibliotheque", { exact: true })).toBeVisible();

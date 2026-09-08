@@ -69,24 +69,21 @@ export const Typewriter = ({
   }
 
   React.useEffect(() => {
-    if (reduced) {
+    if (reduced || count >= text.length) {
       return;
     }
 
-    const timer = setInterval(() => {
-      setCount((current) => {
-        if (current >= text.length) {
-          clearInterval(timer);
-          return current;
-        }
-        return current + 1;
-      });
-    }, speed);
+    const timer = setTimeout(
+      () => {
+        setCount((current) => Math.min(current + 1, text.length));
+      },
+      Math.max(1, speed),
+    );
 
     return () => {
-      clearInterval(timer);
+      clearTimeout(timer);
     };
-  }, [reduced, speed, text]);
+  }, [count, reduced, speed, text.length]);
 
   const typing = count < text.length;
 

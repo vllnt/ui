@@ -5,6 +5,8 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Thumbnail iframes use the alternate loopback host for cross-origin isolation.
+  allowedDevOrigins: ['127.0.0.1', 'localhost'],
   output: 'standalone',
   // Emit browser source maps in production so Lighthouse "valid-source-maps" passes
   productionBrowserSourceMaps: true,

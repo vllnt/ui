@@ -5,7 +5,6 @@ import {
   Breadcrumb,
   MDXContent,
   ShareSection,
-  Sidebar,
   StaticCode,
   TableOfContents,
 } from "@vllnt/ui";
@@ -16,6 +15,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import { buildComponentMdxKit } from "@/components/component-mdx";
+import {
+  type ComponentSource,
+  ComponentSourceCode,
+} from "@/components/component-source-code";
+import { PlatformBadges } from "@/components/platform-badges";
+import { PlatformComparison } from "@/components/platform-comparison";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { PreviewPlaygroundTabs } from "@/components/playground";
 import { QuickAdd } from "@/components/quick-add";
 import { ShareEmbedBar } from "@/components/share-embed-bar";
@@ -37,9 +43,10 @@ import {
   generateTwitterMetadata,
 } from "@/lib/og";
 import {
-  getPlaygroundExample,
-  getRegistryPackageVersion,
-} from "@/lib/playground";
+  getPlatform,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
 import { registry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
@@ -54,6 +61,7 @@ import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
+  searchParams: Promise<PlatformQuery>;
 };
 
 const metadata_map = componentMetadata as Record<
@@ -63,6 +71,7 @@ const metadata_map = componentMetadata as Record<
     defaultStoryId: string;
     description: string;
     name: string;
+    platforms: ("native" | "web")[];
     stories: { id: string; name: string }[];
     title: string;
   }
@@ -84,10 +93,6 @@ export async function generateStaticParams() {
   );
 }
 
-function getNpmUrl(packageName: string): string {
-  return `https://www.npmjs.com/package/${packageName}`;
-}
-
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { locale, slug } = await props.params;
   const component = registry.items.find(
@@ -103,7 +108,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const category = getCategoryForComponent(slug);
   const aiSeo = getAiSeo(slug);
   const componentSeo = getComponentSeo(slug);
-  const componentMdx = await getComponentContent(slug, locale);
+  const [componentMdx, t] = await Promise.all([
+    getComponentContent(slug, locale),
+    getTranslations({ locale, namespace: "pages.component" }),
+  ]);
   // Hand-written copy (ai-seo / component-seo) is English and outranks the
   // templated MDX on the default locale. Other locales must use the localized
   // MDX frontmatter, never English copy.
@@ -116,17 +124,21 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     : undefined;
   const title =
     componentMdx?.frontmatter.title ?? meta?.title ?? component.title;
-  const description =
+  const purposeDescription =
     handWrittenDescription ??
     componentMdx?.frontmatter.description ??
     meta?.description ??
-    component.description;
+    component.description ??
+    title;
+  const description = component.native
+    ? t("nativeMetaDescription", { description: purposeDescription, title })
+    : purposeDescription;
   const pathname = `/components/${slug}`;
 
   const ogParameters = {
     category,
     description,
-    title,
+    title: component.native ? t("nativeMetaTitle", { title }) : title,
     type: "component" as const,
   };
 
@@ -141,13 +153,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     description,
     keywords: componentMdx?.frontmatter.keywords,
     openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
-    title: handWrittenTitle ?? `${title} - VLLNT UI`,
+    title: component.native
+      ? t("nativeMetaTitle", { title })
+      : (handWrittenTitle ?? `${title} - VLLNT UI`),
     twitter: generateTwitterMetadata(ogParameters),
   };
 }
 
 export default async function ComponentPage(props: Props) {
-  const { locale, slug } = await props.params;
+  const [{ locale, slug }, query] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
   setRequestLocale(locale);
   const t = await getTranslations("pages.component");
   const common = await getTranslations("common");
@@ -178,10 +195,10 @@ export default async function ComponentPage(props: Props) {
     meta?.description ??
     component.description ??
     "";
-  const playgroundExample = getPlaygroundExample(component);
-  const registryPackageVersion = getRegistryPackageVersion(registry.version);
+  const platform = getPlatform(query.platform, "all");
 
-  // Read component source for code display
+  // The browser preview stays on the Web implementation. Paired Native source
+  // is available from the source selector when this component supports it.
   let componentCode = "";
   try {
     const isChartComponent = ["area-chart", "bar-chart", "line-chart"].includes(
@@ -231,15 +248,59 @@ export default async function ComponentPage(props: Props) {
     // Source file not found — skip code section
   }
 
-  const installCommand = `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
+  let nativeCode = "";
+  if (component.native) {
+    try {
+      nativeCode = await readFile(
+        path.join(
+          process.cwd(),
+          "..",
+          "..",
+          "packages",
+          "ui-native",
+          component.native.source,
+        ),
+        "utf8",
+      );
+    } catch {
+      // Native source file not found — leave the Web source without a platform tab.
+    }
+  }
 
-  const componentMdx = await getComponentContent(slug, locale);
+  const webSource: ComponentSource | undefined = componentCode
+    ? {
+        code: componentCode,
+        id: "react",
+        label: t("sourceReact"),
+      }
+    : undefined;
+  const nativeSource: ComponentSource | undefined = nativeCode
+    ? {
+        code: nativeCode,
+        id: "react-native",
+        label: t("sourceReactNative"),
+      }
+    : undefined;
+  const sources = (
+    platform === "native"
+      ? [nativeSource, webSource]
+      : [webSource, nativeSource]
+  ).filter((source): source is ComponentSource => source !== undefined);
+
+  const installCommand =
+    platform === "native" && component.native
+      ? t("nativeSourceOnlyCommand")
+      : `pnpm dlx shadcn@latest add https://ui.vllnt.com/r/${component.name}.json`;
+
+  const localizedComponent = await getComponentContent(slug, locale);
+  const componentMdx = localizedComponent;
+  const hasSources = sources.length > 0;
   const mdxKit = buildComponentMdxKit({
-    componentCode,
-    componentName: component.name,
-    example: playgroundExample,
+    component,
+    hasSources,
     installCommand,
-    packageVersion: registryPackageVersion,
+    sourceLinkLabel: t("viewSource"),
+    storybookLabel: t("viewInStorybook"),
     storyId: meta?.defaultStoryId,
   });
 
@@ -257,31 +318,41 @@ export default async function ComponentPage(props: Props) {
     .slice(0, 6);
   const relatedComponents = relatedSlugs.filter((name) =>
     registry.items.some(
-      (item) => item.name === name && item.type === "registry:component",
+      (item) =>
+        item.name === name &&
+        item.type === "registry:component" &&
+        (!platform || item.platforms.includes(platform)),
     ),
   );
 
   const sections = [
     ...(meta?.defaultStoryId ? [{ id: "preview", title: t("preview") }] : []),
+    { id: "platform-comparison", title: t("platformComparison") },
     { id: "installation", title: t("installation") },
-    ...(componentCode ? [{ id: "code", title: t("code") }] : []),
+    ...(hasSources && !meta?.defaultStoryId
+      ? [{ id: "code", title: t("code") }]
+      : []),
     ...(meta?.defaultStoryId
       ? [{ id: "storybook", title: t("storybook") }]
       : []),
-    ...(component.dependencies && component.dependencies.length > 0
-      ? [{ id: "dependencies", title: t("dependencies") }]
-      : []),
-    ...(seoCopy?.faqs.length ? [{ id: "faq", title: t("faq") }] : []),
     ...(relatedComponents.length > 0
       ? [{ id: "related", title: t("related") }]
       : []),
+    ...(seoCopy?.faqs.length ? [{ id: "faq", title: t("faq") }] : []),
   ] as { id: string; title: string }[];
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-  const articleTitle = componentMdx?.frontmatter.title ?? displayTitle;
-  const articleDescription =
-    componentMdx?.frontmatter.description ?? displayDescription;
-  const componentUrl = canonical(`/components/${component.name}`, locale);
+  const articleTitle = localizedComponent?.frontmatter.title ?? displayTitle;
+  const purposeDescription =
+    localizedComponent?.frontmatter.description ?? displayDescription;
+  const articleDescription = component.native
+    ? t("nativeMetaDescription", {
+        description: purposeDescription,
+        title: articleTitle,
+      })
+    : purposeDescription;
+  const componentPath = `/components/${component.name}`;
+  const componentUrl = canonical(componentPath, locale);
   const ogImage = `${SITE_URL}${generateOGImageURL({
     category: componentCategory ?? undefined,
     description: articleDescription,
@@ -297,9 +368,10 @@ export default async function ComponentPage(props: Props) {
           softwareSourceCodeLd({
             description: articleDescription,
             image: ogImage,
-            keywords: componentMdx?.frontmatter.keywords,
+            keywords: localizedComponent?.frontmatter.keywords,
             locale,
             name: component.name,
+            platforms: component.platforms,
             title: articleTitle,
           }),
           techArticleLd({
@@ -307,7 +379,7 @@ export default async function ComponentPage(props: Props) {
             description: articleDescription,
             image: ogImage,
             inLanguage: locale,
-            keywords: componentMdx?.frontmatter.keywords,
+            keywords: localizedComponent?.frontmatter.keywords,
             title: articleTitle,
             url: componentUrl,
           }),
@@ -316,16 +388,13 @@ export default async function ComponentPage(props: Props) {
             locale,
             [
               { name: common("components"), path: "/components" },
-              {
-                name: articleTitle,
-                path: `/components/${component.name}`,
-              },
+              { name: articleTitle, path: componentPath },
             ],
             common("home"),
           ),
         ])}
       />
-      <Sidebar
+      <PlatformSidebar
         sections={await getSidebarSections(
           getCategoryForComponent(slug),
           locale,
@@ -341,19 +410,31 @@ export default async function ComponentPage(props: Props) {
                   className="mb-4 text-muted-foreground"
                   items={[
                     {
-                      href: localizePathname("/", locale),
+                      href: withPlatformQuery(
+                        localizePathname("/", locale),
+                        query,
+                        platform,
+                      ),
                       label: common("home"),
                     },
                     {
-                      href: localizePathname("/components", locale),
+                      href: withPlatformQuery(
+                        localizePathname("/components", locale),
+                        query,
+                        platform,
+                      ),
                       label: common("components"),
                     },
                     ...(familyGroup
                       ? [
                           {
-                            href: localizePathname(
-                              familyPath(familyGroup.category),
-                              locale,
+                            href: withPlatformQuery(
+                              localizePathname(
+                                familyPath(familyGroup.category),
+                                locale,
+                              ),
+                              query,
+                              platform,
                             ),
                             label: familyGroup.label,
                           },
@@ -363,19 +444,30 @@ export default async function ComponentPage(props: Props) {
                   ]}
                 />
                 <h1 className="text-4xl font-semibold mb-2">{articleTitle}</h1>
-                <p className="text-muted-foreground text-lg mb-6">
+                <p className="mb-4 text-lg text-muted-foreground">
                   {articleDescription}
                 </p>
+                <PlatformBadges
+                  className="mb-4 flex flex-wrap items-center gap-2"
+                  platforms={component.platforms}
+                />
                 <div className="flex flex-wrap items-center gap-3">
-                  <QuickAdd componentName={component.name} />
+                  <QuickAdd
+                    componentName={component.name}
+                    platform={platform}
+                  />
                   <ShareEmbedBar
-                    pageUrl={canonical(`/components/${component.name}`, locale)}
+                    pageUrl={componentUrl}
                     slug={component.name}
                     title={articleTitle}
                   />
                   <Link
-                    className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-                    href={`/report?component=${component.name}`}
+                    className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+                    href={withPlatformQuery(
+                      `/report?component=${component.name}`,
+                      query,
+                      platform,
+                    )}
                   >
                     {t("reportBug")}
                   </Link>
@@ -391,7 +483,7 @@ export default async function ComponentPage(props: Props) {
                   <p className="mt-3 text-base leading-relaxed">{whenToUse}</p>
                   <Link
                     className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                    href="/families/ai"
+                    href={withPlatformQuery("/families/ai", query, platform)}
                   >
                     {t("browseAiComponents")}
                     <ExternalLink className="size-3" />
@@ -411,15 +503,38 @@ export default async function ComponentPage(props: Props) {
                   {familyGroup ? (
                     <Link
                       className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground underline"
-                      href={localizePathname(
+                      href={withPlatformQuery(
                         familyPath(familyGroup.category),
-                        locale,
+                        query,
+                        platform,
                       )}
                     >
                       {familyGroup.label}
                       <ExternalLink className="size-3" />
                     </Link>
                   ) : null}
+                </div>
+              ) : null}
+
+              {meta?.defaultStoryId ? (
+                <PreviewPlaygroundTabs
+                  code={
+                    sources.length > 0 ? (
+                      <ComponentSourceCode
+                        label={t("sourceImplementationLabel")}
+                        sources={sources}
+                      />
+                    ) : null
+                  }
+                  componentName={component.name}
+                  storyId={meta.defaultStoryId}
+                />
+              ) : hasSources ? (
+                <div className="mb-8 scroll-mt-8" id="code">
+                  <ComponentSourceCode
+                    label={t("sourceImplementationLabel")}
+                    sources={sources}
+                  />
                 </div>
               ) : null}
 
@@ -431,17 +546,8 @@ export default async function ComponentPage(props: Props) {
                 />
               ) : (
                 <>
-                  {/* Preview + Playground */}
-                  {meta?.defaultStoryId ? (
-                    <PreviewPlaygroundTabs
-                      componentName={component.name}
-                      example={playgroundExample}
-                      packageVersion={registryPackageVersion}
-                      storyId={meta.defaultStoryId}
-                    />
-                  ) : null}
+                  <PlatformComparison component={component} />
 
-                  {/* Installation */}
                   <div className="mb-8 scroll-mt-8" id="installation">
                     <h2 className="text-2xl font-semibold mb-4">
                       {t("installation")}
@@ -449,7 +555,6 @@ export default async function ComponentPage(props: Props) {
                     <StaticCode code={installCommand} language="bash" />
                   </div>
 
-                  {/* Storybook link */}
                   {meta?.defaultStoryId ? (
                     <div className="mb-8 scroll-mt-8" id="storybook">
                       <h2 className="text-2xl font-semibold mb-4">
@@ -459,7 +564,7 @@ export default async function ComponentPage(props: Props) {
                         {t("storybookDescription")}
                       </p>
                       <a
-                        className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                         href={`${STORYBOOK_URL}/?path=/story/${meta.defaultStoryId}`}
                         rel="noopener noreferrer"
                         target="_blank"
@@ -477,7 +582,7 @@ export default async function ComponentPage(props: Props) {
                           <div className="flex flex-wrap gap-2">
                             {meta.stories.map((story) => (
                               <a
-                                className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-muted"
+                                className="inline-flex min-h-11 items-center rounded-md border px-3 text-sm transition-colors hover:bg-muted"
                                 href={`${STORYBOOK_URL}/?path=/story/${story.id}`}
                                 key={story.id}
                                 rel="noopener noreferrer"
@@ -491,50 +596,8 @@ export default async function ComponentPage(props: Props) {
                       ) : null}
                     </div>
                   ) : null}
-
-                  {/* Code */}
-                  {componentCode ? (
-                    <div className="mb-8 scroll-mt-8" id="code">
-                      <h2 className="text-2xl font-semibold mb-4">
-                        {t("code")}
-                      </h2>
-                      <StaticCode code={componentCode} language="typescript" />
-                    </div>
-                  ) : null}
                 </>
               )}
-
-              {/* Dependencies */}
-              {component.dependencies && component.dependencies.length > 0 ? (
-                <div className="mb-8 scroll-mt-8" id="dependencies">
-                  <h2 className="text-2xl font-semibold mb-4">
-                    {t("dependencies")}
-                  </h2>
-                  <div className="rounded-lg border bg-card p-6">
-                    <ul className="space-y-2">
-                      {component.dependencies.map((dep) => {
-                        const npmUrl = getNpmUrl(dep);
-                        return (
-                          <li className="flex items-center gap-2" key={dep}>
-                            <code className="bg-muted px-2 py-1 rounded text-sm">
-                              {dep}
-                            </code>
-                            <a
-                              aria-label={t("viewOnNpm", { dep })}
-                              className="text-muted-foreground hover:text-foreground transition-colors"
-                              href={npmUrl}
-                              rel="noopener noreferrer"
-                              target="_blank"
-                            >
-                              <ExternalLink className="size-3" />
-                            </a>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
-              ) : null}
 
               {relatedComponents.length > 0 ? (
                 <section className="mb-8 scroll-mt-8" id="related">
@@ -546,6 +609,8 @@ export default async function ComponentPage(props: Props) {
                       <ComponentCard
                         key={relatedSlug}
                         locale={locale}
+                        platform={platform}
+                        query={query}
                         slug={relatedSlug}
                       />
                     ))}
@@ -573,10 +638,7 @@ export default async function ComponentPage(props: Props) {
                 shareOn={t("shareOn")}
                 shareTitle={t("shareTitle")}
                 title={`${articleTitle} — VLLNT UI`}
-                url={withRef(
-                  canonical(`/components/${component.name}`, locale),
-                  "share",
-                )}
+                url={withRef(componentUrl, "share")}
               />
             </div>
 

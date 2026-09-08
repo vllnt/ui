@@ -1,0 +1,101 @@
+---
+title: React Native components in 0.4.0
+description: Explore VLLNT UI 0.4.0 React Native components for iOS and Android, shared design tokens, native contracts and source-only availability.
+type: docs
+og:
+  title: React Native components in 0.4.0
+  description: Source-only React Native components for iOS and Android in VLLNT UI 0.4.0
+  type: docs
+---
+
+# React Native components in 0.4.0
+
+`@vllnt/ui-native` is a separate renderer built on the same authored design tokens and portable option contracts as `@vllnt/ui`. The stable web package is unchanged: web uses the DOM, Radix UI, Tailwind CSS, and CVA; native uses React Native core primitives, `StyleSheet`, native accessibility APIs, and injected platform services.
+
+## Current availability
+
+The renderer is **source-only and pre-release**. Its npm package has not been published. The planned command below is documentation, not a working installation action:
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+Use it only after the native manifest reports `availability: "package"` and `installation.available: true`. Until then, evaluate the repository source and private Expo catalog locally.
+
+- Package: `@vllnt/ui-native`
+- Channel: planned `canary`; no `latest` path exists
+- Requirements: React 19 and React Native 0.81+
+- Inventory: 171 source modules
+- Manifest: [`/r/native/registry.json`](/r/native/registry.json)
+
+## Set up a theme
+
+```tsx
+import { ThemeProvider } from "@vllnt/ui-native"
+
+export function Root() {
+  return (
+    <ThemeProvider colorScheme="system">
+      <App />
+    </ThemeProvider>
+  )
+}
+```
+
+The provider follows the device theme by default. Choose `light` or `dark` for a fixed mode, or pass semantic overrides through `override`. Native sRGB values and point dimensions are generated from the canonical OKLCH source in `packages/design/tokens.json`.
+
+## Use native contracts
+
+```tsx
+import {
+  Button,
+  Card,
+  CardContent,
+  Heading,
+  Text,
+} from "@vllnt/ui-native"
+
+export function Example() {
+  return (
+    <Card>
+      <CardContent>
+        <Heading level={2}>Account</Heading>
+        <Text tone="muted">Native semantic tokens.</Text>
+        <Button onPress={() => {}}>Save changes</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+Use React Native props such as `onPress`, `style`, `accessibilityLabel`, `accessibilityState`, and accessibility actions. Web-only props such as `className`, `onClick`, and `asChild` are intentionally absent.
+
+The manifest marks each component as one of:
+
+- `portable-options`: semantic options align with the web renderer while props and implementation remain native.
+- `native-adapted`: the native component preserves intent but changes interaction, layout, or capability to match the platform.
+
+It never claims that web source runs on React Native.
+
+## Interaction and service boundaries
+
+Controls use controlled/uncontrolled state and caller-owned selection IDs. Modal surfaces support native back requests, accessibility escape, reduced motion, and host-provided safe-area wrappers. Clipboard and file selection require injected services. Linking and sharing use typed React Native adapters. Unavailable services remain visibly unavailable instead of falling back to browser APIs.
+
+Native intentionally omits or adapts browser-only behavior such as DOM portals, hover dependence, HTML tables, browser clipboard/download/fullscreen, markdown rendering, syntax highlighting, SVG charts, and web routing ownership.
+
+## Discover support
+
+Browse the [React Native component catalog](/components?platform=native), or compare [Button](/components/button?platform=native), [Input](/components/input?platform=native) and [Dialog](/components/dialog?platform=native). The platform value filters the component list and is preserved across component, family, docs, locale, header, and sidebar navigation. Cards keep the same isolated browser preview in every filter. Each component page compares Web and Native dependencies and capabilities, with paired source tabs when a Native implementation exists.
+
+Machine clients can use:
+
+- `/r/native/registry.json` for the native package manifest
+- `/r/registry.json` for web registry descriptors with platform projections
+- `/llms.txt` and `/llms-full.txt`
+- MCP `search_components` with `{ "platform": "native" }`
+
+## Verification boundary
+
+Repository checks include lint, strict typecheck, Jest interaction tests, renderer boundary checks, generated export/manifest drift, packed-package resolution, Expo Doctor, and Android/iOS Metro exports. Stable native release remains blocked until physical-device, VoiceOver, TalkBack, migration, observability, and rollback evidence exists.
+
+The package has no DOM, Radix UI, Tailwind CSS, NativeWind, or browser-global dependency. `@vllnt/ui` remains the stable web renderer with its existing API and release path.

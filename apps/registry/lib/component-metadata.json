@@ -4,6 +4,10 @@
     "defaultStoryId": "content-accordion--default",
     "description": "Collapsible content sections supporting single or multiple open items.",
     "name": "accordion",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-accordion--default",
@@ -17,6 +21,9 @@
     "defaultStoryId": "data-activityheatmap--default",
     "description": "Contribution-style grid for visualizing operational activity over time.",
     "name": "activity-heatmap",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-activityheatmap--default",
@@ -38,6 +45,10 @@
     "defaultStoryId": "analytics-activitylog--default",
     "description": "Paginated activity feed for audit history and analytics changes.",
     "name": "activity-log",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "analytics-activitylog--default",
@@ -55,6 +66,10 @@
     "defaultStoryId": "ai-agentactivity--default",
     "description": "Visual display of an AI agent's execution chain — steps, tools, decisions, progress.",
     "name": "agent-activity",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-agentactivity--default",
@@ -80,6 +95,10 @@
     "defaultStoryId": "ai-aiartifact--default",
     "description": "Rendered output area for AI-generated content with toolbar, copy/edit/download/fullscreen actions, and version chips.",
     "name": "ai-artifact",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-aiartifact--default",
@@ -105,6 +124,10 @@
     "defaultStoryId": "ai-chatinput--default",
     "description": "Prompt composer for conversational interfaces with helper text, toolbar actions, and submit states.",
     "name": "ai-chat-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-chatinput--default",
@@ -122,6 +145,10 @@
     "defaultStoryId": "ai-messagebubble--default",
     "description": "Chat bubble for assistant, user, tool, and system messages using the current design system surfaces.",
     "name": "ai-message-bubble",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-messagebubble--default",
@@ -143,6 +170,9 @@
     "defaultStoryId": "ai-aisidebar--default",
     "description": "Slide-out AI assistant panel with provider, header / content / footer slots, and a standalone trigger.",
     "name": "ai-sidebar",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "ai-aisidebar--default",
@@ -164,6 +194,10 @@
     "defaultStoryId": "ai-sourcecitation--default",
     "description": "Compact source reference card for AI answers with a title, origin label, and optional excerpt.",
     "name": "ai-source-citation",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-sourcecitation--default",
@@ -177,6 +211,10 @@
     "defaultStoryId": "ai-streamingtext--default",
     "description": "Readable text block for partial assistant output with an optional live cursor while tokens stream in.",
     "name": "ai-streaming-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-streamingtext--default",
@@ -194,6 +232,10 @@
     "defaultStoryId": "ai-toolcalldisplay--default",
     "description": "Structured card for tool invocation traces, statuses, serialized input, and returned output.",
     "name": "ai-tool-call-display",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-toolcalldisplay--default",
@@ -211,6 +253,10 @@
     "defaultStoryId": "data-alert--default",
     "description": "Displays an alert message to the user.",
     "name": "alert",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-alert--default",
@@ -228,6 +274,10 @@
     "defaultStoryId": "overlay-alertdialog--default",
     "description": "Modal dialog for confirming destructive or important actions.",
     "name": "alert-dialog",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-alertdialog--default",
@@ -241,6 +291,9 @@
     "defaultStoryId": "canvas-alertpulse--default",
     "description": "Pulsing ring overlay for alerting canvas objects, with severity tones.",
     "name": "alert-pulse",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-alertpulse--default",
@@ -266,6 +319,9 @@
     "defaultStoryId": "canvas-anchorport--default",
     "description": "Port marker for object inputs, outputs, and bidirectional links on the canvas.",
     "name": "anchor-port",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-anchorport--default",
@@ -279,6 +335,9 @@
     "defaultStoryId": "effects-animatedbeam--default",
     "description": "Animated gradient beam that connects two elements with a flowing light path.",
     "name": "animated-beam",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-animatedbeam--default",
@@ -292,6 +351,9 @@
     "defaultStoryId": "effects-animatedgridpattern--default",
     "description": "Decorative grid background with squares that fade in and out at random.",
     "name": "animated-grid-pattern",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-animatedgridpattern--default",
@@ -309,6 +371,10 @@
     "defaultStoryId": "effects-animatedlist--default",
     "description": "List whose items animate in sequentially with a staggered entrance.",
     "name": "animated-list",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-animatedlist--default",
@@ -322,6 +388,10 @@
     "defaultStoryId": "effects-animatedtabs--default",
     "description": "Tabs with a sliding indicator that animates to the active item.",
     "name": "animated-tabs",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-animatedtabs--default",
@@ -339,6 +409,10 @@
     "defaultStoryId": "effects-animatedtestimonials--default",
     "description": "Testimonial carousel with animated transitions between quotes.",
     "name": "animated-testimonials",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-animatedtestimonials--default",
@@ -356,6 +430,10 @@
     "defaultStoryId": "utility-animatedtext--terminal",
     "description": "Staggered text reveal for headings, pull quotes, and short supporting copy.",
     "name": "animated-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-animatedtext--terminal",
@@ -413,6 +491,9 @@
     "defaultStoryId": "effects-animatedtooltip--default",
     "description": "Tooltip that animates in on hover or focus with a scale-and-fade.",
     "name": "animated-tooltip",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-animatedtooltip--default",
@@ -430,6 +511,9 @@
     "defaultStoryId": "learning-annotation--default",
     "description": "Inline highlight with an attached contextual note.",
     "name": "annotation",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-annotation--default",
@@ -447,6 +531,9 @@
     "defaultStoryId": "",
     "description": "Renders an area chart for data visualization.",
     "name": "area-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [],
     "title": "Area Chart"
   },
@@ -455,6 +542,10 @@
     "defaultStoryId": "utility-aspectratio--default",
     "description": "Constrains content to a specified aspect ratio.",
     "name": "aspect-ratio",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-aspectratio--default",
@@ -468,6 +559,9 @@
     "defaultStoryId": "billing-autoreload--default",
     "description": "Toggle + collapsible threshold/amount form for automatic credit reloading with locale-aware currency.",
     "name": "auto-reload",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "billing-autoreload--default",
@@ -497,6 +591,10 @@
     "defaultStoryId": "core-avatar--default",
     "description": "Displays a user avatar image with fallback initials.",
     "name": "avatar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-avatar--default",
@@ -510,6 +608,10 @@
     "defaultStoryId": "data-avatargroup--default",
     "description": "Overlapping avatar stack for participants, assignees, and collaborative contexts.",
     "name": "avatar-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-avatargroup--default",
@@ -527,6 +629,10 @@
     "defaultStoryId": "core-badge--default",
     "description": "Small status label with variant styles.",
     "name": "badge",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-badge--default",
@@ -552,6 +658,10 @@
     "defaultStoryId": "core-banner--default",
     "description": "Full-width announcement bar with variants, dismissal, and an optional action slot.",
     "name": "banner",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-banner--default",
@@ -585,6 +695,9 @@
     "defaultStoryId": "",
     "description": "Renders a bar chart for data visualization.",
     "name": "bar-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [],
     "title": "Bar Chart"
   },
@@ -593,6 +706,9 @@
     "defaultStoryId": "effects-bentogrid--default",
     "description": "Responsive bento-style grid layout with feature cards.",
     "name": "bento-grid",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-bentogrid--default",
@@ -606,6 +722,9 @@
     "defaultStoryId": "content-blogcard--default",
     "description": "Card layout for displaying blog post previews.",
     "name": "blog-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "content-blogcard--default",
@@ -619,6 +738,10 @@
     "defaultStoryId": "effects-blurreveal--default",
     "description": "Reveals content with a blur-to-sharp transition when it scrolls into view.",
     "name": "blur-reveal",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-blurreveal--default",
@@ -636,6 +759,9 @@
     "defaultStoryId": "utility-borderbeam--default",
     "description": "Animated accent beam that travels around the border of a highlighted surface.",
     "name": "border-beam",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-borderbeam--default",
@@ -653,6 +779,9 @@
     "defaultStoryId": "canvas-bottomactivitystrip--default",
     "description": "Slim horizontally-scrolling row of recent canvas events for low-noise live activity.",
     "name": "bottom-activity-strip",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-bottomactivitystrip--default",
@@ -678,6 +807,10 @@
     "defaultStoryId": "layout-bottombar--default",
     "description": "Slim chrome strip pinned to the bottom of a canvas shell as a calm host for activity strips, status pills, and ambient indicators.",
     "name": "bottom-bar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "layout-bottombar--default",
@@ -691,6 +824,10 @@
     "defaultStoryId": "navigation-breadcrumb--default",
     "description": "Navigation breadcrumb trail showing the current page hierarchy.",
     "name": "breadcrumb",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-breadcrumb--default",
@@ -704,6 +841,10 @@
     "defaultStoryId": "core-button--default",
     "description": "Interactive button with multiple variants and sizes.",
     "name": "button",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-button--default",
@@ -749,6 +890,10 @@
     "defaultStoryId": "form-buttongroup--default",
     "description": "Visually connected group of buttons that share borders.",
     "name": "button-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-buttongroup--default",
@@ -766,6 +911,10 @@
     "defaultStoryId": "form-calendar--default",
     "description": "Date picker calendar for selecting dates.",
     "name": "calendar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-calendar--default",
@@ -779,6 +928,10 @@
     "defaultStoryId": "content-callout--default",
     "description": "Highlighted content block with variant styles for info, warning, danger, and more.",
     "name": "callout",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-callout--default",
@@ -792,6 +945,9 @@
     "defaultStoryId": "data-candlestickchart--default",
     "description": "OHLC financial chart for session-by-session price action.",
     "name": "candlestick-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-candlestickchart--default",
@@ -813,6 +969,9 @@
     "defaultStoryId": "layout-canvasshell--default",
     "description": "Layout shell for canvas workspaces with top bar, left rail, right dock, and bottom slot regions.",
     "name": "canvas-shell",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "layout-canvasshell--default",
@@ -826,6 +985,9 @@
     "defaultStoryId": "layout-canvasview--default",
     "description": "Interactive pan-and-zoom viewport for spatial surfaces with keyboard, wheel, and overlay support.",
     "name": "canvas-view",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "layout-canvasview--default",
@@ -839,6 +1001,10 @@
     "defaultStoryId": "content-card--default",
     "description": "Container with header, content, and footer sections.",
     "name": "card",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-card--default",
@@ -852,6 +1018,9 @@
     "defaultStoryId": "effects-cardflip--default",
     "description": "Card that flips in 3D between a front and back face.",
     "name": "card-flip",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-cardflip--default",
@@ -869,6 +1038,10 @@
     "defaultStoryId": "content-carousel--default",
     "description": "Scrollable content carousel with navigation controls.",
     "name": "carousel",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-carousel--default",
@@ -882,6 +1055,10 @@
     "defaultStoryId": "form-categoryfilter--default",
     "description": "Filterable category selection for content lists.",
     "name": "category-filter",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-categoryfilter--default",
@@ -895,6 +1072,10 @@
     "defaultStoryId": "ai-chainofthought--default",
     "description": "Ordered, status-aware visualization of a model's chain of thought with per-step state.",
     "name": "chain-of-thought",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-chainofthought--default",
@@ -916,6 +1097,9 @@
     "defaultStoryId": "layout-chatdocksection--default",
     "description": "Sidebar section that hosts a compact, scrollable chat thread alongside a spatial workspace — slotted into a dock or rail to keep an AI assistant in view.",
     "name": "chat-dock-section",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "layout-chatdocksection--default",
@@ -929,6 +1113,10 @@
     "defaultStoryId": "core-checkbox--default",
     "description": "Toggle control for boolean input.",
     "name": "checkbox",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-checkbox--default",
@@ -942,6 +1130,10 @@
     "defaultStoryId": "form-checkboxgroup--default",
     "description": "Group of related checkboxes backed by an array of selected values.",
     "name": "checkbox-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-checkboxgroup--default",
@@ -963,6 +1155,10 @@
     "defaultStoryId": "learning-checklist--default",
     "description": "Interactive checklist with progress tracking and toggleable items.",
     "name": "checklist",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-checklist--default",
@@ -980,6 +1176,9 @@
     "defaultStoryId": "maps-choroplethmap--default",
     "description": "Standalone SVG choropleth — region polygons shaded by data value with tooltip, legend, and accessible data-table fallback.",
     "name": "choropleth-map",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "maps-choroplethmap--default",
@@ -1005,6 +1204,9 @@
     "defaultStoryId": "educational-chronologicaltimeline--default",
     "description": "Media-rich, scroll-driven chronological timeline with alternating cards, image/video/audio media, and a progress strip.",
     "name": "chronological-timeline",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-chronologicaltimeline--default",
@@ -1030,6 +1232,9 @@
     "defaultStoryId": "educational-civilizationcard--default",
     "description": "Civilization overview with hero band, BCE/CE era timeline, key stats, achievements, and notable leaders.",
     "name": "civilization-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-civilizationcard--default",
@@ -1059,6 +1264,10 @@
     "defaultStoryId": "content-codeblock--default",
     "description": "Syntax-highlighted code display with copy support.",
     "name": "code-block",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-codeblock--default",
@@ -1072,6 +1281,9 @@
     "defaultStoryId": "content-codeplayground--default",
     "description": "Interactive code editor with live preview.",
     "name": "code-playground",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "content-codeplayground--default",
@@ -1089,6 +1301,10 @@
     "defaultStoryId": "content-collapsible--default",
     "description": "Expandable and collapsible content section.",
     "name": "collapsible",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-collapsible--default",
@@ -1102,6 +1318,10 @@
     "defaultStoryId": "form-colorpicker--default",
     "description": "Popover color picker with swatches, a hue slider, and a hex input.",
     "name": "color-picker",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-colorpicker--default",
@@ -1119,6 +1339,10 @@
     "defaultStoryId": "form-combobox--default",
     "description": "Searchable select input for choosing from a list of options.",
     "name": "combobox",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-combobox--default",
@@ -1136,6 +1360,10 @@
     "defaultStoryId": "overlay-command--default",
     "description": "Command palette with search, groups, and keyboard navigation.",
     "name": "command",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-command--default",
@@ -1149,6 +1377,9 @@
     "defaultStoryId": "canvas-commentpin--default",
     "description": "Anchored discussion pin rendered at canvas coordinates with author + unread badge.",
     "name": "comment-pin",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-commentpin--default",
@@ -1174,6 +1405,9 @@
     "defaultStoryId": "data-comparison--default",
     "description": "Side-by-side comparison layout for content or features.",
     "name": "comparison",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-comparison--default",
@@ -1191,6 +1425,10 @@
     "defaultStoryId": "learning-completiondialog--default",
     "description": "Dialog displayed upon completing a task or workflow.",
     "name": "completion-dialog",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-completiondialog--default",
@@ -1208,6 +1446,9 @@
     "defaultStoryId": "canvas-connectoredge--default",
     "description": "Curved edge between canvas objects with optional inline label state.",
     "name": "connector-edge",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-connectoredge--default",
@@ -1221,6 +1462,10 @@
     "defaultStoryId": "content-contentintro--default",
     "description": "Introductory section for content pages with title and description.",
     "name": "content-intro",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-contentintro--default",
@@ -1238,6 +1483,9 @@
     "defaultStoryId": "canvas-contextlens--default",
     "description": "Vignette overlay that dims the canvas outside a circular focus region.",
     "name": "context-lens",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-contextlens--default",
@@ -1263,6 +1511,10 @@
     "defaultStoryId": "overlay-contextmenu--default",
     "description": "Right-click context menu with items and submenus.",
     "name": "context-menu",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-contextmenu--default",
@@ -1276,6 +1528,9 @@
     "defaultStoryId": "data-contributiongraph--default",
     "description": "GitHub-style heatmap of daily activity over time.",
     "name": "contribution-graph",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-contributiongraph--default",
@@ -1293,6 +1548,10 @@
     "defaultStoryId": "ai-conversationthread--default",
     "description": "Compound component family for AI chat UIs that orchestrates auto-scroll, streaming indicators, empty states, and message rendering.",
     "name": "conversation-thread",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-conversationthread--default",
@@ -1314,6 +1573,9 @@
     "defaultStoryId": "utility-cookieconsent--default",
     "description": "Dismissible cookie-consent banner with positional variants and accept / reject actions for privacy compliance.",
     "name": "cookie-consent",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-cookieconsent--default",
@@ -1327,6 +1589,10 @@
     "defaultStoryId": "core-copybutton--default",
     "description": "Click-to-copy utility with confirmation feedback and a useCopyToClipboard hook.",
     "name": "copy-button",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-copybutton--default",
@@ -1352,6 +1618,10 @@
     "defaultStoryId": "data-countdowntimer--default",
     "description": "Countdown and SLA timer for deadlines, escalations, and response windows.",
     "name": "countdown-timer",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-countdowntimer--default",
@@ -1369,6 +1639,10 @@
     "defaultStoryId": "account-billing-creditbadge--default",
     "description": "Balance status pill for credits, wallet states, and billing health.",
     "name": "credit-badge",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "account-billing-creditbadge--default",
@@ -1386,6 +1660,9 @@
     "defaultStoryId": "learning-curriculum--default",
     "description": "Course-layout container for a sequence of lessons or modules with title, progress, optional intro, and a stack of lesson rows.",
     "name": "curriculum",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-curriculum--default",
@@ -1403,6 +1680,9 @@
     "defaultStoryId": "effects-cursor--default",
     "description": "Custom cursor follower that trails the pointer.",
     "name": "cursor",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-cursor--default",
@@ -1420,6 +1700,10 @@
     "defaultStoryId": "data-datalist--default",
     "description": "Semantic key-value metadata layout for displaying labels with values.",
     "name": "data-list",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-datalist--default",
@@ -1437,6 +1721,9 @@
     "defaultStoryId": "data-datatable--default",
     "description": "Enhanced data table with sorting, filtering, selection, and pagination controls.",
     "name": "data-table",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-datatable--default",
@@ -1450,6 +1737,10 @@
     "defaultStoryId": "form-datefield--default",
     "description": "Native date input styled to match the design system.",
     "name": "date-field",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-datefield--default",
@@ -1467,6 +1758,10 @@
     "defaultStoryId": "form-datepicker--default",
     "description": "Single-date picker built with the shared calendar and popover primitives.",
     "name": "date-picker",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-datepicker--default",
@@ -1484,6 +1779,10 @@
     "defaultStoryId": "form-daterangepicker--default",
     "description": "Popover calendar for selecting a start and end date.",
     "name": "date-range-picker",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-daterangepicker--default",
@@ -1501,6 +1800,10 @@
     "defaultStoryId": "overlay-dialog--default",
     "description": "Modal dialog overlay for focused content and actions.",
     "name": "dialog",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-dialog--default",
@@ -1514,6 +1817,9 @@
     "defaultStoryId": "core-display--default",
     "description": "Oversized hero/display text driven by the display tokens, with an optional reduced-motion-safe reveal.",
     "name": "display",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "core-display--default",
@@ -1535,6 +1841,9 @@
     "defaultStoryId": "effects-dock--default",
     "description": "macOS-style dock whose icons magnify near the pointer.",
     "name": "dock",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-dock--default",
@@ -1548,6 +1857,10 @@
     "defaultStoryId": "content-documentsiblingnav--default",
     "description": "Newer/older navigator: links to the previous and next item in an ordered series.",
     "name": "document-sibling-nav",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-documentsiblingnav--default",
@@ -1581,6 +1894,9 @@
     "defaultStoryId": "effects-dotpattern--default",
     "description": "Decorative dotted background pattern built from token colors.",
     "name": "dot-pattern",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-dotpattern--default",
@@ -1598,6 +1914,10 @@
     "defaultStoryId": "overlay-drawer--default",
     "description": "Slide-out panel anchored to the screen edge.",
     "name": "drawer",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-drawer--default",
@@ -1611,6 +1931,10 @@
     "defaultStoryId": "overlay-dropdownmenu--default",
     "description": "Accessible dropdown menu with items, checkboxes, radio groups, and submenus.",
     "name": "dropdown-menu",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-dropdownmenu--default",
@@ -1624,6 +1948,9 @@
     "defaultStoryId": "canvas-edgelabel--default",
     "description": "Inline edge label for relationship semantics such as streams, handoffs, or policies.",
     "name": "edge-label",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-edgelabel--default",
@@ -1637,6 +1964,10 @@
     "defaultStoryId": "core-emptystate--default",
     "description": "Centered placeholder for empty lists, tables, and search results with sm/md/lg sizes.",
     "name": "empty-state",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-emptystate--default",
@@ -1662,6 +1993,9 @@
     "defaultStoryId": "educational-eracomparison--default",
     "description": "Side-by-side comparison of historical eras with domain rows, color-themed columns, highlights, and figure chips.",
     "name": "era-comparison",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-eracomparison--default",
@@ -1683,6 +2017,10 @@
     "defaultStoryId": "learning-exercise--default",
     "description": "Interactive exercise block for learning content.",
     "name": "exercise",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-exercise--default",
@@ -1700,6 +2038,10 @@
     "defaultStoryId": "effects-expandablecards--default",
     "description": "Cards that expand on click to reveal additional content.",
     "name": "expandable-cards",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-expandablecards--default",
@@ -1713,6 +2055,10 @@
     "defaultStoryId": "content-faq--default",
     "description": "Frequently asked questions section with expandable answers.",
     "name": "faq",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-faq--default",
@@ -1730,6 +2076,10 @@
     "defaultStoryId": "form-field--default",
     "description": "Layout wrapper pairing a label, control, description, and error message.",
     "name": "field",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-field--default",
@@ -1751,6 +2101,10 @@
     "defaultStoryId": "form-fieldset--default",
     "description": "Groups related fields under a shared legend.",
     "name": "fieldset",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-fieldset--default",
@@ -1768,6 +2122,10 @@
     "defaultStoryId": "form-fileupload--default",
     "description": "Dropzone-style file picker with previews for selected files.",
     "name": "file-upload",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-fileupload--default",
@@ -1781,6 +2139,10 @@
     "defaultStoryId": "form-filterbar--default",
     "description": "Horizontal bar with filter controls for content lists.",
     "name": "filter-bar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-filterbar--default",
@@ -1794,6 +2156,10 @@
     "defaultStoryId": "learning-flashcard--default",
     "description": "Study card for active recall with prompt and answer states.",
     "name": "flashcard",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-flashcard--default",
@@ -1807,6 +2173,10 @@
     "defaultStoryId": "utility-floatingactionbutton--default",
     "description": "Fixed-position action button for primary actions.",
     "name": "floating-action-button",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-floatingactionbutton--default",
@@ -1820,6 +2190,9 @@
     "defaultStoryId": "effects-floatingnavbar--default",
     "description": "Floating navigation bar that hides on scroll down and reveals on scroll up.",
     "name": "floating-navbar",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-floatingnavbar--default",
@@ -1833,6 +2206,10 @@
     "defaultStoryId": "canvas-floatingtoolbar--default",
     "description": "Compact action bar that floats above a selection — primary / ghost / destructive variants.",
     "name": "floating-toolbar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "canvas-floatingtoolbar--default",
@@ -1854,6 +2231,9 @@
     "defaultStoryId": "data-flowdiagram--default",
     "description": "Interactive flow diagram with nodes, edges, and controls.",
     "name": "flow-diagram",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-flowdiagram--default",
@@ -1867,6 +2247,9 @@
     "defaultStoryId": "canvas-followmode--default",
     "description": "Follow-mode chrome — outlines a region with a participant's color and surfaces a stop-following chip.",
     "name": "follow-mode",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-followmode--default",
@@ -1888,6 +2271,10 @@
     "defaultStoryId": "core-form--default",
     "description": "Validation wrapper for composing labels, descriptions, controls, and messages.",
     "name": "form",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-form--default",
@@ -1905,6 +2292,9 @@
     "defaultStoryId": "data-ganttchart--default",
     "description": "Project timeline with task bars, progress overlays, milestones, and a today indicator across day/week/month/quarter scales.",
     "name": "gantt-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-ganttchart--default",
@@ -1930,6 +2320,9 @@
     "defaultStoryId": "data-gaugechart--default",
     "description": "Semicircular gauge for a single value within a range.",
     "name": "gauge-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-gaugechart--default",
@@ -1951,6 +2344,9 @@
     "defaultStoryId": "educational-geographyquizmap--default",
     "description": "Interactive identify-mode map quiz — click the correct region per prompt with visual feedback, score, and results panel.",
     "name": "geography-quiz-map",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-geographyquizmap--default",
@@ -1972,6 +2368,9 @@
     "defaultStoryId": "effects-glasscard--default",
     "description": "Frosted-glass card surface with backdrop blur and a translucent background.",
     "name": "glass-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-glasscard--default",
@@ -1985,6 +2384,9 @@
     "defaultStoryId": "layout-glasspanel--default",
     "description": "Frosted-glass surface for floating chrome above a canvas — dock panels, hovering toolbars, and transient overlays — with a translucent background and soft border.",
     "name": "glass-panel",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "layout-glasspanel--default",
@@ -1998,6 +2400,10 @@
     "defaultStoryId": "effects-glassprogress--default",
     "description": "Glass-styled progress bar with a translucent track and token-colored fill.",
     "name": "glass-progress",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-glassprogress--default",
@@ -2015,6 +2421,9 @@
     "defaultStoryId": "maps-globe3d--default",
     "description": "Standalone SVG pseudo-3D globe — orthographic projection with auto-rotation, drag interaction, lat/lng markers, and great-circle arcs.",
     "name": "globe-3d",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "maps-globe3d--default",
@@ -2036,6 +2445,10 @@
     "defaultStoryId": "core-grid--default",
     "description": "Responsive CSS grid layout primitive with breakpoint column and gap props.",
     "name": "grid",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-grid--default",
@@ -2053,6 +2466,9 @@
     "defaultStoryId": "canvas-grouphull--default",
     "description": "Durable boundary wrapper for related runtime objects sharing context or ownership.",
     "name": "group-hull",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-grouphull--default",
@@ -2066,6 +2482,9 @@
     "defaultStoryId": "canvas-handoffbeacon--default",
     "description": "Attention-routing beacon with pulsing ring and optional source / message card for live canvases.",
     "name": "handoff-beacon",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-handoffbeacon--default",
@@ -2091,6 +2510,10 @@
     "defaultStoryId": "core-heading--default",
     "description": "Semantic heading (h1–h6) with theme-overridable font-family, weight, and size design tokens.",
     "name": "heading",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-heading--default",
@@ -2112,6 +2535,9 @@
     "defaultStoryId": "maps-heatmapoverlay--default",
     "description": "Standalone SVG geographic heat map — radial-gradient blobs with configurable radius, blur, gradient, and opacity.",
     "name": "heat-map-overlay",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "maps-heatmapoverlay--default",
@@ -2141,6 +2567,9 @@
     "defaultStoryId": "canvas-heatoverlay--default",
     "description": "Heatmap-style overlay drawing soft radial blobs for canvas activity samples.",
     "name": "heat-overlay",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-heatoverlay--default",
@@ -2166,6 +2595,9 @@
     "defaultStoryId": "educational-historictimeline--default",
     "description": "Specialized timeline for historical events spanning centuries or millennia, with era bands, period bars, and BCE/CE point markers.",
     "name": "historic-timeline",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-historictimeline--default",
@@ -2191,6 +2623,9 @@
     "defaultStoryId": "educational-historicalfigurecard--default",
     "description": "Profile card with portrait, lifespan timeline, fields, works, quote, connections, and an expandable biography section.",
     "name": "historical-figure-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-historicalfigurecard--default",
@@ -2220,6 +2655,10 @@
     "defaultStoryId": "navigation-horizontalscrollrow--default",
     "description": "Horizontal scroll container with snap scrolling, chevron navigation, and hidden scrollbar.",
     "name": "horizontal-scroll-row",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-horizontalscrollrow--default",
@@ -2237,6 +2676,9 @@
     "defaultStoryId": "overlay-hovercard--default",
     "description": "Card that appears on hover for previewing content.",
     "name": "hover-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "overlay-hovercard--default",
@@ -2250,6 +2692,9 @@
     "defaultStoryId": "canvas-infiniteplane--dot",
     "description": "Tiled pannable backdrop for the canvas with dot or grid pattern that drifts with the viewport.",
     "name": "infinite-plane",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-infiniteplane--dot",
@@ -2275,6 +2720,10 @@
     "defaultStoryId": "form-inlineinput--default",
     "description": "Inline text input with keyboard commit and cancel support.",
     "name": "inline-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-inlineinput--default",
@@ -2288,6 +2737,10 @@
     "defaultStoryId": "core-input--default",
     "description": "Text input field for forms.",
     "name": "input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-input--default",
@@ -2301,6 +2754,10 @@
     "defaultStoryId": "form-inputgroup--leading-icon",
     "description": "Groups an input with leading or trailing addons.",
     "name": "input-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-inputgroup--leading-icon",
@@ -2322,6 +2779,10 @@
     "defaultStoryId": "form-inputotp--default",
     "description": "One-time password input with segmented fields.",
     "name": "input-otp",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-inputotp--default",
@@ -2335,6 +2796,10 @@
     "defaultStoryId": "timeline-interactivetimeline--default",
     "description": "Zoomable, pannable, multi-track timeline with category filter, today marker, and click-to-select events.",
     "name": "interactive-timeline",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "timeline-interactivetimeline--default",
@@ -2360,6 +2825,10 @@
     "defaultStoryId": "form-item--default",
     "description": "Flexible row layout with leading media, content, and trailing actions.",
     "name": "item",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-item--default",
@@ -2377,6 +2846,9 @@
     "defaultStoryId": "canvas-jarvisdock--default",
     "description": "Floating bottom dock with quick-action buttons + a command-palette trigger.",
     "name": "jarvis-dock",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-jarvisdock--default",
@@ -2402,6 +2874,9 @@
     "defaultStoryId": "core-kbd--default",
     "description": "Keyboard key indicator with platform-aware modifier expansion via the shortcut prop.",
     "name": "kbd",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "core-kbd--default",
@@ -2435,6 +2910,9 @@
     "defaultStoryId": "learning-keyconcept--default",
     "description": "Highlighted definition block for key terms and a glossary list.",
     "name": "key-concept",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-keyconcept--default",
@@ -2452,6 +2930,10 @@
     "defaultStoryId": "learning-keyboardshortcutshelp--default",
     "description": "Displays available keyboard shortcuts to the user.",
     "name": "keyboard-shortcuts-help",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-keyboardshortcutshelp--default",
@@ -2469,6 +2951,9 @@
     "defaultStoryId": "educational-knowledgecheck--default",
     "description": "Inline knowledge check with multiple-choice / true-false / fill-blank questions, per-answer feedback, and a final score summary.",
     "name": "knowledge-check",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-knowledgecheck--default",
@@ -2490,6 +2975,10 @@
     "defaultStoryId": "utility-label--default",
     "description": "Accessible form label that associates descriptive text with an input control.",
     "name": "label",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-label--default",
@@ -2503,6 +2992,9 @@
     "defaultStoryId": "utility-langprovider--default",
     "description": "Context provider for language and internationalization.",
     "name": "lang-provider",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-langprovider--default",
@@ -2516,6 +3008,9 @@
     "defaultStoryId": "learning-learningobjectives--default",
     "description": "Lists learning goals for educational content.",
     "name": "learning-objectives",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-learningobjectives--default",
@@ -2533,6 +3028,9 @@
     "defaultStoryId": "layout-leftrail--default",
     "description": "Compact vertical rail for canvas modes, tool actions, and secondary navigation controls.",
     "name": "left-rail",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "layout-leftrail--default",
@@ -2546,6 +3044,9 @@
     "defaultStoryId": "",
     "description": "Renders a line chart for data visualization.",
     "name": "line-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [],
     "title": "Line Chart"
   },
@@ -2554,6 +3055,10 @@
     "defaultStoryId": "core-link--default",
     "description": "Styled anchor with emphasis variants and an external-link affordance.",
     "name": "link",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-link--default",
@@ -2579,6 +3084,9 @@
     "defaultStoryId": "effects-liquidglass--default",
     "description": "Glass surface with an animated liquid gradient sheen.",
     "name": "liquid-glass",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-liquidglass--default",
@@ -2592,6 +3100,10 @@
     "defaultStoryId": "form-listbox--single-select",
     "description": "Accessible single- or multi-select list of options.",
     "name": "list-box",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-listbox--single-select",
@@ -2609,6 +3121,9 @@
     "defaultStoryId": "canvas-livecursor--default",
     "description": "Remote user's cursor rendered at canvas coordinates with name + status chip.",
     "name": "live-cursor",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-livecursor--default",
@@ -2634,6 +3149,10 @@
     "defaultStoryId": "data-livefeed--default",
     "description": "Rolling activity stream for surfacing incidents, deploys, and operational signals in real time.",
     "name": "live-feed",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-livefeed--default",
@@ -2651,6 +3170,9 @@
     "defaultStoryId": "effects-magnetic--default",
     "description": "Wrapper that pulls its content toward the pointer for a magnetic effect.",
     "name": "magnetic",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-magnetic--default",
@@ -2668,6 +3190,9 @@
     "defaultStoryId": "effects-magneticbutton--default",
     "description": "Button that drifts toward the pointer for a magnetic hover effect.",
     "name": "magnetic-button",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-magneticbutton--default",
@@ -2685,6 +3210,9 @@
     "defaultStoryId": "maps-map2d--default",
     "description": "Lightweight 2D map primitive — SVG canvas with equirectangular projection, markers, popups, GeoJSON polygon layers, zoom controls, and an optional backdrop image.",
     "name": "map-2d",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "maps-map2d--default",
@@ -2710,6 +3238,9 @@
     "defaultStoryId": "educational-maptimeline--default",
     "description": "Standalone SVG map + time slider — era polygons and year-pinned events appear as the user scrubs the timeline.",
     "name": "map-timeline",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-maptimeline--default",
@@ -2731,6 +3262,9 @@
     "defaultStoryId": "data-markettreemap--default",
     "description": "Sector-style market heatmap using weighted tiles and signed performance colors.",
     "name": "market-treemap",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-markettreemap--default",
@@ -2748,6 +3282,10 @@
     "defaultStoryId": "utility-marquee--default",
     "description": "Continuously scrolling content lane for badges, logos, and status chips.",
     "name": "marquee",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-marquee--default",
@@ -2777,6 +3315,9 @@
     "defaultStoryId": "content-mdxcontent--default",
     "description": "Renders MDX content with component mapping.",
     "name": "mdx-content",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "content-mdxcontent--default",
@@ -2790,6 +3331,10 @@
     "defaultStoryId": "navigation-menubar--default",
     "description": "Horizontal menu bar with dropdown menus.",
     "name": "menubar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-menubar--default",
@@ -2803,6 +3348,9 @@
     "defaultStoryId": "effects-meteors--default",
     "description": "Decorative meteor shower of streaks falling across the background.",
     "name": "meteors",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-meteors--default",
@@ -2820,6 +3368,10 @@
     "defaultStoryId": "core-meter--default",
     "description": "Static measurement bar (role=meter) for a known range, with optional segments.",
     "name": "meter",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-meter--default",
@@ -2841,6 +3393,10 @@
     "defaultStoryId": "canvas-metriccluster--default",
     "description": "Compact stack of related metrics pinned to a canvas object's corner.",
     "name": "metric-cluster",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "canvas-metriccluster--default",
@@ -2866,6 +3422,9 @@
     "defaultStoryId": "data-metricgauge--default",
     "description": "Real-time arc and dial display for monitored percentages and utilization.",
     "name": "metric-gauge",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-metricgauge--default",
@@ -2883,6 +3442,9 @@
     "defaultStoryId": "panels-minimappanel--default",
     "description": "Viewport overview panel showing canvas bounds, markers, and the current zoom window.",
     "name": "mini-map-panel",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "panels-minimappanel--default",
@@ -2896,6 +3458,9 @@
     "defaultStoryId": "ai-modelcomparison--default",
     "description": "Side-by-side comparison of AI model responses with optional blind mode, metadata stats, and a vote bar.",
     "name": "model-comparison",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "ai-modelcomparison--default",
@@ -2921,6 +3486,10 @@
     "defaultStoryId": "form-modelselector--default",
     "description": "Dropdown selector for choosing AI models.",
     "name": "model-selector",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-modelselector--default",
@@ -2934,6 +3503,10 @@
     "defaultStoryId": "form-multiselect--default",
     "description": "Popover-based multi-selection input with selected-value badges and optional search.",
     "name": "multi-select",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-multiselect--default",
@@ -2955,6 +3528,9 @@
     "defaultStoryId": "canvas-multiselectlasso--default",
     "description": "Selection rectangle overlay for canvas multi-select gestures.",
     "name": "multi-select-lasso",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-multiselectlasso--default",
@@ -2980,6 +3556,10 @@
     "defaultStoryId": "form-nativeselect--default",
     "description": "Styled wrapper around the native select element.",
     "name": "native-select",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-nativeselect--default",
@@ -2997,6 +3577,9 @@
     "defaultStoryId": "navigation-navbarsaas--default",
     "description": "SaaS-style navigation bar with branding and links.",
     "name": "navbar-saas",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "navigation-navbarsaas--default",
@@ -3010,6 +3593,10 @@
     "defaultStoryId": "navigation-navigationmenu--default",
     "description": "Accessible navigation menu with links and sub-navigation.",
     "name": "navigation-menu",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-navigationmenu--default",
@@ -3023,6 +3610,9 @@
     "defaultStoryId": "forms-newslettersignup--default",
     "description": "Email-capture form with idle/sending/sent/error state machine, custom validators, and overridable labels.",
     "name": "newsletter-signup",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "forms-newslettersignup--default",
@@ -3052,6 +3642,10 @@
     "defaultStoryId": "form-numberinput--default",
     "description": "Numeric input with increment and decrement controls.",
     "name": "number-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-numberinput--default",
@@ -3065,6 +3659,10 @@
     "defaultStoryId": "utility-numberticker--default",
     "description": "Animated number transitions for stats, KPIs, and compact numeric callouts.",
     "name": "number-ticker",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-numberticker--default",
@@ -3082,6 +3680,9 @@
     "defaultStoryId": "canvas-objectcard--default",
     "description": "Durable object view for agents, runs, artifacts, and tasks inside the canvas.",
     "name": "object-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-objectcard--default",
@@ -3095,6 +3696,9 @@
     "defaultStoryId": "canvas-objecthandle--default",
     "description": "Drag/reposition affordance for spatial objects that need a calm grab target.",
     "name": "object-handle",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-objecthandle--default",
@@ -3108,6 +3712,9 @@
     "defaultStoryId": "canvas-objectinspector--default",
     "description": "Right-dock detail header — kind chip, status dot, title/subtitle, with property-section slots.",
     "name": "object-inspector",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-objectinspector--default",
@@ -3133,6 +3740,9 @@
     "defaultStoryId": "data-orderbook--default",
     "description": "Level II bid/ask depth ladder with cumulative size bars and spread readout.",
     "name": "order-book",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-orderbook--default",
@@ -3154,6 +3764,10 @@
     "defaultStoryId": "layout-overviewboard--default",
     "description": "Grid of overview cards for at-a-glance dashboards — a row of headline metrics with consistent spacing and tone.",
     "name": "overview-board",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "layout-overviewboard--default",
@@ -3167,6 +3781,10 @@
     "defaultStoryId": "navigation-pagination--default",
     "description": "Page navigation controls with previous, next, and page links.",
     "name": "pagination",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-pagination--default",
@@ -3180,6 +3798,10 @@
     "defaultStoryId": "core-panel--default",
     "description": "Bordered, titled content surface with header, body, and footer slots.",
     "name": "panel",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-panel--default",
@@ -3197,6 +3819,9 @@
     "defaultStoryId": "educational-paralleltimeline--default",
     "description": "Multi-track timeline with shared time axis, BCE/CE event markers, and optional era bands for comparative history.",
     "name": "parallel-timeline",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-paralleltimeline--default",
@@ -3222,6 +3847,9 @@
     "defaultStoryId": "effects-particles--default",
     "description": "Floating particle field that drifts gently in the background.",
     "name": "particles",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-particles--default",
@@ -3239,6 +3867,10 @@
     "defaultStoryId": "form-passwordinput--default",
     "description": "Password field with a built-in visibility toggle.",
     "name": "password-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-passwordinput--default",
@@ -3252,6 +3884,10 @@
     "defaultStoryId": "form-phoneinput--default",
     "description": "Phone number input with a country dialing-code selector.",
     "name": "phone-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-phoneinput--default",
@@ -3269,6 +3905,9 @@
     "defaultStoryId": "data-piechart--default",
     "description": "Proportional pie or donut chart for part-to-whole comparisons.",
     "name": "pie-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-piechart--default",
@@ -3290,6 +3929,10 @@
     "defaultStoryId": "account-billing-planbadge--default",
     "description": "Subscription tier indicator for pricing, billing, and account summaries.",
     "name": "plan-badge",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "account-billing-planbadge--default",
@@ -3311,6 +3954,9 @@
     "defaultStoryId": "canvas-playbackghost--default",
     "description": "Translucent overlay marking where a canvas object was at a previous timestamp during playback.",
     "name": "playback-ghost",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-playbackghost--default",
@@ -3336,6 +3982,9 @@
     "defaultStoryId": "canvas-policydeliverypanel--default",
     "description": "Right-dock panel listing policies / guardrails active for the route or run.",
     "name": "policy-delivery-panel",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-policydeliverypanel--default",
@@ -3361,6 +4010,10 @@
     "defaultStoryId": "overlay-popover--default",
     "description": "Floating content panel anchored to a trigger element.",
     "name": "popover",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-popover--default",
@@ -3374,6 +4027,10 @@
     "defaultStoryId": "canvas-presencestack--default",
     "description": "Overlapping live-presence avatars with status dots and a sane overflow chip.",
     "name": "presence-stack",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "canvas-presencestack--default",
@@ -3399,6 +4056,10 @@
     "defaultStoryId": "canvas-presencesyncindicator--live",
     "description": "Compact pill that surfaces live connection + sync health for a collaborative canvas.",
     "name": "presence-sync-indicator",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "canvas-presencesyncindicator--live",
@@ -3424,6 +4085,9 @@
     "defaultStoryId": "billing-pricingtable--default",
     "description": "Plan comparison with feature checklist, tier highlighting, CTA, and an optional monthly/annual toggle.",
     "name": "pricing-table",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "billing-pricingtable--default",
@@ -3445,6 +4109,9 @@
     "defaultStoryId": "educational-primarysourceviewer--default",
     "description": "Document viewer for historical primary sources with zoom, rotate, region annotations, transcription panel, and metadata footer.",
     "name": "primary-source-viewer",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-primarysourceviewer--default",
@@ -3466,6 +4133,9 @@
     "defaultStoryId": "learning-protip--default",
     "description": "Highlighted tip block with variants for tips, best practices, gotchas, and more.",
     "name": "pro-tip",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-protip--default",
@@ -3479,6 +4149,9 @@
     "defaultStoryId": "learning-profilesection--default",
     "description": "User profile display section with avatar and details.",
     "name": "profile-section",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-profilesection--default",
@@ -3496,6 +4169,10 @@
     "defaultStoryId": "data-progressbar--default",
     "description": "Visual progress indicator with labels and completion state.",
     "name": "progress-bar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-progressbar--default",
@@ -3509,6 +4186,10 @@
     "defaultStoryId": "data-progresscard--default",
     "description": "Card displaying progress metrics and status.",
     "name": "progress-card",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-progresscard--default",
@@ -3522,6 +4203,10 @@
     "defaultStoryId": "learning-progresstracker--default",
     "description": "Curriculum-level learning dashboard for modules, lessons, exercises, streaks, and earned skills.",
     "name": "progress-tracker",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-progresstracker--default",
@@ -3539,6 +4224,9 @@
     "defaultStoryId": "effects-progressiveblur--default",
     "description": "Progressive blur overlay that fades focus toward one edge.",
     "name": "progressive-blur",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-progressiveblur--default",
@@ -3556,6 +4244,10 @@
     "defaultStoryId": "ai-promptinput--default",
     "description": "Auto-growing prompt textarea with a submit affordance and optional toolbar slot.",
     "name": "prompt-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-promptinput--default",
@@ -3581,6 +4273,9 @@
     "defaultStoryId": "ai-prompttemplates--default",
     "description": "Searchable prompt template gallery with category filter, variable fill-in form, and onSelect.",
     "name": "prompt-templates",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "ai-prompttemplates--default",
@@ -3606,6 +4301,9 @@
     "defaultStoryId": "canvas-propertysection--default",
     "description": "Compact key/value grid for inspector panels — labels, sublabels, optional collapse.",
     "name": "property-section",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-propertysection--default",
@@ -3631,6 +4329,9 @@
     "defaultStoryId": "core-prose--article",
     "description": "Long-form content wrapper that styles raw HTML descendants with the token-driven type scale.",
     "name": "prose",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "core-prose--article",
@@ -3644,6 +4345,9 @@
     "defaultStoryId": "core-qrcode--default",
     "description": "Renders a QR code from a string value as a theme-aware SVG.",
     "name": "qr-code",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "core-qrcode--default",
@@ -3665,6 +4369,10 @@
     "defaultStoryId": "learning-quiz--default",
     "description": "Interactive multiple-choice quiz with hints, explanations, and scoring.",
     "name": "quiz",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-quiz--default",
@@ -3682,6 +4390,9 @@
     "defaultStoryId": "data-radarchart--default",
     "description": "Spider chart comparing several metrics on shared axes.",
     "name": "radar-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-radarchart--default",
@@ -3699,6 +4410,10 @@
     "defaultStoryId": "core-radiogroup--default",
     "description": "Group of radio buttons for single-selection input.",
     "name": "radio-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-radiogroup--default",
@@ -3712,6 +4427,10 @@
     "defaultStoryId": "form-rangecalendar--default",
     "description": "Calendar that selects a start and end date as a range.",
     "name": "range-calendar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-rangecalendar--default",
@@ -3733,6 +4452,10 @@
     "defaultStoryId": "learning-rating--default",
     "description": "Inline star rating for lightweight learner feedback.",
     "name": "rating",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-rating--default",
@@ -3750,6 +4473,10 @@
     "defaultStoryId": "ai-reasoning--default",
     "description": "Collapsible AI reasoning trace with streaming support and ordered or free-form steps.",
     "name": "reasoning",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "ai-reasoning--default",
@@ -3771,6 +4498,9 @@
     "defaultStoryId": "canvas-relationshipinspector--default",
     "description": "Right-dock panel listing inbound + outbound edges of the focused canvas object.",
     "name": "relationship-inspector",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-relationshipinspector--default",
@@ -3796,6 +4526,10 @@
     "defaultStoryId": "utility-resizable--default",
     "description": "Resizable panel layout with draggable handles.",
     "name": "resizable",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-resizable--default",
@@ -3809,6 +4543,10 @@
     "defaultStoryId": "effects-revealtext--default",
     "description": "Reveals text with a directional slide-and-fade when it enters the viewport.",
     "name": "reveal-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-revealtext--default",
@@ -3830,6 +4568,9 @@
     "defaultStoryId": "layout-rightdock--default",
     "description": "Context dock for inspectors, summaries, and secondary canvas panels.",
     "name": "right-dock",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "layout-rightdock--default",
@@ -3843,6 +4584,10 @@
     "defaultStoryId": "account-billing-rolebadge--default",
     "description": "Account role indicator for owners, admins, members, and billing contacts.",
     "name": "role-badge",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "account-billing-rolebadge--default",
@@ -3860,6 +4605,9 @@
     "defaultStoryId": "maps-routemap--default",
     "description": "Standalone SVG map with animated route paths, waypoints, and progress indicator. For trade routes, voyages, migrations, delivery tracking.",
     "name": "route-map",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "maps-routemap--default",
@@ -3889,6 +4637,9 @@
     "defaultStoryId": "canvas-routingassignmentpanel--default",
     "description": "Right-dock panel listing the agent slots an active route dispatches to.",
     "name": "routing-assignment-panel",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-routingassignmentpanel--default",
@@ -3914,6 +4665,9 @@
     "defaultStoryId": "canvas-runtimeline--default",
     "description": "Multi-lane execution timeline showing run phases over time, with optional cursor.",
     "name": "run-timeline",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-runtimeline--default",
@@ -3939,6 +4693,9 @@
     "defaultStoryId": "canvas-runtimeoverviewpanel--default",
     "description": "Top-of-dock summary tile grid for runtime health when no canvas object is selected.",
     "name": "runtime-overview-panel",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-runtimeoverviewpanel--default",
@@ -3964,6 +4721,9 @@
     "defaultStoryId": "data-sankeychart--default",
     "description": "Flow diagram showing weighted links between nodes.",
     "name": "sankey-chart",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-sankeychart--default",
@@ -3977,6 +4737,9 @@
     "defaultStoryId": "analytics-scopeselector--default",
     "description": "Multi-level scope picker for nested environments, teams, and targets.",
     "name": "scope-selector",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "analytics-scopeselector--default",
@@ -3994,6 +4757,10 @@
     "defaultStoryId": "effects-scrambletext--default",
     "description": "Scrambles characters then resolves them into the final text.",
     "name": "scramble-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-scrambletext--default",
@@ -4011,6 +4778,9 @@
     "defaultStoryId": "utility-scrollarea--default",
     "description": "Custom scrollable area with styled scrollbars.",
     "name": "scroll-area",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-scrollarea--default",
@@ -4024,6 +4794,10 @@
     "defaultStoryId": "effects-scrollprogress--default",
     "description": "Fixed bar that tracks reading progress down the page.",
     "name": "scroll-progress",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-scrollprogress--default",
@@ -4037,6 +4811,10 @@
     "defaultStoryId": "form-searchbar--default",
     "description": "Text search input with icon and clear functionality.",
     "name": "search-bar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-searchbar--default",
@@ -4050,6 +4828,10 @@
     "defaultStoryId": "learning-searchdialog--default",
     "description": "Full-screen search dialog with keyboard navigation.",
     "name": "search-dialog",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-searchdialog--default",
@@ -4067,6 +4849,10 @@
     "defaultStoryId": "form-searchfield--default",
     "description": "Search input with a leading icon and a clear button.",
     "name": "search-field",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-searchfield--default",
@@ -4084,6 +4870,10 @@
     "defaultStoryId": "form-segmentedcontrol--default",
     "description": "Single-choice segmented selector for switching modes, views, or filters.",
     "name": "segmented-control",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-segmentedcontrol--default",
@@ -4105,6 +4895,10 @@
     "defaultStoryId": "form-select--default",
     "description": "Dropdown select input for choosing from a list of options.",
     "name": "select",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-select--default",
@@ -4118,6 +4912,9 @@
     "defaultStoryId": "canvas-selectionhalo--default",
     "description": "Local-user selection halo with corner handles + label slot for spatial canvases.",
     "name": "selection-halo",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-selectionhalo--default",
@@ -4139,6 +4936,9 @@
     "defaultStoryId": "canvas-selectionpresence--default",
     "description": "Dashed-border overlay marking what another user has selected on the canvas.",
     "name": "selection-presence",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-selectionpresence--default",
@@ -4164,6 +4964,10 @@
     "defaultStoryId": "core-separator--default",
     "description": "Visual divider between content sections.",
     "name": "separator",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-separator--default",
@@ -4177,6 +4981,10 @@
     "defaultStoryId": "data-severitybadge--default",
     "description": "Operational severity label with tone variants and optional pulse for critical incidents.",
     "name": "severity-badge",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-severitybadge--default",
@@ -4206,6 +5014,10 @@
     "defaultStoryId": "utility-sharedialog--default",
     "description": "Modal dialog for sharing a page across social platforms with a copy-link action and overridable labels.",
     "name": "share-dialog",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-sharedialog--default",
@@ -4219,6 +5031,10 @@
     "defaultStoryId": "content-sharesection--default",
     "description": "Social sharing buttons and link copy section.",
     "name": "share-section",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-sharesection--default",
@@ -4236,6 +5052,10 @@
     "defaultStoryId": "overlay-sheet--default",
     "description": "Slide-over panel from the edge of the screen.",
     "name": "sheet",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-sheet--default",
@@ -4257,6 +5077,9 @@
     "defaultStoryId": "effects-shimmerbutton--default",
     "description": "Button with a light sheen that sweeps across its surface.",
     "name": "shimmer-button",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-shimmerbutton--default",
@@ -4274,6 +5097,10 @@
     "defaultStoryId": "effects-shimmertext--default",
     "description": "Text with a bright light band that sweeps across it.",
     "name": "shimmer-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-shimmertext--default",
@@ -4291,6 +5118,9 @@
     "defaultStoryId": "effects-shineborder--default",
     "description": "Wrapper that draws an animated gradient border around its content.",
     "name": "shine-border",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-shineborder--default",
@@ -4308,6 +5138,9 @@
     "defaultStoryId": "effects-shinybutton--default",
     "description": "Button with a glossy gradient sheen that sweeps on a loop.",
     "name": "shiny-button",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-shinybutton--default",
@@ -4321,6 +5154,10 @@
     "defaultStoryId": "navigation-sidebar--default",
     "description": "Collapsible sidebar navigation layout.",
     "name": "sidebar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-sidebar--default",
@@ -4334,6 +5171,10 @@
     "defaultStoryId": "navigation-sidebarprovider--default",
     "description": "Context provider for managing sidebar open/close state.",
     "name": "sidebar-provider",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-sidebarprovider--default",
@@ -4347,6 +5188,10 @@
     "defaultStoryId": "navigation-sidebartoggle--default",
     "description": "Responsive toggle button for opening and closing the sidebar.",
     "name": "sidebar-toggle",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-sidebartoggle--default",
@@ -4360,6 +5205,10 @@
     "defaultStoryId": "core-skeleton--default",
     "description": "Placeholder loading animation for content.",
     "name": "skeleton",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-skeleton--default",
@@ -4373,6 +5222,10 @@
     "defaultStoryId": "core-slider--default",
     "description": "Range slider input for selecting numeric values.",
     "name": "slider",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-slider--default",
@@ -4386,6 +5239,10 @@
     "defaultStoryId": "content-slideshow--default",
     "description": "Step-through slideshow for presenting content sequentially.",
     "name": "slideshow",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-slideshow--default",
@@ -4403,6 +5260,9 @@
     "defaultStoryId": "canvas-snapguides--default",
     "description": "Alignment guide overlay — dashed vertical and horizontal lines that surface during a drag.",
     "name": "snap-guides",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-snapguides--default",
@@ -4424,6 +5284,9 @@
     "defaultStoryId": "effects-sparkles--default",
     "description": "Decorative twinkling sparkles scattered behind content.",
     "name": "sparkles",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-sparkles--default",
@@ -4441,6 +5304,9 @@
     "defaultStoryId": "data-sparklinegrid--default",
     "description": "KPI grid of labeled value tiles each paired with a compact sparkline trend.",
     "name": "sparkline-grid",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-sparklinegrid--default",
@@ -4458,6 +5324,10 @@
     "defaultStoryId": "utility-spinner--default",
     "description": "Animated loading spinner indicator.",
     "name": "spinner",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-spinner--default",
@@ -4471,6 +5341,10 @@
     "defaultStoryId": "effects-spinningtext--default",
     "description": "Text laid out in a circle that rotates continuously.",
     "name": "spinning-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-spinningtext--default",
@@ -4488,6 +5362,9 @@
     "defaultStoryId": "effects-spotlightcard--default",
     "description": "Card with a radial spotlight that follows the pointer.",
     "name": "spotlight-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-spotlightcard--default",
@@ -4501,6 +5378,10 @@
     "defaultStoryId": "data-statcard--default",
     "description": "Headline KPI card for metrics, trends, and supporting context.",
     "name": "stat-card",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-statcard--default",
@@ -4518,6 +5399,9 @@
     "defaultStoryId": "canvas-statebadgeoverlay--default",
     "description": "State chip pinned to a canvas object's corner — idle, queued, running, complete, failed, stopped.",
     "name": "state-badge-overlay",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-statebadgeoverlay--default",
@@ -4543,6 +5427,10 @@
     "defaultStoryId": "data-statusboard--default",
     "description": "Service health grid for surfacing infrastructure state, queue pressure, and incidents.",
     "name": "status-board",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-statusboard--default",
@@ -4564,6 +5452,10 @@
     "defaultStoryId": "data-statusindicator--default",
     "description": "Compact status label with tone, variant, and activity dot options.",
     "name": "status-indicator",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-statusindicator--default",
@@ -4581,6 +5473,10 @@
     "defaultStoryId": "learning-stepbystep--default",
     "description": "Numbered step guide with optional interactive completion tracking.",
     "name": "step-by-step",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-stepbystep--default",
@@ -4594,6 +5490,10 @@
     "defaultStoryId": "navigation-stepnavigation--default",
     "description": "Navigation controls for stepping through multi-page content.",
     "name": "step-navigation",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-stepnavigation--default",
@@ -4607,6 +5507,10 @@
     "defaultStoryId": "learning-stepper--default",
     "description": "Sequenced steps with complete, current, and upcoming states.",
     "name": "stepper",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-stepper--default",
@@ -4624,6 +5528,10 @@
     "defaultStoryId": "canvas-stickymetric--default",
     "description": "Pinned metric pill that sticks to a canvas object's corner.",
     "name": "sticky-metric",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "canvas-stickymetric--default",
@@ -4649,6 +5557,9 @@
     "defaultStoryId": "educational-storymap--default",
     "description": "Standalone SVG scroll-driven narrative map — IntersectionObserver tracks the active chapter and the map shifts to its center + zoom.",
     "name": "story-map",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "educational-storymap--default",
@@ -4670,6 +5581,9 @@
     "defaultStoryId": "account-billing-subscriptioncard--default",
     "description": "Subscription status and management card for plan, renewal, and usage details.",
     "name": "subscription-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "account-billing-subscriptioncard--default",
@@ -4687,6 +5601,10 @@
     "defaultStoryId": "utility-switch--default",
     "description": "Toggle switch control for binary on/off state.",
     "name": "switch",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-switch--default",
@@ -4700,6 +5618,9 @@
     "defaultStoryId": "data-table--default",
     "description": "Styled data table with header, body, and footer sections.",
     "name": "table",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-table--default",
@@ -4713,6 +5634,9 @@
     "defaultStoryId": "utility-tableofcontents--default",
     "description": "Auto-generated table of contents from page headings.",
     "name": "table-of-contents",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-tableofcontents--default",
@@ -4730,6 +5654,9 @@
     "defaultStoryId": "utility-tableofcontentspanel--default",
     "description": "Side panel rendering a table of contents for page navigation.",
     "name": "table-of-contents-panel",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-tableofcontentspanel--default",
@@ -4747,6 +5674,10 @@
     "defaultStoryId": "navigation-tabs--default",
     "description": "Tabbed content panels with keyboard-accessible tab triggers.",
     "name": "tabs",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-tabs--default",
@@ -4760,6 +5691,10 @@
     "defaultStoryId": "form-taggroup--selectable",
     "description": "Set of tags supporting selection and removal.",
     "name": "tag-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-taggroup--selectable",
@@ -4777,6 +5712,10 @@
     "defaultStoryId": "form-tagsinput--default",
     "description": "Keyboard-friendly tag editor for adding and removing string values.",
     "name": "tags-input",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-tagsinput--default",
@@ -4798,6 +5737,10 @@
     "defaultStoryId": "content-terminal--default",
     "description": "Terminal-style display for command output.",
     "name": "terminal",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-terminal--default",
@@ -4811,6 +5754,10 @@
     "defaultStoryId": "core-text--default",
     "description": "Body-text primitive with token-driven sans family and a size/tone/weight scale; polymorphic via `as`.",
     "name": "text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-text--default",
@@ -4828,6 +5775,10 @@
     "defaultStoryId": "effects-textanimate--default",
     "description": "Animates text in by word or character with configurable effects.",
     "name": "text-animate",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-textanimate--default",
@@ -4853,6 +5804,10 @@
     "defaultStoryId": "form-textfield--default",
     "description": "Labelled text input bundling description and error message.",
     "name": "text-field",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-textfield--default",
@@ -4874,6 +5829,10 @@
     "defaultStoryId": "effects-textreveal--default",
     "description": "Dims and brightens words as the text scrolls through the viewport.",
     "name": "text-reveal",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-textreveal--default",
@@ -4887,6 +5846,10 @@
     "defaultStoryId": "effects-textshimmer--default",
     "description": "Text with an animated gradient fill that shimmers.",
     "name": "text-shimmer",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-textshimmer--default",
@@ -4904,6 +5867,10 @@
     "defaultStoryId": "core-textarea--default",
     "description": "Multi-line text input field.",
     "name": "textarea",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-textarea--default",
@@ -4917,6 +5884,9 @@
     "defaultStoryId": "utility-themepresetprovider--default",
     "description": "Applies the persisted theme preset on mount and injects a no-flash script so the saved preset is set before paint.",
     "name": "theme-preset-provider",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-themepresetprovider--default",
@@ -4930,6 +5900,9 @@
     "defaultStoryId": "utility-themeprovider--default",
     "description": "Context provider for light/dark theme switching.",
     "name": "theme-provider",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-themeprovider--default",
@@ -4943,6 +5916,9 @@
     "defaultStoryId": "utility-themeswitcher--default",
     "description": "Compact swatch row for switching between built-in theme presets, kept in sync with every other consumer on the page.",
     "name": "theme-switcher",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-themeswitcher--default",
@@ -4956,6 +5932,9 @@
     "defaultStoryId": "utility-themetoggle--default",
     "description": "Button to toggle between light and dark themes.",
     "name": "theme-toggle",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "utility-themetoggle--default",
@@ -4969,6 +5948,10 @@
     "defaultStoryId": "learning-thinkingblock--default",
     "description": "Collapsible block showing AI thinking/reasoning with streaming support.",
     "name": "thinking-block",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-thinkingblock--default",
@@ -4982,6 +5965,9 @@
     "defaultStoryId": "canvas-threadbubble--default",
     "description": "Expanded discussion bubble for an anchored canvas comment thread.",
     "name": "thread-bubble",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-threadbubble--default",
@@ -5007,6 +5993,9 @@
     "defaultStoryId": "canvas-thresholdring--default",
     "description": "Compact ring gauge expressing how close a value is to a threshold.",
     "name": "threshold-ring",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-thresholdring--default",
@@ -5032,6 +6021,9 @@
     "defaultStoryId": "data-tickertape--default",
     "description": "Marquee-style scrolling symbol tape with price and change badges.",
     "name": "ticker-tape",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-tickertape--default",
@@ -5049,6 +6041,9 @@
     "defaultStoryId": "effects-tiltcard--default",
     "description": "Card that tilts in 3D toward the pointer for a parallax hover.",
     "name": "tilt-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "effects-tiltcard--default",
@@ -5062,6 +6057,10 @@
     "defaultStoryId": "form-timefield--default",
     "description": "Native time input styled to match the design system.",
     "name": "time-field",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-timefield--default",
@@ -5079,6 +6078,10 @@
     "defaultStoryId": "form-timepicker--default",
     "description": "Popover time selector built from hour and minute columns.",
     "name": "time-picker",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "form-timepicker--default",
@@ -5096,6 +6099,9 @@
     "defaultStoryId": "content-timeline--default",
     "description": "Vertical or horizontal timeline of sequential events with completed/active/upcoming statuses and connector lines.",
     "name": "timeline",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "content-timeline--default",
@@ -5121,6 +6127,10 @@
     "defaultStoryId": "canvas-timelinescrubber--default",
     "description": "Range slider for scrubbing through canvas state playback, with optional milestone ticks.",
     "name": "timeline-scrubber",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "canvas-timelinescrubber--default",
@@ -5146,6 +6156,10 @@
     "defaultStoryId": "content-tldrsection--default",
     "description": "Summary section for quick content overview.",
     "name": "tldr-section",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "content-tldrsection--default",
@@ -5159,6 +6173,10 @@
     "defaultStoryId": "overlay-toast--default",
     "description": "Temporary notification messages with action support.",
     "name": "toast",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-toast--default",
@@ -5180,6 +6198,10 @@
     "defaultStoryId": "core-toggle--default",
     "description": "Two-state toggle button.",
     "name": "toggle",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-toggle--default",
@@ -5205,6 +6227,10 @@
     "defaultStoryId": "core-togglegroup--default",
     "description": "Group of toggle buttons for single or multiple selection.",
     "name": "toggle-group",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-togglegroup--default",
@@ -5218,6 +6244,10 @@
     "defaultStoryId": "core-toolbar--default",
     "description": "Horizontal control group (role=toolbar) with arrow-key roving focus and separators.",
     "name": "toolbar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "core-toolbar--default",
@@ -5235,6 +6265,10 @@
     "defaultStoryId": "overlay-tooltip--default",
     "description": "Informational popup displayed on hover or focus.",
     "name": "tooltip",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "overlay-tooltip--default",
@@ -5248,6 +6282,10 @@
     "defaultStoryId": "layout-topbar--default",
     "description": "Workspace header bar for titles, leading controls, centered navigation, and trailing actions.",
     "name": "top-bar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "layout-topbar--default",
@@ -5261,6 +6299,10 @@
     "defaultStoryId": "learning-tour--default",
     "description": "Guided onboarding flow for introducing content or interface patterns.",
     "name": "tour",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-tour--default",
@@ -5274,6 +6316,9 @@
     "defaultStoryId": "billing-transactionlist--default",
     "description": "Chronological credit/debit history with locale-aware currency formatting and a pinned subscription row.",
     "name": "transaction-list",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "billing-transactionlist--default",
@@ -5299,6 +6344,10 @@
     "defaultStoryId": "data-display-treeview--default",
     "description": "Hierarchical tree component for nested data with controlled state, single/multi-select, and keyboard navigation.",
     "name": "tree-view",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-display-treeview--default",
@@ -5324,6 +6373,10 @@
     "defaultStoryId": "utility-truncatedtext--default",
     "description": "Single-line text that truncates with an ellipsis when it exceeds a configurable max width.",
     "name": "truncated-text",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "utility-truncatedtext--default",
@@ -5337,6 +6390,9 @@
     "defaultStoryId": "learning-tutorialcard--default",
     "description": "Card for displaying tutorial previews with metadata.",
     "name": "tutorial-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-tutorialcard--default",
@@ -5350,6 +6406,10 @@
     "defaultStoryId": "learning-tutorialcomplete--default",
     "description": "Completion screen displayed when a tutorial is finished.",
     "name": "tutorial-complete",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-tutorialcomplete--default",
@@ -5367,6 +6427,10 @@
     "defaultStoryId": "learning-tutorialfilters--default",
     "description": "Filter controls for browsing tutorials by category or difficulty.",
     "name": "tutorial-filters",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "learning-tutorialfilters--default",
@@ -5380,6 +6444,9 @@
     "defaultStoryId": "learning-tutorialintrocontent--default",
     "description": "Introduction section for tutorial pages with overview and prerequisites.",
     "name": "tutorial-intro-content",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-tutorialintrocontent--default",
@@ -5393,6 +6460,9 @@
     "defaultStoryId": "learning-tutorialmdx--default",
     "description": "MDX renderer tailored for tutorial content with custom components.",
     "name": "tutorial-mdx",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "learning-tutorialmdx--default",
@@ -5406,6 +6476,10 @@
     "defaultStoryId": "effects-typewriter--default",
     "description": "Types text out character by character with a blinking cursor.",
     "name": "typewriter",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "effects-typewriter--default",
@@ -5427,6 +6501,9 @@
     "defaultStoryId": "core-typography--headings",
     "description": "Semantic text primitives: headings, paragraph, lead, muted, blockquote, inline code, and list.",
     "name": "typography",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "core-typography--headings",
@@ -5452,6 +6529,9 @@
     "defaultStoryId": "analytics-usagebreakdown--default",
     "description": "Ranked resource consumption list with relative share and trend cues.",
     "name": "usage-breakdown",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "analytics-usagebreakdown--default",
@@ -5473,6 +6553,9 @@
     "defaultStoryId": "content-videoembed--default",
     "description": "Responsive video embed for YouTube and other providers.",
     "name": "video-embed",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "content-videoembed--default",
@@ -5486,6 +6569,10 @@
     "defaultStoryId": "navigation-viewswitcher--default",
     "description": "URL param-based toggle between named views with pill/tab styling.",
     "name": "view-switcher",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-viewswitcher--default",
@@ -5499,6 +6586,9 @@
     "defaultStoryId": "canvas-viewportbookmarks--default",
     "description": "Saved-view list for the canvas — pinned spatial locations with optional active state.",
     "name": "viewport-bookmarks",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-viewportbookmarks--default",
@@ -5524,6 +6614,9 @@
     "defaultStoryId": "account-billing-walletcard--default",
     "description": "Credit balance display card for available, pending, and refresh details.",
     "name": "wallet-card",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "account-billing-walletcard--default",
@@ -5541,6 +6634,9 @@
     "defaultStoryId": "data-watchlist--default",
     "description": "Tracked-symbol list with price, change, and advancing/declining summary.",
     "name": "watchlist",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "data-watchlist--default",
@@ -5562,6 +6658,10 @@
     "defaultStoryId": "navigation-workspaceswitcher--default",
     "description": "Segmented workspace picker for switching between canvas views and operational contexts.",
     "name": "workspace-switcher",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "navigation-workspaceswitcher--default",
@@ -5575,6 +6675,9 @@
     "defaultStoryId": "canvas-worldbreadcrumbs--default",
     "description": "Spatial trail showing the canvas's current location in a hierarchy of worlds, groups, and runs.",
     "name": "world-breadcrumbs",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "canvas-worldbreadcrumbs--default",
@@ -5600,6 +6703,10 @@
     "defaultStoryId": "data-worldclockbar--default",
     "description": "Multi-timezone display for follow-the-sun teams and operational handoffs.",
     "name": "world-clock-bar",
+    "platforms": [
+      "web",
+      "native"
+    ],
     "stories": [
       {
         "id": "data-worldclockbar--default",
@@ -5621,6 +6728,9 @@
     "defaultStoryId": "overlay-zoomhud--default",
     "description": "Zoom controls with current percentage, increment buttons, and reset action for canvas views.",
     "name": "zoom-hud",
+    "platforms": [
+      "web"
+    ],
     "stories": [
       {
         "id": "overlay-zoomhud--default",

@@ -7,10 +7,11 @@ import { Check, Copy, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 type QuickAddProps = {
-  componentName: string;
+  readonly componentName: string;
+  readonly platform?: "all" | "native" | "web";
 };
 
-export function QuickAdd({ componentName }: QuickAddProps) {
+export function QuickAdd({ componentName, platform }: QuickAddProps) {
   const t = useTranslations("shared.quickAdd");
   const registryUrl = `https://ui.vllnt.com/r/${componentName}.json`;
   const installCommand = `pnpm dlx shadcn@latest add ${registryUrl}`;
@@ -28,7 +29,7 @@ export function QuickAdd({ componentName }: QuickAddProps) {
   return (
     <div className="flex flex-wrap gap-2">
       <Button
-        className="gap-2"
+        className="min-h-11 gap-2"
         onClick={handleCopy}
         size="sm"
         variant="outline"
@@ -41,12 +42,12 @@ export function QuickAdd({ componentName }: QuickAddProps) {
         ) : (
           <>
             <Copy className="size-3" />
-            {t("copyInstall")}
+            {t(platform === "native" ? "copyWebInstall" : "copyInstall")}
           </>
         )}
       </Button>
       <Button
-        className="gap-2"
+        className="min-h-11 gap-2"
         onClick={() => window.open(v0Url, "_blank")}
         size="sm"
         variant="outline"
