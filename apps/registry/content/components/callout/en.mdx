@@ -21,6 +21,26 @@ codebase, ready to adapt:
 
 <Install />
 
+## Neutral and custom content
+
+Use `variant="neutral"` for a token-driven surface. Add `composable` to render
+children directly, without the shorthand title, icon or body typography.
+`CalloutHeader` and `CalloutBody` accept native props, refs and `className`.
+
+```tsx
+import { Callout, CalloutBody, CalloutHeader } from "@vllnt/ui";
+
+<Callout composable variant="neutral" role="note" className="border-accent">
+  <CalloutHeader><h2>Editorial note</h2></CalloutHeader>
+  <CalloutBody><p>Your own content and typography.</p></CalloutBody>
+</Callout>
+```
+
+Use `role="note"` for static editorial content. The existing alert role, colored
+variants and shorthand layout remain unchanged unless explicitly overridden.
+In composable mode, supply headers and icons as children; the shorthand `title`
+and `icon` props are not rendered.
+
 ## Source
 
 <Code />
