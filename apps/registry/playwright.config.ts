@@ -1,8 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 41599;
-// When PLAYWRIGHT_BASE_URL is set (the ntk promote e2e gate points it at the
-// live preview URL) test that deployed instance and skip the local dev server.
+// When PLAYWRIGHT_BASE_URL is set, test that deployed instance and skip the
+// local dev server.
 // Unset (local/CI run) → spin up `pnpm dev` and test localhost.
 const EXTERNAL_BASE_URL = process.env.PLAYWRIGHT_BASE_URL;
 const BASE_URL = EXTERNAL_BASE_URL ?? `http://localhost:${PORT}`;

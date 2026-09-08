@@ -11,8 +11,6 @@
  * storybook origin).
  *
  * Where it runs (playwright.config.ts reads PLAYWRIGHT_BASE_URL):
- *   - ntk promote gate — `PLAYWRIGHT_BASE_URL=$NTK_PREVIEW_URL … test:e2e`
- *     runs this against the live PR preview before a prod promote (ntk.yaml).
  *   - production — `PLAYWRIGHT_BASE_URL=https://ui.vllnt.com pnpm -F
  *     @vllnt/ui-registry test:e2e`.
  *   - local / GH Actions e2e job — no PLAYWRIGHT_BASE_URL, so it hits the dev
@@ -20,7 +18,7 @@
  *     assertions self-skip (see below) and only the page↔metadata wiring check
  *     runs.
  *
- * Infra vs code (per the ntk-preview flakiness lessons): a reachable Storybook
+ * Infra vs code: a reachable Storybook
  * that is MISSING a referenced story is a real bug → FAIL. A Storybook origin
  * that is unreachable (tailnet-only, not provisioned for this PR, transient
  * 5xx) is infra → SKIP, never a false red that blocks a promote.
