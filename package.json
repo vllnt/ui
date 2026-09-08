@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "madge": "^8.0.0",
-    "turbo": "^2.4.4"
+    "turbo": "^2.10.10"
   },
   "pnpm": {
     "overrides": {
