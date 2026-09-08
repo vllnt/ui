@@ -84,6 +84,10 @@ describe("NavbarSaas", () => {
       "href",
       "/docs",
     );
+    expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
     expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle theme")).toBeInTheDocument();
   });
@@ -96,6 +100,23 @@ describe("NavbarSaas", () => {
     );
     expect(screen.getByRole("link", { name: "Home" })).toHaveClass(
       "text-foreground/60",
+    );
+  });
+
+  it("matches active navigation when hrefs carry query state", () => {
+    renderNavbar({
+      navItems: [
+        { href: "/?platform=native", title: "Home" },
+        { href: "/docs?platform=native&ref=test", title: "Docs" },
+      ],
+    });
+
+    expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "Home" })).not.toHaveAttribute(
+      "aria-current",
     );
   });
 
@@ -120,9 +141,12 @@ describe("NavbarSaas", () => {
     });
 
     const trigger = screen.getByTestId("navbar-saas-mobile-trigger");
+    expect(trigger).not.toHaveAttribute("aria-controls");
+    expect(trigger).toHaveAttribute("aria-label", "Open sidebar");
 
     fireEvent.click(trigger);
 
+    expect(trigger).toHaveAttribute("aria-label", "Close sidebar");
     expect(container.querySelector(".lucide-x")).toBeInTheDocument();
   });
 
@@ -140,11 +164,33 @@ describe("NavbarSaas", () => {
     const { container } = renderNavbar();
 
     const trigger = screen.getByTestId("navbar-saas-mobile-trigger");
-    expect(trigger).toHaveAttribute("aria-label", "Toggle sidebar");
-    expect(container.querySelector(".lucide-menu")).toBeInTheDocument();
+    expect(trigger).toHaveAttribute("aria-label", "Open sidebar");
+    expect(
+      container.querySelector(".lucide-panel-left-open"),
+    ).toBeInTheDocument();
 
     fireEvent.click(trigger);
 
-    expect(container.querySelector(".lucide-x")).toBeInTheDocument();
+    expect(trigger).toHaveAttribute("aria-label", "Close sidebar");
+    expect(
+      container.querySelector(".lucide-panel-left-close"),
+    ).toBeInTheDocument();
+  });
+
+  it("supports localized sidebar labels and a custom controlled id", () => {
+    renderNavbar({
+      closeSidebarLabel: "Fermer la navigation",
+      openSidebarLabel: "Ouvrir la navigation",
+      sidebarId: "documentation-sidebar",
+    });
+
+    const trigger = screen.getByRole("button", {
+      name: "Ouvrir la navigation",
+    });
+    expect(trigger).toHaveAttribute("aria-controls", "documentation-sidebar");
+
+    fireEvent.click(trigger);
+
+    expect(trigger).toHaveAccessibleName("Fermer la navigation");
   });
 });

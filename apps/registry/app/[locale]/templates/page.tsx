@@ -1,4 +1,4 @@
-import { ShareSection, Sidebar } from "@vllnt/ui";
+import { ShareSection } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -6,6 +6,7 @@ import Script from "next/script";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { BadgeSnippets } from "@/components/badge-snippets";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -67,7 +68,7 @@ export default async function TemplatesPage({ params }: Props) {
           ),
         )}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="max-w-3xl">

@@ -9,6 +9,11 @@
     "home": "Home",
     "locale": "Language",
     "philosophy": "Philosophy",
+    "platformAll": "All",
+    "platformNative": "Native",
+    "platformSelectorLabel": "Filter by implementation",
+    "platforms": "Supported platforms",
+    "platformWeb": "Web",
     "readDocs": "Read the docs",
     "requestComponent": "Request a component"
   },
@@ -37,7 +42,9 @@
     "resources": "Resources",
     "rssFeed": "RSS feed",
     "sponsor": "Sponsor",
-    "storybook": "Storybook"
+    "storybook": "Storybook",
+    "native": "React Native",
+    "nativeRegistryJson": "Native registry JSON"
   },
   "forms": {
     "report": {
@@ -71,6 +78,7 @@
   },
   "header": {
     "changelog": "Changelog",
+    "closeNavigation": "Close navigation",
     "githubLabel": "VLLNT UI on GitHub",
     "navComponents": "Components",
     "navDesign": "Design",
@@ -80,6 +88,7 @@
     "navRequest": "Request",
     "navTemplates": "Templates",
     "navThemes": "Themes",
+    "openNavigation": "Open navigation",
     "releases": "Releases",
     "rssFeed": "RSS feed",
     "searchButton": "Search...",
@@ -125,14 +134,27 @@
     },
     "hero": {
       "browseAll": "Browse all {count}",
-      "browseTemplates": "Browse templates",
-      "description": "{count} open-source React components for building AI apps — chat, streaming, tool calls, citations, agents, and artifacts. Every component is also a machine-readable JSON descriptor: agents (Claude, Cursor, Cline, Continue) read the registry directly without scraping HTML.",
+      "browseNative": "Browse Native",
+      "browseWeb": "Browse Web",
+      "description": "{count} stable React web components plus a source-only React Native catalog for AI apps. Both renderers publish machine-readable availability and contracts, so agents choose platform-correct source instead of scraping HTML.",
       "exploreAi": "Explore AI components",
       "github": "GitHub",
       "kicker": "v{version} / MIT",
       "readDocs": "Read the docs",
-      "titleAccent": "Copy, paste, ship.",
-      "titleLead": "The UI design system for AI agents."
+      "titleAccent": "One design system. Platform-correct renderers.",
+      "titleLead": "Web and native UI for AI agents."
+    },
+    "renderers": {
+      "browseNative": "Browse Native components",
+      "browseWeb": "Browse Web components",
+      "description": "Choose the renderer that matches your product. Platform stays in the URL as you browse.",
+      "sourcePreview": "Source preview",
+      "nativeDescription": "A focused React Native renderer. Source is available in the repository while the first synchronized canary package is prepared.",
+      "nativeTitle": "Native renderer",
+      "stable": "Stable",
+      "title": "Two renderers, one design system",
+      "webDescription": "The complete React renderer with shadcn installation, live previews, source, and Storybook.",
+      "webTitle": "Web renderer"
     },
     "releases": {
       "description": "Follow what changed across the component library, registry, and release pipeline.",
@@ -184,20 +206,35 @@
     },
     "component": {
       "browseAiComponents": "Browse all AI agent components",
+      "capabilities": "Capabilities",
       "code": "Code",
       "dependencies": "Dependencies",
       "faq": "FAQ",
       "installation": "Installation",
+      "nativeCapabilitiesAdapted": "Native-adapted interaction and accessibility",
+      "nativeCapabilitiesPortable": "Portable semantic options and native interaction",
+      "nativeMetaDescription": "{description} React Native source for {title} is included in VLLNT UI 0.4.0 for iOS and Android. It is source-only; npm publication is pending.",
+      "nativeMetaTitle": "{title} for React and React Native",
+      "notAvailable": "Not available",
+      "platform": "Platform",
+      "platformComparison": "Platform comparison",
+      "platformNative": "Native",
+      "platformWeb": "Web",
       "preview": "Preview",
       "related": "Related components",
       "reportBug": "Report a bug",
       "shareOn": "Share on",
       "shareTitle": "Share this component",
+      "sourceImplementationLabel": "Choose a source implementation",
+      "sourceReact": "React",
+      "sourceReactNative": "React Native",
+      "nativeSourceOnlyCommand": "# React Native is source-only; copy the React Native source above",
       "storiesAvailable": "{count, plural, one {# story available:} other {# stories available:}}",
       "storybook": "Storybook",
       "storybookDescription": "Explore all variants, controls, and accessibility checks in the interactive Storybook playground.",
       "viewInStorybook": "View in Storybook",
-      "viewOnNpm": "View {dep} on npm",
+      "viewSource": "View source above",
+      "webCapabilities": "Browser rendering, DOM events, and ARIA semantics",
       "whatItIsTitle": "What it is and when to use",
       "whenToUseTitle": "When to use this in an AI app"
     },
@@ -205,9 +242,17 @@
       "ctaDescription": "Request a new component and we'll open a prefilled GitHub issue with the right labels and template.",
       "ctaTitle": "Don't see what you need?",
       "description": "Explore all {count} components available in the library.",
-      "noPreview": "No preview",
+      "nativeMetaDescription": "Explore React Native components in VLLNT UI 0.4.0 for iOS and Android. Compare React and native source and capabilities. Source-only pending canary publication.",
+      "nativeMetaTitle": "React Native components for iOS and Android",
+      "noPlatformResults": "No components support this platform yet.",
+      "platformAll": "All",
+      "platformFilterLabel": "Filter by platform",
+      "platformNative": "Native",
+      "platformWeb": "Web",
+      "previewTitle": "{name} preview",
       "stories": "{count, plural, one {# story} other {# stories}}",
-      "title": "Components"
+      "title": "Components",
+      "viewComponent": "View component"
     },
     "design": {
       "colors": "Colors",
@@ -242,6 +287,9 @@
       "faqTitle": "Frequently asked",
       "llmsDescription": "Concise index per the llmstxt.org spec — sections, links, and descriptions.",
       "llmsFullDescription": "Full registry context in one fetch — docs plus every component descriptor.",
+      "nativeDescription": "Browse the component families currently covered by the Native renderer. Availability is smaller than Web and source-first until the first synchronized canary.",
+      "nativeFamilyDescription": "Browse the {label} components currently implemented for the Native renderer.",
+      "noPlatformResults": "No components in this family support the selected renderer.",
       "registryJsonDescription": "Per-component descriptor: props, accessibility schema, and usage examples.",
       "title": "Component families"
     },
@@ -549,7 +597,8 @@
     "quickAdd": {
       "addToV0": "Add to v0.dev",
       "copied": "Copied!",
-      "copyInstall": "Copy install command"
+      "copyInstall": "Copy install command",
+      "copyWebInstall": "Copy Web install command"
     },
     "shareEmbed": {
       "copied": "Copied!",
@@ -569,14 +618,17 @@
       "description": "Switch between light and dark to inspect the embedded Storybook preview.",
       "light": "Light",
       "lightLabel": "Light preview",
+      "loading": "Loading preview…",
       "preview": "Preview",
       "themeLabel": "Preview theme"
     }
   },
   "sidebar": {
+    "closeNavigation": "Close navigation",
     "components": "Components",
     "documentation": "Documentation",
     "getStarted": "Get Started",
+    "navigationLabel": "Site navigation",
     "overview": "Overview",
     "philosophy": "Philosophy",
     "requestComponent": "Request a component",

@@ -9,7 +9,10 @@ const BASE_URL = EXTERNAL_BASE_URL ?? `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
-  fullyParallel: true,
+  // Next dev's Turbopack cache can corrupt concurrently compiled JSON modules.
+  // Production builds are parallel-safe; serialize local cold-start E2E only.
+  fullyParallel: Boolean(process.env.CI || EXTERNAL_BASE_URL),
+  workers: process.env.CI || EXTERNAL_BASE_URL ? undefined : 1,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: "list",

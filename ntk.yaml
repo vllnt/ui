@@ -23,6 +23,9 @@ apps:
       # → the deployer posted a fake-pass `ntk / preview` with no build (#452).
       - apps/registry
       - packages/ui
+      - packages/ui-core
+      - packages/ui-native
+      - packages/design
       - ntk.yaml
     port: 3000
     healthcheck: /

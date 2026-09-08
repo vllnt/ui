@@ -1,8 +1,8 @@
-import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
@@ -65,7 +65,7 @@ export default async function VsVercelAiSdkPage({ params }: Props) {
           ]),
         )}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
           <h1 className="text-4xl font-semibold leading-tight md:text-5xl">

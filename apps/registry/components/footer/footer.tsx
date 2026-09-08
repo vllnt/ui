@@ -35,6 +35,11 @@ const COLUMNS: readonly FooterColumn[] = [
   {
     links: [
       { href: "/components", kind: "route", labelKey: "components" },
+      {
+        href: "/components?platform=native",
+        kind: "route",
+        labelKey: "native",
+      },
       { href: "/docs", kind: "route", labelKey: "docs" },
       { href: "/philosophy", kind: "route", labelKey: "philosophy" },
       { href: "/design", kind: "route", labelKey: "design" },
@@ -45,6 +50,11 @@ const COLUMNS: readonly FooterColumn[] = [
     links: [
       { href: STORYBOOK_URL, kind: "external", labelKey: "storybook" },
       { href: "/r/registry.json", kind: "asset", labelKey: "registryJson" },
+      {
+        href: "/r/native/registry.json",
+        kind: "asset",
+        labelKey: "nativeRegistryJson",
+      },
       { href: "/r/design.json", kind: "asset", labelKey: "designTokens" },
       { href: "/changelog", kind: "route", labelKey: "changelog" },
       { href: "/releases", kind: "route", labelKey: "releases" },

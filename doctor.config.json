@@ -1,6 +1,7 @@
 {
   "$schema": "https://react.doctor/schema/config.json",
-  "failOn": "error",
+  "blocking": "error",
+  "rawTextWrapperComponents": ["Badge", "Button"],
   "rules": {
     "react-doctor/no-multi-comp": "off",
     "react-doctor/only-export-components": "off"

@@ -2,93 +2,115 @@
 
 ## Monorepo layout
 
-```
+```text
 vllnt/ui/
 ├── packages/
-│   └── ui/                   # @vllnt/ui — the shipped library
-│       ├── src/
-│       │   ├── components/   # 309 component folders
-│       │   ├── hooks/        # shared hooks (useDebounce, etc.)
-│       │   ├── lib/          # utilities (cn, registry helpers)
-│       │   └── index.ts      # barrel — the public surface
-│       ├── dist/             # tsup output (published)
-│       ├── styles.css
-│       └── themes/
+│   ├── design/              # authored tokens + portable contracts + generator
+│   ├── ui-core/             # @vllnt/ui-core — generated, platform-neutral data
+│   ├── ui/                  # @vllnt/ui — stable React DOM renderer
+│   └── ui-native/           # @vllnt/ui-native — experimental RN renderer
 ├── apps/
-│   └── registry/             # Next.js site at ui.vllnt.com
-│       ├── app/              # app-router routes (components/[slug], etc.)
-│       ├── content/          # MDX pages
-│       ├── lib/              # registry + OG utilities
-│       └── registry.ts       # shadcn-compatible registry feed
-├── .github/workflows/        # ci.yml, publish.yml, storybook.yml
-├── specs/                    # feature specs (active + shipped)
-└── docs/                     # contributor docs (this folder)
+│   ├── registry/            # Next.js docs + platform-aware registry
+│   └── native-catalog/      # private Expo integration consumer
+├── .github/workflows/
+├── specs/
+└── docs/
 ```
 
 ## Package boundaries
 
-| Package | Purpose | Published |
-|---------|---------|-----------|
-| `@vllnt/ui` | Component library | Yes, public npm |
-| `@vllnt/ui-registry` (registry app) | Docs + shadcn registry | No, deployed to `ui.vllnt.com` |
+| Package | Purpose | Release policy |
+|---------|---------|----------------|
+| `@vllnt/ui` | React DOM components using Radix UI, Tailwind CSS, and CVA | Public `latest` + canary |
+| `@vllnt/ui-core` | Framework-free tokens, native theme values, and portable option contracts | Experimental canary only |
+| `@vllnt/ui-native` | React Native components using native primitives and `StyleSheet` | Experimental canary only |
+| `@vllnt/ui-registry` | Docs, shadcn feed, search, and MCP | Private; deployed |
+| `@vllnt/ui-native-catalog` | Expo integration and Metro bundle proof | Private; CI only |
 
-External shared configs consumed as dev deps from npm:
+`@vllnt/ui` does not depend on the experimental packages. Its exports, CSS entry points, DOM behavior, and stable release path remain unchanged. The native renderer depends on `@vllnt/ui-core`, never on the web renderer. The registry is the first private consumer of core metadata.
 
-- `@vllnt/eslint-config` — ESLint 9 flat config
-- `@vllnt/typescript` — shared `tsconfig` bases
+External contributor tooling still comes from `@vllnt/eslint-config` and `@vllnt/typescript`. The web renderer uses React 19, Radix UI, Tailwind CSS, and CVA; the native renderer uses React 19 and React Native primitives. `tsup` builds libraries, Next.js builds the registry, and Expo/Metro validates the native integration.
 
-## Tech stack
+## Shared foundations
 
-- **Runtime:** React 19, Radix UI primitives, Tailwind CSS 3, CVA, tailwind-merge.
-- **Build:** `tsup` (library), Next.js (registry app).
-- **Test:** Vitest (unit, `jsdom`), Playwright CT (visual, real Chromium), Storybook (interactive + test-runner smoke).
-- **Lint:** ESLint 9 flat config. TypeScript strict.
-- **Workspace:** pnpm workspaces + Turborepo.
+`packages/design/tokens.json` is the authored token source. `packages/design/component-contracts.json` contains only portable semantic options such as Button variants, Text scales, and Heading levels. It deliberately excludes renderer details such as DOM attributes, `className`, `onClick`, React Native `style`, and `onPress`.
 
-## Component module layout
+The token generator writes committed artifacts for deterministic builds:
 
-Every component is a self-contained folder:
+- Existing `packages/ui/themes/default.css` and the token region of `packages/ui/styles.css`.
+- `@vllnt/ui-core` TypeScript and JSON exports.
+- React Native-compatible sRGB colors and point-based spacing, radius, type, and motion values.
 
-```
-src/components/{name}/
-  {name}.tsx         # implementation — forwardRef + cn + CVA + Radix (if applicable)
-  {name}.test.tsx    # Vitest unit tests
-  {name}.visual.tsx  # Playwright CT story (real browser)
-  {name}.mdx         # registry / docs content
-  index.ts           # barrel export from the folder
+```bash
+pnpm tokens:generate
+pnpm tokens:check
 ```
 
-The root `src/index.ts` re-exports components for consumers.
+CI runs the read-only drift check. A token change is incomplete when generated web and core outputs disagree.
 
-## Build graph
+## Renderer model
 
-```
-@vllnt/ui  build  ─▶  dist/       (tsup, preserves "use client")
-                   └▶ styles.css  (copied)
-                   └▶ themes/     (copied)
+### Web
 
-registry app build ─▶ .next/      (consumes @vllnt/ui via workspace link in dev,
-                                    via tsup dist in production CI)
-```
+`@vllnt/ui` targets React 19. Components render semantic DOM and Radix primitives, use Tailwind/CVA recipes, and accept refs as normal React 19 props. Existing package and CSS subpaths remain the supported contract.
 
-`pnpm check:circular` runs `madge` to catch circular imports under `packages/ui/src`.
+Web components remain self-contained under `packages/ui/src/components/{name}` with implementation, unit test, visual fixture, MDX documentation, and barrel export files as applicable. The root `src/index.ts` remains the public barrel. `pnpm check:circular` runs Madge against this graph.
+
+### React Native
+
+`@vllnt/ui-native` targets React 19 and React Native 0.81 or newer. Its source manifest currently lists 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Components consume the generated theme through `ThemeProvider`, expose React Native props, meet native touch-target and accessibility requirements, and have no DOM, Radix, Tailwind, NativeWind, or browser-global dependency.
+
+Interaction infrastructure supplies controlled/uncontrolled state, caller-owned selection IDs, reduced-motion observation, native modal layering, safe-area injection, and typed platform services. Clipboard and file picking stay host-injected; linking and sharing use React Native adapters. Browser-only behavior is omitted or adapted rather than simulated.
+
+NativeWind and `@rn-primitives` remain intentionally absent. This avoids mandatory consumer Babel configuration and unnecessary runtime dependencies. Any future adapter must be justified by behavior and real-device accessibility evidence.
 
 ## Theming
 
-All color values are **OKLCH channel** CSS variables (`L C H`) on `:root` and `.dark` in `styles.css` / `themes/default.css`; spacing and radius are length variables. Downstream apps override variables without patching components. The Tailwind preset (`@vllnt/ui/tailwind-preset`) maps variables to Tailwind tokens as `oklch(var(--name) / <alpha-value>)` so utility classes (including opacity modifiers) stay in sync with theme overrides.
+Web colors remain OKLCH channel CSS variables on `:root` and `.dark`; spacing, radius, and typography also remain CSS variables. The Tailwind preset and runtime preset themes continue to consume those variables, so downstream overrides do not require component patches.
 
-Beyond light/dark, a runtime **preset** layer (`themes/presets.css`) applies named themes via `data-theme` on the document root, switchable with `ThemeSwitcher` / `useThemePreset`. The registry app's `/themes` editor lets users author a custom OKLCH theme and export it as a CSS block, a `npx shadcn add` command (served by the `/r/themes` route handler), or design tokens.
+Core generation converts the authored OKLCH values to clipped sRGB hex for React Native and converts rem-based dimensions to numeric points. It applies two documented native accessibility adjustments: a near-black dark background instead of banned pure black, and a darker light destructive surface so small labels meet 4.5:1 contrast. Native light/dark themes are immutable data selected by `ThemeProvider`; system mode follows `useColorScheme`. These are deterministic renderer conversions, not a second authored token source.
 
-## CI pipelines
+## Build graph
 
-| Workflow | Triggers | Jobs |
-|----------|----------|------|
-| `ci.yml` | push to `main`, PRs | install → lint → typecheck → test → build |
-| `publish.yml` | push to `main`, manual dispatch | quality gates → canary (push) OR release (dispatch) |
-| `storybook.yml` | push to `main`, PRs | build Storybook + optional deploy |
+```text
+packages/design ──drift check──▶ generated web/core artifacts
+                                      │
+@vllnt/ui ────────────────────────────┤──▶ registry app
+                                      │
+@vllnt/ui-core ──▶ @vllnt/ui-native ─┴──▶ Expo native catalog
+```
 
-`publish.yml` uses `npx --yes npm@latest publish` so OIDC trusted publishing survives runner-bundled npm (which is older than 11.5.1).
+Turborepo orders package builds through workspace dependencies. The native CI job additionally runs lint, strict type checks, unit/contract tests, renderer boundary checks, packed-artifact resolution, Expo Doctor, and Android/iOS Metro exports.
 
-## Registry feed
+| Workflow | Responsibility |
+|----------|----------------|
+| `ci.yml` | Existing workspace gates plus an isolated native package/Expo job |
+| `publish.yml` | Existing `@vllnt/ui` canary and stable releases |
+| `native-canary.yml` | Synchronized core/native canaries after native quality gates |
+| `storybook.yml` | Existing web Storybook build and deployment |
 
-The shadcn-compatible registry at `https://ui.vllnt.com/r/{component}.json` is generated from `apps/registry/registry.ts` and served by the Next.js app. Each component resolves to a JSON payload consumable by `shadcn add`.
+## Platform-aware registry
+
+`apps/registry/registry.json` remains the canonical shadcn-compatible index. Generation adds a required `platforms` array to every item. Native-capable entries also carry:
+
+```json
+{
+  "platforms": ["web", "native"],
+  "native": {
+    "package": "@vllnt/ui-native",
+    "channel": "canary",
+    "status": "experimental",
+    "availability": "source",
+    "compatibility": "native-adapted",
+    "source": "src/components/button/button.tsx"
+  }
+}
+```
+
+`shadcn build` strips extension fields, so `stamp-registry-metadata.ts` restores them in generated public descriptors. The website exposes URL-driven platform selection, a dedicated `/native` hub, platform badges, filtering, source-aware component detail pages, and a native manifest at `/r/native/registry.json`; `/llms.txt`, `/llms-full.txt`, JSON routes, search, JSON-LD, and MCP project the same availability contract.
+
+Web installation remains shadcn-based. Native installation is unavailable while the manifest says `availability: "source"` and `installation.available: false`; the planned canary command is displayed as non-actionable documentation. Registry metadata is discovery information, not a claim that the web shim runs on React Native.
+
+## Release boundaries
+
+The existing `publish.yml` remains exclusively responsible for `@vllnt/ui`, including stable releases. `native-canary.yml` has no manual dispatch and cannot publish `latest`, create Git tags, or create GitHub releases. It publishes synchronized core/native canary versions in dependency order and verifies that neither `latest` tag moves.

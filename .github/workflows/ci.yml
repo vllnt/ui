@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -62,6 +65,25 @@ jobs:
 
       - name: Verify component previews resolve to real stories
         run: pnpm -F @vllnt/ui-registry registry:verify-previews
+
+  native:
+    name: Native Package Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Verify native packages and Expo bundles
+        run: pnpm ci:native
 
   e2e:
     name: E2E (Playwright)

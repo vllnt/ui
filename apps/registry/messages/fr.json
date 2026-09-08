@@ -9,6 +9,11 @@
     "home": "Accueil",
     "locale": "Langue",
     "philosophy": "Philosophie",
+    "platformAll": "Tous",
+    "platformNative": "Natif",
+    "platformSelectorLabel": "Filtrer par implementation",
+    "platforms": "Plateformes prises en charge",
+    "platformWeb": "Web",
     "readDocs": "Lire la documentation",
     "requestComponent": "Demander un composant"
   },
@@ -37,7 +42,9 @@
     "resources": "Ressources",
     "rssFeed": "Flux RSS",
     "sponsor": "Sponsoriser",
-    "storybook": "Storybook"
+    "storybook": "Storybook",
+    "native": "React Native",
+    "nativeRegistryJson": "JSON du registre natif"
   },
   "forms": {
     "report": {
@@ -71,6 +78,7 @@
   },
   "header": {
     "changelog": "Journal des modifications",
+    "closeNavigation": "Fermer la navigation",
     "githubLabel": "VLLNT UI sur GitHub",
     "navComponents": "Composants",
     "navDesign": "Design",
@@ -80,6 +88,7 @@
     "navRequest": "Demander",
     "navTemplates": "Modeles",
     "navThemes": "Themes",
+    "openNavigation": "Ouvrir la navigation",
     "releases": "Versions",
     "rssFeed": "Flux RSS",
     "searchButton": "Rechercher...",
@@ -125,14 +134,27 @@
     },
     "hero": {
       "browseAll": "Parcourir les {count}",
-      "browseTemplates": "Parcourir les modeles",
-      "description": "{count} composants React open-source pour construire des applications IA — chat, streaming, appels d'outils, citations, agents et artefacts. Chaque composant est aussi un descripteur JSON lisible par machine : les agents (Claude, Cursor, Cline, Continue) lisent le registre directement sans scraper le HTML.",
+      "browseNative": "Parcourir Natif",
+      "browseWeb": "Parcourir Web",
+      "description": "{count} composants React Web stables et un catalogue React Native disponible uniquement en source pour les applications IA. Les deux renderers publient leur disponibilite et leurs contrats pour que les agents choisissent un source adapte a la plateforme sans scraper le HTML.",
       "exploreAi": "Explorer les composants IA",
       "github": "GitHub",
       "kicker": "v{version} / MIT",
       "readDocs": "Lire la documentation",
-      "titleAccent": "Copiez, collez, livrez.",
-      "titleLead": "Le systeme de design UI pour les agents IA."
+      "titleAccent": "Un design system. Des renderers adaptes a la plateforme.",
+      "titleLead": "UI Web et native pour les agents IA."
+    },
+    "renderers": {
+      "browseNative": "Parcourir les composants Natifs",
+      "browseWeb": "Parcourir les composants Web",
+      "description": "Choisissez le renderer adapte a votre produit. La plateforme reste dans l'URL pendant la navigation.",
+      "sourcePreview": "Apercu source",
+      "nativeDescription": "Un renderer React Native cible. Le source est disponible dans le depot pendant la preparation du premier paquet canary synchronise.",
+      "nativeTitle": "Renderer Natif",
+      "stable": "Stable",
+      "title": "Deux renderers, un systeme de design",
+      "webDescription": "Le renderer React complet avec installation shadcn, apercus en direct, source et Storybook.",
+      "webTitle": "Renderer Web"
     },
     "releases": {
       "description": "Suivez les changements dans la bibliotheque de composants, le registre et le pipeline de publication.",
@@ -184,20 +206,35 @@
     },
     "component": {
       "browseAiComponents": "Parcourir tous les composants pour agents IA",
+      "capabilities": "Capacites",
       "code": "Code",
       "dependencies": "Dependances",
       "faq": "FAQ",
       "installation": "Installation",
+      "nativeCapabilitiesAdapted": "Interactions et accessibilite adaptees au natif",
+      "nativeCapabilitiesPortable": "Options semantiques portables et interactions natives",
+      "nativeMetaDescription": "{description} La source React Native de {title} est incluse dans VLLNT UI 0.4.0 pour iOS et Android. Elle est disponible uniquement comme source ; la publication npm est en attente.",
+      "nativeMetaTitle": "{title} pour React et React Native",
+      "notAvailable": "Indisponible",
+      "platform": "Plateforme",
+      "platformComparison": "Comparaison des plateformes",
+      "platformNative": "Natif",
+      "platformWeb": "Web",
       "preview": "Apercu",
       "related": "Composants similaires",
       "reportBug": "Signaler un bug",
       "shareOn": "Partager sur",
       "shareTitle": "Partager ce composant",
+      "sourceImplementationLabel": "Choisir une implementation source",
+      "sourceReact": "React",
+      "sourceReactNative": "React Native",
+      "nativeSourceOnlyCommand": "# React Native est disponible uniquement comme source ; copiez la source ci-dessus",
       "storiesAvailable": "{count, plural, one {# story disponible :} other {# stories disponibles :}}",
       "storybook": "Storybook",
       "storybookDescription": "Explorez les variantes, controles et verifications d'accessibilite dans le playground Storybook interactif.",
       "viewInStorybook": "Voir dans Storybook",
-      "viewOnNpm": "Voir {dep} sur npm",
+      "viewSource": "Voir le source ci-dessus",
+      "webCapabilities": "Rendu navigateur, evenements DOM et semantique ARIA",
       "whatItIsTitle": "Ce que c'est et quand l'utiliser",
       "whenToUseTitle": "Quand utiliser ceci dans une application IA"
     },
@@ -205,9 +242,17 @@
       "ctaDescription": "Demandez un nouveau composant et nous ouvrirons une issue GitHub pre-remplie avec les bons labels et le bon template.",
       "ctaTitle": "Vous ne trouvez pas ce dont vous avez besoin ?",
       "description": "Explorez les {count} composants disponibles dans la bibliotheque.",
-      "noPreview": "Aucun apercu",
+      "nativeMetaDescription": "Explorez les composants React Native de VLLNT UI 0.4.0 pour iOS et Android. Comparez source et capacites. Source uniquement, publication canary en attente.",
+      "nativeMetaTitle": "Composants React Native pour iOS et Android",
+      "noPlatformResults": "Aucun composant ne prend encore en charge cette plateforme.",
+      "platformAll": "Tous",
+      "platformFilterLabel": "Filtrer par plateforme",
+      "platformNative": "Natif",
+      "platformWeb": "Web",
+      "previewTitle": "Apercu de {name}",
       "stories": "{count, plural, one {# story} other {# stories}}",
-      "title": "Composants"
+      "title": "Composants",
+      "viewComponent": "Voir le composant"
     },
     "design": {
       "colors": "Couleurs",
@@ -242,6 +287,9 @@
       "faqTitle": "Questions frequentes",
       "llmsDescription": "Index concis selon la specification llmstxt.org — sections, liens et descriptions.",
       "llmsFullDescription": "Contexte complet du registre en une requete — docs plus chaque descripteur de composant.",
+      "nativeDescription": "Parcourez les familles actuellement couvertes par le renderer Natif. La disponibilite est plus limitee que sur Web et reste source-first jusqu'au premier canary synchronise.",
+      "nativeFamilyDescription": "Parcourez les composants {label} actuellement implementes pour le renderer Natif.",
+      "noPlatformResults": "Aucun composant de cette famille ne prend en charge le renderer selectionne.",
       "registryJsonDescription": "Descripteur par composant : props, schema d'accessibilite et exemples d'usage.",
       "title": "Familles de composants"
     },
@@ -549,7 +597,8 @@
     "quickAdd": {
       "addToV0": "Ajouter a v0.dev",
       "copied": "Copie !",
-      "copyInstall": "Copier la commande d'installation"
+      "copyInstall": "Copier la commande d'installation",
+      "copyWebInstall": "Copier la commande d'installation Web"
     },
     "shareEmbed": {
       "copied": "Copie !",
@@ -569,14 +618,17 @@
       "description": "Basculez entre clair et sombre pour inspecter l'apercu Storybook integre.",
       "light": "Clair",
       "lightLabel": "Apercu clair",
+      "loading": "Chargement de l'apercu…",
       "preview": "Apercu",
       "themeLabel": "Theme de l'apercu"
     }
   },
   "sidebar": {
+    "closeNavigation": "Fermer la navigation",
     "components": "Composants",
     "documentation": "Documentation",
     "getStarted": "Demarrer",
+    "navigationLabel": "Navigation du site",
     "overview": "Vue d ensemble",
     "philosophy": "Philosophie",
     "requestComponent": "Demander un composant",

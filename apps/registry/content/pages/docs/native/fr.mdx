@@ -1,0 +1,101 @@
+---
+title: Composants React Native dans 0.4.0
+description: Explorez les composants React Native de VLLNT UI 0.4.0 pour iOS et Android, les jetons partages, les contrats natifs et la disponibilite en source.
+type: docs
+og:
+  title: Composants React Native dans 0.4.0
+  description: Composants React Native pour iOS et Android dans VLLNT UI 0.4.0, disponibles en source
+  type: docs
+---
+
+# Composants React Native dans 0.4.0
+
+`@vllnt/ui-native` est un renderer separe, construit avec les memes jetons de design et contrats d'options portables que `@vllnt/ui`. Le paquet web stable reste inchange : le web utilise le DOM, Radix UI, Tailwind CSS et CVA ; le natif utilise les primitives React Native, `StyleSheet`, les API d'accessibilite natives et des services de plateforme injectes.
+
+## Disponibilite actuelle
+
+Le renderer est **en pre-version et disponible uniquement en source**. Son paquet npm n'est pas publie. La commande prevue ci-dessous est de la documentation, pas une action d'installation fonctionnelle :
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+Utilisez-la seulement quand le manifeste natif indique `availability: "package"` et `installation.available: true`. D'ici la, evaluez localement le source du depot et le catalogue Expo prive.
+
+- Paquet : `@vllnt/ui-native`
+- Canal : `canary` prevu ; aucun chemin `latest`
+- Exigences : React 19 et React Native 0.81+
+- Inventaire : 171 modules source
+- Manifeste : [`/r/native/registry.json`](/r/native/registry.json)
+
+## Configurer un theme
+
+```tsx
+import { ThemeProvider } from "@vllnt/ui-native"
+
+export function Root() {
+  return (
+    <ThemeProvider colorScheme="system">
+      <App />
+    </ThemeProvider>
+  )
+}
+```
+
+Le provider suit le theme de l'appareil par defaut. Choisissez `light` ou `dark` pour un mode fixe, ou transmettez des remplacements semantiques via `override`. Les valeurs sRGB et dimensions en points sont generees depuis la source OKLCH canonique dans `packages/design/tokens.json`.
+
+## Utiliser les contrats natifs
+
+```tsx
+import {
+  Button,
+  Card,
+  CardContent,
+  Heading,
+  Text,
+} from "@vllnt/ui-native"
+
+export function Example() {
+  return (
+    <Card>
+      <CardContent>
+        <Heading level={2}>Compte</Heading>
+        <Text tone="muted">Jetons semantiques natifs.</Text>
+        <Button onPress={() => {}}>Enregistrer</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+Utilisez les props React Native comme `onPress`, `style`, `accessibilityLabel`, `accessibilityState` et les actions d'accessibilite. Les props web comme `className`, `onClick` et `asChild` sont volontairement absentes.
+
+Le manifeste classe chaque composant dans une categorie :
+
+- `portable-options` : les options semantiques correspondent au renderer web tandis que les props et l'implementation restent natives.
+- `native-adapted` : le composant natif conserve l'intention mais adapte l'interaction, la mise en page ou la capacite a la plateforme.
+
+Il ne pretend jamais que le source web fonctionne dans React Native.
+
+## Limites des interactions et services
+
+Les controles utilisent un etat controle ou non controle et des identifiants de selection fournis par l'appelant. Les surfaces modales prennent en charge le retour natif, l'echappement d'accessibilite, le mouvement reduit et les wrappers de safe area fournis par l'hote. Le presse-papiers et la selection de fichiers exigent des services injectes. Les liens et le partage utilisent des adaptateurs React Native types. Un service indisponible reste visiblement indisponible au lieu d'utiliser une API navigateur.
+
+Native omet ou adapte les comportements propres au navigateur : portails DOM, dependance au hover, tables HTML, presse-papiers, telechargement ou plein ecran navigateur, rendu Markdown, coloration syntaxique, graphiques SVG et controle du routage web.
+
+## Decouvrir la prise en charge
+
+Parcourez le [catalogue de composants React Native](/fr/components?platform=native), ou comparez [Button](/fr/components/button?platform=native), [Input](/fr/components/input?platform=native) et [Dialog](/fr/components/dialog?platform=native). La valeur de plateforme filtre la liste des composants et reste conservee dans la navigation des composants, familles, docs, langues, entete et barre laterale. Les cartes gardent le meme apercu navigateur isole avec chaque filtre. Chaque page de composant compare les dependances et capacites Web et Natives, avec des onglets de source associes lorsqu'une implementation Native existe.
+
+Les clients machine peuvent utiliser :
+
+- `/r/native/registry.json` pour le manifeste du paquet natif
+- `/r/registry.json` pour les descripteurs web et leurs projections de plateforme
+- `/llms.txt` et `/llms-full.txt`
+- MCP `search_components` avec `{ "platform": "native" }`
+
+## Limite de validation
+
+Les controles du depot incluent le lint, le typecheck strict, les tests Jest d'interaction, les limites du renderer, la derive entre exports et manifeste, la resolution du paquet archive, Expo Doctor et les exports Metro Android/iOS. La version native stable reste bloquee tant que les preuves sur appareil physique, VoiceOver, TalkBack, migration, observabilite et retour arriere n'existent pas.
+
+Le paquet ne depend ni du DOM, ni de Radix UI, ni de Tailwind CSS, ni de NativeWind, ni des globales navigateur. `@vllnt/ui` reste le renderer web stable avec son API et son chemin de publication existants.

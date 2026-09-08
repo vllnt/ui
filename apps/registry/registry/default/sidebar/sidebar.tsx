@@ -11,6 +11,8 @@ import { cn } from "@vllnt/ui";
 import { useSidebar } from "@vllnt/ui";
 
 export type SidebarItem = {
+  /** Overrides pathname matching for navigation with contextual URL state. */
+  current?: boolean;
   href: string;
   title: string;
 };
@@ -25,6 +27,9 @@ export type SidebarSection = {
 };
 
 type SidebarProps = {
+  ariaLabel?: string;
+  closeLabel?: string;
+  id?: string;
   sections: SidebarSection[];
 };
 
@@ -56,7 +61,7 @@ function useMobile(setOpen: (open: boolean) => void) {
 }
 
 function useScrollFade(
-  containerReference: React.RefObject<HTMLDivElement | null>,
+  containerReference: React.RefObject<HTMLElement | null>,
 ) {
   const [showTopFade, setShowTopFade] = useState(false);
   const [showBottomFade, setShowBottomFade] = useState(false);
@@ -208,6 +213,25 @@ function FamilyList({
   );
 }
 
+function getHrefPathname(href: string): string {
+  return href.split(/[#?]/, 1)[0] ?? href;
+}
+
+function isCurrentItem(item: SidebarItem, pathname: string): boolean {
+  return item.current ?? pathname === getHrefPathname(item.href);
+}
+
+function getAriaCurrent(
+  item: SidebarItem,
+  pathname: string,
+): "page" | "true" | undefined {
+  if (item.current !== undefined) {
+    return item.current ? "true" : undefined;
+  }
+
+  return pathname === getHrefPathname(item.href) ? "page" : undefined;
+}
+
 function FamilyItems({
   isMobile,
   onBack,
@@ -254,10 +278,10 @@ function FamilyItems({
       <div className="space-y-0.5">
         {section.items.map((item) => (
           <Link
-            aria-current={pathname === item.href ? "page" : undefined}
+            aria-current={getAriaCurrent(item, pathname)}
             className={cn(
               "block px-3 py-1.5 rounded-md text-sm transition-colors",
-              pathname === item.href
+              isCurrentItem(item, pathname)
                 ? "bg-accent text-accent-foreground font-medium"
                 : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
             )}
@@ -295,8 +319,8 @@ function FamilyNav({
   const activeTitle =
     sections.find(
       (section) =>
-        section.href === pathname ||
-        section.items.some((item) => item.href === pathname),
+        (section.href && getHrefPathname(section.href) === pathname) ||
+        section.items.some((item) => getHrefPathname(item.href) === pathname),
     )?.title ?? null;
 
   const [routeKey, setRouteKey] = useState(pathname);
@@ -339,15 +363,91 @@ function FamilyNav({
 }
 
 // eslint-disable-next-line max-lines-per-function
-export function Sidebar({ sections }: SidebarProps) {
+export function Sidebar({
+  ariaLabel = "Sidebar navigation",
+  closeLabel = "Close sidebar",
+  id = "site-sidebar",
+  sections,
+}: SidebarProps) {
   const pathname = usePathname();
   const { open, setOpen } = useSidebar();
   const isMobile = useMobile(setOpen);
   const mounted = useMounted();
-  const scrollContainerReference = useRef<HTMLDivElement>(null);
+  const returnFocusReference = useRef<HTMLElement | null>(null);
+  const scrollContainerReference = useRef<HTMLElement>(null);
+  const sidebarReference = useRef<HTMLElement>(null);
+  const wasMobileOpenReference = useRef(false);
   const { showBottomFade, showTopFade } = useScrollFade(
     scrollContainerReference,
   );
+
+  useEffect(() => {
+    if (!isMobile || !open) return;
+
+    const containFocus = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const sidebar = sidebarReference.current;
+      if (!sidebar) return;
+
+      const focusable = [
+        ...sidebar.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ].filter((element) => !element.closest("[hidden]") && !element.inert);
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) {
+        event.preventDefault();
+        scrollContainerReference.current?.focus();
+        return;
+      }
+
+      const activeElement = document.activeElement;
+      if (!sidebar.contains(activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      } else if (
+        event.shiftKey &&
+        activeElement === scrollContainerReference.current
+      ) {
+        event.preventDefault();
+        last.focus();
+      }
+    };
+
+    document.addEventListener("keydown", containFocus);
+    return () => {
+      document.removeEventListener("keydown", containFocus);
+    };
+  }, [isMobile, open, setOpen]);
+
+  useEffect(() => {
+    const wasMobileOpen = wasMobileOpenReference.current;
+
+    if (isMobile && open && !wasMobileOpen) {
+      returnFocusReference.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+      scrollContainerReference.current?.focus();
+    } else if (wasMobileOpen && (!isMobile || !open)) {
+      returnFocusReference.current?.focus();
+      returnFocusReference.current = null;
+    }
+
+    wasMobileOpenReference.current = isMobile && open;
+  }, [isMobile, open]);
 
   const collapsed = mounted && !isMobile && !open;
 
@@ -358,19 +458,14 @@ export function Sidebar({ sections }: SidebarProps) {
     <>
       {/* Mobile overlay */}
       {isMobile && open ? (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        <button
+          aria-label={closeLabel}
+          className="fixed inset-0 z-40 bg-foreground/30 lg:hidden"
           data-testid="sidebar-overlay"
           onClick={() => {
             setOpen(false);
           }}
-          onKeyDown={(event) => {
-            if (event.key === "Escape") {
-              setOpen(false);
-            }
-          }}
-          role="button"
-          tabIndex={0}
+          type="button"
         />
       ) : null}
 
@@ -382,12 +477,19 @@ export function Sidebar({ sections }: SidebarProps) {
           "overflow-hidden",
           "shrink-0",
           collapsed ? "border-r-0" : "border-r",
-          collapsed ? "w-0" : isMobile ? "w-full" : "w-64",
+          collapsed
+            ? "w-0"
+            : isMobile
+              ? "w-[calc(100%-3rem)] max-w-80"
+              : "w-64",
           isMobile && open && "translate-x-0",
           isMobile && !open && "-translate-x-full",
           !isMobile && !collapsed && "-translate-x-full lg:translate-x-0",
           !isMobile && collapsed && "-translate-x-full",
         )}
+        id={id}
+        inert={(isMobile && !open) || collapsed ? true : undefined}
+        ref={sidebarReference}
       >
         <div className="relative flex-1 overflow-hidden">
           {/* Top fade */}
@@ -401,8 +503,10 @@ export function Sidebar({ sections }: SidebarProps) {
           ) : null}
 
           <nav
-            className="flex-1 p-4 overflow-y-auto overscroll-contain h-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            aria-label={ariaLabel}
+            className="flex-1 h-full overflow-y-auto overscroll-contain p-4 focus:outline-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             ref={scrollContainerReference}
+            tabIndex={isMobile && open ? -1 : undefined}
           >
             <div className="space-y-4">
               {otherSections.map((section, sectionIndex) => {
@@ -410,24 +514,25 @@ export function Sidebar({ sections }: SidebarProps) {
                   <div className={section.title ? "space-y-0.5" : "space-y-1"}>
                     {section.items.map((item) => (
                       <Link
+                        aria-current={getAriaCurrent(item, pathname)}
                         className={cn(
                           section.title
                             ? "block px-3 py-1.5 rounded-md text-sm transition-colors"
                             : "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                          pathname === item.href ||
-                            (item.href === "/" && pathname === "/")
+                          isCurrentItem(item, pathname)
                             ? "bg-accent text-accent-foreground"
                             : section.title
                               ? "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                               : "hover:bg-accent hover:text-accent-foreground",
                           section.title &&
-                            pathname === item.href &&
+                            isCurrentItem(item, pathname) &&
                             "font-medium",
                         )}
                         href={item.href}
                         key={item.href}
                         onClick={() => {
                           if (isMobile) {
+                            returnFocusReference.current = null;
                             setOpen(false);
                           }
                         }}
@@ -461,6 +566,7 @@ export function Sidebar({ sections }: SidebarProps) {
                 <FamilyNav
                   isMobile={isMobile}
                   onNavigate={() => {
+                    returnFocusReference.current = null;
                     setOpen(false);
                   }}
                   pathname={pathname}

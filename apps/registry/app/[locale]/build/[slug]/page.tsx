@@ -1,10 +1,11 @@
-import { CodeBlock, Sidebar } from "@vllnt/ui";
+import { CodeBlock } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
 import {
@@ -87,7 +88,7 @@ export default async function UseCasePage({ params }: Props) {
           faqPageLd(useCase.faq),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
           <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
