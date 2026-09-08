@@ -1,0 +1,47 @@
+---
+title: Afficher les reponses IA en streaming avec React
+description: Utiliser AIStreamingText pour le texte accumule et gerer explicitement le transport, l'annulation et les erreurs.
+type: docs
+---
+
+## Le rendu n'est pas le transport
+
+`AIStreamingText` affiche le texte disponible. Il n'ouvre pas de connexion, ne decode pas les evenements serveur et n'appelle pas de modele. Votre application gere ces operations. Le [guide des interfaces IA](/guides/ai-ui) explique la separation entre presentation et execution.
+
+Suivez la [configuration du package ou du registre](/docs/installation). Avec le package, importez la feuille de styles complete une fois. Cet exemple consomme l'etat de l'application sans simuler un flux avec des minuteries.
+
+```tsx
+import { AIMessageBubble, AIStreamingText } from "@vllnt/ui";
+
+export function StreamingReply({
+  text,
+  pending,
+}: {
+  text: string;
+  pending: boolean;
+}) {
+  return (
+    <AIMessageBubble messageRole="assistant" author="Assistant">
+      <AIStreamingText text={text} isStreaming={pending} />
+    </AIMessageBubble>
+  );
+}
+```
+
+## Accumuler le texte une seule fois
+
+Passez la chaine complete accumulee dans `text`, pas seulement le dernier fragment. Decodez les octets avec un decodeur de flux et analysez le protocole avant de mettre a jour l'interface. Un fragment reseau ne correspond pas toujours a un caractere, un objet JSON ou un evenement. Testez les caracteres multioctets coupes entre deux fragments.
+
+`isStreaming` controle le curseur et la region d'annonce polie. `showCursor` masque le curseur et `cursor` change son glyphe. Ces props n'annulent pas la requete. Utilisez un controleur d'annulation gere par l'application ou l'API de votre transport.
+
+## Traiter les interruptions sans ambiguite
+
+A la fin, passez `isStreaming` a false et conservez le texte. En cas d'echec, gardez la sortie partielle clairement incomplete et affichez une erreur avec une action de nouvelle tentative. En cas d'annulation, arretez l'etat en cours sans presenter la reponse comme terminee. Ignorez les mises a jour tardives des anciennes requetes.
+
+Regroupez les mises a jour trop frequentes si elles provoquent trop de rendus. Mesurez avec de longues reponses realistes plutot que de supposer que chaque token exige un rendu immediat. N'inserez pas la sortie non fiable avec `dangerouslySetInnerHTML`.
+
+## Tester accessibilite et mouvement
+
+Le composant utilise `aria-live="polite"` pendant le flux et masque le curseur aux technologies d'assistance. Testez avec un lecteur d'ecran : les annonces rapides peuvent gener les utilisateurs. Si besoin, prevoyez une annonce finale au niveau de l'application. Verifiez la reduction des mouvements, l'annulation au clavier et le retour a la ligne sur petit ecran.
+
+Consultez [AIStreamingText](/components/ai-streaming-text) et harmonisez les surfaces avec le [guide des tokens](/guides/design-tokens).
