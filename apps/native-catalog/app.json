@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "VLLNT UI Native Catalog",
+    "slug": "vllnt-ui-native-catalog",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "com.vllnt.uinativecatalog"
+    },
+    "ios": {
+      "bundleIdentifier": "com.vllnt.uinativecatalog",
+      "supportsTablet": true
+    }
+  }
+}

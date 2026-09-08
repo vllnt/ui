@@ -1,16 +1,23 @@
-import { Breadcrumb, Sidebar } from "@vllnt/ui";
+import { Breadcrumb } from "@vllnt/ui";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
-import type { Locale } from "@/i18n/routing";
+import { PlatformSelector } from "@/components/platform-selector";
+import { PlatformSidebar } from "@/components/platform-sidebar";
+import { Link, type Locale } from "@/i18n/routing";
 import {
   breadcrumbTrailLd,
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import {
+  getPlatform,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
+import { registry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import {
   familyPath,
@@ -21,6 +28,7 @@ import {
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
+  readonly searchParams: Promise<PlatformQuery>;
 };
 
 const PATHNAME = "/families";
@@ -50,11 +58,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function FamiliesPage({ params }: Props) {
-  const { locale } = await params;
+export default async function FamiliesPage({ params, searchParams }: Props) {
+  const [{ locale }, query] = await Promise.all([params, searchParams]);
   setRequestLocale(locale);
   const t = await getTranslations("pages.families");
   const common = await getTranslations("common");
+  const platform = getPlatform(query.platform);
+  const platformsByName = new Map(
+    registry.items.map((item) => [item.name, item.platforms]),
+  );
+  const visibleGroups = groupedComponents
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) =>
+        platformsByName.get(item.name)?.includes(platform ?? "web"),
+      ),
+    }))
+    .filter((group) => group.items.length > 0);
 
   return (
     <>
@@ -75,15 +95,26 @@ export default async function FamiliesPage({ params }: Props) {
           }),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <Breadcrumb
             className="mb-4 text-muted-foreground"
             items={[
-              { href: localizePathname("/", locale), label: common("home") },
               {
-                href: localizePathname("/components", locale),
+                href: withPlatformQuery(
+                  localizePathname("/", locale),
+                  query,
+                  platform,
+                ),
+                label: common("home"),
+              },
+              {
+                href: withPlatformQuery(
+                  localizePathname("/components", locale),
+                  query,
+                  platform,
+                ),
                 label: common("components"),
               },
               { label: t("breadcrumb") },
@@ -91,17 +122,26 @@ export default async function FamiliesPage({ params }: Props) {
           />
           <div className="mb-12">
             <h1 className="text-4xl font-semibold mb-4">{t("title")}</h1>
-            <p className="text-muted-foreground text-lg">{t("description")}</p>
-            <p className="text-muted-foreground text-sm mt-2">
-              {t("familyCount", { count: groupedComponents.length })}
+            <p className="text-muted-foreground text-lg">
+              {platform === "native"
+                ? t("nativeDescription")
+                : t("description")}
             </p>
+            <p className="text-muted-foreground text-sm mt-2">
+              {t("familyCount", { count: visibleGroups.length })}
+            </p>
+            <PlatformSelector className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {groupedComponents.map((group) => (
+            {visibleGroups.map((group) => (
               <Link
                 className="group flex flex-col rounded-lg border bg-card p-6 transition-colors hover:border-foreground/20"
-                href={localizePathname(familyPath(group.category), locale)}
+                href={withPlatformQuery(
+                  familyPath(group.category),
+                  query,
+                  platform,
+                )}
                 key={group.category}
               >
                 <div className="flex items-baseline justify-between gap-3">

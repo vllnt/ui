@@ -9,6 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Added
 
 - **Callout composition** — semantic-token `neutral` variant, explicit `composable` opt-in, and typography-free `CalloutHeader` / `CalloutBody` with React 19 refs. Existing colored variants, default titles, layout, and alert role remain unchanged. The root now accepts native div props and refs (#474).
+- Source-only React Native renderer and shared design contracts for the 0.4.0 canary track; stable Web installation remains unchanged.
+- Localized Native catalog discovery, dependency/capability comparison, and extensible React/React Native source tabs in a single component preview surface.
+
+### Fixed
+
+- Preserve nested scrolling, reduced-motion behavior and sidebar keyboard focus in the affected Web components.
+- Forward explicit tab accessibility relationships and label/keyboard handlers without changing default tab navigation.
+- Emit JSON-LD graph documents and localized Native discovery metadata without advertising unpublished npm packages.
 
 ## [0.3.0] - 2026-06-26
 

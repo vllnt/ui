@@ -21,6 +21,16 @@ const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
 const publicRDir = join(repoRoot, "apps/registry/public/r");
 
 type Stability = "stable" | "beta" | "experimental" | "deprecated";
+type ComponentPlatform = "native" | "web";
+
+type NativeRenderer = {
+  availability: "package" | "source";
+  channel: "canary";
+  compatibility: "native-adapted" | "portable-options";
+  package: "@vllnt/ui-native";
+  source: string;
+  status: "experimental";
+};
 
 type A11yKeyboardBinding = {
   keys: string;
@@ -39,7 +49,7 @@ type UsageExample = {
   title: string;
   description?: string;
   code: string;
-  framework?: "react" | "next";
+  framework?: "next" | "react" | "react-native";
   storyId?: string;
 };
 
@@ -56,6 +66,8 @@ type RegistryItem = {
   a11y?: A11ySchema;
   examples?: UsageExample[];
   name: string;
+  native?: NativeRenderer;
+  platforms: ComponentPlatform[];
   props?: PropDefinition[];
   version?: string;
   stability?: Stability;
@@ -82,6 +94,12 @@ for (const item of registry.items) {
 
   data.version = item.version;
   data.stability = item.stability;
+  data.platforms = item.platforms;
+  if (item.native) {
+    data.native = item.native;
+  } else {
+    delete data.native;
+  }
   if (item.replacedBy) {
     data.replacedBy = item.replacedBy;
   } else {
@@ -110,10 +128,25 @@ for (const item of registry.items) {
 // Patch the public registry index too — agents read /r/registry.json.
 const indexPath = join(publicRDir, "registry.json");
 if (existsSync(indexPath)) {
-  const index = JSON.parse(readFileSync(indexPath, "utf8")) as Record<
-    string,
-    unknown
-  >;
+  const index = JSON.parse(readFileSync(indexPath, "utf8")) as {
+    generatedAt?: string;
+    items?: Record<string, unknown>[];
+    version?: string;
+  };
+  const metadataByName = new Map(
+    registry.items.map((item) => [item.name, item]),
+  );
+  for (const indexItem of index.items ?? []) {
+    const name = typeof indexItem.name === "string" ? indexItem.name : "";
+    const metadata = metadataByName.get(name);
+    if (!metadata) continue;
+    indexItem.platforms = metadata.platforms;
+    if (metadata.native) {
+      indexItem.native = metadata.native;
+    } else {
+      delete indexItem.native;
+    }
+  }
   index.version = registry.version;
   index.generatedAt = registry.generatedAt;
   writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`);

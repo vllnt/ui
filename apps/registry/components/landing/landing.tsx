@@ -1,5 +1,11 @@
-import { Badge, StaticCode } from "@vllnt/ui";
-import { ArrowRight, Sparkles, Terminal } from "lucide-react";
+import { Badge } from "@vllnt/ui";
+import {
+  ArrowRight,
+  Monitor,
+  Smartphone,
+  Sparkles,
+  Terminal,
+} from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
@@ -19,9 +25,6 @@ const GITHUB_URL = "https://github.com/vllnt/ui";
 const STORYBOOK_URL = "https://storybook.vllnt.com";
 const REQUEST_URL =
   "https://github.com/vllnt/ui/issues/new?template=feature_request.yml&labels=enhancement,component";
-const INSTALL_COMMAND =
-  "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json";
-
 const TRUST_BADGE_KEYS = ["mit", "typescript", "rsc", "tailwind"] as const;
 
 async function HeroActions({ componentCount }: { componentCount: number }) {
@@ -29,23 +32,11 @@ async function HeroActions({ componentCount }: { componentCount: number }) {
   return (
     <div className="mt-6 flex flex-wrap gap-3">
       <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-        href="/families/ai"
-      >
-        {t("exploreAi")}
-        <ArrowRight className="size-4" />
-      </Link>
-      <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         href="/components"
       >
         {t("browseAll", { count: componentCount })}
-      </Link>
-      <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
-        href="/templates"
-      >
-        {t("browseTemplates")}
+        <ArrowRight className="size-4" />
       </Link>
       <Link
         className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
@@ -91,10 +82,6 @@ async function Hero({
           {t("description", { count: componentCount })}
         </p>
 
-        <div className="mt-8">
-          <StaticCode code={INSTALL_COMMAND} language="bash" />
-        </div>
-
         <HeroActions componentCount={componentCount} />
 
         <ul className="mt-8 flex flex-wrap gap-3 text-xs text-muted-foreground">
@@ -107,6 +94,61 @@ async function Hero({
             </li>
           ))}
         </ul>
+      </div>
+    </section>
+  );
+}
+
+async function RendererChoices() {
+  const t = await getTranslations("landing.renderers");
+
+  return (
+    <section className="border-b border-border">
+      <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
+        <h2 className="text-3xl font-semibold">{t("title")}</h2>
+        <p className="mt-4 max-w-2xl text-muted-foreground">
+          {t("description")}
+        </p>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          <article className="rounded-lg border border-border bg-card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Monitor className="size-5" />
+                <h3 className="text-xl font-semibold">{t("webTitle")}</h3>
+              </div>
+              <Badge variant="outline">{t("stable")}</Badge>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("webDescription")}
+            </p>
+            <Link
+              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              href="/components?platform=web"
+            >
+              {t("browseWeb")}
+              <ArrowRight className="size-4" />
+            </Link>
+          </article>
+          <article className="rounded-lg border border-border bg-card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Smartphone className="size-5" />
+                <h3 className="text-xl font-semibold">{t("nativeTitle")}</h3>
+              </div>
+              <Badge variant="secondary">{t("sourcePreview")}</Badge>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("nativeDescription")}
+            </p>
+            <Link
+              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              href="/components?platform=native"
+            >
+              {t("browseNative")}
+              <ArrowRight className="size-4" />
+            </Link>
+          </article>
+        </div>
       </div>
     </section>
   );
@@ -364,6 +406,7 @@ export async function Landing() {
   return (
     <>
       <Hero componentCount={componentCount} version={latest} />
+      <RendererChoices />
       <Stats
         categoryCount={categoryCount}
         componentCount={componentCount}

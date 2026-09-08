@@ -54,9 +54,9 @@ async function readDocumentPage(slug: string): Promise<string> {
 
 function buildSummary(items: readonly RegistryComponent[]): string {
   return (
-    "One-fetch, complete agent context for the VLLNT UI registry. " +
-    `${items.length} components, install via shadcn CLI against /r/<name>.json. ` +
-    `Site: ${SITE_URL}`
+    "One-fetch, complete agent context for the platform-aware VLLNT UI registry. " +
+    `${items.length} component descriptors for web and React Native. ` +
+    `Inspect platforms before installation. Site: ${SITE_URL}`
   );
 }
 
@@ -67,6 +67,15 @@ const INSTALL_DETAILS = [
   `pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json`,
   `# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`,
   "```",
+  "",
+  "Experimental React Native renderer (source preview only; no npm release yet):",
+  "",
+  "```bash",
+  "# Planned after the first synchronized canary is published:",
+  "pnpm add @vllnt/ui-native@canary",
+  "```",
+  "",
+  `Native manifest: ${SITE_URL}/r/native/registry.json`,
 ].join("\n");
 
 async function buildGuidePages(): Promise<LlmsFullPage[]> {
@@ -121,6 +130,15 @@ function buildTemplatePages(): LlmsFullPage[] {
   }));
 }
 
+function buildNativeComponentDetails(item: RegistryComponent): string[] {
+  if (!item.native) return [];
+  return [
+    `- Native renderer: \`${item.native.package}\` (${item.native.status}; ${item.native.compatibility}; availability: ${item.native.availability})`,
+    `- Native source: \`${item.native.source}\``,
+    `- Native page: ${SITE_URL}/components/${item.name}?platform=native`,
+  ];
+}
+
 function buildComponentPages(
   items: readonly RegistryComponent[],
 ): LlmsFullPage[] {
@@ -130,6 +148,8 @@ function buildComponentPages(
       content: [
         `- Slug: \`${item.name}\``,
         `- Category: \`${item.category ?? ""}\``,
+        `- Platforms: ${item.platforms.join(", ")}`,
+        ...buildNativeComponentDetails(item),
         `- Description: ${item.description ?? ""}`,
         `- Page: ${SITE_URL}/components/${item.name}`,
         `- Schema: ${SITE_URL}/r/${item.name}.json`,

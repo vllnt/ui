@@ -1,0 +1,13 @@
+{
+  "name": "@vllnt/design-source",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/generate-tokens.mjs --check",
+    "lint": "node scripts/generate-tokens.mjs --check",
+    "test:once": "node scripts/generate-tokens.mjs --check",
+    "tokens:check": "node scripts/generate-tokens.mjs --check",
+    "tokens:generate": "node scripts/generate-tokens.mjs"
+  }
+}

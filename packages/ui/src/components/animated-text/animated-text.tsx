@@ -179,16 +179,15 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
       return;
     }
 
+    let current = 0;
+    const finalProgress = length + 4;
     const revealInterval = window.setInterval(
       () => {
-        setProgress((current) => {
-          if (current >= length + 4) {
-            window.clearInterval(revealInterval);
-            return current;
-          }
-
-          return current + 1;
-        });
+        current += 1;
+        setProgress(current);
+        if (current >= finalProgress) {
+          window.clearInterval(revealInterval);
+        }
       },
       Math.max(16, stagger),
     );

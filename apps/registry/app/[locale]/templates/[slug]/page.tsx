@@ -1,4 +1,4 @@
-import { Breadcrumb, Sidebar } from "@vllnt/ui";
+import { Breadcrumb } from "@vllnt/ui";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -6,6 +6,7 @@ import Script from "next/script";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { GitHubMark } from "@/components/github-mark";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale, routing } from "@/i18n/routing";
 import {
   breadcrumbTrailLd,
@@ -99,7 +100,7 @@ export default async function TemplatePage(props: Props) {
           }),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <Breadcrumb

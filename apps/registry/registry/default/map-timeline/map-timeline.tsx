@@ -528,16 +528,19 @@ function useTimelineState(arguments_: {
     clamp(initialYear ?? startYear, startYear, endYear),
   );
   const [isPlaying, setIsPlaying] = useState(false);
+  const yearRef = useRef(year);
+  useEffect(() => {
+    yearRef.current = year;
+  }, [year]);
 
   const updateYear = useCallback(
     (next: number) => {
       const clamped = clamp(next, startYear, endYear);
-      setYear((current) => {
-        if (clamped >= endYear) setIsPlaying(false);
-        if (current === clamped) return current;
-        onYearChange?.(clamped);
-        return clamped;
-      });
+      if (clamped >= endYear) setIsPlaying(false);
+      if (yearRef.current === clamped) return;
+      yearRef.current = clamped;
+      setYear(clamped);
+      onYearChange?.(clamped);
     },
     [endYear, onYearChange, startYear],
   );

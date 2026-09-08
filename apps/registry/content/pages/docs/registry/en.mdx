@@ -27,7 +27,9 @@ Registry items include:
 - `description`: short summary for search, agents, and docs.
 - `type`: registry item kind.
 - `category`: component category.
-- `files`: source files installed by the CLI.
+- `platforms`: non-empty renderer list, using `web`, `native`, or both.
+- `native`: package, channel, release-status, and parity metadata when `native` is supported.
+- `files`: source files installed by the web CLI.
 - `dependencies`: npm dependencies required by the component.
 - `registryDependencies`: other registry components needed at runtime.
 - `version` and `stability`: release metadata stamped during registry build.
@@ -42,4 +44,4 @@ The registry app generates shims and metadata from the package source. Do not ha
 
 ## Agent usage
 
-Agents should prefer `/r/registry.json` for discovery and `/r/<name>.json` for implementation details. Use `/llms-full.txt` when a single text context is easier than fetching many JSON endpoints.
+Agents should prefer `/r/registry.json` for discovery and `/r/<name>.json` for implementation details. Check `platforms` and `native.availability` before selecting an installation path. Web descriptors install through shadcn. Native pilot entries currently expose source metadata only; `@vllnt/ui-native@canary` is planned but not published. Use `/llms-full.txt` when a single text context is easier than fetching many JSON endpoints.

@@ -47,9 +47,11 @@ const CATEGORY_LABEL = new Map<string, string>([
   ["utility", "Utility"],
 ]);
 
-const INSTALL_DETAILS =
-  "Install any component with the shadcn CLI: " +
-  `\`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\``;
+const INSTALL_DETAILS = [
+  "Web: install a component with the shadcn CLI: " +
+    `\`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\`.`,
+  "Native is experimental and currently available from repository source only. The planned `pnpm add @vllnt/ui-native@canary` command becomes valid after the first synchronized canary is published. Check `/r/native/registry.json` first.",
+].join(" ");
 
 const DOCS_SECTION: LlmsSection = {
   links: [
@@ -84,6 +86,12 @@ const DOCS_SECTION: LlmsSection = {
       url: `${SITE_URL}/components`,
     },
     {
+      notes:
+        "React Native support in 0.4.0; source-only until canary publication",
+      title: "React Native component catalog",
+      url: `${SITE_URL}/components?platform=native`,
+    },
+    {
       notes: "starter kits for full VLLNT UI apps",
       title: "Templates",
       url: `${SITE_URL}/templates`,
@@ -113,6 +121,12 @@ const REGISTRY_SECTION: LlmsSection = {
       notes: "full machine-readable list of all components",
       title: "Registry index",
       url: `${SITE_URL}/r/registry.json`,
+    },
+    {
+      notes:
+        "native renderer status, requirements, source, and supported components",
+      title: "Native renderer manifest",
+      url: `${SITE_URL}/r/native/registry.json`,
     },
     {
       notes: "machine-readable VLLNT UI token contract",
@@ -161,9 +175,9 @@ function getSortedCategories(
 
 function buildSummary(items: readonly RegistryComponent[]): string {
   return (
-    "Agent-first React component registry. " +
-    `${items.length} accessible components built on Radix UI, Tailwind CSS, and CVA. ` +
-    "Install via the shadcn CLI against any /r/<name>.json endpoint."
+    "Agent-first, platform-aware component registry. " +
+    `${items.length} accessible descriptors for the stable web renderer and experimental React Native renderer. ` +
+    "Inspect each item's platforms before choosing an install path."
   );
 }
 
@@ -178,12 +192,26 @@ function buildComponentSections(
     const links: LlmsLink[] = [...bucket]
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item) => ({
-        notes: item.description,
+        notes: `${item.description ?? ""} Platforms: ${item.platforms.join(", ")}.`,
         title: item.title,
         url: `${SITE_URL}/components/${item.name}`,
       }));
     return [{ links, title: `Components - ${label}` }];
   });
+}
+
+function buildNativeSection(items: readonly RegistryComponent[]): LlmsSection {
+  return {
+    links: items
+      .filter((item) => item.platforms.includes("native"))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((item) => ({
+        notes: `${item.description ?? ""} Experimental ${item.native?.compatibility ?? "native-adapted"} renderer; ${item.native?.availability ?? "source"} availability.`,
+        title: item.title,
+        url: `${SITE_URL}/components/${item.name}`,
+      })),
+    title: "React Native components - Experimental",
+  };
 }
 
 function buildLlmsTxt(): string {
@@ -194,6 +222,7 @@ function buildLlmsTxt(): string {
       DOCS_SECTION,
       REGISTRY_SECTION,
       ...buildComponentSections(items),
+      buildNativeSection(items),
     ],
     summary: buildSummary(items),
     title: "VLLNT UI",

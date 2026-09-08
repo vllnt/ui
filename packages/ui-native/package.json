@@ -1,0 +1,93 @@
+{
+  "name": "@vllnt/ui-native",
+  "version": "0.4.0",
+  "description": "Accessible React Native renderer for VLLNT UI",
+  "license": "MIT",
+  "author": "vllnt",
+  "homepage": "https://ui.vllnt.com/docs/installation?platform=native",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vllnt/ui.git",
+    "directory": "packages/ui-native"
+  },
+  "bugs": {
+    "url": "https://github.com/vllnt/ui/issues"
+  },
+  "keywords": ["react-native", "expo", "components", "design-system"],
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "react-native": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "react-native": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./registry.json": "./registry.json"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public",
+    "tag": "canary",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "react-native": "./dist/index.js",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "react-native": "./dist/index.js",
+        "import": "./dist/index.js",
+        "default": "./dist/index.js"
+      },
+      "./registry.json": "./registry.json"
+    }
+  },
+  "files": [
+    "dist",
+    "registry.json",
+    "registry.schema.json",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "boundaries:check": "node --test scripts/check-boundaries.test.mjs && node scripts/check-boundaries.mjs",
+    "build": "tsup",
+    "clean": "rm -rf dist node_modules coverage",
+    "generate:index": "node scripts/generate-index.mjs",
+    "generate:index:check": "node scripts/generate-index.mjs --check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "pack:check": "node scripts/check-packed-package.mjs",
+    "test": "jest --watch",
+    "test:once": "jest --runInBand",
+    "typecheck": "tsc --noEmit --project tsconfig.json"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0 <20",
+    "react-native": ">=0.81.0 <1"
+  },
+  "dependencies": {
+    "@vllnt/ui-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@react-native/babel-preset": "0.86.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^29.5.14",
+    "@types/react": "19.2.13",
+    "@vllnt/eslint-config": "^1.0.0",
+    "@vllnt/typescript": "^1.0.0",
+    "babel-jest": "^29.7.0",
+    "eslint": "^9.39.1",
+    "jest": "^29.7.0",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-test-renderer": "19.2.3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  }
+}

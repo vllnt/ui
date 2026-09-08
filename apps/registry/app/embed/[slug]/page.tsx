@@ -10,7 +10,7 @@ import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ theme?: string }>;
+  searchParams: Promise<{ mode?: string; theme?: string }>;
 };
 
 const metadataMap = componentMetadata as Record<
@@ -46,7 +46,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function EmbedPage(props: Props) {
   const { slug } = await props.params;
-  const { theme } = await props.searchParams;
+  const { mode, theme } = await props.searchParams;
   const component = findComponent(slug);
 
   if (!component) {
@@ -56,6 +56,16 @@ export default async function EmbedPage(props: Props) {
   const title = metadataMap[slug]?.title ?? component.title ?? slug;
   const isDark = theme === "dark";
   const link = withRef(componentUrl(slug), "embed");
+
+  if (mode === "thumbnail") {
+    return (
+      <div className={isDark ? "dark" : undefined}>
+        <div className="flex min-h-dvh items-center justify-center overflow-hidden bg-background p-4 text-foreground">
+          <ComponentPreview componentName={slug} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={isDark ? "dark" : undefined}>

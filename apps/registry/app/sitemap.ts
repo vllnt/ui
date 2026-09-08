@@ -65,9 +65,19 @@ function staticRoutes(lastModified: Date): MetadataRoute.Sitemap {
     { changeFrequency: "weekly", path: "/", priority: 1 },
     { changeFrequency: "weekly", path: "/families", priority: 0.9 },
     { changeFrequency: "weekly", path: "/components", priority: 1 },
+    {
+      changeFrequency: "weekly",
+      path: "/components?platform=native",
+      priority: 0.9,
+    },
     { changeFrequency: "weekly", path: "/templates", priority: 0.8 },
     { changeFrequency: "weekly", path: "/changelog", priority: 0.8 },
     { changeFrequency: "weekly", path: "/docs", priority: 0.8 },
+    {
+      changeFrequency: "monthly",
+      path: "/docs/installation?platform=native",
+      priority: 0.75,
+    },
     { changeFrequency: "monthly", path: "/philosophy", priority: 0.6 },
     { changeFrequency: "monthly", path: "/design", priority: 0.8 },
     { changeFrequency: "weekly", path: "/releases", priority: 0.8 },
@@ -154,26 +164,31 @@ function componentRoutes(
   );
 }
 
+const RAW_REGISTRY_ROUTES = [
+  {
+    changeFrequency: "weekly",
+    priority: 0.3,
+    url: `${SITE_URL}/r/registry.json`,
+  },
+  {
+    changeFrequency: "weekly",
+    priority: 0.3,
+    url: `${SITE_URL}/r/native/registry.json`,
+  },
+  {
+    changeFrequency: "monthly",
+    priority: 0.3,
+    url: `${SITE_URL}/r/design.json`,
+  },
+  { changeFrequency: "monthly", priority: 0.3, url: `${SITE_URL}/DESIGN.md` },
+] satisfies readonly Omit<SitemapEntryInput, "lastModified">[];
+
 function registryRoutes(
   items: readonly RegistryComponent[],
   lastModified: Date,
 ): MetadataRoute.Sitemap {
-  const rawRoutes = [
-    {
-      changeFrequency: "weekly",
-      priority: 0.3,
-      url: `${SITE_URL}/r/registry.json`,
-    },
-    {
-      changeFrequency: "monthly",
-      priority: 0.3,
-      url: `${SITE_URL}/r/design.json`,
-    },
-    { changeFrequency: "monthly", priority: 0.3, url: `${SITE_URL}/DESIGN.md` },
-  ] satisfies readonly Omit<SitemapEntryInput, "lastModified">[];
-
   return [
-    ...rawRoutes.map((route) => entry({ ...route, lastModified })),
+    ...RAW_REGISTRY_ROUTES.map((route) => entry({ ...route, lastModified })),
     ...items.map((item) =>
       entry({
         changeFrequency: "weekly",

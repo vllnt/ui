@@ -1,21 +1,22 @@
 import { StaticCode } from "@vllnt/ui";
 import type React from "react";
 
-import { PreviewPlaygroundTabs } from "@/components/playground/preview-playground-tabs";
-import { StorybookEmbed } from "@/components/storybook-embed";
-import type { PlaygroundExample } from "@/lib/playground";
+import { PlatformComparison } from "@/components/platform-comparison";
+import type { RegistryComponent } from "@/types/registry";
+
+import { StorybookLink } from "./storybook-link";
 
 /**
- * Everything a component's SEO MDX needs to render its interactive blocks,
- * resolved once on the page and closed over by the kit so the MDX author writes
- * `<Preview />`, `<Install />`, `<Code />`, `<Stories />` directly.
+ * Compatibility kit for the interactive blocks in existing component MDX.
+ * Preview and source rendering live in the canonical surface above the MDX;
+ * these blocks keep comparison, install, source, and Storybook links in place.
  */
 export type ComponentMdxContext = {
-  readonly componentCode: string;
-  readonly componentName: string;
-  readonly example: PlaygroundExample;
+  readonly component: RegistryComponent;
+  readonly hasSources: boolean;
   readonly installCommand: string;
-  readonly packageVersion: string;
+  readonly sourceLinkLabel: string;
+  readonly storybookLabel: string;
   readonly storyId?: string;
 };
 
@@ -30,29 +31,23 @@ type MdxKit = {
 
 /**
  * Build the MDX component kit bound to a single component's data. Passed to
- * `MDXContent`'s `components` map so the localized MDX embeds live, crawlable
- * previews and code without per-file wiring.
+ * `MDXContent` so localized content keeps its existing block vocabulary while
+ * the page owns the single preview and source surface.
  */
 export function buildComponentMdxKit(context: ComponentMdxContext): MdxKit {
   const {
-    componentCode,
-    componentName,
-    example,
+    component,
+    hasSources,
     installCommand,
-    packageVersion,
+    sourceLinkLabel,
+    storybookLabel,
     storyId,
   } = context;
 
-  function Preview(): null | React.ReactElement {
-    if (!storyId) return null;
+  function Preview(): React.ReactElement {
     return (
-      <div className="not-prose my-6 scroll-mt-8" id="preview">
-        <PreviewPlaygroundTabs
-          componentName={componentName}
-          example={example}
-          packageVersion={packageVersion}
-          storyId={storyId}
-        />
+      <div className="not-prose">
+        <PlatformComparison component={component} />
       </div>
     );
   }
@@ -66,10 +61,15 @@ export function buildComponentMdxKit(context: ComponentMdxContext): MdxKit {
   }
 
   function Code(): null | React.ReactElement {
-    if (!componentCode) return null;
+    if (!hasSources) return null;
     return (
-      <div className="not-prose my-6 scroll-mt-8" id="code">
-        <StaticCode code={componentCode} language="typescript" />
+      <div className="not-prose my-6">
+        <a
+          className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          href="#code"
+        >
+          {sourceLinkLabel}
+        </a>
       </div>
     );
   }
@@ -78,7 +78,7 @@ export function buildComponentMdxKit(context: ComponentMdxContext): MdxKit {
     if (!storyId) return null;
     return (
       <div className="not-prose my-6 scroll-mt-8" id="storybook">
-        <StorybookEmbed componentName={componentName} storyId={storyId} />
+        <StorybookLink label={storybookLabel} storyId={storyId} />
       </div>
     );
   }

@@ -1,8 +1,8 @@
-import { Sidebar } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 
 import { Landing } from "@/components/landing/landing";
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import type { Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { getNpmDistributionTags } from "@/lib/npm-version";
@@ -59,7 +59,7 @@ export default async function HomePage({ params }: Props) {
           }),
         )}
       />
-      <Sidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
       <main className="flex-1 overflow-y-auto bg-background">
         <Landing />
       </main>

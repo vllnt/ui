@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     category: "Developer Tools",
     creator: "VLLNT",
     description:
-      "The UI design system for AI agents and AI-first apps. Open-source React components for AI chat, streaming, tool calls, citations, agents, and artifacts — readable by AI agents via llms.txt. Install with the shadcn CLI.",
+      "The accessible UI design system for AI-first apps: a stable React web renderer and a source-only React Native renderer with machine-readable registry metadata.",
     formatDetection: {
       address: false,
       email: false,
@@ -62,6 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "design system for ai",
       "ai-first design system",
       "react components",
+      "react native components",
+      "expo components",
       "ui library",
       "component library",
       "tailwind",
@@ -96,7 +98,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
       index: true,
     },
-    title: "VLLNT UI — UI components & design system for AI agents",
+    title: "VLLNT UI — Web & React Native UI for AI agents",
     twitter: {
       card: "summary_large_image",
       creator: "@vllnt",

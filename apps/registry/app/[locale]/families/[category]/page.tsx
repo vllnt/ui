@@ -1,13 +1,14 @@
-import { Breadcrumb, Sidebar } from "@vllnt/ui";
+import { Breadcrumb } from "@vllnt/ui";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { ComponentCard } from "@/components/component-card";
 import { Footer } from "@/components/footer/footer";
-import { type Locale, routing } from "@/i18n/routing";
+import { PlatformSelector } from "@/components/platform-selector";
+import { PlatformSidebar } from "@/components/platform-sidebar";
+import { Link, type Locale, routing } from "@/i18n/routing";
 import { getFamilyCopy } from "@/lib/family-copy";
 import { getFamilyGroups } from "@/lib/family-groups";
 import {
@@ -17,6 +18,12 @@ import {
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import {
+  getPlatform,
+  type PlatformQuery,
+  withPlatformQuery,
+} from "@/lib/platform";
+import { registry } from "@/lib/registry";
 import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
 import {
   getCategoryDescription,
@@ -27,6 +34,7 @@ import type { ComponentCategory } from "@/types/registry";
 
 type Props = {
   readonly params: Promise<{ category: string; locale: Locale }>;
+  readonly searchParams: Promise<PlatformQuery>;
 };
 
 function findFamily(category: string) {
@@ -88,8 +96,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function FamilyPage({ params }: Props) {
-  const { category, locale } = await params;
+export default async function FamilyPage({ params, searchParams }: Props) {
+  const [{ category, locale }, query] = await Promise.all([
+    params,
+    searchParams,
+  ]);
   setRequestLocale(locale);
 
   const group = findFamily(category);
@@ -104,6 +115,21 @@ export default async function FamilyPage({ params }: Props) {
   const pathname = `/families/${category}`;
   const t = await getTranslations("pages.families");
   const common = await getTranslations("common");
+  const platform = getPlatform(query.platform);
+  const platformsByName = new Map(
+    registry.items.map((item) => [item.name, item.platforms]),
+  );
+  const supportsPlatform = (slug: string) =>
+    platformsByName.get(slug)?.includes(platform ?? "web") ?? false;
+  const visibleItems = group.items.filter((item) =>
+    supportsPlatform(item.name),
+  );
+  const visibleGroups = groups
+    ?.map((section) => ({
+      ...section,
+      slugs: section.slugs.filter(supportsPlatform),
+    }))
+    .filter((section) => section.slugs.length > 0);
 
   return (
     <>
@@ -125,16 +151,29 @@ export default async function FamilyPage({ params }: Props) {
           ...(copy && copy.faq.length > 0 ? [faqPageLd(copy.faq)] : []),
         ])}
       />
-      <Sidebar sections={await getSidebarSections(group.category, locale)} />
+      <PlatformSidebar
+        sections={await getSidebarSections(group.category, locale)}
+      />
       <main className="flex-1 overflow-y-auto bg-background">
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
             <Breadcrumb
               className="mb-6 text-muted-foreground"
               items={[
-                { href: localizePathname("/", locale), label: common("home") },
                 {
-                  href: localizePathname("/components", locale),
+                  href: withPlatformQuery(
+                    localizePathname("/", locale),
+                    query,
+                    platform,
+                  ),
+                  label: common("home"),
+                },
+                {
+                  href: withPlatformQuery(
+                    localizePathname("/components", locale),
+                    query,
+                    platform,
+                  ),
                   label: common("components"),
                 },
                 { label: group.label },
@@ -148,35 +187,42 @@ export default async function FamilyPage({ params }: Props) {
             </h1>
             {description ? (
               <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-                {description}
+                {platform === "native"
+                  ? t("nativeFamilyDescription", { label: group.label })
+                  : description}
               </p>
             ) : null}
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 className="inline-flex h-11 items-center gap-2 rounded-md bg-foreground px-5 text-sm font-medium text-background hover:opacity-90"
-                href={localizePathname("/components", locale)}
+                href={withPlatformQuery("/components", query, platform)}
               >
                 {t("browseAll")}
                 <ArrowRight className="size-4" />
               </Link>
               <Link
                 className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
-                href={localizePathname("/docs/agents", locale)}
+                href={withPlatformQuery("/docs/agents", query, platform)}
               >
                 {t("agentsDocs")}
               </Link>
               <span className="text-sm text-muted-foreground">
-                {t("componentCount", { count: group.items.length })}
+                {t("componentCount", { count: visibleItems.length })}
               </span>
             </div>
+            <PlatformSelector className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
           </div>
         </section>
 
         <section className="border-b border-border">
           <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-            {groups ? (
+            {visibleItems.length === 0 ? (
+              <p className="rounded-lg border border-dashed bg-card px-6 py-12 text-center text-muted-foreground">
+                {t("noPlatformResults")}
+              </p>
+            ) : visibleGroups ? (
               <div className="space-y-14">
-                {groups.map((section) => (
+                {visibleGroups.map((section) => (
                   <div key={section.heading}>
                     <h2 className="text-2xl font-semibold">
                       {section.heading}
@@ -186,7 +232,13 @@ export default async function FamilyPage({ params }: Props) {
                     </p>
                     <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {section.slugs.map((slug) => (
-                        <ComponentCard key={slug} locale={locale} slug={slug} />
+                        <ComponentCard
+                          key={slug}
+                          locale={locale}
+                          platform={platform}
+                          query={query}
+                          slug={slug}
+                        />
                       ))}
                     </div>
                   </div>
@@ -194,10 +246,12 @@ export default async function FamilyPage({ params }: Props) {
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {group.items.map((component) => (
+                {visibleItems.map((component) => (
                   <ComponentCard
                     key={component.name}
                     locale={locale}
+                    platform={platform}
+                    query={query}
                     slug={component.name}
                   />
                 ))}
@@ -240,7 +294,7 @@ export default async function FamilyPage({ params }: Props) {
               </a>
               <Link
                 className="rounded-lg border border-border p-5 hover:border-foreground/40"
-                href={localizePathname("/docs/agents", locale)}
+                href={withPlatformQuery("/docs/agents", query, platform)}
               >
                 <p className="font-mono text-sm">{"/r/<name>.json"}</p>
                 <p className="mt-3 text-sm text-muted-foreground">

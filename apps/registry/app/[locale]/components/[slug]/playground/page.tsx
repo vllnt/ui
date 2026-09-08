@@ -1,8 +1,9 @@
-import { Breadcrumb, Sidebar } from "@vllnt/ui";
+import { Breadcrumb } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { PlatformSidebar } from "@/components/platform-sidebar";
 import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import { Link, type Locale, routing } from "@/i18n/routing";
@@ -125,7 +126,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
           ]),
         )}
       />
-      <Sidebar
+      <PlatformSidebar
         sections={await getSidebarSections(
           getCategoryForComponent(slug),
           locale,
