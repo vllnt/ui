@@ -97,6 +97,7 @@ function Carousel({
   const reduceMotion = useReducedMotion(reducedMotionService);
   const scrollRef = useRef<null | ScrollView>(null);
   const [width, setWidth] = useState(0);
+  const [swipeRevision, setSwipeRevision] = useState(0);
   const [selection, setSelection] = useControllableState(
     selectedId === undefined
       ? {
@@ -131,7 +132,7 @@ function Carousel({
       x: selectedIndex * width,
       y: 0,
     });
-  }, [reduceMotion, selectedIndex, width]);
+  }, [reduceMotion, selectedIndex, swipeRevision, width]);
 
   const previousDisabled = items.length <= 1 || (!loop && selectedIndex === 0);
   const nextDisabled =
@@ -169,6 +170,8 @@ function Carousel({
           const index = Math.round(event.nativeEvent.contentOffset.x / width);
           const item = items[index];
           if (item) setSelection(item.id);
+          if (selectedId !== undefined)
+            setSwipeRevision((revision) => revision + 1);
         }}
         pagingEnabled
         ref={scrollRef}

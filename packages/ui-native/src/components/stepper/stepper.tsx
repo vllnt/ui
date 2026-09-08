@@ -85,7 +85,7 @@ function Stepper({
   ...props
 }: StepperProps) {
   const theme = useTheme();
-  const [activeStep, setActiveStep] = useControllableState(
+  const [storedStep, setActiveStep] = useControllableState(
     currentStep === undefined
       ? {
           defaultValue: normalizeStep(defaultCurrentStep, steps.length),
@@ -104,6 +104,7 @@ function Stepper({
           value: normalizeStep(currentStep, steps.length),
         },
   );
+  const activeStep = normalizeStep(storedStep, steps.length);
   if (steps.length === 0) return null;
   const horizontal = orientation === "horizontal";
   const content = steps.map((step, index) => {

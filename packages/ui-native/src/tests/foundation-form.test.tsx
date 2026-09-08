@@ -1,27 +1,33 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text as NativeText } from "react-native";
 
-import { ThemeProvider } from "../theme/theme-provider";
-
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar/avatar";
-import { Banner, BannerAction } from "./banner/banner";
-import { EmptyState } from "./empty-state/empty-state";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../components/avatar/avatar";
+import { Banner, BannerAction } from "../components/banner/banner";
+import { EmptyState } from "../components/empty-state/empty-state";
 import {
   Field,
   FieldControl,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "./field/field";
-import { Fieldset, FieldsetContent, FieldsetLegend } from "./fieldset/fieldset";
-import { Grid } from "./grid/grid";
-import { InlineInput } from "./inline-input/inline-input";
-import { Input } from "./input/input";
+} from "../components/field/field";
+import {
+  Fieldset,
+  FieldsetContent,
+  FieldsetLegend,
+} from "../components/fieldset/fieldset";
+import { Grid } from "../components/grid/grid";
+import { InlineInput } from "../components/inline-input/inline-input";
+import { Input } from "../components/input/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "./input-group/input-group";
+} from "../components/input-group/input-group";
 import {
   Item,
   ItemActions,
@@ -29,10 +35,10 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "./item/item";
-import { Label } from "./label/label";
-import { Meter } from "./meter/meter";
-import { NumberInput } from "./number-input/number-input";
+} from "../components/item/item";
+import { Label } from "../components/label/label";
+import { Meter } from "../components/meter/meter";
+import { NumberInput } from "../components/number-input/number-input";
 import {
   Panel,
   PanelBody,
@@ -40,16 +46,17 @@ import {
   PanelFooter,
   PanelHeader,
   PanelTitle,
-} from "./panel/panel";
-import { PasswordInput } from "./password-input/password-input";
-import { PhoneInput } from "./phone-input/phone-input";
-import { SearchBar } from "./search-bar/search-bar";
-import { SearchField } from "./search-field/search-field";
-import { Separator } from "./separator/separator";
-import { Skeleton } from "./skeleton/skeleton";
-import { Switch } from "./switch/switch";
-import { TextField } from "./text-field/text-field";
-import { Textarea } from "./textarea/textarea";
+} from "../components/panel/panel";
+import { PasswordInput } from "../components/password-input/password-input";
+import { PhoneInput } from "../components/phone-input/phone-input";
+import { SearchBar } from "../components/search-bar/search-bar";
+import { SearchField } from "../components/search-field/search-field";
+import { Separator } from "../components/separator/separator";
+import { Skeleton } from "../components/skeleton/skeleton";
+import { Switch } from "../components/switch/switch";
+import { TextField } from "../components/text-field/text-field";
+import { Textarea } from "../components/textarea/textarea";
+import { ThemeProvider } from "../theme/theme-provider";
 
 describe("native foundation and form components", () => {
   it("renders representative foundation compositions", () => {

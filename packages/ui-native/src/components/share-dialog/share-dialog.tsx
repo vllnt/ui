@@ -1,6 +1,13 @@
 "use client";
 
-import type { ReactNode, Ref } from "react";
+import {
+  type ReactNode,
+  type Ref,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+
 import type { ShareContent, ShareOptions } from "react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -86,18 +93,39 @@ function ShareDialog({
       ? createPlatformServices(services).share
       : shareService;
   const available = service !== null;
+  const [sharing, setSharing] = useState(false);
+  const pending = useRef(false);
+  const mounted = useRef(false);
+  const session = useRef(0);
+
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      session.current += 1;
+    };
+  }, [service, visible]);
+
   const close = (reason: ModalLayerCloseReason) => {
+    session.current += 1;
     onRequestClose?.(reason);
     setVisible(false);
   };
   const share = async () => {
-    if (!service) return;
+    if (!service || !visible || pending.current || !mounted.current) return;
+    pending.current = true;
+    setSharing(true);
+    const currentSession = session.current;
     try {
       const result = await service.share(content, options);
+      if (session.current !== currentSession) return;
       onShareResult?.(result);
-      setVisible(false);
+      if (session.current === currentSession) setVisible(false);
     } catch (error: unknown) {
-      onShareError?.(error);
+      if (session.current === currentSession) onShareError?.(error);
+    } finally {
+      pending.current = false;
+      if (mounted.current) setSharing(false);
     }
   };
 
@@ -182,8 +210,11 @@ function ShareDialog({
           <Pressable
             accessibilityLabel={available ? shareLabel : unavailableLabel}
             accessibilityRole="button"
-            accessibilityState={{ disabled: !available }}
-            disabled={!available}
+            accessibilityState={{
+              busy: sharing,
+              disabled: !available || sharing,
+            }}
+            disabled={!available || sharing}
             onPress={() => void share()}
             style={({ pressed }) => [
               styles.action,

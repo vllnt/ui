@@ -165,6 +165,7 @@ function Combobox({
           <Input
             accessibilityLabel={labels.search}
             autoFocus
+            disabled={disabled}
             inputMode="search"
             onChangeText={setQuery}
             placeholder={labels.search}
@@ -184,11 +185,12 @@ function Combobox({
                   accessibilityRole="radio"
                   accessibilityState={{
                     checked: selected,
-                    disabled: option.disabled,
+                    disabled: disabled || option.disabled,
                   }}
-                  disabled={option.disabled}
+                  disabled={disabled || option.disabled}
                   key={option.id}
                   onPress={() => {
+                    if (disabled || option.disabled) return;
                     setSelectedId(option.id);
                     setModalOpen(false);
                   }}
@@ -199,7 +201,7 @@ function Combobox({
                         ? theme.colors.accent
                         : theme.colors.background,
                       borderRadius: theme.radius.sm,
-                      opacity: option.disabled ? 0.5 : 1,
+                      opacity: disabled || option.disabled ? 0.5 : 1,
                       paddingHorizontal: theme.spacing[3],
                     },
                   ]}

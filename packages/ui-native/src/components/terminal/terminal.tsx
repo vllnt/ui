@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useMemo, useState } from "react";
+import { type Ref, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import {
   Pressable,
@@ -71,6 +71,7 @@ function getCommands(lines: readonly TerminalLine[]): string {
 
 type TerminalHeaderProps = {
   readonly available: boolean;
+  readonly copying: boolean;
   readonly copyLabel?: string;
   readonly onCopy: () => void;
   readonly showCopy: boolean;
@@ -79,6 +80,7 @@ type TerminalHeaderProps = {
 
 function TerminalHeader({
   available,
+  copying,
   copyLabel,
   onCopy,
   showCopy,
@@ -112,8 +114,11 @@ function TerminalHeader({
         <Pressable
           accessibilityLabel={copyLabel}
           accessibilityRole="button"
-          accessibilityState={{ disabled: !available }}
-          disabled={!available}
+          accessibilityState={{
+            busy: copying,
+            disabled: !available || copying,
+          }}
+          disabled={!available || copying}
           onPress={onCopy}
           style={({ pressed }) => [
             styles.action,
@@ -217,6 +222,59 @@ function TerminalLines({
 }
 TerminalLines.displayName = "TerminalLines";
 
+function useTerminalCopy(
+  {
+    clipboard,
+    copyable,
+    onCopyError,
+    onCopySuccess,
+  }: Pick<
+    TerminalProps,
+    "clipboard" | "copyable" | "onCopyError" | "onCopySuccess"
+  >,
+  commands: string,
+) {
+  const [copiedCommands, setCopiedCommands] = useState<string>();
+  const [copying, setCopying] = useState(false);
+  const pending = useRef(false);
+  const mounted = useRef(false);
+  const session = useRef(0);
+
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      session.current += 1;
+    };
+  }, [clipboard, commands, copyable]);
+
+  const copy = async () => {
+    if (
+      !clipboard ||
+      !copyable ||
+      !commands ||
+      pending.current ||
+      !mounted.current
+    )
+      return;
+    pending.current = true;
+    setCopying(true);
+    const currentSession = session.current;
+    try {
+      await clipboard.setText(commands);
+      if (session.current !== currentSession) return;
+      setCopiedCommands(commands);
+      onCopySuccess?.();
+    } catch (error: unknown) {
+      if (session.current === currentSession) onCopyError?.(error);
+    } finally {
+      pending.current = false;
+      if (mounted.current) setCopying(false);
+    }
+  };
+  return { copied: copiedCommands === commands, copy, copying };
+}
+
 function Terminal({
   clipboard,
   copyable = true,
@@ -231,25 +289,17 @@ function Terminal({
   ...props
 }: TerminalProps) {
   const theme = useTheme();
-  const [copiedCommands, setCopiedCommands] = useState<string>();
   const commands = useMemo(() => getCommands(lines), [lines]);
+  const { copied, copy, copying } = useTerminalCopy(
+    { clipboard, copyable, onCopyError, onCopySuccess },
+    commands,
+  );
   const copyAvailable = clipboard !== undefined;
-  const copied = copiedCommands === commands;
   const copyLabel = copied
     ? copyLabels?.copied
     : copyAvailable
       ? copyLabels?.copy
       : copyLabels?.unavailable;
-  const copy = async () => {
-    if (!clipboard) return;
-    try {
-      await clipboard.setText(commands);
-      setCopiedCommands(commands);
-      onCopySuccess?.();
-    } catch (error: unknown) {
-      onCopyError?.(error);
-    }
-  };
   return (
     <View
       {...props}
@@ -266,6 +316,7 @@ function Terminal({
     >
       <TerminalHeader
         available={copyAvailable}
+        copying={copying}
         copyLabel={copyLabel}
         onCopy={() => void copy()}
         showCopy={

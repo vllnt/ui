@@ -1,17 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text as NativeText } from "react-native";
 
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
-import { ThemeProvider } from "../theme/theme-provider";
-
-import { AnimatedText } from "./animated-text/animated-text";
-import { Marquee } from "./marquee/marquee";
-import { NumberTicker } from "./number-ticker/number-ticker";
+import { AnimatedText } from "../components/animated-text/animated-text";
+import { Marquee } from "../components/marquee/marquee";
+import { NumberTicker } from "../components/number-ticker/number-ticker";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "./resizable/resizable";
+} from "../components/resizable/resizable";
+import type { ReducedMotionService } from "../primitives/use-reduced-motion";
+import { ThemeProvider } from "../theme/theme-provider";
 
 function createReducedMotionService(): ReducedMotionService {
   return {

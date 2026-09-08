@@ -83,7 +83,7 @@ function Slider({
     upperBound,
     step,
   );
-  const [currentValue, setCurrentValue] = useControllableState(
+  const [storedValue, setCurrentValue] = useControllableState(
     value === undefined
       ? {
           defaultValue: initialValue,
@@ -96,6 +96,7 @@ function Slider({
           value: normalizeValue(value, min, upperBound, step),
         },
   );
+  const currentValue = normalizeValue(storedValue, min, upperBound, step);
   const [trackWidth, setTrackWidth] = useState(0);
   const range = upperBound - min;
   const ratio = range === 0 ? 0 : (currentValue - min) / range;

@@ -86,6 +86,7 @@ function RevealText({
       {...props}
       accessibilityElementsHidden={!visible}
       importantForAccessibility={visible ? "auto" : "no-hide-descendants"}
+      pointerEvents={visible ? props.pointerEvents : "none"}
       ref={ref}
       style={[
         styles.root,

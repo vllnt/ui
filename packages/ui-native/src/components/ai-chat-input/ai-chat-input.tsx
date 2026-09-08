@@ -74,6 +74,7 @@ function useComposerState(props: AIChatInputProps): ComposerState {
   const currentValue = controlled ? props.value : internalValue;
   const unavailable = props.serviceState?.status === "unavailable";
   const canSubmit =
+    props.onSubmit !== undefined &&
     props.disabled !== true &&
     props.isSubmitting !== true &&
     !unavailable &&

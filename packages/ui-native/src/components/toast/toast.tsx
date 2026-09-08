@@ -19,26 +19,23 @@ export type ToastItem = {
   readonly actionDisabled?: boolean;
   readonly actionLabel?: string;
   readonly description?: string;
+  /** Positive milliseconds; changing this value restarts expiry. Omit or use zero to persist. */
   readonly duration?: number;
   readonly id: SelectionKey;
   readonly onAction?: () => void;
   readonly title: string;
   readonly variant?: "default" | "destructive";
 };
-/** Props for a controlled, instance-local toast queue. */
+/**
+ * Props for a controlled, instance-local toast queue. Dismissal requests accumulate
+ * until the owner removes each ID; remove an ID before reusing it for a new toast.
+ */
 export type ToastProps = Omit<ViewProps, "children"> & {
   readonly closeLabel: string;
   readonly onToastsChange: (toasts: readonly ToastItem[]) => void;
   readonly ref?: Ref<View>;
   readonly toasts: readonly ToastItem[];
 };
-
-function createToastTimer(
-  duration: number,
-  onExpire: () => void,
-): ReturnType<typeof setTimeout> {
-  return setTimeout(onExpire, duration);
-}
 
 const styles = StyleSheet.create({
   action: {
@@ -71,12 +68,39 @@ function Toast({
   const queueRef = useRef(toasts);
   const onChangeRef = useRef(onToastsChange);
   const announcedIds = useRef(new Set<SelectionKey>());
-  const timers = useRef(new Map<SelectionKey, ReturnType<typeof setTimeout>>());
+  const dismissedIds = useRef(new Set<SelectionKey>());
+  const timers = useRef(
+    new Map<
+      SelectionKey,
+      {
+        readonly duration: number;
+        readonly timer: ReturnType<typeof setTimeout>;
+      }
+    >(),
+  );
 
   useLayoutEffect(() => {
-    queueRef.current = toasts;
+    const currentIds = new Set(toasts.map((toast) => toast.id));
+    for (const id of dismissedIds.current) {
+      if (!currentIds.has(id)) dismissedIds.current.delete(id);
+    }
+    queueRef.current = toasts.filter(
+      (toast) => !dismissedIds.current.has(toast.id),
+    );
     onChangeRef.current = onToastsChange;
   }, [onToastsChange, toasts]);
+
+  const dismiss = (id: SelectionKey) => {
+    if (dismissedIds.current.has(id)) return;
+    dismissedIds.current.add(id);
+    const entry = timers.current.get(id);
+    if (entry) clearTimeout(entry.timer);
+    timers.current.delete(id);
+    queueRef.current = queueRef.current.filter(
+      (toast) => !Object.is(toast.id, id),
+    );
+    onChangeRef.current(queueRef.current);
+  };
 
   useEffect(() => {
     const timerMap = timers.current;
@@ -84,9 +108,10 @@ function Toast({
     for (const id of announcedIds.current) {
       if (!currentIds.has(id)) announcedIds.current.delete(id);
     }
-    for (const [id, timer] of timerMap) {
-      if (!currentIds.has(id)) {
-        clearTimeout(timer);
+    for (const [id, entry] of timerMap) {
+      const toast = toasts.find((item) => Object.is(item.id, id));
+      if (toast?.duration !== entry.duration || dismissedIds.current.has(id)) {
+        clearTimeout(entry.timer);
         timerMap.delete(id);
       }
     }
@@ -101,44 +126,25 @@ function Toast({
       }
       if (
         !timerMap.has(toast.id) &&
+        !dismissedIds.current.has(toast.id) &&
         toast.duration !== undefined &&
         toast.duration > 0
       ) {
-        const timer = createToastTimer(toast.duration, () => {
-          timerMap.delete(toast.id);
-          onChangeRef.current(
-            queueRef.current.filter((entry) => !Object.is(entry.id, toast.id)),
-          );
-        });
-        timerMap.set(toast.id, timer);
+        const timer = setTimeout(() => {
+          dismiss(toast.id);
+        }, toast.duration);
+        timerMap.set(toast.id, { duration: toast.duration, timer });
       }
     }
-
-    return () => {
-      const activeIds = new Set(queueRef.current.map((toast) => toast.id));
-      for (const [id, timer] of timerMap) {
-        if (!activeIds.has(id)) {
-          clearTimeout(timer);
-          timerMap.delete(id);
-        }
-      }
-    };
   }, [toasts]);
 
   useEffect(
     () => () => {
-      for (const timer of timers.current.values()) clearTimeout(timer);
+      for (const entry of timers.current.values()) clearTimeout(entry.timer);
       timers.current.clear();
     },
     [],
   );
-
-  const dismiss = (id: SelectionKey) => {
-    const timer = timers.current.get(id);
-    if (timer) clearTimeout(timer);
-    timers.current.delete(id);
-    onToastsChange(toasts.filter((toast) => !Object.is(toast.id, id)));
-  };
 
   return (
     <View

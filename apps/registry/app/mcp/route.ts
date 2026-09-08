@@ -140,6 +140,14 @@ export const TOOLS = [
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
+function parsePlatform(value: unknown): ComponentPlatform | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value !== "string" || !isComponentPlatform(value)) {
+    throw new Error(`Unsupported platform: ${String(value)}`);
+  }
+  return value;
+}
+
 export function searchComponents(arguments_: Record<string, unknown>): {
   items: RegistryComponent[];
   total: number;
@@ -150,17 +158,7 @@ export function searchComponents(arguments_: Record<string, unknown>): {
     typeof arguments_.category === "string"
       ? arguments_.category.toLowerCase()
       : null;
-  const platformValue =
-    typeof arguments_.platform === "string"
-      ? arguments_.platform.toLowerCase()
-      : undefined;
-  let platform: ComponentPlatform | undefined;
-  if (platformValue) {
-    if (!isComponentPlatform(platformValue)) {
-      throw new Error(`Unsupported platform: ${platformValue}`);
-    }
-    platform = platformValue;
-  }
+  const platform = parsePlatform(arguments_.platform);
 
   const requested =
     typeof arguments_.limit === "number" && arguments_.limit > 0
@@ -266,20 +264,15 @@ function projectComponent(
 export function getComponent(
   arguments_: Record<string, unknown>,
 ): null | RegistryComponent | RendererComponentProjection {
+  const requestedPlatform = parsePlatform(arguments_.platform);
   const name = typeof arguments_.name === "string" ? arguments_.name : null;
   if (!name) return null;
   const item = REGISTRY.items.find((component) => component.name === name);
   if (!item) return null;
 
-  const requestedPlatform = arguments_.platform;
-  if (requestedPlatform === undefined) return item;
-  if (
-    typeof requestedPlatform !== "string" ||
-    !isComponentPlatform(requestedPlatform)
-  ) {
-    throw new Error(`Unsupported platform: ${String(requestedPlatform)}`);
-  }
-  return projectComponent(item, requestedPlatform);
+  return requestedPlatform === undefined
+    ? item
+    : projectComponent(item, requestedPlatform);
 }
 
 function listCategories(): {

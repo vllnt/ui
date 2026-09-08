@@ -57,7 +57,10 @@ function SearchField({
   const theme = useTheme();
   const [internalValue, setInternalValue] = useState(defaultValue);
   const currentValue = value ?? internalValue;
+  const readOnly =
+    disabled || props.editable === false || props.readOnly === true;
   const update = (next: string) => {
+    if (readOnly) return;
     if (value === undefined) setInternalValue(next);
     onValueChange?.(next);
   };
@@ -80,8 +83,8 @@ function SearchField({
         <Pressable
           accessibilityLabel={clearLabel}
           accessibilityRole="button"
-          accessibilityState={{ disabled }}
-          disabled={disabled}
+          accessibilityState={{ disabled: readOnly }}
+          disabled={readOnly}
           onPress={() => {
             update("");
           }}

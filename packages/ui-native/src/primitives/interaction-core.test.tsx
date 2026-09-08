@@ -92,7 +92,7 @@ function SafeArea({ children }: SafeAreaProps) {
 }
 SafeArea.displayName = "SafeArea";
 
-describe("task 20 native interaction core", () => {
+describe("native interaction core", () => {
   it("updates uncontrolled state and notifies only for changes", () => {
     const onChange = jest.fn();
     render(<StateHarness defaultValue="initial" onChange={onChange} />);
@@ -175,6 +175,58 @@ describe("task 20 native interaction core", () => {
 
     view.unmount();
     expect(remove).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps a newer reduced-motion event when the initial query resolves late", async () => {
+    let resolvePreference: ((enabled: boolean) => void) | undefined;
+    let listener: ((enabled: boolean) => void) | undefined;
+    const initialPreference = new Promise<boolean>((resolve) => {
+      resolvePreference = resolve;
+    });
+    const service: ReducedMotionService = {
+      addEventListener: (_eventName, nextListener) => {
+        listener = nextListener;
+        return { remove: jest.fn() };
+      },
+      isReduceMotionEnabled: () => initialPreference,
+    };
+
+    render(<ReducedMotionHarness service={service} />);
+    act(() => listener?.(true));
+    await act(async () => {
+      resolvePreference?.(false);
+      await initialPreference;
+    });
+
+    expect(screen.getByText("reduced")).toBeOnTheScreen();
+  });
+
+  it("ignores an old service query after replacing its subscription", async () => {
+    let resolvePreference: ((enabled: boolean) => void) | undefined;
+    const initialPreference = new Promise<boolean>((resolve) => {
+      resolvePreference = resolve;
+    });
+    const remove = jest.fn();
+    const oldService: ReducedMotionService = {
+      addEventListener: () => ({ remove }),
+      isReduceMotionEnabled: () => initialPreference,
+    };
+    const nextService: ReducedMotionService = {
+      addEventListener: () => ({ remove: jest.fn() }),
+      isReduceMotionEnabled: async () => true,
+    };
+
+    const view = render(<ReducedMotionHarness service={oldService} />);
+    await act(async () => {
+      view.rerender(<ReducedMotionHarness service={nextService} />);
+    });
+    expect(remove).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      resolvePreference?.(false);
+      await initialPreference;
+    });
+
+    expect(screen.getByText("reduced")).toBeOnTheScreen();
   });
 
   it("maps accessibility escape and Android back through native events", () => {

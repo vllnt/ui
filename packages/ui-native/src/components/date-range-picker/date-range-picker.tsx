@@ -112,8 +112,15 @@ function DateRangePicker({
           ]}
         >
           <RangeCalendar
+            disabled={disabled}
             labels={labels}
-            range={{ mode: "controlled", onChange: setRange, value: range }}
+            range={{
+              mode: "controlled",
+              onChange: (next) => {
+                if (!disabled) setRange(next);
+              },
+              value: range,
+            }}
           />
           <Pressable
             accessibilityLabel={labels.close}

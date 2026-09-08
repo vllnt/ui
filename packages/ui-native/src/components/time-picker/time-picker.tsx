@@ -48,7 +48,7 @@ function part(value: number): string {
   return value.toString().padStart(2, "0");
 }
 function validTime(value: string): value is ISOTimeString {
-  return /^\d{2}:\d{2}$/.test(value);
+  return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
 }
 
 /** Native modal time picker with explicit hour and minute options. */
@@ -65,12 +65,15 @@ function TimePicker({
   const reducedMotion = useReducedMotion();
   const [value, setValue] = useControllableState(selection);
   const [open, setOpen] = useState(false);
-  const [hour, minute] = value?.split(":") ?? ["", ""];
+  const selectedTime = value && validTime(value) ? value : undefined;
+  const [hour, minute] = selectedTime?.split(":") ?? ["", ""];
   const hours = useMemo(
     () => Array.from({ length: 24 }, (_unused, index) => part(index)),
     [],
   );
-  const safeStep = Math.max(1, Math.min(60, Math.floor(minuteStep)));
+  const safeStep = Number.isFinite(minuteStep)
+    ? Math.max(1, Math.min(60, Math.floor(minuteStep)))
+    : 5;
   const minutes = useMemo(
     () =>
       Array.from({ length: Math.ceil(60 / safeStep) }, (_unused, index) =>
@@ -79,6 +82,7 @@ function TimePicker({
     [safeStep],
   );
   const commit = (nextHour: string, nextMinute: string) => {
+    if (disabled) return;
     const next = `${nextHour || "00"}:${nextMinute || "00"}`;
     if (validTime(next)) setValue(next);
   };
@@ -93,7 +97,8 @@ function TimePicker({
         <Pressable
           accessibilityLabel={option}
           accessibilityRole="radio"
-          accessibilityState={{ checked: option === selected }}
+          accessibilityState={{ checked: option === selected, disabled }}
+          disabled={disabled}
           key={option}
           onPress={() => {
             choose(option);
@@ -145,13 +150,13 @@ function TimePicker({
           style={[
             theme.typography.scale.bodySmall,
             {
-              color: value
+              color: selectedTime
                 ? theme.colors.foreground
                 : theme.colors.mutedForeground,
             },
           ]}
         >
-          {value ?? labels.placeholder}
+          {selectedTime ?? labels.placeholder}
         </NativeText>
       </Pressable>
       <ModalLayer

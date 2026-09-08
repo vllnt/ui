@@ -2,26 +2,30 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import { Text as NativeText, View } from "react-native";
 
-import type { LinkingService } from "../primitives/platform-services";
-
-import { AnimatedTabs } from "./animated-tabs/animated-tabs";
-import { BottomBar } from "./bottom-bar/bottom-bar";
-import { Breadcrumb } from "./breadcrumb/breadcrumb";
-import { HorizontalScrollRow } from "./horizontal-scroll-row/horizontal-scroll-row";
-import { Menubar } from "./menubar/menubar";
-import { NavigationMenu } from "./navigation-menu/navigation-menu";
-import { Pagination } from "./pagination/pagination";
-import { Sidebar } from "./sidebar/sidebar";
+import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
+import { BottomBar } from "../components/bottom-bar/bottom-bar";
+import { Breadcrumb } from "../components/breadcrumb/breadcrumb";
+import { HorizontalScrollRow } from "../components/horizontal-scroll-row/horizontal-scroll-row";
+import { Menubar } from "../components/menubar/menubar";
+import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
+import { Pagination } from "../components/pagination/pagination";
+import { Sidebar } from "../components/sidebar/sidebar";
 import {
   SidebarProvider,
   useSidebar,
-} from "./sidebar-provider/sidebar-provider";
-import { SidebarToggle } from "./sidebar-toggle/sidebar-toggle";
-import { StepNavigation } from "./step-navigation/step-navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs/tabs";
-import { TopBar } from "./top-bar/top-bar";
-import { ViewSwitcher } from "./view-switcher/view-switcher";
-import { WorkspaceSwitcher } from "./workspace-switcher/workspace-switcher";
+} from "../components/sidebar-provider/sidebar-provider";
+import { SidebarToggle } from "../components/sidebar-toggle/sidebar-toggle";
+import { StepNavigation } from "../components/step-navigation/step-navigation";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/tabs/tabs";
+import { TopBar } from "../components/top-bar/top-bar";
+import { ViewSwitcher } from "../components/view-switcher/view-switcher";
+import { WorkspaceSwitcher } from "../components/workspace-switcher/workspace-switcher";
+import type { LinkingService } from "../primitives/platform-services";
 
 const linking: LinkingService = {
   openUrl: jest.fn(async () => ({ status: "opened" as const })),

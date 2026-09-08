@@ -294,7 +294,19 @@ function Quiz({
           >
             {isCorrect ? labels.correct : labels.incorrect}
           </Text>
-          {explanation}
+          {typeof explanation === "string" ||
+          typeof explanation === "number" ? (
+            <Text
+              style={[
+                theme.typography.scale.bodySmall,
+                { color: theme.colors.foreground },
+              ]}
+            >
+              {explanation}
+            </Text>
+          ) : (
+            explanation
+          )}
         </View>
       ) : null}
       <Pressable

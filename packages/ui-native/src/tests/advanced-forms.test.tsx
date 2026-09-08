@@ -5,15 +5,14 @@ import {
   waitFor,
 } from "@testing-library/react-native";
 
+import { DateField } from "../components/date-field/date-field";
+import { FileUpload } from "../components/file-upload/file-upload";
+import { InputOTP } from "../components/input-otp/input-otp";
+import { MultiSelect } from "../components/multi-select/multi-select";
+import { RangeCalendar } from "../components/range-calendar/range-calendar";
+import { Select } from "../components/select/select";
 import type { FilePickerService } from "../primitives/platform-services";
 import { ThemeProvider } from "../theme/theme-provider";
-
-import { DateField } from "./date-field/date-field";
-import { FileUpload } from "./file-upload/file-upload";
-import { InputOTP } from "./input-otp/input-otp";
-import { MultiSelect } from "./multi-select/multi-select";
-import { RangeCalendar } from "./range-calendar/range-calendar";
-import { Select } from "./select/select";
 
 const selectLabels = {
   close: "Close choices",

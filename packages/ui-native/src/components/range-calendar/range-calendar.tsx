@@ -20,9 +20,21 @@ export type RangeCalendarProps = Omit<ViewProps, "children"> & {
   readonly ref?: Ref<View>;
 };
 
+function startOfDay(date: Date): Date {
+  const day = new Date(date);
+  day.setHours(0, 0, 0, 0);
+  return day;
+}
+
 function normalizeRange(range?: DateRange): DateRange | undefined {
-  if (!range?.end || range.start.getTime() <= range.end.getTime()) return range;
-  return { end: range.start, start: range.end };
+  if (!range || !Number.isFinite(range.start.getTime())) return undefined;
+  const start = startOfDay(range.start);
+  const end =
+    range.end && Number.isFinite(range.end.getTime())
+      ? startOfDay(range.end)
+      : undefined;
+  if (!end || start.getTime() <= end.getTime()) return { end, start };
+  return { end: start, start: end };
 }
 
 /** Native calendar that chooses an ordered start/end Date range. */

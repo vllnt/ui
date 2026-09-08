@@ -148,6 +148,9 @@ function StepByStepRoot({
           value: completedStepIds,
         },
   );
+  const currentCompletedIds = [...new Set(completedIds)].filter((id) =>
+    steps.some((step) => step.props.id === id),
+  );
   if (interactive && !labels)
     throw new Error("StepByStep labels are required in interactive mode");
 
@@ -174,7 +177,7 @@ function StepByStepRoot({
                 { color: theme.colors.mutedForeground },
               ]}
             >
-              {labels.progress(completedIds.length, steps.length)}
+              {labels.progress(currentCompletedIds.length, steps.length)}
             </Text>
           ) : null}
         </View>
@@ -187,26 +190,36 @@ function StepByStepRoot({
             number: step.props.number ?? index + 1,
           });
         }
+        const {
+          children: stepChildren,
+          id,
+          number,
+          ref: stepRef,
+          style: stepStyle,
+          title: stepTitle,
+          ...stepProps
+        } = step.props;
         return (
           <View
-            key={step.props.id}
+            {...stepProps}
+            id={id}
+            key={id}
+            ref={stepRef}
             style={[
               styles.row,
               { gap: theme.spacing[4], opacity: completed ? 0.65 : 1 },
+              stepStyle,
             ]}
           >
             <Pressable
-              accessibilityLabel={labels?.toggleStep(
-                step.props.title,
-                completed,
-              )}
+              accessibilityLabel={labels?.toggleStep(stepTitle, completed)}
               accessibilityRole="checkbox"
               accessibilityState={{ checked: completed }}
-              nativeID={`step-by-step-${step.props.id}`}
+              nativeID={`step-by-step-${id}`}
               onPress={() => {
                 const next = completed
-                  ? completedIds.filter((id) => id !== step.props.id)
-                  : [...completedIds, step.props.id];
+                  ? completedIds.filter((completedId) => completedId !== id)
+                  : [...completedIds, id];
                 setCompletedIds(next);
               }}
               style={styles.toggle}
@@ -229,7 +242,7 @@ function StepByStepRoot({
                     },
                   ]}
                 >
-                  {completed ? "✓" : (step.props.number ?? index + 1)}
+                  {completed ? "✓" : (number ?? index + 1)}
                 </Text>
               </View>
             </Pressable>
@@ -251,9 +264,9 @@ function StepByStepRoot({
                   },
                 ]}
               >
-                {step.props.title}
+                {stepTitle}
               </Text>
-              {step.props.children}
+              {stepChildren}
             </View>
           </View>
         );

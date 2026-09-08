@@ -60,8 +60,7 @@ function Callout({
   return (
     <View
       {...props}
-      accessibilityLabel={accessibilityLabel ?? displayTitle}
-      accessible
+      accessibilityLabel={accessibilityLabel}
       ref={ref}
       style={[
         styles.root,
@@ -81,6 +80,7 @@ function Callout({
         {icon ? <View accessibilityElementsHidden>{icon}</View> : null}
         <View style={[styles.body, { gap: theme.spacing[1] }]}>
           <NativeText
+            accessibilityLabel={displayTitle}
             style={[
               theme.typography.scale.body,
               {

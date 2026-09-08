@@ -87,14 +87,24 @@ type PromptState = {
   readonly value: string;
 };
 
+function normalizeRows(rows: number | undefined, fallback: number): number {
+  return rows !== undefined && Number.isFinite(rows)
+    ? Math.max(1, Math.floor(rows))
+    : fallback;
+}
+
 function usePromptState(props: PromptInputProps): PromptState {
   const theme = useTheme();
-  const minimum = Math.max(1, props.minRows ?? 1);
-  const maximum = Math.max(minimum, props.maxRows ?? 8);
+  const minimum = normalizeRows(props.minRows, 1);
+  const maximum = Math.max(minimum, normalizeRows(props.maxRows, 8));
   const rowHeight = theme.typography.scale.bodySmall.lineHeight;
   const minHeight = minimum * rowHeight;
   const maxHeight = maximum * rowHeight;
-  const [contentHeight, setContentHeight] = useState(minHeight);
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+  const contentHeight = Math.min(
+    maxHeight,
+    Math.max(minHeight, measuredHeight),
+  );
   const [internalValue, setInternalValue] = useState(props.defaultValue ?? "");
   const controlled = props.value !== undefined;
   const value = controlled ? props.value : internalValue;
@@ -119,9 +129,9 @@ function usePromptState(props: PromptInputProps): PromptState {
   const handleContentSizeChange = useCallback(
     (event: TextInputContentSizeChangeEvent) => {
       const next = event.nativeEvent.contentSize.height;
-      setContentHeight(Math.min(maxHeight, Math.max(minHeight, next)));
+      if (Number.isFinite(next)) setMeasuredHeight(next);
     },
-    [maxHeight, minHeight],
+    [],
   );
   return {
     canSubmit,

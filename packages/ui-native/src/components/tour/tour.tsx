@@ -123,7 +123,7 @@ function Tour({
   const theme = useTheme();
   const generatedId = useId();
   const initialStep = clampStep(defaultCurrentStep, steps.length);
-  const [activeIndex, setActiveIndex] = useControllableState(
+  const [storedIndex, setActiveIndex] = useControllableState(
     currentStep === undefined
       ? {
           defaultValue: initialStep,
@@ -142,6 +142,7 @@ function Tour({
           value: clampStep(currentStep, steps.length),
         },
   );
+  const activeIndex = clampStep(storedIndex, steps.length);
   const step = steps[activeIndex];
   if (!step) return null;
 
@@ -209,6 +210,7 @@ function Tour({
           now: activeIndex + 1,
           text: progressText,
         }}
+        accessible
         nativeID={`${generatedId}-progress`}
         style={[
           styles.progressTrack,

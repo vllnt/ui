@@ -82,17 +82,25 @@ function startNumberAnimation({
 /** Animated native metric text with immediate reduced-motion state. */
 function NumberTicker({
   accessibilityLabel,
-  delay = 0,
-  duration = 1.2,
+  delay: requestedDelay = 0,
+  duration: requestedDuration = 1.2,
   formatOptions,
-  from = 0,
+  from: requestedFrom = 0,
   locale,
   reducedMotionService,
   ref,
   style,
-  value,
+  value: requestedValue,
   ...props
 }: NumberTickerProps) {
+  const delay = Number.isFinite(requestedDelay * 1000)
+    ? Math.max(0, requestedDelay)
+    : 0;
+  const duration = Number.isFinite(requestedDuration * 1000)
+    ? Math.max(0, requestedDuration)
+    : 0;
+  const from = Number.isFinite(requestedFrom) ? requestedFrom : 0;
+  const value = Number.isFinite(requestedValue) ? requestedValue : 0;
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
   const animatedValue = useMemo(() => new Animated.Value(from), [from]);

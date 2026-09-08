@@ -8,6 +8,14 @@ describe("getPlatform", () => {
     expect(getPlatform("unknown")).toBe("web");
   });
 
+  it("uses the first repeated platform consistently with URLSearchParams", () => {
+    const query = new URLSearchParams("platform=native&platform=web");
+    expect(getPlatform(query.getAll("platform"), "all")).toBe("native");
+    expect(getPlatform(query.getAll("platform"), "all")).toBe(
+      getPlatform(query.get("platform") ?? undefined, "all"),
+    );
+  });
+
   it("allows the catalog to retain All", () => {
     expect(getPlatform(undefined, "all")).toBeUndefined();
   });

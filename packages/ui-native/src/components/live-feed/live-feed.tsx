@@ -1,3 +1,5 @@
+"use client";
+
 import { type Ref, useEffect, useMemo, useState } from "react";
 
 import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
@@ -55,7 +57,14 @@ function normalizeDate(value: LiveFeedDateValue): Date {
   return value instanceof Date ? new Date(value.getTime()) : new Date(value);
 }
 
+function sortableTime(value: LiveFeedDateValue): number {
+  const time = normalizeDate(value).getTime();
+  return Number.isFinite(time) ? time : -8_640_000_000_000_001;
+}
+
 function relativeTime(eventDate: Date, now: Date): string {
+  if (!Number.isFinite(eventDate.getTime()) || !Number.isFinite(now.getTime()))
+    return "";
   const seconds = Math.max(
     0,
     Math.floor((now.getTime() - eventDate.getTime()) / 1000),
@@ -77,7 +86,9 @@ function useCurrentDate(now: LiveFeedDateValue | undefined, tickMs: number) {
       () => {
         setTimestamp(Date.now());
       },
-      Math.max(1000, tickMs),
+      Number.isFinite(tickMs)
+        ? Math.min(2_147_483_647, Math.max(1000, tickMs))
+        : 30_000,
     );
     return () => {
       clearInterval(interval);
@@ -126,7 +137,7 @@ function LiveFeedRow({
   const relative = relativeTime(eventDate, now);
   return (
     <View
-      accessibilityLabel={`${event.severity}: ${event.title}, ${relative}`}
+      accessibilityLabel={`${event.severity}: ${event.title}${relative ? `, ${relative}` : ""}`}
       accessibilityRole="text"
       style={[
         styles.item,
@@ -145,9 +156,11 @@ function LiveFeedRow({
         >
           {event.title}
         </Text>
-        <Text size="caption" tone="muted">
-          {relative}
-        </Text>
+        {relative ? (
+          <Text size="caption" tone="muted">
+            {relative}
+          </Text>
+        ) : null}
       </View>
       <SeverityBadge level={event.severity} tone="soft" />
       {event.message ? (
@@ -186,8 +199,7 @@ function LiveFeed({
       [...events]
         .sort(
           (first, second) =>
-            normalizeDate(second.timestamp).getTime() -
-            normalizeDate(first.timestamp).getTime(),
+            sortableTime(second.timestamp) - sortableTime(first.timestamp),
         )
         .slice(0, Math.max(0, maxItems)),
     [events, maxItems],

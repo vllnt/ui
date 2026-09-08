@@ -2,25 +2,35 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement } from "react";
 import { Text as NativeText, type ViewProps } from "react-native";
 
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
-
-import { AnimatedTabs } from "./animated-tabs/animated-tabs";
+import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./collapsible/collapsible";
-import { DateField, type ISODateString } from "./date-field/date-field";
-import { InlineInput } from "./inline-input/inline-input";
+} from "../components/collapsible/collapsible";
+import {
+  DateField,
+  type ISODateString,
+} from "../components/date-field/date-field";
+import { InlineInput } from "../components/inline-input/inline-input";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "./resizable/resizable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs/tabs";
-import { type ISOTimeString, TimeField } from "./time-field/time-field";
-import { TimelineScrubber } from "./timeline-scrubber/timeline-scrubber";
-import { ViewSwitcher } from "./view-switcher/view-switcher";
+} from "../components/resizable/resizable";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/tabs/tabs";
+import {
+  type ISOTimeString,
+  TimeField,
+} from "../components/time-field/time-field";
+import { TimelineScrubber } from "../components/timeline-scrubber/timeline-scrubber";
+import { ViewSwitcher } from "../components/view-switcher/view-switcher";
+import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 
 const reducedMotionService: ReducedMotionService = {
   addEventListener: () => ({ remove: jest.fn() }),

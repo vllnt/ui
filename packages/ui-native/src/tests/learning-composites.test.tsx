@@ -6,25 +6,25 @@ import {
 } from "@testing-library/react-native";
 import { Text } from "react-native";
 
-import { Checklist } from "./checklist/checklist";
-import { CompletionDialog } from "./completion-dialog/completion-dialog";
-import { Exercise } from "./exercise/exercise";
-import { Flashcard } from "./flashcard/flashcard";
-import { KeyboardShortcutsHelp } from "./keyboard-shortcuts-help/keyboard-shortcuts-help";
+import { Checklist } from "../components/checklist/checklist";
+import { CompletionDialog } from "../components/completion-dialog/completion-dialog";
+import { Exercise } from "../components/exercise/exercise";
+import { Flashcard } from "../components/flashcard/flashcard";
+import { KeyboardShortcutsHelp } from "../components/keyboard-shortcuts-help/keyboard-shortcuts-help";
 import {
   ProgressTracker,
   ProgressTrackerModule,
   ProgressTrackerModules,
   ProgressTrackerOverview,
-} from "./progress-tracker/progress-tracker";
-import { Quiz } from "./quiz/quiz";
-import { Rating } from "./rating/rating";
-import { SearchDialog } from "./search-dialog/search-dialog";
-import { Step, StepByStep } from "./step-by-step/step-by-step";
-import { Stepper } from "./stepper/stepper";
-import { Tour } from "./tour/tour";
-import { TutorialComplete } from "./tutorial-complete/tutorial-complete";
-import { TutorialFilters } from "./tutorial-filters/tutorial-filters";
+} from "../components/progress-tracker/progress-tracker";
+import { Quiz } from "../components/quiz/quiz";
+import { Rating } from "../components/rating/rating";
+import { SearchDialog } from "../components/search-dialog/search-dialog";
+import { Step, StepByStep } from "../components/step-by-step/step-by-step";
+import { Stepper } from "../components/stepper/stepper";
+import { Tour } from "../components/tour/tour";
+import { TutorialComplete } from "../components/tutorial-complete/tutorial-complete";
+import { TutorialFilters } from "../components/tutorial-filters/tutorial-filters";
 
 const tourLabels = {
   finish: "Finish",

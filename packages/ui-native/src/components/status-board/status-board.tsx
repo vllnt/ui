@@ -131,7 +131,15 @@ function StatusCard({
 
   return (
     <Card
-      accessibilityLabel={`${item.label}, ${current.label}`}
+      accessibilityLabel={[
+        item.label,
+        current.label,
+        item.description,
+        item.value ?? noMetricLabel,
+        item.meta,
+      ]
+        .filter((value) => value !== undefined && value.length > 0)
+        .join(", ")}
       accessible
       style={{ gap: theme.spacing[3], padding: theme.spacing[4] }}
     >

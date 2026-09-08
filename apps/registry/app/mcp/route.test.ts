@@ -36,6 +36,21 @@ describe("platform-aware MCP tools", () => {
     );
   });
 
+  it.each(["", "NATIVE", JSON.parse("null"), 42, ["native"], {}])(
+    "rejects malformed platforms instead of returning an unfiltered catalog: %j",
+    (platform) => {
+      expect(() => searchComponents({ platform })).toThrow(
+        "Unsupported platform",
+      );
+      expect(() => getComponent({ name: "button", platform })).toThrow(
+        "Unsupported platform",
+      );
+      expect(() =>
+        getComponent({ name: "missing-component", platform }),
+      ).toThrow("Unsupported platform");
+    },
+  );
+
   it("returns a native-only projection without web props or source", () => {
     expect(getComponent({ name: "button", platform: "native" })).toMatchObject({
       compatibility: "portable-options",

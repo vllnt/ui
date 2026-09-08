@@ -43,7 +43,10 @@ function InlineInput({
         committed.current = false;
         onBlur?.(event);
       }}
-      onChangeText={onChangeText}
+      onChangeText={(nextValue) => {
+        committed.current = false;
+        onChangeText(nextValue);
+      }}
       onFocus={(event) => {
         initialValue.current = value;
         committed.current = false;
@@ -51,6 +54,7 @@ function InlineInput({
       }}
       onSubmitEditing={(event) => {
         committed.current = true;
+        initialValue.current = value;
         onCommit(value);
         onSubmitEditing?.(event);
       }}

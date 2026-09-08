@@ -59,9 +59,11 @@ function normalize(tags: readonly string[]): readonly string[] {
 /** Native tag editor that commits text via keyboard action or an explicit button. */
 function TagsInput({
   disabled = false,
+  editable = true,
   labels,
   onSubmitEditing,
   placeholder,
+  readOnly = false,
   ref,
   style,
   tags: state,
@@ -70,9 +72,15 @@ function TagsInput({
   const theme = useTheme();
   const [tags, setTags] = useControllableState(state);
   const [draft, setDraft] = useState("");
+  const locked = disabled || !editable || readOnly;
   const commit = () => {
+    if (locked) return;
     const next = normalize([...tags, draft]);
-    if (next.length !== tags.length) setTags(next);
+    if (
+      next.length !== tags.length ||
+      next.some((tag, index) => tag !== tags[index])
+    )
+      setTags(next);
     setDraft("");
   };
   return (
@@ -114,8 +122,10 @@ function TagsInput({
           <Pressable
             accessibilityLabel={labels.remove(tag)}
             accessibilityRole="button"
-            disabled={disabled}
+            accessibilityState={{ disabled: locked }}
+            disabled={locked}
             onPress={() => {
+              if (locked) return;
               setTags(tags.filter((item) => item !== tag));
             }}
             style={styles.add}
@@ -129,14 +139,17 @@ function TagsInput({
       <TextInput
         {...props}
         accessibilityLabel={labels.input}
-        editable={!disabled}
-        onChangeText={setDraft}
+        editable={!locked}
+        onChangeText={(text) => {
+          if (!locked) setDraft(text);
+        }}
         onSubmitEditing={(event) => {
           commit();
           onSubmitEditing?.(event);
         }}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.mutedForeground}
+        readOnly={readOnly}
         ref={ref}
         returnKeyType="done"
         style={[
@@ -149,8 +162,8 @@ function TagsInput({
       <Pressable
         accessibilityLabel={labels.add}
         accessibilityRole="button"
-        accessibilityState={{ disabled: disabled || draft.trim().length === 0 }}
-        disabled={disabled || draft.trim().length === 0}
+        accessibilityState={{ disabled: locked || draft.trim().length === 0 }}
+        disabled={locked || draft.trim().length === 0}
         onPress={commit}
         style={styles.add}
       >

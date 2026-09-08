@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
 });
 
 function clampedZoom(value: number): number {
-  return Math.min(8, Math.max(1, value));
+  return Number.isFinite(value) ? Math.min(8, Math.max(1, value)) : 1;
 }
 
 function eventGeometry(
@@ -161,6 +161,7 @@ function TimelineLane({
       </Text>
       {events.map((event) => {
         const geometry = eventGeometry(event, start, end);
+        const eventWidth = Math.max(44, geometry.width * width);
         const selected = isSingleSelected(
           selectedId,
           event,
@@ -184,14 +185,14 @@ function TimelineLane({
                 borderColor: selected ? theme.colors.ring : theme.colors.border,
                 borderRadius: theme.radius.sm,
                 borderWidth: 1,
-                left: geometry.left * width,
+                left: Math.max(
+                  0,
+                  Math.min(geometry.left * width, width - eventWidth),
+                ),
                 opacity: pressed ? 0.8 : 1,
                 paddingHorizontal: theme.spacing[2],
                 top: theme.spacing[4],
-                width:
-                  geometry.width > 0
-                    ? Math.max(44, geometry.width * width)
-                    : 44,
+                width: eventWidth,
               },
             ]}
           >
@@ -300,6 +301,7 @@ function InteractiveTimeline({
       accessibilityLabel={labels.region}
       onLayout={(event) => {
         setLayoutWidth(Math.max(1, event.nativeEvent.layout.width));
+        props.onLayout?.(event);
       }}
       ref={ref}
       style={[

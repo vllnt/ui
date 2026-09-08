@@ -70,7 +70,7 @@ function TimeField({
         {...props}
         accessibilityLabel={labels.input}
         aria-invalid={invalid}
-        inputMode="numeric"
+        inputMode="text"
         onBlur={(event) => {
           commit();
           setEditing(false);

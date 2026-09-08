@@ -146,7 +146,7 @@ function Rating({
     >
       {choices.map((choice) => (
         <RatingOption
-          activeValue={currentValue}
+          activeValue={normalize(currentValue, safeMax)}
           allowClear={allowClear}
           choice={choice}
           generatedId={generatedId}
@@ -167,7 +167,7 @@ function Rating({
             },
           ]}
         >
-          {labels.value(currentValue, safeMax)}
+          {labels.value(normalize(currentValue, safeMax), safeMax)}
         </Text>
       ) : null}
     </View>

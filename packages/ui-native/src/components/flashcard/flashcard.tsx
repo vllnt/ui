@@ -126,7 +126,7 @@ function Flashcard({
       <View
         accessibilityLabel={isFlipped ? labels.answer : labels.prompt}
         accessibilityLiveRegion="polite"
-        accessible
+        accessible={false}
         style={[
           styles.side,
           {

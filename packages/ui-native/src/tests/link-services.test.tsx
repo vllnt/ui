@@ -6,15 +6,14 @@ import {
 } from "@testing-library/react-native";
 import { Linking, View } from "react-native";
 
+import { AISourceCitation } from "../components/ai-source-citation/ai-source-citation";
+import { Breadcrumb } from "../components/breadcrumb/breadcrumb";
+import { Menubar } from "../components/menubar/menubar";
+import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
+import { Pagination } from "../components/pagination/pagination";
+import { Sidebar } from "../components/sidebar/sidebar";
+import { SidebarProvider } from "../components/sidebar-provider/sidebar-provider";
 import type { LinkingService } from "../primitives/platform-services";
-
-import { AISourceCitation } from "./ai-source-citation/ai-source-citation";
-import { Breadcrumb } from "./breadcrumb/breadcrumb";
-import { Menubar } from "./menubar/menubar";
-import { NavigationMenu } from "./navigation-menu/navigation-menu";
-import { Pagination } from "./pagination/pagination";
-import { Sidebar } from "./sidebar/sidebar";
-import { SidebarProvider } from "./sidebar-provider/sidebar-provider";
 
 describe("reviewed native links", () => {
   afterEach(() => {

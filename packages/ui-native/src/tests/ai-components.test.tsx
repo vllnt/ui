@@ -8,20 +8,20 @@ import {
   AgentStepDetailText,
   AgentStepProgress,
   AgentStepTitle,
-} from "./agent-activity/agent-activity";
-import { AIChatInput } from "./ai-chat-input/ai-chat-input";
-import { ChainOfThought } from "./chain-of-thought/chain-of-thought";
+} from "../components/agent-activity/agent-activity";
+import { AIChatInput } from "../components/ai-chat-input/ai-chat-input";
+import { ChainOfThought } from "../components/chain-of-thought/chain-of-thought";
 import {
   ConversationEmpty,
   ConversationLoading,
   ConversationMessages,
   ConversationSuggestions,
   ConversationThread,
-} from "./conversation-thread/conversation-thread";
-import { ModelSelector } from "./model-selector/model-selector";
-import { PromptInput } from "./prompt-input/prompt-input";
-import { Reasoning } from "./reasoning/reasoning";
-import { ThinkingBlock } from "./thinking-block/thinking-block";
+} from "../components/conversation-thread/conversation-thread";
+import { ModelSelector } from "../components/model-selector/model-selector";
+import { PromptInput } from "../components/prompt-input/prompt-input";
+import { Reasoning } from "../components/reasoning/reasoning";
+import { ThinkingBlock } from "../components/thinking-block/thinking-block";
 
 const thinkingLabels = {
   collapse: "Hide thinking",

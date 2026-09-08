@@ -100,6 +100,7 @@ function TestimonialCard({
     animation.start();
     return () => {
       animation.stop();
+      progress.setValue(1);
     };
   }, [animateOnMount, progress, reduceMotion]);
   return (

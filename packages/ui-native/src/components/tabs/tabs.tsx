@@ -5,8 +5,11 @@ import {
   type ReactNode,
   type Ref,
   use,
+  useCallback,
+  useEffect,
   useId,
   useMemo,
+  useState,
 } from "react";
 
 import {
@@ -28,6 +31,9 @@ import { Text } from "../text/text";
 type TabsContextValue = {
   readonly baseId: string;
   readonly onValueChange: (value: string) => void;
+  readonly panels: readonly string[];
+  readonly register: (kind: "panels" | "triggers", value: string) => () => void;
+  readonly triggers: readonly string[];
   readonly value: string;
 };
 
@@ -102,13 +108,34 @@ function Tabs({
       ? { defaultValue, mode: "uncontrolled", onChange: onValueChange }
       : { mode: "controlled", onChange: onValueChange, value };
   const [selectedValue, setSelectedValue] = useControllableState(options);
+  const [mounted, setMounted] = useState<{
+    panels: readonly string[];
+    triggers: readonly string[];
+  }>({ panels: [], triggers: [] });
+  const register = useCallback(
+    (kind: "panels" | "triggers", registeredValue: string) => {
+      setMounted((current) => ({
+        ...current,
+        [kind]: [...current[kind], registeredValue],
+      }));
+      return () => {
+        setMounted((current) => ({
+          ...current,
+          [kind]: current[kind].filter((item) => item !== registeredValue),
+        }));
+      };
+    },
+    [],
+  );
   const context = useMemo(
     () => ({
       baseId: id ?? generatedId,
+      ...mounted,
       onValueChange: setSelectedValue,
+      register,
       value: selectedValue,
     }),
-    [generatedId, id, selectedValue, setSelectedValue],
+    [generatedId, id, mounted, register, selectedValue, setSelectedValue],
   );
 
   return (
@@ -162,6 +189,8 @@ function TabsTrigger({
 }: TabsTriggerProps) {
   const theme = useTheme();
   const tabs = useTabs();
+  const { register } = tabs;
+  useEffect(() => register("triggers", value), [register, value]);
   const selected = isSingleSelected(
     tabs.value,
     value,
@@ -173,7 +202,11 @@ function TabsTrigger({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="tab"
       accessibilityState={{ disabled: disabled ?? undefined, selected }}
-      aria-controls={selected ? `${tabs.baseId}-panel-${value}` : undefined}
+      aria-controls={
+        selected && tabs.panels.includes(value)
+          ? `${tabs.baseId}-panel-${value}`
+          : undefined
+      }
       disabled={disabled}
       id={`${tabs.baseId}-tab-${value}`}
       onPress={() => {
@@ -217,13 +250,27 @@ function TabsContent({
 }: TabsContentProps) {
   const theme = useTheme();
   const tabs = useTabs();
-  if (!isSingleSelected(tabs.value, value, (candidate) => candidate)) {
+  const selected = isSingleSelected(
+    tabs.value,
+    value,
+    (candidate) => candidate,
+  );
+  const { register } = tabs;
+  useEffect(() => {
+    if (selected) return register("panels", value);
+    return;
+  }, [register, selected, value]);
+  if (!selected) {
     return null;
   }
   return (
     <View
       {...props}
-      aria-labelledby={`${tabs.baseId}-tab-${value}`}
+      aria-labelledby={
+        tabs.triggers.includes(value)
+          ? `${tabs.baseId}-tab-${value}`
+          : undefined
+      }
       id={`${tabs.baseId}-panel-${value}`}
       ref={ref}
       style={[{ paddingTop: theme.spacing[4] }, style]}

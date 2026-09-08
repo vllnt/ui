@@ -181,11 +181,15 @@ function CollapsibleContent({
   void setProgress;
   useEffect(() => {
     if (!collapsible.open) return;
-    Animated.timing(progress, {
+    const animation = Animated.timing(progress, {
       duration: collapsible.reduceMotion ? 0 : 100,
       toValue: 1,
       useNativeDriver: true,
-    }).start();
+    });
+    animation.start();
+    return () => {
+      animation.stop();
+    };
   }, [collapsible.open, collapsible.reduceMotion, progress]);
 
   if (!collapsible.open) return null;

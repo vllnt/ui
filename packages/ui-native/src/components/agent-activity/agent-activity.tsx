@@ -479,13 +479,16 @@ function AgentStepProgress({
   ...props
 }: AgentStepProgressProps) {
   const theme = useTheme();
-  const clamped = Math.max(0, Math.min(100, value));
+  const clamped = Number.isFinite(value)
+    ? Math.max(0, Math.min(100, value))
+    : 0;
   return (
     <View
       {...props}
       accessibilityLabel={label}
       accessibilityRole="progressbar"
       accessibilityValue={{ max: 100, min: 0, now: clamped }}
+      accessible
       ref={ref}
       style={[
         styles.progress,

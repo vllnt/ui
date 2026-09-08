@@ -88,7 +88,8 @@ function Checklist({
           value: uniqueKnownIds(checkedIds, items),
         },
   );
-  const selected = new Set(selectedIds);
+  const knownSelectedIds = uniqueKnownIds(selectedIds, items);
+  const selected = new Set(knownSelectedIds);
   const progress =
     items.length === 0 ? 0 : Math.round((selected.size / items.length) * 100);
   const progressText = labels.progress(selected.size, items.length);
@@ -149,6 +150,7 @@ function Checklist({
           now: selected.size,
           text: progressText,
         }}
+        accessible
         nativeID={`${generatedId}-progress`}
         style={[
           styles.progressTrack,
@@ -181,8 +183,8 @@ function Checklist({
               nativeID={`${generatedId}-item-${item.id}`}
               onPress={() => {
                 const next = checked
-                  ? selectedIds.filter((id) => id !== item.id)
-                  : [...selectedIds, item.id];
+                  ? knownSelectedIds.filter((id) => id !== item.id)
+                  : [...knownSelectedIds, item.id];
                 setSelectedIds(next);
                 if (
                   !checked &&

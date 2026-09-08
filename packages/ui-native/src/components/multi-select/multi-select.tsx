@@ -171,9 +171,9 @@ function MultiSelect({
                   accessibilityRole="checkbox"
                   accessibilityState={{
                     checked: selected,
-                    disabled: option.disabled,
+                    disabled: disabled || option.disabled,
                   }}
-                  disabled={option.disabled}
+                  disabled={disabled || option.disabled}
                   key={option.id}
                   onPress={() => {
                     setSelectedIds(
@@ -187,7 +187,7 @@ function MultiSelect({
                         ? theme.colors.accent
                         : theme.colors.background,
                       borderRadius: theme.radius.sm,
-                      opacity: option.disabled ? 0.5 : 1,
+                      opacity: disabled || option.disabled ? 0.5 : 1,
                       paddingHorizontal: theme.spacing[3],
                     },
                   ]}

@@ -38,7 +38,12 @@ function getMeterValues(value: number, min: number, max: number) {
     current,
     max: safeMax,
     min: safeMin,
-    ratio: (current - safeMin) / (safeMax - safeMin),
+    ratio:
+      safeMax === safeMin
+        ? 0
+        : Number.isFinite(safeMax - safeMin)
+          ? (current - safeMin) / (safeMax - safeMin)
+          : (current / 2 - safeMin / 2) / (safeMax / 2 - safeMin / 2),
   };
 }
 

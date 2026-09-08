@@ -86,7 +86,18 @@ function Tooltip({
           { opacity: pressed ? 0.8 : 1 },
         ]}
       >
-        {trigger}
+        {typeof trigger === "string" || typeof trigger === "number" ? (
+          <Text
+            style={[
+              theme.typography.scale.bodySmall,
+              { color: theme.colors.foreground },
+            ]}
+          >
+            {trigger}
+          </Text>
+        ) : (
+          trigger
+        )}
       </Pressable>
       <ModalLayer
         animationType={reduceMotion ? "none" : "fade"}
@@ -121,7 +132,18 @@ function Tooltip({
           >
             {label}
           </Text>
-          {children}
+          {typeof children === "string" || typeof children === "number" ? (
+            <Text
+              style={[
+                theme.typography.scale.bodySmall,
+                { color: theme.colors.popoverForeground },
+              ]}
+            >
+              {children}
+            </Text>
+          ) : (
+            children
+          )}
           <Pressable
             accessibilityLabel={closeLabel}
             accessibilityRole="button"

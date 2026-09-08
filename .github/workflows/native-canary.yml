@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "packages/design/**"
+      - "scripts/release-guard*"
       - "packages/ui-core/**"
       - "packages/ui-native/**"
       - "apps/native-catalog/**"
@@ -38,6 +39,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: node --test scripts/release-guard.test.mjs
+
       - run: pnpm ci:native
 
   publish:
@@ -67,15 +70,25 @@ jobs:
         run: pnpm --filter '@vllnt/ui-native...' build
 
       - name: Publish synchronized canaries
+        env:
+          NPM_DIST_TAG_TOKEN: ${{ secrets.NPM_DIST_TAG_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
 
+          CANARY_VERSION="$(node scripts/release-guard.mjs native-canary)"
           CORE_DIR="packages/ui-core"
           NATIVE_DIR="packages/ui-native"
 
           test "$(node -p "require('./${CORE_DIR}/package.json').name")" = "@vllnt/ui-core"
           test "$(node -p "require('./${NATIVE_DIR}/package.json').name")" = "@vllnt/ui-native"
+          if [[ -z "${NPM_DIST_TAG_TOKEN:-}" ]]; then
+            echo "::error::NPM_DIST_TAG_TOKEN is required for dist-tag promotion and rollback because npm trusted publishing authenticates publish commands only"
+            exit 1
+          fi
+          DIST_TAG_NPMRC="$RUNNER_TEMP/npm-dist-tag.npmrc"
+          printf '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n' >"$DIST_TAG_NPMRC"
+          NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 whoami >/dev/null
 
           CORE_BASE="$(node -p "require('./${CORE_DIR}/package.json').version")"
           NATIVE_BASE="$(node -p "require('./${NATIVE_DIR}/package.json').version")"
@@ -94,8 +107,6 @@ jobs:
             exit 0
           fi
 
-          SHORT_SHA="$(printf '%s' "$GITHUB_SHA" | cut -c1-12)"
-          CANARY_VERSION="${CORE_BASE}-canary.${GITHUB_RUN_NUMBER}.sha${SHORT_SHA}"
           STAGING_TAG="run-${GITHUB_RUN_ID}"
 
           read_tags() {
@@ -161,9 +172,6 @@ jobs:
             exit 1
           fi
 
-          sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
-          unset NODE_AUTH_TOKEN
-
           PROMOTION_STARTED=false
           remove_owned_tag() {
             local package="$1"
@@ -177,7 +185,7 @@ jobs:
               echo "::error::Refusing to remove ${package} tag ${tag}: expected ${expected}, found ${current}"
               return 1
             fi
-            npx --yes npm@11.18.0 dist-tag rm "$package" "$tag" || return 1
+            NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag rm "$package" "$tag" || return 1
             tags="$(read_tags "$package")" || return 1
             [[ -z "$(tag_value "$tags" "$tag")" ]]
           }
@@ -242,7 +250,7 @@ jobs:
               return 1
             fi
             if [[ -n "$previous" ]]; then
-              npx --yes npm@11.18.0 dist-tag add "${package}@${previous}" canary || return 1
+              NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag add "${package}@${previous}" canary || return 1
             else
               remove_owned_tag "$package" canary "$CANARY_VERSION" || return 1
             fi
@@ -258,8 +266,8 @@ jobs:
           }
 
           PROMOTION_STARTED=true
-          npx --yes npm@11.18.0 dist-tag add "@vllnt/ui-core@${CANARY_VERSION}" canary
-          npx --yes npm@11.18.0 dist-tag add "@vllnt/ui-native@${CANARY_VERSION}" canary
+          NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag add "@vllnt/ui-core@${CANARY_VERSION}" canary
+          NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag add "@vllnt/ui-native@${CANARY_VERSION}" canary
 
           CORE_TAGS_AFTER="$(read_tags @vllnt/ui-core)"
           NATIVE_TAGS_AFTER="$(read_tags @vllnt/ui-native)"

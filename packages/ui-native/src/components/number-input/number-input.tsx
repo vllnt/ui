@@ -1,3 +1,5 @@
+"use client";
+
 import { type Ref, useState } from "react";
 
 import {
@@ -170,6 +172,34 @@ type NumberControlsProps = {
   readonly state: ReturnType<typeof useNumberState>;
 };
 
+function useNumberDraft(state: ReturnType<typeof useNumberState>) {
+  const [draft, setDraft] = useState<{ numeric?: number; text: string }>();
+  return {
+    clear: () => {
+      setDraft(undefined);
+    },
+    handleChangeText: (text: string) => {
+      const parsed = text === "" ? undefined : Number(text);
+      if (
+        parsed !== undefined &&
+        !Number.isFinite(parsed) &&
+        !/^-?\.?$/.test(text)
+      )
+        return;
+      const numeric =
+        parsed === undefined || Number.isFinite(parsed)
+          ? normalizeValue(parsed, state.min, state.max)
+          : state.current;
+      setDraft({ numeric, text });
+      if (parsed === undefined || Number.isFinite(parsed)) state.update(parsed);
+    },
+    text:
+      draft && Object.is(draft.numeric, state.current)
+        ? draft.text
+        : (state.current?.toString() ?? ""),
+  };
+}
+
 function NumberControls({
   accessibilityLabel,
   decrementLabel,
@@ -179,12 +209,16 @@ function NumberControls({
   inputRef,
   state,
 }: NumberControlsProps) {
+  const draft = useNumberDraft(state);
   return (
     <>
       <NumberStep
         disabled={state.decrementDisabled}
         label={decrementLabel}
-        onPress={state.handleDecrement}
+        onPress={() => {
+          draft.clear();
+          state.handleDecrement();
+        }}
         symbol="−"
       />
       <Input
@@ -192,21 +226,22 @@ function NumberControls({
         accessibilityLabel={accessibilityLabel}
         disabled={disabled}
         inputMode="decimal"
-        onChangeText={(text) => {
-          if (text.length === 0) state.update();
-          else {
-            const parsed = Number(text);
-            if (Number.isFinite(parsed)) state.update(parsed);
-          }
+        onBlur={(event) => {
+          draft.clear();
+          inputProps.onBlur?.(event);
         }}
+        onChangeText={draft.handleChangeText}
         ref={inputRef}
-        style={styles.input}
-        value={state.current?.toString() ?? ""}
+        style={[styles.input, inputProps.style]}
+        value={draft.text}
       />
       <NumberStep
         disabled={state.incrementDisabled}
         label={incrementLabel}
-        onPress={state.handleIncrement}
+        onPress={() => {
+          draft.clear();
+          state.handleIncrement();
+        }}
         symbol="+"
       />
     </>

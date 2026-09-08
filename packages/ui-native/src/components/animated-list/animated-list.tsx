@@ -65,6 +65,7 @@ function AnimatedListRow({
     animation.start();
     return () => {
       animation.stop();
+      progress.setValue(1);
     };
   }, [animateOnMount, delay, index, progress, reduceMotion]);
 

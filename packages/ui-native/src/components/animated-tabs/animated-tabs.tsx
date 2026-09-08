@@ -70,11 +70,15 @@ function AnimatedTabTrigger({
   const opacity = useRef(new Animated.Value(selected ? 1 : 0)).current;
 
   useEffect(() => {
-    Animated.timing(opacity, {
+    const animation = Animated.timing(opacity, {
       duration: reduceMotion ? 0 : 100,
       toValue: selected ? 1 : 0,
       useNativeDriver: true,
-    }).start();
+    });
+    animation.start();
+    return () => {
+      animation.stop();
+    };
   }, [opacity, reduceMotion, selected]);
 
   return (

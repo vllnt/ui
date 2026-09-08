@@ -53,6 +53,7 @@ function DatePicker({
   const [date, setDate] = useControllableState(selection);
   const [open, setOpen] = useState(false);
   const choose = (next?: Date) => {
+    if (disabled) return;
     setDate(next);
     if (next) setOpen(false);
   };
@@ -112,6 +113,7 @@ function DatePicker({
           ]}
         >
           <Calendar
+            disabled={disabled}
             labels={labels}
             selection={{ mode: "controlled", onChange: choose, value: date }}
           />

@@ -147,7 +147,16 @@ function CompletionDialog({
         >
           {title}
         </Text>
-        {description ? (
+        {typeof description === "string" || typeof description === "number" ? (
+          <Text
+            style={[
+              theme.typography.scale.bodySmall,
+              { color: theme.colors.foreground },
+            ]}
+          >
+            {description}
+          </Text>
+        ) : description ? (
           <View style={{ gap: theme.spacing[2] }}>{description}</View>
         ) : null}
         <View style={[styles.actions, { gap: theme.spacing[2] }]}>

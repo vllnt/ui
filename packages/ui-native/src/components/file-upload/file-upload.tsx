@@ -83,13 +83,32 @@ function FileUpload({
     filesRef.current = files;
   }, [files]);
   const updateFiles = (next: readonly PickedFile[]) => {
-    filesRef.current = next;
+    if (fileState.mode === "uncontrolled") filesRef.current = next;
     setFiles(next);
   };
   const [failure, setFailure] = useState<string>();
+  const [busy, setBusy] = useState(false);
+  const pending = useRef(false);
+  const mounted = useRef(true);
+  const generation = useRef(0);
+  useLayoutEffect(
+    () => () => {
+      generation.current += 1;
+    },
+    [disabled, filePicker],
+  );
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const unavailable = filePicker === undefined;
   const choose = async () => {
-    if (!filePicker) return;
+    if (!filePicker || disabled || pending.current) return;
+    pending.current = true;
+    const request = generation.current;
+    setBusy(true);
     setFailure(undefined);
     try {
       const picked = await filePicker.pickFiles(
@@ -97,13 +116,23 @@ function FileUpload({
           ? { allowMultiple }
           : { allowMultiple, mimeTypes },
       );
+      if (
+        !mounted.current ||
+        request !== generation.current ||
+        picked.length === 0
+      )
+        return;
       updateFiles(
         uniqueFiles(
           allowMultiple ? [...filesRef.current, ...picked] : picked.slice(0, 1),
         ),
       );
     } catch {
-      setFailure(labels.failed);
+      if (mounted.current && request === generation.current)
+        setFailure(labels.failed);
+    } finally {
+      pending.current = false;
+      if (mounted.current) setBusy(false);
     }
   };
   return (
@@ -111,8 +140,8 @@ function FileUpload({
       <Pressable
         accessibilityLabel={unavailable ? labels.unavailable : labels.choose}
         accessibilityRole="button"
-        accessibilityState={{ disabled: disabled || unavailable }}
-        disabled={disabled || unavailable}
+        accessibilityState={{ busy, disabled: disabled || unavailable || busy }}
+        disabled={disabled || unavailable || busy}
         onPress={() => {
           void choose();
         }}
@@ -122,7 +151,7 @@ function FileUpload({
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.input,
             borderRadius: theme.radius.lg,
-            opacity: disabled || unavailable ? 0.5 : 1,
+            opacity: disabled || unavailable || busy ? 0.5 : 1,
             padding: theme.spacing[4],
           },
         ]}
@@ -170,6 +199,7 @@ function FileUpload({
             <Pressable
               accessibilityLabel={labels.remove(file.name)}
               accessibilityRole="button"
+              accessibilityState={{ disabled }}
               disabled={disabled}
               onPress={() => {
                 updateFiles(

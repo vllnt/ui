@@ -7,19 +7,19 @@ import {
 } from "@testing-library/react-native";
 import { Text as NativeText, View } from "react-native";
 
-import { BlurReveal } from "./blur-reveal/blur-reveal";
-import { CodeBlock } from "./code-block/code-block";
-import { DocumentSiblingNav } from "./document-sibling-nav/document-sibling-nav";
-import { RevealText } from "./reveal-text/reveal-text";
-import { ScrambleText } from "./scramble-text/scramble-text";
-import { ShareSection } from "./share-section/share-section";
-import { ShimmerText } from "./shimmer-text/shimmer-text";
-import { SpinningText } from "./spinning-text/spinning-text";
-import { Terminal } from "./terminal/terminal";
-import { TextAnimate } from "./text-animate/text-animate";
-import { TextReveal } from "./text-reveal/text-reveal";
-import { TextShimmer } from "./text-shimmer/text-shimmer";
-import { Typewriter } from "./typewriter/typewriter";
+import { BlurReveal } from "../components/blur-reveal/blur-reveal";
+import { CodeBlock } from "../components/code-block/code-block";
+import { DocumentSiblingNav } from "../components/document-sibling-nav/document-sibling-nav";
+import { RevealText } from "../components/reveal-text/reveal-text";
+import { ScrambleText } from "../components/scramble-text/scramble-text";
+import { ShareSection } from "../components/share-section/share-section";
+import { ShimmerText } from "../components/shimmer-text/shimmer-text";
+import { SpinningText } from "../components/spinning-text/spinning-text";
+import { Terminal } from "../components/terminal/terminal";
+import { TextAnimate } from "../components/text-animate/text-animate";
+import { TextReveal } from "../components/text-reveal/text-reveal";
+import { TextShimmer } from "../components/text-shimmer/text-shimmer";
+import { Typewriter } from "../components/typewriter/typewriter";
 
 const motionService = {
   addEventListener(

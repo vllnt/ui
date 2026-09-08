@@ -35,11 +35,12 @@ export type DateFieldProps = Omit<
 function isISODate(value: string): value is ISODateString {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);
-  const date = new Date(year ?? 0, (month ?? 1) - 1, day ?? 0);
+  const date = new Date(0);
+  date.setUTCFullYear(year ?? 0, (month ?? 1) - 1, day ?? 0);
   return (
-    date.getFullYear() === year &&
-    date.getMonth() === (month ?? 1) - 1 &&
-    date.getDate() === day
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === (month ?? 1) - 1 &&
+    date.getUTCDate() === day
   );
 }
 
@@ -75,7 +76,7 @@ function DateField({
         {...props}
         accessibilityLabel={labels.input}
         aria-invalid={invalid}
-        inputMode="numeric"
+        inputMode="text"
         onBlur={(event) => {
           commit();
           setEditing(false);

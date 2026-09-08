@@ -23,6 +23,7 @@ export type BlurRevealProps = Omit<ViewProps, "children"> & {
 function BlurReveal({
   children,
   delay = 0,
+  pointerEvents,
   reducedMotionService,
   ref,
   style,
@@ -59,6 +60,7 @@ function BlurReveal({
       {...props}
       accessibilityElementsHidden={!visible}
       importantForAccessibility={visible ? "auto" : "no-hide-descendants"}
+      pointerEvents={visible ? pointerEvents : "none"}
       ref={ref}
       style={[{ opacity: progress }, style]}
     >

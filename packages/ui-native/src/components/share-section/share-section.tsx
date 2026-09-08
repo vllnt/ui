@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useState } from "react";
+import { type Ref, useLayoutEffect, useRef, useState } from "react";
 
 import type { ShareContent, ShareOptions } from "react-native";
 import {
@@ -81,6 +81,50 @@ function ShareAction({
 }
 ShareAction.displayName = "ShareAction";
 
+function useSectionShare({
+  content,
+  onShareError,
+  onShareResult,
+  options,
+  shareService,
+}: Pick<
+  ShareSectionProps,
+  "content" | "onShareError" | "onShareResult" | "options" | "shareService"
+>) {
+  const [sharing, setSharing] = useState(false);
+  const service =
+    shareService === undefined ? defaultShareService : shareService;
+  const available = service !== null;
+  const pending = useRef(false);
+  const mounted = useRef(false);
+  const session = useRef(0);
+
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      session.current += 1;
+    };
+  }, [service]);
+
+  const share = async () => {
+    if (!service || pending.current || !mounted.current) return;
+    pending.current = true;
+    setSharing(true);
+    const currentSession = session.current;
+    try {
+      const result = await service.share(content, options);
+      if (session.current === currentSession) onShareResult?.(result);
+    } catch (error: unknown) {
+      if (session.current === currentSession) onShareError?.(error);
+    } finally {
+      pending.current = false;
+      if (mounted.current) setSharing(false);
+    }
+  };
+  return { available, share, sharing };
+}
+
 /** Uses the native share sheet rather than fabricating browser social intents. */
 function ShareSection({
   content,
@@ -95,23 +139,14 @@ function ShareSection({
   ...props
 }: ShareSectionProps) {
   const theme = useTheme();
-  const [sharing, setSharing] = useState(false);
-  const service =
-    shareService === undefined ? defaultShareService : shareService;
-  const available = service !== null;
+  const { available, share, sharing } = useSectionShare({
+    content,
+    onShareError,
+    onShareResult,
+    options,
+    shareService,
+  });
   const actionLabel = available ? labels.share : labels.unavailable;
-  const share = async () => {
-    if (!service || sharing) return;
-    setSharing(true);
-    try {
-      const result = await service.share(content, options);
-      onShareResult?.(result);
-    } catch (error: unknown) {
-      onShareError?.(error);
-    } finally {
-      setSharing(false);
-    }
-  };
   return (
     <View
       {...props}

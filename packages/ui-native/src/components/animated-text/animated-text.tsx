@@ -56,7 +56,7 @@ const glyphSegmenter = new Intl.Segmenter(undefined, {
 });
 
 function getSegments(text: string, splitBy: AnimatedTextSplit): string[] {
-  if (splitBy === "word") return text.match(/\S+\s*/g) ?? [];
+  if (splitBy === "word") return text.match(/\s+|\S+\s*/g) ?? [];
   return Array.from(glyphSegmenter.segment(text), ({ segment }) => segment);
 }
 

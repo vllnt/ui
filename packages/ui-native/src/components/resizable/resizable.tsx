@@ -100,16 +100,24 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
+function finiteOr(value: number | undefined, fallback: number): number {
+  return value !== undefined && Number.isFinite(value) ? value : fallback;
+}
+
 function getPanelConfigs(children: ReactNode): PanelConfig[] {
   return Children.toArray(children).reduce<PanelConfig[]>((configs, child) => {
     if (
       isValidElement<InternalResizablePanelProps>(child) &&
       child.type === ResizablePanel
     ) {
-      const minSize = clamp(child.props.minSize ?? 10, 0, 100);
-      const maxSize = clamp(child.props.maxSize ?? 90, minSize, 100);
+      const minSize = clamp(finiteOr(child.props.minSize, 10), 0, 100);
+      const maxSize = clamp(finiteOr(child.props.maxSize, 90), minSize, 100);
       configs.push({
-        defaultSize: clamp(child.props.defaultSize ?? 50, minSize, maxSize),
+        defaultSize: clamp(
+          finiteOr(child.props.defaultSize, 50),
+          minSize,
+          maxSize,
+        ),
         maxSize,
         minSize,
       });
@@ -295,8 +303,11 @@ function ResizablePanel({
   ...props
 }: InternalResizablePanelProps) {
   const context = use(ResizableContext);
+  const minimum = clamp(finiteOr(minSize, 0), 0, 100);
+  const maximum = clamp(finiteOr(maxSize, 100), minimum, 100);
   const size =
-    context?.sizes[panelIndex] ?? clamp(defaultSize, minSize, maxSize);
+    context?.sizes[panelIndex] ??
+    clamp(finiteOr(defaultSize, 50), minimum, maximum);
   return (
     <View
       {...props}
@@ -376,7 +387,7 @@ function ResizableHandle({
     if (!isDisabled) context.adjust(handleIndex, amount);
   };
   const handleAccessibilityAction = (event: AccessibilityActionEvent) => {
-    const resolvedStep = step > 0 ? step : 1;
+    const resolvedStep = Number.isFinite(step) && step > 0 ? step : 1;
     if (event.nativeEvent.actionName === "increment") change(resolvedStep);
     if (event.nativeEvent.actionName === "decrement") change(-resolvedStep);
   };

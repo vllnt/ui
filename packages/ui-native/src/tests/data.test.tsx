@@ -1,23 +1,23 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-import { ActivityLog } from "./activity-log/activity-log";
-import { Alert, AlertDescription, AlertTitle } from "./alert/alert";
-import { AvatarGroup } from "./avatar-group/avatar-group";
-import { CountdownTimer } from "./countdown-timer/countdown-timer";
-import { DataList } from "./data-list/data-list";
-import { LiveFeed } from "./live-feed/live-feed";
-import { MetricCluster } from "./metric-cluster/metric-cluster";
-import { OverviewBoard } from "./overview-board/overview-board";
-import { PresenceStack } from "./presence-stack/presence-stack";
-import { PresenceSyncIndicator } from "./presence-sync-indicator/presence-sync-indicator";
-import { ProgressBar } from "./progress-bar/progress-bar";
-import { ProgressCard } from "./progress-card/progress-card";
-import { SeverityBadge } from "./severity-badge/severity-badge";
-import { StatCard } from "./stat-card/stat-card";
-import { StatusBoard } from "./status-board/status-board";
-import { StatusIndicator } from "./status-indicator/status-indicator";
-import { StickyMetric } from "./sticky-metric/sticky-metric";
-import { WorldClockBar } from "./world-clock-bar/world-clock-bar";
+import { ActivityLog } from "../components/activity-log/activity-log";
+import { Alert, AlertDescription, AlertTitle } from "../components/alert/alert";
+import { AvatarGroup } from "../components/avatar-group/avatar-group";
+import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
+import { DataList } from "../components/data-list/data-list";
+import { LiveFeed } from "../components/live-feed/live-feed";
+import { MetricCluster } from "../components/metric-cluster/metric-cluster";
+import { OverviewBoard } from "../components/overview-board/overview-board";
+import { PresenceStack } from "../components/presence-stack/presence-stack";
+import { PresenceSyncIndicator } from "../components/presence-sync-indicator/presence-sync-indicator";
+import { ProgressBar } from "../components/progress-bar/progress-bar";
+import { ProgressCard } from "../components/progress-card/progress-card";
+import { SeverityBadge } from "../components/severity-badge/severity-badge";
+import { StatCard } from "../components/stat-card/stat-card";
+import { StatusBoard } from "../components/status-board/status-board";
+import { StatusIndicator } from "../components/status-indicator/status-indicator";
+import { StickyMetric } from "../components/sticky-metric/sticky-metric";
+import { WorldClockBar } from "../components/world-clock-bar/world-clock-bar";
 
 const fixedNow = "2026-01-01T12:00:00.000Z";
 

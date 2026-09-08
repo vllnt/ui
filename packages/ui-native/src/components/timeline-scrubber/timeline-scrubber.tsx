@@ -103,6 +103,7 @@ function TimelineScrubber({
         now: current,
         text: formatValue(current),
       }}
+      accessible
       onAccessibilityAction={(event) => {
         if (event.nativeEvent.actionName === "decrement") change(-safeStep);
         if (event.nativeEvent.actionName === "increment") change(safeStep);

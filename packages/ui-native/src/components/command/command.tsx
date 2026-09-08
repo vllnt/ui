@@ -162,7 +162,7 @@ function Command({
           ]}
           value={currentQuery}
         />
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled">
           {filteredItems.length === 0 ? (
             <Text
               accessibilityLiveRegion="polite"

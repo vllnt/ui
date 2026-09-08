@@ -6,19 +6,28 @@ import {
 } from "@testing-library/react-native";
 import { Text as NativeText } from "react-native";
 
+import { Checkbox } from "../components/checkbox/checkbox";
+import { CopyButton } from "../components/copy-button/copy-button";
+import { Link } from "../components/link/link";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "../components/radio-group/radio-group";
+import { Slider } from "../components/slider/slider";
+import { Toggle } from "../components/toggle/toggle";
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "../components/toggle-group/toggle-group";
+import {
+  Toolbar,
+  ToolbarButton,
+  ToolbarSeparator,
+} from "../components/toolbar/toolbar";
 import type {
   ClipboardService,
   LinkingService,
 } from "../primitives/platform-services";
-
-import { Checkbox } from "./checkbox/checkbox";
-import { CopyButton } from "./copy-button/copy-button";
-import { Link } from "./link/link";
-import { RadioGroup, RadioGroupItem } from "./radio-group/radio-group";
-import { Slider } from "./slider/slider";
-import { Toggle } from "./toggle/toggle";
-import { ToggleGroup, ToggleGroupItem } from "./toggle-group/toggle-group";
-import { Toolbar, ToolbarButton, ToolbarSeparator } from "./toolbar/toolbar";
 
 describe("native core controls", () => {
   it("copies through an injected service and exposes unavailable clipboard state", async () => {

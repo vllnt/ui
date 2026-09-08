@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import { useTheme } from "../../theme/theme-provider";
+import { Text } from "../text/text";
 
 /** Layout axis for a native toolbar and its separators. */
 export type ToolbarOrientation = "horizontal" | "vertical";
@@ -106,7 +107,11 @@ function ToolbarButton({
         typeof style === "function" ? style(state) : style,
       ]}
     >
-      {children}
+      {typeof children === "string" || typeof children === "number" ? (
+        <Text size="small">{children}</Text>
+      ) : (
+        children
+      )}
     </Pressable>
   );
 }

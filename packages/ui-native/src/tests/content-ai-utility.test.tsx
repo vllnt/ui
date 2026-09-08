@@ -9,22 +9,22 @@ import {
   AIArtifactToolbar,
   AIArtifactVersion,
   AIArtifactVersions,
-} from "./ai-artifact/ai-artifact";
-import { AIMessageBubble } from "./ai-message-bubble/ai-message-bubble";
-import { AISourceCitation } from "./ai-source-citation/ai-source-citation";
-import { AIStreamingText } from "./ai-streaming-text/ai-streaming-text";
-import { AIToolCallDisplay } from "./ai-tool-call-display/ai-tool-call-display";
-import { AspectRatio } from "./aspect-ratio/aspect-ratio";
-import { Callout } from "./callout/callout";
-import { ContentIntro } from "./content-intro/content-intro";
-import { CreditBadge } from "./credit-badge/credit-badge";
-import { FloatingActionButton } from "./floating-action-button/floating-action-button";
-import { GlassProgress } from "./glass-progress/glass-progress";
-import { PlanBadge } from "./plan-badge/plan-badge";
-import { RoleBadge } from "./role-badge/role-badge";
-import { Spinner } from "./spinner/spinner";
-import { TLDRSection } from "./tldr-section/tldr-section";
-import { TruncatedText } from "./truncated-text/truncated-text";
+} from "../components/ai-artifact/ai-artifact";
+import { AIMessageBubble } from "../components/ai-message-bubble/ai-message-bubble";
+import { AISourceCitation } from "../components/ai-source-citation/ai-source-citation";
+import { AIStreamingText } from "../components/ai-streaming-text/ai-streaming-text";
+import { AIToolCallDisplay } from "../components/ai-tool-call-display/ai-tool-call-display";
+import { AspectRatio } from "../components/aspect-ratio/aspect-ratio";
+import { Callout } from "../components/callout/callout";
+import { ContentIntro } from "../components/content-intro/content-intro";
+import { CreditBadge } from "../components/credit-badge/credit-badge";
+import { FloatingActionButton } from "../components/floating-action-button/floating-action-button";
+import { GlassProgress } from "../components/glass-progress/glass-progress";
+import { PlanBadge } from "../components/plan-badge/plan-badge";
+import { RoleBadge } from "../components/role-badge/role-badge";
+import { Spinner } from "../components/spinner/spinner";
+import { TLDRSection } from "../components/tldr-section/tldr-section";
+import { TruncatedText } from "../components/truncated-text/truncated-text";
 
 describe("native content, AI, and utility components", () => {
   it.each([

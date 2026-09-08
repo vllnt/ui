@@ -93,7 +93,18 @@ function ReasoningTrigger({
       >
         {isStreaming ? labels.reasoning : labels.reasoned}
       </Text>
-      {duration}
+      {typeof duration === "string" || typeof duration === "number" ? (
+        <Text
+          style={[
+            theme.typography.scale.caption,
+            { color: theme.colors.mutedForeground },
+          ]}
+        >
+          {duration}
+        </Text>
+      ) : (
+        duration
+      )}
     </Pressable>
   );
 }

@@ -1,6 +1,6 @@
 {
   "name": "@vllnt/ui-native",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "Accessible React Native renderer for VLLNT UI",
   "license": "MIT",
   "author": "vllnt",
@@ -55,7 +55,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "boundaries:check": "node scripts/check-boundaries.mjs",
+    "boundaries:check": "node --test scripts/check-boundaries.test.mjs && node scripts/check-boundaries.mjs",
     "build": "tsup",
     "clean": "rm -rf dist node_modules coverage",
     "generate:index": "node scripts/generate-index.mjs",

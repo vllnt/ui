@@ -9,19 +9,18 @@ import {
 } from "@testing-library/react-native";
 import { AccessibilityInfo, Modal, Text } from "react-native";
 
+import { AlertDialog } from "../components/alert-dialog/alert-dialog";
+import { Command } from "../components/command/command";
+import { ContextMenu } from "../components/context-menu/context-menu";
+import { Dialog } from "../components/dialog/dialog";
+import { Drawer } from "../components/drawer/drawer";
+import { DropdownMenu } from "../components/dropdown-menu/dropdown-menu";
+import { Popover } from "../components/popover/popover";
+import { ShareDialog } from "../components/share-dialog/share-dialog";
+import { Sheet } from "../components/sheet/sheet";
+import { Toast, type ToastItem } from "../components/toast/toast";
+import { Tooltip } from "../components/tooltip/tooltip";
 import type { ShareService } from "../primitives/platform-services";
-
-import { AlertDialog } from "./alert-dialog/alert-dialog";
-import { Command } from "./command/command";
-import { ContextMenu } from "./context-menu/context-menu";
-import { Dialog } from "./dialog/dialog";
-import { Drawer } from "./drawer/drawer";
-import { DropdownMenu } from "./dropdown-menu/dropdown-menu";
-import { Popover } from "./popover/popover";
-import { ShareDialog } from "./share-dialog/share-dialog";
-import { Sheet } from "./sheet/sheet";
-import { Toast, type ToastItem } from "./toast/toast";
-import { Tooltip } from "./tooltip/tooltip";
 
 function ToastHarness({ initial }: { readonly initial: readonly ToastItem[] }) {
   const [toasts, setToasts] = useState(initial);

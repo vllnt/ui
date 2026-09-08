@@ -39,8 +39,10 @@ function getProgressState(
   value: number,
   isComplete?: boolean,
 ): ProgressState {
-  const normalizedMax = Math.max(0, max);
-  const normalizedValue = Math.min(Math.max(0, value), normalizedMax);
+  const normalizedMax = Number.isFinite(max) ? Math.max(0, max) : 0;
+  const normalizedValue = Number.isFinite(value)
+    ? Math.min(Math.max(0, value), normalizedMax)
+    : 0;
   const complete =
     isComplete ?? (normalizedMax > 0 && normalizedValue >= normalizedMax);
   const percent =

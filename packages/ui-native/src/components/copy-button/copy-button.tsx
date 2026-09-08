@@ -61,17 +61,20 @@ function useCopyToClipboard({
   const [operationStatus, setOperationStatus] =
     useState<Exclude<CopyStatus, "unavailable">>("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const operation = useRef(0);
   const status: CopyStatus =
     clipboard === undefined ? "unavailable" : operationStatus;
 
   useEffect(
     () => () => {
+      operation.current += 1;
       if (timer.current !== undefined) clearTimeout(timer.current);
     },
-    [],
+    [clipboard],
   );
 
   const reset = useCallback(() => {
+    operation.current += 1;
     if (timer.current !== undefined) clearTimeout(timer.current);
     timer.current = undefined;
     setOperationStatus("idle");
@@ -80,17 +83,25 @@ function useCopyToClipboard({
   const copy = useCallback(
     async (value: string): Promise<boolean> => {
       if (clipboard === undefined) return false;
+      const currentOperation = ++operation.current;
+      if (timer.current !== undefined) clearTimeout(timer.current);
+      timer.current = undefined;
       try {
         await clipboard.setText(value);
-        if (timer.current !== undefined) clearTimeout(timer.current);
+        if (currentOperation !== operation.current) return true;
         setOperationStatus("copied");
-        timer.current = setTimeout(() => {
-          setOperationStatus("idle");
-          timer.current = undefined;
-        }, timeout);
+        timer.current = setTimeout(
+          () => {
+            setOperationStatus("idle");
+            timer.current = undefined;
+          },
+          Number.isFinite(timeout)
+            ? Math.min(2_147_483_647, Math.max(0, timeout))
+            : DEFAULT_TIMEOUT,
+        );
         return true;
       } catch {
-        setOperationStatus("error");
+        if (currentOperation === operation.current) setOperationStatus("error");
         return false;
       }
     },

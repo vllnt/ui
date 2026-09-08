@@ -8,45 +8,48 @@ import {
 import type { ReactElement } from "react";
 import { Image, Pressable, Text } from "react-native";
 
-import { ModalLayer } from "../primitives/modal-layer";
-import type { PickedFile } from "../primitives/platform-services";
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
-import { ThemeProvider } from "../theme/theme-provider";
-
-import { ActivityLog } from "./activity-log/activity-log";
-import { AnimatedTestimonials } from "./animated-testimonials/animated-testimonials";
-import { AnimatedText } from "./animated-text/animated-text";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar/avatar";
-import { AvatarGroup } from "./avatar-group/avatar-group";
-import { Calendar } from "./calendar/calendar";
-import { Callout } from "./callout/callout";
-import { Carousel } from "./carousel/carousel";
-import { CodeBlock } from "./code-block/code-block";
-import { ContentIntro } from "./content-intro/content-intro";
-import { CountdownTimer } from "./countdown-timer/countdown-timer";
-import { EmptyState } from "./empty-state/empty-state";
-import { Field, FieldControl, FieldLabel } from "./field/field";
-import { Fieldset } from "./fieldset/fieldset";
-import { FileUpload } from "./file-upload/file-upload";
-import { HorizontalScrollRow } from "./horizontal-scroll-row/horizontal-scroll-row";
-import { ListBox } from "./list-box/list-box";
-import { LiveFeed } from "./live-feed/live-feed";
-import { Marquee } from "./marquee/marquee";
-import { Meter } from "./meter/meter";
-import { ModelSelector } from "./model-selector/model-selector";
-import { NavigationMenu } from "./navigation-menu/navigation-menu";
-import { NumberInput } from "./number-input/number-input";
-import { OverviewCard } from "./overview-board/overview-board";
-import { Pagination } from "./pagination/pagination";
-import { PasswordInput } from "./password-input/password-input";
-import { PhoneInput } from "./phone-input/phone-input";
-import { RangeCalendar } from "./range-calendar/range-calendar";
-import { Rating } from "./rating/rating";
+import { ActivityLog } from "../components/activity-log/activity-log";
+import { AnimatedTestimonials } from "../components/animated-testimonials/animated-testimonials";
+import { AnimatedText } from "../components/animated-text/animated-text";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../components/avatar/avatar";
+import { AvatarGroup } from "../components/avatar-group/avatar-group";
+import { Calendar } from "../components/calendar/calendar";
+import { Callout } from "../components/callout/callout";
+import { Carousel } from "../components/carousel/carousel";
+import { CodeBlock } from "../components/code-block/code-block";
+import { ContentIntro } from "../components/content-intro/content-intro";
+import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
+import { EmptyState } from "../components/empty-state/empty-state";
+import { Field, FieldControl, FieldLabel } from "../components/field/field";
+import { Fieldset } from "../components/fieldset/fieldset";
+import { FileUpload } from "../components/file-upload/file-upload";
+import { HorizontalScrollRow } from "../components/horizontal-scroll-row/horizontal-scroll-row";
+import { ListBox } from "../components/list-box/list-box";
+import { LiveFeed } from "../components/live-feed/live-feed";
+import { Marquee } from "../components/marquee/marquee";
+import { Meter } from "../components/meter/meter";
+import { ModelSelector } from "../components/model-selector/model-selector";
+import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
+import { NumberInput } from "../components/number-input/number-input";
+import { OverviewCard } from "../components/overview-board/overview-board";
+import { Pagination } from "../components/pagination/pagination";
+import { PasswordInput } from "../components/password-input/password-input";
+import { PhoneInput } from "../components/phone-input/phone-input";
+import { RangeCalendar } from "../components/range-calendar/range-calendar";
+import { Rating } from "../components/rating/rating";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "./resizable/resizable";
+} from "../components/resizable/resizable";
+import { ModalLayer } from "../primitives/modal-layer";
+import type { PickedFile } from "../primitives/platform-services";
+import type { ReducedMotionService } from "../primitives/use-reduced-motion";
+import { ThemeProvider } from "../theme/theme-provider";
 
 const calendarLabels = {
   formatDayAccessibilityLabel: (date: Date) =>
@@ -183,7 +186,7 @@ describe("native review regressions", () => {
     }
   });
 
-  it("merges overlapping file-picker results without dropping selections", async () => {
+  it("blocks overlapping pickers and merges subsequent selections without loss", async () => {
     const resolvers: ((files: readonly PickedFile[]) => void)[] = [];
     const onChange = jest.fn();
     render(
@@ -212,15 +215,21 @@ describe("native review regressions", () => {
     const choose = screen.getByRole("button", { name: "Choose files" });
     fireEvent.press(choose);
     fireEvent.press(choose);
-    await act(async () => {
-      resolvers[1]?.([{ name: "second.txt", uri: "file:///second.txt" }]);
-    });
+    expect(resolvers).toHaveLength(1);
+    expect(choose).toBeDisabled();
     await act(async () => {
       resolvers[0]?.([{ name: "first.txt", uri: "file:///first.txt" }]);
     });
+    expect(onChange).toHaveBeenCalledTimes(1);
+    fireEvent.press(choose);
+    expect(resolvers).toHaveLength(2);
+    await act(async () => {
+      resolvers[1]?.([{ name: "second.txt", uri: "file:///second.txt" }]);
+    });
+    expect(onChange).toHaveBeenCalledTimes(2);
     expect(onChange).toHaveBeenLastCalledWith([
-      { name: "second.txt", uri: "file:///second.txt" },
       { name: "first.txt", uri: "file:///first.txt" },
+      { name: "second.txt", uri: "file:///second.txt" },
     ]);
   });
 

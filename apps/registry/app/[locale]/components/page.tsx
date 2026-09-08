@@ -17,7 +17,7 @@ import {
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
-import { componentPlatformSchema, registry } from "@/lib/registry";
+import { registry } from "@/lib/registry";
 import { canonical, languageAlternates } from "@/lib/seo";
 import {
   familyPath,
@@ -79,10 +79,7 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
   setRequestLocale(locale);
   const t = await getTranslations("pages.components");
   const common = await getTranslations("common");
-  const parsedPlatform = componentPlatformSchema.safeParse(query.platform);
-  const selectedPlatform = parsedPlatform.success
-    ? parsedPlatform.data
-    : undefined;
+  const selectedPlatform = getPlatform(query.platform, "all");
   const platformsByName = new Map(
     registry.items.map((item) => [item.name, item.platforms]),
   );

@@ -3,8 +3,8 @@
 import {
   type ReactNode,
   type Ref,
-  useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -277,10 +277,11 @@ function useDocumentationResults({
   const [result, setResult] = useState<{
     readonly items: readonly SearchItem[];
     readonly query: string;
+    readonly service: SearchDialogProps["docsSearch"];
   }>();
   const request = useRef(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentRequest = request.current + 1;
     request.current = currentRequest;
     if (!eligible || !documentationSearch) return;
@@ -288,18 +289,32 @@ function useDocumentationResults({
     void documentationSearch(trimmedQuery).then(
       (items) => {
         if (request.current === currentRequest) {
-          setResult({ items, query: trimmedQuery });
+          setResult({
+            items,
+            query: trimmedQuery,
+            service: documentationSearch,
+          });
         }
       },
       () => {
         if (request.current === currentRequest) {
-          setResult({ items: [], query: trimmedQuery });
+          setResult({
+            items: [],
+            query: trimmedQuery,
+            service: documentationSearch,
+          });
         }
       },
     );
+    return () => {
+      request.current += 1;
+    };
   }, [documentationSearch, eligible, trimmedQuery]);
 
-  const hasCurrentResult = eligible && result?.query === trimmedQuery;
+  const hasCurrentResult =
+    eligible &&
+    result?.query === trimmedQuery &&
+    result.service === documentationSearch;
   return {
     items: hasCurrentResult ? result.items : [],
     loading: eligible && !hasCurrentResult,

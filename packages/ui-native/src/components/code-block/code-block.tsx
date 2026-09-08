@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, type Ref, useState } from "react";
+import { type ReactNode, type Ref, useEffect, useRef, useState } from "react";
 
 import {
   Pressable,
@@ -178,6 +178,13 @@ function CodeBlock({
 }: CodeBlockProps) {
   const theme = useTheme();
   const [copiedCode, setCopiedCode] = useState<string>();
+  const operation = useRef(0);
+  useEffect(
+    () => () => {
+      operation.current += 1;
+    },
+    [clipboard, code],
+  );
   const copyAvailable = clipboard !== undefined;
   const copied = copiedCode === code;
   const copyLabel = copied
@@ -187,11 +194,14 @@ function CodeBlock({
       : copyLabels?.unavailable;
   const copy = async () => {
     if (!clipboard) return;
+    const currentOperation = ++operation.current;
     try {
       await clipboard.setText(code);
+      if (currentOperation !== operation.current) return;
       setCopiedCode(code);
       onCopySuccess?.();
     } catch (error: unknown) {
+      if (currentOperation !== operation.current) return;
       setCopiedCode(undefined);
       onCopyError?.(error);
     }

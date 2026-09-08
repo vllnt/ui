@@ -2,24 +2,23 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement } from "react";
 import { Text as NativeText } from "react-native";
 
+import { Button } from "../components/button/button";
+import { ButtonGroup } from "../components/button-group/button-group";
+import { CategoryFilter } from "../components/category-filter/category-filter";
+import { CheckboxGroup } from "../components/checkbox-group/checkbox-group";
+import { ColorPicker } from "../components/color-picker/color-picker";
+import { Combobox } from "../components/combobox/combobox";
+import { DatePicker } from "../components/date-picker/date-picker";
+import { DateRangePicker } from "../components/date-range-picker/date-range-picker";
+import { FilterBar } from "../components/filter-bar/filter-bar";
+import { Form, FormSubmit } from "../components/form/form";
+import { ListBox } from "../components/list-box/list-box";
+import { NativeSelect } from "../components/native-select/native-select";
+import { SegmentedControl } from "../components/segmented-control/segmented-control";
+import { TagGroup } from "../components/tag-group/tag-group";
+import { TagsInput } from "../components/tags-input/tags-input";
+import { TimePicker } from "../components/time-picker/time-picker";
 import { ThemeProvider } from "../theme/theme-provider";
-
-import { Button } from "./button/button";
-import { ButtonGroup } from "./button-group/button-group";
-import { CategoryFilter } from "./category-filter/category-filter";
-import { CheckboxGroup } from "./checkbox-group/checkbox-group";
-import { ColorPicker } from "./color-picker/color-picker";
-import { Combobox } from "./combobox/combobox";
-import { DatePicker } from "./date-picker/date-picker";
-import { DateRangePicker } from "./date-range-picker/date-range-picker";
-import { FilterBar } from "./filter-bar/filter-bar";
-import { Form, FormSubmit } from "./form/form";
-import { ListBox } from "./list-box/list-box";
-import { NativeSelect } from "./native-select/native-select";
-import { SegmentedControl } from "./segmented-control/segmented-control";
-import { TagGroup } from "./tag-group/tag-group";
-import { TagsInput } from "./tags-input/tags-input";
-import { TimePicker } from "./time-picker/time-picker";
 
 const calendarLabels = {
   close: "Close picker",
