@@ -12,6 +12,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Added
 
+- **Cross-platform foundation** — added the framework-free `@vllnt/ui-core` token/contract package, an experimental source-only `@vllnt/ui-native` renderer with 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules, plus a private Expo catalog for Android/iOS Metro validation. The URL-driven registry UI, unified platform-aware catalog and installation page, component pages, search, llms surfaces, JSON-LD, native manifest, and MCP expose truthful Web/Native availability. No native npm release exists yet; existing `@vllnt/ui` exports and stable publishing remain unchanged. (#479)
 - **Component family landing pages** - every component family has a standalone,
   SEO-oriented landing at `/families/[category]`, plus a `/families` index. One
   shared template renders a hero with CTAs, per-family SEO sub-groups with

@@ -14,7 +14,15 @@ Consume the latest canary locally:
 pnpm add @vllnt/ui@canary
 ```
 
-## Stable release (PR-driven, no PAT)
+## 0.4.0 canary-only hold
+
+`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Web/core/Native bases are 0.4.0. Manual stable dispatch rejects 0.4.x and all newer/unknown bases before Git tagging or npm publication; only existing Web 0.3.x maintenance remains eligible. All publication modes require `refs/heads/main`. There is no input or repository-variable override for this hold. Promotion requires a separate reviewed code change and the exit evidence in `PR506_CANARY_GAP_REVIEW.md`.
+
+Matching main pushes may publish Web prereleases under `canary`, never `latest`. Native remains separately disabled unless its existing owner-controlled enable gate and environment approve publication. The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Stable Web registry installs stay pinned to 0.3.0; Native discovery remains source-only/unavailable.
+
+Run `node --test scripts/release-guard.test.mjs` to verify hold, version derivation and workflow wiring. No publish command is executed by these tests.
+
+## Stable release (PR-driven, no PAT; 0.3.x only during hold)
 
 The release workflow does not push commits to `main`. Version bumps land via normal PRs so branch protection stays in effect and no PAT / bypass is required.
 
@@ -41,7 +49,7 @@ CI will:
 - Read the version from `packages/ui/package.json`. **Fails fast** if a matching `v{x.y.z}` tag already exists — catches dispatches against stale main.
 - Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes.
 - Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
-- `pnpm pack` and `npx --yes npm@latest publish --tag latest --provenance --access public`. OIDC trusted publishing signs the provenance attestation.
+- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`. The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
 - Create the GitHub Release for the new tag.
 
 ### 3. Point the registry at the published version (post-publish)
@@ -52,6 +60,31 @@ Once `@vllnt/ui@{x.y.z}` is live on npm `latest`, open a small follow-up PR that
 - Runs `pnpm -F @vllnt/ui-registry registry:build` and commits the regenerated `registry.json` + `registry/default` shims (the install target becomes `@vllnt/ui@^{x.y.z}` and item versions update).
 
 The `registry:check` and `registry:integrity` CI guards confirm the regenerated registry is in sync and pins a real (non-prerelease) published version. Until this lands, `npx shadcn add` keeps resolving to the previous published version — harmless, just one release behind.
+
+## Experimental native canaries
+
+`@vllnt/ui-core` and `@vllnt/ui-native` have a separate safety boundary in `.github/workflows/native-canary.yml`:
+
+- A push to `main` that changes native/core/token surfaces runs `pnpm ci:native`.
+- Both packages receive the same `0.4.0-canary.<run>.sha<commit>` version, with an exact matching core dependency in the Native tarball.
+- Core publishes first under a run-scoped staging tag; native publishes only after that exact core version is visible.
+- Reruns skip immutable versions already present and reuse the run-scoped tag, allowing recovery from a partial pair.
+- The workflow verifies packed names, versions, the rewritten core dependency, and absence of `workspace:` protocols.
+- Only after both versions are visible does the workflow promote both `canary` tags. Ordinary failures restore the prior pair and clean up staging tags.
+- Publication never targets `latest`; fail-closed registry reads verify that neither `latest` tag moves.
+- No workflow dispatch, Git tag, GitHub Release, or stable publication path exists.
+
+Native publication is fail-closed behind the repository variable `NATIVE_CANARY_PUBLISH_ENABLED`. Before setting it to `true`, reserve both package names on npm, configure trusted-publisher entries, and create a protected GitHub environment named `npm-native-canary`. The protected environment must also supply `NPM_DIST_TAG_TOKEN`, restricted to dist-tag operations for these two packages, with an assigned expiry/rotation/revocation owner. Trusted publishing authenticates uploads, not dist-tag promotion/rollback. Require main-only environment protections and reviewers. Until an authorized owner verifies this setup, keep publication disabled; the workflow still runs native quality gates but skips publication.
+
+No native npm release exists yet. While `packages/ui-native/registry.json` reports `availability: "source"` and `installation.available: false`, the planned command below is documentation and must not be presented as a working install action:
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+Only after the first synchronized pair is visible, both `canary` tags are promoted, fresh packed-consumer validation passes, and the physical-device/accessibility requirements in the Native changelog are satisfied, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
+
+A stable native channel requires a separate PR that defines versioning, migration, physical Android/iOS plus VoiceOver/TalkBack validation, observability, and rollback policy. It must not be added to the web package's release matrix.
 
 ## Versioning policy
 
@@ -75,5 +108,5 @@ The `registry:check` and `registry:integrity` CI guards confirm the regenerated 
 
 If a release needs to be withdrawn:
 
-1. `npm deprecate @vllnt/ui@{bad-version} "reason"` — leaves the version installed for existing users but hides it from `latest`.
+1. An explicitly authorized owner moves `latest` to a verified known-good version and verifies fresh installs. `npm deprecate @vllnt/ui@{bad-version} "reason"` adds an install warning but does **not** move dist-tags. Diagnose partial Git-tag/npm publication before retrying; never blindly delete release tags.
 2. Publish a patch bump with the fix. Do not unpublish unless legally required; unpublishing 72h+ after publish is disallowed by npm and breaks downstream users.

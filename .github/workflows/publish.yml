@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "packages/ui/**"
+      - "scripts/release-guard*"
       - "CHANGELOG.md"
       - "cliff.toml"
       - "pnpm-lock.yaml"
@@ -34,6 +35,8 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      - run: node --test scripts/release-guard.test.mjs
 
       - name: Lint
         run: pnpm -F @vllnt/ui lint
@@ -76,9 +79,7 @@ jobs:
         run: |
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
-          BASE_VERSION=$(node -p "require('./package.json').version")
-          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-7)
-          CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
+          CANARY_VERSION=$(node ../../scripts/release-guard.mjs web-canary)
           npm version "$CANARY_VERSION" --no-git-tag-version
           TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
           npx --yes npm@11.18.0 publish "$TARBALL" --tag canary --provenance --access public
@@ -113,7 +114,7 @@ jobs:
         id: version
         working-directory: packages/ui
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          VERSION=$(node ../../scripts/release-guard.mjs stable)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           if git -C "$GITHUB_WORKSPACE" rev-parse "v${VERSION}" >/dev/null 2>&1; then
             echo "::error::Tag v${VERSION} already exists on this repo. Bump packages/ui/package.json on main via a PR before dispatching."

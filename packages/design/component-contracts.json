@@ -1,0 +1,38 @@
+{
+  "$schema": "./component-contracts.schema.json",
+  "version": "0.1.0",
+  "components": {
+    "badge": {
+      "variants": ["default", "destructive", "outline", "secondary"]
+    },
+    "button": {
+      "sizes": ["default", "icon", "lg", "sm"],
+      "variants": [
+        "default",
+        "destructive",
+        "ghost",
+        "link",
+        "outline",
+        "secondary"
+      ]
+    },
+    "card": {
+      "parts": [
+        "Card",
+        "CardHeader",
+        "CardTitle",
+        "CardDescription",
+        "CardContent",
+        "CardFooter"
+      ]
+    },
+    "heading": {
+      "levels": [1, 2, 3, 4, 5, 6]
+    },
+    "text": {
+      "sizes": ["base", "caption", "lead", "small"],
+      "tones": ["default", "muted"],
+      "weights": ["medium", "normal", "semibold"]
+    }
+  }
+}

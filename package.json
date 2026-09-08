@@ -22,6 +22,9 @@
     "clean": "turbo clean",
     "check:circular": "turbo check:circular",
     "registry:build": "turbo registry:build",
+    "tokens:generate": "pnpm -F @vllnt/design-source tokens:generate",
+    "tokens:check": "pnpm -F @vllnt/design-source tokens:check",
+    "ci:native": "pnpm tokens:check && pnpm -F @vllnt/ui-native generate:index:check && pnpm -F @vllnt/ui-core lint && pnpm -F @vllnt/ui-native lint && pnpm -F @vllnt/ui-native-catalog lint && pnpm -F @vllnt/ui-core typecheck && pnpm -F @vllnt/ui-native typecheck && pnpm --filter '@vllnt/ui-native...' build && pnpm -F @vllnt/ui-core test:once && pnpm -F @vllnt/ui-native test:once && pnpm -F @vllnt/ui-native boundaries:check && pnpm -F @vllnt/ui-core pack:check && pnpm -F @vllnt/ui-native pack:check && pnpm -F @vllnt/ui-native-catalog typecheck && pnpm -F @vllnt/ui-native-catalog run doctor && pnpm -F @vllnt/ui-native-catalog test:once && pnpm -F @vllnt/ui-native-catalog build",
     "doctor": "npx --yes react-doctor . --offline",
     "doctor:full": "npx --yes react-doctor . --offline --full --verbose",
     "doctor:json": "npx --yes react-doctor . --offline --json > .react-doctor.json",
@@ -31,6 +34,7 @@
     "doctor:score": "npx --yes react-doctor . --offline --score"
   },
   "devDependencies": {
+    "madge": "^8.0.0",
     "turbo": "^2.10.10"
   },
   "pnpm": {
@@ -66,7 +70,8 @@
       "brace-expansion@>=4.0.0 <5.0.6": "5.0.6",
       "lodash": ">=4.18.1",
       "flatted": ">=3.4.2",
-      "postcss": ">=8.5.10"
+      "postcss": ">=8.5.10",
+      "ws@>=8.0.0 <8.21.0": "8.21.3"
     }
   }
 }

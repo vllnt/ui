@@ -22,6 +22,7 @@
 - **shadcn-compatible registry** — install individual components with `shadcn add`
 - **TypeScript strict** — fully typed with exported prop interfaces
 - **Tested** — unit tests (Vitest) + visual regression (Playwright CT) + Storybook
+- **React Native source preview** — 171 experimental native component modules in a separate renderer with shared tokens, native accessibility, and no web runtime dependency
 
 ## Install
 
@@ -44,6 +45,28 @@ Or by `@vllnt-ui` namespace once it's in the [shadcn registry index](https://ui.
 ```bash
 pnpm dlx shadcn@latest add @vllnt-ui/button
 ```
+
+## React Native source preview
+
+The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. It currently exists in repository source only; `@vllnt/ui-native` has not been published to npm. The planned command becomes actionable only after the native manifest reports package availability:
+
+```bash
+pnpm add @vllnt/ui-native@canary
+```
+
+```tsx
+import { Button, ThemeProvider } from "@vllnt/ui-native";
+
+export function NativeExample() {
+  return (
+    <ThemeProvider colorScheme="system">
+      <Button onPress={() => {}}>Save changes</Button>
+    </ThemeProvider>
+  );
+}
+```
+
+The source catalog contains 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Browse the [React Native catalog](https://ui.vllnt.com/components?platform=native), switch to Native on the [unified installation guide](https://ui.vllnt.com/docs/installation?platform=native), or inspect the [machine-readable native manifest](https://ui.vllnt.com/r/native/registry.json). `@vllnt/ui` remains the stable Web renderer with its existing API and release path.
 
 ## Quick Start
 
@@ -97,6 +120,8 @@ pnpm dev
 | `pnpm lint` | Lint all packages |
 | `pnpm test:once` | Run tests (single run) |
 | `pnpm check:circular` | Detect circular imports |
+| `pnpm ci:native` | Verify core/native packages and Expo bundles |
+| `pnpm tokens:check` | Check generated web/native token drift |
 
 ## Theming
 
@@ -104,8 +129,8 @@ Override CSS variables after importing styles:
 
 ```css
 :root {
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 0.45 0.16 255;
+  --primary-foreground: 0.98 0 0;
 }
 ```
 

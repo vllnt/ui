@@ -67,6 +67,26 @@ describe("MDXContent", () => {
     );
   });
 
+  it("strips long import lines without regex backtracking or interpreting names", async () => {
+    const node = await MDXContent({
+      components: { "[": Note, Note },
+      content: [
+        `import ${" ".repeat(20_000)}CodeBlock${"CodeBlock".repeat(2000)} from "./code";`,
+        'import { [ } from "./literal-name";',
+        "",
+        "## Content remains",
+        "",
+        "<Note>Imported note</Note>",
+      ].join("\n"),
+    });
+
+    render(node);
+    expect(
+      screen.getByRole("heading", { name: "Content remains" }),
+    ).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent("import");
+  });
+
   it("falls back to markdown when MDX evaluation fails", async () => {
     const consoleError = vi
       .spyOn(console, "error")

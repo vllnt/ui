@@ -54,9 +54,10 @@ export default [
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}'],
+    files: ['**/*.test.{ts,tsx}', 'src/test-setup.ts'],
     rules: {
       'max-lines-per-function': 'off',
+      'unicorn/no-null': 'off',
     },
   },
   {

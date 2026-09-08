@@ -25,7 +25,7 @@ type UseHorizontalScrollReturn = {
  */
 export function useHorizontalScroll(): UseHorizontalScrollReturn {
   const scrollRef = useRef<HTMLElement | undefined>(undefined);
-  const observerRef = useRef<ResizeObserver | undefined>(undefined);
+  const [scrollElement, setScrollElement] = useState<HTMLElement>();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -38,40 +38,29 @@ export function useHorizontalScroll(): UseHorizontalScrollReturn {
     );
   }, []);
 
-  const containerRef = useCallback(
-    (node: HTMLElement | null) => {
-      if (scrollRef.current) {
-        scrollRef.current.removeEventListener("scroll", updateScrollState);
-      }
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = undefined;
-      }
-
-      scrollRef.current = node ?? undefined;
-
-      if (node) {
-        node.addEventListener("scroll", updateScrollState, { passive: true });
-        if (typeof ResizeObserver !== "undefined") {
-          observerRef.current = new ResizeObserver(updateScrollState);
-          observerRef.current.observe(node);
-        }
-        updateScrollState();
-      }
-    },
-    [updateScrollState],
-  );
+  const containerRef = useCallback((node: HTMLElement | null) => {
+    scrollRef.current = node ?? undefined;
+    setScrollElement(node ?? undefined);
+  }, []);
 
   useEffect(() => {
+    if (!scrollElement) return;
+
+    scrollElement.addEventListener("scroll", updateScrollState, {
+      passive: true,
+    });
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? undefined
+        : new ResizeObserver(updateScrollState);
+    observer?.observe(scrollElement);
+    updateScrollState();
+
     return () => {
-      if (scrollRef.current) {
-        scrollRef.current.removeEventListener("scroll", updateScrollState);
-      }
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+      scrollElement.removeEventListener("scroll", updateScrollState);
+      observer?.disconnect();
     };
-  }, [updateScrollState]);
+  }, [scrollElement, updateScrollState]);
 
   const scroll = useCallback((direction: "left" | "right") => {
     const element = scrollRef.current;

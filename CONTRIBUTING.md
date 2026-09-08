@@ -31,6 +31,8 @@ Key scripts (from repo root):
 | `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
 | `pnpm check:circular` | Fail on circular imports |
 | `pnpm doctor` | react-doctor React-health scan |
+| `pnpm tokens:check` | Verify generated token artifacts |
+| `pnpm ci:native` | Verify core/native packages and Expo bundles |
 
 A [react-doctor](https://github.com/millionco/react-doctor) **pre-commit hook**
 (in `.githooks/`, enabled automatically on `pnpm install`) blocks commits that
@@ -58,7 +60,7 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
    ```
 
 2. Follow the existing patterns:
-   - `React.forwardRef` on every component.
+   - React 19 ref-as-prop support and `displayName` on every named component.
    - `cn()` from `src/lib/utils.ts` for class merging.
    - Radix primitives for accessible behavior where applicable.
    - CVA for variants (`class-variance-authority`).
@@ -78,6 +80,25 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
    pnpm lint && pnpm test:once && pnpm -F @vllnt/ui test:visual && pnpm build
    ```
 
+For native changes, also run:
+
+```bash
+pnpm -F @vllnt/ui-native generate:index:check
+pnpm -F @vllnt/ui-native boundaries:check
+pnpm -F @vllnt/ui-native pack:check
+pnpm ci:native
+```
+
+## Adding a native component
+
+1. Add `packages/ui-native/src/components/{name}/{name}.tsx` using React Native core primitives, semantic theme tokens, native accessibility APIs, controlled/uncontrolled state where applicable, and caller-owned selection IDs.
+2. Do not import DOM, Radix, Tailwind, NativeWind, or browser globals. Inject capabilities such as clipboard and file selection when React Native core does not provide a portable service.
+3. Add the component to `packages/ui-native/registry.json` in alphabetical order with honest `portable-options` or `native-adapted` compatibility and its native source path.
+4. Run `pnpm -F @vllnt/ui-native generate:index`; never hand-maintain the generated barrel.
+5. Add interaction/accessibility tests and run the native checks listed below. Update the Expo catalog when the new family needs integration proof.
+
+Native remains source-only until the manifest reports package availability. Do not describe the planned canary command as installable before publication.
+
 ## Code style
 
 - TypeScript **strict** via `@vllnt/typescript`.
@@ -87,15 +108,9 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
 
 ## Releases
 
-Releases are cut via `workflow_dispatch` on `.github/workflows/publish.yml`. Maintainers pick `patch` / `minor` / `major` and the workflow:
+Stable `@vllnt/ui` versions are prepared in a normal version-bump PR. A maintainer then dispatches `.github/workflows/publish.yml` from `main`; the workflow validates the pre-bumped version, publishes with OIDC-signed provenance, tags it, and creates the GitHub release. Web canaries publish automatically after pushes to `main`.
 
-1. Bumps `packages/ui/package.json`.
-2. Generates release notes from commits.
-3. Pushes an annotated tag `v{x.y.z}` back to `main`.
-4. Publishes to the public npm registry with OIDC-signed provenance.
-5. Creates the GitHub release.
-
-Canary builds ship automatically on every push to `main`.
+`@vllnt/ui-core` and `@vllnt/ui-native` are experimental. `.github/workflows/native-canary.yml` publishes them as a synchronized pair only on the `canary` tag. It has no manual dispatch, stable tag, Git tag, or GitHub Release path. Enabling a stable native release requires a separate reviewed workflow change. See [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Reporting bugs / requesting features
 

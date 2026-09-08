@@ -1,3 +1,5 @@
+import type { ComponentPlatform } from "@vllnt/ui-core";
+
 import type { Locale } from "@/i18n/routing";
 import { canonical } from "@/lib/seo";
 
@@ -43,14 +45,27 @@ export function websiteLd(): JsonLdNode {
   };
 }
 
+function getRuntimePlatforms(platforms: readonly ComponentPlatform[]) {
+  const runtimes = platforms.map((platform) =>
+    platform === "native" ? "React Native" : "React",
+  );
+  return runtimes.length === 1 ? runtimes.join("") : runtimes;
+}
+
 export function softwareSourceCodeLd(component: {
   readonly description: string;
   readonly image?: string;
   readonly keywords?: readonly string[];
   readonly locale: Locale;
   readonly name: string;
+  readonly platforms: readonly ComponentPlatform[];
   readonly title: string;
+  readonly url?: string;
 }): JsonLdNode {
+  const url =
+    component.url ??
+    canonical(`/components/${component.name}`, component.locale);
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
@@ -63,17 +78,23 @@ export function softwareSourceCodeLd(component: {
     license: "https://opensource.org/license/mit",
     name: component.title,
     programmingLanguage: "TypeScript",
-    runtimePlatform: "React",
-    url: canonical(`/components/${component.name}`, component.locale),
+    runtimePlatform: getRuntimePlatforms(component.platforms),
+    url,
   };
 }
 
-export function softwareApplicationLd(application: {
+type SoftwareApplicationInput = {
   readonly description: string;
   readonly installCommand?: string;
   readonly name: string;
+  readonly operatingSystem?: readonly string[] | string;
+  readonly softwareRequirements?: string;
   readonly url: string;
-}): JsonLdNode {
+};
+
+export function softwareApplicationLd(
+  application: SoftwareApplicationInput,
+): JsonLdNode {
   const node: JsonLdNode = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -81,11 +102,11 @@ export function softwareApplicationLd(application: {
     codeRepository: "https://github.com/vllnt/ui",
     description: application.description,
     name: application.name,
-    operatingSystem: "Web",
-    softwareRequirements: "Node.js, pnpm, React, Tailwind CSS",
+    operatingSystem: application.operatingSystem ?? "Web",
+    softwareRequirements:
+      application.softwareRequirements ?? "Node.js, pnpm, React, Tailwind CSS",
     url: application.url,
   };
-
   if (application.installCommand) {
     return {
       ...node,
@@ -221,8 +242,29 @@ export function faqPageLd(
   };
 }
 
+function isJsonLdNodeList(
+  node: JsonLdNode | readonly JsonLdNode[],
+): node is readonly JsonLdNode[] {
+  return Array.isArray(node);
+}
+
+function jsonLdDocument(node: JsonLdNode | readonly JsonLdNode[]): JsonLdNode {
+  if (!isJsonLdNodeList(node)) return node;
+
+  const graph = node.map((entry) =>
+    Object.fromEntries(
+      Object.entries(entry).filter(([key]) => key !== "@context"),
+    ),
+  ) as JsonLdNode[];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 export function jsonLdScript(node: JsonLdNode | readonly JsonLdNode[]): string {
-  return JSON.stringify(node).replaceAll("<", "\\u003c");
+  return JSON.stringify(jsonLdDocument(node)).replaceAll("<", "\\u003c");
 }
 
 export function jsonLdScriptAttributes(
