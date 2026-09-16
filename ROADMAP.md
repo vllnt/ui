@@ -1,11 +1,11 @@
 # Roadmap
 
 > **Goal:** the design-system foundation for building UI fast — the @vllnt/ui component registry (web + native), the `@vllnt/ui-cli` DX gate, and `@vllnt/front-studio` + `@vllnt/ui-toolbar` (verify · review · author, API-first) — for humans and agents alike.
-> **Now:** `component-sidebar` — finish `.5`/`.6`, then ship `@vllnt/ui@0.4.0`.
-> **Next:** `native-parity` pilot validation · `agent-ui-cli` (MVP) · `ai-elements-parity`.
-> **Horizon (gated):** the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
-> **Visibility track:** SEO/GEO phases — `search-consolidation` → `ai-toolchain-registration` → `visibility-measurement` → `seo-content-engine` → `backlink-authority`. Diagnosis: infra is DONE (`agent-surface`) but GSC shows indexed-yet-buried (141 pages, 2 clicks/90d, 0 AI-query visibility) + a dead `.com` twin outranking the live `.ai`. Full plan: [strategy dossier](https://claude.ai/code/artifact/6e2359db-a626-4226-aa54-a9e53ecfd766).
-> **Last updated:** 2026-09-03
+> **Now:** `component-sidebar` — finish `.5`/`.6` on the `0.4.0` canary track; no stable release is authorized.
+> **Next:** `agent-ui-cli` (MVP) · `ai-elements-parity`.
+> **Horizon (gated):** `native-parity` (needs an RN consumer) · the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
+> **Visibility track:** SEO/GEO phases — `search-consolidation` → `ai-toolchain-registration` → `visibility-measurement` → `mdx-content-system` → `seo-content-engine` → `backlink-authority`. Historical diagnosis: indexed-yet-buried pages (reported GSC snapshot: 141 pages, 2 clicks/90d, 0 AI-query visibility). Current HTTP evidence: `.ai/components/button` 301s to the live, self-canonical `.com/components/button`; fresh GSC/analytics evidence remains unverified. Full plan: [strategy dossier](https://claude.ai/code/artifact/6e2359db-a626-4226-aa54-a9e53ecfd766).
+> **Last updated:** 2026-07-13
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.
@@ -207,20 +207,20 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] studio-hub.5 Worktree awareness — attribute every artifact to its worktree/branch; register-on-launch from a worktree's dev server (`vllnt-ui studio --register`)
 - [ ] studio-hub.6 Validate studio-hub.1–5: two worktrees (same app, ports A/B) + a 2nd project register to one studio; a dev agent authors in A while a review agent verifies B concurrently, artifacts isolated; the dashboard shows all three (E2E, real agents)
 
-## search-consolidation [PLANNED]
+## search-consolidation [PARTIAL — repository foundations shipped; external verification pending]
 
-**Goal:** Stop the silent ranking leaks — kill the dead-domain cannibalization and fix the canonical / schema / analytics gaps capping the already-indexed pages.
-**Exit criteria:** `ui.vllnt.com/*` 301s to `ui.vllnt.com/*`; GSC shows `.com` pages dropping and `.ai` positions rising; every localized page self-canonicals to its resolved (non-307) URL; zero console errors on load; Rich Results clean for BreadcrumbList + SoftwareApplication.
-**Verify:** a visitor landing on a stale `ui.vllnt.com/components/*` URL is 301'd to the live `.ai` page; Google Rich Results Test passes on `/components/[slug]` (Breadcrumb) and `/` (SoftwareApplication); DevTools console is clean on `/` + `/components/[slug]`. Personas: search visitor on a stale URL; Googlebot recrawling duplicates.
+**Goal:** Preserve the live `.com` canonical origin, verify legacy `.ai` redirects, and close remaining schema / analytics / indexing gaps. Related to #469; canonical PR #500. Roadmap reconciliation alone does not complete the issue.
+**Exit criteria:** legacy `ui.vllnt.ai/*` 301s to matching `ui.vllnt.com/*`; GSC confirms consolidation toward `.com`; every localized page self-canonicals to its resolved URL; zero console errors on load; Rich Results clean for BreadcrumbList + SoftwareApplication.
+**Verify:** a visitor landing on a stale `.ai` component URL is 301'd to the live `.com` page; Rich Results tests pass on component/home pages; DevTools console is clean. Personas: search visitor on a stale URL; Googlebot recrawling duplicates.
 
-- [ ] search-consolidation.1 301-redirect all `ui.vllnt.com/*` → `ui.vllnt.com/*` at the host/DNS edge (restore the subdomain only to serve the redirect) (cmd: `curl -sI https://ui.vllnt.com/components/calendar | grep -Ei '301|location: https://ui.vllnt.com'`)
-- [ ] search-consolidation.2 Self-referencing canonical + hreflang per locale in `apps/registry/app/[locale]/layout.tsx` + `lib/seo.ts` — canonical targets the resolved URL, not the 307 (cmd: `curl -s https://ui.vllnt.com/components/button | grep -c 'rel="canonical".*/components/button'`)
-- [ ] search-consolidation.3 Replace the `@vercel/analytics` + `@vercel/speed-insights` 404s in `layout.tsx` with a portable web-vitals beacon (cmd: agent-browser `/` → 0 console errors, no `/_vercel/insights` 404)
-- [ ] search-consolidation.4 Add `BreadcrumbList` JSON-LD to `/components/[slug]` + `/docs/[slug]`, `SoftwareApplication` `featureList` on `/`, and a `blogPostingLd()` helper in `lib/jsonld.ts` (cmd: Rich Results Test clean on `/components/button`)
-- [ ] search-consolidation.5 Exclude 307/redirecting locale URLs from `sitemap.ts` + request re-index of the AI-wedge pages in GSC (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.com --dimensions page --filter 'page contains /components/ai-'`)
-- [ ] search-consolidation.6 Validate search-consolidation.1–5: E2E — stale `.com` URL 301s to `.ai`; Rich Results clean (Breadcrumb + SoftwareApplication); console clean; canonical resolves (E2E: `pnpm test:e2e seo-consolidation`)
+- [~] search-consolidation.1 Legacy `.ai` → `.com` redirect exists: `/components/button` returns 301 to `.com`, which returns 200 with a self-canonical (verified 2026-09-07 with `curl -sI` on both URLs and canonical extraction from the destination HTML). Remaining: representative path / locale coverage and GSC consolidation evidence; no host mutation required by this observation.
+- [x] search-consolidation.2 Repository canonical + locale hreflang helpers shipped in `lib/seo.ts` and page metadata; `.com/components/button` self-canonical verified. Site-wide runtime coverage remains part of `.6`.
+- [ ] search-consolidation.3 Reproduce the historically reported analytics / speed-insights 404s before choosing a fix. Current console behavior and analytics collection are unverified; require network/console evidence and a verified destination before adding or replacing a beacon.
+- [~] search-consolidation.4 `BreadcrumbList` shipped on component/docs pages; `TechArticle` shipped on docs, with shared `techArticleLd()` and `faqPageLd()` helpers. Remaining: assess homepage SoftwareApplication `featureList`, add BlogPosting only with blog implementation, and obtain Rich Results validation.
+- [~] search-consolidation.5 Locale-expanded sitemap shipped using canonical URLs (EN unprefixed, FR prefixed). Remaining: runtime redirect coverage and authorized GSC re-index request; neither GSC access nor submission is verified.
+- [ ] search-consolidation.6 Validate search-consolidation.1–5: E2E — stale `.ai` URL 301s to `.com`; Rich Results clean (Breadcrumb + SoftwareApplication); console clean; canonical resolves. Add focused regression coverage before claiming completion.
 
-## ai-toolchain-registration [PLANNED]
+## ai-toolchain-registration [PLANNED — external registration unverified]
 
 **Goal:** Make VLLNT UI installable by name inside AI coding tools — register the registry, MCP server, and docs in the indexes agents actually query. Highest-ROI, do-first (converts the DONE `agent-surface` infra into installs).
 **Exit criteria:** `@vllnt-ui` resolves in `ui.shadcn.com/r/registries.json`; a shadcn-MCP-connected agent installs `@vllnt-ui/ai-chat-input` by name; Context7 serves `ui.vllnt.com` docs; `@vllnt/mcp` is on npm + the official MCP Registry; the GitHub repo carries the AI topics.
@@ -233,7 +233,7 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] ai-toolchain-registration.5 Add GitHub topics `ai, ai-agents, llm, generative-ui, shadcn, shadcn-registry` + document the `components.json` `@vllnt-ui` snippet in `/docs/installation` (cmd: `gh repo view vllnt/ui --json repositoryTopics | grep -E 'ai-agents|shadcn-registry'`)
 - [ ] ai-toolchain-registration.6 Validate ai-toolchain-registration.1–5: E2E — in a scratch app with the `@vllnt-ui` namespace, `npx shadcn add @vllnt-ui/ai-chat-input` resolves + installs; MCP `tools/call search_components` returns hits (E2E: `pnpm test:e2e registry-install`)
 
-## visibility-measurement [PLANNED]
+## visibility-measurement [PLANNED — analytics and GSC access/results unverified]
 
 **Goal:** Instrument human + AI-agent traffic and share-of-voice before investing in content, so every later phase is judged on real signal. Stand up first-week even though sequenced here.
 **Exit criteria:** GA4 shows an "AI Assistant" channel with sessions; a SOV tracker reports VLLNT mention-rate across "best AI UI" prompts; server logs surface GPTBot/ClaudeBot/Claude-Code fetches; a scheduled GSC review runs.
@@ -244,22 +244,47 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] visibility-measurement.3 Add server-log crawler monitoring for GPTBot/ClaudeBot/Claude-Code/PerplexityBot/OAI-SearchBot — proves llms.txt consumption (cmd: `grep -Ec 'GPTBot|ClaudeBot|Claude-Code' access.log`)
 - [ ] visibility-measurement.4 Script a recurring GSC position/impressions review via `gsc.py` (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.com --dimensions query --days 28`)
 
+## mdx-content-system [PLANNED]
+
+**Goal:** Make every content page paired EN/FR MDX — shared component map, frontmatter-driven JSON-LD, generic shells — so a new page is a file drop, not a route.
+**Exit criteria:** A new page ships by adding `content/pages/<ns>/<slug>/{en,fr}.mdx` — no per-page TSX, no `staticRoutes()` edit; the body may embed `<ComponentGrid/>` / `<Faq/>` from a shared map; JSON-LD (FAQPage/TechArticle) is emitted by the shell from frontmatter, never the body; the page is sitemapped automatically. EN/FR parity is mandatory, not opt-in.
+**Verify:** paired `content/pages/guides/foo/{en,fr}.mdx` with `<ComponentGrid/>` + `faq:` renders localized guides, emits FAQPage JSON-LD, and appears in the sitemap; the locale drift gate rejects a missing translation. Personas: maintainer authoring content (no TSX); AI answer engine extracting the FAQ; translator adding a locale. Reuse existing FAQPage/TechArticle helpers.
+
+Infra already exists and is under-used: `MDXContent` (`packages/ui/src/components/mdx-content/mdx-content.tsx`) accepts a `components` map, defaults `enableMDX = true`, auto-detects JSX via `/<[A-Z]/` after stripping fenced blocks, falls back to `ReactMarkdown` + `remarkGfm` (GFM tables), and `removeImportStatements` drops import lines. `getPageContent` already resolves `<slug>/<locale>.mdx` → default locale → flat file. This runtime fallback is not permission for optional translation: EN/FR parity remains mandatory. Localized component MDX and locale sitemap entries are already shipped. Remaining gaps are a shared editorial component map, frontmatter extensions, namespaced route discovery, and guide shells. Reconcile this branch with current main before implementation: its current checkout lacks the documented `scripts/check-i18n.ts` gate.
+
+- [ ] mdx-content-system.1 Shared MDX component map `apps/registry/lib/mdx-components.tsx` (`ComponentGrid`, `CompareTable`, `Faq`, `InstallCommand`, `Preview`), passed as `<MDXContent components={…}>` from every content shell (cmd: `grep -rc 'components={mdxComponents}' apps/registry/app/\[locale\]` → ≥4)
+- [ ] mdx-content-system.2 Extend `pageFrontmatterSchema` (`apps/registry/lib/schemas.ts`) with `faq[]`, `componentSlugs[]`, `updated`, `type: +guide|vs|react`; shells emit FAQPage/TechArticle LD from frontmatter via `lib/jsonld.ts` (test: `pnpm test lib/schemas.test.ts`)
+- [ ] mdx-content-system.3 Generic MDX shells `/guides/[slug]`, `/vs/[slug]`, `/react/[slug]` reading `getPageContent()` — a new page is a paired EN/FR MDX drop, zero per-page TSX
+- [ ] mdx-content-system.4 Sitemap enumerates MDX slugs by globbing `content/pages/**` instead of hand-listed `staticRoutes()` entries (cmd: `curl -s https://ui.vllnt.com/sitemap.xml | grep -c /guides/`)
+- [ ] mdx-content-system.5 Author guard for the `evaluate()` hazard — a page containing JSX must not use inline `` `<X>` `` code-spans (MDX 3 parses them as JSX; only fenced blocks are stripped before detection) (test: `pnpm test content-mdx-brackets.test.ts`)
+- [ ] mdx-content-system.6 Migrate the 3 shipped TSX `/vs` pages (shadcn, vercel-ai-sdk, assistant-ui) onto the `/vs/[slug]` MDX shell, URLs unchanged (needs: mdx-content-system.3) (cmd: `curl -s https://ui.vllnt.com/vs/shadcn | grep -c '<table'`)
+- [ ] mdx-content-system.7 Validate mdx-content-system.1–6: E2E — paired `guides/<slug>/{en,fr}.mdx` with `<ComponentGrid/>` + `faq:` renders the grid, emits FAQPage LD, and appears in the sitemap; `fr.mdx` serves `/fr/guides/<slug>`; the 3 migrated `/vs` pages still render tables at unchanged URLs (E2E: `pnpm test:e2e mdx-content`)
+
 ## seo-content-engine [PLANNED]
 
 **Goal:** Build the content flywheel — an MDX blog plus programmatic integration / alternative / comparison pages that capture long-tail install intent and definitional AI-wedge queries.
 **Exit criteria:** `/blog` + `/blog/[slug]` render MDX posts with BlogPosting JSON-LD, Shiki highlighting, per-post OG + RSS; `/integrations/{tool}` + `/alternatives/{competitor}` pages ship and are in the sitemap; 3 flagship guides live; each `/components/[slug]` has unique copy + live demo + install command.
-**Verify:** a dev searching "how to build a chat ui with the vercel ai sdk" finds a VLLNT guide; `/alternatives/assistant-ui` renders a comparison table; a blog post shows correct BlogPosting rich data. Personas: dev in organic search; dev comparing libraries; AI answer engine extracting a table. (needs: search-consolidation done first)
+**Verify:** a dev searching "how to build a chat ui with the vercel ai sdk" finds a VLLNT guide; `/alternatives/assistant-ui` renders a comparison table; a blog post shows correct BlogPosting rich data. Personas: dev in organic search; dev comparing libraries; AI answer engine extracting a table. (needs: search-consolidation done first · mdx-content-system for the MDX shells)
 
-- [ ] seo-content-engine.1 Add the MDX blog: `content/blog/{slug}/{locale}.mdx` + `lib/blog.ts` (Content Collections `@content-collections/mdx`, Zod frontmatter — NOT Contentlayer; Velite fallback) mirroring `lib/content.ts` (needs: search-consolidation.4) → docs/specs/blog-system.md
+**Historical snapshot 2026-07-13 — reported GSC evidence + namespace split** (90d, `sc-domain:ui.vllnt.ai`; not reverified against the current `.com` origin). **Reported evidence:** demand is entirely component-level and framework-qualified (`react callout` ~60 impr @pos 80+, `react floating action button` ~40 impr @58–95, `radix {dialog,slider,popover,scroll-area,button}` ~20 impr) — components that mostly *exist* but rank buried, so `.6`'s uniqueness pass outranks new paths for `callout` + `floating-action-button`. The **"AI UI development" head term has zero demand**: the pillar (`.13`) is a recall/GEO bet (compounding, not near-term impressions), justified because AI *component* pages already rank pos 5–7 (`ai-chat-input`, `ai-source-citation`) and the pillar funnels to them + `/families/ai`. **Namespace decision (2026-07-13):** `/vs` = tools + libs (shadcn, radix, mui, vercel-ai-sdk) · `/alternatives` (`.5`) = direct competitors (assistant-ui, copilotkit, ai-elements) — the shipped `/vs/assistant-ui` migrates in `.11` · `/integrations` (`.4`) stays distinct (how-to-use intent, not comparison) · `/guides` = evergreen reference (new namespace, `.13`/`.14`) while `/blog` (`.1`–`.3`, `.7`) stays dated articles. All new content pages are **MDX** on the `mdx-content-system` shells.
+
+- [ ] seo-content-engine.1 Add the MDX blog: `content/blog/{slug}/{locale}.mdx` + `lib/blog.ts` (Content Collections `@content-collections/mdx`, Zod frontmatter — NOT Contentlayer; Velite fallback) mirroring `lib/content.ts` (needs: search-consolidation.4)
 - [ ] seo-content-engine.2 Routes `/blog` + `/blog/[slug]` with `generateMetadata` + BlogPosting/Breadcrumb JSON-LD + Shiki build-time highlighting + per-post OG via `ImageResponse` (cmd: `curl -s https://ui.vllnt.com/blog/<post> | grep -c '"@type":"BlogPosting"'`)
 - [ ] seo-content-engine.3 Blog RSS + sitemap + llms.txt entries (extend `app/rss.xml`, `sitemap.ts`, `llms.txt/route.ts`) (cmd: `curl -s https://ui.vllnt.com/sitemap.xml | grep -c /blog/`)
 - [ ] seo-content-engine.4 Programmatic `/integrations/{tool}` pages (vercel-ai-sdk, langgraph, convex, openai, anthropic), data-driven like `lib/use-cases.ts` (cmd: `curl -sI https://ui.vllnt.com/integrations/vercel-ai-sdk | grep -c 200`)
 - [ ] seo-content-engine.5 Programmatic `/alternatives/{competitor}` pages (assistant-ui, copilotkit, ai-elements) with a comparison table + FAQPage LD (cmd: `curl -s https://ui.vllnt.com/alternatives/assistant-ui | grep -c '<table'`)
-- [ ] seo-content-engine.6 Per-component uniqueness pass: unique copy + live demo + install command on each `/components/[slug]` → docs/specs/component-page-uniqueness.md
+- [ ] seo-content-engine.6 Per-component uniqueness pass: unique copy + live demo + install command on each `/components/[slug]`
 - [ ] seo-content-engine.7 Publish 3 flagship guides (best react components for AI agents; assistant-ui vs ai-elements vs vllnt; render tool calls in react) — answer-first, stats + tables, TechArticle LD (cmd: `curl -s https://ui.vllnt.com/blog/best-react-components-for-ai-agents | grep -c '<table'`)
 - [ ] seo-content-engine.8 Validate seo-content-engine.1–7: E2E — blog post renders with BlogPosting rich data; integration + alternative pages return 200 with tables; component page shows demo + install; RSS/sitemap include blog (E2E: `pnpm test:e2e content-engine`)
+- [ ] seo-content-engine.9 `/vs/radix` MDX comparison — GSC's largest uncovered cluster (~20 impr: "radix dialog/slider/popover/scroll-area/button", no page today); GFM table, no JSX needed (needs: mdx-content-system.3) (cmd: `curl -s https://ui.vllnt.com/vs/radix | grep -c '<table'`)
+- [ ] seo-content-engine.10 `/vs/mui` MDX comparison — cross-framework intent ("material design multi select", "angular floating action button") (needs: mdx-content-system.3) (cmd: `curl -s https://ui.vllnt.com/vs/mui | grep -c '<table'`)
+- [ ] seo-content-engine.11 Migrate `/vs/assistant-ui` → `/alternatives/assistant-ui` + 301, per the `/vs` = tools-and-libs vs `/alternatives` = competitors split (needs: seo-content-engine.5) (cmd: `curl -sI https://ui.vllnt.com/vs/assistant-ui | grep -c 301`)
+- [ ] seo-content-engine.12 `/react/{component}` framework-qualified MDX landings, hand-written unique copy (thin templates get filtered) — seed `callout`, `floating-action-button`, `code-block` from GSC's ~100 impr of `react <component>` queries (needs: mdx-content-system.3) (cmd: `curl -sI https://ui.vllnt.com/react/callout | grep -c 200`)
+- [ ] seo-content-engine.13 `/guides/ai-ui` pillar MDX — AI-UI-development reference: `<ComponentGrid family="ai"/>` + `faq:` frontmatter, funnels to `/families/ai` + `/build/*` + `/vs/*`, with a Mobile/React-Native coming-soon section (needs: mdx-content-system.3)
+- [ ] seo-content-engine.14 `/guides/streaming-ui` + `/guides/design-tokens` evergreen MDX reference pages (needs: mdx-content-system.3) (cmd: `curl -sI https://ui.vllnt.com/guides/design-tokens | grep -c 200`)
+- [ ] seo-content-engine.15 Validate seo-content-engine.9–14: E2E — `/vs/radix` + `/vs/mui` render comparison tables; `/vs/assistant-ui` 301s to `/alternatives/assistant-ui`; `/react/callout` returns 200 with unique copy; `/guides/ai-ui` emits FAQPage LD + renders the AI grid + the mobile coming-soon section; all appear in `/sitemap.xml` (E2E: `pnpm test:e2e content-paths`)
 
-## backlink-authority [PLANNED]
+## backlink-authority [PLANNED — launches, listings, and backlinks unverified]
 
 **Goal:** Manufacture the off-domain gravity — the referring domains and brand mentions that lift rankings and feed AI recall — from zero.
 **Exit criteria:** VLLNT is listed in ≥5 awesome-lists/directories; a Show HN + Product Hunt launch shipped; ≥3 syndicated posts with canonical-home; one original-data link magnet published and earning links.
@@ -270,7 +295,7 @@ Falls out of API-first (`studio.11`) — registration is just another API — pl
 - [ ] backlink-authority.3 Submit to OSS aggregators: OpenAlternative, LibHunt, AlternativeTo, SaaSHub, DevHunt (cmd: listing URLs live)
 - [ ] backlink-authority.4 Syndicate 3 guides to dev.to/Hashnode with `canonical` → ui.vllnt.com (needs: seo-content-engine.7) (cmd: syndicated post `rel=canonical` points home)
 - [ ] backlink-authority.5 Newsletter sponsorship (React Status / Bytes / JS Weekly) timed to the magnet (cmd: placement confirmed live)
-- [ ] backlink-authority.6 Ship one original-data link magnet: AI chat UI benchmark or "State of AI UI 2026" survey (needs: seo-content-engine.1) → docs/specs/link-magnet.md
+- [ ] backlink-authority.6 Ship one original-data link magnet: AI chat UI benchmark or "State of AI UI 2026" survey (needs: seo-content-engine.1)
 - [ ] backlink-authority.7 Validate backlink-authority.1–6: GSC Links report shows ≥3 new referring domains to the magnet + ≥5 directory/list entries live (cmd: `python3 gsc.py query --site sc-domain:ui.vllnt.com --dimensions page --filter 'page contains /blog/'` + GSC Links export)
 
 ---
@@ -287,6 +312,8 @@ Unscheduled — pull into a phase when prioritized.
 - **agent-ui-cli-v1** — config bundle, `doctor` wrapper, `add`, `ci` reusable workflow (+ `act` for local==CI), `list`/`info`/`why`/`search`, `vllnt.config`, `upgrade`; **drift gates** — `api-extractor` (public-API `.api.md` diff), `dependency-cruiser` (import boundaries across 309 components), `sherif` (dep-version drift); **test** — wrap Storybook 10 `addon-vitest` (interaction + a11y + coverage via Vitest browser mode), don't rebuild; **dual-primitive** — `context`/`check` handle `--base radix|base-ui` (Base UI ascendant, Radix at plateau).
 - **agent-ui-cli-v2** — `audit` (knip + size-limit + dependency-cruiser graph), baseline gating, i18n lint, client security, `new`/scaffold, `theme new`/`edit`, `remove`/`diff`, `watch`/`report`. (Whole-site `audit --browser` + visual regression are now the **`studio`** phase; the human↔agent review loop is **`review-loop`**. Chrome DevTools MCP + Playwright MCP feed both.)
 - **docs + search** — `/docs` expansion (#248), Pagefind full-text (#257), Sandpack playground (#256), `/vs` pages (#258), `/templates` (#259), i18n via next-intl (#281).
+- **multiselect** — multi-select / token-input component. GSC surfaces demand with **no component today**: "multiselect" / "multiselect ui" / "multiselect 2" / "material design multi select" (~12 impr/90d, pos 73–92, `sc-domain:ui.vllnt.ai`). New registry item (component + story + test + `registry:build`); pull into a `demand-driven-components` phase when prioritized.
+- **filter-bar** — faceted filter bar. GSC surfaces demand with **no component today**: "filter bar" / "filter bars" (~5 impr/90d, pos 78–87). New registry item; pairs with the `multiselect` gap above.
 
 ---
 
@@ -499,7 +526,7 @@ Version ≠ phase — phases are outcomes; this maps them to release trains acro
 
 | Phase | Ships as | Rationale |
 |---|---|---|
-| component-sidebar | `@vllnt/ui` **0.4.0** (now) | UI feature — finish + ship small |
+| component-sidebar | `@vllnt/ui` **0.4.0 canary track** (now) | UI feature — finish + validate; stable release not authorized |
 | ai-elements-parity | `@vllnt/ui` **0.5.0** | new components = minor |
 | native-parity | `@vllnt/ui` **1.0.0** | `.native.tsx` in registry items = registry-schema change → the 1.0 "commit the web+native contract" moment |
 | agent-ui-cli | `@vllnt/ui-cli` **0.1+** | separate package, own version line (bin `vllnt-ui`) |
