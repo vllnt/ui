@@ -16,9 +16,9 @@ pnpm add @vllnt/ui@canary
 
 ## 0.4.0 canary-only hold
 
-`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Web/core/Native bases are 0.4.0. Manual stable dispatch rejects 0.4.x and all newer/unknown bases before Git tagging or npm publication; only existing Web 0.3.x maintenance remains eligible. All publication modes require `refs/heads/main`. There is no input or repository-variable override for this hold. Promotion requires a separate reviewed code change and the exit evidence in `PR506_CANARY_GAP_REVIEW.md`.
+`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Web remains on base 0.4.0; core/Native share the independent 0.1.0 canary base. Manual stable dispatch rejects 0.4.x and all newer/unknown bases before Git tagging or npm publication; only existing Web 0.3.x maintenance remains eligible. All publication modes require `refs/heads/main`. There is no input or repository-variable override for this hold. Promotion requires a separate reviewed code change and the exit evidence in `PR506_CANARY_GAP_REVIEW.md`.
 
-Matching main pushes may publish Web prereleases under `canary`, never `latest`. Native remains separately disabled unless its existing owner-controlled enable gate and environment approve publication. The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Stable Web registry installs stay pinned to 0.3.0; Native discovery remains source-only/unavailable.
+Matching main pushes may publish Web prereleases under `canary`, never `latest`. Native publication is unconditionally disabled in the workflow until a separately reviewed enabling change. The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Stable Web registry installs stay pinned to 0.3.0; Native discovery remains source-only/unavailable.
 
 Run `node --test scripts/release-guard.test.mjs` to verify hold, version derivation and workflow wiring. No publish command is executed by these tests.
 
@@ -66,15 +66,20 @@ The `registry:check` and `registry:integrity` CI guards confirm the regenerated 
 `@vllnt/ui-core` and `@vllnt/ui-native` have a separate safety boundary in `.github/workflows/native-canary.yml`:
 
 - A push to `main` that changes native/core/token surfaces runs `pnpm ci:native`.
-- Both packages receive the same `0.4.0-canary.<run>.sha<commit>` version, with an exact matching core dependency in the Native tarball.
+- The guard permits only matching `0.1.0-canary.<positive run>.sha<12 lowercase hex>` versions, with an exact matching core dependency in the Native tarball.
+- The staged publication implementation below is retained but disabled; it is not approved for bootstrap or recovery.
 - Core publishes first under a run-scoped staging tag; native publishes only after that exact core version is visible.
 - Reruns skip immutable versions already present and reuse the run-scoped tag, allowing recovery from a partial pair.
 - The workflow verifies packed names, versions, the rewritten core dependency, and absence of `workspace:` protocols.
 - Only after both versions are visible does the workflow promote both `canary` tags. Ordinary failures restore the prior pair and clean up staging tags.
-- Publication never targets `latest`; fail-closed registry reads verify that neither `latest` tag moves.
+- Publication targets staging, not `latest`. First uploads can nevertheless acquire an implicit `latest`; do not use this workflow to bootstrap unpublished names.
 - No workflow dispatch, Git tag, GitHub Release, or stable publication path exists.
 
-Native publication is fail-closed behind the repository variable `NATIVE_CANARY_PUBLISH_ENABLED`. Before setting it to `true`, reserve both package names on npm, configure trusted-publisher entries, and create a protected GitHub environment named `npm-native-canary`. The protected environment must also supply `NPM_DIST_TAG_TOKEN`, restricted to dist-tag operations for these two packages, with an assigned expiry/rotation/revocation owner. Trusted publishing authenticates uploads, not dist-tag promotion/rollback. Require main-only environment protections and reviewers. Until an authorized owner verifies this setup, keep publication disabled; the workflow still runs native quality gates but skips publication.
+Native publication is unconditionally disabled (`if: ${{ false }}`); setting `NATIVE_CANARY_PUBLISH_ENABLED` cannot enable it. Quality gates still run. Before a separately reviewed change restores the variable gate, fix the retained publisher's version lookup (registry errors must not be interpreted as absence), verify immutable artifact integrity on recovery, and address bootstrap's implicit `latest` behavior. No temporary first-publish script or test belongs in the repository or CI.
+
+An authorized npm owner must bootstrap unpublished names separately; an organization does not reserve package names and trusted publishing requires existing packages. Configure trusted-publisher entries and the protected `npm-native-canary` environment with main-only protection and reviewers. A scoped, expiring `NPM_DIST_TAG_TOKEN` is required for tag operations because OIDC authenticates uploads only; npm does not provide a dist-tag-only granular permission, so treat this token as publishing-capable. Never commit credentials.
+
+The validation hold also remains: the last native gate evidence reports Expo Doctor expecting `~57.0.23` with `57.0.20` installed. The dependency owner must resolve this separately and rerun `pnpm ci:native`; physical Android/iOS and VoiceOver/TalkBack evidence plus fresh published-consumer checks are still required. An upload alone does not lift this hold.
 
 No native npm release exists yet. While `packages/ui-native/registry.json` reports `availability: "source"` and `installation.available: false`, the planned command below is documentation and must not be presented as a working install action:
 

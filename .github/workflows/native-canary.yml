@@ -45,7 +45,9 @@ jobs:
 
   publish:
     name: Publish Native Canary Pair
-    if: vars.NATIVE_CANARY_PUBLISH_ENABLED == 'true'
+    # Hold: bootstrap, registry-failure handling, Expo Doctor and device validation
+    # require separate review before restoring the enable-variable gate.
+    if: ${{ false }}
     needs: quality
     runs-on: ubuntu-latest
     timeout-minutes: 20

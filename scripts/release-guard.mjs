@@ -2,7 +2,15 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
-/** Release 0.4+ stays canary-only until a separately reviewed promotion change. */
+/** Native publication remains locked to the initial canary series. */
+export function assertNativeCanary(version) {
+  if (!/^0\.1\.0-canary\.[1-9]\d*\.sha[a-f0-9]{12}$/.test(version ?? "")) {
+    throw new Error("Expected 0.1.0-canary.<positive run>.sha<12 lowercase hex>; no stable or custom channel");
+  }
+  return version;
+}
+
+/** Web 0.4+ stays canary-only until a separately reviewed promotion change. */
 export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
   if (ref !== "refs/heads/main") throw new Error("Publication requires main");
   if (!/^0\.(?:3|4)\.(?:0|[1-9]\d*)$/.test(web)) throw new Error("Unsupported Web release base");
@@ -13,9 +21,9 @@ export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
   if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
   if (mode === "web-canary") return `${web}-canary.sha${sha.slice(0, 7)}`;
   if (mode !== "native-canary") throw new Error("Unsupported release channel");
-  if (web !== "0.4.0" || core !== web || native !== core) throw new Error("Web/core/Native must share the 0.4.0 base");
+  if (core !== "0.1.0" || native !== core) throw new Error("Core/Native must share the 0.1.0 base");
   if (!/^[1-9]\d*$/.test(run ?? "")) throw new Error("Invalid canary run number");
-  return `${core}-canary.${run}.sha${sha.slice(0, 12)}`;
+  return assertNativeCanary(`${core}-canary.${run}.sha${sha.slice(0, 12)}`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

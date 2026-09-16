@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { releaseVersion } from "./release-guard.mjs";
 
-const input = { web: "0.4.0", core: "0.4.0", native: "0.4.0", ref: "refs/heads/main", sha: "a".repeat(40), run: "42" };
+const input = { web: "0.4.0", core: "0.1.0", native: "0.1.0", ref: "refs/heads/main", sha: "a".repeat(40), run: "42" };
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("stable hold cannot be bypassed by a newer version or channel", () => {
@@ -21,13 +21,14 @@ test("existing stable 0.3 maintenance is preserved on main only", () => {
 test("canaries derive prerelease versions from validated inputs", () => {
   assert.equal(releaseVersion({ ...input, mode: "web-canary" }), "0.4.0-canary.shaaaaaaaa");
   assert.equal(releaseVersion({ ...input, sha: "0123456" + "a".repeat(33), mode: "web-canary" }), "0.4.0-canary.sha0123456");
-  assert.equal(releaseVersion({ ...input, mode: "native-canary" }), "0.4.0-canary.42.shaaaaaaaaaaaaa");
-  for (const changes of [{ core: "0.1.0" }, { native: "0.4.1" }, { web: "0.3.0" }, { run: "0" }, { sha: "bad" }]) {
+  assert.equal(releaseVersion({ ...input, mode: "native-canary" }), "0.1.0-canary.42.shaaaaaaaaaaaaa");
+  for (const changes of [{ core: "0.4.0" }, { native: "0.1.1" }, { run: "0" }, { sha: "bad" }]) {
     assert.throws(() => releaseVersion({ ...input, ...changes, mode: "native-canary" }));
   }
 });
 test("checked-in bases, availability and stable install pin remain coherent", () => {
-  for (const name of ["ui", "ui-core", "ui-native"]) assert.equal(JSON.parse(read(`packages/${name}/package.json`)).version, "0.4.0");
+  assert.equal(JSON.parse(read("packages/ui/package.json")).version, "0.4.0");
+  for (const name of ["ui-core", "ui-native"]) assert.equal(JSON.parse(read(`packages/${name}/package.json`)).version, "0.1.0");
   const native = JSON.parse(read("packages/ui-native/registry.json"));
   assert.equal(native.installation.available, false);
   assert.match(read("apps/registry/scripts/inline-component-source.ts"), /PUBLISHED_VERSION = "0\.3\.0"/);
@@ -41,7 +42,8 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.match(web, /publish "\$TARBALL" --tag latest/);
   assert.ok(native.indexOf("release-guard.mjs native-canary") < native.indexOf("npm@11.18.0 whoami"));
   assert.match(native, /--tag "\$STAGING_TAG"/);
-  assert.doesNotMatch(native, /--tag latest|workflow_dispatch/);
+  assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary/);
+  assert.match(native, /if: \$\{\{ false \}\}/);
   assert.match(native, /dist-tag add "@vllnt\/ui-native@\$\{CANARY_VERSION\}" canary/);
   for (const workflow of [web, native]) assert.match(workflow, /node --test scripts\/release-guard.test.mjs/);
 });
