@@ -4,7 +4,7 @@ Accessible React Native components that share VLLNT UI semantic tokens and porta
 
 > Experimental and source-only. The repository contains the renderer, but no npm release exists yet. Do not run the planned canary install command until the native manifest reports `installation.available: true`.
 
-The package base is **0.4.0**, not a published stable release. Core and Native canaries use the same `0.4.0-canary.<run>.sha<commit>` version and an exact core dependency. A checked-in release hold blocks stable promotion; see [releasing](../../docs/RELEASING.md). Neither merge nor passing local tests authorizes enabling Native publication.
+The package base is **0.1.0**, not a published stable release. Core and Native canaries use the same `0.1.0-canary.<run>.sha<commit>` version and an exact core dependency. Workflow publication is unconditionally disabled pending a separate hardening/enabling review; the stable promotion hold also remains. See [releasing](../../docs/RELEASING.md). Neither merge nor passing local tests authorizes enabling Native publication.
 
 ## Current availability
 

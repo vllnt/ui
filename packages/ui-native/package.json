@@ -1,6 +1,6 @@
 {
   "name": "@vllnt/ui-native",
-  "version": "0.4.0",
+  "version": "0.1.0",
   "description": "Accessible React Native renderer for VLLNT UI",
   "license": "MIT",
   "author": "vllnt",

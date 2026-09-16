@@ -4,7 +4,7 @@ Platform-neutral design tokens and portable component contracts shared by the VL
 
 > Experimental and source-only. The first synchronized `canary` publication with `@vllnt/ui-native` is planned but is not available yet.
 
-The package base is **0.4.0**. Core and Native will use the same `0.4.0-canary.<run>.sha<commit>` prerelease; this version bump does not establish npm availability. Stable promotion requires a separate reviewed change after verification; see [releasing](../../docs/RELEASING.md).
+The package base is **0.1.0**. Core and Native will use the same `0.1.0-canary.<run>.sha<commit>` prerelease; this base does not establish npm availability. Workflow publication is unconditionally disabled pending a separate hardening/enabling review. Stable promotion also requires a separate reviewed change after verification; see [releasing](../../docs/RELEASING.md).
 
 ## Planned install
 
