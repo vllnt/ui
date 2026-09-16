@@ -86,7 +86,7 @@ Turborepo orders package builds through workspace dependencies. The native CI jo
 |----------|----------------|
 | `ci.yml` | Existing workspace gates plus an isolated native package/Expo job |
 | `publish.yml` | Existing `@vllnt/ui` canary and stable releases |
-| `native-canary.yml` | Synchronized core/native canaries after native quality gates |
+| `native-canary.yml` | Native quality gates; synchronized core/native publication unconditionally disabled |
 | `storybook.yml` | Existing web Storybook build and deployment |
 
 ## Platform-aware registry
@@ -113,4 +113,4 @@ Web installation remains shadcn-based. Native installation is unavailable while 
 
 ## Release boundaries
 
-The existing `publish.yml` remains exclusively responsible for `@vllnt/ui`, including stable releases. `native-canary.yml` has no manual dispatch and cannot publish `latest`, create Git tags, or create GitHub releases. It publishes synchronized core/native canary versions in dependency order and verifies that neither `latest` tag moves.
+The existing `publish.yml` remains exclusively responsible for `@vllnt/ui`, including stable releases. Core and Native share the independent `0.1.0` base. `native-canary.yml` runs quality gates but its publication job is unconditionally disabled. Its retained staged canary implementation requires a separate hardening/enabling review; it has no manual dispatch, stable publication, Git tag, or GitHub Release path. See [releasing](RELEASING.md) for the publication and validation holds.
