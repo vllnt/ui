@@ -79,7 +79,7 @@ Native publication is unconditionally disabled (`if: ${{ false }}`); setting `NA
 
 An authorized npm owner must bootstrap unpublished names separately; an organization does not reserve package names and trusted publishing requires existing packages. Configure trusted-publisher entries and the protected `npm-native-canary` environment with main-only protection and reviewers. A scoped, expiring `NPM_DIST_TAG_TOKEN` is required for tag operations because OIDC authenticates uploads only; npm does not provide a dist-tag-only granular permission, so treat this token as publishing-capable. Never commit credentials.
 
-The validation hold also remains: the last native gate evidence reports Expo Doctor expecting `~57.0.23` with `57.0.20` installed. The dependency owner must resolve this separately and rerun `pnpm ci:native`; physical Android/iOS and VoiceOver/TalkBack evidence plus fresh published-consumer checks are still required. An upload alone does not lift this hold.
+The catalog now uses Expo `~57.0.23` to resolve the prior Doctor patch mismatch; `pnpm ci:native` must pass on the reviewed commit. The validation hold still requires physical Android/iOS and VoiceOver/TalkBack evidence plus fresh published-consumer checks. An upload alone does not lift this hold.
 
 No native npm release exists yet. While `packages/ui-native/registry.json` reports `availability: "source"` and `installation.available: false`, the planned command below is documentation and must not be presented as a working install action:
 
