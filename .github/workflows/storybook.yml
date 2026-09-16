@@ -9,12 +9,31 @@ on:
       - "packages/ui/scripts/**"
       - "packages/ui/styles.css"
       - "packages/ui/themes/**"
+      - "packages/ui/.snapshots/**"
+      - "packages/ui/playwright/**"
+      - "packages/ui/playwright-ct.config.ts"
+      - "packages/ui/postcss.config.mjs"
+      - "packages/ui/package.json"
+      - "pnpm-lock.yaml"
       - ".github/workflows/storybook.yml"
   push:
     branches: [main]
     paths:
       - "packages/ui/src/**"
       - "packages/ui/.storybook/**"
+      - "packages/ui/styles.css"
+      - "packages/ui/themes/**"
+      - "packages/ui/.snapshots/**"
+      - "packages/ui/playwright/**"
+      - "packages/ui/playwright-ct.config.ts"
+      - "packages/ui/postcss.config.mjs"
+      - "packages/ui/scripts/**"
+      - "packages/ui/package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/storybook.yml"
+
+permissions:
+  contents: read
 
 concurrency:
   group: storybook-${{ github.head_ref || github.ref }}
@@ -114,8 +133,10 @@ jobs:
 
   visual-regression:
     name: Visual Regression
-    needs: build-storybook
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble@sha256:6446946a1d9fd62d9ae501312a2d76a43ee688542b21622056a372959b65d63d
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v5
 
@@ -128,19 +149,17 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: pnpm -F @vllnt/ui exec playwright install --with-deps chromium
-
-      - name: Run Playwright CT visual tests
+      - name: Compare committed visual baselines
         working-directory: packages/ui
-        run: pnpm test:visual --update-snapshots
+        run: pnpm test:visual --workers=2 --update-snapshots=none
 
       - name: Upload visual snapshots
         if: always()
         uses: actions/upload-artifact@v5
         with:
           name: visual-snapshots
-          path: packages/ui/.snapshots
+          path: packages/ui/.snapshots/linux
+          include-hidden-files: true
           retention-days: 30
 
       - name: Upload visual test results

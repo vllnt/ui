@@ -8,6 +8,7 @@ This folder contains in-repo documentation for `@vllnt/ui` contributors and down
 |-----|------|
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | Monorepo layout, package boundaries, build graph |
 | [RELEASING.md](./RELEASING.md) | How releases are cut and published |
+| [VISUAL_TESTING.md](./VISUAL_TESTING.md) | Reproducible visual comparisons and reviewed baseline updates |
 
 ## External destinations
 
