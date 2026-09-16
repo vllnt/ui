@@ -29,6 +29,32 @@ import { Callout } from '@vllnt/ui'
 
 <Canvas of={Stories.Default} sourceState="shown" />
 
+## Neutral composition
+
+Opt into direct children with `composable`. `CalloutHeader` renders a semantic
+`header`; `CalloutBody` renders a `div`. Both accept native props and React 19
+refs and impose no typography. Compose `Heading` and `Text` for type styling.
+
+```tsx
+import { Callout, CalloutHeader, CalloutBody, Heading, Text } from '@vllnt/ui'
+
+<Callout variant="neutral" composable role="note">
+  <CalloutHeader><Heading level={3}>Before you begin</Heading></CalloutHeader>
+  <CalloutBody className="mt-2"><Text>Review the requirements.</Text></CalloutBody>
+</Callout>
+```
+
+<Canvas of={Stories.Composable} sourceState="shown" />
+
+`composable` bypasses the legacy title/icon wrappers, including `title` and
+`icon` props and automatic default titles. Put those elements in your children.
+Variant selection alone never enables composition. The default remains `info`
+with its original title, colored layout, typography, and `role="alert"`.
+All six legacy colors are retained for compatibility; `neutral` uses semantic
+border, muted surface, and foreground tokens and has no automatic title.
+The root accepts native div props and a React 19 ref. Use `role="note"` for
+static content instead of the compatibility default alert role.
+
 ## API Reference
 
 <Controls />
@@ -37,5 +63,6 @@ import { Callout } from '@vllnt/ui'
 | ---- | ---- | -------- | ----------- |
 | `icon` | `ReactNode` | No | React content (JSX, string, number, etc.) |
 | `title` | `string` | No | - |
-| `variant` | `CalloutVariant` | No | - |
+| `variant` | `CalloutVariant` | No | `info` (default), `danger`, `note`, `success`, `tip`, `warning`, or `neutral` |
+| `composable` | `boolean` | No | Render direct children without legacy wrappers; defaults to `false` |
 

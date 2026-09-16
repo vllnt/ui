@@ -909,7 +909,15 @@ export {
   AccordionTrigger,
   type AccordionTriggerProps,
 } from "./accordion";
-export { Callout, type CalloutProps, type CalloutVariant } from "./callout";
+export {
+  Callout,
+  CalloutBody,
+  type CalloutBodyProps,
+  CalloutHeader,
+  type CalloutHeaderProps,
+  type CalloutProps,
+  type CalloutVariant,
+} from "./callout";
 export {
   Annotation,
   type AnnotationProps,
