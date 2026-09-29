@@ -62,8 +62,15 @@ const styles = StyleSheet.create({
   },
 });
 
+/** Local-midnight Date; multi-argument `new Date` would remap years 0–99 to 19xx. */
+function localDate(year: number, month: number, day: number): Date {
+  const date = new Date(0);
+  date.setFullYear(year, month, day);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
 function startOfMonth(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
+  return localDate(date.getFullYear(), date.getMonth(), 1);
 }
 function sameDay(left?: Date, right?: Date): boolean {
   return (
@@ -76,17 +83,15 @@ function sameDay(left?: Date, right?: Date): boolean {
 function buildMonthDays(month: Date): readonly (Date | undefined)[] {
   const first = startOfMonth(month);
   const prefix = Array.from<undefined>({ length: first.getDay() });
-  const dayCount = new Date(
+  const dayCount = localDate(
     first.getFullYear(),
     first.getMonth() + 1,
     0,
   ).getDate();
   return [
     ...prefix,
-    ...Array.from(
-      { length: dayCount },
-      (_unused, index) =>
-        new Date(first.getFullYear(), first.getMonth(), index + 1),
+    ...Array.from({ length: dayCount }, (_unused, index) =>
+      localDate(first.getFullYear(), first.getMonth(), index + 1),
     ),
   ];
 }
@@ -113,11 +118,11 @@ function Calendar({
   const visibleYear = visibleMonth.getFullYear();
   const visibleMonthIndex = visibleMonth.getMonth();
   const days = useMemo(
-    () => buildMonthDays(new Date(visibleYear, visibleMonthIndex, 1)),
+    () => buildMonthDays(localDate(visibleYear, visibleMonthIndex, 1)),
     [visibleMonthIndex, visibleYear],
   );
   const changeMonth = (offset: number) => {
-    const next = new Date(
+    const next = localDate(
       visibleMonth.getFullYear(),
       visibleMonth.getMonth() + offset,
       1,
