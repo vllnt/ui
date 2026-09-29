@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "pnpm registry:sync-shims",
     "dev": "next dev",
     "build": "pnpm registry:build && pnpm i18n:check && pnpm components:verify-mdx && next build && pnpm search:index",
     "clean": "rm -rf .next node_modules public/r public/_pagefind",
