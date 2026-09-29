@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
 });
 
 function normalizeStep(step: number, total: number): number {
+  if (!Number.isFinite(step)) return 1;
   return Math.min(Math.max(1, Math.round(step)), Math.max(1, total));
 }
 
