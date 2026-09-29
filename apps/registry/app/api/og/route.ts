@@ -4,22 +4,18 @@ import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "@/lib/og";
+import {
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  ogImageParametersSchema,
+} from "@/lib/og";
 import {
   getTemplate,
   type OGTemplateType,
   truncateText,
 } from "@/lib/og-templates";
 
-const parametersSchema = z.object({
-  category: z.string().max(100).optional(),
-  description: z.string().max(500).optional(),
-  title: z.string().min(1).max(200).default("VLLNT UI"),
-  type: z.enum(["home", "component", "docs", "page"]).default("page"),
-  url: z.string().max(200).optional(),
-});
-
-type ValidatedParameters = z.infer<typeof parametersSchema>;
+type ValidatedParameters = z.infer<typeof ogImageParametersSchema>;
 
 function parseSearchParameters(
   searchParameters: URLSearchParams,
@@ -208,7 +204,7 @@ export function GET(request: NextRequest): ImageResponse | Response {
   try {
     const { searchParams } = new URL(request.url);
     const raw = parseSearchParameters(searchParams);
-    const parameters = parametersSchema.parse(raw);
+    const parameters = ogImageParametersSchema.parse(raw);
     const element = renderOGElement(parameters, parameters.type);
 
     return new ImageResponse(element, {

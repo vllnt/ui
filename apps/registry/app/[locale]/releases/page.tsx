@@ -1,10 +1,11 @@
 import { Badge, Breadcrumb, Button, MDXContent } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { ReactNode } from "react";
 
 import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
-import { getReleaseRecords } from "@/lib/changelog";
+import { getReleaseRecords, type ReleaseRecord } from "@/lib/changelog";
 import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
 import { canonical, localizePathname } from "@/lib/seo";
@@ -37,12 +38,29 @@ async function formatComponentDelta(value?: number): Promise<string> {
   return t("componentDelta", { delta });
 }
 
+function ReleaseStat({
+  children,
+  label,
+}: {
+  readonly children: ReactNode;
+  readonly label: string;
+}) {
+  return (
+    <div className="border border-border p-4">
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        {label}
+      </dt>
+      <dd className="mt-1 text-sm font-medium">{children}</dd>
+    </div>
+  );
+}
+
 async function ReleaseCard({
   isLatest,
   release,
 }: {
   readonly isLatest: boolean;
-  readonly release: Awaited<ReturnType<typeof getReleaseRecords>>[number];
+  readonly release: ReleaseRecord;
 }) {
   const t = await getTranslations("pages.releases");
   return (
@@ -80,41 +98,26 @@ async function ReleaseCard({
       </div>
 
       <dl className="mt-6 grid gap-3 sm:grid-cols-3">
-        <div className="border border-border p-4">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("components")}
-          </dt>
-          <dd className="mt-1 text-sm font-medium">
-            {await formatComponentDelta(release.componentDelta)}
-          </dd>
-        </div>
-        <div className="border border-border p-4">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("breakingChanges")}
-          </dt>
-          <dd className="mt-1 text-sm font-medium">
-            {release.breakingChanges}
-          </dd>
-        </div>
-        <div className="border border-border p-4">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("migration")}
-          </dt>
-          <dd className="mt-1 text-sm font-medium">
-            {release.migrationUrl ? (
-              <a
-                className="underline underline-offset-4"
-                href={release.migrationUrl}
-                rel="noreferrer"
-                target="_blank"
-              >
-                {t("openGuide")}
-              </a>
-            ) : (
-              t("none")
-            )}
-          </dd>
-        </div>
+        <ReleaseStat label={t("components")}>
+          {await formatComponentDelta(release.componentDelta)}
+        </ReleaseStat>
+        <ReleaseStat label={t("breakingChanges")}>
+          {release.breakingChanges}
+        </ReleaseStat>
+        <ReleaseStat label={t("migration")}>
+          {release.migrationUrl ? (
+            <a
+              className="underline underline-offset-4"
+              href={release.migrationUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {t("openGuide")}
+            </a>
+          ) : (
+            t("none")
+          )}
+        </ReleaseStat>
       </dl>
 
       <details className="mt-6">
@@ -130,7 +133,7 @@ async function ReleaseCard({
 }
 
 function releaseJsonLdItem(
-  release: Awaited<ReturnType<typeof getReleaseRecords>>[number],
+  release: ReleaseRecord,
   index: number,
   locale: Locale,
 ) {

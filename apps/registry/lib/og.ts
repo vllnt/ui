@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { z } from "zod";
 
 import type { Locale } from "@/i18n/routing";
-import type { PageFrontmatter } from "@/lib/schemas";
+import { ogTypeSchema, type PageFrontmatter } from "@/lib/schemas";
 import {
   alternateOgLocales,
   canonical,
@@ -15,11 +15,11 @@ export const OG_IMAGE_HEIGHT = 1260;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 
-const ogImageParametersSchema = z.object({
+export const ogImageParametersSchema = z.object({
   category: z.string().max(100).optional(),
   description: z.string().max(500).optional(),
   title: z.string().min(1).max(200).default("VLLNT UI"),
-  type: z.enum(["home", "component", "docs", "page"]).default("page"),
+  type: ogTypeSchema.default("page"),
   url: z.string().max(200).optional(),
 });
 

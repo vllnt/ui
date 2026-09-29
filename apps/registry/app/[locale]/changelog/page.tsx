@@ -56,6 +56,31 @@ function normalizeType(value?: string): ChangelogTypeFilter {
   return "all";
 }
 
+function DateFilter({
+  label,
+  name,
+  value,
+}: {
+  readonly label: string;
+  readonly name: string;
+  readonly value?: string;
+}) {
+  return (
+    <div className="grid gap-2">
+      <label className="text-sm font-medium" htmlFor={`changelog-${name}`}>
+        {label}
+      </label>
+      <input
+        className="h-10 rounded-md border border-input bg-background px-3 text-sm font-normal"
+        defaultValue={value}
+        id={`changelog-${name}`}
+        name={name}
+        type="date"
+      />
+    </div>
+  );
+}
+
 async function FilterControls({
   from,
   locale,
@@ -90,30 +115,8 @@ async function FilterControls({
           ))}
         </select>
       </div>
-      <div className="grid gap-2">
-        <label className="text-sm font-medium" htmlFor="changelog-from">
-          {t("filterFrom")}
-        </label>
-        <input
-          className="h-10 rounded-md border border-input bg-background px-3 text-sm font-normal"
-          defaultValue={from}
-          id="changelog-from"
-          name="from"
-          type="date"
-        />
-      </div>
-      <div className="grid gap-2">
-        <label className="text-sm font-medium" htmlFor="changelog-to">
-          {t("filterTo")}
-        </label>
-        <input
-          className="h-10 rounded-md border border-input bg-background px-3 text-sm font-normal"
-          defaultValue={to}
-          id="changelog-to"
-          name="to"
-          type="date"
-        />
-      </div>
+      <DateFilter label={t("filterFrom")} name="from" value={from} />
+      <DateFilter label={t("filterTo")} name="to" value={to} />
       <div className="flex items-end gap-2">
         <Button className="w-full sm:w-auto" type="submit">
           {t("filterApply")}
