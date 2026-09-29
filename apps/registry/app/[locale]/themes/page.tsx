@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import { ThemeEditor } from "@/components/theme-editor";
 import type { Locale } from "@/i18n/routing";
+import { loadEditorPresets } from "@/lib/editor-presets";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
 import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
 import { canonical, languageAlternates } from "@/lib/seo";
@@ -75,7 +76,7 @@ export default async function ThemesPage({ params }: Props) {
               {t.rich("description", { code: codeChunk })}
             </p>
           </div>
-          <ThemeEditor />
+          <ThemeEditor presets={await loadEditorPresets()} />
         </div>
       </main>
     </>

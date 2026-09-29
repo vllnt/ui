@@ -10,7 +10,7 @@ import {
 } from "@vllnt/ui";
 import { useTranslations } from "next-intl";
 
-import { EDITOR_PRESETS, type EditorPreset } from "@/lib/editor-presets";
+import type { EditorPreset } from "@/lib/editor-presets";
 import { decodeTheme, encodeTheme } from "@/lib/theme-serialize";
 import {
   DEFAULT_THEME,
@@ -25,10 +25,12 @@ import { ThemePreview } from "./theme-preview";
 const STORAGE_KEY = "vllnt-theme-editor";
 const MODES: ThemeMode[] = ["light", "dark"];
 
-function readActiveTheme(): ThemeData | undefined {
+function readActiveTheme(
+  presets: readonly EditorPreset[],
+): ThemeData | undefined {
   const active = document.documentElement.dataset.theme;
   if (active && active !== "custom") {
-    const preset = EDITOR_PRESETS.find((item) => item.name === active);
+    const preset = presets.find((item) => item.name === active);
     if (preset) {
       return preset.theme;
     }
@@ -46,7 +48,11 @@ function readActiveTheme(): ThemeData | undefined {
  * entire site live (and persists across navigation); the controls also drive
  * the export panel and a focused preview of the chosen mode.
  */
-export function ThemeEditor() {
+export function ThemeEditor({
+  presets,
+}: {
+  readonly presets: readonly EditorPreset[];
+}) {
   const t = useTranslations("pages.themes.editor");
   const [theme, setTheme] = useState<ThemeData>(DEFAULT_THEME);
   const [mode, setMode] = useState<ThemeMode>("dark");
@@ -63,11 +69,11 @@ export function ThemeEditor() {
       setCustomTheme(urlTheme);
       return;
     }
-    const restored = readActiveTheme();
+    const restored = readActiveTheme(presets);
     if (restored) {
       setTheme(restored);
     }
-  }, []);
+  }, [presets]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
@@ -116,7 +122,7 @@ export function ThemeEditor() {
         <div className="space-y-2">
           <span className="text-sm font-semibold">{t("theme")}</span>
           <div className="flex flex-wrap gap-2">
-            {EDITOR_PRESETS.map((preset) => (
+            {presets.map((preset) => (
               <button
                 className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-xs hover:bg-accent"
                 key={preset.name}
