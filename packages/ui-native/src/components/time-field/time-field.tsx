@@ -1,19 +1,10 @@
 "use client";
 
-import { type Ref, useState } from "react";
+import type { Ref } from "react";
+import type { TextInput, TextInputProps } from "react-native";
 
-import {
-  Text as NativeText,
-  type TextInput,
-  type TextInputProps,
-  View,
-} from "react-native";
-
-import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
-import { useControllableState } from "../../primitives/use-controllable-state";
-import { useTheme } from "../../theme/theme-provider";
-import { Input } from "../input/input";
+import { useISOTextField } from "../date-field/iso-text-field";
 
 /** Local wall-clock time ISO contract without a date or timezone. */
 export type ISOTimeString = `${number}:${number}`;
@@ -40,79 +31,11 @@ function isISOTime(value: string): value is ISOTimeString {
 }
 
 /** Keyboard-friendly native time field committing only valid HH:mm values. */
-function TimeField({
-  labels,
-  onBlur,
-  onSubmitEditing,
-  ref,
-  style,
-  valueState,
-  ...props
-}: TimeFieldProps) {
-  const theme = useTheme();
-  const [value, setValue] = useControllableState(valueState);
-  const [draft, setDraft] = useState(value ?? "");
-  const [editing, setEditing] = useState(false);
-  const [invalid, setInvalid] = useState(false);
-  const commit = () => {
-    if (draft.length === 0) {
-      setInvalid(false);
-      setValue(undefined);
-      return;
-    }
-    if (isISOTime(draft)) {
-      setInvalid(false);
-      setValue(draft);
-    } else setInvalid(true);
-  };
-  return (
-    <View>
-      <Input
-        {...props}
-        accessibilityLabel={labels.input}
-        aria-invalid={invalid}
-        inputMode="text"
-        onBlur={(event) => {
-          commit();
-          setEditing(false);
-          onBlur?.(event);
-        }}
-        onChangeText={(text) => {
-          setDraft(text.replaceAll(/[^\d:]/g, "").slice(0, 5));
-          setInvalid(false);
-        }}
-        onFocus={(event) => {
-          setDraft(value ?? "");
-          setEditing(true);
-          props.onFocus?.(event);
-        }}
-        onSubmitEditing={(event) => {
-          commit();
-          onSubmitEditing?.(event);
-        }}
-        placeholder={labels.placeholder}
-        ref={ref}
-        returnKeyType="done"
-        style={[{ minHeight: 44 }, style]}
-        value={
-          editing
-            ? draft
-            : valueState.mode === "controlled"
-              ? (value ?? "")
-              : (value ?? draft)
-        }
-      />
-      {invalid ? (
-        <NativeText
-          accessibilityLiveRegion="polite"
-          accessibilityRole="alert"
-          style={typeStyle(theme, "bodySmall", "destructive")}
-        >
-          {labels.error}
-        </NativeText>
-      ) : null}
-    </View>
-  );
+function TimeField(props: TimeFieldProps) {
+  return useISOTextField(props, {
+    isValid: isISOTime,
+    sanitize: (text) => text.replaceAll(/[^\d:]/g, "").slice(0, 5),
+  });
 }
 TimeField.displayName = "TimeField";
 
