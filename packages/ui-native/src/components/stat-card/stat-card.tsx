@@ -44,6 +44,11 @@ function getToneColor(theme: NativeTheme, tone: StatCardTone): string {
   return colors[tone];
 }
 
+function hasContent(node: ReactNode): boolean {
+  if (typeof node === "number") return !Number.isNaN(node);
+  return node !== undefined && node !== null && node !== false && node !== "";
+}
+
 function StatHeader({
   icon,
   label,
@@ -86,15 +91,18 @@ function StatDetails({
     neutral: "No change",
     up: "Increase",
   } satisfies Record<StatCardTrend, string>;
-  if (!description && !change && !meta) return null;
+  const showChange = hasContent(change);
+  const showDescription = hasContent(description);
+  const showMeta = hasContent(meta);
+  if (!showDescription && !showChange && !showMeta) return null;
   return (
     <CardContent style={{ gap: theme.spacing[3] }}>
-      {description ? (
+      {showDescription ? (
         <Text size="small" tone="muted">
           {description}
         </Text>
       ) : null}
-      {change || meta ? (
+      {showChange || showMeta ? (
         <View
           style={{
             alignItems: "center",
@@ -102,12 +110,12 @@ function StatDetails({
             justifyContent: "space-between",
           }}
         >
-          {change ? (
+          {showChange ? (
             <Text size="caption" weight="medium">
               {trendPrefix[trend]} · {change}
             </Text>
           ) : null}
-          {meta ? (
+          {showMeta ? (
             <Text size="caption" tone="muted">
               {meta}
             </Text>

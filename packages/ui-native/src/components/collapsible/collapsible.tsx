@@ -5,6 +5,7 @@ import {
   type ReactNode,
   type Ref,
   use,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -51,11 +52,16 @@ export type CollapsibleContentProps = Omit<ViewProps, "children" | "ref"> & {
   readonly ref?: Ref<View>;
 };
 
+type CollapsiblePart = "content" | "trigger";
+
 type CollapsibleContextValue = {
+  readonly contentMounted: boolean;
   readonly id: string;
   readonly open: boolean;
   readonly reduceMotion: boolean;
+  readonly register: (part: CollapsiblePart) => () => void;
   readonly toggle: () => void;
+  readonly triggerMounted: boolean;
 };
 
 const CollapsibleContext = createContext<CollapsibleContextValue | undefined>(
@@ -100,16 +106,26 @@ function Collapsible({
       : { mode: "controlled", onChange: onOpenChange, value: open },
   );
   const reduceMotion = useReducedMotion(reducedMotionService);
+  const [mounted, setMounted] = useState({ content: 0, trigger: 0 });
+  const register = useCallback((part: CollapsiblePart) => {
+    setMounted((current) => ({ ...current, [part]: current[part] + 1 }));
+    return () => {
+      setMounted((current) => ({ ...current, [part]: current[part] - 1 }));
+    };
+  }, []);
   const value = useMemo(
     () => ({
+      contentMounted: mounted.content > 0,
       id,
       open: expanded,
       reduceMotion,
+      register,
       toggle: () => {
         setExpanded(!expanded);
       },
+      triggerMounted: mounted.trigger > 0,
     }),
-    [expanded, id, reduceMotion, setExpanded],
+    [expanded, id, mounted, reduceMotion, register, setExpanded],
   );
   return (
     <CollapsibleContext value={value}>
@@ -132,6 +148,8 @@ function CollapsibleTrigger({
 }: CollapsibleTriggerProps) {
   const theme = useTheme();
   const collapsible = useCollapsible();
+  const { register } = collapsible;
+  useEffect(() => register("trigger"), [register]);
   const handlePress = () => {
     collapsible.toggle();
   };
@@ -144,7 +162,9 @@ function CollapsibleTrigger({
         disabled: disabled === true,
         expanded: collapsible.open,
       }}
-      aria-controls={collapsible.open ? `${collapsible.id}-content` : undefined}
+      aria-controls={
+        collapsible.contentMounted ? `${collapsible.id}-content` : undefined
+      }
       disabled={disabled}
       id={`${collapsible.id}-trigger`}
       onPress={handlePress}
@@ -179,6 +199,11 @@ function CollapsibleContent({
     () => new Animated.Value(collapsible.reduceMotion ? 1 : 0),
   );
   void setProgress;
+  const { open, register } = collapsible;
+  useEffect(() => {
+    if (open) return register("content");
+    return;
+  }, [open, register]);
   useEffect(() => {
     if (!collapsible.open) return;
     const animation = Animated.timing(progress, {
@@ -196,7 +221,9 @@ function CollapsibleContent({
   return (
     <Animated.View
       {...props}
-      aria-labelledby={`${collapsible.id}-trigger`}
+      aria-labelledby={
+        collapsible.triggerMounted ? `${collapsible.id}-trigger` : undefined
+      }
       id={`${collapsible.id}-content`}
       ref={ref}
       style={[

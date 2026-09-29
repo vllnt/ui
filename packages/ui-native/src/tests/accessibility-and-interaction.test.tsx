@@ -233,6 +233,47 @@ describe("native review regressions", () => {
     ]);
   });
 
+  it("removes a failed avatar image and restores it for a new source", () => {
+    const tree = (uri: string) =>
+      themed(
+        <Avatar>
+          <AvatarImage accessibilityLabel="Avatar" source={{ uri }} />
+          <AvatarFallback>
+            <Text>Fallback</Text>
+          </AvatarFallback>
+        </Avatar>,
+      );
+    const onError = jest.fn();
+    render(
+      themed(
+        <Avatar>
+          <AvatarImage
+            accessibilityLabel="Avatar"
+            onError={onError}
+            source={{ uri: "broken" }}
+          />
+          <AvatarFallback>
+            <Text>Fallback</Text>
+          </AvatarFallback>
+        </Avatar>,
+      ),
+    );
+    fireEvent(screen.getByLabelText("Avatar"), "error", {
+      nativeEvent: { error: "failed" },
+    });
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(screen.queryByLabelText("Avatar")).toBeNull();
+    expect(screen.getByText("Fallback")).toBeOnTheScreen();
+    screen.rerender(tree("broken"));
+    expect(screen.queryByLabelText("Avatar")).toBeNull();
+    screen.rerender(tree("working"));
+    expect(screen.getByLabelText("Avatar")).toBeOnTheScreen();
+    fireEvent(screen.getByLabelText("Avatar"), "load", { nativeEvent: {} });
+    expect(screen.queryByText("Fallback")).toBeNull();
+    screen.rerender(tree("broken"));
+    expect(screen.getByLabelText("Avatar")).toBeOnTheScreen();
+  });
+
   it("resets avatar fallback and copied state when their sources fail", async () => {
     let copyFails = false;
     const view = render(

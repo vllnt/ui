@@ -141,7 +141,8 @@ function AvatarGroup({
   style,
   ...props
 }: AvatarGroupProps) {
-  const visibleCount = Math.max(0, max ?? items.length);
+  const limit = max === undefined || Number.isNaN(max) ? items.length : max;
+  const visibleCount = Math.max(0, limit);
   const visibleItems = items.slice(0, visibleCount);
   const hiddenCount = Math.max(0, items.length - visibleItems.length);
   const hiddenLabel = overflowLabel

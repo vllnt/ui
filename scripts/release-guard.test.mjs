@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 import { releaseVersion } from "./release-guard.mjs";
 
@@ -46,4 +49,35 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.match(native, /if: \$\{\{ false \}\}/);
   assert.match(native, /dist-tag add "@vllnt\/ui-native@\$\{CANARY_VERSION\}" canary/);
   for (const workflow of [web, native]) assert.match(workflow, /node --test scripts\/release-guard.test.mjs/);
+});
+test("native publisher distinguishes unpublished versions from registry failures", () => {
+  const workflow = read(".github/workflows/native-canary.yml");
+  const fn = workflow.match(/^( +)version_state\(\) \{\n[\s\S]*?^\1\}\n/m);
+  assert.ok(fn, "version_state() must exist in native-canary.yml");
+  const body = fn[0].replace(new RegExp(`^${fn[1]}`, "gm"), "");
+  const dir = mkdtempSync(join(tmpdir(), "version-state-"));
+  const npmStub = join(dir, "npm");
+  const run = (stub) => {
+    writeFileSync(npmStub, `#!/usr/bin/env bash\n${stub}\n`, { mode: 0o755 });
+    return spawnSync("bash", ["-c", `set -euo pipefail\n${body}\nversion_state "@vllnt/ui-core@0.1.0-canary.1.shaaaaaaaaaaaaa"`], {
+      encoding: "utf8",
+      env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, RUNNER_TEMP: dir },
+    });
+  };
+  const cases = [
+    ["echo 0.1.0-canary.1.shaaaaaaaaaaaaa", 0, "present"],
+    ["exit 0", 0, "absent"],
+    ["echo 'npm error code E404' >&2; exit 1", 0, "absent"],
+    ["echo 'npm error code ETIMEDOUT' >&2; exit 1", 1, ""],
+    ["echo 'npm error code E503' >&2; exit 1", 1, ""],
+  ];
+  try {
+    for (const [stub, status, stdout] of cases) {
+      const result = run(stub);
+      assert.equal(result.status, status, stub);
+      assert.equal(result.stdout.trim(), stdout, stub);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

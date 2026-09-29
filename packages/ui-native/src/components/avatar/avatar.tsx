@@ -91,12 +91,21 @@ function AvatarImage({
   ...props
 }: AvatarImageProps) {
   const { setImageLoaded } = useAvatar();
+  // Compare by value so an inline `source` object does not restart a load.
+  const sourceKey = JSON.stringify(source ?? null);
+  const [failedSourceKey, setFailedSourceKey] = useState<null | string>(null);
+  const [currentSourceKey, setCurrentSourceKey] = useState(sourceKey);
+  if (currentSourceKey !== sourceKey) {
+    setCurrentSourceKey(sourceKey);
+    setFailedSourceKey(null);
+  }
   useEffect(() => {
     setImageLoaded(false);
     return () => {
       setImageLoaded(false);
     };
-  }, [setImageLoaded, source]);
+  }, [setImageLoaded, sourceKey]);
+  if (failedSourceKey === sourceKey) return null;
   return (
     <Image
       {...props}
@@ -104,6 +113,7 @@ function AvatarImage({
       accessible
       onError={(event) => {
         setImageLoaded(false);
+        setFailedSourceKey(sourceKey);
         onError?.(event);
       }}
       onLoad={(event) => {

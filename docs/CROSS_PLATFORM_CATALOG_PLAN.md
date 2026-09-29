@@ -90,7 +90,7 @@ Keep legacy fields for one compatibility cycle, but add a versioned renderer mod
       "install": {
         "kind": "unavailable",
         "plannedCommand": "pnpm add @vllnt/ui-native@canary",
-        "reason": "The first synchronized native canary has not been published."
+        "reason": "Only a manually bootstrapped pre-release exists on npm; it has no build provenance and is not a supported install. The first workflow-built synchronized canary has not been published."
       },
       "source": ["..."],
       "exports": ["Button"],
