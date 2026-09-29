@@ -6,6 +6,7 @@ import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type VsComparisonConfig = {
   /** Call-to-action link below the table. */
@@ -54,7 +55,7 @@ export async function VsComparisonPage({
       jsonLd={breadcrumbTrailLd(locale, [
         { name: `VLLNT UI vs ${otherName}`, path: pathname },
       ])}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
         <h1 className="text-4xl font-semibold leading-tight md:text-5xl">

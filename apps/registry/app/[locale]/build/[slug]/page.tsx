@@ -10,6 +10,7 @@ import { Link, type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
 import { breadcrumbTrailLd, faqPageLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getUseCase, USE_CASES } from "@/lib/use-cases";
 
 type Props = {
@@ -73,7 +74,7 @@ export default async function UseCasePage({ params }: Props) {
         ]),
         faqPageLd(useCase.faq),
       ]}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
         <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">

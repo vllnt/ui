@@ -6,6 +6,7 @@ import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount, getLibraryVersion } from "@/lib/stats";
 
 type Props = {
@@ -71,7 +72,7 @@ export default async function VsShadcnPage({ params }: Props) {
       jsonLd={breadcrumbTrailLd(locale, [
         { name: "VLLNT UI vs shadcn/ui", path: "/vs/shadcn" },
       ])}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto max-w-4xl px-4 py-16 lg:px-8">
         <p className="text-sm uppercase tracking-wide text-muted-foreground">

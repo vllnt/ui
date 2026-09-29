@@ -15,6 +15,7 @@ import {
 import { jsonLdScript } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const DESCRIPTION =
   "Canonical VLLNT UI design rules, tokens, component patterns, accessibility expectations, and agent-facing guidance.";
@@ -104,7 +105,7 @@ export default async function DesignPage({ params }: Props) {
   };
 
   return (
-    <PageShell locale={locale}>
+    <PageShell sections={await getSidebarSections(undefined, locale)}>
       <script
         dangerouslySetInnerHTML={{ __html: jsonLdScript(techArticleLd) }}
         type="application/ld+json"

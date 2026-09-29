@@ -9,6 +9,7 @@ import { breadcrumbTrailLd, techArticleLd } from "@/lib/jsonld";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
 import { frontmatterPageMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -46,7 +47,7 @@ export default async function PhilosophyPage({ params }: Props) {
           url: canonical("/philosophy", locale),
         }),
       ]}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto px-4 py-16 lg:px-8">
         <div className="mb-8">

@@ -15,7 +15,11 @@ import {
 } from "@/lib/platform";
 import { registry } from "@/lib/registry";
 import { canonical } from "@/lib/seo";
-import { familyPath, groupedComponents } from "@/lib/sidebar-sections";
+import {
+  familyPath,
+  getSidebarSections,
+  groupedComponents,
+} from "@/lib/sidebar-sections";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -99,7 +103,7 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
           url: canonical(catalogPathname, locale),
         }),
       ]}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto px-4 py-16 lg:px-8">
         <div className="mb-12">

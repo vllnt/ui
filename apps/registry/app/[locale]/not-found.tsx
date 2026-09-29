@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { PageShell } from "@/components/page-shell";
 import { isLocale, Link } from "@/i18n/routing";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 export const metadata: Metadata = {
   description: "We couldn't find the page you were looking for.",
@@ -29,7 +30,7 @@ export default async function NotFound() {
   const t = await getTranslations({ locale, namespace: "pages.notFound" });
 
   return (
-    <PageShell locale={locale}>
+    <PageShell sections={await getSidebarSections(undefined, locale)}>
       <div className="container mx-auto px-4 py-24 lg:px-8 max-w-3xl">
         <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
           404

@@ -8,6 +8,7 @@ import { softwareApplicationLd } from "@/lib/jsonld";
 import { getNpmDistributionTags } from "@/lib/npm-version";
 import { pageMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount } from "@/lib/stats";
 
 type Props = {
@@ -44,7 +45,7 @@ export default async function HomePage({ params }: Props) {
         name: "VLLNT UI",
         url: canonical("/", locale),
       })}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <Landing />
     </PageShell>

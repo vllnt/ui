@@ -8,6 +8,7 @@ import { type ChangelogTypeFilter, getChangelogEntries } from "@/lib/changelog";
 import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
 import { canonical, localizePathname } from "@/lib/seo";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type SearchParameters = {
   readonly from?: string;
@@ -164,7 +165,7 @@ export default async function ChangelogPage({
           },
         },
       ]}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto max-w-5xl px-4 py-16 lg:px-8">
         <Breadcrumb

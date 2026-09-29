@@ -8,6 +8,7 @@ import type { Locale } from "@/i18n/routing";
 import { loadEditorPresets } from "@/lib/editor-presets";
 import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const codeChunk = (chunks: ReactNode) => (
   <code className="rounded bg-muted px-1.5 py-0.5 text-sm">{chunks}</code>
@@ -48,7 +49,7 @@ export default async function ThemesPage({ params }: Props) {
         [{ name: t("metaTitle"), path: "/themes" }],
         common("home"),
       )}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
         <div className="mb-8 border-b border-border pb-8">

@@ -6,6 +6,7 @@ import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd, collectionPageLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
   readonly params: Promise<{ locale: Locale }>;
@@ -80,7 +81,7 @@ export default async function VsIndexPage({ params }: Props) {
           url: canonical("/vs", locale),
         }),
       ]}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto max-w-3xl px-4 py-16 lg:px-8">
         <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>

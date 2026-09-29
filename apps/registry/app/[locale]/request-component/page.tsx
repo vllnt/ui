@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PageShell } from "@/components/page-shell";
 import type { Locale } from "@/i18n/routing";
 import { pageMetadata } from "@/lib/og";
+import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { RequestComponentForm } from "./request-component-form";
 
@@ -33,7 +34,7 @@ export default async function RequestComponentPage({ params }: Props) {
   const t = await getTranslations("pages.requestComponent");
 
   return (
-    <PageShell locale={locale}>
+    <PageShell sections={await getSidebarSections(undefined, locale)}>
       <div className="container mx-auto max-w-2xl px-4 py-16 lg:px-8">
         <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>
         <p className="text-muted-foreground text-lg mb-8">{t("description")}</p>

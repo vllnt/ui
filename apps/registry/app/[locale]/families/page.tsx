@@ -18,6 +18,7 @@ import { canonical, localizePathname } from "@/lib/seo";
 import {
   familyPath,
   getCategoryDescription,
+  getSidebarSections,
   groupedComponents,
 } from "@/lib/sidebar-sections";
 
@@ -77,7 +78,7 @@ export default async function FamiliesPage({ params, searchParams }: Props) {
           url: canonical(PATHNAME, locale),
         }),
       ]}
-      locale={locale}
+      sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto px-4 py-16 lg:px-8">
         <Breadcrumb
