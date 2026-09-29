@@ -29,7 +29,6 @@
     "doctor:full": "npx --yes react-doctor . --offline --full --verbose",
     "doctor:json": "npx --yes react-doctor . --offline --json > .react-doctor.json",
     "doctor:errors": "npx --yes react-doctor . --offline --fail-on error",
-    "doctor:diff": "npx --yes react-doctor . --offline --diff origin/main",
     "doctor:staged": "git diff --cached --name-only --diff-filter=ACM | grep -E '\\.(tsx|jsx|ts)$' | npx --yes react-doctor . --offline --changed-files-from /dev/stdin --fail-on error",
     "doctor:score": "npx --yes react-doctor . --offline --score"
   },
