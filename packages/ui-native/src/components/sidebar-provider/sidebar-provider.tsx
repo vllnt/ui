@@ -6,7 +6,9 @@ import {
   type Ref,
   use,
   useCallback,
+  useLayoutEffect,
   useMemo,
+  useRef,
 } from "react";
 
 import { View, type ViewProps } from "react-native";
@@ -66,10 +68,24 @@ function SidebarProvider({
           onChange: onOpenChange,
         }
       : { mode: "controlled", onChange: onOpenChange, value: open };
-  const [resolvedOpen, setOpen] = useControllableState(stateOptions);
+  const controlled = open !== undefined;
+  const [resolvedOpen, setResolvedOpen] = useControllableState(stateOptions);
+  // Uncontrolled updates read this ref so repeated calls before a re-render
+  // build on each other; controlled updates always derive from the owner value.
+  const latestOpenRef = useRef(resolvedOpen);
+  useLayoutEffect(() => {
+    latestOpenRef.current = resolvedOpen;
+  }, [resolvedOpen]);
+  const setOpen = useCallback(
+    (nextOpen: boolean) => {
+      if (!controlled) latestOpenRef.current = nextOpen;
+      setResolvedOpen(nextOpen);
+    },
+    [controlled, setResolvedOpen],
+  );
   const toggle = useCallback(() => {
-    setOpen(!resolvedOpen);
-  }, [resolvedOpen, setOpen]);
+    setOpen(!(controlled ? resolvedOpen : latestOpenRef.current));
+  }, [controlled, resolvedOpen, setOpen]);
   const value = useMemo(
     () => ({ open: resolvedOpen, presentation, setOpen, toggle }),
     [presentation, resolvedOpen, setOpen, toggle],
