@@ -37,18 +37,14 @@ import {
   softwareSourceCodeLd,
   techArticleLd,
 } from "@/lib/jsonld";
-import {
-  generateOGImageURL,
-  generateOGMetadata,
-  generateTwitterMetadata,
-} from "@/lib/og";
+import { generateOGImageURL, pageMetadata } from "@/lib/og";
 import {
   getPlatform,
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
 import { registry } from "@/lib/registry";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
 import {
   familyPath,
@@ -134,30 +130,23 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     ? t("nativeMetaDescription", { description: purposeDescription, title })
     : purposeDescription;
   const pathname = `/components/${slug}`;
+  const ogTitle = component.native ? t("nativeMetaTitle", { title }) : title;
 
-  const ogParameters = {
-    category,
-    description,
-    title: component.native ? t("nativeMetaTitle", { title }) : title,
-    type: "component" as const,
-  };
-
-  return {
+  return pageMetadata({
     alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
       types: {
         "application/json+oembed": oembedUrl(canonical(pathname, locale)),
       },
     },
     description,
     keywords: componentMdx?.frontmatter.keywords,
-    openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
+    locale,
+    og: { category, description, title: ogTitle, type: "component" },
+    pathname,
     title: component.native
-      ? t("nativeMetaTitle", { title })
+      ? ogTitle
       : (handWrittenTitle ?? `${title} - VLLNT UI`),
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+  });
 }
 
 export default async function ComponentPage(props: Props) {

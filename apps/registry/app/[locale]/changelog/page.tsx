@@ -6,8 +6,8 @@ import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { type ChangelogTypeFilter, getChangelogEntries } from "@/lib/changelog";
 import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type SearchParameters = {
@@ -38,30 +38,16 @@ export async function generateMetadata({
 }: LocaleParameters): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.changelog" });
-  const title = t("metaTitle");
-  const description = t("metaDescription");
 
-  return {
-    alternates: {
-      canonical: canonical("/changelog", locale),
-      languages: languageAlternates("/changelog"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      {
-        description,
-        title,
-        type: "docs",
-      },
-      { locale, pathname: "/changelog" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
       type: "docs",
-    }),
-  };
+    },
+    pathname: "/changelog",
+  });
 }
 
 function normalizeType(value?: string): ChangelogTypeFilter {

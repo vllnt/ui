@@ -11,14 +11,14 @@ import {
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { pageMetadata } from "@/lib/og";
 import {
   getPlatform,
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
 import { registry } from "@/lib/registry";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, localizePathname } from "@/lib/seo";
 import {
   familyPath,
   getCategoryDescription,
@@ -39,23 +39,12 @@ const DESCRIPTION =
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
-  return {
-    alternates: {
-      canonical: canonical(PATHNAME, locale),
-      languages: languageAlternates(PATHNAME),
-    },
-    description: DESCRIPTION,
-    openGraph: generateOGMetadata(
-      { description: DESCRIPTION, title: TITLE, type: "page" },
-      { locale, pathname: PATHNAME },
-    ),
+  return pageMetadata({
+    locale,
+    og: { description: DESCRIPTION, title: TITLE, type: "page" },
+    pathname: PATHNAME,
     title: `${TITLE} — VLLNT UI`,
-    twitter: generateTwitterMetadata({
-      description: DESCRIPTION,
-      title: TITLE,
-      type: "page",
-    }),
-  };
+  });
 }
 
 export default async function FamiliesPage({ params, searchParams }: Props) {

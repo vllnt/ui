@@ -13,8 +13,8 @@ import {
   slugifyHeading,
 } from "@/lib/design-guide";
 import { jsonLdScript } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const DESCRIPTION =
@@ -30,27 +30,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
-  return {
-    alternates: {
-      canonical: canonical("/design", locale),
-      languages: languageAlternates("/design"),
-    },
-    description: DESCRIPTION,
-    openGraph: generateOGMetadata(
-      {
-        description: DESCRIPTION,
-        title: "VLLNT UI Design Guide",
-        type: "docs",
-      },
-      { locale, pathname: "/design" },
-    ),
-    title: "Design Guide",
-    twitter: generateTwitterMetadata({
+  return pageMetadata({
+    locale,
+    og: {
       description: DESCRIPTION,
       title: "VLLNT UI Design Guide",
       type: "docs",
-    }),
-  };
+    },
+    pathname: "/design",
+    title: "Design Guide",
+  });
 }
 
 function getNodeText(children: ReactNode): string {

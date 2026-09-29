@@ -3,8 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import type { Locale } from "@/i18n/routing";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 import { RequestComponentForm } from "./request-component-form";
@@ -19,26 +18,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     namespace: "pages.requestComponent",
   });
-  const ogParameters = {
-    description: t("metaDescription"),
-    title: t("title"),
-    type: "page" as const,
-  };
 
-  return {
-    alternates: {
-      canonical: canonical("/request-component", locale),
-      languages: languageAlternates("/request-component"),
-    },
-    description: ogParameters.description,
-    openGraph: generateOGMetadata(ogParameters, {
-      locale,
-      pathname: "/request-component",
-    }),
+  return pageMetadata({
+    locale,
+    og: { description: t("metaDescription"), title: t("title"), type: "page" },
+    pathname: "/request-component",
     robots: { follow: true, index: false },
     title: `${t("title")} · VLLNT UI`,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+  });
 }
 
 export default async function RequestComponentPage({ params }: Props) {

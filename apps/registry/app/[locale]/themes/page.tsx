@@ -7,8 +7,7 @@ import { ThemeEditor } from "@/components/theme-editor";
 import type { Locale } from "@/i18n/routing";
 import { loadEditorPresets } from "@/lib/editor-presets";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const codeChunk = (chunks: ReactNode) => (
@@ -25,26 +24,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.themes" });
-  const title = t("metaTitle");
-  const description = t("metaDescription");
 
-  return {
-    alternates: {
-      canonical: canonical("/themes", locale),
-      languages: languageAlternates("/themes"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      { description, title, type: "page" },
-      { locale, pathname: "/themes" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
       type: "page",
-    }),
-  };
+    },
+    pathname: "/themes",
+  });
 }
 
 export default async function ThemesPage({ params }: Props) {

@@ -17,14 +17,14 @@ import {
   faqPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { pageMetadata } from "@/lib/og";
 import {
   getPlatform,
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
 import { registry } from "@/lib/registry";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, localizePathname } from "@/lib/seo";
 import {
   getCategoryDescription,
   getSidebarSections,
@@ -58,42 +58,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  const pathname = `/families/${category}`;
   const copy = getFamilyCopy(group.category);
-  const description = copy?.intro ?? getCategoryDescription(group.category);
-  const ogTitle = `${group.label} components`;
   const lower = group.label.toLowerCase();
-  const keywords = [
-    `${lower} components`,
-    `react ${lower} components`,
-    `${lower} ui components`,
-    `${lower} component library`,
-    `shadcn ${lower} components`,
-    `accessible ${lower} components`,
-    ...group.items
-      .slice(0, 6)
-      .map((item) => `${item.title.toLowerCase()} component`),
-  ];
 
-  return {
-    alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
-    },
-    description,
-    keywords,
-    openGraph: generateOGMetadata(
-      { category: group.label, description, title: ogTitle, type: "page" },
-      { locale, pathname },
-    ),
-    title: `${group.label} Components — VLLNT UI`,
-    twitter: generateTwitterMetadata({
+  return pageMetadata({
+    keywords: [
+      `${lower} components`,
+      `react ${lower} components`,
+      `${lower} ui components`,
+      `${lower} component library`,
+      `shadcn ${lower} components`,
+      `accessible ${lower} components`,
+      ...group.items
+        .slice(0, 6)
+        .map((item) => `${item.title.toLowerCase()} component`),
+    ],
+    locale,
+    og: {
       category: group.label,
-      description,
-      title: ogTitle,
+      description: copy?.intro ?? getCategoryDescription(group.category),
+      title: `${group.label} components`,
       type: "page",
-    }),
-  };
+    },
+    pathname: `/families/${category}`,
+    title: `${group.label} Components — VLLNT UI`,
+  });
 }
 
 export default async function FamilyPage({ params, searchParams }: Props) {

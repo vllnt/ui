@@ -9,8 +9,8 @@ import { BadgeSnippets } from "@/components/badge-snippets";
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { withRef } from "@/lib/share";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getTemplatePath, TEMPLATES } from "@/lib/templates";
@@ -26,27 +26,11 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
-  return {
-    alternates: {
-      canonical: canonical("/templates", locale),
-      languages: languageAlternates("/templates"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      {
-        description,
-        title,
-        type: "docs",
-      },
-      { locale, pathname: "/templates" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
-      type: "docs",
-    }),
-  };
+  return pageMetadata({
+    locale,
+    og: { description, title, type: "docs" },
+    pathname: "/templates",
+  });
 }
 
 export default async function TemplatesPage({ params }: Props) {

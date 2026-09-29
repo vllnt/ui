@@ -11,14 +11,14 @@ import {
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { frontmatterPageMetadata, pageMetadata } from "@/lib/og";
 import {
   getPlatform,
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
 import { registry } from "@/lib/registry";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { canonical } from "@/lib/seo";
 import {
   familyPath,
   getSidebarSections,
@@ -39,39 +39,23 @@ export async function generateMetadata({
     getPageContent("components", locale),
     getTranslations({ locale, namespace: "pages.components" }),
   ]);
-  const og = frontmatter.og;
-  const nativeFilter = getPlatform(query.platform, "all") === "native";
-  const pathname = nativeFilter ? "/components?platform=native" : "/components";
-  const title = nativeFilter ? t("nativeMetaTitle") : frontmatter.title;
-  const description = nativeFilter
-    ? t("nativeMetaDescription")
-    : frontmatter.description;
-  const socialTitle = nativeFilter ? title : (og?.title ?? title);
-  const socialDescription = nativeFilter
-    ? description
-    : (og?.description ?? description);
 
-  return {
-    alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
+  if (getPlatform(query.platform, "all") !== "native") {
+    return frontmatterPageMetadata(frontmatter, {
+      locale,
+      pathname: "/components",
+    });
+  }
+
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("nativeMetaDescription"),
+      title: t("nativeMetaTitle"),
+      type: frontmatter.og?.type ?? frontmatter.type,
     },
-    description,
-    openGraph: generateOGMetadata(
-      {
-        description: socialDescription,
-        title: socialTitle,
-        type: og?.type ?? frontmatter.type,
-      },
-      { locale, pathname },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description: socialDescription,
-      title: socialTitle,
-      type: og?.type ?? frontmatter.type,
-    }),
-  };
+    pathname: "/components?platform=native",
+  });
 }
 
 export default async function ComponentsPage({ params, searchParams }: Props) {

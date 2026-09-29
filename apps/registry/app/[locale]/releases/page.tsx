@@ -6,8 +6,8 @@ import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { getReleaseRecords } from "@/lib/changelog";
 import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -17,30 +17,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.releases" });
-  const title = t("metaTitle");
-  const description = t("metaDescription");
 
-  return {
-    alternates: {
-      canonical: canonical("/releases", locale),
-      languages: languageAlternates("/releases"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      {
-        description,
-        title,
-        type: "docs",
-      },
-      { locale, pathname: "/releases" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
       type: "docs",
-    }),
-  };
+    },
+    pathname: "/releases",
+  });
 }
 
 async function formatComponentDelta(value?: number): Promise<string> {

@@ -5,8 +5,7 @@ import { Footer } from "@/components/footer/footer";
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -30,25 +29,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     locale,
     namespace: "pages.vs.vercelAiSdk",
   });
-  const ogParameters = {
-    description: t("metaDescription"),
-    title: t("metaTitle"),
-    type: "page" as const,
-  };
 
-  return {
-    alternates: {
-      canonical: canonical(PATHNAME, locale),
-      languages: languageAlternates(PATHNAME),
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
+      type: "page",
     },
-    description: ogParameters.description,
-    openGraph: generateOGMetadata(ogParameters, {
-      locale,
-      pathname: PATHNAME,
-    }),
+    pathname: PATHNAME,
     title: `${t("metaTitle")} | VLLNT UI`,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+  });
 }
 
 export default async function VsVercelAiSdkPage({ params }: Props) {

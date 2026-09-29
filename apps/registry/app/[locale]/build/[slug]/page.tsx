@@ -13,8 +13,7 @@ import {
   faqPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getUseCase, USE_CASES } from "@/lib/use-cases";
 
@@ -35,23 +34,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  const pathname = `/build/${slug}`;
-  const ogParameters = {
-    description: useCase.description,
-    title: useCase.title,
-    type: "page" as const,
-  };
-
-  return {
-    alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
+  return pageMetadata({
+    locale,
+    og: {
+      description: useCase.description,
+      title: useCase.title,
+      type: "page",
     },
-    description: useCase.description,
-    openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
+    pathname: `/build/${slug}`,
     title: `${useCase.title} | VLLNT UI`,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+  });
 }
 
 export default async function UseCasePage({ params }: Props) {

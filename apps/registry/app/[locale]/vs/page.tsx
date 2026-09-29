@@ -8,8 +8,8 @@ import {
   collectionPageLd,
   jsonLdScriptAttributes,
 } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -19,22 +19,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.vs.index" });
-  const ogParameters = {
-    description: t("metaDescription"),
-    title: t("metaTitle"),
-    type: "page" as const,
-  };
 
-  return {
-    alternates: {
-      canonical: canonical("/vs", locale),
-      languages: languageAlternates("/vs"),
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
+      type: "page",
     },
-    description: ogParameters.description,
-    openGraph: generateOGMetadata(ogParameters, { locale, pathname: "/vs" }),
-    title: ogParameters.title,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+    pathname: "/vs",
+  });
 }
 
 const COMPARISONS: readonly {

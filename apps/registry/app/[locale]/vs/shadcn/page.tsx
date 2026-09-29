@@ -5,8 +5,7 @@ import type { ReactNode } from "react";
 import { PlatformSidebar } from "@/components/platform-sidebar";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount, getLibraryVersion } from "@/lib/stats";
 
@@ -17,25 +16,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.vs.shadcn" });
-  const ogParameters = {
-    description: t("metaDescription"),
-    title: t("metaTitle"),
-    type: "page" as const,
-  };
 
-  return {
-    alternates: {
-      canonical: canonical("/vs/shadcn", locale),
-      languages: languageAlternates("/vs/shadcn"),
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
+      type: "page",
     },
-    description: ogParameters.description,
-    openGraph: generateOGMetadata(ogParameters, {
-      locale,
-      pathname: "/vs/shadcn",
-    }),
-    title: ogParameters.title,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+    pathname: "/vs/shadcn",
+  });
 }
 
 type RowMeta = {

@@ -11,8 +11,8 @@ import {
   techArticleLd,
 } from "@/lib/jsonld";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { frontmatterPageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -22,29 +22,11 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const { frontmatter } = await getPageContent("philosophy", locale);
-  const og = frontmatter.og;
 
-  return {
-    alternates: {
-      canonical: canonical("/philosophy", locale),
-      languages: languageAlternates("/philosophy"),
-    },
-    description: frontmatter.description,
-    openGraph: generateOGMetadata(
-      {
-        description: og?.description ?? frontmatter.description,
-        title: og?.title ?? frontmatter.title,
-        type: og?.type ?? frontmatter.type,
-      },
-      { locale, pathname: "/philosophy" },
-    ),
-    title: frontmatter.title,
-    twitter: generateTwitterMetadata({
-      description: og?.description ?? frontmatter.description,
-      title: og?.title ?? frontmatter.title,
-      type: og?.type ?? frontmatter.type,
-    }),
-  };
+  return frontmatterPageMetadata(frontmatter, {
+    locale,
+    pathname: "/philosophy",
+  });
 }
 
 export default async function PhilosophyPage({ params }: Props) {

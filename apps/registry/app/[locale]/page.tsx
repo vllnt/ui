@@ -6,8 +6,8 @@ import { PlatformSidebar } from "@/components/platform-sidebar";
 import type { Locale } from "@/i18n/routing";
 import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
 import { getNpmDistributionTags } from "@/lib/npm-version";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount } from "@/lib/stats";
 
@@ -19,26 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const componentCount = getComponentCount();
   const { latest: version } = await getNpmDistributionTags();
-  const title = "VLLNT UI — UI components & design system for AI agents";
-  const description = `Open-source React components for building AI apps: chat, streaming text, tool calls, citations, agent activity, and artifacts. ${componentCount} accessible components, readable by AI agents via llms.txt + JSON. Install with the shadcn CLI. v${version}, MIT.`;
 
-  return {
-    alternates: {
-      canonical: canonical("/", locale),
-      languages: languageAlternates("/"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      { description, title, type: "home" },
-      { locale, pathname: "/" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
+  return pageMetadata({
+    locale,
+    og: {
+      description: `Open-source React components for building AI apps: chat, streaming text, tool calls, citations, agent activity, and artifacts. ${componentCount} accessible components, readable by AI agents via llms.txt + JSON. Install with the shadcn CLI. v${version}, MIT.`,
+      title: "VLLNT UI — UI components & design system for AI agents",
       type: "home",
-    }),
-  };
+    },
+    pathname: "/",
+  });
 }
 
 export default async function HomePage({ params }: Props) {
