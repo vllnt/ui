@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
-import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount, getLibraryVersion } from "@/lib/stats";
 
 type Props = {
@@ -68,75 +67,70 @@ export default async function VsShadcnPage({ params }: Props) {
   const version = getLibraryVersion();
 
   return (
-    <>
-      <script
-        {...jsonLdScriptAttributes(
-          breadcrumbTrailLd(locale, [
-            { name: "VLLNT UI vs shadcn/ui", path: "/vs/shadcn" },
-          ]),
-        )}
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <div className="container mx-auto max-w-4xl px-4 py-16 lg:px-8">
-          <p className="text-sm uppercase tracking-wide text-muted-foreground">
-            {t("eyebrow", { version })}
-          </p>
-          <h1 className="mt-2 text-4xl font-semibold">{t("title")}</h1>
+    <PageShell
+      jsonLd={breadcrumbTrailLd(locale, [
+        { name: "VLLNT UI vs shadcn/ui", path: "/vs/shadcn" },
+      ])}
+      locale={locale}
+    >
+      <div className="container mx-auto max-w-4xl px-4 py-16 lg:px-8">
+        <p className="text-sm uppercase tracking-wide text-muted-foreground">
+          {t("eyebrow", { version })}
+        </p>
+        <h1 className="mt-2 text-4xl font-semibold">{t("title")}</h1>
 
-          <div className="prose prose-lg dark:prose-invert mt-6 max-w-none">
-            <h2>{t("tldrHeading")}</h2>
-            <p>{t.rich("tldr1", { code: codeChunk })}</p>
-            <p>{t("tldr2")}</p>
-            <p>{t.rich("tldr3", { link: templatesLinkChunk })}</p>
-          </div>
-
-          <h2 className="mt-12 text-2xl font-semibold">{t("sideBySide")}</h2>
-          <div className="mt-4 overflow-x-auto rounded-lg border border-border">
-            <table className="w-full text-sm">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="p-3 text-left font-semibold">
-                    {t("colAttribute")}
-                  </th>
-                  <th className="p-3 text-left font-semibold">VLLNT UI</th>
-                  <th className="p-3 text-left font-semibold">shadcn/ui</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ROWS.map((row) => (
-                  <tr className="border-t border-border" key={row.key}>
-                    <td className="p-3 font-medium">
-                      {t(`rows.${row.key}.attribute`)}
-                    </td>
-                    <td
-                      className={
-                        row.winner === "vllnt" ? "p-3 font-semibold" : "p-3"
-                      }
-                    >
-                      {t(`rows.${row.key}.vllnt`, { count: componentCount })}
-                    </td>
-                    <td
-                      className={
-                        row.winner === "shadcn" ? "p-3 font-semibold" : "p-3"
-                      }
-                    >
-                      {t(`rows.${row.key}.shadcn`)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="prose prose-lg dark:prose-invert mt-12 max-w-none">
-            <h2>{t("whenHeading")}</h2>
-            <p>{t.rich("when1", { strong: strongChunk })}</p>
-            <p>{t.rich("when2", { strong: strongChunk })}</p>
-            <p>{t("when3")}</p>
-          </div>
+        <div className="prose prose-lg dark:prose-invert mt-6 max-w-none">
+          <h2>{t("tldrHeading")}</h2>
+          <p>{t.rich("tldr1", { code: codeChunk })}</p>
+          <p>{t("tldr2")}</p>
+          <p>{t.rich("tldr3", { link: templatesLinkChunk })}</p>
         </div>
-      </main>
-    </>
+
+        <h2 className="mt-12 text-2xl font-semibold">{t("sideBySide")}</h2>
+        <div className="mt-4 overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-muted">
+              <tr>
+                <th className="p-3 text-left font-semibold">
+                  {t("colAttribute")}
+                </th>
+                <th className="p-3 text-left font-semibold">VLLNT UI</th>
+                <th className="p-3 text-left font-semibold">shadcn/ui</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ROWS.map((row) => (
+                <tr className="border-t border-border" key={row.key}>
+                  <td className="p-3 font-medium">
+                    {t(`rows.${row.key}.attribute`)}
+                  </td>
+                  <td
+                    className={
+                      row.winner === "vllnt" ? "p-3 font-semibold" : "p-3"
+                    }
+                  >
+                    {t(`rows.${row.key}.vllnt`, { count: componentCount })}
+                  </td>
+                  <td
+                    className={
+                      row.winner === "shadcn" ? "p-3 font-semibold" : "p-3"
+                    }
+                  >
+                    {t(`rows.${row.key}.shadcn`)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="prose prose-lg dark:prose-invert mt-12 max-w-none">
+          <h2>{t("whenHeading")}</h2>
+          <p>{t.rich("when1", { strong: strongChunk })}</p>
+          <p>{t.rich("when2", { strong: strongChunk })}</p>
+          <p>{t("when3")}</p>
+        </div>
+      </div>
+    </PageShell>
   );
 }

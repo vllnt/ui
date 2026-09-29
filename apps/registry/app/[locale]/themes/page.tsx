@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import { ThemeEditor } from "@/components/theme-editor";
 import type { Locale } from "@/i18n/routing";
 import { loadEditorPresets } from "@/lib/editor-presets";
-import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
+import { breadcrumbTrailLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const codeChunk = (chunks: ReactNode) => (
   <code className="rounded bg-muted px-1.5 py-0.5 text-sm">{chunks}</code>
@@ -43,31 +42,26 @@ export default async function ThemesPage({ params }: Props) {
   const common = await getTranslations({ locale, namespace: "common" });
 
   return (
-    <>
-      <script
-        {...jsonLdScriptAttributes(
-          breadcrumbTrailLd(
-            locale,
-            [{ name: t("metaTitle"), path: "/themes" }],
-            common("home"),
-          ),
-        )}
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
-          <div className="mb-8 border-b border-border pb-8">
-            <p className="mb-3 text-sm font-medium text-muted-foreground">
-              {t("eyebrow")}
-            </p>
-            <h1 className="text-4xl font-semibold">{t("title")}</h1>
-            <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">
-              {t.rich("description", { code: codeChunk })}
-            </p>
-          </div>
-          <ThemeEditor presets={await loadEditorPresets()} />
+    <PageShell
+      jsonLd={breadcrumbTrailLd(
+        locale,
+        [{ name: t("metaTitle"), path: "/themes" }],
+        common("home"),
+      )}
+      locale={locale}
+    >
+      <div className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
+        <div className="mb-8 border-b border-border pb-8">
+          <p className="mb-3 text-sm font-medium text-muted-foreground">
+            {t("eyebrow")}
+          </p>
+          <h1 className="text-4xl font-semibold">{t("title")}</h1>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">
+            {t.rich("description", { code: codeChunk })}
+          </p>
         </div>
-      </main>
-    </>
+        <ThemeEditor presets={await loadEditorPresets()} />
+      </div>
+    </PageShell>
   );
 }

@@ -4,7 +4,7 @@ import { MDXContent } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import type { Locale } from "@/i18n/routing";
 import {
   designTokens,
@@ -15,7 +15,6 @@ import {
 import { jsonLdScript } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 
 const DESCRIPTION =
   "Canonical VLLNT UI design rules, tokens, component patterns, accessibility expectations, and agent-facing guidance.";
@@ -105,84 +104,81 @@ export default async function DesignPage({ params }: Props) {
   };
 
   return (
-    <>
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <script
-          dangerouslySetInnerHTML={{ __html: jsonLdScript(techArticleLd) }}
-          type="application/ld+json"
-        />
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_18rem] lg:px-8">
-          <article className="min-w-0">
-            <div className="mb-8 border-b border-border pb-8">
-              <p className="mb-3 text-sm font-medium text-muted-foreground">
-                {t("eyebrow")}
-              </p>
-              <h1 className="text-4xl font-semibold">{t("title")}</h1>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">
-                {t("description")}
-              </p>
-            </div>
-            <MDXContent
-              components={{
-                h2: DesignHeadingTwo,
-                h3: DesignHeadingThree,
-              }}
-              content={markdown}
-            />
-          </article>
+    <PageShell locale={locale}>
+      <script
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(techArticleLd) }}
+        type="application/ld+json"
+      />
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_18rem] lg:px-8">
+        <article className="min-w-0">
+          <div className="mb-8 border-b border-border pb-8">
+            <p className="mb-3 text-sm font-medium text-muted-foreground">
+              {t("eyebrow")}
+            </p>
+            <h1 className="text-4xl font-semibold">{t("title")}</h1>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">
+              {t("description")}
+            </p>
+          </div>
+          <MDXContent
+            components={{
+              h2: DesignHeadingTwo,
+              h3: DesignHeadingThree,
+            }}
+            content={markdown}
+          />
+        </article>
 
-          <aside className="lg:sticky lg:top-8 lg:self-start">
-            <div className="rounded-lg border border-border bg-card p-4">
-              <h2 className="text-sm font-semibold">{t("contents")}</h2>
-              <nav aria-label={t("sectionsNavLabel")} className="mt-4">
-                <ol className="space-y-2">
-                  {sections.map((section) => (
-                    <li key={section.id}>
-                      <a
-                        className="text-sm text-muted-foreground hover:text-foreground"
-                        href={`#${section.id}`}
-                      >
-                        {section.title}
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-            </div>
+        <aside className="lg:sticky lg:top-8 lg:self-start">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">{t("contents")}</h2>
+            <nav aria-label={t("sectionsNavLabel")} className="mt-4">
+              <ol className="space-y-2">
+                {sections.map((section) => (
+                  <li key={section.id}>
+                    <a
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                      href={`#${section.id}`}
+                    >
+                      {section.title}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          </div>
 
-            <div className="mt-4 rounded-lg border border-border bg-card p-4">
-              <h2 className="text-sm font-semibold">{t("tokenContract")}</h2>
-              <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <dt className="text-muted-foreground">{t("version")}</dt>
-                  <dd className="font-medium">{designTokens.version}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">{t("colors")}</dt>
-                  <dd className="font-medium">{semanticColorCount}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">{t("spacing")}</dt>
-                  <dd className="font-medium">{spacingCount}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">{t("icons")}</dt>
-                  <dd className="font-medium">
-                    {designTokens.iconography.library}
-                  </dd>
-                </div>
-              </dl>
-              <a
-                className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4"
-                href="/r/design.json"
-              >
-                {t("viewTokensJson")}
-              </a>
-            </div>
-          </aside>
-        </div>
-      </main>
-    </>
+          <div className="mt-4 rounded-lg border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">{t("tokenContract")}</h2>
+            <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt className="text-muted-foreground">{t("version")}</dt>
+                <dd className="font-medium">{designTokens.version}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{t("colors")}</dt>
+                <dd className="font-medium">{semanticColorCount}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{t("spacing")}</dt>
+                <dd className="font-medium">{spacingCount}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{t("icons")}</dt>
+                <dd className="font-medium">
+                  {designTokens.iconography.library}
+                </dd>
+              </div>
+            </dl>
+            <a
+              className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4"
+              href="/r/design.json"
+            >
+              {t("viewTokensJson")}
+            </a>
+          </div>
+        </aside>
+      </div>
+    </PageShell>
   );
 }

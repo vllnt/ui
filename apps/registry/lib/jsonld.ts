@@ -13,7 +13,7 @@ type JsonLdValue =
   | string
   | { readonly [key: string]: JsonLdValue };
 
-type JsonLdNode = Readonly<Record<string, JsonLdValue>>;
+export type JsonLdNode = Readonly<Record<string, JsonLdValue>>;
 
 export type JsonLdScriptAttributes = {
   readonly dangerouslySetInnerHTML: {

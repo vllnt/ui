@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 
 import { Landing } from "@/components/landing/landing";
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import type { Locale } from "@/i18n/routing";
-import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
+import { softwareApplicationLd } from "@/lib/jsonld";
 import { getNpmDistributionTags } from "@/lib/npm-version";
 import { pageMetadata } from "@/lib/og";
 import { canonical } from "@/lib/seo";
-import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount } from "@/lib/stats";
 
 type Props = {
@@ -37,22 +36,17 @@ export default async function HomePage({ params }: Props) {
   const componentCount = getComponentCount();
 
   return (
-    <>
-      <script
-        {...jsonLdScriptAttributes(
-          softwareApplicationLd({
-            description: `Open-source React UI components and design system for building AI apps — ${componentCount} accessible components installable with the shadcn CLI and readable by AI agents via llms.txt.`,
-            installCommand:
-              "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[name].json",
-            name: "VLLNT UI",
-            url: canonical("/", locale),
-          }),
-        )}
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <Landing />
-      </main>
-    </>
+    <PageShell
+      jsonLd={softwareApplicationLd({
+        description: `Open-source React UI components and design system for building AI apps — ${componentCount} accessible components installable with the shadcn CLI and readable by AI agents via llms.txt.`,
+        installCommand:
+          "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[name].json",
+        name: "VLLNT UI",
+        url: canonical("/", locale),
+      })}
+      locale={locale}
+    >
+      <Landing />
+    </PageShell>
   );
 }
