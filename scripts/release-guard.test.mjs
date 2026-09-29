@@ -59,7 +59,7 @@ test("native publisher distinguishes unpublished versions from registry failures
   const npmStub = join(dir, "npm");
   const run = (stub) => {
     writeFileSync(npmStub, `#!/usr/bin/env bash\n${stub}\n`, { mode: 0o755 });
-    return spawnSync("bash", ["-c", `${body}\nversion_state "@vllnt/ui-core@0.1.0-canary.1.shaaaaaaaaaaaaa"`], {
+    return spawnSync("bash", ["-c", `set -euo pipefail\n${body}\nversion_state "@vllnt/ui-core@0.1.0-canary.1.shaaaaaaaaaaaaa"`], {
       encoding: "utf8",
       env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, RUNNER_TEMP: dir },
     });
