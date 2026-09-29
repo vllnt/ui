@@ -10,7 +10,7 @@
   "installation": {
     "available": false,
     "command": "pnpm add @vllnt/ui-native@canary",
-    "reason": "The first synchronized native canary has not been published."
+    "reason": "Only a manually bootstrapped pre-release exists on npm; it has no build provenance and is not a supported install. The first workflow-built synchronized canary has not been published."
   },
   "peerDependencies": {
     "react": ">=19.0.0 <20",
