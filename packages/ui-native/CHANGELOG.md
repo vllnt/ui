@@ -15,6 +15,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 ### Fixed
 
 - Uncontrolled `SidebarProvider` and `ToggleGroup` apply repeated updates made before a re-render from the latest value instead of dropping one; controlled mode still derives each change from the owner value.
+- `Typewriter` and `ScrambleText` step, time, and sample scramble characters by Unicode code point, so emoji and other surrogate pairs are never split.
 
 ### Availability
 

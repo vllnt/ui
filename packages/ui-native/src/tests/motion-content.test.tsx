@@ -53,6 +53,15 @@ const reducedMotionService = {
   },
 };
 
+/** Advances fake timers in 10ms steps so each tick's effect can schedule the next. */
+function advanceTimersBySteps(milliseconds: number): void {
+  for (let elapsed = 0; elapsed < milliseconds; elapsed += 10) {
+    act(() => {
+      jest.advanceTimersByTime(10);
+    });
+  }
+}
+
 describe("native motion and content utilities", () => {
   it("renders complete accessible text when motion is reduced", async () => {
     render(
@@ -123,6 +132,52 @@ describe("native motion and content utilities", () => {
 
     expect(screen.getByText("AB")).toBeOnTheScreen();
     expect(screen.getByText("CD")).toBeOnTheScreen();
+    expect(jest.getTimerCount()).toBe(0);
+    jest.useRealTimers();
+  });
+
+  it("types by code point without splitting surrogate pairs", async () => {
+    jest.useFakeTimers();
+    render(
+      <Typewriter
+        cursor={false}
+        reducedMotionService={motionService}
+        speed={10}
+        testID="typewriter"
+        text="a😀b"
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    advanceTimersBySteps(20);
+    expect(screen.getByTestId("typewriter")).toHaveTextContent("a😀");
+    advanceTimersBySteps(10);
+    expect(screen.getByTestId("typewriter")).toHaveTextContent("a😀b");
+    expect(jest.getTimerCount()).toBe(0);
+    jest.useRealTimers();
+  });
+
+  it("times scramble reveal and samples its pool by code point", async () => {
+    jest.useFakeTimers();
+    render(
+      <ScrambleText
+        duration={100}
+        reducedMotionService={motionService}
+        scrambleCharacters="🔒"
+        testID="scramble"
+        text="😀😀"
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    advanceTimersBySteps(50);
+    expect(screen.getByTestId("scramble")).toHaveTextContent("😀🔒");
+    advanceTimersBySteps(50);
+    expect(screen.getByTestId("scramble")).toHaveTextContent("😀😀");
     expect(jest.getTimerCount()).toBe(0);
     jest.useRealTimers();
   });

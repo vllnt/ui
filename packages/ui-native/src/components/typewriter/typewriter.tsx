@@ -23,23 +23,31 @@ export type TypewriterProps = Omit<TextProps, "children"> & {
   readonly text: string;
 };
 
+function splitCharacters(value: string): readonly string[] {
+  // Code points, not graphemes: Hermes has no Intl.Segmenter. Array.from is
+  // required because no-misused-spread rejects string spread.
+  // eslint-disable-next-line unicorn/prefer-spread
+  return Array.from(value);
+}
+
 function useTypedCount(
   reduceMotion: boolean,
   speed: number,
   text: string,
 ): number {
+  const length = splitCharacters(text).length;
   const [state, setState] = useState({
-    count: text.length,
+    count: length,
     reduceMotion,
     text,
   });
   if (state.reduceMotion !== reduceMotion || state.text !== text) {
-    setState({ count: reduceMotion ? text.length : 0, reduceMotion, text });
+    setState({ count: reduceMotion ? length : 0, reduceMotion, text });
   }
   const current = state.reduceMotion === reduceMotion && state.text === text;
-  const count = current ? state.count : reduceMotion ? text.length : 0;
+  const count = current ? state.count : reduceMotion ? length : 0;
   useEffect(() => {
-    if (reduceMotion || count >= text.length) return;
+    if (reduceMotion || count >= length) return;
     const timer = setTimeout(
       () => {
         setState((value) => ({ ...value, count: value.count + 1 }));
@@ -49,11 +57,14 @@ function useTypedCount(
     return () => {
       clearTimeout(timer);
     };
-  }, [count, reduceMotion, speed, text.length]);
+  }, [count, length, reduceMotion, speed]);
   return count;
 }
 
-/** Types characters on a fixed interval and exposes the complete accessible text. */
+/**
+ * Types characters on a fixed interval and exposes the complete accessible text.
+ * Characters are Unicode code points (`Array.from`), so surrogate pairs are never split.
+ */
 function Typewriter({
   accessibilityLabel,
   cursor = "|",
@@ -66,8 +77,9 @@ function Typewriter({
 }: TypewriterProps) {
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
+  const characters = splitCharacters(text);
   const count = useTypedCount(reduceMotion, speed, text);
-  const typing = !reduceMotion && count < text.length;
+  const typing = !reduceMotion && count < characters.length;
   return (
     <NativeText
       {...props}
@@ -79,7 +91,7 @@ function Typewriter({
         style,
       ]}
     >
-      {reduceMotion ? text : text.slice(0, count)}
+      {reduceMotion ? text : characters.slice(0, count).join("")}
       {cursor !== false && typing ? (
         <NativeText
           accessibilityElementsHidden
