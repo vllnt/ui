@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for the native TLDR disclosure. */
@@ -43,12 +44,7 @@ function TLDRContent({ children }: { readonly children: ReactNode }) {
       ]}
     >
       {typeof children === "string" || typeof children === "number" ? (
-        <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <NativeText style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {children}
         </NativeText>
       ) : (
@@ -102,13 +98,10 @@ function TLDRSection({
         ]}
       >
         <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {label}
         </NativeText>

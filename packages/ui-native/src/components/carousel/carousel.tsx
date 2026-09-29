@@ -12,6 +12,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -209,12 +210,7 @@ function Carousel({
             {labels.previous}
           </Text>
         </Pressable>
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {position}
         </Text>
         <Pressable

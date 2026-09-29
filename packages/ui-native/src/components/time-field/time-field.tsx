@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -105,10 +106,7 @@ function TimeField({
         <NativeText
           accessibilityLiveRegion="polite"
           accessibilityRole="alert"
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.destructive },
-          ]}
+          style={typeStyle(theme, "bodySmall", "destructive")}
         >
           {labels.error}
         </NativeText>

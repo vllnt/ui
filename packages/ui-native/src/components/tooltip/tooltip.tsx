@@ -7,6 +7,7 @@ import {
   ModalLayer,
   type ModalLayerCloseReason,
 } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -87,12 +88,7 @@ function Tooltip({
         ]}
       >
         {typeof trigger === "string" || typeof trigger === "number" ? (
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.foreground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {trigger}
           </Text>
         ) : (
@@ -122,23 +118,15 @@ function Tooltip({
         >
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodySmall,
-              {
-                color: theme.colors.popoverForeground,
-                fontWeight: theme.typography.fontWeight.caption,
-              },
-            ]}
+            style={typeStyle(theme, "bodySmall", {
+              color: "popoverForeground",
+              fontWeight: theme.typography.fontWeight.caption,
+            })}
           >
             {label}
           </Text>
           {typeof children === "string" || typeof children === "number" ? (
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.popoverForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "popoverForeground")}>
               {children}
             </Text>
           ) : (

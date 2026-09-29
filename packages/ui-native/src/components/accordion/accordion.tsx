@@ -11,6 +11,7 @@ import {
 
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -214,13 +215,10 @@ function AccordionTrigger({
     >
       <View style={styles.triggerContent}>
         <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.cardForeground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "cardForeground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {label}
         </Text>

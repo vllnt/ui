@@ -23,6 +23,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import {
   ThinkingBlock,
@@ -215,12 +216,7 @@ function MessageAction({
         pressed ? styles.pressed : undefined,
       ]}
     >
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {label}
       </Text>
     </Pressable>
@@ -254,10 +250,7 @@ function MessageTools({
       {toolCalls.map((toolCall) => (
         <Text
           key={toolCall.id}
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
+          style={typeStyle(theme, "caption", "mutedForeground")}
         >
           {toolCall.name}
         </Text>
@@ -337,14 +330,11 @@ function MessageItem({ message }: { readonly message: ConversationMessage }) {
         <MessageTools label={labels.toolCalls} toolCalls={message.toolCalls} />
         <Text
           accessibilityLiveRegion={message.isStreaming ? "polite" : "none"}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: isUser
-                ? theme.colors.primaryForeground
-                : theme.colors.foreground,
-            },
-          ]}
+          style={typeStyle(
+            theme,
+            "bodySmall",
+            isUser ? "primaryForeground" : "foreground",
+          )}
         >
           {message.content}
         </Text>
@@ -455,11 +445,10 @@ function ConversationTitle({ ref, style, ...props }: ConversationTitleProps) {
       accessibilityRole="header"
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.foreground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "foreground",
           fontWeight: theme.typography.fontWeight.heading,
-        },
+        }),
         style,
       ]}
     />
@@ -558,12 +547,7 @@ function ConversationSuggestions({
             pressed ? styles.pressed : undefined,
           ]}
         >
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.foreground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {suggestion.label}
           </Text>
         </Pressable>
@@ -600,12 +584,7 @@ function ConversationScrollButton({
         style,
       ]}
     >
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.foreground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "foreground")}>
         {labels.scrollToBottom}
       </Text>
     </Pressable>
@@ -627,10 +606,7 @@ function ConversationLoading({
     <View {...props} ref={ref} style={style}>
       <Text
         accessibilityLiveRegion="polite"
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
+        style={typeStyle(theme, "caption", "mutedForeground")}
       >
         {labels.assistantTyping}
       </Text>

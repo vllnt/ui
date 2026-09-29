@@ -8,6 +8,7 @@ import {
   type ModalLayerCloseReason,
 } from "../../primitives/modal-layer";
 import type { SelectionKey } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -115,14 +116,11 @@ function ContextMenu({
               ]}
             >
               <Text
-                style={[
-                  theme.typography.scale.bodySmall,
-                  {
-                    color: item.destructive
-                      ? theme.colors.destructive
-                      : theme.colors.popoverForeground,
-                  },
-                ]}
+                style={typeStyle(
+                  theme,
+                  "bodySmall",
+                  item.destructive ? "destructive" : "popoverForeground",
+                )}
               >
                 {item.label}
               </Text>

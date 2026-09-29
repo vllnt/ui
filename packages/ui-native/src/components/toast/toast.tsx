@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import type { SelectionKey } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Controlled native toast queue entry. */
@@ -177,28 +178,22 @@ function Toast({
           >
             <View style={[styles.body, { gap: theme.spacing[1] }]}>
               <Text
-                style={[
-                  theme.typography.scale.bodySmall,
-                  {
-                    color: destructive
-                      ? theme.colors.destructiveForeground
-                      : theme.colors.popoverForeground,
-                    fontWeight: theme.typography.fontWeight.caption,
-                  },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: destructive
+                    ? "destructiveForeground"
+                    : "popoverForeground",
+                  fontWeight: theme.typography.fontWeight.caption,
+                })}
               >
                 {toast.title}
               </Text>
               {toast.description ? (
                 <Text
-                  style={[
-                    theme.typography.scale.bodySmall,
-                    {
-                      color: destructive
-                        ? theme.colors.destructiveForeground
-                        : theme.colors.mutedForeground,
-                    },
-                  ]}
+                  style={typeStyle(
+                    theme,
+                    "bodySmall",
+                    destructive ? "destructiveForeground" : "mutedForeground",
+                  )}
                 >
                   {toast.description}
                 </Text>

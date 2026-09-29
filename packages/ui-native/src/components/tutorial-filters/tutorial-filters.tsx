@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Localized labels for native tutorial filters. */
@@ -93,14 +94,11 @@ function FilterChoice({
       ]}
     >
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: selected
-              ? theme.colors.primaryForeground
-              : theme.colors.foreground,
-          },
-        ]}
+        style={typeStyle(
+          theme,
+          "bodySmall",
+          selected ? "primaryForeground" : "foreground",
+        )}
       >
         {label}
       </Text>
@@ -162,13 +160,10 @@ function TutorialFilters({
         style={{ gap: theme.spacing[2] }}
       >
         <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {labels.difficultyLabel}
         </Text>
@@ -202,13 +197,10 @@ function TutorialFilters({
             ]}
           >
             <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                {
-                  color: theme.colors.foreground,
-                  fontWeight: theme.typography.fontWeight.caption,
-                },
-              ]}
+              style={typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: theme.typography.fontWeight.caption,
+              })}
             >
               {labels.tagsLabel}
             </Text>
@@ -221,12 +213,7 @@ function TutorialFilters({
                 }}
                 style={styles.action}
               >
-                <Text
-                  style={[
-                    theme.typography.scale.caption,
-                    { color: theme.colors.mutedForeground },
-                  ]}
-                >
+                <Text style={typeStyle(theme, "caption", "mutedForeground")}>
                   {labels.clear}
                 </Text>
               </Pressable>
@@ -256,12 +243,7 @@ function TutorialFilters({
           accessibilityLabel={labels.activeFilters}
           style={[styles.row, { alignItems: "center", gap: theme.spacing[2] }]}
         >
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {labels.activeFilters}
           </Text>
           {currentDifficulty ? (
@@ -291,12 +273,7 @@ function TutorialFilters({
             }}
             style={styles.action}
           >
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {labels.clearAll}
             </Text>
           </Pressable>

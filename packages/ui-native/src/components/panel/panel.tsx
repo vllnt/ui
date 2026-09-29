@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 type PanelViewProps = ViewProps & { readonly ref?: Ref<View> };
@@ -85,11 +86,10 @@ function PanelTitle({ ref, style, ...props }: PanelTitleProps) {
       accessibilityRole="header"
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.cardForeground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "cardForeground",
           fontWeight: theme.typography.fontWeight.heading,
-        },
+        }),
         style,
       ]}
     />
@@ -104,11 +104,7 @@ function PanelDescription({ ref, style, ...props }: PanelDescriptionProps) {
     <NativeText
       {...props}
       ref={ref}
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "bodySmall", "mutedForeground"), style]}
     />
   );
 }

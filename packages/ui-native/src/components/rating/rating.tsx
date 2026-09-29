@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -159,13 +160,10 @@ function Rating({
       {showValue ? (
         <Text
           accessibilityLiveRegion="polite"
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.mutedForeground,
-              marginStart: theme.spacing[2],
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "mutedForeground",
+            marginStart: theme.spacing[2],
+          })}
         >
           {labels.value(normalize(currentValue, safeMax), safeMax)}
         </Text>

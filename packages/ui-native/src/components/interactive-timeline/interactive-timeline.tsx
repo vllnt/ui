@@ -16,6 +16,7 @@ import {
   isSingleSelected,
   toggleMultipleSelected,
 } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -198,14 +199,11 @@ function TimelineLane({
           >
             <Text
               numberOfLines={1}
-              style={[
-                theme.typography.scale.caption,
-                {
-                  color: selected
-                    ? theme.colors.primaryForeground
-                    : theme.colors.accentForeground,
-                },
-              ]}
+              style={typeStyle(
+                theme,
+                "caption",
+                selected ? "primaryForeground" : "accentForeground",
+              )}
             >
               {event.title}
             </Text>
@@ -381,12 +379,7 @@ function InteractiveTimeline({
                   },
                 ]}
               >
-                <Text
-                  style={[
-                    theme.typography.scale.caption,
-                    { color: theme.colors.foreground },
-                  ]}
-                >
+                <Text style={typeStyle(theme, "caption", "foreground")}>
                   {category.label}
                 </Text>
               </Pressable>

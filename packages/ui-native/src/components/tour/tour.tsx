@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -95,12 +96,7 @@ function TourAction({
         },
       ]}
     >
-      <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          { color: theme.colors.secondaryForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
         {label}
       </Text>
     </Pressable>
@@ -170,34 +166,21 @@ function Tour({
       ]}
     >
       <View style={[styles.badgeRow, { gap: theme.spacing[2] }]}>
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {labels.tour}
         </Text>
         {step.badge ? (
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.foreground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "foreground")}>
             {step.badge}
           </Text>
         ) : null}
       </View>
       <Text
         accessibilityRole="header"
-        style={[
-          theme.typography.scale.h4,
-          {
-            color: theme.colors.cardForeground,
-            fontWeight: theme.typography.fontWeight.heading,
-          },
-        ]}
+        style={typeStyle(theme, "h4", {
+          color: "cardForeground",
+          fontWeight: theme.typography.fontWeight.heading,
+        })}
       >
         {step.title}
       </Text>
@@ -247,12 +230,7 @@ function Tour({
             padding: theme.spacing[3],
           }}
         >
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {labels.hint}
           </Text>
           {step.hint}

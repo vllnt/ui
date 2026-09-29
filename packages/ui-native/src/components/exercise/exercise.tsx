@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -89,14 +90,11 @@ function ExerciseAction({
       ]}
     >
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: selected
-              ? theme.colors.primaryForeground
-              : theme.colors.secondaryForeground,
-          },
-        ]}
+        style={typeStyle(
+          theme,
+          "bodySmall",
+          selected ? "primaryForeground" : "secondaryForeground",
+        )}
       >
         {label}
       </Text>
@@ -183,22 +181,14 @@ function Exercise({
         <View style={{ flex: 1, gap: theme.spacing[1] }}>
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodyLarge,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "bodyLarge", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {title}
           </Text>
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {labels.difficulty[difficulty]}
           </Text>
         </View>
@@ -222,20 +212,10 @@ function Exercise({
               padding: theme.spacing[3],
             }}
           >
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {labels.hint}
             </Text>
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {hint}
             </Text>
           </View>
@@ -269,12 +249,7 @@ function Exercise({
                 padding: theme.spacing[4],
               }}
             >
-              <Text
-                style={[
-                  theme.typography.scale.caption,
-                  { color: theme.colors.mutedForeground },
-                ]}
-              >
+              <Text style={typeStyle(theme, "caption", "mutedForeground")}>
                 {labels.solution}
               </Text>
               {solution}

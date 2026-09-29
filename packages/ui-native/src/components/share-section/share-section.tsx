@@ -16,6 +16,7 @@ import {
   type ShareResult,
   type ShareService,
 } from "../../primitives/platform-services";
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-localized labels for native sharing. */
@@ -163,13 +164,10 @@ function ShareSection({
     >
       <NativeText
         accessibilityRole="header"
-        style={[
-          theme.typography.scale.bodyLarge,
-          {
-            color: theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.heading,
-          },
-        ]}
+        style={typeStyle(theme, "bodyLarge", {
+          color: "foreground",
+          fontWeight: theme.typography.fontWeight.heading,
+        })}
       >
         {title}
       </NativeText>

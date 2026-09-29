@@ -23,6 +23,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** State of one native agent step, including unavailable services. */
@@ -181,25 +182,19 @@ function ActivityHeader({
       <View>
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {labels.activity}
         </Text>
         <Text
-          style={[
-            theme.typography.scale.caption,
-            {
-              color: failed
-                ? theme.colors.destructive
-                : theme.colors.mutedForeground,
-            },
-          ]}
+          style={typeStyle(
+            theme,
+            "caption",
+            failed ? "destructive" : "mutedForeground",
+          )}
         >
           {labels.status[status]}
         </Text>
@@ -347,12 +342,7 @@ function StepHeader({
             pressed ? styles.pressed : undefined,
           ]}
         >
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {isOpen ? labels.collapse : labels.expand}
           </Text>
         </Pressable>
@@ -441,11 +431,10 @@ function AgentStepTitle({ ref, style, ...props }: AgentStepTitleProps) {
       {...props}
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.foreground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "foreground",
           fontWeight: theme.typography.fontWeight.caption,
-        },
+        }),
         style,
       ]}
     />
@@ -460,11 +449,7 @@ function AgentStepDuration({ ref, style, ...props }: AgentStepDurationProps) {
     <Text
       {...props}
       ref={ref}
-      style={[
-        theme.typography.scale.caption,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "caption", "mutedForeground"), style]}
     />
   );
 }
@@ -521,11 +506,7 @@ function AgentStepDetailText({ ref, style, ...props }: AgentStepTitleProps) {
     <Text
       {...props}
       ref={ref}
-      style={[
-        theme.typography.scale.caption,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "caption", "mutedForeground"), style]}
     />
   );
 }

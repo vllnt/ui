@@ -12,6 +12,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Explicit availability of the service receiving a chat message. */
@@ -119,10 +120,7 @@ function ComposerMessages({
           <Text
             accessibilityLiveRegion={message === status ? "polite" : "none"}
             key={message}
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
+            style={typeStyle(theme, "caption", "mutedForeground")}
           >
             {message}
           </Text>
@@ -131,21 +129,13 @@ function ComposerMessages({
       {unavailable ? (
         <Text
           accessibilityLiveRegion="polite"
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.destructive },
-          ]}
+          style={typeStyle(theme, "caption", "destructive")}
         >
           {serviceState.message}
         </Text>
       ) : null}
       {typeof inputProps?.maxLength === "number" ? (
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {currentValue.length}/{inputProps.maxLength}
         </Text>
       ) : null}
@@ -185,13 +175,10 @@ function SubmitAction({
       ]}
     >
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: theme.colors.primaryForeground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: "primaryForeground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {label}
       </Text>
@@ -228,8 +215,7 @@ function ComposerBody({
       returnKeyType="send"
       style={[
         styles.input,
-        theme.typography.scale.body,
-        { color: theme.colors.foreground },
+        ...typeStyle(theme, "body", "foreground"),
         inputProps?.style,
       ]}
       submitBehavior="submit"

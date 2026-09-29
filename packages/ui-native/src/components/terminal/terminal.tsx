@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import type { ClipboardService } from "../../primitives/platform-services";
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** A native terminal line. */
@@ -100,13 +101,10 @@ function TerminalHeader({
       ]}
     >
       <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: "foreground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {title}
       </NativeText>
@@ -173,17 +171,11 @@ function TerminalLineView({
       ) : null}
       <NativeText
         selectable
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color:
-              line.type === "command"
-                ? theme.colors.foreground
-                : theme.colors.mutedForeground,
-            fontFamily: "monospace",
-            fontStyle: line.type === "comment" ? "italic" : "normal",
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: line.type === "command" ? "foreground" : "mutedForeground",
+          fontFamily: "monospace",
+          fontStyle: line.type === "comment" ? "italic" : "normal",
+        })}
       >
         {content}
       </NativeText>

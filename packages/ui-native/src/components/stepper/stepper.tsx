@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -157,49 +158,30 @@ function Stepper({
           ]}
         >
           <Text
-            style={[
-              theme.typography.scale.caption,
-              {
-                color:
-                  state === "complete"
-                    ? theme.colors.primaryForeground
-                    : theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "caption", {
+              color: state === "complete" ? "primaryForeground" : "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {state === "complete" ? "✓" : showNumbers ? index + 1 : "•"}
           </Text>
         </View>
         <View style={{ flex: 1, gap: theme.spacing[1] }}>
           <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.caption,
-              },
-            ]}
+            style={typeStyle(theme, "bodySmall", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.caption,
+            })}
           >
             {step.title}
           </Text>
           {step.meta ? (
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {step.meta}
             </Text>
           ) : null}
           {step.description ? (
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
               {step.description}
             </Text>
           ) : null}

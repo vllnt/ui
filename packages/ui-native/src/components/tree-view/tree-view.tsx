@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { toggleMultipleSelected } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -151,12 +152,11 @@ function TreeRow({
             numberOfLines={1}
             style={[
               styles.label,
-              theme.typography.scale.bodySmall,
-              {
-                color: selected
-                  ? theme.colors.accentForeground
-                  : theme.colors.foreground,
-              },
+              ...typeStyle(
+                theme,
+                "bodySmall",
+                selected ? "accentForeground" : "foreground",
+              ),
             ]}
           >
             {node.label}

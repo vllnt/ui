@@ -7,6 +7,7 @@ import {
   ModalLayer,
   type ModalLayerCloseReason,
 } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -88,23 +89,15 @@ function Popover({
       >
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.popoverForeground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "popoverForeground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {label}
         </Text>
         {description ? (
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
             {description}
           </Text>
         ) : null}

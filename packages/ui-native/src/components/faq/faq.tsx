@@ -3,6 +3,7 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -71,13 +72,10 @@ function FAQRow({
         style={{ paddingHorizontal: theme.spacing[4] }}
       >
         <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.cardForeground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "cardForeground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {item.question}
         </Text>
@@ -141,13 +139,10 @@ function FAQ({
       >
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.cardForeground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "cardForeground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {title}
         </Text>

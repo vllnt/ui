@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { toggleMultipleSelected } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -103,12 +104,7 @@ function ListBox({
               },
             ]}
           >
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {selected ? "✓ " : ""}
               {option.label}
             </NativeText>

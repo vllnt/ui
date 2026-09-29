@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** One tutorial section available for review. */
@@ -95,14 +96,11 @@ function CompletionAction({
       ]}
     >
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: primary
-              ? theme.colors.primaryForeground
-              : theme.colors.secondaryForeground,
-          },
-        ]}
+        style={typeStyle(
+          theme,
+          "bodySmall",
+          primary ? "primaryForeground" : "secondaryForeground",
+        )}
       >
         {label}
       </Text>
@@ -163,22 +161,19 @@ function TutorialComplete({
         </View>
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.h3,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-              textAlign: "center",
-            },
-          ]}
+          style={typeStyle(theme, "h3", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+            textAlign: "center",
+          })}
         >
           {complete ? labels.tutorialComplete : labels.tutorialFinished}
         </Text>
         <Text
-          style={[
-            theme.typography.scale.body,
-            { color: theme.colors.mutedForeground, textAlign: "center" },
-          ]}
+          style={typeStyle(theme, "body", {
+            color: "mutedForeground",
+            textAlign: "center",
+          })}
         >
           {labels.completionSummary(title, percent)}
         </Text>
@@ -187,13 +182,10 @@ function TutorialComplete({
       <View style={{ gap: theme.spacing[2] }}>
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {labels.reviewSections}
         </Text>
@@ -237,10 +229,10 @@ function TutorialComplete({
               </Text>
               <Text
                 numberOfLines={1}
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.foreground, flex: 1 },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: "foreground",
+                  flex: 1,
+                })}
               >
                 {section.title}
               </Text>
@@ -253,13 +245,10 @@ function TutorialComplete({
         <View style={{ gap: theme.spacing[2] }}>
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodyLarge,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "bodyLarge", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {labels.relatedContent}
           </Text>
@@ -282,20 +271,15 @@ function TutorialComplete({
                 },
               ]}
             >
-              <Text
-                style={[
-                  theme.typography.scale.caption,
-                  { color: theme.colors.mutedForeground },
-                ]}
-              >
+              <Text style={typeStyle(theme, "caption", "mutedForeground")}>
                 {item.type}
               </Text>
               <Text
                 numberOfLines={1}
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.foreground, flex: 1 },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: "foreground",
+                  flex: 1,
+                })}
               >
                 {item.title}
               </Text>

@@ -3,6 +3,7 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -79,23 +80,15 @@ function ExpandableCard({
       >
         <View style={[styles.trigger, { gap: theme.spacing[1] }]}>
           <Text
-            style={[
-              theme.typography.scale.body,
-              {
-                color: theme.colors.cardForeground,
-                fontWeight: theme.typography.fontWeight.caption,
-              },
-            ]}
+            style={typeStyle(theme, "body", {
+              color: "cardForeground",
+              fontWeight: theme.typography.fontWeight.caption,
+            })}
           >
             {card.title}
           </Text>
           {card.description === undefined ? null : (
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
               {card.description}
             </Text>
           )}

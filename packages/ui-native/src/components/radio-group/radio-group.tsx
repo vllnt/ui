@@ -16,6 +16,7 @@ import {
   type SelectionKey,
   selectSingle,
 } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -196,12 +197,7 @@ function RadioGroupItem({
         ) : null}
       </View>
       {typeof children === "number" || typeof children === "string" ? (
-        <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.foreground },
-          ]}
-        >
+        <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
           {children}
         </NativeText>
       ) : (

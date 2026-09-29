@@ -24,6 +24,7 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -158,14 +159,11 @@ function SearchScopeControl({
           >
             <Text
               numberOfLines={1}
-              style={[
-                theme.typography.scale.caption,
-                {
-                  color: selected
-                    ? theme.colors.foreground
-                    : theme.colors.mutedForeground,
-                },
-              ]}
+              style={typeStyle(
+                theme,
+                "caption",
+                selected ? "foreground" : "mutedForeground",
+              )}
             >
               {labels.scopeOption[option]}
             </Text>
@@ -194,13 +192,10 @@ function SearchResults({
     <View accessibilityLabel={heading} style={{ gap: theme.spacing[1] }}>
       <Text
         accessibilityRole="header"
-        style={[
-          theme.typography.scale.caption,
-          {
-            color: theme.colors.mutedForeground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "caption", {
+          color: "mutedForeground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {heading}
       </Text>
@@ -225,23 +220,17 @@ function SearchResults({
           ]}
         >
           <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.caption,
-              },
-            ]}
+            style={typeStyle(theme, "bodySmall", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.caption,
+            })}
           >
             {item.title}
           </Text>
           {item.snippet || item.description ? (
             <Text
               numberOfLines={2}
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
+              style={typeStyle(theme, "caption", "mutedForeground")}
             >
               {item.snippet ?? item.description}
             </Text>
@@ -429,12 +418,7 @@ function SearchDialog({
           },
         ]}
       >
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.secondaryForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
           {labels.open}
         </Text>
       </Pressable>
@@ -519,12 +503,7 @@ function SearchDialog({
             </Pressable>
           </View>
           {hardwareKeyboardHint ? (
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {hardwareKeyboardHint}
             </Text>
           ) : null}
@@ -556,22 +535,14 @@ function SearchDialog({
               />
             ) : null}
             {waitingForQuery ? (
-              <Text
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.mutedForeground },
-                ]}
-              >
+              <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
                 {labels.minimumDocsQuery(minimum)}
               </Text>
             ) : null}
             {documentation.loading ? (
               <Text
                 accessibilityLiveRegion="polite"
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.mutedForeground },
-                ]}
+                style={typeStyle(theme, "bodySmall", "mutedForeground")}
               >
                 {labels.searchingDocs}
               </Text>
@@ -579,10 +550,7 @@ function SearchDialog({
             {noResults && !waitingForQuery ? (
               <Text
                 accessibilityLiveRegion="polite"
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.mutedForeground },
-                ]}
+                style={typeStyle(theme, "bodySmall", "mutedForeground")}
               >
                 {searchScope === "docs" ? labels.docsEmpty : labels.empty}
               </Text>

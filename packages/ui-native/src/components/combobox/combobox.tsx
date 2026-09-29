@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { ModalLayer } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -126,14 +127,11 @@ function Combobox({
       >
         <NativeText
           numberOfLines={1}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: selectedOption
-                ? theme.colors.foreground
-                : theme.colors.mutedForeground,
-            },
-          ]}
+          style={typeStyle(
+            theme,
+            "bodySmall",
+            selectedOption ? "foreground" : "mutedForeground",
+          )}
         >
           {selectedOption?.label ?? labels.placeholder}
         </NativeText>
@@ -207,10 +205,7 @@ function Combobox({
                   ]}
                 >
                   <NativeText
-                    style={[
-                      theme.typography.scale.bodySmall,
-                      { color: theme.colors.foreground },
-                    ]}
+                    style={typeStyle(theme, "bodySmall", "foreground")}
                   >
                     {option.label}
                   </NativeText>
@@ -225,13 +220,10 @@ function Combobox({
             {visibleOptions.length === 0 ? (
               <NativeText
                 accessibilityLiveRegion="polite"
-                style={[
-                  theme.typography.scale.bodySmall,
-                  {
-                    color: theme.colors.mutedForeground,
-                    padding: theme.spacing[3],
-                  },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: "mutedForeground",
+                  padding: theme.spacing[3],
+                })}
               >
                 {labels.empty}
               </NativeText>
@@ -245,12 +237,7 @@ function Combobox({
             }}
             style={styles.action}
           >
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
           </Pressable>

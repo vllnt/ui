@@ -8,6 +8,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import {
   type ReducedMotionService,
   useReducedMotion,
@@ -85,11 +86,7 @@ function Typewriter({
       {...props}
       accessibilityLabel={accessibilityLabel ?? text}
       ref={ref}
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.foreground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "bodySmall", "foreground"), style]}
     >
       {reduceMotion ? text : characters.slice(0, count).join("")}
       {cursor !== false && typing ? (

@@ -9,6 +9,7 @@ import {
   type View,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -63,15 +64,10 @@ function Toggle({
   const content =
     typeof children === "number" || typeof children === "string" ? (
       <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: isPressed
-              ? theme.colors.accentForeground
-              : theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: isPressed ? "accentForeground" : "foreground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {children}
       </NativeText>

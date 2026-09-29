@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a native group of related fields. */
@@ -59,11 +60,10 @@ function FieldsetLegend({ ref, style, ...props }: FieldsetLegendProps) {
       accessibilityRole="header"
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.foreground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "foreground",
           fontWeight: theme.typography.fontWeight.caption,
-        },
+        }),
         style,
       ]}
     />

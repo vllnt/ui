@@ -12,6 +12,7 @@ import {
   type SelectionKey,
   selectSingle,
 } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -142,17 +143,14 @@ function DropdownMenu({
                 ]}
               >
                 <Text
-                  style={[
-                    theme.typography.scale.bodySmall,
-                    {
-                      color: item.destructive
-                        ? theme.colors.destructive
-                        : theme.colors.popoverForeground,
-                      fontWeight: selected
-                        ? theme.typography.fontWeight.caption
-                        : theme.typography.fontWeight.body,
-                    },
-                  ]}
+                  style={typeStyle(theme, "bodySmall", {
+                    color: item.destructive
+                      ? "destructive"
+                      : "popoverForeground",
+                    fontWeight: selected
+                      ? theme.typography.fontWeight.caption
+                      : theme.typography.fontWeight.body,
+                  })}
                 >
                   {item.label}
                 </Text>

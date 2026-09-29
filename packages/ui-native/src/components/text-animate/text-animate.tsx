@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import {
   type ReducedMotionService,
   useReducedMotion,
@@ -59,24 +60,18 @@ function Segment({
     <Animated.Text
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.foreground,
-          opacity: progress.interpolate({ inputRange, outputRange: [0, 1] }),
-          transform: [
-            {
-              translateY: progress.interpolate({
-                inputRange,
-                outputRange: [
-                  animation === "slide-up" ? theme.spacing[2] : 0,
-                  0,
-                ],
-              }),
-            },
-          ],
-        },
-      ]}
+      style={typeStyle(theme, "bodySmall", {
+        color: "foreground",
+        opacity: progress.interpolate({ inputRange, outputRange: [0, 1] }),
+        transform: [
+          {
+            translateY: progress.interpolate({
+              inputRange,
+              outputRange: [animation === "slide-up" ? theme.spacing[2] : 0, 0],
+            }),
+          },
+        ],
+      })}
     >
       {value}
     </Animated.Text>

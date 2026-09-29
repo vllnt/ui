@@ -17,6 +17,7 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -142,33 +143,22 @@ function SlideshowHeader({
       <View style={[styles.titleBlock, { gap: theme.spacing[1] }]}>
         <Text
           numberOfLines={1}
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
+          style={typeStyle(theme, "caption", "mutedForeground")}
         >
           {title}
         </Text>
         <Text
           accessibilityRole="header"
           numberOfLines={1}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {sectionTitle}
         </Text>
       </View>
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {position}
       </Text>
       <Pressable
@@ -230,12 +220,7 @@ function SlideshowSections({
               },
             ]}
           >
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {section.title}
             </Text>
           </Pressable>
