@@ -15,70 +15,12 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import type { Registry } from "./registry-types";
+
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDir, "../../..");
 const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
 const publicRDir = join(repoRoot, "apps/registry/public/r");
-
-type Stability = "stable" | "beta" | "experimental" | "deprecated";
-type ComponentPlatform = "native" | "web";
-
-type NativeRenderer = {
-  availability: "package" | "source";
-  channel: "canary";
-  compatibility: "native-adapted" | "portable-options";
-  package: "@vllnt/ui-native";
-  source: string;
-  status: "experimental";
-};
-
-type A11yKeyboardBinding = {
-  keys: string;
-  action: string;
-};
-
-type A11ySchema = {
-  role?: string;
-  keyboard?: A11yKeyboardBinding[];
-  aria?: string[];
-  focusManagement?: "auto" | "manual";
-  notes?: string;
-};
-
-type UsageExample = {
-  title: string;
-  description?: string;
-  code: string;
-  framework?: "next" | "react" | "react-native";
-  storyId?: string;
-};
-
-type PropDefinition = {
-  name: string;
-  type: string;
-  required?: boolean;
-  defaultValue?: string;
-  description?: string;
-  deprecated?: boolean;
-};
-
-type RegistryItem = {
-  a11y?: A11ySchema;
-  examples?: UsageExample[];
-  name: string;
-  native?: NativeRenderer;
-  platforms: ComponentPlatform[];
-  props?: PropDefinition[];
-  version?: string;
-  stability?: Stability;
-  replacedBy?: string;
-};
-
-type Registry = {
-  generatedAt?: string;
-  items: RegistryItem[];
-  version?: string;
-};
 
 const registry = JSON.parse(readFileSync(registryJsonPath, "utf8")) as Registry;
 
