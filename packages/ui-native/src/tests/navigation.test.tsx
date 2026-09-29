@@ -27,6 +27,8 @@ import { ViewSwitcher } from "../components/view-switcher/view-switcher";
 import { WorkspaceSwitcher } from "../components/workspace-switcher/workspace-switcher";
 import type { LinkingService } from "../primitives/platform-services";
 
+import { reducedMotion } from "./test-utils";
+
 const linking: LinkingService = {
   openUrl: jest.fn(async () => ({ status: "opened" as const })),
 };
@@ -129,10 +131,7 @@ describe("native navigation components", () => {
         <AnimatedTabs
           defaultValue="code"
           onValueChange={onAnimatedChange}
-          reducedMotionService={{
-            addEventListener: () => ({ remove: jest.fn() }),
-            isReduceMotionEnabled: async () => true,
-          }}
+          reducedMotionService={reducedMotion(true)}
           tabs={[
             {
               label: "Code",

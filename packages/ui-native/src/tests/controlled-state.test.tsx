@@ -30,12 +30,10 @@ import {
 } from "../components/time-field/time-field";
 import { TimelineScrubber } from "../components/timeline-scrubber/timeline-scrubber";
 import { ViewSwitcher } from "../components/view-switcher/view-switcher";
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 
-const reducedMotionService: ReducedMotionService = {
-  addEventListener: () => ({ remove: jest.fn() }),
-  isReduceMotionEnabled: () => new Promise(() => void 0),
-};
+import { reducedMotion } from "./test-utils";
+
+const reducedMotionService = reducedMotion("pending");
 
 const dateLabels = {
   error: "Enter a valid date",

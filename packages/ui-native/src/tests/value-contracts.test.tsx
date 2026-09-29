@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { fireEvent, render, screen } from "@testing-library/react-native";
 import { StyleSheet, Text, View } from "react-native";
 
 import { AvatarGroup } from "../components/avatar-group/avatar-group";
@@ -12,7 +12,8 @@ import { StatCard } from "../components/stat-card/stat-card";
 import { Stepper } from "../components/stepper/stepper";
 import { TextReveal } from "../components/text-reveal/text-reveal";
 import { TutorialComplete } from "../components/tutorial-complete/tutorial-complete";
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
+
+import { flushMicrotasks, reducedMotion } from "./test-utils";
 
 function historicDate(year: number, month: number, day: number): Date {
   const date = new Date(0);
@@ -44,10 +45,7 @@ const tutorialLabels = {
   tutorialFinished: "Finished",
 };
 
-const motionEnabled: ReducedMotionService = {
-  addEventListener: () => ({ remove: jest.fn() }),
-  isReduceMotionEnabled: () => Promise.resolve(false),
-};
+const motionEnabled = reducedMotion(false);
 
 const NAN = Number.NaN;
 const POS_INF = Number.POSITIVE_INFINITY;
@@ -137,9 +135,7 @@ describe("non-finite numeric inputs", () => {
           alpha beta
         </TextReveal>,
       );
-      await act(async () => {
-        await Promise.resolve();
-      });
+      await flushMicrotasks();
       for (const word of ["alpha", "beta"]) {
         expect(
           StyleSheet.flatten(

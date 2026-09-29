@@ -8,6 +8,8 @@ import {
 import type { ReactNode } from "react";
 import { Modal, Pressable, Text } from "react-native";
 
+import { reducedMotion } from "../tests/test-utils";
+
 import { ModalLayer } from "./modal-layer";
 import {
   type ClipboardService,
@@ -211,10 +213,7 @@ describe("native interaction core", () => {
       addEventListener: () => ({ remove }),
       isReduceMotionEnabled: () => initialPreference,
     };
-    const nextService: ReducedMotionService = {
-      addEventListener: () => ({ remove: jest.fn() }),
-      isReduceMotionEnabled: async () => true,
-    };
+    const nextService = reducedMotion(true);
 
     const view = render(<ReducedMotionHarness service={oldService} />);
     await act(async () => {

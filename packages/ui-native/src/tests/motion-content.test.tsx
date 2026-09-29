@@ -21,37 +21,10 @@ import { TextReveal } from "../components/text-reveal/text-reveal";
 import { TextShimmer } from "../components/text-shimmer/text-shimmer";
 import { Typewriter } from "../components/typewriter/typewriter";
 
-const motionService = {
-  addEventListener(
-    eventName: "reduceMotionChanged",
-    listener: (enabled: boolean) => void,
-  ) {
-    void eventName;
-    void listener;
-    return { remove() {} };
-  },
-  async isReduceMotionEnabled() {
-    return false;
-  },
-};
+import { flushMicrotasks, reducedMotion } from "./test-utils";
 
-const reducedMotionService = {
-  addEventListener(
-    eventName: "reduceMotionChanged",
-    listener: (enabled: boolean) => void,
-  ) {
-    void eventName;
-    void listener;
-    return {
-      remove() {
-        return;
-      },
-    };
-  },
-  async isReduceMotionEnabled() {
-    return true;
-  },
-};
+const motionService = reducedMotion(false);
+const reducedMotionService = reducedMotion(true);
 
 /** Advances fake timers in 10ms steps so each tick's effect can schedule the next. */
 function advanceTimersBySteps(milliseconds: number): void {
@@ -120,9 +93,7 @@ describe("native motion and content utilities", () => {
       </View>,
     );
 
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await flushMicrotasks();
     act(() => {
       jest.runOnlyPendingTimers();
     });
@@ -136,48 +107,50 @@ describe("native motion and content utilities", () => {
     jest.useRealTimers();
   });
 
-  it("types by code point without splitting surrogate pairs", async () => {
+  it.each([
+    {
+      element: (
+        <Typewriter
+          cursor={false}
+          reducedMotionService={motionService}
+          speed={10}
+          testID="typewriter"
+          text="a😀b"
+        />
+      ),
+      steps: [
+        [20, "a😀"],
+        [10, "a😀b"],
+      ] as const,
+      testID: "typewriter",
+      title: "types by code point without splitting surrogate pairs",
+    },
+    {
+      element: (
+        <ScrambleText
+          duration={100}
+          reducedMotionService={motionService}
+          scrambleCharacters="🔒"
+          testID="scramble"
+          text="😀😀"
+        />
+      ),
+      steps: [
+        [50, "😀🔒"],
+        [50, "😀😀"],
+      ] as const,
+      testID: "scramble",
+      title: "times scramble reveal and samples its pool by code point",
+    },
+  ])("$title", async ({ element, steps, testID }) => {
     jest.useFakeTimers();
-    render(
-      <Typewriter
-        cursor={false}
-        reducedMotionService={motionService}
-        speed={10}
-        testID="typewriter"
-        text="a😀b"
-      />,
-    );
+    render(element);
 
-    await act(async () => {
-      await Promise.resolve();
-    });
-    advanceTimersBySteps(20);
-    expect(screen.getByTestId("typewriter")).toHaveTextContent("a😀");
-    advanceTimersBySteps(10);
-    expect(screen.getByTestId("typewriter")).toHaveTextContent("a😀b");
-    expect(jest.getTimerCount()).toBe(0);
-    jest.useRealTimers();
-  });
-
-  it("times scramble reveal and samples its pool by code point", async () => {
-    jest.useFakeTimers();
-    render(
-      <ScrambleText
-        duration={100}
-        reducedMotionService={motionService}
-        scrambleCharacters="🔒"
-        testID="scramble"
-        text="😀😀"
-      />,
-    );
-
-    await act(async () => {
-      await Promise.resolve();
-    });
-    advanceTimersBySteps(50);
-    expect(screen.getByTestId("scramble")).toHaveTextContent("😀🔒");
-    advanceTimersBySteps(50);
-    expect(screen.getByTestId("scramble")).toHaveTextContent("😀😀");
+    await flushMicrotasks();
+    for (const [milliseconds, text] of steps) {
+      advanceTimersBySteps(milliseconds);
+      expect(screen.getByTestId(testID)).toHaveTextContent(text);
+    }
     expect(jest.getTimerCount()).toBe(0);
     jest.useRealTimers();
   });

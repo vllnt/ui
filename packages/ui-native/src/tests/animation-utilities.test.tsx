@@ -11,15 +11,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "../components/resizable/resizable";
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 import { ThemeProvider } from "../theme/theme-provider";
 
-function createReducedMotionService(): ReducedMotionService {
-  return {
-    addEventListener: () => ({ remove: jest.fn() }),
-    isReduceMotionEnabled: () => new Promise(() => void 0),
-  };
-}
+import { reducedMotion } from "./test-utils";
 
 const hidden = { includeHiddenElements: true } as const;
 
@@ -28,7 +22,7 @@ describe("native animation utilities", () => {
     render(
       <ThemeProvider colorScheme="dark">
         <AnimatedText
-          reducedMotionService={createReducedMotionService()}
+          reducedMotionService={reducedMotion("pending")}
           text="Deterministic launch"
           variant="matrix"
         />
@@ -43,7 +37,7 @@ describe("native animation utilities", () => {
   it("splits AnimatedText by grapheme when Intl.Segmenter is available", () => {
     render(
       <AnimatedText
-        reducedMotionService={createReducedMotionService()}
+        reducedMotionService={reducedMotion("pending")}
         text="👍🏽x"
       />,
     );
@@ -65,7 +59,7 @@ describe("native animation utilities", () => {
         );
         testing.render(
           <isolated.AnimatedText
-            reducedMotionService={createReducedMotionService()}
+            reducedMotionService={reducedMotion("pending")}
             text="a😀b"
           />,
         );
@@ -87,7 +81,7 @@ describe("native animation utilities", () => {
         formatOptions={{ maximumFractionDigits: 0 }}
         from={0}
         locale="en-US"
-        reducedMotionService={createReducedMotionService()}
+        reducedMotionService={reducedMotion("pending")}
         value={1234}
       />,
     );
@@ -100,10 +94,7 @@ describe("native animation utilities", () => {
 
   it("renders a reduced-motion marquee without hiding primary content", () => {
     render(
-      <Marquee
-        reducedMotionService={createReducedMotionService()}
-        testID="marquee"
-      >
+      <Marquee reducedMotionService={reducedMotion("pending")} testID="marquee">
         <NativeText>Alpha</NativeText>
         <NativeText>Beta</NativeText>
       </Marquee>,
