@@ -19,6 +19,9 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - `StatCard` renders numeric `0` for `change`, `meta`, and `description` while still omitting `undefined`, `null`, and `NaN`.
 - `CollapsibleContent` sets `aria-labelledby` only while a `CollapsibleTrigger` is mounted, and the trigger sets `aria-controls` only while content is mounted, so neither points at a missing node.
 - `AvatarImage` now unmounts after a load failure so the fallback shows, as documented, and mounts again when `source` changes to a different value.
+- Uncontrolled `SidebarProvider` and `ToggleGroup` apply repeated updates made before a re-render from the latest value instead of dropping one; controlled mode still derives each change from the owner value.
+- `Typewriter` and `ScrambleText` step, time, and sample scramble characters by Unicode code point, so emoji and other surrogate pairs are never split.
+- `AnimatedText` no longer constructs `Intl.Segmenter` at module load, so importing it on engines without `Intl.Segmenter` (Hermes) no longer throws; it splits by grapheme when available and by code point otherwise.
 
 ### Availability
 

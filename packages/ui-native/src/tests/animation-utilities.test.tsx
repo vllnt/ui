@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import type * as TestingLibrary from "@testing-library/react-native/pure";
 import { Text as NativeText } from "react-native";
 
+import type * as AnimatedTextModule from "../components/animated-text/animated-text";
 import { AnimatedText } from "../components/animated-text/animated-text";
 import { Marquee } from "../components/marquee/marquee";
 import { NumberTicker } from "../components/number-ticker/number-ticker";
@@ -19,6 +21,8 @@ function createReducedMotionService(): ReducedMotionService {
   };
 }
 
+const hidden = { includeHiddenElements: true } as const;
+
 describe("native animation utilities", () => {
   it("reveals final text immediately when reduced motion is enabled", () => {
     render(
@@ -34,6 +38,47 @@ describe("native animation utilities", () => {
     expect(screen.getByLabelText("Deterministic launch")).toHaveTextContent(
       "Deterministic launch",
     );
+  });
+
+  it("splits AnimatedText by grapheme when Intl.Segmenter is available", () => {
+    render(
+      <AnimatedText
+        reducedMotionService={createReducedMotionService()}
+        text="👍🏽x"
+      />,
+    );
+
+    expect(screen.getByText("👍🏽", hidden)).toBeOnTheScreen();
+    expect(screen.getByText("x", hidden)).toBeOnTheScreen();
+  });
+
+  it("loads AnimatedText and splits by code point without Intl.Segmenter", () => {
+    const segmenter = Object.getOwnPropertyDescriptor(Intl, "Segmenter");
+    Reflect.deleteProperty(Intl, "Segmenter");
+    try {
+      jest.isolateModules(() => {
+        const testing = jest.requireActual<typeof TestingLibrary>(
+          "@testing-library/react-native/pure",
+        );
+        const isolated = jest.requireActual<typeof AnimatedTextModule>(
+          "../components/animated-text/animated-text",
+        );
+        testing.render(
+          <isolated.AnimatedText
+            reducedMotionService={createReducedMotionService()}
+            text="a😀b"
+          />,
+        );
+
+        for (const glyph of ["a", "😀", "b"]) {
+          expect(testing.screen.getByText(glyph, hidden)).toBeTruthy();
+        }
+        testing.cleanup();
+      });
+    } finally {
+      if (segmenter) Object.defineProperty(Intl, "Segmenter", segmenter);
+    }
+    expect(typeof Intl.Segmenter).toBe("function");
   });
 
   it("formats the final ticker value immediately for reduced motion", () => {

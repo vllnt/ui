@@ -1,4 +1,5 @@
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -144,6 +145,79 @@ describe("native core controls", () => {
     expect(screen.getByRole("button", { name: "Compact" })).toHaveProp(
       "accessibilityState",
       expect.objectContaining({ selected: true }),
+    );
+  });
+
+  it("applies repeated toggle-group presses from the latest uncontrolled value", () => {
+    const onMultipleChange = jest.fn();
+    const onSingleChange = jest.fn();
+    render(
+      <>
+        <ToggleGroup
+          accessibilityLabel="Formatting"
+          onValueChange={onMultipleChange}
+          type="multiple"
+        >
+          <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+          <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup
+          accessibilityLabel="Size"
+          onValueChange={onSingleChange}
+          type="single"
+        >
+          <ToggleGroupItem value="small">Small</ToggleGroupItem>
+        </ToggleGroup>
+      </>,
+    );
+
+    act(() => {
+      fireEvent.press(screen.getByRole("button", { name: "Bold" }));
+      fireEvent.press(screen.getByRole("button", { name: "Italic" }));
+      fireEvent.press(screen.getByRole("button", { name: "Small" }));
+      fireEvent.press(screen.getByRole("button", { name: "Small" }));
+    });
+
+    expect(onMultipleChange.mock.calls).toEqual([
+      [["bold"]],
+      [["bold", "italic"]],
+    ]);
+    expect(onSingleChange.mock.calls).toEqual([["small"], [undefined]]);
+    for (const [name, selected] of [
+      ["Bold", true],
+      ["Italic", true],
+      ["Small", false],
+    ] as const) {
+      expect(screen.getByRole("button", { name })).toHaveProp(
+        "accessibilityState",
+        expect.objectContaining({ selected }),
+      );
+    }
+  });
+
+  it("keeps controlled toggle-group presses derived from the owner value", () => {
+    const onValueChange = jest.fn();
+    render(
+      <ToggleGroup
+        accessibilityLabel="Formatting"
+        onValueChange={onValueChange}
+        type="multiple"
+        value={[]}
+      >
+        <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+        <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+      </ToggleGroup>,
+    );
+
+    act(() => {
+      fireEvent.press(screen.getByRole("button", { name: "Bold" }));
+      fireEvent.press(screen.getByRole("button", { name: "Italic" }));
+    });
+
+    expect(onValueChange.mock.calls).toEqual([[["bold"]], [["italic"]]]);
+    expect(screen.getByRole("button", { name: "Bold" })).toHaveProp(
+      "accessibilityState",
+      expect.objectContaining({ selected: false }),
     );
   });
 

@@ -26,15 +26,21 @@ export type ScrambleTextProps = Omit<TextProps, "children"> & {
 const defaultPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 function splitCharacters(value: string): readonly string[] {
-  return value.match(/[\s\S]/gu) ?? [];
+  // Code points, not graphemes: Hermes has no Intl.Segmenter. Array.from is
+  // required because no-misused-spread rejects string spread.
+  // eslint-disable-next-line unicorn/prefer-spread
+  return Array.from(value);
 }
 
 function scramble(text: string, revealed: number, pool: string): string {
-  if (pool.length === 0) return text;
+  const poolCharacters = splitCharacters(pool);
+  if (poolCharacters.length === 0) return text;
   return splitCharacters(text)
     .map((character, index) => {
       if (index < revealed || character.trim().length === 0) return character;
-      return pool.charAt((index * 17 + revealed * 13) % pool.length);
+      return poolCharacters[
+        (index * 17 + revealed * 13) % poolCharacters.length
+      ];
     })
     .join("");
 }
@@ -50,10 +56,11 @@ function useRevealCount({
   readonly reduceMotion: boolean;
   readonly text: string;
 }): number {
+  const length = splitCharacters(text).length;
   const [state, setState] = useState({
     pool,
     reduceMotion,
-    revealed: text.length,
+    revealed: length,
     text,
   });
   if (
@@ -64,7 +71,7 @@ function useRevealCount({
     setState({
       pool,
       reduceMotion,
-      revealed: reduceMotion || pool.length === 0 ? text.length : 0,
+      revealed: reduceMotion || pool.length === 0 ? length : 0,
       text,
     });
   }
@@ -72,12 +79,12 @@ function useRevealCount({
     state.pool === pool &&
     state.reduceMotion === reduceMotion &&
     state.text === text;
-  const revealed = current ? state.revealed : reduceMotion ? text.length : 0;
+  const revealed = current ? state.revealed : reduceMotion ? length : 0;
   useEffect(() => {
     if (
       reduceMotion ||
-      revealed >= text.length ||
-      text.length === 0 ||
+      revealed >= length ||
+      length === 0 ||
       pool.length === 0
     ) {
       return;
@@ -86,16 +93,19 @@ function useRevealCount({
       () => {
         setState((value) => ({ ...value, revealed: value.revealed + 1 }));
       },
-      Math.max(1, Math.floor(duration / text.length)),
+      Math.max(1, Math.floor(duration / length)),
     );
     return () => {
       clearTimeout(timer);
     };
-  }, [duration, pool.length, reduceMotion, revealed, text.length]);
+  }, [duration, length, pool.length, reduceMotion, revealed]);
   return revealed;
 }
 
-/** Resolves a deterministic glyph sequence without randomness or browser APIs. */
+/**
+ * Resolves a deterministic glyph sequence without randomness or browser APIs.
+ * Reveal steps and timing count Unicode code points (`Array.from`), matching Typewriter.
+ */
 function ScrambleText({
   accessibilityLabel,
   duration = 1200,

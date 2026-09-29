@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react-native";
+import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import { Text as NativeText, View } from "react-native";
 
@@ -242,6 +242,51 @@ describe("native navigation components", () => {
     fireEvent.press(screen.getByRole("button", { name: "Close sidebar" }));
     expect(screen.getByText("closed:compact")).toBeOnTheScreen();
     expect(screen.queryByRole("button", { name: "Dashboard" })).toBeNull();
+  });
+
+  it("applies repeated sidebar toggles from the latest uncontrolled value", () => {
+    const onOpenChange = jest.fn();
+    function SidebarState() {
+      const { open } = useSidebar();
+      return <NativeText>{open ? "open" : "closed"}</NativeText>;
+    }
+
+    render(
+      <SidebarProvider onOpenChange={onOpenChange}>
+        <SidebarToggle accessibilityLabel="Sidebar" />
+        <SidebarState />
+      </SidebarProvider>,
+    );
+
+    const toggle = screen.getByRole("button", { name: "Sidebar" });
+    act(() => {
+      fireEvent.press(toggle);
+      fireEvent.press(toggle);
+    });
+
+    expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
+    expect(screen.getByText("closed")).toBeOnTheScreen();
+  });
+
+  it("keeps controlled sidebar toggles derived from the owner value", () => {
+    const onOpenChange = jest.fn();
+    render(
+      <SidebarProvider onOpenChange={onOpenChange} open={false}>
+        <SidebarToggle accessibilityLabel="Sidebar" />
+      </SidebarProvider>,
+    );
+
+    const toggle = screen.getByRole("button", { name: "Sidebar" });
+    act(() => {
+      fireEvent.press(toggle);
+      fireEvent.press(toggle);
+    });
+
+    expect(onOpenChange.mock.calls).toEqual([[true], [true]]);
+    expect(toggle).toHaveProp(
+      "accessibilityState",
+      expect.objectContaining({ expanded: false }),
+    );
   });
 
   it("paginates with current and disabled semantics", () => {

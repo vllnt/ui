@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, type ReactNode, type Ref, use, useMemo } from "react";
+import {
+  createContext,
+  type ReactNode,
+  type Ref,
+  use,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 
 import {
   Pressable,
@@ -119,8 +127,9 @@ function ToggleGroup(props: ToggleGroupProps) {
     value: _value,
     ...viewProps
   } = props;
+  const controlled = "value" in props;
   const [selectedKeys, setSelectedKeys] = useControllableState(
-    "value" in props
+    controlled
       ? {
           mode: "controlled",
           onChange: (keys) => {
@@ -136,25 +145,29 @@ function ToggleGroup(props: ToggleGroupProps) {
           },
         },
   );
+  // Uncontrolled presses read this ref so repeated presses before a re-render
+  // build on each other; controlled presses always derive from the owner value.
+  const latestKeysRef = useRef(selectedKeys);
+  useLayoutEffect(() => {
+    latestKeysRef.current = selectedKeys;
+  }, [selectedKeys]);
   const context = useMemo<ToggleGroupContextValue>(
     () => ({
       disabled: disabled ?? undefined,
       selectedKeys,
       toggle(key) {
-        if (props.type === "single") {
-          const current = firstKey(selectedKeys);
-          const selected = isMultipleSelected(selectedKeys, key, identity);
-          setSelectedKeys(
-            selected
+        const currentKeys = controlled ? selectedKeys : latestKeysRef.current;
+        const nextKeys: ReadonlySet<SelectionKey> =
+          props.type === "single"
+            ? isMultipleSelected(currentKeys, key, identity)
               ? new Set()
-              : new Set([selectSingle(current, key, identity)]),
-          );
-        } else {
-          setSelectedKeys(toggleMultipleSelected(selectedKeys, key, identity));
-        }
+              : new Set([selectSingle(firstKey(currentKeys), key, identity)])
+            : toggleMultipleSelected(currentKeys, key, identity);
+        if (!controlled) latestKeysRef.current = nextKeys;
+        setSelectedKeys(nextKeys);
       },
     }),
-    [disabled, props.type, selectedKeys, setSelectedKeys],
+    [controlled, disabled, props.type, selectedKeys, setSelectedKeys],
   );
   const theme = useTheme();
 
