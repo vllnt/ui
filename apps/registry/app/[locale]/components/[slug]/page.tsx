@@ -61,17 +61,6 @@ type Props = {
 
 const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
-const PACKAGES_DIR = path.join(process.cwd(), "..", "..", "packages");
-const CHART_COMPONENTS = new Set(["area-chart", "bar-chart", "line-chart"]);
-
-/** Reads a workspace package file; a missing file reads as "". */
-async function readPackageFile(...segments: string[]): Promise<string> {
-  try {
-    return await readFile(path.join(PACKAGES_DIR, ...segments), "utf8");
-  } catch {
-    return "";
-  }
-}
 
 export async function generateStaticParams() {
   const slugs = registry.items.map((item) => item.name);
@@ -174,18 +163,73 @@ export default async function ComponentPage(props: Props) {
 
   // The browser preview stays on the Web implementation. Paired Native source
   // is available from the source selector when this component supports it.
-  const componentCode =
-    (await readPackageFile(
-      "ui",
-      "src",
-      "components",
-      CHART_COMPONENTS.has(component.name) ? "chart" : component.name,
-      `${component.name}.tsx`,
-    )) ||
-    (await readPackageFile("ui", "src", "components", `${component.name}.tsx`));
-  const nativeCode = component.native
-    ? await readPackageFile("ui-native", component.native.source)
-    : "";
+  let componentCode = "";
+  try {
+    const isChartComponent = ["area-chart", "bar-chart", "line-chart"].includes(
+      component.name,
+    );
+
+    const sourcePath = isChartComponent
+      ? path.join(
+          process.cwd(),
+          "..",
+          "..",
+          "packages",
+          "ui",
+          "src",
+          "components",
+          "chart",
+          `${component.name}.tsx`,
+        )
+      : path.join(
+          process.cwd(),
+          "..",
+          "..",
+          "packages",
+          "ui",
+          "src",
+          "components",
+          component.name,
+          `${component.name}.tsx`,
+        );
+
+    try {
+      componentCode = await readFile(sourcePath, "utf8");
+    } catch {
+      const directPath = path.join(
+        process.cwd(),
+        "..",
+        "..",
+        "packages",
+        "ui",
+        "src",
+        "components",
+        `${component.name}.tsx`,
+      );
+      componentCode = await readFile(directPath, "utf8");
+    }
+  } catch {
+    // Source file not found — skip code section
+  }
+
+  let nativeCode = "";
+  if (component.native) {
+    try {
+      nativeCode = await readFile(
+        path.join(
+          process.cwd(),
+          "..",
+          "..",
+          "packages",
+          "ui-native",
+          component.native.source,
+        ),
+        "utf8",
+      );
+    } catch {
+      // Native source file not found — leave the Web source without a platform tab.
+    }
+  }
 
   const webSource: ComponentSource | undefined = componentCode
     ? {
