@@ -212,6 +212,46 @@ describe("Native A-C individual audit regressions", () => {
     expect(screen.queryByText("Body")).toBeNull();
   });
 
+  it("links disclosure parts only while their counterparts are mounted", () => {
+    const tree = (parts: { content: boolean; trigger: boolean }) => (
+      <ThemeProvider>
+        <Collapsible defaultOpen id="details">
+          {parts.trigger ? (
+            <CollapsibleTrigger label="Toggle">
+              <Text>Toggle</Text>
+            </CollapsibleTrigger>
+          ) : null}
+          {parts.content ? (
+            <CollapsibleContent testID="details-content">
+              <Text>Body</Text>
+            </CollapsibleContent>
+          ) : null}
+        </Collapsible>
+      </ThemeProvider>
+    );
+    render(tree({ content: true, trigger: false }));
+    expect(
+      screen.getByTestId("details-content").props["aria-labelledby"],
+    ).toBeUndefined();
+    screen.rerender(tree({ content: true, trigger: true }));
+    expect(screen.getByTestId("details-content")).toHaveProp(
+      "aria-labelledby",
+      "details-trigger",
+    );
+    expect(screen.getByRole("button", { name: "Toggle" })).toHaveProp(
+      "aria-controls",
+      "details-content",
+    );
+    screen.rerender(tree({ content: false, trigger: true }));
+    expect(
+      screen.getByRole("button", { name: "Toggle" }).props["aria-controls"],
+    ).toBeUndefined();
+    screen.rerender(tree({ content: true, trigger: false }));
+    expect(
+      screen.getByTestId("details-content").props["aria-labelledby"],
+    ).toBeUndefined();
+  });
+
   it("preserves unsent composer text when no submit adapter exists", () => {
     render(
       <ThemeProvider>
