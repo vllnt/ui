@@ -10,3 +10,12 @@ test-results
 playwright-report
 .playwright
 
+# Generated shadcn shims: scripts/inline-component-source.ts writes these from
+# packages/ui/src on `registry:build` (run by `build`) and `registry:sync-shims`
+# (run by `predev`). The chart shims have no single canonical source file, so
+# they stay hand-maintained and tracked.
+/registry/default/*/*.tsx
+!/registry/default/area-chart/area-chart.tsx
+!/registry/default/bar-chart/bar-chart.tsx
+!/registry/default/line-chart/line-chart.tsx
+

@@ -66,8 +66,8 @@ with `git commit --no-verify`.
 ### Config — [`doctor.config.json`](./doctor.config.json)
 
 - `ignore.files` skips generated/build output so the score reflects hand-written
-  source: `registry/default/**` (generated from `packages/ui/src` by
-  `inline-component-source.ts`), `storybook-static`, `dist`, `.next`, Pagefind
+  source: `registry/default/**` (untracked shims generated from
+  `packages/ui/src` by `inline-component-source.ts`), `storybook-static`, `dist`, `.next`, Pagefind
   and shadcn registry output, and `*.visual.tsx` Playwright CT fixtures (test
   entry files the import graph can't see).
 - Two rules are `off` because they conflict with deliberate library patterns:

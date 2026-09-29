@@ -57,7 +57,7 @@ CI will:
 Once `@vllnt/ui@{x.y.z}` is live on npm `latest`, open a small follow-up PR that:
 
 - Sets `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-source.ts` to `{x.y.z}`.
-- Runs `pnpm -F @vllnt/ui-registry registry:build` and commits the regenerated `registry.json` + `registry/default` shims (the install target becomes `@vllnt/ui@^{x.y.z}` and item versions update).
+- Runs `pnpm -F @vllnt/ui-registry registry:build` and commits the regenerated `registry.json` and `lib/component-metadata.json` (the install target becomes `@vllnt/ui@^{x.y.z}` and item versions update). The `registry/default` shims are untracked build output and are regenerated on every build.
 
 The `registry:check` and `registry:integrity` CI guards confirm the regenerated registry is in sync and pins a real (non-prerelease) published version. Until this lands, `npx shadcn add` keeps resolving to the previous published version — harmless, just one release behind.
 
