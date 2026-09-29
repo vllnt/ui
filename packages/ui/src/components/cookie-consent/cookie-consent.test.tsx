@@ -167,34 +167,26 @@ describe("CookieConsent", () => {
       expect(handleDecline).toHaveBeenCalledTimes(1);
     });
 
-    it("calls onOpenChange with false after accept", async () => {
-      const handleOpenChange = vi.fn();
-      render(<CookieConsent onOpenChange={handleOpenChange} open={true} />);
-
-      const acceptButtons = screen.getAllByRole("button", { name: "Accept" });
-      fireEvent.click(acceptButtons[0]!);
-
-      // Wait for animation timeout - wrap in act to avoid React warnings
-      await act(async () => {
-        vi.advanceTimersByTime(200);
-      });
-
-      expect(handleOpenChange).toHaveBeenCalledWith(false);
-    });
-
-    it("calls onOpenChange with false after decline", async () => {
+    it.each([
+      ["calls onOpenChange with false after accept", {}, "Accept"],
+      [
+        "calls onOpenChange with false after decline",
+        { declineText: "Decline" },
+        "Decline",
+      ],
+    ])("%s", async (_name, props, buttonName) => {
       const handleOpenChange = vi.fn();
       render(
         <CookieConsent
-          declineText="Decline"
+          {...props}
           onOpenChange={handleOpenChange}
           open={true}
         />,
       );
 
-      const declineButtons = screen.getAllByRole("button", { name: "Decline" });
-      fireEvent.click(declineButtons[0]!);
+      fireEvent.click(screen.getAllByRole("button", { name: buttonName })[0]!);
 
+      // Wait for animation timeout - wrap in act to avoid React warnings
       await act(async () => {
         vi.advanceTimersByTime(200);
       });
@@ -262,25 +254,22 @@ describe("CookieConsent", () => {
   });
 
   describe("position variants", () => {
-    it("applies bottom-left position by default", () => {
-      render(<CookieConsent open={true} />);
+    it.each([
+      ["applies bottom-left position by default", {}, ["bottom-4", "left-4"]],
+      [
+        "applies bottom-right position",
+        { position: "bottom-right" as const },
+        ["bottom-4", "right-4"],
+      ],
+      [
+        "applies bottom-center position",
+        { position: "bottom-center" as const },
+        ["bottom-4", "left-1/2", "-translate-x-1/2"],
+      ],
+    ])("%s", (_name, props, classes) => {
+      render(<CookieConsent {...props} open={true} />);
 
-      const dialog = screen.getByRole("dialog");
-      expect(dialog).toHaveClass("bottom-4", "left-4");
-    });
-
-    it("applies bottom-right position", () => {
-      render(<CookieConsent open={true} position="bottom-right" />);
-
-      const dialog = screen.getByRole("dialog");
-      expect(dialog).toHaveClass("bottom-4", "right-4");
-    });
-
-    it("applies bottom-center position", () => {
-      render(<CookieConsent open={true} position="bottom-center" />);
-
-      const dialog = screen.getByRole("dialog");
-      expect(dialog).toHaveClass("bottom-4", "left-1/2", "-translate-x-1/2");
+      expect(screen.getByRole("dialog")).toHaveClass(...classes);
     });
   });
 

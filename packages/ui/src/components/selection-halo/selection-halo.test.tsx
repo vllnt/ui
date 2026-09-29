@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 
 import { SelectionHalo } from "./selection-halo";
 
+const SQUARE = { height: 100, width: 100, x: 0, y: 0 };
+
 describe("SelectionHalo", () => {
   it("positions and sizes from bounds props", () => {
     const { container } = render(
@@ -19,42 +21,23 @@ describe("SelectionHalo", () => {
   });
 
   it("renders a corner handle at each of the four corners", () => {
-    const { container } = render(
-      <SelectionHalo bounds={{ height: 100, width: 100, x: 0, y: 0 }} />,
-    );
+    const { container } = render(<SelectionHalo bounds={SQUARE} />);
 
-    expect(
-      container.querySelector("[data-handle-corner='nw']"),
-    ).toBeInTheDocument();
-    expect(
-      container.querySelector("[data-handle-corner='ne']"),
-    ).toBeInTheDocument();
-    expect(
-      container.querySelector("[data-handle-corner='se']"),
-    ).toBeInTheDocument();
-    expect(
-      container.querySelector("[data-handle-corner='sw']"),
-    ).toBeInTheDocument();
+    ["nw", "ne", "se", "sw"].forEach((corner) => {
+      expect(
+        container.querySelector(`[data-handle-corner='${corner}']`),
+      ).toBeInTheDocument();
+    });
   });
 
   it("renders the label chip when label is set", () => {
-    render(
-      <SelectionHalo
-        bounds={{ height: 100, width: 100, x: 0, y: 0 }}
-        label="3 selected"
-      />,
-    );
+    render(<SelectionHalo bounds={SQUARE} label="3 selected" />);
 
     expect(screen.getByText("3 selected")).toBeInTheDocument();
   });
 
   it("emits data-pulsing when pulsing is true", () => {
-    const { container } = render(
-      <SelectionHalo
-        bounds={{ height: 100, width: 100, x: 0, y: 0 }}
-        pulsing
-      />,
-    );
+    const { container } = render(<SelectionHalo bounds={SQUARE} pulsing />);
 
     expect(container.querySelector("[data-selection-halo]")).toHaveAttribute(
       "data-pulsing",

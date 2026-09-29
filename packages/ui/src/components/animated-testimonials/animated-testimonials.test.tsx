@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
+
+import { stubMatchMedia } from "../../__tests__/stub-match-media";
 
 import {
   AnimatedTestimonials,
@@ -13,14 +15,7 @@ const testimonials: Testimonial[] = [
 
 describe("AnimatedTestimonials", () => {
   beforeEach(() => {
-    vi.stubGlobal(
-      "matchMedia",
-      vi.fn().mockReturnValue({
-        addEventListener: vi.fn(),
-        matches: false,
-        removeEventListener: vi.fn(),
-      }),
-    );
+    stubMatchMedia();
   });
 
   it("renders the first testimonial", () => {

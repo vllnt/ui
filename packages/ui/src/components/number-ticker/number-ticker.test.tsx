@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import { stubMatchMedia } from "../../__tests__/stub-match-media";
+
 import { NumberTicker } from "./number-ticker";
 
 describe("NumberTicker", () => {
@@ -23,17 +25,7 @@ describe("NumberTicker", () => {
   });
 
   it("respects reduced motion preferences", () => {
-    const matchMedia = vi.fn().mockReturnValue({
-      addEventListener: vi.fn(),
-      addListener: vi.fn(),
-      matches: true,
-      media: "(prefers-reduced-motion: reduce)",
-      onchange: null,
-      removeEventListener: vi.fn(),
-      removeListener: vi.fn(),
-    });
-
-    vi.stubGlobal("matchMedia", matchMedia);
+    stubMatchMedia(true);
 
     render(<NumberTicker duration={2} from={10} value={99} />);
 

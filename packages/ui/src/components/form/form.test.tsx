@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { useForm } from "react-hook-form";
+import { useForm, type UseFormReturn } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
@@ -28,6 +28,88 @@ type EmailValues = z.infer<typeof emailSchema>;
 type NativeSubmitEvent = Parameters<
   NonNullable<React.ComponentPropsWithoutRef<"form">["onSubmit"]>
 >[0];
+
+type EmailItemFormOptions = {
+  control?: React.ComponentPropsWithoutRef<typeof FormControl>;
+  description?: React.ReactNode;
+  form?: {
+    controlId?: string;
+    disabled?: boolean;
+    invalid?: boolean;
+    required?: boolean;
+  };
+  message?: React.ReactNode;
+};
+
+type EmailFieldFormOptions = {
+  description?: string;
+  email?: string;
+  onSubmit?: React.ComponentPropsWithoutRef<"form">["onSubmit"];
+  onValidSubmit?: (
+    values: EmailValues,
+    form: UseFormReturn<EmailValues, unknown, EmailValues>,
+  ) => Promise<void> | void;
+  renderSubmit?: (
+    form: UseFormReturn<EmailValues, unknown, EmailValues>,
+  ) => React.ReactNode;
+};
+
+function renderEmailFieldForm({
+  description,
+  email = "",
+  renderSubmit = () => <Button type="submit">Save changes</Button>,
+  ...formProps
+}: EmailFieldFormOptions = {}) {
+  return render(
+    <Form<EmailValues>
+      defaultValues={{ email }}
+      schema={emailSchema}
+      {...formProps}
+    >
+      {(form) => (
+        <>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                {description ? (
+                  <FormDescription>{description}</FormDescription>
+                ) : null}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {renderSubmit(form)}
+        </>
+      )}
+    </Form>,
+  );
+}
+
+function emailItemForm({
+  control,
+  description,
+  form,
+  message,
+}: EmailItemFormOptions = {}) {
+  return (
+    <Form onSubmit={vi.fn()} {...form}>
+      <FormItem>
+        <FormLabel>Email</FormLabel>
+        <FormControl {...control}>
+          <Input type="email" />
+        </FormControl>
+        {description}
+        {message}
+      </FormItem>
+    </Form>
+  );
+}
 
 describe("Form", () => {
   it("renders a native form element and forwards props, ref, and submit", async () => {
@@ -80,33 +162,11 @@ describe("Form", () => {
     });
     const validSubmit = vi.fn();
 
-    render(
-      <Form<EmailValues>
-        defaultValues={{ email: "person@example.com" }}
-        onSubmit={nativeSubmit}
-        onValidSubmit={validSubmit}
-        schema={emailSchema}
-      >
-        {(form) => (
-          <>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Save changes</Button>
-          </>
-        )}
-      </Form>,
-    );
+    renderEmailFieldForm({
+      email: "person@example.com",
+      onSubmit: nativeSubmit,
+      onValidSubmit: validSubmit,
+    });
 
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
@@ -117,16 +177,7 @@ describe("Form", () => {
   });
 
   it("omits aria-describedby when no description or message is rendered", () => {
-    render(
-      <Form onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-        </FormItem>
-      </Form>,
-    );
+    render(emailItemForm());
 
     const input = screen.getByRole("textbox");
     expect(input).not.toHaveAttribute("aria-describedby");
@@ -134,14 +185,10 @@ describe("Form", () => {
 
   it("preserves caller aria-describedby when description and message are absent", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl aria-describedby="external-help">
-            <Input type="email" />
-          </FormControl>
-        </FormItem>
-      </Form>,
+      emailItemForm({
+        control: { "aria-describedby": "external-help" },
+        form: { invalid: true },
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -150,15 +197,10 @@ describe("Form", () => {
 
   it("does not link the message id when invalid but no FormMessage is rendered", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-          <FormDescription>Help text</FormDescription>
-        </FormItem>
-      </Form>,
+      emailItemForm({
+        description: <FormDescription>Help text</FormDescription>,
+        form: { invalid: true },
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -168,15 +210,10 @@ describe("Form", () => {
 
   it("does not render or link empty message content", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-          <FormMessage>{null}</FormMessage>
-        </FormItem>
-      </Form>,
+      emailItemForm({
+        form: { invalid: true },
+        message: <FormMessage>{null}</FormMessage>,
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -186,15 +223,10 @@ describe("Form", () => {
 
   it("does not link the description id when no FormDescription is rendered", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-          <FormMessage>Required</FormMessage>
-        </FormItem>
-      </Form>,
+      emailItemForm({
+        form: { invalid: true },
+        message: <FormMessage>Required</FormMessage>,
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -204,16 +236,11 @@ describe("Form", () => {
 
   it("renders description and message ids in server markup on the first pass", () => {
     const markup = renderToStaticMarkup(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-          <FormDescription>Help text</FormDescription>
-          <FormMessage>Required</FormMessage>
-        </FormItem>
-      </Form>,
+      emailItemForm({
+        description: <FormDescription>Help text</FormDescription>,
+        form: { invalid: true },
+        message: <FormMessage>Required</FormMessage>,
+      }),
     );
 
     expect(markup).toContain("aria-describedby=");
@@ -223,18 +250,16 @@ describe("Form", () => {
 
   it("ignores native id overrides that would break form associations", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl id="custom-control-id">
-            <Input type="email" />
-          </FormControl>
+      emailItemForm({
+        control: { id: "custom-control-id" },
+        description: (
           <FormDescription id="custom-description-id">
             Help text
           </FormDescription>
-          <FormMessage id="custom-message-id">Required</FormMessage>
-        </FormItem>
-      </Form>,
+        ),
+        form: { invalid: true },
+        message: <FormMessage id="custom-message-id">Required</FormMessage>,
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -255,35 +280,10 @@ describe("Form", () => {
   it("wires labels, descriptions, and validation errors through form context", async () => {
     const handleSubmit = vi.fn();
 
-    render(
-      <Form<EmailValues>
-        defaultValues={{ email: "" }}
-        onValidSubmit={handleSubmit}
-        schema={emailSchema}
-      >
-        {(form) => (
-          <>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Use your work email address.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Save changes</Button>
-          </>
-        )}
-      </Form>,
-    );
+    renderEmailFieldForm({
+      description: "Use your work email address.",
+      onValidSubmit: handleSubmit,
+    });
 
     const input = screen.getByRole("textbox", { name: "Email" });
     const label = screen.getByText("Email");
@@ -306,31 +306,7 @@ describe("Form", () => {
   });
 
   it("runs schema validation even without explicit submit callbacks", async () => {
-    render(
-      <Form<EmailValues> defaultValues={{ email: "" }} schema={emailSchema}>
-        {(form) => (
-          <>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Use your work email address.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Save changes</Button>
-          </>
-        )}
-      </Form>,
-    );
+    renderEmailFieldForm({ description: "Use your work email address." });
 
     const input = screen.getByRole("textbox", { name: "Email" });
     const description = screen.getByText("Use your work email address.");
@@ -374,40 +350,16 @@ describe("Form", () => {
   });
 
   it("supports server-side field errors via setError", async () => {
-    render(
-      <Form<EmailValues>
-        defaultValues={{ email: "person@example.com" }}
-        onValidSubmit={async (_values, form) => {
-          form.setError("email", {
-            message: "This email is already in use.",
-            type: "server",
-          });
-        }}
-        schema={emailSchema}
-      >
-        {(form) => (
-          <>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    We will send invitations here.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Save changes</Button>
-          </>
-        )}
-      </Form>,
-    );
+    renderEmailFieldForm({
+      description: "We will send invitations here.",
+      email: "person@example.com",
+      onValidSubmit: async (_values, form) => {
+        form.setError("email", {
+          message: "This email is already in use.",
+          type: "server",
+        });
+      },
+    });
 
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
@@ -474,34 +426,15 @@ describe("Form", () => {
         resolveSubmit = resolve;
       });
 
-    render(
-      <Form<EmailValues>
-        defaultValues={{ email: "person@example.com" }}
-        onValidSubmit={handlePendingSubmit}
-        schema={emailSchema}
-      >
-        {(form) => (
-          <>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button disabled={form.formState.isSubmitting} type="submit">
-              {form.formState.isSubmitting ? "Saving…" : "Save changes"}
-            </Button>
-          </>
-        )}
-      </Form>,
-    );
+    renderEmailFieldForm({
+      email: "person@example.com",
+      onValidSubmit: handlePendingSubmit,
+      renderSubmit: (form) => (
+        <Button disabled={form.formState.isSubmitting} type="submit">
+          {form.formState.isSubmitting ? "Saving…" : "Save changes"}
+        </Button>
+      ),
+    });
 
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }));
 
@@ -525,16 +458,7 @@ describe("Form", () => {
   });
 
   it("propagates disabled and required state to native controls", () => {
-    render(
-      <Form disabled onSubmit={vi.fn()} required>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-        </FormItem>
-      </Form>,
-    );
+    render(emailItemForm({ form: { disabled: true, required: true } }));
 
     const input = screen.getByRole("textbox");
 
@@ -545,16 +469,7 @@ describe("Form", () => {
   });
 
   it("preserves control-level disabled and required props when the form is not flagged", () => {
-    render(
-      <Form onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl disabled required>
-            <Input type="email" />
-          </FormControl>
-        </FormItem>
-      </Form>,
-    );
+    render(emailItemForm({ control: { disabled: true, required: true } }));
 
     const input = screen.getByRole("textbox");
 
@@ -602,20 +517,19 @@ describe("Form", () => {
 
   it("links wrapped description and message content", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
+      emailItemForm({
+        description: (
           <div>
             <FormDescription>Wrapped help</FormDescription>
           </div>
+        ),
+        form: { invalid: true },
+        message: (
           <div>
             <FormMessage>Wrapped error</FormMessage>
           </div>
-        </FormItem>
-      </Form>,
+        ),
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -631,18 +545,15 @@ describe("Form", () => {
 
   it("supports fragment-wrapped helper content", () => {
     render(
-      <Form invalid onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
+      emailItemForm({
+        description: (
           <>
             <FormDescription>Fragment help</FormDescription>
             <FormMessage>Fragment error</FormMessage>
           </>
-        </FormItem>
-      </Form>,
+        ),
+        form: { invalid: true },
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -658,18 +569,15 @@ describe("Form", () => {
 
   it("keeps helper text in aria-describedby without linking a valid message", () => {
     render(
-      <Form onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl aria-describedby="external-help">
-            <Input type="email" />
-          </FormControl>
+      emailItemForm({
+        control: { "aria-describedby": "external-help" },
+        description: (
           <FormDescription>
             We only use this for account updates.
           </FormDescription>
-          <FormMessage>Looks good.</FormMessage>
-        </FormItem>
-      </Form>,
+        ),
+        message: <FormMessage>Looks good.</FormMessage>,
+      }),
     );
 
     const input = screen.getByRole("textbox");
@@ -778,16 +686,11 @@ describe("Form", () => {
 
   it("keeps partial custom id overrides scoped to their role", () => {
     render(
-      <Form controlId="field" onSubmit={vi.fn()}>
-        <FormItem>
-          <FormLabel>Email</FormLabel>
-          <FormControl>
-            <Input type="email" />
-          </FormControl>
-          <FormDescription>Scoped description</FormDescription>
-          <FormMessage>Scoped message</FormMessage>
-        </FormItem>
-      </Form>,
+      emailItemForm({
+        description: <FormDescription>Scoped description</FormDescription>,
+        form: { controlId: "field" },
+        message: <FormMessage>Scoped message</FormMessage>,
+      }),
     );
 
     const input = screen.getByRole("textbox");
