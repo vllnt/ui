@@ -5345,682 +5345,350 @@ function ParallelTimelinePreview() {
   );
 }
 
-// eslint-disable-next-line max-lines-per-function -- Switch statement mapping all components
+const SIMPLE_PREVIEW_DESCRIPTIONS: Record<string, string> = {
+  "anchor-port": "Connection port primitive for object graph cards and edges.",
+  "canvas-shell":
+    "Overlay shell for infinite-canvas workspaces with floating chrome regions.",
+  "completion-dialog":
+    "A dialog for displaying completion status with confetti animation.",
+  "connector-edge":
+    "Curved connector edge for linking spatial objects on the canvas.",
+  "content-intro":
+    "An introduction section with progress tracking and action buttons.",
+  "edge-label": "Compact edge annotation badge used inside connector paths.",
+  "filter-bar": "A filter bar with search, sort, and filter controls.",
+  "group-hull": "Dashed grouping surface for related spatial objects.",
+  "left-rail":
+    "Primary left-side rail for workspace navigation and context controls.",
+  "mini-map-panel":
+    "Viewport overview panel showing camera position within the world surface.",
+  "model-selector":
+    "A dialog for selecting AI models with search and filtering.",
+  "navbar-saas": "A responsive navigation bar for SaaS applications.",
+  "object-card":
+    "Object card primitive for spatial entities with metrics, actions, and ports.",
+  "object-handle":
+    "Drag/move handle affordance for manipulating canvas objects.",
+  "progress-card": "A card component with progress tracking.",
+  "right-dock":
+    "Right-side dock for inspector, agent, or activity panels in the workspace shell.",
+  "scroll-progress":
+    "A fixed progress bar pinned to the top of the page that fills as the reader scrolls.",
+  "search-dialog": "A command palette style search dialog.",
+  slideshow: "A slideshow with keyboard navigation and progress.",
+  "table-of-contents-panel":
+    "A table of contents panel with progress tracking.",
+  "top-bar":
+    "Top workspace bar combining title, subtitle, and command surfaces.",
+  "tutorial-complete":
+    "A completion screen with achievements and related content.",
+  "tutorial-filters": "Filter controls for tutorial listings.",
+  "tutorial-intro-content":
+    "An introduction component for tutorials with objectives.",
+  "tutorial-mdx": "MDX components optimized for tutorial content.",
+  "workspace-switcher":
+    "Workspace selector for moving between orchestration views and object neighborhoods.",
+  "zoom-hud":
+    "Heads-up zoom control for resetting and stepping canvas magnification.",
+};
+
+const PREVIEWS: Record<string, React.ComponentType> = {
+  accordion: AccordionPreview,
+  "activity-heatmap": ActivityHeatmapPreview,
+  "activity-log": ActivityLogPreview,
+  "agent-activity": AgentActivityPreview,
+  "ai-artifact": AiArtifactPreview,
+  "ai-chat-input": AiChatInputPreview,
+  "ai-message-bubble": AiMessageBubblePreview,
+  "ai-sidebar": AiSidebarPreview,
+  "ai-source-citation": AiSourceCitationPreview,
+  "ai-streaming-text": AiStreamingTextPreview,
+  "ai-tool-call-display": AiToolCallDisplayPreview,
+  alert: AlertPreview,
+  "alert-dialog": AlertDialogPreview,
+  "alert-pulse": AlertPulsePreview,
+  "animated-beam": AnimatedBeamPreview,
+  "animated-grid-pattern": AnimatedGridPatternPreview,
+  "animated-list": AnimatedListPreview,
+  "animated-tabs": AnimatedTabsPreview,
+  "animated-testimonials": AnimatedTestimonialsPreview,
+  "animated-text": AnimatedTextPreview,
+  "animated-tooltip": AnimatedTooltipPreview,
+  annotation: AnnotationPreview,
+  "area-chart": AreaChartPreview,
+  "aspect-ratio": AspectRatioPreview,
+  "auto-reload": AutoReloadPreview,
+  avatar: AvatarPreview,
+  "avatar-group": AvatarGroupPreview,
+  badge: BadgePreview,
+  banner: BannerPreview,
+  "bar-chart": BarChartPreview,
+  "bento-grid": BentoGridPreview,
+  "blog-card": BlogCardPreview,
+  "blur-reveal": BlurRevealPreview,
+  "border-beam": BorderBeamPreview,
+  "bottom-activity-strip": BottomActivityStripPreview,
+  "bottom-bar": BottomBarPreview,
+  breadcrumb: BreadcrumbPreview,
+  button: ButtonPreview,
+  "button-group": ButtonGroupPreview,
+  calendar: CalendarPreview,
+  callout: CalloutPreview,
+  "candlestick-chart": CandlestickChartPreview,
+  "canvas-view": CanvasViewPreview,
+  card: CardPreview,
+  "card-flip": CardFlipPreview,
+  carousel: CarouselPreview,
+  "category-filter": CategoryFilterPreview,
+  "chain-of-thought": ChainOfThoughtPreview,
+  "chat-dock-section": ChatDockSectionPreview,
+  checkbox: CheckboxPreview,
+  "checkbox-group": CheckboxGroupPreview,
+  checklist: ChecklistPreview,
+  "choropleth-map": ChoroplethMapPreview,
+  "chronological-timeline": ChronologicalTimelinePreview,
+  "civilization-card": CivilizationCardPreview,
+  "code-block": CodeBlockPreview,
+  "code-playground": CodePlaygroundPreview,
+  collapsible: CollapsiblePreview,
+  "color-picker": ColorPickerPreview,
+  combobox: ComboboxPreview,
+  command: CommandPreview,
+  "comment-pin": CommentPinPreview,
+  comparison: ComparisonPreview,
+  "context-lens": ContextLensPreview,
+  "context-menu": ContextMenuPreview,
+  "contribution-graph": ContributionGraphPreview,
+  "conversation-thread": ConversationThreadPreview,
+  "cookie-consent": CookieConsentPreview,
+  "copy-button": CopyButtonPreview,
+  "countdown-timer": CountdownTimerPreview,
+  "credit-badge": CreditBadgePreview,
+  curriculum: CurriculumPreview,
+  cursor: CursorPreview,
+  "data-list": DataListPreview,
+  "data-table": DataTablePreview,
+  "date-field": DateFieldPreview,
+  "date-picker": DatePickerPreview,
+  "date-range-picker": DateRangePickerPreview,
+  dialog: DialogPreview,
+  dock: DockPreview,
+  "document-sibling-nav": DocumentSiblingNavPreview,
+  "dot-pattern": DotPatternPreview,
+  drawer: DrawerPreview,
+  "dropdown-menu": DropdownMenuPreview,
+  "empty-state": EmptyStatePreview,
+  "era-comparison": EraComparisonPreview,
+  exercise: ExercisePreview,
+  "expandable-cards": ExpandableCardsPreview,
+  faq: FAQPreview,
+  field: FieldPreview,
+  fieldset: FieldsetPreview,
+  "file-upload": FileUploadPreview,
+  flashcard: FlashcardPreview,
+  "floating-action-button": FloatingActionButtonPreview,
+  "floating-navbar": FloatingNavbarPreview,
+  "floating-toolbar": FloatingToolbarPreview,
+  "flow-diagram": FlowDiagramPreview,
+  "follow-mode": FollowModePreview,
+  form: FormPreview,
+  "gantt-chart": GanttChartPreview,
+  "gauge-chart": GaugeChartPreview,
+  "geography-quiz-map": GeographyQuizMapPreview,
+  "glass-card": GlassCardPreview,
+  "glass-panel": GlassPanelPreview,
+  "glass-progress": GlassProgressPreview,
+  "globe-3d": Globe3dPreview,
+  grid: GridPreview,
+  "handoff-beacon": HandoffBeaconPreview,
+  "heat-map-overlay": HeatMapOverlayPreview,
+  "heat-overlay": HeatOverlayPreview,
+  "historic-timeline": HistoricTimelinePreview,
+  "historical-figure-card": HistoricalFigureCardPreview,
+  "horizontal-scroll-row": HorizontalScrollRowPreview,
+  "hover-card": HoverCardPreview,
+  "infinite-plane": InfinitePlanePreview,
+  "inline-input": InlineInputPreview,
+  input: InputPreview,
+  "input-group": InputGroupPreview,
+  "input-otp": InputOTPPreview,
+  "interactive-timeline": InteractiveTimelinePreview,
+  item: ItemPreview,
+  "jarvis-dock": JarvisDockPreview,
+  kbd: KbdPreview,
+  "key-concept": KeyConceptPreview,
+  "keyboard-shortcuts-help": KeyboardShortcutsHelpPreview,
+  "knowledge-check": KnowledgeCheckPreview,
+  label: LabelPreview,
+  "lang-provider": LangProviderPreview,
+  "learning-objectives": LearningObjectivesPreview,
+  "line-chart": LineChartPreview,
+  link: LinkPreview,
+  "liquid-glass": LiquidGlassPreview,
+  "list-box": ListBoxPreview,
+  "live-cursor": LiveCursorPreview,
+  "live-feed": LiveFeedPreview,
+  magnetic: MagneticPreview,
+  "magnetic-button": MagneticButtonPreview,
+  "map-2d": Map2dPreview,
+  "map-timeline": MapTimelinePreview,
+  "market-treemap": MarketTreemapPreview,
+  marquee: MarqueePreview,
+  "mdx-content": MDXContentPreview,
+  menubar: MenubarPreview,
+  meteors: MeteorsPreview,
+  meter: MeterPreview,
+  "metric-cluster": MetricClusterPreview,
+  "metric-gauge": MetricGaugePreview,
+  "model-comparison": ModelComparisonPreview,
+  "multi-select": MultiSelectPreview,
+  "multi-select-lasso": MultiSelectLassoPreview,
+  "native-select": NativeSelectPreview,
+  "navigation-menu": NavigationMenuPreview,
+  "newsletter-signup": NewsletterSignupPreview,
+  "number-input": NumberInputPreview,
+  "number-ticker": NumberTickerPreview,
+  "object-inspector": ObjectInspectorPreview,
+  "order-book": OrderBookPreview,
+  "overview-board": OverviewBoardPreview,
+  pagination: PaginationPreview,
+  panel: PanelPreview,
+  "parallel-timeline": ParallelTimelinePreview,
+  particles: ParticlesPreview,
+  "password-input": PasswordInputPreview,
+  "phone-input": PhoneInputPreview,
+  "pie-chart": PieChartPreview,
+  "plan-badge": PlanBadgePreview,
+  "playback-ghost": PlaybackGhostPreview,
+  "policy-delivery-panel": PolicyDeliveryPanelPreview,
+  popover: PopoverPreview,
+  "presence-stack": PresenceStackPreview,
+  "presence-sync-indicator": PresenceSyncIndicatorPreview,
+  "pricing-table": PricingTablePreview,
+  "primary-source-viewer": PrimarySourceViewerPreview,
+  "pro-tip": ProTipPreview,
+  "profile-section": ProfileSectionPreview,
+  "progress-bar": ProgressBarPreview,
+  "progress-tracker": ProgressTrackerPreview,
+  "progressive-blur": ProgressiveBlurPreview,
+  "prompt-input": PromptInputPreview,
+  "prompt-templates": PromptTemplatesPreview,
+  "property-section": PropertySectionPreview,
+  "qr-code": QrCodePreview,
+  quiz: QuizPreview,
+  "radar-chart": RadarChartPreview,
+  "radio-group": RadioGroupPreview,
+  "range-calendar": RangeCalendarPreview,
+  rating: RatingPreview,
+  reasoning: ReasoningPreview,
+  "relationship-inspector": RelationshipInspectorPreview,
+  resizable: ResizablePreview,
+  "reveal-text": RevealTextPreview,
+  "role-badge": RoleBadgePreview,
+  "route-map": RouteMapPreview,
+  "routing-assignment-panel": RoutingAssignmentPanelPreview,
+  "run-timeline": RunTimelinePreview,
+  "runtime-overview-panel": RuntimeOverviewPanelPreview,
+  "sankey-chart": SankeyChartPreview,
+  "scope-selector": ScopeSelectorPreview,
+  "scramble-text": ScrambleTextPreview,
+  "scroll-area": ScrollAreaPreview,
+  "search-bar": SearchBarPreview,
+  "search-field": SearchFieldPreview,
+  "segmented-control": SegmentedControlPreview,
+  select: SelectPreview,
+  "selection-halo": SelectionHaloPreview,
+  "selection-presence": SelectionPresencePreview,
+  separator: SeparatorPreview,
+  "severity-badge": SeverityBadgePreview,
+  "share-dialog": ShareDialogPreview,
+  "share-section": ShareSectionPreview,
+  sheet: SheetPreview,
+  "shimmer-button": ShimmerButtonPreview,
+  "shimmer-text": ShimmerTextPreview,
+  "shine-border": ShineBorderPreview,
+  "shiny-button": ShinyButtonPreview,
+  sidebar: SidebarPreview,
+  "sidebar-provider": SidebarProviderPreview,
+  "sidebar-toggle": SidebarTogglePreview,
+  skeleton: SkeletonPreview,
+  slider: SliderPreview,
+  "snap-guides": SnapGuidesPreview,
+  sparkles: SparklesPreview,
+  "sparkline-grid": SparklineGridPreview,
+  spinner: SpinnerPreview,
+  "spinning-text": SpinningTextPreview,
+  "spotlight-card": SpotlightCardPreview,
+  "stat-card": StatCardPreview,
+  "state-badge-overlay": StateBadgeOverlayPreview,
+  "status-board": StatusBoardPreview,
+  "status-indicator": StatusIndicatorPreview,
+  "step-by-step": StepByStepPreview,
+  "step-navigation": StepNavigationPreview,
+  stepper: StepperPreview,
+  "sticky-metric": StickyMetricPreview,
+  "story-map": StoryMapPreview,
+  "subscription-card": SubscriptionCardPreview,
+  switch: SwitchPreview,
+  table: TablePreview,
+  "table-of-contents": TableOfContentsPreview,
+  tabs: TabsPreview,
+  "tag-group": TagGroupPreview,
+  "tags-input": TagsInputPreview,
+  terminal: TerminalPreview,
+  "text-animate": TextAnimatePreview,
+  "text-field": TextFieldPreview,
+  "text-reveal": TextRevealPreview,
+  "text-shimmer": TextShimmerPreview,
+  textarea: TextareaPreview,
+  "theme-preset-provider": ThemePresetProviderPreview,
+  "theme-provider": ThemeProviderPreview,
+  "theme-switcher": ThemeSwitcherPreview,
+  "theme-toggle": ThemeTogglePreview,
+  "thinking-block": ThinkingBlockPreview,
+  "thread-bubble": ThreadBubblePreview,
+  "threshold-ring": ThresholdRingPreview,
+  "ticker-tape": TickerTapePreview,
+  "tilt-card": TiltCardPreview,
+  "time-field": TimeFieldPreview,
+  "time-picker": TimePickerPreview,
+  timeline: TimelinePreview,
+  "timeline-scrubber": TimelineScrubberPreview,
+  "tldr-section": TLDRSectionPreview,
+  toast: ToastPreview,
+  toggle: TogglePreview,
+  "toggle-group": ToggleGroupPreview,
+  toolbar: ToolbarPreview,
+  tooltip: TooltipPreview,
+  tour: TourPreview,
+  "transaction-list": TransactionListPreview,
+  "tree-view": TreeViewPreview,
+  "truncated-text": TruncatedTextPreview,
+  "tutorial-card": TutorialCardPreview,
+  typewriter: TypewriterPreview,
+  typography: TypographyPreview,
+  "usage-breakdown": UsageBreakdownPreview,
+  "video-embed": VideoEmbedPreview,
+  "view-switcher": ViewSwitcherPreview,
+  "viewport-bookmarks": ViewportBookmarksPreview,
+  "wallet-card": WalletCardPreview,
+  watchlist: WatchlistPreview,
+  "world-breadcrumbs": WorldBreadcrumbsPreview,
+  "world-clock-bar": WorldClockBarPreview,
+};
+
 export function ComponentPreview({ componentName }: ComponentPreviewProps) {
-  switch (componentName) {
-    case "accordion":
-      return <AccordionPreview />;
-    case "activity-heatmap":
-      return <ActivityHeatmapPreview />;
-    case "activity-log":
-      return <ActivityLogPreview />;
-    case "alert":
-      return <AlertPreview />;
-    case "alert-dialog":
-      return <AlertDialogPreview />;
-    case "animated-text":
-      return <AnimatedTextPreview />;
-    case "area-chart":
-      return <AreaChartPreview />;
-    case "aspect-ratio":
-      return <AspectRatioPreview />;
-    case "avatar":
-      return <AvatarPreview />;
-    case "avatar-group":
-      return <AvatarGroupPreview />;
-    case "border-beam":
-      return <BorderBeamPreview />;
-    case "badge":
-      return <BadgePreview />;
-    case "bar-chart":
-      return <BarChartPreview />;
-    case "blog-card":
-      return <BlogCardPreview />;
-    case "breadcrumb":
-      return <BreadcrumbPreview />;
-    case "button":
-      return <ButtonPreview />;
-    case "anchor-port":
-      return (
-        <SimplePreview description="Connection port primitive for object graph cards and edges." />
-      );
-    case "callout":
-      return <CalloutPreview />;
-    case "calendar":
-      return <CalendarPreview />;
-    case "combobox":
-      return <ComboboxPreview />;
-    case "card":
-      return <CardPreview />;
-    case "data-list":
-      return <DataListPreview />;
-    case "data-table":
-      return <DataTablePreview />;
-    case "carousel":
-      return <CarouselPreview />;
-    case "canvas-shell":
-      return (
-        <SimplePreview description="Overlay shell for infinite-canvas workspaces with floating chrome regions." />
-      );
-    case "canvas-view":
-      return <CanvasViewPreview />;
-    case "connector-edge":
-      return (
-        <SimplePreview description="Curved connector edge for linking spatial objects on the canvas." />
-      );
-    case "category-filter":
-      return <CategoryFilterPreview />;
-    case "checkbox":
-      return <CheckboxPreview />;
-    case "collapsible":
-      return <CollapsiblePreview />;
-    case "checklist":
-      return <ChecklistPreview />;
-    case "code-block":
-      return <CodeBlockPreview />;
-    case "code-playground":
-      return <CodePlaygroundPreview />;
-    case "command":
-      return <CommandPreview />;
-    case "comparison":
-      return <ComparisonPreview />;
-    case "completion-dialog":
-      return (
-        <SimplePreview description="A dialog for displaying completion status with confetti animation." />
-      );
-    case "content-intro":
-      return (
-        <SimplePreview description="An introduction section with progress tracking and action buttons." />
-      );
-    case "context-menu":
-      return <ContextMenuPreview />;
-    case "countdown-timer":
-      return <CountdownTimerPreview />;
-    case "credit-badge":
-      return <CreditBadgePreview />;
-    case "dialog":
-      return <DialogPreview />;
-    case "drawer":
-      return <DrawerPreview />;
-    case "dropdown-menu":
-      return <DropdownMenuPreview />;
-    case "exercise":
-      return <ExercisePreview />;
-    case "faq":
-      return <FAQPreview />;
-    case "flashcard":
-      return <FlashcardPreview />;
-    case "edge-label":
-      return (
-        <SimplePreview description="Compact edge annotation badge used inside connector paths." />
-      );
-    case "file-upload":
-      return <FileUploadPreview />;
-    case "filter-bar":
-      return (
-        <SimplePreview description="A filter bar with search, sort, and filter controls." />
-      );
-    case "floating-action-button":
-      return <FloatingActionButtonPreview />;
-    case "form":
-      return <FormPreview />;
-    case "group-hull":
-      return (
-        <SimplePreview description="Dashed grouping surface for related spatial objects." />
-      );
-    case "horizontal-scroll-row":
-      return <HorizontalScrollRowPreview />;
-    case "hover-card":
-      return <HoverCardPreview />;
-    case "inline-input":
-      return <InlineInputPreview />;
-    case "input":
-      return <InputPreview />;
-    case "input-otp":
-      return <InputOTPPreview />;
-    case "date-picker":
-      return <DatePickerPreview />;
-    case "key-concept":
-      return <KeyConceptPreview />;
-    case "keyboard-shortcuts-help":
-      return <KeyboardShortcutsHelpPreview />;
-    case "left-rail":
-      return (
-        <SimplePreview description="Primary left-side rail for workspace navigation and context controls." />
-      );
-    case "lang-provider":
-      return <LangProviderPreview />;
-    case "learning-objectives":
-      return <LearningObjectivesPreview />;
-    case "line-chart":
-      return <LineChartPreview />;
-    case "marquee":
-      return <MarqueePreview />;
-    case "live-feed":
-      return <LiveFeedPreview />;
-    case "market-treemap":
-      return <MarketTreemapPreview />;
-    case "mdx-content":
-      return <MDXContentPreview />;
-    case "menubar":
-      return <MenubarPreview />;
-    case "mini-map-panel":
-      return (
-        <SimplePreview description="Viewport overview panel showing camera position within the world surface." />
-      );
-    case "metric-gauge":
-      return <MetricGaugePreview />;
-    case "model-selector":
-      return (
-        <SimplePreview description="A dialog for selecting AI models with search and filtering." />
-      );
-    case "multi-select":
-      return <MultiSelectPreview />;
-    case "tags-input":
-      return <TagsInputPreview />;
-    case "segmented-control":
-      return <SegmentedControlPreview />;
-    case "navbar-saas":
-      return (
-        <SimplePreview description="A responsive navigation bar for SaaS applications." />
-      );
-    case "navigation-menu":
-      return <NavigationMenuPreview />;
-    case "number-input":
-      return <NumberInputPreview />;
-    case "number-ticker":
-      return <NumberTickerPreview />;
-    case "object-card":
-      return (
-        <SimplePreview description="Object card primitive for spatial entities with metrics, actions, and ports." />
-      );
-    case "object-handle":
-      return (
-        <SimplePreview description="Drag/move handle affordance for manipulating canvas objects." />
-      );
-    case "order-book":
-      return <OrderBookPreview />;
-    case "pagination":
-      return <PaginationPreview />;
-    case "password-input":
-      return <PasswordInputPreview />;
-    case "popover":
-      return <PopoverPreview />;
-    case "pro-tip":
-      return <ProTipPreview />;
-    case "profile-section":
-      return <ProfileSectionPreview />;
-    case "progress-bar":
-      return <ProgressBarPreview />;
-    case "progress-card":
-      return (
-        <SimplePreview description="A card component with progress tracking." />
-      );
-    case "quiz":
-      return <QuizPreview />;
-    case "radio-group":
-      return <RadioGroupPreview />;
-    case "resizable":
-      return <ResizablePreview />;
-    case "right-dock":
-      return (
-        <SimplePreview description="Right-side dock for inspector, agent, or activity panels in the workspace shell." />
-      );
-    case "scroll-area":
-      return <ScrollAreaPreview />;
-    case "search-bar":
-      return <SearchBarPreview />;
-    case "search-dialog":
-      return (
-        <SimplePreview description="A command palette style search dialog." />
-      );
-    case "scope-selector":
-      return <ScopeSelectorPreview />;
-    case "select":
-      return <SelectPreview />;
-    case "separator":
-      return <SeparatorPreview />;
-    case "severity-badge":
-      return <SeverityBadgePreview />;
-    case "share-section":
-      return <ShareSectionPreview />;
-    case "sheet":
-      return <SheetPreview />;
-    case "sidebar":
-      return <SidebarPreview />;
-    case "skeleton":
-      return <SkeletonPreview />;
-    case "slider":
-      return <SliderPreview />;
-    case "spinner":
-      return <SpinnerPreview />;
-    case "stat-card":
-      return <StatCardPreview />;
-    case "status-board":
-      return <StatusBoardPreview />;
-    case "sidebar-provider":
-      return <SidebarProviderPreview />;
-    case "sidebar-toggle":
-      return <SidebarTogglePreview />;
-    case "slideshow":
-      return (
-        <SimplePreview description="A slideshow with keyboard navigation and progress." />
-      );
-    case "step-by-step":
-      return <StepByStepPreview />;
-    case "step-navigation":
-      return <StepNavigationPreview />;
-    case "status-indicator":
-      return <StatusIndicatorPreview />;
-    case "table-of-contents":
-      return <TableOfContentsPreview />;
-    case "table-of-contents-panel":
-      return (
-        <SimplePreview description="A table of contents panel with progress tracking." />
-      );
-    case "top-bar":
-      return (
-        <SimplePreview description="Top workspace bar combining title, subtitle, and command surfaces." />
-      );
-    case "table":
-      return <TablePreview />;
-    case "tabs":
-      return <TabsPreview />;
-    case "terminal":
-      return <TerminalPreview />;
-    case "textarea":
-      return <TextareaPreview />;
-    case "theme-provider":
-      return <ThemeProviderPreview />;
-    case "theme-toggle":
-      return <ThemeTogglePreview />;
-    case "thinking-block":
-      return <ThinkingBlockPreview />;
-    case "tldr-section":
-      return <TLDRSectionPreview />;
-    case "toast":
-      return <ToastPreview />;
-    case "toggle":
-      return <TogglePreview />;
-    case "toggle-group":
-      return <ToggleGroupPreview />;
-    case "tooltip":
-      return <TooltipPreview />;
-    case "tutorial-card":
-      return <TutorialCardPreview />;
-    case "tutorial-complete":
-      return (
-        <SimplePreview description="A completion screen with achievements and related content." />
-      );
-    case "tutorial-filters":
-      return (
-        <SimplePreview description="Filter controls for tutorial listings." />
-      );
-    case "tutorial-intro-content":
-      return (
-        <SimplePreview description="An introduction component for tutorials with objectives." />
-      );
-    case "tutorial-mdx":
-      return (
-        <SimplePreview description="MDX components optimized for tutorial content." />
-      );
-    case "usage-breakdown":
-      return <UsageBreakdownPreview />;
-    case "video-embed":
-      return <VideoEmbedPreview />;
-    case "view-switcher":
-      return <ViewSwitcherPreview />;
-    case "workspace-switcher":
-      return (
-        <SimplePreview description="Workspace selector for moving between orchestration views and object neighborhoods." />
-      );
-    case "wallet-card":
-      return <WalletCardPreview />;
-    case "watchlist":
-      return <WatchlistPreview />;
-    case "zoom-hud":
-      return (
-        <SimplePreview description="Heads-up zoom control for resetting and stepping canvas magnification." />
-      );
-    case "world-clock-bar":
-      return <WorldClockBarPreview />;
-    case "animated-beam":
-      return <AnimatedBeamPreview />;
-    case "choropleth-map":
-      return <ChoroplethMapPreview />;
-    case "chronological-timeline":
-      return <ChronologicalTimelinePreview />;
-    case "floating-toolbar":
-      return <FloatingToolbarPreview />;
-    case "follow-mode":
-      return <FollowModePreview />;
-    case "geography-quiz-map":
-      return <GeographyQuizMapPreview />;
-    case "glass-progress":
-      return <GlassProgressPreview />;
-    case "globe-3d":
-      return <Globe3dPreview />;
-    case "handoff-beacon":
-      return <HandoffBeaconPreview />;
-    case "heat-map-overlay":
-      return <HeatMapOverlayPreview />;
-    case "historic-timeline":
-      return <HistoricTimelinePreview />;
-    case "interactive-timeline":
-      return <InteractiveTimelinePreview />;
-    case "map-2d":
-      return <Map2dPreview />;
-    case "map-timeline":
-      return <MapTimelinePreview />;
-    case "primary-source-viewer":
-      return <PrimarySourceViewerPreview />;
-    case "route-map":
-      return <RouteMapPreview />;
-    case "scroll-progress":
-      return (
-        <SimplePreview description="A fixed progress bar pinned to the top of the page that fills as the reader scrolls." />
-      );
-    case "selection-halo":
-      return <SelectionHaloPreview />;
-    case "snap-guides":
-      return <SnapGuidesPreview />;
-    case "story-map":
-      return <StoryMapPreview />;
-    case "tree-view":
-      return <TreeViewPreview />;
-    case "alert-pulse":
-      return <AlertPulsePreview />;
-    case "animated-grid-pattern":
-      return <AnimatedGridPatternPreview />;
-    case "card-flip":
-      return <CardFlipPreview />;
-    case "comment-pin":
-      return <CommentPinPreview />;
-    case "context-lens":
-      return <ContextLensPreview />;
-    case "cursor":
-      return <CursorPreview />;
-    case "dot-pattern":
-      return <DotPatternPreview />;
-    case "glass-card":
-      return <GlassCardPreview />;
-    case "glass-panel":
-      return <GlassPanelPreview />;
-    case "infinite-plane":
-      return <InfinitePlanePreview />;
-    case "liquid-glass":
-      return <LiquidGlassPreview />;
-    case "live-cursor":
-      return <LiveCursorPreview />;
-    case "magnetic":
-      return <MagneticPreview />;
-    case "magnetic-button":
-      return <MagneticButtonPreview />;
-    case "meteors":
-      return <MeteorsPreview />;
-    case "multi-select-lasso":
-      return <MultiSelectLassoPreview />;
-    case "particles":
-      return <ParticlesPreview />;
-    case "playback-ghost":
-      return <PlaybackGhostPreview />;
-    case "progressive-blur":
-      return <ProgressiveBlurPreview />;
-    case "selection-presence":
-      return <SelectionPresencePreview />;
-    case "shimmer-button":
-      return <ShimmerButtonPreview />;
-    case "shine-border":
-      return <ShineBorderPreview />;
-    case "shiny-button":
-      return <ShinyButtonPreview />;
-    case "sparkles":
-      return <SparklesPreview />;
-    case "spotlight-card":
-      return <SpotlightCardPreview />;
-    case "state-badge-overlay":
-      return <StateBadgeOverlayPreview />;
-    case "theme-preset-provider":
-      return <ThemePresetProviderPreview />;
-    case "theme-switcher":
-      return <ThemeSwitcherPreview />;
-    case "thread-bubble":
-      return <ThreadBubblePreview />;
-    case "tilt-card":
-      return <TiltCardPreview />;
-    case "truncated-text":
-      return <TruncatedTextPreview />;
-    case "animated-list":
-      return <AnimatedListPreview />;
-    case "animated-testimonials":
-      return <AnimatedTestimonialsPreview />;
-    case "bento-grid":
-      return <BentoGridPreview />;
-    case "blur-reveal":
-      return <BlurRevealPreview />;
-    case "document-sibling-nav":
-      return <DocumentSiblingNavPreview />;
-    case "expandable-cards":
-      return <ExpandableCardsPreview />;
-    case "object-inspector":
-      return <ObjectInspectorPreview />;
-    case "plan-badge":
-      return <PlanBadgePreview />;
-    case "policy-delivery-panel":
-      return <PolicyDeliveryPanelPreview />;
-    case "property-section":
-      return <PropertySectionPreview />;
-    case "relationship-inspector":
-      return <RelationshipInspectorPreview />;
-    case "reveal-text":
-      return <RevealTextPreview />;
-    case "role-badge":
-      return <RoleBadgePreview />;
-    case "routing-assignment-panel":
-      return <RoutingAssignmentPanelPreview />;
-    case "runtime-overview-panel":
-      return <RuntimeOverviewPanelPreview />;
-    case "scramble-text":
-      return <ScrambleTextPreview />;
-    case "shimmer-text":
-      return <ShimmerTextPreview />;
-    case "spinning-text":
-      return <SpinningTextPreview />;
-    case "subscription-card":
-      return <SubscriptionCardPreview />;
-    case "text-animate":
-      return <TextAnimatePreview />;
-    case "text-reveal":
-      return <TextRevealPreview />;
-    case "text-shimmer":
-      return <TextShimmerPreview />;
-    case "timeline":
-      return <TimelinePreview />;
-    case "typewriter":
-      return <TypewriterPreview />;
-    case "bottom-activity-strip":
-      return <BottomActivityStripPreview />;
-    case "candlestick-chart":
-      return <CandlestickChartPreview />;
-    case "contribution-graph":
-      return <ContributionGraphPreview />;
-    case "flow-diagram":
-      return <FlowDiagramPreview />;
-    case "gantt-chart":
-      return <GanttChartPreview />;
-    case "gauge-chart":
-      return <GaugeChartPreview />;
-    case "heat-overlay":
-      return <HeatOverlayPreview />;
-    case "metric-cluster":
-      return <MetricClusterPreview />;
-    case "overview-board":
-      return <OverviewBoardPreview />;
-    case "pie-chart":
-      return <PieChartPreview />;
-    case "presence-stack":
-      return <PresenceStackPreview />;
-    case "presence-sync-indicator":
-      return <PresenceSyncIndicatorPreview />;
-    case "radar-chart":
-      return <RadarChartPreview />;
-    case "run-timeline":
-      return <RunTimelinePreview />;
-    case "sankey-chart":
-      return <SankeyChartPreview />;
-    case "sparkline-grid":
-      return <SparklineGridPreview />;
-    case "sticky-metric":
-      return <StickyMetricPreview />;
-    case "threshold-ring":
-      return <ThresholdRingPreview />;
-    case "ticker-tape":
-      return <TickerTapePreview />;
-    case "button-group":
-      return <ButtonGroupPreview />;
-    case "checkbox-group":
-      return <CheckboxGroupPreview />;
-    case "color-picker":
-      return <ColorPickerPreview />;
-    case "date-field":
-      return <DateFieldPreview />;
-    case "date-range-picker":
-      return <DateRangePickerPreview />;
-    case "field":
-      return <FieldPreview />;
-    case "fieldset":
-      return <FieldsetPreview />;
-    case "input-group":
-      return <InputGroupPreview />;
-    case "item":
-      return <ItemPreview />;
-    case "list-box":
-      return <ListBoxPreview />;
-    case "native-select":
-      return <NativeSelectPreview />;
-    case "newsletter-signup":
-      return <NewsletterSignupPreview />;
-    case "phone-input":
-      return <PhoneInputPreview />;
-    case "range-calendar":
-      return <RangeCalendarPreview />;
-    case "search-field":
-      return <SearchFieldPreview />;
-    case "tag-group":
-      return <TagGroupPreview />;
-    case "text-field":
-      return <TextFieldPreview />;
-    case "time-field":
-      return <TimeFieldPreview />;
-    case "time-picker":
-      return <TimePickerPreview />;
-    case "timeline-scrubber":
-      return <TimelineScrubberPreview />;
-    case "agent-activity":
-      return <AgentActivityPreview />;
-    case "ai-artifact":
-      return <AiArtifactPreview />;
-    case "ai-sidebar":
-      return <AiSidebarPreview />;
-    case "chain-of-thought":
-      return <ChainOfThoughtPreview />;
-    case "chat-dock-section":
-      return <ChatDockSectionPreview />;
-    case "model-comparison":
-      return <ModelComparisonPreview />;
-    case "prompt-input":
-      return <PromptInputPreview />;
-    case "prompt-templates":
-      return <PromptTemplatesPreview />;
-    case "reasoning":
-      return <ReasoningPreview />;
-    case "ai-chat-input":
-      return <AiChatInputPreview />;
-    case "ai-message-bubble":
-      return <AiMessageBubblePreview />;
-    case "ai-source-citation":
-      return <AiSourceCitationPreview />;
-    case "ai-streaming-text":
-      return <AiStreamingTextPreview />;
-    case "ai-tool-call-display":
-      return <AiToolCallDisplayPreview />;
-    case "annotation":
-      return <AnnotationPreview />;
-    case "conversation-thread":
-      return <ConversationThreadPreview />;
-    case "curriculum":
-      return <CurriculumPreview />;
-    case "progress-tracker":
-      return <ProgressTrackerPreview />;
-    case "rating":
-      return <RatingPreview />;
-    case "stepper":
-      return <StepperPreview />;
-    case "tour":
-      return <TourPreview />;
-    case "banner":
-      return <BannerPreview />;
-    case "cookie-consent":
-      return <CookieConsentPreview />;
-    case "copy-button":
-      return <CopyButtonPreview />;
-    case "empty-state":
-      return <EmptyStatePreview />;
-    case "grid":
-      return <GridPreview />;
-    case "kbd":
-      return <KbdPreview />;
-    case "label":
-      return <LabelPreview />;
-    case "link":
-      return <LinkPreview />;
-    case "meter":
-      return <MeterPreview />;
-    case "panel":
-      return <PanelPreview />;
-    case "qr-code":
-      return <QrCodePreview />;
-    case "switch":
-      return <SwitchPreview />;
-    case "toolbar":
-      return <ToolbarPreview />;
-    case "typography":
-      return <TypographyPreview />;
-    case "animated-tooltip":
-      return <AnimatedTooltipPreview />;
-    case "share-dialog":
-      return <ShareDialogPreview />;
-    case "animated-tabs":
-      return <AnimatedTabsPreview />;
-    case "bottom-bar":
-      return <BottomBarPreview />;
-    case "dock":
-      return <DockPreview />;
-    case "floating-navbar":
-      return <FloatingNavbarPreview />;
-    case "jarvis-dock":
-      return <JarvisDockPreview />;
-    case "viewport-bookmarks":
-      return <ViewportBookmarksPreview />;
-    case "world-breadcrumbs":
-      return <WorldBreadcrumbsPreview />;
-    case "auto-reload":
-      return <AutoReloadPreview />;
-    case "pricing-table":
-      return <PricingTablePreview />;
-    case "transaction-list":
-      return <TransactionListPreview />;
-    case "civilization-card":
-      return <CivilizationCardPreview />;
-    case "era-comparison":
-      return <EraComparisonPreview />;
-    case "historical-figure-card":
-      return <HistoricalFigureCardPreview />;
-    case "knowledge-check":
-      return <KnowledgeCheckPreview />;
-    case "parallel-timeline":
-      return <ParallelTimelinePreview />;
-    default:
-      return <PlaceholderPreview componentName={componentName} />;
+  const Preview = Object.hasOwn(PREVIEWS, componentName)
+    ? PREVIEWS[componentName]
+    : undefined;
+  if (Preview) {
+    return <Preview />;
   }
+  const description = Object.hasOwn(SIMPLE_PREVIEW_DESCRIPTIONS, componentName)
+    ? SIMPLE_PREVIEW_DESCRIPTIONS[componentName]
+    : undefined;
+  if (description !== undefined) {
+    return <SimplePreview description={description} />;
+  }
+  return <PlaceholderPreview componentName={componentName} />;
 }
