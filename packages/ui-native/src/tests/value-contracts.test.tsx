@@ -49,11 +49,9 @@ const motionEnabled: ReducedMotionService = {
   isReduceMotionEnabled: () => Promise.resolve(false),
 };
 
-const nonFinite = [
-  Number.NaN,
-  Number.POSITIVE_INFINITY,
-  Number.NEGATIVE_INFINITY,
-];
+const NAN = Number.NaN;
+const POS_INF = Number.POSITIVE_INFINITY;
+const NEG_INF = Number.NEGATIVE_INFINITY;
 
 describe("Calendar historic years", () => {
   it.each([0, 50, 99])("keeps year %i instead of remapping to 19xx", (year) => {
@@ -100,28 +98,40 @@ describe("Calendar historic years", () => {
 });
 
 describe("non-finite numeric inputs", () => {
-  it.each(nonFinite)("ScrollProgress maps %p to empty progress", (value) => {
+  it.each([
+    [NAN, 0],
+    [POS_INF, 100],
+    [NEG_INF, 0],
+  ])("ScrollProgress maps %p to %p%%", (value, percent) => {
     render(<ScrollProgress label="Reading" value={value} />);
     const bar = screen.getByLabelText("Reading");
-    expect(bar.props.accessibilityValue).toMatchObject({ now: 0 });
+    expect(bar.props.accessibilityValue).toMatchObject({ now: percent });
     expect(StyleSheet.flatten(bar.findByType(View).props.style)).toMatchObject({
-      width: "0%",
+      width: `${percent}%`,
     });
   });
 
-  it("calculateScrollProgress maps non-finite offsets to zero", () => {
+  it.each([
+    [NAN, 0],
+    [POS_INF, 1],
+    [NEG_INF, 0],
+  ])("calculateScrollProgress maps offset %p to %p", (y, progress) => {
     expect(
       calculateScrollProgress({
-        contentOffset: { y: Number.NaN },
+        contentOffset: { y },
         contentSize: { height: 200 },
         layoutMeasurement: { height: 100 },
       }),
-    ).toBe(0);
+    ).toBe(progress);
   });
 
-  it.each(nonFinite)(
-    "TextReveal keeps word opacity finite for %p",
-    async (progress) => {
+  it.each([
+    [NAN, 0.2],
+    [POS_INF, 1],
+    [NEG_INF, 0.2],
+  ])(
+    "TextReveal maps progress %p to word opacity %p",
+    async (progress, opacity) => {
       render(
         <TextReveal progress={progress} reducedMotionService={motionEnabled}>
           alpha beta
@@ -135,14 +145,18 @@ describe("non-finite numeric inputs", () => {
           StyleSheet.flatten(
             screen.getByText(word, { includeHiddenElements: true }).props.style,
           ),
-        ).toMatchObject({ opacity: 0.2 });
+        ).toMatchObject({ opacity });
       }
     },
   );
 
-  it.each(nonFinite)(
-    "TutorialComplete reports 0%% for %p",
-    (completionPercent) => {
+  it.each([
+    [NAN, 0, "Finished"],
+    [POS_INF, 100, "Complete"],
+    [NEG_INF, 0, "Finished"],
+  ])(
+    "TutorialComplete maps %p to %p%%",
+    (completionPercent, percent, heading) => {
       render(
         <TutorialComplete
           completedSectionIds={[]}
@@ -155,35 +169,38 @@ describe("non-finite numeric inputs", () => {
           title="Guide"
         />,
       );
-      expect(screen.getByText("Guide 0%")).toBeTruthy();
-      expect(screen.getByText("Finished")).toBeTruthy();
+      expect(screen.getByText(`Guide ${percent}%`)).toBeTruthy();
+      expect(screen.getByText(heading)).toBeTruthy();
     },
   );
 
-  it.each(nonFinite)(
-    "Stepper falls back to the first step for %p",
-    (currentStep) => {
-      render(
-        <Stepper
-          currentStep={currentStep}
-          labels={{
-            step: (step, state) => `${step.title} ${state}`,
-            stepper: "Progress",
-          }}
-          steps={[
-            { id: "one", title: "One" },
-            { id: "two", title: "Two" },
-          ]}
-        />,
-      );
-      expect(
-        screen.getByRole("button", { name: "One current" }),
-      ).toBeSelected();
-      expect(screen.getByRole("button", { name: "Two upcoming" })).toBeTruthy();
-    },
-  );
+  it.each([
+    [NAN, "One current", "Two upcoming"],
+    [POS_INF, "One complete", "Two current"],
+    [NEG_INF, "One current", "Two upcoming"],
+  ])("Stepper maps step %p to %p", (currentStep, first, second) => {
+    render(
+      <Stepper
+        currentStep={currentStep}
+        labels={{
+          step: (step, state) => `${step.title} ${state}`,
+          stepper: "Progress",
+        }}
+        steps={[
+          { id: "one", title: "One" },
+          { id: "two", title: "Two" },
+        ]}
+      />,
+    );
+    expect(screen.getByRole("button", { name: first })).toBeTruthy();
+    expect(screen.getByRole("button", { name: second })).toBeTruthy();
+  });
 
-  it.each(nonFinite)("AvatarGroup treats max %p as no limit", (max) => {
+  it.each([
+    [NAN, ["Ada", "Bo"], 0],
+    [POS_INF, ["Ada", "Bo"], 0],
+    [NEG_INF, [], 2],
+  ])("AvatarGroup max %p shows %p", (max, visible, hidden) => {
     render(
       <AvatarGroup
         items={[
@@ -193,9 +210,14 @@ describe("non-finite numeric inputs", () => {
         max={max}
       />,
     );
-    expect(screen.getByLabelText("Ada")).toBeTruthy();
-    expect(screen.getByLabelText("Bo")).toBeTruthy();
-    expect(screen.queryByLabelText(/more/)).toBeNull();
+    for (const name of ["Ada", "Bo"]) {
+      if (visible.includes(name))
+        expect(screen.getByLabelText(name)).toBeTruthy();
+      else expect(screen.queryByLabelText(name)).toBeNull();
+    }
+    if (hidden > 0)
+      expect(screen.getByLabelText(`${hidden} more`)).toBeTruthy();
+    else expect(screen.queryByLabelText(/more/)).toBeNull();
   });
 });
 

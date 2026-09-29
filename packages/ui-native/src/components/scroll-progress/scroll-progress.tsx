@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 });
 
 function clampProgress(value: number): number {
-  if (!Number.isFinite(value)) return 0;
+  if (Number.isNaN(value)) return 0;
   return Math.min(1, Math.max(0, value));
 }
 
