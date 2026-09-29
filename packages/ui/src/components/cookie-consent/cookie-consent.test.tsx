@@ -1,8 +1,14 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion -- test file */
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { CookieConsent } from "./cookie-consent";
+import { CookieConsent, type CookieConsentProps } from "./cookie-consent";
+
+/** Clicks the first match; the banner renders mobile and desktop copies. */
+function clickFirstButton(name: string): void {
+  const [button] = screen.getAllByRole("button", { name });
+  if (!button) throw new Error(`Missing "${name}" button`);
+  fireEvent.click(button);
+}
 
 describe("CookieConsent", () => {
   beforeEach(() => {
@@ -145,8 +151,7 @@ describe("CookieConsent", () => {
       const handleAccept = vi.fn();
       render(<CookieConsent onAccept={handleAccept} open={true} />);
 
-      const acceptButtons = screen.getAllByRole("button", { name: "Accept" });
-      fireEvent.click(acceptButtons[0]!);
+      clickFirstButton("Accept");
 
       expect(handleAccept).toHaveBeenCalledTimes(1);
     });
@@ -161,8 +166,7 @@ describe("CookieConsent", () => {
         />,
       );
 
-      const declineButtons = screen.getAllByRole("button", { name: "Decline" });
-      fireEvent.click(declineButtons[0]!);
+      clickFirstButton("Decline");
 
       expect(handleDecline).toHaveBeenCalledTimes(1);
     });
@@ -184,7 +188,7 @@ describe("CookieConsent", () => {
         />,
       );
 
-      fireEvent.click(screen.getAllByRole("button", { name: buttonName })[0]!);
+      clickFirstButton(buttonName);
 
       // Wait for animation timeout - wrap in act to avoid React warnings
       await act(async () => {
@@ -245,8 +249,7 @@ describe("CookieConsent", () => {
       const dialog = screen.getByRole("dialog");
       expect(dialog).toHaveClass("opacity-100");
 
-      const acceptButtons = screen.getAllByRole("button", { name: "Accept" });
-      fireEvent.click(acceptButtons[0]!);
+      clickFirstButton("Accept");
 
       // During animation out
       expect(dialog).toHaveClass("opacity-0");
@@ -258,12 +261,12 @@ describe("CookieConsent", () => {
       ["applies bottom-left position by default", {}, ["bottom-4", "left-4"]],
       [
         "applies bottom-right position",
-        { position: "bottom-right" as const },
+        { position: "bottom-right" } satisfies CookieConsentProps,
         ["bottom-4", "right-4"],
       ],
       [
         "applies bottom-center position",
-        { position: "bottom-center" as const },
+        { position: "bottom-center" } satisfies CookieConsentProps,
         ["bottom-4", "left-1/2", "-translate-x-1/2"],
       ],
     ])("%s", (_name, props, classes) => {

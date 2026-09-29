@@ -172,9 +172,9 @@ describe("ProgressTracker", () => {
       lessons: 4,
       persistKey: "react-fundamentals",
       progress: 0,
-      status: "in-progress" as const,
+      status: "in-progress",
       title: "Checklist-backed module",
-    };
+    } satisfies React.ComponentProps<typeof ProgressTrackerModule>;
 
     render(
       <ProgressTracker
