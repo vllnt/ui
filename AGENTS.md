@@ -31,6 +31,7 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 | Command | Scope |
 |---------|-------|
 | `pnpm install --frozen-lockfile` | Install deps |
+| `pnpm dev` | Registry + Storybook dev servers (turbo) |
 | `pnpm build` | Build every package |
 | `pnpm lint` / `pnpm lint:fix` | Lint workspace |
 | `pnpm test:once` | Vitest single-run workspace-wide |
@@ -41,6 +42,8 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 | `pnpm doctor:full` | Verbose full scan with per-file detail |
 | `pnpm doctor:errors` | Scan, exit non-zero on any **error** (CI/pre-commit gate) |
 | `pnpm doctor:staged` | Scan only staged files (what the pre-commit hook runs) |
+| `pnpm tokens:check` | Verify generated token artifacts |
+| `pnpm ci:native` | Verify core/native packages and Expo bundles |
 
 ---
 
@@ -63,8 +66,8 @@ with `git commit --no-verify`.
 ### Config — [`doctor.config.json`](./doctor.config.json)
 
 - `ignore.files` skips generated/build output so the score reflects hand-written
-  source: `registry/default/**` (generated from `packages/ui/src` by
-  `inline-component-source.ts`), `storybook-static`, `dist`, `.next`, Pagefind
+  source: `registry/default/**` (untracked shims generated from
+  `packages/ui/src` by `inline-component-source.ts`), `storybook-static`, `dist`, `.next`, Pagefind
   and shadcn registry output, and `*.visual.tsx` Playwright CT fixtures (test
   entry files the import graph can't see).
 - Two rules are `off` because they conflict with deliberate library patterns:
@@ -120,7 +123,7 @@ Read these in order. Each is BLOCKING — violations keep a PR in draft.
 |------|------|
 | [`docs/agents/RULES.md`](./docs/agents/RULES.md) | The 15 BLOCKING rules — process + code quality. **Read first.** |
 | [`docs/agents/PR_PLAYBOOK.md`](./docs/agents/PR_PLAYBOOK.md) | Ship checklist: diff sanity → gates → evidence → body refresh → ready |
-| [`docs/agents/COMPONENTS.md`](./docs/agents/COMPONENTS.md) | Component patterns: forwardRef, semantic root, ARIA, events, props |
+| [`docs/agents/COMPONENTS.md`](./docs/agents/COMPONENTS.md) | Component patterns: ref-as-prop + displayName, semantic root, ARIA, events, props |
 | [`docs/agents/BRANCHING.md`](./docs/agents/BRANCHING.md) | Branch hygiene: zero-diff, supersede, reconcile, worktrees |
 
 Repository-wide docs (audience = contributors, not just agents):

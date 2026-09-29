@@ -20,19 +20,7 @@ pnpm install
 pnpm dev
 ```
 
-Key scripts (from repo root):
-
-| Script | What |
-|--------|------|
-| `pnpm dev` | Run registry + Storybook dev servers in parallel via turbo |
-| `pnpm build` | Build every package |
-| `pnpm lint` / `pnpm lint:fix` | ESLint flat config across the workspace |
-| `pnpm test:once` | Vitest single-run across the workspace |
-| `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
-| `pnpm check:circular` | Fail on circular imports |
-| `pnpm doctor` | react-doctor React-health scan |
-| `pnpm tokens:check` | Verify generated token artifacts |
-| `pnpm ci:native` | Verify core/native packages and Expo bundles |
+Key scripts (build, lint, tests, visual snapshots, react-doctor, tokens, native checks) are listed in the [AGENTS.md commands table](AGENTS.md#commands-run-from-repo-root).
 
 A [react-doctor](https://github.com/millionco/react-doctor) **pre-commit hook**
 (in `.githooks/`, enabled automatically on `pnpm install`) blocks commits that
@@ -48,32 +36,16 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
 
 ## Adding a component
 
-1. Scaffold a folder under `packages/ui/src/components/{name}/` containing:
+1. Create `packages/ui/src/components/{name}/` following the folder layout and patterns in [docs/agents/COMPONENTS.md](docs/agents/COMPONENTS.md#folder-layout) (ref-as-prop + `displayName`, `cn()`, Radix, CVA), and add the export to `packages/ui/src/components/index.ts` (import from `./{name}/{name}`; there are no per-folder `index.ts` files).
 
-   ```
-   {name}/
-     {name}.tsx         # implementation
-     {name}.test.tsx    # Vitest unit tests
-     {name}.visual.tsx  # Playwright CT story
-     {name}.mdx         # registry docs (optional if auto-generated)
-   ```
-
-2. Follow the existing patterns:
-   - React 19 ref-as-prop support and `displayName` on every named component.
-   - `cn()` from `src/lib/utils.ts` for class merging.
-   - Radix primitives for accessible behavior where applicable.
-   - CVA for variants (`class-variance-authority`).
-
-3. Add the export to `packages/ui/src/components/index.ts`, importing from `./{name}/{name}` (there is no per-folder `index.ts`).
-
-4. Regenerate registry docs:
+2. Regenerate registry docs:
 
    ```bash
    pnpm -F @vllnt/ui storybook:generate
    pnpm -F @vllnt/ui storybook:generate-docs
    ```
 
-5. Run the full gate locally:
+3. Run the full gate locally:
 
    ```bash
    pnpm lint && pnpm test:once && pnpm -F @vllnt/ui test:visual && pnpm build

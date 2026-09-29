@@ -9,7 +9,8 @@
         "!.next/cache/**",
         "dist/**",
         "public/r/**",
-        "public/_pagefind/**"
+        "public/_pagefind/**",
+        "registry/default/**"
       ]
     },
     "clean": {
@@ -41,7 +42,7 @@
     },
     "registry:build": {
       "dependsOn": ["^build"],
-      "outputs": ["public/r/**"]
+      "outputs": ["public/r/**", "registry/default/**"]
     },
     "storybook": {
       "persistent": true,

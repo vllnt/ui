@@ -2,11 +2,11 @@
  * Registry drift check.
  *
  * Run AFTER `pnpm registry:build` (CI runs it via `pnpm build`). The generated
- * registry artifacts — the shadcn shims under registry/default, registry.json,
- * and component-metadata.json — are derived from the canonical component sources
- * in packages/ui. If a source changes (e.g. the PR #404 OKLCH migration) but the
- * artifacts are not regenerated and committed, shadcn-installed components ship
- * stale code (the blocker that rendered components black under OKLCH tokens).
+ * registry artifacts — registry.json and component-metadata.json — are derived
+ * from the canonical component sources in packages/ui. If a source changes but
+ * the artifacts are not regenerated and committed, the published registry
+ * metadata goes stale. The shadcn shims under registry/default are not checked:
+ * they are untracked build output, regenerated from source on every build.
  *
  * This fails the build when the freshly-built artifacts differ from what is
  * committed, ignoring only the non-deterministic `generatedAt` timestamp.
@@ -18,7 +18,6 @@ import { execSync } from "node:child_process";
 
 const TRACKED_PATHS = [
   "apps/registry/registry.json",
-  "apps/registry/registry/default",
   "apps/registry/lib/component-metadata.json",
 ];
 

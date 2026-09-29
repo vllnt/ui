@@ -54,7 +54,7 @@ CI runs the read-only drift check. A token change is incomplete when generated w
 
 `@vllnt/ui` targets React 19. Components render semantic DOM and Radix primitives, use Tailwind/CVA recipes, and accept refs as normal React 19 props. Existing package and CSS subpaths remain the supported contract.
 
-Web components remain self-contained under `packages/ui/src/components/{name}` with implementation, unit test, visual fixture, MDX documentation, and barrel export files as applicable. The root `src/index.ts` remains the public barrel. `pnpm check:circular` runs Madge against this graph.
+Web components remain self-contained under `packages/ui/src/components/{name}` with implementation, unit test, visual fixture, and MDX documentation files as applicable (no per-folder `index.ts`); `src/components/index.ts` re-exports each component file and the root `src/index.ts` remains the public barrel. `pnpm check:circular` runs Madge against this graph.
 
 ### React Native
 
