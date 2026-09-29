@@ -139,6 +139,27 @@ jobs:
           tag_value() {
             jq -r --arg tag "$2" '.[$tag] // ""' <<<"$1"
           }
+          version_state() {
+            local spec="$1"
+            local output_file error_file output
+            output_file="$(mktemp "$RUNNER_TEMP/npm-view-output.XXXXXX")"
+            error_file="$(mktemp "$RUNNER_TEMP/npm-view-error.XXXXXX")"
+            if npm view "$spec" version >"$output_file" 2>"$error_file"; then
+              output="$(cat "$output_file")"
+              rm -f "$output_file" "$error_file"
+              if [[ -n "$output" ]]; then echo present; else echo absent; fi
+              return 0
+            fi
+            if grep -q 'E404' "$output_file" "$error_file"; then
+              rm -f "$output_file" "$error_file"
+              echo absent
+              return 0
+            fi
+            echo "::error::Could not determine whether ${spec} is published" >&2
+            cat "$output_file" "$error_file" >&2
+            rm -f "$output_file" "$error_file"
+            return 1
+          }
 
           CORE_TAGS_BEFORE="$(read_tags @vllnt/ui-core)"
           NATIVE_TAGS_BEFORE="$(read_tags @vllnt/ui-native)"
@@ -213,25 +234,27 @@ jobs:
           }
           trap on_exit EXIT
 
-          if ! npm view "@vllnt/ui-core@${CANARY_VERSION}" version >/dev/null 2>&1; then
+          CORE_STATE="$(version_state "@vllnt/ui-core@${CANARY_VERSION}")"
+          if [[ "$CORE_STATE" = absent ]]; then
             npx --yes npm@11.18.0 publish "$CORE_TARBALL" --tag "$STAGING_TAG" --provenance --access public
           fi
 
           for attempt in $(seq 1 12); do
-            npm view "@vllnt/ui-core@${CANARY_VERSION}" version >/dev/null 2>&1 && break
+            [[ "$(version_state "@vllnt/ui-core@${CANARY_VERSION}")" = present ]] && break
             sleep 5
           done
-          npm view "@vllnt/ui-core@${CANARY_VERSION}" version >/dev/null
+          test "$(version_state "@vllnt/ui-core@${CANARY_VERSION}")" = present
 
-          if ! npm view "@vllnt/ui-native@${CANARY_VERSION}" version >/dev/null 2>&1; then
+          NATIVE_STATE="$(version_state "@vllnt/ui-native@${CANARY_VERSION}")"
+          if [[ "$NATIVE_STATE" = absent ]]; then
             npx --yes npm@11.18.0 publish "$NATIVE_TARBALL" --tag "$STAGING_TAG" --provenance --access public
           fi
 
           for attempt in $(seq 1 12); do
-            npm view "@vllnt/ui-native@${CANARY_VERSION}" version >/dev/null 2>&1 && break
+            [[ "$(version_state "@vllnt/ui-native@${CANARY_VERSION}")" = present ]] && break
             sleep 5
           done
-          npm view "@vllnt/ui-native@${CANARY_VERSION}" version >/dev/null
+          test "$(version_state "@vllnt/ui-native@${CANARY_VERSION}")" = present
 
           REMOTE_MAIN_SHA="$(current_main_sha)"
           test -n "$REMOTE_MAIN_SHA"
