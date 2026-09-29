@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { AnchorPort } from "../anchor-port";
+import { AnchorPort } from "../anchor-port/anchor-port";
 import { ObjectCard } from "./object-card";
 
 test.describe("ObjectCard Visual", () => {

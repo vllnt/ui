@@ -56,7 +56,6 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
      {name}.test.tsx    # Vitest unit tests
      {name}.visual.tsx  # Playwright CT story
      {name}.mdx         # registry docs (optional if auto-generated)
-     index.ts           # barrel export
    ```
 
 2. Follow the existing patterns:
@@ -65,7 +64,7 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
    - Radix primitives for accessible behavior where applicable.
    - CVA for variants (`class-variance-authority`).
 
-3. Add the export to `packages/ui/src/index.ts`.
+3. Add the export to `packages/ui/src/components/index.ts`, importing from `./{name}/{name}` (there is no per-folder `index.ts`).
 
 4. Regenerate registry docs:
 

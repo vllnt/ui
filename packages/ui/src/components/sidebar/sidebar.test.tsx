@@ -7,7 +7,10 @@ import {
 } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { SidebarProvider, useSidebar } from "../sidebar-provider";
+import {
+  SidebarProvider,
+  useSidebar,
+} from "../sidebar-provider/sidebar-provider";
 
 import { Sidebar, type SidebarSection } from "./sidebar";
 

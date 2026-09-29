@@ -15,10 +15,9 @@ Every component lives at `packages/ui/src/components/{name}/`:
   {name}.visual.tsx  # Playwright CT story (real Chromium)
   {name}.stories.tsx # Storybook story (default export + named stories)
   {name}.mdx         # registry/docs (auto-generated where possible)
-  index.ts           # barrel export from the folder
 ```
 
-Add the export to `packages/ui/src/index.ts`.
+Add the export to `packages/ui/src/components/index.ts`, importing from `./{name}/{name}` (no per-folder `index.ts`; import siblings as `../{other}/{other}`).
 
 ---
 

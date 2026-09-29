@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { StatusIndicator } from "../status-indicator";
+import { StatusIndicator } from "../status-indicator/status-indicator";
 import { DataTable } from "./data-table";
 
 type Workspace = {

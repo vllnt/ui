@@ -5,7 +5,7 @@ import * as React from "react";
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
 import { Input } from "../input/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 
 const presetSwatches: string[] = [
   "#ef4444",

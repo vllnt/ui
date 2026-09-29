@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { CanvasView } from "./canvas-view";
-import { ZoomHUD } from "../zoom-hud";
+import { ZoomHUD } from "../zoom-hud/zoom-hud";
 
 const meta = {
   component: CanvasView,

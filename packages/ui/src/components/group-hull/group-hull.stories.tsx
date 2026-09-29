@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { AnchorPort } from "../anchor-port";
-import { ObjectCard } from "../object-card";
+import { AnchorPort } from "../anchor-port/anchor-port";
+import { ObjectCard } from "../object-card/object-card";
 import { GroupHull } from "./group-hull";
 
 const meta = {

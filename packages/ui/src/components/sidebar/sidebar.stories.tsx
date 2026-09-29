@@ -1,7 +1,7 @@
 // manual
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { SidebarProvider } from "../sidebar-provider";
+import { SidebarProvider } from "../sidebar-provider/sidebar-provider";
 
 import { Sidebar } from "./sidebar";
 

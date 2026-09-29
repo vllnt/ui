@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   CHECKLIST_PROGRESS_EVENT,
   createChecklistStorageValue,
-} from "../checklist";
+} from "../checklist/checklist";
 
 import {
   ProgressTracker,

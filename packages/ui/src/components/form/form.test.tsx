@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
-import { Button } from "../button";
-import { Input } from "../input";
+import { Button } from "../button/button";
+import { Input } from "../input/input";
 
 import {
   Form,

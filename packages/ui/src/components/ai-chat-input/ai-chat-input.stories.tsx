@@ -3,7 +3,7 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Sparkles } from "lucide-react";
 
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import { AIChatInput } from "./ai-chat-input";
 
 const meta = {

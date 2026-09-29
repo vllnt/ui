@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import type { DateRange } from "react-day-picker";
 
-import { Calendar } from "../calendar";
+import { Calendar } from "../calendar/calendar";
 
 /** Calendar that selects a start and end date as a range. */
 export type RangeCalendarProps = {

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { ThemeProvider } from "../theme-provider";
+import { ThemeProvider } from "../theme-provider/theme-provider";
 
 import { ThemeToggle } from "./theme-toggle";
 
