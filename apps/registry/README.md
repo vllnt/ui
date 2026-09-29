@@ -29,11 +29,10 @@ apps/ui-registry/
 │   │   ├── [name]/         # Individual component registry JSON
 │   │   └── registry.json/  # Main registry index
 │   └── page.tsx            # Homepage
-├── registry/               # Component source files
-│   └── default/           # Default style variant
-│       └── [component]/   # Component files
-│           ├── [component].tsx
-│           └── docs.mdx   # Optional documentation
+├── registry/
+│   └── default/           # Generated shadcn shims (gitignored, except the
+│       └── [component]/   #   hand-maintained area/bar/line-chart shims)
+│           └── [component].tsx
 ├── registry.json          # Main registry manifest
 ├── public/r/              # Generated static registry files
 └── src/                   # Legacy component exports
@@ -53,6 +52,8 @@ pnpm install
 pnpm dev
 ```
 
+`predev` runs `registry:sync-shims` first, which writes the component shims under `registry/default/` from `packages/ui/src` (they are not committed).
+
 Visit `http://localhost:3000` to view the registry interface.
 
 ### Build
@@ -61,7 +62,7 @@ Visit `http://localhost:3000` to view the registry interface.
 pnpm build
 ```
 
-This builds the Next.js app and generates registry JSON files to `public/r/` using `shadcn build`.
+This runs `registry:build` (generates the `registry/default/` shims from `packages/ui/src`, then the registry JSON files in `public/r/` via `shadcn build`) before building the Next.js app.
 
 ## Registry API
 
@@ -95,33 +96,11 @@ pnpm dlx shadcn@latest add @vllnt-ui/button
 
 ## Adding Components
 
-1. **Create component directory**:
+Component source lives in `packages/ui`, not here. The files under `registry/default/` are generated — do not create or edit them by hand (except the chart shims noted above).
 
-   ```bash
-   mkdir -p registry/default/[component-name]
-   ```
+1. **Add the component** at `packages/ui/src/components/[component-name]/[component-name].tsx` and export it from the package.
 
-2. **Add component file**:
-
-   ```tsx
-   // registry/default/[component-name]/[component-name].tsx
-   export function ComponentName() {
-     // Component implementation
-   }
-   ```
-
-3. **Add optional documentation**:
-
-   ```mdx
-   // registry/default/[component-name]/docs.mdx
-
-   # Component Name
-
-   Component description...
-   ```
-
-4. **Update registry.json**:
-   Add entry to `registry.json`:
+2. **Add a registry entry** to `registry.json`:
 
    ```json
    {
@@ -140,10 +119,15 @@ pnpm dlx shadcn@latest add @vllnt-ui/button
    }
    ```
 
-5. **Rebuild registry**:
+3. **Add the docs page** at `content/components/[component-name]/[locale].mdx` for every locale (`pnpm components:generate-mdx` scaffolds them; `components:verify-mdx` enforces them at build time).
+
+4. **Rebuild the registry**:
+
    ```bash
    pnpm registry:build
    ```
+
+   This writes the shim at the `files[].path` above (gitignored) and restamps `registry.json` and `lib/component-metadata.json`. Commit those two files; CI's `registry:check` fails if they drift from source.
 
 ## Available Components
 

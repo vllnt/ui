@@ -77,6 +77,9 @@ export default defineConfig({
     "!src/**/*.visual.*",
     "!src/**/*.stories.*",
     "!src/**/__tests__/**",
+    // Test and Storybook support modules; nothing in the public entries imports them.
+    "!src/test-setup.ts",
+    "!src/components/canvas-shell/canvas-foundation-demo.tsx",
   ],
   format: ["esm"],
   dts: { entry: ["src/index.ts", "src/tailwind-preset.ts"] },
