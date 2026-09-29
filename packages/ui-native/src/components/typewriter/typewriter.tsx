@@ -24,11 +24,9 @@ export type TypewriterProps = Omit<TextProps, "children"> & {
   readonly text: string;
 };
 
+/** Splits by code point, not grapheme: Hermes has no `Intl.Segmenter`. */
 function splitCharacters(value: string): readonly string[] {
-  // Code points, not graphemes: Hermes has no Intl.Segmenter. Array.from is
-  // required because no-misused-spread rejects string spread.
-  // eslint-disable-next-line unicorn/prefer-spread
-  return Array.from(value);
+  return value.match(/./gsu) ?? [];
 }
 
 function useTypedCount(
