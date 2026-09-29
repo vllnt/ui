@@ -10,7 +10,10 @@ import {
 } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 export type ExerciseDifficulty = "easy" | "hard" | "medium";
@@ -126,39 +129,17 @@ function Exercise({
 }: ExerciseProps) {
   const theme = useTheme();
   const [isCompleted, setCompleted] = useControllableState(
-    completed === undefined
-      ? {
-          defaultValue: defaultCompleted,
-          mode: "uncontrolled",
-          onChange: onCompletedChange,
-        }
-      : { mode: "controlled", onChange: onCompletedChange, value: completed },
+    controllableOptions(completed, defaultCompleted, onCompletedChange),
   );
   const [showHint, setHintVisible] = useControllableState(
-    hintVisible === undefined
-      ? {
-          defaultValue: defaultHintVisible,
-          mode: "uncontrolled",
-          onChange: onHintVisibleChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onHintVisibleChange,
-          value: hintVisible,
-        },
+    controllableOptions(hintVisible, defaultHintVisible, onHintVisibleChange),
   );
   const [showSolution, setSolutionVisible] = useControllableState(
-    solutionVisible === undefined
-      ? {
-          defaultValue: defaultSolutionVisible,
-          mode: "uncontrolled",
-          onChange: onSolutionVisibleChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onSolutionVisibleChange,
-          value: solutionVisible,
-        },
+    controllableOptions(
+      solutionVisible,
+      defaultSolutionVisible,
+      onSolutionVisibleChange,
+    ),
   );
 
   return (

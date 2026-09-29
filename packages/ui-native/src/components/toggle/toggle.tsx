@@ -10,7 +10,10 @@ import {
 } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native visual treatments for a toggle action. */
@@ -53,13 +56,7 @@ function Toggle({
 }: ToggleProps) {
   const theme = useTheme();
   const [isPressed, setIsPressed] = useControllableState(
-    pressed === undefined
-      ? {
-          defaultValue: defaultPressed,
-          mode: "uncontrolled",
-          onChange: onPressedChange,
-        }
-      : { mode: "controlled", onChange: onPressedChange, value: pressed },
+    controllableOptions(pressed, defaultPressed, onPressedChange),
   );
   const content =
     typeof children === "number" || typeof children === "string" ? (

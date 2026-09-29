@@ -4,7 +4,10 @@ import type { ReactNode, Ref } from "react";
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 import {
@@ -116,13 +119,7 @@ function ExpandableCards({
 }: ExpandableCardsProps) {
   const theme = useTheme();
   const [expanded, setExpanded] = useControllableState(
-    expandedId === undefined
-      ? {
-          defaultValue: defaultExpandedId,
-          mode: "uncontrolled",
-          onChange: onExpandedIdChange,
-        }
-      : { mode: "controlled", onChange: onExpandedIdChange, value: expandedId },
+    controllableOptions(expandedId, defaultExpandedId, onExpandedIdChange),
   );
   return (
     <View

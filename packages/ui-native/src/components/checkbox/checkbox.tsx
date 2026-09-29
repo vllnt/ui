@@ -10,7 +10,10 @@ import {
   View,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Checked values supported by the native checkbox. */
@@ -53,13 +56,7 @@ function Checkbox({
 }: CheckboxProps) {
   const theme = useTheme();
   const [current, setCurrent] = useControllableState(
-    checked === undefined
-      ? {
-          defaultValue: defaultChecked,
-          mode: "uncontrolled",
-          onChange: onCheckedChange,
-        }
-      : { mode: "controlled", onChange: onCheckedChange, value: checked },
+    controllableOptions(checked, defaultChecked, onCheckedChange),
   );
   const selected = current !== false;
 

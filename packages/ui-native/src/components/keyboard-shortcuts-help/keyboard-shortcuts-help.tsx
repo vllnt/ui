@@ -16,7 +16,10 @@ import {
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -103,13 +106,7 @@ function KeyboardShortcutsHelp({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);

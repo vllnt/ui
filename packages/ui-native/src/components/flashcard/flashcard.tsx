@@ -10,7 +10,10 @@ import {
 } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-localized labels for a native flashcard. */
@@ -74,13 +77,7 @@ function Flashcard({
 }: FlashcardProps) {
   const theme = useTheme();
   const [isFlipped, setFlipped] = useControllableState(
-    flipped === undefined
-      ? {
-          defaultValue: defaultFlipped,
-          mode: "uncontrolled",
-          onChange: onFlippedChange,
-        }
-      : { mode: "controlled", onChange: onFlippedChange, value: flipped },
+    controllableOptions(flipped, defaultFlipped, onFlippedChange),
   );
   const toggle = () => {
     setFlipped(!isFlipped);

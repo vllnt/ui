@@ -18,7 +18,10 @@ import {
 } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a stable native instructional step. */
@@ -132,17 +135,11 @@ function StepByStepRoot({
     isValidElement<StepProps>(child),
   );
   const [completedIds, setCompletedIds] = useControllableState(
-    completedStepIds === undefined
-      ? {
-          defaultValue: defaultCompletedStepIds,
-          mode: "uncontrolled",
-          onChange: onCompletedStepIdsChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onCompletedStepIdsChange,
-          value: completedStepIds,
-        },
+    controllableOptions(
+      completedStepIds,
+      defaultCompletedStepIds,
+      onCompletedStepIdsChange,
+    ),
   );
   const currentCompletedIds = [...new Set(completedIds)].filter((id) =>
     steps.some((step) => step.props.id === id),

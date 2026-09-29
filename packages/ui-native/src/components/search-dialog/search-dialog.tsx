@@ -25,7 +25,10 @@ import {
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -338,31 +341,13 @@ function SearchDialog({
   const reduceMotion = useReducedMotion();
   const generatedId = useId();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const [searchQuery, setSearchQuery] = useControllableState(
-    query === undefined
-      ? {
-          defaultValue: defaultQuery,
-          mode: "uncontrolled",
-          onChange: onQueryChange,
-        }
-      : { mode: "controlled", onChange: onQueryChange, value: query },
+    controllableOptions(query, defaultQuery, onQueryChange),
   );
   const [searchScope, setSearchScope] = useControllableState(
-    scope === undefined
-      ? {
-          defaultValue: defaultScope,
-          mode: "uncontrolled",
-          onChange: onScopeChange,
-        }
-      : { mode: "controlled", onChange: onScopeChange, value: scope },
+    controllableOptions(scope, defaultScope, onScopeChange),
   );
   const minimum = Math.max(1, Math.round(minimumDocumentationSearchLength));
   const documentation = useDocumentationResults({

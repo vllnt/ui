@@ -17,7 +17,10 @@ import {
   toggleMultipleSelected,
 } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-identified timeline lane. */
@@ -244,28 +247,20 @@ function InteractiveTimeline({
   const theme = useTheme();
   const [layoutWidth, setLayoutWidth] = useState(1);
   const [selection, setSelection] = useControllableState(
-    selectedId === undefined
-      ? {
-          defaultValue: defaultSelectedId ?? "",
-          mode: "uncontrolled",
-          onChange: onSelectedIdChange,
-        }
-      : { mode: "controlled", onChange: onSelectedIdChange, value: selectedId },
+    controllableOptions(
+      selectedId,
+      defaultSelectedId ?? "",
+      onSelectedIdChange,
+    ),
   );
   const defaultCategories =
     defaultVisibleCategoryIds ?? categories.map((category) => category.id);
   const [visible, setVisible] = useControllableState(
-    visibleCategoryIds === undefined
-      ? {
-          defaultValue: defaultCategories,
-          mode: "uncontrolled",
-          onChange: onVisibleCategoryIdsChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onVisibleCategoryIdsChange,
-          value: visibleCategoryIds,
-        },
+    controllableOptions(
+      visibleCategoryIds,
+      defaultCategories,
+      onVisibleCategoryIdsChange,
+    ),
   );
   const [scale, setScale] = useControllableState(
     zoom === undefined

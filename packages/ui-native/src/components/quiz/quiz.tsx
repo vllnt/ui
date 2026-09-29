@@ -11,7 +11,10 @@ import {
 } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** One answer choice for a native quiz. */
@@ -88,35 +91,13 @@ function Quiz({
   const theme = useTheme();
   const generatedId = useId();
   const [activeId, setActiveId] = useControllableState(
-    selectedId === undefined
-      ? {
-          defaultValue: defaultSelectedId,
-          mode: "uncontrolled",
-          onChange: onSelectedIdChange,
-        }
-      : { mode: "controlled", onChange: onSelectedIdChange, value: selectedId },
+    controllableOptions(selectedId, defaultSelectedId, onSelectedIdChange),
   );
   const [isSubmitted, setSubmitted] = useControllableState(
-    submitted === undefined
-      ? {
-          defaultValue: defaultSubmitted,
-          mode: "uncontrolled",
-          onChange: onSubmittedChange,
-        }
-      : { mode: "controlled", onChange: onSubmittedChange, value: submitted },
+    controllableOptions(submitted, defaultSubmitted, onSubmittedChange),
   );
   const [isHintVisible, setHintVisible] = useControllableState(
-    hintVisible === undefined
-      ? {
-          defaultValue: defaultHintVisible,
-          mode: "uncontrolled",
-          onChange: onHintVisibleChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onHintVisibleChange,
-          value: hintVisible,
-        },
+    controllableOptions(hintVisible, defaultHintVisible, onHintVisibleChange),
   );
   const selectedOption = options.find((option) => option.id === activeId);
   const isCorrect = selectedOption?.correct === true;

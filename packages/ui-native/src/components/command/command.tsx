@@ -20,7 +20,10 @@ import {
   selectSingle,
 } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -88,27 +91,13 @@ function Command({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const [currentQuery, setCurrentQuery] = useControllableState(
-    query === undefined
-      ? {
-          defaultValue: defaultQuery,
-          mode: "uncontrolled",
-          onChange: onQueryChange,
-        }
-      : { mode: "controlled", onChange: onQueryChange, value: query },
+    controllableOptions(query, defaultQuery, onQueryChange),
   );
   const [selection, setSelection] = useControllableState(
-    selectedId === undefined
-      ? { defaultValue: defaultSelectedId, mode: "uncontrolled" }
-      : { mode: "controlled", value: selectedId },
+    controllableOptions(selectedId, defaultSelectedId),
   );
   const normalizedQuery = currentQuery.trim().toLocaleLowerCase();
   const filteredItems = items.filter(

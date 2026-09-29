@@ -12,7 +12,10 @@ import {
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 import {
@@ -107,13 +110,7 @@ function Accordion({
 }: AccordionProps) {
   const theme = useTheme();
   const [expandedIds, setExpandedIds] = useControllableState(
-    openIds === undefined
-      ? {
-          defaultValue: defaultOpenIds,
-          mode: "uncontrolled",
-          onChange: onOpenIdsChange,
-        }
-      : { mode: "controlled", onChange: onOpenIdsChange, value: openIds },
+    controllableOptions(openIds, defaultOpenIds, onOpenIdsChange),
   );
   const toggle = useCallback(
     (id: string) => {

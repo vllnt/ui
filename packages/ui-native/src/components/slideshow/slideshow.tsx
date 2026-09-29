@@ -18,7 +18,10 @@ import {
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -334,26 +337,14 @@ function Slideshow({
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const [selection, setSelection] = useControllableState(
-    currentSectionId === undefined
-      ? {
-          defaultValue: defaultCurrentSectionId ?? sections[0]?.id ?? "",
-          mode: "uncontrolled",
-          onChange: onCurrentSectionIdChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onCurrentSectionIdChange,
-          value: currentSectionId,
-        },
+    controllableOptions(
+      currentSectionId,
+      defaultCurrentSectionId ?? sections[0]?.id ?? "",
+      onCurrentSectionIdChange,
+    ),
   );
   const [sectionsOpen, setSectionsOpen] = useState(false);
   const foundIndex = sections.findIndex((section) => section.id === selection);
