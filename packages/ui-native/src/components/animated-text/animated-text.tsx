@@ -51,18 +51,36 @@ export type AnimatedTextProps = Omit<TextProps, "children"> & {
 const styles = StyleSheet.create({
   segment: { opacity: 0 },
 });
-const glyphSegmenter = new Intl.Segmenter(undefined, {
-  granularity: "grapheme",
-});
+const glyphSegmenterCache: { segmenter?: Intl.Segmenter | null } = {};
+
+/** Returns a grapheme segmenter, or `null` on engines without one (Hermes). */
+function getGlyphSegmenter(): Intl.Segmenter | null {
+  if (glyphSegmenterCache.segmenter === undefined) {
+    glyphSegmenterCache.segmenter =
+      typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
+        ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+        : null;
+  }
+  return glyphSegmenterCache.segmenter;
+}
+
+/** Splits by grapheme when `Intl.Segmenter` exists, otherwise by code point. */
+function splitGlyphs(text: string): string[] {
+  const segmenter = getGlyphSegmenter();
+  // Use Array.from because no-misused-spread rejects string spread.
+  // eslint-disable-next-line unicorn/prefer-spread
+  if (segmenter === null) return Array.from(text);
+  return Array.from(segmenter.segment(text), ({ segment }) => segment);
+}
 
 function getSegments(text: string, splitBy: AnimatedTextSplit): string[] {
   if (splitBy === "word") return text.match(/\s+|\S+\s*/g) ?? [];
-  return Array.from(glyphSegmenter.segment(text), ({ segment }) => segment);
+  return splitGlyphs(text);
 }
 
 function getDeterministicRank(segment: string, index: number): number {
-  return [...glyphSegmenter.segment(segment)].reduce(
-    (rank, { segment: glyph }) => rank * 31 + (glyph.codePointAt(0) ?? 0),
+  return splitGlyphs(segment).reduce(
+    (rank, glyph) => rank * 31 + (glyph.codePointAt(0) ?? 0),
     index + 17,
   );
 }
