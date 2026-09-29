@@ -27,7 +27,7 @@ and as a shadcn-compatible registry at `https://ui.vllnt.com/r`.
 
 - Docs: https://ui.vllnt.com · Storybook: https://storybook.vllnt.ai
 - npm: https://www.npmjs.com/package/@vllnt/ui
-- Machine docs: `llms.txt` / `llms-full.txt` at repo root
+- Machine docs: https://ui.vllnt.com/llms.txt / https://ui.vllnt.com/llms-full.txt
 
 The **design system is canonical in `DESIGN.md`**. Every UI suggestion must obey
 it. This skill is a **table of contents**: it keeps the stable design rules

@@ -20,16 +20,6 @@ Full R6 rerun was attempted but the harness terminated lint with SIGTERM when RS
 
 Merge can trigger existing Web canary publication and conditionally Native canary publication if the separately controlled enable gate/environment permits it; it cannot promote stable through these checked-in workflows. This is not an npm-account-level prohibition against an owner publishing outside the workflows. External owner settings, device/AT evidence, deployment diagnostics, remaining contract triage, publication/recovery rehearsal and all exit requirements below remain unverified. Keep the PR draft. Releasing docs now retain device/AT gates before advertising Native installation and distinguish deprecation from dist-tag rollback.
 
-## Original audit decision (historical, before Task63)
-
-**Not yet enforced as the requested synchronized 0.4.0 canary-only release.** Merge does **not** automatically publish stable Web or Native in the inspected workflows. However:
-
-1. Native/core still derive **0.1.0-canary.N.sha…**, not 0.4.0 canaries.
-2. Web still has an unprotected manual-dispatch `latest` publication path. Passing ordinary quality gates is not the requested explicit verification/promotion approval.
-3. Source-only merge can remain safe with Native publication disabled, but live repository/environment/npm settings were not checked. This audit does not ensure those settings or authorize changing them.
-
-Smallest next implementation: after task61 releases code ownership, align core/native base versions to 0.4.0; add a fail-closed 0.4.0 stable-release hold to Web's release job; document and test the release boundaries without any publication. Keep Web registry install pins at 0.3.0 and Native install availability false. Do not add Native to the Web stable matrix.
-
 ## Scope, evidence, and exclusions
 
 Read-only audit of `/Users/bntvllnt/Github/vllnt/ui-native-platform`, branch `feat/react-native-platform`, HEAD `811451e3cb223f8513e069f3dfee4471fb65d126` plus ongoing dirty repairs. Only this new report was written. Existing dirty `.github/workflows/native-canary.yml` (dist-tag authentication) and `CHANGELOG.md` were inspected, not overwritten. Their dirty state matters: committed HEAD lacks the separate dist-tag credential repair.
@@ -131,7 +121,7 @@ Representative evidence matrix must cover iOS + Android: modal focus entry/confi
 
 ### G7 — P1, remaining supported-contract triage; do not waive as device-only
 
-Existing reports retain unclosed software questions. `PR506_READINESS_REVIEW.md` explicitly supersedes repaired Carousel/disabled-picker/animation/FileUpload/LiveFeed findings, and MR/SZ follow-ups supersede their corresponding original rows. Do not reopen those already repaired merely from stale rows.
+Existing reports retain unclosed software questions. [`PR506_READINESS_REVIEW.md`](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_READINESS_REVIEW.md) explicitly supersedes repaired Carousel/disabled-picker/animation/FileUpload/LiveFeed findings, and MR/SZ follow-ups supersede their corresponding original rows. Do not reopen those already repaired merely from stale rows.
 
 Still requiring bounded reproduction/decision: Calendar years 0–99 (`calendar.tsx:66,79–89,116,120` uses multi-argument Date construction), Collapsible optional trigger relationships, Avatar failed-image lifecycle/TSDoc, repeated SidebarProvider/ToggleGroup updates, Unicode Typewriter/ScrambleText behavior, remaining raw scalar slots/zero content, non-finite numeric inputs, default disabled-tab selection, suggestion versus onSend semantics, progress units, filter-clear defaults, localization APIs. The current Calendar constructor pattern corroborates the historic-year question; this audit did not execute a component reproduction or establish that every listed historic observation still fails.
 
@@ -195,17 +185,7 @@ This table is the complete inventory of surfaces audited here, not a claim every
 | Availability/contracts | Native and Web registry JSON parsed/counts checked; `packages/design/component-contracts.json` fully read; generator stable/version/platform anchors inspected. Five portable contracts, 166 adaptations, source-only and stable Web pin established. |
 | Runtime/adapters/theme | `src/primitives/{platform-services.ts,modal-layer.tsx}`, `src/theme/theme-provider.tsx` fully read; safe-area exposure searched in Dialog/Sheet/DatePicker/Combobox; Calendar constructor anchors checked; RTL/font-scale source search performed. No fresh 171-component implementation audit. |
 | Catalog/platform proof | `apps/native-catalog/{README.md,package.json,app.json}` read; `App.tsx`, `catalog-sections.tsx` platform/accessibility anchors searched; CI/native scripts read. Workspace Expo bundle versus installed app boundary established. |
-| Package/security evidence | `docs/PR506_PACKAGE_SECURITY_REVIEW.md` fully read/reused for lock/build/pack/consumer boundaries. Existing paired tarballs independently listed for LICENSE. `SECURITY.md` fully read but protected. No third-party source/advisory/SBOM audit claim. |
-| Prior component findings | `docs/PR506_READINESS_REVIEW.md` fully read; residual/superseding entries in `PR506_NATIVE_REVIEW_{AC,DL,MR,SZ,SZ_ASYNC,SZ_CONTRACTS}.md` searched. Existing organization map used as historical-path context; tests not moved or rerun. |
-| Web/registry evidence | `docs/PR506_WEB_REGISTRY_REVIEW.md` existing inventory/evidence reused; existing report distinguishes source availability, comparison, locale, MCP/llms, browser previews and stable pinning. No new browser verification or preview-status claim. |
+| Package/security evidence | [`PR506_PACKAGE_SECURITY_REVIEW.md`](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_PACKAGE_SECURITY_REVIEW.md) fully read/reused for lock/build/pack/consumer boundaries. Existing paired tarballs independently listed for LICENSE. `SECURITY.md` fully read but protected. No third-party source/advisory/SBOM audit claim. |
+| Prior component findings | [`PR506_READINESS_REVIEW.md`](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_READINESS_REVIEW.md) fully read; residual/superseding entries in PR506_NATIVE_REVIEW_{[AC](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_NATIVE_REVIEW_AC.md), [DL](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_NATIVE_REVIEW_DL.md), [MR](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_NATIVE_REVIEW_MR.md), [SZ](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_NATIVE_REVIEW_SZ.md), [SZ_ASYNC](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_NATIVE_REVIEW_SZ_ASYNC.md), [SZ_CONTRACTS](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_NATIVE_REVIEW_SZ_CONTRACTS.md)} searched. Existing [organization map](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/NATIVE_TEST_ORGANIZATION.md) used as historical-path context; tests not moved or rerun. |
+| Web/registry evidence | [`PR506_WEB_REGISTRY_REVIEW.md`](https://github.com/vllnt/ui/blob/a986d124104c08cc7179e4dad49a51d5c0fab755/docs/PR506_WEB_REGISTRY_REVIEW.md) existing inventory/evidence reused; existing report distinguishes source availability, comparison, locale, MCP/llms, browser previews and stable pinning. No new browser verification or preview-status claim. |
 | External owner state | npm tags/package ownership/OIDC/token rights, repository variable/environment reviewers, branch protections and deployment logs **not checked**; explicit owner gate rather than assumed safe. |
-
-## Checks performed in this audit
-
-- Read-only Git branch/status/HEAD and protected dirty diff inspected; no mutation.
-- Parsed all workspace package versions and both registry manifests; counts/compatibility/availability above verified.
-- Extracted Native workflow embedded publication shell and ran `bash -n` via stdin: **exit 0**. This checks shell syntax, not YAML/Actions expression validity, authentication, rollback correctness, or successful publication.
-- Inspected existing paired tarball listings: both include LICENSE. Those artifacts are earlier report artifacts, not a fresh final-HEAD pack.
-- No full build/test/Metro/Next/device/registry mutation performed. Task61 remains owner of aggregate verification. No task statuses were fabricated.
-
-**Only path written:** `docs/PR506_CANARY_GAP_REVIEW.md`.
