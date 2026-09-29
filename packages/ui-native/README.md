@@ -2,7 +2,7 @@
 
 Accessible React Native components that share VLLNT UI semantic tokens and portable option names while using a renderer designed specifically for React Native.
 
-> Experimental and source-only. The repository contains the renderer, but no npm release exists yet. Do not run the planned canary install command until the native manifest reports `installation.available: true`.
+> Experimental and source-only. The repository contains the renderer. A manually bootstrapped pre-release (`0.1.0-canary.20260917105553.sha7466647a4ba5`) exists on npm only to reserve the package name; it has no build provenance, npm's `latest` tag points at it, and it is not a supported install. Do not run the planned canary install command until the native manifest reports `installation.available: true`.
 
 The package base is **0.1.0**, not a published stable release. Core and Native canaries use the same `0.1.0-canary.<run>.sha<commit>` version and an exact core dependency. Workflow publication is unconditionally disabled pending a separate hardening/enabling review; the stable promotion hold also remains. See [releasing](../../docs/RELEASING.md). Neither merge nor passing local tests authorizes enabling Native publication.
 

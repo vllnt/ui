@@ -81,7 +81,7 @@ An authorized npm owner must bootstrap unpublished names separately; an organiza
 
 The catalog now uses Expo `~57.0.23` to resolve the prior Doctor patch mismatch; `pnpm ci:native` must pass on the reviewed commit. The validation hold still requires physical Android/iOS and VoiceOver/TalkBack evidence plus fresh published-consumer checks. An upload alone does not lift this hold.
 
-No native npm release exists yet. While `packages/ui-native/registry.json` reports `availability: "source"` and `installation.available: false`, the planned command below is documentation and must not be presented as a working install action:
+No supported native npm release exists yet. A manually bootstrapped pre-release (`0.1.0-canary.20260917105553.sha7466647a4ba5`) reserves both package names; it has no build provenance and npm's implicit `latest` tag points at it. While `packages/ui-native/registry.json` reports `availability: "source"` and `installation.available: false`, the planned command below is documentation and must not be presented as a working install action:
 
 ```bash
 pnpm add @vllnt/ui-native@canary
