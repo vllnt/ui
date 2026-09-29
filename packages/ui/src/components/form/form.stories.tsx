@@ -110,8 +110,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const ServerError: Story = {
-  args: {
-    serverError: true,
-  },
-};
+export const ServerError: Story = { args: { serverError: true } };

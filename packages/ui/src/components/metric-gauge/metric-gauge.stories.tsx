@@ -19,8 +19,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Critical: Story = {
-  args: {
-    value: 94,
-  },
-};
+export const Critical: Story = { args: { value: 94 } };

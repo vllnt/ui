@@ -25,11 +25,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Searchable: Story = {
-  args: {
-    searchable: true,
-  },
-};
+export const Searchable: Story = { args: { searchable: true } };
 
 function ControlledMultiSelectDemo(props: React.ComponentProps<typeof MultiSelect>) {
   const [value, setValue] = React.useState(["react", "vue"]);

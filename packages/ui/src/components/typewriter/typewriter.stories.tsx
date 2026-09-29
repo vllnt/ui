@@ -15,14 +15,5 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Fast: Story = {
-  args: {
-    speed: 25,
-  },
-};
-
-export const NoCursor: Story = {
-  args: {
-    cursor: false,
-  },
-};
+export const Fast: Story = { args: { speed: 25 } };
+export const NoCursor: Story = { args: { cursor: false } };

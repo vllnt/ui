@@ -15,16 +15,5 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const AsHeroHeading: Story = {
-  args: {
-    as: "h1",
-    children: "Build the web, faster",
-  },
-};
-
-export const Animated: Story = {
-  args: {
-    animated: true,
-    children: "Reveal on mount",
-  },
-};
+export const AsHeroHeading: Story = { args: { as: "h1", children: "Build the web, faster" } };
+export const Animated: Story = { args: { animated: true, children: "Reveal on mount" } };

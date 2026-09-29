@@ -64,15 +64,5 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Compact: Story = {
-  args: {
-    items: sampleItems.slice(0, 3),
-    title: "Top movers",
-  },
-};
-
-export const HeadingOverride: Story = {
-  args: {
-    as: "h2",
-  },
-};
+export const Compact: Story = { args: { items: sampleItems.slice(0, 3), title: "Top movers" } };
+export const HeadingOverride: Story = { args: { as: "h2" } };

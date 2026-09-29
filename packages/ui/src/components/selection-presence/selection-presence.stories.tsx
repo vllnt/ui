@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { SelectionPresence } from "./selection-presence";
 
 const meta = {
@@ -12,16 +14,7 @@ const meta = {
     y: 60,
   },
   component: SelectionPresence,
-  decorators: [
-    (Story) => (
-      <div
-        className="relative bg-muted/30"
-        style={{ height: 220, width: 280 }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative bg-muted/30", { height: 220, width: 280 })],
   title: "Canvas/SelectionPresence",
 } satisfies Meta<typeof SelectionPresence>;
 
@@ -30,14 +23,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Warm: Story = {
-  args: { color: "#f59e0b", name: "Sam" },
-};
-
-export const ChipHidden: Story = {
-  args: { name: null },
-};
-
-export const Tall: Story = {
-  args: { height: 160, width: 80 },
-};
+export const Warm: Story = { args: { color: "#f59e0b", name: "Sam" } };
+export const ChipHidden: Story = { args: { name: null } };
+export const Tall: Story = { args: { height: 160, width: 80 } };

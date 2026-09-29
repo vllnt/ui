@@ -19,8 +19,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Breached: Story = {
-  args: {
-    now: "2026-03-15T10:35:00.000Z",
-  },
-};
+export const Breached: Story = { args: { now: "2026-03-15T10:35:00.000Z" } };

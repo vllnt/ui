@@ -12,8 +12,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const WithValue: Story = {
-  args: {
-    value: new Date("2026-04-19T00:00:00.000Z"),
-  },
-};
+export const WithValue: Story = { args: { value: new Date("2026-04-19T00:00:00.000Z") } };

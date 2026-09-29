@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { SpotlightCard } from "./spotlight-card";
 
 const meta = {
@@ -7,13 +9,7 @@ const meta = {
     children: "Move your pointer across me",
   },
   component: SpotlightCard,
-  decorators: [
-    (Story) => (
-      <div className="w-80 p-12">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-80 p-12")],
   title: "Effects/SpotlightCard",
 } satisfies Meta<typeof SpotlightCard>;
 

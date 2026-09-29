@@ -32,26 +32,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Slow: Story = {
-  args: {
-    speed: "slow",
-  },
-};
-
-export const Fast: Story = {
-  args: {
-    speed: "fast",
-  },
-};
-
-export const CustomDuration: Story = {
-  args: {
-    duration: 14,
-  },
-};
-
-export const Reverse: Story = {
-  args: {
-    reverse: true,
-  },
-};
+export const Slow: Story = { args: { speed: "slow" } };
+export const Fast: Story = { args: { speed: "fast" } };
+export const CustomDuration: Story = { args: { duration: 14 } };
+export const Reverse: Story = { args: { reverse: true } };

@@ -34,50 +34,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const SizeIcon: Story = {
-  args: {
-    size: "icon",
-  },
-};
-
-export const SizeLg: Story = {
-  args: {
-    size: "lg",
-  },
-};
-
-export const SizeSm: Story = {
-  args: {
-    size: "sm",
-  },
-};
-
-export const VariantDestructive: Story = {
-  args: {
-    variant: "destructive",
-  },
-};
-
-export const VariantGhost: Story = {
-  args: {
-    variant: "ghost",
-  },
-};
-
-export const VariantLink: Story = {
-  args: {
-    variant: "link",
-  },
-};
-
-export const VariantOutline: Story = {
-  args: {
-    variant: "outline",
-  },
-};
-
-export const VariantSecondary: Story = {
-  args: {
-    variant: "secondary",
-  },
-};
+export const SizeIcon: Story = { args: { size: "icon" } };
+export const SizeLg: Story = { args: { size: "lg" } };
+export const SizeSm: Story = { args: { size: "sm" } };
+export const VariantDestructive: Story = { args: { variant: "destructive" } };
+export const VariantGhost: Story = { args: { variant: "ghost" } };
+export const VariantLink: Story = { args: { variant: "link" } };
+export const VariantOutline: Story = { args: { variant: "outline" } };
+export const VariantSecondary: Story = { args: { variant: "secondary" } };

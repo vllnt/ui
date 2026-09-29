@@ -22,9 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Donut: Story = {
-  args: { innerRadius: 0.6 },
-};
+export const Donut: Story = { args: { innerRadius: 0.6 } };
 
 export const CustomPalette: Story = {
   args: {

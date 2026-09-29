@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import {
   type FloatingToolbarAction,
   FloatingToolbar,
@@ -21,13 +23,7 @@ const meta = {
     y: 120,
   },
   component: FloatingToolbar,
-  decorators: [
-    (Story) => (
-      <div className="relative h-[180px] w-[480px] rounded-2xl border bg-muted/30">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative h-[180px] w-[480px] rounded-2xl border bg-muted/30")],
   title: "Canvas/FloatingToolbar",
 } satisfies Meta<typeof FloatingToolbar>;
 
@@ -44,6 +40,4 @@ export const Disabled: Story = {
   },
 };
 
-export const Compact: Story = {
-  args: { actions: ACTIONS.slice(0, 2) },
-};
+export const Compact: Story = { args: { actions: ACTIONS.slice(0, 2) } };

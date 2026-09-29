@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { PresenceSyncIndicator } from "./presence-sync-indicator";
 
 const meta = {
@@ -8,13 +10,7 @@ const meta = {
     status: "3 peers",
   },
   component: PresenceSyncIndicator,
-  decorators: [
-    (Story) => (
-      <div className="flex items-start bg-muted/30 p-4">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("flex items-start bg-muted/30 p-4")],
   title: "Canvas/PresenceSyncIndicator",
 } satisfies Meta<typeof PresenceSyncIndicator>;
 
@@ -23,14 +19,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Live: Story = {};
 
-export const Syncing: Story = {
-  args: { state: "syncing", status: "2 changes" },
-};
-
-export const Reconnecting: Story = {
-  args: { state: "reconnecting", status: "retry 2 / 5" },
-};
-
-export const Offline: Story = {
-  args: { state: "offline", status: undefined },
-};
+export const Syncing: Story = { args: { state: "syncing", status: "2 changes" } };
+export const Reconnecting: Story = { args: { state: "reconnecting", status: "retry 2 / 5" } };
+export const Offline: Story = { args: { state: "offline", status: undefined } };

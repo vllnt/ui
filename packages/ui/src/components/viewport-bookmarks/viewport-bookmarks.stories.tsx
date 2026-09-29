@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { ViewportBookmarks } from "./viewport-bookmarks";
 
 const noop = (): void => undefined;
@@ -16,13 +18,7 @@ const meta = {
     onSelect: noop,
   },
   component: ViewportBookmarks,
-  decorators: [
-    (Story) => (
-      <div className="w-64">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-64")],
   title: "Canvas/ViewportBookmarks",
 } satisfies Meta<typeof ViewportBookmarks>;
 
@@ -31,14 +27,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { bookmarks: [] },
-};
-
-export const NoActive: Story = {
-  args: { activeId: undefined },
-};
-
-export const ReadOnly: Story = {
-  args: { onSelect: undefined },
-};
+export const Empty: Story = { args: { bookmarks: [] } };
+export const NoActive: Story = { args: { activeId: undefined } };
+export const ReadOnly: Story = { args: { onSelect: undefined } };

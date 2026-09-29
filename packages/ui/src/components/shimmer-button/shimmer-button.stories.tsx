@@ -15,8 +15,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Slow: Story = {
-  args: {
-    shimmerDuration: 4,
-  },
-};
+export const Slow: Story = { args: { shimmerDuration: 4 } };

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { AnimatedTooltip } from "./animated-tooltip";
 
 const meta = {
@@ -15,13 +17,7 @@ const meta = {
     content: "Tooltip content",
   },
   component: AnimatedTooltip,
-  decorators: [
-    (Story) => (
-      <div className="flex min-h-40 items-center justify-center p-10">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("flex min-h-40 items-center justify-center p-10")],
   title: "Effects/AnimatedTooltip",
 } satisfies Meta<typeof AnimatedTooltip>;
 
@@ -30,8 +26,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Bottom: Story = {
-  args: {
-    side: "bottom",
-  },
-};
+export const Bottom: Story = { args: { side: "bottom" } };

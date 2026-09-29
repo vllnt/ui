@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { HeatOverlay } from "./heat-overlay";
 
 const meta = {
@@ -13,16 +15,7 @@ const meta = {
     ],
   },
   component: HeatOverlay,
-  decorators: [
-    (Story) => (
-      <div
-        className="relative bg-muted/20"
-        style={{ height: 240, width: 360 }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative bg-muted/20", { height: 240, width: 360 })],
   title: "Canvas/HeatOverlay",
 } satisfies Meta<typeof HeatOverlay>;
 
@@ -31,9 +24,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { points: [] },
-};
+export const Empty: Story = { args: { points: [] } };
 
 export const Cool: Story = {
   args: {
@@ -45,6 +36,4 @@ export const Cool: Story = {
   },
 };
 
-export const HighIntensity: Story = {
-  args: { intensity: 96 },
-};
+export const HighIntensity: Story = { args: { intensity: 96 } };

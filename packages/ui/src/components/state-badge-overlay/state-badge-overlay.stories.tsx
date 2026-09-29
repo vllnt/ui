@@ -32,24 +32,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Failed: Story = {
-  args: {
-    anchor: "bottom-left",
-    state: "failed",
-    x: 80,
-    y: 160,
-  },
-};
-
-export const Complete: Story = {
-  args: {
-    state: "complete",
-  },
-};
-
-export const CustomLabel: Story = {
-  args: {
-    label: "Spawning",
-    state: "queued",
-  },
-};
+export const Failed: Story = { args: { anchor: "bottom-left", state: "failed", x: 80, y: 160 } };
+export const Complete: Story = { args: { state: "complete" } };
+export const CustomLabel: Story = { args: { label: "Spawning", state: "queued" } };

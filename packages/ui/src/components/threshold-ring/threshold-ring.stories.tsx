@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { ThresholdRing } from "./threshold-ring";
 
 const meta = {
@@ -10,13 +12,7 @@ const meta = {
     value: 0.68,
   },
   component: ThresholdRing,
-  decorators: [
-    (Story) => (
-      <div className="flex items-center justify-center bg-muted/30 p-8">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("flex items-center justify-center bg-muted/30 p-8")],
   title: "Canvas/ThresholdRing",
 } satisfies Meta<typeof ThresholdRing>;
 

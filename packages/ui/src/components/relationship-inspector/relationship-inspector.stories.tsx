@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { RelationshipInspector } from "./relationship-inspector";
 
 const noop = (): void => undefined;
@@ -33,13 +35,7 @@ const meta = {
     ],
   },
   component: RelationshipInspector,
-  decorators: [
-    (Story) => (
-      <div className="w-72">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72")],
   title: "Canvas/RelationshipInspector",
 } satisfies Meta<typeof RelationshipInspector>;
 
@@ -48,9 +44,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { edges: [] },
-};
+export const Empty: Story = { args: { edges: [] } };
 
 export const InboundOnly: Story = {
   args: {

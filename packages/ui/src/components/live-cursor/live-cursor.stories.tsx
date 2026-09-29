@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { LiveCursor } from "./live-cursor";
 
 const meta = {
@@ -10,16 +12,7 @@ const meta = {
     y: 80,
   },
   component: LiveCursor,
-  decorators: [
-    (Story) => (
-      <div
-        className="relative bg-muted/30"
-        style={{ height: 240, width: 320 }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative bg-muted/30", { height: 240, width: 320 })],
   title: "Canvas/LiveCursor",
 } satisfies Meta<typeof LiveCursor>;
 
@@ -28,18 +21,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const WithStatus: Story = {
-  args: {
-    color: "#10b981",
-    name: "Lior",
-    status: "editing",
-  },
-};
-
-export const ChipHidden: Story = {
-  args: { name: null },
-};
-
-export const Warm: Story = {
-  args: { color: "#f59e0b", name: "Sam" },
-};
+export const WithStatus: Story = { args: { color: "#10b981", name: "Lior", status: "editing" } };
+export const ChipHidden: Story = { args: { name: null } };
+export const Warm: Story = { args: { color: "#f59e0b", name: "Sam" } };

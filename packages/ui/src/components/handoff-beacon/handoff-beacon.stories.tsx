@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { HandoffBeacon } from "./handoff-beacon";
 
 const meta = {
@@ -11,13 +13,7 @@ const meta = {
     y: 80,
   },
   component: HandoffBeacon,
-  decorators: [
-    (Story) => (
-      <div className="relative h-[260px] w-[480px] rounded-2xl border bg-muted/30">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative h-[260px] w-[480px] rounded-2xl border bg-muted/30")],
   title: "Canvas/HandoffBeacon",
 } satisfies Meta<typeof HandoffBeacon>;
 
@@ -58,6 +54,4 @@ export const Pulsing: Story = {
   args: { level: "urgent", message: "Schema mismatch", source: "Riley" },
 };
 
-export const Anonymous: Story = {
-  args: { message: "Look here", source: undefined },
-};
+export const Anonymous: Story = { args: { message: "Look here", source: undefined } };

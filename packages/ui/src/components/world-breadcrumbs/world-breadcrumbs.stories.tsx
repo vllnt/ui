@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { WorldBreadcrumbs } from "./world-breadcrumbs";
 
 const noop = (): void => undefined;
@@ -15,13 +17,7 @@ const meta = {
     onSelect: noop,
   },
   component: WorldBreadcrumbs,
-  decorators: [
-    (Story) => (
-      <div className="bg-muted/30 p-4">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("bg-muted/30 p-4")],
   title: "Canvas/WorldBreadcrumbs",
 } satisfies Meta<typeof WorldBreadcrumbs>;
 
@@ -39,10 +35,5 @@ export const Shallow: Story = {
   },
 };
 
-export const Empty: Story = {
-  args: { crumbs: [] },
-};
-
-export const ReadOnly: Story = {
-  args: { onSelect: undefined },
-};
+export const Empty: Story = { args: { crumbs: [] } };
+export const ReadOnly: Story = { args: { onSelect: undefined } };

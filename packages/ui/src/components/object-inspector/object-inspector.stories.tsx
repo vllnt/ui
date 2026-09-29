@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { ObjectInspector } from "./object-inspector";
 
 const meta = {
@@ -10,13 +12,7 @@ const meta = {
     title: "research-2025-04-15",
   },
   component: ObjectInspector,
-  decorators: [
-    (Story) => (
-      <div className="w-72">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72")],
   title: "Canvas/ObjectInspector",
 } satisfies Meta<typeof ObjectInspector>;
 
@@ -25,9 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { kind: undefined, title: undefined },
-};
+export const Empty: Story = { args: { kind: undefined, title: undefined } };
 
 export const WithBody: Story = {
   args: {

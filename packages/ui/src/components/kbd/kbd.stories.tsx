@@ -22,29 +22,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const SizeSm: Story = {
-  args: {
-    size: "sm",
-  },
-};
-
-export const SizeLg: Story = {
-  args: {
-    size: "lg",
-  },
-};
-
-export const Shortcut: Story = {
-  args: {
-    shortcut: "ctrl+k",
-  },
-};
-
-export const ModShortcut: Story = {
-  args: {
-    shortcut: "mod+shift+p",
-  },
-};
+export const SizeSm: Story = { args: { size: "sm" } };
+export const SizeLg: Story = { args: { size: "lg" } };
+export const Shortcut: Story = { args: { shortcut: "ctrl+k" } };
+export const ModShortcut: Story = { args: { shortcut: "mod+shift+p" } };
 
 export const Composed: Story = {
   render: (args) => (
