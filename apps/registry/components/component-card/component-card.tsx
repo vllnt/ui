@@ -4,22 +4,12 @@ import { ComponentThumbnail } from "@/components/component-thumbnail";
 import { PlatformBadges } from "@/components/platform-badges";
 import { Link, type Locale } from "@/i18n/routing";
 import { getComponentContent } from "@/lib/component-content";
-import componentMetadata from "@/lib/component-metadata.json";
+import { componentMeta } from "@/lib/component-meta";
 import {
   type PlatformContext,
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
-
-const META = componentMetadata as Record<
-  string,
-  {
-    description?: string;
-    platforms?: ("native" | "web")[];
-    stories?: { id: string; name: string }[];
-    title?: string;
-  }
->;
 
 type ComponentCardProps = {
   /** Optional description override (e.g. AI-SEO copy); falls back to registry metadata. */
@@ -52,7 +42,7 @@ export async function ComponentCard({
   title,
 }: ComponentCardProps) {
   const t = await getTranslations("pages.components");
-  const meta = META[slug];
+  const meta = componentMeta[slug];
   const localized = await getComponentContent(slug, locale);
   const displayTitle =
     title ?? localized?.frontmatter.title ?? meta?.title ?? slug;

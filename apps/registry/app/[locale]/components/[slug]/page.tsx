@@ -28,7 +28,7 @@ import { ShareEmbedBar } from "@/components/share-embed-bar";
 import { Link, type Locale, routing } from "@/i18n/routing";
 import { getAiSeo } from "@/lib/ai-seo";
 import { getComponentContent } from "@/lib/component-content";
-import componentMetadata from "@/lib/component-metadata.json";
+import { componentMeta } from "@/lib/component-meta";
 import { getComponentSeo } from "@/lib/component-seo";
 import {
   breadcrumbTrailLd,
@@ -43,7 +43,7 @@ import {
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
-import { registry } from "@/lib/registry";
+import { findComponent, registry } from "@/lib/registry";
 import { canonical, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
 import {
@@ -53,36 +53,17 @@ import {
   groupedComponents,
 } from "@/lib/sidebar-sections";
 import { getRegistryGeneratedAt } from "@/lib/stats";
-import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
   searchParams: Promise<PlatformQuery>;
 };
 
-const metadata_map = componentMetadata as Record<
-  string,
-  {
-    category: string;
-    defaultStoryId: string;
-    description: string;
-    name: string;
-    platforms: ("native" | "web")[];
-    stories: { id: string; name: string }[];
-    title: string;
-  }
->;
-
 const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
 
 export async function generateStaticParams() {
-  const slugs = registry.items.reduce<string[]>((names, item) => {
-    if (item.type === "registry:component") {
-      names.push(item.name);
-    }
-    return names;
-  }, []);
+  const slugs = registry.items.map((item) => item.name);
 
   return routing.locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug })),
@@ -91,16 +72,13 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { locale, slug } = await props.params;
-  const component = registry.items.find(
-    (item): item is RegistryComponent =>
-      item.name === slug && item.type === "registry:component",
-  );
+  const component = findComponent(slug);
 
   if (!component) {
     return {};
   }
 
-  const meta = metadata_map[slug];
+  const meta = componentMeta[slug];
   const category = getCategoryForComponent(slug);
   const aiSeo = getAiSeo(slug);
   const componentSeo = getComponentSeo(slug);
@@ -158,16 +136,13 @@ export default async function ComponentPage(props: Props) {
   const t = await getTranslations("pages.component");
   const common = await getTranslations("common");
   const shared = await getTranslations("shared");
-  const component = registry.items.find(
-    (item): item is RegistryComponent =>
-      item.name === slug && item.type === "registry:component",
-  );
+  const component = findComponent(slug);
 
   if (!component) {
     notFound();
   }
 
-  const meta = metadata_map[slug];
+  const meta = componentMeta[slug];
   const aiSeo = getAiSeo(slug);
   const componentSeo = getComponentSeo(slug);
   const isDefaultLocale = locale === routing.defaultLocale;
@@ -308,9 +283,7 @@ export default async function ComponentPage(props: Props) {
   const relatedComponents = relatedSlugs.filter((name) =>
     registry.items.some(
       (item) =>
-        item.name === name &&
-        item.type === "registry:component" &&
-        (!platform || item.platforms.includes(platform)),
+        item.name === name && (!platform || item.platforms.includes(platform)),
     ),
   );
 

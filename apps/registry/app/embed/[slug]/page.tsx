@@ -3,40 +3,23 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ComponentPreview } from "@/components/component-preview/component-preview";
-import componentMetadata from "@/lib/component-metadata.json";
-import { registry } from "@/lib/registry";
+import { componentMeta } from "@/lib/component-meta";
+import { findComponent, registry } from "@/lib/registry";
 import { componentUrl, withRef } from "@/lib/share";
-import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ mode?: string; theme?: string }>;
 };
 
-const metadataMap = componentMetadata as Record<
-  string,
-  { description: string; title: string }
->;
-
-function findComponent(slug: string): RegistryComponent | undefined {
-  return registry.items.find(
-    (item): item is RegistryComponent =>
-      item.name === slug && item.type === "registry:component",
-  );
-}
-
 export function generateStaticParams() {
-  return registry.items
-    .filter(
-      (item): item is RegistryComponent => item.type === "registry:component",
-    )
-    .map((item) => ({ slug: item.name }));
+  return registry.items.map((item) => ({ slug: item.name }));
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { slug } = await props.params;
   const component = findComponent(slug);
-  const title = metadataMap[slug]?.title ?? component?.title ?? slug;
+  const title = componentMeta[slug]?.title ?? component?.title ?? slug;
 
   return {
     robots: { follow: false, index: false },
@@ -53,7 +36,7 @@ export default async function EmbedPage(props: Props) {
     notFound();
   }
 
-  const title = metadataMap[slug]?.title ?? component.title ?? slug;
+  const title = componentMeta[slug]?.title ?? component.title ?? slug;
   const isDark = theme === "dark";
   const link = withRef(componentUrl(slug), "embed");
 

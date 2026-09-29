@@ -3,8 +3,7 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
-import { registry } from "@/lib/registry";
-import type { RegistryComponent } from "@/types/registry";
+import { findComponent } from "@/lib/registry";
 
 type RouteParameters = {
   params: Promise<{ name: string }>;
@@ -25,10 +24,7 @@ async function readComponentFile(filePath: string) {
 export async function GET(_request: Request, routeParameters: RouteParameters) {
   try {
     const { name } = await routeParameters.params;
-    const component = registry.items.find(
-      (item): item is RegistryComponent =>
-        item.name === name && item.type === "registry:component",
-    );
+    const component = findComponent(name);
 
     if (!component) {
       return NextResponse.json(

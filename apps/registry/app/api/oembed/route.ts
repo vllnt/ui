@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import componentMetadata from "@/lib/component-metadata.json";
-import { registry } from "@/lib/registry";
+import { componentMeta } from "@/lib/component-meta";
+import { findComponent } from "@/lib/registry";
 import {
   buildEmbedSnippet,
   EMBED_DEFAULT_HEIGHT,
@@ -10,11 +10,6 @@ import {
   SITE_URL,
 } from "@/lib/share";
 import type { RegistryComponent } from "@/types/registry";
-
-const metadataMap = componentMetadata as Record<
-  string,
-  { category?: string; description?: string; title?: string }
->;
 
 const querySchema = z.object({
   format: z.enum(["json", "xml"]).default("json"),
@@ -43,13 +38,6 @@ function slugFromUrl(pageUrl: string): string | undefined {
   }
 }
 
-function findComponent(slug: string): RegistryComponent | undefined {
-  return registry.items.find(
-    (item): item is RegistryComponent =>
-      item.name === slug && item.type === "registry:component",
-  );
-}
-
 function buildThumbnailUrl(input: {
   category?: string;
   description: string;
@@ -74,7 +62,7 @@ function buildPayload(
   component: RegistryComponent,
   size: { height: number; width: number },
 ): Record<string, unknown> {
-  const meta = metadataMap[slug];
+  const meta = componentMeta[slug];
   const title = meta?.title ?? component.title ?? slug;
   const description = meta?.description ?? component.description ?? "";
   const { height, width } = size;
