@@ -14,9 +14,12 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ### Fixed
 
+- `Calendar` and `RangeCalendar` keep years 0–99 instead of remapping them to 1900–1999.
+- `ScrollProgress`, `TextReveal`, `TutorialComplete`, `Stepper`, and `AvatarGroup` map `NaN` numeric inputs to a safe value (empty progress, first step, or no avatar limit) instead of rendering `NaN` values or styles; `±Infinity` still clamps to the range bounds.
+- `StatCard` renders numeric `0` for `change`, `meta`, and `description` while still omitting `undefined`, `null`, and `NaN`.
 - `CollapsibleContent` sets `aria-labelledby` only while a `CollapsibleTrigger` is mounted, and the trigger sets `aria-controls` only while content is mounted, so neither points at a missing node.
 - `AvatarImage` now unmounts after a load failure so the fallback shows, as documented, and mounts again when `source` changes to a different value.
 
 ### Availability
 
-- No npm version is published. The renderer remains `availability: "source"` with `installation.available: false` until synchronized canary publication and device/accessibility gates pass.
+- No supported npm version is published. A manually bootstrapped pre-release (`0.1.0-canary.20260917105553.sha7466647a4ba5`) reserves the package names for `@vllnt/ui-core` and `@vllnt/ui-native`; it has no build provenance and npm's `latest` tag points at it. The renderer remains `availability: "source"` with `installation.available: false` until synchronized canary publication and device/accessibility gates pass.

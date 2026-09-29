@@ -48,7 +48,7 @@ pnpm dlx shadcn@latest add @vllnt-ui/button
 
 ## React Native source preview
 
-The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. It currently exists in repository source only; `@vllnt/ui-native` has not been published to npm. The planned command becomes actionable only after the native manifest reports package availability:
+The experimental native renderer is separate so React DOM and Radix dependencies never enter Metro. It currently exists in repository source only; `@vllnt/ui-native` has no supported npm release (only a manually bootstrapped name-reservation pre-release without provenance). The planned command becomes actionable only after the native manifest reports package availability:
 
 ```bash
 pnpm add @vllnt/ui-native@canary

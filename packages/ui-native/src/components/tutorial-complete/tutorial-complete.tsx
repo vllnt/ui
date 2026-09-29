@@ -129,7 +129,9 @@ function TutorialComplete({
   ...props
 }: TutorialCompleteProps) {
   const theme = useTheme();
-  const percent = Math.min(100, Math.max(0, Math.round(completionPercent)));
+  const percent = Number.isNaN(completionPercent)
+    ? 0
+    : Math.min(100, Math.max(0, Math.round(completionPercent)));
   const complete = percent === 100;
   return (
     <View {...props} ref={ref} style={[{ gap: theme.spacing[6] }, style]}>
