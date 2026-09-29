@@ -51,9 +51,9 @@ For UI behavior changes, paste the verification command + its output, or attach 
 
 > **Why:** PR #123 reviewer flagged: *"the spec calls for explicit manual verification … I did not find that evidence attached to the PR."*
 
-### R5 — Issue link required
+### R5 — Linked issue required
 
-Every PR body must contain `Closes #N`, `Fixes #N`, or `Related to #N`. Mirrors the CI gate (`.github/workflows/pr-issue-link.yml`, issue #152, PR #153).
+Every PR body must link a GitHub issue (e.g. `Closes #N`, `Part of #N`, `Related to #N`; full keyword list in [`AGENTS.md`](../../AGENTS.md#quick-reference)). Mirrors the CI gate (`.github/workflows/pr-issue-link.yml`, issue #152, PR #153).
 
 ### R6 — Workspace gates green at HEAD
 
@@ -91,55 +91,14 @@ See [`BRANCHING.md`](./BRANCHING.md).
 
 ## Code-quality rules
 
-See [`COMPONENTS.md`](./COMPONENTS.md) for the full pattern catalog. Summary of what's BLOCKING:
+One line each; the linked [`COMPONENTS.md`](./COMPONENTS.md) section holds the full pattern and examples.
 
-### R9 — Compound `forwardRef` + `displayName`
+- **R9 — Ref-as-prop + `displayName`.** Every named export, compound subcomponents included, takes `ref` as a prop (React 19, no `forwardRef`), reads context with `use()`, and sets `displayName`. [Pattern](./COMPONENTS.md#the-ref-as-prop--displayname-contract). *Why:* PR #150 (compound parts missing the contract); PR #268 moved it to ref-as-prop.
+- **R10 — Semantic root.** A name that implies an HTML element (`Form`, `Nav`, `List`, `Article`, `Header`) renders that element, not `<div role="…">`. [Pattern](./COMPONENTS.md#semantic-root). *Why:* PR #145 (`Form` shipped as a `<div>`).
+- **R11 — No dangling ARIA references.** Emit `aria-describedby` / `aria-labelledby` ids only when the target renders. [Pattern](./COMPONENTS.md#aria-describedby--aria-labelledby-must-point-at-rendered-nodes). *Why:* PR #145 (`FormControl` pointed at unrendered nodes).
+- **R12 — Don't hijack events from descendants.** Containers check `event.target` before `preventDefault()` on wheel / key / pointer; defer first, hijack last. [Pattern](./COMPONENTS.md#event-handling--dont-hijack-what-isnt-yours). *Why:* PR #139 (`canvas-view` stole wheel and arrow/zoom keys).
+- **R13 — Legacy prop = legacy behavior.** Keep a prop's documented behavior, or rename + major bump + migration note. [Pattern](./COMPONENTS.md#legacy-props--legacy-behavior). *Why:* PR #141 (`CanvasShell` slots lost their layout contract).
+- **R14 — Prop name = trigger.** Handler names match the real trigger (`onSuggestionClick`, not `onSend`). [Pattern](./COMPONENTS.md#prop-naming--trigger). *Why:* PR #150 (`onSend` fired only on suggestion clicks).
+- **R15 — ARIA by spec, not vibe.** Pick roles from Radix / WAI-ARIA Authoring Practices and cite the source in the PR body for non-obvious roles. [Pattern](./COMPONENTS.md#aria--by-spec-not-vibe). *Why:* PR #139 (`role="button"` on a workspace host), PR #140 (`role="status"` on a static marker).
 
-Every named export — including compound subcomponents (`Card.Header`, `Conversation.Title`, `Form.Field`) — has `React.forwardRef` and a set `displayName`.
-
-> **Why:** PR #150 needed an auto-fix to add `forwardRef` to all 8 compound parts of `ConversationThread`.
-
-### R10 — Semantic root
-
-If the component name implies an HTML element (`Form`, `Nav`, `List`, `Article`, `Header`), the root **renders that element**. `<div role="…">` is a smell — rename, or use the real tag.
-
-> **Why:** PR #145: `Form` shipped as a styled `<div>` while docs presented it as the form primitive.
-
-### R11 — No dangling ARIA references
-
-`aria-describedby` and `aria-labelledby` only emit when the referenced node will render. Generated ids must be conditional, not unconditional.
-
-> **Why:** PR #145 `FormControl` composed `aria-describedby` with ids that pointed at nothing when no `FormDescription` / `FormMessage` was rendered.
-
-### R12 — Don't hijack events from descendants
-
-For container components (canvas, scroll wrappers, key-shortcut hosts): before `preventDefault()` on wheel / key / pointer handlers, check `event.target` is not a nested scroll container or interactive element. Defer first, hijack last.
-
-> **Why:** PR #139 — `canvas-view` globally prevented wheel and stole arrow/zoom keys, breaking nested scrollers and inputs.
-
-### R13 — Legacy prop = legacy behavior
-
-Keeping a prop name but changing its layout/behavior is a breaking change. Either preserve the documented behavior, or rename + bump major + write a migration note.
-
-> **Why:** PR #141 — `leftRail` / `rightDock` / `bottomSlot` on `CanvasShell` survived as names but lost their grid/full-width contract.
-
-### R14 — Prop name = trigger
-
-Event-handler prop names map to the actual trigger. `onSend` fires on send, not on suggestion click. If unsure, qualify (`onSuggestionClick`).
-
-> **Why:** PR #150 — `onSend` only fired on suggestion clicks; reviewer flagged the misleading name.
-
-### R15 — ARIA by spec, not vibe
-
-Pick roles from Radix's pattern + WAI-ARIA Authoring Practices, not intuition. When introducing a non-obvious role, cite the source in the PR body.
-
-> **Why:** PR #139 (`role="button"` on a complex workspace host), PR #140 (`role="status"` on a static marker).
-
----
-
-## Out of scope for agents
-
-- Don't modify `LICENSE`, `CODE_OF_CONDUCT.md`, or `SECURITY.md` without explicit human authorization.
-- Don't add new dependencies without explaining the tradeoff (bundle size, maintenance, security surface).
-- Don't publish, push to `main`, or merge PRs without explicit authorization.
-- Don't hand-edit generated files (`apps/registry/lib/component-metadata.json`, dist outputs). Regenerate via the documented script.
+Out-of-scope actions for agents are listed in [`AGENTS.md`](../../AGENTS.md#out-of-scope-for-agents).
