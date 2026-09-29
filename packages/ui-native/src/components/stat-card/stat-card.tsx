@@ -45,6 +45,7 @@ function getToneColor(theme: NativeTheme, tone: StatCardTone): string {
 }
 
 function hasContent(node: ReactNode): boolean {
+  if (typeof node === "number") return !Number.isNaN(node);
   return node !== undefined && node !== null && node !== false && node !== "";
 }
 

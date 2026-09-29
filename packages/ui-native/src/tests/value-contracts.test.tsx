@@ -240,4 +240,18 @@ describe("StatCard zero content", () => {
     expect(screen.queryByText(/change/)).toBeNull();
     expect(JSON.stringify(toJSON())).not.toContain("·");
   });
+
+  it("omits NaN details", () => {
+    const { toJSON } = render(
+      <StatCard
+        change={Number.NaN}
+        description={Number.NaN}
+        label="Errors"
+        meta={Number.NaN}
+        value="3"
+      />,
+    );
+    expect(screen.queryByText(/NaN/)).toBeNull();
+    expect(JSON.stringify(toJSON())).not.toContain("NaN");
+  });
 });

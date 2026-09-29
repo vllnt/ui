@@ -16,7 +16,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 - `Calendar` and `RangeCalendar` keep years 0–99 instead of remapping them to 1900–1999.
 - `ScrollProgress`, `TextReveal`, `TutorialComplete`, `Stepper`, and `AvatarGroup` map `NaN` numeric inputs to a safe value (empty progress, first step, or no avatar limit) instead of rendering `NaN` values or styles; `±Infinity` still clamps to the range bounds.
-- `StatCard` renders numeric `0` for `change`, `meta`, and `description` while still omitting `undefined` and `null`.
+- `StatCard` renders numeric `0` for `change`, `meta`, and `description` while still omitting `undefined`, `null`, and `NaN`.
 
 ### Availability
 
