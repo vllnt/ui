@@ -68,7 +68,7 @@ const INSTALL_DETAILS = [
   `# Or with npm: npx shadcn@latest add ${SITE_URL}/r/<name>.json`,
   "```",
   "",
-  "Experimental React Native renderer (source preview only; no npm release yet):",
+  "Experimental React Native renderer (source preview only; no supported npm release yet):",
   "",
   "```bash",
   "# Planned after the first synchronized canary is published:",
