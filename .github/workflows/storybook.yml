@@ -36,11 +36,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Check story coverage
-        working-directory: packages/ui
-        run: pnpm exec tsx scripts/check-story-coverage.ts
-
-      - name: Verify story props
+      - name: Verify story coverage and props
         working-directory: packages/ui
         run: pnpm exec tsx scripts/verify-stories.ts
 

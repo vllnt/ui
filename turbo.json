@@ -54,9 +54,6 @@
     "test-storybook": {
       "cache": false
     },
-    "check:stories": {
-      "cache": false
-    },
     "sync-storybook": {
       "cache": false
     }

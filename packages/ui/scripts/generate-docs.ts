@@ -18,6 +18,16 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
+import {
+  extractExports,
+  extractTypeBlock,
+  extractVariants,
+  parsePropsFromBlock as parseSourceProps,
+  type PropInfo as SourcePropInfo,
+  toPascalCase,
+  type VariantInfo,
+} from './lib/component-source'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -37,16 +47,7 @@ interface RegistryItem {
   registryDependencies?: string[]
 }
 
-interface VariantInfo {
-  name: string
-  values: string[]
-  defaultValue?: string
-}
-
-interface PropInfo {
-  name: string
-  type: string
-  required: boolean
+interface PropInfo extends SourcePropInfo {
   description: string
 }
 
@@ -90,90 +91,8 @@ function loadRegistry(): RegistryItem[] {
   }
 }
 
-function toPascalCase(str: string): string {
-  return str
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('')
-}
-
 function toKebabCase(str: string): string {
   return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
-}
-
-function extractVariants(source: string): VariantInfo[] {
-  const variants: VariantInfo[] = []
-  if (!source.includes('cva(')) return variants
-
-  const defaultsMatch = source.match(/defaultVariants\s*:\s*\{([^}]+)\}/s)
-  const defaults: Record<string, string> = {}
-  if (defaultsMatch?.[1]) {
-    const defaultPairs = defaultsMatch[1].matchAll(/(\w+)\s*:\s*['"](\w+)['"]/g)
-    for (const match of defaultPairs) {
-      if (match[1] && match[2]) {
-        defaults[match[1]] = match[2]
-      }
-    }
-  }
-
-  const variantsStartMatch = source.match(/variants\s*:\s*\{/)
-  if (!variantsStartMatch || variantsStartMatch.index === undefined) return variants
-
-  const variantsStartPos = variantsStartMatch.index + variantsStartMatch[0].length
-  let depth = 1
-  let variantsEndPos = variantsStartPos
-
-  for (let i = variantsStartPos; i < source.length; i++) {
-    if (source[i] === '{') depth++
-    if (source[i] === '}') {
-      depth--
-      if (depth === 0) {
-        variantsEndPos = i
-        break
-      }
-    }
-  }
-
-  const variantsBlock = source.slice(variantsStartPos, variantsEndPos)
-  const variantTypeRegex = /(\w+)\s*:\s*\{/g
-  let typeMatch
-
-  while ((typeMatch = variantTypeRegex.exec(variantsBlock)) !== null) {
-    const variantName = typeMatch[1]
-    const typeStartPos = typeMatch.index + typeMatch[0].length
-    let typeDepth = 1
-    let typeEndPos = typeStartPos
-
-    for (let i = typeStartPos; i < variantsBlock.length; i++) {
-      if (variantsBlock[i] === '{') typeDepth++
-      if (variantsBlock[i] === '}') {
-        typeDepth--
-        if (typeDepth === 0) {
-          typeEndPos = i
-          break
-        }
-      }
-    }
-
-    const typeContent = variantsBlock.slice(typeStartPos, typeEndPos)
-    const values: string[] = []
-    const keyRegex = /(\w+)\s*:\s*['"`]/g
-    let keyMatch
-
-    while ((keyMatch = keyRegex.exec(typeContent)) !== null) {
-      if (keyMatch[1]) values.push(keyMatch[1])
-    }
-
-    if (values.length > 0 && variantName) {
-      variants.push({
-        name: variantName,
-        values,
-        defaultValue: defaults[variantName],
-      })
-    }
-  }
-
-  return variants
 }
 
 function classifyType(rawType: string): string {
@@ -232,46 +151,10 @@ function describeType(prop: PropInfo, typeDefinitions: TypeDefinition[]): string
   }
 }
 
-function extractTypeBlock(source: string, startIndex: number): string {
-  let depth = 0
-  let blockStart = -1
-  for (let i = startIndex; i < source.length; i++) {
-    if (source[i] === '{') {
-      if (depth === 0) blockStart = i + 1
-      depth++
-    }
-    if (source[i] === '}') {
-      depth--
-      if (depth === 0) {
-        return source.slice(blockStart, i)
-      }
-    }
-  }
-  return ''
-}
-
 function parsePropsFromBlock(block: string): PropInfo[] {
-  const props: PropInfo[] = []
-  const lines = block.split('\n')
-
-  for (const line of lines) {
-    const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith('//') || trimmed.startsWith('/*')) continue
-
-    const propMatch = trimmed.match(/^(\w+)(\??)\s*:\s*(.+?)\s*;?\s*$/)
-    if (propMatch) {
-      const name = propMatch[1] ?? ''
-      const required = propMatch[2] !== '?'
-      let type = (propMatch[3] ?? '').trim().replace(/;$/, '').replace(/,$/, '')
-
-      if (!name || !type) continue
-      if (REACT_NODE_IGNORED_PROP_NAMES.has(name) && type === 'ReactNode') continue
-
-      props.push({ name, type, required, description: '' })
-    }
-  }
-
-  return props
+  return parseSourceProps(block)
+    .filter(({ name, type }) => !(REACT_NODE_IGNORED_PROP_NAMES.has(name) && type === 'ReactNode'))
+    .map((prop) => ({ ...prop, description: '' }))
 }
 
 function extractAllTypes(source: string): TypeDefinition[] {
@@ -322,30 +205,6 @@ function extractProps(source: string, componentName: string, allTypes: TypeDefin
   }
 
   return []
-}
-
-function extractExports(source: string): string[] {
-  const exports: string[] = []
-
-  const namedExports = source.matchAll(/export\s*\{\s*([^}]+)\s*\}/g)
-  for (const match of namedExports) {
-    if (!match[1]) continue
-    for (const rawName of match[1].split(',')) {
-      const trimmed = rawName.trim()
-      if (trimmed.startsWith('type ')) continue
-      const name = trimmed.split(/\s+as\s+/)[0]?.trim() ?? ''
-      if (name.length > 0 && /^[A-Z]/.test(name)) {
-        exports.push(name)
-      }
-    }
-  }
-
-  const constExports = source.matchAll(/export\s+(?:const|function)\s+([A-Z]\w+)/g)
-  for (const match of constExports) {
-    if (match[1]) exports.push(match[1])
-  }
-
-  return [...new Set(exports)]
 }
 
 function extractStoryExports(storySource: string): string[] {

@@ -82,15 +82,12 @@
     "test:visual": "playwright test -c playwright-ct.config.ts",
     "test:visual:update": "playwright test -c playwright-ct.config.ts --update-snapshots",
     "test:all": "pnpm test:coverage && pnpm test:visual",
-    "test:generate": "tsx scripts/generate-tests.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
     "storybook:generate": "tsx scripts/generate-stories.ts",
     "storybook:generate-docs": "tsx scripts/generate-docs.ts",
     "storybook:verify": "tsx scripts/verify-stories.ts",
-    "storybook:fix-stories": "tsx scripts/fix-stories.ts",
-    "check:stories": "tsx scripts/check-story-coverage.ts",
     "check:use-client": "tsx scripts/check-use-client.ts"
   },
   "peerDependencies": {
