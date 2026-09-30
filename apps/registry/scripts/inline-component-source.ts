@@ -125,6 +125,51 @@ const readComponentProps = (name: string): PropDefinition[] => {
   }
 };
 
+const packageEntry = join(repoRoot, "packages/ui/src/index.ts");
+
+/** Public `@vllnt/ui` export names, read from the package's re-export chain. */
+const collectPublicExports = (file: string, names = new Set<string>()) => {
+  const source = readFileSync(file, "utf8");
+  for (const [, list] of source.matchAll(/export\s+(?:type\s+)?\{([^}]*)\}/g)) {
+    for (const entry of (list ?? "").split(",")) {
+      const binding = entry.replace(/^\s*type\s+/, "").trim();
+      const exported = binding.split(/\s+as\s+/).at(-1)?.trim();
+      if (exported) names.add(exported);
+    }
+  }
+  for (const [, specifier] of source.matchAll(
+    /export\s+\*\s+from\s+["'](\.{1,2}\/[^"']+)["']/g,
+  )) {
+    const base = join(dirname(file), specifier ?? "");
+    const target = [`${base}.ts`, `${base}.tsx`, join(base, "index.ts")].find(
+      (candidate) => existsSync(candidate),
+    );
+    if (target) collectPublicExports(target, names);
+  }
+  return names;
+};
+
+const publicExports = collectPublicExports(packageEntry);
+
+/**
+ * Same-folder helpers (`./x`) are not shipped with a single-file shim, so an
+ * import from one only works when every binding is public API.
+ */
+const rewriteSameFolderImports = (source: string): string =>
+  source.replace(
+    /import\s+(type\s+)?\{([^}]*)\}\s+from\s+["']\.\/[a-z][a-z0-9-]*["']/g,
+    (statement, typeOnly: string | undefined, list: string) => {
+      const imported = list
+        .split(",")
+        .map((entry) => entry.replace(/^\s*type\s+/, "").trim())
+        .filter(Boolean)
+        .map((binding) => binding.split(/\s+as\s+/)[0]?.trim() ?? "");
+      return imported.every((name) => publicExports.has(name))
+        ? `import ${typeOnly ?? ""}{${list}} from "${PACKAGE_NAME}"`
+        : statement;
+    },
+  );
+
 const rewriteImports = (source: string): string => {
   // Collect import lines that target lib utilities or sibling components
   // and replace each with a single deduped `import ... from "@vllnt/ui"` block.
@@ -151,7 +196,13 @@ const rewriteImports = (source: string): string => {
     `from "${PACKAGE_NAME}"`,
   );
 
-  return code;
+  // Dynamic `import("../<sibling>[/<file>]")` → `import("@vllnt/ui")`
+  code = code.replace(
+    /import\(\s*["']\.\.\/[a-z][a-z0-9-]*(?:\/[a-z][a-z0-9-]*)?["']\s*\)/g,
+    `import("${PACKAGE_NAME}")`,
+  );
+
+  return rewriteSameFolderImports(code);
 };
 
 const registry = JSON.parse(readFileSync(registryJsonPath, "utf8")) as Registry;
