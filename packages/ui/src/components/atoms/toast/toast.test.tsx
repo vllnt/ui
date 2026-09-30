@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import { toast } from "./sonner-toast";
 import {
   Toast,
   ToastAction,
@@ -8,6 +9,7 @@ import {
   ToastDescription,
   ToastTitle,
 } from "./toast";
+import { Toaster } from "./toaster";
 
 describe("Toast", () => {
   it("renders children", () => {
@@ -67,5 +69,15 @@ describe("ToastAction", () => {
     );
     fireEvent.click(screen.getByText("Retry"));
     expect(handleRetryAction).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("toast + Toaster", () => {
+  it("shows a toast() message in the mounted Toaster", async () => {
+    render(<Toaster theme="light" />);
+    act(() => {
+      toast("Deployed");
+    });
+    expect(await screen.findByText("Deployed")).toBeInTheDocument();
   });
 });
