@@ -27,7 +27,38 @@ export type CompletionDialogProps = {
 
 type DialogContentProps = Omit<CompletionDialogProps, "isOpen">;
 
-// eslint-disable-next-line max-lines-per-function -- Dialog content with keyboard handling
+type DialogCloseButtonProps = Pick<DialogContentProps, "closeIcon" | "onClose">;
+
+function DialogCloseButton({
+  closeIcon,
+  onClose,
+}: DialogCloseButtonProps): React.ReactNode {
+  return (
+    <button
+      aria-label="Close"
+      className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity"
+      onClick={onClose}
+      type="button"
+    >
+      {closeIcon ?? (
+        <svg
+          className="size-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M6 18L18 6M6 6l12 12"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+        </svg>
+      )}
+    </button>
+  );
+}
+
 function DialogContent({
   as: Heading = "h2",
   cancelLabel = "Skip",
@@ -56,28 +87,7 @@ function DialogContent({
         className,
       )}
     >
-      <button
-        aria-label="Close"
-        className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity"
-        onClick={onClose}
-        type="button"
-      >
-        {closeIcon ?? (
-          <svg
-            className="size-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M6 18L18 6M6 6l12 12"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-            />
-          </svg>
-        )}
-      </button>
+      <DialogCloseButton closeIcon={closeIcon} onClose={onClose} />
       <div className="mb-4">
         <Heading className="text-lg font-semibold" id="completion-dialog-title">
           {title}
@@ -114,22 +124,23 @@ function DialogContent({
   );
 }
 
-// eslint-disable-next-line max-lines-per-function -- Modal with keyboard handling
-function CompletionDialogImpl({
-  as,
-  cancelLabel,
-  cancelShortcut = "S",
-  className,
-  closeIcon,
-  confirmLabel,
-  confirmShortcut = "D",
-  description,
+type CompletionDialogKeyboardOptions = {
+  cancelShortcut: string;
+  confirmShortcut: string;
+  isOpen: boolean;
+  onCancel: () => void;
+  onClose: () => void;
+  onConfirm: () => void;
+};
+
+function useCompletionDialogKeyboard({
+  cancelShortcut,
+  confirmShortcut,
   isOpen,
   onCancel,
   onClose,
   onConfirm,
-  title,
-}: CompletionDialogProps): React.ReactNode {
+}: CompletionDialogKeyboardOptions): void {
   const keyDownHandlerRef = useRef<(event: KeyboardEvent) => void>(() => {
     return;
   });
@@ -171,6 +182,31 @@ function CompletionDialogImpl({
       document.removeEventListener("keydown", onDocumentKeyDown, true);
     };
   }, [isOpen]);
+}
+
+function CompletionDialogImpl({
+  as,
+  cancelLabel,
+  cancelShortcut = "S",
+  className,
+  closeIcon,
+  confirmLabel,
+  confirmShortcut = "D",
+  description,
+  isOpen,
+  onCancel,
+  onClose,
+  onConfirm,
+  title,
+}: CompletionDialogProps): React.ReactNode {
+  useCompletionDialogKeyboard({
+    cancelShortcut,
+    confirmShortcut,
+    isOpen,
+    onCancel,
+    onClose,
+    onConfirm,
+  });
 
   if (!isOpen) return null;
 

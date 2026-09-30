@@ -2,7 +2,6 @@ import { expect, test } from "@playwright/experimental-ct-react";
 
 import { CookieConsent } from "./cookie-consent";
 
-// eslint-disable-next-line max-lines-per-function
 test.describe("CookieConsent", () => {
   test("bottom-left position", async ({ mount }) => {
     const component = await mount(

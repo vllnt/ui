@@ -21,7 +21,32 @@ export type StepNavigationProps = {
   totalSteps: number;
 };
 
-// eslint-disable-next-line max-lines-per-function -- Complex navigation with icons
+const buttonClassName = cn(
+  "flex min-h-[44px] min-w-[44px] items-center justify-center",
+  "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+  "hover:bg-neutral-100 dark:hover:bg-neutral-900",
+  "disabled:pointer-events-none disabled:opacity-40",
+);
+
+function ChevronIcon({ d }: { d: string }): React.ReactNode {
+  return (
+    <svg
+      aria-hidden="true"
+      className="size-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d={d}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+      />
+    </svg>
+  );
+}
+
 function StepNavigationImpl({
   canNext,
   canPrev,
@@ -50,32 +75,12 @@ function StepNavigationImpl({
         {/* Previous Button */}
         <button
           aria-label="Previous step"
-          className={cn(
-            "flex min-h-[44px] min-w-[44px] items-center justify-center",
-            "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-            "hover:bg-neutral-100 dark:hover:bg-neutral-900",
-            "disabled:pointer-events-none disabled:opacity-40",
-          )}
+          className={buttonClassName}
           disabled={!canPrev}
           onClick={onPrev}
           type="button"
         >
-          {previousIcon ?? (
-            <svg
-              aria-hidden="true"
-              className="size-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="m15 19-7-7 7-7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
-          )}
+          {previousIcon ?? <ChevronIcon d="m15 19-7-7 7-7" />}
           <span className="ml-1">{previousLabel}</span>
         </button>
 
@@ -87,33 +92,13 @@ function StepNavigationImpl({
         {/* Next Button */}
         <button
           aria-label="Next step"
-          className={cn(
-            "flex min-h-[44px] min-w-[44px] items-center justify-center",
-            "rounded-md px-3 py-2 text-sm font-medium transition-colors",
-            "hover:bg-neutral-100 dark:hover:bg-neutral-900",
-            "disabled:pointer-events-none disabled:opacity-40",
-          )}
+          className={buttonClassName}
           disabled={!canNext}
           onClick={onNext}
           type="button"
         >
           <span className="mr-1">{nextLabel}</span>
-          {nextIcon ?? (
-            <svg
-              aria-hidden="true"
-              className="size-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="m9 5 7 7-7 7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
-          )}
+          {nextIcon ?? <ChevronIcon d="m9 5 7 7-7 7" />}
         </button>
       </div>
     </nav>

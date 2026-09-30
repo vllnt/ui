@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
