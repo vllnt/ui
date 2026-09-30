@@ -3,140 +3,69 @@ import { describe, expect, it } from "vitest";
 
 import { CivilizationCard, CivilizationComparison } from "./civilization-card";
 
+const eraBarWidth = () =>
+  screen
+    .getByRole("img", { name: /Era timeline/ })
+    .querySelector<HTMLSpanElement>("span[style]")?.style.width ?? "";
+
 describe("CivilizationCard", () => {
-  describe("rendering", () => {
-    it("renders the name as a heading", () => {
-      render(<CivilizationCard name="Roman Empire" />);
-
-      expect(
-        screen.getByRole("heading", { level: 3, name: "Roman Empire" }),
-      ).toBeInTheDocument();
-    });
-
-    it("renders region when provided", () => {
-      render(<CivilizationCard name="Rome" region="Mediterranean" />);
-
-      expect(screen.getByText("Mediterranean")).toBeInTheDocument();
-    });
-
-    it("renders the hero globe fallback when no image is provided", () => {
-      const { container } = render(<CivilizationCard name="Rome" />);
-
-      expect(container.querySelector("svg")).toBeInTheDocument();
-    });
+  it("renders the hero globe fallback when no image is provided", () => {
+    const { container } = render(<CivilizationCard name="Rome" />);
+    expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
-  describe("era", () => {
-    it("formats BCE/CE start and end", () => {
-      render(
-        <CivilizationCard era={{ end: 476, start: -27 }} name="Roman Empire" />,
-      );
-
-      expect(screen.getByText("27 BCE – 476 CE")).toBeInTheDocument();
-    });
-
-    it('uses "present" when end is omitted', () => {
-      render(<CivilizationCard era={{ start: 1776 }} name="USA" />);
-
-      expect(screen.getByText("1776 CE – present")).toBeInTheDocument();
-    });
-
-    it("renders the era timeline bar", () => {
-      render(
-        <CivilizationCard era={{ end: 476, start: -27 }} name="Roman Empire" />,
-      );
-
-      expect(
-        screen.getByRole("img", { name: /Era timeline/ }),
-      ).toBeInTheDocument();
-    });
-
-    it("sizes the timeline fill proportionally to the era span", () => {
-      const { rerender } = render(
-        <CivilizationCard era={{ end: 476, start: -27 }} name="Roman Empire" />,
-      );
-      const shortBar = screen
-        .getByRole("img", { name: /Era timeline/ })
-        .querySelector<HTMLSpanElement>("span[style]");
-      const shortWidth = shortBar?.style.width ?? "";
-      expect(shortWidth).not.toBe("");
-      expect(shortWidth).not.toBe("66.66667%");
-
-      rerender(
-        <CivilizationCard era={{ end: 1453, start: -2000 }} name="Long" />,
-      );
-      const longBar = screen
-        .getByRole("img", { name: /Era timeline/ })
-        .querySelector<HTMLSpanElement>("span[style]");
-      const longWidth = longBar?.style.width ?? "";
-
-      expect(Number.parseFloat(longWidth)).toBeGreaterThan(
-        Number.parseFloat(shortWidth),
-      );
-    });
+  it("renders the name heading and optional stats, lists, and action", () => {
+    render(
+      <CivilizationCard
+        achievements={["Aqueducts", "Law"]}
+        actionHref="/civ/rome"
+        capital="Rome"
+        leaders={["Augustus", "Trajan"]}
+        name="Roman Empire"
+        peakPopulation="70 million"
+        region="Mediterranean"
+      />,
+    );
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Roman Empire" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Mediterranean")).toBeInTheDocument();
+    expect(screen.getByText("Capital")).toBeInTheDocument();
+    expect(screen.getByText("Rome")).toBeInTheDocument();
+    expect(screen.getByText("Peak population")).toBeInTheDocument();
+    expect(screen.getByText("70 million")).toBeInTheDocument();
+    expect(screen.getByText("Aqueducts")).toBeInTheDocument();
+    expect(screen.getByText("Law")).toBeInTheDocument();
+    expect(screen.getByText("Augustus")).toBeInTheDocument();
+    expect(screen.getByText("Trajan")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Explore/ })).toHaveAttribute(
+      "href",
+      "/civ/rome",
+    );
   });
 
-  describe("stats", () => {
-    it("renders capital and peak population", () => {
-      render(
-        <CivilizationCard
-          capital="Rome"
-          name="Roman Empire"
-          peakPopulation="70 million"
-        />,
-      );
+  it("formats BCE/CE era, duration, and a proportional timeline bar", () => {
+    const { rerender } = render(
+      <CivilizationCard era={{ end: 476, start: -27 }} name="Roman Empire" />,
+    );
+    expect(screen.getByText("27 BCE – 476 CE")).toBeInTheDocument();
+    expect(screen.getByText("Duration")).toBeInTheDocument();
+    expect(screen.getByText("503 years")).toBeInTheDocument();
+    const shortWidth = eraBarWidth();
+    expect(shortWidth).not.toBe("");
+    expect(shortWidth).not.toBe("66.66667%");
 
-      expect(screen.getByText("Capital")).toBeInTheDocument();
-      expect(screen.getByText("Rome")).toBeInTheDocument();
-      expect(screen.getByText("Peak population")).toBeInTheDocument();
-      expect(screen.getByText("70 million")).toBeInTheDocument();
-    });
-
-    it("computes a duration when both era endpoints exist", () => {
-      render(
-        <CivilizationCard era={{ end: 476, start: -27 }} name="Roman Empire" />,
-      );
-
-      expect(screen.getByText("Duration")).toBeInTheDocument();
-      expect(screen.getByText("503 years")).toBeInTheDocument();
-    });
+    rerender(
+      <CivilizationCard era={{ end: 1453, start: -2000 }} name="Long" />,
+    );
+    expect(Number.parseFloat(eraBarWidth())).toBeGreaterThan(
+      Number.parseFloat(shortWidth),
+    );
   });
 
-  describe("lists", () => {
-    it("renders achievements as badges", () => {
-      render(
-        <CivilizationCard
-          achievements={["Aqueducts", "Law"]}
-          name="Roman Empire"
-        />,
-      );
-
-      expect(screen.getByText("Aqueducts")).toBeInTheDocument();
-      expect(screen.getByText("Law")).toBeInTheDocument();
-    });
-
-    it("renders leaders as a list", () => {
-      render(
-        <CivilizationCard
-          leaders={["Augustus", "Trajan"]}
-          name="Roman Empire"
-        />,
-      );
-
-      expect(screen.getByText("Augustus")).toBeInTheDocument();
-      expect(screen.getByText("Trajan")).toBeInTheDocument();
-    });
-  });
-
-  describe("action", () => {
-    it("renders actionHref as a link", () => {
-      render(<CivilizationCard actionHref="/civ/rome" name="Roman Empire" />);
-
-      expect(screen.getByRole("link", { name: /Explore/ })).toHaveAttribute(
-        "href",
-        "/civ/rome",
-      );
-    });
+  it('uses "present" when end is omitted', () => {
+    render(<CivilizationCard era={{ start: 1776 }} name="USA" />);
+    expect(screen.getByText("1776 CE – present")).toBeInTheDocument();
   });
 });
 
@@ -148,7 +77,6 @@ describe("CivilizationComparison", () => {
         <CivilizationCard name="Han" />
       </CivilizationComparison>,
     );
-
     expect(screen.getByText("Rome")).toBeInTheDocument();
     expect(screen.getByText("Han")).toBeInTheDocument();
   });

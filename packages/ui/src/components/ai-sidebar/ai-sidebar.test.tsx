@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -12,202 +13,112 @@ import {
   AISidebarTrigger,
 } from "./ai-sidebar";
 
+const sidebar = (
+  props: ComponentProps<typeof AISidebarProvider>,
+  sidebarProps?: ComponentProps<typeof AISidebar>,
+) => (
+  <AISidebarProvider {...props}>
+    <AISidebar {...sidebarProps}>
+      <AISidebarTitle>Assistant</AISidebarTitle>
+    </AISidebar>
+    <AISidebarTrigger />
+  </AISidebarProvider>
+);
+
 describe("AISidebar", () => {
-  describe("rendering", () => {
-    it("renders the title and content", () => {
-      render(
-        <AISidebarProvider defaultOpen>
-          <AISidebar>
-            <AISidebarHeader>
-              <AISidebarTitle>Assistant</AISidebarTitle>
-              <AISidebarClose />
-            </AISidebarHeader>
-            <AISidebarContent>
-              <p>Hello</p>
-            </AISidebarContent>
-            <AISidebarFooter>
-              <button type="button">Send</button>
-            </AISidebarFooter>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      expect(
-        screen.getByRole("heading", { level: 2, name: /Assistant/ }),
-      ).toBeInTheDocument();
-      expect(screen.getByText("Hello")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Send" })).toBeInTheDocument();
-    });
-
-    it("falls back to the default title when no children are passed", () => {
-      render(
-        <AISidebarProvider defaultOpen>
-          <AISidebar>
-            <AISidebarHeader>
-              <AISidebarTitle />
-            </AISidebarHeader>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      expect(
-        screen.getByRole("heading", { level: 2, name: /AI Assistant/ }),
-      ).toBeInTheDocument();
-    });
-
-    it("uses aria-hidden=false when open and aria-hidden=true when closed", () => {
-      const { container, rerender } = render(
-        <AISidebarProvider open>
-          <AISidebar>
+  it("renders the title and content, and AISidebarClose closes the sidebar", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <AISidebarProvider defaultOpen onOpenChange={onOpenChange}>
+        <AISidebar>
+          <AISidebarHeader>
             <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      expect(container.querySelector("aside")).toHaveAttribute(
-        "aria-hidden",
-        "false",
-      );
-
-      rerender(
-        <AISidebarProvider open={false}>
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      expect(container.querySelector("aside")).toHaveAttribute(
-        "aria-hidden",
-        "true",
-      );
-    });
-
-    it("marks the closed sidebar inert so it is removed from the tab order", () => {
-      const { container, rerender } = render(
-        <AISidebarProvider open>
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      expect(container.querySelector("aside")).not.toHaveAttribute("inert");
-
-      rerender(
-        <AISidebarProvider open={false}>
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      expect(container.querySelector("aside")).toHaveAttribute("inert");
-    });
+            <AISidebarClose />
+          </AISidebarHeader>
+          <AISidebarContent>
+            <p>Hello</p>
+          </AISidebarContent>
+          <AISidebarFooter>
+            <button type="button">Send</button>
+          </AISidebarFooter>
+        </AISidebar>
+      </AISidebarProvider>,
+    );
+    expect(
+      screen.getByRole("heading", { level: 2, name: /Assistant/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Send" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Close assistant" }));
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  describe("toggle", () => {
-    it("the trigger toggles open state", () => {
-      const onOpenChange = vi.fn();
-      render(
-        <AISidebarProvider onOpenChange={onOpenChange}>
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-          <AISidebarTrigger />
-        </AISidebarProvider>,
-      );
-
-      fireEvent.click(
-        screen.getByRole("button", { name: "Open AI assistant" }),
-      );
-
-      expect(onOpenChange).toHaveBeenCalledWith(true);
-    });
-
-    it("AISidebarClose closes the sidebar", () => {
-      const onOpenChange = vi.fn();
-      render(
-        <AISidebarProvider defaultOpen onOpenChange={onOpenChange}>
-          <AISidebar>
-            <AISidebarHeader>
-              <AISidebarTitle>Assistant</AISidebarTitle>
-              <AISidebarClose />
-            </AISidebarHeader>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      fireEvent.click(screen.getByRole("button", { name: "Close assistant" }));
-
-      expect(onOpenChange).toHaveBeenCalledWith(false);
-    });
-
-    it("Escape closes the sidebar when closeOnEscape is the default", () => {
-      const onOpenChange = vi.fn();
-      render(
-        <AISidebarProvider defaultOpen onOpenChange={onOpenChange}>
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      fireEvent.keyDown(document, { key: "Escape" });
-
-      expect(onOpenChange).toHaveBeenCalledWith(false);
-    });
-
-    it("Escape is ignored when closeOnEscape is false", () => {
-      const onOpenChange = vi.fn();
-      render(
-        <AISidebarProvider defaultOpen onOpenChange={onOpenChange}>
-          <AISidebar closeOnEscape={false}>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
-
-      fireEvent.keyDown(document, { key: "Escape" });
-
-      expect(onOpenChange).not.toHaveBeenCalled();
-    });
-
-    it("controlled mode flows through onOpenChange without changing internal state", () => {
-      const onOpenChange = vi.fn();
-      render(
-        <AISidebarProvider onOpenChange={onOpenChange} open={false}>
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-          <AISidebarTrigger />
-        </AISidebarProvider>,
-      );
-
-      fireEvent.click(
-        screen.getByRole("button", { name: "Open AI assistant" }),
-      );
-
-      expect(onOpenChange).toHaveBeenCalledWith(true);
-      const aside = document.querySelector("aside");
-      expect(aside).toHaveAttribute("aria-hidden", "true");
-    });
+  it("falls back to the default title when no children are passed", () => {
+    render(
+      <AISidebarProvider defaultOpen>
+        <AISidebar>
+          <AISidebarHeader>
+            <AISidebarTitle />
+          </AISidebarHeader>
+        </AISidebar>
+      </AISidebarProvider>,
+    );
+    expect(
+      screen.getByRole("heading", { level: 2, name: /AI Assistant/ }),
+    ).toBeInTheDocument();
   });
 
-  describe("position", () => {
-    it("emits data-state and position-driven classes", () => {
-      const { container } = render(
-        <AISidebarProvider defaultOpen defaultPosition="left">
-          <AISidebar>
-            <AISidebarTitle>Assistant</AISidebarTitle>
-          </AISidebar>
-        </AISidebarProvider>,
-      );
+  it("is visible and focusable when open, aria-hidden and inert when closed", () => {
+    const { container, rerender } = render(sidebar({ open: true }));
+    const aside = () => container.querySelector("aside");
+    expect(aside()).toHaveAttribute("aria-hidden", "false");
+    expect(aside()).not.toHaveAttribute("inert");
+    rerender(sidebar({ open: false }));
+    expect(aside()).toHaveAttribute("aria-hidden", "true");
+    expect(aside()).toHaveAttribute("inert");
+  });
 
-      const aside = container.querySelector("aside");
-      expect(aside).toHaveAttribute("data-state", "open");
-      expect(aside?.className).toContain("left-0");
-      expect(aside?.className).toContain("border-r");
-    });
+  it("the trigger toggles open state", () => {
+    const onOpenChange = vi.fn();
+    render(sidebar({ onOpenChange }));
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+  });
+
+  it("Escape closes the sidebar when closeOnEscape is the default", () => {
+    const onOpenChange = vi.fn();
+    render(sidebar({ defaultOpen: true, onOpenChange }));
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("Escape is ignored when closeOnEscape is false", () => {
+    const onOpenChange = vi.fn();
+    render(
+      sidebar({ defaultOpen: true, onOpenChange }, { closeOnEscape: false }),
+    );
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("controlled mode flows through onOpenChange without changing internal state", () => {
+    const onOpenChange = vi.fn();
+    render(sidebar({ onOpenChange, open: false }));
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
+    expect(document.querySelector("aside")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+  });
+
+  it("emits data-state and position-driven classes", () => {
+    const { container } = render(
+      sidebar({ defaultOpen: true, defaultPosition: "left" }),
+    );
+    const aside = container.querySelector("aside");
+    expect(aside).toHaveAttribute("data-state", "open");
+    expect(aside?.className).toContain("left-0");
+    expect(aside?.className).toContain("border-r");
   });
 });

@@ -11,20 +11,14 @@ const data = [
 ];
 
 describe("ContributionGraph", () => {
-  it("renders a titled cell for dated entries", () => {
-    render(<ContributionGraph data={data} />);
-
+  it("renders a titled cell for dated entries and merges className", () => {
+    const { container } = render(
+      <ContributionGraph className="custom-class" data={data} />,
+    );
     expect(
       screen.getByRole("img", { name: "Contribution graph" }),
     ).toBeInTheDocument();
     expect(screen.getByText("2026-01-06: 7")).toBeInTheDocument();
-  });
-
-  it("applies a custom className", () => {
-    const { container } = render(
-      <ContributionGraph className="custom-class" data={data} />,
-    );
-
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
@@ -32,7 +26,6 @@ describe("ContributionGraph", () => {
     const { container } = render(
       <ContributionGraph data={[{ count: 3, date: "not-a-date" }]} />,
     );
-
     expect(container).toBeEmptyDOMElement();
   });
 });

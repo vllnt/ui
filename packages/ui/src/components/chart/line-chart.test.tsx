@@ -10,23 +10,16 @@ const data = [
 ];
 
 describe("LineChart", () => {
-  it("renders the chart from data", () => {
-    render(<LineChart data={data} />);
-
-    expect(screen.getByRole("img", { name: "Line chart" })).toBeInTheDocument();
-  });
-
-  it("applies a custom className", () => {
+  it("renders the chart from data and merges className", () => {
     const { container } = render(
       <LineChart className="custom-class" data={data} />,
     );
-
+    expect(screen.getByRole("img", { name: "Line chart" })).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
   it("returns null when no data is provided", () => {
     const { container } = render(<LineChart data={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 });

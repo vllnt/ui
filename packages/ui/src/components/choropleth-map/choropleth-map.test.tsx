@@ -35,138 +35,92 @@ const REGIONS: ChoroplethRegion[] = [
 
 const DATA = { DE: 4082, FR: 2937 };
 
+const region = (container: HTMLElement, id: string): Element => {
+  const path = container.querySelector(`[data-region-id='${id}']`);
+  expect(path).not.toBeNull();
+  return path ?? container;
+};
+
 describe("ChoroplethMap", () => {
-  describe("rendering", () => {
-    it("renders one path per region with stable data attributes", () => {
-      const { container } = render(
-        <ChoroplethMap data={DATA} regions={REGIONS} />,
-      );
-
-      expect(
-        container.querySelector("[data-region-id='FR']"),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector("[data-region-id='DE']"),
-      ).toBeInTheDocument();
-    });
-
-    it("renders the accessible data table fallback", () => {
-      render(<ChoroplethMap data={DATA} regions={REGIONS} />);
-
-      expect(screen.getByText("France")).toBeInTheDocument();
-      expect(screen.getByText("4,082")).toBeInTheDocument();
-    });
-
-    it("uses the missing color when a region has no data", () => {
-      const { container } = render(
-        <ChoroplethMap
-          data={{ FR: 100 }}
-          missingColor="#ff00ff"
-          regions={REGIONS}
-        />,
-      );
-
-      const path = container.querySelector("[data-region-id='DE']");
-      expect(path).toHaveAttribute("fill", "#ff00ff");
-    });
+  it("renders one path per region plus the accessible data table fallback", () => {
+    const { container } = render(
+      <ChoroplethMap data={DATA} regions={REGIONS} />,
+    );
+    expect(
+      container.querySelector("[data-region-id='FR']"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector("[data-region-id='DE']"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("France")).toBeInTheDocument();
+    expect(screen.getByText("4,082")).toBeInTheDocument();
   });
 
-  describe("interaction", () => {
-    it("fires onSelectRegion when a region is clicked", () => {
-      const onSelectRegion = vi.fn();
-      const { container } = render(
-        <ChoroplethMap
-          data={DATA}
-          onSelectRegion={onSelectRegion}
-          regions={REGIONS}
-        />,
-      );
-
-      const path = container.querySelector("[data-region-id='FR']");
-      expect(path).not.toBeNull();
-      if (path) fireEvent.click(path);
-
-      expect(onSelectRegion).toHaveBeenCalledWith(
-        expect.objectContaining({ id: "FR" }),
-      );
-    });
-
-    it("marks the clicked region with data-selected", () => {
-      const { container } = render(
-        <ChoroplethMap data={DATA} regions={REGIONS} />,
-      );
-
-      const path = container.querySelector("[data-region-id='FR']");
-      if (path) fireEvent.click(path);
-
-      expect(container.querySelector("[data-region-id='FR']")).toHaveAttribute(
-        "data-selected",
-        "true",
-      );
-    });
+  it("uses the missing color when a region has no data", () => {
+    const { container } = render(
+      <ChoroplethMap
+        data={{ FR: 100 }}
+        missingColor="#ff00ff"
+        regions={REGIONS}
+      />,
+    );
+    expect(region(container, "DE")).toHaveAttribute("fill", "#ff00ff");
   });
 
-  describe("tooltip", () => {
-    it("renders the default tooltip on hover with the region name and value", () => {
-      const { container } = render(
-        <ChoroplethMap data={DATA} regions={REGIONS}>
-          <ChoroplethTooltip />
-        </ChoroplethMap>,
-      );
-
-      const path = container.querySelector("[data-region-id='FR']");
-      if (path) fireEvent.mouseEnter(path);
-
-      expect(screen.getAllByText(/France/).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/2,937/).length).toBeGreaterThan(0);
-    });
-
-    it("hides the tooltip on mouse leave", () => {
-      const { container } = render(
-        <ChoroplethMap data={DATA} regions={REGIONS}>
-          <ChoroplethTooltip />
-        </ChoroplethMap>,
-      );
-
-      const path = container.querySelector("[data-region-id='FR']");
-      if (path) fireEvent.mouseEnter(path);
-      if (path) fireEvent.mouseLeave(path);
-
-      expect(container.querySelector("[data-tooltip-region-id]")).toBeNull();
-    });
-
-    it("invokes the render-prop with region + value", () => {
-      const { container } = render(
-        <ChoroplethMap data={DATA} regions={REGIONS}>
-          <ChoroplethTooltip>
-            {({ region, value }) => (
-              <span>
-                Custom: {region.name} = {value ?? "?"}
-              </span>
-            )}
-          </ChoroplethTooltip>
-        </ChoroplethMap>,
-      );
-
-      const path = container.querySelector("[data-region-id='DE']");
-      if (path) fireEvent.mouseEnter(path);
-
-      expect(screen.getByText(/Custom: Germany = 4082/)).toBeInTheDocument();
-    });
+  it("fires onSelectRegion and marks the clicked region with data-selected", () => {
+    const onSelectRegion = vi.fn();
+    const { container } = render(
+      <ChoroplethMap
+        data={DATA}
+        onSelectRegion={onSelectRegion}
+        regions={REGIONS}
+      />,
+    );
+    fireEvent.click(region(container, "FR"));
+    expect(onSelectRegion).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "FR" }),
+    );
+    expect(region(container, "FR")).toHaveAttribute("data-selected", "true");
   });
 
-  describe("legend", () => {
-    it("renders the legend with min and max labels from the domain", () => {
-      const { container } = render(
-        <ChoroplethMap data={DATA} regions={REGIONS}>
-          <ChoroplethLegend title="GDP" />
-        </ChoroplethMap>,
-      );
+  it("shows the default tooltip on hover and hides it on mouse leave", () => {
+    const { container } = render(
+      <ChoroplethMap data={DATA} regions={REGIONS}>
+        <ChoroplethTooltip />
+      </ChoroplethMap>,
+    );
+    fireEvent.mouseEnter(region(container, "FR"));
+    expect(screen.getAllByText(/France/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/2,937/).length).toBeGreaterThan(0);
+    fireEvent.mouseLeave(region(container, "FR"));
+    expect(container.querySelector("[data-tooltip-region-id]")).toBeNull();
+  });
 
-      expect(screen.getByText("GDP")).toBeInTheDocument();
-      expect(screen.getAllByText("2,937").length).toBeGreaterThan(0);
-      expect(screen.getAllByText("4,082").length).toBeGreaterThan(0);
-      expect(container.querySelector("[data-legend]")).toBeInTheDocument();
-    });
+  it("invokes the tooltip render-prop with region + value", () => {
+    const { container } = render(
+      <ChoroplethMap data={DATA} regions={REGIONS}>
+        <ChoroplethTooltip>
+          {({ region: hovered, value }) => (
+            <span>
+              Custom: {hovered.name} = {value ?? "?"}
+            </span>
+          )}
+        </ChoroplethTooltip>
+      </ChoroplethMap>,
+    );
+    fireEvent.mouseEnter(region(container, "DE"));
+    expect(screen.getByText(/Custom: Germany = 4082/)).toBeInTheDocument();
+  });
+
+  it("renders the legend with min and max labels from the domain", () => {
+    const { container } = render(
+      <ChoroplethMap data={DATA} regions={REGIONS}>
+        <ChoroplethLegend title="GDP" />
+      </ChoroplethMap>,
+    );
+    expect(screen.getByText("GDP")).toBeInTheDocument();
+    expect(screen.getAllByText("2,937").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("4,082").length).toBeGreaterThan(0);
+    expect(container.querySelector("[data-legend]")).toBeInTheDocument();
   });
 });

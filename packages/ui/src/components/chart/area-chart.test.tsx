@@ -10,23 +10,16 @@ const data = [
 ];
 
 describe("AreaChart", () => {
-  it("renders the chart from data", () => {
-    render(<AreaChart data={data} />);
-
-    expect(screen.getByRole("img", { name: "Area chart" })).toBeInTheDocument();
-  });
-
-  it("applies a custom className", () => {
+  it("renders the chart from data and merges className", () => {
     const { container } = render(
       <AreaChart className="custom-class" data={data} />,
     );
-
+    expect(screen.getByRole("img", { name: "Area chart" })).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
   it("returns null when no data is provided", () => {
     const { container } = render(<AreaChart data={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 });

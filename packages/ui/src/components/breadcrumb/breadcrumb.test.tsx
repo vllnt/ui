@@ -10,33 +10,17 @@ const sample: BreadcrumbItem[] = [
 ];
 
 describe("Breadcrumb", () => {
-  it("renders one entry per item", () => {
-    render(<Breadcrumb items={sample} />);
-
+  it("renders a landmark with links for href items and a plain last item", () => {
+    const { container } = render(<Breadcrumb items={sample} />);
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Runs")).toBeInTheDocument();
     expect(screen.getByText("research-2025")).toBeInTheDocument();
-  });
-
-  it("renders items with href as links", () => {
-    render(<Breadcrumb items={sample} />);
-
     expect(screen.getByText("Home").closest("a")).toHaveAttribute("href", "/");
     expect(screen.getByText("Runs").closest("a")).toHaveAttribute(
       "href",
       "/runs",
     );
-  });
-
-  it("renders the last item as a plain span when href is omitted", () => {
-    render(<Breadcrumb items={sample} />);
-
     expect(screen.getByText("research-2025").closest("a")).toBeNull();
-  });
-
-  it("uses the breadcrumb landmark", () => {
-    const { container } = render(<Breadcrumb items={sample} />);
-
     expect(container.querySelector("nav")).toHaveAttribute(
       "aria-label",
       "Breadcrumb",
@@ -45,7 +29,6 @@ describe("Breadcrumb", () => {
 
   it("respects the separator prop", () => {
     render(<Breadcrumb items={sample} separator="slash" />);
-
     expect(screen.getAllByText("/").length).toBeGreaterThan(0);
   });
 });

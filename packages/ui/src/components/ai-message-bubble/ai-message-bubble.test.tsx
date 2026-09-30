@@ -10,7 +10,6 @@ describe("AIMessageBubble", () => {
         Here is the answer you asked for.
       </AIMessageBubble>,
     );
-
     expect(screen.getByText("Assistant")).toBeVisible();
     expect(screen.getByText("sent")).toBeVisible();
     expect(screen.getByText("Here is the answer you asked for.")).toBeVisible();
@@ -22,7 +21,6 @@ describe("AIMessageBubble", () => {
         Can you summarize this PR?
       </AIMessageBubble>,
     );
-
     expect(container.firstChild).toHaveClass("justify-end");
   });
 
@@ -30,7 +28,6 @@ describe("AIMessageBubble", () => {
     const { container } = render(
       <AIMessageBubble className="custom-class">Styled bubble</AIMessageBubble>,
     );
-
     expect(container.querySelector(".custom-class")).toBeInTheDocument();
   });
 });

@@ -18,28 +18,16 @@ describe("AnimatedTestimonials", () => {
     stubMatchMedia();
   });
 
-  it("renders the first testimonial", () => {
-    render(<AnimatedTestimonials testimonials={testimonials} />);
-
-    expect(screen.getByText("First quote")).toBeInTheDocument();
-  });
-
-  it("advances to the next testimonial", () => {
-    render(<AnimatedTestimonials testimonials={testimonials} />);
-
-    fireEvent.click(screen.getByText("Next"));
-
-    expect(screen.getByText("Second quote")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
+  it("renders the first testimonial, merges className, and advances to the next", () => {
     const { container } = render(
       <AnimatedTestimonials
         className="custom-class"
         testimonials={testimonials}
       />,
     );
-
     expect(container.firstChild).toHaveClass("custom-class");
+    expect(screen.getByText("First quote")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Next"));
+    expect(screen.getByText("Second quote")).toBeInTheDocument();
   });
 });

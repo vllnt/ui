@@ -4,14 +4,7 @@ import { describe, expect, it } from "vitest";
 import { CardFlip } from "./card-flip";
 
 describe("CardFlip", () => {
-  it("renders both faces", () => {
-    render(<CardFlip back={<span>Back</span>} front={<span>Front</span>} />);
-
-    expect(screen.getByText("Front")).toBeInTheDocument();
-    expect(screen.getByText("Back")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
+  it("renders both faces and merges className", () => {
     const { container } = render(
       <CardFlip
         back={<span>Back</span>}
@@ -19,7 +12,8 @@ describe("CardFlip", () => {
         front={<span>Front</span>}
       />,
     );
-
+    expect(screen.getByText("Front")).toBeInTheDocument();
+    expect(screen.getByText("Back")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
@@ -32,12 +26,10 @@ describe("CardFlip", () => {
       />,
     );
     const card = container.firstChild;
-
     expect(card).toHaveAttribute("role", "button");
     if (card) {
       fireEvent.click(card);
     }
-
     expect(screen.getByText("Front")).toBeInTheDocument();
   });
 });

@@ -4,25 +4,9 @@ import { describe, expect, it } from "vitest";
 import { Calendar } from "./calendar";
 
 describe("Calendar", () => {
-  describe("rendering", () => {
-    it("renders correctly", () => {
-      const { container } = render(<Calendar />);
-
-      expect(container.firstChild).toBeInTheDocument();
-    });
-
-    it("applies custom className", () => {
-      const { container } = render(<Calendar className="custom-class" />);
-
-      expect(container.firstChild).toHaveClass("custom-class");
-    });
-  });
-
-  describe("accessibility", () => {
-    it("is visible when rendered", () => {
-      const { container } = render(<Calendar />);
-
-      expect(container.firstChild).toBeVisible();
-    });
+  it("renders a visible root that merges className", () => {
+    const { container } = render(<Calendar className="custom-class" />);
+    expect(container.firstChild).toBeVisible();
+    expect(container.firstChild).toHaveClass("custom-class");
   });
 });

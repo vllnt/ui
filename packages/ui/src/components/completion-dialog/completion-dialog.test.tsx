@@ -3,25 +3,28 @@ import { describe, expect, it, vi } from "vitest";
 
 import { CompletionDialog } from "./completion-dialog";
 
-const baseProps = {
-  onCancel: vi.fn(),
-  onClose: vi.fn(),
-  onConfirm: vi.fn(),
-  title: "Done?",
+const renderOpen = () => {
+  const handlers = { onCancel: vi.fn(), onClose: vi.fn(), onConfirm: vi.fn() };
+  render(<CompletionDialog {...handlers} isOpen title="Done?" />);
+  return handlers;
 };
 
 describe("CompletionDialog", () => {
   it("renders nothing when isOpen is false", () => {
     const { container } = render(
-      <CompletionDialog {...baseProps} isOpen={false} />,
+      <CompletionDialog
+        isOpen={false}
+        onCancel={vi.fn()}
+        onClose={vi.fn()}
+        onConfirm={vi.fn()}
+        title="Done?"
+      />,
     );
-
     expect(container.firstChild).toBeNull();
   });
 
   it("renders the title and default labels when open", () => {
-    render(<CompletionDialog {...baseProps} isOpen />);
-
+    renderOpen();
     expect(screen.getByText("Done?")).toBeInTheDocument();
     expect(screen.getByText("Skip")).toBeInTheDocument();
     expect(screen.getByText("Done")).toBeInTheDocument();
@@ -30,45 +33,35 @@ describe("CompletionDialog", () => {
   it("uses override labels when provided", () => {
     render(
       <CompletionDialog
-        {...baseProps}
         cancelLabel="Later"
         confirmLabel="Mark complete"
         isOpen
+        onCancel={vi.fn()}
+        onClose={vi.fn()}
+        onConfirm={vi.fn()}
+        title="Done?"
       />,
     );
-
     expect(screen.getByText("Later")).toBeInTheDocument();
     expect(screen.getByText("Mark complete")).toBeInTheDocument();
   });
 
-  it("invokes onConfirm when the confirm button is clicked", () => {
-    const onConfirm = vi.fn();
-    render(<CompletionDialog {...baseProps} isOpen onConfirm={onConfirm} />);
-
+  it("invokes onConfirm and onCancel from their buttons", () => {
+    const { onCancel, onConfirm } = renderOpen();
     fireEvent.click(screen.getByText("Done"));
-    expect(onConfirm).toHaveBeenCalledTimes(1);
-  });
-
-  it("invokes onCancel when the cancel button is clicked", () => {
-    const onCancel = vi.fn();
-    render(<CompletionDialog {...baseProps} isOpen onCancel={onCancel} />);
-
     fireEvent.click(screen.getByText("Skip"));
+    expect(onConfirm).toHaveBeenCalledTimes(1);
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 
   it("invokes onClose when Escape is pressed", () => {
-    const onClose = vi.fn();
-    render(<CompletionDialog {...baseProps} isOpen onClose={onClose} />);
-
+    const { onClose } = renderOpen();
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it("invokes onClose when the close icon button is clicked", () => {
-    const onClose = vi.fn();
-    render(<CompletionDialog {...baseProps} isOpen onClose={onClose} />);
-
+    const { onClose } = renderOpen();
     fireEvent.click(screen.getByLabelText("Close"));
     expect(onClose).toHaveBeenCalledTimes(1);
   });

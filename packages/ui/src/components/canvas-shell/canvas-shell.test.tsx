@@ -23,9 +23,25 @@ function getShellElements(container: HTMLElement) {
   return { contentHost, shell };
 }
 
+function expectLegacyShell(container: HTMLElement) {
+  const shell = getElement(container.firstElementChild, "legacy shell");
+  expect(shell.className).toContain("flex-col");
+  expect(shell.className).not.toContain("relative isolate");
+  return shell;
+}
+
+const floatingSafeArea = [
+  "--canvas-shell-safe-right: calc(16px + 18rem)",
+  "--canvas-shell-safe-bottom: calc(16px + 3.5rem)",
+  "--canvas-shell-safe-left: calc(16px + 4.5rem)",
+];
+
+const action = (name: string) =>
+  screen.getByRole("button", { name: `${name} action` });
+
 describe("CanvasShell", () => {
-  it("renders top, left, main, right, and bottom regions", () => {
-    render(
+  it("renders all regions and reserves default chrome footprint in floating mode", () => {
+    const { container } = render(
       <CanvasShell
         bottomBar={<div>bottom host</div>}
         leftBar={<div>left rail</div>}
@@ -35,12 +51,20 @@ describe("CanvasShell", () => {
         <div>main view</div>
       </CanvasShell>,
     );
-
-    expect(screen.getByText("top bar")).toBeInTheDocument();
-    expect(screen.getByText("left rail")).toBeInTheDocument();
-    expect(screen.getByText("main view")).toBeInTheDocument();
-    expect(screen.getByText("right dock")).toBeInTheDocument();
-    expect(screen.getByText("bottom host")).toBeInTheDocument();
+    ["top bar", "left rail", "main view", "right dock", "bottom host"].forEach(
+      (text) => {
+        expect(screen.getByText(text)).toBeInTheDocument();
+      },
+    );
+    const shellStyle = getShellElements(container).shell.getAttribute("style");
+    expect(shellStyle).toContain(
+      "--canvas-shell-safe-top: calc(16px + 3.5rem)",
+    );
+    floatingSafeArea.forEach((variable) => {
+      expect(shellStyle).toContain(variable);
+    });
+    expect(shellStyle).not.toContain("112px");
+    expect(shellStyle).not.toContain("392px");
   });
 
   it("exposes safe-area CSS vars for content spacing", () => {
@@ -51,64 +75,22 @@ describe("CanvasShell", () => {
         <div>spaced main</div>
       </CanvasShell>,
     );
-
     const { contentHost, shell } = getShellElements(container);
-
-    expect(shell.getAttribute("style")).toContain(
-      "--canvas-shell-safe-top: 77px",
-    );
-    expect(shell.getAttribute("style")).toContain(
-      "--canvas-shell-safe-right: 55px",
-    );
-    expect(shell.getAttribute("style")).toContain(
-      "--canvas-shell-safe-bottom: 88px",
-    );
-    expect(shell.getAttribute("style")).toContain(
-      "--canvas-shell-safe-left: 44px",
-    );
-    expect(contentHost.getAttribute("style")).toContain(
-      "padding-top: var(--canvas-shell-safe-top)",
-    );
-    expect(contentHost.getAttribute("style")).toContain(
-      "padding-right: var(--canvas-shell-safe-right)",
-    );
-    expect(contentHost.getAttribute("style")).toContain(
-      "padding-bottom: var(--canvas-shell-safe-bottom)",
-    );
-    expect(contentHost.getAttribute("style")).toContain(
-      "padding-left: var(--canvas-shell-safe-left)",
-    );
-  });
-
-  it("reserves default chrome footprint in floating mode instead of only the inset", () => {
-    const { container } = render(
-      <CanvasShell
-        bottomBar={<div>bottom host</div>}
-        leftBar={<div>left rail</div>}
-        rightBar={<div>right dock</div>}
-        topBar={<div>top bar</div>}
-      >
-        <div>floating main</div>
-      </CanvasShell>,
-    );
-
-    const { shell } = getShellElements(container);
-    const shellStyle = shell.getAttribute("style");
-
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-top: calc(16px + 3.5rem)",
-    );
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-right: calc(16px + 18rem)",
-    );
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-bottom: calc(16px + 3.5rem)",
-    );
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-left: calc(16px + 4.5rem)",
-    );
-    expect(shellStyle).not.toContain("112px");
-    expect(shellStyle).not.toContain("392px");
+    (
+      [
+        ["top", 77],
+        ["right", 55],
+        ["bottom", 88],
+        ["left", 44],
+      ] as const
+    ).forEach(([side, px]) => {
+      expect(shell.getAttribute("style")).toContain(
+        `--canvas-shell-safe-${side}: ${px}px`,
+      );
+      expect(contentHost.getAttribute("style")).toContain(
+        `padding-${side}: var(--canvas-shell-safe-${side})`,
+      );
+    });
   });
 
   it("keeps legacy slot props on the legacy layout path", () => {
@@ -122,53 +104,32 @@ describe("CanvasShell", () => {
         <div>Legacy main</div>
       </CanvasShell>,
     );
-
-    const shell = getElement(container.firstElementChild, "legacy shell");
+    const shell = expectLegacyShell(container);
     const grid = getElement(shell.children.item(1), "legacy grid");
     const bottomHost = getElement(shell.children.item(2), "legacy bottom host");
-
-    expect(shell.className).toContain("flex-col");
-    expect(shell.className).not.toContain("relative isolate");
     expect(grid.className).toContain("grid-cols-[auto_minmax(0,1fr)_auto]");
     expect(bottomHost.className).toContain("border-t");
-    expect(screen.getByText("Legacy top")).toBeInTheDocument();
-    expect(screen.getByText("Legacy left")).toBeInTheDocument();
-    expect(screen.getByText("Legacy right")).toBeInTheDocument();
-    expect(screen.getByText("Legacy bottom")).toBeInTheDocument();
-    expect(screen.getByText("Legacy main")).toBeInTheDocument();
+    ["top", "left", "right", "bottom", "main"].forEach((text) => {
+      expect(screen.getByText(`Legacy ${text}`)).toBeInTheDocument();
+    });
   });
 
-  it("keeps the legacy layout when new chrome props are null", () => {
+  it.each([
+    {
+      name: "new chrome props are null",
+      props: { bottomBar: null, leftBar: null, rightBar: null },
+    },
+    {
+      name: "chromeInset is explicitly undefined",
+      props: { chromeInset: undefined },
+    },
+  ])("keeps the legacy layout when $name", ({ props }) => {
     const { container } = render(
-      <CanvasShell
-        bottomBar={null}
-        leftBar={null}
-        rightBar={null}
-        topBar={<div>Legacy top</div>}
-      >
+      <CanvasShell {...props} topBar={<div>Legacy top</div>}>
         <div>Legacy main</div>
       </CanvasShell>,
     );
-
-    const shell = getElement(container.firstElementChild, "legacy shell");
-
-    expect(shell.className).toContain("flex-col");
-    expect(shell.className).not.toContain("relative isolate");
-    expect(screen.getByText("Legacy top")).toBeInTheDocument();
-    expect(screen.getByText("Legacy main")).toBeInTheDocument();
-  });
-
-  it("keeps an explicit undefined chromeInset on the legacy layout path", () => {
-    const { container } = render(
-      <CanvasShell chromeInset={undefined} topBar={<div>Legacy top</div>}>
-        <div>Legacy main</div>
-      </CanvasShell>,
-    );
-
-    const shell = getElement(container.firstElementChild, "legacy shell");
-
-    expect(shell.className).toContain("flex-col");
-    expect(shell.className).not.toContain("relative isolate");
+    expectLegacyShell(container);
     expect(screen.getByText("Legacy top")).toBeInTheDocument();
     expect(screen.getByText("Legacy main")).toBeInTheDocument();
   });
@@ -179,9 +140,7 @@ describe("CanvasShell", () => {
         <div>Inset main</div>
       </CanvasShell>,
     );
-
     const { shell } = getShellElements(container);
-
     expect(shell.className).toContain("relative isolate flex");
     expect(shell.getAttribute("style")).toContain(
       "--canvas-shell-safe-top: 16px",
@@ -195,11 +154,7 @@ describe("CanvasShell", () => {
         <div>Falsey main</div>
       </CanvasShell>,
     );
-
-    const shell = getElement(container.firstElementChild, "legacy shell");
-
-    expect(shell.className).toContain("flex-col");
-    expect(shell.className).not.toContain("relative isolate");
+    expectLegacyShell(container);
     expect(screen.getByText("Falsey main")).toBeInTheDocument();
     expect(screen.queryByText("0")).not.toBeInTheDocument();
   });
@@ -215,24 +170,18 @@ describe("CanvasShell", () => {
         <button type="button">Main action</button>
       </CanvasShell>,
     );
-
-    const topAction = screen.getByRole("button", { name: "Top action" });
-    const mainAction = screen.getByRole("button", { name: "Main action" });
-    const rightAction = screen.getByRole("button", { name: "Right action" });
-    const bottomAction = screen.getByRole("button", { name: "Bottom action" });
-
-    expect(
-      topAction.compareDocumentPosition(mainAction) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
-    expect(
-      mainAction.compareDocumentPosition(rightAction) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
-    expect(
-      mainAction.compareDocumentPosition(bottomAction) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
+    (
+      [
+        ["Top", "Main"],
+        ["Main", "Right"],
+        ["Main", "Bottom"],
+      ] as const
+    ).forEach(([before, after]) => {
+      expect(
+        action(before).compareDocumentPosition(action(after)) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy();
+    });
   });
 
   it("preserves deprecated side slots during floating migrations", () => {
@@ -247,25 +196,15 @@ describe("CanvasShell", () => {
         <div>legacy main</div>
       </CanvasShell>,
     );
-
     const { shell } = getShellElements(container);
     const shellStyle = shell.getAttribute("style");
-
     expect(shell.className).toContain("relative isolate flex");
     expect(shellStyle).toContain("--canvas-shell-safe-top: 24px");
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-left: calc(16px + 4.5rem)",
-    );
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-right: calc(16px + 18rem)",
-    );
-    expect(shellStyle).toContain(
-      "--canvas-shell-safe-bottom: calc(16px + 3.5rem)",
-    );
-    expect(screen.getByText("legacy top")).toBeInTheDocument();
-    expect(screen.getByText("legacy left")).toBeInTheDocument();
-    expect(screen.getByText("legacy right")).toBeInTheDocument();
-    expect(screen.getByText("legacy bottom")).toBeInTheDocument();
-    expect(screen.getByText("legacy main")).toBeInTheDocument();
+    floatingSafeArea.forEach((variable) => {
+      expect(shellStyle).toContain(variable);
+    });
+    ["top", "left", "right", "bottom", "main"].forEach((text) => {
+      expect(screen.getByText(`legacy ${text}`)).toBeInTheDocument();
+    });
   });
 });
