@@ -5,3 +5,9 @@ const { AccessibilityInfo } = require("react-native");
 jest
   .spyOn(AccessibilityInfo, "isReduceMotionEnabled")
   .mockImplementation(() => new Promise(() => {}));
+
+// Screen-reader-dependent behavior (toast expiry, marquee motion) is tested by
+// overriding this spy per test; keep it pending for unrelated render tests.
+jest
+  .spyOn(AccessibilityInfo, "isScreenReaderEnabled")
+  .mockImplementation(() => new Promise(() => {}));

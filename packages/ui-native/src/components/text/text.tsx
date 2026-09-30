@@ -1,5 +1,6 @@
+import { type Ref, use } from "react";
+
 import type { TextSize, TextTone, TextWeight } from "@vllnt/ui-core";
-import type { Ref } from "react";
 import {
   Text as NativeText,
   type Text as NativeTextInstance,
@@ -7,6 +8,7 @@ import {
   type TextStyle,
 } from "react-native";
 
+import { textColorContext } from "../../primitives/text-color";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for token-driven React Native body text. */
@@ -27,6 +29,7 @@ function Text({
   ...props
 }: TextProps) {
   const theme = useTheme();
+  const surfaceColor = use(textColorContext);
   const scale = {
     base: theme.typography.scale.body,
     caption: theme.typography.scale.caption,
@@ -47,9 +50,10 @@ function Text({
         scale[size],
         {
           color:
-            tone === "muted"
+            surfaceColor ??
+            (tone === "muted"
               ? theme.colors.mutedForeground
-              : theme.colors.foreground,
+              : theme.colors.foreground),
           fontWeight: fontWeight[weight],
         },
         style,
