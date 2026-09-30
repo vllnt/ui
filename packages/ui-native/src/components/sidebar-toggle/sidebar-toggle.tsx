@@ -7,6 +7,7 @@ import {
   type View,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { useSidebar } from "../sidebar-provider/sidebar-provider";
 
@@ -64,7 +65,7 @@ function SidebarToggle({
     >
       <NativeText
         accessible={false}
-        style={[theme.typography.scale.h5, { color: theme.colors.foreground }]}
+        style={typeStyle(theme, "h5", "foreground")}
       >
         {open ? "×" : "≡"}
       </NativeText>

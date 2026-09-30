@@ -19,7 +19,11 @@ import {
   type SelectionKey,
   selectSingle,
 } from "../../primitives/selection";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -87,27 +91,13 @@ function Command({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const [currentQuery, setCurrentQuery] = useControllableState(
-    query === undefined
-      ? {
-          defaultValue: defaultQuery,
-          mode: "uncontrolled",
-          onChange: onQueryChange,
-        }
-      : { mode: "controlled", onChange: onQueryChange, value: query },
+    controllableOptions(query, defaultQuery, onQueryChange),
   );
   const [selection, setSelection] = useControllableState(
-    selectedId === undefined
-      ? { defaultValue: defaultSelectedId, mode: "uncontrolled" }
-      : { mode: "controlled", value: selectedId },
+    controllableOptions(selectedId, defaultSelectedId),
   );
   const normalizedQuery = currentQuery.trim().toLocaleLowerCase();
   const filteredItems = items.filter(
@@ -166,14 +156,11 @@ function Command({
           {filteredItems.length === 0 ? (
             <Text
               accessibilityLiveRegion="polite"
-              style={[
-                theme.typography.scale.bodySmall,
-                {
-                  color: theme.colors.mutedForeground,
-                  padding: theme.spacing[4],
-                  textAlign: "center",
-                },
-              ]}
+              style={typeStyle(theme, "bodySmall", {
+                color: "mutedForeground",
+                padding: theme.spacing[4],
+                textAlign: "center",
+              })}
             >
               {emptyLabel}
             </Text>
@@ -209,14 +196,11 @@ function Command({
                   ]}
                 >
                   <Text
-                    style={[
-                      theme.typography.scale.bodySmall,
-                      {
-                        color: item.destructive
-                          ? theme.colors.destructive
-                          : theme.colors.popoverForeground,
-                      },
-                    ]}
+                    style={typeStyle(
+                      theme,
+                      "bodySmall",
+                      item.destructive ? "destructive" : "popoverForeground",
+                    )}
                   >
                     {item.label}
                   </Text>

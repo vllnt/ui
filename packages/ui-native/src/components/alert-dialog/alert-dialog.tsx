@@ -8,7 +8,11 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -71,13 +75,7 @@ function AlertDialog({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
@@ -115,22 +113,14 @@ function AlertDialog({
       >
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {title}
         </Text>
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {description}
         </Text>
         {children}
@@ -151,12 +141,7 @@ function AlertDialog({
               },
             ]}
           >
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.secondaryForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
               {cancelLabel}
             </Text>
           </Pressable>
@@ -183,15 +168,12 @@ function AlertDialog({
             ]}
           >
             <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                {
-                  color: destructive
-                    ? theme.colors.destructiveForeground
-                    : theme.colors.primaryForeground,
-                  fontWeight: theme.typography.fontWeight.caption,
-                },
-              ]}
+              style={typeStyle(theme, "bodySmall", {
+                color: destructive
+                  ? "destructiveForeground"
+                  : "primaryForeground",
+                fontWeight: theme.typography.fontWeight.caption,
+              })}
             >
               {actionLabel}
             </Text>

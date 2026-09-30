@@ -14,6 +14,7 @@ import {
   type LinkingService,
   type OpenUrlResult,
 } from "../../primitives/platform-services";
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native sibling-navigation presentation. */
@@ -76,26 +77,20 @@ function SiblingText({
   return (
     <>
       <NativeText
-        style={[
-          theme.typography.scale.caption,
-          {
-            color: theme.colors.mutedForeground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "caption", {
+          color: "mutedForeground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {caption}
       </NativeText>
       {variant === "compact" ? null : (
         <NativeText
           numberOfLines={2}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {link.title}
         </NativeText>

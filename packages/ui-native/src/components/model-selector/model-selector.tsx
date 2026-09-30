@@ -14,6 +14,7 @@ import {
 } from "react-native";
 
 import { ModalLayer } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -93,51 +94,26 @@ function ModelMeta({
   const unavailable = model.serviceState?.status === "unavailable";
   return (
     <>
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {model.id}
       </Text>
       {model.description ? (
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {model.description}
         </Text>
       ) : null}
       {price ? (
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {price}
         </Text>
       ) : null}
       {selected ? (
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.primary },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "primary")}>
           {labels.selected}
         </Text>
       ) : null}
       {unavailable ? (
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.destructive },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "destructive")}>
           {labels.unavailable}: {model.serviceState.message}
         </Text>
       ) : null}
@@ -186,13 +162,10 @@ function ModelRow({
       ]}
     >
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: theme.colors.popoverForeground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: "popoverForeground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {model.name}
       </Text>
@@ -273,22 +246,14 @@ function SelectorHeader({
       <View style={[styles.headerText, { gap: theme.spacing[1] }]}>
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.h5,
-            {
-              color: theme.colors.popoverForeground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "h5", {
+            color: "popoverForeground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {labels.title}
         </Text>
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {labels.description}
         </Text>
       </View>
@@ -305,12 +270,7 @@ function SelectorHeader({
           pressed ? styles.pressed : undefined,
         ]}
       >
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.popoverForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "popoverForeground")}>
           {labels.close}
         </Text>
       </Pressable>
@@ -341,10 +301,10 @@ function SelectorList({
       {models.length === 0 ? (
         <Text
           accessibilityLiveRegion="polite"
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground, padding: theme.spacing[4] },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "mutedForeground",
+            padding: theme.spacing[4],
+          })}
         >
           {labels.noModels}
         </Text>

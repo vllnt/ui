@@ -12,7 +12,11 @@ import {
 } from "react-native";
 
 import { toggleMultipleSelected } from "../../primitives/selection";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-identified node in a native hierarchy. */
@@ -151,12 +155,11 @@ function TreeRow({
             numberOfLines={1}
             style={[
               styles.label,
-              theme.typography.scale.bodySmall,
-              {
-                color: selected
-                  ? theme.colors.accentForeground
-                  : theme.colors.foreground,
-              },
+              ...typeStyle(
+                theme,
+                "bodySmall",
+                selected ? "accentForeground" : "foreground",
+              ),
             ]}
           >
             {node.label}
@@ -206,30 +209,10 @@ function TreeView({
 }: TreeViewProps) {
   const theme = useTheme();
   const [expanded, setExpanded] = useControllableState(
-    expandedIds === undefined
-      ? {
-          defaultValue: defaultExpandedIds,
-          mode: "uncontrolled",
-          onChange: onExpandedIdsChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onExpandedIdsChange,
-          value: expandedIds,
-        },
+    controllableOptions(expandedIds, defaultExpandedIds, onExpandedIdsChange),
   );
   const [selected, setSelected] = useControllableState(
-    selectedIds === undefined
-      ? {
-          defaultValue: defaultSelectedIds,
-          mode: "uncontrolled",
-          onChange: onSelectedIdsChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onSelectedIdsChange,
-          value: selectedIds,
-        },
+    controllableOptions(selectedIds, defaultSelectedIds, onSelectedIdsChange),
   );
   const onExpand = useCallback(
     (id: string) => {

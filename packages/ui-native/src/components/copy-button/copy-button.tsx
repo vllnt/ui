@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import type { ClipboardService } from "../../primitives/platform-services";
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 const DEFAULT_TIMEOUT = 2000;
@@ -177,13 +178,10 @@ function CopyButton({
     >
       <NativeText
         accessibilityLiveRegion="polite"
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: "foreground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {currentLabel}
       </NativeText>

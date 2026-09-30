@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -111,12 +112,7 @@ function TagsInput({
             },
           ]}
         >
-          <NativeText
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.foreground },
-            ]}
-          >
+          <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
             {tag}
           </NativeText>
           <Pressable
@@ -152,11 +148,7 @@ function TagsInput({
         readOnly={readOnly}
         ref={ref}
         returnKeyType="done"
-        style={[
-          styles.input,
-          theme.typography.scale.bodySmall,
-          { color: theme.colors.foreground },
-        ]}
+        style={[styles.input, ...typeStyle(theme, "bodySmall", "foreground")]}
         value={draft}
       />
       <Pressable

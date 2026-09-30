@@ -7,6 +7,7 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
 import { Text } from "../text/text";
@@ -68,14 +69,11 @@ function MessageAvatar({ label }: { readonly label: string }) {
       ]}
     >
       <NativeText
-        style={[
-          theme.typography.scale.caption,
-          {
-            color: theme.colors.mutedForeground,
-            fontWeight: theme.typography.fontWeight.caption,
-            textTransform: "uppercase",
-          },
-        ]}
+        style={typeStyle(theme, "caption", {
+          color: "mutedForeground",
+          fontWeight: theme.typography.fontWeight.caption,
+          textTransform: "uppercase",
+        })}
       >
         {label}
       </NativeText>

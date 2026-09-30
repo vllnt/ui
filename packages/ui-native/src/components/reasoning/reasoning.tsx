@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** One stable text reasoning item. */
@@ -84,22 +85,16 @@ function ReasoningTrigger({
       <Text
         style={[
           styles.triggerLabel,
-          theme.typography.scale.bodySmall,
-          {
-            color: theme.colors.mutedForeground,
+          ...typeStyle(theme, "bodySmall", {
+            color: "mutedForeground",
             fontWeight: theme.typography.fontWeight.caption,
-          },
+          }),
         ]}
       >
         {isStreaming ? labels.reasoning : labels.reasoned}
       </Text>
       {typeof duration === "string" || typeof duration === "number" ? (
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {duration}
         </Text>
       ) : (
@@ -141,18 +136,15 @@ function ReasoningContent({
               <Text
                 accessibilityElementsHidden
                 importantForAccessibility="no-hide-descendants"
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.mutedForeground },
-                ]}
+                style={typeStyle(theme, "bodySmall", "mutedForeground")}
               >
                 {index + 1}.
               </Text>
               <Text
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.mutedForeground, flex: 1 },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: "mutedForeground",
+                  flex: 1,
+                })}
               >
                 {step.text}
               </Text>

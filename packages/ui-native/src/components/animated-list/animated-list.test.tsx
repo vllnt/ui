@@ -1,7 +1,9 @@
 import { StrictMode } from "react";
 
-import { act, render, screen } from "@testing-library/react-native";
+import { render, screen } from "@testing-library/react-native";
 import { Animated, Text } from "react-native";
+
+import { flushMicrotasks, reducedMotion } from "../../tests/test-utils";
 
 import { AnimatedList } from "./animated-list";
 
@@ -11,10 +13,7 @@ it("settles interrupted entrance rows visibly when their index changes", async (
   jest
     .spyOn(Animated, "timing")
     .mockReturnValue({ reset: jest.fn(), start: jest.fn(), stop });
-  const service = {
-    addEventListener: () => ({ remove: () => {} }),
-    isReduceMotionEnabled: async () => false,
-  };
+  const service = reducedMotion(false);
   const initial = [{ content: <Text>A</Text>, id: "a" }];
   const added = { content: <Text>B</Text>, id: "b" };
   render(
@@ -26,9 +25,7 @@ it("settles interrupted entrance rows visibly when their index changes", async (
       />
     </StrictMode>,
   );
-  await act(async () => {
-    await Promise.resolve();
-  });
+  await flushMicrotasks();
   setValue.mockClear();
   screen.rerender(
     <StrictMode>

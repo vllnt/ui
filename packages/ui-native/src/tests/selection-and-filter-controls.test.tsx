@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import type { ReactElement } from "react";
 import { Text as NativeText } from "react-native";
 
 import { Button } from "../components/button/button";
@@ -18,7 +17,8 @@ import { SegmentedControl } from "../components/segmented-control/segmented-cont
 import { TagGroup } from "../components/tag-group/tag-group";
 import { TagsInput } from "../components/tags-input/tags-input";
 import { TimePicker } from "../components/time-picker/time-picker";
-import { ThemeProvider } from "../theme/theme-provider";
+
+import { themed } from "./test-utils";
 
 const calendarLabels = {
   close: "Close picker",
@@ -40,10 +40,6 @@ const selectLabels = {
   options: "Status choices",
   placeholder: "No status",
 };
-
-function themed(element: ReactElement) {
-  return <ThemeProvider colorScheme="light">{element}</ThemeProvider>;
-}
 
 describe("previously unmounted native component families", () => {
   it("mounts grouped controls and preserves stable selection callbacks", () => {

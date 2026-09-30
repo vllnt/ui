@@ -12,7 +12,11 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -119,31 +123,18 @@ function TestimonialCard({
         ],
       }}
     >
-      <Text
-        style={[
-          theme.typography.scale.bodyLarge,
-          { color: theme.colors.cardForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "bodyLarge", "cardForeground")}>
         {testimonial.quote}
       </Text>
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: theme.colors.cardForeground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: "cardForeground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {testimonial.name}
       </Text>
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {testimonial.title}
       </Text>
     </Animated.View>
@@ -172,13 +163,11 @@ function AnimatedTestimonials({
   const reduceMotion = useReducedMotion(reducedMotionService);
   const [autoplayPaused, setAutoplayPaused] = useState(false);
   const [selection, setSelection] = useControllableState(
-    selectedId === undefined
-      ? {
-          defaultValue: defaultSelectedId ?? testimonials[0]?.id ?? "",
-          mode: "uncontrolled",
-          onChange: onSelectedIdChange,
-        }
-      : { mode: "controlled", onChange: onSelectedIdChange, value: selectedId },
+    controllableOptions(
+      selectedId,
+      defaultSelectedId ?? testimonials[0]?.id ?? "",
+      onSelectedIdChange,
+    ),
   );
   const selectedIndex = Math.max(
     0,
@@ -258,12 +247,7 @@ function AnimatedTestimonials({
             {labels.previous}
           </Text>
         </Pressable>
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {labels.position(selectedIndex + 1, testimonials.length)}
         </Text>
         {autoplay && !reduceMotion && !controlsDisabled ? (

@@ -5,7 +5,6 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react-native";
-import type { ReactElement } from "react";
 import { Image, Pressable, Text } from "react-native";
 
 import { ActivityLog } from "../components/activity-log/activity-log";
@@ -48,8 +47,8 @@ import {
 } from "../components/resizable/resizable";
 import { ModalLayer } from "../primitives/modal-layer";
 import type { PickedFile } from "../primitives/platform-services";
-import type { ReducedMotionService } from "../primitives/use-reduced-motion";
-import { ThemeProvider } from "../theme/theme-provider";
+
+import { flushMicrotasks, reducedMotion, themed } from "./test-utils";
 
 const calendarLabels = {
   formatDayAccessibilityLabel: (date: Date) =>
@@ -67,14 +66,7 @@ const pagingLabels = {
   region: "Items",
   resume: "Resume rotation",
 };
-const reducedMotionService: ReducedMotionService = {
-  addEventListener: () => ({ remove: jest.fn() }),
-  isReduceMotionEnabled: async () => true,
-};
-
-function themed(element: ReactElement) {
-  return <ThemeProvider colorScheme="light">{element}</ThemeProvider>;
-}
+const reducedMotionService = reducedMotion(true);
 
 describe("native review regressions", () => {
   it("keeps grouped child controls exposed and associates field labels", async () => {
@@ -596,10 +588,7 @@ describe("native review regressions", () => {
 
   it("pauses testimonial autoplay after manual navigation", async () => {
     jest.useFakeTimers();
-    const motionService: ReducedMotionService = {
-      addEventListener: () => ({ remove: jest.fn() }),
-      isReduceMotionEnabled: async () => false,
-    };
+    const motionService = reducedMotion(false);
     render(
       themed(
         <AnimatedTestimonials
@@ -614,9 +603,7 @@ describe("native review regressions", () => {
         />,
       ),
     );
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await flushMicrotasks();
     act(() => {
       jest.advanceTimersByTime(1000);
     });
@@ -637,10 +624,7 @@ describe("native review regressions", () => {
 
   it("normalizes non-finite testimonial autoplay intervals", async () => {
     jest.useFakeTimers();
-    const motionService: ReducedMotionService = {
-      addEventListener: () => ({ remove: jest.fn() }),
-      isReduceMotionEnabled: async () => false,
-    };
+    const motionService = reducedMotion(false);
     render(
       themed(
         <AnimatedTestimonials
@@ -655,9 +639,7 @@ describe("native review regressions", () => {
         />,
       ),
     );
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await flushMicrotasks();
     act(() => {
       jest.advanceTimersByTime(4999);
     });

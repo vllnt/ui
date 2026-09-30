@@ -14,7 +14,11 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -79,13 +83,7 @@ function CompletionDialog({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
@@ -137,23 +135,15 @@ function CompletionDialog({
         </Pressable>
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {title}
         </Text>
         {typeof description === "string" || typeof description === "number" ? (
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.foreground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {description}
           </Text>
         ) : description ? (
@@ -176,12 +166,7 @@ function CompletionDialog({
               },
             ]}
           >
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.secondaryForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
               {cancelLabel}
             </Text>
           </Pressable>
@@ -201,12 +186,7 @@ function CompletionDialog({
               },
             ]}
           >
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.primaryForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "primaryForeground")}>
               {confirmLabel}
             </Text>
           </Pressable>

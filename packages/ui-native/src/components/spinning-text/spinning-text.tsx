@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import {
   type ReducedMotionService,
   useReducedMotion,
@@ -55,9 +56,8 @@ function RingCharacters({
         key={`${character}-${index.toString()}`}
         style={[
           styles.character,
-          theme.typography.scale.caption,
-          {
-            color: theme.colors.foreground,
+          ...typeStyle(theme, "caption", {
+            color: "foreground",
             left: radius + Math.sin(radians) * radius,
             top: radius - Math.cos(radians) * radius,
             transform: [
@@ -65,7 +65,7 @@ function RingCharacters({
               { translateY: -theme.spacing[2] },
               { rotate: `${angle.toString()}deg` },
             ],
-          },
+          }),
         ]}
       >
         {character}

@@ -5,6 +5,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for native text updated by an AI stream. */
@@ -35,11 +36,7 @@ function AIStreamingText({
       accessibilityLabel={accessibilityLabel ?? text}
       accessibilityLiveRegion={isStreaming ? "polite" : "none"}
       ref={ref}
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.foreground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "bodySmall", "foreground"), style]}
     >
       {text}
       {isStreaming && showCursor ? (

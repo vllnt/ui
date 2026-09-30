@@ -9,7 +9,11 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-localized labels for a native flashcard. */
@@ -73,13 +77,7 @@ function Flashcard({
 }: FlashcardProps) {
   const theme = useTheme();
   const [isFlipped, setFlipped] = useControllableState(
-    flipped === undefined
-      ? {
-          defaultValue: defaultFlipped,
-          mode: "uncontrolled",
-          onChange: onFlippedChange,
-        }
-      : { mode: "controlled", onChange: onFlippedChange, value: flipped },
+    controllableOptions(flipped, defaultFlipped, onFlippedChange),
   );
   const toggle = () => {
     setFlipped(!isFlipped);
@@ -102,23 +100,15 @@ function Flashcard({
       ]}
     >
       <View style={{ gap: theme.spacing[1] }}>
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {category ? `${labels.study} · ${category}` : labels.study}
         </Text>
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.h4,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "h4", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {title}
         </Text>
@@ -138,32 +128,22 @@ function Flashcard({
           },
         ]}
       >
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {isFlipped ? labels.answer : labels.prompt}
         </Text>
         {isFlipped ? answer : question}
       </View>
       {hint ? (
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.hint(hint)}
         </Text>
       ) : null}
       <View style={[styles.footer, { gap: theme.spacing[3] }]}>
         <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground, flex: 1 },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "mutedForeground",
+            flex: 1,
+          })}
         >
           {isFlipped ? labels.answerInstruction : labels.promptInstruction}
         </Text>
@@ -181,12 +161,7 @@ function Flashcard({
             },
           ]}
         >
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.primaryForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "primaryForeground")}>
             {actionLabel}
           </Text>
         </Pressable>

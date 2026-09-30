@@ -1,7 +1,9 @@
 import { StrictMode } from "react";
 
-import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Animated } from "react-native";
+
+import { flushMicrotasks, reducedMotion } from "../../tests/test-utils";
 
 import { AnimatedTestimonials } from "./animated-testimonials";
 
@@ -11,10 +13,7 @@ it("settles a newly selected testimonial after StrictMode interrupts its entranc
   jest
     .spyOn(Animated, "timing")
     .mockReturnValue({ reset: jest.fn(), start: jest.fn(), stop });
-  const service = {
-    addEventListener: () => ({ remove: () => {} }),
-    isReduceMotionEnabled: async () => false,
-  };
+  const service = reducedMotion(false);
   render(
     <StrictMode>
       <AnimatedTestimonials
@@ -34,9 +33,7 @@ it("settles a newly selected testimonial after StrictMode interrupts its entranc
       />
     </StrictMode>,
   );
-  await act(async () => {
-    await Promise.resolve();
-  });
+  await flushMicrotasks();
   setValue.mockClear();
   fireEvent.press(screen.getByRole("button", { name: "Next" }));
   expect(stop).toHaveBeenCalled();

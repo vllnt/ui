@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native alert tone. */
@@ -80,11 +81,10 @@ function AlertTitle({ ref, style, ...props }: AlertTitleProps) {
       aria-level={5}
       ref={ref}
       style={[
-        theme.typography.scale.body,
-        {
-          color: theme.colors.foreground,
+        ...typeStyle(theme, "body", {
+          color: "foreground",
           fontWeight: theme.typography.fontWeight.caption,
-        },
+        }),
         style,
       ]}
     />
@@ -99,11 +99,7 @@ function AlertDescription({ ref, style, ...props }: AlertDescriptionProps) {
     <NativeText
       {...props}
       ref={ref}
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "bodySmall", "mutedForeground"), style]}
     />
   );
 }

@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 
@@ -65,12 +66,7 @@ function PhoneCountryPrefix({
     },
   ];
   const content = (
-    <NativeText
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.foreground },
-      ]}
-    >
+    <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
       {country.dialCode}
     </NativeText>
   );

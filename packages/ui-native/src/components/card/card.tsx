@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 type NativeViewProps = ViewProps & { readonly ref?: Ref<View> };
@@ -77,11 +78,10 @@ function CardTitle({ ref, style, ...props }: CardTitleProps) {
       accessibilityRole="header"
       ref={ref}
       style={[
-        theme.typography.scale.h4,
-        {
-          color: theme.colors.cardForeground,
+        ...typeStyle(theme, "h4", {
+          color: "cardForeground",
           fontWeight: theme.typography.fontWeight.heading,
-        },
+        }),
         style,
       ]}
     />
@@ -97,11 +97,10 @@ function CardDescription({ ref, style, ...props }: CardDescriptionProps) {
       {...props}
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.mutedForeground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "mutedForeground",
           marginTop: theme.spacing[2],
-        },
+        }),
         style,
       ]}
     />

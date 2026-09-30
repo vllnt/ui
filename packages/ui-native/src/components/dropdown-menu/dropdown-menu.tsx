@@ -12,7 +12,11 @@ import {
   type SelectionKey,
   selectSingle,
 } from "../../primitives/selection";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -69,18 +73,10 @@ function DropdownMenu({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const [selection, setSelection] = useControllableState(
-    selectedId === undefined
-      ? { defaultValue: defaultSelectedId, mode: "uncontrolled" }
-      : { mode: "controlled", value: selectedId },
+    controllableOptions(selectedId, defaultSelectedId),
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
@@ -142,17 +138,14 @@ function DropdownMenu({
                 ]}
               >
                 <Text
-                  style={[
-                    theme.typography.scale.bodySmall,
-                    {
-                      color: item.destructive
-                        ? theme.colors.destructive
-                        : theme.colors.popoverForeground,
-                      fontWeight: selected
-                        ? theme.typography.fontWeight.caption
-                        : theme.typography.fontWeight.body,
-                    },
-                  ]}
+                  style={typeStyle(theme, "bodySmall", {
+                    color: item.destructive
+                      ? "destructive"
+                      : "popoverForeground",
+                    fontWeight: selected
+                      ? theme.typography.fontWeight.caption
+                      : theme.typography.fontWeight.body,
+                  })}
                 >
                   {item.label}
                 </Text>

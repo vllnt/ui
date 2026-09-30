@@ -14,6 +14,7 @@ import type {
   FilePickerService,
   PickedFile,
 } from "../../primitives/platform-services";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -156,22 +157,12 @@ function FileUpload({
           },
         ]}
       >
-        <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.foreground },
-          ]}
-        >
+        <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
           {unavailable ? labels.unavailable : labels.choose}
         </NativeText>
       </Pressable>
       {files.length === 0 ? (
-        <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <NativeText style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.empty}
         </NativeText>
       ) : (
@@ -189,10 +180,10 @@ function FileUpload({
           >
             <NativeText
               numberOfLines={1}
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground, flex: 1 },
-              ]}
+              style={typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                flex: 1,
+              })}
             >
               {file.name}
             </NativeText>
@@ -219,10 +210,7 @@ function FileUpload({
         <NativeText
           accessibilityLiveRegion="polite"
           accessibilityRole="alert"
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.destructive },
-          ]}
+          style={typeStyle(theme, "bodySmall", "destructive")}
         >
           {failure}
         </NativeText>
