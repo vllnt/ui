@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, use, useMemo, useState } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import type { ReactNode } from "react";
 
@@ -41,17 +49,25 @@ function Tabs({
   const isControlled = value !== undefined;
   const activeTab = isControlled ? value : internalTab;
 
-  const handleSetActiveTab = (next: string): void => {
-    if (!isControlled) {
-      setInternalTab(next);
-    }
-    onValueChange?.(next);
-  };
+  // Read the latest `onValueChange` without re-creating the context value.
+  const onValueChangeRef = useRef(onValueChange);
+  useEffect(() => {
+    onValueChangeRef.current = onValueChange;
+  }, [onValueChange]);
+
+  const handleSetActiveTab = useCallback(
+    (next: string): void => {
+      if (!isControlled) {
+        setInternalTab(next);
+      }
+      onValueChangeRef.current?.(next);
+    },
+    [isControlled],
+  );
 
   const contextValue = useMemo(
     () => ({ activeTab, setActiveTab: handleSetActiveTab }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [activeTab, isControlled],
+    [activeTab, handleSetActiveTab],
   );
 
   return (
