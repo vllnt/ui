@@ -18,6 +18,9 @@
  *   - `from "../<sibling>/<sibling>"`             → `from "@vllnt/ui"`
  *   - `from "../../<level>/<sibling>/<sibling>"`  → `from "@vllnt/ui"`
  *   - `from "../<sibling>"`                       → `from "@vllnt/ui"`
+ *   - `import("../<sibling>")` (same sibling paths) → `import("@vllnt/ui")`
+ *   - `import { A } from "./<helper>"`            → `from "@vllnt/ui"` when every
+ *     binding is a public export
  *
  * Component folders are found by name through `lib/component-directory.ts`
  * (`packages/ui/src/components/<level>/<name>/`).
@@ -142,11 +145,66 @@ const findComponentSource = (
   return existsSync(path) ? { directory, path } : undefined;
 };
 
+/**
+ * A sibling component path at any depth: `../<name>[/<file>]` within a level
+ * folder, `../../<level>/<name>[/<file>]` across levels.
+ */
+const SIBLING_PATH =
+  `(?:\\.\\.\\/)+(?:(?:${COMPONENT_LEVELS.join("|")})\\/)?` +
+  `[a-z][a-z0-9-]*(?:\\/[a-z][a-z0-9-]*)?`;
 const SIBLING_IMPORT_PATTERN = new RegExp(
-  `from\\s+["'](?:\\.\\.\\/)+(?:(?:${COMPONENT_LEVELS.join("|")})\\/)?` +
-    `[a-z][a-z0-9-]*(?:\\/[a-z][a-z0-9-]*)?["']`,
+  `from\\s+["']${SIBLING_PATH}["']`,
   "g",
 );
+const DYNAMIC_SIBLING_IMPORT_PATTERN = new RegExp(
+  `import\\(\\s*["']${SIBLING_PATH}["']\\s*\\)`,
+  "g",
+);
+
+const packageEntry = join(repoRoot, "packages/ui/src/index.ts");
+
+/** Public `@vllnt/ui` export names, read from the package's re-export chain. */
+const collectPublicExports = (file: string, names = new Set<string>()) => {
+  const source = readFileSync(file, "utf8");
+  for (const [, list] of source.matchAll(/export\s+(?:type\s+)?\{([^}]*)\}/g)) {
+    for (const entry of (list ?? "").split(",")) {
+      const binding = entry.replace(/^\s*type\s+/, "").trim();
+      const exported = binding.split(/\s+as\s+/).at(-1)?.trim();
+      if (exported) names.add(exported);
+    }
+  }
+  for (const [, specifier] of source.matchAll(
+    /export\s+\*\s+from\s+["'](\.{1,2}\/[^"']+)["']/g,
+  )) {
+    const base = join(dirname(file), specifier ?? "");
+    const target = [`${base}.ts`, `${base}.tsx`, join(base, "index.ts")].find(
+      (candidate) => existsSync(candidate),
+    );
+    if (target) collectPublicExports(target, names);
+  }
+  return names;
+};
+
+const publicExports = collectPublicExports(packageEntry);
+
+/**
+ * Same-folder helpers (`./x`) are not shipped with a single-file shim, so an
+ * import from one only works when every binding is public API.
+ */
+const rewriteSameFolderImports = (source: string): string =>
+  source.replace(
+    /import\s+(type\s+)?\{([^}]*)\}\s+from\s+["']\.\/[a-z][a-z0-9-]*["']/g,
+    (statement, typeOnly: string | undefined, list: string) => {
+      const imported = list
+        .split(",")
+        .map((entry) => entry.replace(/^\s*type\s+/, "").trim())
+        .filter(Boolean)
+        .map((binding) => binding.split(/\s+as\s+/)[0]?.trim() ?? "");
+      return imported.every((name) => publicExports.has(name))
+        ? `import ${typeOnly ?? ""}{${list}} from "${PACKAGE_NAME}"`
+        : statement;
+    },
+  );
 
 const rewriteImports = (source: string): string => {
   // Collect import lines that target lib utilities or sibling components
@@ -166,7 +224,10 @@ const rewriteImports = (source: string): string => {
   // → `@vllnt/ui`
   code = code.replace(SIBLING_IMPORT_PATTERN, `from "${PACKAGE_NAME}"`);
 
-  return code;
+  // Dynamic `import("<sibling path>")` → `import("@vllnt/ui")`
+  code = code.replace(DYNAMIC_SIBLING_IMPORT_PATTERN, `import("${PACKAGE_NAME}")`);
+
+  return rewriteSameFolderImports(code);
 };
 
 const registry = JSON.parse(readFileSync(registryJsonPath, "utf8")) as Registry;

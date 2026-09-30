@@ -1,7 +1,7 @@
 /**
  * Registry integrity check.
  *
- * Guards three regressions surfaced in the 0.3.0 review:
+ * Guards regressions surfaced in the 0.3.0 review, plus shim portability:
  *   1. Coverage — a component with a story AND a test must appear in
  *      registry.json (or be an explicitly documented exclusion). New components
  *      were shipped without a registry entry, so shadcn users could not install
@@ -11,6 +11,8 @@
  *   3. No prerelease leak — the published install target must be a real release,
  *      never the in-development `0.3.0-canary.<sha>` version. The registry build
  *      pins it via PUBLISHED_VERSION; this asserts the committed result is sane.
+ *   4. Shim portability — generated shims must not keep relative imports
+ *      (static or dynamic); they are installed as standalone files.
  *
  * Usage: pnpm -F @vllnt/ui-registry registry:integrity
  */
@@ -40,6 +42,7 @@ const EXCLUDED = new Set<string>([
 
 type RegistryItem = {
   dependencies?: string[];
+  files?: { path: string }[];
   name: string;
   native?: {
     availability?: string;
@@ -136,6 +139,26 @@ for (const item of registry.items) {
       `Item "${item.name}" pins a prerelease "${uiDep}". The registry must ` +
         `advertise a published release, never a canary.`,
     );
+  }
+}
+
+// Shims are installed standalone by shadcn: any relative specifier left after
+// the @vllnt/ui rewrite would point at a file the consumer does not have.
+const RELATIVE_SPECIFIER = /(?:\bfrom\s+|\bimport\s*\(\s*)["']\.{1,2}\//;
+for (const item of registry.items) {
+  for (const file of item.files ?? []) {
+    const shimPath = join(repoRoot, "apps/registry", file.path);
+    if (!existsSync(shimPath)) {
+      errors.push(
+        `Shim "${file.path}" is missing. Run \`pnpm -F @vllnt/ui-registry registry:build\` first.`,
+      );
+      continue;
+    }
+    if (RELATIVE_SPECIFIER.test(readFileSync(shimPath, "utf8"))) {
+      errors.push(
+        `Shim "${file.path}" still imports a relative path; shadcn installs would break.`,
+      );
+    }
   }
 }
 

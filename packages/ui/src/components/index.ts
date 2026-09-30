@@ -1350,6 +1350,7 @@ export {
 // Flow/Diagram components
 export {
   type CopyStatus,
+  FlowCanvas,
   FlowControls,
   type FlowControlsProps,
   FlowDiagram,
