@@ -1,20 +1,20 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { ActivityHeatmap } from "./activity-heatmap/activity-heatmap";
-import { CandlestickChart } from "./candlestick-chart/candlestick-chart";
-import { Checklist } from "./checklist/checklist";
-import { Exercise } from "./exercise/exercise";
-import { FAQ } from "./faq/faq";
-import { Glossary, KeyConcept } from "./key-concept/key-concept";
-import { LearningObjectives } from "./learning-objectives/learning-objectives";
-import { MarketTreemap } from "./market-treemap/market-treemap";
-import { OrderBook } from "./order-book/order-book";
-import { ProfileSection } from "./profile-section/profile-section";
-import { Quiz } from "./quiz/quiz";
-import { StatusBoard } from "./status-board/status-board";
-import { Step, StepByStep } from "./step-by-step/step-by-step";
-import { Watchlist } from "./watchlist/watchlist";
-import { WorldClockBar } from "./world-clock-bar/world-clock-bar";
+import { ActivityHeatmap } from "./organisms/activity-heatmap/activity-heatmap";
+import { CandlestickChart } from "./organisms/candlestick-chart/candlestick-chart";
+import { Checklist } from "./atoms/checklist/checklist";
+import { Exercise } from "./molecules/exercise/exercise";
+import { FAQ } from "./atoms/faq/faq";
+import { Glossary, KeyConcept } from "./atoms/key-concept/key-concept";
+import { LearningObjectives } from "./atoms/learning-objectives/learning-objectives";
+import { MarketTreemap } from "./organisms/market-treemap/market-treemap";
+import { OrderBook } from "./atoms/order-book/order-book";
+import { ProfileSection } from "./molecules/profile-section/profile-section";
+import { Quiz } from "./atoms/quiz/quiz";
+import { StatusBoard } from "./molecules/status-board/status-board";
+import { Step, StepByStep } from "./atoms/step-by-step/step-by-step";
+import { Watchlist } from "./atoms/watchlist/watchlist";
+import { WorldClockBar } from "./molecules/world-clock-bar/world-clock-bar";
 
 
 test("learning heading override props expose matching accessible levels", async ({

@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { Display } from "./display/display";
-import { Heading } from "./heading/heading";
-import { Text } from "./text/text";
+import { Display } from "./atoms/display/display";
+import { Heading } from "./atoms/heading/heading";
+import { Text } from "./atoms/text/text";
 
 test.describe("Typography token wiring (#465)", () => {
   test("Heading renders the semantic element for every level", async ({

@@ -3,10 +3,10 @@ import { createRequire } from "node:module";
 import { expect, test } from "@playwright/experimental-ct-react";
 import type { Page } from "@playwright/test";
 
-import { Display } from "./display/display";
-import { Heading } from "./heading/heading";
-import { Prose } from "./prose/prose";
-import { Text } from "./text/text";
+import { Display } from "./atoms/display/display";
+import { Heading } from "./atoms/heading/heading";
+import { Prose } from "./atoms/prose/prose";
+import { Text } from "./atoms/text/text";
 
 declare global {
   interface Window {

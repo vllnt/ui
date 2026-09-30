@@ -1,5 +1,5 @@
 // Core UI primitives
-export { Badge, type BadgeProps, badgeVariants } from "./badge/badge";
+export { Badge, type BadgeProps, badgeVariants } from "./atoms/badge/badge";
 export {
   Banner,
   BannerAction,
@@ -7,14 +7,18 @@ export {
   type BannerProps,
   type BannerVariant,
   bannerVariants,
-} from "./banner/banner";
-export { Breadcrumb, type BreadcrumbItem } from "./breadcrumb/breadcrumb";
-export { Button, type ButtonProps, buttonVariants } from "./button/button";
+} from "./atoms/banner/banner";
+export { Breadcrumb, type BreadcrumbItem } from "./atoms/breadcrumb/breadcrumb";
+export {
+  Button,
+  type ButtonProps,
+  buttonVariants,
+} from "./atoms/button/button";
 export {
   CookieConsent,
   type CookieConsentProps,
   cookieConsentVariants,
-} from "./cookie-consent/cookie-consent";
+} from "./molecules/cookie-consent/cookie-consent";
 export {
   Card,
   CardContent,
@@ -22,7 +26,7 @@ export {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./card/card";
+} from "./atoms/card/card";
 export {
   Command,
   CommandDialog,
@@ -33,13 +37,16 @@ export {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "./command/command";
+} from "./molecules/command/command";
 export {
   Combobox,
   type ComboboxOption,
   type ComboboxProps,
-} from "./combobox/combobox";
-export { DatePicker, type DatePickerProps } from "./date-picker/date-picker";
+} from "./organisms/combobox/combobox";
+export {
+  DatePicker,
+  type DatePickerProps,
+} from "./organisms/date-picker/date-picker";
 export {
   Dialog,
   DialogClose,
@@ -51,7 +58,7 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from "./dialog/dialog";
+} from "./atoms/dialog/dialog";
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -68,12 +75,15 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "./dropdown-menu/dropdown-menu";
-export { Input } from "./input/input";
-export { Kbd, type KbdProps, kbdVariants } from "./kbd/kbd";
-export { Checkbox } from "./checkbox/checkbox";
-export { FileUpload, type FileUploadProps } from "./file-upload/file-upload";
-export { Label } from "./label/label";
+} from "./atoms/dropdown-menu/dropdown-menu";
+export { Input } from "./atoms/input/input";
+export { Kbd, type KbdProps, kbdVariants } from "./atoms/kbd/kbd";
+export { Checkbox } from "./atoms/checkbox/checkbox";
+export {
+  FileUpload,
+  type FileUploadProps,
+} from "./molecules/file-upload/file-upload";
+export { Label } from "./atoms/label/label";
 export {
   NewsletterSignup,
   type NewsletterSignupLabels,
@@ -81,16 +91,16 @@ export {
   newsletterSignupReducer,
   type NewsletterSignupStatus,
   type NewsletterSignupVariant,
-} from "./newsletter-signup/newsletter-signup";
+} from "./molecules/newsletter-signup/newsletter-signup";
 export {
   NumberInput,
   type NumberInputProps,
-} from "./number-input/number-input";
+} from "./molecules/number-input/number-input";
 export {
   PasswordInput,
   type PasswordInputProps,
-} from "./password-input/password-input";
-export { Switch } from "./switch/switch";
+} from "./atoms/password-input/password-input";
+export { Switch } from "./atoms/switch/switch";
 export {
   Form,
   FormControl,
@@ -101,13 +111,13 @@ export {
   FormMessage,
   type FormProps,
   useFormField,
-} from "./form/form";
+} from "./molecules/form/form";
 export {
   MultiSelect,
   type MultiSelectOption,
   type MultiSelectProps,
-} from "./multi-select/multi-select";
-export { TagsInput, type TagsInputProps } from "./tags-input/tags-input";
+} from "./organisms/multi-select/multi-select";
+export { TagsInput, type TagsInputProps } from "./atoms/tags-input/tags-input";
 export {
   SegmentedControl,
   SegmentedControlItem,
@@ -115,7 +125,7 @@ export {
   segmentedControlItemVariants,
   type SegmentedControlProps,
   segmentedControlVariants,
-} from "./segmented-control/segmented-control";
+} from "./atoms/segmented-control/segmented-control";
 export { toast } from "sonner";
 export {
   Toast,
@@ -124,8 +134,8 @@ export {
   ToastDescription,
   type ToastProps,
   ToastTitle,
-} from "./toast/toast";
-export { Toaster } from "./toast/toaster";
+} from "./atoms/toast/toast";
+export { Toaster } from "./atoms/toast/toaster";
 
 // AI components
 export {
@@ -143,28 +153,28 @@ export {
   type AIArtifactVersionProps,
   AIArtifactVersions,
   useAIArtifact,
-} from "./ai-artifact/ai-artifact";
+} from "./molecules/ai-artifact/ai-artifact";
 export {
   AIChatInput,
   type AIChatInputProps,
-} from "./ai-chat-input/ai-chat-input";
+} from "./molecules/ai-chat-input/ai-chat-input";
 export {
   AIMessageBubble,
   type AIMessageBubbleProps,
-} from "./ai-message-bubble/ai-message-bubble";
+} from "./molecules/ai-message-bubble/ai-message-bubble";
 export {
   AISourceCitation,
   type AISourceCitationProps,
-} from "./ai-source-citation/ai-source-citation";
+} from "./atoms/ai-source-citation/ai-source-citation";
 export {
   AIStreamingText,
   type AIStreamingTextProps,
-} from "./ai-streaming-text/ai-streaming-text";
+} from "./atoms/ai-streaming-text/ai-streaming-text";
 export {
   AIToolCallDisplay,
   type AIToolCallDisplayProps,
   type AIToolCallStatus,
-} from "./ai-tool-call-display/ai-tool-call-display";
+} from "./molecules/ai-tool-call-display/ai-tool-call-display";
 export {
   AISidebar,
   AISidebarClose,
@@ -180,10 +190,10 @@ export {
   AISidebarTrigger,
   type AISidebarTriggerProps,
   useAISidebar,
-} from "./ai-sidebar/ai-sidebar";
+} from "./molecules/ai-sidebar/ai-sidebar";
 
 // New shadcn primitives - Form
-export { Textarea, type TextareaProps } from "./textarea/textarea";
+export { Textarea, type TextareaProps } from "./atoms/textarea/textarea";
 export {
   Select,
   SelectContent,
@@ -195,46 +205,49 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "./select/select";
-export { RadioGroup, RadioGroupItem } from "./radio-group/radio-group";
-export { Slider } from "./slider/slider";
-export { Toggle, toggleVariants } from "./toggle/toggle";
-export { ToggleGroup, ToggleGroupItem } from "./toggle-group/toggle-group";
+} from "./atoms/select/select";
+export { RadioGroup, RadioGroupItem } from "./atoms/radio-group/radio-group";
+export { Slider } from "./atoms/slider/slider";
+export { Toggle, toggleVariants } from "./atoms/toggle/toggle";
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "./molecules/toggle-group/toggle-group";
 export {
   type TreeNode,
   TreeView,
   type TreeViewLabels,
   type TreeViewProps,
   type TreeViewSelectionMode,
-} from "./tree-view/tree-view";
+} from "./organisms/tree-view/tree-view";
 export {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "./input-otp/input-otp";
+} from "./atoms/input-otp/input-otp";
 
 // Form primitives (#409)
 export {
   ButtonGroup,
   type ButtonGroupProps,
   buttonGroupVariants,
-} from "./button-group/button-group";
+} from "./atoms/button-group/button-group";
 export {
   CheckboxGroup,
   CheckboxGroupItem,
   type CheckboxGroupItemProps,
   type CheckboxGroupProps,
-} from "./checkbox-group/checkbox-group";
+} from "./molecules/checkbox-group/checkbox-group";
 export {
   ColorPicker,
   type ColorPickerProps,
-} from "./color-picker/color-picker";
-export { DateField, type DateFieldProps } from "./date-field/date-field";
+} from "./molecules/color-picker/color-picker";
+export { DateField, type DateFieldProps } from "./atoms/date-field/date-field";
 export {
   DateRangePicker,
   type DateRangePickerProps,
-} from "./date-range-picker/date-range-picker";
+} from "./organisms/date-range-picker/date-range-picker";
 export {
   Field,
   FieldControl,
@@ -247,7 +260,7 @@ export {
   type FieldLabelProps,
   type FieldProps,
   fieldVariants,
-} from "./field/field";
+} from "./molecules/field/field";
 export {
   Fieldset,
   FieldsetContent,
@@ -255,7 +268,7 @@ export {
   FieldsetLegend,
   type FieldsetLegendProps,
   type FieldsetProps,
-} from "./fieldset/fieldset";
+} from "./atoms/fieldset/fieldset";
 export {
   InputGroup,
   InputGroupAddon,
@@ -265,7 +278,7 @@ export {
   type InputGroupInputProps,
   type InputGroupProps,
   inputGroupVariants,
-} from "./input-group/input-group";
+} from "./atoms/input-group/input-group";
 export {
   Item,
   ItemActions,
@@ -280,41 +293,47 @@ export {
   ItemTitle,
   type ItemTitleProps,
   itemVariants,
-} from "./item/item";
+} from "./atoms/item/item";
 export {
   ListBox,
   ListBoxItem,
   type ListBoxItemProps,
   type ListBoxProps,
   type ListBoxSelectionMode,
-} from "./list-box/list-box";
+} from "./atoms/list-box/list-box";
 export {
   NativeSelect,
   type NativeSelectProps,
-} from "./native-select/native-select";
+} from "./atoms/native-select/native-select";
 export {
   type PhoneCountry,
   PhoneInput,
   type PhoneInputProps,
-} from "./phone-input/phone-input";
+} from "./atoms/phone-input/phone-input";
 export {
   RangeCalendar,
   type RangeCalendarProps,
-} from "./range-calendar/range-calendar";
+} from "./organisms/range-calendar/range-calendar";
 export {
   SearchField,
   type SearchFieldProps,
-} from "./search-field/search-field";
+} from "./atoms/search-field/search-field";
 export {
   TagGroup,
   TagGroupItem,
   type TagGroupItemProps,
   type TagGroupProps,
   type TagSelectionMode,
-} from "./tag-group/tag-group";
-export { TextField, type TextFieldProps } from "./text-field/text-field";
-export { TimeField, type TimeFieldProps } from "./time-field/time-field";
-export { TimePicker, type TimePickerProps } from "./time-picker/time-picker";
+} from "./atoms/tag-group/tag-group";
+export {
+  TextField,
+  type TextFieldProps,
+} from "./molecules/text-field/text-field";
+export { TimeField, type TimeFieldProps } from "./atoms/time-field/time-field";
+export {
+  TimePicker,
+  type TimePickerProps,
+} from "./molecules/time-picker/time-picker";
 
 // New shadcn primitives - Overlay
 export {
@@ -322,13 +341,13 @@ export {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./tooltip/tooltip";
+} from "./atoms/tooltip/tooltip";
 export {
   Popover,
   PopoverAnchor,
   PopoverContent,
   PopoverTrigger,
-} from "./popover/popover";
+} from "./atoms/popover/popover";
 export {
   Sheet,
   SheetClose,
@@ -340,7 +359,7 @@ export {
   SheetPortal,
   SheetTitle,
   SheetTrigger,
-} from "./sheet/sheet";
+} from "./atoms/sheet/sheet";
 export {
   Drawer,
   DrawerClose,
@@ -352,14 +371,14 @@ export {
   DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
-} from "./drawer/drawer";
+} from "./atoms/drawer/drawer";
 export {
   DocumentSiblingNav,
   type DocumentSiblingNavLink,
   type DocumentSiblingNavProps,
   type DocumentSiblingNavVariant,
   documentSiblingNavVariants,
-} from "./document-sibling-nav/document-sibling-nav";
+} from "./atoms/document-sibling-nav/document-sibling-nav";
 export {
   AlertDialog,
   AlertDialogAction,
@@ -372,7 +391,7 @@ export {
   AlertDialogPortal,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./alert-dialog/alert-dialog";
+} from "./molecules/alert-dialog/alert-dialog";
 export {
   type HistoricCategory,
   type HistoricColor,
@@ -382,12 +401,12 @@ export {
   HistoricTimeline,
   type HistoricTimelineLabels,
   type HistoricTimelineProps,
-} from "./historic-timeline/historic-timeline";
+} from "./organisms/historic-timeline/historic-timeline";
 export {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "./hover-card/hover-card";
+} from "./atoms/hover-card/hover-card";
 export {
   HistoricalFigureCard,
   type HistoricalFigureCardConnection,
@@ -395,7 +414,7 @@ export {
   type HistoricalFigureCardLifeEvent,
   type HistoricalFigureCardProps,
   type HistoricalFigureCardQuote,
-} from "./historical-figure-card/historical-figure-card";
+} from "./molecules/historical-figure-card/historical-figure-card";
 export {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -412,7 +431,7 @@ export {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "./context-menu/context-menu";
+} from "./atoms/context-menu/context-menu";
 export {
   Menubar,
   MenubarCheckboxItem,
@@ -430,7 +449,7 @@ export {
   MenubarSubContent,
   MenubarSubTrigger,
   MenubarTrigger,
-} from "./menubar/menubar";
+} from "./atoms/menubar/menubar";
 export {
   NavigationMenu,
   NavigationMenuContent,
@@ -441,7 +460,7 @@ export {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
   NavigationMenuViewport,
-} from "./navigation-menu/navigation-menu";
+} from "./atoms/navigation-menu/navigation-menu";
 
 // New shadcn primitives - Data Display
 export {
@@ -449,7 +468,7 @@ export {
   type DataTableFilter,
   type DataTableFilterOption,
   type DataTableProps,
-} from "./data-table/data-table";
+} from "./organisms/data-table/data-table";
 export {
   DataList,
   DataListItem,
@@ -459,7 +478,7 @@ export {
   type DataListProps,
   DataListValue,
   dataListVariants,
-} from "./data-list/data-list";
+} from "./atoms/data-list/data-list";
 export {
   Table,
   TableBody,
@@ -469,13 +488,13 @@ export {
   TableHead,
   TableHeader,
   TableRow,
-} from "./table/table";
+} from "./atoms/table/table";
 export {
   AutoReload,
   type AutoReloadLabels,
   type AutoReloadProps,
   type AutoReloadSavePayload,
-} from "./auto-reload/auto-reload";
+} from "./molecules/auto-reload/auto-reload";
 export {
   Timeline,
   type TimelineColor,
@@ -486,7 +505,7 @@ export {
   type TimelineProps,
   timelineVariants,
   useTimelineOrientation,
-} from "./timeline/timeline";
+} from "./atoms/timeline/timeline";
 export {
   formatTransactionAmount,
   formatTransactionDate,
@@ -501,23 +520,23 @@ export {
   TransactionListSubscriptionRow,
   type TransactionListSubscriptionRowProps,
   type TransactionType,
-} from "./transaction-list/transaction-list";
-export { Avatar, AvatarFallback, AvatarImage } from "./avatar/avatar";
+} from "./molecules/transaction-list/transaction-list";
+export { Avatar, AvatarFallback, AvatarImage } from "./atoms/avatar/avatar";
 export {
   AvatarGroup,
   type AvatarGroupItem,
   type AvatarGroupProps,
   avatarGroupVariants,
   avatarItemVariants,
-} from "./avatar-group/avatar-group";
-export { Skeleton } from "./skeleton/skeleton";
-export { Separator } from "./separator/separator";
+} from "./molecules/avatar-group/avatar-group";
+export { Skeleton } from "./atoms/skeleton/skeleton";
+export { Separator } from "./atoms/separator/separator";
 export {
   Alert,
   AlertDescription,
   AlertTitle,
   alertVariants,
-} from "./alert/alert";
+} from "./atoms/alert/alert";
 export {
   AgentActivity,
   type AgentActivityLabels,
@@ -535,33 +554,36 @@ export {
   AgentStepTitle,
   type AgentStepTitleProps,
   useAgentStepStatus,
-} from "./agent-activity/agent-activity";
+} from "./atoms/agent-activity/agent-activity";
 export {
   StatCard,
   type StatCardProps,
   statCardVariants,
-} from "./stat-card/stat-card";
-export { StaticCode, type StaticCodeProps } from "./static-code/static-code";
+} from "./molecules/stat-card/stat-card";
+export {
+  StaticCode,
+  type StaticCodeProps,
+} from "./organisms/static-code/static-code";
 export {
   dotVariants,
   StatusIndicator,
   type StatusIndicatorProps,
   statusIndicatorVariants,
-} from "./status-indicator/status-indicator";
+} from "./atoms/status-indicator/status-indicator";
 
 // New shadcn primitives - Layout
-export { AspectRatio } from "./aspect-ratio/aspect-ratio";
-export { ScrollArea, ScrollBar } from "./scroll-area/scroll-area";
+export { AspectRatio } from "./atoms/aspect-ratio/aspect-ratio";
+export { ScrollArea, ScrollBar } from "./atoms/scroll-area/scroll-area";
 export {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "./resizable/resizable";
+} from "./atoms/resizable/resizable";
 export {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "./collapsible/collapsible";
+} from "./atoms/collapsible/collapsible";
 export {
   Carousel,
   type CarouselApi,
@@ -569,16 +591,19 @@ export {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./carousel/carousel";
+} from "./molecules/carousel/carousel";
 
 // New shadcn primitives - Utilities
-export { BorderBeam, type BorderBeamProps } from "./border-beam/border-beam";
+export {
+  BorderBeam,
+  type BorderBeamProps,
+} from "./atoms/border-beam/border-beam";
 export {
   ActivityHeatmap,
   type ActivityHeatmapItem,
   type ActivityHeatmapProps,
-} from "./activity-heatmap/activity-heatmap";
-export { Calendar, type CalendarProps } from "./calendar/calendar";
+} from "./organisms/activity-heatmap/activity-heatmap";
+export { Calendar, type CalendarProps } from "./molecules/calendar/calendar";
 export {
   type ChoroplethColorScale,
   ChoroplethLegend,
@@ -589,18 +614,18 @@ export {
   type ChoroplethRegion,
   ChoroplethTooltip,
   type ChoroplethTooltipProps,
-} from "./choropleth-map/choropleth-map";
+} from "./organisms/choropleth-map/choropleth-map";
 export {
   ChronoEvent,
   type ChronoEventProps,
   ChronologicalTimeline,
   type ChronologicalTimelineProps,
   type ChronoMedia,
-} from "./chronological-timeline/chronological-timeline";
+} from "./organisms/chronological-timeline/chronological-timeline";
 export {
   CountdownTimer,
   type CountdownTimerProps,
-} from "./countdown-timer/countdown-timer";
+} from "./molecules/countdown-timer/countdown-timer";
 export {
   type GeoJSONPolygon,
   type GeoPosition,
@@ -617,8 +642,8 @@ export {
   type MapPopupProps,
   MapZoomIn,
   MapZoomOut,
-} from "./map-2d/map-2d";
-export { Marquee, type MarqueeProps } from "./marquee/marquee";
+} from "./organisms/map-2d/map-2d";
+export { Marquee, type MarqueeProps } from "./atoms/marquee/marquee";
 export {
   MapTimeline,
   type MapTimelineColor,
@@ -632,25 +657,25 @@ export {
   MapTimelinePlayButton,
   type MapTimelineProps,
   MapTimelineSlider,
-} from "./map-timeline/map-timeline";
+} from "./organisms/map-timeline/map-timeline";
 export {
   NumberTicker,
   type NumberTickerProps,
-} from "./number-ticker/number-ticker";
-export { Spinner, type SpinnerProps } from "./spinner/spinner";
+} from "./atoms/number-ticker/number-ticker";
+export { Spinner, type SpinnerProps } from "./atoms/spinner/spinner";
 export {
   UnicodeSpinner,
   type UnicodeSpinnerAnimation,
   type UnicodeSpinnerProps,
-} from "./spinner/unicode-spinner";
+} from "./atoms/spinner/unicode-spinner";
 export {
   WorldClockBar,
   type WorldClockBarProps,
   type WorldClockBarZone,
-} from "./world-clock-bar/world-clock-bar";
+} from "./molecules/world-clock-bar/world-clock-bar";
 
 // Content components
-export { CodeBlock } from "./code-block/code-block";
+export { CodeBlock } from "./organisms/code-block/code-block";
 export {
   CopyButton,
   type CopyButtonProps,
@@ -658,30 +683,30 @@ export {
   useCopyToClipboard,
   type UseCopyToClipboardOptions,
   type UseCopyToClipboardResult,
-} from "./copy-button/copy-button";
-export { MDXContent } from "./mdx-content/mdx-content";
+} from "./molecules/copy-button/copy-button";
+export { MDXContent } from "./organisms/mdx-content/mdx-content";
 
 // Layout components
 export {
   CanvasShell,
   type CanvasShellProps,
-} from "./canvas-shell/canvas-shell";
+} from "./templates/canvas-shell/canvas-shell";
 export {
   type CanvasShellInsets,
   type CanvasShellRouteConfig,
-} from "./canvas-shell/canvas-shell-route-config";
+} from "./templates/canvas-shell/canvas-shell-route-config";
 export {
   CanvasView,
   type CanvasViewHandle,
   type CanvasViewport,
   type CanvasViewProps,
-} from "./canvas-view/canvas-view";
-export { BottomBar, type BottomBarProps } from "./bottom-bar/bottom-bar";
+} from "./organisms/canvas-view/canvas-view";
+export { BottomBar, type BottomBarProps } from "./atoms/bottom-bar/bottom-bar";
 export {
   type ChatDockMessage,
   ChatDockSection,
   type ChatDockSectionProps,
-} from "./chat-dock-section/chat-dock-section";
+} from "./molecules/chat-dock-section/chat-dock-section";
 export {
   Globe3D,
   type Globe3DLabels,
@@ -692,8 +717,11 @@ export {
   type GlobeCoord,
   GlobeMarker,
   type GlobeMarkerProps,
-} from "./globe-3d/globe-3d";
-export { GlassPanel, type GlassPanelProps } from "./glass-panel/glass-panel";
+} from "./organisms/globe-3d/globe-3d";
+export {
+  GlassPanel,
+  type GlassPanelProps,
+} from "./atoms/glass-panel/glass-panel";
 export {
   GeographyQuizMap,
   type GeographyQuizMapLabels,
@@ -704,19 +732,19 @@ export {
   type QuizAnswer,
   type QuizQuestion,
   type QuizRegion,
-} from "./geography-quiz-map/geography-quiz-map";
+} from "./organisms/geography-quiz-map/geography-quiz-map";
 export {
   InfinitePlane,
   type InfinitePlaneLabels,
   type InfinitePlanePattern,
   type InfinitePlaneProps,
-} from "./infinite-plane/infinite-plane";
-export { LeftRail, type LeftRailProps } from "./left-rail/left-rail";
+} from "./atoms/infinite-plane/infinite-plane";
+export { LeftRail, type LeftRailProps } from "./atoms/left-rail/left-rail";
 export {
   type MiniMapMarker,
   MiniMapPanel,
   type MiniMapPanelProps,
-} from "./mini-map-panel/mini-map-panel";
+} from "./atoms/mini-map-panel/mini-map-panel";
 export {
   OverviewBoard,
   type OverviewBoardItem,
@@ -724,36 +752,36 @@ export {
   OverviewCard,
   type OverviewCardProps,
   type OverviewCardTone,
-} from "./overview-board/overview-board";
+} from "./molecules/overview-board/overview-board";
 export {
   NavbarSaas,
   type NavbarSaasProps,
   type NavItem,
-} from "./navbar-saas/navbar-saas";
-export { useMobile } from "./navbar-saas/use-mobile";
-export { RightDock, type RightDockProps } from "./right-dock/right-dock";
-export { Sidebar } from "./sidebar/sidebar";
-export type { SidebarItem, SidebarSection } from "./sidebar/sidebar";
+} from "./organisms/navbar-saas/navbar-saas";
+export { useMobile } from "./organisms/navbar-saas/use-mobile";
+export { RightDock, type RightDockProps } from "./atoms/right-dock/right-dock";
+export { Sidebar } from "./molecules/sidebar/sidebar";
+export type { SidebarItem, SidebarSection } from "./molecules/sidebar/sidebar";
 export {
   SidebarProvider,
   useSidebar,
-} from "./sidebar-provider/sidebar-provider";
-export { TableOfContents } from "./table-of-contents/table-of-contents";
-export { TopBar, type TopBarProps } from "./top-bar/top-bar";
+} from "./atoms/sidebar-provider/sidebar-provider";
+export { TableOfContents } from "./atoms/table-of-contents/table-of-contents";
+export { TopBar, type TopBarProps } from "./atoms/top-bar/top-bar";
 export {
   type ViewportBookmark,
   ViewportBookmarks,
   type ViewportBookmarksLabels,
   type ViewportBookmarksProps,
-} from "./viewport-bookmarks/viewport-bookmarks";
+} from "./atoms/viewport-bookmarks/viewport-bookmarks";
 export {
   WorldBreadcrumbs,
   type WorldBreadcrumbsLabels,
   type WorldBreadcrumbsProps,
   type WorldCrumb,
   type WorldCrumbKind,
-} from "./world-breadcrumbs/world-breadcrumbs";
-export { ZoomHUD, type ZoomHUDProps } from "./zoom-hud/zoom-hud";
+} from "./atoms/world-breadcrumbs/world-breadcrumbs";
+export { ZoomHUD, type ZoomHUDProps } from "./molecules/zoom-hud/zoom-hud";
 
 // Blog components
 export {
@@ -761,10 +789,13 @@ export {
   type ActivityLogItem,
   type ActivityLogProps,
   type ActivityLogTone,
-} from "./activity-log/activity-log";
-export { BlogCard, ContentCard } from "./blog-card/blog-card";
-export { CategoryFilter } from "./category-filter/category-filter";
-export { Pagination, type PaginationProps } from "./pagination/pagination";
+} from "./molecules/activity-log/activity-log";
+export { BlogCard, ContentCard } from "./molecules/blog-card/blog-card";
+export { CategoryFilter } from "./molecules/category-filter/category-filter";
+export {
+  Pagination,
+  type PaginationProps,
+} from "./molecules/pagination/pagination";
 export {
   ParallelTimeline,
   type ParallelTimelineColor,
@@ -773,74 +804,77 @@ export {
   type ParallelTimelineLabels,
   type ParallelTimelineProps,
   type ParallelTimelineTrack,
-} from "./parallel-timeline/parallel-timeline";
-export { SearchBar } from "./search-bar/search-bar";
+} from "./organisms/parallel-timeline/parallel-timeline";
+export { SearchBar } from "./molecules/search-bar/search-bar";
 export {
   ScopeSelector,
   type ScopeSelectorNode,
   type ScopeSelectorProps,
   type ScopeSelectorSelection,
-} from "./scope-selector/scope-selector";
+} from "./molecules/scope-selector/scope-selector";
 export {
   UsageBreakdown,
   type UsageBreakdownItem,
   type UsageBreakdownProps,
   type UsageBreakdownTone,
-} from "./usage-breakdown/usage-breakdown";
+} from "./molecules/usage-breakdown/usage-breakdown";
 export {
   type PlatformConfig,
   type SharePlatform,
   ShareSection,
-} from "./share-section/share-section";
+} from "./atoms/share-section/share-section";
 
 // Registry/Documentation components
-export { SearchDialog, type SearchItem } from "./search-dialog/search-dialog";
+export {
+  SearchDialog,
+  type SearchItem,
+} from "./organisms/search-dialog/search-dialog";
 
 // Theme & Language providers
-export { LangProvider } from "./lang-provider/lang-provider";
-export { ThemePresetProvider } from "./theme-preset-provider/theme-preset-provider";
-export { ThemeProvider } from "./theme-provider/theme-provider";
+export { LangProvider } from "./atoms/lang-provider/lang-provider";
+export { ThemePresetProvider } from "./atoms/theme-preset-provider/theme-preset-provider";
+export { ThemeProvider } from "./atoms/theme-provider/theme-provider";
 export {
   ThemeSwitcher,
   type ThemeSwitcherProps,
-} from "./theme-switcher/theme-switcher";
-export { ThemeToggle } from "./theme-toggle/theme-toggle";
+} from "./atoms/theme-switcher/theme-switcher";
+export { ThemeToggle } from "./molecules/theme-toggle/theme-toggle";
 
 // Feature components
 export {
   CandlestickChart,
   type CandlestickChartProps,
   type CandlestickDatum,
-} from "./candlestick-chart/candlestick-chart";
+} from "./organisms/candlestick-chart/candlestick-chart";
 export {
   CreditBadge,
   type CreditBadgeProps,
   type CreditBadgeStatus,
-} from "./credit-badge/credit-badge";
+} from "./molecules/credit-badge/credit-badge";
 export {
   MarketTreemap,
   type MarketTreemapItem,
   type MarketTreemapProps,
-} from "./market-treemap/market-treemap";
+} from "./organisms/market-treemap/market-treemap";
 export {
   OrderBook,
   type OrderBookLevel,
   type OrderBookProps,
-} from "./order-book/order-book";
-export { ProfileSection } from "./profile-section/profile-section";
+} from "./atoms/order-book/order-book";
+export { ProfileSection } from "./molecules/profile-section/profile-section";
 export {
   type PromptTemplate,
   type PromptTemplateCategory,
   PromptTemplates,
   type PromptTemplatesLabels,
   type PromptTemplatesProps,
-} from "./prompt-templates/prompt-templates";
+} from "./molecules/prompt-templates/prompt-templates";
 export {
   PlanBadge,
   type PlanBadgeProps,
   type PlanBadgeState,
   type PlanBadgeTier,
-} from "./plan-badge/plan-badge";
+} from "./molecules/plan-badge/plan-badge";
 export {
   type PricingFeature,
   type PricingPeriod,
@@ -849,12 +883,12 @@ export {
   type PricingPlanProps,
   PricingTable,
   type PricingTableProps,
-} from "./pricing-table/pricing-table";
+} from "./molecules/pricing-table/pricing-table";
 export {
   RoleBadge,
   type RoleBadgeProps,
   type RoleBadgeRole,
-} from "./role-badge/role-badge";
+} from "./molecules/role-badge/role-badge";
 export {
   type RouteColor,
   type RouteLineStyle,
@@ -862,12 +896,12 @@ export {
   type RouteMapLabels,
   type RouteMapProps,
   type RouteWaypoint,
-} from "./route-map/route-map";
+} from "./organisms/route-map/route-map";
 export {
   SparklineGrid,
   type SparklineGridItem,
   type SparklineGridProps,
-} from "./sparkline-grid/sparkline-grid";
+} from "./atoms/sparkline-grid/sparkline-grid";
 export {
   StoryMap,
   StoryMapChapter,
@@ -876,59 +910,65 @@ export {
   type StoryMapLabels,
   type StoryMapMedia,
   type StoryMapProps,
-} from "./story-map/story-map";
+} from "./organisms/story-map/story-map";
 export {
   SubscriptionCard,
   type SubscriptionCardProps,
   type SubscriptionCardStatus,
-} from "./subscription-card/subscription-card";
-export { TLDRSection } from "./tldr-section/tldr-section";
+} from "./organisms/subscription-card/subscription-card";
+export { TLDRSection } from "./atoms/tldr-section/tldr-section";
 export {
   TickerTape,
   type TickerTapeItem,
   type TickerTapeProps,
-} from "./ticker-tape/ticker-tape";
-export { WalletCard, type WalletCardProps } from "./wallet-card/wallet-card";
+} from "./molecules/ticker-tape/ticker-tape";
+export {
+  WalletCard,
+  type WalletCardProps,
+} from "./organisms/wallet-card/wallet-card";
 export {
   Watchlist,
   type WatchlistItem,
   type WatchlistProps,
-} from "./watchlist/watchlist";
-export { AreaChart } from "./chart/area-chart";
-export { BarChart } from "./chart/bar-chart";
-export { LineChart } from "./chart/line-chart";
+} from "./atoms/watchlist/watchlist";
+export { AreaChart } from "./organisms/chart/area-chart";
+export { BarChart } from "./organisms/chart/bar-chart";
+export { LineChart } from "./organisms/chart/line-chart";
 export {
   type ContributionDay,
   ContributionGraph,
   type ContributionGraphProps,
-} from "./contribution-graph/contribution-graph";
-export { GaugeChart, type GaugeChartProps } from "./gauge-chart/gauge-chart";
+} from "./organisms/contribution-graph/contribution-graph";
+export {
+  GaugeChart,
+  type GaugeChartProps,
+} from "./atoms/gauge-chart/gauge-chart";
 export {
   PieChart,
   type PieChartProps,
   type PieDatum,
-} from "./pie-chart/pie-chart";
+} from "./organisms/pie-chart/pie-chart";
 export {
   RadarChart,
   type RadarChartProps,
   type RadarDatum,
-} from "./radar-chart/radar-chart";
+} from "./organisms/radar-chart/radar-chart";
 export {
   SankeyChart,
   type SankeyChartProps,
   type SankeyLink,
   type SankeyNode,
-} from "./sankey-chart/sankey-chart";
+} from "./organisms/sankey-chart/sankey-chart";
 export {
   LiveFeed,
   type LiveFeedEvent,
   type LiveFeedProps,
-} from "./live-feed/live-feed";
+} from "./molecules/live-feed/live-feed";
 export {
   MetricGauge,
   type MetricGaugeProps,
   type MetricGaugeThreshold,
-} from "./metric-gauge/metric-gauge";
+} from "./molecules/metric-gauge/metric-gauge";
 export {
   ModelComparison,
   ModelComparisonColumn,
@@ -940,29 +980,29 @@ export {
   ModelComparisonVote,
   type ModelComparisonVoteProps,
   type ModelComparisonVoteValue,
-} from "./model-comparison/model-comparison";
+} from "./molecules/model-comparison/model-comparison";
 export {
   SeverityBadge,
   type SeverityBadgeLevel,
   type SeverityBadgeProps,
   severityBadgeVariants,
-} from "./severity-badge/severity-badge";
+} from "./atoms/severity-badge/severity-badge";
 export {
   StatusBoard,
   type StatusBoardItem,
   type StatusBoardProps,
   type StatusBoardStatus,
-} from "./status-board/status-board";
+} from "./molecules/status-board/status-board";
 
 // Text components
 export {
   AnimatedText,
   type AnimatedTextProps,
-} from "./animated-text/animated-text";
+} from "./atoms/animated-text/animated-text";
 export {
   TruncatedText,
   type TruncatedTextProps,
-} from "./truncated-text/truncated-text";
+} from "./atoms/truncated-text/truncated-text";
 
 // Tutorial/Educational MDX components
 export {
@@ -974,23 +1014,23 @@ export {
   type AccordionProps,
   AccordionTrigger,
   type AccordionTriggerProps,
-} from "./accordion/accordion";
+} from "./atoms/accordion/accordion";
 export {
   Callout,
   type CalloutProps,
   type CalloutVariant,
-} from "./callout/callout";
+} from "./atoms/callout/callout";
 export {
   Annotation,
   type AnnotationProps,
   Highlight,
   type HighlightProps,
-} from "./annotation/annotation";
+} from "./molecules/annotation/annotation";
 export {
   Checklist,
   type ChecklistItem,
   type ChecklistProps,
-} from "./checklist/checklist";
+} from "./atoms/checklist/checklist";
 export {
   CivilizationCard,
   type CivilizationCardColor,
@@ -999,25 +1039,25 @@ export {
   type CivilizationCardProps,
   CivilizationComparison,
   type CivilizationComparisonProps,
-} from "./civilization-card/civilization-card";
+} from "./molecules/civilization-card/civilization-card";
 export {
   CodePlayground,
   type CodePlaygroundProps,
   FileTree,
   type FileTreeProps,
-} from "./code-playground/code-playground";
+} from "./organisms/code-playground/code-playground";
 export {
   BeforeAfter,
   type BeforeAfterProps,
   Comparison,
   type ComparisonProps,
-} from "./comparison/comparison";
+} from "./atoms/comparison/comparison";
 export {
   EmptyState,
   type EmptyStateProps,
   type EmptyStateSize,
   emptyStateVariants,
-} from "./empty-state/empty-state";
+} from "./atoms/empty-state/empty-state";
 export {
   type EraColor,
   EraColumn,
@@ -1031,16 +1071,24 @@ export {
   EraHighlight,
   type EraHighlightProps,
   useEraColumnColor,
-} from "./era-comparison/era-comparison";
-export { Exercise, type ExerciseProps } from "./exercise/exercise";
-export { FAQ, FAQItem, type FAQItemProps, type FAQProps } from "./faq/faq";
-export { Flashcard, type FlashcardProps } from "./flashcard/flashcard";
+} from "./atoms/era-comparison/era-comparison";
+export { Exercise, type ExerciseProps } from "./molecules/exercise/exercise";
+export {
+  FAQ,
+  FAQItem,
+  type FAQItemProps,
+  type FAQProps,
+} from "./atoms/faq/faq";
+export {
+  Flashcard,
+  type FlashcardProps,
+} from "./molecules/flashcard/flashcard";
 export {
   Glossary,
   type GlossaryProps,
   KeyConcept,
   type KeyConceptProps,
-} from "./key-concept/key-concept";
+} from "./atoms/key-concept/key-concept";
 export {
   LearningObjectives,
   type LearningObjectivesProps,
@@ -1048,7 +1096,7 @@ export {
   type PrerequisitesProps,
   Summary,
   type SummaryProps,
-} from "./learning-objectives/learning-objectives";
+} from "./atoms/learning-objectives/learning-objectives";
 export {
   Curriculum,
   CurriculumLesson,
@@ -1058,7 +1106,7 @@ export {
   type CurriculumProps,
   type LessonDifficulty,
   type LessonStatus,
-} from "./curriculum/curriculum";
+} from "./atoms/curriculum/curriculum";
 export {
   type AnnotationColor,
   type AnnotationRegion,
@@ -1077,16 +1125,16 @@ export {
   type PrimarySourceViewerProps,
   PrimarySourceZoomIn,
   PrimarySourceZoomOut,
-} from "./primary-source-viewer/primary-source-viewer";
+} from "./organisms/primary-source-viewer/primary-source-viewer";
 export {
   ProgressBar,
   type ProgressBarProps,
-} from "./progress-bar/progress-bar";
+} from "./atoms/progress-bar/progress-bar";
 export {
   ContentCard as ProgressCard,
   type ContentCardProgress as ProgressCardProgress,
   type ContentCardProps as ProgressCardProps,
-} from "./progress-card/progress-card";
+} from "./molecules/progress-card/progress-card";
 export {
   ProgressTracker,
   ProgressTrackerBadge,
@@ -1105,27 +1153,27 @@ export {
   ProgressTrackerStats,
   type ProgressTrackerStatsProps,
   useProgressTrackerContext,
-} from "./progress-tracker/progress-tracker";
+} from "./molecules/progress-tracker/progress-tracker";
 export {
   CommonMistake,
   type CommonMistakeProps,
   ProTip,
   type ProTipProps,
   type ProTipVariant,
-} from "./pro-tip/pro-tip";
-export { Quiz, type QuizOption, type QuizProps } from "./quiz/quiz";
-export { Rating, type RatingProps } from "./rating/rating";
+} from "./atoms/pro-tip/pro-tip";
+export { Quiz, type QuizOption, type QuizProps } from "./atoms/quiz/quiz";
+export { Rating, type RatingProps } from "./atoms/rating/rating";
 export {
   Step,
   StepByStep,
   type StepByStepProps,
   type StepProps,
-} from "./step-by-step/step-by-step";
+} from "./atoms/step-by-step/step-by-step";
 export {
   Stepper,
   type StepperProps,
   type StepperStep,
-} from "./stepper/stepper";
+} from "./atoms/stepper/stepper";
 export {
   Tabs,
   TabsContent,
@@ -1135,90 +1183,93 @@ export {
   type TabsProps,
   TabsTrigger,
   type TabsTriggerProps,
-} from "./tabs/tabs";
+} from "./atoms/tabs/tabs";
 export {
   SimpleTerminal,
   type SimpleTerminalProps,
   Terminal,
   type TerminalLine,
   type TerminalProps,
-} from "./terminal/terminal";
-export { VideoEmbed, type VideoEmbedProps } from "./video-embed/video-embed";
+} from "./organisms/terminal/terminal";
+export {
+  VideoEmbed,
+  type VideoEmbedProps,
+} from "./atoms/video-embed/video-embed";
 export {
   type FilterUpdates,
   TutorialFilters,
   type TutorialFiltersLabels,
   type TutorialFiltersProps,
-} from "./tutorial-filters/tutorial-filters";
+} from "./molecules/tutorial-filters/tutorial-filters";
 export {
   TutorialCard,
   type TutorialCardLabels,
   type TutorialCardMeta,
   type TutorialCardProgress,
   type TutorialCardProps,
-} from "./tutorial-card/tutorial-card";
+} from "./molecules/tutorial-card/tutorial-card";
 export {
   TutorialComplete,
   type TutorialCompleteLabels,
   type TutorialCompleteProps,
   type TutorialCompleteRelatedContent,
   type TutorialCompleteSection,
-} from "./tutorial-complete/tutorial-complete";
+} from "./organisms/tutorial-complete/tutorial-complete";
 export {
   TutorialIntroContent,
   type TutorialIntroContentProps,
-} from "./tutorial-intro-content/tutorial-intro-content";
+} from "./atoms/tutorial-intro-content/tutorial-intro-content";
 export {
   mdxComponents,
   TutorialMDX,
   type TutorialMDXProps,
-} from "./tutorial-mdx/tutorial-mdx";
-export { Tour, type TourProps, type TourStep } from "./tour/tour";
+} from "./organisms/tutorial-mdx/tutorial-mdx";
+export { Tour, type TourProps, type TourStep } from "./molecules/tour/tour";
 
 // Tutorial/Interactive components
 export {
   CompletionDialog,
   type CompletionDialogProps,
-} from "./completion-dialog/completion-dialog";
+} from "./molecules/completion-dialog/completion-dialog";
 export {
   ContentIntro,
   type ContentIntroLabels,
   type ContentIntroProps,
   type ContentIntroSection,
-} from "./content-intro/content-intro";
+} from "./molecules/content-intro/content-intro";
 export {
   FilterBar,
   type FilterBarLabels,
   type FilterBarProps,
   type FilterOption,
-} from "./filter-bar/filter-bar";
+} from "./molecules/filter-bar/filter-bar";
 export {
   FloatingActionButton,
   type FloatingActionButtonProps,
-} from "./floating-action-button/floating-action-button";
+} from "./atoms/floating-action-button/floating-action-button";
 export {
   FloatingToolbar,
   type FloatingToolbarAction,
   type FloatingToolbarLabels,
   type FloatingToolbarProps,
-} from "./floating-toolbar/floating-toolbar";
+} from "./atoms/floating-toolbar/floating-toolbar";
 export {
   type SelectionBounds,
   SelectionHalo,
   type SelectionHaloLabels,
   type SelectionHaloProps,
-} from "./selection-halo/selection-halo";
+} from "./atoms/selection-halo/selection-halo";
 export {
   type SnapGuide,
   SnapGuides,
   type SnapGuidesLabels,
   type SnapGuidesProps,
-} from "./snap-guides/snap-guides";
+} from "./atoms/snap-guides/snap-guides";
 export {
   type KeyboardShortcut,
   KeyboardShortcutsHelp,
   type KeyboardShortcutsHelpProps,
-} from "./keyboard-shortcuts-help/keyboard-shortcuts-help";
+} from "./atoms/keyboard-shortcuts-help/keyboard-shortcuts-help";
 export {
   KnowledgeCheck,
   type KnowledgeCheckAnswer,
@@ -1228,22 +1279,22 @@ export {
   type KnowledgeCheckQuestion,
   type KnowledgeCheckQuestionType,
   type KnowledgeCheckScore,
-} from "./knowledge-check/knowledge-check";
+} from "./molecules/knowledge-check/knowledge-check";
 export {
   Slideshow,
   type SlideshowLabels,
   type SlideshowProps,
   type SlideshowSection,
-} from "./slideshow/slideshow";
+} from "./organisms/slideshow/slideshow";
 export {
   StepNavigation,
   type StepNavigationProps,
-} from "./step-navigation/step-navigation";
+} from "./atoms/step-navigation/step-navigation";
 export {
   TableOfContentsPanel,
   type TableOfContentsPanelProps,
   type TOCSection,
-} from "./table-of-contents-panel/table-of-contents-panel";
+} from "./atoms/table-of-contents-panel/table-of-contents-panel";
 
 // Social/Sharing components
 export {
@@ -1251,50 +1302,50 @@ export {
   type ShareDialogLabels,
   type SharePlatform as ShareDialogPlatform,
   type ShareDialogProps,
-} from "./share-dialog/share-dialog";
+} from "./organisms/share-dialog/share-dialog";
 export {
   type SharePlatformConfig,
   SocialFAB,
   type SocialFabActionConfig,
   type SocialFabLabels,
   type SocialFabProps,
-} from "./social-fab/social-fab";
-export { useSocialFab } from "./social-fab/use-social-fab";
+} from "./atoms/social-fab/social-fab";
+export { useSocialFab } from "./atoms/social-fab/use-social-fab";
 
 // Scroll/View components
 export {
   HorizontalScrollRow,
   type HorizontalScrollRowProps,
-} from "./horizontal-scroll-row/horizontal-scroll-row";
+} from "./molecules/horizontal-scroll-row/horizontal-scroll-row";
 export {
   FollowMode,
   type FollowModeColor,
   type FollowModeLabels,
   type FollowModeProps,
-} from "./follow-mode/follow-mode";
+} from "./atoms/follow-mode/follow-mode";
 export {
   HandoffBeacon,
   type HandoffBeaconLabels,
   type HandoffBeaconLevel,
   type HandoffBeaconProps,
-} from "./handoff-beacon/handoff-beacon";
+} from "./atoms/handoff-beacon/handoff-beacon";
 export {
   type HeatGradient,
   HeatMapOverlay,
   type HeatMapOverlayLabels,
   type HeatMapOverlayProps,
   type HeatMapPoint,
-} from "./heat-map-overlay/heat-map-overlay";
+} from "./organisms/heat-map-overlay/heat-map-overlay";
 export {
   type ViewOption,
   ViewSwitcher,
   type ViewSwitcherProps,
-} from "./view-switcher/view-switcher";
+} from "./atoms/view-switcher/view-switcher";
 export {
   type WorkspaceOption,
   WorkspaceSwitcher,
   type WorkspaceSwitcherProps,
-} from "./workspace-switcher/workspace-switcher";
+} from "./atoms/workspace-switcher/workspace-switcher";
 
 // Flow/Diagram components
 export {
@@ -1311,7 +1362,7 @@ export {
   useFlowDiagram,
   type UseFlowDiagramOptions,
   type UseFlowDiagramReturn,
-} from "./flow-diagram";
+} from "./organisms/flow-diagram";
 export {
   GanttChart,
   type GanttChartLabels,
@@ -1321,7 +1372,7 @@ export {
   type GanttMilestone,
   type GanttScale,
   type GanttTask,
-} from "./gantt-chart/gantt-chart";
+} from "./organisms/gantt-chart/gantt-chart";
 
 // Canvas/Object components
 export {
@@ -1329,53 +1380,56 @@ export {
   type AlertPulseLabels,
   type AlertPulseProps,
   type AlertPulseSeverity,
-} from "./alert-pulse/alert-pulse";
-export { AnchorPort, type AnchorPortProps } from "./anchor-port/anchor-port";
+} from "./atoms/alert-pulse/alert-pulse";
+export {
+  AnchorPort,
+  type AnchorPortProps,
+} from "./atoms/anchor-port/anchor-port";
 export {
   type ActivityEvent,
   type ActivityStripTone,
   BottomActivityStrip,
   type BottomActivityStripLabels,
   type BottomActivityStripProps,
-} from "./bottom-activity-strip/bottom-activity-strip";
+} from "./atoms/bottom-activity-strip/bottom-activity-strip";
 export {
   CommentPin,
   type CommentPinLabels,
   type CommentPinProps,
   type CommentPinState,
-} from "./comment-pin/comment-pin";
+} from "./atoms/comment-pin/comment-pin";
 export {
   ConnectorEdge,
   type ConnectorEdgePoint,
   type ConnectorEdgeProps,
-} from "./connector-edge/connector-edge";
+} from "./molecules/connector-edge/connector-edge";
 export {
   ContextLens,
   type ContextLensFocus,
   type ContextLensLabels,
   type ContextLensProps,
-} from "./context-lens/context-lens";
-export { EdgeLabel, type EdgeLabelProps } from "./edge-label/edge-label";
-export { GroupHull, type GroupHullProps } from "./group-hull/group-hull";
+} from "./atoms/context-lens/context-lens";
+export { EdgeLabel, type EdgeLabelProps } from "./atoms/edge-label/edge-label";
+export { GroupHull, type GroupHullProps } from "./atoms/group-hull/group-hull";
 export {
   HeatOverlay,
   type HeatOverlayLabels,
   type HeatOverlayProps,
   type HeatOverlayTone,
   type HeatPoint,
-} from "./heat-overlay/heat-overlay";
+} from "./atoms/heat-overlay/heat-overlay";
 export {
   JarvisDock,
   type JarvisDockAction,
   type JarvisDockLabels,
   type JarvisDockProps,
   type JarvisDockTone,
-} from "./jarvis-dock/jarvis-dock";
+} from "./atoms/jarvis-dock/jarvis-dock";
 export {
   LiveCursor,
   type LiveCursorLabels,
   type LiveCursorProps,
-} from "./live-cursor/live-cursor";
+} from "./atoms/live-cursor/live-cursor";
 export {
   MetricCluster,
   type MetricClusterAnchor,
@@ -1383,76 +1437,76 @@ export {
   type MetricClusterLabels,
   type MetricClusterProps,
   type MetricClusterTone,
-} from "./metric-cluster/metric-cluster";
+} from "./atoms/metric-cluster/metric-cluster";
 export {
   type LassoRect,
   MultiSelectLasso,
   type MultiSelectLassoLabels,
   type MultiSelectLassoProps,
-} from "./multi-select-lasso/multi-select-lasso";
+} from "./atoms/multi-select-lasso/multi-select-lasso";
 export {
   ObjectCard,
   type ObjectCardAction,
   type ObjectCardMetric,
   type ObjectCardProps,
-} from "./object-card/object-card";
+} from "./molecules/object-card/object-card";
 export {
   ObjectHandle,
   type ObjectHandleProps,
-} from "./object-handle/object-handle";
+} from "./atoms/object-handle/object-handle";
 export {
   ObjectInspector,
   type ObjectInspectorKind,
   type ObjectInspectorLabels,
   type ObjectInspectorProps,
   type ObjectInspectorStatus,
-} from "./object-inspector/object-inspector";
+} from "./atoms/object-inspector/object-inspector";
 export {
   PlaybackGhost,
   type PlaybackGhostKind,
   type PlaybackGhostLabels,
   type PlaybackGhostProps,
-} from "./playback-ghost/playback-ghost";
+} from "./atoms/playback-ghost/playback-ghost";
 export {
   PolicyDeliveryPanel,
   type PolicyDeliveryPanelLabels,
   type PolicyDeliveryPanelProps,
   type PolicyEntry,
   type PolicyStatus,
-} from "./policy-delivery-panel/policy-delivery-panel";
+} from "./atoms/policy-delivery-panel/policy-delivery-panel";
 export {
   PresenceStack,
   type PresenceStackLabels,
   type PresenceStackProps,
   type PresenceStatus,
   type PresenceUser,
-} from "./presence-stack/presence-stack";
+} from "./atoms/presence-stack/presence-stack";
 export {
   PresenceSyncIndicator,
   type PresenceSyncIndicatorLabels,
   type PresenceSyncIndicatorProps,
   type PresenceSyncState,
-} from "./presence-sync-indicator/presence-sync-indicator";
+} from "./atoms/presence-sync-indicator/presence-sync-indicator";
 export {
   type PropertyEntry,
   PropertySection,
   type PropertySectionLabels,
   type PropertySectionProps,
-} from "./property-section/property-section";
+} from "./atoms/property-section/property-section";
 export {
   type RelationshipDirection,
   type RelationshipEdge,
   RelationshipInspector,
   type RelationshipInspectorLabels,
   type RelationshipInspectorProps,
-} from "./relationship-inspector/relationship-inspector";
+} from "./atoms/relationship-inspector/relationship-inspector";
 export {
   type RoutingAssignment,
   RoutingAssignmentPanel,
   type RoutingAssignmentPanelLabels,
   type RoutingAssignmentPanelProps,
   type RoutingRole,
-} from "./routing-assignment-panel/routing-assignment-panel";
+} from "./atoms/routing-assignment-panel/routing-assignment-panel";
 export {
   type RunPhaseState,
   RunTimeline,
@@ -1460,7 +1514,7 @@ export {
   type RunTimelineLane,
   type RunTimelinePhase,
   type RunTimelineProps,
-} from "./run-timeline/run-timeline";
+} from "./organisms/run-timeline/run-timeline";
 export {
   type RuntimeMetric,
   type RuntimeMetricTone,
@@ -1468,45 +1522,45 @@ export {
   RuntimeOverviewPanel,
   type RuntimeOverviewPanelLabels,
   type RuntimeOverviewPanelProps,
-} from "./runtime-overview-panel/runtime-overview-panel";
+} from "./atoms/runtime-overview-panel/runtime-overview-panel";
 export {
   SelectionPresence,
   type SelectionPresenceLabels,
   type SelectionPresenceProps,
-} from "./selection-presence/selection-presence";
+} from "./atoms/selection-presence/selection-presence";
 export {
   type StateBadgeAnchor,
   StateBadgeOverlay,
   type StateBadgeOverlayLabels,
   type StateBadgeOverlayProps,
   type StateBadgeState,
-} from "./state-badge-overlay/state-badge-overlay";
+} from "./atoms/state-badge-overlay/state-badge-overlay";
 export {
   StickyMetric,
   type StickyMetricAnchor,
   type StickyMetricLabels,
   type StickyMetricProps,
   type StickyMetricTone,
-} from "./sticky-metric/sticky-metric";
+} from "./atoms/sticky-metric/sticky-metric";
 export {
   ThreadBubble,
   type ThreadBubbleLabels,
   type ThreadBubbleProps,
   type ThreadMessage,
-} from "./thread-bubble/thread-bubble";
+} from "./atoms/thread-bubble/thread-bubble";
 export {
   ThresholdRing,
   type ThresholdRingLabels,
   type ThresholdRingProps,
   type ThresholdRingTone,
-} from "./threshold-ring/threshold-ring";
+} from "./atoms/threshold-ring/threshold-ring";
 export {
   TimelineScrubber,
   type TimelineScrubberLabels,
   type TimelineScrubberProps,
   type TimelineScrubberTone,
   type TimelineTick,
-} from "./timeline-scrubber/timeline-scrubber";
+} from "./atoms/timeline-scrubber/timeline-scrubber";
 
 // AI/Chat components
 export {
@@ -1528,11 +1582,11 @@ export {
   ConversationTitle,
   type ConversationTitleProps,
   type ToolCall,
-} from "./conversation-thread/conversation-thread";
+} from "./molecules/conversation-thread/conversation-thread";
 export {
   InlineInput,
   type InlineInputProps,
-} from "./inline-input/inline-input";
+} from "./molecules/inline-input/inline-input";
 export {
   InteractiveTimeline,
   type InteractiveTimelineCategory,
@@ -1547,156 +1601,168 @@ export {
   type InteractiveTimelineTrack,
   InteractiveTimelineZoomIn,
   InteractiveTimelineZoomOut,
-} from "./interactive-timeline/interactive-timeline";
+} from "./organisms/interactive-timeline/interactive-timeline";
 export {
   type ModelInfo,
   ModelSelector,
   type ModelSelectorProps,
-} from "./model-selector/model-selector";
+} from "./organisms/model-selector/model-selector";
 export {
   SidebarToggle,
   type SidebarToggleProps,
-} from "./sidebar-toggle/sidebar-toggle";
+} from "./molecules/sidebar-toggle/sidebar-toggle";
 export {
   ThinkingBlock,
   type ThinkingBlockProps,
-} from "./thinking-block/thinking-block";
+} from "./atoms/thinking-block/thinking-block";
 
 // Motion / effect components (#413)
 export {
   AnimatedBeam,
   type AnimatedBeamProps,
-} from "./animated-beam/animated-beam";
+} from "./atoms/animated-beam/animated-beam";
 export {
   AnimatedGridPattern,
   type AnimatedGridPatternProps,
-} from "./animated-grid-pattern/animated-grid-pattern";
+} from "./atoms/animated-grid-pattern/animated-grid-pattern";
 export {
   AnimatedList,
   type AnimatedListProps,
-} from "./animated-list/animated-list";
+} from "./atoms/animated-list/animated-list";
 export {
   type AnimatedTab,
   AnimatedTabs,
   type AnimatedTabsProps,
-} from "./animated-tabs/animated-tabs";
+} from "./atoms/animated-tabs/animated-tabs";
 export {
   AnimatedTestimonials,
   type AnimatedTestimonialsProps,
   type Testimonial,
-} from "./animated-testimonials/animated-testimonials";
+} from "./atoms/animated-testimonials/animated-testimonials";
 export {
   AnimatedTooltip,
   type AnimatedTooltipProps,
   type TooltipSide,
-} from "./animated-tooltip/animated-tooltip";
+} from "./atoms/animated-tooltip/animated-tooltip";
 export {
   BentoCard,
   type BentoCardProps,
   BentoGrid,
   type BentoGridProps,
-} from "./bento-grid/bento-grid";
-export { BlurReveal, type BlurRevealProps } from "./blur-reveal/blur-reveal";
-export { CardFlip, type CardFlipProps } from "./card-flip/card-flip";
-export { Cursor, type CursorProps } from "./cursor/cursor";
+} from "./atoms/bento-grid/bento-grid";
+export {
+  BlurReveal,
+  type BlurRevealProps,
+} from "./atoms/blur-reveal/blur-reveal";
+export { CardFlip, type CardFlipProps } from "./atoms/card-flip/card-flip";
+export { Cursor, type CursorProps } from "./atoms/cursor/cursor";
 export {
   Dock,
   DockIcon,
   type DockIconProps,
   type DockProps,
-} from "./dock/dock";
-export { DotPattern, type DotPatternProps } from "./dot-pattern/dot-pattern";
+} from "./atoms/dock/dock";
+export {
+  DotPattern,
+  type DotPatternProps,
+} from "./atoms/dot-pattern/dot-pattern";
 export {
   type ExpandableCardItem,
   ExpandableCards,
   type ExpandableCardsProps,
-} from "./expandable-cards/expandable-cards";
+} from "./atoms/expandable-cards/expandable-cards";
 export {
   FloatingNavbar,
   type FloatingNavbarProps,
-} from "./floating-navbar/floating-navbar";
-export { GlassCard, type GlassCardProps } from "./glass-card/glass-card";
+} from "./atoms/floating-navbar/floating-navbar";
+export { GlassCard, type GlassCardProps } from "./atoms/glass-card/glass-card";
 export {
   GlassProgress,
   type GlassProgressProps,
-} from "./glass-progress/glass-progress";
+} from "./atoms/glass-progress/glass-progress";
 export {
   LiquidGlass,
   type LiquidGlassProps,
-} from "./liquid-glass/liquid-glass";
-export { Magnetic, type MagneticProps } from "./magnetic/magnetic";
+} from "./atoms/liquid-glass/liquid-glass";
+export { Magnetic, type MagneticProps } from "./atoms/magnetic/magnetic";
 export {
   MagneticButton,
   type MagneticButtonProps,
-} from "./magnetic-button/magnetic-button";
-export { Meteors, type MeteorsProps } from "./meteors/meteors";
-export { Particles, type ParticlesProps } from "./particles/particles";
+} from "./atoms/magnetic-button/magnetic-button";
+export { Meteors, type MeteorsProps } from "./atoms/meteors/meteors";
+export { Particles, type ParticlesProps } from "./atoms/particles/particles";
 export {
   ProgressiveBlur,
   type ProgressiveBlurDirection,
   type ProgressiveBlurProps,
-} from "./progressive-blur/progressive-blur";
+} from "./atoms/progressive-blur/progressive-blur";
 export {
   type RevealDirection,
   RevealText,
   type RevealTextProps,
-} from "./reveal-text/reveal-text";
+} from "./atoms/reveal-text/reveal-text";
 export {
   ScrambleText,
   type ScrambleTextProps,
-} from "./scramble-text/scramble-text";
+} from "./atoms/scramble-text/scramble-text";
 export {
   ScrollProgress,
   type ScrollProgressProps,
-} from "./scroll-progress/scroll-progress";
+} from "./atoms/scroll-progress/scroll-progress";
 export {
   ShimmerButton,
   type ShimmerButtonProps,
-} from "./shimmer-button/shimmer-button";
+} from "./atoms/shimmer-button/shimmer-button";
 export {
   ShimmerText,
   type ShimmerTextProps,
-} from "./shimmer-text/shimmer-text";
+} from "./atoms/shimmer-text/shimmer-text";
 export {
   ShineBorder,
   type ShineBorderProps,
-} from "./shine-border/shine-border";
+} from "./atoms/shine-border/shine-border";
 export {
   ShinyButton,
   type ShinyButtonProps,
-} from "./shiny-button/shiny-button";
-export { Sparkles, type SparklesProps } from "./sparkles/sparkles";
+} from "./atoms/shiny-button/shiny-button";
+export { Sparkles, type SparklesProps } from "./atoms/sparkles/sparkles";
 export {
   SpinningText,
   type SpinningTextProps,
-} from "./spinning-text/spinning-text";
+} from "./atoms/spinning-text/spinning-text";
 export {
   SpotlightCard,
   type SpotlightCardProps,
-} from "./spotlight-card/spotlight-card";
+} from "./atoms/spotlight-card/spotlight-card";
 export {
   TextAnimate,
   type TextAnimateAnimation,
   type TextAnimateProps,
-} from "./text-animate/text-animate";
-export { TextReveal, type TextRevealProps } from "./text-reveal/text-reveal";
+} from "./atoms/text-animate/text-animate";
+export {
+  TextReveal,
+  type TextRevealProps,
+} from "./atoms/text-reveal/text-reveal";
 export {
   TextShimmer,
   type TextShimmerProps,
-} from "./text-shimmer/text-shimmer";
-export { TiltCard, type TiltCardProps } from "./tilt-card/tilt-card";
-export { Typewriter, type TypewriterProps } from "./typewriter/typewriter";
-export { Reasoning, type ReasoningProps } from "./reasoning/reasoning";
+} from "./atoms/text-shimmer/text-shimmer";
+export { TiltCard, type TiltCardProps } from "./atoms/tilt-card/tilt-card";
+export {
+  Typewriter,
+  type TypewriterProps,
+} from "./atoms/typewriter/typewriter";
+export { Reasoning, type ReasoningProps } from "./atoms/reasoning/reasoning";
 export {
   ChainOfThought,
   type ChainOfThoughtProps,
   type ChainOfThoughtStatus,
   type ChainOfThoughtStep,
-} from "./chain-of-thought/chain-of-thought";
+} from "./atoms/chain-of-thought/chain-of-thought";
 export {
   PromptInput,
   type PromptInputProps,
-} from "./prompt-input/prompt-input";
+} from "./atoms/prompt-input/prompt-input";
 
 // Core primitives (#412)
 export {
@@ -1716,26 +1782,30 @@ export {
   type ParagraphProps,
   type TypographyVariant,
   typographyVariants,
-} from "./typography/typography";
+} from "./atoms/typography/typography";
 // The plain heading-element props alias — the canonical `HeadingProps` now
 // belongs to the `Heading` primitive (below).
-export { type HeadingProps as TypographyHeadingProps } from "./typography/typography";
-export { Link, type LinkProps, linkVariants } from "./link/link";
+export { type HeadingProps as TypographyHeadingProps } from "./atoms/typography/typography";
+export { Link, type LinkProps, linkVariants } from "./atoms/link/link";
 export {
   Toolbar,
   type ToolbarOrientation,
   type ToolbarProps,
   ToolbarSeparator,
   type ToolbarSeparatorProps,
-} from "./toolbar/toolbar";
-export { Meter, meterFillVariants, type MeterProps } from "./meter/meter";
-export { QrCode, type QrCodeLevel, type QrCodeProps } from "./qr-code/qr-code";
+} from "./atoms/toolbar/toolbar";
+export { Meter, meterFillVariants, type MeterProps } from "./atoms/meter/meter";
+export {
+  QrCode,
+  type QrCodeLevel,
+  type QrCodeProps,
+} from "./atoms/qr-code/qr-code";
 export {
   Grid,
   type GridColumns,
   type GridGap,
   type GridProps,
-} from "./grid/grid";
+} from "./atoms/grid/grid";
 export {
   Panel,
   PanelBody,
@@ -1746,21 +1816,21 @@ export {
   type PanelProps,
   PanelTitle,
   type PanelTitleProps,
-} from "./panel/panel";
+} from "./atoms/panel/panel";
 export {
   Heading,
   type HeadingLevel,
   type HeadingProps,
-} from "./heading/heading";
+} from "./atoms/heading/heading";
 export {
   Text,
   type TextElement,
   type TextProps,
   textVariants,
-} from "./text/text";
+} from "./atoms/text/text";
 export {
   Display,
   type DisplayElement,
   type DisplayProps,
-} from "./display/display";
-export { Prose, type ProseProps } from "./prose/prose";
+} from "./atoms/display/display";
+export { Prose, type ProseProps } from "./atoms/prose/prose";

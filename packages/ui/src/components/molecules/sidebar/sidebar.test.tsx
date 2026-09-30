@@ -1,0 +1,255 @@
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+import {
+  SidebarProvider,
+  useSidebar,
+} from "../../atoms/sidebar-provider/sidebar-provider";
+
+import { Sidebar, type SidebarSection } from "./sidebar";
+
+let mockPathname = "/docs/components";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => mockPathname,
+}));
+
+vi.mock("next/link", () => ({
+  default: ({
+    children,
+    href,
+    onClick,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+    <a
+      href={href}
+      {...props}
+      onClick={(event) => {
+        event.preventDefault();
+        onClick?.(event);
+      }}
+    >
+      {children}
+    </a>
+  ),
+}));
+
+const sections: SidebarSection[] = [
+  {
+    items: [
+      { href: "/", title: "Overview" },
+      { href: "/docs/components", title: "Components" },
+    ],
+  },
+  {
+    items: [
+      { href: "/docs/forms", title: "Forms" },
+      { href: "/docs/navigation", title: "Navigation" },
+    ],
+    title: "Guides",
+  },
+];
+
+function setViewportWidth(width: number) {
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: width,
+    writable: true,
+  });
+  act(() => {
+    window.dispatchEvent(new Event("resize"));
+  });
+}
+
+function SidebarStateProbe() {
+  const { open, setOpen } = useSidebar();
+
+  return (
+    <>
+      <span data-testid="sidebar-state">{open ? "open" : "closed"}</span>
+      <button
+        onClick={() => {
+          setOpen(true);
+        }}
+        type="button"
+      >
+        Open sidebar
+      </button>
+      <button
+        onClick={() => {
+          setOpen(false);
+        }}
+        type="button"
+      >
+        Close sidebar
+      </button>
+    </>
+  );
+}
+
+function renderSidebar(sidebarSections: SidebarSection[] = sections) {
+  return render(
+    <SidebarProvider>
+      <Sidebar sections={sidebarSections} />
+      <SidebarStateProbe />
+    </SidebarProvider>,
+  );
+}
+
+async function expectState(state: "closed" | "open") {
+  await waitFor(() => {
+    expect(screen.getByTestId("sidebar-state")).toHaveTextContent(state);
+  });
+}
+
+describe("Sidebar", () => {
+  beforeEach(() => {
+    mockPathname = "/docs/components";
+    setViewportWidth(1280);
+  });
+
+  it("renders sections, links, and active route state", async () => {
+    renderSidebar();
+    await expectState("open");
+    expect(screen.getByText("Guides")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Components" })).toHaveClass(
+      "bg-accent",
+      "text-accent-foreground",
+    );
+    expect(screen.getByRole("link", { name: "Components" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "Forms" })).toHaveAttribute(
+      "href",
+      "/docs/forms",
+    );
+  });
+
+  it("supports explicit current state for query-backed navigation", async () => {
+    renderSidebar([
+      {
+        items: [
+          {
+            current: true,
+            href: "/native?platform=native",
+            title: "React Native",
+          },
+          {
+            current: false,
+            href: "/docs/components",
+            title: "Components",
+          },
+        ],
+        title: "Renderers",
+      },
+    ]);
+    await waitFor(() => {
+      expect(
+        screen.getByRole("link", { name: "React Native" }),
+      ).toHaveAttribute("aria-current", "true");
+    });
+    expect(
+      screen.getByRole("link", { name: "Components" }),
+    ).not.toHaveAttribute("aria-current");
+  });
+
+  it("honors collapsible section default state and toggles it", () => {
+    renderSidebar([
+      {
+        collapsible: true,
+        defaultOpen: false,
+        items: [{ href: "/docs/forms", title: "Forms" }],
+        title: "Guides",
+      },
+    ]);
+    const trigger = screen.getByRole("button", { name: "Guides" });
+    const panel = trigger.nextElementSibling;
+    expect(panel).toHaveAttribute("hidden");
+    expect(
+      screen.queryByRole("link", { name: "Forms" }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(trigger);
+    expect(panel).not.toHaveAttribute("hidden");
+    expect(screen.getByRole("link", { name: "Forms" })).toHaveAttribute(
+      "href",
+      "/docs/forms",
+    );
+  });
+
+  it("opens on desktop and closes on mobile resize", async () => {
+    renderSidebar();
+    await expectState("open");
+    setViewportWidth(390);
+    await expectState("closed");
+    setViewportWidth(1280);
+    await expectState("open");
+  });
+
+  it("uses a bounded drawer, closes on Escape, and restores focus", async () => {
+    setViewportWidth(768);
+    const { container } = renderSidebar();
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
+      expect(container.querySelector("aside")).toHaveAttribute("inert");
+    });
+    const openButton = screen.getByRole("button", { name: "Open sidebar" });
+    openButton.focus();
+    fireEvent.click(openButton);
+    await waitFor(() => {
+      expect(container.querySelector("aside")).toHaveClass(
+        "w-[calc(100%-3rem)]",
+        "max-w-80",
+      );
+      expect(container.querySelector("aside")).not.toHaveAttribute("inert");
+      expect(screen.getByRole("navigation")).toHaveFocus();
+    });
+    fireEvent.keyDown(document, { key: "Escape" });
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
+      expect(openButton).toHaveFocus();
+    });
+  });
+
+  it("closes the mobile overlay on click", async () => {
+    setViewportWidth(390);
+    renderSidebar();
+    await expectState("closed");
+    fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
+    await expectState("open");
+    const overlay = screen.getByTestId("sidebar-overlay");
+    fireEvent.click(overlay);
+    await expectState("closed");
+  });
+
+  it("closes the mobile sidebar when a link is selected", async () => {
+    setViewportWidth(390);
+    renderSidebar();
+    await expectState("closed");
+    fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
+    fireEvent.click(screen.getByRole("link", { name: "Forms" }));
+    await expectState("closed");
+  });
+
+  it("collapses to zero width on desktop when closed", async () => {
+    const { container } = renderSidebar();
+    await expectState("open");
+    expect(container.querySelector("aside")).toHaveClass("w-64");
+    fireEvent.click(screen.getByRole("button", { name: "Close sidebar" }));
+    await waitFor(() => {
+      expect(container.querySelector("aside")).toHaveClass("w-0", "border-r-0");
+      expect(container.querySelector("aside")).toHaveAttribute("inert");
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
+    await waitFor(() => {
+      expect(container.querySelector("aside")).toHaveClass("w-64");
+      expect(container.querySelector("aside")).not.toHaveAttribute("inert");
+    });
+  });
+});

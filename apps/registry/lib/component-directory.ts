@@ -12,8 +12,6 @@ export const COMPONENT_LEVELS = [
   "templates",
 ] as const;
 
-const LEVEL_NAMES: ReadonlySet<string> = new Set(COMPONENT_LEVELS);
-
 /** A `@vllnt/ui` component folder. */
 export type ComponentDirectory = {
   directory: string;
@@ -34,8 +32,7 @@ const listDirectories = (directory: string): string[] =>
 
 /**
  * Finds a `@vllnt/ui` component folder by name. Components live at
- * `<componentsRoot>/<level>/<name>/`; a folder directly under `componentsRoot`
- * is still found until every component sits in a level folder.
+ * `<componentsRoot>/<level>/<name>/`.
  *
  * @param componentsRoot - Absolute path of `packages/ui/src/components`.
  * @param name - Component folder name, e.g. `"button"`.
@@ -46,9 +43,9 @@ export function findComponentDirectory(
   componentsRoot: string,
   name: string,
 ): string | undefined {
-  return [...COMPONENT_LEVELS, ""]
-    .map((level) => path.join(componentsRoot, level, name))
-    .find((directory) => existsSync(directory));
+  return COMPONENT_LEVELS.map((level) =>
+    path.join(componentsRoot, level, name),
+  ).find((directory) => existsSync(directory));
 }
 
 /**
@@ -60,16 +57,11 @@ export function findComponentDirectory(
 export function listComponentDirectories(
   componentsRoot: string,
 ): ComponentDirectory[] {
-  const unleveled = listDirectories(componentsRoot)
-    .filter((entry) => !LEVEL_NAMES.has(entry))
-    .map((name) => ({ directory: path.join(componentsRoot, name), name }));
-  const leveled = COMPONENT_LEVELS.flatMap((level) => {
+  return COMPONENT_LEVELS.flatMap((level) => {
     const levelDirectory = path.join(componentsRoot, level);
     return listDirectories(levelDirectory).map((name) => ({
       directory: path.join(levelDirectory, name),
       name,
     }));
-  });
-
-  return [...unleveled, ...leveled].sort(byName);
+  }).sort(byName);
 }

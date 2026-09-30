@@ -18,25 +18,15 @@ const listDirectories = (directory: string): string[] =>
   readdirSync(directory).filter((entry) => statSync(join(directory, entry)).isDirectory());
 
 /**
- * Every component folder under `componentsDir`, sorted by name. Components live
- * at `<componentsDir>/<level>/<name>/`; folders directly under `componentsDir`
- * that are not level folders are listed too until every component is moved.
+ * Every component folder (`<componentsDir>/<level>/<name>/`), sorted by name.
  */
 export function listComponentDirectories(componentsDir: string): ComponentDirectory[] {
-  const levelDirectories = COMPONENT_LEVELS.map((level) => join(componentsDir, level)).filter(
-    (directory) => existsSync(directory),
-  );
-  const levelNames: ReadonlySet<string> = new Set(COMPONENT_LEVELS);
-  const unleveled = listDirectories(componentsDir)
-    .filter((entry) => !levelNames.has(entry))
-    .map((name) => ({ name, path: join(componentsDir, name) }));
-
-  return [
-    ...unleveled,
-    ...levelDirectories.flatMap((levelDirectory) =>
+  return COMPONENT_LEVELS.map((level) => join(componentsDir, level))
+    .filter((levelDirectory) => existsSync(levelDirectory))
+    .flatMap((levelDirectory) =>
       listDirectories(levelDirectory).map((name) => ({ name, path: join(levelDirectory, name) })),
-    ),
-  ].sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+    )
+    .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 }
 
 export interface VariantInfo {
