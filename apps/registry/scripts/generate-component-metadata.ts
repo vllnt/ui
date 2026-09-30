@@ -6,7 +6,7 @@
  * which only exists after a full Storybook build. CI doesn't run that on every
  * push, so the metadata file goes stale every time a new component lands.
  *
- * This script walks packages/ui/src/components/<name>/<name>.stories.tsx,
+ * This script walks packages/ui/src/components/<level>/<name>/<name>.stories.tsx,
  * extracts the title via regex, and derives Storybook story IDs from the
  * Storybook convention:
  *
@@ -22,9 +22,11 @@
  * Run via: pnpm sync-storybook (replaces the previous storybook-static reader)
  */
 
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { findComponentDirectory } from "../lib/component-directory";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 
@@ -176,8 +178,11 @@ function extractMetaTitle(source: string): string | undefined {
 }
 
 function findStoryFile(componentName: string): string | undefined {
-  const componentDirectory = join(componentsRoot, componentName);
-  if (!existsSync(componentDirectory)) return;
+  const componentDirectory = findComponentDirectory(
+    componentsRoot,
+    componentName,
+  );
+  if (!componentDirectory) return;
 
   const candidates = readdirSync(componentDirectory).filter((file) =>
     file.endsWith(".stories.tsx"),

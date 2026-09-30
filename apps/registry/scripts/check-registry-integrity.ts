@@ -15,14 +15,11 @@
  * Usage: pnpm -F @vllnt/ui-registry registry:integrity
  */
 
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { listComponentDirectories } from "../lib/component-directory";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDir, "../../..");
@@ -75,13 +72,8 @@ const nativeRegistry = JSON.parse(
 const itemNames = new Set(registry.items.map((item) => item.name));
 const errors: string[] = [];
 
-const componentDirs = readdirSync(componentsRoot).filter((name) =>
-  statSync(join(componentsRoot, name)).isDirectory(),
-);
-
-for (const name of componentDirs) {
-  const dir = join(componentsRoot, name);
-  const files = readdirSync(dir);
+for (const { directory, name } of listComponentDirectories(componentsRoot)) {
+  const files = readdirSync(directory);
   const hasStory = files.some((file) => file.endsWith(".stories.tsx"));
   const hasTest = files.some((file) => file.endsWith(".test.tsx"));
   if (hasStory && hasTest && !itemNames.has(name) && !EXCLUDED.has(name)) {

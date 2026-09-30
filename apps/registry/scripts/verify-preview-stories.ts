@@ -22,11 +22,14 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { findComponentDirectory } from "../lib/component-directory";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDirectory, "..", "..", "..");
+const uiPackageRoot = join(repoRoot, "packages", "ui");
 
 const metadataPath = join(
   repoRoot,
@@ -35,13 +38,7 @@ const metadataPath = join(
   "lib",
   "component-metadata.json",
 );
-const storybookIndexPath = join(
-  repoRoot,
-  "packages",
-  "ui",
-  "storybook-static",
-  "index.json",
-);
+const storybookIndexPath = join(uiPackageRoot, "storybook-static", "index.json");
 
 type ComponentMetadata = {
   defaultStoryId: string;
@@ -91,9 +88,14 @@ const validStoryIds = new Set(storyEntries.map(([id]) => id));
 
 /** Story IDs that belong to a given component folder, for actionable hints. */
 function storyIdsForComponent(componentName: string): string[] {
-  const marker = `/components/${componentName}/`;
+  const directory = findComponentDirectory(
+    join(uiPackageRoot, "src", "components"),
+    componentName,
+  );
+  if (!directory) return [];
+  const marker = `./${relative(uiPackageRoot, directory)}/`;
   return storyEntries
-    .filter(([, entry]) => entry.importPath.includes(marker))
+    .filter(([, entry]) => entry.importPath.startsWith(marker))
     .map(([id]) => id);
 }
 

@@ -12,12 +12,15 @@
  *   - Sibling primitives, lib utilities, and hooks resolve through `@vllnt/ui`
  *     as a single npm peer dep — `import { Dialog, cn } from "@vllnt/ui"` etc.
  *
- * Rewrites applied to each component source:
- *   - `from "../../lib/utils"`           → `from "@vllnt/ui"`
- *   - `from "../../lib/types"`           → `from "@vllnt/ui"`
- *   - `from "../../lib/use-X"`           → `from "@vllnt/ui"`
- *   - `from "../<sibling>/<sibling>"`    → `from "@vllnt/ui"`
- *   - `from "../<sibling>"`              → `from "@vllnt/ui"`
+ * Rewrites applied to each component source (at any `../` depth):
+ *   - `from "../../../lib/utils"`                 → `from "@vllnt/ui"`
+ *   - `from "../../../lib/use-X"`                 → `from "@vllnt/ui"`
+ *   - `from "../<sibling>/<sibling>"`             → `from "@vllnt/ui"`
+ *   - `from "../../<level>/<sibling>/<sibling>"`  → `from "@vllnt/ui"`
+ *   - `from "../<sibling>"`                       → `from "@vllnt/ui"`
+ *
+ * Component folders are found by name through `lib/component-directory.ts`
+ * (`packages/ui/src/components/<level>/<name>/`).
  *
  * `registryDependencies` is set to `[]` for each component (no transitive registry
  * pulls — `@vllnt/ui` covers all internals). The npm `dependencies` field gets
@@ -36,6 +39,10 @@ import {
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  COMPONENT_LEVELS,
+  findComponentDirectory,
+} from "../lib/component-directory";
 import type {
   A11ySchema,
   NativeRegistry,
@@ -79,8 +86,8 @@ const PUBLISHED_VERSION = "0.3.0";
 const PACKAGE_VERSION_RANGE = `^${PUBLISHED_VERSION}`;
 const PACKAGE_DEP = `${PACKAGE_NAME}@${PACKAGE_VERSION_RANGE}`;
 
-const readComponentMeta = (name: string): ComponentMeta => {
-  const metaPath = join(componentsRoot, name, "meta.json");
+const readComponentMeta = (directory: string): ComponentMeta => {
+  const metaPath = join(directory, "meta.json");
   if (!existsSync(metaPath)) return {};
   try {
     return JSON.parse(readFileSync(metaPath, "utf8")) as ComponentMeta;
@@ -89,8 +96,8 @@ const readComponentMeta = (name: string): ComponentMeta => {
   }
 };
 
-const readComponentExamples = (name: string): UsageExample[] => {
-  const examplesPath = join(componentsRoot, name, "examples.json");
+const readComponentExamples = (directory: string): UsageExample[] => {
+  const examplesPath = join(directory, "examples.json");
   if (!existsSync(examplesPath)) return [];
   try {
     const raw = JSON.parse(readFileSync(examplesPath, "utf8")) as unknown;
@@ -107,8 +114,8 @@ const readComponentExamples = (name: string): UsageExample[] => {
   }
 };
 
-const readComponentProps = (name: string): PropDefinition[] => {
-  const propsPath = join(componentsRoot, name, "props.json");
+const readComponentProps = (directory: string): PropDefinition[] => {
+  const propsPath = join(directory, "props.json");
   if (!existsSync(propsPath)) return [];
   try {
     const raw = JSON.parse(readFileSync(propsPath, "utf8")) as unknown;
@@ -125,31 +132,39 @@ const readComponentProps = (name: string): PropDefinition[] => {
   }
 };
 
+/** The component's folder and its canonical `<name>.tsx`, when both exist. */
+const findComponentSource = (
+  name: string,
+): { directory: string; path: string } | undefined => {
+  const directory = findComponentDirectory(componentsRoot, name);
+  if (!directory) return undefined;
+  const path = join(directory, `${name}.tsx`);
+  return existsSync(path) ? { directory, path } : undefined;
+};
+
+const SIBLING_IMPORT_PATTERN = new RegExp(
+  `from\\s+["'](?:\\.\\.\\/)+(?:(?:${COMPONENT_LEVELS.join("|")})\\/)?` +
+    `[a-z][a-z0-9-]*(?:\\/[a-z][a-z0-9-]*)?["']`,
+  "g",
+);
+
 const rewriteImports = (source: string): string => {
   // Collect import lines that target lib utilities or sibling components
   // and replace each with a single deduped `import ... from "@vllnt/ui"` block.
   let code = source;
 
-  // `../../lib/<module>` → `@vllnt/ui`. Matches any single-segment kebab-case
-  // lib module (utils, types, theme-presets, use-*, …); every lib module is
-  // re-exported from the public @vllnt/ui barrel, so this rewrite is always safe
-  // and new lib modules are covered automatically (no regex edit per addition).
+  // `../../../lib/<module>` → `@vllnt/ui`. Matches any single-segment kebab-case
+  // lib module (utils, types, theme-presets, use-*, …) at any depth; every lib
+  // module is re-exported from the public @vllnt/ui barrel, so this rewrite is
+  // always safe and new lib modules are covered automatically.
   code = code.replace(
     /from\s+["'](?:\.\.\/)+lib\/[a-z][a-z0-9-]*["']/g,
     `from "${PACKAGE_NAME}"`,
   );
 
-  // `../<sibling>/<file>` → `@vllnt/ui`
-  code = code.replace(
-    /from\s+["']\.\.\/[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*["']/g,
-    `from "${PACKAGE_NAME}"`,
-  );
-
-  // `../<sibling>` → `@vllnt/ui`
-  code = code.replace(
-    /from\s+["']\.\.\/[a-z][a-z0-9-]*["']/g,
-    `from "${PACKAGE_NAME}"`,
-  );
+  // `../<sibling>/<file>`, `../../<level>/<sibling>/<file>`, `../<sibling>`
+  // → `@vllnt/ui`
+  code = code.replace(SIBLING_IMPORT_PATTERN, `from "${PACKAGE_NAME}"`);
 
   return code;
 };
@@ -186,8 +201,8 @@ for (const item of registry.items) {
     delete item.native;
   }
 
-  const sourcePath = join(componentsRoot, item.name, `${item.name}.tsx`);
-  if (!existsSync(sourcePath)) {
+  const source = findComponentSource(item.name);
+  if (!source) {
     // No canonical `<name>/<name>.tsx` to inline (e.g. bar/line/area-chart are
     // exported from a shared chart module with a hand-maintained shim). Still
     // stamp the published-version range + version so the registry-integrity
@@ -202,7 +217,7 @@ for (const item of registry.items) {
     continue;
   }
 
-  const sourceCode = readFileSync(sourcePath, "utf8");
+  const sourceCode = readFileSync(source.path, "utf8");
   const code = rewriteImports(sourceCode);
 
   // Write rewritten source to shim path
@@ -223,8 +238,8 @@ for (const item of registry.items) {
 
   // Stamp version + stability per the registry item schema (see #253).
   // Defaults to the published @vllnt/ui version + "stable"; per-component
-  // overrides come from packages/ui/src/components/<name>/meta.json if present.
-  const meta = readComponentMeta(item.name);
+  // overrides come from packages/ui/src/components/<level>/<name>/meta.json if present.
+  const meta = readComponentMeta(source.directory);
   item.version = PUBLISHED_VERSION;
   item.stability = meta.stability ?? "stable";
   if (item.stability === "deprecated") {
@@ -245,9 +260,9 @@ for (const item of registry.items) {
 
   // Stamp inline usage examples (see #254) — agents see how to use the
   // component without scraping Storybook iframes. Source: optional
-  // packages/ui/src/components/<name>/examples.json. Schema:
+  // packages/ui/src/components/<level>/<name>/examples.json. Schema:
   // [{ title, description?, code, framework?, storyId? }].
-  const examples = readComponentExamples(item.name);
+  const examples = readComponentExamples(source.directory);
   if (examples.length > 0) {
     item.examples = examples;
   } else {
@@ -256,11 +271,11 @@ for (const item of registry.items) {
 
   // Stamp prop definitions (see #242) — agents reading /r/<name>.json
   // see the public API surface in TSDoc-shaped JSON. Source: optional
-  // packages/ui/src/components/<name>/props.json. Schema:
+  // packages/ui/src/components/<level>/<name>/props.json. Schema:
   // [{ name, type, required?, defaultValue?, description?, deprecated? }].
   // Auto-extraction from TS source is a future follow-up; props.json is
   // the contract for now.
-  const props = readComponentProps(item.name);
+  const props = readComponentProps(source.directory);
   if (props.length > 0) {
     item.props = props;
   } else {

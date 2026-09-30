@@ -63,7 +63,7 @@ export default [
     },
   },
   {
-    files: ['**/components/cookie-consent/cookie-consent.tsx'],
+    files: ['**/cookie-consent/cookie-consent.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
@@ -82,55 +82,55 @@ export default [
     },
   },
   {
-    files: ['**/components/slideshow/slideshow.tsx'],
+    files: ['**/slideshow/slideshow.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/carousel/carousel.tsx'],
+    files: ['**/carousel/carousel.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/code-block/code-block.tsx'],
+    files: ['**/code-block/code-block.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/code-playground/code-playground.tsx'],
+    files: ['**/code-playground/code-playground.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/comparison/comparison.tsx'],
+    files: ['**/comparison/comparison.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/flow-diagram/flow-diagram.tsx'],
+    files: ['**/flow-diagram/flow-diagram.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/navbar-saas/navbar-saas.tsx'],
+    files: ['**/navbar-saas/navbar-saas.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/terminal/terminal.tsx'],
+    files: ['**/terminal/terminal.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/data-table/data-table.tsx'],
+    files: ['**/data-table/data-table.tsx'],
     rules: {
       'max-lines-per-function': 'off',
       'react-hooks/incompatible-library': 'off',
@@ -138,31 +138,31 @@ export default [
     },
   },
   {
-    files: ['**/components/search-bar/search-bar.tsx'],
+    files: ['**/search-bar/search-bar.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/search-dialog/search-dialog.tsx'],
+    files: ['**/search-dialog/search-dialog.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/tldr-section/tldr-section.tsx'],
+    files: ['**/tldr-section/tldr-section.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/progress-card/progress-card.tsx'],
+    files: ['**/progress-card/progress-card.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
   },
   {
-    files: ['**/components/theme-toggle/theme-toggle.tsx'],
+    files: ['**/theme-toggle/theme-toggle.tsx'],
     rules: {
       'max-lines-per-function': 'off',
     },
