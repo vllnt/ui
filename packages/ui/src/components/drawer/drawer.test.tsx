@@ -18,7 +18,6 @@ describe("Drawer", () => {
         <DrawerContent>Body</DrawerContent>
       </Drawer>,
     );
-
     expect(screen.getByText("Open")).toBeInTheDocument();
     expect(screen.queryByText("Body")).not.toBeInTheDocument();
   });
@@ -34,7 +33,6 @@ describe("Drawer", () => {
         </DrawerContent>
       </Drawer>,
     );
-
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Description")).toBeInTheDocument();
   });

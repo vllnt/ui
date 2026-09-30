@@ -14,29 +14,23 @@ const sample: RelationshipEdge[] = [
 describe("RelationshipInspector", () => {
   it("renders the empty state when no edges are provided", () => {
     const { container } = render(<RelationshipInspector edges={[]} />);
-
     expect(
       container.querySelector("[data-relationship-state='empty']"),
     ).toBeInTheDocument();
     expect(screen.getByText("No relationships")).toBeInTheDocument();
   });
 
-  it("groups edges by direction", () => {
+  it("groups plain rows by direction with a relation chip each", () => {
     const { container } = render(<RelationshipInspector edges={sample} />);
-
     expect(
       container.querySelector("[data-relationship-group='inbound']"),
     ).toBeInTheDocument();
     expect(
       container.querySelector("[data-relationship-group='outbound']"),
     ).toBeInTheDocument();
-  });
-
-  it("renders the relation chip for each row", () => {
-    render(<RelationshipInspector edges={sample} />);
-
     expect(screen.getByText("spawned-by")).toBeInTheDocument();
     expect(screen.getByText("emits")).toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("invokes onActivate when a row is clicked", () => {
@@ -54,15 +48,7 @@ describe("RelationshipInspector", () => {
         ]}
       />,
     );
-
-    const button = screen.getByRole("button");
-    fireEvent.click(button);
+    fireEvent.click(screen.getByRole("button"));
     expect(handleActivate).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders rows as plain divs when onActivate is omitted", () => {
-    render(<RelationshipInspector edges={sample} />);
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 });

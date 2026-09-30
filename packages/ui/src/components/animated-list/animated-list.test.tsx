@@ -4,21 +4,15 @@ import { describe, expect, it } from "vitest";
 import { AnimatedList } from "./animated-list";
 
 describe("AnimatedList", () => {
-  it("renders its children", () => {
-    render(
-      <AnimatedList>
+  it("renders its children and merges className", () => {
+    const { container } = render(
+      <AnimatedList className="custom-class">
         <span>First</span>
         <span>Second</span>
       </AnimatedList>,
     );
-
     expect(screen.getByText("First")).toBeInTheDocument();
     expect(screen.getByText("Second")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
-    const { container } = render(<AnimatedList className="custom-class" />);
-
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

@@ -14,7 +14,6 @@ describe("WorldClockBar", () => {
         ]}
       />,
     );
-
     expect(screen.getByText("San Francisco")).toBeInTheDocument();
     expect(screen.getByText("London")).toBeInTheDocument();
     expect(screen.getByText("2 zones")).toBeInTheDocument();

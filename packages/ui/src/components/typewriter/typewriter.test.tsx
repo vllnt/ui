@@ -11,17 +11,11 @@ describe("Typewriter", () => {
     stubMatchMedia();
   });
 
-  it("renders an accessible label with the full text", () => {
-    render(<Typewriter text="Hello" />);
-
-    expect(screen.getByLabelText("Hello")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
+  it("renders an accessible label with the full text and applies a custom class name", () => {
     const { container } = render(
-      <Typewriter className="custom-class" text="Hi" />,
+      <Typewriter className="custom-class" text="Hello" />,
     );
-
+    expect(screen.getByLabelText("Hello")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
@@ -30,7 +24,6 @@ describe("Typewriter", () => {
     const { container, rerender } = render(
       <Typewriter speed={10} text="Hello" />,
     );
-
     act(() => {
       vi.runOnlyPendingTimers();
     });
@@ -40,12 +33,10 @@ describe("Typewriter", () => {
     expect(container.querySelector("[aria-hidden='true']")).toHaveTextContent(
       "He",
     );
-
     rerender(<Typewriter speed={20} text="Hello" />);
     act(() => {
       vi.runOnlyPendingTimers();
     });
-
     expect(container.querySelector("[aria-hidden='true']")).toHaveTextContent(
       "Hel",
     );

@@ -45,68 +45,52 @@ describe("StaticCode", () => {
     vi.restoreAllMocks();
   });
 
-  describe("rendering", () => {
-    it("renders the highlighted source code", () => {
-      render(<StaticCode code={SNIPPET} language="typescript" />);
+  it("renders the highlighted source code", () => {
+    render(<StaticCode code={SNIPPET} language="typescript" />);
+    expect(screen.getByText(/greeting/)).toBeInTheDocument();
+  });
 
-      expect(screen.getByText(/greeting/)).toBeInTheDocument();
-    });
+  it("renders the copy island button", () => {
+    render(<StaticCode code={SNIPPET} />);
+    expect(
+      screen.getByRole("button", { name: "Copy code" }),
+    ).toBeInTheDocument();
+  });
 
-    it("renders the copy island button", () => {
-      render(<StaticCode code={SNIPPET} />);
-
-      expect(
-        screen.getByRole("button", { name: "Copy code" }),
-      ).toBeInTheDocument();
+  it("writes the code to the clipboard on click", async () => {
+    render(<StaticCodeCopy value={SNIPPET} />);
+    fireEvent.click(screen.getByRole("button", { name: "Copy code" }));
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith(SNIPPET);
     });
   });
 
-  describe("copy interaction", () => {
-    it("writes the code to the clipboard on click", async () => {
-      render(<StaticCodeCopy value={SNIPPET} />);
+  it("flips the accessible label to copied after a successful copy", async () => {
+    render(<StaticCodeCopy value={SNIPPET} />);
+    fireEvent.click(screen.getByRole("button", { name: "Copy code" }));
+    await screen.findByRole("button", { name: "Copied" });
+  });
 
-      fireEvent.click(screen.getByRole("button", { name: "Copy code" }));
-
-      await waitFor(() => {
-        expect(writeText).toHaveBeenCalledWith(SNIPPET);
-      });
-    });
-
-    it("flips the accessible label to copied after a successful copy", async () => {
-      render(<StaticCodeCopy value={SNIPPET} />);
-
-      fireEvent.click(screen.getByRole("button", { name: "Copy code" }));
-
-      await screen.findByRole("button", { name: "Copied" });
-    });
-
-    it("does not throw when the clipboard API is unavailable", async () => {
-      restoreClipboard();
-      restoreClipboard = setClipboard(undefined);
-
-      render(<StaticCodeCopy value={SNIPPET} />);
-
-      const button = screen.getByRole("button", { name: "Copy code" });
-      expect(() => {
-        fireEvent.click(button);
-      }).not.toThrow();
-
-      await Promise.resolve();
-      expect(button).toHaveAccessibleName("Copy code");
-    });
-
-    it("does not throw when writeText rejects (permission denied)", async () => {
-      writeText.mockRejectedValue(new Error("NotAllowedError"));
-
-      render(<StaticCodeCopy value={SNIPPET} />);
-
-      const button = screen.getByRole("button", { name: "Copy code" });
+  it("does not throw when the clipboard API is unavailable", async () => {
+    restoreClipboard();
+    restoreClipboard = setClipboard(undefined);
+    render(<StaticCodeCopy value={SNIPPET} />);
+    const button = screen.getByRole("button", { name: "Copy code" });
+    expect(() => {
       fireEvent.click(button);
+    }).not.toThrow();
+    await Promise.resolve();
+    expect(button).toHaveAccessibleName("Copy code");
+  });
 
-      await waitFor(() => {
-        expect(writeText).toHaveBeenCalled();
-      });
-      expect(button).toHaveAccessibleName("Copy code");
+  it("does not throw when writeText rejects (permission denied)", async () => {
+    writeText.mockRejectedValue(new Error("NotAllowedError"));
+    render(<StaticCodeCopy value={SNIPPET} />);
+    const button = screen.getByRole("button", { name: "Copy code" });
+    fireEvent.click(button);
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalled();
     });
+    expect(button).toHaveAccessibleName("Copy code");
   });
 });

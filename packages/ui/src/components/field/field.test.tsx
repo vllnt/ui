@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { Input } from "../input/input";
@@ -12,69 +12,47 @@ import {
 } from "./field";
 
 describe("Field", () => {
-  describe("rendering", () => {
-    it("renders label, control, and description", () => {
-      const { getByLabelText, getByText } = render(
-        <Field>
-          <FieldLabel>Email</FieldLabel>
-          <FieldControl>
-            <Input />
-          </FieldControl>
-          <FieldDescription>We never share it.</FieldDescription>
-        </Field>,
-      );
-
-      expect(getByLabelText("Email")).toBeInTheDocument();
-      expect(getByText("We never share it.")).toBeInTheDocument();
-    });
-
-    it("wires the label to the control via htmlFor", () => {
-      const { getByLabelText } = render(
-        <Field>
-          <FieldLabel>Name</FieldLabel>
-          <FieldControl>
-            <Input />
-          </FieldControl>
-        </Field>,
-      );
-
-      expect(getByLabelText("Name").tagName).toBe("INPUT");
-    });
+  it("wires the label to the input control and renders the description", () => {
+    render(
+      <Field>
+        <FieldLabel>Email</FieldLabel>
+        <FieldControl>
+          <Input />
+        </FieldControl>
+        <FieldDescription>We never share it.</FieldDescription>
+      </Field>,
+    );
+    expect(screen.getByLabelText("Email").tagName).toBe("INPUT");
+    expect(screen.getByText("We never share it.")).toBeInTheDocument();
   });
 
-  describe("error state", () => {
-    it("renders the error and marks the control invalid", () => {
-      const { getByLabelText, getByRole } = render(
-        <Field invalid>
-          <FieldLabel>Password</FieldLabel>
-          <FieldControl>
-            <Input />
-          </FieldControl>
-          <FieldError>Too short</FieldError>
-        </Field>,
-      );
-
-      expect(getByRole("alert")).toHaveTextContent("Too short");
-      expect(getByLabelText("Password")).toHaveAttribute(
-        "aria-invalid",
-        "true",
-      );
-    });
-
-    it("renders nothing when error has no children", () => {
-      const { queryByRole } = render(
-        <Field>
-          <FieldError />
-        </Field>,
-      );
-
-      expect(queryByRole("alert")).not.toBeInTheDocument();
-    });
+  it("renders the error and marks the control invalid", () => {
+    render(
+      <Field invalid>
+        <FieldLabel>Password</FieldLabel>
+        <FieldControl>
+          <Input />
+        </FieldControl>
+        <FieldError>Too short</FieldError>
+      </Field>,
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent("Too short");
+    expect(screen.getByLabelText("Password")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
   });
 
-  describe("error boundary", () => {
-    it("throws when subcomponents render outside a Field", () => {
-      expect(() => render(<FieldLabel>Orphan</FieldLabel>)).toThrow();
-    });
+  it("renders nothing when error has no children", () => {
+    render(
+      <Field>
+        <FieldError />
+      </Field>,
+    );
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("throws when subcomponents render outside a Field", () => {
+    expect(() => render(<FieldLabel>Orphan</FieldLabel>)).toThrow();
   });
 });

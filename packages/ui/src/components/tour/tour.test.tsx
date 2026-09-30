@@ -24,19 +24,14 @@ const steps = [
 describe("Tour", () => {
   it("moves through steps", () => {
     render(<Tour steps={steps} />);
-
     fireEvent.click(screen.getByRole("button", { name: "Next" }));
-
     expect(screen.getByText("Progress")).toBeInTheDocument();
   });
 
   it("calls onComplete on the last step", () => {
     const onComplete = vi.fn();
-
     render(<Tour defaultStep={2} onComplete={onComplete} steps={steps} />);
-
     fireEvent.click(screen.getByRole("button", { name: "Finish" }));
-
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 });

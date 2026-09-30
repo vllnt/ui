@@ -10,40 +10,25 @@ import {
   type QuizRegion,
 } from "./geography-quiz-map";
 
+function box([west, north, east, south]: [
+  number,
+  number,
+  number,
+  number,
+]): QuizRegion["coordinates"] {
+  return [
+    [west, north],
+    [east, north],
+    [east, south],
+    [west, south],
+    [west, north],
+  ];
+}
+
 const REGIONS: QuizRegion[] = [
-  {
-    coordinates: [
-      [-5, 51],
-      [10, 51],
-      [10, 41],
-      [-5, 41],
-      [-5, 51],
-    ],
-    id: "FR",
-    name: "France",
-  },
-  {
-    coordinates: [
-      [5, 55],
-      [15, 55],
-      [15, 47],
-      [5, 47],
-      [5, 55],
-    ],
-    id: "DE",
-    name: "Germany",
-  },
-  {
-    coordinates: [
-      [-9, 44],
-      [3, 44],
-      [3, 36],
-      [-9, 36],
-      [-9, 44],
-    ],
-    id: "ES",
-    name: "Spain",
-  },
+  { coordinates: box([-5, 51, 10, 41]), id: "FR", name: "France" },
+  { coordinates: box([5, 55, 15, 47]), id: "DE", name: "Germany" },
+  { coordinates: box([-9, 44, 3, 36]), id: "ES", name: "Spain" },
 ];
 
 const QUESTIONS: QuizQuestion[] = [
@@ -72,158 +57,84 @@ function clickRegion(container: HTMLElement, id: string): void {
 }
 
 describe("GeographyQuizMap", () => {
-  describe("rendering", () => {
-    it("renders one region path per entry", () => {
-      const { container } = render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS} />,
-      );
-
-      expect(
-        container.querySelector("[data-region-id='FR']"),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector("[data-region-id='DE']"),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector("[data-region-id='ES']"),
-      ).toBeInTheDocument();
-    });
-
-    it("renders the prompt for the current question", () => {
-      render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
-          <GeographyQuizMapPrompt />
-        </GeographyQuizMap>,
-      );
-
-      expect(screen.getByText("Click on France")).toBeInTheDocument();
-    });
-
-    it("renders the score slot with running totals", () => {
-      render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
-          <GeographyQuizMapScore />
-        </GeographyQuizMap>,
-      );
-
-      expect(screen.getByText("0 / 2 · 0%")).toBeInTheDocument();
-    });
+  it("renders regions, prompt, and score; a correct click scores, ignores extra clicks, and advances", () => {
+    const { container } = render(
+      <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
+        <GeographyQuizMapPrompt />
+        <GeographyQuizMapScore />
+      </GeographyQuizMap>,
+    );
+    expect(
+      container.querySelector("[data-region-id='ES']"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Click on France")).toBeInTheDocument();
+    expect(screen.getByText("0 / 2 · 0%")).toBeInTheDocument();
+    clickRegion(container, "FR");
+    expect(container.querySelector("[data-region-id='FR']")).toHaveAttribute(
+      "data-state",
+      "correct",
+    );
+    clickRegion(container, "DE");
+    flushAdvance();
+    expect(screen.getByText("1 / 2 · 100%")).toBeInTheDocument();
+    expect(screen.getByText("Click on Germany")).toBeInTheDocument();
   });
 
-  describe("interaction", () => {
-    it("marks the answer correct when the right region is clicked", () => {
-      const onComplete = vi.fn();
-      const { container } = render(
-        <GeographyQuizMap
-          onComplete={onComplete}
-          questions={QUESTIONS}
-          regions={REGIONS}
-        >
-          <GeographyQuizMapScore />
-        </GeographyQuizMap>,
-      );
-
-      clickRegion(container, "FR");
-      expect(container.querySelector("[data-region-id='FR']")).toHaveAttribute(
-        "data-state",
-        "correct",
-      );
-
-      flushAdvance();
-      expect(screen.getByText("1 / 2 · 100%")).toBeInTheDocument();
-    });
-
-    it("marks the answer incorrect and reveals the correct region", () => {
-      const { container } = render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS} />,
-      );
-
-      clickRegion(container, "ES");
-
-      expect(container.querySelector("[data-region-id='ES']")).toHaveAttribute(
-        "data-state",
-        "incorrect",
-      );
-      expect(container.querySelector("[data-region-id='FR']")).toHaveAttribute(
-        "data-state",
-        "answer",
-      );
-    });
-
-    it("advances to the next question after the feedback delay", () => {
-      const { container } = render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
-          <GeographyQuizMapPrompt />
-        </GeographyQuizMap>,
-      );
-
-      clickRegion(container, "FR");
-      flushAdvance();
-      expect(screen.getByText("Click on Germany")).toBeInTheDocument();
-    });
-
-    it("ignores clicks while the feedback is showing", () => {
-      const { container } = render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
-          <GeographyQuizMapScore />
-        </GeographyQuizMap>,
-      );
-
-      clickRegion(container, "FR");
-      clickRegion(container, "DE");
-      flushAdvance();
-      expect(screen.getByText("1 / 2 · 100%")).toBeInTheDocument();
-    });
-
-    it("fires onComplete with the per-question outcome after the last answer", () => {
-      const onComplete = vi.fn();
-      const { container } = render(
-        <GeographyQuizMap
-          onComplete={onComplete}
-          questions={QUESTIONS}
-          regions={REGIONS}
-        />,
-      );
-
-      clickRegion(container, "FR");
-      flushAdvance();
-      clickRegion(container, "DE");
-      flushAdvance();
-
-      expect(onComplete).toHaveBeenCalledTimes(1);
-      expect(onComplete).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          expect.objectContaining({ correct: true, selectedRegionId: "FR" }),
-          expect.objectContaining({ correct: true, selectedRegionId: "DE" }),
-        ]),
-      );
-    });
+  it("marks the answer incorrect and reveals the correct region", () => {
+    const { container } = render(
+      <GeographyQuizMap questions={QUESTIONS} regions={REGIONS} />,
+    );
+    clickRegion(container, "ES");
+    expect(container.querySelector("[data-region-id='ES']")).toHaveAttribute(
+      "data-state",
+      "incorrect",
+    );
+    expect(container.querySelector("[data-region-id='FR']")).toHaveAttribute(
+      "data-state",
+      "answer",
+    );
   });
 
-  describe("results", () => {
-    it("renders the results panel after completion", () => {
-      const { container } = render(
-        <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
-          <GeographyQuizMapResults />
-        </GeographyQuizMap>,
-      );
+  it("fires onComplete with the per-question outcome after the last answer", () => {
+    const onComplete = vi.fn();
+    const { container } = render(
+      <GeographyQuizMap
+        onComplete={onComplete}
+        questions={QUESTIONS}
+        regions={REGIONS}
+      />,
+    );
+    clickRegion(container, "FR");
+    flushAdvance();
+    clickRegion(container, "DE");
+    flushAdvance();
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(onComplete).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ correct: true, selectedRegionId: "FR" }),
+        expect.objectContaining({ correct: true, selectedRegionId: "DE" }),
+      ]),
+    );
+  });
 
-      clickRegion(container, "FR");
-      flushAdvance();
-      clickRegion(container, "ES");
-      flushAdvance();
-
-      expect(
-        container.querySelector("[data-quiz-results]"),
-      ).toBeInTheDocument();
-      expect(container.querySelector("[data-answer-id='q1']")).toHaveAttribute(
-        "data-answer-correct",
-        "true",
-      );
-      expect(container.querySelector("[data-answer-id='q2']")).toHaveAttribute(
-        "data-answer-correct",
-        "false",
-      );
-    });
+  it("renders the results panel after completion", () => {
+    const { container } = render(
+      <GeographyQuizMap questions={QUESTIONS} regions={REGIONS}>
+        <GeographyQuizMapResults />
+      </GeographyQuizMap>,
+    );
+    clickRegion(container, "FR");
+    flushAdvance();
+    clickRegion(container, "ES");
+    flushAdvance();
+    expect(container.querySelector("[data-quiz-results]")).toBeInTheDocument();
+    expect(container.querySelector("[data-answer-id='q1']")).toHaveAttribute(
+      "data-answer-correct",
+      "true",
+    );
+    expect(container.querySelector("[data-answer-id='q2']")).toHaveAttribute(
+      "data-answer-correct",
+      "false",
+    );
   });
 });

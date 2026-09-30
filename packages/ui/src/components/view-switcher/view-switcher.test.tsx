@@ -24,91 +24,63 @@ describe("ViewSwitcher", () => {
     mockSearchParameters = new URLSearchParams();
   });
 
-  describe("rendering", () => {
-    it("renders all options", () => {
-      render(<ViewSwitcher options={defaultOptions} />);
-      expect(screen.getByText("All")).toBeInTheDocument();
-      expect(screen.getByText("Series")).toBeInTheDocument();
-    });
+  it("renders all options as tabs in a tablist, first selected by default", () => {
+    render(<ViewSwitcher options={defaultOptions} />);
+    expect(screen.getByRole("tablist")).toBeInTheDocument();
+    expect(screen.getAllByRole("tab")).toHaveLength(2);
+    expect(screen.getByText("All")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("Series")).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
+  });
 
-    it("renders with tablist role", () => {
-      render(<ViewSwitcher options={defaultOptions} />);
-      expect(screen.getByRole("tablist")).toBeInTheDocument();
-    });
+  it("applies custom className", () => {
+    render(<ViewSwitcher className="custom-class" options={defaultOptions} />);
+    expect(screen.getByRole("tablist")).toHaveClass("custom-class");
+  });
 
-    it("renders options with tab role", () => {
-      render(<ViewSwitcher options={defaultOptions} />);
-      expect(screen.getAllByRole("tab")).toHaveLength(2);
-    });
+  it("marks option matching URL param as selected", () => {
+    mockSearchParameters = new URLSearchParams("view=series");
+    render(<ViewSwitcher options={defaultOptions} />);
+    expect(screen.getByText("Series")).toHaveAttribute("aria-selected", "true");
+  });
 
-    it("applies custom className", () => {
-      render(
-        <ViewSwitcher className="custom-class" options={defaultOptions} />,
-      );
-      expect(screen.getByRole("tablist")).toHaveClass("custom-class");
+  it("uses custom defaultKey", () => {
+    render(<ViewSwitcher defaultKey="series" options={defaultOptions} />);
+    expect(screen.getByText("Series")).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("pushes URL with param on non-default selection", () => {
+    render(<ViewSwitcher options={defaultOptions} />);
+    fireEvent.click(screen.getByText("Series"));
+    expect(mockPush).toHaveBeenCalledWith("/tutorials?view=series", {
+      scroll: false,
     });
   });
 
-  describe("active state", () => {
-    it("marks first option as selected by default", () => {
-      render(<ViewSwitcher options={defaultOptions} />);
-      expect(screen.getByText("All")).toHaveAttribute("aria-selected", "true");
-      expect(screen.getByText("Series")).toHaveAttribute(
-        "aria-selected",
-        "false",
-      );
-    });
+  it("removes param when selecting default option", () => {
+    mockSearchParameters = new URLSearchParams("view=series");
+    render(<ViewSwitcher options={defaultOptions} />);
+    fireEvent.click(screen.getByText("All"));
+    expect(mockPush).toHaveBeenCalledWith("/tutorials", { scroll: false });
+  });
 
-    it("marks option matching URL param as selected", () => {
-      mockSearchParameters = new URLSearchParams("view=series");
-      render(<ViewSwitcher options={defaultOptions} />);
-      expect(screen.getByText("Series")).toHaveAttribute(
-        "aria-selected",
-        "true",
-      );
-    });
-
-    it("uses custom defaultKey", () => {
-      render(<ViewSwitcher defaultKey="series" options={defaultOptions} />);
-      expect(screen.getByText("Series")).toHaveAttribute(
-        "aria-selected",
-        "true",
-      );
+  it("uses custom paramName", () => {
+    render(<ViewSwitcher options={defaultOptions} paramName="tab" />);
+    fireEvent.click(screen.getByText("Series"));
+    expect(mockPush).toHaveBeenCalledWith("/tutorials?tab=series", {
+      scroll: false,
     });
   });
 
-  describe("navigation", () => {
-    it("pushes URL with param on non-default selection", () => {
-      render(<ViewSwitcher options={defaultOptions} />);
-      fireEvent.click(screen.getByText("Series"));
-      expect(mockPush).toHaveBeenCalledWith("/tutorials?view=series", {
-        scroll: false,
-      });
-    });
-
-    it("removes param when selecting default option", () => {
-      mockSearchParameters = new URLSearchParams("view=series");
-      render(<ViewSwitcher options={defaultOptions} />);
-      fireEvent.click(screen.getByText("All"));
-      expect(mockPush).toHaveBeenCalledWith("/tutorials", { scroll: false });
-    });
-
-    it("uses custom paramName", () => {
-      render(<ViewSwitcher options={defaultOptions} paramName="tab" />);
-      fireEvent.click(screen.getByText("Series"));
-      expect(mockPush).toHaveBeenCalledWith("/tutorials?tab=series", {
-        scroll: false,
-      });
-    });
-
-    it("preserves other search params", () => {
-      mockSearchParameters = new URLSearchParams("category=design");
-      render(<ViewSwitcher options={defaultOptions} />);
-      fireEvent.click(screen.getByText("Series"));
-      expect(mockPush).toHaveBeenCalledWith(
-        "/tutorials?category=design&view=series",
-        { scroll: false },
-      );
-    });
+  it("preserves other search params", () => {
+    mockSearchParameters = new URLSearchParams("category=design");
+    render(<ViewSwitcher options={defaultOptions} />);
+    fireEvent.click(screen.getByText("Series"));
+    expect(mockPush).toHaveBeenCalledWith(
+      "/tutorials?category=design&view=series",
+      { scroll: false },
+    );
   });
 });

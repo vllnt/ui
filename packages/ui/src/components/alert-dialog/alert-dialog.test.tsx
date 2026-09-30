@@ -21,14 +21,14 @@ describe("AlertDialog", () => {
         <AlertDialogContent>Body</AlertDialogContent>
       </AlertDialog>,
     );
-
     expect(screen.getByText("Delete")).toBeInTheDocument();
     expect(screen.queryByText("Body")).not.toBeInTheDocument();
   });
 
-  it("renders the content when defaultOpen is true", () => {
+  it("renders the content when defaultOpen and invokes onOpenChange on cancel", () => {
+    const onOpenChange = vi.fn();
     render(
-      <AlertDialog defaultOpen>
+      <AlertDialog defaultOpen onOpenChange={onOpenChange}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -41,24 +41,9 @@ describe("AlertDialog", () => {
         </AlertDialogContent>
       </AlertDialog>,
     );
-
     expect(screen.getByText("Are you sure?")).toBeInTheDocument();
     expect(screen.getByText("Cancel")).toBeInTheDocument();
     expect(screen.getByText("Confirm")).toBeInTheDocument();
-  });
-
-  it("invokes onOpenChange when cancel is clicked", () => {
-    const onOpenChange = vi.fn();
-    render(
-      <AlertDialog defaultOpen onOpenChange={onOpenChange}>
-        <AlertDialogContent>
-          <AlertDialogTitle>Title</AlertDialogTitle>
-          <AlertDialogDescription>Description</AlertDialogDescription>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-        </AlertDialogContent>
-      </AlertDialog>,
-    );
-
     fireEvent.click(screen.getByText("Cancel"));
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });

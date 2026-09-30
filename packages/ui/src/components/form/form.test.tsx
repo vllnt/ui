@@ -457,22 +457,18 @@ describe("Form", () => {
     });
   });
 
-  it("propagates disabled and required state to native controls", () => {
-    render(emailItemForm({ form: { disabled: true, required: true } }));
-
+  it.each([
+    [
+      "propagates form disabled and required state to native controls",
+      { form: { disabled: true, required: true } },
+    ],
+    [
+      "preserves control-level disabled and required props when the form is not flagged",
+      { control: { disabled: true, required: true } },
+    ],
+  ])("%s", (_name, options) => {
+    render(emailItemForm(options));
     const input = screen.getByRole("textbox");
-
-    expect(input).toBeDisabled();
-    expect(input).toBeRequired();
-    expect(input).toHaveAttribute("aria-disabled", "true");
-    expect(input).toHaveAttribute("aria-required", "true");
-  });
-
-  it("preserves control-level disabled and required props when the form is not flagged", () => {
-    render(emailItemForm({ control: { disabled: true, required: true } }));
-
-    const input = screen.getByRole("textbox");
-
     expect(input).toBeDisabled();
     expect(input).toBeRequired();
     expect(input).toHaveAttribute("aria-disabled", "true");
@@ -515,56 +511,45 @@ describe("Form", () => {
     expect(backupMessage).toHaveTextContent("Required");
   });
 
-  it("links wrapped description and message content", () => {
-    render(
-      emailItemForm({
+  it.each([
+    [
+      "links wrapped description and message content",
+      "Wrapped",
+      {
         description: (
           <div>
             <FormDescription>Wrapped help</FormDescription>
           </div>
         ),
-        form: { invalid: true },
         message: (
           <div>
             <FormMessage>Wrapped error</FormMessage>
           </div>
         ),
-      }),
-    );
-
-    const input = screen.getByRole("textbox");
-    const description = screen.getByText("Wrapped help");
-    const message = screen.getByRole("alert");
-
-    expect(input).toHaveAttribute(
-      "aria-describedby",
-      `${description.id} ${message.id}`,
-    );
-    expect(message).toHaveTextContent("Wrapped error");
-  });
-
-  it("supports fragment-wrapped helper content", () => {
-    render(
-      emailItemForm({
+      },
+    ],
+    [
+      "supports fragment-wrapped helper content",
+      "Fragment",
+      {
         description: (
           <>
             <FormDescription>Fragment help</FormDescription>
             <FormMessage>Fragment error</FormMessage>
           </>
         ),
-        form: { invalid: true },
-      }),
-    );
-
+      },
+    ],
+  ])("%s", (_name, prefix, options) => {
+    render(emailItemForm({ ...options, form: { invalid: true } }));
     const input = screen.getByRole("textbox");
-    const description = screen.getByText("Fragment help");
+    const description = screen.getByText(`${prefix} help`);
     const message = screen.getByRole("alert");
-
     expect(input).toHaveAttribute(
       "aria-describedby",
       `${description.id} ${message.id}`,
     );
-    expect(message).toHaveTextContent("Fragment error");
+    expect(message).toHaveTextContent(`${prefix} error`);
   });
 
   it("keeps helper text in aria-describedby without linking a valid message", () => {

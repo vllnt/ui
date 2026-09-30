@@ -4,32 +4,18 @@ import { describe, expect, it, vi } from "vitest";
 import { ColorPicker } from "./color-picker";
 
 describe("ColorPicker", () => {
-  describe("rendering", () => {
-    it("renders the default value on the trigger", () => {
-      const { getByRole } = render(<ColorPicker />);
-
-      expect(getByRole("button")).toHaveTextContent("#3b82f6");
-    });
-
-    it("renders a controlled value", () => {
-      const { getByRole } = render(<ColorPicker value="#22c55e" />);
-
-      expect(getByRole("button")).toHaveTextContent("#22c55e");
-    });
-
-    it("renders a custom default value", () => {
-      const { getByRole } = render(<ColorPicker defaultValue="#ec4899" />);
-
-      expect(getByRole("button")).toHaveTextContent("#ec4899");
-    });
+  it.each([
+    ["the default value", {}, "#3b82f6"],
+    ["a controlled value", { value: "#22c55e" }, "#22c55e"],
+    ["a custom default value", { defaultValue: "#ec4899" }, "#ec4899"],
+  ])("renders %s on the trigger", (_, props, expected) => {
+    const { getByRole } = render(<ColorPicker {...props} />);
+    expect(getByRole("button")).toHaveTextContent(expected);
   });
 
-  describe("interaction", () => {
-    it("does not call onValueChange before any input", () => {
-      const onValueChange = vi.fn();
-      render(<ColorPicker onValueChange={onValueChange} />);
-
-      expect(onValueChange).not.toHaveBeenCalled();
-    });
+  it("does not call onValueChange before any input", () => {
+    const onValueChange = vi.fn();
+    render(<ColorPicker onValueChange={onValueChange} />);
+    expect(onValueChange).not.toHaveBeenCalled();
   });
 });

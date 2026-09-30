@@ -11,24 +11,17 @@ const items = [
 ];
 
 describe("AvatarGroup", () => {
-  it("renders visible avatars", () => {
-    render(<AvatarGroup items={items.slice(0, 2)} />);
-
+  it("renders visible avatars and merges className", () => {
+    const { container } = render(
+      <AvatarGroup className="custom-class" items={items.slice(0, 2)} />,
+    );
     expect(screen.getByText("AL")).toBeVisible();
     expect(screen.getByText("GH")).toBeVisible();
+    expect(container.firstChild).toHaveClass("custom-class");
   });
 
   it("renders overflow count when max is provided", () => {
     render(<AvatarGroup items={items} max={3} />);
-
     expect(screen.getByText("+1")).toBeVisible();
-  });
-
-  it("applies custom class names", () => {
-    const { container } = render(
-      <AvatarGroup className="custom-class" items={items} />,
-    );
-
-    expect(container.firstChild).toHaveClass("custom-class");
   });
 });

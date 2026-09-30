@@ -17,7 +17,6 @@ beforeEach(() => {
 describe("ThemePresetProvider", () => {
   it("renders its children", () => {
     render(<ThemePresetProvider>child</ThemePresetProvider>);
-
     expect(screen.getByText("child")).toBeInTheDocument();
   });
 
@@ -25,7 +24,6 @@ describe("ThemePresetProvider", () => {
     const { container } = render(
       <ThemePresetProvider>content</ThemePresetProvider>,
     );
-
     const script = container.querySelector("script");
     expect(script).not.toBeNull();
     expect(script?.innerHTML).toContain("data-theme");
@@ -36,7 +34,6 @@ describe("ThemePresetProvider", () => {
     render(
       <ThemePresetProvider defaultPreset="matrix">child</ThemePresetProvider>,
     );
-
     await waitFor(() => {
       expect(document.documentElement.dataset.theme).toBe("matrix");
     });
@@ -44,11 +41,9 @@ describe("ThemePresetProvider", () => {
 
   it("does not override a stored preset with defaultPreset", async () => {
     localStorage.setItem(THEME_PRESET_STORAGE_KEY, "dracula");
-
     render(
       <ThemePresetProvider defaultPreset="matrix">child</ThemePresetProvider>,
     );
-
     await waitFor(() => {
       expect(document.documentElement.dataset.theme).not.toBe("matrix");
     });

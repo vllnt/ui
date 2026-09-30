@@ -11,147 +11,130 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "../components/resizable/resizable";
-import { ThemeProvider } from "../theme/theme-provider";
 
-import { reducedMotion } from "./test-utils";
+import { reducedMotion, renderThemed } from "./test-utils";
 
 const hidden = { includeHiddenElements: true } as const;
 
-describe("native animation utilities", () => {
-  it("reveals final text immediately when reduced motion is enabled", () => {
-    render(
-      <ThemeProvider colorScheme="dark">
-        <AnimatedText
+it("reveals final text immediately when reduced motion is enabled", () => {
+  renderThemed(
+    <AnimatedText
+      reducedMotionService={reducedMotion("pending")}
+      text="Deterministic launch"
+      variant="matrix"
+    />,
+    "dark",
+  );
+  expect(screen.getByLabelText("Deterministic launch")).toHaveTextContent(
+    "Deterministic launch",
+  );
+});
+
+it("splits AnimatedText by grapheme when Intl.Segmenter is available", () => {
+  render(
+    <AnimatedText reducedMotionService={reducedMotion("pending")} text="👍🏽x" />,
+  );
+  expect(screen.getByText("👍🏽", hidden)).toBeOnTheScreen();
+  expect(screen.getByText("x", hidden)).toBeOnTheScreen();
+});
+
+it("loads AnimatedText and splits by code point without Intl.Segmenter", () => {
+  const segmenter = Object.getOwnPropertyDescriptor(Intl, "Segmenter");
+  Reflect.deleteProperty(Intl, "Segmenter");
+  try {
+    jest.isolateModules(() => {
+      const testing = jest.requireActual<typeof TestingLibrary>(
+        "@testing-library/react-native/pure",
+      );
+      const isolated = jest.requireActual<typeof AnimatedTextModule>(
+        "../components/animated-text/animated-text",
+      );
+      testing.render(
+        <isolated.AnimatedText
           reducedMotionService={reducedMotion("pending")}
-          text="Deterministic launch"
-          variant="matrix"
-        />
-      </ThemeProvider>,
-    );
+          text="a😀b"
+        />,
+      );
 
-    expect(screen.getByLabelText("Deterministic launch")).toHaveTextContent(
-      "Deterministic launch",
-    );
-  });
-
-  it("splits AnimatedText by grapheme when Intl.Segmenter is available", () => {
-    render(
-      <AnimatedText
-        reducedMotionService={reducedMotion("pending")}
-        text="👍🏽x"
-      />,
-    );
-
-    expect(screen.getByText("👍🏽", hidden)).toBeOnTheScreen();
-    expect(screen.getByText("x", hidden)).toBeOnTheScreen();
-  });
-
-  it("loads AnimatedText and splits by code point without Intl.Segmenter", () => {
-    const segmenter = Object.getOwnPropertyDescriptor(Intl, "Segmenter");
-    Reflect.deleteProperty(Intl, "Segmenter");
-    try {
-      jest.isolateModules(() => {
-        const testing = jest.requireActual<typeof TestingLibrary>(
-          "@testing-library/react-native/pure",
-        );
-        const isolated = jest.requireActual<typeof AnimatedTextModule>(
-          "../components/animated-text/animated-text",
-        );
-        testing.render(
-          <isolated.AnimatedText
-            reducedMotionService={reducedMotion("pending")}
-            text="a😀b"
-          />,
-        );
-
-        for (const glyph of ["a", "😀", "b"]) {
-          expect(testing.screen.getByText(glyph, hidden)).toBeTruthy();
-        }
-        testing.cleanup();
-      });
-    } finally {
-      if (segmenter) Object.defineProperty(Intl, "Segmenter", segmenter);
-    }
-    expect(typeof Intl.Segmenter).toBe("function");
-  });
-
-  it("formats the final ticker value immediately for reduced motion", () => {
-    render(
-      <NumberTicker
-        formatOptions={{ maximumFractionDigits: 0 }}
-        from={0}
-        locale="en-US"
-        reducedMotionService={reducedMotion("pending")}
-        value={1234}
-      />,
-    );
-
-    expect(screen.getByLabelText("1,234")).toHaveTextContent("1,234");
-    expect(screen.getByLabelText("1,234")).toHaveStyle({
-      fontVariant: ["tabular-nums"],
+      for (const glyph of ["a", "😀", "b"]) {
+        expect(testing.screen.getByText(glyph, hidden)).toBeTruthy();
+      }
+      testing.cleanup();
     });
+  } finally {
+    if (segmenter) Object.defineProperty(Intl, "Segmenter", segmenter);
+  }
+  expect(typeof Intl.Segmenter).toBe("function");
+});
+
+it("formats the final ticker value immediately for reduced motion", () => {
+  render(
+    <NumberTicker
+      formatOptions={{ maximumFractionDigits: 0 }}
+      from={0}
+      locale="en-US"
+      reducedMotionService={reducedMotion("pending")}
+      value={1234}
+    />,
+  );
+  expect(screen.getByLabelText("1,234")).toHaveTextContent("1,234");
+  expect(screen.getByLabelText("1,234")).toHaveStyle({
+    fontVariant: ["tabular-nums"],
+  });
+});
+
+it("renders a reduced-motion marquee without hiding primary content", () => {
+  render(
+    <Marquee reducedMotionService={reducedMotion("pending")} testID="marquee">
+      <NativeText>Alpha</NativeText>
+      <NativeText>Beta</NativeText>
+    </Marquee>,
+  );
+  expect(screen.getByTestId("marquee")).toHaveStyle({ overflow: "hidden" });
+  expect(screen.getAllByText("Alpha")).toHaveLength(1);
+});
+
+it("keeps normalized defaults inside every panel constraint", () => {
+  render(
+    <ResizablePanelGroup>
+      <ResizablePanel
+        defaultSize={30}
+        minSize={30}
+        testID="constrained-first"
+      />
+      <ResizableHandle accessibilityLabel="Resize constrained workspace" />
+      <ResizablePanel defaultSize={90} testID="constrained-second" />
+    </ResizablePanelGroup>,
+  );
+  expect(screen.getByTestId("constrained-first")).toHaveStyle({ flexGrow: 30 });
+  expect(screen.getByTestId("constrained-second")).toHaveStyle({
+    flexGrow: 70,
+  });
+});
+
+it("resizes adjacent panels through 44-point adjustable actions", () => {
+  const onSizesChange = jest.fn();
+  render(
+    <ResizablePanelGroup onSizesChange={onSizesChange}>
+      <ResizablePanel defaultSize={50} testID="first-panel" />
+      <ResizableHandle accessibilityLabel="Resize workspace" withHandle />
+      <ResizablePanel defaultSize={50} testID="second-panel" />
+    </ResizablePanelGroup>,
+  );
+  const handle = screen.getByRole("adjustable", { name: "Resize workspace" });
+  expect(handle).toHaveStyle({ minHeight: 44, width: 44 });
+  expect(handle).toHaveAccessibilityValue({
+    max: 90,
+    min: 10,
+    now: 50,
+    text: "50 percent",
   });
 
-  it("renders a reduced-motion marquee without hiding primary content", () => {
-    render(
-      <Marquee reducedMotionService={reducedMotion("pending")} testID="marquee">
-        <NativeText>Alpha</NativeText>
-        <NativeText>Beta</NativeText>
-      </Marquee>,
-    );
-
-    expect(screen.getByTestId("marquee")).toHaveStyle({ overflow: "hidden" });
-    expect(screen.getAllByText("Alpha")).toHaveLength(1);
+  fireEvent(handle, "accessibilityAction", {
+    nativeEvent: { actionName: "increment" },
   });
 
-  it("keeps normalized defaults inside every panel constraint", () => {
-    render(
-      <ResizablePanelGroup>
-        <ResizablePanel
-          defaultSize={30}
-          minSize={30}
-          testID="constrained-first"
-        />
-        <ResizableHandle accessibilityLabel="Resize constrained workspace" />
-        <ResizablePanel defaultSize={90} testID="constrained-second" />
-      </ResizablePanelGroup>,
-    );
-
-    expect(screen.getByTestId("constrained-first")).toHaveStyle({
-      flexGrow: 30,
-    });
-    expect(screen.getByTestId("constrained-second")).toHaveStyle({
-      flexGrow: 70,
-    });
-  });
-
-  it("resizes adjacent panels through 44-point adjustable actions", () => {
-    const onSizesChange = jest.fn();
-    render(
-      <ResizablePanelGroup onSizesChange={onSizesChange}>
-        <ResizablePanel defaultSize={50} testID="first-panel" />
-        <ResizableHandle accessibilityLabel="Resize workspace" withHandle />
-        <ResizablePanel defaultSize={50} testID="second-panel" />
-      </ResizablePanelGroup>,
-    );
-
-    const handle = screen.getByRole("adjustable", {
-      name: "Resize workspace",
-    });
-    expect(handle).toHaveStyle({ minHeight: 44, width: 44 });
-    expect(handle).toHaveAccessibilityValue({
-      max: 90,
-      min: 10,
-      now: 50,
-      text: "50 percent",
-    });
-
-    fireEvent(handle, "accessibilityAction", {
-      nativeEvent: { actionName: "increment" },
-    });
-
-    expect(onSizesChange).toHaveBeenCalledWith([55, 45]);
-    expect(screen.getByTestId("first-panel")).toHaveStyle({ flexGrow: 55 });
-    expect(screen.getByTestId("second-panel")).toHaveStyle({ flexGrow: 45 });
-  });
+  expect(onSizesChange).toHaveBeenCalledWith([55, 45]);
+  expect(screen.getByTestId("first-panel")).toHaveStyle({ flexGrow: 55 });
+  expect(screen.getByTestId("second-panel")).toHaveStyle({ flexGrow: 45 });
 });

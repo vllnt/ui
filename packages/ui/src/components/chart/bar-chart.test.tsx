@@ -10,23 +10,16 @@ const data = [
 ];
 
 describe("BarChart", () => {
-  it("renders the chart from data", () => {
-    render(<BarChart data={data} />);
-
-    expect(screen.getByRole("img", { name: "Bar chart" })).toBeInTheDocument();
-  });
-
-  it("applies a custom className", () => {
+  it("renders the chart from data and merges className", () => {
     const { container } = render(
       <BarChart className="custom-class" data={data} />,
     );
-
+    expect(screen.getByRole("img", { name: "Bar chart" })).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
   it("returns null when no data is provided", () => {
     const { container } = render(<BarChart data={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 });

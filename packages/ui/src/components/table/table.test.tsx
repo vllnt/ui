@@ -36,7 +36,6 @@ describe("Table", () => {
         </TableFooter>
       </Table>,
     );
-
     expect(screen.getByText("Run history")).toBeInTheDocument();
     expect(screen.getByText("ID")).toBeInTheDocument();
     expect(screen.getByText("r-1")).toBeInTheDocument();
@@ -53,7 +52,6 @@ describe("Table", () => {
         </TableBody>
       </Table>,
     );
-
     expect(container.querySelector("table")).toHaveClass("extra");
   });
 });

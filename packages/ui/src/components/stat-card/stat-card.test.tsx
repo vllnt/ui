@@ -7,7 +7,6 @@ import { StatCard } from "./stat-card";
 describe("StatCard", () => {
   it("renders label and value", () => {
     render(<StatCard label="MRR" value="$42.8k" />);
-
     expect(screen.getByText("MRR")).toBeVisible();
     expect(screen.getByText("$42.8k")).toBeVisible();
   });
@@ -24,14 +23,12 @@ describe("StatCard", () => {
         value="71%"
       />,
     );
-
     expect(screen.getByText("Month-over-month growth")).toBeVisible();
     expect(screen.getByText("Updated 5 minutes ago")).toBeVisible();
   });
 
   it("accepts custom class names", () => {
     render(<StatCard className="custom-class" label="Latency" value="92ms" />);
-
     expect(screen.getByText("Latency").closest("div.rounded-lg")).toHaveClass(
       "custom-class",
     );

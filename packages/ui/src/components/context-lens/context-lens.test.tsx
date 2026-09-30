@@ -6,7 +6,6 @@ import { ContextLens } from "./context-lens";
 describe("ContextLens", () => {
   it("renders nothing when focus is null", () => {
     const { container } = render(<ContextLens focus={null} />);
-
     expect(container.firstChild).toBeNull();
   });
 
@@ -14,26 +13,29 @@ describe("ContextLens", () => {
     const { container } = render(
       <ContextLens focus={{ cx: 100, cy: 100, inner: 30, outer: 80 }} />,
     );
-
     expect(container.querySelector("[data-context-lens]")).toBeInTheDocument();
   });
 
-  it("clamps inner radius to non-negative", () => {
+  it.each([
+    {
+      inner: -5,
+      name: "inner radius to non-negative",
+      outer: 50,
+      radius: "50",
+    },
+    {
+      inner: 60,
+      name: "outer radius to be at least inner",
+      outer: 30,
+      radius: "60",
+    },
+  ])("clamps $name", ({ inner, outer, radius }) => {
     const { container } = render(
-      <ContextLens focus={{ cx: 0, cy: 0, inner: -5, outer: 50 }} />,
+      <ContextLens focus={{ cx: 0, cy: 0, inner, outer }} />,
     );
-
-    const gradient = container.querySelector("[data-context-lens-gradient]");
-    expect(gradient).toHaveAttribute("r", "50");
-  });
-
-  it("clamps outer radius to be at least inner", () => {
-    const { container } = render(
-      <ContextLens focus={{ cx: 0, cy: 0, inner: 60, outer: 30 }} />,
-    );
-
-    const gradient = container.querySelector("[data-context-lens-gradient]");
-    expect(gradient).toHaveAttribute("r", "60");
+    expect(
+      container.querySelector("[data-context-lens-gradient]"),
+    ).toHaveAttribute("r", radius);
   });
 
   it("clamps opacity into 0..1", () => {
@@ -43,8 +45,9 @@ describe("ContextLens", () => {
         opacity={5}
       />,
     );
-
-    const dim = container.querySelector("[data-context-lens-dim]");
-    expect(dim).toHaveAttribute("fill-opacity", "1");
+    expect(container.querySelector("[data-context-lens-dim]")).toHaveAttribute(
+      "fill-opacity",
+      "1",
+    );
   });
 });

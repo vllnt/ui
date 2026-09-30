@@ -6,73 +6,33 @@ import { FlowDiagram } from "./flow-diagram";
 import type { FlowDiagramEdge, FlowDiagramNode } from "./types";
 
 type MockFlowNode = {
-  data: {
-    description?: string;
-    label: string;
-  };
+  data: { description?: string; label: string };
   id: string;
-  position?: {
-    x: number;
-    y: number;
-  };
-};
-
-type MockFlowEdge = {
-  id: string;
-  source: string;
-  target: string;
+  position?: { x: number; y: number };
 };
 
 type MockReactFlowProps = {
   children?: React.ReactNode;
   colorMode?: string;
-  edges: MockFlowEdge[];
+  edges: { id: string; source: string; target: string }[];
   nodes: MockFlowNode[];
   onNodeClick?: (event: React.MouseEvent, node: MockFlowNode) => void;
 };
 
 const flowRuntime = vi.hoisted(() => {
-  type RuntimeNode = {
-    data: {
-      description?: string;
-      label: string;
-    };
-    id: string;
-    position?: {
-      x: number;
-      y: number;
-    };
-  };
-
-  const currentNodes: RuntimeNode[] = [];
-
+  const currentNodes: MockFlowNode[] = [];
   return {
     clipboardWrite: vi.fn(() => Promise.resolve()),
     currentNodes,
     fetchImage: vi.fn((input: string) =>
       Promise.resolve(
-        new Response(new Blob([input], { type: "image/png" }), {
-          status: 200,
-        }),
+        new Response(new Blob([input], { type: "image/png" }), { status: 200 }),
       ),
     ),
     fitView: vi.fn(() => Promise.resolve()),
-    getNodesBounds: vi.fn(() => ({
-      height: 80,
-      width: 120,
-      x: 0,
-      y: 0,
-    })),
-    getViewport: vi.fn(() => ({
-      x: 0,
-      y: 0,
-      zoom: 1,
-    })),
-    getViewportForBounds: vi.fn(() => ({
-      x: 10,
-      y: 20,
-      zoom: 1.25,
-    })),
+    getNodesBounds: vi.fn(() => ({ height: 80, width: 120, x: 0, y: 0 })),
+    getViewport: vi.fn(() => ({ x: 0, y: 0, zoom: 1 })),
+    getViewportForBounds: vi.fn(() => ({ x: 10, y: 20, zoom: 1.25 })),
     toPng: vi.fn(() => Promise.resolve("data:image/png;base64,diagram")),
     zoomTo: vi.fn(() => Promise.resolve()),
   };
@@ -154,34 +114,17 @@ const edges: FlowDiagramEdge[] = [
   { id: "start-end", source: "start", target: "end" },
 ];
 
-function setRuntimeNodes(nextNodes: FlowDiagramNode[]) {
-  flowRuntime.currentNodes.splice(
-    0,
-    flowRuntime.currentNodes.length,
-    ...nextNodes,
-  );
-}
-
-function getReactFlowParent(): HTMLElement {
-  const parent = screen.getByTestId("react-flow").parentElement;
-  if (!parent) throw new Error("Expected ReactFlow parent element");
-  return parent;
-}
-
 describe("FlowDiagram", () => {
   beforeEach(() => {
-    setRuntimeNodes(nodes);
+    flowRuntime.currentNodes.splice(
+      0,
+      flowRuntime.currentNodes.length,
+      ...nodes,
+    );
+    vi.clearAllMocks();
     flowRuntime.clipboardWrite.mockReset();
     flowRuntime.clipboardWrite.mockResolvedValue();
-    flowRuntime.fetchImage.mockClear();
-    flowRuntime.fitView.mockClear();
-    flowRuntime.getNodesBounds.mockClear();
-    flowRuntime.getViewport.mockClear();
-    flowRuntime.getViewportForBounds.mockClear();
-    flowRuntime.toPng.mockClear();
     flowRuntime.toPng.mockResolvedValue("data:image/png;base64,diagram");
-    flowRuntime.zoomTo.mockClear();
-
     vi.stubGlobal("ClipboardItem", TestClipboardItem);
     vi.stubGlobal("fetch", flowRuntime.fetchImage);
     vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) =>
@@ -215,17 +158,11 @@ describe("FlowDiagram", () => {
         title="Pipeline"
       />,
     );
-
     expect(screen.getByText("Pipeline")).toBeInTheDocument();
-    expect(screen.getByTestId("react-flow")).toHaveAttribute(
-      "data-node-count",
-      "2",
-    );
-    expect(screen.getByTestId("react-flow")).toHaveAttribute(
-      "data-edge-count",
-      "1",
-    );
-    expect(getReactFlowParent()).toHaveStyle({ height: "320px" });
+    const flow = screen.getByTestId("react-flow");
+    expect(flow).toHaveAttribute("data-node-count", "2");
+    expect(flow).toHaveAttribute("data-edge-count", "1");
+    expect(flow.parentElement).toHaveStyle({ height: "320px" });
     expect(screen.getByLabelText("Zoom in")).toBeInTheDocument();
     expect(screen.getByLabelText("Zoom out")).toBeInTheDocument();
     expect(screen.getByLabelText("Fit view")).toBeInTheDocument();
@@ -242,14 +179,12 @@ describe("FlowDiagram", () => {
         title="No controls"
       />,
     );
-
     expect(screen.getByText("No controls")).toBeInTheDocument();
     expect(screen.queryByLabelText("Zoom in")).not.toBeInTheDocument();
   });
 
   it("warns for invalid flow data", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => null);
-
     render(
       <FlowDiagram
         edges={[{ id: "missing", source: "start", target: "missing" }]}

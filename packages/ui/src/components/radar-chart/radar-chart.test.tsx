@@ -13,7 +13,6 @@ const data = [
 describe("RadarChart", () => {
   it("renders an axis label for each datum", () => {
     render(<RadarChart data={data} max={100} />);
-
     expect(
       screen.getByRole("img", { name: "Radar chart" }),
     ).toBeInTheDocument();
@@ -25,7 +24,6 @@ describe("RadarChart", () => {
     const { container } = render(
       <RadarChart className="custom-class" data={data} />,
     );
-
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
@@ -38,7 +36,6 @@ describe("RadarChart", () => {
         ]}
       />,
     );
-
     expect(container).toBeEmptyDOMElement();
   });
 });

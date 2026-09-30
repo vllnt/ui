@@ -35,7 +35,6 @@ describe("UnicodeSpinner", () => {
 
   it("renders with an accessible loading label", () => {
     render(<UnicodeSpinner />);
-
     expect(screen.getByRole("status")).toBeVisible();
     expect(
       screen.getByText("Loading", { selector: ".sr-only" }),
@@ -44,7 +43,6 @@ describe("UnicodeSpinner", () => {
 
   it("renders a visible text label when provided", () => {
     render(<UnicodeSpinner animation="scanline" label="Syncing feed" />);
-
     expect(screen.getByText("Syncing feed")).toBeVisible();
     expect(
       screen.getByText("Loading Syncing feed", { selector: ".sr-only" }),
@@ -53,23 +51,19 @@ describe("UnicodeSpinner", () => {
 
   it("supports additional upstream presets like orbit", () => {
     render(<UnicodeSpinner animation="orbit" />);
-
     expect(screen.getByRole("status")).toBeVisible();
   });
 
   it("advances frames over time", () => {
     vi.useFakeTimers();
-
     try {
       const { container } = render(<UnicodeSpinner animation="braille" />);
       const before = container.querySelector(
         '[aria-hidden="true"]',
       )?.textContent;
-
       act(() => {
         vi.advanceTimersByTime(160);
       });
-
       const after = container.querySelector(
         '[aria-hidden="true"]',
       )?.textContent;

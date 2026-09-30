@@ -11,18 +11,9 @@ type Invoice = {
 };
 
 const columns: ColumnDef<Invoice>[] = [
-  {
-    accessorKey: "customer",
-    header: "Customer",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "revenue",
-    header: "Revenue",
-  },
+  { accessorKey: "customer", header: "Customer" },
+  { accessorKey: "status", header: "Status" },
+  { accessorKey: "revenue", header: "Revenue" },
 ];
 
 const data: Invoice[] = [
@@ -31,27 +22,15 @@ const data: Invoice[] = [
   { customer: "Delta", revenue: 950, status: "paused" },
 ];
 
-function getBodyRows(container: HTMLElement): HTMLTableRowElement[] {
-  const body = container.querySelector("tbody");
-  return body ? [...body.querySelectorAll("tr")] : [];
-}
-
 describe("DataTable", () => {
-  it("renders rows", () => {
-    render(<DataTable columns={columns} data={data} />);
-
+  it("renders rows and sorts them when clicking a sortable header", () => {
+    const { container } = render(<DataTable columns={columns} data={data} />);
     expect(screen.getByText("Acme")).toBeVisible();
     expect(screen.getByText("Beacon")).toBeVisible();
-  });
-
-  it("sorts rows when clicking a sortable header", () => {
-    const { container } = render(<DataTable columns={columns} data={data} />);
-
     const revenueHeader = screen.getByRole("button", { name: /revenue/i });
     fireEvent.click(revenueHeader);
     fireEvent.click(revenueHeader);
-
-    expect(getBodyRows(container)[0]).toHaveTextContent("Delta");
+    expect(container.querySelector("tbody tr")).toHaveTextContent("Delta");
   });
 
   it("filters rows through the search input", () => {
@@ -62,20 +41,16 @@ describe("DataTable", () => {
         searchPlaceholder="Search customers"
       />,
     );
-
     fireEvent.change(screen.getByPlaceholderText("Search customers"), {
       target: { value: "Beacon" },
     });
-
     expect(screen.getByText("Beacon")).toBeVisible();
     expect(screen.queryByText("Acme")).toBeNull();
   });
 
   it("supports row selection", () => {
     render(<DataTable columns={columns} data={data} enableSelection={true} />);
-
     fireEvent.click(screen.getByLabelText("Select row 1"));
-
     expect(screen.getByText("1 selected")).toBeVisible();
   });
 });

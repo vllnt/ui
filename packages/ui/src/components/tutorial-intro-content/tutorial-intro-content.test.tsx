@@ -11,7 +11,6 @@ describe("TutorialIntroContent", () => {
         title="Start here"
       />,
     );
-
     expect(screen.getByRole("heading", { name: "Start here" })).toBeVisible();
     expect(screen.getByText(/Intro paragraph with/)).toBeInTheDocument();
     expect(screen.getByText("strong text")).toHaveClass("font-semibold");
@@ -24,7 +23,6 @@ describe("TutorialIntroContent", () => {
         title="Setup"
       />,
     );
-
     expect(screen.getByText("pnpm").tagName).toBe("CODE");
     expect(screen.getByText("pnpm").closest("a")).toHaveAttribute(
       "href",
@@ -43,7 +41,6 @@ describe("TutorialIntroContent", () => {
         title="Hybrid content"
       />,
     );
-
     expect(screen.getByText("Visible copy.")).toBeInTheDocument();
     expect(
       screen.queryByText("Hidden client-only content"),
@@ -58,7 +55,6 @@ describe("TutorialIntroContent", () => {
         title="Intro"
       />,
     );
-
     expect(container.querySelector("section")).toHaveClass("custom-intro");
   });
 });

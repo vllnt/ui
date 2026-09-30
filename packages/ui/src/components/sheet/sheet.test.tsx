@@ -22,7 +22,6 @@ describe("Sheet", () => {
         </SheetContent>
       </Sheet>,
     );
-
     expect(screen.getByText("Open sheet")).toBeInTheDocument();
     expect(screen.queryByText("Title")).not.toBeInTheDocument();
   });
@@ -38,7 +37,6 @@ describe("Sheet", () => {
         </SheetContent>
       </Sheet>,
     );
-
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Description")).toBeInTheDocument();
   });
@@ -52,7 +50,6 @@ describe("Sheet", () => {
         </SheetContent>
       </Sheet>,
     );
-
     expect(screen.getByText("Title")).toBeInTheDocument();
   });
 });

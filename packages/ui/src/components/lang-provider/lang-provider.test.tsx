@@ -11,37 +11,39 @@ vi.mock("next/navigation", () => ({
 
 describe("LangProvider", () => {
   afterEach(() => {
-    mockPathname = "/en/docs";
     document.documentElement.removeAttribute("lang");
+    mockPathname = "/en/docs";
   });
 
-  it("sets the document language from a supported pathname prefix", async () => {
-    mockPathname = "/fr/components/button";
-
-    render(<LangProvider />);
-
-    await waitFor(() => {
-      expect(document.documentElement).toHaveAttribute("lang", "fr");
-    });
-  });
-
-  it("uses the default language when the pathname has no locale prefix", async () => {
-    mockPathname = "/components/button";
-
-    render(<LangProvider defaultLanguage="fr" />);
-
-    await waitFor(() => {
-      expect(document.documentElement).toHaveAttribute("lang", "fr");
-    });
-  });
-
-  it("ignores unsupported locale prefixes", async () => {
-    mockPathname = "/de/components/button";
-
-    render(<LangProvider defaultLanguage="en" supportedLanguages={["en"]} />);
-
-    await waitFor(() => {
-      expect(document.documentElement).toHaveAttribute("lang", "en");
-    });
-  });
+  it.each([
+    {
+      element: <LangProvider />,
+      lang: "fr",
+      name: "from a supported pathname prefix",
+      pathname: "/fr/components/button",
+    },
+    {
+      element: <LangProvider defaultLanguage="fr" />,
+      lang: "fr",
+      name: "from the default language when the pathname has no locale prefix",
+      pathname: "/components/button",
+    },
+    {
+      element: (
+        <LangProvider defaultLanguage="en" supportedLanguages={["en"]} />
+      ),
+      lang: "en",
+      name: "ignoring unsupported locale prefixes",
+      pathname: "/de/components/button",
+    },
+  ])(
+    "sets the document language $name",
+    async ({ element, lang, pathname }) => {
+      mockPathname = pathname;
+      render(element);
+      await waitFor(() => {
+        expect(document.documentElement).toHaveAttribute("lang", lang);
+      });
+    },
+  );
 });

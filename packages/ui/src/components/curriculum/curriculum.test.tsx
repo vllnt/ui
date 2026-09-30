@@ -1,174 +1,117 @@
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { Curriculum, CurriculumLesson, CurriculumModule } from "./curriculum";
 
+const inModule = (children: ReactNode) => (
+  <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
+    <CurriculumModule id="mod-1" title="Module 1">
+      {children}
+    </CurriculumModule>
+  </Curriculum>
+);
+
 describe("Curriculum", () => {
-  describe("rendering", () => {
-    it("renders with title", () => {
-      const { getByText } = render(
-        <Curriculum title="Full-Stack Development">
-          <div />
-        </Curriculum>,
-      );
-      expect(getByText("Full-Stack Development")).toBeInTheDocument();
-    });
-
-    it("applies custom className", () => {
-      const { container } = render(
-        <Curriculum className="custom-class" title="Test">
-          <div />
-        </Curriculum>,
-      );
-      expect(container.firstChild).toHaveClass("custom-class");
-    });
-
-    it("renders totalHours when provided", () => {
-      const { getByText } = render(
-        <Curriculum title="Course" totalHours={40}>
-          <div />
-        </Curriculum>,
-      );
-      expect(getByText("40h total")).toBeInTheDocument();
-    });
-
-    it("does not render hours label when totalHours is omitted", () => {
-      const { queryByText } = render(
-        <Curriculum title="Course">
-          <div />
-        </Curriculum>,
-      );
-      expect(queryByText(/total/)).not.toBeInTheDocument();
-    });
+  it("renders title, totalHours, and className", () => {
+    const { container } = render(
+      <Curriculum
+        className="custom-class"
+        title="Full-Stack Development"
+        totalHours={40}
+      >
+        <div />
+      </Curriculum>,
+    );
+    expect(screen.getByText("Full-Stack Development")).toBeInTheDocument();
+    expect(screen.getByText("40h total")).toBeInTheDocument();
+    expect(container.firstChild).toHaveClass("custom-class");
   });
 
-  describe("accessibility", () => {
-    it("does not expose a tree role for the module list", () => {
-      const { queryByRole } = render(
-        <Curriculum title="Course">
-          <div />
-        </Curriculum>,
-      );
-      expect(queryByRole("tree")).not.toBeInTheDocument();
-    });
+  it("omits the hours label and never exposes a tree role", () => {
+    render(
+      <Curriculum title="Course">
+        <div />
+      </Curriculum>,
+    );
+    expect(screen.queryByText(/total/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("tree")).not.toBeInTheDocument();
   });
 });
 
 describe("CurriculumModule", () => {
-  const wrapper = (children: ReactNode) => (
-    <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
-      {children}
-    </Curriculum>
-  );
-
-  it("renders module title", () => {
-    const { getByText } = render(
-      wrapper(
-        <CurriculumModule id="mod-1" title="Module 1: Foundations">
-          <div />
-        </CurriculumModule>,
-      ),
-    );
-    expect(getByText("Module 1: Foundations")).toBeInTheDocument();
-  });
-
-  it("renders description when provided", () => {
-    const { getByText } = render(
-      wrapper(
+  it("renders module title, description, and estimatedHours", () => {
+    render(
+      <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
         <CurriculumModule
           description="Core web technologies"
+          estimatedHours={8}
           id="mod-1"
-          title="Module 1"
+          title="Module 1: Foundations"
         >
           <div />
-        </CurriculumModule>,
-      ),
+        </CurriculumModule>
+      </Curriculum>,
     );
-    expect(getByText("Core web technologies")).toBeInTheDocument();
-  });
-
-  it("renders estimatedHours when provided", () => {
-    const { getByText } = render(
-      wrapper(
-        <CurriculumModule estimatedHours={8} id="mod-1" title="Module 1">
-          <div />
-        </CurriculumModule>,
-      ),
-    );
-    expect(getByText("8h")).toBeInTheDocument();
+    expect(screen.getByText("Module 1: Foundations")).toBeInTheDocument();
+    expect(screen.getByText("Core web technologies")).toBeInTheDocument();
+    expect(screen.getByText("8h")).toBeInTheDocument();
   });
 
   it("keeps collapsed lessons out of the accessible tree until expanded", () => {
-    const { getByRole, queryByRole } = render(
+    render(
       <Curriculum title="Course">
         <CurriculumModule id="mod-1" title="Module 1">
           <CurriculumLesson href="/lessons/html" title="HTML Basics" />
         </CurriculumModule>
       </Curriculum>,
     );
-
     expect(
-      queryByRole("link", { name: "HTML Basics" }),
+      screen.queryByRole("link", { name: "HTML Basics" }),
     ).not.toBeInTheDocument();
-
-    fireEvent.click(getByRole("button", { name: /module 1/i }));
-
+    fireEvent.click(screen.getByRole("button", { name: /module 1/i }));
     expect(
-      getByRole("link", { name: "Available HTML Basics" }),
+      screen.getByRole("link", { name: "Available HTML Basics" }),
     ).toBeInTheDocument();
   });
 
   it("removes lesson progress when a lesson unmounts", () => {
-    const { getByText, queryByText, rerender } = render(
-      <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
-        <CurriculumModule id="mod-1" title="Module 1">
-          <CurriculumLesson
-            id="lesson-1"
-            status="completed"
-            title="HTML Basics"
-          />
-        </CurriculumModule>
-      </Curriculum>,
+    const { rerender } = render(
+      inModule(
+        <CurriculumLesson
+          id="lesson-1"
+          status="completed"
+          title="HTML Basics"
+        />,
+      ),
     );
-
-    expect(getByText("1/1")).toBeInTheDocument();
-
-    rerender(
-      <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
-        <CurriculumModule id="mod-1" title="Module 1">
-          {null}
-        </CurriculumModule>
-      </Curriculum>,
-    );
-
-    expect(queryByText("1/1")).not.toBeInTheDocument();
+    expect(screen.getByText("1/1")).toBeInTheDocument();
+    rerender(inModule(null));
+    expect(screen.queryByText("1/1")).not.toBeInTheDocument();
   });
 
   it("tracks duplicate lesson titles independently when ids are omitted", () => {
-    const { getByText } = render(
-      <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
-        <CurriculumModule id="mod-1" title="Module 1">
+    render(
+      inModule(
+        <>
           <CurriculumLesson status="completed" title="Duplicate" />
           <CurriculumLesson status="completed" title="Duplicate" />
-        </CurriculumModule>
-      </Curriculum>,
+        </>,
+      ),
     );
-
-    expect(getByText("2/2")).toBeInTheDocument();
+    expect(screen.getByText("2/2")).toBeInTheDocument();
   });
 
   it("renders module progress during server render", () => {
     const html = renderToStaticMarkup(
-      <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
-        <CurriculumModule id="mod-1" title="Module 1">
+      inModule(
+        <>
           <CurriculumLesson status="completed" title="Completed lesson" />
           <CurriculumLesson status="available" title="Available lesson" />
-        </CurriculumModule>
-      </Curriculum>,
+        </>,
+      ),
     );
-
     expect(html).toContain("1/2");
   });
 
@@ -184,53 +127,29 @@ describe("CurriculumModule", () => {
 });
 
 describe("CurriculumLesson", () => {
-  const wrapper = (children: ReactNode) => (
-    <Curriculum defaultExpandedModules={["mod-1"]} title="Course">
-      <CurriculumModule id="mod-1" title="Module 1">
-        {children}
-      </CurriculumModule>
-    </Curriculum>
-  );
-
-  it("renders lesson title", () => {
-    const { getByText } = render(
-      wrapper(<CurriculumLesson title="HTML & Semantic Markup" />),
-    );
-    expect(getByText("HTML & Semantic Markup")).toBeInTheDocument();
-  });
-
-  it("renders duration when provided", () => {
-    const { getByText } = render(
-      wrapper(<CurriculumLesson duration="45 min" title="HTML Basics" />),
-    );
-    expect(getByText("45 min")).toBeInTheDocument();
-  });
-
-  it("renders difficulty badge when provided", () => {
-    const { getByText } = render(
-      wrapper(<CurriculumLesson difficulty="beginner" title="HTML Basics" />),
-    );
-    expect(getByText("beginner")).toBeInTheDocument();
-  });
-
-  it("renders as anchor when href provided and not locked", () => {
+  it("renders title, duration, difficulty, and an anchor when available", () => {
     const { container } = render(
-      wrapper(
+      inModule(
         <CurriculumLesson
+          difficulty="beginner"
+          duration="45 min"
           href="/lessons/html"
           status="available"
-          title="HTML Basics"
+          title="HTML & Semantic Markup"
         />,
       ),
     );
+    expect(screen.getByText("HTML & Semantic Markup")).toBeInTheDocument();
+    expect(screen.getByText("45 min")).toBeInTheDocument();
+    expect(screen.getByText("beginner")).toBeInTheDocument();
     expect(
       container.querySelector("a[href='/lessons/html']"),
     ).toBeInTheDocument();
   });
 
   it("does not render anchor when status is locked", () => {
-    const { container, getByText } = render(
-      wrapper(
+    const { container } = render(
+      inModule(
         <CurriculumLesson
           href="/lessons/html"
           status="locked"
@@ -239,16 +158,16 @@ describe("CurriculumLesson", () => {
       ),
     );
     expect(container.querySelector("a")).not.toBeInTheDocument();
-    expect(getByText("Locked")).toBeInTheDocument();
+    expect(screen.getByText("Locked")).toBeInTheDocument();
     expect(
-      getByText((_, element) => element?.textContent === " (Locked)"),
+      screen.getByText((_, element) => element?.textContent === " (Locked)"),
     ).toBeInTheDocument();
   });
 
   it("applies completed style when status is completed", () => {
-    const { getByText } = render(
-      wrapper(<CurriculumLesson status="completed" title="HTML Basics" />),
+    render(
+      inModule(<CurriculumLesson status="completed" title="HTML Basics" />),
     );
-    expect(getByText("HTML Basics")).toHaveClass("line-through");
+    expect(screen.getByText("HTML Basics")).toHaveClass("line-through");
   });
 });

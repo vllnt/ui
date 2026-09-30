@@ -19,17 +19,11 @@ describe("BlurReveal", () => {
     );
   });
 
-  it("renders its children", () => {
-    render(<BlurReveal>Content</BlurReveal>);
-
-    expect(screen.getByText("Content")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
+  it("renders its children and merges className", () => {
     const { container } = render(
       <BlurReveal className="custom-class">Content</BlurReveal>,
     );
-
+    expect(screen.getByText("Content")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

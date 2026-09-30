@@ -1,53 +1,32 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group";
 
 describe("InputGroup", () => {
-  describe("rendering", () => {
-    it("renders an input with addons", () => {
-      const { getByPlaceholderText, getByText } = render(
-        <InputGroup>
-          <InputGroupAddon>$</InputGroupAddon>
-          <InputGroupInput placeholder="Amount" />
-        </InputGroup>,
-      );
-
-      expect(getByText("$")).toBeInTheDocument();
-      expect(getByPlaceholderText("Amount")).toBeInTheDocument();
-    });
-
-    it("applies custom className", () => {
-      const { container } = render(<InputGroup className="custom-class" />);
-
-      expect(container.firstChild).toHaveClass("custom-class");
-    });
-
-    it("exposes a group role", () => {
-      const { getByRole } = render(<InputGroup />);
-
-      expect(getByRole("group")).toBeInTheDocument();
-    });
-  });
-
-  describe("addon alignment", () => {
-    it.each(["leading", "trailing"] as const)(
-      "renders %s alignment",
-      (align) => {
-        const { getByText } = render(
-          <InputGroupAddon align={align}>icon</InputGroupAddon>,
-        );
-
-        expect(getByText("icon")).toBeInTheDocument();
-      },
+  it("renders a group with custom className, an addon, and an input", () => {
+    const { container } = render(
+      <InputGroup className="custom-class">
+        <InputGroupAddon>$</InputGroupAddon>
+        <InputGroupInput placeholder="Amount" />
+      </InputGroup>,
     );
+    expect(screen.getByRole("group")).toBe(container.firstChild);
+    expect(container.firstChild).toHaveClass("custom-class");
+    expect(screen.getByText("$")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Amount")).toBeInTheDocument();
   });
 
-  describe("input", () => {
-    it("forwards the disabled attribute", () => {
-      const { getByRole } = render(<InputGroupInput disabled />);
+  it.each(["leading", "trailing"] as const)(
+    "renders %s addon alignment",
+    (align) => {
+      render(<InputGroupAddon align={align}>icon</InputGroupAddon>);
+      expect(screen.getByText("icon")).toBeInTheDocument();
+    },
+  );
 
-      expect(getByRole("textbox")).toBeDisabled();
-    });
+  it("forwards the disabled attribute to the input", () => {
+    render(<InputGroupInput disabled />);
+    expect(screen.getByRole("textbox")).toBeDisabled();
   });
 });

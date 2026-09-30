@@ -48,35 +48,27 @@ describe("Slideshow", () => {
 
   it("renders in a portal and restores body scroll lock on cleanup", () => {
     const { view } = renderSlideshow();
-
     expect(screen.getByText("Tutorial")).toBeInTheDocument();
     expect(screen.getByText("Intro body")).toBeInTheDocument();
     expect(document.body.style.overflow).toBe("hidden");
-
     view.unmount();
-
     expect(document.body.style.overflow).toBe("");
   });
 
   it("opens the completion dialog before navigating an incomplete section", () => {
     const { props } = renderSlideshow();
-
     fireEvent.click(screen.getByRole("button", { name: /next/i }));
-
     expect(
       screen.getByRole("dialog", { name: "Mark section as complete?" }),
     ).toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: /^done/i }));
     advanceNavigationTimer();
-
     expect(props.onToggleSection).toHaveBeenCalledWith("intro");
     expect(props.onNavigate).toHaveBeenCalledWith(1);
   });
 
   it("navigates from the table of contents after the transition delay", () => {
     const { props } = renderSlideshow();
-
     fireEvent.click(
       screen.getByRole("button", { name: "Open table of contents" }),
     );
@@ -88,7 +80,6 @@ describe("Slideshow", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Setup" }));
     advanceNavigationTimer();
-
     expect(props.onNavigate).toHaveBeenCalledWith(1);
     expect(
       screen.getByRole("button", { name: "Open table of contents" }),
@@ -99,11 +90,9 @@ describe("Slideshow", () => {
     const { props } = renderSlideshow({
       completedSections: new Set(["intro"]),
     });
-
     fireEvent.keyDown(document, { key: "ArrowRight" });
     advanceNavigationTimer();
     expect(props.onNavigate).toHaveBeenCalledWith(1);
-
     fireEvent.keyDown(document, { key: "Escape" });
     expect(props.onExit).toHaveBeenCalledTimes(1);
   });

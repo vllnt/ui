@@ -10,24 +10,17 @@ const items = [
 ];
 
 describe("MarketTreemap", () => {
-  it("renders market tiles", () => {
+  it("renders market tiles with signed percentage changes", () => {
     render(<MarketTreemap items={items} />);
-
     expect(screen.getByText("Market treemap")).toBeInTheDocument();
     expect(screen.getByText("NVDA")).toBeInTheDocument();
     expect(screen.getByText("XOM")).toBeInTheDocument();
-  });
-
-  it("shows signed percentage changes", () => {
-    render(<MarketTreemap items={items} />);
-
     expect(screen.getByText("+2.60%")).toBeInTheDocument();
     expect(screen.getByText("-1.40%")).toBeInTheDocument();
   });
 
   it("returns null with no tiles", () => {
     const { container } = render(<MarketTreemap items={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 });

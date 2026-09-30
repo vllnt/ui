@@ -6,6 +6,7 @@ import {
   formatTransactionDate,
   type Transaction,
   TransactionList,
+  type TransactionListSubscriptionRowProps,
 } from "./transaction-list";
 
 const FIXED_DATE = Date.UTC(2025, 2, 10);
@@ -70,144 +71,91 @@ describe("formatTransactionDate", () => {
   });
 });
 
+function renderSubscription(
+  props: Partial<TransactionListSubscriptionRowProps> = {},
+) {
+  return render(
+    <TransactionList transactions={[]}>
+      <TransactionList.Pinned>
+        <TransactionList.SubscriptionRow
+          amountCents={1200}
+          interval="month"
+          plan="AI OS Pro"
+          status="active"
+          {...props}
+        />
+      </TransactionList.Pinned>
+    </TransactionList>,
+  );
+}
+
 describe("TransactionList", () => {
-  describe("rendering", () => {
-    it("renders all transactions in order", () => {
-      render(<TransactionList transactions={TRANSACTIONS} />);
-
-      expect(screen.getByText("Credit reload")).toBeInTheDocument();
-      expect(screen.getByText("API usage - March")).toBeInTheDocument();
-    });
-
-    it("emits data-transaction-type per row", () => {
-      const { container } = render(
-        <TransactionList transactions={TRANSACTIONS} />,
-      );
-
-      const items = container.querySelectorAll("li[data-transaction-type]");
-      expect(items.length).toBe(2);
-      expect(items[0]).toHaveAttribute("data-transaction-type", "credit");
-      expect(items[1]).toHaveAttribute("data-transaction-type", "debit");
-    });
-
-    it("formats amounts with sign prefixes", () => {
-      render(<TransactionList transactions={TRANSACTIONS} />);
-
-      expect(screen.getByText("+$20.00")).toBeInTheDocument();
-      expect(screen.getByText("-$1.50")).toBeInTheDocument();
-    });
-
-    it("renders the empty message when no transactions and no children", () => {
-      render(
-        <TransactionList
-          emptyMessage="No transactions yet"
-          transactions={[]}
-        />,
-      );
-
-      expect(screen.getByText("No transactions yet")).toBeInTheDocument();
-    });
-
-    it("hides the empty message when pinned children are rendered", () => {
-      render(
-        <TransactionList emptyMessage="No txn" transactions={[]}>
-          <TransactionList.Pinned>
-            <TransactionList.SubscriptionRow
-              amountCents={1200}
-              interval="month"
-              plan="AI OS Pro"
-              status="active"
-            />
-          </TransactionList.Pinned>
-        </TransactionList>,
-      );
-
-      expect(screen.queryByText("No txn")).not.toBeInTheDocument();
-      expect(screen.getByText("AI OS Pro")).toBeInTheDocument();
-    });
-  });
-
-  describe("TransactionListSubscriptionRow", () => {
-    it("renders the active badge and active-border style", () => {
-      const { container } = render(
-        <TransactionList transactions={[]}>
-          <TransactionList.Pinned>
-            <TransactionList.SubscriptionRow
-              amountCents={1200}
-              interval="month"
-              plan="AI OS Pro"
-              status="active"
-            />
-          </TransactionList.Pinned>
-        </TransactionList>,
-      );
-
-      expect(screen.getByText("Active")).toBeInTheDocument();
-      const subscriptionRow = container.querySelector("[data-status]");
-      expect(subscriptionRow).toHaveAttribute("data-status", "active");
-    });
-
-    it("renders the renewal date when provided", () => {
-      render(
-        <TransactionList transactions={[]}>
-          <TransactionList.Pinned>
-            <TransactionList.SubscriptionRow
-              amountCents={1200}
-              interval="month"
-              plan="AI OS Pro"
-              renewsAt={Date.UTC(2025, 3, 15)}
-              status="active"
-            />
-          </TransactionList.Pinned>
-        </TransactionList>,
-      );
-
-      expect(screen.getByText(/Renews/)).toBeInTheDocument();
-      expect(screen.getByText(/2025/)).toBeInTheDocument();
-    });
-
-    it("formats the per-interval amount", () => {
-      render(
-        <TransactionList transactions={[]}>
-          <TransactionList.Pinned>
-            <TransactionList.SubscriptionRow
-              amountCents={1200}
-              currency="EUR"
-              interval="month"
-              locale="en-IE"
-              plan="AI OS Pro"
-              status="active"
-            />
-          </TransactionList.Pinned>
-        </TransactionList>,
-      );
-
-      expect(screen.getByText(/€12\.00\/mo/)).toBeInTheDocument();
-    });
-
-    it.each([
-      ["active", "Active"],
-      ["trialing", "Trial"],
-      ["past_due", "Past due"],
-      ["canceled", "Canceled"],
-    ] as const)(
-      "renders status=%s with badge label %s",
-      (status, expectedLabel) => {
-        render(
-          <TransactionList transactions={[]}>
-            <TransactionList.Pinned>
-              <TransactionList.SubscriptionRow
-                amountCents={1200}
-                interval="month"
-                plan="Plan"
-                status={status}
-              />
-            </TransactionList.Pinned>
-          </TransactionList>,
-        );
-
-        expect(screen.getByText(expectedLabel)).toBeInTheDocument();
-      },
+  it("renders all transactions in order with type attributes and signed amounts", () => {
+    const { container } = render(
+      <TransactionList transactions={TRANSACTIONS} />,
     );
+    expect(screen.getByText("Credit reload")).toBeInTheDocument();
+    expect(screen.getByText("API usage - March")).toBeInTheDocument();
+    const items = container.querySelectorAll("li[data-transaction-type]");
+    expect(items.length).toBe(2);
+    expect(items[0]).toHaveAttribute("data-transaction-type", "credit");
+    expect(items[1]).toHaveAttribute("data-transaction-type", "debit");
+    expect(screen.getByText("+$20.00")).toBeInTheDocument();
+    expect(screen.getByText("-$1.50")).toBeInTheDocument();
   });
+
+  it("renders the empty message when no transactions and no children", () => {
+    render(
+      <TransactionList emptyMessage="No transactions yet" transactions={[]} />,
+    );
+    expect(screen.getByText("No transactions yet")).toBeInTheDocument();
+  });
+
+  it("hides the empty message when pinned children are rendered", () => {
+    render(
+      <TransactionList emptyMessage="No txn" transactions={[]}>
+        <TransactionList.Pinned>
+          <TransactionList.SubscriptionRow
+            amountCents={1200}
+            interval="month"
+            plan="AI OS Pro"
+            status="active"
+          />
+        </TransactionList.Pinned>
+      </TransactionList>,
+    );
+    expect(screen.queryByText("No txn")).not.toBeInTheDocument();
+    expect(screen.getByText("AI OS Pro")).toBeInTheDocument();
+  });
+
+  it("renders the active badge and active-border style", () => {
+    const { container } = renderSubscription();
+    expect(screen.getByText("Active")).toBeInTheDocument();
+    const subscriptionRow = container.querySelector("[data-status]");
+    expect(subscriptionRow).toHaveAttribute("data-status", "active");
+  });
+
+  it("renders the renewal date when provided", () => {
+    renderSubscription({ renewsAt: Date.UTC(2025, 3, 15) });
+    expect(screen.getByText(/Renews/)).toBeInTheDocument();
+    expect(screen.getByText(/2025/)).toBeInTheDocument();
+  });
+
+  it("formats the per-interval amount", () => {
+    renderSubscription({ currency: "EUR", locale: "en-IE" });
+    expect(screen.getByText(/€12\.00\/mo/)).toBeInTheDocument();
+  });
+
+  it.each([
+    ["active", "Active"],
+    ["trialing", "Trial"],
+    ["past_due", "Past due"],
+    ["canceled", "Canceled"],
+  ] as const)(
+    "renders status=%s with badge label %s",
+    (status, expectedLabel) => {
+      renderSubscription({ plan: "Plan", status });
+      expect(screen.getByText(expectedLabel)).toBeInTheDocument();
+    },
+  );
 });

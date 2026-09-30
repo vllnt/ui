@@ -10,7 +10,6 @@ describe("SidebarProvider", () => {
         <span>sidebar-body</span>
       </SidebarProvider>,
     );
-
     expect(screen.getByText("sidebar-body")).toBeInTheDocument();
   });
 });
@@ -26,7 +25,6 @@ describe("useSidebar", () => {
     const { result } = renderHook(() => useSidebar(), {
       wrapper: ({ children }) => <SidebarProvider>{children}</SidebarProvider>,
     });
-
     expect(result.current.open).toBe(false);
     act(() => {
       result.current.setOpen(true);

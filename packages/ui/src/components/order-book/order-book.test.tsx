@@ -16,23 +16,16 @@ const bids = [
 ];
 
 describe("OrderBook", () => {
-  it("renders both sides of the book", () => {
-    render(<OrderBook asks={asks} bids={bids} />);
-
+  it("renders both sides of the book and formats the spread", () => {
+    render(<OrderBook asks={asks} bids={bids} precision={2} />);
     expect(screen.getByText("Order book")).toBeInTheDocument();
     expect(screen.getByText("Asks")).toBeInTheDocument();
     expect(screen.getByText("Bids")).toBeInTheDocument();
-  });
-
-  it("formats the spread", () => {
-    render(<OrderBook asks={asks} bids={bids} precision={2} />);
-
     expect(screen.getByText("Spread 0.06")).toBeInTheDocument();
   });
 
   it("returns null when there is no order flow", () => {
     const { container } = render(<OrderBook asks={[]} bids={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 });

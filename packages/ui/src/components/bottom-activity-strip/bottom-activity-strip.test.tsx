@@ -15,26 +15,20 @@ const sample: ActivityEvent[] = [
 describe("BottomActivityStrip", () => {
   it("renders the empty state when events list is empty", () => {
     const { container } = render(<BottomActivityStrip events={[]} />);
-
     expect(
       container.querySelector("[data-strip-state='empty']"),
     ).toBeInTheDocument();
     expect(screen.getByText("No recent activity")).toBeInTheDocument();
   });
 
-  it("renders one chip per event", () => {
+  it("renders one plain chip per event with its tone", () => {
     const { container } = render(<BottomActivityStrip events={sample} />);
-
     expect(container.querySelectorAll("[data-strip-event]")).toHaveLength(3);
-  });
-
-  it("propagates per-event tone to a data attribute", () => {
-    const { container } = render(<BottomActivityStrip events={sample} />);
-
     expect(container.querySelector("[data-strip-event='1']")).toHaveAttribute(
       "data-strip-event-tone",
       "success",
     );
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("invokes onActivate when an interactive chip is clicked", () => {
@@ -42,31 +36,18 @@ describe("BottomActivityStrip", () => {
     render(
       <BottomActivityStrip
         events={[
-          {
-            id: "1",
-            label: "click me",
-            onActivate: handleActivate,
-            ts: "now",
-          },
+          { id: "1", label: "click me", onActivate: handleActivate, ts: "now" },
         ]}
       />,
     );
-
     fireEvent.click(screen.getByRole("button"));
     expect(handleActivate).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders chips as plain spans when onActivate is omitted", () => {
-    render(<BottomActivityStrip events={sample} />);
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("respects maxEvents and drops the tail", () => {
     const { container } = render(
       <BottomActivityStrip events={sample} maxEvents={2} />,
     );
-
     expect(container.querySelectorAll("[data-strip-event]")).toHaveLength(2);
     expect(
       container.querySelector("[data-strip-event='3']"),

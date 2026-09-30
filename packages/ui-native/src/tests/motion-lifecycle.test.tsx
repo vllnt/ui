@@ -54,170 +54,117 @@ function mockAnimations() {
     readonly stop: jest.Mock;
   }[] = [];
   const timing = jest.spyOn(Animated, "timing").mockImplementation(() => {
-    const animation = {
-      reset: jest.fn(),
-      start: jest.fn(),
-      stop: jest.fn(),
-    };
+    const animation = { reset: jest.fn(), start: jest.fn(), stop: jest.fn() };
     animations.push(animation);
     return animation;
   });
   return { animations, timing };
 }
 
-describe("native reviewed motion behavior", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
+const initialItems = [{ content: <Text>Initial row</Text>, id: "initial" }];
+
+function list(service: ReducedMotionService, inserted = false) {
+  const items = inserted
+    ? [...initialItems, { content: <Text>Inserted row</Text>, id: "inserted" }]
+    : initialItems;
+  return (
+    <AnimatedList
+      items={items}
+      label="Updates"
+      reducedMotionService={service}
+    />
+  );
+}
+
+function quotes(service: ReducedMotionService) {
+  return (
+    <AnimatedTestimonials
+      labels={labels}
+      reducedMotionService={service}
+      testimonials={testimonials}
+    />
+  );
+}
+
+async function settled(service: ReducedMotionService) {
+  await waitFor(() => {
+    expect(service.isReduceMotionEnabled).toHaveBeenCalledTimes(1);
   });
+}
 
-  it("keeps initial list rows visible and animates only later insertions", async () => {
-    const { service } = createReducedMotionService(false);
-    const { timing } = mockAnimations();
-    const initialItems = [{ content: <Text>Initial row</Text>, id: "initial" }];
-    const view = render(
-      <AnimatedList
-        items={initialItems}
-        label="Updates"
-        reducedMotionService={service}
-      />,
-    );
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
-    await waitFor(() => {
-      expect(service.isReduceMotionEnabled).toHaveBeenCalledTimes(1);
-    });
-    expect(screen.getByText("Initial row")).toBeOnTheScreen();
-    expect(timing).not.toHaveBeenCalled();
+it("keeps initial list rows visible and animates only later insertions", async () => {
+  const { service } = createReducedMotionService(false);
+  const { timing } = mockAnimations();
+  const view = render(list(service));
 
-    view.rerender(
-      <AnimatedList
-        items={[
-          ...initialItems,
-          { content: <Text>Inserted row</Text>, id: "inserted" },
-        ]}
-        label="Updates"
-        reducedMotionService={service}
-      />,
-    );
+  await settled(service);
+  expect(screen.getByText("Initial row")).toBeOnTheScreen();
+  expect(timing).not.toHaveBeenCalled();
 
-    expect(timing).toHaveBeenCalledTimes(1);
-    expect(timing).toHaveBeenCalledWith(
-      expect.any(Animated.Value),
-      expect.objectContaining({ delay: 40, duration: 100, toValue: 1 }),
-    );
+  view.rerender(list(service, true));
+
+  expect(timing).toHaveBeenCalledTimes(1);
+  expect(timing).toHaveBeenCalledWith(
+    expect.any(Animated.Value),
+    expect.objectContaining({ delay: 40, duration: 100, toValue: 1 }),
+  );
+});
+
+it("keeps the initial testimonial visible and animates a user selection", async () => {
+  const { service } = createReducedMotionService(false);
+  const { timing } = mockAnimations();
+  render(quotes(service));
+
+  await settled(service);
+  expect(screen.getByText("First quote")).toBeOnTheScreen();
+  expect(timing).not.toHaveBeenCalled();
+
+  fireEvent.press(screen.getByRole("button", { name: "Next testimonial" }));
+
+  expect(screen.getByText("Second quote")).toBeOnTheScreen();
+  expect(timing).toHaveBeenCalledTimes(1);
+});
+
+it("never animates list insertions or testimonial selections with reduced motion", async () => {
+  const { service } = createReducedMotionService(true);
+  const { timing } = mockAnimations();
+  const view = render(list(service));
+
+  await settled(service);
+  view.rerender(list(service, true));
+  expect(timing).not.toHaveBeenCalled();
+
+  view.unmount();
+  render(quotes(service));
+  fireEvent.press(screen.getByRole("button", { name: "Next testimonial" }));
+  expect(screen.getByText("Second quote")).toBeOnTheScreen();
+  expect(timing).not.toHaveBeenCalled();
+});
+
+it("stops running motion on preference changes and unmount", async () => {
+  const preference = createReducedMotionService(false);
+  const { animations } = mockAnimations();
+  const view = render(list(preference.service));
+
+  await settled(preference.service);
+  view.rerender(list(preference.service, true));
+  expect(animations).toHaveLength(1);
+
+  act(() => {
+    preference.emit(true);
   });
+  expect(animations[0]?.stop).toHaveBeenCalledTimes(1);
 
-  it("keeps the initial testimonial visible and animates a user selection", async () => {
-    const { service } = createReducedMotionService(false);
-    const { timing } = mockAnimations();
-    render(
-      <AnimatedTestimonials
-        labels={labels}
-        reducedMotionService={service}
-        testimonials={testimonials}
-      />,
-    );
+  const nextPreference = createReducedMotionService(false);
+  const testimonialsView = render(quotes(nextPreference.service));
+  await settled(nextPreference.service);
+  fireEvent.press(screen.getByRole("button", { name: "Next testimonial" }));
+  expect(animations).toHaveLength(2);
 
-    await waitFor(() => {
-      expect(service.isReduceMotionEnabled).toHaveBeenCalledTimes(1);
-    });
-    expect(screen.getByText("First quote")).toBeOnTheScreen();
-    expect(timing).not.toHaveBeenCalled();
-
-    fireEvent.press(screen.getByRole("button", { name: "Next testimonial" }));
-
-    expect(screen.getByText("Second quote")).toBeOnTheScreen();
-    expect(timing).toHaveBeenCalledTimes(1);
-  });
-
-  it("never animates list insertions or testimonial selections with reduced motion", async () => {
-    const { service } = createReducedMotionService(true);
-    const { timing } = mockAnimations();
-    const initialItems = [{ content: <Text>Initial row</Text>, id: "initial" }];
-    const view = render(
-      <AnimatedList
-        items={initialItems}
-        label="Updates"
-        reducedMotionService={service}
-      />,
-    );
-
-    await waitFor(() => {
-      expect(service.isReduceMotionEnabled).toHaveBeenCalledTimes(1);
-    });
-    view.rerender(
-      <AnimatedList
-        items={[
-          ...initialItems,
-          { content: <Text>Inserted row</Text>, id: "inserted" },
-        ]}
-        label="Updates"
-        reducedMotionService={service}
-      />,
-    );
-    expect(timing).not.toHaveBeenCalled();
-
-    view.unmount();
-    render(
-      <AnimatedTestimonials
-        labels={labels}
-        reducedMotionService={service}
-        testimonials={testimonials}
-      />,
-    );
-    fireEvent.press(screen.getByRole("button", { name: "Next testimonial" }));
-    expect(screen.getByText("Second quote")).toBeOnTheScreen();
-    expect(timing).not.toHaveBeenCalled();
-  });
-
-  it("stops running motion on preference changes and unmount", async () => {
-    const preference = createReducedMotionService(false);
-    const { animations } = mockAnimations();
-    const initialItems = [{ content: <Text>Initial row</Text>, id: "initial" }];
-    const view = render(
-      <AnimatedList
-        items={initialItems}
-        label="Updates"
-        reducedMotionService={preference.service}
-      />,
-    );
-
-    await waitFor(() => {
-      expect(preference.service.isReduceMotionEnabled).toHaveBeenCalledTimes(1);
-    });
-    view.rerender(
-      <AnimatedList
-        items={[
-          ...initialItems,
-          { content: <Text>Inserted row</Text>, id: "inserted" },
-        ]}
-        label="Updates"
-        reducedMotionService={preference.service}
-      />,
-    );
-    expect(animations).toHaveLength(1);
-
-    act(() => {
-      preference.emit(true);
-    });
-    expect(animations[0]?.stop).toHaveBeenCalledTimes(1);
-
-    const nextPreference = createReducedMotionService(false);
-    const testimonialsView = render(
-      <AnimatedTestimonials
-        labels={labels}
-        reducedMotionService={nextPreference.service}
-        testimonials={testimonials}
-      />,
-    );
-    await waitFor(() => {
-      expect(
-        nextPreference.service.isReduceMotionEnabled,
-      ).toHaveBeenCalledTimes(1);
-    });
-    fireEvent.press(screen.getByRole("button", { name: "Next testimonial" }));
-    expect(animations).toHaveLength(2);
-
-    testimonialsView.unmount();
-    expect(animations[1]?.stop).toHaveBeenCalledTimes(1);
-  });
+  testimonialsView.unmount();
+  expect(animations[1]?.stop).toHaveBeenCalledTimes(1);
 });

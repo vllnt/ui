@@ -9,27 +9,9 @@ import {
 const noop = (): void => undefined;
 
 describe("FloatingToolbar", () => {
-  it("positions absolutely from x/y props", () => {
-    const { container } = render(
-      <FloatingToolbar
-        actions={[{ id: "a", label: "A", onActivate: noop }]}
-        x={120}
-        y={80}
-      />,
-    );
-
-    const toolbar = container.querySelector("[data-floating-toolbar]");
-    expect(toolbar).toHaveStyle({ left: "120px", top: "80px" });
-  });
-
-  it("renders one button per action with the configured variant", () => {
+  it("positions from x/y and renders one button per action with the configured variant", () => {
     const actions: FloatingToolbarAction[] = [
-      {
-        id: "rename",
-        label: "Rename",
-        onActivate: noop,
-        variant: "primary",
-      },
+      { id: "rename", label: "Rename", onActivate: noop, variant: "primary" },
       { id: "duplicate", label: "Duplicate", onActivate: noop },
       {
         id: "delete",
@@ -39,49 +21,37 @@ describe("FloatingToolbar", () => {
       },
     ];
     const { container } = render(
-      <FloatingToolbar actions={actions} x={0} y={0} />,
+      <FloatingToolbar actions={actions} x={120} y={80} />,
     );
-
-    expect(
-      container.querySelector("[data-action-id='rename']"),
-    ).toHaveAttribute("data-variant", "primary");
-    expect(
-      container.querySelector("[data-action-id='duplicate']"),
-    ).toHaveAttribute("data-variant", "ghost");
-    expect(
-      container.querySelector("[data-action-id='delete']"),
-    ).toHaveAttribute("data-variant", "destructive");
+    expect(container.querySelector("[data-floating-toolbar]")).toHaveStyle({
+      left: "120px",
+      top: "80px",
+    });
+    const action = (id: string) =>
+      container.querySelector(`[data-action-id='${id}']`);
+    expect(action("rename")).toHaveAttribute("data-variant", "primary");
+    expect(action("duplicate")).toHaveAttribute("data-variant", "ghost");
+    expect(action("delete")).toHaveAttribute("data-variant", "destructive");
   });
 
-  it("fires onActivate when an action is clicked", () => {
+  it("fires onActivate when an action is clicked, but not for disabled actions", () => {
     const onActivate = vi.fn();
-    render(
-      <FloatingToolbar
-        actions={[{ id: "rename", label: "Rename", onActivate }]}
-        x={0}
-        y={0}
-      />,
-    );
-
-    fireEvent.click(screen.getByText("Rename"));
-    expect(onActivate).toHaveBeenCalledTimes(1);
-  });
-
-  it("disables actions when disabled is set", () => {
-    const onActivate = vi.fn();
+    const onDisabled = vi.fn();
     render(
       <FloatingToolbar
         actions={[
-          { disabled: true, id: "rename", label: "Rename", onActivate },
+          { id: "rename", label: "Rename", onActivate },
+          { disabled: true, id: "lock", label: "Lock", onActivate: onDisabled },
         ]}
         x={0}
         y={0}
       />,
     );
-
-    const button = screen.getByText("Rename").closest("button");
-    expect(button).toBeDisabled();
-    if (button) fireEvent.click(button);
-    expect(onActivate).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByText("Rename"));
+    expect(onActivate).toHaveBeenCalledTimes(1);
+    const disabled = screen.getByText("Lock").closest("button");
+    expect(disabled).toBeDisabled();
+    if (disabled) fireEvent.click(disabled);
+    expect(onDisabled).not.toHaveBeenCalled();
   });
 });

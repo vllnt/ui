@@ -4,36 +4,15 @@ import { describe, expect, it, vi } from "vitest";
 import { TLDRSection } from "./tldr-section";
 
 describe("TLDRSection", () => {
-  it("renders the label", () => {
+  it("renders the label, starts collapsed, and keeps the label after expanding", () => {
     render(
       <TLDRSection label="TLDR">
-        <p>Body</p>
+        <p>Body content</p>
       </TLDRSection>,
     );
-
     expect(screen.getByText("TLDR")).toBeInTheDocument();
-  });
-
-  it("starts collapsed", () => {
-    render(
-      <TLDRSection label="TLDR">
-        <p>Body content</p>
-      </TLDRSection>,
-    );
-
     expect(screen.queryByText("Body content")).not.toBeInTheDocument();
-  });
-
-  it("expands on trigger click", () => {
-    render(
-      <TLDRSection label="TLDR">
-        <p>Body content</p>
-      </TLDRSection>,
-    );
-
     fireEvent.click(screen.getByText("TLDR"));
-
-    // After click the label is still there + the content slot mounts
     expect(screen.getByText("TLDR")).toBeInTheDocument();
   });
 
@@ -48,17 +27,14 @@ describe("TLDRSection", () => {
           <p>Body content</p>
         </TLDRSection>,
       );
-
       act(() => {
         fireEvent.click(screen.getByText("TLDR"));
       });
-
       // requestAnimationFrame dispatches "show" -> skeleton replaces content.
       act(() => {
         vi.advanceTimersByTime(32);
       });
       expect(screen.queryByText("Body content")).not.toBeInTheDocument();
-
       // The 800ms timer dispatches "hide" -> content appears.
       act(() => {
         vi.advanceTimersByTime(800);

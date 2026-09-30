@@ -13,13 +13,10 @@ describe("SnapGuides", () => {
         ]}
       />,
     );
-
     const vertical = container.querySelector("[data-snap-guide-id='x-200']");
     const horizontal = container.querySelector("[data-snap-guide-id='y-160']");
-
     expect(vertical).toHaveAttribute("data-snap-orientation", "vertical");
     expect(vertical).toHaveStyle({ left: "200px" });
-
     expect(horizontal).toHaveAttribute("data-snap-orientation", "horizontal");
     expect(horizontal).toHaveStyle({ top: "160px" });
   });
@@ -34,7 +31,6 @@ describe("SnapGuides", () => {
         ]}
       />,
     );
-
     expect(container.querySelector("[data-snap-guide-count]")).toHaveAttribute(
       "data-snap-guide-count",
       "3",
@@ -43,7 +39,6 @@ describe("SnapGuides", () => {
 
   it("renders nothing when guides is empty", () => {
     const { container } = render(<SnapGuides guides={[]} />);
-
     expect(container.querySelector("[data-snap-guide-id]")).toBeNull();
   });
 });

@@ -111,23 +111,14 @@ describe("SearchDialog", () => {
     expect(onDocumentationSelect).toHaveBeenCalledWith(documentationResult);
   });
 
-  it("opens the command dialog from the trigger", () => {
+  it("opens the command dialog from the trigger with items sorted by title and optional descriptions", () => {
     renderSearchDialog();
-
     fireEvent.click(screen.getByRole("button", { name: /search/i }));
-
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("Search components"),
     ).toBeInTheDocument();
     expect(screen.getByText("Components")).toBeInTheDocument();
-  });
-
-  it("sorts items by title and renders optional descriptions", () => {
-    renderSearchDialog();
-
-    fireEvent.click(screen.getByRole("button", { name: /search/i }));
-
     const avatar = screen.getByText("Avatar");
     const badge = screen.getByText("Badge");
     const form = screen.getByText("Form");

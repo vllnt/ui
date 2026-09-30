@@ -15,14 +15,16 @@ const links = [
 ];
 
 describe("SankeyChart", () => {
-  it("renders a label for each node", () => {
-    render(<SankeyChart links={links} nodes={nodes} />);
-
+  it("renders a label for each node and merges className", () => {
+    const { container } = render(
+      <SankeyChart className="custom-class" links={links} nodes={nodes} />,
+    );
     expect(
       screen.getByRole("img", { name: "Sankey chart" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Visits")).toBeInTheDocument();
     expect(screen.getByText("Paid")).toBeInTheDocument();
+    expect(container.firstChild).toHaveClass("custom-class");
   });
 
   it("ignores links that reference unknown nodes", () => {
@@ -32,23 +34,13 @@ describe("SankeyChart", () => {
         nodes={nodes}
       />,
     );
-
     expect(
       screen.getByRole("img", { name: "Sankey chart" }),
     ).toBeInTheDocument();
   });
 
-  it("applies a custom className", () => {
-    const { container } = render(
-      <SankeyChart className="custom-class" links={links} nodes={nodes} />,
-    );
-
-    expect(container.firstChild).toHaveClass("custom-class");
-  });
-
   it("returns null when no nodes are provided", () => {
     const { container } = render(<SankeyChart links={[]} nodes={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 });

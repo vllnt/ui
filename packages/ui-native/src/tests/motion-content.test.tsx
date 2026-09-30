@@ -21,7 +21,7 @@ import { TextReveal } from "../components/text-reveal/text-reveal";
 import { TextShimmer } from "../components/text-shimmer/text-shimmer";
 import { Typewriter } from "../components/typewriter/typewriter";
 
-import { flushMicrotasks, reducedMotion } from "./test-utils";
+import { advanceTimers, flushMicrotasks, reducedMotion } from "./test-utils";
 
 const motionService = reducedMotion(false);
 const reducedMotionService = reducedMotion(true);
@@ -29,249 +29,229 @@ const reducedMotionService = reducedMotion(true);
 /** Advances fake timers in 10ms steps so each tick's effect can schedule the next. */
 function advanceTimersBySteps(milliseconds: number): void {
   for (let elapsed = 0; elapsed < milliseconds; elapsed += 10) {
-    act(() => {
-      jest.advanceTimersByTime(10);
-    });
+    advanceTimers(10);
   }
 }
 
-describe("native motion and content utilities", () => {
-  it("renders complete accessible text when motion is reduced", async () => {
-    render(
-      <View>
-        <BlurReveal reducedMotionService={reducedMotionService}>
-          <NativeText>Blur fallback</NativeText>
-        </BlurReveal>
-        <RevealText reducedMotionService={reducedMotionService}>
-          <NativeText>Controlled reveal</NativeText>
-        </RevealText>
-        <ScrambleText
-          reducedMotionService={reducedMotionService}
-          text="SCRAMBLE"
-        />
-        <ShimmerText reducedMotionService={reducedMotionService}>
-          Shimmer
-        </ShimmerText>
-        <SpinningText reducedMotionService={reducedMotionService}>
-          Native ring
-        </SpinningText>
-        <TextAnimate reducedMotionService={reducedMotionService}>
-          Animated words
-        </TextAnimate>
-        <TextReveal progress={0} reducedMotionService={reducedMotionService}>
-          Readable words
-        </TextReveal>
-        <TextShimmer reducedMotionService={reducedMotionService}>
-          Text shimmer
-        </TextShimmer>
-        <Typewriter
-          reducedMotionService={reducedMotionService}
-          text="Typed text"
-        />
-      </View>,
-    );
+it("renders complete accessible text when motion is reduced", async () => {
+  render(
+    <View>
+      <BlurReveal reducedMotionService={reducedMotionService}>
+        <NativeText>Blur fallback</NativeText>
+      </BlurReveal>
+      <RevealText reducedMotionService={reducedMotionService}>
+        <NativeText>Controlled reveal</NativeText>
+      </RevealText>
+      <ScrambleText
+        reducedMotionService={reducedMotionService}
+        text="SCRAMBLE"
+      />
+      <ShimmerText reducedMotionService={reducedMotionService}>
+        Shimmer
+      </ShimmerText>
+      <SpinningText reducedMotionService={reducedMotionService}>
+        Native ring
+      </SpinningText>
+      <TextAnimate reducedMotionService={reducedMotionService}>
+        Animated words
+      </TextAnimate>
+      <TextReveal progress={0} reducedMotionService={reducedMotionService}>
+        Readable words
+      </TextReveal>
+      <TextShimmer reducedMotionService={reducedMotionService}>
+        Text shimmer
+      </TextShimmer>
+      <Typewriter
+        reducedMotionService={reducedMotionService}
+        text="Typed text"
+      />
+    </View>,
+  );
+  await waitFor(() => {
+    expect(screen.getByText("SCRAMBLE")).toBeOnTheScreen();
+    expect(screen.getByText("Typed text")).toBeOnTheScreen();
+  });
+  for (const name of ["Native ring", "Animated words", "Readable words"])
+    expect(screen.getByLabelText(name)).toBeOnTheScreen();
+});
 
-    await waitFor(() => {
-      expect(screen.getByText("SCRAMBLE")).toBeOnTheScreen();
-      expect(screen.getByText("Typed text")).toBeOnTheScreen();
-    });
-    expect(screen.getByLabelText("Native ring")).toBeOnTheScreen();
-    expect(screen.getByLabelText("Animated words")).toBeOnTheScreen();
-    expect(screen.getByLabelText("Readable words")).toBeOnTheScreen();
+it("stops text motion timers after completion", async () => {
+  jest.useFakeTimers();
+  render(
+    <View>
+      <ScrambleText
+        duration={20}
+        reducedMotionService={motionService}
+        text="AB"
+      />
+      <Typewriter reducedMotionService={motionService} speed={10} text="CD" />
+    </View>,
+  );
+  await flushMicrotasks();
+  act(() => {
+    jest.runOnlyPendingTimers();
+  });
+  act(() => {
+    jest.runOnlyPendingTimers();
   });
 
-  it("stops text motion timers after completion", async () => {
-    jest.useFakeTimers();
-    render(
-      <View>
-        <ScrambleText
-          duration={20}
-          reducedMotionService={motionService}
-          text="AB"
-        />
-        <Typewriter reducedMotionService={motionService} speed={10} text="CD" />
-      </View>,
-    );
+  expect(screen.getByText("AB")).toBeOnTheScreen();
+  expect(screen.getByText("CD")).toBeOnTheScreen();
+  expect(jest.getTimerCount()).toBe(0);
+  jest.useRealTimers();
+});
 
-    await flushMicrotasks();
-    act(() => {
-      jest.runOnlyPendingTimers();
-    });
-    act(() => {
-      jest.runOnlyPendingTimers();
-    });
+it.each([
+  {
+    element: (
+      <Typewriter
+        cursor={false}
+        reducedMotionService={motionService}
+        speed={10}
+        testID="typewriter"
+        text="a😀b"
+      />
+    ),
+    steps: [
+      [20, "a😀"],
+      [10, "a😀b"],
+    ] as const,
+    testID: "typewriter",
+    title: "types by code point without splitting surrogate pairs",
+  },
+  {
+    element: (
+      <ScrambleText
+        duration={100}
+        reducedMotionService={motionService}
+        scrambleCharacters="🔒"
+        testID="scramble"
+        text="😀😀"
+      />
+    ),
+    steps: [
+      [50, "😀🔒"],
+      [50, "😀😀"],
+    ] as const,
+    testID: "scramble",
+    title: "times scramble reveal and samples its pool by code point",
+  },
+])("$title", async ({ element, steps, testID }) => {
+  jest.useFakeTimers();
+  render(element);
 
-    expect(screen.getByText("AB")).toBeOnTheScreen();
-    expect(screen.getByText("CD")).toBeOnTheScreen();
-    expect(jest.getTimerCount()).toBe(0);
-    jest.useRealTimers();
+  await flushMicrotasks();
+  for (const [milliseconds, text] of steps) {
+    advanceTimersBySteps(milliseconds);
+    expect(screen.getByTestId(testID)).toHaveTextContent(text);
+  }
+  expect(jest.getTimerCount()).toBe(0);
+  jest.useRealTimers();
+});
+
+it("keeps code plain unless a renderer is injected and uses an explicit clipboard", async () => {
+  const setText = jest.fn(async (): Promise<void> => {
+    await Promise.resolve();
   });
-
-  it.each([
-    {
-      element: (
-        <Typewriter
-          cursor={false}
-          reducedMotionService={motionService}
-          speed={10}
-          testID="typewriter"
-          text="a😀b"
-        />
-      ),
-      steps: [
-        [20, "a😀"],
-        [10, "a😀b"],
-      ] as const,
-      testID: "typewriter",
-      title: "types by code point without splitting surrogate pairs",
-    },
-    {
-      element: (
-        <ScrambleText
-          duration={100}
-          reducedMotionService={motionService}
-          scrambleCharacters="🔒"
-          testID="scramble"
-          text="😀😀"
-        />
-      ),
-      steps: [
-        [50, "😀🔒"],
-        [50, "😀😀"],
-      ] as const,
-      testID: "scramble",
-      title: "times scramble reveal and samples its pool by code point",
-    },
-  ])("$title", async ({ element, steps, testID }) => {
-    jest.useFakeTimers();
-    render(element);
-
-    await flushMicrotasks();
-    for (const [milliseconds, text] of steps) {
-      advanceTimersBySteps(milliseconds);
-      expect(screen.getByTestId(testID)).toHaveTextContent(text);
-    }
-    expect(jest.getTimerCount()).toBe(0);
-    jest.useRealTimers();
-  });
-
-  it("keeps code plain unless a renderer is injected and uses an explicit clipboard", async () => {
-    const setText = jest.fn(async (): Promise<void> => {
-      await Promise.resolve();
-    });
-    render(
-      <CodeBlock
-        clipboard={{ getText: async () => "", setText }}
-        code="const native = true;"
-        copyLabels={{
-          copied: "Code copied",
-          copy: "Copy native code",
-          unavailable: "Copy unavailable",
-        }}
-        language="typescript"
-        showLanguage
-      />,
-    );
-
-    expect(screen.getByText("const native = true;")).toHaveProp(
-      "selectable",
-      true,
-    );
-    fireEvent.press(screen.getByRole("button", { name: "Copy native code" }));
-    await waitFor(() => {
-      expect(setText).toHaveBeenCalledWith("const native = true;");
-      expect(
-        screen.getByRole("button", { name: "Code copied" }),
-      ).toBeOnTheScreen();
-    });
-  });
-
-  it("opens document links and the native share sheet through injected services", async () => {
-    const openUrl = jest.fn(
-      async (): Promise<{ readonly status: "opened" }> => ({
-        status: "opened",
-      }),
-    );
-    const share = jest.fn(
-      async (): Promise<{ readonly status: "shared" }> => ({
-        status: "shared",
-      }),
-    );
-    render(
-      <View>
-        <DocumentSiblingNav
-          labels={{
-            navigation: "Article navigation",
-            next: "Next article",
-            previous: "Previous article",
-          }}
-          linking={{ openUrl }}
-          next={{ href: "https://example.com/next", title: "Native follow-up" }}
-        />
-        <ShareSection
-          content={{ message: "Native release", url: "https://example.com" }}
-          labels={{
-            share: "Share release",
-            unavailable: "Sharing unavailable",
-          }}
-          shareService={{ share }}
-          title="Share this release"
-        />
-      </View>,
-    );
-
-    fireEvent.press(
-      screen.getByRole("link", { name: "Next article: Native follow-up" }),
-    );
-    fireEvent.press(screen.getByRole("button", { name: "Share release" }));
-
-    await waitFor(() => {
-      expect(openUrl).toHaveBeenCalledWith("https://example.com/next");
-      expect(share).toHaveBeenCalledWith(
-        { message: "Native release", url: "https://example.com" },
-        undefined,
-      );
-    });
-  });
-
-  it("copies only terminal command lines and exposes unavailable copy truthfully", async () => {
-    const setText = jest.fn(async (): Promise<void> => {
-      await Promise.resolve();
-    });
-    const { rerender } = render(
-      <Terminal
-        clipboard={{ getText: async () => "", setText }}
-        copyLabels={{
-          copied: "Commands copied",
-          copy: "Copy commands",
-          unavailable: "Copy unavailable",
-        }}
-        lines={[
-          { content: "pnpm test", type: "command" },
-          { content: "Tests passed", type: "output" },
-        ]}
-        title="Test terminal"
-      />,
-    );
-
-    fireEvent.press(screen.getByRole("button", { name: "Copy commands" }));
-    await waitFor(() => {
-      expect(setText).toHaveBeenCalledWith("pnpm test");
-    });
-
-    rerender(
-      <Terminal
-        copyLabels={{
-          copied: "Commands copied",
-          copy: "Copy commands",
-          unavailable: "Copy unavailable",
-        }}
-        lines={[{ content: "pnpm build", type: "command" }]}
-        title="Build terminal"
-      />,
-    );
+  render(
+    <CodeBlock
+      clipboard={{ getText: async () => "", setText }}
+      code="const native = true;"
+      copyLabels={{
+        copied: "Code copied",
+        copy: "Copy native code",
+        unavailable: "Copy unavailable",
+      }}
+      language="typescript"
+      showLanguage
+    />,
+  );
+  expect(screen.getByText("const native = true;")).toHaveProp(
+    "selectable",
+    true,
+  );
+  fireEvent.press(screen.getByRole("button", { name: "Copy native code" }));
+  await waitFor(() => {
+    expect(setText).toHaveBeenCalledWith("const native = true;");
     expect(
-      screen.getByRole("button", { name: "Copy unavailable" }),
-    ).toBeDisabled();
+      screen.getByRole("button", { name: "Code copied" }),
+    ).toBeOnTheScreen();
   });
+});
+
+it("opens document links and the native share sheet through injected services", async () => {
+  const openUrl = jest.fn(
+    async (): Promise<{ readonly status: "opened" }> => ({ status: "opened" }),
+  );
+  const share = jest.fn(
+    async (): Promise<{ readonly status: "shared" }> => ({ status: "shared" }),
+  );
+  render(
+    <View>
+      <DocumentSiblingNav
+        labels={{
+          navigation: "Article navigation",
+          next: "Next article",
+          previous: "Previous article",
+        }}
+        linking={{ openUrl }}
+        next={{ href: "https://example.com/next", title: "Native follow-up" }}
+      />
+      <ShareSection
+        content={{ message: "Native release", url: "https://example.com" }}
+        labels={{ share: "Share release", unavailable: "Sharing unavailable" }}
+        shareService={{ share }}
+        title="Share this release"
+      />
+    </View>,
+  );
+  fireEvent.press(
+    screen.getByRole("link", { name: "Next article: Native follow-up" }),
+  );
+  fireEvent.press(screen.getByRole("button", { name: "Share release" }));
+
+  await waitFor(() => {
+    expect(openUrl).toHaveBeenCalledWith("https://example.com/next");
+    expect(share).toHaveBeenCalledWith(
+      { message: "Native release", url: "https://example.com" },
+      undefined,
+    );
+  });
+});
+
+it("copies only terminal command lines and exposes unavailable copy truthfully", async () => {
+  const setText = jest.fn(async (): Promise<void> => {
+    await Promise.resolve();
+  });
+  const copyLabels = {
+    copied: "Commands copied",
+    copy: "Copy commands",
+    unavailable: "Copy unavailable",
+  };
+  const { rerender } = render(
+    <Terminal
+      clipboard={{ getText: async () => "", setText }}
+      copyLabels={copyLabels}
+      lines={[
+        { content: "pnpm test", type: "command" },
+        { content: "Tests passed", type: "output" },
+      ]}
+      title="Test terminal"
+    />,
+  );
+  fireEvent.press(screen.getByRole("button", { name: "Copy commands" }));
+  await waitFor(() => {
+    expect(setText).toHaveBeenCalledWith("pnpm test");
+  });
+
+  rerender(
+    <Terminal
+      copyLabels={copyLabels}
+      lines={[{ content: "pnpm build", type: "command" }]}
+      title="Build terminal"
+    />,
+  );
+  expect(
+    screen.getByRole("button", { name: "Copy unavailable" }),
+  ).toBeDisabled();
 });

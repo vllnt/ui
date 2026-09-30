@@ -32,18 +32,26 @@ describe("RunTimeline", () => {
     const { container } = render(
       <RunTimeline end={100} phases={[]} start={0} />,
     );
-
     expect(
       container.querySelector("[data-run-timeline-state='empty']"),
     ).toBeInTheDocument();
   });
 
-  it("renders one phase bar per phase routed to its lane", () => {
+  it("renders one plain phase bar per phase routed to its lane, plus the cursor", () => {
     const { container } = render(
-      <RunTimeline end={3600} lanes={lanes} phases={sample} start={0} />,
+      <RunTimeline
+        cursor={1800}
+        end={3600}
+        lanes={lanes}
+        phases={sample}
+        start={0}
+      />,
     );
-
     expect(container.querySelectorAll("[data-run-phase]")).toHaveLength(2);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(
+      container.querySelector("[data-run-timeline-cursor]"),
+    ).toBeInTheDocument();
   });
 
   it("invokes onActivate when an interactive phase is clicked", () => {
@@ -63,31 +71,8 @@ describe("RunTimeline", () => {
         start={0}
       />,
     );
-
     fireEvent.click(screen.getByRole("button"));
     expect(handleActivate).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders phases as plain elements when onActivate is omitted", () => {
-    render(<RunTimeline end={3600} lanes={lanes} phases={sample} start={0} />);
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
-  });
-
-  it("renders the cursor when a numeric value is provided", () => {
-    const { container } = render(
-      <RunTimeline
-        cursor={1800}
-        end={3600}
-        lanes={lanes}
-        phases={sample}
-        start={0}
-      />,
-    );
-
-    expect(
-      container.querySelector("[data-run-timeline-cursor]"),
-    ).toBeInTheDocument();
   });
 
   it("falls back to a single 'Run' lane when lanes prop is omitted", () => {
@@ -98,7 +83,6 @@ describe("RunTimeline", () => {
         start={0}
       />,
     );
-
     expect(
       container.querySelector("[data-run-timeline-lane='default']"),
     ).toBeInTheDocument();
@@ -114,7 +98,6 @@ describe("RunTimeline", () => {
         start={0}
       />,
     );
-
     expect(screen.getByText("0m")).toBeInTheDocument();
     expect(screen.getByText("60m")).toBeInTheDocument();
     expect(screen.getByText("30m")).toBeInTheDocument();
@@ -128,7 +111,6 @@ describe("RunTimeline", () => {
         start={5}
       />,
     );
-
     expect(container.querySelector("[data-run-phase='p']")).toBeInTheDocument();
   });
 });

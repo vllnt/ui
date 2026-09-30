@@ -19,17 +19,11 @@ describe("TextAnimate", () => {
     );
   });
 
-  it("renders the full text content", () => {
-    const { container } = render(<TextAnimate>Hello world</TextAnimate>);
-
-    expect(container.textContent).toContain("Hello world");
-  });
-
-  it("applies a custom class name", () => {
+  it("renders the full text content and applies a custom class name", () => {
     const { container } = render(
-      <TextAnimate className="custom-class">Hello</TextAnimate>,
+      <TextAnimate className="custom-class">Hello world</TextAnimate>,
     );
-
+    expect(container.textContent).toContain("Hello world");
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

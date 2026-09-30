@@ -18,7 +18,6 @@ describe("Tooltip", () => {
         </Tooltip>
       </TooltipProvider>,
     );
-
     expect(screen.getByText("Hover me")).toBeInTheDocument();
     expect(screen.queryByText("Tip body")).not.toBeInTheDocument();
   });
@@ -32,7 +31,6 @@ describe("Tooltip", () => {
         </Tooltip>
       </TooltipProvider>,
     );
-
     expect(screen.getAllByText("Open content").length).toBeGreaterThan(0);
   });
 
@@ -45,7 +43,6 @@ describe("Tooltip", () => {
         </Tooltip>
       </TooltipProvider>,
     );
-
     const node = screen.getAllByText("Body")[0];
     expect(node).toHaveClass("extra");
   });

@@ -13,7 +13,6 @@ describe("SubscriptionCard", () => {
         status="active"
       />,
     );
-
     expect(screen.getByText("Subscription")).toBeVisible();
     expect(screen.getByText("$49/mo")).toBeVisible();
     expect(screen.getByText("Growth")).toBeVisible();
@@ -30,7 +29,6 @@ describe("SubscriptionCard", () => {
         usageLabel="1.2M tokens"
       />,
     );
-
     expect(screen.getByText("3 seats")).toBeVisible();
     expect(screen.getByText("1.2M tokens")).toBeVisible();
     expect(screen.getByText("Trialing")).toBeVisible();
@@ -47,7 +45,6 @@ describe("SubscriptionCard", () => {
         status="active"
       />,
     );
-
     expect(screen.getByRole("button", { name: "Manage plan" })).toBeVisible();
     expect(screen.getByRole("button", { name: "View invoices" })).toBeVisible();
   });

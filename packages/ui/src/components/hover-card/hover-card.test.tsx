@@ -11,30 +11,17 @@ describe("HoverCard", () => {
         <HoverCardContent>Card body</HoverCardContent>
       </HoverCard>,
     );
-
     expect(screen.getByText("Hover me")).toBeInTheDocument();
     expect(screen.queryByText("Card body")).not.toBeInTheDocument();
   });
 
-  it("renders the content when defaultOpen is true", () => {
+  it("renders the content with merged className when defaultOpen is true", () => {
     render(
       <HoverCard defaultOpen>
         <HoverCardTrigger>Trigger</HoverCardTrigger>
-        <HoverCardContent>Open card</HoverCardContent>
+        <HoverCardContent className="extra">Open card</HoverCardContent>
       </HoverCard>,
     );
-
-    expect(screen.getByText("Open card")).toBeInTheDocument();
-  });
-
-  it("merges the className prop on the content", () => {
-    render(
-      <HoverCard defaultOpen>
-        <HoverCardTrigger>Trigger</HoverCardTrigger>
-        <HoverCardContent className="extra">Body</HoverCardContent>
-      </HoverCard>,
-    );
-
-    expect(screen.getByText("Body")).toHaveClass("extra");
+    expect(screen.getByText("Open card")).toHaveClass("extra");
   });
 });

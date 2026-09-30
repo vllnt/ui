@@ -4,21 +4,12 @@ import { describe, expect, it } from "vitest";
 import { RoleBadge } from "./role-badge";
 
 describe("RoleBadge", () => {
-  it("renders the provided role label", () => {
-    render(<RoleBadge accountRole="owner" />);
-
-    expect(screen.getByText("Owner")).toBeVisible();
-  });
-
-  it("accepts a custom label", () => {
-    render(<RoleBadge accountRole="billing" label="Finance" />);
-
-    expect(screen.getByText("Finance")).toBeInTheDocument();
-  });
-
-  it("renders member role without errors", () => {
-    render(<RoleBadge accountRole="member" />);
-
-    expect(screen.getByText("Member")).toBeVisible();
+  it.each([
+    ["owner", undefined, "Owner"],
+    ["billing", "Finance", "Finance"],
+    ["member", undefined, "Member"],
+  ] as const)("renders the %s role (custom label: %s)", (role, label, text) => {
+    render(<RoleBadge accountRole={role} label={label} />);
+    expect(screen.getByText(text)).toBeVisible();
   });
 });

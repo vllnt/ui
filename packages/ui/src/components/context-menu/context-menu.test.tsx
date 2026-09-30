@@ -21,31 +21,19 @@ describe("ContextMenu", () => {
         </ContextMenuContent>
       </ContextMenu>,
     );
-
     expect(screen.getByText("Right-click target")).toBeInTheDocument();
     expect(screen.queryByText("Item")).not.toBeInTheDocument();
   });
-});
 
-describe("ContextMenuShortcut", () => {
-  it("renders the shortcut text", () => {
-    render(<ContextMenuShortcut>Ctrl+S</ContextMenuShortcut>);
-
+  it("renders Shortcut, Label, and Separator parts on their own", () => {
+    render(
+      <>
+        <ContextMenuShortcut>Ctrl+S</ContextMenuShortcut>
+        <ContextMenuLabel>Section heading</ContextMenuLabel>
+        <ContextMenuSeparator />
+      </>,
+    );
     expect(screen.getByText("Ctrl+S")).toBeInTheDocument();
-  });
-});
-
-describe("ContextMenuLabel + Separator + Item (rendered manually)", () => {
-  it("renders Label children when rendered alone", () => {
-    render(<ContextMenuLabel>Section heading</ContextMenuLabel>);
-
     expect(screen.getByText("Section heading")).toBeInTheDocument();
-  });
-
-  it("renders Separator + Item when used inside the menu", () => {
-    render(<ContextMenuSeparator />);
-
-    // Separator renders without crashing.
-    expect(true).toBe(true);
   });
 });

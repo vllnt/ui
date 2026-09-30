@@ -9,33 +9,25 @@ const sample: ChatDockMessage[] = [
 ];
 
 describe("ChatDockSection", () => {
-  it("renders one entry per message", () => {
-    render(<ChatDockSection messages={sample} />);
-
+  it("renders each message with its speaker and the optional context label", () => {
+    render(
+      <ChatDockSection
+        contextLabel="Spatial workspace"
+        messages={sample}
+        title="Helper"
+      />,
+    );
     expect(
       screen.getByText("How do I retry a failed run?"),
     ).toBeInTheDocument();
     expect(screen.getByText("Click retry on the run row.")).toBeInTheDocument();
-  });
-
-  it("renders the speaker for each message", () => {
-    render(<ChatDockSection messages={sample} title="Helper" />);
-
     expect(screen.getByText("Bea")).toBeInTheDocument();
     expect(screen.getByText("Assistant")).toBeInTheDocument();
-  });
-
-  it("renders the optional context label", () => {
-    render(
-      <ChatDockSection contextLabel="Spatial workspace" messages={sample} />,
-    );
-
     expect(screen.getByText("Spatial workspace")).toBeInTheDocument();
   });
 
   it("falls back to the default title and composer placeholder", () => {
     render(<ChatDockSection messages={[]} />);
-
     expect(screen.getByText("Assistant")).toBeInTheDocument();
     expect(
       screen.getByText("Ask about runs, errors, or pending work…"),
@@ -50,7 +42,6 @@ describe("ChatDockSection", () => {
         title="Helper"
       />,
     );
-
     expect(screen.getByText("Helper")).toBeInTheDocument();
     expect(screen.getByText("Type a question…")).toBeInTheDocument();
   });

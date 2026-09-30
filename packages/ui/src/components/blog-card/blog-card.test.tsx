@@ -13,81 +13,46 @@ const post = {
 };
 
 describe("ContentCard", () => {
-  it("renders the title and description", () => {
-    render(<ContentCard href="/posts/first-post" post={post} />);
-
-    expect(screen.getByText("First post")).toBeInTheDocument();
-    expect(
-      screen.getByText("A short summary of the post."),
-    ).toBeInTheDocument();
-  });
-
-  it("renders the leading tag as a badge", () => {
-    render(<ContentCard href="/posts/first-post" post={post} />);
-
-    expect(screen.getByText("news")).toBeInTheDocument();
-  });
-
-  it("hides the badge when showBadge is false", () => {
-    render(
-      <ContentCard href="/posts/first-post" post={post} showBadge={false} />,
-    );
-
-    expect(screen.queryByText("news")).not.toBeInTheDocument();
-  });
-
-  it("renders the formatted date when formatDate + lang are provided", () => {
+  it("renders a linked card with title, description, badge, date, and read-more", () => {
     render(
       <ContentCard
         formatDate={(date) => `formatted-${date}`}
         href="/posts/first-post"
         lang="en"
         post={post}
-      />,
-    );
-
-    expect(screen.getByText("formatted-2026-01-15")).toBeInTheDocument();
-  });
-
-  it("renders the read-more affordance when label is supplied", () => {
-    render(
-      <ContentCard
-        href="/posts/first-post"
-        post={post}
         readMoreLabel="Read more"
       />,
     );
-
-    expect(screen.getByText("Read more")).toBeInTheDocument();
-  });
-
-  it("hides the read-more affordance when showReadMore is false", () => {
-    render(
-      <ContentCard
-        href="/posts/first-post"
-        post={post}
-        readMoreLabel="Read more"
-        showReadMore={false}
-      />,
-    );
-
-    expect(screen.queryByText("Read more")).not.toBeInTheDocument();
-  });
-
-  it("wraps the card in a link to the href", () => {
-    render(<ContentCard href="/posts/first-post" post={post} />);
-
     expect(screen.getByText("First post").closest("a")).toHaveAttribute(
       "href",
       "/posts/first-post",
     );
+    expect(
+      screen.getByText("A short summary of the post."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("news")).toBeInTheDocument();
+    expect(screen.getByText("formatted-2026-01-15")).toBeInTheDocument();
+    expect(screen.getByText("Read more")).toBeInTheDocument();
+  });
+
+  it("hides the badge and read-more affordance when disabled", () => {
+    render(
+      <ContentCard
+        href="/posts/first-post"
+        post={post}
+        readMoreLabel="Read more"
+        showBadge={false}
+        showReadMore={false}
+      />,
+    );
+    expect(screen.queryByText("news")).not.toBeInTheDocument();
+    expect(screen.queryByText("Read more")).not.toBeInTheDocument();
   });
 });
 
 describe("BlogCard", () => {
   it("renders through the backwards-compatible alias", () => {
     render(<BlogCard href="/posts/first-post" post={post} />);
-
     expect(screen.getByText("First post")).toBeInTheDocument();
   });
 });

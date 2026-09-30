@@ -4,45 +4,21 @@ import { describe, expect, it } from "vitest";
 import { LeftRail } from "./left-rail";
 
 describe("LeftRail", () => {
-  it("renders children inside the rail", () => {
-    render(
-      <LeftRail>
+  it("renders children, title, and footer inside an aside with merged className", () => {
+    const { container } = render(
+      <LeftRail className="extra" footer={<span>foot</span>} title="Workspace">
         <span>nav-item</span>
       </LeftRail>,
     );
-
     expect(screen.getByText("nav-item")).toBeInTheDocument();
-  });
-
-  it("renders the optional title", () => {
-    render(
-      <LeftRail title="Workspace">
-        <span>nav</span>
-      </LeftRail>,
-    );
-
     expect(screen.getByText("Workspace")).toBeInTheDocument();
-  });
-
-  it("renders the optional footer", () => {
-    render(
-      <LeftRail footer={<span>foot</span>}>
-        <span>nav</span>
-      </LeftRail>,
-    );
-
     expect(screen.getByText("foot")).toBeInTheDocument();
-  });
-
-  it("uses an aside landmark", () => {
-    const { container } = render(<LeftRail>nav</LeftRail>);
-
     expect(container.querySelector("aside")).toBeInTheDocument();
+    expect(container.firstChild).toHaveClass("extra");
   });
 
-  it("merges the className prop", () => {
-    const { container } = render(<LeftRail className="extra">nav</LeftRail>);
-
-    expect(container.firstChild).toHaveClass("extra");
+  it("renders without optional title and footer", () => {
+    render(<LeftRail>nav</LeftRail>);
+    expect(screen.getByText("nav")).toBeInTheDocument();
   });
 });
