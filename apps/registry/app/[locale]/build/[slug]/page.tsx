@@ -5,16 +5,11 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Footer } from "@/components/footer/footer";
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import { Link, type Locale, routing } from "@/i18n/routing";
 import { resolveAiComponent } from "@/lib/ai-seo";
-import {
-  breadcrumbTrailLd,
-  faqPageLd,
-  jsonLdScriptAttributes,
-} from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { breadcrumbTrailLd, faqPageLd } from "@/lib/jsonld";
+import { pageMetadata } from "@/lib/og";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getUseCase, USE_CASES } from "@/lib/use-cases";
 
@@ -35,23 +30,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  const pathname = `/build/${slug}`;
-  const ogParameters = {
-    description: useCase.description,
-    title: useCase.title,
-    type: "page" as const,
-  };
-
-  return {
-    alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
+  return pageMetadata({
+    locale,
+    og: {
+      description: useCase.description,
+      title: useCase.title,
+      type: "page",
     },
-    description: useCase.description,
-    openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
+    pathname: `/build/${slug}`,
     title: `${useCase.title} | VLLNT UI`,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+  });
 }
 
 export default async function UseCasePage({ params }: Props) {
@@ -78,86 +66,79 @@ export default async function UseCasePage({ params }: Props) {
     .join("\n");
 
   return (
-    <>
-      <script
-        {...jsonLdScriptAttributes([
-          breadcrumbTrailLd(locale, [
-            { name: "AI components", path: "/ai" },
-            { name: useCase.title, path: `/build/${useCase.slug}` },
-          ]),
-          faqPageLd(useCase.faq),
-        ])}
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
-          <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            <Link className="hover:text-foreground" href="/families/ai">
-              {t("breadcrumb")}
-            </Link>
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-            {useCase.title}
-          </h1>
-          <p className="mt-6 text-lg text-muted-foreground">{useCase.intro}</p>
+    <PageShell
+      jsonLd={[
+        breadcrumbTrailLd(locale, [
+          { name: "AI components", path: "/ai" },
+          { name: useCase.title, path: `/build/${useCase.slug}` },
+        ]),
+        faqPageLd(useCase.faq),
+      ]}
+      sections={await getSidebarSections(undefined, locale)}
+    >
+      <div className="mx-auto max-w-4xl px-4 py-16 lg:px-8">
+        <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+          <Link className="hover:text-foreground" href="/families/ai">
+            {t("breadcrumb")}
+          </Link>
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+          {useCase.title}
+        </h1>
+        <p className="mt-6 text-lg text-muted-foreground">{useCase.intro}</p>
 
-          {/* Components used */}
-          <h2 className="mt-14 text-2xl font-semibold">
-            {t("componentsHeading")}
-          </h2>
-          <ul className="mt-6 space-y-3">
-            {components.map((component) => (
-              <li key={component.name}>
-                <Link
-                  className="group flex flex-col rounded-lg border border-border p-5 hover:border-foreground/40"
-                  href={`/components/${component.name}`}
-                >
-                  <span className="flex items-center justify-between gap-2">
-                    <span className="font-medium">{component.title}</span>
-                    <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                  <span className="mt-2 text-sm text-muted-foreground">
-                    {component.description}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+        {/* Components used */}
+        <h2 className="mt-14 text-2xl font-semibold">
+          {t("componentsHeading")}
+        </h2>
+        <ul className="mt-6 space-y-3">
+          {components.map((component) => (
+            <li key={component.name}>
+              <Link
+                className="group flex flex-col rounded-lg border border-border p-5 hover:border-foreground/40"
+                href={`/components/${component.name}`}
+              >
+                <span className="flex items-center justify-between gap-2">
+                  <span className="font-medium">{component.title}</span>
+                  <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                </span>
+                <span className="mt-2 text-sm text-muted-foreground">
+                  {component.description}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-          {/* Install */}
-          <h2 className="mt-14 text-2xl font-semibold">
-            {t("installHeading")}
-          </h2>
-          <p className="mt-2 text-muted-foreground">
-            {t("installDescription")}
-          </p>
-          <div className="mt-4">
-            <CodeBlock language="bash">{installCommand}</CodeBlock>
-          </div>
-
-          {/* FAQ */}
-          <h2 className="mt-14 text-2xl font-semibold">{t("faqHeading")}</h2>
-          <dl className="mt-6 space-y-6">
-            {useCase.faq.map((item) => (
-              <div key={item.question}>
-                <dt className="font-medium">{item.question}</dt>
-                <dd className="mt-2 text-muted-foreground">{item.answer}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-14 border-t border-border pt-8">
-            <Link
-              className="inline-flex items-center gap-1 font-medium text-foreground underline"
-              href="/families/ai"
-            >
-              {t("browseAll")}
-              <ArrowRight className="size-4" />
-            </Link>
-          </div>
+        {/* Install */}
+        <h2 className="mt-14 text-2xl font-semibold">{t("installHeading")}</h2>
+        <p className="mt-2 text-muted-foreground">{t("installDescription")}</p>
+        <div className="mt-4">
+          <CodeBlock language="bash">{installCommand}</CodeBlock>
         </div>
-        <Footer />
-      </main>
-    </>
+
+        {/* FAQ */}
+        <h2 className="mt-14 text-2xl font-semibold">{t("faqHeading")}</h2>
+        <dl className="mt-6 space-y-6">
+          {useCase.faq.map((item) => (
+            <div key={item.question}>
+              <dt className="font-medium">{item.question}</dt>
+              <dd className="mt-2 text-muted-foreground">{item.answer}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="mt-14 border-t border-border pt-8">
+          <Link
+            className="inline-flex items-center gap-1 font-medium text-foreground underline"
+            href="/families/ai"
+          >
+            {t("browseAll")}
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
+      </div>
+      <Footer />
+    </PageShell>
   );
 }

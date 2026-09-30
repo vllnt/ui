@@ -33,22 +33,20 @@ async function breadcrumbJson(page: Page, path: string): Promise<string> {
 }
 
 test.describe("locale-aware JSON-LD", () => {
-  test("a /fr route prefixes its breadcrumb URLs with the locale", async ({
-    page,
-  }) => {
-    const json = await breadcrumbJson(page, "/fr/families/form");
+  for (const prefix of ["/fr", ""]) {
+    test(`breadcrumb URLs on ${prefix || "the default locale"} carry exactly that locale prefix`, async ({
+      page,
+    }) => {
+      const json = await breadcrumbJson(page, `${prefix}/families/form`);
 
-    // Home crumb resolves to the /fr root, the family crumb to /fr/families/form.
-    expect(json).toMatch(/"item":"https:\/\/[^"]*\/fr","name":"Home"/);
-    expect(json).toMatch(/"item":"https:\/\/[^"]*\/fr\/families\/form"/);
-  });
-
-  test("the default-locale route carries no locale segment", async ({
-    page,
-  }) => {
-    const json = await breadcrumbJson(page, "/families/form");
-
-    expect(json).not.toContain("/fr");
-    expect(json).toMatch(/"item":"https:\/\/[^"]*\/families\/form"/);
-  });
+      expect(json.includes("/fr")).toBe(prefix === "/fr");
+      // Home resolves to the locale root, the family crumb to its page.
+      expect(json).toMatch(
+        new RegExp(`"item":"https://[^/"]+${prefix}","name":"Home"`),
+      );
+      expect(json).toMatch(
+        new RegExp(`"item":"https://[^/"]+${prefix}/families/form"`),
+      );
+    });
+  }
 });

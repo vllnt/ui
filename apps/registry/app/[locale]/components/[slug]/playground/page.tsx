@@ -7,50 +7,26 @@ import { PlatformSidebar } from "@/components/platform-sidebar";
 import { PlaygroundCodePanel } from "@/components/playground";
 import { StorybookEmbed } from "@/components/storybook-embed";
 import { Link, type Locale, routing } from "@/i18n/routing";
-import componentMetadata from "@/lib/component-metadata.json";
+import { componentMeta } from "@/lib/component-meta";
 import { breadcrumbTrailLd, jsonLdScriptAttributes } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { pageMetadata } from "@/lib/og";
 import {
   getPlaygroundExample,
   getRegistryPackageVersion,
 } from "@/lib/playground";
-import { registry } from "@/lib/registry";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { findComponent, registry } from "@/lib/registry";
+import { localizePathname } from "@/lib/seo";
 import {
   getCategoryForComponent,
   getSidebarSections,
 } from "@/lib/sidebar-sections";
-import type { RegistryComponent } from "@/types/registry";
 
 type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
-const metadata_map = componentMetadata as Record<
-  string,
-  {
-    category: string;
-    defaultStoryId: string;
-    description: string;
-    name: string;
-    stories: { id: string; name: string }[];
-    title: string;
-  }
->;
-
-function findComponent(slug: string): RegistryComponent | undefined {
-  return registry.items.find(
-    (item): item is RegistryComponent =>
-      item.name === slug && item.type === "registry:component",
-  );
-}
-
 export async function generateStaticParams() {
-  const slugs = registry.items
-    .filter(
-      (item): item is RegistryComponent => item.type === "registry:component",
-    )
-    .map((item) => item.name);
+  const slugs = registry.items.map((item) => item.name);
 
   return routing.locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug })),
@@ -66,32 +42,26 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   const t = await getTranslations({ locale, namespace: "pages.playground" });
-  const meta = metadata_map[slug];
+  const meta = componentMeta[slug];
   const title = meta?.title ?? component.title;
-  const description =
-    meta?.description ?? component.description ?? t("metaDescriptionFallback");
-  const pathname = `/components/${slug}/playground`;
-  // Canonicalize to the parent component page: the playground is an interactive
-  // variant of the same content, not a distinct indexable document.
-  const canonicalPath = `/components/${slug}`;
 
-  const ogParameters = {
-    category: getCategoryForComponent(slug),
-    description,
-    title,
-    type: "component" as const,
-  };
-
-  return {
-    alternates: {
-      canonical: canonical(canonicalPath, locale),
-      languages: languageAlternates(canonicalPath),
+  return pageMetadata({
+    // Canonicalize to the parent component page: the playground is an
+    // interactive variant of the same content, not a distinct indexable document.
+    canonicalPath: `/components/${slug}`,
+    locale,
+    og: {
+      category: getCategoryForComponent(slug),
+      description:
+        meta?.description ??
+        component.description ??
+        t("metaDescriptionFallback"),
+      title,
+      type: "component",
     },
-    description,
-    openGraph: generateOGMetadata(ogParameters, { locale, pathname }),
+    pathname: `/components/${slug}/playground`,
     title: t("metaTitle", { title }),
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+  });
 }
 
 export default async function ComponentPlaygroundPage(props: Props) {
@@ -105,7 +75,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
     notFound();
   }
 
-  const meta = metadata_map[slug];
+  const meta = componentMeta[slug];
   const displayTitle = meta?.title ?? component.title ?? component.name;
   const displayDescription =
     meta?.description ?? component.description ?? t("descriptionFallback");

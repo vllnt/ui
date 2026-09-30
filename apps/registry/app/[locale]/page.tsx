@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 
 import { Landing } from "@/components/landing/landing";
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import type { Locale } from "@/i18n/routing";
-import { jsonLdScriptAttributes, softwareApplicationLd } from "@/lib/jsonld";
+import { softwareApplicationLd } from "@/lib/jsonld";
 import { getNpmDistributionTags } from "@/lib/npm-version";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import { getComponentCount } from "@/lib/stats";
 
@@ -19,26 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const componentCount = getComponentCount();
   const { latest: version } = await getNpmDistributionTags();
-  const title = "VLLNT UI — UI components & design system for AI agents";
-  const description = `Open-source React components for building AI apps: chat, streaming text, tool calls, citations, agent activity, and artifacts. ${componentCount} accessible components, readable by AI agents via llms.txt + JSON. Install with the shadcn CLI. v${version}, MIT.`;
 
-  return {
-    alternates: {
-      canonical: canonical("/", locale),
-      languages: languageAlternates("/"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      { description, title, type: "home" },
-      { locale, pathname: "/" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
+  return pageMetadata({
+    locale,
+    og: {
+      description: `Open-source React components for building AI apps: chat, streaming text, tool calls, citations, agent activity, and artifacts. ${componentCount} accessible components, readable by AI agents via llms.txt + JSON. Install with the shadcn CLI. v${version}, MIT.`,
+      title: "VLLNT UI — UI components & design system for AI agents",
       type: "home",
-    }),
-  };
+    },
+    pathname: "/",
+  });
 }
 
 export default async function HomePage({ params }: Props) {
@@ -47,22 +37,17 @@ export default async function HomePage({ params }: Props) {
   const componentCount = getComponentCount();
 
   return (
-    <>
-      <script
-        {...jsonLdScriptAttributes(
-          softwareApplicationLd({
-            description: `Open-source React UI components and design system for building AI apps — ${componentCount} accessible components installable with the shadcn CLI and readable by AI agents via llms.txt.`,
-            installCommand:
-              "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[name].json",
-            name: "VLLNT UI",
-            url: canonical("/", locale),
-          }),
-        )}
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <Landing />
-      </main>
-    </>
+    <PageShell
+      jsonLd={softwareApplicationLd({
+        description: `Open-source React UI components and design system for building AI apps — ${componentCount} accessible components installable with the shadcn CLI and readable by AI agents via llms.txt.`,
+        installCommand:
+          "pnpm dlx shadcn@latest add https://ui.vllnt.com/r/[name].json",
+        name: "VLLNT UI",
+        url: canonical("/", locale),
+      })}
+      sections={await getSidebarSections(undefined, locale)}
+    >
+      <Landing />
+    </PageShell>
   );
 }

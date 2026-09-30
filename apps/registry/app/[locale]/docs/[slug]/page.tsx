@@ -18,13 +18,13 @@ import {
   techArticleLd,
 } from "@/lib/jsonld";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
+import { frontmatterPageMetadata } from "@/lib/og";
 import {
   getPlatform,
   type PlatformQuery,
   withPlatformQuery,
 } from "@/lib/platform";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -95,31 +95,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       : undefined;
   const contentSlug = platform === "native" ? "native" : docsPage.slug;
   const { frontmatter } = await getPageContent(`docs/${contentSlug}`, locale);
-  const og = frontmatter.og;
-  const baseHref = getDocsPath(docsPage);
-  const href = withPlatformQuery(baseHref, {}, platform);
 
-  return {
-    alternates: {
-      canonical: canonical(href, locale),
-      languages: languageAlternates(href),
-    },
-    description: frontmatter.description,
-    openGraph: generateOGMetadata(
-      {
-        description: og?.description ?? frontmatter.description,
-        title: og?.title ?? frontmatter.title,
-        type: og?.type ?? frontmatter.type,
-      },
-      { locale, pathname: href },
-    ),
-    title: frontmatter.title,
-    twitter: generateTwitterMetadata({
-      description: og?.description ?? frontmatter.description,
-      title: og?.title ?? frontmatter.title,
-      type: og?.type ?? frontmatter.type,
-    }),
-  };
+  return frontmatterPageMetadata(frontmatter, {
+    locale,
+    pathname: withPlatformQuery(getDocsPath(docsPage), {}, platform),
+  });
 }
 
 export default async function DocsSlugPage(props: Props) {

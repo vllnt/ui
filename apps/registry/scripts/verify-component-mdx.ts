@@ -18,6 +18,8 @@ import path from "node:path";
 
 import matter from "gray-matter";
 
+import { locales } from "../i18n/locales";
+
 const REGISTRY_ROOT = path.join(import.meta.dirname, "..");
 const CONTENT_DIR = path.join(REGISTRY_ROOT, "content", "components");
 
@@ -33,15 +35,6 @@ type Registry = {
   items: { name: string; type: string }[];
 };
 
-function readLocales(): string[] {
-  const source = readFileSync(
-    path.join(REGISTRY_ROOT, "i18n", "locales.ts"),
-    "utf8",
-  );
-  const body = /locales\s*=\s*\[([^\]]+)\]/.exec(source)?.[1] ?? "";
-  return [...body.matchAll(/"([^"]+)"/g)].map((match) => match[1]!);
-}
-
 function componentSlugs(): string[] {
   const registry = JSON.parse(
     readFileSync(path.join(REGISTRY_ROOT, "registry.json"), "utf8"),
@@ -53,7 +46,6 @@ function componentSlugs(): string[] {
 }
 
 function main(): void {
-  const locales = readLocales();
   const slugs = componentSlugs();
   const failures: string[] = [];
 

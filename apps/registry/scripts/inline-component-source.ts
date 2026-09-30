@@ -36,6 +36,15 @@ import {
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import type {
+  A11ySchema,
+  NativeRegistry,
+  PropDefinition,
+  Registry,
+  Stability,
+  UsageExample,
+} from "./registry-types";
+
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDir, "../../..");
 const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
@@ -52,99 +61,10 @@ const RESERVED_REGISTRY_NAMES = new Set([
   "use-mounted",
 ]);
 
-type RegistryFile = {
-  path: string;
-  type: string;
-};
-
-type Stability = "stable" | "beta" | "experimental" | "deprecated";
-type ComponentPlatform = "native" | "web";
-type NativeCompatibility = "native-adapted" | "portable-options";
-type NativeAvailability = "package" | "source";
-
-type NativeRenderer = {
-  availability: NativeAvailability;
-  channel: "canary";
-  compatibility: NativeCompatibility;
-  package: "@vllnt/ui-native";
-  source: string;
-  status: "experimental";
-};
-
-type NativeRegistry = {
-  availability: NativeAvailability;
-  channel: "canary";
-  components: {
-    compatibility: NativeCompatibility;
-    name: string;
-    source: string;
-  }[];
-  package: "@vllnt/ui-native";
-  status: "experimental";
-};
-
-type A11yKeyboardBinding = {
-  keys: string;
-  action: string;
-};
-
-type A11ySchema = {
-  role?: string;
-  keyboard?: A11yKeyboardBinding[];
-  aria?: string[];
-  focusManagement?: "auto" | "manual";
-  notes?: string;
-};
-
-type UsageExample = {
-  title: string;
-  description?: string;
-  code: string;
-  framework?: "next" | "react" | "react-native";
-  storyId?: string;
-};
-
-type PropDefinition = {
-  name: string;
-  type: string;
-  required?: boolean;
-  defaultValue?: string;
-  description?: string;
-  deprecated?: boolean;
-};
-
 type ComponentMeta = {
   stability?: Stability;
   replacedBy?: string;
   a11y?: A11ySchema;
-};
-
-type RegistryItem = {
-  a11y?: A11ySchema;
-  category?: string;
-  dependencies?: string[];
-  description?: string;
-  examples?: UsageExample[];
-  files: RegistryFile[];
-  name: string;
-  native?: NativeRenderer;
-  platforms: ComponentPlatform[];
-  props?: PropDefinition[];
-  registryDependencies?: string[];
-  replacedBy?: string;
-  stability?: Stability;
-  title?: string;
-  type: string;
-  version?: string;
-};
-
-type Registry = {
-  $schema?: string;
-  generatedAt?: string;
-  homepage?: string;
-  items: RegistryItem[];
-  name?: string;
-  version?: string;
 };
 
 // The npm `latest` version external consumers install via shadcn. The registry

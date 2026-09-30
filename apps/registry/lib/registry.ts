@@ -144,4 +144,9 @@ export type Registry = z.infer<typeof registrySchema>;
 
 export const registry: Registry = registrySchema.parse(registryData);
 
+/** The registry component whose `name` is `slug`, if any. */
+export function findComponent(slug: string): RegistryComponent | undefined {
+  return registry.items.find((item) => item.name === slug);
+}
+
 export { type ComponentPlatform } from "@vllnt/ui-core";

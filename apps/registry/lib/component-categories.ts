@@ -1,5 +1,5 @@
 import { registry } from "@/lib/registry";
-import type { ComponentCategory, RegistryComponent } from "@/types/registry";
+import type { ComponentCategory } from "@/types/registry";
 
 /**
  * Pure category grouping for the docs sidebar. This module avoids i18n imports
@@ -8,9 +8,6 @@ import type { ComponentCategory, RegistryComponent } from "@/types/registry";
  */
 
 const components = registry.items
-  .filter(
-    (item): item is RegistryComponent => item.type === "registry:component",
-  )
   .map((item) => ({
     category: item.category,
     name: item.name,

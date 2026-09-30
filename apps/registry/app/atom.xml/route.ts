@@ -2,26 +2,11 @@ import {
   feedUpdatedAt,
   getReleaseRecords,
   releasePageUrl,
+  type ReleaseRecord,
 } from "@/lib/changelog";
+import { escapeXml, feedHeaders, SITE_URL } from "@/lib/feed";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
-const ATOM_HEADERS = new Headers([
-  [
-    "Cache-Control",
-    "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
-  ],
-  ["Content-Type", "application/atom+xml; charset=utf-8"],
-]);
-type ReleaseRecord = Awaited<ReturnType<typeof getReleaseRecords>>[number];
-
-function escapeXml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-}
+const ATOM_HEADERS = feedHeaders("application/atom+xml; charset=utf-8");
 
 function buildAtomDate(value?: string): string {
   return new Date(value ?? 0).toISOString();

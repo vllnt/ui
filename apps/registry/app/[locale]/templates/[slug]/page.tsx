@@ -13,8 +13,8 @@ import {
   jsonLdScriptAttributes,
   softwareApplicationLd,
 } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { pageMetadata } from "@/lib/og";
+import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 import {
   getTemplate,
@@ -43,30 +43,15 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     };
   }
 
-  const title = `${template.title} Template - VLLNT UI`;
-  const pathname = getTemplatePath(template);
-
-  return {
-    alternates: {
-      canonical: canonical(pathname, locale),
-      languages: languageAlternates(pathname),
-    },
-    description: template.description,
-    openGraph: generateOGMetadata(
-      {
-        description: template.description,
-        title,
-        type: "docs",
-      },
-      { locale, pathname },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
+  return pageMetadata({
+    locale,
+    og: {
       description: template.description,
-      title,
+      title: `${template.title} Template - VLLNT UI`,
       type: "docs",
-    }),
-  };
+    },
+    pathname: getTemplatePath(template),
+  });
 }
 
 export default async function TemplatePage(props: Props) {

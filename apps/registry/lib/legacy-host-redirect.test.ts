@@ -7,36 +7,28 @@ import {
 } from "./legacy-host-redirect";
 
 describe("legacyHostRedirectUrl", () => {
-  it("redirects the legacy host to canonical, preserving path and query", () => {
-    expect(
-      legacyHostRedirectUrl(LEGACY_HOST, "/components/button", "?tab=code"),
-    ).toBe(`https://${CANONICAL_HOST}/components/button?tab=code`);
-  });
+  it.each([
+    // Preserves path and query.
+    { host: LEGACY_HOST, path: "/components/button", query: "?tab=code" },
+    // Redirects the root path.
+    { host: LEGACY_HOST, path: "/", query: "" },
+    // Case-insensitive; ignores a port on the host.
+    { host: "UI.VLLNT.AI:443", path: "/x", query: "" },
+  ])(
+    "redirects $host$path$query to the canonical host",
+    ({ host, path, query }) => {
+      expect(legacyHostRedirectUrl(host, path, query)).toBe(
+        `https://${CANONICAL_HOST}${path}${query}`,
+      );
+    },
+  );
 
-  it("redirects the root path", () => {
-    expect(legacyHostRedirectUrl(LEGACY_HOST, "/", "")).toBe(
-      `https://${CANONICAL_HOST}/`,
-    );
-  });
-
-  it("is case-insensitive and ignores a port on the host", () => {
-    expect(legacyHostRedirectUrl("UI.VLLNT.AI:443", "/x", "")).toBe(
-      `https://${CANONICAL_HOST}/x`,
-    );
-  });
-
-  it("does not redirect the canonical host", () => {
-    expect(legacyHostRedirectUrl(CANONICAL_HOST, "/", "")).toBeUndefined();
-  });
-
-  it("does not redirect preview or localhost hosts", () => {
-    expect(
-      legacyHostRedirectUrl("pr-42-ui-registry.preview.vllnt.ai", "/", ""),
-    ).toBeUndefined();
-    expect(legacyHostRedirectUrl("localhost:3000", "/", "")).toBeUndefined();
-  });
-
-  it("does not redirect when the host is missing", () => {
-    expect(legacyHostRedirectUrl(undefined, "/", "")).toBeUndefined();
+  it.each([
+    CANONICAL_HOST,
+    "pr-42-ui-registry.preview.vllnt.ai",
+    "localhost:3000",
+    undefined,
+  ])("does not redirect host %s", (host) => {
+    expect(legacyHostRedirectUrl(host, "/", "")).toBeUndefined();
   });
 });

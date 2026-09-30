@@ -14,6 +14,13 @@ import {
   softwareSourceCodeLd,
 } from "./jsonld";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
+/** Each locale with the path prefix its URLs must carry (none for the default). */
+const LOCALE_PREFIXES = [
+  ["fr", "/fr"],
+  ["en", ""],
+] as const;
+
 describe("jsonLdScript", () => {
   it("wraps multiple nodes in a standards-compliant graph document", () => {
     const script = jsonLdScript([
@@ -54,33 +61,23 @@ describe("jsonLdScript", () => {
  * and the default locale prefixes none.
  */
 describe("breadcrumbTrailLd", () => {
-  it("prefixes every crumb URL with the locale segment for a non-default locale", () => {
-    const json = JSON.stringify(
-      breadcrumbTrailLd("fr", [{ name: "Docs", path: "/docs" }]),
-    );
+  it.each(LOCALE_PREFIXES)(
+    "resolves every crumb URL through the %s locale prefix",
+    (locale, prefix) => {
+      const json = JSON.stringify(
+        breadcrumbTrailLd(locale, [{ name: "Docs", path: "/docs" }]),
+      );
 
-    expect(json).toContain('"@type":"BreadcrumbList"');
-    // The helper adds Home as the first crumb at position 1, pointing at /fr.
-    expect(json).toMatch(
-      /"item":"https:\/\/[^"]*\/fr","name":"Home","position":1/,
-    );
-    // The trailing crumb resolves to the /fr-prefixed docs URL, not /docs.
-    expect(json).toMatch(
-      /"item":"https:\/\/[^"]*\/fr\/docs","name":"Docs","position":2/,
-    );
-  });
-
-  it("emits no locale segment for the default locale", () => {
-    const json = JSON.stringify(
-      breadcrumbTrailLd("en", [{ name: "Docs", path: "/docs" }]),
-    );
-
-    expect(json).not.toContain("/fr");
-    expect(json).toMatch(/"name":"Home","position":1/);
-    expect(json).toMatch(
-      /"item":"https:\/\/[^"]*\/docs","name":"Docs","position":2/,
-    );
-  });
+      expect(json).toContain('"@type":"BreadcrumbList"');
+      // The helper adds Home as the first crumb at position 1.
+      expect(json).toContain(
+        `"item":"${SITE_URL}${prefix}","name":"Home","position":1`,
+      );
+      expect(json).toContain(
+        `"item":"${SITE_URL}${prefix}/docs","name":"Docs","position":2`,
+      );
+    },
+  );
 
   it("prefixes deep trails and numbers positions sequentially from Home", () => {
     const json = JSON.stringify(
@@ -121,34 +118,20 @@ describe("softwareApplicationLd", () => {
 });
 
 describe("softwareSourceCodeLd", () => {
-  it("points at the locale URL of the component page", () => {
-    const json = JSON.stringify(
-      softwareSourceCodeLd({
+  it.each(LOCALE_PREFIXES)(
+    "points at the %s locale URL of the component page",
+    (locale, prefix) => {
+      const result = softwareSourceCodeLd({
         description: "A button.",
-        locale: "fr",
+        locale,
         name: "button",
         platforms: ["web"],
         title: "Button",
-      }),
-    );
+      });
 
-    expect(json).toMatch(/"url":"https:\/\/[^"]*\/fr\/components\/button"/);
-  });
-
-  it("omits the locale segment for the default locale", () => {
-    const json = JSON.stringify(
-      softwareSourceCodeLd({
-        description: "A button.",
-        locale: "en",
-        name: "button",
-        platforms: ["web"],
-        title: "Button",
-      }),
-    );
-
-    expect(json).not.toContain("/fr");
-    expect(json).toMatch(/"url":"https:\/\/[^"]*\/components\/button"/);
-  });
+      expect(result.url).toBe(`${SITE_URL}${prefix}/components/button`);
+    },
+  );
 
   it("accepts an explicit filtered component URL", () => {
     const result = softwareSourceCodeLd({

@@ -1,13 +1,14 @@
 import { Badge, Breadcrumb, Button, MDXContent } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { ReactNode } from "react";
 
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
-import { getReleaseRecords } from "@/lib/changelog";
-import { breadcrumbTrailLd, jsonLdScript } from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates, localizePathname } from "@/lib/seo";
+import { getReleaseRecords, type ReleaseRecord } from "@/lib/changelog";
+import { breadcrumbTrailLd } from "@/lib/jsonld";
+import { pageMetadata } from "@/lib/og";
+import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -17,30 +18,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.releases" });
-  const title = t("metaTitle");
-  const description = t("metaDescription");
 
-  return {
-    alternates: {
-      canonical: canonical("/releases", locale),
-      languages: languageAlternates("/releases"),
-    },
-    description,
-    openGraph: generateOGMetadata(
-      {
-        description,
-        title,
-        type: "docs",
-      },
-      { locale, pathname: "/releases" },
-    ),
-    title,
-    twitter: generateTwitterMetadata({
-      description,
-      title,
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
       type: "docs",
-    }),
-  };
+    },
+    pathname: "/releases",
+  });
 }
 
 async function formatComponentDelta(value?: number): Promise<string> {
@@ -52,12 +39,29 @@ async function formatComponentDelta(value?: number): Promise<string> {
   return t("componentDelta", { delta });
 }
 
+function ReleaseStat({
+  children,
+  label,
+}: {
+  readonly children: ReactNode;
+  readonly label: string;
+}) {
+  return (
+    <div className="border border-border p-4">
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        {label}
+      </dt>
+      <dd className="mt-1 text-sm font-medium">{children}</dd>
+    </div>
+  );
+}
+
 async function ReleaseCard({
   isLatest,
   release,
 }: {
   readonly isLatest: boolean;
-  readonly release: Awaited<ReturnType<typeof getReleaseRecords>>[number];
+  readonly release: ReleaseRecord;
 }) {
   const t = await getTranslations("pages.releases");
   return (
@@ -95,41 +99,26 @@ async function ReleaseCard({
       </div>
 
       <dl className="mt-6 grid gap-3 sm:grid-cols-3">
-        <div className="border border-border p-4">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("components")}
-          </dt>
-          <dd className="mt-1 text-sm font-medium">
-            {await formatComponentDelta(release.componentDelta)}
-          </dd>
-        </div>
-        <div className="border border-border p-4">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("breakingChanges")}
-          </dt>
-          <dd className="mt-1 text-sm font-medium">
-            {release.breakingChanges}
-          </dd>
-        </div>
-        <div className="border border-border p-4">
-          <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {t("migration")}
-          </dt>
-          <dd className="mt-1 text-sm font-medium">
-            {release.migrationUrl ? (
-              <a
-                className="underline underline-offset-4"
-                href={release.migrationUrl}
-                rel="noreferrer"
-                target="_blank"
-              >
-                {t("openGuide")}
-              </a>
-            ) : (
-              t("none")
-            )}
-          </dd>
-        </div>
+        <ReleaseStat label={t("components")}>
+          {await formatComponentDelta(release.componentDelta)}
+        </ReleaseStat>
+        <ReleaseStat label={t("breakingChanges")}>
+          {release.breakingChanges}
+        </ReleaseStat>
+        <ReleaseStat label={t("migration")}>
+          {release.migrationUrl ? (
+            <a
+              className="underline underline-offset-4"
+              href={release.migrationUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {t("openGuide")}
+            </a>
+          ) : (
+            t("none")
+          )}
+        </ReleaseStat>
       </dl>
 
       <details className="mt-6">
@@ -145,7 +134,7 @@ async function ReleaseCard({
 }
 
 function releaseJsonLdItem(
-  release: Awaited<ReturnType<typeof getReleaseRecords>>[number],
+  release: ReleaseRecord,
   index: number,
   locale: Locale,
 ) {
@@ -172,67 +161,59 @@ export default async function ReleasesPage({ params }: Props) {
   const releases = await getReleaseRecords();
 
   return (
-    <>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: jsonLdScript([
-            breadcrumbTrailLd(locale, [
-              { name: "Releases", path: "/releases" },
-            ]),
-            {
-              "@context": "https://schema.org",
-              "@type": "ItemList",
-              itemListElement: releases.map((release, index) =>
-                releaseJsonLdItem(release, index, locale),
-              ),
-              name: "VLLNT UI Releases",
-              numberOfItems: releases.length,
-            },
-          ]),
-        }}
-        type="application/ld+json"
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <div className="container mx-auto max-w-5xl px-4 py-16 lg:px-8">
-          <Breadcrumb
-            className="mb-4 text-muted-foreground"
-            items={[
-              { href: localizePathname("/", locale), label: common("home") },
-              { label: t("heading") },
-            ]}
-          />
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-                {t("eyebrow")}
-              </p>
-              <h1 className="mt-2 text-4xl font-semibold">{t("heading")}</h1>
-              <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                {t("intro")}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button asChild variant="outline">
-                <Link href="/changelog">{t("changelogLink")}</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <a href="/atom.xml">{t("atomLink")}</a>
-              </Button>
-            </div>
+    <PageShell
+      jsonLd={[
+        breadcrumbTrailLd(locale, [{ name: "Releases", path: "/releases" }]),
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: releases.map((release, index) =>
+            releaseJsonLdItem(release, index, locale),
+          ),
+          name: "VLLNT UI Releases",
+          numberOfItems: releases.length,
+        },
+      ]}
+      sections={await getSidebarSections(undefined, locale)}
+    >
+      <div className="container mx-auto max-w-5xl px-4 py-16 lg:px-8">
+        <Breadcrumb
+          className="mb-4 text-muted-foreground"
+          items={[
+            { href: localizePathname("/", locale), label: common("home") },
+            { label: t("heading") },
+          ]}
+        />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              {t("eyebrow")}
+            </p>
+            <h1 className="mt-2 text-4xl font-semibold">{t("heading")}</h1>
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+              {t("intro")}
+            </p>
           </div>
-
-          <div className="mt-10 space-y-6">
-            {releases.map((release, index) => (
-              <ReleaseCard
-                isLatest={index === 0}
-                key={release.anchor}
-                release={release}
-              />
-            ))}
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline">
+              <Link href="/changelog">{t("changelogLink")}</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <a href="/atom.xml">{t("atomLink")}</a>
+            </Button>
           </div>
         </div>
-      </main>
-    </>
+
+        <div className="mt-10 space-y-6">
+          {releases.map((release, index) => (
+            <ReleaseCard
+              isLatest={index === 0}
+              key={release.anchor}
+              release={release}
+            />
+          ))}
+        </div>
+      </div>
+    </PageShell>
   );
 }

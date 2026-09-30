@@ -1,15 +1,11 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { PlatformSidebar } from "@/components/platform-sidebar";
+import { PageShell } from "@/components/page-shell";
 import { Link, type Locale } from "@/i18n/routing";
-import {
-  breadcrumbTrailLd,
-  collectionPageLd,
-  jsonLdScriptAttributes,
-} from "@/lib/jsonld";
-import { generateOGMetadata, generateTwitterMetadata } from "@/lib/og";
-import { canonical, languageAlternates } from "@/lib/seo";
+import { breadcrumbTrailLd, collectionPageLd } from "@/lib/jsonld";
+import { pageMetadata } from "@/lib/og";
+import { canonical } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
@@ -19,22 +15,16 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pages.vs.index" });
-  const ogParameters = {
-    description: t("metaDescription"),
-    title: t("metaTitle"),
-    type: "page" as const,
-  };
 
-  return {
-    alternates: {
-      canonical: canonical("/vs", locale),
-      languages: languageAlternates("/vs"),
+  return pageMetadata({
+    locale,
+    og: {
+      description: t("metaDescription"),
+      title: t("metaTitle"),
+      type: "page",
     },
-    description: ogParameters.description,
-    openGraph: generateOGMetadata(ogParameters, { locale, pathname: "/vs" }),
-    title: ogParameters.title,
-    twitter: generateTwitterMetadata(ogParameters),
-  };
+    pathname: "/vs",
+  });
 }
 
 const COMPARISONS: readonly {
@@ -75,63 +65,60 @@ export default async function VsIndexPage({ params }: Props) {
   const t = await getTranslations("pages.vs.index");
 
   return (
-    <>
-      <script
-        {...jsonLdScriptAttributes([
-          breadcrumbTrailLd(locale, [{ name: "Comparisons", path: "/vs" }]),
-          collectionPageLd({
-            description:
-              "Honest, evidence-based comparisons of VLLNT UI against shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
-            items: COMPARISONS.filter((entry) => entry.available).map(
-              (entry) => ({
-                name: `VLLNT UI vs ${entry.name}`,
-                url: canonical(`/vs/${entry.slug}`, locale),
-              }),
-            ),
-            title: "VLLNT UI vs the rest",
-            url: canonical("/vs", locale),
-          }),
-        ])}
-      />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
-        <div className="container mx-auto max-w-3xl px-4 py-16 lg:px-8">
-          <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>
-          <p className="text-muted-foreground text-lg mb-10">{t("intro")}</p>
+    <PageShell
+      jsonLd={[
+        breadcrumbTrailLd(locale, [{ name: "Comparisons", path: "/vs" }]),
+        collectionPageLd({
+          description:
+            "Honest, evidence-based comparisons of VLLNT UI against shadcn/ui, Radix UI, HeadlessUI, and NextUI.",
+          items: COMPARISONS.filter((entry) => entry.available).map(
+            (entry) => ({
+              name: `VLLNT UI vs ${entry.name}`,
+              url: canonical(`/vs/${entry.slug}`, locale),
+            }),
+          ),
+          title: "VLLNT UI vs the rest",
+          url: canonical("/vs", locale),
+        }),
+      ]}
+      sections={await getSidebarSections(undefined, locale)}
+    >
+      <div className="container mx-auto max-w-3xl px-4 py-16 lg:px-8">
+        <h1 className="text-4xl font-semibold mb-3">{t("title")}</h1>
+        <p className="text-muted-foreground text-lg mb-10">{t("intro")}</p>
 
-          <ul className="space-y-3">
-            {COMPARISONS.map((entry) =>
-              entry.available ? (
-                <li key={entry.slug}>
-                  <Link
-                    className="block rounded-lg border border-border p-5 hover:border-foreground/40"
-                    href={`/vs/${entry.slug}`}
-                  >
-                    <p className="text-lg font-semibold">
-                      {t("cardTitle", { name: entry.name })}
-                    </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {t(`taglines.${entry.taglineKey}`)}
-                    </p>
-                  </Link>
-                </li>
-              ) : (
-                <li
-                  className="rounded-lg border border-dashed border-border p-5 opacity-60"
-                  key={entry.slug}
+        <ul className="space-y-3">
+          {COMPARISONS.map((entry) =>
+            entry.available ? (
+              <li key={entry.slug}>
+                <Link
+                  className="block rounded-lg border border-border p-5 hover:border-foreground/40"
+                  href={`/vs/${entry.slug}`}
                 >
                   <p className="text-lg font-semibold">
                     {t("cardTitle", { name: entry.name })}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {t(`taglines.${entry.taglineKey}`)}. {t("comingSoon")}
+                    {t(`taglines.${entry.taglineKey}`)}
                   </p>
-                </li>
-              ),
-            )}
-          </ul>
-        </div>
-      </main>
-    </>
+                </Link>
+              </li>
+            ) : (
+              <li
+                className="rounded-lg border border-dashed border-border p-5 opacity-60"
+                key={entry.slug}
+              >
+                <p className="text-lg font-semibold">
+                  {t("cardTitle", { name: entry.name })}
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t(`taglines.${entry.taglineKey}`)}. {t("comingSoon")}
+                </p>
+              </li>
+            ),
+          )}
+        </ul>
+      </div>
+    </PageShell>
   );
 }

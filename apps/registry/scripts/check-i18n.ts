@@ -21,6 +21,8 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
+import { defaultLocale, locales } from "../i18n/locales";
+
 const REGISTRY_ROOT = path.join(import.meta.dirname, "..");
 const MESSAGES_DIR = path.join(REGISTRY_ROOT, "messages");
 const CONTENT_DIR = path.join(REGISTRY_ROOT, "content", "pages");
@@ -43,22 +45,6 @@ function fail(check: string, message: string): void {
   failures.push({ check, message });
 }
 
-function readLocales(): { defaultLocale: string; locales: string[] } {
-  const source = readFileSync(
-    path.join(REGISTRY_ROOT, "i18n", "locales.ts"),
-    "utf8",
-  );
-  const localesBody = /locales\s*=\s*\[([^\]]+)\]/.exec(source)?.[1];
-  const defaultLocale = /defaultLocale\s*=\s*"([^"]+)"/.exec(source)?.[1];
-  if (!localesBody || !defaultLocale) {
-    throw new Error("Unable to parse i18n/locales.ts");
-  }
-  const locales = [...localesBody.matchAll(/"([^"]+)"/g)]
-    .map((entry) => entry[1])
-    .filter((value): value is string => value !== undefined);
-  return { defaultLocale, locales };
-}
-
 function collectLeafKeys(value: unknown, prefix: string, keys: Set<string>): void {
   if (value !== null && typeof value === "object" && !Array.isArray(value)) {
     for (const [key, child] of Object.entries(value)) {
@@ -75,7 +61,7 @@ function loadMessages(locale: string): Record<string, unknown> {
   ) as Record<string, unknown>;
 }
 
-function checkMessageParity(defaultLocale: string, locales: string[]): void {
+function checkMessageParity(defaultLocale: string, locales: readonly string[]): void {
   const defaultKeys = new Set<string>();
   collectLeafKeys(loadMessages(defaultLocale), "", defaultKeys);
 
@@ -123,7 +109,7 @@ function listPageDirectories(directory: string, pages: Set<string>): void {
   }
 }
 
-function checkMdxCoverage(locales: string[]): void {
+function checkMdxCoverage(locales: readonly string[]): void {
   const pages = new Set<string>();
   listPageDirectories(CONTENT_DIR, pages);
 
@@ -205,7 +191,6 @@ function checkMessageWiring(defaultLocale: string): void {
 }
 
 function main(): void {
-  const { defaultLocale, locales } = readLocales();
   console.log(`i18n:check - locales: ${locales.join(", ")} (default: ${defaultLocale})`);
 
   checkMessageParity(defaultLocale, locales);
