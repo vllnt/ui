@@ -17,8 +17,10 @@ VLLNT UI components are designed as accessible primitives for real application s
 Most components live under:
 
 ```text
-packages/ui/src/components/<name>/
+packages/ui/src/components/<level>/<name>/
 ```
+
+`<level>` is the component's Atomic Design level: `atoms` compose no other component, `molecules` compose atoms, `organisms` are section-level widgets that may compose any lower level or other organisms, and `templates` are page layouts. The level only organises the source; install names and exports stay `<name>`.
 
 Common files include:
 

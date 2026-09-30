@@ -17,8 +17,10 @@ Les composants VLLNT UI sont concus comme des primitives accessibles pour de vra
 La plupart des composants se trouvent sous :
 
 ```text
-packages/ui/src/components/<name>/
+packages/ui/src/components/<level>/<name>/
 ```
+
+`<level>` est le niveau Atomic Design du composant : les `atoms` ne composent aucun autre composant, les `molecules` composent des atoms, les `organisms` sont des widgets de section qui peuvent composer tout niveau inferieur ou d'autres organisms, et les `templates` sont des mises en page. Le niveau organise seulement le code source ; les noms d'installation et les exports restent `<name>`.
 
 Les fichiers courants incluent :
 

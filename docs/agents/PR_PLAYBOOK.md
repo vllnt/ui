@@ -28,10 +28,11 @@ pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
 
 ## 3. Workspace gates (R6 — before requesting merge)
 
-All four must be green at HEAD:
+All five must be green at HEAD:
 
 ```bash
 pnpm -F @vllnt/ui lint
+pnpm check:atomic
 pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
 pnpm build
 pnpm test:once

@@ -61,6 +61,7 @@ These must all pass on the PR head before requesting merge:
 
 ```bash
 pnpm -F @vllnt/ui lint
+pnpm check:atomic
 pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
 pnpm build
 pnpm test:once

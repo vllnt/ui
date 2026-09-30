@@ -6,7 +6,18 @@ Authoritative pattern catalog for every component in `packages/ui/src/components
 
 ## Folder layout
 
-Every component lives at `packages/ui/src/components/{name}/`:
+Every component lives at `packages/ui/src/components/{level}/{name}/`, where `{level}` is its [Atomic Design level](#atomic-design-levels):
+
+```
+src/components/
+  atoms/{name}/      # button, input, badge, dialog, theme-provider, …
+  molecules/{name}/  # search-bar, field, form, command, …
+  organisms/{name}/  # data-table, map-2d, navbar-saas, tutorial-mdx, …
+  templates/{name}/  # canvas-shell
+  index.ts           # barrel — the only file that re-exports components
+```
+
+Each component folder:
 
 ```
 {name}/
@@ -17,7 +28,38 @@ Every component lives at `packages/ui/src/components/{name}/`:
   {name}.mdx         # registry/docs (auto-generated where possible)
 ```
 
-Add the export to `packages/ui/src/components/index.ts`, importing from `./{name}/{name}` (no per-folder `index.ts`; import siblings as `../{other}/{other}`).
+Add the export to `packages/ui/src/components/index.ts`, importing from `./{level}/{name}/{name}` (no per-folder `index.ts`). Import another component as `../{other}/{other}` within the same level and `../../{level}/{other}/{other}` across levels; library code is `../../../lib/{module}`. Component names stay unique across levels: the registry, Storybook scripts and `/r/{name}.json` resolve a component by name, so its level never shows in public output.
+
+---
+
+## Atomic Design levels
+
+| Level | What it is | May import |
+|-------|------------|------------|
+| `atoms` | A building block that composes no other component: controls, text, surfaces, decorations, overlays pinned to another surface, providers, and multi-part primitives (`Dialog`, `Select`, `Card`) | no component — only `lib/` (utils, hooks, types) |
+| `molecules` | A small unit built from atoms (`SearchBar` = `Input` + `Button`) | atoms |
+| `organisms` | A section-level widget: built from molecules or other organisms, or a self-contained section (see below) | atoms, molecules, organisms |
+| `templates` | A page-level layout that arranges organisms into regions (`CanvasShell`) | atoms, molecules, organisms — never another template |
+
+Component imports never form a cycle. Stories, tests, visual fixtures and MDX may import from any level — demos compose freely. `pnpm check:atomic` ([`scripts/check-atomic-levels.mjs`](../../scripts/check-atomic-levels.mjs), CI quality gate) fails on a folder outside a level, an upward or sideways import the table forbids, a cycle, or a duplicate name.
+
+### Choosing a level
+
+1. **From imports:** imports no component → atom; imports only atoms → molecule; imports a molecule or an organism → organism.
+2. **Promote to organism** a component that imports no (or only atom) components but is a self-contained, section-level widget — any of:
+   - **Data visualisation** — a complete chart, map, diagram or timeline rendered from a data collection on its own axes, projection or time scale (`pie-chart`, `map-2d`, `gantt-chart`, `interactive-timeline`). Single-value indicators (`gauge-chart`, `meter`, `threshold-ring`, `sparkline-grid` tiles) and overlays drawn on another surface (`heat-overlay`, `sticky-metric`) stay atoms.
+   - **Interactive workspace or viewer** — owns a pan/zoom/drag viewport or a document view (`canvas-view`, `flow-diagram`, `primary-source-viewer`).
+   - **Data grid or tree** — renders a whole tabular or hierarchical dataset and owns its sort, filter, pagination, selection or expansion state (`data-table`, `tree-view`).
+3. **Templates** are page layouts only (today: `canvas-shell`). Providers stay atoms.
+
+The level is the higher of steps 1 and 2. When unsure, pick the lower level — promoting later is a folder move.
+
+### Moving a component to another level
+
+1. `git mv` the folder to `src/components/{new-level}/{name}` and its committed visual baselines from `packages/ui/.snapshots/{old-level}/{name}` to `packages/ui/.snapshots/{new-level}/{name}` (the snapshot path mirrors the test path).
+2. Fix the relative imports inside the folder, in its importers (including `vi.mock` paths in tests) and in `src/components/index.ts`. Keep export names and order unchanged.
+3. Promoting a component can push its importers up too: an atom or molecule may not import an organism. `pnpm check:atomic` lists every importer to move.
+4. Run `pnpm check:atomic`, `pnpm -F @vllnt/ui lint`, `pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json`, `pnpm -F @vllnt/ui test:once` and `pnpm -F @vllnt/ui-registry registry:build` — the registry output must not change.
 
 ---
 
