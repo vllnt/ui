@@ -62,16 +62,24 @@ typography, spacing, radius, elevation, motion, and iconography.
 
 ### Semantic tokens (consumer-facing)
 
-| Token | Light role | Dark role |
-|-------|------------|-----------|
-| `--background` | Surface | Surface |
-| `--foreground` | Primary text | Primary text |
-| `--muted` | Subtle surface | Subtle surface |
-| `--muted-foreground` | Secondary text | Secondary text |
-| `--border` | Hairline divider | Hairline divider |
-| `--ring` | Focus ring | Focus ring |
-| `--accent` / `--accent-foreground` | Active / hover surface | Same |
-| `--destructive` / `--destructive-foreground` | Danger surface / text | Same |
+Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
+
+| Token | Role | Light | Dark |
+|-------|------|-------|------|
+| `--background` | Page surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
+| `--foreground` | Primary text | `0.1445 0 0` (#0a0a0a) | `0.9848 0 0` (#fafafa) |
+| `--card` / `--popover` | Contained / floating surface | `1 0 0` (#ffffff) | `0.1445 0 0` (#0a0a0a) |
+| `--muted` | Subtle surface (`--secondary` and `--accent` share it) | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.7153 0 0` (#a3a3a3) |
+| `--destructive` | Danger fill **and** danger text | `0.55 0.2078 25.326` (#cf1f29) | `0.7 0.18 25.721` (#fa6961) |
+| `--destructive-foreground` | Text on a destructive fill | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
+| `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.2686 0 0` (#262626) |
+| `--input` | Form-control boundary | `0.66 0 0` (#929292) | `0.49 0 0` (#606060) |
+| `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
+
+In dark mode `--destructive` is a light red paired with a dark
+`--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both
+readable text on a near-black surface and a fill behind white text.
 
 ### Anti-patterns
 - **Never** use `bg-black` / `text-white` / `bg-white`. Use `bg-background` / `bg-foreground` / `text-foreground` so dark mode works.
@@ -79,7 +87,29 @@ typography, spacing, radius, elevation, motion, and iconography.
 - **Pure black** (`#000`) is banned for backgrounds — use `--background`.
 
 ### Contrast
-WCAG **AA** minimum. Body text against any surface ≥ **4.5:1**, large text ≥ **3:1**, non-text UI ≥ **3:1**. The default theme passes; new themes must verify before merging.
+WCAG 2.2 **AA** minimum: text ≥ **4.5:1** (large text ≥ 3:1), non-text UI such as control boundaries and focus rings ≥ **3:1**.
+The token contract below holds for the default theme and every preset in
+`themes/presets.css`, in light and dark. Tests enforce it and fail on any
+regression: `packages/ui/src/lib/theme-contrast.test.ts` (web CSS) and
+`packages/ui-core/src/theme.test.ts` (native theme).
+
+| Rule | Pairs | Minimum |
+|------|-------|---------|
+| On-surface text | `X-foreground` on `X` for background, card, popover, primary, secondary, accent, destructive | 4.5:1 |
+| Secondary text | `--muted-foreground` on background, card, popover, muted | 4.5:1 |
+| Danger text | `--destructive` on background, card, popover, muted, and on its own 10% tint (`bg-destructive/10`) | 4.5:1 |
+| Control boundary | `--input` against background, card, popover | 3:1 |
+| Focus ring | `--ring` against background | 3:1 |
+
+Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.00 (dark, on muted);
+destructive text 5.41 / 4.96 (light), 7.26 / 5.23 (dark, on background / muted);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.34 (dark, on background).
+
+**Rules**
+- Draw form-control boundaries (input, textarea, select trigger, checkbox, switch off-track, composers) with `border-input`, never `border` / `border-border`. `--border` is decorative and stays low contrast.
+- Text on `bg-primary` / `bg-secondary` / `bg-accent` / `bg-destructive` uses that surface's `*-foreground`. `--muted-foreground` is only guaranteed on background, card, popover, and muted.
+- Put light text on a destructive fill with `text-destructive-foreground`, never `text-white`: dark mode pairs a light red with dark text.
+- New themes and presets must pass the contract test before merging. Keep new values inside the sRGB gamut so the measured ratio matches what renders.
 
 ---
 
