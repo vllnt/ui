@@ -11,30 +11,17 @@ describe("Popover", () => {
         <PopoverContent>Body</PopoverContent>
       </Popover>,
     );
-
     expect(screen.getByText("Open")).toBeInTheDocument();
     expect(screen.queryByText("Body")).not.toBeInTheDocument();
   });
 
-  it("renders the content when defaultOpen is true", () => {
+  it("renders the content with merged className when defaultOpen is true", () => {
     render(
       <Popover defaultOpen>
         <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverContent>Visible body</PopoverContent>
+        <PopoverContent className="extra">Visible body</PopoverContent>
       </Popover>,
     );
-
-    expect(screen.getByText("Visible body")).toBeInTheDocument();
-  });
-
-  it("merges the className prop on the content", () => {
-    render(
-      <Popover defaultOpen>
-        <PopoverTrigger>Open</PopoverTrigger>
-        <PopoverContent className="extra">Body</PopoverContent>
-      </Popover>,
-    );
-
-    expect(screen.getByText("Body")).toHaveClass("extra");
+    expect(screen.getByText("Visible body")).toHaveClass("extra");
   });
 });

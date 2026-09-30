@@ -1,26 +1,17 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { stubMatchMedia } from "../../__tests__/stub-match-media";
 
 import { MagneticButton } from "./magnetic-button";
 
 describe("MagneticButton", () => {
-  beforeEach(() => {
+  it("renders its children and merges className", () => {
     stubMatchMedia();
-  });
-
-  it("renders its children", () => {
-    render(<MagneticButton>Hover me</MagneticButton>);
-
-    expect(screen.getByText("Hover me")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
     const { container } = render(
-      <MagneticButton className="custom-class">Action</MagneticButton>,
+      <MagneticButton className="custom-class">Hover me</MagneticButton>,
     );
-
+    expect(screen.getByText("Hover me")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

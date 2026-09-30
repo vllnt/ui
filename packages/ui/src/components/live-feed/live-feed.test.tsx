@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 
 import { LiveFeed, type LiveFeedEvent } from "./live-feed";
 
+const now = "2026-03-15T12:00:00.000Z";
+
 const events: LiveFeedEvent[] = [
   {
     id: "a",
@@ -22,10 +24,7 @@ const events: LiveFeedEvent[] = [
 
 describe("LiveFeed", () => {
   it("renders events sorted newest first with relative times", () => {
-    render(
-      <LiveFeed events={events} now="2026-03-15T12:00:00.000Z" title="Feed" />,
-    );
-
+    render(<LiveFeed events={events} now={now} title="Feed" />);
     expect(screen.getByText("Feed")).toBeInTheDocument();
     expect(screen.getByText("Latency breach")).toBeInTheDocument();
     expect(screen.getByText("Rollback succeeded")).toBeInTheDocument();
@@ -34,14 +33,7 @@ describe("LiveFeed", () => {
   });
 
   it("renders an empty state when no events are provided", () => {
-    render(
-      <LiveFeed
-        emptyLabel="Feed quiet"
-        events={[]}
-        now="2026-03-15T12:00:00.000Z"
-      />,
-    );
-
+    render(<LiveFeed emptyLabel="Feed quiet" events={[]} now={now} />);
     expect(screen.getByText("Feed quiet")).toBeInTheDocument();
   });
 
@@ -54,11 +46,7 @@ describe("LiveFeed", () => {
       ),
       title: `Event ${index}`,
     }));
-
-    render(
-      <LiveFeed events={many} maxItems={2} now="2026-03-15T12:00:00.000Z" />,
-    );
-
+    render(<LiveFeed events={many} maxItems={2} now={now} />);
     expect(screen.getByText("Event 4")).toBeInTheDocument();
     expect(screen.getByText("Event 3")).toBeInTheDocument();
     expect(screen.queryByText("Event 0")).not.toBeInTheDocument();

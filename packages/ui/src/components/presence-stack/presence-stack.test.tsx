@@ -10,35 +10,23 @@ const sample: PresenceUser[] = [
 ];
 
 describe("PresenceStack", () => {
-  it("renders one avatar per visible user", () => {
+  it("renders one titled, colored avatar per visible user with status", () => {
     const { container } = render(<PresenceStack users={sample} />);
-
+    const user = (id: string) =>
+      container.querySelector(`[data-presence-stack-user='${id}']`);
     expect(
       container.querySelectorAll("[data-presence-stack-user]"),
     ).toHaveLength(3);
+    expect(user("1")).toHaveStyle({ "background-color": "#5b8def" });
+    expect(user("1")).toHaveAttribute("title", "Bea");
+    expect(user("2")).toHaveAttribute("data-presence-stack-status", "away");
   });
 
-  it("propagates the user accent color to the avatar background", () => {
-    const { container } = render(<PresenceStack users={sample} />);
-
-    expect(
-      container.querySelector("[data-presence-stack-user='1']"),
-    ).toHaveStyle({ "background-color": "#5b8def" });
-  });
-
-  it("propagates status to a data attribute", () => {
-    const { container } = render(<PresenceStack users={sample} />);
-
-    expect(
-      container.querySelector("[data-presence-stack-user='2']"),
-    ).toHaveAttribute("data-presence-stack-status", "away");
-  });
-
-  it("renders the overflow chip when users exceed max", () => {
+  it("renders the overflow as a plain chip when users exceed max", () => {
     render(<PresenceStack max={2} users={sample} />);
-
     expect(screen.getByText("+1")).toBeInTheDocument();
     expect(screen.getByLabelText("1 more")).toBeInTheDocument();
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("renders the overflow as a button when onOverflowActivate is provided", () => {
@@ -46,22 +34,7 @@ describe("PresenceStack", () => {
     render(
       <PresenceStack max={2} onOverflowActivate={handleClick} users={sample} />,
     );
-
     fireEvent.click(screen.getByRole("button"));
     expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders the overflow as a plain span when no handler is provided", () => {
-    render(<PresenceStack max={2} users={sample} />);
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
-  });
-
-  it("uses the user name as a hover title", () => {
-    const { container } = render(<PresenceStack users={sample} />);
-
-    expect(
-      container.querySelector("[data-presence-stack-user='1']"),
-    ).toHaveAttribute("title", "Bea");
   });
 });

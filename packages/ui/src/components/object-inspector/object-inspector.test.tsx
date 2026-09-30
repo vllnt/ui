@@ -6,7 +6,6 @@ import { ObjectInspector } from "./object-inspector";
 describe("ObjectInspector", () => {
   it("renders the empty state when kind is omitted", () => {
     const { container } = render(<ObjectInspector />);
-
     expect(
       container.querySelector("[data-object-state='empty']"),
     ).toBeInTheDocument();
@@ -15,13 +14,12 @@ describe("ObjectInspector", () => {
 
   it("renders the empty state when title is omitted", () => {
     const { container } = render(<ObjectInspector kind="run" />);
-
     expect(
       container.querySelector("[data-object-state='empty']"),
     ).toBeInTheDocument();
   });
 
-  it("renders the kind chip + status dot when populated", () => {
+  it("renders the kind chip, status dot, title and subtitle when populated", () => {
     const { container } = render(
       <ObjectInspector
         kind="run"
@@ -30,7 +28,6 @@ describe("ObjectInspector", () => {
         title="research-2025"
       />,
     );
-
     expect(container.querySelector("[data-object-kind]")).toHaveAttribute(
       "data-object-kind",
       "run",
@@ -41,14 +38,7 @@ describe("ObjectInspector", () => {
     );
     expect(screen.getByText("Run")).toBeInTheDocument();
     expect(screen.getByText("Running")).toBeInTheDocument();
-  });
-
-  it("renders the title and subtitle", () => {
-    render(
-      <ObjectInspector kind="agent" subtitle="claude-3.7" title="researcher" />,
-    );
-
-    expect(screen.getByText("researcher")).toBeInTheDocument();
+    expect(screen.getByText("research-2025")).toBeInTheDocument();
     expect(screen.getByText("claude-3.7")).toBeInTheDocument();
   });
 
@@ -58,7 +48,14 @@ describe("ObjectInspector", () => {
         <p>Body section</p>
       </ObjectInspector>,
     );
-
     expect(screen.getByText("Body section")).toBeInTheDocument();
+  });
+
+  it("renders an agent title and subtitle without status", () => {
+    render(
+      <ObjectInspector kind="agent" subtitle="claude-3.7" title="researcher" />,
+    );
+    expect(screen.getByText("researcher")).toBeInTheDocument();
+    expect(screen.getByText("claude-3.7")).toBeInTheDocument();
   });
 });

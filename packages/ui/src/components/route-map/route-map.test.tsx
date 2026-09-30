@@ -11,118 +11,67 @@ const SILK_ROAD: RouteWaypoint[] = [
 ];
 
 describe("RouteMap", () => {
-  describe("rendering", () => {
-    it("renders one waypoint dot per entry with label", () => {
-      const { container } = render(<RouteMap waypoints={SILK_ROAD} />);
-
-      expect(
-        container.querySelector("[data-waypoint-id='chang']"),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector("[data-waypoint-id='constantinople']"),
-      ).toBeInTheDocument();
-      expect(screen.getAllByText("Chang'an").length).toBeGreaterThan(0);
-    });
-
-    it("emits 1-based ordinal when order is omitted", () => {
-      const { container } = render(<RouteMap waypoints={SILK_ROAD} />);
-
-      const first = container.querySelector("[data-waypoint-id='chang']");
-      const last = container.querySelector(
-        "[data-waypoint-id='constantinople']",
-      );
-      expect(first).toHaveAttribute("data-waypoint-ordinal", "1");
-      expect(last).toHaveAttribute("data-waypoint-ordinal", "4");
-    });
-
-    it("uses the provided order when set", () => {
-      const { container } = render(
-        <RouteMap
-          waypoints={[
-            { id: "a", label: "Start", order: 10, position: [0, 0] },
-            { id: "b", label: "End", order: 20, position: [10, 10] },
-          ]}
-        />,
-      );
-
-      expect(container.querySelector("[data-waypoint-id='a']")).toHaveAttribute(
-        "data-waypoint-ordinal",
-        "10",
-      );
-      expect(container.querySelector("[data-waypoint-id='b']")).toHaveAttribute(
-        "data-waypoint-ordinal",
-        "20",
-      );
-    });
-
-    it("renders the route polyline", () => {
-      const { container } = render(<RouteMap waypoints={SILK_ROAD} />);
-
-      const line = container.querySelector("[data-route-line]");
-      expect(line).toBeInTheDocument();
-      const path = line?.querySelector("path");
-      expect(path?.getAttribute("d")).toMatch(/^M/);
-    });
-
-    it("renders the backdrop image when set", () => {
-      const { container } = render(
-        <RouteMap
-          backdrop="/world.svg"
-          backdropAlt="World"
-          waypoints={SILK_ROAD}
-        />,
-      );
-
-      const image = container.querySelector("image");
-      expect(image).toHaveAttribute("href", "/world.svg");
-      expect(image).toHaveAttribute("aria-label", "World");
-    });
+  it("renders ordinal waypoint dots, the polyline and a summary of every waypoint, without progress by default", () => {
+    const { container } = render(<RouteMap waypoints={SILK_ROAD} />);
+    expect(
+      container.querySelector("[data-waypoint-id='chang']"),
+    ).toHaveAttribute("data-waypoint-ordinal", "1");
+    expect(
+      container.querySelector("[data-waypoint-id='constantinople']"),
+    ).toHaveAttribute("data-waypoint-ordinal", "4");
+    expect(screen.getAllByText("Chang'an").length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Chang'an/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Kashgar/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Samarkand/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Constantinople/).length).toBeGreaterThan(0);
+    const line = container.querySelector("[data-route-line]");
+    expect(line).toBeInTheDocument();
+    expect(line?.querySelector("path")?.getAttribute("d")).toMatch(/^M/);
+    expect(container.querySelector("[data-route-progress]")).toBeNull();
   });
 
-  describe("animation + progress", () => {
-    it("does not render the progress indicator by default", () => {
-      const { container } = render(<RouteMap waypoints={SILK_ROAD} />);
-
-      expect(container.querySelector("[data-route-progress]")).toBeNull();
-    });
-
-    it("renders the progress indicator when showProgressIndicator is true", () => {
-      const { container } = render(
-        <RouteMap showProgressIndicator waypoints={SILK_ROAD} />,
-      );
-
-      expect(
-        container.querySelector("[data-route-progress]"),
-      ).toBeInTheDocument();
-    });
-
-    it("renders the SVG <animate> element when animated is true", () => {
-      const { container } = render(<RouteMap animated waypoints={SILK_ROAD} />);
-
-      expect(container.querySelector("animate")).toBeInTheDocument();
-    });
+  it("uses the provided order when set", () => {
+    const { container } = render(
+      <RouteMap
+        waypoints={[
+          { id: "a", label: "Start", order: 10, position: [0, 0] },
+          { id: "b", label: "End", order: 20, position: [10, 10] },
+        ]}
+      />,
+    );
+    expect(container.querySelector("[data-waypoint-id='a']")).toHaveAttribute(
+      "data-waypoint-ordinal",
+      "10",
+    );
+    expect(container.querySelector("[data-waypoint-id='b']")).toHaveAttribute(
+      "data-waypoint-ordinal",
+      "20",
+    );
   });
 
-  describe("accessibility", () => {
-    it("renders the data-summary fallback list with every waypoint", () => {
-      render(<RouteMap waypoints={SILK_ROAD} />);
-
-      expect(screen.getAllByText(/Chang'an/).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/Kashgar/).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/Samarkand/).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/Constantinople/).length).toBeGreaterThan(0);
-    });
+  it("renders the backdrop image and info panel children when set", () => {
+    const { container } = render(
+      <RouteMap backdrop="/world.svg" backdropAlt="World" waypoints={SILK_ROAD}>
+        <p>4 waypoints · 7,500 km</p>
+      </RouteMap>,
+    );
+    const image = container.querySelector("image");
+    expect(image).toHaveAttribute("href", "/world.svg");
+    expect(image).toHaveAttribute("aria-label", "World");
+    expect(screen.getByText("4 waypoints · 7,500 km")).toBeInTheDocument();
   });
 
-  describe("info panel", () => {
-    it("renders children inside the info panel slot", () => {
-      render(
-        <RouteMap waypoints={SILK_ROAD}>
-          <p>4 waypoints · 7,500 km</p>
-        </RouteMap>,
-      );
+  it("renders the progress indicator when showProgressIndicator is true", () => {
+    const { container } = render(
+      <RouteMap showProgressIndicator waypoints={SILK_ROAD} />,
+    );
+    expect(
+      container.querySelector("[data-route-progress]"),
+    ).toBeInTheDocument();
+  });
 
-      expect(screen.getByText("4 waypoints · 7,500 km")).toBeInTheDocument();
-    });
+  it("renders the SVG <animate> element when animated is true", () => {
+    const { container } = render(<RouteMap animated waypoints={SILK_ROAD} />);
+    expect(container.querySelector("animate")).toBeInTheDocument();
   });
 });

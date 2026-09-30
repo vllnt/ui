@@ -73,9 +73,14 @@ describe("NavbarSaas", () => {
     setViewportWidth(1280);
   });
 
-  it("renders brand, navigation links, right slot, and theme toggle", () => {
+  it("renders brand, navigation links, right slot, theme toggle and marks the current pathname active", () => {
     renderNavbar();
-
+    expect(screen.getByRole("link", { name: "Docs" })).toHaveClass(
+      "text-foreground",
+    );
+    expect(screen.getByRole("link", { name: "Home" })).toHaveClass(
+      "text-foreground/60",
+    );
     expect(screen.getByRole("link", { name: "Vllnt" })).toHaveAttribute(
       "href",
       "/",
@@ -90,17 +95,6 @@ describe("NavbarSaas", () => {
     );
     expect(screen.getByRole("link", { name: "Login" })).toBeInTheDocument();
     expect(screen.getByLabelText("Toggle theme")).toBeInTheDocument();
-  });
-
-  it("marks the current pathname as active", () => {
-    renderNavbar();
-
-    expect(screen.getByRole("link", { name: "Docs" })).toHaveClass(
-      "text-foreground",
-    );
-    expect(screen.getByRole("link", { name: "Home" })).toHaveClass(
-      "text-foreground/60",
-    );
   });
 
   it("matches active navigation when hrefs carry query state", () => {

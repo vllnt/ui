@@ -1,26 +1,17 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { stubMatchMedia } from "../../__tests__/stub-match-media";
 
 import { ScrambleText } from "./scramble-text";
 
 describe("ScrambleText", () => {
-  beforeEach(() => {
+  it("renders an accessible label with the final text and merges className", () => {
     stubMatchMedia();
-  });
-
-  it("renders an accessible label with the final text", () => {
-    render(<ScrambleText text="SECRET" />);
-
-    expect(screen.getByLabelText("SECRET")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
     const { container } = render(
       <ScrambleText className="custom-class" text="SECRET" />,
     );
-
+    expect(screen.getByLabelText("SECRET")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

@@ -8,8 +8,8 @@ import {
 } from "./resizable";
 
 describe("ResizablePanelGroup", () => {
-  it("renders panels and handles", () => {
-    render(
+  it("renders panels and a handle with separator role by default", () => {
+    const { container } = render(
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={50}>
           <span>left-pane</span>
@@ -20,24 +20,8 @@ describe("ResizablePanelGroup", () => {
         </ResizablePanel>
       </ResizablePanelGroup>,
     );
-
     expect(screen.getByText("left-pane")).toBeInTheDocument();
     expect(screen.getByText("right-pane")).toBeInTheDocument();
-  });
-
-  it("renders the handle with separator role by default", () => {
-    const { container } = render(
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel defaultSize={50}>
-          <span>l</span>
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel defaultSize={50}>
-          <span>r</span>
-        </ResizablePanel>
-      </ResizablePanelGroup>,
-    );
-
     expect(container.querySelector("[role='separator']")).toBeInTheDocument();
   });
 
@@ -49,7 +33,6 @@ describe("ResizablePanelGroup", () => {
         </ResizablePanel>
       </ResizablePanelGroup>,
     );
-
     expect(container.firstChild).toHaveClass("extra");
   });
 });

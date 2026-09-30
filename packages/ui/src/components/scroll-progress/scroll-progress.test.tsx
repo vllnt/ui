@@ -4,16 +4,12 @@ import { describe, expect, it } from "vitest";
 import { ScrollProgress } from "./scroll-progress";
 
 describe("ScrollProgress", () => {
-  it("renders a progressbar starting at zero", () => {
-    render(<ScrollProgress />);
-
-    const bar = screen.getByRole("progressbar");
-    expect(bar).toHaveAttribute("aria-valuenow", "0");
-  });
-
-  it("applies a custom class name", () => {
+  it("renders a zeroed progressbar that merges className", () => {
     const { container } = render(<ScrollProgress className="custom-class" />);
-
+    expect(screen.getByRole("progressbar")).toHaveAttribute(
+      "aria-valuenow",
+      "0",
+    );
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });
