@@ -219,7 +219,7 @@ export const PromptInput = ({
   return (
     <form
       className={cn(
-        "flex flex-col gap-2 rounded-2xl border border-border bg-background p-2 shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring",
+        "flex flex-col gap-2 rounded-2xl border border-input bg-background p-2 shadow-sm transition-colors focus-within:ring-1 focus-within:ring-ring",
         className,
       )}
       onSubmit={handleFormSubmit}
