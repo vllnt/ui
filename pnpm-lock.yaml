@@ -134,12 +134,6 @@ importers:
       '@vllnt/ui-core':
         specifier: workspace:*
         version: link:../../packages/ui-core
-      class-variance-authority:
-        specifier: ^0.7.1
-        version: 0.7.1
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
@@ -161,9 +155,6 @@ importers:
       shadcn:
         specifier: canary
         version: 4.2.0-canary.0(@types/node@22.19.10)(typescript@5.9.3)
-      tailwind-merge:
-        specifier: ^3.3.1
-        version: 3.4.0
       zod:
         specifier: ^4.3.6
         version: 4.3.6

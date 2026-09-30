@@ -32,8 +32,6 @@
     "@vllnt/next-llms": "canary",
     "@vllnt/ui": "workspace:*",
     "@vllnt/ui-core": "workspace:*",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.468.0",
     "next": "16.2.6",
@@ -41,7 +39,6 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "shadcn": "canary",
-    "tailwind-merge": "^3.3.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
