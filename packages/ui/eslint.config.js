@@ -2,6 +2,8 @@ import { react } from '@vllnt/eslint-config'
 
 export default [
   {
+    // Build-tool configs outside the typed component surface are not linted
+    // (postcss.config.mjs, tailwind.config.ts, tsup/playwright configs).
     ignores: ['node_modules/**', 'dist/**', 'storybook-static/**', '.storybook/**', 'eslint.config.js', 'scripts/**', 'playwright-ct.config.ts', 'playwright/**', 'postcss.config.mjs', 'tailwind.config.ts', 'tsup.config.ts', 'src/**/*.visual.tsx', 'src/**/*.stories.tsx', 'src/**/*.stories.ts'],
   },
   ...react,
@@ -38,6 +40,9 @@ export default [
       'jsx-a11y/no-noninteractive-element-interactions': [
         'error',
         {
+          // Passive focus tracking: an <article> observes focus bubbling from
+          // its interactive children (e.g. ChronoEvent scroll-spy).
+          article: ['onFocus'],
           body: ['onError', 'onLoad'],
           iframe: ['onError', 'onLoad'],
           img: ['onError', 'onLoad'],
@@ -45,6 +50,16 @@ export default [
       ],
       'jsx-a11y/no-noninteractive-tabindex': 'error',
       'jsx-a11y/no-static-element-interactions': 'error',
+      // cmdk styles its input wrapper via the `[cmdk-input-wrapper]` attribute selector.
+      'react/no-unknown-property': ['error', { ignore: ['cmdk-input-wrapper'] }],
+    },
+  },
+  {
+    // Tailwind theme keys (`DEFAULT`, `2xl`, `accordion-down`, `0%`) and the
+    // Vite `@` path alias are dictated by the tools, not by our naming style.
+    files: ['src/tailwind-preset.ts', 'vitest.config.ts'],
+    rules: {
+      '@typescript-eslint/naming-convention': 'off',
     },
   },
   {

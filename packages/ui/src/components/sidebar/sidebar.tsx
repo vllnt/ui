@@ -362,25 +362,21 @@ function FamilyNav({
   );
 }
 
-// eslint-disable-next-line max-lines-per-function
-export function Sidebar({
-  ariaLabel = "Sidebar navigation",
-  closeLabel = "Close sidebar",
-  id = "site-sidebar",
-  sections,
-}: SidebarProps) {
-  const pathname = usePathname();
-  const { open, setOpen } = useSidebar();
-  const isMobile = useMobile(setOpen);
-  const mounted = useMounted();
-  const returnFocusReference = useRef<HTMLElement | null>(null);
-  const scrollContainerReference = useRef<HTMLElement>(null);
-  const sidebarReference = useRef<HTMLElement>(null);
-  const wasMobileOpenReference = useRef(false);
-  const { showBottomFade, showTopFade } = useScrollFade(
-    scrollContainerReference,
-  );
+type MobileFocusTrapOptions = {
+  isMobile: boolean;
+  open: boolean;
+  scrollContainerReference: React.RefObject<HTMLElement | null>;
+  setOpen: (open: boolean) => void;
+  sidebarReference: React.RefObject<HTMLElement | null>;
+};
 
+function useMobileFocusTrap({
+  isMobile,
+  open,
+  scrollContainerReference,
+  setOpen,
+  sidebarReference,
+}: MobileFocusTrapOptions) {
   useEffect(() => {
     if (!isMobile || !open) return;
 
@@ -430,77 +426,287 @@ export function Sidebar({
     return () => {
       document.removeEventListener("keydown", containFocus);
     };
-  }, [isMobile, open, setOpen]);
+  }, [isMobile, open, scrollContainerReference, setOpen, sidebarReference]);
+}
+
+type MobileFocusReturnOptions = {
+  isMobile: boolean;
+  open: boolean;
+  returnFocusRef: React.RefObject<HTMLElement | null>;
+  scrollContainerRef: React.RefObject<HTMLElement | null>;
+};
+
+function useMobileFocusReturn({
+  isMobile,
+  open,
+  returnFocusRef,
+  scrollContainerRef,
+}: MobileFocusReturnOptions) {
+  const wasMobileOpenReference = useRef(false);
 
   useEffect(() => {
     const wasMobileOpen = wasMobileOpenReference.current;
 
     if (isMobile && open && !wasMobileOpen) {
-      returnFocusReference.current =
+      returnFocusRef.current =
         document.activeElement instanceof HTMLElement
           ? document.activeElement
           : null;
-      scrollContainerReference.current?.focus();
+      scrollContainerRef.current?.focus();
     } else if (wasMobileOpen && (!isMobile || !open)) {
-      returnFocusReference.current?.focus();
-      returnFocusReference.current = null;
+      returnFocusRef.current?.focus();
+      returnFocusRef.current = null;
     }
 
     wasMobileOpenReference.current = isMobile && open;
-  }, [isMobile, open]);
+  }, [isMobile, open, returnFocusRef, scrollContainerRef]);
+}
+
+type SectionLinksProps = {
+  isMobile: boolean;
+  onNavigate: () => void;
+  pathname: string;
+  section: SidebarSection;
+};
+
+function SectionLinks({
+  isMobile,
+  onNavigate,
+  pathname,
+  section,
+}: SectionLinksProps) {
+  return (
+    <div className={section.title ? "space-y-0.5" : "space-y-1"}>
+      {section.items.map((item) => (
+        <Link
+          aria-current={getAriaCurrent(item, pathname)}
+          className={cn(
+            section.title
+              ? "block px-3 py-1.5 rounded-md text-sm transition-colors"
+              : "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
+            isCurrentItem(item, pathname)
+              ? "bg-accent text-accent-foreground"
+              : section.title
+                ? "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                : "hover:bg-accent hover:text-accent-foreground",
+            section.title && isCurrentItem(item, pathname) && "font-medium",
+          )}
+          href={item.href}
+          key={item.href}
+          onClick={() => {
+            if (isMobile) {
+              onNavigate();
+            }
+          }}
+        >
+          {item.title}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+type AsideClassNameOptions = {
+  collapsed: boolean;
+  isMobile: boolean;
+  open: boolean;
+};
+
+function getAsideClassName({
+  collapsed,
+  isMobile,
+  open,
+}: AsideClassNameOptions): string {
+  return cn(
+    "fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full bg-background transition-[transform,width] duration-300 ease-in-out",
+    "flex flex-col",
+    "overflow-hidden",
+    "shrink-0",
+    collapsed ? "border-r-0" : "border-r",
+    collapsed ? "w-0" : isMobile ? "w-[calc(100%-3rem)] max-w-80" : "w-64",
+    isMobile && open && "translate-x-0",
+    isMobile && !open && "-translate-x-full",
+    !isMobile && !collapsed && "-translate-x-full lg:translate-x-0",
+    !isMobile && collapsed && "-translate-x-full",
+  );
+}
+
+type ScrollFadesProps = {
+  showBottomFade: boolean;
+  showTopFade: boolean;
+};
+
+function ScrollFades({ showBottomFade, showTopFade }: ScrollFadesProps) {
+  return (
+    <>
+      {/* Top fade */}
+      {showTopFade ? (
+        <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-background to-transparent pointer-events-none z-20" />
+      ) : null}
+
+      {/* Bottom fade */}
+      {showBottomFade ? (
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent pointer-events-none z-20" />
+      ) : null}
+    </>
+  );
+}
+
+type SidebarSectionsProps = {
+  isMobile: boolean;
+  onNavigate: () => void;
+  pathname: string;
+  sections: SidebarSection[];
+};
+
+function SidebarSections({
+  isMobile,
+  onNavigate,
+  pathname,
+  sections,
+}: SidebarSectionsProps) {
+  const familySections = sections.filter((section) => section.family);
+  const otherSections = sections.filter((section) => !section.family);
+
+  return (
+    <div className="space-y-4">
+      {otherSections.map((section, sectionIndex) => {
+        const sectionItems = (
+          <SectionLinks
+            isMobile={isMobile}
+            onNavigate={onNavigate}
+            pathname={pathname}
+            section={section}
+          />
+        );
+
+        return (
+          <div className="space-y-1" key={section.title || sectionIndex}>
+            {section.title ? (
+              <CollapsibleSection
+                collapsible={section.collapsible}
+                defaultOpen={section.defaultOpen ?? true}
+                title={section.title}
+              >
+                {sectionItems}
+              </CollapsibleSection>
+            ) : (
+              sectionItems
+            )}
+          </div>
+        );
+      })}
+      {familySections.length > 0 ? (
+        <FamilyNav
+          isMobile={isMobile}
+          onNavigate={onNavigate}
+          pathname={pathname}
+          sections={familySections}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+type SidebarFocusOptions = MobileFocusTrapOptions & {
+  returnFocusReference: React.RefObject<HTMLElement | null>;
+};
+
+/** Focus trap + focus return for the mobile drawer, in that effect order. */
+function useSidebarFocus({
+  isMobile,
+  open,
+  returnFocusReference,
+  scrollContainerReference,
+  setOpen,
+  sidebarReference,
+}: SidebarFocusOptions) {
+  useMobileFocusTrap({
+    isMobile,
+    open,
+    scrollContainerReference,
+    setOpen,
+    sidebarReference,
+  });
+  useMobileFocusReturn({
+    isMobile,
+    open,
+    returnFocusRef: returnFocusReference,
+    scrollContainerRef: scrollContainerReference,
+  });
+}
+
+type MobileOverlayProps = {
+  closeLabel: string;
+  setOpen: (open: boolean) => void;
+};
+
+function MobileOverlay({ closeLabel, setOpen }: MobileOverlayProps) {
+  return (
+    <button
+      aria-label={closeLabel}
+      className="fixed inset-0 z-40 bg-foreground/30 lg:hidden"
+      data-testid="sidebar-overlay"
+      onClick={() => {
+        setOpen(false);
+      }}
+      type="button"
+    />
+  );
+}
+
+export function Sidebar({
+  ariaLabel = "Sidebar navigation",
+  closeLabel = "Close sidebar",
+  id = "site-sidebar",
+  sections,
+}: SidebarProps) {
+  const pathname = usePathname();
+  const { open, setOpen } = useSidebar();
+  const isMobile = useMobile(setOpen);
+  const mounted = useMounted();
+  const returnFocusReference = useRef<HTMLElement | null>(null);
+  const scrollContainerReference = useRef<HTMLElement>(null);
+  const sidebarReference = useRef<HTMLElement>(null);
+  const { showBottomFade, showTopFade } = useScrollFade(
+    scrollContainerReference,
+  );
+
+  useSidebarFocus({
+    isMobile,
+    open,
+    returnFocusReference,
+    scrollContainerReference,
+    setOpen,
+    sidebarReference,
+  });
 
   const collapsed = mounted && !isMobile && !open;
 
-  const familySections = sections.filter((section) => section.family);
-  const otherSections = sections.filter((section) => !section.family);
+  const handleNavigate = () => {
+    returnFocusReference.current = null;
+    setOpen(false);
+  };
 
   return (
     <>
       {/* Mobile overlay */}
       {isMobile && open ? (
-        <button
-          aria-label={closeLabel}
-          className="fixed inset-0 z-40 bg-foreground/30 lg:hidden"
-          data-testid="sidebar-overlay"
-          onClick={() => {
-            setOpen(false);
-          }}
-          type="button"
-        />
+        <MobileOverlay closeLabel={closeLabel} setOpen={setOpen} />
       ) : null}
 
       {/* Sidebar */}
       <aside
-        className={cn(
-          "fixed lg:relative top-16 lg:top-0 bottom-0 lg:bottom-auto left-0 z-40 lg:h-full bg-background transition-[transform,width] duration-300 ease-in-out",
-          "flex flex-col",
-          "overflow-hidden",
-          "shrink-0",
-          collapsed ? "border-r-0" : "border-r",
-          collapsed
-            ? "w-0"
-            : isMobile
-              ? "w-[calc(100%-3rem)] max-w-80"
-              : "w-64",
-          isMobile && open && "translate-x-0",
-          isMobile && !open && "-translate-x-full",
-          !isMobile && !collapsed && "-translate-x-full lg:translate-x-0",
-          !isMobile && collapsed && "-translate-x-full",
-        )}
+        className={getAsideClassName({ collapsed, isMobile, open })}
         id={id}
         inert={(isMobile && !open) || collapsed ? true : undefined}
         ref={sidebarReference}
       >
         <div className="relative flex-1 overflow-hidden">
-          {/* Top fade */}
-          {showTopFade ? (
-            <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-background to-transparent pointer-events-none z-20" />
-          ) : null}
-
-          {/* Bottom fade */}
-          {showBottomFade ? (
-            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-background to-transparent pointer-events-none z-20" />
-          ) : null}
+          <ScrollFades
+            showBottomFade={showBottomFade}
+            showTopFade={showTopFade}
+          />
 
           <nav
             aria-label={ariaLabel}
@@ -508,72 +714,12 @@ export function Sidebar({
             ref={scrollContainerReference}
             tabIndex={isMobile && open ? -1 : undefined}
           >
-            <div className="space-y-4">
-              {otherSections.map((section, sectionIndex) => {
-                const sectionItems = (
-                  <div className={section.title ? "space-y-0.5" : "space-y-1"}>
-                    {section.items.map((item) => (
-                      <Link
-                        aria-current={getAriaCurrent(item, pathname)}
-                        className={cn(
-                          section.title
-                            ? "block px-3 py-1.5 rounded-md text-sm transition-colors"
-                            : "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                          isCurrentItem(item, pathname)
-                            ? "bg-accent text-accent-foreground"
-                            : section.title
-                              ? "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                              : "hover:bg-accent hover:text-accent-foreground",
-                          section.title &&
-                            isCurrentItem(item, pathname) &&
-                            "font-medium",
-                        )}
-                        href={item.href}
-                        key={item.href}
-                        onClick={() => {
-                          if (isMobile) {
-                            returnFocusReference.current = null;
-                            setOpen(false);
-                          }
-                        }}
-                      >
-                        {item.title}
-                      </Link>
-                    ))}
-                  </div>
-                );
-
-                return (
-                  <div
-                    className="space-y-1"
-                    key={section.title || sectionIndex}
-                  >
-                    {section.title ? (
-                      <CollapsibleSection
-                        collapsible={section.collapsible}
-                        defaultOpen={section.defaultOpen ?? true}
-                        title={section.title}
-                      >
-                        {sectionItems}
-                      </CollapsibleSection>
-                    ) : (
-                      sectionItems
-                    )}
-                  </div>
-                );
-              })}
-              {familySections.length > 0 ? (
-                <FamilyNav
-                  isMobile={isMobile}
-                  onNavigate={() => {
-                    returnFocusReference.current = null;
-                    setOpen(false);
-                  }}
-                  pathname={pathname}
-                  sections={familySections}
-                />
-              ) : null}
-            </div>
+            <SidebarSections
+              isMobile={isMobile}
+              onNavigate={handleNavigate}
+              pathname={pathname}
+              sections={sections}
+            />
           </nav>
         </div>
       </aside>

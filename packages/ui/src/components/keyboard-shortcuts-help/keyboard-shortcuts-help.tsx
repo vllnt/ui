@@ -26,7 +26,51 @@ export type KeyboardShortcutsHelpProps = {
   title?: string;
 };
 
-// eslint-disable-next-line max-lines-per-function -- Modal with keyboard handling and focus trap
+function DefaultCloseIcon(): React.ReactNode {
+  return (
+    <svg
+      className="size-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M6 18L18 6M6 6l12 12"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+      />
+    </svg>
+  );
+}
+
+function ShortcutsList({
+  shortcuts,
+}: Pick<KeyboardShortcutsHelpProps, "shortcuts">): React.ReactNode {
+  return (
+    <div className="space-y-3">
+      {shortcuts.map((shortcut) => (
+        <div
+          className="flex items-center justify-between text-sm"
+          key={shortcut.description}
+        >
+          <span className="text-muted-foreground">{shortcut.description}</span>
+          <div className="flex gap-1">
+            {shortcut.keys.map((key) => (
+              <kbd
+                className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-border bg-muted px-1.5 font-mono text-xs"
+                key={key}
+              >
+                {key}
+              </kbd>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function KeyboardShortcutsHelpImpl({
   as: Heading = "h2",
   className,
@@ -84,47 +128,12 @@ function KeyboardShortcutsHelpImpl({
             ref={closeButtonRef}
             type="button"
           >
-            {closeIcon ?? (
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M6 18L18 6M6 6l12 12"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </svg>
-            )}
+            {closeIcon ?? <DefaultCloseIcon />}
           </button>
         </div>
 
         {/* Shortcuts List */}
-        <div className="space-y-3">
-          {shortcuts.map((shortcut) => (
-            <div
-              className="flex items-center justify-between text-sm"
-              key={shortcut.description}
-            >
-              <span className="text-muted-foreground">
-                {shortcut.description}
-              </span>
-              <div className="flex gap-1">
-                {shortcut.keys.map((key) => (
-                  <kbd
-                    className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-border bg-muted px-1.5 font-mono text-xs"
-                    key={key}
-                  >
-                    {key}
-                  </kbd>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <ShortcutsList shortcuts={shortcuts} />
 
         {/* Footer */}
         {footer ? (

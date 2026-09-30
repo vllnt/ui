@@ -7,9 +7,14 @@ import remarkGfm from "remark-gfm";
 import { CodeBlock } from "../code-block/code-block";
 import { StaticCode } from "../static-code/static-code";
 
+/**
+ * Any React component the content may render. MDX supplies its props from
+ * the source at runtime, so `never` keeps the prop type open to every component.
+ */
+type MDXComponent = React.JSXElementConstructor<never>;
+
 type MDXContentProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  components?: Record<string, React.ComponentType<any>>;
+  components?: Record<string, MDXComponent>;
   content: string;
   enableMDX?: boolean;
 };
@@ -118,6 +123,8 @@ const MDXComponents: Components = {
   ),
 };
 
+type MDXModule = Awaited<ReturnType<typeof evaluate>>;
+
 const proseClasses = [
   "prose prose-lg dark:prose-invert max-w-none",
   "prose-headings:font-bold prose-headings:tracking-tight",
@@ -161,19 +168,15 @@ function removeImportStatements(
 }
 
 function buildCustomComponents(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  injectedComponents: Record<string, React.ComponentType<any>>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Record<string, React.ComponentType<any>> {
+  injectedComponents: Record<string, MDXComponent>,
+): Record<string, MDXComponent> {
   return {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    CodeBlock: CodeBlock as React.ComponentType<any>,
+    CodeBlock,
     ...injectedComponents,
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const EMPTY_MDX_COMPONENTS: Record<string, React.ComponentType<any>> = {};
+const EMPTY_MDX_COMPONENTS: Record<string, MDXComponent> = {};
 
 export async function MDXContent({
   components = EMPTY_MDX_COMPONENTS,
@@ -189,11 +192,11 @@ export async function MDXContent({
   const hasJSX = /<[A-Z][A-Za-z]*/.test(contentWithoutCodeBlocks);
 
   const customComponents = buildCustomComponents(components);
-  const allComponents = { ...MDXComponents, ...customComponents };
+  // Markdown and MDX call these with props parsed from `content`.
+  const allComponents = { ...MDXComponents, ...customComponents } as Components;
 
   if (enableMDX && hasJSX) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let Component: React.ComponentType<{ components: any }> | undefined;
+    let Component: MDXModule["default"] | undefined;
 
     try {
       const result = await evaluate(processedContent, {

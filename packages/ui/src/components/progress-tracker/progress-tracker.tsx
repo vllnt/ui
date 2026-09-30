@@ -251,15 +251,7 @@ export type ProgressTrackerOverviewProps =
     label?: string;
   };
 
-// eslint-disable-next-line max-lines-per-function
-function ProgressTrackerOverview({
-  className,
-  description = "Track completion across modules, lessons, and exercises.",
-  label = "Overall progress",
-  ...props
-}: ProgressTrackerOverviewProps): React.ReactNode {
-  const { modules, overallProgress, streak, title } =
-    useProgressTrackerContext();
+function useChecklistRefresh(modules: ProgressTrackerModuleItem[]): void {
   const trackedPersistKeys = React.useMemo(
     () =>
       modules.reduce<string[]>((keys, module) => {
@@ -298,10 +290,19 @@ function ProgressTrackerOverview({
       window.removeEventListener(CHECKLIST_PROGRESS_EVENT, syncEventListener);
     };
   }, [trackedPersistKeys]);
+}
 
-  const radius = 54;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (overallProgress / 100) * circumference;
+type OverviewTotals = {
+  completedExercises: number;
+  completedLessons: number;
+  completedModules: number;
+  totalExercises: number;
+  totalLessons: number;
+};
+
+function getOverviewTotals(
+  modules: ProgressTrackerModuleItem[],
+): OverviewTotals {
   const completedModules = modules.filter(
     (module) => module.status === "completed",
   ).length;
@@ -328,6 +329,139 @@ function ProgressTrackerOverview({
     0,
   );
 
+  return {
+    completedExercises,
+    completedLessons,
+    completedModules,
+    totalExercises,
+    totalLessons,
+  };
+}
+
+type OverviewRingProps = {
+  completedModules: number;
+  label: string;
+  moduleCount: number;
+  overallProgress: number;
+};
+
+function OverviewRing({
+  completedModules,
+  label,
+  moduleCount,
+  overallProgress,
+}: OverviewRingProps): React.ReactNode {
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (overallProgress / 100) * circumference;
+
+  return (
+    <div className="mx-auto flex flex-col items-center gap-3 text-center">
+      <div className="relative flex size-36 items-center justify-center">
+        <svg className="size-36 -rotate-90" viewBox="0 0 120 120">
+          <circle
+            className="stroke-muted"
+            cx="60"
+            cy="60"
+            fill="none"
+            r={radius}
+            strokeWidth="10"
+          />
+          <circle
+            aria-label={label}
+            aria-valuemax={100}
+            aria-valuemin={0}
+            aria-valuenow={overallProgress}
+            className="stroke-primary transition-all duration-500"
+            cx="60"
+            cy="60"
+            fill="none"
+            r={radius}
+            role="progressbar"
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            strokeWidth="10"
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-3xl font-semibold text-foreground">
+            {overallProgress}%
+          </span>
+          <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Complete
+          </span>
+        </div>
+      </div>
+      <p className="max-w-52 text-sm text-muted-foreground">
+        {completedModules} of {moduleCount} modules completed.
+      </p>
+    </div>
+  );
+}
+
+type OverviewStatsProps = OverviewTotals & {
+  moduleCount: number;
+  streak: number;
+};
+
+function OverviewStats({
+  completedExercises,
+  completedLessons,
+  completedModules,
+  moduleCount,
+  streak,
+  totalExercises,
+  totalLessons,
+}: OverviewStatsProps): React.ReactNode {
+  return (
+    <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="rounded-xl border bg-muted/30 p-4">
+        <dt className="text-sm text-muted-foreground">Modules</dt>
+        <dd className="mt-2 text-2xl font-semibold text-foreground">
+          {completedModules}/{moduleCount}
+        </dd>
+      </div>
+      <div className="rounded-xl border bg-muted/30 p-4">
+        <dt className="text-sm text-muted-foreground">Lessons</dt>
+        <dd className="mt-2 text-2xl font-semibold text-foreground">
+          {completedLessons}/{totalLessons}
+        </dd>
+      </div>
+      <div className="rounded-xl border bg-muted/30 p-4">
+        <dt className="text-sm text-muted-foreground">Exercises</dt>
+        <dd className="mt-2 text-2xl font-semibold text-foreground">
+          {completedExercises}/{totalExercises}
+        </dd>
+      </div>
+      <div className="rounded-xl border bg-muted/30 p-4">
+        <dt className="text-sm text-muted-foreground">Momentum</dt>
+        <dd className="mt-2 text-2xl font-semibold text-foreground">
+          {streak} day{streak === 1 ? "" : "s"}
+        </dd>
+      </div>
+    </dl>
+  );
+}
+
+function ProgressTrackerOverview({
+  className,
+  description = "Track completion across modules, lessons, and exercises.",
+  label = "Overall progress",
+  ...props
+}: ProgressTrackerOverviewProps): React.ReactNode {
+  const { modules, overallProgress, streak, title } =
+    useProgressTrackerContext();
+  useChecklistRefresh(modules);
+
+  const {
+    completedExercises,
+    completedLessons,
+    completedModules,
+    totalExercises,
+    totalLessons,
+  } = getOverviewTotals(modules);
+
   return (
     <Card className={cn("overflow-hidden", className)} {...props}>
       <CardHeader className="gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -352,74 +486,22 @@ function ProgressTrackerOverview({
         </div>
       </CardHeader>
       <CardContent className="grid gap-6 lg:grid-cols-[auto,1fr] lg:items-center">
-        <div className="mx-auto flex flex-col items-center gap-3 text-center">
-          <div className="relative flex size-36 items-center justify-center">
-            <svg className="size-36 -rotate-90" viewBox="0 0 120 120">
-              <circle
-                className="stroke-muted"
-                cx="60"
-                cy="60"
-                fill="none"
-                r={radius}
-                strokeWidth="10"
-              />
-              <circle
-                aria-label={label}
-                aria-valuemax={100}
-                aria-valuemin={0}
-                aria-valuenow={overallProgress}
-                className="stroke-primary transition-all duration-500"
-                cx="60"
-                cy="60"
-                fill="none"
-                r={radius}
-                role="progressbar"
-                strokeDasharray={circumference}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-                strokeWidth="10"
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-semibold text-foreground">
-                {overallProgress}%
-              </span>
-              <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Complete
-              </span>
-            </div>
-          </div>
-          <p className="max-w-52 text-sm text-muted-foreground">
-            {completedModules} of {modules.length} modules completed.
-          </p>
-        </div>
+        <OverviewRing
+          completedModules={completedModules}
+          label={label}
+          moduleCount={modules.length}
+          overallProgress={overallProgress}
+        />
 
-        <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-xl border bg-muted/30 p-4">
-            <dt className="text-sm text-muted-foreground">Modules</dt>
-            <dd className="mt-2 text-2xl font-semibold text-foreground">
-              {completedModules}/{modules.length}
-            </dd>
-          </div>
-          <div className="rounded-xl border bg-muted/30 p-4">
-            <dt className="text-sm text-muted-foreground">Lessons</dt>
-            <dd className="mt-2 text-2xl font-semibold text-foreground">
-              {completedLessons}/{totalLessons}
-            </dd>
-          </div>
-          <div className="rounded-xl border bg-muted/30 p-4">
-            <dt className="text-sm text-muted-foreground">Exercises</dt>
-            <dd className="mt-2 text-2xl font-semibold text-foreground">
-              {completedExercises}/{totalExercises}
-            </dd>
-          </div>
-          <div className="rounded-xl border bg-muted/30 p-4">
-            <dt className="text-sm text-muted-foreground">Momentum</dt>
-            <dd className="mt-2 text-2xl font-semibold text-foreground">
-              {streak} day{streak === 1 ? "" : "s"}
-            </dd>
-          </div>
-        </dl>
+        <OverviewStats
+          completedExercises={completedExercises}
+          completedLessons={completedLessons}
+          completedModules={completedModules}
+          moduleCount={modules.length}
+          streak={streak}
+          totalExercises={totalExercises}
+          totalLessons={totalLessons}
+        />
       </CardContent>
     </Card>
   );
@@ -445,7 +527,151 @@ function ProgressTrackerModules({
 export type ProgressTrackerModuleProps = React.HTMLAttributes<HTMLDivElement> &
   ProgressTrackerModuleItem;
 
-// eslint-disable-next-line max-lines-per-function
+type ModuleCardHeaderProps = Pick<
+  ProgressTrackerModuleItem,
+  "badge" | "currentLesson" | "description" | "status" | "timeSpent" | "title"
+>;
+
+function ModuleCardHeader({
+  badge,
+  currentLesson,
+  description,
+  status,
+  timeSpent,
+  title,
+}: ModuleCardHeaderProps): React.ReactNode {
+  return (
+    <CardHeader className="gap-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-1">
+          <CardTitle className="text-xl">{title}</CardTitle>
+          {description ? (
+            <CardDescription>{description}</CardDescription>
+          ) : null}
+        </div>
+        <Badge
+          className={cn("whitespace-nowrap", getStatusClasses(status))}
+          variant="outline"
+        >
+          {getStatusLabel(status)}
+        </Badge>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {badge ? <Badge variant="secondary">{badge}</Badge> : null}
+        {currentLesson ? (
+          <Badge variant="outline">Current: {currentLesson}</Badge>
+        ) : null}
+        {timeSpent ? <Badge variant="outline">{timeSpent}</Badge> : null}
+      </div>
+    </CardHeader>
+  );
+}
+
+type ModuleProgressValues = ReturnType<typeof getModuleProgressValues>;
+
+type ModuleProgressProps = {
+  isComplete: boolean;
+  title: string;
+  values: ModuleProgressValues;
+};
+
+function ModuleProgress({
+  isComplete,
+  title,
+  values,
+}: ModuleProgressProps): React.ReactNode {
+  const {
+    progressPercent,
+    progressValue,
+    resolvedLessons,
+    resolvedLessonTotal,
+    safeExerciseComplete,
+    safeExerciseTotal,
+  } = values;
+
+  return (
+    <div className="space-y-2">
+      <div
+        aria-label={`${title} progress`}
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={progressPercent}
+        role="progressbar"
+      >
+        <ProgressBar
+          completedLabel="lessons"
+          currentLabel={`${progressPercent}% complete`}
+          isComplete={isComplete}
+          max={resolvedLessonTotal}
+          showLabels
+          value={progressValue}
+        />
+      </div>
+      <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+        <span>
+          Lessons:{" "}
+          <span className="font-medium text-foreground">
+            {resolvedLessons}/{resolvedLessonTotal}
+          </span>
+        </span>
+        <span>
+          Exercises:{" "}
+          <span className="font-medium text-foreground">
+            {safeExerciseComplete}/{safeExerciseTotal}
+          </span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ModuleSkills({ skills }: { skills: string[] }): React.ReactNode {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {skills.map((skill) => (
+        <ProgressTrackerBadge key={skill}>{skill}</ProgressTrackerBadge>
+      ))}
+    </div>
+  );
+}
+
+type ModuleProgressValuesInput = Pick<
+  ProgressTrackerModuleItem,
+  "completedExercises" | "exercises" | "lessons" | "progress"
+> & {
+  checklistProgress: ReturnType<typeof useChecklistProgress>;
+  completedLessons: number;
+};
+
+function getModuleProgressValues({
+  checklistProgress,
+  completedExercises,
+  completedLessons,
+  exercises,
+  lessons,
+  progress,
+}: ModuleProgressValuesInput) {
+  const resolvedLessons = checklistProgress?.completedCount ?? completedLessons;
+  const resolvedLessonTotal = checklistProgress?.total || lessons;
+  const progressPercent =
+    checklistProgress?.progress ?? clampPercentage(progress);
+  const progressValue = Math.min(resolvedLessons, resolvedLessonTotal);
+  const safeExerciseTotal = exercises ?? 0;
+  const safeExerciseComplete = Math.min(
+    completedExercises ?? 0,
+    safeExerciseTotal,
+  );
+
+  return {
+    progressPercent,
+    progressValue,
+    resolvedLessons,
+    resolvedLessonTotal,
+    safeExerciseComplete,
+    safeExerciseTotal,
+  };
+}
+
 function ProgressTrackerModule({
   badge,
   checklistItems,
@@ -467,16 +693,14 @@ function ProgressTrackerModule({
   ...props
 }: ProgressTrackerModuleProps): React.ReactNode {
   const checklistProgress = useChecklistProgress(checklistItems, persistKey);
-  const resolvedLessons = checklistProgress?.completedCount ?? completedLessons;
-  const resolvedLessonTotal = checklistProgress?.total || lessons;
-  const progressPercent =
-    checklistProgress?.progress ?? clampPercentage(progress);
-  const progressValue = Math.min(resolvedLessons, resolvedLessonTotal);
-  const safeExerciseTotal = exercises ?? 0;
-  const safeExerciseComplete = Math.min(
-    completedExercises ?? 0,
-    safeExerciseTotal,
-  );
+  const values = getModuleProgressValues({
+    checklistProgress,
+    completedExercises,
+    completedLessons,
+    exercises,
+    lessons,
+    progress,
+  });
   const card = (
     <Card
       aria-disabled={status === "locked"}
@@ -489,69 +713,21 @@ function ProgressTrackerModule({
       id={id}
       {...props}
     >
-      <CardHeader className="gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            <CardTitle className="text-xl">{title}</CardTitle>
-            {description ? (
-              <CardDescription>{description}</CardDescription>
-            ) : null}
-          </div>
-          <Badge
-            className={cn("whitespace-nowrap", getStatusClasses(status))}
-            variant="outline"
-          >
-            {getStatusLabel(status)}
-          </Badge>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {badge ? <Badge variant="secondary">{badge}</Badge> : null}
-          {currentLesson ? (
-            <Badge variant="outline">Current: {currentLesson}</Badge>
-          ) : null}
-          {timeSpent ? <Badge variant="outline">{timeSpent}</Badge> : null}
-        </div>
-      </CardHeader>
+      <ModuleCardHeader
+        badge={badge}
+        currentLesson={currentLesson}
+        description={description}
+        status={status}
+        timeSpent={timeSpent}
+        title={title}
+      />
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div
-            aria-label={`${title} progress`}
-            aria-valuemax={100}
-            aria-valuemin={0}
-            aria-valuenow={progressPercent}
-            role="progressbar"
-          >
-            <ProgressBar
-              completedLabel="lessons"
-              currentLabel={`${progressPercent}% complete`}
-              isComplete={status === "completed"}
-              max={resolvedLessonTotal}
-              showLabels
-              value={progressValue}
-            />
-          </div>
-          <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
-            <span>
-              Lessons:{" "}
-              <span className="font-medium text-foreground">
-                {resolvedLessons}/{resolvedLessonTotal}
-              </span>
-            </span>
-            <span>
-              Exercises:{" "}
-              <span className="font-medium text-foreground">
-                {safeExerciseComplete}/{safeExerciseTotal}
-              </span>
-            </span>
-          </div>
-        </div>
-        {skills.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <ProgressTrackerBadge key={skill}>{skill}</ProgressTrackerBadge>
-            ))}
-          </div>
-        ) : null}
+        <ModuleProgress
+          isComplete={status === "completed"}
+          title={title}
+          values={values}
+        />
+        {skills.length > 0 ? <ModuleSkills skills={skills} /> : null}
       </CardContent>
     </Card>
   );
