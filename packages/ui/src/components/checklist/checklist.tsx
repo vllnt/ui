@@ -178,7 +178,32 @@ export type ChecklistProps = {
   title?: string;
 };
 
-// eslint-disable-next-line max-lines-per-function -- Complex interactive component with state and localStorage
+function readPersistedChecklist(persistKey: string | undefined): Set<string> {
+  if (typeof window !== "undefined" && persistKey) {
+    const saved = localStorage.getItem(`checklist:${persistKey}`);
+    if (saved) {
+      return new Set(parseChecklistStorageValue(saved));
+    }
+  }
+  return new Set();
+}
+
+function persistChecklist(persistKey: string, ids: Set<string>): void {
+  try {
+    localStorage.setItem(
+      `checklist:${persistKey}`,
+      createChecklistStorageValue(ids),
+    );
+    window.dispatchEvent(
+      new CustomEvent(CHECKLIST_PROGRESS_EVENT, {
+        detail: { persistKey },
+      }),
+    );
+  } catch {
+    /* skip */
+  }
+}
+
 export function Checklist({
   as: Heading = "h4",
   className,
@@ -187,15 +212,9 @@ export function Checklist({
   persistKey,
   title,
 }: ChecklistProps): React.ReactNode {
-  const [checked, setChecked] = useState<Set<string>>(() => {
-    if (typeof window !== "undefined" && persistKey) {
-      const saved = localStorage.getItem(`checklist:${persistKey}`);
-      if (saved) {
-        return new Set(parseChecklistStorageValue(saved));
-      }
-    }
-    return new Set();
-  });
+  const [checked, setChecked] = useState<Set<string>>(() =>
+    readPersistedChecklist(persistKey),
+  );
 
   const toggleItem = (id: string): void => {
     const newChecked = new Set(checked);
@@ -203,19 +222,7 @@ export function Checklist({
     else newChecked.add(id);
     setChecked(newChecked);
     if (persistKey) {
-      try {
-        localStorage.setItem(
-          `checklist:${persistKey}`,
-          createChecklistStorageValue(newChecked),
-        );
-        window.dispatchEvent(
-          new CustomEvent(CHECKLIST_PROGRESS_EVENT, {
-            detail: { persistKey },
-          }),
-        );
-      } catch {
-        /* skip */
-      }
+      persistChecklist(persistKey, newChecked);
     }
     if (newChecked.size === items.length) {
       onComplete?.();

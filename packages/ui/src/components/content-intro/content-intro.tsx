@@ -62,23 +62,143 @@ function ContentIntroBody({ source }: ContentIntroBodyProps): ReactNode {
   return source();
 }
 
-// eslint-disable-next-line max-lines-per-function -- Complex intro with TOC and sticky button
-function ContentIntroImpl({
-  additionalContent,
+type ContentIntroTocProps = {
+  completedSections: Set<string>;
+  isLoading: boolean;
+  label: string;
+  onGoToSection: (index: number) => void;
+  sections: ContentIntroSection[];
+  TocHeading: HeadingTag;
+};
+
+function ContentIntroToc({
   completedSections,
-  estimatedTime,
-  isLoading = false,
-  labels = EMPTY_CONTENT_INTRO_LABELS,
+  isLoading,
+  label,
   onGoToSection,
-  onStart,
-  renderIntroContent,
   sections,
-  title,
-  titleAs: TitleHeading = "h2",
-  tocLabelAs: TocHeading = "h3",
-}: ContentIntroProps): React.ReactNode {
-  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
-  const hasProgress = completedSections.size > 0;
+  TocHeading,
+}: ContentIntroTocProps): ReactNode {
+  return (
+    <section className="mt-8 py-6 border-t border-border">
+      <TocHeading className="text-lg font-semibold mb-4">{label}</TocHeading>
+      <ol className="space-y-2">
+        {sections.map((section, index) => {
+          const isCompleted = !isLoading && completedSections.has(section.id);
+          return (
+            <li key={section.id}>
+              <button
+                className="w-full flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-muted/50 transition-colors text-left"
+                onClick={() => {
+                  onGoToSection(index);
+                }}
+                type="button"
+              >
+                <span
+                  className={cn(
+                    "flex-shrink-0 size-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
+                    isLoading && "animate-pulse bg-muted",
+                    !isLoading &&
+                      isCompleted &&
+                      "bg-foreground text-background",
+                    !isLoading && !isCompleted && "bg-muted",
+                  )}
+                >
+                  {isCompleted ? (
+                    <svg
+                      className="size-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M5 13l4 4L19 7"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                      />
+                    </svg>
+                  ) : (
+                    index + 1
+                  )}
+                </span>
+                <span
+                  className={cn(
+                    "text-sm",
+                    isCompleted && "line-through text-muted-foreground",
+                  )}
+                >
+                  {section.title}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+}
+
+type ContentIntroStickyBarProps = {
+  completedCount: number;
+  estimatedTime: string;
+  hasProgress: boolean;
+  labels: Required<ContentIntroLabels>;
+  onStart: () => void;
+  sectionCount: number;
+};
+
+function ContentIntroStickyBar({
+  completedCount,
+  estimatedTime,
+  hasProgress,
+  labels: mergedLabels,
+  onStart,
+  sectionCount,
+}: ContentIntroStickyBarProps): ReactNode {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/80 backdrop-blur-sm safe-bottom">
+      <div className="mx-auto max-w-3xl p-4">
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground hidden sm:block">
+            {hasProgress
+              ? `${completedCount}/${sectionCount} completed`
+              : `${sectionCount} sections · ${estimatedTime}`}
+          </p>
+          <Button
+            className="flex-1 sm:flex-none px-8 py-6 text-lg font-medium gap-2"
+            onClick={onStart}
+            size="lg"
+          >
+            <svg
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M5 3l14 9-14 9V3z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+              />
+            </svg>
+            <span>
+              {hasProgress
+                ? mergedLabels.continueLabel
+                : mergedLabels.startLabel}
+            </span>
+            <kbd className="hidden md:inline-flex ml-1 px-1.5 py-0.5 text-xs font-mono bg-primary-foreground/20 rounded">
+              ↵
+            </kbd>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function useEnterToStart(onStart: () => void): void {
   const onStartRef = useRef(onStart);
 
   useEffect(() => {
@@ -98,6 +218,25 @@ function ContentIntroImpl({
       document.removeEventListener("keydown", onDocumentKeyDown);
     };
   }, []);
+}
+
+function ContentIntroImpl({
+  additionalContent,
+  completedSections,
+  estimatedTime,
+  isLoading = false,
+  labels = EMPTY_CONTENT_INTRO_LABELS,
+  onGoToSection,
+  onStart,
+  renderIntroContent,
+  sections,
+  title,
+  titleAs: TitleHeading = "h2",
+  tocLabelAs: TocHeading = "h3",
+}: ContentIntroProps): React.ReactNode {
+  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+  const hasProgress = completedSections.size > 0;
+  useEnterToStart(onStart);
 
   return (
     <>
@@ -113,109 +252,28 @@ function ContentIntroImpl({
         </section>
 
         {/* Table of Contents */}
-        <section className="mt-8 py-6 border-t border-border">
-          <TocHeading className="text-lg font-semibold mb-4">
-            {mergedLabels.tableOfContentsLabel}
-          </TocHeading>
-          <ol className="space-y-2">
-            {sections.map((section, index) => {
-              const isCompleted =
-                !isLoading && completedSections.has(section.id);
-              return (
-                <li key={section.id}>
-                  <button
-                    className="w-full flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-muted/50 transition-colors text-left"
-                    onClick={() => {
-                      onGoToSection(index);
-                    }}
-                    type="button"
-                  >
-                    <span
-                      className={cn(
-                        "flex-shrink-0 size-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
-                        isLoading && "animate-pulse bg-muted",
-                        !isLoading &&
-                          isCompleted &&
-                          "bg-foreground text-background",
-                        !isLoading && !isCompleted && "bg-muted",
-                      )}
-                    >
-                      {isCompleted ? (
-                        <svg
-                          className="size-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            d="M5 13l4 4L19 7"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                          />
-                        </svg>
-                      ) : (
-                        index + 1
-                      )}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-sm",
-                        isCompleted && "line-through text-muted-foreground",
-                      )}
-                    >
-                      {section.title}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-        </section>
+        <ContentIntroToc
+          completedSections={completedSections}
+          isLoading={isLoading}
+          label={mergedLabels.tableOfContentsLabel}
+          onGoToSection={onGoToSection}
+          sections={sections}
+          TocHeading={TocHeading}
+        />
 
         {/* Extra Content (Share, Profile, etc.) */}
         {additionalContent}
       </div>
 
       {/* Sticky Start/Continue Button */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/80 backdrop-blur-sm safe-bottom">
-        <div className="mx-auto max-w-3xl p-4">
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground hidden sm:block">
-              {hasProgress
-                ? `${completedSections.size}/${sections.length} completed`
-                : `${sections.length} sections · ${estimatedTime}`}
-            </p>
-            <Button
-              className="flex-1 sm:flex-none px-8 py-6 text-lg font-medium gap-2"
-              onClick={onStart}
-              size="lg"
-            >
-              <svg
-                className="size-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M5 3l14 9-14 9V3z"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </svg>
-              <span>
-                {hasProgress
-                  ? mergedLabels.continueLabel
-                  : mergedLabels.startLabel}
-              </span>
-              <kbd className="hidden md:inline-flex ml-1 px-1.5 py-0.5 text-xs font-mono bg-primary-foreground/20 rounded">
-                ↵
-              </kbd>
-            </Button>
-          </div>
-        </div>
-      </div>
+      <ContentIntroStickyBar
+        completedCount={completedSections.size}
+        estimatedTime={estimatedTime}
+        hasProgress={hasProgress}
+        labels={mergedLabels}
+        onStart={onStart}
+        sectionCount={sections.length}
+      />
     </>
   );
 }
