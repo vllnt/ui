@@ -102,6 +102,12 @@ function renderSidebar(sidebarSections: SidebarSection[] = sections) {
   );
 }
 
+async function expectState(state: "closed" | "open") {
+  await waitFor(() => {
+    expect(screen.getByTestId("sidebar-state")).toHaveTextContent(state);
+  });
+}
+
 describe("Sidebar", () => {
   beforeEach(() => {
     mockPathname = "/docs/components";
@@ -110,11 +116,7 @@ describe("Sidebar", () => {
 
   it("renders sections, links, and active route state", async () => {
     renderSidebar();
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
-    });
-
+    await expectState("open");
     expect(screen.getByText("Guides")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Components" })).toHaveClass(
       "bg-accent",
@@ -148,7 +150,6 @@ describe("Sidebar", () => {
         title: "Renderers",
       },
     ]);
-
     await waitFor(() => {
       expect(
         screen.getByRole("link", { name: "React Native" }),
@@ -168,17 +169,13 @@ describe("Sidebar", () => {
         title: "Guides",
       },
     ]);
-
     const trigger = screen.getByRole("button", { name: "Guides" });
     const panel = trigger.nextElementSibling;
-
     expect(panel).toHaveAttribute("hidden");
     expect(
       screen.queryByRole("link", { name: "Forms" }),
     ).not.toBeInTheDocument();
-
     fireEvent.click(trigger);
-
     expect(panel).not.toHaveAttribute("hidden");
     expect(screen.getByRole("link", { name: "Forms" })).toHaveAttribute(
       "href",
@@ -188,37 +185,23 @@ describe("Sidebar", () => {
 
   it("opens on desktop and closes on mobile resize", async () => {
     renderSidebar();
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
-    });
-
+    await expectState("open");
     setViewportWidth(390);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
-    });
-
+    await expectState("closed");
     setViewportWidth(1280);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
-    });
+    await expectState("open");
   });
 
   it("uses a bounded drawer, closes on Escape, and restores focus", async () => {
     setViewportWidth(768);
     const { container } = renderSidebar();
-
     await waitFor(() => {
       expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
       expect(container.querySelector("aside")).toHaveAttribute("inert");
     });
-
     const openButton = screen.getByRole("button", { name: "Open sidebar" });
     openButton.focus();
     fireEvent.click(openButton);
-
     await waitFor(() => {
       expect(container.querySelector("aside")).toHaveClass(
         "w-[calc(100%-3rem)]",
@@ -227,9 +210,7 @@ describe("Sidebar", () => {
       expect(container.querySelector("aside")).not.toHaveAttribute("inert");
       expect(screen.getByRole("navigation")).toHaveFocus();
     });
-
     fireEvent.keyDown(document, { key: "Escape" });
-
     await waitFor(() => {
       expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
       expect(openButton).toHaveFocus();
@@ -239,59 +220,33 @@ describe("Sidebar", () => {
   it("closes the mobile overlay on click", async () => {
     setViewportWidth(390);
     renderSidebar();
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
-    });
-
+    await expectState("closed");
     fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
-    });
-
+    await expectState("open");
     const overlay = screen.getByTestId("sidebar-overlay");
-
     fireEvent.click(overlay);
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
-    });
+    await expectState("closed");
   });
 
   it("closes the mobile sidebar when a link is selected", async () => {
     setViewportWidth(390);
     renderSidebar();
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
-    });
-
+    await expectState("closed");
     fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
     fireEvent.click(screen.getByRole("link", { name: "Forms" }));
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("closed");
-    });
+    await expectState("closed");
   });
 
   it("collapses to zero width on desktop when closed", async () => {
     const { container } = renderSidebar();
-
-    await waitFor(() => {
-      expect(screen.getByTestId("sidebar-state")).toHaveTextContent("open");
-    });
+    await expectState("open");
     expect(container.querySelector("aside")).toHaveClass("w-64");
-
     fireEvent.click(screen.getByRole("button", { name: "Close sidebar" }));
-
     await waitFor(() => {
       expect(container.querySelector("aside")).toHaveClass("w-0", "border-r-0");
       expect(container.querySelector("aside")).toHaveAttribute("inert");
     });
-
     fireEvent.click(screen.getByRole("button", { name: "Open sidebar" }));
-
     await waitFor(() => {
       expect(container.querySelector("aside")).toHaveClass("w-64");
       expect(container.querySelector("aside")).not.toHaveAttribute("inert");

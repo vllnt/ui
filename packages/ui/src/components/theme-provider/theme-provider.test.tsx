@@ -16,7 +16,6 @@ describe("ThemeProvider", () => {
         <span>themed-content</span>
       </ThemeProvider>,
     );
-
     expect(screen.getByText("themed-content")).toBeInTheDocument();
   });
 
@@ -26,7 +25,6 @@ describe("ThemeProvider", () => {
         <span>themed-content</span>
       </ThemeProvider>,
     );
-
     expect(screen.getByText("themed-content")).toBeInTheDocument();
   });
 });

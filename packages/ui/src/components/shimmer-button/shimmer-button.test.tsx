@@ -4,19 +4,13 @@ import { describe, expect, it } from "vitest";
 import { ShimmerButton } from "./shimmer-button";
 
 describe("ShimmerButton", () => {
-  it("renders its children inside a button", () => {
-    render(<ShimmerButton>Click me</ShimmerButton>);
-
+  it("renders its children inside a button and applies a custom class name", () => {
+    const { container } = render(
+      <ShimmerButton className="custom-class">Click me</ShimmerButton>,
+    );
     expect(
       screen.getByRole("button", { name: "Click me" }),
     ).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
-    const { container } = render(
-      <ShimmerButton className="custom-class">Go</ShimmerButton>,
-    );
-
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
@@ -26,7 +20,6 @@ describe("ShimmerButton", () => {
         Send
       </ShimmerButton>,
     );
-
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
   });
 });

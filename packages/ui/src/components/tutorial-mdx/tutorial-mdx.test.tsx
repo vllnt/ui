@@ -24,7 +24,6 @@ describe("TutorialMDX", () => {
         ].join("\n")}
       />,
     );
-
     expect(container.firstChild).toHaveClass("tutorial-copy");
     expect(screen.getByRole("heading", { name: "Intro" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "guide" })).toHaveAttribute(
@@ -42,7 +41,6 @@ describe("TutorialMDX", () => {
     );
     const codeBlock = container.querySelector("pre");
     if (!codeBlock) throw new Error("Expected fenced code block");
-
     expect(codeBlock).toHaveTextContent("<Callout>Example</Callout>");
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
@@ -53,7 +51,6 @@ describe("TutorialMDX", () => {
         <TutorialMDX content='<Callout title="Heads up" variant="tip">Remember the flow.</Callout>' />,
       );
     });
-
     expect(await screen.findByRole("alert")).toHaveTextContent("Heads up");
     expect(screen.getByText("Remember the flow.")).toBeInTheDocument();
   });
@@ -64,7 +61,6 @@ describe("TutorialMDX", () => {
         <TutorialMDX content='<FlowDiagram title="Architecture map" nodes={[]} edges={[]} />' />,
       );
     });
-
     expect(await screen.findByTestId("mock-flow-diagram")).toHaveTextContent(
       "Architecture map",
     );

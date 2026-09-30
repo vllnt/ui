@@ -8,7 +8,6 @@ describe("Slider", () => {
     const { container } = render(
       <Slider defaultValue={[40]} max={100} step={1} />,
     );
-
     expect(container.querySelector("[role='slider']")).toBeInTheDocument();
   });
 
@@ -16,7 +15,6 @@ describe("Slider", () => {
     const { container } = render(
       <Slider defaultValue={[40]} max={100} step={1} />,
     );
-
     expect(container.querySelector("[role='slider']")).toHaveAttribute(
       "aria-valuenow",
       "40",
@@ -27,7 +25,6 @@ describe("Slider", () => {
     const { container } = render(
       <Slider defaultValue={[40]} disabled max={100} step={1} />,
     );
-
     expect(container.querySelector("[role='slider']")).toHaveAttribute(
       "data-disabled",
     );
@@ -37,7 +34,6 @@ describe("Slider", () => {
     const { container } = render(
       <Slider className="extra" defaultValue={[40]} max={100} step={1} />,
     );
-
     expect(container.firstChild).toHaveClass("extra");
   });
 });

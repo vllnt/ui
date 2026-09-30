@@ -21,7 +21,6 @@ const items = [
 describe("SparklineGrid", () => {
   it("renders cards and sparkline charts", () => {
     render(<SparklineGrid items={items} />);
-
     expect(screen.getByText("Tech momentum")).toBeInTheDocument();
     expect(screen.getByText("Energy breadth")).toBeInTheDocument();
     expect(
@@ -31,13 +30,11 @@ describe("SparklineGrid", () => {
 
   it("returns null for empty items", () => {
     const { container } = render(<SparklineGrid items={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 
   it("shows formatted positive and negative changes", () => {
     render(<SparklineGrid items={items} />);
-
     expect(screen.getByText("+2.14%")).toBeInTheDocument();
     expect(screen.getByText("-1.08%")).toBeInTheDocument();
   });

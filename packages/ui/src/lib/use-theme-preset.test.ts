@@ -43,16 +43,13 @@ describe("THEME_PRESETS", () => {
 describe("setThemePreset", () => {
   it('sets data-theme to "matrix" and persists to localStorage', () => {
     setThemePreset("matrix");
-
     expect(document.documentElement.dataset.theme).toBe("matrix");
     expect(localStorage.getItem(THEME_PRESET_STORAGE_KEY)).toBe("matrix");
   });
 
   it('removes data-theme attribute when preset is "default"', () => {
     document.documentElement.dataset.theme = "matrix";
-
     setThemePreset("default");
-
     expect(document.documentElement.dataset.theme).toBeUndefined();
   });
 });
@@ -66,57 +63,48 @@ describe("setCustomTheme", () => {
 
   it('sets data-theme to "custom"', () => {
     setCustomTheme(customTheme);
-
     expect(document.documentElement.dataset.theme).toBe("custom");
   });
 
   it("injects a <style> element with the correct id", () => {
     setCustomTheme(customTheme);
-
     const style = document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`);
     expect(style).toBeInstanceOf(HTMLStyleElement);
   });
 
   it('injected style contains html[data-theme="custom"]{', () => {
     setCustomTheme(customTheme);
-
     const style = document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`);
     expect(style?.textContent).toContain('html[data-theme="custom"]{');
   });
 
   it("injected style contains --primary token", () => {
     setCustomTheme(customTheme);
-
     const style = document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`);
     expect(style?.textContent).toContain("--primary:0.5 0.1 200");
   });
 
   it("injected style contains --radius token", () => {
     setCustomTheme(customTheme);
-
     const style = document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`);
     expect(style?.textContent).toContain("--radius:0.5rem");
   });
 
   it("persists custom CSS to localStorage", () => {
     setCustomTheme(customTheme);
-
     expect(localStorage.getItem(THEME_CUSTOM_CSS_STORAGE_KEY)).toBeTruthy();
   });
 
-  describe("SECURITY: safeValue sanitization", () => {
-    it("strips malicious } from injected primary value", () => {
-      setCustomTheme({
-        dark: {},
-        light: { primary: "0 0 0} html{display:none" },
-        radius: "0.5rem} *{}",
-      });
-
-      const content =
-        document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`)?.textContent ?? "";
-      expect(content).not.toContain("html{display:none");
-      expect(content).not.toContain("} html");
+  it("strips malicious } from injected primary value", () => {
+    setCustomTheme({
+      dark: {},
+      light: { primary: "0 0 0} html{display:none" },
+      radius: "0.5rem} *{}",
     });
+    const content =
+      document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`)?.textContent ?? "";
+    expect(content).not.toContain("html{display:none");
+    expect(content).not.toContain("} html");
   });
 });
 
@@ -127,11 +115,8 @@ describe("setThemePreset after setCustomTheme", () => {
       light: { primary: "0.5 0.1 200" },
       radius: "0.5rem",
     });
-
     expect(document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`)).toBeTruthy();
-
     setThemePreset("matrix");
-
     expect(document.querySelector(`#${THEME_CUSTOM_STYLE_ID}`)).toBeNull();
     expect(localStorage.getItem(THEME_CUSTOM_CSS_STORAGE_KEY)).toBeNull();
   });
@@ -140,23 +125,19 @@ describe("setThemePreset after setCustomTheme", () => {
 describe("useThemePreset", () => {
   it('reports "default" when no theme is applied', () => {
     const { result } = renderHook(() => useThemePreset());
-
     expect(result.current.preset).toBe("default");
   });
 
   it("reports the active built-in preset name", () => {
     const { result } = renderHook(() => useThemePreset());
-
     act(() => {
       setThemePreset("matrix");
     });
-
     expect(result.current.preset).toBe("matrix");
   });
 
   it('reports "custom" while a custom theme is active', () => {
     const { result } = renderHook(() => useThemePreset());
-
     act(() => {
       setCustomTheme({
         dark: { primary: "0.6 0.1 200" },
@@ -164,13 +145,11 @@ describe("useThemePreset", () => {
         radius: "0.5rem",
       });
     });
-
     expect(result.current.preset).toBe("custom");
   });
 
   it('returns to "default" after the custom theme is replaced by a preset', () => {
     const { result } = renderHook(() => useThemePreset());
-
     act(() => {
       setCustomTheme({
         dark: { primary: "0.6 0.1 200" },
@@ -179,11 +158,9 @@ describe("useThemePreset", () => {
       });
     });
     expect(result.current.preset).toBe("custom");
-
     act(() => {
       setThemePreset("default");
     });
-
     expect(result.current.preset).toBe("default");
   });
 });

@@ -13,7 +13,6 @@ describe("TimelineScrubber", () => {
         value={25}
       />,
     );
-
     expect(screen.getByText("0")).toBeInTheDocument();
     expect(screen.getByText("100")).toBeInTheDocument();
     expect(screen.getByText("25")).toBeInTheDocument();
@@ -29,7 +28,6 @@ describe("TimelineScrubber", () => {
         value={25}
       />,
     );
-
     const input = screen.getByRole("slider");
     fireEvent.change(input, { target: { value: "60" } });
     expect(handleChange).toHaveBeenCalledWith(60);
@@ -44,7 +42,6 @@ describe("TimelineScrubber", () => {
         value={500}
       />,
     );
-
     const fill = container.querySelector("[data-timeline-scrubber-fill]");
     expect(fill).toHaveStyle({ width: "100%" });
   });
@@ -59,7 +56,6 @@ describe("TimelineScrubber", () => {
         value={1800}
       />,
     );
-
     expect(screen.getByText("1800s")).toBeInTheDocument();
     expect(screen.getByText("3600s")).toBeInTheDocument();
   });
@@ -77,7 +73,6 @@ describe("TimelineScrubber", () => {
         value={25}
       />,
     );
-
     expect(container.querySelectorAll("[data-scrubber-tick]")).toHaveLength(2);
     expect(container.querySelector("[data-scrubber-tick='b']")).toHaveAttribute(
       "data-scrubber-tick-tone",
@@ -89,7 +84,6 @@ describe("TimelineScrubber", () => {
     render(
       <TimelineScrubber end={5} onValueChange={vi.fn()} start={5} value={5} />,
     );
-
     const input = screen.getByRole("slider");
     expect(input).toHaveAttribute("min", "5");
     expect(input).toHaveAttribute("max", "6");

@@ -28,7 +28,7 @@ const tutorial: TutorialCardMeta = {
 };
 
 describe("TutorialCard", () => {
-  it("renders title + description", () => {
+  it("renders title, description, meta, and tags inside an anchor pointing at href", () => {
     render(
       <TutorialCard
         href="/tutorials/canvas-basics"
@@ -36,47 +36,13 @@ describe("TutorialCard", () => {
         tutorial={tutorial}
       />,
     );
-
     expect(screen.getByText("Canvas basics")).toBeInTheDocument();
     expect(screen.getByText("Learn the basics.")).toBeInTheDocument();
-  });
-
-  it("renders difficulty + estimated time + section count", () => {
-    render(
-      <TutorialCard
-        href="/tutorials/canvas-basics"
-        labels={labels}
-        tutorial={tutorial}
-      />,
-    );
-
     expect(screen.getByText("Beginner")).toBeInTheDocument();
     expect(screen.getByText(/30 min/)).toBeInTheDocument();
     expect(screen.getByText(/6 sections/)).toBeInTheDocument();
-  });
-
-  it("renders tags", () => {
-    render(
-      <TutorialCard
-        href="/tutorials/canvas-basics"
-        labels={labels}
-        tutorial={tutorial}
-      />,
-    );
-
     expect(screen.getByText("canvas")).toBeInTheDocument();
     expect(screen.getByText("interaction")).toBeInTheDocument();
-  });
-
-  it("wraps the card in an anchor pointing at href", () => {
-    render(
-      <TutorialCard
-        href="/tutorials/canvas-basics"
-        labels={labels}
-        tutorial={tutorial}
-      />,
-    );
-
     expect(screen.getByText("Canvas basics").closest("a")).toHaveAttribute(
       "href",
       "/tutorials/canvas-basics",

@@ -11,7 +11,6 @@ describe("ToggleGroup", () => {
         <ToggleGroupItem value="b">B</ToggleGroupItem>
       </ToggleGroup>,
     );
-
     expect(screen.getByText("A")).toBeInTheDocument();
     expect(screen.getByText("B")).toBeInTheDocument();
   });
@@ -24,7 +23,6 @@ describe("ToggleGroup", () => {
         <ToggleGroupItem value="b">B</ToggleGroupItem>
       </ToggleGroup>,
     );
-
     fireEvent.click(screen.getByText("B"));
     expect(onValueChange).toHaveBeenCalledWith("b");
   });
@@ -36,7 +34,6 @@ describe("ToggleGroup", () => {
         <ToggleGroupItem value="b">B</ToggleGroupItem>
       </ToggleGroup>,
     );
-
     expect(screen.getByText("A")).toHaveAttribute("data-state", "on");
     expect(screen.getByText("B")).toHaveAttribute("data-state", "off");
   });
@@ -47,7 +44,6 @@ describe("ToggleGroup", () => {
         <ToggleGroupItem value="a">A</ToggleGroupItem>
       </ToggleGroup>,
     );
-
     expect(container.firstChild).toHaveClass("extra");
   });
 });

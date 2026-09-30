@@ -22,7 +22,6 @@ const items: StatusBoardItem[] = [
 describe("StatusBoard", () => {
   it("renders the title, summary, and items", () => {
     render(<StatusBoard items={items} title="Operations" />);
-
     expect(screen.getByText("Operations")).toBeInTheDocument();
     expect(screen.getByText("API Gateway")).toBeInTheDocument();
     expect(screen.getByText("Jobs")).toBeInTheDocument();

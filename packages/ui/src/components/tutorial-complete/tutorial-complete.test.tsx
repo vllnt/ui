@@ -100,16 +100,13 @@ function renderTutorialComplete(props: Partial<TutorialCompleteProps> = {}) {
 describe("TutorialComplete", () => {
   it("renders the full completion state and restarts", () => {
     const { onRestart } = renderTutorialComplete();
-
     expect(
       screen.getByRole("heading", { name: "Tutorial Complete!" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText('You\'ve completed all sections of "React Basics"'),
     ).toBeInTheDocument();
-
     fireEvent.click(screen.getByRole("button", { name: "Start Over" }));
-
     expect(onRestart).toHaveBeenCalledTimes(1);
   });
 
@@ -118,7 +115,6 @@ describe("TutorialComplete", () => {
       completedSections: new Set(["intro"]),
       completionPercent: 50,
     });
-
     expect(
       screen.getByRole("heading", { name: "Tutorial Finished" }),
     ).toBeInTheDocument();
@@ -129,9 +125,7 @@ describe("TutorialComplete", () => {
 
   it("navigates to review sections by index", () => {
     const { onGoToSection } = renderTutorialComplete();
-
     fireEvent.click(screen.getByRole("button", { name: /advanced concepts/i }));
-
     expect(onGoToSection).toHaveBeenCalledWith(1);
   });
 
@@ -142,7 +136,6 @@ describe("TutorialComplete", () => {
         socialLinks: [{ href: "https://example.com", label: "Website" }],
       },
     });
-
     expect(
       screen.getByRole("link", { name: /tutorial next tutorial/i }),
     ).toHaveAttribute("href", "/next");

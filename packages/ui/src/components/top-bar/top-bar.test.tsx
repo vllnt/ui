@@ -6,7 +6,6 @@ import { TopBar } from "./top-bar";
 describe("TopBar", () => {
   it("renders the title and subtitle slots", () => {
     render(<TopBar subtitle="environment" title="Production" />);
-
     expect(screen.getByText("Production")).toBeInTheDocument();
     expect(screen.getByText("environment")).toBeInTheDocument();
   });
@@ -19,7 +18,6 @@ describe("TopBar", () => {
         trailing={<span>right</span>}
       />,
     );
-
     expect(screen.getByText("left")).toBeInTheDocument();
     expect(screen.getByText("right")).toBeInTheDocument();
   });
@@ -30,19 +28,16 @@ describe("TopBar", () => {
         <span>middle</span>
       </TopBar>,
     );
-
     expect(screen.getByText("middle")).toBeInTheDocument();
   });
 
   it("uses a header landmark", () => {
     const { container } = render(<TopBar title="t" />);
-
     expect(container.querySelector("header")).toBeInTheDocument();
   });
 
   it("merges the className prop", () => {
     const { container } = render(<TopBar className="extra" title="t" />);
-
     expect(container.firstChild).toHaveClass("extra");
   });
 });

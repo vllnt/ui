@@ -30,29 +30,17 @@ describe("TableOfContents", () => {
     { id: "api", title: "API" },
   ];
 
-  it("renders one button per section", () => {
-    render(<TableOfContents sections={sections} />);
-
+  it("renders one button per section under the on-this-page heading in an aside landmark", () => {
+    const { container } = render(<TableOfContents sections={sections} />);
     expect(screen.getByText("Introduction")).toBeInTheDocument();
     expect(screen.getByText("Design")).toBeInTheDocument();
     expect(screen.getByText("API")).toBeInTheDocument();
+    expect(screen.getByText("On This Page")).toBeInTheDocument();
+    expect(container.querySelector("aside")).toBeInTheDocument();
   });
 
   it("renders nothing when sections is empty", () => {
     const { container } = render(<TableOfContents sections={[]} />);
-
     expect(container.firstChild).toBeNull();
-  });
-
-  it("renders the on-this-page heading", () => {
-    render(<TableOfContents sections={sections} />);
-
-    expect(screen.getByText("On This Page")).toBeInTheDocument();
-  });
-
-  it("renders sections inside an aside landmark", () => {
-    const { container } = render(<TableOfContents sections={sections} />);
-
-    expect(container.querySelector("aside")).toBeInTheDocument();
   });
 });

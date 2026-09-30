@@ -10,57 +10,33 @@ const sample: WorldCrumb[] = [
 ];
 
 describe("WorldBreadcrumbs", () => {
-  it("renders one entry per crumb", () => {
+  it("renders one plain entry per crumb with separators and the last crumb active", () => {
     const { container } = render(<WorldBreadcrumbs crumbs={sample} />);
-
     expect(container.querySelectorAll("[data-world-breadcrumb]")).toHaveLength(
       3,
     );
-  });
-
-  it("marks the last crumb as active", () => {
-    const { container } = render(<WorldBreadcrumbs crumbs={sample} />);
-
     expect(
       container.querySelector("[data-world-breadcrumb='run']"),
     ).toHaveAttribute("data-world-breadcrumb-active", "true");
+    expect(
+      container.querySelectorAll("[data-world-breadcrumb-sep]"),
+    ).toHaveLength(2);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  it("invokes onSelect with the activated id for non-last crumbs", () => {
+  it("invokes onSelect with the activated id for non-last crumbs only", () => {
     const handleSelect = vi.fn();
     render(<WorldBreadcrumbs crumbs={sample} onSelect={handleSelect} />);
-
+    fireEvent.click(screen.getByText("research-2025"));
+    expect(handleSelect).not.toHaveBeenCalled();
     fireEvent.click(screen.getByText("Production"));
     expect(handleSelect).toHaveBeenCalledWith("world");
   });
 
-  it("does not invoke onSelect for the last crumb", () => {
-    const handleSelect = vi.fn();
-    render(<WorldBreadcrumbs crumbs={sample} onSelect={handleSelect} />);
-
-    fireEvent.click(screen.getByText("research-2025"));
-    expect(handleSelect).not.toHaveBeenCalled();
-  });
-
-  it("renders crumbs as plain spans when no onSelect is provided", () => {
-    render(<WorldBreadcrumbs crumbs={sample} />);
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
-  });
-
   it("renders the empty state when crumbs list is empty", () => {
     const { container } = render(<WorldBreadcrumbs crumbs={[]} />);
-
     expect(
       container.querySelector("[data-world-breadcrumbs-state='empty']"),
     ).toBeInTheDocument();
-  });
-
-  it("renders separators between crumbs", () => {
-    const { container } = render(<WorldBreadcrumbs crumbs={sample} />);
-
-    expect(
-      container.querySelectorAll("[data-world-breadcrumb-sep]"),
-    ).toHaveLength(2);
   });
 });

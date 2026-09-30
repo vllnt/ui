@@ -57,7 +57,6 @@ describe("SocialFAB", () => {
 
   it("renders nothing when hidden", () => {
     const { container } = renderSocialFab({ hidden: true });
-
     expect(container.firstChild).toBeNull();
   });
 
@@ -67,13 +66,11 @@ describe("SocialFAB", () => {
     const { container } = renderSocialFab({ onClose, onOpen });
     const wrapper = container.querySelector(".fixed");
     if (!wrapper) throw new Error("Expected fixed FAB wrapper");
-
     fireEvent.mouseEnter(wrapper);
     expect(
       screen.getByRole("button", { name: "Close social actions" }),
     ).toHaveAttribute("aria-expanded", "true");
     expect(onOpen).toHaveBeenCalledWith("hover", "desktop");
-
     fireEvent.mouseLeave(wrapper);
     expect(getMainButton("Share")).toHaveAttribute("aria-expanded", "false");
     expect(onClose).toHaveBeenCalledWith("hover_leave");
@@ -84,18 +81,14 @@ describe("SocialFAB", () => {
     const onClose = vi.fn();
     const onOpen = vi.fn();
     renderSocialFab({ onClose, onOpen });
-
     fireEvent.click(getMainButton("Share"));
-
     expect(
       screen.getByRole("button", { name: "Close social actions" }),
     ).toHaveAttribute("aria-expanded", "true");
     expect(onOpen).toHaveBeenCalledWith("tap", "mobile");
-
     const backdrop = document.body.querySelector("[aria-hidden='true']");
     if (!backdrop) throw new Error("Expected mobile backdrop");
     fireEvent.click(backdrop);
-
     expect(getMainButton("Share")).toHaveAttribute("aria-expanded", "false");
     expect(onClose).toHaveBeenCalledWith("backdrop");
   });
@@ -114,11 +107,9 @@ describe("SocialFAB", () => {
         },
       ],
     });
-
     fireEvent.click(getMainButton("Share"));
     fireEvent.mouseEnter(getFirstButton("Share"));
     fireEvent.click(screen.getByRole("button", { name: "Example Network" }));
-
     expect(onAction).toHaveBeenCalledWith("share");
     expect(open).toHaveBeenCalledWith(
       expect.stringContaining("https://share.example/"),

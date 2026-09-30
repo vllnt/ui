@@ -27,24 +27,20 @@ const items = [
 describe("UsageBreakdown", () => {
   it("renders items ranked by descending value", () => {
     render(<UsageBreakdown items={items} />);
-
     const labels = screen
       .getAllByText(/Model inference|Vector storage|Events API/)
       .map((element) => element.textContent);
-
     expect(labels).toEqual(["Model inference", "Vector storage", "Events API"]);
   });
 
   it("shows relative share details", () => {
     render(<UsageBreakdown items={items} />);
-
     expect(screen.getByText("63% of total")).toBeInTheDocument();
     expect(screen.getByText("24% of total")).toBeInTheDocument();
   });
 
   it("renders the empty state when there are no items", () => {
     render(<UsageBreakdown emptyMessage="Nothing to report" items={[]} />);
-
     expect(screen.getByText("Nothing to report")).toBeInTheDocument();
   });
 });

@@ -6,7 +6,6 @@ import { StickyMetric } from "./sticky-metric";
 describe("StickyMetric", () => {
   it("renders the label and value", () => {
     render(<StickyMetric label="errs / min" value="14" x={100} y={50} />);
-
     expect(screen.getByText("errs / min")).toBeInTheDocument();
     expect(screen.getByText("14")).toBeInTheDocument();
   });
@@ -15,7 +14,6 @@ describe("StickyMetric", () => {
     const { container } = render(
       <StickyMetric label="x" value="1" x={120} y={80} />,
     );
-
     const metric = container.querySelector("[data-sticky-metric]");
     expect(metric).toHaveStyle({ left: "120px", top: "80px" });
   });
@@ -24,7 +22,6 @@ describe("StickyMetric", () => {
     const { container } = render(
       <StickyMetric anchor="bottom-left" label="x" value="1" x={0} y={0} />,
     );
-
     expect(container.querySelector("[data-sticky-anchor]")).toHaveAttribute(
       "data-sticky-anchor",
       "bottom-left",
@@ -33,7 +30,6 @@ describe("StickyMetric", () => {
 
   it("renders the optional detail line", () => {
     render(<StickyMetric detail="↑ 12%" label="qps" value="240" x={0} y={0} />);
-
     expect(screen.getByText("↑ 12%")).toBeInTheDocument();
   });
 
@@ -41,7 +37,6 @@ describe("StickyMetric", () => {
     const { container } = render(
       <StickyMetric label="x" tone="danger" value="1" x={0} y={0} />,
     );
-
     expect(container.querySelector("[data-sticky-tone]")).toHaveAttribute(
       "data-sticky-tone",
       "danger",

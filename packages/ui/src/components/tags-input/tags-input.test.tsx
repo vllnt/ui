@@ -8,17 +8,12 @@ import { TagsInput } from "./tags-input";
 describe("TagsInput", () => {
   it("supports uncontrolled keyboard add and remove flows", () => {
     render(<TagsInput aria-label="Framework tags" defaultValue={["React"]} />);
-
     const input = screen.getByRole("textbox", { name: "Framework tags" });
-
     fireEvent.change(input, { target: { value: "Vue" } });
     fireEvent.keyDown(input, { key: "Enter" });
-
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("Vue")).toBeInTheDocument();
-
     fireEvent.keyDown(input, { key: "Backspace" });
-
     expect(screen.queryByText("Vue")).not.toBeInTheDocument();
     expect(screen.getByText("React")).toBeInTheDocument();
   });
@@ -26,7 +21,6 @@ describe("TagsInput", () => {
   it("supports controlled value updates through onValueChange", () => {
     function ControlledTagsInput() {
       const [value, setValue] = React.useState(["React"]);
-
       return (
         <TagsInput
           aria-label="Controlled tags"
@@ -35,21 +29,16 @@ describe("TagsInput", () => {
         />
       );
     }
-
     render(<ControlledTagsInput />);
-
     const input = screen.getByRole("textbox", { name: "Controlled tags" });
-
     fireEvent.change(input, { target: { value: "Vue" } });
     fireEvent.keyDown(input, { key: "," });
-
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("Vue")).toBeInTheDocument();
   });
 
   it("prevents editing and removal when disabled", () => {
     const handleValueChange = vi.fn();
-
     render(
       <TagsInput
         aria-label="Disabled tags"
@@ -58,16 +47,12 @@ describe("TagsInput", () => {
         onValueChange={handleValueChange}
       />,
     );
-
     const input = screen.getByRole("textbox", { name: "Disabled tags" });
     const removeButton = screen.getByRole("button", { name: "Remove React" });
-
     expect(input).toBeDisabled();
     expect(removeButton).toBeDisabled();
     expect(screen.getByRole("group")).toHaveAttribute("aria-disabled", "true");
-
     fireEvent.click(removeButton);
-
     expect(handleValueChange).not.toHaveBeenCalled();
     expect(screen.getByText("React")).toBeInTheDocument();
   });
@@ -76,10 +61,8 @@ describe("TagsInput", () => {
     render(
       <TagsInput aria-label="A11y tags" defaultValue={["React", "Vue"]} />,
     );
-
     const list = screen.getByRole("list");
     const items = screen.getAllByRole("listitem");
-
     expect(list).toBeInTheDocument();
     expect(items).toHaveLength(2);
     expect(items[0]).toHaveClass("rounded-md", "border", "bg-muted");

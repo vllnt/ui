@@ -21,17 +21,18 @@ const sample: ThreadMessage[] = [
 ];
 
 describe("ThreadBubble", () => {
-  it("renders one entry per message", () => {
+  it("renders one entry per message with author colors and no resolve button by default", () => {
     const { container } = render(<ThreadBubble messages={sample} />);
-
     expect(
       container.querySelectorAll("[data-thread-bubble-message]"),
     ).toHaveLength(2);
+    const author = container.querySelector("[data-thread-bubble-author]");
+    expect(author).toHaveStyle({ color: "#5b8def" });
+    expect(screen.queryByText("Resolve")).not.toBeInTheDocument();
   });
 
   it("renders the empty state when there are no messages", () => {
     const { container } = render(<ThreadBubble messages={[]} />);
-
     expect(
       container.querySelector("[data-thread-bubble-state='empty']"),
     ).toBeInTheDocument();
@@ -39,7 +40,6 @@ describe("ThreadBubble", () => {
 
   it("renders the title when provided", () => {
     render(<ThreadBubble messages={sample} title="research-2025" />);
-
     expect(screen.getByText("research-2025")).toBeInTheDocument();
   });
 
@@ -48,22 +48,8 @@ describe("ThreadBubble", () => {
     render(
       <ThreadBubble messages={sample} onResolve={handleResolve} title="x" />,
     );
-
     fireEvent.click(screen.getByText("Resolve"));
     expect(handleResolve).toHaveBeenCalledTimes(1);
-  });
-
-  it("hides the resolve button when no handler is provided", () => {
-    render(<ThreadBubble messages={sample} />);
-
-    expect(screen.queryByText("Resolve")).not.toBeInTheDocument();
-  });
-
-  it("applies the author color when provided", () => {
-    const { container } = render(<ThreadBubble messages={sample} />);
-
-    const author = container.querySelector("[data-thread-bubble-author]");
-    expect(author).toHaveStyle({ color: "#5b8def" });
   });
 
   it("renders the footer slot when provided", () => {
@@ -73,7 +59,6 @@ describe("ThreadBubble", () => {
         messages={sample}
       />,
     );
-
     expect(screen.getByTestId("footer")).toBeInTheDocument();
   });
 });

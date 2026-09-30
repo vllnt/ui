@@ -26,7 +26,6 @@ describe("ThemeToggle", () => {
         <ThemeToggle dict={dict} />
       </ThemeProvider>,
     );
-
     expect(screen.getByLabelText("Toggle theme")).toBeInTheDocument();
   });
 
@@ -45,7 +44,6 @@ describe("ThemeToggle", () => {
         />
       </ThemeProvider>,
     );
-
     expect(screen.getByLabelText("Changer le thème")).toBeInTheDocument();
   });
 });

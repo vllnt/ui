@@ -21,47 +21,29 @@ const platforms: SharePlatform[] = [
 describe("ShareDialog", () => {
   it("keeps content closed by default", () => {
     render(<ShareDialog platforms={platforms} />);
-
     expect(screen.queryByText("Share")).not.toBeInTheDocument();
   });
 
-  it("renders the title + platform buttons when open", () => {
+  it("renders the title, platform buttons, and default copy-link label when open", () => {
     render(<ShareDialog open platforms={platforms} />);
-
     expect(screen.getByText("Share")).toBeInTheDocument();
     expect(screen.getByText("X")).toBeInTheDocument();
     expect(screen.getByText("LinkedIn")).toBeInTheDocument();
+    expect(screen.getByText("Copy link")).toBeInTheDocument();
   });
 
-  it("renders the override title and description", () => {
+  it("renders the override title, description, and copy-link label", () => {
     render(
       <ShareDialog
         description="Share this run"
+        labels={{ copied: "Copied", copyLink: "Get link" }}
         open
         platforms={platforms}
         title="Send"
       />,
     );
-
     expect(screen.getByText("Send")).toBeInTheDocument();
     expect(screen.getByText("Share this run")).toBeInTheDocument();
-  });
-
-  it("renders the copy-link button with the default label", () => {
-    render(<ShareDialog open platforms={platforms} />);
-
-    expect(screen.getByText("Copy link")).toBeInTheDocument();
-  });
-
-  it("renders the copy-link button with override labels", () => {
-    render(
-      <ShareDialog
-        labels={{ copied: "Copied", copyLink: "Get link" }}
-        open
-        platforms={platforms}
-      />,
-    );
-
     expect(screen.getByText("Get link")).toBeInTheDocument();
   });
 });

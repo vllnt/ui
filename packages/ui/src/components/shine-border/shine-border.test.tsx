@@ -4,17 +4,11 @@ import { describe, expect, it } from "vitest";
 import { ShineBorder } from "./shine-border";
 
 describe("ShineBorder", () => {
-  it("renders its children", () => {
-    render(<ShineBorder>Featured</ShineBorder>);
-
-    expect(screen.getByText("Featured")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
+  it("renders its children and applies a custom class name", () => {
     const { container } = render(
-      <ShineBorder className="custom-class">Card</ShineBorder>,
+      <ShineBorder className="custom-class">Featured</ShineBorder>,
     );
-
+    expect(screen.getByText("Featured")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

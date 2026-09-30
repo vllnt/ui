@@ -11,7 +11,6 @@ const items = [
 describe("TickerTape", () => {
   it("renders ticker items", () => {
     render(<TickerTape items={items} />);
-
     expect(screen.getAllByText("AAPL")).toHaveLength(2);
     expect(screen.getAllByText("MSFT")).toHaveLength(2);
     expect(screen.getAllByText("+1.42%")).toHaveLength(2);
@@ -19,13 +18,11 @@ describe("TickerTape", () => {
 
   it("returns null for an empty feed", () => {
     const { container } = render(<TickerTape items={[]} />);
-
     expect(container).toBeEmptyDOMElement();
   });
 
   it("duplicates content for seamless scrolling", () => {
     render(<TickerTape items={items} />);
-
     expect(screen.getByLabelText("TickerTape")).toBeInTheDocument();
     expect(screen.getAllByText("Vol 32M")).toHaveLength(2);
   });

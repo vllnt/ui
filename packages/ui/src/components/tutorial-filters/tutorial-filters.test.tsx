@@ -35,7 +35,6 @@ const baseProps = {
 describe("TutorialFilters", () => {
   it("renders search, difficulty options, and tags", () => {
     render(<TutorialFilters {...baseProps} />);
-
     expect(screen.getByLabelText("Search tutorials")).toHaveAttribute(
       "placeholder",
       "Search by topic",
@@ -51,12 +50,10 @@ describe("TutorialFilters", () => {
     render(
       <TutorialFilters {...baseProps} onFilterChange={handleFilterChange} />,
     );
-
     fireEvent.change(screen.getByLabelText("Search tutorials"), {
       target: { value: "state" },
     });
     fireEvent.click(screen.getByText("Intermediate"));
-
     expect(handleFilterChange).toHaveBeenCalledWith({ search: "state" });
     expect(handleFilterChange).toHaveBeenCalledWith({
       difficulty: "intermediate",
@@ -74,10 +71,8 @@ describe("TutorialFilters", () => {
     );
     const tagList = screen.getByTestId("tag-filter-list");
     const reactTag = within(tagList).getByText("React");
-
     fireEvent.click(reactTag);
     fireEvent.click(screen.getByText("Design"));
-
     expect(handleFilterChange).toHaveBeenCalledWith({ tags: [] });
     expect(handleFilterChange).toHaveBeenCalledWith({
       tags: ["React", "Design"],
@@ -95,13 +90,10 @@ describe("TutorialFilters", () => {
         searchQuery="routing"
       />,
     );
-
     expect(screen.getByText("Active filters:")).toBeInTheDocument();
     expect(screen.getByText('Search "routing"')).toBeInTheDocument();
-
     fireEvent.click(screen.getByText("Clear"));
     fireEvent.click(screen.getByText("Clear all"));
-
     expect(handleFilterChange).toHaveBeenCalledWith({ tags: [] });
     expect(handleFilterChange).toHaveBeenCalledWith({
       difficulty: "all",
@@ -112,7 +104,6 @@ describe("TutorialFilters", () => {
 
   it("disables search and difficulty controls while pending", () => {
     render(<TutorialFilters {...baseProps} isPending />);
-
     expect(screen.getByLabelText("Search tutorials")).toBeDisabled();
     expect(screen.getByText("Beginner").closest("button")).toBeDisabled();
   });

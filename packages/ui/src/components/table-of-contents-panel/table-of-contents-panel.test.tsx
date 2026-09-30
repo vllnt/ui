@@ -25,13 +25,11 @@ const baseProps = {
 describe("TableOfContentsPanel", () => {
   it("renders nothing when closed", () => {
     render(<TableOfContentsPanel {...baseProps} isOpen={false} />);
-
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("renders the dialog with progress and sections when open", () => {
     render(<TableOfContentsPanel {...baseProps} />);
-
     expect(screen.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
     expect(screen.getByText("Table of Contents")).toBeInTheDocument();
     expect(screen.getByText("1 / 2 (50%)")).toBeInTheDocument();
@@ -49,9 +47,7 @@ describe("TableOfContentsPanel", () => {
         onSelectSection={handleSelectSection}
       />,
     );
-
     fireEvent.click(screen.getByText("Deep dive"));
-
     expect(handleSelectSection).toHaveBeenCalledWith(1);
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -60,10 +56,8 @@ describe("TableOfContentsPanel", () => {
     const handleClose = vi.fn();
     render(<TableOfContentsPanel {...baseProps} onClose={handleClose} />);
     const backdrop = screen.getByTestId("toc-backdrop");
-
     fireEvent.keyDown(window, { key: "Escape" });
     fireEvent.click(backdrop);
-
     expect(handleClose).toHaveBeenCalledTimes(2);
   });
 
@@ -72,10 +66,8 @@ describe("TableOfContentsPanel", () => {
     const { rerender } = render(
       <TableOfContentsPanel {...baseProps} onReset={handleReset} />,
     );
-
     fireEvent.click(screen.getByText("Reset Progress"));
     expect(handleReset).toHaveBeenCalledTimes(1);
-
     rerender(
       <TableOfContentsPanel
         {...baseProps}

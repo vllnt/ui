@@ -10,17 +10,11 @@ describe("TextReveal", () => {
     stubMatchMedia();
   });
 
-  it("renders an accessible label with the full text", () => {
-    render(<TextReveal>Read this line</TextReveal>);
-
-    expect(screen.getByLabelText("Read this line")).toBeInTheDocument();
-  });
-
-  it("applies a custom class name", () => {
+  it("renders an accessible label with the full text and applies a custom class name", () => {
     const { container } = render(
-      <TextReveal className="custom-class">Read this</TextReveal>,
+      <TextReveal className="custom-class">Read this line</TextReveal>,
     );
-
+    expect(screen.getByLabelText("Read this line")).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 });

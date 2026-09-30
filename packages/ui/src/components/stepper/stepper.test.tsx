@@ -12,7 +12,6 @@ const steps = [
 describe("Stepper", () => {
   it("renders the current step and completed steps", () => {
     render(<Stepper currentStep={2} steps={steps} />);
-
     expect(screen.getByText("Goal")).toBeInTheDocument();
     expect(screen.getByText("Set your goal and timeline.")).toBeInTheDocument();
     expect(screen.getByText("Practice")).toBeInTheDocument();
@@ -23,11 +22,8 @@ describe("Stepper", () => {
 
   it("calls onStepClick when an item is clicked", () => {
     const onStepClick = vi.fn();
-
     render(<Stepper currentStep={1} onStepClick={onStepClick} steps={steps} />);
-
     fireEvent.click(screen.getByText("Practice"));
-
     expect(onStepClick).toHaveBeenCalledWith(steps[2], 2);
   });
 });

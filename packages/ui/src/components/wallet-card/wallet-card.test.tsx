@@ -6,7 +6,6 @@ import { WalletCard } from "./wallet-card";
 describe("WalletCard", () => {
   it("renders wallet balance information", () => {
     render(<WalletCard balanceLabel="128 credits" status="healthy" />);
-
     expect(screen.getByText("Wallet")).toBeVisible();
     expect(screen.getAllByText("128 credits").length).toBeGreaterThan(0);
   });
@@ -21,7 +20,6 @@ describe("WalletCard", () => {
         status="low"
       />,
     );
-
     expect(screen.getByText("96 credits")).toBeVisible();
     expect(screen.getByText("32 credits")).toBeVisible();
     expect(screen.getAllByText("Auto-refresh on May 1").length).toBe(2);
@@ -36,7 +34,6 @@ describe("WalletCard", () => {
         status="depleted"
       />,
     );
-
     expect(screen.getByRole("button", { name: "Buy credits" })).toBeVisible();
     expect(
       screen.getByRole("button", { name: "Billing history" }),
