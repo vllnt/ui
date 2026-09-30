@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 type StructuredData = {
   readonly "@graph"?: StructuredData[];
@@ -15,6 +15,18 @@ function flattenStructuredData(content: string): StructuredData[] {
   return nodes.flatMap((node) =>
     node["@graph"] ? flattenStructuredData(JSON.stringify(node["@graph"])) : node,
   );
+}
+
+// A click that lands before the page hydrates is dropped; retry until it navigates.
+async function clickUntilUrl(
+  page: Page,
+  target: Locator,
+  url: string,
+): Promise<void> {
+  await expect(async () => {
+    await target.click();
+    await expect(page).toHaveURL(url, { timeout: 2000 });
+  }).toPass({ timeout: 20_000 });
 }
 
 const nativeComponents = (
@@ -120,8 +132,11 @@ test.describe("platform-aware component discovery", () => {
     }
     await expect(firstPreviewFrame.contentFrame().locator("body")).not.toBeEmpty();
 
-    await main.getByRole("link", { name: "Web", exact: true }).click();
-    await expect(page).toHaveURL("/components?platform=web&ref=e2e");
+    await clickUntilUrl(
+      page,
+      main.getByRole("link", { name: "Web", exact: true }),
+      "/components?platform=web&ref=e2e",
+    );
     const webFirstSection = await main.locator("section").first().boundingBox();
     expect(webFirstSection?.y).toBeCloseTo(nativeFirstSection?.y ?? 0, 2);
   });
@@ -143,19 +158,23 @@ test.describe("platform-aware component discovery", () => {
     await expect(page).toHaveURL(/\/components\/.+\?platform=native&ref=e2e$/);
 
     const sidebar = page.getByRole("complementary");
-    await sidebar.getByRole("link", { name: "Button", exact: true }).click();
-    await expect(page).toHaveURL(
+    await clickUntilUrl(
+      page,
+      sidebar.getByRole("link", { name: "Button", exact: true }),
       "/components/button?platform=native&ref=e2e",
     );
 
-    await page
-      .getByRole("link", { name: "Components", exact: true })
-      .first()
-      .click();
-    await expect(page).toHaveURL("/components?platform=native&ref=e2e");
+    await clickUntilUrl(
+      page,
+      page.getByRole("link", { name: "Components", exact: true }).first(),
+      "/components?platform=native&ref=e2e",
+    );
 
-    await page.getByRole("link", { name: "fr", exact: true }).click();
-    await expect(page).toHaveURL("/fr/components?platform=native&ref=e2e");
+    await clickUntilUrl(
+      page,
+      page.getByRole("link", { name: "fr", exact: true }),
+      "/fr/components?platform=native&ref=e2e",
+    );
   });
 
   test("switches renderer setup on one installation route", async ({ page }) => {
@@ -173,11 +192,13 @@ test.describe("platform-aware component discovery", () => {
         .first(),
     ).toBeVisible();
 
-    await page
-      .getByRole("navigation", { name: "Filter by implementation" })
-      .getByRole("link", { name: "Web", exact: true })
-      .click();
-    await expect(page).toHaveURL("/docs/installation?platform=web&ref=e2e");
+    await clickUntilUrl(
+      page,
+      page
+        .getByRole("navigation", { name: "Filter by implementation" })
+        .getByRole("link", { name: "Web", exact: true }),
+      "/docs/installation?platform=web&ref=e2e",
+    );
     await expect(
       page.getByRole("heading", { name: "Web prerequisites" }),
     ).toBeVisible();
