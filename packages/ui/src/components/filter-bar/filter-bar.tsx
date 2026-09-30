@@ -2,6 +2,8 @@
 
 import { memo, useCallback, useTransition } from "react";
 
+import type { TransitionStartFunction } from "react";
+
 import { cn } from "../../lib/utils";
 import { Badge } from "../badge/badge";
 
@@ -252,20 +254,17 @@ const DEFAULT_LABELS: Required<FilterBarLabels> = {
 
 const EMPTY_FILTER_BAR_LABELS: FilterBarLabels = {};
 
-// eslint-disable-next-line max-lines-per-function -- Complex filter component with sub-components
-function FilterBarImpl({
-  className,
-  currentDifficulty,
-  currentTags,
-  difficultyOptions,
-  labels = EMPTY_FILTER_BAR_LABELS,
-  onFiltersChange,
-  searchQuery,
-  tags,
-}: FilterBarProps): React.ReactNode {
-  const [isPending, startTransition] = useTransition();
-  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+type FilterBarHandlerOptions = {
+  currentTags: string[];
+  onFiltersChange: FilterBarProps["onFiltersChange"];
+  startTransition: TransitionStartFunction;
+};
 
+function useFilterBarHandlers({
+  currentTags,
+  onFiltersChange,
+  startTransition,
+}: FilterBarHandlerOptions) {
   const handleDifficultyChange = useCallback(
     (difficulty: string): void => {
       startTransition(() => {
@@ -297,6 +296,34 @@ function FilterBarImpl({
     const input = document.querySelector<HTMLInputElement>("#filter-search");
     if (input) input.value = "";
   }, [onFiltersChange]);
+
+  return {
+    handleClearAll,
+    handleDifficultyChange,
+    handleSearchChange,
+    handleTagToggle,
+  };
+}
+
+function FilterBarImpl({
+  className,
+  currentDifficulty,
+  currentTags,
+  difficultyOptions,
+  labels = EMPTY_FILTER_BAR_LABELS,
+  onFiltersChange,
+  searchQuery,
+  tags,
+}: FilterBarProps): React.ReactNode {
+  const [isPending, startTransition] = useTransition();
+  const mergedLabels = { ...DEFAULT_LABELS, ...labels };
+
+  const {
+    handleClearAll,
+    handleDifficultyChange,
+    handleSearchChange,
+    handleTagToggle,
+  } = useFilterBarHandlers({ currentTags, onFiltersChange, startTransition });
 
   const activeDifficulty = currentDifficulty || "all";
 

@@ -26,8 +26,7 @@ export function CategoryFilter({ categories, lang }: CategoryFilterProps) {
   const pathname = usePathname();
 
   // Get all unique categories and sort them
-  // eslint-disable-next-line unicorn/prefer-spread
-  const allCategories: string[] = Array.from(new Set(categories)).sort();
+  const allCategories: string[] = [...new Set(categories)].sort();
 
   if (allCategories.length === 0) {
     return null;

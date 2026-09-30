@@ -67,9 +67,8 @@ function getGlyphSegmenter(): Intl.Segmenter | null {
 /** Splits by grapheme when `Intl.Segmenter` exists, otherwise by code point. */
 function splitGlyphs(text: string): string[] {
   const segmenter = getGlyphSegmenter();
-  // Use Array.from because no-misused-spread rejects string spread.
-  // eslint-disable-next-line unicorn/prefer-spread
-  if (segmenter === null) return Array.from(text);
+  // Spread the string's code point iterator; no-misused-spread forbids spreading the string itself.
+  if (segmenter === null) return [...text[Symbol.iterator]()];
   return Array.from(segmenter.segment(text), ({ segment }) => segment);
 }
 

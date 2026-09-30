@@ -72,6 +72,12 @@ describe("Slideshow", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Open table of contents" }),
     );
+    // Clicks and keys inside the panel must not close it.
+    fireEvent.click(screen.getByRole("dialog"));
+    fireEvent.keyDown(screen.getByRole("button", { name: "Setup" }), {
+      key: "Enter",
+    });
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Setup" }));
     advanceNavigationTimer();
     expect(props.onNavigate).toHaveBeenCalledWith(1);
