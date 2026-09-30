@@ -21,7 +21,6 @@ const MAX_TOKEN_LENGTH = 2048;
  * built in the editor installs with `npx shadcn add <origin>/r/themes?t=...`.
  * Must stay dynamic — every distinct token yields a distinct response.
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export function GET(request: Request): Response {
   const url = new URL(request.url);
   const token = url.searchParams.get("t");

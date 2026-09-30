@@ -1,5 +1,13 @@
 import { nextjs } from '@vllnt/eslint-config'
 
+const NAMING_CONVENTION = '@typescript-eslint/naming-convention'
+
+/* The preset's project-wide naming-convention options. Rule options replace
+   rather than merge, so the scoped overrides below extend this list. */
+const [, ...namingConventionOptions] = nextjs.find(
+  (config) => !config.files && config.rules?.[NAMING_CONVENTION],
+).rules[NAMING_CONVENTION]
+
 export default [
   {
     ignores: [
@@ -55,11 +63,68 @@ export default [
     },
   },
   {
+    /* Next.js route handlers must export UPPER_CASE HTTP-method functions. */
+    files: ['app/**/route.ts'],
+    ignores: ['app/api/**'], // the preset already turns the rule off there
+    rules: {
+      [NAMING_CONVENTION]: [
+        'error',
+        {
+          selector: 'function',
+          modifiers: ['exported'],
+          filter: { regex: '^(GET|HEAD|POST|PUT|PATCH|DELETE|OPTIONS)$', match: true },
+          format: ['UPPER_CASE'],
+        },
+        ...namingConventionOptions,
+      ],
+    },
+  },
+  {
     /* Externally-mandated key shapes: JSON-LD (@context/@type), web app
        manifest (snake_case members), MCP JSON-RPC protocol fields. */
     files: ['lib/jsonld.ts', 'lib/seo.ts', 'app/manifest.ts', 'app/mcp/route.ts'],
     rules: {
       '@typescript-eslint/naming-convention': 'off',
+    },
+  },
+  {
+    /* next-intl's createNavigation returns the `Link` component, destructured
+       under its PascalCase component name. */
+    files: ['i18n/routing.ts'],
+    rules: {
+      [NAMING_CONVENTION]: [
+        'error',
+        {
+          selector: 'variable',
+          modifiers: ['destructured'],
+          format: ['camelCase', 'PascalCase'],
+        },
+        ...namingConventionOptions,
+      ],
+    },
+  },
+  {
+    /* Data keyed by external names (npm packages, sandbox paths, CSS custom
+       properties) that cannot be camelCase; only keys needing quotes are exempt. */
+    files: ['lib/codesandbox.ts', 'lib/theme-tokens.ts'],
+    rules: {
+      [NAMING_CONVENTION]: [
+        'error',
+        {
+          selector: 'objectLiteralProperty',
+          modifiers: ['requiresQuotes'],
+          format: null,
+        },
+        ...namingConventionOptions,
+      ],
+    },
+  },
+  {
+    /* The badge preview renders the /api/badge SVG with the same plain <img>
+       the copied snippets embed; next/image would change that markup. */
+    files: ['components/badge-snippets/badge-snippets.tsx'],
+    rules: {
+      '@next/next/no-img-element': 'off',
     },
   },
   {

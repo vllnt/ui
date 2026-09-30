@@ -20,7 +20,6 @@ async function readComponentFile(filePath: string) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export async function GET(_request: Request, routeParameters: RouteParameters) {
   try {
     const { name } = await routeParameters.params;

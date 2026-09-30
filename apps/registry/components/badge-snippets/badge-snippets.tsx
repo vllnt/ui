@@ -40,7 +40,6 @@ export function BadgeSnippets(): React.ReactElement {
       </p>
 
       <div className="mt-5 flex items-center gap-3">
-        {/* eslint-disable-next-line @next/next/no-img-element -- external badge endpoint, intentionally unoptimized */}
         <img alt={t("alt")} height={28} src={BADGE_SVG_PATH} />
       </div>
 
