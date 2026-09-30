@@ -3,6 +3,8 @@ import * as React from "react";
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { stubMatchMedia } from "../../__tests__/stub-match-media";
+
 import { AnimatedBeam } from "./animated-beam";
 
 class ResizeObserverStub {
@@ -13,14 +15,7 @@ class ResizeObserverStub {
 
 describe("AnimatedBeam", () => {
   beforeEach(() => {
-    vi.stubGlobal(
-      "matchMedia",
-      vi.fn().mockReturnValue({
-        addEventListener: vi.fn(),
-        matches: false,
-        removeEventListener: vi.fn(),
-      }),
-    );
+    stubMatchMedia();
     vi.stubGlobal("ResizeObserver", ResizeObserverStub);
   });
 

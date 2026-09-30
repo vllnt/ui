@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { ObjectCard } from "../object-card";
+import { ObjectCard } from "../object-card/object-card";
 import { GroupHull } from "./group-hull";
 
 test.describe("GroupHull Visual", () => {

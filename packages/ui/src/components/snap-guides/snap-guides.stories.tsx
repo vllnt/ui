@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { type SnapGuide, SnapGuides } from "./snap-guides";
 
 const GUIDES: SnapGuide[] = [
@@ -12,13 +14,7 @@ const GUIDES: SnapGuide[] = [
 const meta = {
   args: { guides: GUIDES },
   component: SnapGuides,
-  decorators: [
-    (Story) => (
-      <div className="relative h-[280px] w-[480px] rounded-2xl border bg-muted/30">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative h-[280px] w-[480px] rounded-2xl border bg-muted/30")],
   title: "Canvas/SnapGuides",
 } satisfies Meta<typeof SnapGuides>;
 

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { BlurReveal } from "./blur-reveal";
 
 const meta = {
@@ -7,13 +9,7 @@ const meta = {
     children: "I sharpen into view",
   },
   component: BlurReveal,
-  decorators: [
-    (Story) => (
-      <div className="p-12">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("p-12")],
   title: "Effects/BlurReveal",
 } satisfies Meta<typeof BlurReveal>;
 
@@ -22,8 +18,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Delayed: Story = {
-  args: {
-    delay: 300,
-  },
-};
+export const Delayed: Story = { args: { delay: 300 } };

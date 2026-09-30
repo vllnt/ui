@@ -47,8 +47,4 @@ export const TightSpread: Story = {
   },
 };
 
-export const HeadingOverride: Story = {
-  args: {
-    as: "h2",
-  },
-};
+export const HeadingOverride: Story = { args: { as: "h2" } };

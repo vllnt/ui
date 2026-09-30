@@ -32,12 +32,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Animated: Story = {
-  args: {
-    animated: true,
-    showProgressIndicator: true,
-  },
-};
+export const Animated: Story = { args: { animated: true, showProgressIndicator: true } };
 
 export const ColumbusVoyage: Story = {
   args: {
@@ -56,9 +51,4 @@ export const WithInfoPanel: Story = {
   ),
 };
 
-export const Dotted: Story = {
-  args: {
-    color: "emerald",
-    lineStyle: "dotted",
-  },
-};
+export const Dotted: Story = { args: { color: "emerald", lineStyle: "dotted" } };

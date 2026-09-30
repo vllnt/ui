@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { ShineBorder } from "./shine-border";
 
 const meta = {
@@ -7,13 +9,7 @@ const meta = {
     children: "Featured",
   },
   component: ShineBorder,
-  decorators: [
-    (Story) => (
-      <div className="flex min-h-40 items-center justify-center p-10">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("flex min-h-40 items-center justify-center p-10")],
   title: "Effects/ShineBorder",
 } satisfies Meta<typeof ShineBorder>;
 

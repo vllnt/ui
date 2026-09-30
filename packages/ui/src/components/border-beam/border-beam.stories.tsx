@@ -29,8 +29,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Reverse: Story = {
-  args: {
-    reverse: true,
-  },
-};
+export const Reverse: Story = { args: { reverse: true } };

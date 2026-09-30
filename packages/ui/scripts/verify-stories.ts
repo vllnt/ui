@@ -1,8 +1,9 @@
 /**
  * Story Verification Script
  *
- * Validates that all .stories.tsx files provide required props in their Default story.
- * Catches runtime crashes before they reach the browser.
+ * 1. Coverage: every component directory has a .stories.tsx file.
+ * 2. Props: every story file provides the required props in its args.
+ * Catches runtime crashes before they reach the browser. Exits 1 on either failure.
  *
  * Usage: pnpm -F @vllnt/ui storybook:verify
  */
@@ -10,6 +11,13 @@
 import { readdirSync, readFileSync, statSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+
+import {
+  extractTypeBlock,
+  parsePropsFromBlock,
+  type PropInfo,
+  toPascalCase,
+} from "./lib/component-source";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,66 +27,11 @@ const DELIMITER_OPEN = new Set(["{", "[", "("]);
 const DELIMITER_CLOSE = new Set(["}", "]", ")"]);
 const NON_IMPLEMENTATION_FILE_PATTERN = /\.(?:stories|test|visual)\./;
 
-interface PropInfo {
-  name: string;
-  type: string;
-  required: boolean;
-}
-
 interface Violation {
   component: string;
   story: string;
   missingProps: string[];
   crashRisk: string;
-}
-
-function extractTypeBlock(source: string, startIndex: number): string {
-  let depth = 0;
-  let blockStart = -1;
-
-  for (let i = startIndex; i < source.length; i++) {
-    if (source[i] === "{") {
-      if (depth === 0) blockStart = i + 1;
-      depth++;
-    }
-
-    if (source[i] === "}") {
-      depth--;
-      if (depth === 0) return source.slice(blockStart, i);
-    }
-  }
-
-  return "";
-}
-
-function parsePropsFromBlock(block: string): PropInfo[] {
-  const props: PropInfo[] = [];
-  const lines = block.split("\n");
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("//") || trimmed.startsWith("/*")) continue;
-
-    const match = trimmed.match(/^(\w+)(\??)\s*:\s*(.+?)\s*;?\s*$/);
-    if (!match) continue;
-
-    const name = match[1] ?? "";
-    const required = match[2] !== "?";
-    const type = (match[3] ?? "").trim().replace(/[;,]$/, "");
-
-    if (name && type) {
-      props.push({ name, required, type });
-    }
-  }
-
-  return props;
-}
-
-function toPascalCase(str: string): string {
-  return str
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("");
 }
 
 function extractNamedPropsBlock(source: string, typeName: string): string {
@@ -212,6 +165,26 @@ function classifyCrashRisk(prop: PropInfo): string {
   return "WARN: missing required prop";
 }
 
+function checkCoverage(componentDirs: string[]): void {
+  const missing = componentDirs.filter(
+    (dir) =>
+      !readdirSync(join(COMPONENTS_DIR, dir)).some((file) =>
+        file.endsWith(".stories.tsx"),
+      ),
+  );
+
+  if (missing.length > 0) {
+    console.error(`Missing stories for ${missing.length} component(s):\n`);
+    for (const name of missing) {
+      console.error(`  - ${name}`);
+    }
+    console.error(`\nRun: pnpm -F @vllnt/ui storybook:generate`);
+    process.exit(1);
+  }
+
+  console.log(`All ${componentDirs.length} components have stories.`);
+}
+
 function verify(): void {
   const violations: Violation[] = [];
   let checked = 0;
@@ -219,6 +192,7 @@ function verify(): void {
   const componentDirs = readdirSync(COMPONENTS_DIR).filter((dir) =>
     statSync(join(COMPONENTS_DIR, dir)).isDirectory(),
   );
+  checkCoverage(componentDirs);
 
   for (const dir of componentDirs) {
     const dirPath = join(COMPONENTS_DIR, dir);

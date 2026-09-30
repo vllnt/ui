@@ -7,8 +7,8 @@ import type { DateRange } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
 import { Button } from "../button/button";
-import { Calendar } from "../calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "../popover";
+import { Calendar } from "../calendar/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 
 const rangeFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",

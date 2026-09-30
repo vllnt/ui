@@ -23,10 +23,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const TopStrong: Story = {
-  args: {
-    blur: 16,
-    direction: "top",
-    layers: 6,
-  },
-};
+export const TopStrong: Story = { args: { blur: 16, direction: "top", layers: 6 } };

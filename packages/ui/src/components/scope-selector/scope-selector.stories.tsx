@@ -73,8 +73,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const WithDefaultSelection: Story = {
-  args: {
-    defaultValue: "prod-eu",
-  },
-};
+export const WithDefaultSelection: Story = { args: { defaultValue: "prod-eu" } };

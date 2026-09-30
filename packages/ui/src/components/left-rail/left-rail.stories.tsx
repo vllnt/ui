@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Compass, Layers3, Sparkles } from "lucide-react";
 
-import { Button } from "../button";
+import { Button } from "../button/button";
 import { LeftRail } from "./left-rail";
 
 const meta = {

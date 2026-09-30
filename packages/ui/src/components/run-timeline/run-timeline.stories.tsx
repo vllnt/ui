@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { RunTimeline } from "./run-timeline";
 
 const noop = (): void => undefined;
@@ -64,13 +66,7 @@ const meta = {
     start: 0,
   },
   component: RunTimeline,
-  decorators: [
-    (Story) => (
-      <div className="w-[540px]">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-[540px]")],
   title: "Canvas/RunTimeline",
 } satisfies Meta<typeof RunTimeline>;
 
@@ -90,10 +86,5 @@ export const SingleLane: Story = {
   },
 };
 
-export const NoCursor: Story = {
-  args: { cursor: undefined },
-};
-
-export const Empty: Story = {
-  args: { phases: [] },
-};
+export const NoCursor: Story = { args: { cursor: undefined } };
+export const Empty: Story = { args: { phases: [] } };

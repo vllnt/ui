@@ -23,17 +23,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Muted: Story = {
-  args: {
-    variant: "muted",
-  },
-};
-
-export const Underline: Story = {
-  args: {
-    variant: "underline",
-  },
-};
+export const Muted: Story = { args: { variant: "muted" } };
+export const Underline: Story = { args: { variant: "underline" } };
 
 export const External: Story = {
   args: {

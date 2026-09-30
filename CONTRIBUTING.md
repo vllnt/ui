@@ -36,7 +36,7 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
 
 ## Adding a component
 
-1. Create `packages/ui/src/components/{name}/` following the folder layout and patterns in [docs/agents/COMPONENTS.md](docs/agents/COMPONENTS.md#folder-layout) (ref-as-prop + `displayName`, `cn()`, Radix, CVA), and add the export to `packages/ui/src/index.ts`.
+1. Create `packages/ui/src/components/{name}/` following the folder layout and patterns in [docs/agents/COMPONENTS.md](docs/agents/COMPONENTS.md#folder-layout) (ref-as-prop + `displayName`, `cn()`, Radix, CVA), and add the export to `packages/ui/src/components/index.ts` (import from `./{name}/{name}`; there are no per-folder `index.ts` files).
 
 2. Regenerate registry docs:
 

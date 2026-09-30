@@ -37,13 +37,7 @@ export const Tones: Story = {
   ),
 };
 
-export const Pulsing: Story = {
-  args: {
-    level: "critical",
-    pulse: true,
-    tone: "solid",
-  },
-};
+export const Pulsing: Story = { args: { level: "critical", pulse: true, tone: "solid" } };
 
 export const CustomLabel: Story = {
   args: {

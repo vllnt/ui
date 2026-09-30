@@ -1,16 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { TiltCard } from "./tilt-card";
 
 const meta = {
   component: TiltCard,
-  decorators: [
-    (Story) => (
-      <div className="flex min-h-64 items-center justify-center p-10">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("flex min-h-64 items-center justify-center p-10")],
   title: "Effects/TiltCard",
 } satisfies Meta<typeof TiltCard>;
 

@@ -31,9 +31,4 @@ export const HighErrorCorrection: Story = {
   },
 };
 
-export const Small: Story = {
-  args: {
-    size: 96,
-    value: "vllnt",
-  },
-};
+export const Small: Story = { args: { size: 96, value: "vllnt" } };

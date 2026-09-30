@@ -44,17 +44,5 @@ export const Danger: Story = {
   },
 };
 
-export const BottomLeft: Story = {
-  args: {
-    anchor: "bottom-left",
-    x: 80,
-    y: 160,
-  },
-};
-
-export const Plain: Story = {
-  args: {
-    detail: undefined,
-    tone: "neutral",
-  },
-};
+export const BottomLeft: Story = { args: { anchor: "bottom-left", x: 80, y: 160 } };
+export const Plain: Story = { args: { detail: undefined, tone: "neutral" } };

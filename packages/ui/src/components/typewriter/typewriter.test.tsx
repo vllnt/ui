@@ -1,19 +1,14 @@
 import { act, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { stubMatchMedia } from "../../__tests__/stub-match-media";
+
 import { Typewriter } from "./typewriter";
 
 describe("Typewriter", () => {
   beforeEach(() => {
     vi.useRealTimers();
-    vi.stubGlobal(
-      "matchMedia",
-      vi.fn().mockReturnValue({
-        addEventListener: vi.fn(),
-        matches: false,
-        removeEventListener: vi.fn(),
-      }),
-    );
+    stubMatchMedia();
   });
 
   it("renders an accessible label with the full text", () => {

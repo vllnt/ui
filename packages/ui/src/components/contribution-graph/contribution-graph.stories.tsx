@@ -32,6 +32,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const LastTwelveWeeks: Story = {
-  args: { weeks: 12 },
-};
+export const LastTwelveWeeks: Story = { args: { weeks: 12 } };

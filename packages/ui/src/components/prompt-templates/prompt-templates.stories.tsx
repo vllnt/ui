@@ -66,11 +66,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const NoCategories: Story = {
-  args: {
-    categories: undefined,
-  },
-};
+export const NoCategories: Story = { args: { categories: undefined } };
 
 export const Empty: Story = {
   args: {

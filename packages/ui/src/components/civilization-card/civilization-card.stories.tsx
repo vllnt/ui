@@ -31,11 +31,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const WithAction: Story = {
-  args: {
-    actionHref: "/civilizations/rome",
-  },
-};
+export const WithAction: Story = { args: { actionHref: "/civilizations/rome" } };
 
 export const Extant: Story = {
   args: {

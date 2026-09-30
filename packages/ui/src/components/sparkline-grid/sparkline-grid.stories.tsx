@@ -42,8 +42,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const FourColumns: Story = {
-  args: {
-    columns: 4,
-  },
-};
+export const FourColumns: Story = { args: { columns: 4 } };

@@ -1,25 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 
+import { stubMatchMedia } from "../../__tests__/stub-match-media";
+
 import { ThemeProvider } from "./theme-provider";
 
-const noop = (): void => undefined;
-
 beforeEach(() => {
-  Object.defineProperty(window, "matchMedia", {
-    configurable: true,
-    value: (query: string) => ({
-      addEventListener: noop,
-      addListener: noop,
-      dispatchEvent: () => false,
-      matches: false,
-      media: query,
-      onchange: null,
-      removeEventListener: noop,
-      removeListener: noop,
-    }),
-    writable: true,
-  });
+  stubMatchMedia();
 });
 
 describe("ThemeProvider", () => {

@@ -48,6 +48,4 @@ export const Soft: Story = {
   },
 };
 
-export const Hidden: Story = {
-  args: { focus: null },
-};
+export const Hidden: Story = { args: { focus: null } };

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { ThreadBubble } from "./thread-bubble";
 
 const noop = (): void => undefined;
@@ -33,13 +35,7 @@ const meta = {
     title: "research-2025",
   },
   component: ThreadBubble,
-  decorators: [
-    (Story) => (
-      <div className="bg-muted/30 p-4">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("bg-muted/30 p-4")],
   title: "Canvas/ThreadBubble",
 } satisfies Meta<typeof ThreadBubble>;
 
@@ -48,9 +44,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { messages: [] },
-};
+export const Empty: Story = { args: { messages: [] } };
 
 export const WithFooter: Story = {
   args: {
@@ -63,6 +57,4 @@ export const WithFooter: Story = {
   },
 };
 
-export const ReadOnly: Story = {
-  args: { onResolve: undefined },
-};
+export const ReadOnly: Story = { args: { onResolve: undefined } };

@@ -19,26 +19,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Enabled: Story = {
-  args: {
-    defaultEnabled: true,
-  },
-};
-
-export const Euro: Story = {
-  args: {
-    currency: "EUR",
-    defaultEnabled: true,
-    locale: "en-IE",
-  },
-};
-
-export const Saving: Story = {
-  args: {
-    defaultEnabled: true,
-    isSaving: true,
-  },
-};
+export const Enabled: Story = { args: { defaultEnabled: true } };
+export const Euro: Story = { args: { currency: "EUR", defaultEnabled: true, locale: "en-IE" } };
+export const Saving: Story = { args: { defaultEnabled: true, isSaving: true } };
 
 export const DisabledForUnsubscribed: Story = {
   args: {

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { TextAnimate } from "./text-animate";
 
 const meta = {
@@ -7,13 +9,7 @@ const meta = {
     children: "Welcome aboard the platform",
   },
   component: TextAnimate,
-  decorators: [
-    (Story) => (
-      <div className="bg-background p-8 text-3xl font-semibold text-foreground">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("bg-background p-8 text-3xl font-semibold text-foreground")],
   title: "Effects/TextAnimate",
 } satisfies Meta<typeof TextAnimate>;
 
@@ -22,21 +18,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const SlideUp: Story = {
-  args: {
-    animation: "slide-up",
-  },
-};
-
-export const Blur: Story = {
-  args: {
-    animation: "blur",
-  },
-};
-
-export const ByCharacter: Story = {
-  args: {
-    by: "character",
-    delay: 30,
-  },
-};
+export const SlideUp: Story = { args: { animation: "slide-up" } };
+export const Blur: Story = { args: { animation: "blur" } };
+export const ByCharacter: Story = { args: { by: "character", delay: 30 } };

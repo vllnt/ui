@@ -1,16 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { Meteors } from "./meteors";
 
 const meta = {
   component: Meteors,
-  decorators: [
-    (Story) => (
-      <div className="relative h-64 w-96 overflow-hidden rounded-xl border bg-card">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative h-64 w-96 overflow-hidden rounded-xl border bg-card")],
   title: "Effects/Meteors",
 } satisfies Meta<typeof Meteors>;
 
@@ -23,8 +19,4 @@ export const Default: Story = {
   },
 };
 
-export const Sparse: Story = {
-  args: {
-    count: 6,
-  },
-};
+export const Sparse: Story = { args: { count: 6 } };

@@ -20,8 +20,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Large: Story = {
-  args: {
-    size: 40,
-  },
-};
+export const Large: Story = { args: { size: 40 } };

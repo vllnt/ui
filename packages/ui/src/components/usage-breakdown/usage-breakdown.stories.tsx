@@ -45,11 +45,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const TopTwoOnly: Story = {
-  args: {
-    maxItems: 2,
-  },
-};
+export const TopTwoOnly: Story = { args: { maxItems: 2 } };
 
 export const Empty: Story = {
   args: {

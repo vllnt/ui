@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   CHECKLIST_PROGRESS_EVENT,
   createChecklistStorageValue,
-} from "../checklist";
+} from "../checklist/checklist";
 
 import {
   ProgressTracker,
@@ -42,6 +42,13 @@ const modules = [
     timeSpent: "6h 20m",
     title: "React Fundamentals",
   },
+];
+
+const CHECKLIST_ITEMS = [
+  { id: "intro", label: "Intro" },
+  { id: "components", label: "Components" },
+  { id: "hooks", label: "Hooks" },
+  { id: "state", label: "State" },
 ];
 
 afterEach(() => {
@@ -99,12 +106,7 @@ describe("ProgressTracker", () => {
       <ProgressTracker modules={modules} overallProgress={65} streak={7}>
         <ProgressTrackerModules>
           <ProgressTrackerModule
-            checklistItems={[
-              { id: "intro", label: "Intro" },
-              { id: "components", label: "Components" },
-              { id: "hooks", label: "Hooks" },
-              { id: "state", label: "State" },
-            ]}
+            checklistItems={CHECKLIST_ITEMS}
             completedLessons={0}
             lessons={4}
             persistKey="react-fundamentals"
@@ -162,47 +164,27 @@ describe("ProgressTracker", () => {
   });
 
   it("updates overview totals and module progress from same-tab checklist persistence events", () => {
+    const checklistModule = {
+      checklistItems: CHECKLIST_ITEMS,
+      completedExercises: 2,
+      completedLessons: 0,
+      exercises: 4,
+      lessons: 4,
+      persistKey: "react-fundamentals",
+      progress: 0,
+      status: "in-progress",
+      title: "Checklist-backed module",
+    } satisfies React.ComponentProps<typeof ProgressTrackerModule>;
+
     render(
       <ProgressTracker
-        modules={[
-          {
-            checklistItems: [
-              { id: "intro", label: "Intro" },
-              { id: "components", label: "Components" },
-              { id: "hooks", label: "Hooks" },
-              { id: "state", label: "State" },
-            ],
-            completedExercises: 2,
-            completedLessons: 0,
-            exercises: 4,
-            lessons: 4,
-            persistKey: "react-fundamentals",
-            progress: 0,
-            status: "in-progress",
-            title: "Checklist-backed module",
-          },
-        ]}
+        modules={[checklistModule]}
         overallProgress={65}
         streak={7}
       >
         <ProgressTrackerOverview />
         <ProgressTrackerModules>
-          <ProgressTrackerModule
-            checklistItems={[
-              { id: "intro", label: "Intro" },
-              { id: "components", label: "Components" },
-              { id: "hooks", label: "Hooks" },
-              { id: "state", label: "State" },
-            ]}
-            completedExercises={2}
-            completedLessons={0}
-            exercises={4}
-            lessons={4}
-            persistKey="react-fundamentals"
-            progress={0}
-            status="in-progress"
-            title="Checklist-backed module"
-          />
+          <ProgressTrackerModule {...checklistModule} />
         </ProgressTrackerModules>
       </ProgressTracker>,
     );

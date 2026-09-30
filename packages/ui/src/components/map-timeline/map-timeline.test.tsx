@@ -20,9 +20,9 @@ const ROMAN_RING: [number, number][] = [
 
 describe("MapTimeline", () => {
   describe("layer visibility", () => {
-    it("renders a layer when the year falls inside its window", () => {
-      const { container } = render(
-        <MapTimeline endYear={500} initialYear={100} startYear={-100}>
+    const renderRome = (initialYear: number) =>
+      render(
+        <MapTimeline endYear={500} initialYear={initialYear} startYear={-100}>
           <MapTimelineLayer
             color="red"
             endYear={476}
@@ -33,6 +33,9 @@ describe("MapTimeline", () => {
           />
         </MapTimeline>,
       );
+
+    it("renders a layer when the year falls inside its window", () => {
+      const { container } = renderRome(100);
 
       expect(container.querySelector("[data-layer-id='rome']")).toHaveAttribute(
         "data-state",
@@ -42,73 +45,48 @@ describe("MapTimeline", () => {
     });
 
     it("hides a layer when the year is outside its window", () => {
-      const { container } = render(
-        <MapTimeline endYear={500} initialYear={500} startYear={-100}>
-          <MapTimelineLayer
-            color="red"
-            endYear={476}
-            geometry={{ polygon: ROMAN_RING, type: "polygon" }}
-            id="rome"
-            label="Roman Empire"
-            startYear={-27}
-          />
-        </MapTimeline>,
-      );
+      const { container } = renderRome(500);
 
       expect(container.querySelector("[data-layer-id='rome']")).toBeNull();
     });
   });
 
   describe("event visibility", () => {
-    it("renders an event when the year matches", () => {
+    it.each([
+      [
+        "renders an event when the year matches",
+        { initialYear: 79, toleranceYears: undefined },
+        true,
+      ],
+      [
+        "renders an event within the tolerance window",
+        { initialYear: 82, toleranceYears: 5 },
+        true,
+      ],
+      [
+        "hides an event outside the tolerance window",
+        { initialYear: 150, toleranceYears: 5 },
+        false,
+      ],
+    ])("%s", (_name, { initialYear, toleranceYears }, visible) => {
       const { container } = render(
-        <MapTimeline endYear={200} initialYear={79} startYear={0}>
+        <MapTimeline endYear={200} initialYear={initialYear} startYear={0}>
           <MapTimelineEvent
             id="vesuvius"
             position={[14.48, 40.75]}
             title="Vesuvius"
+            toleranceYears={toleranceYears}
             year={79}
           />
         </MapTimeline>,
       );
 
-      expect(
-        container.querySelector("[data-event-id='vesuvius']"),
-      ).toBeInTheDocument();
-    });
-
-    it("renders an event within the tolerance window", () => {
-      const { container } = render(
-        <MapTimeline endYear={200} initialYear={82} startYear={0}>
-          <MapTimelineEvent
-            id="vesuvius"
-            position={[14.48, 40.75]}
-            title="Vesuvius"
-            toleranceYears={5}
-            year={79}
-          />
-        </MapTimeline>,
-      );
-
-      expect(
-        container.querySelector("[data-event-id='vesuvius']"),
-      ).toBeInTheDocument();
-    });
-
-    it("hides an event outside the tolerance window", () => {
-      const { container } = render(
-        <MapTimeline endYear={200} initialYear={150} startYear={0}>
-          <MapTimelineEvent
-            id="vesuvius"
-            position={[14.48, 40.75]}
-            title="Vesuvius"
-            toleranceYears={5}
-            year={79}
-          />
-        </MapTimeline>,
-      );
-
-      expect(container.querySelector("[data-event-id='vesuvius']")).toBeNull();
+      const event = container.querySelector("[data-event-id='vesuvius']");
+      if (visible) {
+        expect(event).toBeInTheDocument();
+      } else {
+        expect(event).toBeNull();
+      }
     });
   });
 

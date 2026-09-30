@@ -29,11 +29,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Stacked: Story = {
-  args: {
-    variant: "stacked",
-  },
-};
+export const Stacked: Story = { args: { variant: "stacked" } };
 
 export const ErrorState: Story = {
   args: {

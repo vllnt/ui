@@ -57,11 +57,10 @@ Bare ticked checkboxes don't count.
 ## 5. Story coverage
 
 ```bash
-pnpm -F @vllnt/ui exec tsx scripts/check-story-coverage.ts
 pnpm -F @vllnt/ui exec tsx scripts/verify-stories.ts
 ```
 
-These also run in CI (`storybook.yml`). Run them locally first.
+It checks story coverage and required story props, and also runs in CI (`storybook.yml`). Run it locally first.
 
 ## 6. Refresh PR body to match HEAD (R3)
 

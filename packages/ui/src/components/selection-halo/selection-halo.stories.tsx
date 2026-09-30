@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { SelectionHalo } from "./selection-halo";
 
 const meta = {
@@ -8,13 +10,7 @@ const meta = {
     label: "3 objects",
   },
   component: SelectionHalo,
-  decorators: [
-    (Story) => (
-      <div className="relative h-[280px] w-[480px] rounded-2xl border bg-muted/30">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("relative h-[280px] w-[480px] rounded-2xl border bg-muted/30")],
   title: "Canvas/SelectionHalo",
 } satisfies Meta<typeof SelectionHalo>;
 
@@ -24,5 +20,4 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Pulsing: Story = { args: { pulsing: true } };
-
 export const NoLabel: Story = { args: { label: undefined } };
