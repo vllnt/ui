@@ -13,9 +13,7 @@ function flattenStructuredData(content: string): StructuredData[] {
   const document = JSON.parse(content) as StructuredData | StructuredData[];
   const nodes = Array.isArray(document) ? document : [document];
   return nodes.flatMap((node) =>
-    node["@graph"]
-      ? flattenStructuredData(JSON.stringify(node["@graph"]))
-      : node,
+    node["@graph"] ? flattenStructuredData(JSON.stringify(node["@graph"])) : node,
   );
 }
 
@@ -59,15 +57,13 @@ test.describe("platform-aware component discovery", () => {
     ).toBeVisible();
 
     const sidebar = page.getByRole("complementary");
-    await expect(sidebar.getByText("Renderers", { exact: true })).toHaveCount(
-      0,
-    );
+    await expect(sidebar.getByText("Renderers", { exact: true })).toHaveCount(0);
     await expect(
       sidebar.getByRole("link", { name: "Native", exact: true }),
     ).toHaveCount(0);
-    await expect(sidebar.locator('a[aria-current="page"]')).toHaveText(
-      "Components",
-    );
+    await expect(
+      sidebar.locator('a[aria-current="page"]'),
+    ).toHaveText("Components");
   });
 
   test("filters the component list without changing its preview layout", async ({
@@ -100,16 +96,11 @@ test.describe("platform-aware component discovery", () => {
           | undefined
       )?.itemListElement?.at(-1)?.item,
     ).toMatch(/\/components\?platform=native$/);
-    const nativeFirstSection = await main
-      .locator("section")
-      .first()
-      .boundingBox();
+    const nativeFirstSection = await main.locator("section").first().boundingBox();
 
     for (const component of nativeComponents) {
       await expect(
-        main.locator(
-          `a[href="/components/${component}?platform=native&ref=e2e"]`,
-        ),
+        main.locator(`a[href="/components/${component}?platform=native&ref=e2e"]`),
       ).toHaveCount(1);
     }
     await expect(
@@ -139,9 +130,7 @@ test.describe("platform-aware component discovery", () => {
         new URL(catalogUrl).origin,
       );
     }
-    await expect(
-      firstPreviewFrame.contentFrame().locator("body"),
-    ).not.toBeEmpty();
+    await expect(firstPreviewFrame.contentFrame().locator("body")).not.toBeEmpty();
 
     await clickUntilUrl(
       page,
@@ -188,11 +177,11 @@ test.describe("platform-aware component discovery", () => {
     );
   });
 
-  test("switches renderer setup on one installation route", async ({
-    page,
-  }) => {
+  test("switches renderer setup on one installation route", async ({ page }) => {
     await page.goto("/docs/installation?platform=native&ref=e2e");
-    await expect(page).toHaveURL("/docs/installation?platform=native&ref=e2e");
+    await expect(page).toHaveURL(
+      "/docs/installation?platform=native&ref=e2e",
+    );
     await expect(
       page.getByRole("heading", { name: "Current availability" }),
     ).toBeVisible();
@@ -238,9 +227,7 @@ test.describe("platform-aware component discovery", () => {
     await expect(
       main.getByRole("button", { name: "Copy install command" }),
     ).toBeVisible();
-    await expect(
-      main.getByRole("button", { name: "Add to v0.dev" }),
-    ).toBeVisible();
+    await expect(main.getByRole("button", { name: "Add to v0.dev" })).toBeVisible();
     await expect(
       main.getByRole("navigation", { name: "Filter by implementation" }),
     ).toHaveCount(0);
@@ -277,9 +264,10 @@ test.describe("platform-aware component discovery", () => {
 
     await expect(main.locator("#preview")).toHaveCount(1);
     await expect(main.locator("iframe")).toHaveCount(1);
-    await expect(
-      main.locator('iframe[title="button preview"]'),
-    ).toHaveAttribute("sandbox", "allow-scripts allow-same-origin");
+    await expect(main.locator('iframe[title="button preview"]')).toHaveAttribute(
+      "sandbox",
+      "allow-scripts allow-same-origin",
+    );
     await main.getByRole("tab", { name: "Code", exact: true }).click();
     const source = main.locator("#preview");
     const reactTab = source.getByRole("tab", { name: "React", exact: true });
@@ -298,16 +286,14 @@ test.describe("platform-aware component discovery", () => {
     await main.getByRole("tab", { name: "Preview", exact: true }).click();
     await expect(page).toHaveURL(/#preview$/);
     await main.getByRole("link", { name: "View source above" }).click();
-    await expect(
-      main.getByRole("tab", { name: "Code", exact: true }),
-    ).toHaveAttribute("aria-selected", "true");
+    await expect(main.getByRole("tab", { name: "Code", exact: true })).toHaveAttribute(
+      "aria-selected", "true",
+    );
 
     await expect(
       main.getByRole("button", { name: "Copy Web install command" }),
     ).toBeVisible();
-    await expect(
-      main.getByRole("button", { name: "Add to v0.dev" }),
-    ).toBeVisible();
+    await expect(main.getByRole("button", { name: "Add to v0.dev" })).toBeVisible();
     await expect(main.getByRole("tab", { name: "Preview" })).toBeVisible();
     await expect(main.getByText("Storybook", { exact: true })).toBeVisible();
     await expect(
@@ -407,9 +393,7 @@ test.describe("platform-aware component discovery", () => {
     await expect(trigger).toBeFocused();
   });
 
-  test("keeps the capability filter within a 320px viewport", async ({
-    page,
-  }) => {
+  test("keeps the capability filter within a 320px viewport", async ({ page }) => {
     await page.setViewportSize({ height: 720, width: 320 });
     await page.goto("/components?platform=native");
 
