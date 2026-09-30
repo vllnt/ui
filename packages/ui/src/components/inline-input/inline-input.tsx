@@ -17,6 +17,11 @@ export type InlineInputProps = {
   value: string;
 };
 
+/** Stable ref callback: focuses the input once when it mounts, like `autoFocus`. */
+function focusOnMount(node: HTMLInputElement | null): void {
+  node?.focus();
+}
+
 /**
  * Inline input for editing text with keyboard support.
  * - Enter: commits the value
@@ -42,7 +47,6 @@ export function InlineInput({
 
   return (
     <Input
-      autoFocus // eslint-disable-line jsx-a11y/no-autofocus
       className={cn("flex-1 h-7 text-sm", className)}
       onBlur={() => {
         onCommit(value);
@@ -54,6 +58,7 @@ export function InlineInput({
         event.stopPropagation();
       }}
       onKeyDown={handleKeyDown}
+      ref={focusOnMount}
       value={value}
     />
   );
