@@ -57,6 +57,8 @@ export function ThemeEditor({
   const [theme, setTheme] = useState<ThemeData>(DEFAULT_THEME);
   const [mode, setMode] = useState<ThemeMode>("dark");
   const isFirstRender = useRef(true);
+  // Presets are static per page; read them once on mount like the old module constant.
+  const initialPresets = useRef(presets);
 
   /* eslint-disable react-hooks/set-state-in-effect -- one-shot init from
      URL/localStorage after hydration; a lazy useState initializer cannot
@@ -69,11 +71,11 @@ export function ThemeEditor({
       setCustomTheme(urlTheme);
       return;
     }
-    const restored = readActiveTheme(presets);
+    const restored = readActiveTheme(initialPresets.current);
     if (restored) {
       setTheme(restored);
     }
-  }, [presets]);
+  }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
