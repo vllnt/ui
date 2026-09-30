@@ -93,7 +93,8 @@ export function ThemeEditor({
   }, [theme]);
 
   const applyPreset = (preset: EditorPreset): void => {
-    setTheme(preset.theme);
+    // Keep the local DEFAULT_THEME identity: "Default" on a fresh editor is a no-op.
+    setTheme(preset.name === "default" ? DEFAULT_THEME : preset.theme);
     if (isThemePresetName(preset.name)) {
       setThemePreset(preset.name);
     } else {
