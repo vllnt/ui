@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -111,12 +112,7 @@ function TimelineScrubber({
       ref={ref}
       style={[{ gap: theme.spacing[1] }, style]}
     >
-      <NativeText
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <NativeText style={typeStyle(theme, "caption", "mutedForeground")}>
         {formatValue(current)}
       </NativeText>
       <View style={styles.controls}>

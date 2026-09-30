@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -121,22 +122,14 @@ function Checklist({
         >
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodyLarge,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "bodyLarge", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {title}
           </Text>
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {progressText}
           </Text>
         </View>
@@ -229,25 +222,19 @@ function Checklist({
               </View>
               <View style={{ flex: 1 }}>
                 <Text
-                  style={[
-                    theme.typography.scale.bodySmall,
-                    {
-                      color: theme.colors.foreground,
-                      textDecorationLine: checked ? "line-through" : "none",
-                    },
-                  ]}
+                  style={typeStyle(theme, "bodySmall", {
+                    color: "foreground",
+                    textDecorationLine: checked ? "line-through" : "none",
+                  })}
                 >
                   {item.label}
                 </Text>
                 {item.description ? (
                   <Text
-                    style={[
-                      theme.typography.scale.caption,
-                      {
-                        color: theme.colors.mutedForeground,
-                        marginTop: theme.spacing[1],
-                      },
-                    ]}
+                    style={typeStyle(theme, "caption", {
+                      color: "mutedForeground",
+                      marginTop: theme.spacing[1],
+                    })}
                   >
                     {item.description}
                   </Text>
@@ -260,10 +247,10 @@ function Checklist({
       {allCompleted ? (
         <Text
           accessibilityLiveRegion="polite"
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.foreground, textAlign: "center" },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            textAlign: "center",
+          })}
         >
           {labels.allCompleted}
         </Text>

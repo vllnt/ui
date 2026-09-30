@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { ScrambleText } from "./scramble-text";
 
 const meta = {
@@ -7,13 +9,7 @@ const meta = {
     text: "DECRYPTED",
   },
   component: ScrambleText,
-  decorators: [
-    (Story) => (
-      <div className="bg-background p-8 text-3xl font-semibold text-foreground">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("bg-background p-8 text-3xl font-semibold text-foreground")],
   title: "Effects/ScrambleText",
 } satisfies Meta<typeof ScrambleText>;
 
@@ -22,8 +18,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Slow: Story = {
-  args: {
-    duration: 2400,
-  },
-};
+export const Slow: Story = { args: { duration: 2400 } };

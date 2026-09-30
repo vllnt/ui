@@ -27,12 +27,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const TightRadius: Story = {
-  args: {
-    blur: 6,
-    radius: 25,
-  },
-};
+export const TightRadius: Story = { args: { blur: 6, radius: 25 } };
 
 export const CustomGradient: Story = {
   args: {
@@ -44,11 +39,7 @@ export const CustomGradient: Story = {
   },
 };
 
-export const HighOpacity: Story = {
-  args: {
-    opacity: 1,
-  },
-};
+export const HighOpacity: Story = { args: { opacity: 1 } };
 
 export const WithInfoPanel: Story = {
   render: (args) => (

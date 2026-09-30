@@ -1,15 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { Sparkles } from "./sparkles";
 
 const meta = {
   component: Sparkles,
   decorators: [
-    (Story) => (
-      <div className="relative flex h-64 w-96 items-center justify-center rounded-xl border bg-card text-card-foreground">
-        <Story />
-      </div>
-    ),
+    withWrapper("relative flex h-64 w-96 items-center justify-center rounded-xl border bg-card text-card-foreground"),
   ],
   title: "Effects/Sparkles",
 } satisfies Meta<typeof Sparkles>;
@@ -24,8 +22,4 @@ export const Default: Story = {
   },
 };
 
-export const Dense: Story = {
-  args: {
-    count: 60,
-  },
-};
+export const Dense: Story = { args: { count: 60 } };

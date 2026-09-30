@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { CardFlip } from "./card-flip";
 
 const meta = {
@@ -16,13 +18,7 @@ const meta = {
     ),
   },
   component: CardFlip,
-  decorators: [
-    (Story) => (
-      <div className="w-64 p-12">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-64 p-12")],
   title: "Effects/CardFlip",
 } satisfies Meta<typeof CardFlip>;
 
@@ -31,8 +27,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const ClickToFlip: Story = {
-  args: {
-    flipOnHover: false,
-  },
-};
+export const ClickToFlip: Story = { args: { flipOnHover: false } };

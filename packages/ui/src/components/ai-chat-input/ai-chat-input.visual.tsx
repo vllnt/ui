@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { Badge } from "../badge";
+import { Badge } from "../badge/badge";
 import { AIChatInput } from "./ai-chat-input";
 
 test.describe("AIChatInput Visual", () => {

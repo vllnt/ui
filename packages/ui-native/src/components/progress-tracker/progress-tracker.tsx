@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
 import {
@@ -196,12 +197,7 @@ function ProgressTrackerOverview({
           max={100}
           value={overallProgress}
         />
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.completedModules(completedModules, modules.length)}
         </Text>
         <View style={[styles.stats, { gap: theme.spacing[3] }]}>
@@ -215,22 +211,14 @@ function ProgressTrackerOverview({
                 padding: theme.spacing[3],
               }}
             >
-              <Text
-                style={[
-                  theme.typography.scale.caption,
-                  { color: theme.colors.mutedForeground },
-                ]}
-              >
+              <Text style={typeStyle(theme, "caption", "mutedForeground")}>
                 {stat.label}
               </Text>
               <Text
-                style={[
-                  theme.typography.scale.bodyLarge,
-                  {
-                    color: theme.colors.foreground,
-                    fontWeight: theme.typography.fontWeight.heading,
-                  },
-                ]}
+                style={typeStyle(theme, "bodyLarge", {
+                  color: "foreground",
+                  fontWeight: theme.typography.fontWeight.heading,
+                })}
               >
                 {stat.value}
               </Text>
@@ -344,20 +332,10 @@ function ProgressTrackerModule({
           value={Math.min(completedLessons, lessons)}
         />
         <View style={[styles.row, { gap: theme.spacing[4] }]}>
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
             {labels.lessons}: {completedLessons}/{lessons}
           </Text>
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
             {labels.exercises}: {completedExercises}/{exercises}
           </Text>
         </View>
@@ -424,22 +402,14 @@ function ProgressTrackerStat({
       <CardContent
         style={{ gap: theme.spacing[2], paddingTop: theme.spacing[6] }}
       >
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {label}
         </Text>
         <Text
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {value}
         </Text>

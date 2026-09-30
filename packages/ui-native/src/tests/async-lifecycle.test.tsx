@@ -11,27 +11,7 @@ import { Terminal } from "../components/terminal/terminal";
 import { Toast, type ToastItem } from "../components/toast/toast";
 import type { ShareResult } from "../primitives/platform-services";
 
-function ignoreSettlement() {}
-
-function deferredClipboard() {
-  let resolve: () => void = ignoreSettlement;
-  let reject: (error: unknown) => void = ignoreSettlement;
-  const promise = new Promise<void>((resolvePromise, rejectPromise) => {
-    resolve = resolvePromise;
-    reject = rejectPromise;
-  });
-  return { promise, reject, resolve };
-}
-
-function deferred<T>() {
-  let resolve: (value: T) => void = ignoreSettlement;
-  let reject: (error: unknown) => void = ignoreSettlement;
-  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
-    resolve = resolvePromise;
-    reject = rejectPromise;
-  });
-  return { promise, reject, resolve };
-}
+import { deferred, flushMicrotasks } from "./test-utils";
 
 const searchLabels: SearchDialogLabels = {
   clear: "Clear",
@@ -96,9 +76,7 @@ describe("S–Z async lifecycle regressions", () => {
       query: "native",
     } satisfies React.ComponentProps<typeof SearchDialog>;
     render(<SearchDialog {...props} docsSearch={first} />);
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await flushMicrotasks();
     expect(screen.getByText("Old docs")).toBeOnTheScreen();
     screen.rerender(<SearchDialog {...props} docsSearch={second} />);
     expect(screen.queryByText("Old docs")).toBeNull();
@@ -284,7 +262,7 @@ describe("S–Z async lifecycle regressions", () => {
   });
 
   it("serializes terminal copying and reports one success", async () => {
-    const pending = deferredClipboard();
+    const pending = deferred();
     const setText = jest.fn(() => pending.promise);
     const onCopySuccess = jest.fn();
     render(
@@ -344,7 +322,7 @@ describe("S–Z async lifecycle regressions", () => {
   it.each(["commands", "unmount"])(
     "ignores terminal completion after %s changes",
     async (change) => {
-      const pending = deferredClipboard();
+      const pending = deferred();
       const clipboard = {
         getText: async () => "",
         setText: jest.fn(() => pending.promise),

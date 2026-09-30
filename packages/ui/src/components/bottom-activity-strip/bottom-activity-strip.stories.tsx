@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { BottomActivityStrip } from "./bottom-activity-strip";
 
 const noop = (): void => undefined;
@@ -15,13 +17,7 @@ const meta = {
     ],
   },
   component: BottomActivityStrip,
-  decorators: [
-    (Story) => (
-      <div className="w-[480px]">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-[480px]")],
   title: "Canvas/BottomActivityStrip",
 } satisfies Meta<typeof BottomActivityStrip>;
 
@@ -30,13 +26,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { events: [] },
-};
-
-export const Capped: Story = {
-  args: { maxEvents: 3 },
-};
+export const Empty: Story = { args: { events: [] } };
+export const Capped: Story = { args: { maxEvents: 3 } };
 
 export const NonInteractive: Story = {
   args: {

@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -83,12 +84,7 @@ function ColorPicker({
                 },
               ]}
             />
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {choice.label}
             </NativeText>
           </Pressable>

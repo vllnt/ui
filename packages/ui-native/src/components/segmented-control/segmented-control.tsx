@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -90,15 +91,10 @@ function SegmentedControl({
           >
             <NativeText
               numberOfLines={1}
-              style={[
-                theme.typography.scale.bodySmall,
-                {
-                  color: selected
-                    ? theme.colors.foreground
-                    : theme.colors.mutedForeground,
-                  fontWeight: theme.typography.fontWeight.caption,
-                },
-              ]}
+              style={typeStyle(theme, "bodySmall", {
+                color: selected ? "foreground" : "mutedForeground",
+                fontWeight: theme.typography.fontWeight.caption,
+              })}
             >
               {item.label}
             </NativeText>

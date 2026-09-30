@@ -22,20 +22,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const VariantDestructive: Story = {
-  args: {
-    variant: "destructive",
-  },
-};
-
-export const VariantOutline: Story = {
-  args: {
-    variant: "outline",
-  },
-};
-
-export const VariantSecondary: Story = {
-  args: {
-    variant: "secondary",
-  },
-};
+export const VariantDestructive: Story = { args: { variant: "destructive" } };
+export const VariantOutline: Story = { args: { variant: "outline" } };
+export const VariantSecondary: Story = { args: { variant: "secondary" } };

@@ -70,15 +70,5 @@ export const WithEra: Story = {
   },
 };
 
-export const TwoTracks: Story = {
-  args: {
-    tracks: TRACKS.slice(0, 2),
-  },
-};
-
-export const TightWindow: Story = {
-  args: {
-    endYear: 500,
-    startYear: -300,
-  },
-};
+export const TwoTracks: Story = { args: { tracks: TRACKS.slice(0, 2) } };
+export const TightWindow: Story = { args: { endYear: 500, startYear: -300 } };

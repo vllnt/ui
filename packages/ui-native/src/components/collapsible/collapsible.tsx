@@ -20,7 +20,10 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -97,13 +100,7 @@ function Collapsible({
   ...props
 }: CollapsibleProps) {
   const [expanded, setExpanded] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const reduceMotion = useReducedMotion(reducedMotionService);
   const [mounted, setMounted] = useState({ content: 0, trigger: 0 });

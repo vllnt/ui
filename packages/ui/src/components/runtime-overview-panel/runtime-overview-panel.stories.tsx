@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { RuntimeOverviewPanel } from "./runtime-overview-panel";
 
 const meta = {
@@ -32,13 +34,7 @@ const meta = {
     ],
   },
   component: RuntimeOverviewPanel,
-  decorators: [
-    (Story) => (
-      <div className="w-72">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72")],
   title: "Canvas/RuntimeOverviewPanel",
 } satisfies Meta<typeof RuntimeOverviewPanel>;
 
@@ -47,9 +43,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { metrics: [] },
-};
+export const Empty: Story = { args: { metrics: [] } };
 
 export const AllHealthy: Story = {
   args: {

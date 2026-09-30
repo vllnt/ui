@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { TimelineScrubber } from "./timeline-scrubber";
 
 const meta = {
@@ -16,13 +18,7 @@ const meta = {
     value: 1800,
   },
   component: TimelineScrubber,
-  decorators: [
-    (Story) => (
-      <div className="w-72 bg-muted/30 p-4">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72 bg-muted/30 p-4")],
   title: "Canvas/TimelineScrubber",
 } satisfies Meta<typeof TimelineScrubber>;
 
@@ -31,14 +27,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const NoTicks: Story = {
-  args: { ticks: undefined },
-};
-
-export const Warning: Story = {
-  args: { tone: "warn", value: 3000 },
-};
-
-export const RawValues: Story = {
-  args: { formatValue: undefined, ticks: undefined },
-};
+export const NoTicks: Story = { args: { ticks: undefined } };
+export const Warning: Story = { args: { tone: "warn", value: 3000 } };
+export const RawValues: Story = { args: { formatValue: undefined, ticks: undefined } };

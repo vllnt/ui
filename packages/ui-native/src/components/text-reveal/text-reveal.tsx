@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import {
   type ReducedMotionService,
   useReducedMotion,
@@ -63,13 +64,10 @@ function TextReveal({
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
           key={`${word}-${index.toString()}`}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              opacity: wordOpacity(resolvedProgress, words.length, index),
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            opacity: wordOpacity(resolvedProgress, words.length, index),
+          })}
         >
           {word}
         </NativeText>

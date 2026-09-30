@@ -26,20 +26,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const SizeLg: Story = {
-  args: {
-    size: "lg",
-  },
-};
-
-export const SizeSm: Story = {
-  args: {
-    size: "sm",
-  },
-};
-
-export const VariantOutline: Story = {
-  args: {
-    variant: "outline",
-  },
-};
+export const SizeLg: Story = { args: { size: "lg" } };
+export const SizeSm: Story = { args: { size: "sm" } };
+export const VariantOutline: Story = { args: { variant: "outline" } };

@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 export type ItemSize = "default" | "sm";
@@ -87,11 +88,10 @@ function ItemTitle({ ref, style, ...props }: ItemTitleProps) {
       {...props}
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.foreground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "foreground",
           fontWeight: theme.typography.fontWeight.caption,
-        },
+        }),
         style,
       ]}
     />
@@ -105,11 +105,7 @@ function ItemDescription({ ref, style, ...props }: ItemDescriptionProps) {
     <NativeText
       {...props}
       ref={ref}
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "bodySmall", "mutedForeground"), style]}
     />
   );
 }

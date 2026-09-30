@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS,
@@ -69,5 +69,29 @@ describe("AnimatedText", () => {
     );
 
     expect(screen.getByLabelText("GLYPH")).toBeVisible();
+  });
+
+  it("loads and splits by code point without Intl.Segmenter", async () => {
+    const { Segmenter } = Intl;
+    Reflect.deleteProperty(Intl, "Segmenter");
+    vi.resetModules();
+    try {
+      const module = await import("./animated-text");
+      render(
+        <module.AnimatedText
+          splitBy="character"
+          text="a😀b"
+          variant="reveal"
+        />,
+      );
+      expect(screen.getByLabelText("a😀b")).toBeVisible();
+      expect(screen.getByText("😀")).toBeInTheDocument();
+    } finally {
+      Object.defineProperty(Intl, "Segmenter", {
+        configurable: true,
+        value: Segmenter,
+        writable: true,
+      });
+    }
   });
 });

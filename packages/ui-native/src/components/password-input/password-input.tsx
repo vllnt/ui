@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 
@@ -67,13 +68,10 @@ function PasswordInput({
         style={styles.toggle}
       >
         <NativeText
-          style={[
-            theme.typography.scale.caption,
-            {
-              color: theme.colors.mutedForeground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "caption", {
+            color: "mutedForeground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {label}
         </NativeText>

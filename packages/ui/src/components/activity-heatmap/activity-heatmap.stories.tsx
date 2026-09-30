@@ -36,14 +36,5 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const TwoWeeks: Story = {
-  args: {
-    weeks: 2,
-  },
-};
-
-export const HeadingOverride: Story = {
-  args: {
-    as: "h2",
-  },
-};
+export const TwoWeeks: Story = { args: { weeks: 2 } };
+export const HeadingOverride: Story = { args: { as: "h2" } };

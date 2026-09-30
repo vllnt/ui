@@ -34,14 +34,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Faint: Story = {
-  args: { opacity: 0.2 },
-};
-
-export const Bold: Story = {
-  args: { opacity: 0.7 },
-};
-
-export const Glyphless: Story = {
-  args: { kind: undefined, label: "anon" },
-};
+export const Faint: Story = { args: { opacity: 0.2 } };
+export const Bold: Story = { args: { opacity: 0.7 } };
+export const Glyphless: Story = { args: { kind: undefined, label: "anon" } };

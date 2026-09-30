@@ -37,9 +37,4 @@ export const AllTiers: Story = {
   ),
 };
 
-export const Trial: Story = {
-  args: {
-    state: "trial",
-    tier: "starter",
-  },
-};
+export const Trial: Story = { args: { state: "trial", tier: "starter" } };

@@ -23,8 +23,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Fast: Story = {
-  args: {
-    speedSeconds: 18,
-  },
-};
+export const Fast: Story = { args: { speedSeconds: 18 } };

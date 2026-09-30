@@ -7,7 +7,11 @@ import {
   ModalLayer,
   type ModalLayerCloseReason,
 } from "../../primitives/modal-layer";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -58,13 +62,7 @@ function Tooltip({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
@@ -87,12 +85,7 @@ function Tooltip({
         ]}
       >
         {typeof trigger === "string" || typeof trigger === "number" ? (
-          <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              { color: theme.colors.foreground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {trigger}
           </Text>
         ) : (
@@ -122,23 +115,15 @@ function Tooltip({
         >
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodySmall,
-              {
-                color: theme.colors.popoverForeground,
-                fontWeight: theme.typography.fontWeight.caption,
-              },
-            ]}
+            style={typeStyle(theme, "bodySmall", {
+              color: "popoverForeground",
+              fontWeight: theme.typography.fontWeight.caption,
+            })}
           >
             {label}
           </Text>
           {typeof children === "string" || typeof children === "number" ? (
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.popoverForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "popoverForeground")}>
               {children}
             </Text>
           ) : (

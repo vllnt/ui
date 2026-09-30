@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/experimental-ct-react";
 
-import { SidebarProvider } from "../sidebar-provider";
+import { SidebarProvider } from "../sidebar-provider/sidebar-provider";
 import { Sidebar } from "./sidebar";
 
 const sampleSections = [

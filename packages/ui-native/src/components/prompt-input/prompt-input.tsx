@@ -13,6 +13,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Explicit availability of the service receiving a prompt. */
@@ -177,8 +178,10 @@ function PromptField({
       scrollEnabled={state.contentHeight >= state.maxHeight}
       style={[
         styles.input,
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.foreground, height: state.contentHeight },
+        ...typeStyle(theme, "bodySmall", {
+          color: "foreground",
+          height: state.contentHeight,
+        }),
         inputProps?.style,
       ]}
       submitBehavior={submitBehavior}
@@ -218,12 +221,7 @@ function PromptAction({
         pressed ? styles.pressed : undefined,
       ]}
     >
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.primaryForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "primaryForeground")}>
         {label}
       </Text>
     </Pressable>
@@ -284,10 +282,7 @@ function PromptFooter({
       {unavailableMessage ? (
         <Text
           accessibilityLiveRegion="polite"
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.destructive },
-          ]}
+          style={typeStyle(theme, "caption", "destructive")}
         >
           {unavailableMessage}
         </Text>

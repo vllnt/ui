@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { PolicyDeliveryPanel } from "./policy-delivery-panel";
 
 const noop = (): void => undefined;
@@ -30,13 +32,7 @@ const meta = {
     ],
   },
   component: PolicyDeliveryPanel,
-  decorators: [
-    (Story) => (
-      <div className="w-72">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72")],
   title: "Canvas/PolicyDeliveryPanel",
 } satisfies Meta<typeof PolicyDeliveryPanel>;
 
@@ -45,9 +41,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { policies: [] },
-};
+export const Empty: Story = { args: { policies: [] } };
 
 export const AllEnforced: Story = {
   args: {

@@ -26,25 +26,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const OnlyPrevious: Story = {
-  args: {
-    next: undefined,
-    previous: FOO,
-  },
-};
-
-export const OnlyNext: Story = {
-  args: {
-    next: BAR,
-    previous: undefined,
-  },
-};
-
-export const Compact: Story = {
-  args: {
-    variant: "compact",
-  },
-};
+export const OnlyPrevious: Story = { args: { next: undefined, previous: FOO } };
+export const OnlyNext: Story = { args: { next: BAR, previous: undefined } };
+export const Compact: Story = { args: { variant: "compact" } };
 
 export const WithMeta: Story = {
   args: {

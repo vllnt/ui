@@ -126,25 +126,69 @@ export type StepByStepProps = {
   title?: string;
 };
 
-// eslint-disable-next-line max-lines-per-function -- Complex component with interactive/non-interactive modes
-function StepByStep({
-  as: Heading = "h3",
-  children,
-  className,
-  interactive = false,
-  title,
-}: StepByStepProps): React.ReactNode {
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
-  const steps = Array.isArray(children) ? children : [children];
+// Object.assign (not `StepByStep.Step = Step`) keeps the emitted d.ts free of
+// a namespace member that shadows `Step` (TS2502 under skipLibCheck: false).
+const StepByStep = Object.assign(
+  // eslint-disable-next-line max-lines-per-function -- Complex component with interactive/non-interactive modes
+  function StepByStep({
+    as: Heading = "h3",
+    children,
+    className,
+    interactive = false,
+    title,
+  }: StepByStepProps): React.ReactNode {
+    const [completedSteps, setCompletedSteps] = useState<Set<number>>(
+      new Set(),
+    );
+    const steps = Array.isArray(children) ? children : [children];
 
-  const toggleStep = (index: number): void => {
-    const newCompleted = new Set(completedSteps);
-    if (newCompleted.has(index)) newCompleted.delete(index);
-    else newCompleted.add(index);
-    setCompletedSteps(newCompleted);
-  };
+    const toggleStep = (index: number): void => {
+      const newCompleted = new Set(completedSteps);
+      if (newCompleted.has(index)) newCompleted.delete(index);
+      else newCompleted.add(index);
+      setCompletedSteps(newCompleted);
+    };
 
-  if (!interactive) {
+    if (!interactive) {
+      return (
+        <div className={cn("my-6", className)}>
+          {title ? (
+            <div className="flex items-center gap-2 mb-4">
+              <svg
+                className="size-5 text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="m9 18 6-6-6-6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                />
+              </svg>
+              <Heading className="font-semibold text-lg">{title}</Heading>
+            </div>
+          ) : null}
+          <div className="space-y-0">
+            {steps.map((step, index) => {
+              const stepElement = step as React.ReactElement<StepProps>;
+              const stepKey = `${stepElement.props.title}-${index + 1}`;
+              return (
+                <Step
+                  key={stepKey}
+                  number={index + 1}
+                  title={stepElement.props.title}
+                >
+                  {stepElement.props.children}
+                </Step>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={cn("my-6", className)}>
         {title ? (
@@ -162,71 +206,32 @@ function StepByStep({
                 strokeWidth={2}
               />
             </svg>
-            <Heading className="font-semibold text-lg">{title}</Heading>
+            <h3 className="font-semibold text-lg">{title}</h3>
+            <span className="text-xs text-muted-foreground ml-auto">
+              {completedSteps.size}/{steps.length} completed
+            </span>
           </div>
         ) : null}
         <div className="space-y-0">
-          {steps.map((step, index) => {
-            const stepElement = step as React.ReactElement<StepProps>;
-            const stepKey = `${stepElement.props.title}-${index + 1}`;
-            return (
-              <Step
-                key={stepKey}
-                number={index + 1}
-                title={stepElement.props.title}
-              >
-                {stepElement.props.children}
-              </Step>
-            );
-          })}
+          {steps.map((step, index) => (
+            <InteractiveStep
+              isCompleted={completedSteps.has(index)}
+              isLast={index === steps.length - 1}
+              key={`${(step as React.ReactElement<StepProps>).props.title}-${index + 1}`}
+              onToggle={() => {
+                toggleStep(index);
+              }}
+              stepNumber={index + 1}
+              title={(step as React.ReactElement<StepProps>).props.title}
+            >
+              {(step as React.ReactElement<StepProps>).props.children}
+            </InteractiveStep>
+          ))}
         </div>
       </div>
     );
-  }
-
-  return (
-    <div className={cn("my-6", className)}>
-      {title ? (
-        <div className="flex items-center gap-2 mb-4">
-          <svg
-            className="size-5 text-primary"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="m9 18 6-6-6-6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-            />
-          </svg>
-          <h3 className="font-semibold text-lg">{title}</h3>
-          <span className="text-xs text-muted-foreground ml-auto">
-            {completedSteps.size}/{steps.length} completed
-          </span>
-        </div>
-      ) : null}
-      <div className="space-y-0">
-        {steps.map((step, index) => (
-          <InteractiveStep
-            isCompleted={completedSteps.has(index)}
-            isLast={index === steps.length - 1}
-            key={`${(step as React.ReactElement<StepProps>).props.title}-${index + 1}`}
-            onToggle={() => {
-              toggleStep(index);
-            }}
-            stepNumber={index + 1}
-            title={(step as React.ReactElement<StepProps>).props.title}
-          >
-            {(step as React.ReactElement<StepProps>).props.children}
-          </InteractiveStep>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-StepByStep.Step = Step;
+  },
+  { Step },
+);
 
 export { Step, StepByStep };

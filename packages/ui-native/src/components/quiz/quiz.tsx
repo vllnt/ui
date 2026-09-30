@@ -10,7 +10,11 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** One answer choice for a native quiz. */
@@ -87,35 +91,13 @@ function Quiz({
   const theme = useTheme();
   const generatedId = useId();
   const [activeId, setActiveId] = useControllableState(
-    selectedId === undefined
-      ? {
-          defaultValue: defaultSelectedId,
-          mode: "uncontrolled",
-          onChange: onSelectedIdChange,
-        }
-      : { mode: "controlled", onChange: onSelectedIdChange, value: selectedId },
+    controllableOptions(selectedId, defaultSelectedId, onSelectedIdChange),
   );
   const [isSubmitted, setSubmitted] = useControllableState(
-    submitted === undefined
-      ? {
-          defaultValue: defaultSubmitted,
-          mode: "uncontrolled",
-          onChange: onSubmittedChange,
-        }
-      : { mode: "controlled", onChange: onSubmittedChange, value: submitted },
+    controllableOptions(submitted, defaultSubmitted, onSubmittedChange),
   );
   const [isHintVisible, setHintVisible] = useControllableState(
-    hintVisible === undefined
-      ? {
-          defaultValue: defaultHintVisible,
-          mode: "uncontrolled",
-          onChange: onHintVisibleChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onHintVisibleChange,
-          value: hintVisible,
-        },
+    controllableOptions(hintVisible, defaultHintVisible, onHintVisibleChange),
   );
   const selectedOption = options.find((option) => option.id === activeId);
   const isCorrect = selectedOption?.correct === true;
@@ -144,13 +126,10 @@ function Quiz({
       <Text
         accessibilityRole="header"
         nativeID={`${generatedId}-question`}
-        style={[
-          theme.typography.scale.bodyLarge,
-          {
-            color: theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.heading,
-          },
-        ]}
+        style={typeStyle(theme, "bodyLarge", {
+          color: "foreground",
+          fontWeight: theme.typography.fontWeight.heading,
+        })}
       >
         {question}
       </Text>
@@ -193,26 +172,20 @@ function Quiz({
               ]}
             >
               <Text
-                style={[
-                  theme.typography.scale.bodySmall,
-                  {
-                    color: incorrectSelection
-                      ? theme.colors.destructive
-                      : theme.colors.foreground,
-                  },
-                ]}
+                style={typeStyle(
+                  theme,
+                  "bodySmall",
+                  incorrectSelection ? "destructive" : "foreground",
+                )}
               >
                 {option.label}
               </Text>
               {isSubmitted && option.explanation ? (
                 <Text
-                  style={[
-                    theme.typography.scale.caption,
-                    {
-                      color: theme.colors.mutedForeground,
-                      marginTop: theme.spacing[2],
-                    },
-                  ]}
+                  style={typeStyle(theme, "caption", {
+                    color: "mutedForeground",
+                    marginTop: theme.spacing[2],
+                  })}
                 >
                   {option.explanation}
                 </Text>
@@ -231,20 +204,10 @@ function Quiz({
               padding: theme.spacing[3],
             }}
           >
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {labels.hint}
             </Text>
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {hint}
             </Text>
           </View>
@@ -256,12 +219,7 @@ function Quiz({
             }}
             style={styles.action}
           >
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.hint}
             </Text>
           </Pressable>
@@ -282,26 +240,16 @@ function Quiz({
           }}
         >
           <Text
-            style={[
-              theme.typography.scale.bodySmall,
-              {
-                color: isCorrect
-                  ? theme.colors.foreground
-                  : theme.colors.destructive,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "bodySmall", {
+              color: isCorrect ? "foreground" : "destructive",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {isCorrect ? labels.correct : labels.incorrect}
           </Text>
           {typeof explanation === "string" ||
           typeof explanation === "number" ? (
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {explanation}
             </Text>
           ) : (
@@ -330,12 +278,7 @@ function Quiz({
           },
         ]}
       >
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.primaryForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "primaryForeground")}>
           {isSubmitted ? labels.tryAgain : labels.checkAnswer}
         </Text>
       </Pressable>

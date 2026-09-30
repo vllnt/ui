@@ -9,7 +9,11 @@ import {
   type View,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native visual treatments for a toggle action. */
@@ -52,26 +56,15 @@ function Toggle({
 }: ToggleProps) {
   const theme = useTheme();
   const [isPressed, setIsPressed] = useControllableState(
-    pressed === undefined
-      ? {
-          defaultValue: defaultPressed,
-          mode: "uncontrolled",
-          onChange: onPressedChange,
-        }
-      : { mode: "controlled", onChange: onPressedChange, value: pressed },
+    controllableOptions(pressed, defaultPressed, onPressedChange),
   );
   const content =
     typeof children === "number" || typeof children === "string" ? (
       <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: isPressed
-              ? theme.colors.accentForeground
-              : theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: isPressed ? "accentForeground" : "foreground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {children}
       </NativeText>

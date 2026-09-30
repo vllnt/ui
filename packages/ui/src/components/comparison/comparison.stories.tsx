@@ -35,8 +35,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const HeadingOverride: Story = {
-  args: {
-    as: "h2",
-  },
-};
+export const HeadingOverride: Story = { args: { as: "h2" } };

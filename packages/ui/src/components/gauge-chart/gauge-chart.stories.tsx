@@ -20,10 +20,5 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { label: "Idle", value: 0 },
-};
-
-export const Full: Story = {
-  args: { label: "Capacity", value: 100 },
-};
+export const Empty: Story = { args: { label: "Idle", value: 0 } };
+export const Full: Story = { args: { label: "Capacity", value: 100 } };

@@ -4,9 +4,21 @@ import * as React from "react";
 
 import { cn } from "../../lib/utils";
 
-const GLYPH_SEGMENTER = new Intl.Segmenter(undefined, {
-  granularity: "grapheme",
-});
+const glyphSegmenterCache: { segmenter?: Intl.Segmenter | null } = {};
+
+/** Splits by grapheme when `Intl.Segmenter` exists, otherwise by code point. */
+function splitGlyphs(text: string): string[] {
+  if (glyphSegmenterCache.segmenter === undefined) {
+    glyphSegmenterCache.segmenter =
+      typeof Intl.Segmenter === "function"
+        ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+        : null;
+  }
+  const { segmenter } = glyphSegmenterCache;
+  return segmenter
+    ? Array.from(segmenter.segment(text), ({ segment }) => segment)
+    : (text.match(/./gsu) ?? []);
+}
 
 const ASCII_RANDOM_CHARACTERS = Array.from({ length: 94 }, (_, index) =>
   String.fromCodePoint(index + 33),
@@ -61,14 +73,14 @@ export type AnimatedTextProps = React.ComponentPropsWithoutRef<"p"> & {
 
 function getSegments(text: string, splitBy: AnimatedTextSplit): string[] {
   if (splitBy === "character") {
-    return Array.from(GLYPH_SEGMENTER.segment(text), ({ segment }) => segment);
+    return splitGlyphs(text);
   }
 
   return text.match(/\S+\s*/g) ?? [];
 }
 
 function getGlyphs(text: string): string[] {
-  return Array.from(GLYPH_SEGMENTER.segment(text), ({ segment }) => segment);
+  return splitGlyphs(text);
 }
 
 function getRandomMatrixGlyph(randomCharacters: string): string {

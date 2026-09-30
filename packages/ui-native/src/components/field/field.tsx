@@ -22,6 +22,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 import { Label } from "../label/label";
@@ -144,11 +145,7 @@ function FieldDescription({ ref, style, ...props }: FieldDescriptionProps) {
     <NativeText
       {...props}
       ref={ref}
-      style={[
-        theme.typography.scale.bodySmall,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
+      style={[...typeStyle(theme, "bodySmall", "mutedForeground"), style]}
     />
   );
 }
@@ -166,11 +163,10 @@ function FieldError({ children, ref, style, ...props }: FieldErrorProps) {
       accessibilityRole="alert"
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.destructive,
+        ...typeStyle(theme, "bodySmall", {
+          color: "destructive",
           fontWeight: theme.typography.fontWeight.caption,
-        },
+        }),
         style,
       ]}
     >

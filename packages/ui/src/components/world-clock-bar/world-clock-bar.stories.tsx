@@ -31,14 +31,5 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const TimeOnly: Story = {
-  args: {
-    showDate: false,
-  },
-};
-
-export const HeadingOverride: Story = {
-  args: {
-    as: "h2",
-  },
-};
+export const TimeOnly: Story = { args: { showDate: false } };
+export const HeadingOverride: Story = { args: { as: "h2" } };

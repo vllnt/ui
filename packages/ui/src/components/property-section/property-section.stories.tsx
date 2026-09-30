@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { type PropertyEntry, PropertySection } from "./property-section";
 
 const ENTRIES: PropertyEntry[] = [
@@ -12,13 +14,7 @@ const ENTRIES: PropertyEntry[] = [
 const meta = {
   args: { entries: ENTRIES, title: "Layout" },
   component: PropertySection,
-  decorators: [
-    (Story) => (
-      <div className="w-72">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72")],
   title: "Canvas/PropertySection",
 } satisfies Meta<typeof PropertySection>;
 
@@ -34,5 +30,4 @@ export const WithSublabels: Story = {
 };
 
 export const Collapsible: Story = { args: { collapsible: true } };
-
 export const Untitled: Story = { args: { title: undefined } };

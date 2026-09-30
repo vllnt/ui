@@ -3,6 +3,11 @@ import { describe, expect, it } from "vitest";
 
 import { ChronoEvent, ChronologicalTimeline } from "./chronological-timeline";
 
+const renderHistory = (events: React.ReactNode) =>
+  render(
+    <ChronologicalTimeline title="History">{events}</ChronologicalTimeline>,
+  );
+
 describe("ChronologicalTimeline", () => {
   describe("rendering", () => {
     it("renders the title and event cards", () => {
@@ -28,10 +33,8 @@ describe("ChronologicalTimeline", () => {
     });
 
     it("uses the provided id for the article element", () => {
-      const { container } = render(
-        <ChronologicalTimeline title="History">
-          <ChronoEvent date="1957" id="sputnik" title="Sputnik 1" />
-        </ChronologicalTimeline>,
+      const { container } = renderHistory(
+        <ChronoEvent date="1957" id="sputnik" title="Sputnik 1" />,
       );
 
       expect(container.querySelector("#sputnik")).toBeInTheDocument();
@@ -72,20 +75,18 @@ describe("ChronologicalTimeline", () => {
 
   describe("media", () => {
     it("renders an image with alt text", () => {
-      render(
-        <ChronologicalTimeline title="History">
-          <ChronoEvent
-            date="1957"
-            id="sputnik"
-            media={{
-              alt: "Sputnik satellite",
-              credit: "NASA",
-              src: "/sputnik.jpg",
-              type: "image",
-            }}
-            title="Sputnik 1"
-          />
-        </ChronologicalTimeline>,
+      renderHistory(
+        <ChronoEvent
+          date="1957"
+          id="sputnik"
+          media={{
+            alt: "Sputnik satellite",
+            credit: "NASA",
+            src: "/sputnik.jpg",
+            type: "image",
+          }}
+          title="Sputnik 1"
+        />,
       );
 
       const image = screen.getByAltText("Sputnik satellite");
@@ -94,19 +95,17 @@ describe("ChronologicalTimeline", () => {
     });
 
     it("renders a video iframe with the title attribute", () => {
-      const { container } = render(
-        <ChronologicalTimeline title="History">
-          <ChronoEvent
-            date="1969"
-            id="apollo"
-            media={{
-              src: "https://example.test/embed/abc",
-              title: "Apollo 11 footage",
-              type: "video",
-            }}
-            title="Apollo 11"
-          />
-        </ChronologicalTimeline>,
+      const { container } = renderHistory(
+        <ChronoEvent
+          date="1969"
+          id="apollo"
+          media={{
+            src: "https://example.test/embed/abc",
+            title: "Apollo 11 footage",
+            type: "video",
+          }}
+          title="Apollo 11"
+        />,
       );
 
       const iframe = container.querySelector("iframe");
@@ -115,19 +114,17 @@ describe("ChronologicalTimeline", () => {
     });
 
     it("renders an audio control with aria-label from alt", () => {
-      const { container } = render(
-        <ChronologicalTimeline title="History">
-          <ChronoEvent
-            date="1969"
-            id="apollo"
-            media={{
-              alt: "Mission audio",
-              src: "/apollo.mp3",
-              type: "audio",
-            }}
-            title="Apollo 11"
-          />
-        </ChronologicalTimeline>,
+      const { container } = renderHistory(
+        <ChronoEvent
+          date="1969"
+          id="apollo"
+          media={{
+            alt: "Mission audio",
+            src: "/apollo.mp3",
+            type: "audio",
+          }}
+          title="Apollo 11"
+        />,
       );
 
       const audio = container.querySelector("audio");

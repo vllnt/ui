@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { RoutingAssignmentPanel } from "./routing-assignment-panel";
 
 const noop = (): void => undefined;
@@ -25,13 +27,7 @@ const meta = {
     ],
   },
   component: RoutingAssignmentPanel,
-  decorators: [
-    (Story) => (
-      <div className="w-72">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("w-72")],
   title: "Canvas/RoutingAssignmentPanel",
 } satisfies Meta<typeof RoutingAssignmentPanel>;
 
@@ -40,9 +36,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Empty: Story = {
-  args: { assignments: [] },
-};
+export const Empty: Story = { args: { assignments: [] } };
 
 export const PrimaryOnly: Story = {
   args: {

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { PresenceStack } from "./presence-stack";
 
 const noop = (): void => undefined;
@@ -18,13 +20,7 @@ const meta = {
     ],
   },
   component: PresenceStack,
-  decorators: [
-    (Story) => (
-      <div className="bg-muted/30 p-4">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("bg-muted/30 p-4")],
   title: "Canvas/PresenceStack",
 } satisfies Meta<typeof PresenceStack>;
 
@@ -41,12 +37,7 @@ export const Solo: Story = {
   },
 };
 
-export const NoOverflow: Story = {
-  args: {
-    max: 10,
-    onOverflowActivate: undefined,
-  },
-};
+export const NoOverflow: Story = { args: { max: 10, onOverflowActivate: undefined } };
 
 export const AllAway: Story = {
   args: {

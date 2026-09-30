@@ -6,6 +6,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Semantic tone for a native Callout. */
@@ -92,12 +93,7 @@ function Callout({
             {displayTitle}
           </NativeText>
           {typeof children === "string" || typeof children === "number" ? (
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {children}
             </NativeText>
           ) : (

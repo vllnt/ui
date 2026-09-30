@@ -7,7 +7,7 @@ import {
 } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { SidebarProvider } from "../sidebar-provider";
+import { SidebarProvider } from "../sidebar-provider/sidebar-provider";
 
 import { NavbarSaas, type NavbarSaasProps } from "./navbar-saas";
 

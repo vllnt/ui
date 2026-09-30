@@ -37,17 +37,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Untitled: Story = {
-  args: { title: undefined },
-};
-
-export const BottomLeft: Story = {
-  args: {
-    anchor: "bottom-left",
-    x: 80,
-    y: 160,
-  },
-};
+export const Untitled: Story = { args: { title: undefined } };
+export const BottomLeft: Story = { args: { anchor: "bottom-left", x: 80, y: 160 } };
 
 export const Healthy: Story = {
   args: {

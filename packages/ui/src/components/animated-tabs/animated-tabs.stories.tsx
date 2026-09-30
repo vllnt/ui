@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { withWrapper } from "../../../.storybook/decorators";
+
 import { AnimatedTabs } from "./animated-tabs";
 
 const meta = {
@@ -11,13 +13,7 @@ const meta = {
     ],
   },
   component: AnimatedTabs,
-  decorators: [
-    (Story) => (
-      <div className="flex min-h-40 items-center justify-center p-10">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [withWrapper("flex min-h-40 items-center justify-center p-10")],
   title: "Effects/AnimatedTabs",
 } satisfies Meta<typeof AnimatedTabs>;
 
@@ -26,8 +22,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const SecondActive: Story = {
-  args: {
-    defaultValue: "activity",
-  },
-};
+export const SecondActive: Story = { args: { defaultValue: "activity" } };

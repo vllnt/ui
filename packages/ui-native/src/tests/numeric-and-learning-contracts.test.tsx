@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Animated, StyleSheet, Text, View } from "react-native";
 
 import { Meter } from "../components/meter/meter";
@@ -19,10 +19,9 @@ import {
 import { RevealText } from "../components/reveal-text/reveal-text";
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 
-const reducedMotionService: ReducedMotionService = {
-  addEventListener: () => ({ remove: jest.fn() }),
-  isReduceMotionEnabled: () => new Promise(() => void 0),
-};
+import { flushMicrotasks, reducedMotion } from "./test-utils";
+
+const reducedMotionService = reducedMotion("pending");
 const ratingLabels = {
   option: (value: number) => `Rate ${value}`,
   value: (value: number, max: number) => `${value} of ${max}`,
@@ -167,9 +166,7 @@ describe("M–R follow-up regressions", () => {
           value={5}
         />,
       );
-      await act(async () => {
-        await Promise.resolve();
-      });
+      await flushMicrotasks();
       expect(delay).toHaveBeenLastCalledWith(0);
       expect(timing).toHaveBeenLastCalledWith(
         expect.any(Animated.Value),

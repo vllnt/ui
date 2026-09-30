@@ -15,7 +15,11 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -102,13 +106,7 @@ function KeyboardShortcutsHelp({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
@@ -147,13 +145,10 @@ function KeyboardShortcutsHelp({
         <View style={styles.header}>
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodyLarge,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "bodyLarge", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {labels.title}
           </Text>
@@ -170,12 +165,7 @@ function KeyboardShortcutsHelp({
             </Text>
           </Pressable>
         </View>
-        <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.hardwareKeyboardGuidance}
         </Text>
         <ScrollView contentContainerStyle={{ gap: theme.spacing[2] }}>
@@ -187,10 +177,10 @@ function KeyboardShortcutsHelp({
               style={[styles.row, { gap: theme.spacing[3] }]}
             >
               <Text
-                style={[
-                  theme.typography.scale.bodySmall,
-                  { color: theme.colors.mutedForeground, flex: 1 },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: "mutedForeground",
+                  flex: 1,
+                })}
               >
                 {shortcut.description}
               </Text>
@@ -212,12 +202,7 @@ function KeyboardShortcutsHelp({
                       },
                     ]}
                   >
-                    <Text
-                      style={[
-                        theme.typography.scale.caption,
-                        { color: theme.colors.foreground },
-                      ]}
-                    >
+                    <Text style={typeStyle(theme, "caption", "foreground")}>
                       {key}
                     </Text>
                   </View>

@@ -2,8 +2,8 @@ import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { z } from "zod";
 
-import { Button } from "../button";
-import { Input } from "../input";
+import { Button } from "../button/button";
+import { Input } from "../input/input";
 import {
   Form,
   FormControl,
@@ -110,8 +110,4 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const ServerError: Story = {
-  args: {
-    serverError: true,
-  },
-};
+export const ServerError: Story = { args: { serverError: true } };

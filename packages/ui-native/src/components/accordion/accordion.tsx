@@ -11,7 +11,11 @@ import {
 
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
 import {
@@ -106,13 +110,7 @@ function Accordion({
 }: AccordionProps) {
   const theme = useTheme();
   const [expandedIds, setExpandedIds] = useControllableState(
-    openIds === undefined
-      ? {
-          defaultValue: defaultOpenIds,
-          mode: "uncontrolled",
-          onChange: onOpenIdsChange,
-        }
-      : { mode: "controlled", onChange: onOpenIdsChange, value: openIds },
+    controllableOptions(openIds, defaultOpenIds, onOpenIdsChange),
   );
   const toggle = useCallback(
     (id: string) => {
@@ -214,13 +212,10 @@ function AccordionTrigger({
     >
       <View style={styles.triggerContent}>
         <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.cardForeground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "cardForeground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {label}
         </Text>

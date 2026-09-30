@@ -17,7 +17,11 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a stable native instructional step. */
@@ -82,13 +86,10 @@ function Step({ children, number, ref, style, title, ...props }: StepProps) {
         ]}
       >
         <Text
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.primaryForeground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "primaryForeground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {number}
         </Text>
@@ -102,13 +103,10 @@ function Step({ children, number, ref, style, title, ...props }: StepProps) {
       >
         <Text
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodyLarge,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodyLarge", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {title}
         </Text>
@@ -137,17 +135,11 @@ function StepByStepRoot({
     isValidElement<StepProps>(child),
   );
   const [completedIds, setCompletedIds] = useControllableState(
-    completedStepIds === undefined
-      ? {
-          defaultValue: defaultCompletedStepIds,
-          mode: "uncontrolled",
-          onChange: onCompletedStepIdsChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onCompletedStepIdsChange,
-          value: completedStepIds,
-        },
+    controllableOptions(
+      completedStepIds,
+      defaultCompletedStepIds,
+      onCompletedStepIdsChange,
+    ),
   );
   const currentCompletedIds = [...new Set(completedIds)].filter((id) =>
     steps.some((step) => step.props.id === id),
@@ -161,23 +153,15 @@ function StepByStepRoot({
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.h4,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "h4", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {title}
           </Text>
           {interactive && labels ? (
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {labels.progress(currentCompletedIds.length, steps.length)}
             </Text>
           ) : null}
@@ -235,13 +219,10 @@ function StepByStepRoot({
                   ]}
                 >
                   <Text
-                    style={[
-                      theme.typography.scale.bodySmall,
-                      {
-                        color: theme.colors.primaryForeground,
-                        fontWeight: theme.typography.fontWeight.heading,
-                      },
-                    ]}
+                    style={typeStyle(theme, "bodySmall", {
+                      color: "primaryForeground",
+                      fontWeight: theme.typography.fontWeight.heading,
+                    })}
                   >
                     {completed ? "✓" : (number ?? index + 1)}
                   </Text>
@@ -256,14 +237,11 @@ function StepByStepRoot({
               >
                 <Text
                   accessibilityRole="header"
-                  style={[
-                    theme.typography.scale.bodyLarge,
-                    {
-                      color: theme.colors.foreground,
-                      fontWeight: theme.typography.fontWeight.heading,
-                      textDecorationLine: completed ? "line-through" : "none",
-                    },
-                  ]}
+                  style={typeStyle(theme, "bodyLarge", {
+                    color: "foreground",
+                    fontWeight: theme.typography.fontWeight.heading,
+                    textDecorationLine: completed ? "line-through" : "none",
+                  })}
                 >
                   {stepTitle}
                 </Text>

@@ -9,7 +9,11 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
 export type ExerciseDifficulty = "easy" | "hard" | "medium";
@@ -89,14 +93,11 @@ function ExerciseAction({
       ]}
     >
       <Text
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: selected
-              ? theme.colors.primaryForeground
-              : theme.colors.secondaryForeground,
-          },
-        ]}
+        style={typeStyle(
+          theme,
+          "bodySmall",
+          selected ? "primaryForeground" : "secondaryForeground",
+        )}
       >
         {label}
       </Text>
@@ -128,39 +129,17 @@ function Exercise({
 }: ExerciseProps) {
   const theme = useTheme();
   const [isCompleted, setCompleted] = useControllableState(
-    completed === undefined
-      ? {
-          defaultValue: defaultCompleted,
-          mode: "uncontrolled",
-          onChange: onCompletedChange,
-        }
-      : { mode: "controlled", onChange: onCompletedChange, value: completed },
+    controllableOptions(completed, defaultCompleted, onCompletedChange),
   );
   const [showHint, setHintVisible] = useControllableState(
-    hintVisible === undefined
-      ? {
-          defaultValue: defaultHintVisible,
-          mode: "uncontrolled",
-          onChange: onHintVisibleChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onHintVisibleChange,
-          value: hintVisible,
-        },
+    controllableOptions(hintVisible, defaultHintVisible, onHintVisibleChange),
   );
   const [showSolution, setSolutionVisible] = useControllableState(
-    solutionVisible === undefined
-      ? {
-          defaultValue: defaultSolutionVisible,
-          mode: "uncontrolled",
-          onChange: onSolutionVisibleChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onSolutionVisibleChange,
-          value: solutionVisible,
-        },
+    controllableOptions(
+      solutionVisible,
+      defaultSolutionVisible,
+      onSolutionVisibleChange,
+    ),
   );
 
   return (
@@ -183,22 +162,14 @@ function Exercise({
         <View style={{ flex: 1, gap: theme.spacing[1] }}>
           <Text
             accessibilityRole="header"
-            style={[
-              theme.typography.scale.bodyLarge,
-              {
-                color: theme.colors.foreground,
-                fontWeight: theme.typography.fontWeight.heading,
-              },
-            ]}
+            style={typeStyle(theme, "bodyLarge", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
           >
             {title}
           </Text>
-          <Text
-            style={[
-              theme.typography.scale.caption,
-              { color: theme.colors.mutedForeground },
-            ]}
-          >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
             {labels.difficulty[difficulty]}
           </Text>
         </View>
@@ -222,20 +193,10 @@ function Exercise({
               padding: theme.spacing[3],
             }}
           >
-            <Text
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
               {labels.hint}
             </Text>
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {hint}
             </Text>
           </View>
@@ -269,12 +230,7 @@ function Exercise({
                 padding: theme.spacing[4],
               }}
             >
-              <Text
-                style={[
-                  theme.typography.scale.caption,
-                  { color: theme.colors.mutedForeground },
-                ]}
-              >
+              <Text style={typeStyle(theme, "caption", "mutedForeground")}>
                 {labels.solution}
               </Text>
               {solution}

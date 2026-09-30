@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { TopBar } from "./top-bar";
-import { WorkspaceSwitcher } from "../workspace-switcher";
+import { WorkspaceSwitcher } from "../workspace-switcher/workspace-switcher";
 
 const meta = {
   component: TopBar,

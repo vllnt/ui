@@ -12,11 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const SingleMonth: Story = {
-  args: {
-    numberOfMonths: 1,
-  },
-};
+export const SingleMonth: Story = { args: { numberOfMonths: 1 } };
 
 export const Preselected: Story = {
   args: {

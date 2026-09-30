@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Button } from "../button/button";
 import { Heading } from "../heading/heading";
@@ -83,15 +84,10 @@ function SectionMarker({
       ]}
     >
       <NativeText
-        style={[
-          theme.typography.scale.caption,
-          {
-            color: completed
-              ? theme.colors.primaryForeground
-              : theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "caption", {
+          color: completed ? "primaryForeground" : "foreground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {completed ? "✓" : index + 1}
       </NativeText>
@@ -134,12 +130,11 @@ function ContentIntroSectionRow({
       <SectionMarker completed={completed} index={index} />
       <NativeText
         style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: completed
-              ? theme.colors.mutedForeground
-              : theme.colors.foreground,
-          },
+          ...typeStyle(
+            theme,
+            "bodySmall",
+            completed ? "mutedForeground" : "foreground",
+          ),
           completed ? styles.completedTitle : undefined,
         ]}
       >
@@ -212,12 +207,7 @@ function ContentIntroFooter({
         paddingTop: theme.spacing[4],
       }}
     >
-      <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <NativeText style={typeStyle(theme, "bodySmall", "mutedForeground")}>
         {hasProgress
           ? `${completedCount}/${sectionCount} completed`
           : `${sectionCount} sections · ${estimatedTime}`}
