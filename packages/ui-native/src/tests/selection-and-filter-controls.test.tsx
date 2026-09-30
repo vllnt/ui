@@ -120,7 +120,11 @@ it("mounts grouped controls and preserves stable selection callbacks", () => {
   fireEvent.press(screen.getByRole("radio", { name: "Red" }));
   fireEvent.press(screen.getByRole("radio", { name: "Ada" }));
   fireEvent.press(screen.getByRole("radio", { name: "List" }));
-  fireEvent.press(screen.getByRole("button", { name: "Native" }));
+  expect(screen.getByRole("togglebutton", { name: "Native" })).toHaveProp(
+    "accessibilityHint",
+    "Platforms",
+  );
+  fireEvent.press(screen.getByRole("togglebutton", { name: "Native" }));
   fireEvent.press(screen.getByRole("button", { name: "Remove Native" }));
 
   expect(onCategory).toHaveBeenCalledWith("open");

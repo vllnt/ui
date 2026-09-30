@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.8 },
 });
 
-/** Accessible native toggle action with selected-state semantics. */
+/** Accessible native toggle button exposing its pressed state as `checked`. */
 function Toggle({
   accessibilityState,
   children,
@@ -75,11 +75,11 @@ function Toggle({
   return (
     <Pressable
       {...props}
-      accessibilityRole="button"
+      accessibilityRole="togglebutton"
       accessibilityState={{
         ...accessibilityState,
+        checked: isPressed,
         disabled: disabled ?? undefined,
-        selected: isPressed,
       }}
       disabled={disabled}
       onPress={(event) => {

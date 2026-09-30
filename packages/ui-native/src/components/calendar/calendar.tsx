@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -26,6 +27,11 @@ export type CalendarLabels = {
 
 /** Props for a one-month native Gregorian calendar. */
 export type CalendarProps = Omit<ViewProps, "children"> & {
+  /**
+   * Extra spoken state for a day (for example "Range start"), read as the
+   * day button's value.
+   */
+  readonly describeDate?: (date: Date) => string | undefined;
   readonly disabled?: boolean;
   readonly isDateDisabled?: (date: Date) => boolean;
   readonly isDateSelected?: (date: Date) => boolean;
@@ -43,6 +49,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
     width: "14.2857%",
   },
+  disabled: { opacity: 0.5 },
   grid: { flexDirection: "row", flexWrap: "wrap" },
   header: {
     alignItems: "center",
@@ -97,8 +104,12 @@ function buildMonthDays(month: Date): readonly (Date | undefined)[] {
   ];
 }
 
-/** Token-driven native calendar with caller-localized labels and Date values. */
+/**
+ * Token-driven native calendar with caller-localized labels and Date values.
+ * The visible month header names the grid, and month changes are announced.
+ */
 function Calendar({
+  describeDate,
   disabled = false,
   isDateDisabled,
   isDateSelected,
@@ -131,9 +142,10 @@ function Calendar({
     if (month === undefined) setInternalMonth(next);
     onMonthChange?.(next);
   };
+  const monthLabel = labels.formatMonth(visibleMonth);
+  useAnnounceOnChange(monthLabel);
   return (
     <View
-      accessibilityLabel={labels.formatMonth(visibleMonth)}
       ref={ref}
       style={[
         { backgroundColor: theme.colors.background, gap: theme.spacing[1] },
@@ -150,7 +162,7 @@ function Calendar({
           onPress={() => {
             changeMonth(-1);
           }}
-          style={styles.monthAction}
+          style={[styles.monthAction, disabled ? styles.disabled : undefined]}
         >
           <NativeText style={{ color: theme.colors.foreground }}>‹</NativeText>
         </Pressable>
@@ -161,7 +173,7 @@ function Calendar({
             fontWeight: theme.typography.fontWeight.heading,
           })}
         >
-          {labels.formatMonth(visibleMonth)}
+          {monthLabel}
         </NativeText>
         <Pressable
           accessibilityLabel={labels.nextMonth}
@@ -171,7 +183,7 @@ function Calendar({
           onPress={() => {
             changeMonth(1);
           }}
-          style={styles.monthAction}
+          style={[styles.monthAction, disabled ? styles.disabled : undefined]}
         >
           <NativeText style={{ color: theme.colors.foreground }}>›</NativeText>
         </Pressable>
@@ -197,6 +209,11 @@ function Calendar({
                 disabled: dateDisabled,
                 selected: dateSelected,
               }}
+              accessibilityValue={
+                describeDate?.(date) === undefined
+                  ? undefined
+                  : { text: describeDate(date) }
+              }
               disabled={dateDisabled}
               key={`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`}
               onPress={() => {

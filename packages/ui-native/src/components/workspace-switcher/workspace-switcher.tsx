@@ -99,7 +99,6 @@ function WorkspaceSwitcher({
               accessibilityState={{
                 checked: active,
                 disabled: workspace.disabled,
-                selected: active,
               }}
               disabled={workspace.disabled}
               key={workspace.id}

@@ -141,7 +141,7 @@ it("normalizes invalid prompt row limits", () => {
       submitLabel="Send"
     />,
   );
-  expect(screen.getByLabelText("Prompt")).toHaveStyle({ height: 21 });
+  expect(screen.getByLabelText("Prompt")).toHaveStyle({ height: 44 });
 });
 
 it("sanitizes ticker inputs with motion enabled", async () => {

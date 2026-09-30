@@ -384,9 +384,9 @@ it("groups single list selection and limits navigation triggers to one action", 
       />
     </>,
   );
-  expect(screen.getByLabelText("Assignees")).toHaveProp(
-    "accessibilityRole",
-    "radiogroup",
+  expect(screen.getByRole("radio", { name: "Ada" })).toHaveProp(
+    "accessibilityHint",
+    "Assignees",
   );
   fireEvent.press(screen.getByRole("button", { name: "Products" }));
   expect(screen.getByText("Product links")).toBeOnTheScreen();
@@ -449,7 +449,10 @@ it("falls back after group avatar image failures and disables stray handles", ()
     </>,
   );
   expect(screen.queryByText("AD")).toBeNull();
-  fireEvent(screen.getByLabelText("Ada").findByType(Image), "error");
+  fireEvent(
+    screen.getByLabelText("Avatar group, Ada").findByType(Image),
+    "error",
+  );
   expect(screen.getByText("AD")).toBeOnTheScreen();
   expect(
     screen.getByRole("adjustable", { name: "Trailing handle" }),

@@ -5,6 +5,7 @@ import {
   type ReactNode,
   type Ref,
   use,
+  useCallback,
   useEffect,
   useId,
   useMemo,
@@ -22,15 +23,24 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  plainText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 import { Label } from "../label/label";
 
+type FieldTextPart = "description" | "error" | "label";
+type FieldTexts = Readonly<Partial<Record<FieldTextPart, string>>>;
 type FieldContextValue = {
   readonly invalid: boolean;
   readonly labelId?: string;
   readonly setLabelId: (id?: string) => void;
+  readonly setText: (part: FieldTextPart, text?: string) => void;
+  readonly texts: FieldTexts;
 };
 const FieldContext = createContext<FieldContextValue | null>(null);
 
@@ -39,6 +49,20 @@ function useField(): FieldContextValue {
   if (!context)
     throw new Error("Field subcomponents must be used within Field");
   return context;
+}
+
+/**
+ * Shares a part's plain text with the field so the control can speak it:
+ * VoiceOver ignores `accessibilityLabelledBy`, an Android prop.
+ */
+function useFieldText(part: FieldTextPart, text?: string) {
+  const { setText } = useField();
+  useEffect(() => {
+    setText(part, text);
+    return () => {
+      setText(part, undefined);
+    };
+  }, [part, setText, text]);
 }
 
 /** Props for a native field composition root. */
@@ -81,9 +105,15 @@ function Field({
 }: FieldProps) {
   const theme = useTheme();
   const [labelId, setLabelId] = useState<string>();
+  const [texts, setTexts] = useState<FieldTexts>({});
+  const setText = useCallback((part: FieldTextPart, text?: string) => {
+    setTexts((current) =>
+      current[part] === text ? current : { ...current, [part]: text },
+    );
+  }, []);
   const value = useMemo(
-    () => ({ invalid, labelId, setLabelId }),
-    [invalid, labelId],
+    () => ({ invalid, labelId, setLabelId, setText, texts }),
+    [invalid, labelId, setText, texts],
   );
   return (
     <FieldContext value={value}>
@@ -108,9 +138,10 @@ function Field({
 }
 Field.displayName = "Field";
 
-/** Visible label that reflects its field's invalid state. */
+/** Visible label that reflects its field's invalid state and names its control. */
 function FieldLabel({ nativeID, ref, ...props }: FieldLabelProps) {
   const { invalid, setLabelId } = useField();
+  useFieldText("label", plainText(props.children));
   const generatedId = useId();
   const resolvedId = nativeID ?? generatedId;
   useEffect(() => {
@@ -123,14 +154,28 @@ function FieldLabel({ nativeID, ref, ...props }: FieldLabelProps) {
 }
 FieldLabel.displayName = "FieldLabel";
 
-/** Native text input that reflects its field's invalid state. */
-function FieldControl({ ref, ...props }: FieldControlProps) {
-  const { invalid, labelId } = useField();
+/**
+ * Native text input named by its field label, with the description and the
+ * current error spoken as its hint on both platforms.
+ */
+function FieldControl({
+  accessibilityHint,
+  accessibilityLabel,
+  accessibilityLabelledBy,
+  ref,
+  ...props
+}: FieldControlProps) {
+  const { invalid, labelId, texts } = useField();
   return (
     <Input
       {...props}
-      accessibilityLabelledBy={props.accessibilityLabelledBy ?? labelId}
-      aria-invalid={invalid}
+      accessibilityHint={joinAccessibilityText([
+        invalid ? texts.error : undefined,
+        texts.description,
+        accessibilityHint,
+      ])}
+      accessibilityLabel={accessibilityLabel ?? texts.label}
+      accessibilityLabelledBy={accessibilityLabelledBy ?? labelId}
       ref={ref}
     />
   );
@@ -140,7 +185,7 @@ FieldControl.displayName = "FieldControl";
 /** Supporting text for a native field. */
 function FieldDescription({ ref, style, ...props }: FieldDescriptionProps) {
   const theme = useTheme();
-  useField();
+  useFieldText("description", plainText(props.children));
   return (
     <NativeText
       {...props}
@@ -151,10 +196,16 @@ function FieldDescription({ ref, style, ...props }: FieldDescriptionProps) {
 }
 FieldDescription.displayName = "FieldDescription";
 
-/** Error text announced when rendered inside an invalid field. */
+/**
+ * Error text for an invalid field, spoken by TalkBack through its live region
+ * and announced on iOS when it appears.
+ */
 function FieldError({ children, ref, style, ...props }: FieldErrorProps) {
   const theme = useTheme();
   const { invalid } = useField();
+  const message = invalid ? plainText(children) : undefined;
+  useFieldText("error", message);
+  useAnnounceOnChange(message, { initial: true, liveRegion: true });
   if (!invalid || children === undefined || children === null) return null;
   return (
     <NativeText

@@ -78,7 +78,6 @@ function AlertTitle({ ref, style, ...props }: AlertTitleProps) {
     <NativeText
       {...props}
       accessibilityRole="header"
-      aria-level={5}
       ref={ref}
       style={[
         ...typeStyle(theme, "body", {

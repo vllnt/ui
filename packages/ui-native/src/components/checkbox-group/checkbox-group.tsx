@@ -43,7 +43,11 @@ const styles = StyleSheet.create({
   wrap: { flexWrap: "wrap" },
 });
 
-/** Native related-checkbox group backed by stable caller IDs. */
+/**
+ * Native related-checkbox group backed by stable caller IDs. The group
+ * `label` is each checkbox's hint, because VoiceOver ignores labels on
+ * non-focusable containers.
+ */
 function CheckboxGroup({
   disabled = false,
   items,
@@ -59,8 +63,6 @@ function CheckboxGroup({
   const getId = (item: CheckboxGroupItem) => item.id;
   return (
     <View
-      accessibilityLabel={label}
-      accessibilityState={{ disabled }}
       ref={ref}
       style={[
         orientation === "horizontal"
@@ -75,6 +77,7 @@ function CheckboxGroup({
         const itemDisabled = disabled || item.disabled === true;
         return (
           <Pressable
+            accessibilityHint={label}
             accessibilityLabel={item.label}
             accessibilityRole="checkbox"
             accessibilityState={{ checked, disabled: itemDisabled }}

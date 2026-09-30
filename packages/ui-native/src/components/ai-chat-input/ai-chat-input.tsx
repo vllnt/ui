@@ -245,7 +245,7 @@ function ComposerShell({
         styles.root,
         {
           backgroundColor: theme.colors.background,
-          borderColor: theme.colors.border,
+          borderColor: theme.colors.input,
           borderRadius: theme.radius.lg,
           gap: theme.spacing[3],
           padding: theme.spacing[3],

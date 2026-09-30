@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useRevealFocus } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -66,10 +67,12 @@ const styles = StyleSheet.create({
 });
 
 function ExerciseAction({
+  expanded,
   label,
   onPress,
   selected = false,
 }: {
+  readonly expanded?: boolean;
   readonly label: string;
   readonly onPress: () => void;
   readonly selected?: boolean;
@@ -78,7 +81,7 @@ function ExerciseAction({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityState={{ selected }}
+      accessibilityState={expanded === undefined ? undefined : { expanded }}
       onPress={onPress}
       style={({ pressed }) => [
         styles.action,
@@ -106,7 +109,11 @@ function ExerciseAction({
 }
 ExerciseAction.displayName = "ExerciseAction";
 
-/** Native exercise surface with independently controllable completion and reveals. */
+/**
+ * Native exercise surface with independently controllable completion and
+ * reveals. The completion button's label states the action; the solution
+ * button reports `expanded`; revealing the hint moves screen-reader focus to it.
+ */
 function Exercise({
   children,
   completed,
@@ -141,6 +148,7 @@ function Exercise({
       onSolutionVisibleChange,
     ),
   );
+  const hintFocus = useRevealFocus<View>(showHint);
 
   return (
     <View
@@ -185,7 +193,9 @@ function Exercise({
       {hint ? (
         showHint ? (
           <View
-            accessibilityLiveRegion="polite"
+            accessibilityLabel={`${labels.hint}: ${hint}`}
+            accessible
+            ref={hintFocus.target}
             style={{
               backgroundColor: theme.colors.muted,
               borderRadius: theme.radius.md,
@@ -204,6 +214,7 @@ function Exercise({
           <ExerciseAction
             label={labels.showHint}
             onPress={() => {
+              hintFocus.request();
               setHintVisible(true);
             }}
           />
@@ -212,6 +223,7 @@ function Exercise({
       {solution ? (
         <View style={{ gap: theme.spacing[2] }}>
           <ExerciseAction
+            expanded={showSolution}
             label={showSolution ? labels.hideSolution : labels.showSolution}
             onPress={() => {
               setSolutionVisible(!showSolution);
@@ -220,7 +232,6 @@ function Exercise({
           />
           {showSolution ? (
             <View
-              accessibilityLiveRegion="polite"
               style={{
                 backgroundColor: theme.colors.background,
                 borderColor: theme.colors.border,

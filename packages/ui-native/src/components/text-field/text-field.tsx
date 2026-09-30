@@ -8,6 +8,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
@@ -47,10 +51,8 @@ function TextField({
   ...props
 }: TextFieldProps) {
   const theme = useTheme();
-  const hint =
-    [accessibilityHint, description, error]
-      .filter((value) => value !== undefined && value.length > 0)
-      .join(" ") || undefined;
+  const hint = joinAccessibilityText([error, description, accessibilityHint]);
+  useAnnounceOnChange(error, { liveRegion: true });
 
   return (
     <View
@@ -64,7 +66,6 @@ function TextField({
         accessibilityLabel={
           accessibilityLabel ?? (typeof label === "string" ? label : undefined)
         }
-        aria-invalid={error !== undefined}
         ref={ref}
       />
       {description ? (

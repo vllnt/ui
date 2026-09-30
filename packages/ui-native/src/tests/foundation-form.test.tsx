@@ -178,7 +178,10 @@ it("exposes input, switch, meter, and validation semantics", () => {
     screen.getByRole("progressbar", { name: "Storage used" }),
   ).toHaveAccessibilityValue({ max: 10, min: 0, now: 7, text: "7 GB" });
   expect(screen.getByRole("alert", { name: "Required" })).toBeOnTheScreen();
-  expect(screen.getByLabelText("Username")).toHaveProp("aria-invalid", true);
+  expect(screen.getByLabelText("Username")).toHaveProp(
+    "accessibilityHint",
+    "Already used. Public identifier",
+  );
   expect(screen.getByLabelText("Contact fields")).toBeDisabled();
 });
 
@@ -258,16 +261,14 @@ it("handles native form interactions and controlled state", () => {
   });
   expect(onInlineCommit).toHaveBeenCalledWith("Draft");
 
-  fireEvent.press(screen.getAllByRole("button", { name: "Increment" })[0]);
+  const [increment, disabledIncrement] = screen.getAllByRole("button", {
+    name: "Increment",
+  });
+  if (!increment || !disabledIncrement) throw new Error("Expected steppers.");
+  fireEvent.press(increment);
   expect(onNumberChange).toHaveBeenCalledWith(3);
-  fireEvent(
-    screen.UNSAFE_getByProps({
-      accessibilityLabel: "Disabled quantity",
-      accessibilityRole: "spinbutton",
-    }),
-    "accessibilityAction",
-    { nativeEvent: { actionName: "increment" } },
-  );
+  expect(disabledIncrement).toBeDisabled();
+  fireEvent.press(disabledIncrement);
   expect(onDisabledNumberChange).not.toHaveBeenCalled();
   fireEvent.press(screen.getByRole("button", { name: "Show password" }));
   expect(screen.getByLabelText("Password")).toHaveProp(

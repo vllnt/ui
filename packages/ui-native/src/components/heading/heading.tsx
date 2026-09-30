@@ -13,6 +13,11 @@ export type HeadingProps = Omit<
   NativeTextProps,
   "accessibilityRole" | "aria-level"
 > & {
+  /**
+   * Document level; selects the default visual size. VoiceOver and TalkBack
+   * expose React Native headings without a level, so screen readers do not
+   * speak it.
+   */
   readonly level?: HeadingLevel;
   readonly ref?: Ref<NativeTextInstance>;
   readonly size?: HeadingLevel;
@@ -34,7 +39,6 @@ function Heading({ level = 2, ref, size, style, ...props }: HeadingProps) {
     <NativeText
       {...props}
       accessibilityRole="header"
-      aria-level={level}
       ref={ref}
       style={[
         scale[size ?? level],

@@ -8,6 +8,8 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { joinAccessibilityText } from "../../primitives/accessibility";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -37,11 +39,10 @@ const styles = StyleSheet.create({
   root: { alignItems: "center", flexDirection: "row" },
 });
 
-function getDimensions(size: AvatarGroupSize) {
-  return {
-    diameter: { lg: 48, md: 40, sm: 32 }[size],
-    overlap: { lg: 16, md: 12, sm: 10 }[size],
-  };
+function useDimensions(size: AvatarGroupSize) {
+  const diameter = useFontScaledSize({ lg: 48, md: 40, sm: 32 }[size]);
+  const overlap = { lg: 16, md: 12, sm: 10 }[size];
+  return { diameter, overlap: Math.round(overlap * (diameter / 40)) };
 }
 
 function AvatarItem({
@@ -56,12 +57,10 @@ function AvatarItem({
   readonly total: number;
 }) {
   const theme = useTheme();
-  const dimensions = getDimensions(size);
+  const dimensions = useDimensions(size);
   const [failedSource, setFailedSource] = useState<ImageSourcePropType>();
   return (
     <View
-      accessibilityLabel={item.accessibilityLabel}
-      accessible
       style={[
         styles.avatar,
         {
@@ -96,19 +95,15 @@ AvatarItem.displayName = "AvatarItem";
 
 function AvatarOverflow({
   count,
-  label,
   size,
 }: {
   readonly count: number;
-  readonly label: string;
   readonly size: AvatarGroupSize;
 }) {
   const theme = useTheme();
-  const dimensions = getDimensions(size);
+  const dimensions = useDimensions(size);
   return (
     <View
-      accessibilityLabel={label}
-      accessible
       style={[
         styles.avatar,
         {
@@ -130,7 +125,11 @@ function AvatarOverflow({
 }
 AvatarOverflow.displayName = "AvatarOverflow";
 
-/** Native overlapping avatar group with caller-supplied stable ids. */
+/**
+ * Native overlapping avatar group with caller-supplied stable ids. The group is
+ * one screen-reader stop that speaks its label, every visible name, and the
+ * overflow count.
+ */
 function AvatarGroup({
   accessibilityLabel = "Avatar group",
   items,
@@ -152,8 +151,15 @@ function AvatarGroup({
   return (
     <View
       {...props}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="none"
+      accessibilityLabel={joinAccessibilityText(
+        [
+          accessibilityLabel,
+          ...visibleItems.map((item) => item.accessibilityLabel),
+          hiddenCount > 0 ? hiddenLabel : undefined,
+        ],
+        ", ",
+      )}
+      accessible
       ref={ref}
       style={[styles.root, style]}
     >
@@ -167,7 +173,7 @@ function AvatarGroup({
         />
       ))}
       {hiddenCount > 0 ? (
-        <AvatarOverflow count={hiddenCount} label={hiddenLabel} size={size} />
+        <AvatarOverflow count={hiddenCount} size={size} />
       ) : null}
     </View>
   );

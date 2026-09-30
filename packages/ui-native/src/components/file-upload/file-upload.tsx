@@ -10,6 +10,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  announce,
+  focusAccessibility,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import type {
   FilePickerService,
   PickedFile,
@@ -21,6 +26,11 @@ import { useTheme } from "../../theme/theme-provider";
 
 /** Localized copy required by FileUpload. */
 export type FileUploadLabels = {
+  /**
+   * Announcement after files are added; receives the added file names.
+   * Defaults to the comma-separated names.
+   */
+  readonly added?: (fileNames: readonly string[]) => string;
   readonly choose: string;
   readonly empty: string;
   readonly failed: string;
@@ -65,7 +75,11 @@ function uniqueFiles(files: readonly PickedFile[]): readonly PickedFile[] {
   );
 }
 
-/** Native file chooser requiring an injected host picker, with no false fallback. */
+/**
+ * Native file chooser requiring an injected host picker, with no false
+ * fallback. Added files and failures are announced; removing a file returns
+ * screen-reader focus to the choose action.
+ */
 function FileUpload({
   allowMultiple = true,
   disabled = false,
@@ -88,6 +102,8 @@ function FileUpload({
     setFiles(next);
   };
   const [failure, setFailure] = useState<string>();
+  useAnnounceOnChange(failure, { liveRegion: true });
+  const chooseRef = useRef<View>(null);
   const [busy, setBusy] = useState(false);
   const pending = useRef(false);
   const mounted = useRef(true);
@@ -123,11 +139,12 @@ function FileUpload({
         picked.length === 0
       )
         return;
+      const added = allowMultiple ? picked : picked.slice(0, 1);
       updateFiles(
-        uniqueFiles(
-          allowMultiple ? [...filesRef.current, ...picked] : picked.slice(0, 1),
-        ),
+        uniqueFiles(allowMultiple ? [...filesRef.current, ...added] : added),
       );
+      const names = added.map((file) => file.name);
+      announce(labels.added ? labels.added(names) : names.join(", "));
     } catch {
       if (mounted.current && request === generation.current)
         setFailure(labels.failed);
@@ -146,6 +163,7 @@ function FileUpload({
         onPress={() => {
           void choose();
         }}
+        ref={chooseRef}
         style={[
           styles.action,
           {
@@ -196,6 +214,7 @@ function FileUpload({
                 updateFiles(
                   filesRef.current.filter((item) => item.uri !== file.uri),
                 );
+                focusAccessibility(chooseRef);
               }}
               style={styles.remove}
             >

@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import {
   isSingleSelected,
   type SelectionKey,
@@ -43,6 +44,7 @@ export type RadioGroupItemProps = Omit<PressableProps, "children"> & {
 
 type RadioGroupContextValue = {
   readonly disabled: boolean;
+  readonly groupLabel?: string;
   readonly select: (value: SelectionKey) => void;
   readonly value?: SelectionKey;
 };
@@ -73,10 +75,16 @@ function identity(key: SelectionKey): SelectionKey {
   return key;
 }
 
-/** Native radio group using caller-owned item values for stable selection. */
+/**
+ * Native radio group using caller-owned item values for stable selection.
+ * VoiceOver ignores labels and state on non-focusable containers, so the
+ * group's `accessibilityLabel` becomes each radio's hint and `disabled`
+ * reaches every radio.
+ */
 function RadioGroup(groupProps: RadioGroupProps) {
   const {
-    accessibilityState,
+    accessibilityLabel,
+    accessibilityState: _accessibilityState,
     children,
     defaultValue,
     disabled = false,
@@ -99,12 +107,13 @@ function RadioGroup(groupProps: RadioGroupProps) {
   const context = useMemo<RadioGroupContextValue>(
     () => ({
       disabled: disabled ?? undefined,
+      groupLabel: accessibilityLabel,
       select(nextValue) {
         setSelectedValue(selectSingle(selectedValue, nextValue, identity));
       },
       value: selectedValue,
     }),
-    [disabled, selectedValue, setSelectedValue],
+    [accessibilityLabel, disabled, selectedValue, setSelectedValue],
   );
   const theme = useTheme();
 
@@ -112,10 +121,6 @@ function RadioGroup(groupProps: RadioGroupProps) {
     <View
       {...props}
       accessibilityRole="radiogroup"
-      accessibilityState={{
-        ...accessibilityState,
-        disabled: disabled ?? undefined,
-      }}
       ref={ref}
       style={[
         orientation === "horizontal" ? styles.horizontal : styles.vertical,
@@ -131,6 +136,7 @@ RadioGroup.displayName = "RadioGroup";
 
 /** Accessible native radio keyed by its required stable value prop. */
 function RadioGroupItem({
+  accessibilityHint,
   accessibilityState,
   children,
   disabled = false,
@@ -151,6 +157,7 @@ function RadioGroupItem({
   return (
     <Pressable
       {...props}
+      accessibilityHint={accessibilityHint ?? context.groupLabel}
       accessibilityRole="radio"
       accessibilityState={{
         ...accessibilityState,
@@ -173,8 +180,7 @@ function RadioGroupItem({
       ]}
     >
       <View
-        accessibilityElementsHidden
-        importantForAccessibility="no"
+        {...decorativeProps}
         style={[
           styles.indicator,
           {

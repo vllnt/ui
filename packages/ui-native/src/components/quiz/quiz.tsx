@@ -10,6 +10,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+  useRevealFocus,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -67,7 +72,12 @@ const styles = StyleSheet.create({
   root: { borderWidth: 1 },
 });
 
-/** Accessible native quiz with explicit controlled and uncontrolled state. */
+/**
+ * Accessible native quiz with explicit controlled and uncontrolled state.
+ * After submission each option speaks whether it is correct (not only its
+ * colour) and its explanation; the result is announced on both platforms;
+ * revealing the hint moves screen-reader focus to it.
+ */
 function Quiz({
   defaultHintVisible = false,
   defaultSelectedId = "",
@@ -101,6 +111,9 @@ function Quiz({
   );
   const selectedOption = options.find((option) => option.id === activeId);
   const isCorrect = selectedOption?.correct === true;
+  const result = isCorrect ? labels.correct : labels.incorrect;
+  useAnnounceOnChange(isSubmitted ? result : undefined, { liveRegion: true });
+  const hintFocus = useRevealFocus<View>(isHintVisible);
   const reset = () => {
     setActiveId("");
     setSubmitted(false);
@@ -133,21 +146,26 @@ function Quiz({
       >
         {question}
       </Text>
-      <View
-        accessibilityLabel={labels.options}
-        accessibilityRole="radiogroup"
-        aria-labelledby={`${generatedId}-question`}
-        style={{ gap: theme.spacing[2] }}
-      >
+      <View accessibilityRole="radiogroup" style={{ gap: theme.spacing[2] }}>
         {options.map((option, index) => {
           const selected = option.id === activeId;
           const correctAnswer = isSubmitted && option.correct === true;
           const incorrectSelection = isSubmitted && selected && !option.correct;
           return (
             <Pressable
+              accessibilityHint={
+                isSubmitted ? option.explanation : labels.options
+              }
               accessibilityLabel={labels.option(option, index)}
               accessibilityRole="radio"
               accessibilityState={{ checked: selected, disabled: isSubmitted }}
+              accessibilityValue={
+                correctAnswer
+                  ? { text: labels.correct }
+                  : incorrectSelection
+                    ? { text: labels.incorrect }
+                    : undefined
+              }
               disabled={isSubmitted}
               key={option.id}
               nativeID={`${generatedId}-option-${option.id}`}
@@ -197,7 +215,12 @@ function Quiz({
       {hint && !isSubmitted ? (
         isHintVisible ? (
           <View
-            accessibilityLiveRegion="polite"
+            accessibilityLabel={joinAccessibilityText(
+              [labels.hint, hint],
+              ": ",
+            )}
+            accessible
+            ref={hintFocus.target}
             style={{
               backgroundColor: theme.colors.muted,
               borderRadius: theme.radius.md,
@@ -215,6 +238,7 @@ function Quiz({
           <Pressable
             accessibilityRole="button"
             onPress={() => {
+              hintFocus.request();
               setHintVisible(true);
             }}
             style={styles.action}
@@ -227,9 +251,6 @@ function Quiz({
       ) : null}
       {isSubmitted ? (
         <View
-          accessibilityLabel={isCorrect ? labels.correct : labels.incorrect}
-          accessibilityLiveRegion="polite"
-          accessible
           style={{
             backgroundColor: isCorrect
               ? theme.colors.accent
@@ -240,12 +261,13 @@ function Quiz({
           }}
         >
           <Text
+            accessibilityLiveRegion="polite"
             style={typeStyle(theme, "bodySmall", {
               color: isCorrect ? "foreground" : "destructive",
               fontWeight: theme.typography.fontWeight.heading,
             })}
           >
-            {isCorrect ? labels.correct : labels.incorrect}
+            {result}
           </Text>
           {typeof explanation === "string" ||
           typeof explanation === "number" ? (

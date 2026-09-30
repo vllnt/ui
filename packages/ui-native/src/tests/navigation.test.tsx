@@ -143,7 +143,7 @@ it("selects animated tabs and workspace radios without routing", () => {
   expect(onWorkspaceChange).toHaveBeenCalledWith("beta");
   expect(screen.getByRole("radio", { name: "Beta" })).toHaveProp(
     "accessibilityState",
-    { checked: true, disabled: undefined, selected: true },
+    { checked: true, disabled: undefined },
   );
   expect(screen.getByText("Beta workspace")).toBeOnTheScreen();
 });

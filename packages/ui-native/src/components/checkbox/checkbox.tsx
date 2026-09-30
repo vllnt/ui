@@ -10,6 +10,8 @@ import {
   View,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
+import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
   useControllableState,
@@ -19,10 +21,15 @@ import { useTheme } from "../../theme/theme-provider";
 /** Checked values supported by the native checkbox. */
 export type CheckboxCheckedState = "indeterminate" | boolean;
 
-/** Props for a controlled or uncontrolled native checkbox. */
+/**
+ * Props for a controlled or uncontrolled native checkbox. Name it with
+ * `label` (visible, part of the touch target) or `accessibilityLabel`.
+ */
 export type CheckboxProps = Omit<PressableProps, "children"> & {
   readonly checked?: CheckboxCheckedState;
   readonly defaultChecked?: CheckboxCheckedState;
+  /** Visible label rendered beside the box; also the accessible name. */
+  readonly label?: string;
   readonly onCheckedChange?: (checked: CheckboxCheckedState) => void;
   readonly ref?: Ref<NativeView>;
 };
@@ -40,14 +47,17 @@ const styles = StyleSheet.create({
     minHeight: 44,
     minWidth: 44,
   },
+  withLabel: { flexDirection: "row", justifyContent: "flex-start" },
 });
 
 /** Accessible native checkbox with truthful mixed-state exposure. */
 function Checkbox({
+  accessibilityLabel,
   accessibilityState,
   checked,
   defaultChecked = false,
   disabled = false,
+  label,
   onCheckedChange,
   onPress,
   ref,
@@ -63,6 +73,7 @@ function Checkbox({
   return (
     <Pressable
       {...props}
+      accessibilityLabel={accessibilityLabel ?? label}
       accessibilityRole="checkbox"
       accessibilityState={{
         ...accessibilityState,
@@ -77,13 +88,13 @@ function Checkbox({
       ref={ref}
       style={(state) => [
         styles.root,
+        label ? [styles.withLabel, { gap: theme.spacing[2] }] : undefined,
         { opacity: disabled ? 0.5 : state.pressed ? 0.8 : 1 },
         typeof style === "function" ? style(state) : style,
       ]}
     >
       <View
-        accessibilityElementsHidden
-        importantForAccessibility="no"
+        {...decorativeProps}
         style={[
           styles.indicator,
           {
@@ -107,6 +118,11 @@ function Checkbox({
           </NativeText>
         ) : null}
       </View>
+      {label ? (
+        <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+          {label}
+        </NativeText>
+      ) : null}
     </Pressable>
   );
 }

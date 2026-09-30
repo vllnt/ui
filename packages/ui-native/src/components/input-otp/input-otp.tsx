@@ -10,12 +10,20 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
-/** Props for a native one-time-code input. */
+/**
+ * Props for a native one-time-code input. `accessibilityLabel` defaults to
+ * "One-time code"; pass a localized name. The entered count and the error are
+ * spoken as the hint so the typed digits stay the field's value.
+ */
 export type InputOTPProps = Omit<
   TextInputProps,
   "defaultValue" | "maxLength" | "onChangeText" | "value"
@@ -38,6 +46,8 @@ function normalizeCode(value: string, length: number): string {
 
 /** Native numeric OTP editor with system one-time-code autofill semantics. */
 function InputOTP({
+  accessibilityHint,
+  accessibilityLabel = "One-time code",
   errorText,
   invalid = false,
   length,
@@ -49,13 +59,18 @@ function InputOTP({
 }: InputOTPProps) {
   const theme = useTheme();
   const [value, setValue] = useControllableState(valueState);
+  const error = invalid ? errorText : undefined;
+  useAnnounceOnChange(error, { liveRegion: true });
   return (
     <View {...rootProps}>
       <TextInput
         {...props}
-        accessibilityLiveRegion={invalid ? "polite" : undefined}
-        accessibilityValue={{ text: `${value.length}/${length}` }}
-        aria-invalid={invalid}
+        accessibilityHint={joinAccessibilityText([
+          error,
+          `${value.length}/${length}`,
+          accessibilityHint,
+        ])}
+        accessibilityLabel={accessibilityLabel}
         inputMode="numeric"
         maxLength={length}
         onChangeText={(nextValue) => {

@@ -25,6 +25,11 @@ export type TimePickerLabels = {
   readonly hour: string;
   readonly minute: string;
   readonly open: string;
+  /**
+   * Spoken name of one hour or minute option; receives the column label and
+   * the two-digit value. Defaults to "<column>, <value>" such as "Hour, 07".
+   */
+  readonly option?: (column: string, value: string) => string;
   readonly placeholder: string;
 };
 /** Props for a native hour-and-minute modal list picker. */
@@ -39,6 +44,7 @@ export type TimePickerProps = Omit<ViewProps, "children"> & {
 const styles = StyleSheet.create({
   action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
   columns: { flexDirection: "row", maxHeight: 360 },
+  heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   option: { alignItems: "center", justifyContent: "center", minHeight: 44 },
   panel: { borderTopWidth: 1 },
@@ -52,7 +58,11 @@ function validTime(value: string): value is ISOTimeString {
   return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
 }
 
-/** Native modal time picker with explicit hour and minute options. */
+/**
+ * Native modal time picker with explicit hour and minute options. The trigger
+ * speaks the chosen time (or placeholder) as its value and every option names
+ * its column, so "07" is heard as an hour or a minute.
+ */
 function TimePicker({
   disabled = false,
   labels,
@@ -93,10 +103,12 @@ function TimePicker({
     selected: string,
     choose: (item: string) => void,
   ) => (
-    <ScrollView accessibilityLabel={label} style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }}>
       {options.map((option) => (
         <Pressable
-          accessibilityLabel={option}
+          accessibilityLabel={
+            labels.option?.(label, option) ?? `${label}, ${option}`
+          }
           accessibilityRole="radio"
           accessibilityState={{ checked: option === selected, disabled }}
           disabled={disabled}
@@ -127,6 +139,7 @@ function TimePicker({
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
+        accessibilityValue={{ text: selectedTime ?? labels.placeholder }}
         disabled={disabled}
         onPress={() => {
           setOpen(true);
@@ -170,6 +183,18 @@ function TimePicker({
             },
           ]}
         >
+          <NativeText
+            accessibilityRole="header"
+            style={[
+              styles.heading,
+              ...typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: theme.typography.fontWeight.heading,
+              }),
+            ]}
+          >
+            {labels.open}
+          </NativeText>
           <View style={styles.columns}>
             {column(labels.hour, hours, hour ?? "", (next) => {
               commit(next, minute ?? "");

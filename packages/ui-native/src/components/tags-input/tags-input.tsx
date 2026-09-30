@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useState } from "react";
+import { type Ref, useRef, useState } from "react";
 
 import {
   Pressable,
@@ -11,6 +11,8 @@ import {
   View,
 } from "react-native";
 
+import { focusAccessibility } from "../../primitives/accessibility";
+import { mergeReferences } from "../../primitives/merge-references";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -73,7 +75,9 @@ function TagsInput({
   const theme = useTheme();
   const [tags, setTags] = useControllableState(state);
   const [draft, setDraft] = useState("");
+  const inputRef = useRef<null | TextInput>(null);
   const locked = disabled || !editable || readOnly;
+  const addDisabled = locked || draft.trim().length === 0;
   const commit = () => {
     if (locked) return;
     const next = normalize([...tags, draft]);
@@ -86,7 +90,6 @@ function TagsInput({
   };
   return (
     <View
-      accessibilityLabel={labels.input}
       style={[
         styles.root,
         {
@@ -123,6 +126,7 @@ function TagsInput({
             onPress={() => {
               if (locked) return;
               setTags(tags.filter((item) => item !== tag));
+              focusAccessibility(inputRef);
             }}
             style={styles.add}
           >
@@ -135,6 +139,7 @@ function TagsInput({
       <TextInput
         {...props}
         accessibilityLabel={labels.input}
+        accessibilityState={{ disabled: locked }}
         editable={!locked}
         onChangeText={(text) => {
           if (!locked) setDraft(text);
@@ -146,7 +151,7 @@ function TagsInput({
         placeholder={placeholder}
         placeholderTextColor={theme.colors.mutedForeground}
         readOnly={readOnly}
-        ref={ref}
+        ref={mergeReferences(inputRef, ref)}
         returnKeyType="done"
         style={[styles.input, ...typeStyle(theme, "bodySmall", "foreground")]}
         value={draft}
@@ -154,10 +159,10 @@ function TagsInput({
       <Pressable
         accessibilityLabel={labels.add}
         accessibilityRole="button"
-        accessibilityState={{ disabled: locked || draft.trim().length === 0 }}
-        disabled={locked || draft.trim().length === 0}
+        accessibilityState={{ disabled: addDisabled }}
+        disabled={addDisabled}
         onPress={commit}
-        style={styles.add}
+        style={[styles.add, { opacity: addDisabled ? 0.5 : 1 }]}
       >
         <NativeText style={{ color: theme.colors.foreground }}>+</NativeText>
       </Pressable>

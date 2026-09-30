@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
@@ -33,6 +34,8 @@ export type MultiSelectLabels = {
   readonly open: string;
   readonly options: string;
   readonly placeholder: string;
+  /** Result count spoken after filtering, for example "3 options". */
+  readonly results?: (count: number) => string;
   readonly search: string;
 };
 
@@ -48,13 +51,18 @@ export type MultiSelectProps = Omit<ViewProps, "children"> & {
 
 const styles = StyleSheet.create({
   action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   option: { justifyContent: "center", minHeight: 44 },
   panel: { borderTopWidth: 1, maxHeight: "80%" },
   trigger: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
 });
 
-/** Native multi-select with optional real text filtering and modal options. */
+/**
+ * Native multi-select with optional real text filtering and modal options. The
+ * trigger speaks the selected options (or placeholder) as its value, and the
+ * filtered result count or empty message is announced while searching.
+ */
 function MultiSelect({
   disabled = false,
   labels,
@@ -88,6 +96,15 @@ function MultiSelect({
         .includes(normalizedQuery),
     );
   }, [options, query]);
+  const noResults = visibleOptions.length === 0;
+  useAnnounceOnChange(
+    query.trim()
+      ? noResults
+        ? labels.empty
+        : labels.results?.(visibleOptions.length)
+      : undefined,
+    { liveRegion: noResults },
+  );
 
   return (
     <View ref={ref} style={style} {...props}>
@@ -95,6 +112,12 @@ function MultiSelect({
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
+        accessibilityValue={{
+          text:
+            selectedLabels.length > 0
+              ? selectedLabels.join(", ")
+              : labels.placeholder,
+        }}
         disabled={disabled}
         onPress={() => {
           setOpen(true);
@@ -125,10 +148,7 @@ function MultiSelect({
       </Pressable>
       <ModalLayer
         animationType={reducedMotion ? "none" : "fade"}
-        contentProps={{
-          accessibilityLabel: labels.options,
-          style: styles.modal,
-        }}
+        contentProps={{ style: styles.modal }}
         onClose={() => {
           setOpen(false);
           setQuery("");
@@ -145,6 +165,18 @@ function MultiSelect({
             },
           ]}
         >
+          <NativeText
+            accessibilityRole="header"
+            style={[
+              styles.heading,
+              ...typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: theme.typography.fontWeight.heading,
+              }),
+            ]}
+          >
+            {labels.options}
+          </NativeText>
           {searchable ? (
             <Input
               accessibilityLabel={labels.search}
@@ -156,10 +188,7 @@ function MultiSelect({
               value={query}
             />
           ) : null}
-          <ScrollView
-            accessibilityLabel={labels.options}
-            keyboardShouldPersistTaps="handled"
-          >
+          <ScrollView keyboardShouldPersistTaps="handled">
             {visibleOptions.map((option) => {
               const selected = selectedIds.has(option.id);
               return (
@@ -198,7 +227,7 @@ function MultiSelect({
                 </Pressable>
               );
             })}
-            {visibleOptions.length === 0 ? (
+            {noResults ? (
               <NativeText
                 accessibilityLiveRegion="polite"
                 style={typeStyle(theme, "bodySmall", {

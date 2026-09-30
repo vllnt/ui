@@ -22,7 +22,7 @@ export type PasswordInputProps = Omit<TextInputProps, "secureTextEntry"> & {
 };
 
 const styles = StyleSheet.create({
-  input: { flex: 1, paddingRight: 72 },
+  input: { flex: 1 },
   root: { justifyContent: "center", width: "100%" },
   toggle: {
     alignItems: "center",
@@ -46,6 +46,7 @@ function PasswordInput({
 }: PasswordInputProps) {
   const theme = useTheme();
   const [visible, setVisible] = useState(false);
+  const [toggleWidth, setToggleWidth] = useState(72);
   const label = visible ? hideLabel : showLabel;
 
   return (
@@ -55,13 +56,16 @@ function PasswordInput({
         disabled={disabled}
         ref={ref}
         secureTextEntry={!visible}
-        style={[styles.input, style]}
+        style={[styles.input, { paddingRight: toggleWidth }, style]}
       />
       <Pressable
         accessibilityLabel={label}
         accessibilityRole="button"
         accessibilityState={{ disabled }}
         disabled={disabled}
+        onLayout={(event) => {
+          setToggleWidth(Math.max(72, event.nativeEvent.layout.width));
+        }}
         onPress={() => {
           setVisible((previous) => !previous);
         }}

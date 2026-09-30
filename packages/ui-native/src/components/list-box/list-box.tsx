@@ -38,7 +38,11 @@ const styles = StyleSheet.create({
   root: { borderWidth: 1, overflow: "hidden" },
 });
 
-/** Accessible native list whose selection is keyed only by caller IDs. */
+/**
+ * Accessible native list whose selection is keyed only by caller IDs. The
+ * list `label` is spoken as every option's hint, since VoiceOver ignores
+ * labels on non-focusable containers.
+ */
 function ListBox({
   disabled = false,
   label,
@@ -56,9 +60,7 @@ function ListBox({
   return (
     <View
       {...props}
-      accessibilityLabel={label}
       accessibilityRole={mode === "single" ? "radiogroup" : "list"}
-      accessibilityState={{ disabled }}
       ref={ref}
       style={[
         styles.root,
@@ -75,12 +77,12 @@ function ListBox({
         const optionDisabled = disabled || option.disabled === true;
         return (
           <Pressable
+            accessibilityHint={label}
             accessibilityLabel={option.label}
             accessibilityRole={mode === "single" ? "radio" : "checkbox"}
             accessibilityState={{
               checked: selected,
               disabled: optionDisabled,
-              selected,
             }}
             disabled={optionDisabled}
             key={option.id}

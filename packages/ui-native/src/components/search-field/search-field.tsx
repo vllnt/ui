@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useState } from "react";
+import { type Ref, useRef, useState } from "react";
 
 import {
   Pressable,
@@ -11,6 +11,8 @@ import {
   View,
 } from "react-native";
 
+import { focusAccessibility } from "../../primitives/accessibility";
+import { mergeReferences } from "../../primitives/merge-references";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 
@@ -55,6 +57,7 @@ function SearchField({
   ...props
 }: SearchFieldProps) {
   const theme = useTheme();
+  const inputRef = useRef<null | TextInput>(null);
   const [internalValue, setInternalValue] = useState(defaultValue);
   const currentValue = value ?? internalValue;
   const readOnly =
@@ -74,7 +77,7 @@ function SearchField({
         inputMode="search"
         onChangeText={update}
         placeholder={placeholder}
-        ref={ref}
+        ref={mergeReferences(inputRef, ref)}
         returnKeyType={props.returnKeyType ?? "search"}
         style={[styles.input, style]}
         value={currentValue}
@@ -87,6 +90,7 @@ function SearchField({
           disabled={readOnly}
           onPress={() => {
             update("");
+            focusAccessibility(inputRef);
           }}
           style={styles.clear}
         >

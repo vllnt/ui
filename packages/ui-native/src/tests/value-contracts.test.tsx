@@ -203,13 +203,12 @@ it.each([
       max={max}
     />,
   );
-  for (const name of ["Ada", "Bo"]) {
-    if (visible.includes(name))
-      expect(screen.getByLabelText(name)).toBeTruthy();
-    else expect(screen.queryByLabelText(name)).toBeNull();
-  }
-  if (hidden > 0) expect(screen.getByLabelText(`${hidden} more`)).toBeTruthy();
-  else expect(screen.queryByLabelText(/more/)).toBeNull();
+  const spoken = [
+    "Avatar group",
+    ...visible,
+    ...(hidden > 0 ? [`${hidden} more`] : []),
+  ].join(", ");
+  expect(screen.getByLabelText(spoken)).toHaveProp("accessible", true);
 });
 
 it("renders numeric 0 for change, meta, and description", () => {

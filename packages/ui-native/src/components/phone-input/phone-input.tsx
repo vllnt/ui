@@ -34,13 +34,15 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     flexDirection: "row",
     justifyContent: "center",
+    minHeight: 44,
+    minWidth: 44,
   },
   input: { borderRadius: 0, borderWidth: 0, flex: 1 },
   root: {
     alignItems: "center",
     borderWidth: 1,
     flexDirection: "row",
-    minHeight: 40,
+    minHeight: 44,
     overflow: "hidden",
     width: "100%",
   },
@@ -76,6 +78,7 @@ function PhoneCountryPrefix({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
+      accessibilityValue={{ text: `${country.label}, ${country.dialCode}` }}
       disabled={disabled}
       onPress={onPress}
       style={style}

@@ -23,8 +23,12 @@ function clampPercent(value: number): number {
   return Math.min(Math.max(value, 0), 100);
 }
 
-/** Token-driven determinate progress indicator for React Native. */
+/**
+ * Token-driven determinate progress indicator for React Native. Its name
+ * defaults to "Progress"; pass a localized `accessibilityLabel`.
+ */
 function GlassProgress({
+  accessibilityLabel = "Progress",
   ref,
   style,
   testID,
@@ -37,6 +41,7 @@ function GlassProgress({
   return (
     <View
       {...props}
+      accessibilityLabel={accessibilityLabel}
       accessibilityRole="progressbar"
       accessibilityValue={{ max: 100, min: 0, now: clamped }}
       accessible

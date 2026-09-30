@@ -12,7 +12,7 @@ export type InputProps = TextInputProps & {
 
 const styles = StyleSheet.create({
   disabled: { opacity: 0.5 },
-  input: { borderWidth: 1, minHeight: 40 },
+  input: { borderWidth: 1, minHeight: 44 },
 });
 
 /** Accessible single-line React Native text input. */

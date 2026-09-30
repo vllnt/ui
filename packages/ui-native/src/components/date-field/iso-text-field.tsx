@@ -9,6 +9,10 @@ import {
   View,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   type ControllableStateOptions,
@@ -40,6 +44,7 @@ type ISOTextFormat<TValue extends string> = {
 /** Renders a keyboard-friendly field that commits only values `format` accepts. */
 function useISOTextField<TValue extends string>(
   {
+    accessibilityHint,
     labels,
     onBlur,
     onSubmitEditing,
@@ -55,6 +60,7 @@ function useISOTextField<TValue extends string>(
   const [draft, setDraft] = useState<string>(value ?? "");
   const [editing, setEditing] = useState(false);
   const [invalid, setInvalid] = useState(false);
+  useAnnounceOnChange(invalid ? labels.error : undefined, { liveRegion: true });
   const commit = () => {
     if (draft.length === 0) {
       setInvalid(false);
@@ -70,8 +76,11 @@ function useISOTextField<TValue extends string>(
     <View>
       <Input
         {...props}
+        accessibilityHint={joinAccessibilityText([
+          invalid ? labels.error : undefined,
+          accessibilityHint,
+        ])}
         accessibilityLabel={labels.input}
-        aria-invalid={invalid}
         inputMode="text"
         onBlur={(event) => {
           commit();

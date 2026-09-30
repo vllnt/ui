@@ -80,12 +80,16 @@ it("supports toggle and checkbox state while blocking disabled changes", () => {
       />
     </>,
   );
-  const toggle = screen.getByRole("button", { name: "Bold" });
+  const toggle = screen.getByRole("togglebutton", { name: "Bold" });
+  expect(toggle).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ checked: false }),
+  );
   fireEvent.press(toggle);
   expect(onPressedChange).toHaveBeenCalledWith(true);
   expect(toggle).toHaveProp(
     "accessibilityState",
-    expect.objectContaining({ selected: true }),
+    expect.objectContaining({ checked: true }),
   );
   const checkbox = screen.getByRole("checkbox", { name: "Terms" });
   expect(checkbox).toHaveProp(
@@ -127,18 +131,18 @@ it("uses caller-owned keys for controlled and uncontrolled toggle groups", () =>
       </ToggleGroup>
     </>,
   );
-  expect(screen.getByLabelText("Alignment")).toHaveProp(
-    "accessibilityRole",
-    "none",
+  expect(screen.getByRole("togglebutton", { name: "Center" })).toHaveProp(
+    "accessibilityHint",
+    "Alignment",
   );
-  fireEvent.press(screen.getByRole("button", { name: "Center" }));
+  fireEvent.press(screen.getByRole("togglebutton", { name: "Center" }));
   expect(onMultipleChange).toHaveBeenCalledWith(["start", 42]);
 
-  fireEvent.press(screen.getByRole("button", { name: "Comfortable" }));
+  fireEvent.press(screen.getByRole("radio", { name: "Comfortable" }));
   expect(onSingleChange).toHaveBeenCalledWith("comfortable");
-  expect(screen.getByRole("button", { name: "Compact" })).toHaveProp(
+  expect(screen.getByRole("radio", { name: "Compact" })).toHaveProp(
     "accessibilityState",
-    expect.objectContaining({ selected: true }),
+    { checked: true, disabled: false },
   );
 });
 
@@ -165,10 +169,10 @@ it("applies repeated toggle-group presses from the latest uncontrolled value", (
     </>,
   );
   act(() => {
-    fireEvent.press(screen.getByRole("button", { name: "Bold" }));
-    fireEvent.press(screen.getByRole("button", { name: "Italic" }));
-    fireEvent.press(screen.getByRole("button", { name: "Small" }));
-    fireEvent.press(screen.getByRole("button", { name: "Small" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Bold" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Italic" }));
+    fireEvent.press(screen.getByRole("radio", { name: "Small" }));
+    fireEvent.press(screen.getByRole("radio", { name: "Small" }));
   });
 
   expect(onMultipleChange.mock.calls).toEqual([
@@ -176,14 +180,14 @@ it("applies repeated toggle-group presses from the latest uncontrolled value", (
     [["bold", "italic"]],
   ]);
   expect(onSingleChange.mock.calls).toEqual([["small"], [undefined]]);
-  for (const [name, selected] of [
-    ["Bold", true],
-    ["Italic", true],
-    ["Small", false],
+  for (const [role, name, checked] of [
+    ["togglebutton", "Bold", true],
+    ["togglebutton", "Italic", true],
+    ["radio", "Small", false],
   ] as const) {
-    expect(screen.getByRole("button", { name })).toHaveProp(
+    expect(screen.getByRole(role, { name })).toHaveProp(
       "accessibilityState",
-      expect.objectContaining({ selected }),
+      expect.objectContaining({ checked }),
     );
   }
 });
@@ -202,14 +206,14 @@ it("keeps controlled toggle-group presses derived from the owner value", () => {
     </ToggleGroup>,
   );
   act(() => {
-    fireEvent.press(screen.getByRole("button", { name: "Bold" }));
-    fireEvent.press(screen.getByRole("button", { name: "Italic" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Bold" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Italic" }));
   });
 
   expect(onValueChange.mock.calls).toEqual([[["bold"]], [["italic"]]]);
-  expect(screen.getByRole("button", { name: "Bold" })).toHaveProp(
+  expect(screen.getByRole("togglebutton", { name: "Bold" })).toHaveProp(
     "accessibilityState",
-    expect.objectContaining({ selected: false }),
+    expect.objectContaining({ checked: false }),
   );
 });
 
@@ -234,9 +238,9 @@ it("selects stable radio values and respects item and group disabled state", () 
       </RadioGroup>
     </>,
   );
-  expect(screen.getByLabelText("Delivery")).toHaveProp(
-    "accessibilityRole",
-    "radiogroup",
+  expect(screen.getByRole("radio", { name: "Standard" })).toHaveProp(
+    "accessibilityHint",
+    "Delivery",
   );
   expect(screen.getByRole("radio", { name: "Standard" })).toHaveProp(
     "accessibilityState",

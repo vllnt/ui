@@ -11,6 +11,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  decorativeProps,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -48,6 +52,7 @@ export type SelectProps = Omit<ViewProps, "children"> & {
 const styles = StyleSheet.create({
   close: { alignItems: "center", justifyContent: "center", minHeight: 44 },
   error: { marginTop: 4 },
+  heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   option: {
     alignItems: "center",
@@ -66,7 +71,11 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Accessible native picker that presents options in a modal list. */
+/**
+ * Accessible native picker that presents options in a modal list. The trigger
+ * speaks `labels.open` as its name and the selected option (or placeholder) as
+ * its value; the open list is titled by a `labels.options` header.
+ */
 function Select({
   disabled = false,
   errorText,
@@ -91,14 +100,19 @@ function Select({
     setOpen(nextOpen);
     onOpenChange?.(nextOpen);
   };
+  const error = invalid ? errorText : undefined;
+  useAnnounceOnChange(error, { liveRegion: true });
 
   return (
     <View ref={ref} style={style} {...props}>
       <Pressable
+        accessibilityHint={error}
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
-        aria-invalid={invalid}
+        accessibilityValue={{
+          text: selectedOption?.label ?? labels.placeholder,
+        }}
         disabled={disabled}
         onPress={() => {
           setModalOpen(true);
@@ -126,11 +140,14 @@ function Select({
         >
           {selectedOption?.label ?? labels.placeholder}
         </NativeText>
-        <NativeText style={{ color: theme.colors.mutedForeground }}>
+        <NativeText
+          {...decorativeProps}
+          style={{ color: theme.colors.mutedForeground }}
+        >
           ⌄
         </NativeText>
       </Pressable>
-      {invalid && errorText ? (
+      {error ? (
         <NativeText
           accessibilityLiveRegion="polite"
           accessibilityRole="alert"
@@ -144,10 +161,7 @@ function Select({
       ) : null}
       <ModalLayer
         animationType={reducedMotion ? "none" : "fade"}
-        contentProps={{
-          accessibilityLabel: labels.options,
-          style: styles.modal,
-        }}
+        contentProps={{ style: styles.modal }}
         onClose={() => {
           setModalOpen(false);
         }}
@@ -163,7 +177,19 @@ function Select({
             },
           ]}
         >
-          <ScrollView accessibilityLabel={labels.options}>
+          <NativeText
+            accessibilityRole="header"
+            style={[
+              styles.heading,
+              ...typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: theme.typography.fontWeight.heading,
+              }),
+            ]}
+          >
+            {labels.options}
+          </NativeText>
+          <ScrollView>
             {options.map((option) => {
               const selected = option.id === selectedId;
               const optionDisabled = disabled || option.disabled === true;
