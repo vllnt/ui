@@ -71,8 +71,17 @@ function noopUnsubscribe() {
   return;
 }
 
-function subscribeToLocation() {
+/** Subscription for client values that never change after hydration. */
+function subscribeToStaticValue() {
   return noopUnsubscribe;
+}
+
+function getLacksObserverSnapshot(): boolean {
+  return !("IntersectionObserver" in window);
+}
+
+function getServerLacksObserverSnapshot(): boolean {
+  return false;
 }
 
 function getSandbox(previewOrigin: string): string {
@@ -100,23 +109,22 @@ export function ComponentThumbnail({
     getServerThemeSnapshot,
   );
   const previewOrigin = useSyncExternalStore(
-    subscribeToLocation,
+    subscribeToStaticValue,
     getPreviewOriginSnapshot,
     getServerPreviewOriginSnapshot,
+  );
+  // Compatibility fallback: mount once after hydration when observation is unavailable.
+  const lacksObserver = useSyncExternalStore(
+    subscribeToStaticValue,
+    getLacksObserverSnapshot,
+    getServerLacksObserverSnapshot,
   );
   const rootRef = useRef<HTMLDivElement>(null);
   const [isNearViewport, setIsNearViewport] = useState(false);
 
   useEffect(() => {
     const node = rootRef.current;
-    if (!node) return;
-
-    if (!("IntersectionObserver" in window)) {
-      // Compatibility fallback: mount once after hydration when observation is unavailable.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsNearViewport(true);
-      return;
-    }
+    if (!node || getLacksObserverSnapshot()) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -144,7 +152,7 @@ export function ComponentThumbnail({
         className="size-full overflow-hidden pointer-events-none select-none"
         inert
       >
-        {isNearViewport ? (
+        {isNearViewport || lacksObserver ? (
           <iframe
             className="size-full border-0 bg-background"
             loading="lazy"

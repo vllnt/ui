@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention -- keys are npm package
-   names and sandbox file paths, which are external contracts and cannot be
-   camelCase (matches packages/ui tailwind-preset.ts). */
 type CodeSandboxFile = {
   content: Record<string, unknown> | string;
 };

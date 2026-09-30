@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import {
   Button,
@@ -43,6 +49,36 @@ function readActiveTheme(
   }
 }
 
+type RestoredTheme = {
+  /** True when the theme came from the `?t=` token; the editor applies it site-wide. */
+  readonly fromUrl: boolean;
+  readonly theme: ThemeData;
+};
+
+function readRestoredTheme(
+  presets: readonly EditorPreset[],
+): RestoredTheme | undefined {
+  const fromUrl = new URLSearchParams(window.location.search).get("t");
+  const urlTheme = fromUrl ? decodeTheme(fromUrl) : undefined;
+  if (urlTheme) {
+    return { fromUrl: true, theme: urlTheme };
+  }
+  const restored = readActiveTheme(presets);
+  return restored ? { fromUrl: false, theme: restored } : undefined;
+}
+
+function noopUnsubscribe() {
+  return;
+}
+
+function subscribeToStaticValue() {
+  return noopUnsubscribe;
+}
+
+function getServerRestoredTheme(): RestoredTheme | undefined {
+  return undefined;
+}
+
 /**
  * Interactive theme editor. Picking a preset or editing a token re-themes the
  * entire site live (and persists across navigation); the controls also drive
@@ -54,35 +90,40 @@ export function ThemeEditor({
   readonly presets: readonly EditorPreset[];
 }) {
   const t = useTranslations("pages.themes.editor");
-  const [theme, setTheme] = useState<ThemeData>(DEFAULT_THEME);
-  const [mode, setMode] = useState<ThemeMode>("dark");
-  const isFirstRender = useRef(true);
   // Presets are static per page; read them once on mount like the old module constant.
   const initialPresets = useRef(presets);
-
-  /* eslint-disable react-hooks/set-state-in-effect -- one-shot init from
-     URL/localStorage after hydration; a lazy useState initializer cannot
-     read window during SSR. */
-  useEffect(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get("t");
-    const urlTheme = fromUrl ? decodeTheme(fromUrl) : undefined;
-    if (urlTheme) {
-      setTheme(urlTheme);
-      setCustomTheme(urlTheme);
-      return;
-    }
-    const restored = readActiveTheme(initialPresets.current);
-    if (restored) {
-      setTheme(restored);
-    }
+  const restoredCache = useRef<{ value?: RestoredTheme }>(undefined);
+  /* Reads the theme to restore (URL token, then active preset or saved token)
+     once per mount. The server snapshot is empty, so the server and the
+     hydrating client render the default theme and the restored one follows. */
+  const getRestoredTheme = useCallback((): RestoredTheme | undefined => {
+    restoredCache.current ??= {
+      value: readRestoredTheme(initialPresets.current),
+    };
+    return restoredCache.current.value;
   }, []);
-  /* eslint-enable react-hooks/set-state-in-effect */
+  const restored = useSyncExternalStore(
+    subscribeToStaticValue,
+    getRestoredTheme,
+    getServerRestoredTheme,
+  );
+  const [editedTheme, setEditedTheme] = useState<ThemeData>();
+  const theme = editedTheme ?? restored?.theme ?? DEFAULT_THEME;
+  const [mode, setMode] = useState<ThemeMode>("dark");
+  const persistedTheme = useRef<ThemeData>(DEFAULT_THEME);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (restored?.fromUrl) {
+      setCustomTheme(restored.theme);
+    }
+  }, [restored]);
+
+  useEffect(() => {
+    // Persist every change away from the theme last rendered (initially the default).
+    if (theme === persistedTheme.current) {
       return;
     }
+    persistedTheme.current = theme;
     const token = encodeTheme(theme);
     const url = new URL(window.location.href);
     url.searchParams.set("t", token);
@@ -96,7 +137,7 @@ export function ThemeEditor({
 
   const applyPreset = (preset: EditorPreset): void => {
     // Keep the local DEFAULT_THEME identity: "Default" on a fresh editor is a no-op.
-    setTheme(preset.name === "default" ? DEFAULT_THEME : preset.theme);
+    setEditedTheme(preset.name === "default" ? DEFAULT_THEME : preset.theme);
     if (isThemePresetName(preset.name)) {
       setThemePreset(preset.name);
     } else {
@@ -109,13 +150,13 @@ export function ThemeEditor({
       ...theme,
       [mode]: { ...theme[mode], [name]: channels },
     };
-    setTheme(next);
+    setEditedTheme(next);
     setCustomTheme(next);
   };
 
   const updateRadius = (radius: string): void => {
     const next: ThemeData = { ...theme, radius };
-    setTheme(next);
+    setEditedTheme(next);
     setCustomTheme(next);
   };
 
@@ -163,7 +204,7 @@ export function ThemeEditor({
           </div>
           <Button
             onClick={() => {
-              setTheme(DEFAULT_THEME);
+              setEditedTheme(DEFAULT_THEME);
               setThemePreset("default");
             }}
             size="sm"

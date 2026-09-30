@@ -9,7 +9,6 @@ export const routing = defineRouting({
   locales,
 });
 
-/* eslint-disable-next-line @typescript-eslint/naming-convention */
 export const { getPathname, Link, redirect, usePathname, useRouter } =
   createNavigation(routing);
 

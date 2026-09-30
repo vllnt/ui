@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 /**
  * Shared theme model for the editor and the export endpoint. Token values are
  * OKLCH channel strings ("L C H"). A fixed token order lets a theme serialize to
