@@ -19,7 +19,32 @@ type QuizOptionButtonProps = {
   submitted: boolean;
 };
 
-// eslint-disable-next-line max-lines-per-function -- Option button showing selected, correct, incorrect states
+type QuizResultIconProps = {
+  className: string;
+  d: string;
+};
+
+function QuizResultIcon({
+  className,
+  d,
+}: QuizResultIconProps): React.ReactNode {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d={d}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+      />
+    </svg>
+  );
+}
+
 function QuizOptionButton({
   index,
   onSelect,
@@ -51,49 +76,22 @@ function QuizOptionButton({
         <span className="text-sm">{option.label}</span>
         {showResult ? (
           option.correct ? (
-            <svg
+            <QuizResultIcon
               className="size-4 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M5 13l4 4L19 7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
+              d="M5 13l4 4L19 7"
+            />
           ) : (
-            <svg
+            <QuizResultIcon
               className="size-4 text-red-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M6 18L18 6M6 6l12 12"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
+              d="M6 18L18 6M6 6l12 12"
+            />
           )
         ) : null}
         {submitted && !isSelected && option.correct ? (
-          <svg
+          <QuizResultIcon
             className="size-4 text-green-500/50"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M5 13l4 4L19 7"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-            />
-          </svg>
+            d="M5 13l4 4L19 7"
+          />
         ) : null}
       </div>
       {submitted && option.explanation ? (
@@ -157,6 +155,69 @@ function QuizResult({
   );
 }
 
+type QuizHeaderProps = {
+  Heading: HeadingTag;
+  question: string;
+};
+
+function QuizHeader({ Heading, question }: QuizHeaderProps): React.ReactNode {
+  return (
+    <div className="flex items-start gap-3 mb-4">
+      <svg
+        className="size-5 text-primary flex-shrink-0 mt-0.5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+        />
+      </svg>
+      <Heading className="font-semibold text-foreground">{question}</Heading>
+    </div>
+  );
+}
+
+type QuizActionsProps = {
+  canSubmit: boolean;
+  onReset: () => void;
+  onSubmit: () => void;
+  submitted: boolean;
+};
+
+function QuizActions({
+  canSubmit,
+  onReset,
+  onSubmit,
+  submitted,
+}: QuizActionsProps): React.ReactNode {
+  return (
+    <div className="flex gap-2">
+      {submitted ? (
+        <button
+          className="px-3 py-1.5 text-sm rounded-md border border-border hover:bg-muted transition-colors"
+          onClick={onReset}
+          type="button"
+        >
+          Try Again
+        </button>
+      ) : (
+        <button
+          className="px-3 py-1.5 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none transition-colors"
+          disabled={!canSubmit}
+          onClick={onSubmit}
+          type="button"
+        >
+          Check Answer
+        </button>
+      )}
+    </div>
+  );
+}
+
 export type QuizProps = {
   /** Heading tag for the question. Defaults to `h4`. */
   as?: HeadingTag;
@@ -168,7 +229,6 @@ export type QuizProps = {
   question: string;
 };
 
-// eslint-disable-next-line max-lines-per-function -- Interactive quiz with state management
 export function Quiz({
   as: Heading = "h4",
   className,
@@ -198,22 +258,7 @@ export function Quiz({
 
   return (
     <div className={cn("my-6 rounded-lg border bg-card p-6", className)}>
-      <div className="flex items-start gap-3 mb-4">
-        <svg
-          className="size-5 text-primary flex-shrink-0 mt-0.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-          />
-        </svg>
-        <Heading className="font-semibold text-foreground">{question}</Heading>
-      </div>
+      <QuizHeader Heading={Heading} question={question} />
       <div className="space-y-2 mb-4">
         {options.map((opt, index) => (
           <QuizOptionButton
@@ -240,26 +285,12 @@ export function Quiz({
       {submitted && explanation ? (
         <QuizResult explanation={explanation} isCorrect={Boolean(isCorrect)} />
       ) : null}
-      <div className="flex gap-2">
-        {submitted ? (
-          <button
-            className="px-3 py-1.5 text-sm rounded-md border border-border hover:bg-muted transition-colors"
-            onClick={handleReset}
-            type="button"
-          >
-            Try Again
-          </button>
-        ) : (
-          <button
-            className="px-3 py-1.5 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none transition-colors"
-            disabled={selectedIndex === null}
-            onClick={handleSubmit}
-            type="button"
-          >
-            Check Answer
-          </button>
-        )}
-      </div>
+      <QuizActions
+        canSubmit={selectedIndex !== null}
+        onReset={handleReset}
+        onSubmit={handleSubmit}
+        submitted={submitted}
+      />
     </div>
   );
 }

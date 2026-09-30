@@ -117,6 +117,44 @@ function InteractiveStep({
   );
 }
 
+function StepByStepTitleIcon(): React.ReactNode {
+  return (
+    <svg
+      className="size-5 text-primary"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="m9 18 6-6-6-6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+      />
+    </svg>
+  );
+}
+
+function StaticStepList({ steps }: { steps: ReactNode[] }): React.ReactNode {
+  return (
+    <div className="space-y-0">
+      {steps.map((step, index) => {
+        const stepElement = step as React.ReactElement<StepProps>;
+        const stepKey = `${stepElement.props.title}-${index + 1}`;
+        return (
+          <Step
+            key={stepKey}
+            number={index + 1}
+            title={stepElement.props.title}
+          >
+            {stepElement.props.children}
+          </Step>
+        );
+      })}
+    </div>
+  );
+}
+
 export type StepByStepProps = {
   /** Heading tag for the main title. Defaults to `h3`. */
   as?: HeadingTag;
@@ -129,7 +167,6 @@ export type StepByStepProps = {
 // Object.assign (not `StepByStep.Step = Step`) keeps the emitted d.ts free of
 // a namespace member that shadows `Step` (TS2502 under skipLibCheck: false).
 const StepByStep = Object.assign(
-  // eslint-disable-next-line max-lines-per-function -- Complex component with interactive/non-interactive modes
   function StepByStep({
     as: Heading = "h3",
     children,
@@ -154,37 +191,11 @@ const StepByStep = Object.assign(
         <div className={cn("my-6", className)}>
           {title ? (
             <div className="flex items-center gap-2 mb-4">
-              <svg
-                className="size-5 text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="m9 18 6-6-6-6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                />
-              </svg>
+              <StepByStepTitleIcon />
               <Heading className="font-semibold text-lg">{title}</Heading>
             </div>
           ) : null}
-          <div className="space-y-0">
-            {steps.map((step, index) => {
-              const stepElement = step as React.ReactElement<StepProps>;
-              const stepKey = `${stepElement.props.title}-${index + 1}`;
-              return (
-                <Step
-                  key={stepKey}
-                  number={index + 1}
-                  title={stepElement.props.title}
-                >
-                  {stepElement.props.children}
-                </Step>
-              );
-            })}
-          </div>
+          <StaticStepList steps={steps} />
         </div>
       );
     }
@@ -193,19 +204,7 @@ const StepByStep = Object.assign(
       <div className={cn("my-6", className)}>
         {title ? (
           <div className="flex items-center gap-2 mb-4">
-            <svg
-              className="size-5 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="m9 18 6-6-6-6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-              />
-            </svg>
+            <StepByStepTitleIcon />
             <h3 className="font-semibold text-lg">{title}</h3>
             <span className="text-xs text-muted-foreground ml-auto">
               {completedSteps.size}/{steps.length} completed
