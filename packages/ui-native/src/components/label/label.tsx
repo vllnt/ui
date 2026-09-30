@@ -5,6 +5,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for native form label text. Use `nativeID` with a control's `accessibilityLabelledBy` when supported. */
@@ -28,12 +29,11 @@ function Label({
       {...props}
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: invalid ? theme.colors.destructive : theme.colors.foreground,
+        ...typeStyle(theme, "bodySmall", {
+          color: invalid ? "destructive" : "foreground",
           fontWeight: theme.typography.fontWeight.caption,
           opacity: disabled ? 0.7 : 1,
-        },
+        }),
         style,
       ]}
     />

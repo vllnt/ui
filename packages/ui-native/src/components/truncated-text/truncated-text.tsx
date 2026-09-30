@@ -5,6 +5,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for native text truncated with a platform ellipsis. */
@@ -35,8 +36,7 @@ function TruncatedText({
       numberOfLines={numberOfLines}
       ref={ref}
       style={[
-        theme.typography.scale.body,
-        { color: theme.colors.foreground, maxWidth },
+        ...typeStyle(theme, "body", { color: "foreground", maxWidth }),
         style,
       ]}
     >

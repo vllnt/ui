@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import { toggleMultipleSelected } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -104,26 +105,18 @@ function TagGroup({
                 style={[styles.action, { paddingLeft: theme.spacing[3] }]}
               >
                 <NativeText
-                  style={[
-                    theme.typography.scale.bodySmall,
-                    {
-                      color: selected
-                        ? theme.colors.primaryForeground
-                        : theme.colors.foreground,
-                    },
-                  ]}
+                  style={typeStyle(
+                    theme,
+                    "bodySmall",
+                    selected ? "primaryForeground" : "foreground",
+                  )}
                 >
                   {item.label}
                 </NativeText>
               </Pressable>
             ) : (
               <View style={[styles.action, { paddingLeft: theme.spacing[3] }]}>
-                <NativeText
-                  style={[
-                    theme.typography.scale.bodySmall,
-                    { color: theme.colors.foreground },
-                  ]}
-                >
+                <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
                   {item.label}
                 </NativeText>
               </View>

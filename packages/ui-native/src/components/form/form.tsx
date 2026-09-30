@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 const FormContext = createContext<(() => void) | null>(null);
@@ -88,12 +89,7 @@ function FormSubmit({
         style,
       ]}
     >
-      <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          { color: theme.colors.primaryForeground },
-        ]}
-      >
+      <NativeText style={typeStyle(theme, "bodySmall", "primaryForeground")}>
         {children}
       </NativeText>
     </Pressable>
@@ -114,12 +110,7 @@ function FormMessage({ children, ref, ...props }: FormMessageProps) {
       accessible
       ref={ref}
     >
-      <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          { color: theme.colors.destructive },
-        ]}
-      >
+      <NativeText style={typeStyle(theme, "bodySmall", "destructive")}>
         {children}
       </NativeText>
     </View>

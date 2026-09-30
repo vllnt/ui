@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** State of one ordered reasoning step. */
@@ -133,13 +134,10 @@ function StepText({
       </Text>
       {step.description ? (
         <Text
-          style={[
-            theme.typography.scale.caption,
-            {
-              color: theme.colors.mutedForeground,
-              marginTop: theme.spacing[1],
-            },
-          ]}
+          style={typeStyle(theme, "caption", {
+            color: "mutedForeground",
+            marginTop: theme.spacing[1],
+          })}
         >
           {step.description}
         </Text>

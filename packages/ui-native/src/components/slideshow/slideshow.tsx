@@ -17,7 +17,11 @@ import {
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
 } from "../../primitives/modal-layer";
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -142,33 +146,22 @@ function SlideshowHeader({
       <View style={[styles.titleBlock, { gap: theme.spacing[1] }]}>
         <Text
           numberOfLines={1}
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
+          style={typeStyle(theme, "caption", "mutedForeground")}
         >
           {title}
         </Text>
         <Text
           accessibilityRole="header"
           numberOfLines={1}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {sectionTitle}
         </Text>
       </View>
-      <Text
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
-      >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {position}
       </Text>
       <Pressable
@@ -230,12 +223,7 @@ function SlideshowSections({
               },
             ]}
           >
-            <Text
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {section.title}
             </Text>
           </Pressable>
@@ -349,26 +337,14 @@ function Slideshow({
   const theme = useTheme();
   const reduceMotion = useReducedMotion(reducedMotionService);
   const [visible, setVisible] = useControllableState(
-    open === undefined
-      ? {
-          defaultValue: defaultOpen,
-          mode: "uncontrolled",
-          onChange: onOpenChange,
-        }
-      : { mode: "controlled", onChange: onOpenChange, value: open },
+    controllableOptions(open, defaultOpen, onOpenChange),
   );
   const [selection, setSelection] = useControllableState(
-    currentSectionId === undefined
-      ? {
-          defaultValue: defaultCurrentSectionId ?? sections[0]?.id ?? "",
-          mode: "uncontrolled",
-          onChange: onCurrentSectionIdChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onCurrentSectionIdChange,
-          value: currentSectionId,
-        },
+    controllableOptions(
+      currentSectionId,
+      defaultCurrentSectionId ?? sections[0]?.id ?? "",
+      onCurrentSectionIdChange,
+    ),
   );
   const [sectionsOpen, setSectionsOpen] = useState(false);
   const foundIndex = sections.findIndex((section) => section.id === selection);

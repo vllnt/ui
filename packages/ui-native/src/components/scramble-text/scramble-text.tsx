@@ -8,6 +8,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import {
   type ReducedMotionService,
   useReducedMotion,
@@ -25,11 +26,9 @@ export type ScrambleTextProps = Omit<TextProps, "children"> & {
 
 const defaultPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+/** Splits by code point, not grapheme: Hermes has no `Intl.Segmenter`. */
 function splitCharacters(value: string): readonly string[] {
-  // Code points, not graphemes: Hermes has no Intl.Segmenter. Array.from is
-  // required because no-misused-spread rejects string spread.
-  // eslint-disable-next-line unicorn/prefer-spread
-  return Array.from(value);
+  return value.match(/./gsu) ?? [];
 }
 
 function scramble(text: string, revealed: number, pool: string): string {
@@ -130,11 +129,10 @@ function ScrambleText({
       accessibilityLabel={accessibilityLabel ?? text}
       ref={ref}
       style={[
-        theme.typography.scale.bodySmall,
-        {
-          color: theme.colors.foreground,
+        ...typeStyle(theme, "bodySmall", {
+          color: "foreground",
           fontFamily: "monospace",
-        },
+        }),
         style,
       ]}
     >

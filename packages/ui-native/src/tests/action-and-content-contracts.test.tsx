@@ -24,6 +24,8 @@ import { CompletionDialog } from "../components/completion-dialog/completion-dia
 import { useCopyToClipboard } from "../components/copy-button/copy-button";
 import { ThemeProvider } from "../theme/theme-provider";
 
+import { deferred } from "./test-utils";
+
 const labels = {
   allCompleted: "Done",
   item: (item: { label: string }) => item.label,
@@ -33,16 +35,6 @@ const items = [
   { id: "a", label: "A" },
   { id: "b", label: "B" },
 ];
-
-function deferred() {
-  let resolve: () => void = jest.fn();
-  let reject: (error: Error) => void = jest.fn();
-  const promise = new Promise<void>((yes, no) => {
-    resolve = yes;
-    reject = no;
-  });
-  return { promise, reject, resolve };
-}
 
 afterEach(() => {
   jest.restoreAllMocks();

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import type { ClipboardService } from "../../primitives/platform-services";
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-localized labels for optional code copying. */
@@ -84,10 +85,10 @@ function CodeBlockHeader({
     >
       {showLanguage && language ? (
         <NativeText
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground, fontFamily: "monospace" },
-          ]}
+          style={typeStyle(theme, "caption", {
+            color: "mutedForeground",
+            fontFamily: "monospace",
+          })}
         >
           {language}
         </NativeText>
@@ -146,10 +147,10 @@ function CodeContent({
       ) : (
         <NativeText
           selectable
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.foreground, fontFamily: "monospace" },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontFamily: "monospace",
+          })}
         >
           {code}
         </NativeText>

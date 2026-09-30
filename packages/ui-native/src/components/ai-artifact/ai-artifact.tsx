@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
 import { Button, type ButtonProps } from "../button/button";
@@ -463,16 +464,11 @@ function AIArtifactVersion({
     >
       {typeof label === "string" || typeof label === "number" ? (
         <NativeText
-          style={[
-            theme.typography.scale.caption,
-            {
-              color: active
-                ? theme.colors.primaryForeground
-                : theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.caption,
-              textAlign: "center",
-            },
-          ]}
+          style={typeStyle(theme, "caption", {
+            color: active ? "primaryForeground" : "foreground",
+            fontWeight: theme.typography.fontWeight.caption,
+            textAlign: "center",
+          })}
         >
           {label}
         </NativeText>

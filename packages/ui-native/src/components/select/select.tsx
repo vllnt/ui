@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { ModalLayer } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -117,14 +118,11 @@ function Select({
       >
         <NativeText
           numberOfLines={1}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: selectedOption
-                ? theme.colors.foreground
-                : theme.colors.mutedForeground,
-            },
-          ]}
+          style={typeStyle(
+            theme,
+            "bodySmall",
+            selectedOption ? "foreground" : "mutedForeground",
+          )}
         >
           {selectedOption?.label ?? labels.placeholder}
         </NativeText>
@@ -138,8 +136,7 @@ function Select({
           accessibilityRole="alert"
           style={[
             styles.error,
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.destructive },
+            ...typeStyle(theme, "bodySmall", "destructive"),
           ]}
         >
           {errorText}
@@ -197,10 +194,7 @@ function Select({
                   ]}
                 >
                   <NativeText
-                    style={[
-                      theme.typography.scale.bodySmall,
-                      { color: theme.colors.foreground },
-                    ]}
+                    style={typeStyle(theme, "bodySmall", "foreground")}
                   >
                     {option.label}
                   </NativeText>
@@ -221,12 +215,7 @@ function Select({
             }}
             style={styles.close}
           >
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
           </Pressable>

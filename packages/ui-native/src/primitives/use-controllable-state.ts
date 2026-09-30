@@ -62,4 +62,18 @@ function useControllableState<TValue>(
   return [value, setValue];
 }
 
-export { useControllableState };
+/**
+ * Returns controlled options for a present `value`, otherwise uncontrolled
+ * options seeded from `defaultValue`.
+ */
+function controllableOptions<TValue>(
+  value: TValue | undefined,
+  defaultValue: TValue,
+  onChange?: ControllableStateChangeHandler<TValue>,
+): ControllableStateOptions<TValue> {
+  return value === undefined
+    ? { defaultValue, mode: "uncontrolled", onChange }
+    : { mode: "controlled", onChange, value };
+}
+
+export { controllableOptions, useControllableState };

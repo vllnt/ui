@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { ModalLayer } from "../../primitives/modal-layer";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -81,14 +82,11 @@ function DateRangePicker({
         ]}
       >
         <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: range
-                ? theme.colors.foreground
-                : theme.colors.mutedForeground,
-            },
-          ]}
+          style={typeStyle(
+            theme,
+            "bodySmall",
+            range ? "foreground" : "mutedForeground",
+          )}
         >
           {range ? labels.formatValue(range) : labels.placeholder}
         </NativeText>
@@ -130,12 +128,7 @@ function DateRangePicker({
             }}
             style={styles.action}
           >
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
           </Pressable>

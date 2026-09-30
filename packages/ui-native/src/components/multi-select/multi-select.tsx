@@ -13,6 +13,7 @@ import {
 
 import { ModalLayer } from "../../primitives/modal-layer";
 import { toggleMultipleSelected } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -111,15 +112,11 @@ function MultiSelect({
       >
         <NativeText
           numberOfLines={1}
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color:
-                selectedLabels.length > 0
-                  ? theme.colors.foreground
-                  : theme.colors.mutedForeground,
-            },
-          ]}
+          style={typeStyle(
+            theme,
+            "bodySmall",
+            selectedLabels.length > 0 ? "foreground" : "mutedForeground",
+          )}
         >
           {selectedLabels.length > 0
             ? selectedLabels.join(", ")
@@ -193,10 +190,7 @@ function MultiSelect({
                   ]}
                 >
                   <NativeText
-                    style={[
-                      theme.typography.scale.bodySmall,
-                      { color: theme.colors.foreground },
-                    ]}
+                    style={typeStyle(theme, "bodySmall", "foreground")}
                   >
                     {selected ? "✓ " : ""}
                     {option.label}
@@ -207,13 +201,10 @@ function MultiSelect({
             {visibleOptions.length === 0 ? (
               <NativeText
                 accessibilityLiveRegion="polite"
-                style={[
-                  theme.typography.scale.bodySmall,
-                  {
-                    color: theme.colors.mutedForeground,
-                    padding: theme.spacing[3],
-                  },
-                ]}
+                style={typeStyle(theme, "bodySmall", {
+                  color: "mutedForeground",
+                  padding: theme.spacing[3],
+                })}
               >
                 {labels.empty}
               </NativeText>
@@ -228,12 +219,7 @@ function MultiSelect({
             }}
             style={styles.action}
           >
-            <NativeText
-              style={[
-                theme.typography.scale.bodySmall,
-                { color: theme.colors.foreground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
           </Pressable>

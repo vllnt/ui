@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-localized copy for the native thinking disclosure. */
@@ -66,10 +67,7 @@ function ThinkingContent({
     >
       <Text
         accessibilityLiveRegion={isStreaming ? "polite" : "none"}
-        style={[
-          theme.typography.scale.caption,
-          { color: theme.colors.mutedForeground },
-        ]}
+        style={typeStyle(theme, "caption", "mutedForeground")}
       >
         {thinking}
       </Text>
@@ -116,13 +114,10 @@ function ThinkingBlock({
         ]}
       >
         <Text
-          style={[
-            theme.typography.scale.caption,
-            {
-              color: theme.colors.mutedForeground,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "caption", {
+            color: "mutedForeground",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {isStreaming ? labels.streaming : labels.thinking}
         </Text>

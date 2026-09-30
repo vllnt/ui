@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 import { Label } from "../label/label";
@@ -67,12 +68,7 @@ function TextField({
         ref={ref}
       />
       {description ? (
-        <NativeText
-          style={[
-            theme.typography.scale.bodySmall,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <NativeText style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {description}
         </NativeText>
       ) : null}
@@ -80,13 +76,10 @@ function TextField({
         <NativeText
           accessibilityLiveRegion="polite"
           accessibilityRole="alert"
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.destructive,
-              fontWeight: theme.typography.fontWeight.caption,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "destructive",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
         >
           {error}
         </NativeText>

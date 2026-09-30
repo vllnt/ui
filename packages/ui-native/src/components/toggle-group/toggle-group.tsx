@@ -25,6 +25,7 @@ import {
   selectSingle,
   toggleMultipleSelected,
 } from "../../primitives/selection";
+import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -213,15 +214,10 @@ function ToggleGroupItem({
   const content =
     typeof children === "number" || typeof children === "string" ? (
       <NativeText
-        style={[
-          theme.typography.scale.bodySmall,
-          {
-            color: selected
-              ? theme.colors.accentForeground
-              : theme.colors.foreground,
-            fontWeight: theme.typography.fontWeight.caption,
-          },
-        ]}
+        style={typeStyle(theme, "bodySmall", {
+          color: selected ? "accentForeground" : "foreground",
+          fontWeight: theme.typography.fontWeight.caption,
+        })}
       >
         {children}
       </NativeText>

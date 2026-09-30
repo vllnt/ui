@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -155,13 +156,10 @@ function Calendar({
         </Pressable>
         <NativeText
           accessibilityRole="header"
-          style={[
-            theme.typography.scale.bodySmall,
-            {
-              color: theme.colors.foreground,
-              fontWeight: theme.typography.fontWeight.heading,
-            },
-          ]}
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
         >
           {labels.formatMonth(visibleMonth)}
         </NativeText>
@@ -181,12 +179,7 @@ function Calendar({
       <View style={styles.grid}>
         {Array.from({ length: 7 }, (_unused, weekday) => (
           <View key={weekday} style={styles.weekday}>
-            <NativeText
-              style={[
-                theme.typography.scale.caption,
-                { color: theme.colors.mutedForeground },
-              ]}
-            >
+            <NativeText style={typeStyle(theme, "caption", "mutedForeground")}>
               {labels.formatWeekday(weekday)}
             </NativeText>
           </View>
@@ -221,14 +214,11 @@ function Calendar({
               ]}
             >
               <NativeText
-                style={[
-                  theme.typography.scale.bodySmall,
-                  {
-                    color: dateSelected
-                      ? theme.colors.primaryForeground
-                      : theme.colors.foreground,
-                  },
-                ]}
+                style={typeStyle(
+                  theme,
+                  "bodySmall",
+                  dateSelected ? "primaryForeground" : "foreground",
+                )}
               >
                 {date.getDate()}
               </NativeText>

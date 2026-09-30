@@ -12,7 +12,11 @@ import {
   type ViewProps,
 } from "react-native";
 
-import { useControllableState } from "../../primitives/use-controllable-state";
+import { typeStyle } from "../../primitives/type-style";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../primitives/use-controllable-state";
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
 import { useTheme } from "../../theme/theme-provider";
@@ -99,13 +103,11 @@ function Carousel({
   const [width, setWidth] = useState(0);
   const [swipeRevision, setSwipeRevision] = useState(0);
   const [selection, setSelection] = useControllableState(
-    selectedId === undefined
-      ? {
-          defaultValue: defaultSelectedId ?? items[0]?.id ?? "",
-          mode: "uncontrolled",
-          onChange: onSelectedIdChange,
-        }
-      : { mode: "controlled", onChange: onSelectedIdChange, value: selectedId },
+    controllableOptions(
+      selectedId,
+      defaultSelectedId ?? items[0]?.id ?? "",
+      onSelectedIdChange,
+    ),
   );
   const foundIndex = items.findIndex((item) => item.id === selection);
   const selectedIndex = foundIndex < 0 ? 0 : foundIndex;
@@ -209,12 +211,7 @@ function Carousel({
             {labels.previous}
           </Text>
         </Pressable>
-        <Text
-          style={[
-            theme.typography.scale.caption,
-            { color: theme.colors.mutedForeground },
-          ]}
-        >
+        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {position}
         </Text>
         <Pressable
