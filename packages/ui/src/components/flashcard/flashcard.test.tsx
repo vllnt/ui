@@ -11,9 +11,7 @@ describe("Flashcard", () => {
         question="What does a variable do?"
       />,
     );
-
     fireEvent.click(screen.getByRole("button", { name: "Reveal answer" }));
-
     expect(
       screen.getByText("A variable stores a reusable value."),
     ).toBeInTheDocument();
@@ -21,7 +19,6 @@ describe("Flashcard", () => {
 
   it("calls onFlipChange when toggled", () => {
     const onFlipChange = vi.fn();
-
     render(
       <Flashcard
         answer="A loop repeats a block of code."
@@ -29,9 +26,7 @@ describe("Flashcard", () => {
         question="What is a loop?"
       />,
     );
-
     fireEvent.click(screen.getByRole("button", { name: "Flip" }));
-
     expect(onFlipChange).toHaveBeenCalledWith(true);
   });
 });

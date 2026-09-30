@@ -3,26 +3,21 @@ import { describe, expect, it, vi } from "vitest";
 
 import { DatePicker } from "./date-picker";
 
-const SELECTED_DATE = new Date("2026-04-19T00:00:00.000Z");
-
 describe("DatePicker", () => {
   it("renders placeholder by default", () => {
     render(<DatePicker placeholder="Select a due date" />);
-
     expect(screen.getByRole("button")).toHaveTextContent("Select a due date");
   });
 
-  it("renders the selected date", () => {
-    render(<DatePicker value={SELECTED_DATE} />);
-
-    expect(screen.getByRole("button")).toHaveTextContent("April 19, 2026");
-  });
-
-  it("forwards calendar selection changes", () => {
+  it("renders the selected date without firing onValueChange", () => {
     const onValueChange = vi.fn();
-
-    render(<DatePicker onValueChange={onValueChange} value={SELECTED_DATE} />);
-
+    render(
+      <DatePicker
+        onValueChange={onValueChange}
+        value={new Date("2026-04-19T00:00:00.000Z")}
+      />,
+    );
+    expect(screen.getByRole("button")).toHaveTextContent("April 19, 2026");
     expect(onValueChange).not.toHaveBeenCalled();
   });
 });

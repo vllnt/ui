@@ -12,7 +12,6 @@ describe("CountdownTimer", () => {
         title="SLA timer"
       />,
     );
-
     expect(screen.getByText("SLA timer")).toBeInTheDocument();
     expect(screen.getByText("On track")).toBeInTheDocument();
     expect(screen.getByText("Days")).toBeInTheDocument();
@@ -27,7 +26,6 @@ describe("CountdownTimer", () => {
         now="2026-03-15T10:05:00.000Z"
       />,
     );
-
     expect(screen.getByText("Breached")).toBeInTheDocument();
   });
 });

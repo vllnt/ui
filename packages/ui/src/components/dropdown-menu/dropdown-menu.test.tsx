@@ -21,7 +21,6 @@ describe("DropdownMenu", () => {
         </DropdownMenuContent>
       </DropdownMenu>,
     );
-
     expect(screen.getByText("Menu")).toBeInTheDocument();
     expect(screen.queryByText("Item")).not.toBeInTheDocument();
   });
@@ -37,16 +36,12 @@ describe("DropdownMenu", () => {
         </DropdownMenuContent>
       </DropdownMenu>,
     );
-
     expect(screen.getByText("Label")).toBeInTheDocument();
     expect(screen.getByText("Item")).toBeInTheDocument();
   });
-});
 
-describe("DropdownMenuShortcut", () => {
-  it("renders the shortcut text", () => {
+  it("DropdownMenuShortcut renders the shortcut text", () => {
     render(<DropdownMenuShortcut>Cmd+K</DropdownMenuShortcut>);
-
     expect(screen.getByText("Cmd+K")).toBeInTheDocument();
   });
 });

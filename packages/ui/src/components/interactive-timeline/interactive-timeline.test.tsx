@@ -42,183 +42,138 @@ const CATEGORIES = [
 
 const TIMELINE_START = new Date("2024-01-01");
 const TIMELINE_END = new Date("2025-01-01");
-const OUTSIDE_WINDOW_START = new Date("2010-01-01");
-const OUTSIDE_WINDOW_END = new Date("2010-12-31");
 
 describe("InteractiveTimeline", () => {
-  describe("rendering", () => {
-    it("renders track labels and event markers", () => {
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={TIMELINE_END}
-          events={EVENTS}
-          startDate={TIMELINE_START}
-          tracks={TRACKS}
-        />,
-      );
-
-      expect(screen.getByText("Releases")).toBeInTheDocument();
-      expect(screen.getByText("Incidents")).toBeInTheDocument();
-      expect(
-        container.querySelector("[data-event-id='v1']"),
-      ).toBeInTheDocument();
-      expect(
-        container.querySelector("[data-event-id='incident-1']"),
-      ).toBeInTheDocument();
-    });
-
-    it("falls back to a single default track when none provided", () => {
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={TIMELINE_END}
-          events={EVENTS}
-          startDate={TIMELINE_START}
-        />,
-      );
-
-      expect(
-        container.querySelector("[data-track-id='default']"),
-      ).toBeInTheDocument();
-    });
+  it("renders track labels and markers, then selects and reports a clicked marker", () => {
+    const onEventClick = vi.fn();
+    const { container } = render(
+      <InteractiveTimeline
+        endDate={TIMELINE_END}
+        events={EVENTS}
+        onEventClick={onEventClick}
+        startDate={TIMELINE_START}
+        tracks={TRACKS}
+      />,
+    );
+    expect(screen.getByText("Releases")).toBeInTheDocument();
+    expect(screen.getByText("Incidents")).toBeInTheDocument();
+    expect(
+      container.querySelector("[data-event-id='incident-1']"),
+    ).toBeInTheDocument();
+    const marker = container.querySelector("[data-event-id='v1']");
+    expect(marker).not.toBeNull();
+    if (marker) fireEvent.click(marker);
+    expect(onEventClick).toHaveBeenCalledTimes(1);
+    expect(onEventClick).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "v1" }),
+    );
+    expect(container.querySelector("[data-event-id='v1']")).toHaveAttribute(
+      "data-selected",
+      "true",
+    );
   });
 
-  describe("interaction", () => {
-    it("fires onEventClick when a marker is clicked", () => {
-      const onEventClick = vi.fn();
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={TIMELINE_END}
-          events={EVENTS}
-          onEventClick={onEventClick}
-          startDate={TIMELINE_START}
-          tracks={TRACKS}
-        />,
-      );
-
-      const marker = container.querySelector("[data-event-id='v1']");
-      expect(marker).not.toBeNull();
-      if (marker) fireEvent.click(marker);
-
-      expect(onEventClick).toHaveBeenCalledTimes(1);
-      expect(onEventClick).toHaveBeenCalledWith(
-        expect.objectContaining({ id: "v1" }),
-      );
-    });
-
-    it("marks the clicked event as selected via data-selected", () => {
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={TIMELINE_END}
-          events={EVENTS}
-          startDate={TIMELINE_START}
-          tracks={TRACKS}
-        />,
-      );
-
-      const marker = container.querySelector("[data-event-id='v1']");
-      if (marker) fireEvent.click(marker);
-
-      expect(container.querySelector("[data-event-id='v1']")).toHaveAttribute(
-        "data-selected",
-        "true",
-      );
-    });
+  it("falls back to a single default track when none provided", () => {
+    const { container } = render(
+      <InteractiveTimeline
+        endDate={TIMELINE_END}
+        events={EVENTS}
+        startDate={TIMELINE_START}
+      />,
+    );
+    expect(
+      container.querySelector("[data-track-id='default']"),
+    ).toBeInTheDocument();
   });
 
-  describe("filtering", () => {
-    it("hides events whose category is toggled off", () => {
-      const { container } = render(
-        <InteractiveTimeline
-          categories={CATEGORIES}
-          endDate={TIMELINE_END}
-          events={EVENTS}
-          startDate={TIMELINE_START}
-          tracks={TRACKS}
-        >
-          <InteractiveTimelineToolbar>
-            <InteractiveTimelineFilter categories={CATEGORIES} />
-          </InteractiveTimelineToolbar>
-        </InteractiveTimeline>,
-      );
-
-      const incidentChip = container.querySelector(
-        "[data-category-id='incident']",
-      );
-      expect(incidentChip).not.toBeNull();
-      if (incidentChip) fireEvent.click(incidentChip);
-
-      expect(
-        container.querySelector("[data-event-id='incident-1']"),
-      ).toBeNull();
-      expect(
-        container.querySelector("[data-event-id='v1']"),
-      ).toBeInTheDocument();
-    });
+  it("marks a clicked event as selected without an onEventClick handler", () => {
+    const { container } = render(
+      <InteractiveTimeline
+        endDate={TIMELINE_END}
+        events={EVENTS}
+        startDate={TIMELINE_START}
+        tracks={TRACKS}
+      />,
+    );
+    const marker = container.querySelector("[data-event-id='v1']");
+    if (marker) fireEvent.click(marker);
+    expect(container.querySelector("[data-event-id='v1']")).toHaveAttribute(
+      "data-selected",
+      "true",
+    );
   });
 
-  describe("zoom controls", () => {
-    it("doubles inner width on zoom-in and halves on zoom-out", () => {
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={TIMELINE_END}
-          events={EVENTS}
-          startDate={TIMELINE_START}
-          tracks={TRACKS}
-        >
-          <InteractiveTimelineToolbar>
-            <InteractiveTimelineZoomIn />
-            <InteractiveTimelineZoomOut />
-            <InteractiveTimelineToday />
-          </InteractiveTimelineToolbar>
-        </InteractiveTimeline>,
-      );
-
-      const readZoom = (): string | undefined =>
-        container.querySelector<HTMLElement>("[data-zoom]")?.dataset.zoom;
-
-      expect(readZoom()).toBe("1");
-
-      fireEvent.click(screen.getByLabelText("Zoom in"));
-      expect(readZoom()).toBe("2");
-
-      fireEvent.click(screen.getByLabelText("Zoom out"));
-      expect(readZoom()).toBe("1");
-    });
+  it("hides events whose category is toggled off", () => {
+    const { container } = render(
+      <InteractiveTimeline
+        categories={CATEGORIES}
+        endDate={TIMELINE_END}
+        events={EVENTS}
+        startDate={TIMELINE_START}
+        tracks={TRACKS}
+      >
+        <InteractiveTimelineToolbar>
+          <InteractiveTimelineFilter categories={CATEGORIES} />
+        </InteractiveTimelineToolbar>
+      </InteractiveTimeline>,
+    );
+    const incidentChip = container.querySelector(
+      "[data-category-id='incident']",
+    );
+    expect(incidentChip).not.toBeNull();
+    if (incidentChip) fireEvent.click(incidentChip);
+    expect(container.querySelector("[data-event-id='incident-1']")).toBeNull();
+    expect(container.querySelector("[data-event-id='v1']")).toBeInTheDocument();
   });
 
-  describe("today marker", () => {
-    it("renders the today marker when today falls in the visible window", () => {
-      const today = new Date();
-      const start = new Date(today.getTime() - 86_400_000);
-      const end = new Date(today.getTime() + 86_400_000);
+  it("doubles inner width on zoom-in and halves on zoom-out", () => {
+    const { container } = render(
+      <InteractiveTimeline
+        endDate={TIMELINE_END}
+        events={EVENTS}
+        startDate={TIMELINE_START}
+        tracks={TRACKS}
+      >
+        <InteractiveTimelineToolbar>
+          <InteractiveTimelineZoomIn />
+          <InteractiveTimelineZoomOut />
+          <InteractiveTimelineToday />
+        </InteractiveTimelineToolbar>
+      </InteractiveTimeline>,
+    );
+    const readZoom = (): string | undefined =>
+      container.querySelector<HTMLElement>("[data-zoom]")?.dataset.zoom;
+    expect(readZoom()).toBe("1");
+    fireEvent.click(screen.getByLabelText("Zoom in"));
+    expect(readZoom()).toBe("2");
+    fireEvent.click(screen.getByLabelText("Zoom out"));
+    expect(readZoom()).toBe("1");
+  });
 
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={end}
-          events={[]}
-          startDate={start}
-          tracks={TRACKS}
-        />,
-      );
+  it("renders the today marker when today falls in the visible window", () => {
+    const now = Date.now();
+    const { container } = render(
+      <InteractiveTimeline
+        endDate={new Date(now + 86_400_000)}
+        events={[]}
+        startDate={new Date(now - 86_400_000)}
+        tracks={TRACKS}
+      />,
+    );
+    expect(
+      container.querySelector("[data-testid='today-marker']"),
+    ).toBeInTheDocument();
+  });
 
-      expect(
-        container.querySelector("[data-testid='today-marker']"),
-      ).toBeInTheDocument();
-    });
-
-    it("hides the today marker when outside the window", () => {
-      const { container } = render(
-        <InteractiveTimeline
-          endDate={OUTSIDE_WINDOW_END}
-          events={[]}
-          startDate={OUTSIDE_WINDOW_START}
-          tracks={TRACKS}
-        />,
-      );
-
-      expect(
-        container.querySelector("[data-testid='today-marker']"),
-      ).toBeNull();
-    });
+  it("hides the today marker when outside the window", () => {
+    const { container } = render(
+      <InteractiveTimeline
+        endDate={new Date("2010-12-31")}
+        events={[]}
+        startDate={new Date("2010-01-01")}
+        tracks={TRACKS}
+      />,
+    );
+    expect(container.querySelector("[data-testid='today-marker']")).toBeNull();
   });
 });

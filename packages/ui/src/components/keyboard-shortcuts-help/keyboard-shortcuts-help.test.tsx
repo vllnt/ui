@@ -17,7 +17,6 @@ describe("KeyboardShortcutsHelp", () => {
         shortcuts={shortcuts}
       />,
     );
-
     expect(container.firstChild).toBeNull();
   });
 
@@ -25,7 +24,6 @@ describe("KeyboardShortcutsHelp", () => {
     render(
       <KeyboardShortcutsHelp isOpen onClose={vi.fn()} shortcuts={shortcuts} />,
     );
-
     expect(screen.getByText("Keyboard Shortcuts")).toBeInTheDocument();
     expect(screen.getByText("Pan canvas")).toBeInTheDocument();
     expect(screen.getByText("Zoom in")).toBeInTheDocument();
@@ -40,11 +38,16 @@ describe("KeyboardShortcutsHelp", () => {
         title="Hotkeys"
       />,
     );
-
     expect(screen.getByText("Hotkeys")).toBeInTheDocument();
   });
 
-  it("invokes onClose when Escape is pressed", () => {
+  it.each([
+    ["Escape is pressed", () => fireEvent.keyDown(window, { key: "Escape" })],
+    [
+      "the close button is clicked",
+      () => fireEvent.click(screen.getByRole("button")),
+    ],
+  ])("invokes onClose when %s", (_name, act) => {
     const handleClose = vi.fn();
     render(
       <KeyboardShortcutsHelp
@@ -53,23 +56,7 @@ describe("KeyboardShortcutsHelp", () => {
         shortcuts={shortcuts}
       />,
     );
-
-    fireEvent.keyDown(window, { key: "Escape" });
-    expect(handleClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("invokes onClose when the close button is clicked", () => {
-    const handleClose = vi.fn();
-    render(
-      <KeyboardShortcutsHelp
-        isOpen
-        onClose={handleClose}
-        shortcuts={shortcuts}
-      />,
-    );
-
-    const closeButton = screen.getByRole("button");
-    fireEvent.click(closeButton);
+    act();
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
 });

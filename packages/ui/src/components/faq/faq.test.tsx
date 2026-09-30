@@ -4,39 +4,22 @@ import { describe, expect, it } from "vitest";
 import { FAQ, FAQItem } from "./faq";
 
 describe("FAQ", () => {
-  it("renders the title and items", () => {
-    render(
+  it("renders the title as h4 by default with items closed until clicked", () => {
+    const { container } = render(
       <FAQ title="Common questions">
         <FAQItem question="What does it do?">It tests the FAQ.</FAQItem>
       </FAQ>,
     );
-
-    expect(screen.getByText("Common questions")).toBeInTheDocument();
-    expect(screen.getByText("What does it do?")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 4, name: "Common questions" }),
+    ).toBeInTheDocument();
+    const panel = container.querySelector(".overflow-hidden");
+    expect(panel).toHaveClass("max-h-0");
+    fireEvent.click(screen.getByText("What does it do?"));
+    expect(panel).toHaveClass("max-h-96");
   });
 
-  it("renders FAQItem closed by default", () => {
-    const { container } = render(
-      <FAQ>
-        <FAQItem question="Q1">Answer 1</FAQItem>
-      </FAQ>,
-    );
-
-    expect(container.querySelector(".overflow-hidden")).toHaveClass("max-h-0");
-  });
-
-  it("opens the item when the trigger is clicked", () => {
-    const { container } = render(
-      <FAQ>
-        <FAQItem question="Q1">Answer 1</FAQItem>
-      </FAQ>,
-    );
-
-    fireEvent.click(screen.getByText("Q1"));
-    expect(container.querySelector(".overflow-hidden")).toHaveClass("max-h-96");
-  });
-
-  it("respects defaultOpen on FAQItem", () => {
+  it("falls back to the default title and respects defaultOpen on FAQItem", () => {
     const { container } = render(
       <FAQ>
         <FAQItem defaultOpen question="Q1">
@@ -44,30 +27,8 @@ describe("FAQ", () => {
         </FAQItem>
       </FAQ>,
     );
-
-    expect(container.querySelector(".overflow-hidden")).toHaveClass("max-h-96");
-  });
-
-  it("falls back to the default title when none is provided", () => {
-    render(
-      <FAQ>
-        <FAQItem question="Q1">A</FAQItem>
-      </FAQ>,
-    );
-
     expect(screen.getByText("Frequently Asked Questions")).toBeInTheDocument();
-  });
-
-  it("renders the title as h4 by default", () => {
-    render(
-      <FAQ title="Common questions">
-        <FAQItem question="Q1">A</FAQItem>
-      </FAQ>,
-    );
-
-    expect(
-      screen.getByRole("heading", { level: 4, name: "Common questions" }),
-    ).toBeInTheDocument();
+    expect(container.querySelector(".overflow-hidden")).toHaveClass("max-h-96");
   });
 
   it("renders the title with the heading tag passed via the as prop", () => {
@@ -76,7 +37,6 @@ describe("FAQ", () => {
         <FAQItem question="Q1">A</FAQItem>
       </FAQ>,
     );
-
     expect(
       screen.getByRole("heading", { level: 2, name: "Common questions" }),
     ).toBeInTheDocument();

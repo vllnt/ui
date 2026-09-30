@@ -9,18 +9,20 @@ import {
 } from "./data-list";
 
 describe("DataList", () => {
-  it("renders labels and values semantically", () => {
+  it("renders labels and values semantically with custom class names", () => {
     render(
-      <DataList>
+      <DataList className="custom-class">
         <DataListItem>
           <DataListLabel>Environment</DataListLabel>
           <DataListValue>Production</DataListValue>
         </DataListItem>
       </DataList>,
     );
-
     expect(screen.getByText("Environment").tagName).toBe("DT");
     expect(screen.getByText("Production").tagName).toBe("DD");
+    expect(screen.getByText("Environment").closest("dl")).toHaveClass(
+      "custom-class",
+    );
   });
 
   it("inherits compact density from the root", () => {
@@ -32,22 +34,6 @@ describe("DataList", () => {
         </DataListItem>
       </DataList>,
     );
-
     expect(screen.getByText("Owner").parentElement).toHaveClass("py-3");
-  });
-
-  it("accepts custom class names", () => {
-    render(
-      <DataList className="custom-class">
-        <DataListItem>
-          <DataListLabel>Region</DataListLabel>
-          <DataListValue>us-east-1</DataListValue>
-        </DataListItem>
-      </DataList>,
-    );
-
-    expect(screen.getByText("Region").closest("dl")).toHaveClass(
-      "custom-class",
-    );
   });
 });

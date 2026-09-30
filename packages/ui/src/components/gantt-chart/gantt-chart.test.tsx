@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import type { ComponentProps } from "react";
 import { describe, expect, it } from "vitest";
 
 import { GanttChart, type GanttGroup } from "./gantt-chart";
@@ -28,163 +29,79 @@ const GROUPS: GanttGroup[] = [
   },
 ];
 
+function renderChart(props: Partial<ComponentProps<typeof GanttChart>> = {}) {
+  return render(
+    <GanttChart
+      endDate="2026-06-30"
+      groups={GROUPS}
+      startDate="2026-01-01"
+      {...props}
+    />,
+  );
+}
+
 describe("GanttChart", () => {
-  describe("rendering", () => {
-    it("renders the group name and task titles", () => {
-      render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={GROUPS}
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(screen.getByText("Phase 1")).toBeInTheDocument();
-      expect(screen.getByText("Design system")).toBeInTheDocument();
-      expect(screen.getByText("Core components")).toBeInTheDocument();
+  it("renders the group, task titles, per-bar ids, in-range milestones, and the today line", () => {
+    const { container } = renderChart({
+      milestones: [{ date: "2026-04-15", id: "v1", title: "v1.0" }],
+      now: "2026-03-01",
     });
+    expect(screen.getByText("Phase 1")).toBeInTheDocument();
+    expect(screen.getByText("Design system")).toBeInTheDocument();
+    expect(screen.getByText("Core components")).toBeInTheDocument();
+    expect(screen.getByText("v1.0")).toBeInTheDocument();
+    const bars = container.querySelectorAll("[data-task-id]");
+    expect(bars.length).toBe(2);
+    expect(bars[0]).toHaveAttribute("data-task-id", "design");
+    expect(bars[1]).toHaveAttribute("data-task-id", "core");
+    expect(screen.getByLabelText("Milestone: v1.0")).toBeInTheDocument();
+    expect(screen.getByLabelText("Today")).toBeInTheDocument();
+  });
 
-    it("emits data-task-id per bar", () => {
-      const { container } = render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={GROUPS}
-          startDate="2026-01-01"
-        />,
-      );
-
-      const bars = container.querySelectorAll("[data-task-id]");
-      expect(bars.length).toBe(2);
-      expect(bars[0]).toHaveAttribute("data-task-id", "design");
-      expect(bars[1]).toHaveAttribute("data-task-id", "core");
-    });
-
-    it("renders progress bars with role=progressbar and clamped aria values", () => {
-      render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={[
+  it("renders the assignee and a progressbar with clamped aria values", () => {
+    renderChart({
+      groups: [
+        {
+          id: "single",
+          name: "Single",
+          tasks: [
             {
-              id: "single",
-              name: "Single",
-              tasks: [
-                {
-                  end: "2026-02-15",
-                  id: "task",
-                  progress: 150,
-                  start: "2026-01-15",
-                  title: "Edge",
-                },
-              ],
+              end: "2026-02-15",
+              id: "task",
+              progress: 150,
+              start: "2026-01-15",
+              title: "Edge",
             },
-          ]}
-          startDate="2026-01-01"
-        />,
-      );
-
-      const bars = screen.getAllByRole("progressbar");
-      expect(bars).toHaveLength(1);
-      expect(bars[0]).toHaveAttribute("aria-valuenow", "100");
-      expect(bars[0]).toHaveAttribute("aria-valuemin", "0");
-      expect(bars[0]).toHaveAttribute("aria-valuemax", "100");
-    });
-
-    it("renders the assignee label when provided", () => {
-      render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={[
             {
-              id: "single",
-              name: "Single",
-              tasks: [
-                {
-                  assignee: "Alice",
-                  end: "2026-02-15",
-                  id: "task",
-                  start: "2026-01-15",
-                  title: "Design",
-                },
-              ],
+              assignee: "Alice",
+              end: "2026-02-15",
+              id: "owned",
+              start: "2026-01-15",
+              title: "Design",
             },
-          ]}
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(screen.getByText("Alice")).toBeInTheDocument();
+          ],
+        },
+      ],
     });
+    expect(screen.getByText("Alice")).toBeInTheDocument();
+    const bars = screen.getAllByRole("progressbar");
+    expect(bars).toHaveLength(2);
+    expect(bars[0]).toHaveAttribute("aria-valuenow", "100");
+    expect(bars[0]).toHaveAttribute("aria-valuemin", "0");
+    expect(bars[0]).toHaveAttribute("aria-valuemax", "100");
   });
 
-  describe("milestones", () => {
-    it("renders milestones in range", () => {
-      render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={GROUPS}
-          milestones={[{ date: "2026-04-15", id: "v1", title: "v1.0" }]}
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(screen.getByLabelText("Milestone: v1.0")).toBeInTheDocument();
-      expect(screen.getByText("v1.0")).toBeInTheDocument();
+  it("hides out-of-range milestones and today line", () => {
+    const { container } = renderChart({
+      milestones: [{ date: "2027-01-01", id: "future", title: "Future" }],
+      now: "2027-01-01",
     });
-
-    it("hides milestones outside the visible range", () => {
-      const { container } = render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={GROUPS}
-          milestones={[{ date: "2027-01-01", id: "future", title: "Future" }]}
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(container.querySelector("[data-milestone-id]")).toBeNull();
-    });
+    expect(container.querySelector("[data-milestone-id]")).toBeNull();
+    expect(screen.queryByLabelText("Today")).not.toBeInTheDocument();
   });
 
-  describe("today line", () => {
-    it("renders the today line when within range", () => {
-      render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={GROUPS}
-          now="2026-03-01"
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(screen.getByLabelText("Today")).toBeInTheDocument();
-    });
-
-    it("hides the today line when outside the range", () => {
-      render(
-        <GanttChart
-          endDate="2026-06-30"
-          groups={GROUPS}
-          now="2027-01-01"
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(screen.queryByLabelText("Today")).not.toBeInTheDocument();
-    });
-  });
-
-  describe("scale", () => {
-    it("renders quarter ticks for scale=quarter", () => {
-      render(
-        <GanttChart
-          endDate="2026-12-31"
-          groups={GROUPS}
-          scale="quarter"
-          startDate="2026-01-01"
-        />,
-      );
-
-      expect(screen.getByText("Q1 2026")).toBeInTheDocument();
-    });
+  it("renders quarter ticks for scale=quarter", () => {
+    renderChart({ endDate: "2026-12-31", scale: "quarter" });
+    expect(screen.getByText("Q1 2026")).toBeInTheDocument();
   });
 });

@@ -28,139 +28,102 @@ const QUESTIONS: KnowledgeCheckQuestion[] = [
   },
 ];
 
+const click = (name: string) => {
+  fireEvent.click(screen.getByRole("button", { name }));
+};
+
+function answerChoice(label: string) {
+  fireEvent.click(screen.getByLabelText(label));
+  click("Check");
+}
+
 describe("KnowledgeCheck", () => {
-  describe("rendering", () => {
-    it("renders the title and the first question", () => {
-      render(<KnowledgeCheck questions={QUESTIONS} title="Check yourself" />);
-
-      expect(
-        screen.getByRole("heading", { level: 3, name: "Check yourself" }),
-      ).toBeInTheDocument();
-      expect(screen.getByText("What is React?")).toBeInTheDocument();
-    });
-
-    it("shows the position counter", () => {
-      render(<KnowledgeCheck questions={QUESTIONS} />);
-
-      expect(screen.getByText("1 of 3")).toBeInTheDocument();
-    });
+  it("renders the title, the first question, and the position counter", () => {
+    render(<KnowledgeCheck questions={QUESTIONS} title="Check yourself" />);
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Check yourself" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("What is React?")).toBeInTheDocument();
+    expect(screen.getByText("1 of 3")).toBeInTheDocument();
   });
 
-  describe("multiple-choice", () => {
-    it("checks the answer + flips to the next button", () => {
-      render(<KnowledgeCheck questions={QUESTIONS} />);
-
-      fireEvent.click(screen.getByLabelText("A UI library"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-
-      expect(screen.getByRole("status")).toHaveTextContent("Correct");
-      expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument();
-    });
-
-    it("flags an incorrect choice", () => {
-      render(<KnowledgeCheck questions={QUESTIONS} />);
-
-      fireEvent.click(screen.getByLabelText("A database"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-
-      expect(screen.getByRole("status")).toHaveTextContent("Try again");
-    });
+  it("flags an incorrect multiple-choice answer", () => {
+    render(<KnowledgeCheck questions={QUESTIONS} />);
+    answerChoice("A database");
+    expect(screen.getByRole("status")).toHaveTextContent("Try again");
   });
 
-  describe("true-false", () => {
-    it("evaluates the boolean answer", () => {
-      render(<KnowledgeCheck questions={QUESTIONS} />);
+  it("walks every question type to the score summary", () => {
+    const onAnswer = vi.fn();
+    const onComplete = vi.fn();
+    render(
+      <KnowledgeCheck
+        onAnswer={onAnswer}
+        onComplete={onComplete}
+        questions={QUESTIONS}
+      />,
+    );
 
-      fireEvent.click(screen.getByLabelText("A UI library"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "Next" }));
+    answerChoice("A UI library");
+    expect(screen.getByRole("status")).toHaveTextContent("Correct");
+    click("Next");
 
-      expect(screen.getByText("React is a framework.")).toBeInTheDocument();
-      fireEvent.click(screen.getByRole("button", { name: "False" }));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
+    expect(screen.getByText("React is a framework.")).toBeInTheDocument();
+    click("False");
+    click("Check");
+    expect(screen.getByRole("status")).toHaveTextContent("Correct");
+    expect(
+      screen.getByText("React is a UI library, not a framework."),
+    ).toBeInTheDocument();
+    click("Next");
 
-      expect(screen.getByRole("status")).toHaveTextContent("Correct");
-      expect(
-        screen.getByText("React is a UI library, not a framework."),
-      ).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "  USESTATE  " },
     });
+    click("Check");
+    expect(screen.getByRole("status")).toHaveTextContent("Correct");
+    expect(onAnswer).toHaveBeenLastCalledWith({
+      correct: true,
+      questionId: "state-hook",
+      response: "  USESTATE  ",
+    });
+
+    click("You scored");
+    expect(screen.getByText("3 of 3")).toBeInTheDocument();
+    expect(onComplete).toHaveBeenCalledTimes(1);
+    expect(onComplete).toHaveBeenCalledWith(
+      expect.objectContaining({ correct: 3, total: 3 }),
+    );
   });
 
-  describe("fill-blank", () => {
-    it("normalizes case insensitively by default", () => {
-      const onAnswer = vi.fn();
-      render(<KnowledgeCheck onAnswer={onAnswer} questions={QUESTIONS} />);
-
-      fireEvent.click(screen.getByLabelText("A UI library"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "Next" }));
-      fireEvent.click(screen.getByRole("button", { name: "False" }));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "Next" }));
-
-      const input = screen.getByRole("textbox");
-      fireEvent.change(input, { target: { value: "  USESTATE  " } });
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-
-      expect(screen.getByRole("status")).toHaveTextContent("Correct");
-      expect(onAnswer).toHaveBeenLastCalledWith({
-        correct: true,
-        questionId: "state-hook",
-        response: "  USESTATE  ",
-      });
+  it("accepts the exact fill-blank answer", () => {
+    const fillBlank = QUESTIONS[2];
+    if (!fillBlank) throw new Error("expected a fixture question");
+    render(<KnowledgeCheck questions={[fillBlank]} />);
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "useState" },
     });
+    click("Check");
+    expect(screen.getByRole("status")).toHaveTextContent("Correct");
   });
 
-  describe("completion", () => {
-    it("shows the score summary on the last question", () => {
-      const onComplete = vi.fn();
-      render(<KnowledgeCheck onComplete={onComplete} questions={QUESTIONS} />);
-
-      fireEvent.click(screen.getByLabelText("A UI library"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "Next" }));
-      fireEvent.click(screen.getByRole("button", { name: "False" }));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "Next" }));
-      fireEvent.change(screen.getByRole("textbox"), {
-        target: { value: "useState" },
-      });
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "You scored" }));
-
-      expect(screen.getByText("3 of 3")).toBeInTheDocument();
-      expect(onComplete).toHaveBeenCalledTimes(1);
-      expect(onComplete).toHaveBeenCalledWith(
-        expect.objectContaining({ correct: 3, total: 3 }),
-      );
-    });
-
-    it("retry resets the form to the first question", () => {
-      const firstQuestion = QUESTIONS[0];
-      if (!firstQuestion) throw new Error("expected a fixture question");
-      render(<KnowledgeCheck questions={[firstQuestion]} />);
-
-      fireEvent.click(screen.getByLabelText("A UI library"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "You scored" }));
-
-      expect(screen.getByText("1 of 1")).toBeInTheDocument();
-      fireEvent.click(screen.getByRole("button", { name: "Retry" }));
-      expect(screen.getByText("What is React?")).toBeInTheDocument();
-    });
+  it("retry resets the form to the first question", () => {
+    const firstQuestion = QUESTIONS[0];
+    if (!firstQuestion) throw new Error("expected a fixture question");
+    render(<KnowledgeCheck questions={[firstQuestion]} />);
+    answerChoice("A UI library");
+    click("You scored");
+    expect(screen.getByText("1 of 1")).toBeInTheDocument();
+    click("Retry");
+    expect(screen.getByText("What is React?")).toBeInTheDocument();
   });
 
-  describe("navigation", () => {
-    it("Back returns to the previous question", () => {
-      render(<KnowledgeCheck questions={QUESTIONS} />);
-
-      fireEvent.click(screen.getByLabelText("A UI library"));
-      fireEvent.click(screen.getByRole("button", { name: "Check" }));
-      fireEvent.click(screen.getByRole("button", { name: "Next" }));
-      expect(screen.getByText("React is a framework.")).toBeInTheDocument();
-
-      fireEvent.click(screen.getByRole("button", { name: "Back" }));
-      expect(screen.getByText("What is React?")).toBeInTheDocument();
-    });
+  it("Back returns to the previous question", () => {
+    render(<KnowledgeCheck questions={QUESTIONS} />);
+    answerChoice("A UI library");
+    click("Next");
+    expect(screen.getByText("React is a framework.")).toBeInTheDocument();
+    click("Back");
+    expect(screen.getByText("What is React?")).toBeInTheDocument();
   });
 });

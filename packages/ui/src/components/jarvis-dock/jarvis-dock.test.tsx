@@ -24,57 +24,23 @@ const buildActions = (
 ];
 
 describe("JarvisDock", () => {
-  it("renders one button per action with the label", () => {
-    const actions = buildActions();
-    render(<JarvisDock actions={actions} />);
-
-    expect(screen.getByText("Summon")).toBeInTheDocument();
-    expect(screen.getByText("Review")).toBeInTheDocument();
-  });
-
-  it("invokes onActivate when an action is clicked", () => {
-    const handleActivate = vi.fn();
-    render(
-      <JarvisDock
-        actions={[
-          {
-            glyph: "+",
-            id: "summon",
-            label: "Summon",
-            onActivate: handleActivate,
-          },
-        ]}
-      />,
-    );
-
-    fireEvent.click(screen.getByText("Summon"));
-    expect(handleActivate).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders the palette trigger only when onOpenPalette is provided", () => {
+  it("renders labelled buttons and the palette trigger only when onOpenPalette is provided", () => {
     const { container, rerender } = render(
       <JarvisDock actions={buildActions()} />,
     );
-
+    expect(screen.getByText("Summon")).toBeInTheDocument();
+    expect(screen.getByText("Review")).toBeInTheDocument();
     expect(
       container.querySelector("[data-jarvis-palette-trigger]"),
     ).not.toBeInTheDocument();
-
     rerender(<JarvisDock actions={buildActions()} onOpenPalette={vi.fn()} />);
     expect(
       container.querySelector("[data-jarvis-palette-trigger]"),
     ).toBeInTheDocument();
   });
 
-  it("invokes onOpenPalette when the palette trigger is clicked", () => {
-    const handleOpen = vi.fn();
-    render(<JarvisDock actions={buildActions()} onOpenPalette={handleOpen} />);
-
-    fireEvent.click(screen.getByLabelText("Open command palette"));
-    expect(handleOpen).toHaveBeenCalledTimes(1);
-  });
-
-  it("renders the badge when provided", () => {
+  it("invokes onActivate for an untoned action and renders its badge", () => {
+    const handleActivate = vi.fn();
     render(
       <JarvisDock
         actions={[
@@ -83,12 +49,20 @@ describe("JarvisDock", () => {
             glyph: "+",
             id: "summon",
             label: "Summon",
-            onActivate: vi.fn(),
+            onActivate: handleActivate,
           },
         ]}
       />,
     );
-
     expect(screen.getByText("3")).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Summon"));
+    expect(handleActivate).toHaveBeenCalledTimes(1);
+  });
+
+  it("invokes onOpenPalette when the palette trigger is clicked", () => {
+    const handleOpen = vi.fn();
+    render(<JarvisDock actions={buildActions()} onOpenPalette={handleOpen} />);
+    fireEvent.click(screen.getByLabelText("Open command palette"));
+    expect(handleOpen).toHaveBeenCalledTimes(1);
   });
 });

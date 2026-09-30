@@ -19,14 +19,14 @@ describe("Dialog", () => {
         <DialogContent>Body</DialogContent>
       </Dialog>,
     );
-
     expect(screen.getByText("Open")).toBeInTheDocument();
     expect(screen.queryByText("Body")).not.toBeInTheDocument();
   });
 
-  it("renders the content when defaultOpen is true", () => {
+  it("renders the content when defaultOpen is true and reports close via onOpenChange", () => {
+    const onOpenChange = vi.fn();
     render(
-      <Dialog defaultOpen>
+      <Dialog defaultOpen onOpenChange={onOpenChange}>
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -39,24 +39,9 @@ describe("Dialog", () => {
         </DialogContent>
       </Dialog>,
     );
-
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Description")).toBeInTheDocument();
     expect(screen.getByText("Confirm")).toBeInTheDocument();
-  });
-
-  it("invokes onOpenChange when the close button is clicked", () => {
-    const onOpenChange = vi.fn();
-    render(
-      <Dialog defaultOpen onOpenChange={onOpenChange}>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent>
-          <DialogTitle>Title</DialogTitle>
-          <DialogDescription>Description</DialogDescription>
-        </DialogContent>
-      </Dialog>,
-    );
-
     fireEvent.click(screen.getByText("Close"));
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
