@@ -76,6 +76,7 @@
     "lint:fix": "eslint . --fix",
     "pack:check": "node scripts/check-packed-package.mjs",
     "check:circular": "madge --circular --extensions ts,tsx src",
+    "check:atomic": "node ../../scripts/check-atomic-levels.mjs src/components",
     "test": "vitest",
     "test:once": "vitest run",
     "test:coverage": "vitest run --coverage",

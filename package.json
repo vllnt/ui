@@ -21,6 +21,7 @@
     "test:once": "turbo test:once",
     "clean": "turbo clean",
     "check:circular": "turbo check:circular",
+    "check:atomic": "turbo check:atomic",
     "registry:build": "turbo registry:build",
     "tokens:generate": "pnpm -F @vllnt/design-source tokens:generate",
     "tokens:check": "pnpm -F @vllnt/design-source tokens:check",
