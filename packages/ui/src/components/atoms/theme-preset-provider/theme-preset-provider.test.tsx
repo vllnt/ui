@@ -28,6 +28,7 @@ describe("ThemePresetProvider", () => {
     expect(script).not.toBeNull();
     expect(script?.innerHTML).toContain("data-theme");
     expect(script?.innerHTML).toContain("localStorage");
+    expect(script?.innerHTML).not.toMatch(/<\/|[\u2028\u2029]/);
   });
 
   it("seeds data-theme from defaultPreset when no stored value exists", async () => {
