@@ -37,14 +37,6 @@ const PAGE_LEVEL_RULES = [
   "region",
 ];
 
-/**
- * Colour tokens whose contrast is being retuned in the design-token PR
- * (issue #535). A color-contrast node whose foreground or background is one
- * of these tokens is reported but does not fail the run; every other contrast
- * failure does. Delete an entry once its token passes AA.
- */
-const PENDING_TOKEN_CONTRAST = ["--muted-foreground", "--destructive"];
-
 const THEMES = ["light", "dark"];
 
 function exceptionsFor(context, parameters) {
@@ -109,55 +101,24 @@ async function runAxe(page, disabledRules) {
     await page.addScriptTag({ content: axe.source });
   }
   return page.evaluate(
-    async ({ disabled, pendingTokens, tags }) => {
-      const canvas = document.createElement("canvas").getContext("2d");
-      const rootStyle = getComputedStyle(document.documentElement);
-      const tokenColours = pendingTokens.map((name) => {
-        canvas.clearRect(0, 0, 1, 1);
-        canvas.fillStyle = `oklch(${rootStyle.getPropertyValue(name).trim()})`;
-        canvas.fillRect(0, 0, 1, 1);
-        return [...canvas.getImageData(0, 0, 1, 1).data.slice(0, 3)];
-      });
-      const isPendingToken = (hex) => {
-        if (typeof hex !== "string" || hex.length !== 7) return false;
-        const rgb = [1, 3, 5].map((index) =>
-          Number.parseInt(hex.slice(index, index + 2), 16),
-        );
-        return tokenColours.some((token) =>
-          token.every((channel, index) => Math.abs(channel - rgb[index]) <= 2),
-        );
-      };
+    async ({ disabled, tags }) => {
       const result = await window.axe.run(document, {
         resultTypes: ["violations"],
         rules: Object.fromEntries(disabled.map((id) => [id, { enabled: false }])),
         runOnly: { type: "tag", values: tags },
       });
-      const violations = [];
-      let pending = 0;
-      for (const violation of result.violations) {
-        const nodes = violation.nodes.filter((node) => {
-          if (violation.id !== "color-contrast") return true;
-          const data = node.any[0]?.data ?? {};
-          const tokenOwned = isPendingToken(data.fgColor) || isPendingToken(data.bgColor);
-          if (tokenOwned) pending += 1;
-          return !tokenOwned;
-        });
-        if (nodes.length > 0) {
-          violations.push({
-            help: violation.help,
-            id: violation.id,
-            impact: violation.impact,
-            nodes: nodes.map((node) => ({
-              html: node.html.slice(0, 160),
-              summary: (node.failureSummary ?? "").replace(/\s+/g, " ").slice(0, 240),
-              target: node.target.join(" "),
-            })),
-          });
-        }
-      }
-      return { pending, violations };
+      return result.violations.map((violation) => ({
+        help: violation.help,
+        id: violation.id,
+        impact: violation.impact,
+        nodes: violation.nodes.map((node) => ({
+          html: node.html.slice(0, 160),
+          summary: (node.failureSummary ?? "").replace(/\s+/g, " ").slice(0, 240),
+          target: node.target.join(" "),
+        })),
+      }));
     },
-    { disabled: disabledRules, pendingTokens: PENDING_TOKEN_CONTRAST, tags: AXE_TAGS },
+    { disabled: disabledRules, tags: AXE_TAGS },
   );
 }
 
@@ -185,7 +146,7 @@ async function checkA11y(page, context) {
     for (const theme of THEMES) {
       await setTheme(page, theme);
       await settle(page);
-      const { violations } = await runAxe(page, disabled);
+      const violations = await runAxe(page, disabled);
       report.push(...formatViolations(theme, violations));
     }
   } finally {
