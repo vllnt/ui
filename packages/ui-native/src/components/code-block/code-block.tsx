@@ -161,6 +161,15 @@ function CodeContent({
 }
 CodeContent.displayName = "CodeContent";
 
+function resolveCopyLabel(
+  copied: boolean,
+  available: boolean,
+  labels: CodeBlockProps["copyLabels"],
+) {
+  if (copied) return labels?.copied;
+  return available ? labels?.copy : labels?.unavailable;
+}
+
 /**
  * Renders selectable plain code. Hosts inject syntax rendering and clipboard
  * support explicitly.
@@ -189,14 +198,8 @@ function CodeBlock({
   );
   const copyAvailable = clipboard !== undefined;
   const copied = copiedCode === code;
-  const copyLabel = copied
-    ? copyLabels?.copied
-    : copyAvailable
-      ? copyLabels?.copy
-      : copyLabels?.unavailable;
-  useAnnounceOnChange(copied ? copyLabels?.copied : undefined, {
-    liveRegion: true,
-  });
+  const copyLabel = resolveCopyLabel(copied, copyAvailable, copyLabels);
+  useAnnounceOnChange(copied ? copyLabel : undefined, { liveRegion: true });
   const copy = async () => {
     if (!clipboard) return;
     const currentOperation = ++operation.current;

@@ -295,8 +295,9 @@ function getTimerPresentation({
 /**
  * Native countdown card with fixed-time injection for deterministic rendering.
  * The title speaks the status and remaining time when focused; the ticking
- * digits stay silent, and only status transitions (on track, at risk,
- * breached) are announced. The progress bar reports the time remaining.
+ * digits stay silent, and the card announces status transitions (on track,
+ * at risk, breached) and nothing else. The progress bar reports the time
+ * remaining.
  */
 function CountdownTimer({
   deadline,

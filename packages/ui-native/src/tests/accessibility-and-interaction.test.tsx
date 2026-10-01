@@ -1,5 +1,5 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react-native";
-import { Image, Pressable, Text } from "react-native";
+import { AccessibilityInfo, Image, Pressable, Text } from "react-native";
 
 import { ActivityLog } from "../components/activity-log/activity-log";
 import { AnimatedTestimonials } from "../components/animated-testimonials/animated-testimonials";
@@ -460,31 +460,33 @@ it("falls back after group avatar image failures and disables stray handles", ()
 });
 
 it("announces feed additions without making clock changes reannounce the group", () => {
-  renderThemed(
-    <LiveFeed
-      events={[
-        {
-          id: "event",
-          severity: "info",
-          timestamp: "2025-01-01T00:00:00Z",
-          title: "Deploy complete",
-        },
-      ]}
-      now="2025-01-01T00:01:00Z"
-      testID="feed"
-    />,
+  jest.useFakeTimers();
+  const announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
+  announceSpy.mockClear();
+  const first = {
+    id: "event",
+    severity: "info" as const,
+    timestamp: "2025-01-01T00:00:00Z",
+    title: "Deploy complete",
+  };
+  const feed = (events: readonly (typeof first)[], now: string) => (
+    <LiveFeed events={events} now={now} testID="feed" />
   );
-  expect(screen.getByText("Deploy complete")).toHaveProp(
-    "accessibilityLiveRegion",
-    "polite",
-  );
+  const view = renderThemed(feed([first], "2025-01-01T00:01:00Z"));
   expect(screen.getByTestId("feed")).not.toHaveProp("accessibilityLiveRegion");
-  expect(
-    screen.UNSAFE_getByProps({
-      accessibilityLabel: "Live feed",
-      accessibilityRole: "list",
-    }).props.accessibilityLiveRegion,
-  ).toBeUndefined();
+  expect(screen.getByText("Deploy complete")).not.toHaveProp(
+    "accessibilityLiveRegion",
+  );
+  view.rerender(themed(feed([first], "2025-01-01T00:02:00Z")));
+  advanceTimers(5000);
+  expect(announceSpy).not.toHaveBeenCalled();
+  const second = { ...first, id: "next", title: "Rollback started" };
+  view.rerender(themed(feed([second, first], "2025-01-01T00:02:00Z")));
+  advanceTimers(5000);
+  expect(announceSpy).toHaveBeenCalledTimes(1);
+  expect(announceSpy).toHaveBeenCalledWith("info: Rollback started");
+  announceSpy.mockRestore();
+  jest.useRealTimers();
 });
 
 async function renderAutoplay(autoplayInterval: number) {
@@ -556,7 +558,10 @@ it("completes reduced motion once and exposes countdown duration errors", async 
     expect(
       screen.getByRole("alert", { name: `${title}: ${zero}` }),
     ).toBeOnTheScreen();
-  expect(screen.getAllByText("00", { exact: true })).toHaveLength(8);
+  expect(
+    screen.getAllByText("00", { exact: true, includeHiddenElements: true }),
+  ).toHaveLength(8);
+  expect(screen.queryAllByText("00", { exact: true })).toHaveLength(0);
   view.rerender(
     themed(
       <AnimatedText

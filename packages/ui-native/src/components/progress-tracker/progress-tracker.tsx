@@ -298,12 +298,7 @@ function ProgressTrackerModule({
   const lessonText = `${labels.lessons}: ${completedLessons}/${lessons}`;
   const exerciseText = `${labels.exercises}: ${completedExercises}/${exercises}`;
   const content = (
-    <Card
-      {...props}
-      nativeID={`progress-module-${id}`}
-      ref={ref}
-      style={style}
-    >
+    <Card {...props} nativeID={`progress-module-${id}`} ref={ref} style={style}>
       <CardHeader>
         <View
           style={[
@@ -369,7 +364,10 @@ function ProgressTrackerModule({
       accessibilityRole="button"
       accessibilityValue={{
         text: joinAccessibilityText(
-          [labels.status[status], labels.progressPercent(clampPercent(progress))],
+          [
+            labels.status[status],
+            labels.progressPercent(clampPercent(progress)),
+          ],
           ", ",
         ),
       }}

@@ -39,6 +39,11 @@ export type ToastProps = Omit<ViewProps, "children"> & {
   readonly toasts: readonly ToastItem[];
 };
 
+/** Runs `callback` at `deadline` (epoch milliseconds); the caller clears it. */
+function scheduleAt(deadline: number, callback: () => void) {
+  return setTimeout(callback, Math.max(0, deadline - Date.now()));
+}
+
 const styles = StyleSheet.create({
   action: {
     alignItems: "center",
@@ -145,13 +150,13 @@ function Toast({
       ) {
         const deadline =
           timerMap.get(toast.id)?.deadline ?? Date.now() + toast.duration;
-        const timer = setTimeout(
-          () => {
+        timerMap.set(toast.id, {
+          deadline,
+          duration: toast.duration,
+          timer: scheduleAt(deadline, () => {
             dismiss(toast.id);
-          },
-          Math.max(0, deadline - Date.now()),
-        );
-        timerMap.set(toast.id, { deadline, duration: toast.duration, timer });
+          }),
+        });
       }
     }
     return () => {

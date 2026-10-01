@@ -117,7 +117,10 @@ function TimelineScrubber({
           max: safeEnd,
           min: start,
           now: current,
-          text: joinAccessibilityText([formatValue(current), currentTick], ", "),
+          text: joinAccessibilityText(
+            [formatValue(current), currentTick],
+            ", ",
+          ),
         }}
         accessible
         onAccessibilityAction={(event) => {

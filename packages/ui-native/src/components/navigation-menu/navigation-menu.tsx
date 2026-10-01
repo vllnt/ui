@@ -110,12 +110,7 @@ function NavigationMenu({
   };
 
   return (
-    <View
-      {...props}
-      accessibilityRole="none"
-      ref={ref}
-      style={style}
-    >
+    <View {...props} accessibilityRole="none" ref={ref} style={style}>
       <ScrollView
         contentContainerStyle={[styles.list, { gap: theme.spacing[1] }]}
         horizontal

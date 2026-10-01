@@ -65,7 +65,11 @@ function TopBar({
         {title || subtitle ? (
           <View style={{ flex: 1, minWidth: 0 }}>
             {title ? (
-              <Text accessibilityRole="header" numberOfLines={1} weight="medium">
+              <Text
+                accessibilityRole="header"
+                numberOfLines={1}
+                weight="medium"
+              >
                 {title}
               </Text>
             ) : null}

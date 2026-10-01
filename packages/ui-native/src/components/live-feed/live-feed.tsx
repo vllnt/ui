@@ -216,8 +216,8 @@ LiveFeedRow.displayName = "LiveFeedRow";
 
 /**
  * Native rolling feed sorted from newest to oldest. Each row is one
- * screen-reader stop; a newly arrived newest event is announced once on both
- * platforms (bursts collapse to the newest) and clock ticks stay silent.
+ * screen-reader stop; the feed announces a newly arrived newest event once on
+ * both platforms (bursts collapse to the newest) and clock ticks stay silent.
  */
 function LiveFeed({
   description,

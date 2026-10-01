@@ -83,8 +83,8 @@ DataRow.displayName = "DataRow";
 /**
  * Native key-value metadata list with caller-supplied stable item ids. Each
  * row is one screen-reader stop that speaks "label, value". VoiceOver ignores
- * names on non-focusable containers, so the list itself carries only the list
- * role; name it with a visible heading next to it.
+ * names on non-focusable containers, so the list itself carries the list
+ * role without a name; name it with a visible heading next to it.
  */
 function DataList({
   accessibilityLabel: _accessibilityLabel,

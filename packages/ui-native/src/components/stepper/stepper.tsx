@@ -12,8 +12,8 @@ import {
 
 import { joinAccessibilityText } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
-import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useControllableState } from "../../primitives/use-controllable-state";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 export type StepperStepState = "complete" | "current" | "upcoming";

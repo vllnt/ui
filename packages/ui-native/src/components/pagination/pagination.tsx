@@ -85,8 +85,7 @@ function Pagination({
   );
   const resolved = {
     currentPage: labels?.currentPage ?? "current page",
-    navigation:
-      props.accessibilityLabel ?? labels?.navigation ?? "Pagination",
+    navigation: props.accessibilityLabel ?? labels?.navigation ?? "Pagination",
     next: labels?.next ?? "Next page",
     page: labels?.page ?? ((page: number) => `Page ${page}`),
     previous: labels?.previous ?? "Previous page",
@@ -108,12 +107,12 @@ function Pagination({
   ) => (
     <Pressable
       accessibilityHint={resolved.navigation}
-      accessibilityLabel={content === String(page) ? resolved.page(page) : content}
+      accessibilityLabel={
+        content === String(page) ? resolved.page(page) : content
+      }
       accessibilityRole={getHref ? "link" : "button"}
       accessibilityState={{ disabled, selected: current }}
-      accessibilityValue={
-        current ? { text: resolved.currentPage } : undefined
-      }
+      accessibilityValue={current ? { text: resolved.currentPage } : undefined}
       disabled={disabled}
       key={`${content}-${page}`}
       onPress={() => {

@@ -268,7 +268,10 @@ it("exposes toolbar semantics and 44-point action targets", () => {
     </Toolbar>,
   );
   const [toolbar] = screen.UNSAFE_root.findAll(
-    (node) =>
+    (node: {
+      readonly props: Record<string, unknown>;
+      readonly type: unknown;
+    }) =>
       typeof node.type === "string" &&
       node.props.accessibilityRole === "toolbar",
   );

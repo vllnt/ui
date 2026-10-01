@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { AccessibilityInfo } from "react-native";
 
 import { ActivityLog } from "../components/activity-log/activity-log";
 import { Alert, AlertDescription, AlertTitle } from "../components/alert/alert";
@@ -113,6 +114,8 @@ it("renders overview and service status data with explicit status text", () => {
 });
 
 it("provides readable status, severity, alert, and sync announcements", () => {
+  const announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
+  announceSpy.mockClear();
   render(
     <>
       <StatusIndicator label="Operational" tone="success" />
@@ -131,10 +134,10 @@ it("provides readable status, severity, alert, and sync announcements", () => {
       name: "Presence sync: Reconnecting, retry 2 of 5",
     }),
   ).toHaveProp("accessibilityLiveRegion", "polite");
-  expect(screen.getByRole("alert")).toHaveProp(
-    "accessibilityLiveRegion",
-    "assertive",
+  expect(announceSpy).toHaveBeenCalledWith(
+    "Connection lost. Check the network and retry.",
   );
+  announceSpy.mockRestore();
 });
 
 it("renders deterministic countdown and feed times without real timers", () => {
@@ -169,8 +172,12 @@ it("renders deterministic countdown and feed times without real timers", () => {
       name: "Countdown timer: On track, 00 Days, 01 Hours, 01 Minutes, 02 Seconds",
     }),
   ).toBeOnTheScreen();
-  expect(screen.getAllByText("01")).toHaveLength(2);
-  expect(screen.getByText("02")).toBeOnTheScreen();
+  expect(
+    screen.getAllByText("01", { includeHiddenElements: true }),
+  ).toHaveLength(2);
+  expect(
+    screen.getByText("02", { includeHiddenElements: true }),
+  ).toBeOnTheScreen();
   expect(screen.getByText("30s ago")).toBeOnTheScreen();
   expect(screen.getAllByText("1h ago")).toHaveLength(1);
 });

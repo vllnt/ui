@@ -45,6 +45,8 @@ let focusSpy: jest.SpyInstance;
 beforeEach(() => {
   announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
   focusSpy = jest.spyOn(AccessibilityInfo, "sendAccessibilityEvent");
+  announceSpy.mockClear();
+  focusSpy.mockClear();
 });
 afterEach(() => {
   announceSpy.mockRestore();

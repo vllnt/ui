@@ -9,7 +9,7 @@ import { ContextMenu } from "../components/context-menu/context-menu";
 import { DatePicker } from "../components/date-picker/date-picker";
 import { DropdownMenu } from "../components/dropdown-menu/dropdown-menu";
 import { ExpandableCards } from "../components/expandable-cards/expandable-cards";
-import { FAQ } from "../components/faq/faq";
+import { FAQ as Faq } from "../components/faq/faq";
 import { Menubar } from "../components/menubar/menubar";
 import { SearchDialog } from "../components/search-dialog/search-dialog";
 import { Tabs, TabsList, TabsTrigger } from "../components/tabs/tabs";
@@ -22,6 +22,8 @@ let focusSpy: jest.SpyInstance;
 beforeEach(() => {
   announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
   focusSpy = jest.spyOn(AccessibilityInfo, "sendAccessibilityEvent");
+  announceSpy.mockClear();
+  focusSpy.mockClear();
 });
 afterEach(() => {
   announceSpy.mockRestore();
@@ -130,7 +132,10 @@ it("names menubar menus and closes an open sheet from its close button or backdr
   expect(screen.queryByRole("menuitem", { name: "New" })).toBeNull();
   fireEvent.press(file);
   const [backdrop] = screen.UNSAFE_root.findAll(
-    (node) =>
+    (node: {
+      readonly props: Record<string, unknown>;
+      readonly type: unknown;
+    }) =>
       typeof node.type === "string" &&
       node.props.accessible === false &&
       typeof node.props.onClick === "function",
@@ -191,9 +196,11 @@ it("reads dialog titles before pinned close buttons and titles picker sheets", (
       />
     </>,
   );
-  const order = screen
+  const order: unknown[] = screen
     .getAllByRole(/header|button/)
-    .map((node) => node.props.accessibilityLabel ?? node.props.children);
+    .map(
+      (node): unknown => node.props.accessibilityLabel ?? node.props.children,
+    );
   expect(order.indexOf("Lesson complete")).toBeLessThan(order.indexOf("Close"));
   fireEvent.press(screen.getByRole("button", { name: "Choose date" }));
   expect(screen.getByRole("header", { name: "Choose date" })).toBeOnTheScreen();
@@ -214,7 +221,7 @@ it("moves container names of tabs, FAQ, and cards into hints", () => {
           { disabled: true, label: "Locked", value: "locked" },
         ]}
       />
-      <FAQ
+      <Faq
         items={[{ answer: <Text>Yes</Text>, id: "q", question: "Why?" }]}
         labels={{
           collapseAnswer: (item) => `Hide ${item.question}`,

@@ -203,7 +203,8 @@ function defaultPageLabel(page: number, totalPages: number) {
 
 /**
  * Native paginated activity history with caller-owned entry identifiers.
- * Each entry is one screen-reader stop, and page changes are announced.
+ * Each entry is one screen-reader stop, and the component announces page
+ * changes.
  */
 function ActivityLog({
   defaultPage = 1,

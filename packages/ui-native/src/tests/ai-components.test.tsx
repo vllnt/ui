@@ -219,11 +219,8 @@ it("preserves conversation scroll position while reading history", () => {
       <ConversationMessages />
     </ConversationThread>,
   );
-  const list = {
-    accessibilityLabel: "Assistant message",
-    accessibilityRole: "list",
-  };
-  const messageList = screen.UNSAFE_getByProps(list);
+  const messageList = screen.UNSAFE_getByProps({ accessibilityRole: "list" });
+  expect(messageList.props.accessibilityLabel).toBeUndefined();
   expect(messageList.props.onContentSizeChange).toEqual(expect.any(Function));
   fireEvent.scroll(messageList, {
     nativeEvent: {
@@ -234,7 +231,8 @@ it("preserves conversation scroll position while reading history", () => {
   });
 
   expect(
-    screen.UNSAFE_getByProps(list).props.onContentSizeChange,
+    screen.UNSAFE_getByProps({ accessibilityRole: "list" }).props
+      .onContentSizeChange,
   ).toBeUndefined();
 });
 

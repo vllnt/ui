@@ -218,9 +218,7 @@ function SlideshowSections({
             accessibilityRole="button"
             accessibilityState={{ selected }}
             accessibilityValue={
-              completed
-                ? { text: labels.completed ?? "Completed" }
-                : undefined
+              completed ? { text: labels.completed ?? "Completed" } : undefined
             }
             key={section.id}
             onPress={() => {
