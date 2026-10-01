@@ -143,3 +143,23 @@ describe("CompletionDialog dialog semantics (WAI-ARIA APG modal dialog)", () => 
     });
   });
 });
+
+describe("CompletionDialog modal prop", () => {
+  it("locks the page by default and leaves it interactive when modal is false", () => {
+    const handlers = {
+      onCancel: vi.fn(),
+      onClose: vi.fn(),
+      onConfirm: vi.fn(),
+    };
+    const { rerender } = render(
+      <CompletionDialog {...handlers} isOpen title="Done?" />,
+    );
+    expect(document.body.style.pointerEvents).toBe("none");
+    rerender(<CompletionDialog {...handlers} isOpen={false} title="Done?" />);
+    rerender(
+      <CompletionDialog {...handlers} isOpen modal={false} title="Done?" />,
+    );
+    expect(screen.getByRole("dialog", { name: "Done?" })).toBeInTheDocument();
+    expect(document.body.style.pointerEvents).not.toBe("none");
+  });
+});

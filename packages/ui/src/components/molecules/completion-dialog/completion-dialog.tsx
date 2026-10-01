@@ -29,13 +29,22 @@ export type CompletionDialogProps = {
   confirmShortcut?: string;
   description?: ReactNode;
   isOpen: boolean;
+  /**
+   * Page-modal dialog (focus trap, scroll lock, the rest of the page inert).
+   * Defaults to `true`. Pass `false` to keep the page interactive; the
+   * dialog then overlays its container without trapping focus.
+   */
+  modal?: boolean;
   onCancel: () => void;
   onClose: () => void;
   onConfirm: () => void;
   title: string;
 };
 
-type DialogBodyProps = Omit<CompletionDialogProps, "isOpen" | "onClose">;
+type DialogBodyProps = Omit<
+  CompletionDialogProps,
+  "isOpen" | "modal" | "onClose"
+>;
 
 type DialogCloseButtonProps = Pick<DialogBodyProps, "closeIcon">;
 
@@ -200,13 +209,20 @@ function DialogBody({
  * it, and focus returns to the element that opened it. The single-key
  * shortcuts act while focus sits inside the dialog and nowhere else.
  */
+const BACKDROP_CLASS = cn(
+  "absolute inset-0 bg-background/80 backdrop-blur-sm",
+  "animate-in fade-in-0 duration-200",
+);
+
 function CompletionDialogImpl({
   isOpen,
+  modal = true,
   onClose,
   ...props
 }: CompletionDialogProps): React.ReactNode {
   return (
     <DialogPrimitive.Root
+      modal={modal}
       onOpenChange={(open) => {
         if (!open) onClose();
       }}
@@ -214,12 +230,11 @@ function CompletionDialogImpl({
     >
       {isOpen ? (
         <div className="absolute inset-0 z-[100] flex items-center justify-center">
-          <DialogPrimitive.Overlay
-            className={cn(
-              "absolute inset-0 bg-background/80 backdrop-blur-sm",
-              "animate-in fade-in-0 duration-200",
-            )}
-          />
+          {modal ? (
+            <DialogPrimitive.Overlay className={BACKDROP_CLASS} />
+          ) : (
+            <div aria-hidden="true" className={BACKDROP_CLASS} />
+          )}
           <DialogBody {...props} />
         </div>
       ) : null}
