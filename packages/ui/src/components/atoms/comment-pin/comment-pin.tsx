@@ -154,7 +154,7 @@ export const CommentPin = ({
   );
   return (
     <div
-      aria-label={ariaLabel}
+      aria-label={onActivate ? undefined : ariaLabel}
       className={cn(
         "absolute z-30 inline-flex -translate-x-1/2 -translate-y-1/2",
         className,
@@ -162,7 +162,7 @@ export const CommentPin = ({
       data-comment-pin
       data-comment-pin-state={state}
       ref={ref}
-      role="img"
+      role={onActivate ? undefined : "img"}
       style={{ left: x, top: y }}
       {...rest}
     >

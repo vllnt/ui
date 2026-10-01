@@ -38,3 +38,18 @@ describe("CommentPin", () => {
     expect(handleActivate).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("CommentPin semantics", () => {
+  it("is a single named button when interactive, without an img wrapper", () => {
+    render(<CommentPin onActivate={vi.fn()} unread={3} x={0} y={0} />);
+    expect(
+      screen.getByRole("button", { name: "Comment, 3 unread" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  });
+
+  it("is a named image when static", () => {
+    render(<CommentPin x={0} y={0} />);
+    expect(screen.getByRole("img", { name: "Comment" })).toBeInTheDocument();
+  });
+});

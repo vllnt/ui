@@ -161,11 +161,12 @@ export const BottomActivityStrip = ({
     <section
       aria-label={resolvedLabels.region}
       className={cn(
-        "flex w-full items-center gap-2 overflow-x-auto rounded-md border border-border bg-background/90 px-2 py-1 text-foreground",
+        "flex w-full items-center gap-2 overflow-x-auto rounded-md border border-border bg-background/90 px-2 py-1 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
       data-bottom-activity-strip
       ref={ref}
+      tabIndex={0}
       {...rest}
     >
       {visible.length === 0 ? (

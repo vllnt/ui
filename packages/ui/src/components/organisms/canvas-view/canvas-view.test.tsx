@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { CanvasView } from "./canvas-view";
 
 const workspace = () =>
-  screen.getByRole("button", { name: "Canvas workspace" });
+  screen.getByRole("region", { name: "Canvas workspace" });
 
 const focusedWorkspace = () => {
   const viewport = workspace();
@@ -131,5 +131,19 @@ describe("CanvasView", () => {
     fireEvent.blur(viewport);
     expect(viewport).toHaveClass("cursor-default");
     expect(viewport).not.toHaveClass("cursor-grab");
+  });
+});
+
+describe("CanvasView semantics", () => {
+  it("is a focusable region, not a button wrapping interactive children", () => {
+    render(
+      <CanvasView>
+        <button type="button">node action</button>
+      </CanvasView>,
+    );
+    expect(workspace()).toHaveAttribute("tabindex", "0");
+    expect(
+      screen.queryByRole("button", { name: "Canvas workspace" }),
+    ).not.toBeInTheDocument();
   });
 });

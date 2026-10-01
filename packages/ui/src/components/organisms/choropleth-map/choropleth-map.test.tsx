@@ -124,3 +124,30 @@ describe("ChoroplethMap", () => {
     expect(container.querySelector("[data-legend]")).toBeInTheDocument();
   });
 });
+
+describe("ChoroplethMap keyboard access", () => {
+  it("exposes focusable regions as buttons that Enter and Space select", () => {
+    const onSelectRegion = vi.fn();
+    const { container } = render(
+      <ChoroplethMap
+        data={DATA}
+        onSelectRegion={onSelectRegion}
+        regions={REGIONS}
+      />,
+    );
+    expect(container.querySelector("svg[aria-hidden='true']")).toBeNull();
+    const france = screen.getByRole("button", { name: "France 2937" });
+    expect(france).toHaveAttribute("aria-pressed", "false");
+    fireEvent.keyDown(france, { key: "Enter" });
+    expect(onSelectRegion).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: "FR" }),
+    );
+    expect(france).toHaveAttribute("aria-pressed", "true");
+    fireEvent.keyDown(screen.getByRole("button", { name: "Germany 4082" }), {
+      key: " ",
+    });
+    expect(onSelectRegion).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: "DE" }),
+    );
+  });
+});

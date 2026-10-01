@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { CalendarIcon } from "lucide-react";
 
+import { focusCalendarDay } from "../../../lib/focus-calendar-day";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -28,6 +29,8 @@ export type DatePickerProps = {
   className?: string;
   onValueChange?: (date?: Date) => void;
   placeholder?: string;
+  /** Accessible name of the calendar popover dialog. Defaults to "Choose date". */
+  popoverLabel?: string;
   value?: Date;
 };
 
@@ -37,6 +40,7 @@ const DatePicker = ({
   className,
   onValueChange,
   placeholder = "Pick a date",
+  popoverLabel = "Choose date",
   ref: reference,
   value,
 }: DatePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
@@ -70,14 +74,20 @@ const DatePicker = ({
           ref={reference}
           variant="outline"
         >
-          <CalendarIcon className="mr-2 size-4" />
+          <CalendarIcon aria-hidden="true" className="mr-2 size-4" />
           {selectedDate
             ? defaultDateFormatter.format(selectedDate)
             : placeholder}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className={cn("w-auto p-0", className)}>
+      <PopoverContent
+        align="start"
+        aria-label={popoverLabel}
+        className={cn("w-auto p-0", className)}
+        onOpenAutoFocus={focusCalendarDay}
+      >
         <Calendar
+          defaultMonth={selectedDate}
           mode="single"
           onSelect={handleSelect}
           selected={selectedDate}

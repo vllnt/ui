@@ -43,12 +43,21 @@ export default [
           // Passive focus tracking: an <article> observes focus bubbling from
           // its interactive children (e.g. ChronoEvent scroll-spy).
           article: ['onFocus'],
+          // A focusable workspace landmark (CanvasView) pans and zooms with
+          // keys only when it is the event target itself (RULES.md R12).
+          section: ['onBlur', 'onKeyDown', 'onKeyUp'],
           body: ['onError', 'onLoad'],
           iframe: ['onError', 'onLoad'],
           img: ['onError', 'onLoad'],
         },
       ],
-      'jsx-a11y/no-noninteractive-tabindex': 'error',
+      // Scrollable regions and logs must be reachable by keyboard (WCAG 2.1.1,
+      // axe scrollable-region-focusable); tab panels per the APG tabs pattern.
+      // A labelled <section> is a region (no-redundant-roles forbids role="region" on it).
+      'jsx-a11y/no-noninteractive-tabindex': [
+        'error',
+        { roles: ['log', 'region', 'tabpanel'], tags: ['section'] },
+      ],
       'jsx-a11y/no-static-element-interactions': 'error',
       // cmdk styles its input wrapper via the `[cmdk-input-wrapper]` attribute selector.
       'react/no-unknown-property': ['error', { ignore: ['cmdk-input-wrapper'] }],

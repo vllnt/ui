@@ -242,8 +242,9 @@ function RegionPath({
   return (
     <path
       aria-label={`${region.name}${value === undefined ? " no data" : ` ${value.toString()}`}`}
+      aria-pressed={selectedId === region.id}
       className={cn(
-        "cursor-pointer outline-none transition-[opacity,filter]",
+        "cursor-pointer outline-none transition-[opacity,filter] focus-visible:stroke-foreground focus-visible:[stroke-width:3]",
         active ? "opacity-100" : "opacity-90 hover:opacity-100",
         selectedId === region.id ? "stroke-foreground" : "stroke-background",
       )}
@@ -255,8 +256,14 @@ function RegionPath({
       onBlur={handleLeave}
       onClick={handleSelect}
       onFocus={handleEnter}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        handleSelect();
+      }}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
+      role="button"
       strokeWidth={selectedId === region.id ? 2 : 0.75}
       tabIndex={0}
     />
@@ -584,9 +591,9 @@ export const ChoroplethMap = (props: ChoroplethMapProps) => {
         {...rest}
       >
         <svg
-          aria-hidden="true"
           className="block h-full w-full"
           preserveAspectRatio="xMidYMid meet"
+          role="group"
           viewBox={`0 0 ${VIEWBOX_WIDTH.toString()} ${VIEWBOX_HEIGHT.toString()}`}
         >
           <RegionsLayer

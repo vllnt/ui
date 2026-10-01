@@ -37,6 +37,11 @@ export type MultiSelectProps = Omit<
   onValueChange?: (value: string[]) => void;
   options: MultiSelectOption[];
   placeholder?: string;
+  /**
+   * Accessible name of the popover dialog. Defaults to `aria-label`, then
+   * `placeholder`.
+   */
+  popoverLabel?: string;
   searchable?: boolean;
   searchPlaceholder?: string;
   value?: string[];
@@ -71,6 +76,7 @@ type MultiSelectTriggerProps = Omit<
   | "onOpenChange"
   | "onValueChange"
   | "options"
+  | "popoverLabel"
   | "searchable"
   | "searchPlaceholder"
   | "value"
@@ -84,6 +90,7 @@ type MultiSelectContentProps = {
   contentId: string;
   disabled: boolean;
   emptyText: string;
+  label: string;
   onSelect: (value: string) => void;
   options: MultiSelectOption[];
   searchable: boolean;
@@ -170,6 +177,7 @@ function MultiSelectContent({
   contentId,
   disabled,
   emptyText,
+  label,
   onSelect,
   options,
   searchable,
@@ -179,6 +187,7 @@ function MultiSelectContent({
   return (
     <PopoverContent
       align="start"
+      aria-label={label}
       className="w-[var(--radix-popover-trigger-width)] p-0"
       id={contentId}
     >
@@ -274,10 +283,22 @@ const MultiSelectTrigger = ({
         selectedOptions={selectedOptions}
       />
     </span>
-    <ChevronDown className="ml-2 size-4 shrink-0 opacity-50" />
+    <ChevronDown
+      aria-hidden="true"
+      className="ml-2 size-4 shrink-0 opacity-50"
+    />
   </Button>
 );
 MultiSelectTrigger.displayName = "MultiSelectTrigger";
+
+function resolvePopoverLabel(
+  popoverLabel: string | undefined,
+  props: Pick<MultiSelectProps, "aria-label" | "placeholder">,
+): string {
+  return (
+    popoverLabel ?? props["aria-label"] ?? props.placeholder ?? "Select options"
+  );
+}
 
 const MultiSelect = ({
   defaultValue = [],
@@ -286,6 +307,7 @@ const MultiSelect = ({
   onOpenChange,
   onValueChange,
   options,
+  popoverLabel,
   ref,
   searchable = false,
   searchPlaceholder = "Search options...",
@@ -343,6 +365,7 @@ const MultiSelect = ({
         contentId={contentId}
         disabled={props.disabled || false}
         emptyText={emptyText}
+        label={resolvePopoverLabel(popoverLabel, props)}
         onSelect={handleSelect}
         options={options}
         searchable={searchable}

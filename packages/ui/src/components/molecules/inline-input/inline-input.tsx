@@ -6,7 +6,7 @@ import { cn } from "../../../lib/utils";
 import { Input } from "../../atoms/input/input";
 
 export type InlineInputProps = {
-  /** Accessible name when no visible label is associated with the input. */
+  /** Accessible name for an input without a visible `<label>`. */
   "aria-label"?: string;
   /** Id of the element that labels the input. */
   "aria-labelledby"?: string;

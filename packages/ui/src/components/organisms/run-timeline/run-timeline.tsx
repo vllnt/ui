@@ -19,7 +19,7 @@ export type RunPhaseState =
 const STATE_FILL: Record<RunPhaseState, string> = {
   complete: "bg-emerald-500/70",
   failed: "bg-red-500/70",
-  queued: "bg-amber-500/70",
+  queued: "bg-amber-500/70 dark:bg-amber-600/70",
   running: "bg-blue-500/70",
   stopped: "bg-muted-foreground/40",
 };
@@ -170,7 +170,7 @@ const PhaseBar = (props: {
       <button
         aria-label={ariaLabel}
         className={cn(
-          "absolute flex items-center justify-start overflow-hidden truncate rounded-sm border border-border/50 px-1 text-left text-[10px] text-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "absolute flex min-w-6 items-center justify-start overflow-hidden truncate rounded-sm border border-border/50 px-1 text-left text-[10px] text-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           STATE_FILL[state],
         )}
         data-run-phase={phase.id}

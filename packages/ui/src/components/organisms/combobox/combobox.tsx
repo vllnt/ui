@@ -28,12 +28,23 @@ export type ComboboxOption = {
 };
 
 export type ComboboxProps = {
+  /** Accessible name for the trigger when no `<label>` points at `id`. */
+  "aria-describedby"?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
   className?: string;
   commandClassName?: string;
   emptyText?: string;
+  /** Id for the trigger button, e.g. for `<label htmlFor>`. */
+  id?: string;
   onValueChange?: (value: string) => void;
   options: ComboboxOption[];
   placeholder?: string;
+  /**
+   * Accessible name of the popover dialog. Defaults to `aria-label`, then
+   * `placeholder`.
+   */
+  popoverLabel?: string;
   searchPlaceholder?: string;
   triggerClassName?: string;
   value?: string;
@@ -92,7 +103,7 @@ function ComboboxListPanel({
   className,
   commandClassName,
   emptyText,
-  listboxId,
+  label,
   onSelect,
   options,
   resolvedValue,
@@ -101,7 +112,7 @@ function ComboboxListPanel({
   className?: string;
   commandClassName?: string;
   emptyText: string;
-  listboxId: string;
+  label: string;
   onSelect: (value: string) => void;
   options: ComboboxOption[];
   resolvedValue: string;
@@ -109,11 +120,12 @@ function ComboboxListPanel({
 }) {
   return (
     <PopoverContent
+      aria-label={label}
       className={cn("w-[var(--radix-popover-trigger-width)] p-0", className)}
     >
       <Command className={commandClassName}>
         <CommandInput placeholder={searchPlaceholder} />
-        <CommandList id={listboxId}>
+        <CommandList>
           <CommandEmpty>{emptyText}</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
@@ -132,19 +144,23 @@ function ComboboxListPanel({
 }
 
 const Combobox = ({
+  "aria-describedby": ariaDescribedBy,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   className,
   commandClassName,
   emptyText = "No option found.",
+  id,
   onValueChange,
   options,
   placeholder = "Select an option",
+  popoverLabel,
   ref: reference,
   searchPlaceholder = "Search options...",
   triggerClassName,
   value,
 }: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [open, setOpen] = React.useState(false);
-  const listboxId = React.useId();
   const { resolvedValue, setResolvedValue } = useComboboxValue(
     value,
     onValueChange,
@@ -162,10 +178,12 @@ const Combobox = ({
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
-          aria-controls={listboxId}
+          aria-describedby={ariaDescribedBy}
           aria-expanded={open}
-          aria-haspopup="listbox"
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
           className={cn("w-full justify-between", triggerClassName)}
+          id={id}
           ref={reference}
           role="combobox"
           variant="outline"
@@ -173,14 +191,17 @@ const Combobox = ({
           <span className="truncate">
             {selectedOption ? selectedOption.label : placeholder}
           </span>
-          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+          <ChevronsUpDown
+            aria-hidden="true"
+            className="ml-2 size-4 shrink-0 opacity-50"
+          />
         </Button>
       </PopoverTrigger>
       <ComboboxListPanel
         className={className}
         commandClassName={commandClassName}
         emptyText={emptyText}
-        listboxId={listboxId}
+        label={popoverLabel ?? ariaLabel ?? placeholder}
         onSelect={handleSelect}
         options={options}
         resolvedValue={resolvedValue}

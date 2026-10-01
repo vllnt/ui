@@ -57,6 +57,6 @@ describe("TLDRSection", () => {
     fireEvent.click(toggle);
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     const regionId = toggle.getAttribute("aria-controls") ?? "";
-    expect(document.getElementById(regionId)).toBeInTheDocument();
+    expect(document.querySelector(`[id="${regionId}"]`)).toBeInTheDocument();
   });
 });

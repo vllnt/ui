@@ -138,3 +138,22 @@ describe("GeographyQuizMap", () => {
     );
   });
 });
+
+describe("GeographyQuizMap semantics", () => {
+  it("groups the clickable regions instead of hiding them inside an img", () => {
+    const { container } = render(
+      <GeographyQuizMap
+        backdrop="/world.png"
+        questions={QUESTIONS}
+        regions={REGIONS}
+      />,
+    );
+    const stage = container.querySelector("svg");
+    expect(stage).toHaveAttribute("role", "group");
+    expect(container.querySelector("[role='img'] [role='button']")).toBeNull();
+    expect(container.querySelector("image")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+  });
+});

@@ -105,3 +105,21 @@ describe("GanttChart", () => {
     expect(screen.getByText("Q1 2026")).toBeInTheDocument();
   });
 });
+
+describe("GanttChart accessibility", () => {
+  it("is a named, focusable scrolling region", () => {
+    renderChart({ labels: { region: "Roadmap" } });
+    expect(screen.getByRole("region", { name: "Roadmap" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+  });
+
+  it("defaults the region name and keeps the today caption on a 10% tint", () => {
+    renderChart({ now: "2026-03-01" });
+    expect(
+      screen.getByRole("region", { name: "Gantt chart" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Today")).toHaveClass("bg-destructive/10");
+  });
+});

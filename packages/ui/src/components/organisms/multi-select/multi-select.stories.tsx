@@ -14,6 +14,7 @@ const options = [
 const meta = {
   args: {
     options: options,
+    "aria-label": "Frameworks",
     placeholder: "Select frameworks",
   },
   component: MultiSelect,

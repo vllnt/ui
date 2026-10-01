@@ -5,8 +5,8 @@ import * as React from "react";
 import { cn } from "../../../lib/utils";
 
 /**
- * Props for {@link ScrollProgress}. The progressbar is named
- * `"Reading progress"` unless `aria-label` or `aria-labelledby` is passed.
+ * Props for {@link ScrollProgress}. The progressbar takes the name
+ * `"Reading progress"` unless you pass `aria-label` or `aria-labelledby`.
  */
 export type ScrollProgressProps = React.ComponentPropsWithoutRef<"div">;
 

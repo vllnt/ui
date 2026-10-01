@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { SearchField } from "./search-field";
@@ -29,5 +29,14 @@ describe("SearchField", () => {
     fireEvent.click(getByLabelText("Clear search"));
     expect(onValueChange).toHaveBeenCalledWith("");
     expect(getByRole("searchbox")).toHaveValue("");
+  });
+});
+
+describe("SearchField clear button", () => {
+  it("has a 24px minimum target", () => {
+    render(<SearchField defaultValue="docs" />);
+    expect(screen.getByRole("button", { name: "Clear search" })).toHaveClass(
+      "size-6",
+    );
   });
 });

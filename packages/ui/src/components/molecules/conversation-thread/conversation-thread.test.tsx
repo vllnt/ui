@@ -183,3 +183,12 @@ describe("ConversationThread", () => {
     consoleError.mockRestore();
   });
 });
+
+describe("ConversationMessages keyboard access", () => {
+  it("lets keyboard users focus the scrolling message log", () => {
+    renderThread({});
+    expect(
+      screen.getByRole("log", { name: "Conversation messages" }),
+    ).toHaveAttribute("tabindex", "0");
+  });
+});

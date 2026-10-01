@@ -16,7 +16,11 @@ it("GlassProgress clamps the progressbar value and applies a custom class name",
 
 it("GlassProgress has a default accessible name that consumers can override", () => {
   const { rerender } = render(<GlassProgress value={40} />);
-  expect(screen.getByRole("progressbar", { name: "Progress" })).toBeInTheDocument();
+  expect(
+    screen.getByRole("progressbar", { name: "Progress" }),
+  ).toBeInTheDocument();
   rerender(<GlassProgress aria-label="Upload" value={40} />);
-  expect(screen.getByRole("progressbar", { name: "Upload" })).toBeInTheDocument();
+  expect(
+    screen.getByRole("progressbar", { name: "Upload" }),
+  ).toBeInTheDocument();
 });

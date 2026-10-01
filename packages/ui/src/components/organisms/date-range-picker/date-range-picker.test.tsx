@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { DateRangePicker } from "./date-range-picker";
@@ -24,5 +24,22 @@ describe("DateRangePicker", () => {
       <DateRangePicker value={{ from: new Date(2026, 5, 1), to: undefined }} />,
     );
     expect(screen.getByRole("button")).toHaveTextContent("Jun 1, 2026");
+  });
+
+  it("opens a named dialog with focus on the range start", () => {
+    render(
+      <DateRangePicker
+        defaultValue={{
+          from: new Date(2026, 3, 10),
+          to: new Date(2026, 3, 14),
+        }}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button"));
+    expect(
+      screen.getByRole("dialog", { name: "Choose date range" }),
+    ).toBeInTheDocument();
+    expect(document.activeElement).toHaveTextContent("10");
+    expect(document.activeElement?.closest("[role=grid]")).not.toBeNull();
   });
 });

@@ -393,10 +393,11 @@ export const ConversationMessages = ({
       <div
         aria-label="Conversation messages"
         aria-live="polite"
-        className="absolute inset-0 overflow-y-auto"
+        className="absolute inset-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         onScroll={handleScroll}
         ref={scrollContainerRef}
         role="log"
+        tabIndex={0}
       >
         <div className="flex flex-col p-4">
           {messages.map((message) => (

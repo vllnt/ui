@@ -194,3 +194,10 @@ describe("AIArtifact", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("AIArtifactContent keyboard access", () => {
+  it("lets keyboard users focus and scroll the payload", () => {
+    render(<AIArtifactContent data-testid="payload">body</AIArtifactContent>);
+    expect(screen.getByTestId("payload")).toHaveAttribute("tabindex", "0");
+  });
+});

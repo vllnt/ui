@@ -664,11 +664,14 @@ export const AIArtifactContent = ({
   ...rest
 }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
+    aria-label="Artifact content"
     className={cn(
-      "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground",
+      "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className,
     )}
     ref={ref}
+    role="region"
+    tabIndex={0}
     {...rest}
   />
 );

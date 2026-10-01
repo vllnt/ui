@@ -82,8 +82,8 @@ function wordColor(reveal: number): string {
 
 /**
  * Brightens each word in turn as the block scrolls through the viewport.
- * Unrevealed words use the muted text colour, so they stay readable, and the
- * full sentence is exposed once to assistive technology.
+ * Unrevealed words use the muted text colour, so they stay readable, and
+ * assistive technology reads the full sentence once.
  *
  * Respects `prefers-reduced-motion`: every word shows at full colour.
  *

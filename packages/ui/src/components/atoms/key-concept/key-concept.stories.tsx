@@ -6,7 +6,8 @@ const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
 const meta = {
   args: {
-    children: "KeyConcept",
+    children: "A reusable piece of UI that encapsulates structure and behaviour.",
+    term: "Component",
   },
   component: KeyConcept,
   title: "Learning/KeyConcept",

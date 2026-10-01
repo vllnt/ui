@@ -20,8 +20,12 @@ describe("NumberInput", () => {
 
   it("names the step buttons and lets consumers override the labels", () => {
     const { rerender } = render(<NumberInput aria-label="Quantity" />);
-    expect(screen.getByRole("button", { name: "Decrease" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Increase" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Decrease" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Increase" }),
+    ).toBeInTheDocument();
     rerender(
       <NumberInput
         aria-label="Quantity"
@@ -29,7 +33,9 @@ describe("NumberInput", () => {
         incrementLabel="Add one"
       />,
     );
-    expect(screen.getByRole("button", { name: "Remove one" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Remove one" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Add one" })).toBeInTheDocument();
   });
 });

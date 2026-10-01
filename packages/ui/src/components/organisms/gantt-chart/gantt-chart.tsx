@@ -67,12 +67,15 @@ export type GanttScale = "day" | "month" | "quarter" | "week";
 export type GanttChartLabels = {
   /** Aria-label prefix for milestone diamonds. Defaults to `"Milestone"`. */
   milestone?: string;
+  /** Accessible name of the scrolling chart region. Defaults to `"Gantt chart"`. */
+  region?: string;
   /** Caption for the today line. Defaults to `"Today"`. */
   today?: string;
 };
 
 const DEFAULT_LABELS = {
   milestone: "Milestone",
+  region: "Gantt chart",
   today: "Today",
 } as const satisfies Required<GanttChartLabels>;
 
@@ -371,7 +374,7 @@ function TodayLine({ geometry, label, now }: TodayLineProps): ReactNode {
         aria-hidden="true"
         className="absolute inset-y-0 w-0.5 -translate-x-1/2 bg-destructive"
       />
-      <span className="absolute -top-5 -translate-x-1/2 whitespace-nowrap rounded bg-destructive/15 px-1 text-[10px] font-semibold uppercase tracking-wide text-destructive">
+      <span className="absolute -top-5 -translate-x-1/2 whitespace-nowrap rounded bg-destructive/10 px-1 text-[10px] font-semibold uppercase tracking-wide text-destructive">
         {label}
       </span>
     </div>
@@ -551,11 +554,14 @@ export const GanttChart = ({
 
   return (
     <div
+      aria-label={resolvedLabels.region}
       className={cn(
-        "flex w-full overflow-x-auto rounded-2xl border bg-background text-foreground",
+        "flex w-full overflow-x-auto rounded-2xl border bg-background text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
       ref={ref}
+      role="region"
+      tabIndex={0}
       {...rest}
     >
       <LeftColumn groups={groups} taskColumnWidth={taskColumnWidth} />

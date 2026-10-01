@@ -114,3 +114,25 @@ describe("RunTimeline", () => {
     expect(container.querySelector("[data-run-phase='p']")).toBeInTheDocument();
   });
 });
+
+describe("RunTimeline target size and contrast", () => {
+  it("keeps clickable phases at least 24px wide and darkens the queued fill in dark mode", () => {
+    render(
+      <RunTimeline
+        end={3600}
+        lanes={lanes}
+        phases={[
+          { ...sample[0], end: 20, onActivate: vi.fn() },
+          { ...sample[1], onActivate: vi.fn(), state: "queued" },
+        ]}
+        start={0}
+      />,
+    );
+    expect(screen.getByRole("button", { name: /^Complete/ })).toHaveClass(
+      "min-w-6",
+    );
+    expect(screen.getByRole("button", { name: /^Queued/ })).toHaveClass(
+      "dark:bg-amber-600/70",
+    );
+  });
+});

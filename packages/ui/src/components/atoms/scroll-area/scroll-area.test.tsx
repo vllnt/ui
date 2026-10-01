@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { ScrollArea } from "./scroll-area";
@@ -12,5 +12,15 @@ describe("ScrollArea", () => {
     expect(container.firstChild).toBeVisible();
     expect(container.firstChild).toHaveClass("custom-class");
     expect(ref.current).toBeInstanceOf(HTMLElement);
+  });
+});
+
+describe("ScrollArea keyboard access", () => {
+  it("makes the scrolling viewport a keyboard tab stop", () => {
+    const { container } = render(<ScrollArea>content</ScrollArea>);
+    expect(
+      container.querySelector("[data-radix-scroll-area-viewport]"),
+    ).toHaveAttribute("tabindex", "0");
+    expect(screen.getByText("content")).toBeInTheDocument();
   });
 });

@@ -70,13 +70,13 @@ const SearchField = ({
       {currentValue ? (
         <button
           aria-label="Clear search"
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="absolute right-1.5 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           onClick={() => {
             setValue("");
           }}
           type="button"
         >
-          <X className="size-4" />
+          <X aria-hidden="true" className="size-4" />
         </button>
       ) : null}
     </div>
