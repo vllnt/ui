@@ -31,12 +31,22 @@ export {
   type ThemePresetName,
 } from "./lib/theme-presets";
 export { formatChange, normalizeDate } from "./lib/format";
+export { focusCalendarDay } from "./lib/focus-calendar-day";
+export {
+  moveRovingFocus,
+  type RovingFocusOptions,
+  type RovingOrientation,
+} from "./lib/roving-focus";
 export { useBodyScrollLock } from "./lib/use-body-scroll-lock";
 export { useDebounce } from "./lib/use-debounce";
 export { useEscapeKey } from "./lib/use-escape-key";
 export { useHorizontalScroll } from "./lib/use-horizontal-scroll";
 export { useLiveDate } from "./lib/use-live-date";
 export { useMounted } from "./lib/use-mounted";
+export {
+  type ReturnFocusHandlers,
+  useReturnFocus,
+} from "./lib/use-return-focus";
 export {
   type CustomTheme,
   setCustomTheme,
