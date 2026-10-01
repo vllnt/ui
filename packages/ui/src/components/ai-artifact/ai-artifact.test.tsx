@@ -137,6 +137,31 @@ describe("AIArtifact", () => {
     expect(revokeObjectURL).toHaveBeenCalledTimes(1);
   });
 
+  it("AIArtifactDownloadButton slugifies the title and trims hyphens", () => {
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: vi.fn(() => "blob:mock"),
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    const downloads: string[] = [];
+    const click = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(function record(this: HTMLAnchorElement) {
+        downloads.push(this.download);
+      });
+    withToolbar(<AIArtifactDownloadButton />, {
+      title: `  ${"-".repeat(20_000)}User Profile!!${"-".repeat(20_000)}  `,
+    });
+    const start = performance.now();
+    fireEvent.click(screen.getByRole("button", { name: "Download" }));
+    expect(performance.now() - start).toBeLessThan(1000);
+    expect(downloads[0]).toMatch(/^user-profile\./);
+    click.mockRestore();
+  });
+
   it("AIArtifactFullscreenButton toggles the data-fullscreen attribute", () => {
     const { container } = withToolbar(<AIArtifactFullscreenButton />);
     const section = container.querySelector("section");

@@ -53,7 +53,7 @@ const SPECIAL_KEY_LABELS: Record<string, string> = {
   tab: "⇥",
 };
 
-const SHORTCUT_SEPARATOR = /\s*\+\s*/;
+const SHORTCUT_SEPARATOR = "+";
 
 function isMacPlatform(): boolean {
   if (typeof navigator === "undefined") return false;
@@ -141,7 +141,12 @@ export const Kbd = ({
   }
 
   if (shortcut) {
-    const tokens = shortcut.split(SHORTCUT_SEPARATOR).filter(Boolean);
+    // Split on "+" and trim, instead of a whitespace-greedy regex that
+    // backtracks polynomially on long runs of spaces.
+    const tokens = shortcut
+      .split(SHORTCUT_SEPARATOR)
+      .map((token) => token.trim())
+      .filter(Boolean);
     const ariaLabel = tokens
       .map((token) => formatToken(token, isMac))
       .join(" + ");
