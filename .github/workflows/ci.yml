@@ -35,6 +35,9 @@ jobs:
       - name: Lint registry
         run: pnpm -F @vllnt/ui-registry lint
 
+      - name: Check atomic design levels
+        run: node --test scripts/check-atomic-levels.test.mjs && pnpm check:atomic
+
       - name: Typecheck
         run: pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
 

@@ -14,7 +14,7 @@
  * Usage: pnpm -F @vllnt/ui storybook:generate-docs [--force]
  */
 
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs'
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -22,6 +22,7 @@ import {
   extractExports,
   extractTypeBlock,
   extractVariants,
+  listComponentDirectories,
   parsePropsFromBlock as parseSourceProps,
   type PropInfo as SourcePropInfo,
   toPascalCase,
@@ -845,17 +846,13 @@ async function main(): Promise<void> {
 
   const registryItems = loadRegistry()
 
-  const componentDirs = readdirSync(COMPONENTS_DIR).filter((dir) => {
-    const fullPath = join(COMPONENTS_DIR, dir)
-    return statSync(fullPath).isDirectory()
-  })
+  const componentDirs = listComponentDirectories(COMPONENTS_DIR)
 
   let generated = 0
   let skipped = 0
   const stats = { withTypes: 0, withSubComponents: 0, withVariants: 0, withArrayProps: 0 }
 
-  for (const dir of componentDirs) {
-    const dirPath = join(COMPONENTS_DIR, dir)
+  for (const { name: dir, path: dirPath } of componentDirs) {
     const component = analyzeComponent(dirPath, registryItems)
 
     if (!component) {

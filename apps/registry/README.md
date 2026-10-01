@@ -98,7 +98,7 @@ pnpm dlx shadcn@latest add @vllnt-ui/button
 
 Component source lives in `packages/ui`, not here. The files under `registry/default/` are generated — do not create or edit them by hand (except the chart shims noted above).
 
-1. **Add the component** at `packages/ui/src/components/[component-name]/[component-name].tsx` and export it from the package.
+1. **Add the component** at `packages/ui/src/components/[level]/[component-name]/[component-name].tsx` — `[level]` is its Atomic Design level (`atoms`, `molecules`, `organisms`, `templates`; see [docs/agents/COMPONENTS.md](../../docs/agents/COMPONENTS.md#atomic-design-levels)) — and export it from the package. The registry scripts find the folder by name through `lib/component-directory.ts`.
 
 2. **Add a registry entry** to `registry.json`:
 

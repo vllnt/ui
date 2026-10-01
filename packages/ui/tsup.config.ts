@@ -79,7 +79,7 @@ export default defineConfig({
     "!src/**/__tests__/**",
     // Test and Storybook support modules; nothing in the public entries imports them.
     "!src/test-setup.ts",
-    "!src/components/canvas-shell/canvas-foundation-demo.tsx",
+    "!src/components/templates/canvas-shell/canvas-foundation-demo.tsx",
   ],
   format: ["esm"],
   dts: { entry: ["src/index.ts", "src/tailwind-preset.ts"] },

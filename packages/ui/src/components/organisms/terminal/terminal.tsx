@@ -1,0 +1,179 @@
+"use client";
+
+import { Check, Copy, Terminal as TerminalIcon } from "lucide-react";
+
+import { Button } from "../../atoms/button/button";
+import { useCopyToClipboard } from "../../molecules/copy-button/copy-button";
+
+export type TerminalLine = {
+  content: string;
+  type: "command" | "comment" | "output";
+};
+
+export type TerminalProps = {
+  copyable?: boolean;
+  lines: TerminalLine[];
+  title?: string;
+};
+
+function getCommandContents(lines: TerminalLine[]): string[] {
+  return lines.reduce<string[]>((commands, line) => {
+    if (line.type === "command") {
+      commands.push(line.content);
+    }
+    return commands;
+  }, []);
+}
+
+export function Terminal({
+  copyable = true,
+  lines,
+  title = "Terminal",
+}: TerminalProps) {
+  const { copied, copy } = useCopyToClipboard();
+
+  const commands = getCommandContents(lines);
+
+  const handleCopy = () => {
+    void copy(commands.join("\n"));
+  };
+
+  return (
+    <div className="my-6 rounded-lg border bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 dark:bg-zinc-800 border-b border-zinc-800">
+        <div className="flex items-center gap-2">
+          <TerminalIcon className="size-4 text-zinc-400" />
+          <span className="text-sm font-medium text-zinc-300">{title}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="size-3 rounded-full bg-red-500" />
+          <div className="size-3 rounded-full bg-yellow-500" />
+          <div className="size-3 rounded-full bg-green-500" />
+        </div>
+      </div>
+      <div className="relative">
+        <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
+          {lines.map((line) => (
+            <div
+              className="flex items-start"
+              key={`${line.type}-${line.content}`}
+            >
+              {line.type === "command" && (
+                <>
+                  <span className="text-green-400 mr-2 select-none">$</span>
+                  <span className="text-zinc-100">{line.content}</span>
+                </>
+              )}
+              {line.type === "output" && (
+                <span className="text-zinc-400">{line.content}</span>
+              )}
+              {line.type === "comment" && (
+                <span className="text-zinc-600 italic"># {line.content}</span>
+              )}
+            </div>
+          ))}
+        </div>
+        {copyable && commands.length > 0 ? (
+          <Button
+            aria-label={copied ? "Copied" : "Copy commands"}
+            className="absolute top-2 right-2 size-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
+            onClick={handleCopy}
+            size="icon"
+            variant="ghost"
+          >
+            {copied ? (
+              <Check className="size-3" />
+            ) : (
+              <Copy className="size-3" />
+            )}
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+export type SimpleTerminalProps = {
+  children: string;
+  title?: string;
+};
+
+export function SimpleTerminal({
+  children,
+  title = "Terminal",
+}: SimpleTerminalProps) {
+  const { copied, copy } = useCopyToClipboard();
+
+  const lines = children
+    .trim()
+    .split("\n")
+    .map((line): TerminalLine => {
+      if (line.startsWith("$ ")) {
+        return { content: line.slice(2), type: "command" };
+      }
+      if (line.startsWith("# ")) {
+        return { content: line.slice(2), type: "comment" };
+      }
+      return { content: line, type: "output" };
+    });
+
+  const commands = getCommandContents(lines);
+
+  const handleCopy = () => {
+    void copy(commands.join("\n"));
+  };
+
+  return (
+    <div className="my-6 rounded-lg border bg-zinc-950 dark:bg-zinc-900 overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 dark:bg-zinc-800 border-b border-zinc-800">
+        <div className="flex items-center gap-2">
+          <TerminalIcon className="size-4 text-zinc-400" />
+          <span className="text-sm font-medium text-zinc-300">{title}</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="size-3 rounded-full bg-red-500" />
+          <div className="size-3 rounded-full bg-yellow-500" />
+          <div className="size-3 rounded-full bg-green-500" />
+        </div>
+      </div>
+      <div className="relative">
+        <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
+          {lines.map((line) => (
+            <div
+              className="flex items-start"
+              key={`${line.type}-${line.content}`}
+            >
+              {line.type === "command" && (
+                <>
+                  <span className="text-green-400 mr-2 select-none">$</span>
+                  <span className="text-zinc-100">{line.content}</span>
+                </>
+              )}
+              {line.type === "output" && (
+                <span className="text-zinc-400">{line.content}</span>
+              )}
+              {line.type === "comment" && (
+                <span className="text-zinc-600 italic"># {line.content}</span>
+              )}
+            </div>
+          ))}
+        </div>
+        {commands.length > 0 && (
+          <Button
+            aria-label={copied ? "Copied" : "Copy commands"}
+            className="absolute top-2 right-2 size-8 bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
+            onClick={handleCopy}
+            size="icon"
+            variant="ghost"
+          >
+            {copied ? (
+              <Check className="size-3" />
+            ) : (
+              <Copy className="size-3" />
+            )}
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}

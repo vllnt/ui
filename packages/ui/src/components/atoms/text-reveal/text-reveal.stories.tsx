@@ -1,0 +1,19 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
+import { withWrapper } from "../../../../.storybook/decorators";
+
+import { TextReveal } from "./text-reveal";
+
+const meta = {
+  args: {
+    children: "Scroll to read this line word by word as it brightens.",
+  },
+  component: TextReveal,
+  decorators: [withWrapper("bg-background p-8 text-2xl font-semibold")],
+  title: "Effects/TextReveal",
+} satisfies Meta<typeof TextReveal>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

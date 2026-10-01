@@ -10,13 +10,14 @@
  *   --force  Overwrite existing stories (skips files with "// manual" header)
  */
 
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs'
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
 import {
   extractExports,
   extractVariants,
+  listComponentDirectories,
   toPascalCase,
   type VariantInfo,
 } from './lib/component-source'
@@ -167,16 +168,12 @@ async function main(): Promise<void> {
     console.log('Force mode: overwriting stories (except // manual files)\n')
   }
 
-  const componentDirs = readdirSync(COMPONENTS_DIR).filter((dir) => {
-    const fullPath = join(COMPONENTS_DIR, dir)
-    return statSync(fullPath).isDirectory()
-  })
+  const componentDirs = listComponentDirectories(COMPONENTS_DIR)
 
   let generated = 0
   let skipped = 0
 
-  for (const dir of componentDirs) {
-    const dirPath = join(COMPONENTS_DIR, dir)
+  for (const { name: dir, path: dirPath } of componentDirs) {
     const component = analyzeComponent(dirPath)
 
     if (!component) {

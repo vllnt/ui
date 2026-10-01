@@ -253,7 +253,10 @@ Only when editing inside this repo (not for app consumers).
   `packages/ui/src/components/index.ts`, grep to confirm it landed, then run the
   **full** package lint — changed-file-only lint misses the sort rule and CI
   fails: `pnpm -F @vllnt/ui lint`.
-- **Component file layout:** `{name}/{name}.tsx` (+ `.test.tsx`, `.stories.tsx`).
+- **Component file layout:** `{level}/{name}/{name}.tsx` (+ `.test.tsx`,
+  `.stories.tsx`), where `{level}` is the Atomic Design level — `atoms`,
+  `molecules`, `organisms` or `templates`; a component imports only lower
+  levels (organisms may import organisms). Validate with `pnpm check:atomic`.
   Define variants with `cva`, expose `VariantProps`, merge with `cn`, forward
   refs, support `asChild` where a wrapper element makes sense.
 - **Tokens, not literals** — the design rules above are enforced in review.

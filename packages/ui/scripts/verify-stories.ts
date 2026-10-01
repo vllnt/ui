@@ -8,12 +8,14 @@
  * Usage: pnpm -F @vllnt/ui storybook:verify
  */
 
-import { readdirSync, readFileSync, statSync } from "fs";
+import { readdirSync, readFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 import {
+  type ComponentDirectory,
   extractTypeBlock,
+  listComponentDirectories,
   parsePropsFromBlock,
   type PropInfo,
   toPascalCase,
@@ -165,13 +167,12 @@ function classifyCrashRisk(prop: PropInfo): string {
   return "WARN: missing required prop";
 }
 
-function checkCoverage(componentDirs: string[]): void {
-  const missing = componentDirs.filter(
-    (dir) =>
-      !readdirSync(join(COMPONENTS_DIR, dir)).some((file) =>
-        file.endsWith(".stories.tsx"),
-      ),
-  );
+function checkCoverage(componentDirs: ComponentDirectory[]): void {
+  const missing = componentDirs
+    .filter(
+      (dir) => !readdirSync(dir.path).some((file) => file.endsWith(".stories.tsx")),
+    )
+    .map((dir) => dir.name);
 
   if (missing.length > 0) {
     console.error(`Missing stories for ${missing.length} component(s):\n`);
@@ -189,13 +190,10 @@ function verify(): void {
   const violations: Violation[] = [];
   let checked = 0;
 
-  const componentDirs = readdirSync(COMPONENTS_DIR).filter((dir) =>
-    statSync(join(COMPONENTS_DIR, dir)).isDirectory(),
-  );
+  const componentDirs = listComponentDirectories(COMPONENTS_DIR);
   checkCoverage(componentDirs);
 
-  for (const dir of componentDirs) {
-    const dirPath = join(COMPONENTS_DIR, dir);
+  for (const { name: dir, path: dirPath } of componentDirs) {
     const componentName = toPascalCase(dir);
     let fallbackMainFile: string | undefined;
     let mainFile: string | undefined;

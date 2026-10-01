@@ -28,6 +28,7 @@ import { ShareEmbedBar } from "@/components/share-embed-bar";
 import { Link, type Locale, routing } from "@/i18n/routing";
 import { getAiSeo } from "@/lib/ai-seo";
 import { getComponentContent } from "@/lib/component-content";
+import { findComponentDirectory } from "@/lib/component-directory";
 import { componentMeta } from "@/lib/component-meta";
 import { getComponentSeo } from "@/lib/component-seo";
 import {
@@ -169,34 +170,8 @@ export default async function ComponentPage(props: Props) {
       component.name,
     );
 
-    const sourcePath = isChartComponent
-      ? path.join(
-          process.cwd(),
-          "..",
-          "..",
-          "packages",
-          "ui",
-          "src",
-          "components",
-          "chart",
-          `${component.name}.tsx`,
-        )
-      : path.join(
-          process.cwd(),
-          "..",
-          "..",
-          "packages",
-          "ui",
-          "src",
-          "components",
-          component.name,
-          `${component.name}.tsx`,
-        );
-
-    try {
-      componentCode = await readFile(sourcePath, "utf8");
-    } catch {
-      const directPath = path.join(
+    const componentDirectory = findComponentDirectory(
+      path.join(
         process.cwd(),
         "..",
         "..",
@@ -204,9 +179,15 @@ export default async function ComponentPage(props: Props) {
         "ui",
         "src",
         "components",
-        `${component.name}.tsx`,
+      ),
+      isChartComponent ? "chart" : component.name,
+    );
+
+    if (componentDirectory) {
+      componentCode = await readFile(
+        path.join(componentDirectory, `${component.name}.tsx`),
+        "utf8",
       );
-      componentCode = await readFile(directPath, "utf8");
     }
   } catch {
     // Source file not found — skip code section

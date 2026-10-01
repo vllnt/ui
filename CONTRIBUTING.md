@@ -36,7 +36,7 @@ with `git commit --no-verify`. See AGENTS.md → *React health* for details.
 
 ## Adding a component
 
-1. Create `packages/ui/src/components/{name}/` following the folder layout and patterns in [docs/agents/COMPONENTS.md](docs/agents/COMPONENTS.md#folder-layout) (ref-as-prop + `displayName`, `cn()`, Radix, CVA), and add the export to `packages/ui/src/components/index.ts` (import from `./{name}/{name}`; there are no per-folder `index.ts` files).
+1. Pick the component's [Atomic Design level](docs/agents/COMPONENTS.md#atomic-design-levels) (`atoms`, `molecules`, `organisms` or `templates`), create `packages/ui/src/components/{level}/{name}/` following the folder layout and patterns in [docs/agents/COMPONENTS.md](docs/agents/COMPONENTS.md#folder-layout) (ref-as-prop + `displayName`, `cn()`, Radix, CVA), and add the export to `packages/ui/src/components/index.ts` (import from `./{level}/{name}/{name}`; there are no per-folder `index.ts` files). `pnpm check:atomic` verifies the level against the component's imports.
 
 2. Regenerate registry docs:
 

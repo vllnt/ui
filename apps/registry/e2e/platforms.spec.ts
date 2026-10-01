@@ -18,6 +18,8 @@ function flattenStructuredData(content: string): StructuredData[] {
 }
 
 // A click that lands before the page hydrates is dropped; retry until it navigates.
+// Each attempt waits out a slow dev-server render so the next click does not
+// restart a navigation that is still in flight.
 async function clickUntilUrl(
   page: Page,
   target: Locator,
@@ -25,7 +27,7 @@ async function clickUntilUrl(
 ): Promise<void> {
   await expect(async () => {
     await target.click();
-    await expect(page).toHaveURL(url, { timeout: 2000 });
+    await expect(page).toHaveURL(url, { timeout: 5000 });
   }).toPass({ timeout: 20_000 });
 }
 

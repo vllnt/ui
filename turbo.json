@@ -40,6 +40,9 @@
     "check:circular": {
       "cache": false
     },
+    "check:atomic": {
+      "cache": false
+    },
     "registry:build": {
       "dependsOn": ["^build"],
       "outputs": ["public/r/**", "registry/default/**"]
