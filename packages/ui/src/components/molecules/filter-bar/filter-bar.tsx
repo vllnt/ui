@@ -65,7 +65,7 @@ function SearchInput({
       </label>
       <input
         className={cn(
-          "w-full px-4 py-2 border border-border rounded-lg",
+          "w-full px-4 py-2 border border-input rounded-lg",
           "bg-background text-foreground placeholder:text-muted-foreground",
           "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
         )}

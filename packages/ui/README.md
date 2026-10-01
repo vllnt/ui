@@ -100,13 +100,13 @@ All colors are **OKLCH channel** CSS variables (`L C H`), consumed as
   --secondary: 0.9703 0 0;
   --secondary-foreground: 0.2044 0 0;
   --muted: 0.9703 0 0;
-  --muted-foreground: 0.5555 0 0;
+  --muted-foreground: 0.525 0 0;
   --accent: 0.9703 0 0;
   --accent-foreground: 0.2044 0 0;
-  --destructive: 0.6368 0.2078 25.326;
+  --destructive: 0.55 0.2078 25.326;
   --destructive-foreground: 0.9848 0 0;
   --border: 0.9219 0 0;
-  --input: 0.9219 0 0;
+  --input: 0.66 0 0;
   --ring: 0.1445 0 0;
   --radius: 0.5rem;
   --card: 1 0 0;

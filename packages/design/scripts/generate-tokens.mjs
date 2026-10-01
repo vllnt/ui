@@ -33,15 +33,12 @@ const [designTokens, componentContracts] = await Promise.all([
   parseJson(paths.contracts),
 ]);
 
-// Renderer-specific accessibility adjustments preserve the authored web theme:
-// native uses small destructive labels and DESIGN.md bans pure-black backgrounds.
+// Renderer-specific adjustment: DESIGN.md bans pure-black backgrounds on native.
 const nativeColorOverrides = {
   dark: {
     background: "#050505",
   },
-  light: {
-    destructive: "#c92f32",
-  },
+  light: {},
 };
 
 const expectedSemanticColors = [
