@@ -43,6 +43,7 @@ describe("Combobox", () => {
     render(<Combobox aria-label="Framework" options={options} />);
     const trigger = screen.getByRole("combobox", { name: "Framework" });
     expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+    expect(trigger).toHaveAttribute("aria-controls");
     fireEvent.click(trigger);
     const dialog = screen.getByRole("dialog", { name: "Framework" });
     expect(trigger).toHaveAttribute("aria-controls", dialog.id);

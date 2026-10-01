@@ -102,6 +102,7 @@ function ComboboxOptionItem({
 function ComboboxListPanel({
   className,
   commandClassName,
+  contentId,
   emptyText,
   label,
   onSelect,
@@ -111,6 +112,7 @@ function ComboboxListPanel({
 }: {
   className?: string;
   commandClassName?: string;
+  contentId: string;
   emptyText: string;
   label: string;
   onSelect: (value: string) => void;
@@ -122,6 +124,7 @@ function ComboboxListPanel({
     <PopoverContent
       aria-label={label}
       className={cn("w-[var(--radix-popover-trigger-width)] p-0", className)}
+      id={contentId}
     >
       <Command className={commandClassName}>
         <CommandInput placeholder={searchPlaceholder} />
@@ -161,6 +164,7 @@ const Combobox = ({
   value,
 }: ComboboxProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [open, setOpen] = React.useState(false);
+  const contentId = React.useId();
   const { resolvedValue, setResolvedValue } = useComboboxValue(
     value,
     onValueChange,
@@ -178,6 +182,7 @@ const Combobox = ({
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger asChild>
         <Button
+          aria-controls={contentId}
           aria-describedby={ariaDescribedBy}
           aria-expanded={open}
           aria-label={ariaLabel}
@@ -200,6 +205,7 @@ const Combobox = ({
       <ComboboxListPanel
         className={className}
         commandClassName={commandClassName}
+        contentId={contentId}
         emptyText={emptyText}
         label={popoverLabel ?? ariaLabel ?? placeholder}
         onSelect={handleSelect}
