@@ -85,7 +85,7 @@ function wordReveal(progress: number, total: number, index: number): number {
  * (revealed), so every step keeps at least the muted-text contrast.
  */
 function wordColor(reveal: number): string {
-  return `color-mix(in oklch, oklch(var(--foreground)) ${Math.round(reveal * 100).toString()}%, oklch(var(--muted-foreground)))`;
+  return `color-mix(in oklab, oklch(var(--foreground)) ${Math.round(reveal * 100).toString()}%, oklch(var(--muted-foreground)))`;
 }
 
 /**

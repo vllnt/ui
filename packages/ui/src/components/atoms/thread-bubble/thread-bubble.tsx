@@ -68,7 +68,7 @@ const Message = (props: { message: ThreadMessage }): React.ReactElement => {
           style={
             message.authorColor
               ? {
-                  color: `color-mix(in oklch, ${message.authorColor} 50%, oklch(var(--foreground)))`,
+                  color: `color-mix(in oklab, ${message.authorColor} 50%, oklch(var(--foreground)))`,
                 }
               : undefined
           }

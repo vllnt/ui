@@ -36,7 +36,7 @@ describe("LiveCursor", () => {
     expect(
       container.querySelector("[data-live-cursor-chip]")?.getAttribute("style"),
     ).toMatch(
-      /color-mix\(in oklch, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+      /color-mix\(in oklab, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
     );
   });
 });

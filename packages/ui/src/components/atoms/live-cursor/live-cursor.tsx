@@ -95,7 +95,7 @@ export const LiveCursor = ({
           className="ml-2 mt-2 inline-flex flex-col rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
           data-live-cursor-chip
           style={{
-            backgroundColor: `color-mix(in oklch, ${resolvedColor} 55%, oklch(0 0 0))`,
+            backgroundColor: `color-mix(in oklab, ${resolvedColor} 55%, oklch(0 0 0))`,
           }}
         >
           <span>{name}</span>
