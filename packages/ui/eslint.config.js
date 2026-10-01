@@ -35,9 +35,6 @@ export default [
         },
       ],
       'jsx-a11y/lang': 'error',
-      // Component props such as vaul's Drawer `autoFocus` move focus into an
-      // opened dialog (APG); the rule targets DOM autofocus on page load.
-      'jsx-a11y/no-autofocus': ['error', { ignoreNonDOM: true }],
       'jsx-a11y/no-aria-hidden-on-focusable': 'error',
       'jsx-a11y/no-interactive-element-to-noninteractive-role': 'error',
       'jsx-a11y/no-noninteractive-element-interactions': [
@@ -46,24 +43,65 @@ export default [
           // Passive focus tracking: an <article> observes focus bubbling from
           // its interactive children (e.g. ChronoEvent scroll-spy).
           article: ['onFocus'],
-          // A focusable workspace landmark (CanvasView) pans and zooms with
-          // keys only when it is the event target itself (RULES.md R12).
-          section: ['onBlur', 'onKeyDown', 'onKeyUp'],
           body: ['onError', 'onLoad'],
           iframe: ['onError', 'onLoad'],
           img: ['onError', 'onLoad'],
         },
       ],
-      // Scrollable regions and logs must be reachable by keyboard (WCAG 2.1.1,
-      // axe scrollable-region-focusable); tab panels per the APG tabs pattern.
-      // A labelled <section> is a region (no-redundant-roles forbids role="region" on it).
-      'jsx-a11y/no-noninteractive-tabindex': [
-        'error',
-        { roles: ['log', 'region', 'tabpanel'], tags: ['section'] },
-      ],
+      'jsx-a11y/no-noninteractive-tabindex': 'error',
       'jsx-a11y/no-static-element-interactions': 'error',
       // cmdk styles its input wrapper via the `[cmdk-input-wrapper]` attribute selector.
       'react/no-unknown-property': ['error', { ignore: ['cmdk-input-wrapper'] }],
+    },
+  },
+  {
+    // vaul's Drawer `autoFocus` prop moves focus into the opened sheet (APG
+    // modal dialog); the rule targets DOM autofocus on page load.
+    files: ['**/drawer/drawer.tsx'],
+    rules: {
+      'jsx-a11y/no-autofocus': ['error', { ignoreNonDOM: true }],
+    },
+  },
+  {
+    // Scrolling regions and logs must be reachable by keyboard (WCAG 2.1.1,
+    // axe scrollable-region-focusable). A labelled <section> is a region, and
+    // no-redundant-roles forbids spelling role="region" on it.
+    files: [
+      '**/ai-artifact/ai-artifact.tsx',
+      '**/bottom-activity-strip/bottom-activity-strip.tsx',
+      '**/canvas-view/canvas-view.tsx',
+      '**/conversation-thread/conversation-thread.tsx',
+      '**/gantt-chart/gantt-chart.tsx',
+      '**/parallel-timeline/parallel-timeline.tsx',
+    ],
+    rules: {
+      'jsx-a11y/no-noninteractive-tabindex': [
+        'error',
+        { roles: ['log', 'region'], tags: ['section'] },
+      ],
+    },
+  },
+  {
+    // APG tabs: a tab panel without focusable content is itself a tab stop.
+    files: ['**/tabs/tabs.tsx'],
+    rules: {
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { roles: ['tabpanel'], tags: [] }],
+    },
+  },
+  {
+    // CanvasView's focusable workspace <section> pans and zooms with keys only
+    // when it is the event target itself (RULES.md R12).
+    files: ['**/canvas-view/canvas-view.tsx'],
+    rules: {
+      'jsx-a11y/no-noninteractive-element-interactions': [
+        'error',
+        {
+          body: ['onError', 'onLoad'],
+          iframe: ['onError', 'onLoad'],
+          img: ['onError', 'onLoad'],
+          section: ['onBlur', 'onKeyDown', 'onKeyUp'],
+        },
+      ],
     },
   },
   {
