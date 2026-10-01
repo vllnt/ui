@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { announce } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
@@ -28,8 +29,12 @@ export type AIArtifactType =
 
 /** Localizable labels for native artifact actions. */
 export type AIArtifactLabels = {
+  /** Announced after the copy action runs. Defaults to "Copied". */
+  readonly copied?: string;
   readonly copy?: string;
   readonly download?: string;
+  /** Announced after the download action runs. Defaults to "Download started". */
+  readonly downloadStarted?: string;
   readonly edit?: string;
 };
 
@@ -59,8 +64,10 @@ type AIArtifactContextValue = {
 };
 
 const defaultLabels: Required<AIArtifactLabels> = {
+  copied: "Copied",
   copy: "Copy",
   download: "Download",
+  downloadStarted: "Download started",
   edit: "Edit",
 };
 
@@ -177,8 +184,10 @@ function useArtifactContext({
 >): AIArtifactContextValue {
   const resolvedLabels = useMemo<Required<AIArtifactLabels>>(
     () => ({
+      copied: labels?.copied ?? defaultLabels.copied,
       copy: labels?.copy ?? defaultLabels.copy,
       download: labels?.download ?? defaultLabels.download,
+      downloadStarted: labels?.downloadStarted ?? defaultLabels.downloadStarted,
       edit: labels?.edit ?? defaultLabels.edit,
     }),
     [labels],
@@ -202,7 +211,11 @@ function useArtifactContext({
   );
 }
 
-/** Native container for consumer-rendered AI output. */
+/**
+ * Native container for consumer-rendered AI output. The visible title is the
+ * artifact's heading; VoiceOver ignores labels on the non-focusable container,
+ * so the title is not repeated there.
+ */
 function AIArtifact({
   accessibilityLabel,
   children,
@@ -237,9 +250,7 @@ function AIArtifact({
     <AIArtifactContext value={context}>
       <View
         {...props}
-        accessibilityLabel={
-          accessibilityLabel ?? (typeof title === "string" ? title : undefined)
-        }
+        accessibilityLabel={accessibilityLabel}
         ref={ref}
         style={[
           styles.root,
@@ -308,6 +319,7 @@ function AIArtifactCopyButton({
       onPress={(event) => {
         onPress?.(event);
         onCopy?.(value);
+        if (onCopy) announce(labels.copied);
       }}
       ref={ref}
       size="sm"
@@ -333,6 +345,7 @@ function AIArtifactDownloadButton({
       onPress={(event) => {
         onPress?.(event);
         onDownload?.(value, filename);
+        if (onDownload) announce(labels.downloadStarted);
       }}
       ref={ref}
       size="sm"

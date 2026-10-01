@@ -167,11 +167,9 @@ WorldClockCard.displayName = "WorldClockCard";
 function WorldClockList({
   emptyLabel,
   items,
-  title,
 }: {
   readonly emptyLabel: string;
   readonly items: readonly FormattedZone[];
-  readonly title: string;
 }) {
   const theme = useTheme();
   if (items.length === 0) {
@@ -183,7 +181,6 @@ function WorldClockList({
   }
   return (
     <ScrollView
-      accessibilityLabel={title}
       accessibilityRole="list"
       horizontal
       showsHorizontalScrollIndicator={false}
@@ -229,11 +226,7 @@ function WorldClockBar({
         title={title}
         zoneCount={formattedZones.length}
       />
-      <WorldClockList
-        emptyLabel={emptyLabel}
-        items={formattedZones}
-        title={title}
-      />
+      <WorldClockList emptyLabel={emptyLabel} items={formattedZones} />
     </View>
   );
 }

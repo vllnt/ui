@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -129,7 +130,6 @@ function KeyboardShortcutsHelp({
     >
       <View
         {...surfaceProps}
-        accessibilityLabel={labels.title}
         style={[
           styles.surface,
           {
@@ -185,8 +185,7 @@ function KeyboardShortcutsHelp({
                 {shortcut.description}
               </Text>
               <View
-                accessibilityElementsHidden
-                importantForAccessibility="no"
+                {...decorativeProps}
                 style={{ flexDirection: "row", gap: theme.spacing[1] }}
               >
                 {shortcut.keys.map((key, index) => (

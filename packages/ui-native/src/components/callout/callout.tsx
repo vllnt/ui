@@ -6,6 +6,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -78,7 +79,7 @@ function Callout({
       ]}
     >
       <View style={[styles.content, { gap: theme.spacing[3] }]}>
-        {icon ? <View accessibilityElementsHidden>{icon}</View> : null}
+        {icon ? <View {...decorativeProps}>{icon}</View> : null}
         <View style={[styles.body, { gap: theme.spacing[1] }]}>
           <NativeText
             accessibilityLabel={displayTitle}

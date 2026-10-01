@@ -95,11 +95,6 @@ function ViewSwitcher({
                 disabled: option.disabled,
                 selected: active,
               }}
-              aria-controls={
-                active && option.panel !== undefined
-                  ? `${baseId}-panel-${option.key}`
-                  : undefined
-              }
               disabled={option.disabled}
               id={`${baseId}-tab-${option.key}`}
               key={option.key}

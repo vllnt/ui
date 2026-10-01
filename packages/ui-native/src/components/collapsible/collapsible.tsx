@@ -159,9 +159,6 @@ function CollapsibleTrigger({
         disabled: disabled === true,
         expanded: collapsible.open,
       }}
-      aria-controls={
-        collapsible.contentMounted ? `${collapsible.id}-content` : undefined
-      }
       disabled={disabled}
       id={`${collapsible.id}-trigger`}
       onPress={handlePress}

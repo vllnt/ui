@@ -6,6 +6,6 @@ import { createContext } from "react";
  * React Native does not inherit text color across Views, so filled
  * containers provide their paired foreground token here.
  */
-const textColorContext = createContext<string | undefined>(undefined);
+const TextColorContext = createContext<string | undefined>(undefined);
 
-export { textColorContext };
+export { TextColorContext };

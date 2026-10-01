@@ -56,11 +56,11 @@ function SearchBar({
   return (
     <View
       {...props}
-      accessibilityRole="search"
       ref={ref}
       style={[styles.root, { gap: theme.spacing[2] }, style]}
     >
       <Input
+        accessibilityRole="search"
         {...inputProps}
         accessibilityLabel={
           inputProps?.accessibilityLabel ??

@@ -62,7 +62,10 @@ it("opens and closes a dialog through controls, back, and accessibility escape",
   expect(onOpenChange).toHaveBeenCalledWith(false);
 
   view.rerender(<Dialog {...props} open />);
-  fireEvent(screen.getByLabelText("Preferences"), "accessibilityEscape");
+  fireEvent(
+    screen.getByRole("header", { name: "Preferences" }),
+    "accessibilityEscape",
+  );
   expect(onRequestClose).toHaveBeenCalledWith("accessibilityEscape");
   fireEvent(screen.UNSAFE_getByType(Modal), "requestClose", {
     nativeEvent: {},
@@ -111,10 +114,8 @@ it("reports unavailable and available native sharing truthfully", async () => {
   };
   const unavailable = render(<ShareDialog {...props} shareService={null} />);
 
-  expect(screen.getByText("Sharing unavailable")).toBeOnTheScreen();
-  expect(
-    screen.getByRole("button", { name: "Sharing unavailable" }),
-  ).toBeDisabled();
+  expect(screen.getAllByText("Sharing unavailable")).toHaveLength(1);
+  expect(screen.getByRole("button", { name: "Share now" })).toBeDisabled();
   unavailable.unmount();
 
   const clipboard = { getText: async () => "", setText: async () => {} };

@@ -110,11 +110,11 @@ it("mounts grouped controls and preserves stable selection callbacks", () => {
       />
     </>,
   );
-  expect(screen.getByLabelText("Editing actions")).toBeOnTheScreen();
-  expect(screen.getByLabelText("Filters")).toHaveProp(
-    "accessibilityRole",
-    "toolbar",
+  expect(screen.getByRole("button", { name: "Save changes" })).toHaveProp(
+    "accessibilityHint",
+    "Editing actions",
   );
+  expect(screen.queryByLabelText("Filters")).toBeNull();
   fireEvent.press(screen.getByRole("radio", { name: "Open" }));
   fireEvent.press(screen.getByRole("checkbox", { name: "Email" }));
   fireEvent.press(screen.getByRole("radio", { name: "Red" }));

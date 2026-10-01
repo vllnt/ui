@@ -4,6 +4,10 @@ import { type Ref, useEffect, useMemo, useState } from "react";
 
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  decorativeProps,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../badge/badge";
 import { Card } from "../card/card";
@@ -157,7 +161,6 @@ function TimerHeader({
       <View style={{ flex: 1, gap: theme.spacing[1] }}>
         <Text
           accessibilityLabel={accessibilityLabel}
-          accessibilityLiveRegion="polite"
           accessibilityRole={accessibilityRole}
           weight="semibold"
         >
@@ -180,7 +183,10 @@ function TimerSegments({
 }) {
   const theme = useTheme();
   return (
-    <View style={[styles.segments, { gap: theme.spacing[2] }]}>
+    <View
+      {...decorativeProps}
+      style={[styles.segments, { gap: theme.spacing[2] }]}
+    >
       {segments.map((segment) => (
         <View
           key={segment.id}
@@ -222,10 +228,13 @@ function getProgress({
   readonly remainingMs: number;
   readonly startedAt?: Date;
 }): { readonly max: number; readonly value: number } {
-  if (!startedAt) return { max: 1, value: remainingMs <= 0 ? 1 : 0 };
+  if (!startedAt) return { max: 1, value: remainingMs <= 0 ? 0 : 1 };
   const max = Math.max(0, deadline.getTime() - startedAt.getTime());
-  const value = Math.min(max, Math.max(0, now.getTime() - startedAt.getTime()));
-  return { max, value };
+  const elapsed = Math.min(
+    max,
+    Math.max(0, now.getTime() - startedAt.getTime()),
+  );
+  return { max, value: max - elapsed };
 }
 
 function getTimerPresentation({
@@ -283,7 +292,12 @@ function getTimerPresentation({
   };
 }
 
-/** Native countdown card with fixed-time injection for deterministic rendering. */
+/**
+ * Native countdown card with fixed-time injection for deterministic rendering.
+ * The title speaks the status and remaining time when focused; the ticking
+ * digits stay silent, and only status transitions (on track, at risk,
+ * breached) are announced. The progress bar reports the time remaining.
+ */
 function CountdownTimer({
   deadline,
   description,
@@ -312,6 +326,7 @@ function CountdownTimer({
     startedAt: startedAtDate,
     warningThresholdMs,
   });
+  useAnnounceOnChange(`${title}: ${timer.status.label}`);
 
   return (
     <Card

@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import type { ClipboardService } from "../../primitives/platform-services";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
@@ -193,6 +194,9 @@ function CodeBlock({
     : copyAvailable
       ? copyLabels?.copy
       : copyLabels?.unavailable;
+  useAnnounceOnChange(copied ? copyLabels?.copied : undefined, {
+    liveRegion: true,
+  });
   const copy = async () => {
     if (!clipboard) return;
     const currentOperation = ++operation.current;

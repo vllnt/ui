@@ -40,7 +40,11 @@ const styles = StyleSheet.create({
   root: { flexDirection: "row", padding: 4 },
 });
 
-/** Native segmented control with radio semantics and 44-point targets. */
+/**
+ * Native segmented control with radio semantics and 44-point targets. The
+ * group `label` is each option's hint (VoiceOver ignores labels on
+ * non-focusable containers), and option text wraps at large font sizes.
+ */
 function SegmentedControl({
   disabled = false,
   items,
@@ -54,7 +58,6 @@ function SegmentedControl({
   const [selectedId, setSelectedId] = useControllableState(selection);
   return (
     <View
-      accessibilityLabel={label}
       accessibilityRole="radiogroup"
       ref={ref}
       style={[
@@ -69,6 +72,7 @@ function SegmentedControl({
         const itemDisabled = disabled || item.disabled === true;
         return (
           <Pressable
+            accessibilityHint={label}
             accessibilityLabel={item.label}
             accessibilityRole="radio"
             accessibilityState={{ checked: selected, disabled: itemDisabled }}
@@ -90,10 +94,10 @@ function SegmentedControl({
             ]}
           >
             <NativeText
-              numberOfLines={1}
               style={typeStyle(theme, "bodySmall", {
                 color: selected ? "foreground" : "mutedForeground",
                 fontWeight: theme.typography.fontWeight.caption,
+                textAlign: "center",
               })}
             >
               {item.label}

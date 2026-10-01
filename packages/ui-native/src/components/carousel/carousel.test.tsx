@@ -31,9 +31,7 @@ it("restores the controlled slide after a rejected swipe", () => {
   });
   expect(onSelectedIdChange).toHaveBeenCalledWith("b");
   expect(scrollTo).toHaveBeenLastCalledWith({ animated: false, x: 0, y: 0 });
-  expect(screen.getByLabelText("A")).toHaveProp(
-    "accessibilityElementsHidden",
-    false,
-  );
+  expect(screen.getByText("A slide")).toBeOnTheScreen();
+  expect(screen.queryByText("B slide")).toBeNull();
   scrollTo.mockRestore();
 });

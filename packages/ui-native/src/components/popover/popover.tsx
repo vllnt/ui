@@ -72,7 +72,6 @@ function Popover({
       visible={visible}
     >
       <View
-        accessibilityLabel={label}
         style={[
           styles.surface,
           {

@@ -2,6 +2,7 @@ import type { NativeTheme } from "@vllnt/ui-core";
 import type { Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -67,7 +68,11 @@ function getStateColor(theme: NativeTheme, state: PresenceSyncState): string {
   return values[state];
 }
 
-/** Native live-region indicator for collaboration connection health. */
+/**
+ * Native live-region indicator for collaboration connection health. TalkBack
+ * reads changes through the live region; iOS receives an announcement when
+ * the connection state changes.
+ */
 function PresenceSyncIndicator({
   accessibilityLabel,
   label,
@@ -82,6 +87,7 @@ function PresenceSyncIndicator({
   const stateLabel = getStateLabel(state, labels);
   const regionLabel = labels?.region ?? "Presence sync";
   const statusSuffix = status ? `, ${status}` : "";
+  useAnnounceOnChange(`${regionLabel}: ${stateLabel}`, { liveRegion: true });
 
   return (
     <View

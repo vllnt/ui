@@ -1,9 +1,14 @@
 "use client";
 
-import { type Ref, useEffect, useMemo, useState } from "react";
+import { type Ref, useEffect, useMemo, useRef, useState } from "react";
 
 import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  announce,
+  decorativeProps,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
 import { Card } from "../card/card";
@@ -97,6 +102,37 @@ function useCurrentDate(now: LiveFeedDateValue | undefined, tickMs: number) {
   return now === undefined ? new Date(timestamp) : normalizeDate(now);
 }
 
+function eventSummary(event: LiveFeedEvent) {
+  return `${event.severity}: ${event.title}`;
+}
+
+/**
+ * Announces the newest event once when it changes, at most once per
+ * `intervalMs`; a burst of events collapses into one trailing announcement of
+ * the newest. Clock ticks never re-announce.
+ */
+function useNewestEventAnnouncement(newest?: LiveFeedEvent, intervalMs = 2000) {
+  const previousId = useRef(newest?.id);
+  const lastAnnouncedAt = useRef(0);
+  const id = newest?.id;
+  const message = newest ? eventSummary(newest) : undefined;
+  useEffect(() => {
+    if (message === undefined || id === previousId.current) return;
+    previousId.current = id;
+    const delay = Math.max(
+      0,
+      lastAnnouncedAt.current + intervalMs - Date.now(),
+    );
+    const timer = setTimeout(() => {
+      lastAnnouncedAt.current = Date.now();
+      announce(message);
+    }, delay);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [id, intervalMs, message]);
+}
+
 function LiveFeedHeader({
   description,
   liveLabel,
@@ -110,7 +146,9 @@ function LiveFeedHeader({
   return (
     <View style={[styles.titleRow, { gap: theme.spacing[3] }]}>
       <View style={{ flex: 1, gap: theme.spacing[1] }}>
-        <Text weight="semibold">{title}</Text>
+        <Text accessibilityRole="header" weight="semibold">
+          {title}
+        </Text>
         {description ? (
           <Text size="small" tone="muted">
             {description}
@@ -124,11 +162,9 @@ function LiveFeedHeader({
 LiveFeedHeader.displayName = "LiveFeedHeader";
 
 function LiveFeedRow({
-  announce,
   event,
   now,
 }: {
-  readonly announce: boolean;
   readonly event: LiveFeedEvent;
   readonly now: Date;
 }) {
@@ -137,8 +173,12 @@ function LiveFeedRow({
   const relative = relativeTime(eventDate, now);
   return (
     <View
-      accessibilityLabel={`${event.severity}: ${event.title}${relative ? `, ${relative}` : ""}`}
-      accessibilityRole="text"
+      accessibilityHint={joinAccessibilityText([event.message, event.source])}
+      accessibilityLabel={joinAccessibilityText(
+        [eventSummary(event), relative],
+        ", ",
+      )}
+      accessible
       style={[
         styles.item,
         {
@@ -149,11 +189,7 @@ function LiveFeedRow({
       ]}
     >
       <View style={[styles.itemTop, { gap: theme.spacing[2] }]}>
-        <Text
-          accessibilityLiveRegion={announce ? "polite" : undefined}
-          style={{ flex: 1 }}
-          weight="medium"
-        >
+        <Text style={{ flex: 1 }} weight="medium">
           {event.title}
         </Text>
         {relative ? (
@@ -162,7 +198,7 @@ function LiveFeedRow({
           </Text>
         ) : null}
       </View>
-      <SeverityBadge level={event.severity} tone="soft" />
+      <SeverityBadge {...decorativeProps} level={event.severity} tone="soft" />
       {event.message ? (
         <Text size="small" tone="muted">
           {event.message}
@@ -178,7 +214,11 @@ function LiveFeedRow({
 }
 LiveFeedRow.displayName = "LiveFeedRow";
 
-/** Native rolling feed sorted from newest to oldest. */
+/**
+ * Native rolling feed sorted from newest to oldest. Each row is one
+ * screen-reader stop; a newly arrived newest event is announced once on both
+ * platforms (bursts collapse to the newest) and clock ticks stay silent.
+ */
 function LiveFeed({
   description,
   emptyLabel = "No events yet",
@@ -204,6 +244,7 @@ function LiveFeed({
         .slice(0, Math.max(0, maxItems)),
     [events, maxItems],
   );
+  useNewestEventAnnouncement(visibleEvents[0]);
 
   return (
     <Card
@@ -221,14 +262,9 @@ function LiveFeed({
           {emptyLabel}
         </Text>
       ) : (
-        <ScrollView accessibilityLabel={title} accessibilityRole="list">
-          {visibleEvents.map((event, index) => (
-            <LiveFeedRow
-              announce={index === 0}
-              event={event}
-              key={event.id}
-              now={liveNow}
-            />
+        <ScrollView accessibilityRole="list">
+          {visibleEvents.map((event) => (
+            <LiveFeedRow event={event} key={event.id} now={liveNow} />
           ))}
         </ScrollView>
       )}

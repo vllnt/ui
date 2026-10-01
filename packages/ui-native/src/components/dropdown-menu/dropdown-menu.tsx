@@ -3,6 +3,7 @@
 import type { Ref } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -32,6 +33,11 @@ export type DropdownMenuProps = {
   readonly cancelLabel: string;
   readonly defaultOpen?: boolean;
   readonly defaultSelectedId?: SelectionKey;
+  /**
+   * Hint spoken on destructive items so their meaning does not rely on
+   * colour. Defaults to "Destructive".
+   */
+  readonly destructiveLabel?: string;
   readonly items: readonly DropdownMenuItem[];
   readonly label: string;
   readonly onOpenChange?: (open: boolean) => void;
@@ -46,6 +52,7 @@ const getItemId = (item: DropdownMenuItem) => item.id;
 const styles = StyleSheet.create({
   cancel: { alignItems: "center", justifyContent: "center", minHeight: 44 },
   content: { flex: 1, justifyContent: "center" },
+  heading: { paddingHorizontal: 12, paddingTop: 4 },
   item: { justifyContent: "center", minHeight: 44 },
   surface: {
     alignSelf: "center",
@@ -56,11 +63,16 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Modal list interpretation of a dropdown for native platforms. */
+/**
+ * Modal list interpretation of a dropdown for native platforms. The menu
+ * `label` renders as the sheet's header and screen readers hear it when the
+ * menu opens.
+ */
 function DropdownMenu({
   cancelLabel,
   defaultOpen = false,
   defaultSelectedId,
+  destructiveLabel = "Destructive",
   items,
   label,
   onOpenChange,
@@ -78,6 +90,7 @@ function DropdownMenu({
   const [selection, setSelection] = useControllableState(
     controllableOptions(selectedId, defaultSelectedId),
   );
+  useAnnounceOnChange(visible ? label : undefined, { initial: true });
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
@@ -93,7 +106,6 @@ function DropdownMenu({
       visible={visible}
     >
       <View
-        accessibilityLabel={label}
         accessibilityRole="menu"
         style={[
           styles.surface,
@@ -106,11 +118,26 @@ function DropdownMenu({
           },
         ]}
       >
+        <Text
+          accessibilityRole="header"
+          style={[
+            styles.heading,
+            ...typeStyle(theme, "bodySmall", {
+              color: "popoverForeground",
+              fontWeight: theme.typography.fontWeight.heading,
+            }),
+          ]}
+        >
+          {label}
+        </Text>
         <ScrollView>
           {items.map((item) => {
             const selected = isSingleSelected(selection, item, getItemId);
             return (
               <Pressable
+                accessibilityHint={
+                  item.destructive ? destructiveLabel : undefined
+                }
                 accessibilityLabel={item.label}
                 accessibilityRole="menuitem"
                 accessibilityState={{

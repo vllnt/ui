@@ -27,7 +27,11 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row" },
 });
 
-/** Labeled, accessible native horizontal ScrollView. */
+/**
+ * Labeled, accessible native horizontal ScrollView. The visible heading names
+ * the row (an `accessibilityLabel` overrides the heading's spoken text),
+ * because VoiceOver ignores labels on the non-focusable list container.
+ */
 function HorizontalScrollRow({
   accessibilityLabel,
   children,
@@ -43,7 +47,11 @@ function HorizontalScrollRow({
   return (
     <View style={[styles.root, { gap: theme.spacing[4] }]}>
       <View style={{ gap: theme.spacing[1] }}>
-        <Heading level={headingLevel} size={6}>
+        <Heading
+          accessibilityLabel={accessibilityLabel}
+          level={headingLevel}
+          size={6}
+        >
           {title}
         </Heading>
         {description ? (
@@ -54,7 +62,6 @@ function HorizontalScrollRow({
       </View>
       <ScrollView
         {...props}
-        accessibilityLabel={accessibilityLabel ?? title}
         accessibilityRole="list"
         contentContainerStyle={[
           styles.row,

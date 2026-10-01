@@ -2,7 +2,7 @@
 
 import { type ReactNode, type Ref, useEffect, useRef, useState } from "react";
 
-import { Animated, StyleSheet, View, type ViewProps } from "react-native";
+import { Animated, StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -23,7 +23,10 @@ export type AnimatedListProps = Omit<ViewProps, "children" | "ref"> & {
   readonly ref?: Ref<View>;
 };
 
-const styles = StyleSheet.create({ root: { width: "100%" } });
+const styles = StyleSheet.create({
+  name: { height: 1, overflow: "hidden", position: "absolute", width: 1 },
+  root: { width: "100%" },
+});
 
 function AnimatedListRow({
   animate,
@@ -91,7 +94,9 @@ AnimatedListRow.displayName = "AnimatedListRow";
 
 /**
  * Keeps initial rows visible and animates rows inserted after resolving a
- * non-reduced motion preference.
+ * non-reduced motion preference. VoiceOver ignores names on non-focusable
+ * containers, so `label` renders as a visually hidden header read before the
+ * rows on both platforms.
  */
 function AnimatedList({
   delay = 40,
@@ -107,11 +112,16 @@ function AnimatedList({
   return (
     <View
       {...props}
-      accessibilityLabel={label}
       accessibilityRole="list"
       ref={ref}
       style={[styles.root, { gap: theme.spacing[2] }, style]}
     >
+      <Text
+        accessibilityRole="header"
+        style={[styles.name, { color: theme.colors.foreground }]}
+      >
+        {label}
+      </Text>
       {items.map((item, index) => (
         <AnimatedListRow
           animate={!reduceMotion}

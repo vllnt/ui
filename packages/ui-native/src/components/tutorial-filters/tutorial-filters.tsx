@@ -60,12 +60,14 @@ const styles = StyleSheet.create({
 
 function FilterChoice({
   disabled,
+  groupLabel,
   label,
   onPress,
   selected,
   type,
 }: {
   readonly disabled: boolean;
+  readonly groupLabel: string;
   readonly label: string;
   readonly onPress: () => void;
   readonly selected: boolean;
@@ -74,9 +76,10 @@ function FilterChoice({
   const theme = useTheme();
   return (
     <Pressable
+      accessibilityHint={groupLabel}
       accessibilityLabel={label}
       accessibilityRole={type}
-      accessibilityState={{ checked: selected, disabled }}
+      accessibilityState={{ busy: disabled, checked: selected, disabled }}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
@@ -107,7 +110,37 @@ function FilterChoice({
 }
 FilterChoice.displayName = "FilterChoice";
 
-/** Native filter controls without DOM queries or browser state. */
+function ClearAction({
+  disabled,
+  label,
+  onPress,
+}: {
+  readonly disabled: boolean;
+  readonly label: string;
+  readonly onPress: () => void;
+}) {
+  const theme = useTheme();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      disabled={disabled}
+      onPress={onPress}
+      style={[styles.action, { opacity: disabled ? 0.5 : 1 }]}
+    >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+ClearAction.displayName = "ClearAction";
+
+/**
+ * Native filter controls without DOM queries or browser state. Group names
+ * are each choice's hint (VoiceOver ignores container labels), and a pending
+ * update marks the controls busy and disabled.
+ */
 function TutorialFilters({
   currentDifficulty,
   currentTags,
@@ -132,6 +165,7 @@ function TutorialFilters({
     <View {...props} ref={ref} style={[{ gap: theme.spacing[4] }, style]}>
       <TextInput
         accessibilityLabel={labels.searchLabel}
+        accessibilityState={{ busy: isPending, disabled: isPending }}
         editable={!isPending}
         inputMode="search"
         nativeID={`${generatedId}-search`}
@@ -154,12 +188,9 @@ function TutorialFilters({
         ]}
         value={searchQuery}
       />
-      <View
-        accessibilityLabel={labels.difficultyLabel}
-        accessibilityRole="radiogroup"
-        style={{ gap: theme.spacing[2] }}
-      >
+      <View accessibilityRole="radiogroup" style={{ gap: theme.spacing[2] }}>
         <Text
+          accessibilityRole="header"
           style={typeStyle(theme, "bodySmall", {
             color: "foreground",
             fontWeight: theme.typography.fontWeight.caption,
@@ -173,6 +204,7 @@ function TutorialFilters({
             return (
               <FilterChoice
                 disabled={isPending}
+                groupLabel={labels.difficultyLabel}
                 key={difficulty}
                 label={label}
                 onPress={() => {
@@ -186,10 +218,7 @@ function TutorialFilters({
         </View>
       </View>
       {tags.length > 0 ? (
-        <View
-          accessibilityLabel={labels.tagsLabel}
-          style={{ gap: theme.spacing[2] }}
-        >
+        <View style={{ gap: theme.spacing[2] }}>
           <View
             style={[
               styles.row,
@@ -197,6 +226,7 @@ function TutorialFilters({
             ]}
           >
             <Text
+              accessibilityRole="header"
               style={typeStyle(theme, "bodySmall", {
                 color: "foreground",
                 fontWeight: theme.typography.fontWeight.caption,
@@ -205,24 +235,20 @@ function TutorialFilters({
               {labels.tagsLabel}
             </Text>
             {currentTags.length > 0 ? (
-              <Pressable
-                accessibilityRole="button"
+              <ClearAction
                 disabled={isPending}
+                label={labels.clear}
                 onPress={() => {
                   onFilterChange({ tags: [] });
                 }}
-                style={styles.action}
-              >
-                <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-                  {labels.clear}
-                </Text>
-              </Pressable>
+              />
             ) : null}
           </View>
           <View style={[styles.row, { gap: theme.spacing[2] }]}>
             {tags.map((tag) => (
               <FilterChoice
                 disabled={isPending}
+                groupLabel={labels.tagsLabel}
                 key={tag}
                 label={tag}
                 onPress={() => {
@@ -240,7 +266,6 @@ function TutorialFilters({
       ) : null}
       {hasFilters ? (
         <View
-          accessibilityLabel={labels.activeFilters}
           style={[styles.row, { alignItems: "center", gap: theme.spacing[2] }]}
         >
           <Text style={typeStyle(theme, "caption", "mutedForeground")}>
@@ -261,9 +286,9 @@ function TutorialFilters({
               {labels.searchFilter(searchQuery)}
             </Text>
           ) : null}
-          <Pressable
-            accessibilityRole="button"
+          <ClearAction
             disabled={isPending}
+            label={labels.clearAll}
             onPress={() => {
               onFilterChange({
                 difficulty: difficultyOptions[0] ?? "",
@@ -271,12 +296,7 @@ function TutorialFilters({
                 tags: [],
               });
             }}
-            style={styles.action}
-          >
-            <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-              {labels.clearAll}
-            </Text>
-          </Pressable>
+          />
         </View>
       ) : null}
     </View>

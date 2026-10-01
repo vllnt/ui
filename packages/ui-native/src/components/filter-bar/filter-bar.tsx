@@ -3,6 +3,10 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  ControlGroupContext,
+  useNestedControlGroup,
+} from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a native filter-control composition row. */
@@ -21,19 +25,25 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Labelled native container for independently controlled filter inputs. */
+/**
+ * Labelled native container for independently controlled filter inputs.
+ * VoiceOver ignores labels on non-focusable containers, so package buttons
+ * and inputs inside speak `label` as their hint.
+ */
 function FilterBar({ children, label, ref, style, ...props }: FilterBarProps) {
   const theme = useTheme();
+  const group = useNestedControlGroup({ label });
   return (
-    <View
-      accessibilityLabel={label}
-      accessibilityRole="toolbar"
-      ref={ref}
-      style={[styles.root, { gap: theme.spacing[2] }, style]}
-      {...props}
-    >
-      {children}
-    </View>
+    <ControlGroupContext value={group}>
+      <View
+        accessibilityRole="toolbar"
+        ref={ref}
+        style={[styles.root, { gap: theme.spacing[2] }, style]}
+        {...props}
+      >
+        {children}
+      </View>
+    </ControlGroupContext>
   );
 }
 FilterBar.displayName = "FilterBar";

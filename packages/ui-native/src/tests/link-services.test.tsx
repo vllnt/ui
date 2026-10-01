@@ -91,7 +91,7 @@ it("opens every enabled href with the default native linking adapter", async () 
   fireEvent.press(
     screen.getByRole("link", { name: "Navigation menu destination" }),
   );
-  fireEvent.press(screen.getByRole("link", { name: "2" }));
+  fireEvent.press(screen.getByRole("link", { name: "Page 2" }));
   fireEvent.press(screen.getByRole("button", { name: "Review menu" }));
   fireEvent.press(screen.getByRole("link", { name: "Menubar destination" }));
   fireEvent.press(
@@ -191,7 +191,7 @@ it("reports rejected link opens with their destination context", async () => {
   fireEvent.press(screen.getByRole("link", { name: breadcrumbItem.label }));
   fireEvent.press(screen.getByRole("link", { name: sidebarItem.label }));
   fireEvent.press(screen.getByRole("link", { name: navigationItem.label }));
-  fireEvent.press(screen.getByRole("link", { name: "2" }));
+  fireEvent.press(screen.getByRole("link", { name: "Page 2" }));
   fireEvent.press(screen.getByRole("button", { name: menubarMenu.label }));
   fireEvent.press(screen.getByRole("link", { name: menubarItem.label }));
   fireEvent.press(

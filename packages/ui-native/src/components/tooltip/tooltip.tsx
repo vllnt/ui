@@ -101,7 +101,6 @@ function Tooltip({
         visible={visible}
       >
         <View
-          accessibilityLabel={label}
           style={[
             styles.surface,
             {

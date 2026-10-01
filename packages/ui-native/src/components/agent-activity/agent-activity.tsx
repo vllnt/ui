@@ -23,6 +23,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  plainText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -177,6 +182,7 @@ function ActivityHeader({
 }) {
   const theme = useTheme();
   const failed = status === "error" || status === "unavailable";
+  const elapsedText = plainText(elapsed);
   return (
     <View style={[styles.header, { gap: theme.spacing[3] }]}>
       <View>
@@ -200,14 +206,28 @@ function ActivityHeader({
         </Text>
       </View>
       {elapsed ? (
-        <View accessibilityLabel={labels.elapsed}>{elapsed}</View>
+        <View
+          {...(elapsedText === undefined
+            ? undefined
+            : {
+                accessibilityLabel: labels.elapsed,
+                accessibilityValue: { text: elapsedText },
+                accessible: true,
+              })}
+        >
+          {elapsed}
+        </View>
       ) : null}
     </View>
   );
 }
 ActivityHeader.displayName = "ActivityHeader";
 
-/** Native activity surface for agent steps and service state. */
+/**
+ * Native activity surface for agent steps and service state. It announces
+ * each status change (running, completed, failed) once on both platforms,
+ * replacing the former Android live region.
+ */
 function AgentActivity({
   children,
   elapsed,
@@ -218,12 +238,11 @@ function AgentActivity({
   ...props
 }: AgentActivityProps) {
   const theme = useTheme();
+  useAnnounceOnChange(`${labels.activity}, ${labels.status[status]}`);
   return (
     <LabelsContext value={labels}>
       <View
         {...props}
-        accessibilityLabel={`${labels.activity}, ${labels.status[status]}`}
-        accessibilityLiveRegion={status === "running" ? "polite" : "none"}
         ref={ref}
         style={[
           styles.activity,
@@ -272,20 +291,29 @@ function AgentStepDetail({ ref, style, ...props }: AgentStepDetailProps) {
 }
 AgentStepDetail.displayName = "AgentStepDetail";
 
+function titleText(child: ReactNode): string | undefined {
+  if (!isValidElement<TextProps>(child) || child.type !== AgentStepTitle)
+    return undefined;
+  return plainText(child.props.children);
+}
+
 function splitStepChildren(children: ReactNode): {
   readonly details: ReactNode[];
   readonly header: ReactNode[];
+  readonly title?: string;
 } {
   const details: ReactNode[] = [];
   const header: ReactNode[] = [];
+  let title: string | undefined;
   Children.forEach(children, (child) => {
     if (isValidElement(child) && child.type === AgentStepDetail) {
       details.push(child);
     } else {
+      title ??= titleText(child);
       header.push(child);
     }
   });
-  return { details, header };
+  return { details, header, title };
 }
 
 type StepHeaderProps = {
@@ -297,6 +325,7 @@ type StepHeaderProps = {
   readonly onToggle: () => void;
   readonly status: AgentStepStatus;
   readonly statusColor: string;
+  readonly title?: string;
 };
 
 function StepHeader({
@@ -308,8 +337,10 @@ function StepHeader({
   onToggle,
   status,
   statusColor,
+  title,
 }: StepHeaderProps) {
   const theme = useTheme();
+  const toggleLabel = isOpen ? labels.collapse : labels.expand;
   return (
     <View
       style={[
@@ -326,13 +357,16 @@ function StepHeader({
       </View>
       <View style={[styles.stepHeaderContent, { gap: theme.spacing[1] }]}>
         {header}
-        <Text style={[theme.typography.scale.caption, { color: statusColor }]}>
+        <Text
+          accessibilityState={{ busy: status === "running" }}
+          style={[theme.typography.scale.caption, { color: statusColor }]}
+        >
           {labels.status[status]}
         </Text>
       </View>
       {hasDetails ? (
         <Pressable
-          accessibilityLabel={isOpen ? labels.collapse : labels.expand}
+          accessibilityLabel={joinAccessibilityText([toggleLabel, title], ", ")}
           accessibilityRole="button"
           accessibilityState={{ expanded: isOpen }}
           onPress={onToggle}
@@ -343,7 +377,7 @@ function StepHeader({
           ]}
         >
           <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-            {isOpen ? labels.collapse : labels.expand}
+            {toggleLabel}
           </Text>
         </Pressable>
       ) : null}
@@ -352,7 +386,11 @@ function StepHeader({
 }
 StepHeader.displayName = "StepHeader";
 
-/** One status-aware row in a native agent activity surface. */
+/**
+ * One status-aware row in a native agent activity surface. Its status text
+ * reports `busy` while running, and it announces each status change with the
+ * step title.
+ */
 function AgentStep({
   children,
   defaultOpen = true,
@@ -373,6 +411,9 @@ function AgentStep({
   const split = useMemo(() => splitStepChildren(children), [children]);
   const hasDetails = split.details.length > 0;
   const statusColor = getStepColor(status, theme.colors);
+  useAnnounceOnChange(
+    joinAccessibilityText([split.title, labels.status[status]], ", "),
+  );
 
   const handleToggle = useCallback(() => {
     const next = !isOpen;
@@ -386,8 +427,6 @@ function AgentStep({
     <StepContext value={context}>
       <View
         {...props}
-        accessibilityLabel={labels.status[status]}
-        accessibilityState={{ busy: status === "running" }}
         ref={ref}
         style={[
           styles.step,
@@ -408,6 +447,7 @@ function AgentStep({
           onToggle={handleToggle}
           status={status}
           statusColor={statusColor}
+          title={split.title}
         />
         {hasDetails && isOpen ? (
           <View

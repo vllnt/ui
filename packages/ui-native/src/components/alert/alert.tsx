@@ -1,4 +1,14 @@
-import type { Ref } from "react";
+"use client";
+
+import {
+  createContext,
+  type Ref,
+  use,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
 import {
   Text as NativeText,
   type Text as NativeTextInstance,
@@ -7,13 +17,21 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  plainText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native alert tone. */
 export type AlertVariant = "default" | "destructive";
 
-/** Props for a native alert region. */
+/**
+ * Props for a native alert region. `accessibilityLabel` replaces the spoken
+ * announcement (by default the title and description text).
+ */
 export type AlertProps = ViewProps & {
   readonly ref?: Ref<View>;
   readonly variant?: AlertVariant;
@@ -27,7 +45,29 @@ export type AlertDescriptionProps = TextProps & {
   readonly ref?: Ref<NativeTextInstance>;
 };
 
-/** Time-sensitive native announcement surface. */
+type AlertTextPart = "description" | "title";
+type AlertTexts = Readonly<Partial<Record<AlertTextPart, string>>>;
+const AlertTextContext = createContext<
+  ((part: AlertTextPart, text?: string) => void) | null
+>(null);
+
+/** Shares a part's plain text with its Alert so the alert can announce it. */
+function useAlertText(part: AlertTextPart, text?: string) {
+  const setText = use(AlertTextContext);
+  useEffect(() => {
+    setText?.(part, text);
+    return () => {
+      setText?.(part, undefined);
+    };
+  }, [part, setText, text]);
+}
+
+/**
+ * Time-sensitive native announcement surface. TalkBack speaks it through its
+ * live region and iOS receives an announcement when it appears or its text
+ * changes. The alert stays a plain group so actions inside it remain
+ * individually reachable by screen readers.
+ */
 function Alert({
   accessibilityLabel,
   accessibilityLiveRegion,
@@ -37,36 +77,46 @@ function Alert({
   ...props
 }: AlertProps) {
   const theme = useTheme();
+  const [texts, setTexts] = useState<AlertTexts>({});
+  const setText = useCallback((part: AlertTextPart, text?: string) => {
+    setTexts((current) =>
+      current[part] === text ? current : { ...current, [part]: text },
+    );
+  }, []);
+  useAnnounceOnChange(
+    accessibilityLabel ??
+      joinAccessibilityText([texts.title, texts.description]),
+    { initial: true, liveRegion: true },
+  );
 
   return (
-    <View
-      {...props}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityLiveRegion={
-        accessibilityLiveRegion ??
-        (variant === "destructive" ? "assertive" : "polite")
-      }
-      accessible
-      ref={ref}
-      role="alert"
-      style={[
-        {
-          backgroundColor:
-            variant === "destructive"
-              ? theme.colors.muted
-              : theme.colors.background,
-          borderColor:
-            variant === "destructive"
-              ? theme.colors.destructive
-              : theme.colors.border,
-          borderRadius: theme.radius.md,
-          borderWidth: 1,
-          gap: theme.spacing[1],
-          padding: theme.spacing[4],
-        },
-        style,
-      ]}
-    />
+    <AlertTextContext value={setText}>
+      <View
+        {...props}
+        accessibilityLiveRegion={
+          accessibilityLiveRegion ??
+          (variant === "destructive" ? "assertive" : "polite")
+        }
+        ref={ref}
+        style={[
+          {
+            backgroundColor:
+              variant === "destructive"
+                ? theme.colors.muted
+                : theme.colors.background,
+            borderColor:
+              variant === "destructive"
+                ? theme.colors.destructive
+                : theme.colors.border,
+            borderRadius: theme.radius.md,
+            borderWidth: 1,
+            gap: theme.spacing[1],
+            padding: theme.spacing[4],
+          },
+          style,
+        ]}
+      />
+    </AlertTextContext>
   );
 }
 Alert.displayName = "Alert";
@@ -74,6 +124,7 @@ Alert.displayName = "Alert";
 /** Heading for a native alert. */
 function AlertTitle({ ref, style, ...props }: AlertTitleProps) {
   const theme = useTheme();
+  useAlertText("title", plainText(props.children));
   return (
     <NativeText
       {...props}
@@ -94,6 +145,7 @@ AlertTitle.displayName = "AlertTitle";
 /** Supporting content for a native alert. */
 function AlertDescription({ ref, style, ...props }: AlertDescriptionProps) {
   const theme = useTheme();
+  useAlertText("description", plainText(props.children));
   return (
     <NativeText
       {...props}

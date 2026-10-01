@@ -11,6 +11,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  decorativeProps,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import type { ClipboardService } from "../../primitives/platform-services";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
@@ -159,7 +163,7 @@ function TerminalLineView({
     <View style={styles.line}>
       {line.type === "command" ? (
         <NativeText
-          accessibilityElementsHidden
+          {...decorativeProps}
           style={{
             color: theme.colors.primary,
             fontFamily: "monospace",
@@ -292,6 +296,9 @@ function Terminal({
     : copyAvailable
       ? copyLabels?.copy
       : copyLabels?.unavailable;
+  useAnnounceOnChange(copied ? copyLabels?.copied : undefined, {
+    liveRegion: true,
+  });
   return (
     <View
       {...props}

@@ -47,8 +47,13 @@ const styles = StyleSheet.create({
   root: { borderRightWidth: 1, flex: 1 },
 });
 
-/** Native sidebar driven by provider state and caller-owned navigation. */
+/**
+ * Native sidebar driven by provider state and caller-owned navigation. The
+ * sidebar `label` (or `accessibilityLabel`) is every item's hint, section
+ * labels are headers, and item labels wrap instead of truncating.
+ */
 function Sidebar({
+  accessibilityLabel,
   currentId,
   label = "Sidebar navigation",
   linking = defaultLinkingService,
@@ -67,7 +72,6 @@ function Sidebar({
   return (
     <View
       {...props}
-      accessibilityLabel={props.accessibilityLabel ?? label}
       accessibilityRole="none"
       ref={ref}
       style={[
@@ -85,7 +89,12 @@ function Sidebar({
         {sections.map((section) => (
           <View key={section.id} style={{ gap: theme.spacing[1] }}>
             {!compact && section.label ? (
-              <Text size="caption" tone="muted" weight="semibold">
+              <Text
+                accessibilityRole="header"
+                size="caption"
+                tone="muted"
+                weight="semibold"
+              >
                 {section.label}
               </Text>
             ) : null}
@@ -97,6 +106,7 @@ function Sidebar({
               );
               return (
                 <Pressable
+                  accessibilityHint={accessibilityLabel ?? label}
                   accessibilityLabel={item.label}
                   accessibilityRole={item.href ? "link" : "button"}
                   accessibilityState={{
@@ -133,7 +143,7 @@ function Sidebar({
                   ]}
                 >
                   <Text
-                    numberOfLines={1}
+                    numberOfLines={compact ? 1 : undefined}
                     size="small"
                     tone={current ? "default" : "muted"}
                     weight={current ? "medium" : "normal"}

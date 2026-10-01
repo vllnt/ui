@@ -185,9 +185,12 @@ it("exposes current navigation and invokes callback and link adapters", () => {
   expect(onNavigate).toHaveBeenCalled();
   expect(linking.openUrl).toHaveBeenCalledWith("app://home");
   expect(screen.getByText("Product links")).toBeOnTheScreen();
-  expect(screen.getByLabelText("Settings")).toHaveProp("accessibilityState", {
-    selected: true,
+  const currentCrumb = screen.getByLabelText("Settings");
+  expect(currentCrumb).toHaveProp("accessible", true);
+  expect(currentCrumb).toHaveProp("accessibilityValue", {
+    text: "current page",
   });
+  expect(currentCrumb).toHaveProp("accessibilityHint", "Breadcrumb");
 });
 
 function SidebarState() {
@@ -266,11 +269,16 @@ it("paginates with current and disabled semantics", () => {
     "accessibilityState",
     { disabled: true, selected: false },
   );
-  expect(screen.getByRole("link", { name: "Page 1, current page" })).toHaveProp(
-    "accessibilityState",
-    { disabled: false, selected: true },
-  );
-  fireEvent.press(screen.getByRole("link", { name: "2" }));
+  const currentPage = screen.getByRole("link", { name: "Page 1" });
+  expect(currentPage).toHaveProp("accessibilityState", {
+    disabled: false,
+    selected: true,
+  });
+  expect(currentPage).toHaveProp("accessibilityValue", {
+    text: "current page",
+  });
+  expect(currentPage).toHaveProp("accessibilityHint", "Pagination");
+  fireEvent.press(screen.getByRole("link", { name: "Page 2" }));
   expect(onPageChange).toHaveBeenCalledWith(2);
   expect(linking.openUrl).toHaveBeenCalledWith("app://pages/2");
 });
@@ -336,10 +344,9 @@ it("uses safe-area wrappers and an accessible horizontal ScrollView", () => {
   );
   expect(safeArea).toHaveBeenCalledTimes(2);
   expect(screen.getAllByTestId("safe-area")).toHaveLength(2);
-  const row = screen.UNSAFE_getByProps({
-    accessibilityLabel: "Workspaces",
-    accessibilityRole: "list",
-  });
+  expect(screen.getByRole("header", { name: "Workspaces" })).toBeOnTheScreen();
+  const row = screen.UNSAFE_getByProps({ accessibilityRole: "list" });
+  expect(row.props.accessibilityLabel).toBeUndefined();
   expect(row.props.accessible).not.toBe(true);
   expect(row.props.horizontal).toBe(true);
   fireEvent.scroll(row, { nativeEvent: { contentOffset: { x: 120, y: 0 } } });

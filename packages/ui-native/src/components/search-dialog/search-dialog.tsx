@@ -20,6 +20,10 @@ import {
 } from "react-native";
 
 import {
+  focusAccessibility,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
+import {
   ModalLayer,
   type ModalLayerCloseReason,
   type ModalLayerPresentationProps,
@@ -54,6 +58,8 @@ export type SearchDialogLabels = {
   readonly minimumDocsQuery: (minimum: number) => string;
   readonly open: string;
   readonly result: (item: SearchItem) => string;
+  /** Result count announced after the query or scope changes, e.g. "3 results". */
+  readonly results?: (count: number) => string;
   readonly scope: string;
   readonly scopeOption: Readonly<Record<SearchScope, string>>;
   readonly searchingDocs: string;
@@ -126,7 +132,6 @@ function SearchScopeControl({
   const scopes: readonly SearchScope[] = ["components", "docs", "everything"];
   return (
     <View
-      accessibilityLabel={labels.scope}
       accessibilityRole="radiogroup"
       style={[
         styles.scopes,
@@ -141,6 +146,7 @@ function SearchScopeControl({
         const selected = option === scope;
         return (
           <Pressable
+            accessibilityHint={labels.scope}
             accessibilityLabel={labels.scopeOption[option]}
             accessibilityRole="radio"
             accessibilityState={{ checked: selected }}
@@ -192,7 +198,7 @@ function SearchResults({
   const theme = useTheme();
   if (items.length === 0) return null;
   return (
-    <View accessibilityLabel={heading} style={{ gap: theme.spacing[1] }}>
+    <View style={{ gap: theme.spacing[1] }}>
       <Text
         accessibilityRole="header"
         style={typeStyle(theme, "caption", {
@@ -204,6 +210,7 @@ function SearchResults({
       </Text>
       {items.map((item) => (
         <Pressable
+          accessibilityHint={item.snippet ?? item.description}
           accessibilityLabel={labels.result(item)}
           accessibilityRole="button"
           key={item.id}
@@ -313,7 +320,28 @@ function useDocumentationResults({
   };
 }
 
-/** Native modal search without browser-global shortcut claims. */
+function resultStatus({
+  count,
+  labels,
+  loading,
+  scope,
+}: {
+  readonly count: number;
+  readonly labels: SearchDialogLabels;
+  readonly loading: boolean;
+  readonly scope: SearchScope;
+}) {
+  if (loading) return labels.searchingDocs;
+  if (count > 0) return labels.results?.(count);
+  return scope === "docs" ? labels.docsEmpty : labels.empty;
+}
+
+/**
+ * Native modal search without browser-global shortcut claims. The dialog
+ * title renders as its first header; result counts (via `labels.results`),
+ * loading, and empty states reach VoiceOver and TalkBack; clearing the
+ * query returns screen-reader focus to the search field.
+ */
 function SearchDialog({
   defaultOpen = false,
   defaultQuery = "",
@@ -340,6 +368,7 @@ function SearchDialog({
   const theme = useTheme();
   const reduceMotion = useReducedMotion();
   const generatedId = useId();
+  const inputRef = useRef<TextInput>(null);
   const [visible, setVisible] = useControllableState(
     controllableOptions(open, defaultOpen, onOpenChange),
   );
@@ -372,6 +401,22 @@ function SearchDialog({
     (!showComponents || componentItems.length === 0) &&
     (!showDocumentation || documentation.items.length === 0) &&
     !documentation.loading;
+  const resultCount =
+    (showComponents ? componentItems.length : 0) +
+    (showDocumentation ? documentation.items.length : 0);
+  const announceStatus =
+    visible && normalizedQuery.length > 0 && !waitingForQuery;
+  useAnnounceOnChange(
+    announceStatus
+      ? resultStatus({
+          count: resultCount,
+          labels,
+          loading: documentation.loading,
+          scope: searchScope,
+        })
+      : undefined,
+    { liveRegion: documentation.loading || noResults },
+  );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
@@ -423,7 +468,6 @@ function SearchDialog({
       >
         <View
           {...surfaceProps}
-          accessibilityLabel={labels.title}
           style={[
             styles.surface,
             {
@@ -436,6 +480,15 @@ function SearchDialog({
             surfaceProps?.style,
           ]}
         >
+          <Text
+            accessibilityRole="header"
+            style={typeStyle(theme, "bodyLarge", {
+              color: "foreground",
+              fontWeight: theme.typography.fontWeight.heading,
+            })}
+          >
+            {labels.title}
+          </Text>
           <View style={[styles.row, { gap: theme.spacing[2] }]}>
             <TextInput
               accessibilityLabel={labels.searchPlaceholder}
@@ -444,6 +497,7 @@ function SearchDialog({
               onChangeText={setSearchQuery}
               placeholder={labels.searchPlaceholder}
               placeholderTextColor={theme.colors.mutedForeground}
+              ref={inputRef}
               style={[
                 styles.input,
                 theme.typography.scale.body,
@@ -462,6 +516,7 @@ function SearchDialog({
                 accessibilityRole="button"
                 onPress={() => {
                   setSearchQuery("");
+                  focusAccessibility(inputRef);
                 }}
                 style={styles.action}
               >

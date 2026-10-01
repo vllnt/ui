@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     justifyContent: "center",
     minHeight: 44,
+    minWidth: 44,
   },
 });
 

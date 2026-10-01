@@ -102,7 +102,6 @@ function Dialog({
     >
       <View
         {...surfaceProps}
-        accessibilityLabel={title}
         style={[
           styles.surface,
           {

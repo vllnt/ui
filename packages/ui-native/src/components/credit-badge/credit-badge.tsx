@@ -45,11 +45,12 @@ function CreditBadge({
 }: CreditBadgeProps) {
   const statusLabel = label ?? statusLabels[status];
   const displayLabel = amount ? `${amount} • ${statusLabel}` : statusLabel;
+  const spokenLabel = amount ? `${amount}, ${statusLabel}` : statusLabel;
 
   return (
     <Badge
       {...props}
-      accessibilityLabel={accessibilityLabel ?? displayLabel}
+      accessibilityLabel={accessibilityLabel ?? spokenLabel}
       accessible
       ref={ref}
       variant={statusVariants[status]}

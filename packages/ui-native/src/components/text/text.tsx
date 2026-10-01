@@ -8,7 +8,7 @@ import {
   type TextStyle,
 } from "react-native";
 
-import { textColorContext } from "../../primitives/text-color";
+import { TextColorContext } from "../../primitives/text-color";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for token-driven React Native body text. */
@@ -29,7 +29,7 @@ function Text({
   ...props
 }: TextProps) {
   const theme = useTheme();
-  const surfaceColor = use(textColorContext);
+  const surfaceColor = use(TextColorContext);
   const scale = {
     base: theme.typography.scale.body,
     caption: theme.typography.scale.caption,

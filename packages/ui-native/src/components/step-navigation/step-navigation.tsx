@@ -1,6 +1,7 @@
 import type { ReactNode, Ref } from "react";
 import { Pressable, StyleSheet, View, type ViewProps } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -46,7 +47,11 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Accessible previous/next controls for a caller-owned step flow. */
+/**
+ * Accessible previous/next controls for a caller-owned step flow. The step
+ * counter is announced when it changes, the navigation name is each button's
+ * hint, and disabled buttons dim.
+ */
 function StepNavigation({
   canNext,
   canPrevious,
@@ -64,27 +69,32 @@ function StepNavigation({
 }: StepNavigationProps) {
   const theme = useTheme();
   const resolved = {
-    navigation: labels?.navigation ?? "Step navigation",
+    navigation:
+      props.accessibilityLabel ?? labels?.navigation ?? "Step navigation",
     next: labels?.next ?? "Next",
     nextAccessibility: labels?.nextAccessibility ?? "Next step",
     previous: labels?.previous ?? "Previous",
     previousAccessibility: labels?.previousAccessibility ?? "Previous step",
     step: labels?.step ?? "Step",
   };
-  const actionStyle = ({ pressed }: { readonly pressed: boolean }) => [
-    styles.action,
-    {
-      backgroundColor: pressed ? theme.colors.accent : "transparent",
-      borderRadius: theme.radius.md,
-      gap: theme.spacing[1],
-      opacity: pressed ? 0.8 : 1,
-      paddingHorizontal: theme.spacing[3],
-    },
-  ];
+  const counter = `${resolved.step} ${currentStep} / ${totalSteps}`;
+  useAnnounceOnChange(counter);
+  const actionStyle =
+    (disabled: boolean) =>
+    ({ pressed }: { readonly pressed: boolean }) => [
+      styles.action,
+      {
+        backgroundColor: pressed ? theme.colors.accent : "transparent",
+        borderRadius: theme.radius.md,
+        gap: theme.spacing[1],
+        opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
+        paddingHorizontal: theme.spacing[3],
+      },
+    ];
   const content = (
     <View
       {...props}
-      accessibilityLabel={props.accessibilityLabel ?? resolved.navigation}
+      accessibilityLabel={undefined}
       accessibilityRole="none"
       ref={ref}
       style={[
@@ -99,12 +109,13 @@ function StepNavigation({
       ]}
     >
       <Pressable
+        accessibilityHint={resolved.navigation}
         accessibilityLabel={resolved.previousAccessibility}
         accessibilityRole="button"
         accessibilityState={{ disabled: !canPrevious }}
         disabled={!canPrevious}
         onPress={onPrevious}
-        style={actionStyle}
+        style={actionStyle(!canPrevious)}
       >
         {previousIcon}
         <Text size="small" weight="medium">
@@ -112,15 +123,16 @@ function StepNavigation({
         </Text>
       </Pressable>
       <Text size="small" style={styles.counter} tone="muted">
-        {resolved.step} {currentStep} / {totalSteps}
+        {counter}
       </Text>
       <Pressable
+        accessibilityHint={resolved.navigation}
         accessibilityLabel={resolved.nextAccessibility}
         accessibilityRole="button"
         accessibilityState={{ disabled: !canNext }}
         disabled={!canNext}
         onPress={onNext}
-        style={actionStyle}
+        style={actionStyle(!canNext)}
       >
         <Text size="small" weight="medium">
           {resolved.next}

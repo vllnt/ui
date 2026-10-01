@@ -85,11 +85,6 @@ function AnimatedTabTrigger({
     <Pressable
       accessibilityRole="tab"
       accessibilityState={{ disabled: tab.disabled, selected }}
-      aria-controls={
-        selected && tab.panel !== undefined
-          ? `${baseId}-panel-${tab.value}`
-          : undefined
-      }
       disabled={tab.disabled}
       id={`${baseId}-tab-${tab.value}`}
       onPress={onSelect}
@@ -97,6 +92,7 @@ function AnimatedTabTrigger({
         styles.trigger,
         {
           borderRadius: theme.radius.md,
+          opacity: tab.disabled ? 0.5 : 1,
           paddingHorizontal: theme.spacing[3],
         },
       ]}

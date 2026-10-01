@@ -39,12 +39,16 @@ export type DateRangePickerProps = Omit<ViewProps, "children"> & {
 
 const styles = StyleSheet.create({
   action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   panel: { borderTopWidth: 1 },
   trigger: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
 });
 
-/** Date-range picker using an accessible native modal calendar. */
+/**
+ * Date-range picker using an accessible native modal calendar. The open
+ * sheet is titled by a `labels.open` header.
+ */
 function DateRangePicker({
   disabled = false,
   labels,
@@ -109,6 +113,18 @@ function DateRangePicker({
             },
           ]}
         >
+          <NativeText
+            accessibilityRole="header"
+            style={[
+              styles.heading,
+              ...typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: theme.typography.fontWeight.heading,
+              }),
+            ]}
+          >
+            {labels.open}
+          </NativeText>
           <RangeCalendar
             disabled={disabled}
             labels={labels}

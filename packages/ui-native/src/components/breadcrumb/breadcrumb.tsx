@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -25,7 +26,10 @@ export type BreadcrumbItem = {
 
 /** Props for an accessible native breadcrumb trail. */
 export type BreadcrumbProps = Omit<ViewProps, "children" | "ref"> & {
+  /** Spoken value of the last (current) crumb. Defaults to "current page". */
+  readonly currentPageLabel?: string;
   readonly items: readonly BreadcrumbItem[];
+  /** Trail name, spoken as every crumb's hint. Defaults to "Breadcrumb". */
   readonly label?: string;
   readonly linking?: LinkingService;
   readonly onNavigate?: (item: BreadcrumbItem) => void;
@@ -39,8 +43,14 @@ const styles = StyleSheet.create({
   row: { alignItems: "center", flexDirection: "row" },
 });
 
-/** Horizontally scrollable native breadcrumb links with current-page state. */
+/**
+ * Horizontally scrollable native breadcrumb links with current-page state.
+ * Every crumb is its own screen-reader stop; the last one speaks
+ * `currentPageLabel` as its value, and separators stay hidden.
+ */
 function Breadcrumb({
+  accessibilityLabel,
+  currentPageLabel = "current page",
   items,
   label = "Breadcrumb",
   linking = defaultLinkingService,
@@ -52,14 +62,9 @@ function Breadcrumb({
   ...props
 }: BreadcrumbProps) {
   const theme = useTheme();
+  const trail = accessibilityLabel ?? label;
   return (
-    <View
-      {...props}
-      accessibilityLabel={props.accessibilityLabel ?? label}
-      accessibilityRole="none"
-      ref={ref}
-      style={style}
-    >
+    <View {...props} accessibilityRole="none" ref={ref} style={style}>
       <ScrollView
         contentContainerStyle={[styles.row, { gap: theme.spacing[2] }]}
         horizontal
@@ -72,16 +77,13 @@ function Breadcrumb({
           return (
             <View key={item.id} style={styles.row}>
               {index > 0 ? (
-                <Text
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
-                  tone="muted"
-                >
+                <Text {...decorativeProps} tone="muted">
                   {separator}
                 </Text>
               ) : null}
               {interactive ? (
                 <Pressable
+                  accessibilityHint={trail}
                   accessibilityLabel={item.label}
                   accessibilityRole={item.href ? "link" : "button"}
                   accessibilityState={{ disabled: item.disabled }}
@@ -112,9 +114,13 @@ function Breadcrumb({
                 </Pressable>
               ) : (
                 <View
+                  accessibilityHint={trail}
                   accessibilityLabel={item.label}
                   accessibilityRole="text"
-                  accessibilityState={{ selected: current }}
+                  accessibilityValue={
+                    current ? { text: currentPageLabel } : undefined
+                  }
+                  accessible
                   style={[
                     styles.item,
                     {

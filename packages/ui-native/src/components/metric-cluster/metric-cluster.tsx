@@ -2,6 +2,11 @@ import type { NativeTheme } from "@vllnt/ui-core";
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  joinAccessibilityText,
+  plainText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -23,10 +28,18 @@ export type MetricClusterEntry = {
   readonly value: ReactNode;
 };
 
+/** Localized tone words spoken with each metric; English defaults. */
+export type MetricClusterLabels = {
+  /** Defaults: Critical, Good, Warning (none for neutral). */
+  readonly tone?: Partial<Record<MetricClusterTone, string>>;
+};
+
 /** Props for a compact native metric cluster overlay. */
 export type MetricClusterProps = Omit<ViewProps, "children"> & {
   readonly anchor?: MetricClusterAnchor;
+  /** Announces each metric whose spoken text changes. */
   readonly announceChanges?: boolean;
+  readonly labels?: MetricClusterLabels;
   readonly metrics: readonly MetricClusterEntry[];
   readonly offsetX?: number;
   readonly offsetY?: number;
@@ -54,13 +67,46 @@ function getToneColor(theme: NativeTheme, tone: MetricClusterTone): string {
   return colors[tone];
 }
 
-function MetricRow({ entry }: { readonly entry: MetricClusterEntry }) {
+const defaultToneLabels: Readonly<Partial<Record<MetricClusterTone, string>>> =
+  {
+    danger: "Critical",
+    success: "Good",
+    warn: "Warning",
+  };
+
+function rowLabel(entry: MetricClusterEntry, toneLabel?: string) {
+  const label = plainText(entry.label);
+  const value = plainText(entry.value);
+  const name =
+    entry.accessibilityLabel ??
+    (label === undefined || value === undefined
+      ? undefined
+      : `${label}: ${value}`);
+  return name === undefined
+    ? undefined
+    : joinAccessibilityText([name, toneLabel], ", ");
+}
+
+function MetricRow({
+  announceChanges,
+  entry,
+  labels,
+}: {
+  readonly announceChanges: boolean;
+  readonly entry: MetricClusterEntry;
+  readonly labels?: MetricClusterLabels;
+}) {
   const theme = useTheme();
   const tone = entry.tone ?? "neutral";
+  const spoken = rowLabel(
+    entry,
+    labels?.tone?.[tone] ?? defaultToneLabels[tone],
+  );
+  useAnnounceOnChange(announceChanges ? spoken : undefined);
   return (
     <View
-      accessibilityLabel={entry.accessibilityLabel}
-      accessible={entry.accessibilityLabel !== undefined}
+      accessibilityLabel={spoken}
+      accessible={spoken !== undefined}
       style={[styles.row, { gap: theme.spacing[2] }]}
     >
       <View
@@ -93,11 +139,16 @@ function MetricRow({ entry }: { readonly entry: MetricClusterEntry }) {
 }
 MetricRow.displayName = "MetricRow";
 
-/** Native-adapted metric overlay pinned by edge offsets, not canvas coordinates. */
+/**
+ * Native-adapted metric overlay pinned by edge offsets, not canvas coordinates.
+ * Each metric is one screen-reader stop ("label: value, tone"); with
+ * `announceChanges` it announces each metric whose text changed.
+ */
 function MetricCluster({
-  accessibilityLabel = "Metric cluster",
+  accessibilityLabel,
   anchor = "top-right",
   announceChanges = false,
+  labels,
   metrics,
   offsetX = 0,
   offsetY = 0,
@@ -118,7 +169,6 @@ function MetricCluster({
     <View
       {...props}
       accessibilityLabel={accessibilityLabel}
-      accessibilityLiveRegion={announceChanges ? "polite" : "none"}
       ref={ref}
       style={[
         styles.root,
@@ -139,7 +189,12 @@ function MetricCluster({
         </Text>
       ) : null}
       {metrics.map((entry) => (
-        <MetricRow entry={entry} key={entry.id} />
+        <MetricRow
+          announceChanges={announceChanges}
+          entry={entry}
+          key={entry.id}
+          labels={labels}
+        />
       ))}
     </View>
   );

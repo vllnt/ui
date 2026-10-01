@@ -89,6 +89,7 @@ it("renders representative foundation compositions", () => {
       </Panel>
       <EmptyState description="Try another filter" title="No results" />
       <Separator decorative={false} />
+      <Separator accessibilityLabel="Section break" decorative={false} />
       <Skeleton accessibilityLabel="Loading profile" testID="skeleton" />
       <Item variant="outline">
         <ItemMedia>
@@ -122,7 +123,10 @@ it("renders representative foundation compositions", () => {
     "accessibilityRole",
     "header",
   );
-  expect(screen.getByRole("separator")).toBeOnTheScreen();
+  expect(screen.getByRole("separator")).toHaveProp(
+    "accessibilityLabel",
+    "Section break",
+  );
   expect(screen.getByLabelText("Loading profile")).toBeOnTheScreen();
   expect(screen.getByText("Profile details")).toBeOnTheScreen();
 });
@@ -161,6 +165,7 @@ it("exposes input, switch, meter, and validation semantics", () => {
       <Fieldset accessibilityLabel="Contact fields" disabled>
         <FieldsetLegend>Contact</FieldsetLegend>
         <FieldsetContent>
+          <Input accessibilityLabel="Contact email" />
           <NativeText>Fields</NativeText>
         </FieldsetContent>
       </Fieldset>
@@ -182,7 +187,9 @@ it("exposes input, switch, meter, and validation semantics", () => {
     "accessibilityHint",
     "Already used. Public identifier",
   );
-  expect(screen.getByLabelText("Contact fields")).toBeDisabled();
+  const contactEmail = screen.getByLabelText("Contact email");
+  expect(contactEmail).toBeDisabled();
+  expect(contactEmail).toHaveProp("accessibilityHint", "Contact fields");
 });
 
 it("handles native form interactions and controlled state", () => {

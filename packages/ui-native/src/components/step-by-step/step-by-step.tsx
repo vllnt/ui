@@ -22,6 +22,7 @@ import {
   controllableOptions,
   useControllableState,
 } from "../../primitives/use-controllable-state";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a stable native instructional step. */
@@ -52,12 +53,7 @@ export type StepByStepProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  marker: {
-    alignItems: "center",
-    height: 32,
-    justifyContent: "center",
-    width: 32,
-  },
+  marker: { alignItems: "center", justifyContent: "center" },
   row: { alignItems: "flex-start", flexDirection: "row" },
   toggle: {
     alignItems: "center",
@@ -67,9 +63,13 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Presentational native step used by StepByStep. */
+/**
+ * Presentational native step used by StepByStep. Its number marker grows with
+ * the user's font size so large text is not clipped.
+ */
 function Step({ children, number, ref, style, title, ...props }: StepProps) {
   const theme = useTheme();
+  const markerSize = useFontScaledSize(32);
   return (
     <View
       {...props}
@@ -82,6 +82,8 @@ function Step({ children, number, ref, style, title, ...props }: StepProps) {
           {
             backgroundColor: theme.colors.primary,
             borderRadius: theme.radius.full,
+            height: markerSize,
+            width: markerSize,
           },
         ]}
       >
@@ -131,6 +133,7 @@ function StepByStepRoot({
   ...props
 }: StepByStepProps) {
   const theme = useTheme();
+  const markerSize = useFontScaledSize(32);
   const steps = Children.toArray(children).filter((child) =>
     isValidElement<StepProps>(child),
   );
@@ -215,6 +218,8 @@ function StepByStepRoot({
                     {
                       backgroundColor: theme.colors.primary,
                       borderRadius: theme.radius.full,
+                      height: markerSize,
+                      width: markerSize,
                     },
                   ]}
                 >

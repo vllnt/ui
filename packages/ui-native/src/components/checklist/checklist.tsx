@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -95,6 +96,9 @@ function Checklist({
     items.length === 0 ? 0 : Math.round((selected.size / items.length) * 100);
   const progressText = labels.progress(selected.size, items.length);
   const allCompleted = items.length > 0 && selected.size === items.length;
+  useAnnounceOnChange(allCompleted ? labels.allCompleted : undefined, {
+    liveRegion: true,
+  });
 
   return (
     <View

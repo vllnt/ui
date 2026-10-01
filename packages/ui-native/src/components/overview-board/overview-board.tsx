@@ -1,6 +1,12 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  decorativeProps,
+  joinAccessibilityText,
+  plainText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Button } from "../button/button";
 import { Card } from "../card/card";
@@ -22,18 +28,30 @@ export type OverviewBoardItem = {
   readonly tone?: OverviewCardTone;
 };
 
+/** Localized tone words spoken with the metric; English defaults. */
+export type OverviewBoardLabels = {
+  /** Defaults: Critical, Warning (none for default). */
+  readonly tone?: Partial<Record<OverviewCardTone, string>>;
+};
+
 /** Props for one native overview card. */
 export type OverviewCardProps = Omit<ViewProps, "children"> &
   Omit<OverviewBoardItem, "id"> & {
+    /** Announces "heading: metric" when the metric changes. Off by default. */
+    readonly announceChanges?: boolean;
+    readonly labels?: OverviewBoardLabels;
     readonly ref?: Ref<View>;
   };
 
 /** Props for a native overview board. */
 export type OverviewBoardProps = Omit<ViewProps, "children"> & {
+  /** Announces each card's metric when it changes. Off by default. */
+  readonly announceChanges?: boolean;
   readonly emptyLabel?: string;
   readonly eyebrow?: ReactNode;
   readonly heading: ReactNode;
   readonly items: readonly OverviewBoardItem[];
+  readonly labels?: OverviewBoardLabels;
   readonly ref?: Ref<View>;
   readonly subtitle?: ReactNode;
 };
@@ -46,12 +64,35 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Native summary card with an optional explicit action. */
+const defaultToneLabels: Readonly<Partial<Record<OverviewCardTone, string>>> = {
+  danger: "Critical",
+  warning: "Warning",
+};
+
+function metricSemantics(metric: ReactNode, toneLabel?: string) {
+  const metricText = plainText(metric);
+  return metricText === undefined
+    ? { accessibilityHint: toneLabel }
+    : {
+        accessibilityLabel: joinAccessibilityText(
+          [metricText, toneLabel],
+          ", ",
+        ),
+      };
+}
+
+/**
+ * Native summary card with an optional explicit action. The metric speaks the
+ * card tone ("2, Critical") as well as the border colour; the icon slot
+ * is decorative, and metrics are not live regions by default.
+ */
 function OverviewCard({
+  announceChanges = false,
   ctaLabel,
   description,
   heading,
   icon,
+  labels,
   metric,
   onCtaPress,
   ref,
@@ -66,6 +107,11 @@ function OverviewCard({
       : tone === "warning"
         ? theme.colors.secondaryForeground
         : theme.colors.border;
+  useAnnounceOnChange(
+    announceChanges
+      ? joinAccessibilityText([plainText(heading), plainText(metric)], ": ")
+      : undefined,
+  );
 
   return (
     <Card
@@ -86,14 +132,17 @@ function OverviewCard({
             {heading}
           </Text>
           <Text
-            accessibilityLiveRegion="polite"
+            {...metricSemantics(
+              metric,
+              labels?.tone?.[tone] ?? defaultToneLabels[tone],
+            )}
             style={theme.typography.scale.h3}
             weight="semibold"
           >
             {metric}
           </Text>
         </View>
-        {icon ? <View>{icon}</View> : null}
+        {icon ? <View {...decorativeProps}>{icon}</View> : null}
       </View>
       <Text size="small" tone="muted">
         {description}
@@ -112,10 +161,12 @@ OverviewCard.displayName = "OverviewCard";
 
 /** Native overview section that stacks caller-keyed metric cards. */
 function OverviewBoard({
+  announceChanges = false,
   emptyLabel = "No overview data available.",
   eyebrow,
   heading,
   items,
+  labels,
   ref,
   style,
   subtitle,
@@ -147,11 +198,13 @@ function OverviewBoard({
       ) : (
         items.map((item) => (
           <OverviewCard
+            announceChanges={announceChanges}
             ctaLabel={item.ctaLabel}
             description={item.description}
             heading={item.heading}
             icon={item.icon}
             key={item.id}
+            labels={labels}
             metric={item.metric}
             onCtaPress={
               item.onCtaPress

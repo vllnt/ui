@@ -1,6 +1,10 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  joinAccessibilityText,
+  plainText,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -47,9 +51,15 @@ function DataRow({
     density === "compact" ? theme.spacing[3] : theme.spacing[4];
   return (
     <View
-      accessibilityLabel={item.accessibilityLabel}
+      accessibilityLabel={
+        item.accessibilityLabel ??
+        joinAccessibilityText(
+          [plainText(item.label), plainText(item.value)],
+          ", ",
+        )
+      }
       accessibilityRole="text"
-      accessible={item.accessibilityLabel !== undefined}
+      accessible
       style={[
         styles.row,
         {
@@ -70,9 +80,14 @@ function DataRow({
 }
 DataRow.displayName = "DataRow";
 
-/** Native key-value metadata list with caller-supplied stable item ids. */
+/**
+ * Native key-value metadata list with caller-supplied stable item ids. Each
+ * row is one screen-reader stop that speaks "label, value". VoiceOver ignores
+ * names on non-focusable containers, so the list itself carries only the list
+ * role; name it with a visible heading next to it.
+ */
 function DataList({
-  accessibilityLabel = "Data list",
+  accessibilityLabel: _accessibilityLabel,
   density = "default",
   emptyLabel = "No data available.",
   items,
@@ -84,7 +99,6 @@ function DataList({
   return (
     <View
       {...props}
-      accessibilityLabel={accessibilityLabel}
       accessibilityRole="list"
       ref={ref}
       style={[

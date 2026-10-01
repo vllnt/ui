@@ -2,6 +2,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import { AccessibilityInfo, Text as NativeText } from "react-native";
 
 import { Avatar, AvatarImage } from "../components/avatar/avatar";
+import { Button } from "../components/button/button";
+import { ButtonGroup } from "../components/button-group/button-group";
 import { Calendar } from "../components/calendar/calendar";
 import { Checkbox } from "../components/checkbox/checkbox";
 import { CheckboxGroup } from "../components/checkbox-group/checkbox-group";
@@ -14,9 +16,12 @@ import {
   FieldError,
   FieldLabel,
 } from "../components/field/field";
+import { Fieldset } from "../components/fieldset/fieldset";
 import { FileUpload } from "../components/file-upload/file-upload";
 import { Form, FormMessage, FormSubmit } from "../components/form/form";
+import { Input } from "../components/input/input";
 import { InputOTP } from "../components/input-otp/input-otp";
+import { Link } from "../components/link/link";
 import { ModelSelector } from "../components/model-selector/model-selector";
 import { MultiSelect } from "../components/multi-select/multi-select";
 import { PhoneInput } from "../components/phone-input/phone-input";
@@ -506,4 +511,42 @@ it("describes model rows and announces filtered counts", () => {
   );
   fireEvent.changeText(screen.getByLabelText("Search models"), "fast");
   expect(announceSpy).toHaveBeenLastCalledWith("1 models");
+});
+
+it("hands group names and disabled state to the controls inside", () => {
+  const onPress = jest.fn();
+  renderThemed(
+    <>
+      <Fieldset accessibilityLabel="Shipping" disabled>
+        <ButtonGroup label="Address actions">
+          <Button onPress={onPress}>Use saved</Button>
+        </ButtonGroup>
+        <Input accessibilityLabel="Street" />
+      </Fieldset>
+      <Button accessibilityLabel="Close" size="icon">
+        ×
+      </Button>
+      <Link href="https://example.com" linking={{ openUrl: jest.fn() }}>
+        Go
+      </Link>
+    </>,
+  );
+  const saved = screen.getByRole("button", { name: "Use saved" });
+  expect(saved).toHaveProp("accessibilityHint", "Address actions");
+  expect(saved).toBeDisabled();
+  fireEvent.press(saved);
+  expect(onPress).not.toHaveBeenCalled();
+  expect(screen.getByLabelText("Street")).toHaveProp(
+    "accessibilityHint",
+    "Shipping",
+  );
+  expect(screen.getByLabelText("Street")).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Close" })).toHaveStyle({
+    height: 88,
+    width: 88,
+  });
+  expect(screen.getByRole("link", { name: "Go" })).toHaveStyle({
+    minHeight: 44,
+    minWidth: 44,
+  });
 });

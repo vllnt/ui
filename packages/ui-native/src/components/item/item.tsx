@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -64,8 +65,20 @@ function Item({
 }
 Item.displayName = "Item";
 
+/**
+ * Leading icon or thumbnail slot. Decorative by default (hidden from
+ * VoiceOver and TalkBack); override `accessibilityElementsHidden` and
+ * `importantForAccessibility` for media that carries meaning.
+ */
 function ItemMedia({ ref, style, ...props }: ItemMediaProps) {
-  return <View {...props} ref={ref} style={[styles.media, style]} />;
+  return (
+    <View
+      {...decorativeProps}
+      {...props}
+      ref={ref}
+      style={[styles.media, style]}
+    />
+  );
 }
 ItemMedia.displayName = "ItemMedia";
 

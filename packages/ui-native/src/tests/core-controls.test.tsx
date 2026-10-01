@@ -267,10 +267,15 @@ it("exposes toolbar semantics and 44-point action targets", () => {
       </ToolbarButton>
     </Toolbar>,
   );
-  const toolbar = screen.getByLabelText("Formatting");
-  expect(toolbar).toHaveProp("accessibilityRole", "toolbar");
-  expect(toolbar).not.toHaveProp("accessible", true);
+  const [toolbar] = screen.UNSAFE_root.findAll(
+    (node) =>
+      typeof node.type === "string" &&
+      node.props.accessibilityRole === "toolbar",
+  );
+  expect(toolbar?.props.accessibilityLabel).toBeUndefined();
+  expect(toolbar?.props.accessible).not.toBe(true);
   const bold = screen.getByRole("button", { name: "Bold" });
+  expect(bold).toHaveProp("accessibilityHint", "Formatting");
   expect(bold).toHaveStyle({ minHeight: 44, minWidth: 44 });
   fireEvent.press(bold);
   expect(onPress).toHaveBeenCalledTimes(1);

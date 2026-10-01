@@ -12,6 +12,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  announce,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -109,7 +113,6 @@ function TestimonialCard({
   }, [animateOnMount, progress, reduceMotion]);
   return (
     <Animated.View
-      accessibilityLiveRegion="polite"
       style={{
         gap: theme.spacing[2],
         opacity: progress,
@@ -144,7 +147,10 @@ TestimonialCard.displayName = "TestimonialCard";
 
 /**
  * Keeps the initial testimonial visible and animates later selections only
- * after a non-reduced motion preference is known.
+ * after a non-reduced motion preference is known. Selections made with the
+ * previous and next buttons are announced; autoplay rotation stays silent so
+ * screen readers are not interrupted every few seconds. `labels.region` is the
+ * buttons' hint, because VoiceOver ignores labels on non-focusable containers.
  */
 function AnimatedTestimonials({
   autoplay = false,
@@ -174,16 +180,33 @@ function AnimatedTestimonials({
     testimonials.findIndex((item) => item.id === selection),
   );
   const active = testimonials[selectedIndex];
+  const spokenIndex = useRef<number | undefined>(undefined);
   const move = useCallback(
-    (step: number) => {
+    (step: number, spoken = false) => {
       if (testimonials.length === 0) return;
       const nextIndex =
         (selectedIndex + step + testimonials.length) % testimonials.length;
       const next = testimonials[nextIndex];
+      if (spoken && nextIndex !== selectedIndex)
+        spokenIndex.current = nextIndex;
       if (next) setSelection(next.id);
     },
     [selectedIndex, setSelection, testimonials],
   );
+  useEffect(() => {
+    if (spokenIndex.current !== selectedIndex || !active) return;
+    spokenIndex.current = undefined;
+    announce(
+      joinAccessibilityText(
+        [
+          active.quote,
+          active.name,
+          labels.position(selectedIndex + 1, testimonials.length),
+        ],
+        ", ",
+      ),
+    );
+  }, [active, labels, selectedIndex, testimonials.length]);
 
   useEffect(() => {
     if (!autoplay || autoplayPaused || reduceMotion || testimonials.length <= 1)
@@ -211,7 +234,6 @@ function AnimatedTestimonials({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.region}
       ref={ref}
       style={[
         styles.root,
@@ -233,13 +255,14 @@ function AnimatedTestimonials({
       />
       <View style={styles.actions}>
         <Pressable
+          accessibilityHint={labels.region}
           accessibilityLabel={labels.previous}
           accessibilityRole="button"
           accessibilityState={{ disabled: controlsDisabled }}
           disabled={controlsDisabled}
           onPress={() => {
             if (autoplay) setAutoplayPaused(true);
-            move(-1);
+            move(-1, true);
           }}
           style={styles.action}
         >
@@ -252,6 +275,7 @@ function AnimatedTestimonials({
         </Text>
         {autoplay && !reduceMotion && !controlsDisabled ? (
           <Pressable
+            accessibilityHint={labels.region}
             accessibilityLabel={autoplayPaused ? labels.resume : labels.pause}
             accessibilityRole="button"
             onPress={() => {
@@ -265,13 +289,14 @@ function AnimatedTestimonials({
           </Pressable>
         ) : null}
         <Pressable
+          accessibilityHint={labels.region}
           accessibilityLabel={labels.next}
           accessibilityRole="button"
           accessibilityState={{ disabled: controlsDisabled }}
           disabled={controlsDisabled}
           onPress={() => {
             if (autoplay) setAutoplayPaused(true);
-            move(1);
+            move(1, true);
           }}
           style={styles.action}
         >

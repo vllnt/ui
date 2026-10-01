@@ -57,8 +57,13 @@ function navigationRole(item: NavigationMenuItem): "button" | "link" {
   return item.href ? "link" : "button";
 }
 
-/** Native navigation menu using callbacks or an injected link service. */
+/**
+ * Native navigation menu using callbacks or an injected link service. The
+ * menu `label` (or `accessibilityLabel`) is every item's hint, because
+ * VoiceOver ignores labels on non-focusable containers.
+ */
 function NavigationMenu({
+  accessibilityLabel,
   currentId,
   defaultOpenId = "",
   items,
@@ -107,7 +112,6 @@ function NavigationMenu({
   return (
     <View
       {...props}
-      accessibilityLabel={props.accessibilityLabel ?? label}
       accessibilityRole="none"
       ref={ref}
       style={style}
@@ -128,6 +132,7 @@ function NavigationMenu({
             isSingleSelected(expandedId, item, (candidate) => candidate.id);
           return (
             <Pressable
+              accessibilityHint={accessibilityLabel ?? label}
               accessibilityLabel={item.label}
               accessibilityRole={navigationRole(item)}
               accessibilityState={{

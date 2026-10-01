@@ -10,6 +10,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -104,7 +108,10 @@ function TourAction({
 }
 TourAction.displayName = "TourAction";
 
-/** Native, touch-first tour with stable step identifiers and 44-point actions. */
+/**
+ * Native, touch-first tour with stable step identifiers and 44-point actions.
+ * Step changes announce the new title and progress.
+ */
 function Tour({
   currentStep,
   defaultCurrentStep = 0,
@@ -140,9 +147,12 @@ function Tour({
   );
   const activeIndex = clampStep(storedIndex, steps.length);
   const step = steps[activeIndex];
+  const progressText = labels.stepProgress(activeIndex + 1, steps.length);
+  useAnnounceOnChange(
+    step ? joinAccessibilityText([step.title, progressText], ", ") : undefined,
+  );
   if (!step) return null;
 
-  const progressText = labels.stepProgress(activeIndex + 1, steps.length);
   const goTo = (index: number) => {
     setActiveIndex(clampStep(index, steps.length));
   };
@@ -150,8 +160,6 @@ function Tour({
   return (
     <View
       {...props}
-      accessibilityLabel={`${labels.tour}: ${step.title}`}
-      accessible={false}
       ref={ref}
       style={[
         styles.root,
@@ -222,7 +230,6 @@ function Tour({
       </View>
       {step.hint ? (
         <View
-          accessibilityLabel={labels.hint}
           style={{
             backgroundColor: theme.colors.muted,
             borderRadius: theme.radius.md,

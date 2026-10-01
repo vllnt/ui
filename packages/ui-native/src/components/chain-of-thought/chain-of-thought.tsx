@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -161,10 +162,14 @@ function ChainOfThoughtItem({
   const theme = useTheme();
   const status = step.status ?? "pending";
   const statusColor = getStatusColor(status, theme.colors);
+  const summary = `${step.title}, ${statusLabels[status]}`;
+  useAnnounceOnChange(summary);
   return (
     <View
-      accessibilityLabel={`${step.title}, ${statusLabels[status]}`}
+      accessibilityHint={step.description}
+      accessibilityLabel={summary}
       accessibilityState={{ busy: status === "active" }}
+      accessible
       style={[styles.item, { gap: theme.spacing[3] }]}
     >
       <StepMarker index={index} isLast={isLast} statusColor={statusColor} />
@@ -180,7 +185,11 @@ function ChainOfThoughtItem({
 }
 ChainOfThoughtItem.displayName = "ChainOfThoughtItem";
 
-/** Native ordered, status-aware reasoning sequence. */
+/**
+ * Native ordered, status-aware reasoning sequence. Each step is one
+ * screen-reader stop ("title, status", description as hint) and announces
+ * its status when it changes.
+ */
 function ChainOfThought({
   accessibilityLabel,
   ref,

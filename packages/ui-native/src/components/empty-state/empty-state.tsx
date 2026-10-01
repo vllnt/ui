@@ -6,6 +6,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native empty-state visual size. */
@@ -40,7 +41,7 @@ function EmptyStateIcon({
   const iconSize = size === "lg" ? 64 : size === "sm" ? 32 : 48;
   return (
     <View
-      accessible={false}
+      {...decorativeProps}
       style={{
         alignItems: "center",
         backgroundColor: theme.colors.muted,
@@ -105,7 +106,10 @@ function EmptyStateCopy({
 }
 EmptyStateCopy.displayName = "EmptyStateCopy";
 
-/** Centered summary for an empty collection or result set. */
+/**
+ * Centered summary for an empty collection or result set. The title is a
+ * header and actions stay individually reachable; the icon is decorative.
+ */
 function EmptyState({
   children,
   description,
@@ -126,7 +130,6 @@ function EmptyState({
   return (
     <View
       {...props}
-      accessibilityRole="summary"
       ref={ref}
       style={[styles.root, { gap: theme.spacing[3], padding }, style]}
     >

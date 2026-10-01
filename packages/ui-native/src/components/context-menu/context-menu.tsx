@@ -3,6 +3,7 @@
 import type { Ref } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -27,6 +28,11 @@ export type ContextMenuItem = {
 export type ContextMenuProps = {
   readonly cancelLabel: string;
   readonly defaultOpen?: boolean;
+  /**
+   * Hint spoken on destructive items so their meaning does not rely on
+   * colour. Defaults to "Destructive".
+   */
+  readonly destructiveLabel?: string;
   readonly items: readonly ContextMenuItem[];
   readonly label: string;
   readonly onOpenChange?: (open: boolean) => void;
@@ -39,13 +45,19 @@ export type ContextMenuProps = {
 const styles = StyleSheet.create({
   action: { justifyContent: "center", minHeight: 44 },
   content: { flex: 1, justifyContent: "flex-end" },
+  heading: { paddingHorizontal: 12 },
   surface: { borderTopWidth: 1, maxHeight: "80%", width: "100%" },
 });
 
-/** Context menu represented truthfully as a native modal action list. */
+/**
+ * Context menu represented truthfully as a native modal action list. The
+ * menu `label` renders as the sheet's header and screen readers hear it when
+ * the menu opens.
+ */
 function ContextMenu({
   cancelLabel,
   defaultOpen = false,
+  destructiveLabel = "Destructive",
   items,
   label,
   onOpenChange,
@@ -59,6 +71,7 @@ function ContextMenu({
   const [visible, setVisible] = useControllableState(
     controllableOptions(open, defaultOpen, onOpenChange),
   );
+  useAnnounceOnChange(visible ? label : undefined, { initial: true });
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
@@ -74,7 +87,6 @@ function ContextMenu({
       visible={visible}
     >
       <View
-        accessibilityLabel={label}
         accessibilityRole="menu"
         style={[
           styles.surface,
@@ -88,9 +100,24 @@ function ContextMenu({
           },
         ]}
       >
+        <Text
+          accessibilityRole="header"
+          style={[
+            styles.heading,
+            ...typeStyle(theme, "bodySmall", {
+              color: "popoverForeground",
+              fontWeight: theme.typography.fontWeight.heading,
+            }),
+          ]}
+        >
+          {label}
+        </Text>
         <ScrollView>
           {items.map((item) => (
             <Pressable
+              accessibilityHint={
+                item.destructive ? destructiveLabel : undefined
+              }
               accessibilityLabel={item.label}
               accessibilityRole="menuitem"
               accessibilityState={{ disabled: item.disabled === true }}

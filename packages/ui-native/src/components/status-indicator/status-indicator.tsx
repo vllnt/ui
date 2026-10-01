@@ -9,6 +9,7 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Semantic status tone. */
@@ -23,10 +24,18 @@ export type StatusIndicatorSize = "lg" | "md" | "sm";
 /** Native status indicator surface treatment. */
 export type StatusIndicatorVariant = "outline" | "soft" | "solid";
 
+/** Localized tone names appended to the spoken label. */
+export type StatusIndicatorLabels = {
+  /** Defaults to the tone value, for example "success". */
+  readonly tone?: Partial<Record<StatusIndicatorTone, string>>;
+};
+
 /** Props for a native status label. */
 export type StatusIndicatorProps = Omit<ViewProps, "children"> & {
+  /** Speaks label changes: live region on Android, announcement on iOS. */
   readonly announceChanges?: boolean;
   readonly label: string;
+  readonly labels?: StatusIndicatorLabels;
   readonly ref?: Ref<View>;
   readonly showDot?: boolean;
   readonly size?: StatusIndicatorSize;
@@ -126,6 +135,7 @@ function StatusIndicator({
   accessibilityLabel,
   announceChanges = false,
   label,
+  labels,
   ref,
   showDot = true,
   size = "md",
@@ -140,11 +150,16 @@ function StatusIndicator({
     tone,
     variant,
   });
+  const spoken =
+    accessibilityLabel ?? `${label}, ${labels?.tone?.[tone] ?? tone}`;
+  useAnnounceOnChange(announceChanges ? spoken : undefined, {
+    liveRegion: true,
+  });
 
   return (
     <View
       {...props}
-      accessibilityLabel={accessibilityLabel ?? `${label}, ${tone}`}
+      accessibilityLabel={spoken}
       accessibilityLiveRegion={announceChanges ? "polite" : "none"}
       accessible
       ref={ref}

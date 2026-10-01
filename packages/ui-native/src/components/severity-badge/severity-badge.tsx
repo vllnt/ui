@@ -27,6 +27,8 @@ export type SeverityBadgeLabels = {
   readonly info?: string;
   readonly low?: string;
   readonly medium?: string;
+  /** Spoken name built from the visible label. Defaults to "<label> severity". */
+  readonly spoken?: (label: string) => string;
 };
 
 /** Props for a native operational severity badge. */
@@ -120,7 +122,11 @@ function SeverityBadge({
   return (
     <View
       {...props}
-      accessibilityLabel={accessibilityLabel ?? `${resolvedLabel} severity`}
+      accessibilityLabel={
+        accessibilityLabel ??
+        labels?.spoken?.(resolvedLabel) ??
+        `${resolvedLabel} severity`
+      }
       accessible
       ref={ref}
       style={[

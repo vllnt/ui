@@ -10,6 +10,8 @@ import {
   type View,
 } from "react-native";
 
+import { useControlGroup } from "../../primitives/control-group";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 import { resolveButtonStyles } from "./button-styles";
@@ -41,8 +43,14 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Accessible native action with the same semantic variants as the web Button. */
+/**
+ * Accessible native action with the same semantic variants as the web Button.
+ * Inside a named group (ButtonGroup, FilterBar, Fieldset) it speaks the group
+ * name as its hint and follows the group's disabled state. The icon size
+ * grows with the user's font scale.
+ */
 function Button({
+  accessibilityHint,
   accessibilityLabel,
   accessibilityState,
   children,
@@ -55,7 +63,9 @@ function Button({
   ...props
 }: ButtonProps) {
   const theme = useTheme();
-  const isDisabled = disabled === true;
+  const group = useControlGroup();
+  const iconSize = useFontScaledSize(44);
+  const isDisabled = disabled === true || group.disabled === true;
   const resolved = resolveButtonStyles(theme, variant, size);
   const content = (
     <NativeText
@@ -74,6 +84,7 @@ function Button({
   return (
     <Pressable
       {...props}
+      accessibilityHint={accessibilityHint ?? group.label}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       accessibilityState={{ ...accessibilityState, disabled: isDisabled }}
@@ -83,6 +94,7 @@ function Button({
         styles.base,
         { borderRadius: theme.radius.md, gap: theme.spacing[2] },
         resolved.container,
+        size === "icon" ? { height: iconSize, width: iconSize } : undefined,
         state.pressed ? styles.pressed : undefined,
         isDisabled ? styles.disabled : undefined,
         typeof style === "function" ? style(state) : style,

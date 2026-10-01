@@ -13,6 +13,7 @@ import {
 
 import type { SelectionKey } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
+import { useScreenReaderEnabled } from "../../primitives/use-screen-reader-enabled";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Controlled native toast queue entry. */
@@ -56,7 +57,12 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Accessible controlled toast queue with per-instance deterministic timers. */
+/**
+ * Accessible controlled toast queue with per-instance deterministic timers.
+ * Each new toast (title and description) is announced once on both platforms;
+ * while VoiceOver or TalkBack runs, toasts do not expire so users have time to
+ * reach them, and expiry restarts when the screen reader stops.
+ */
 function Toast({
   closeLabel,
   onToastsChange,
@@ -66,6 +72,7 @@ function Toast({
   ...props
 }: ToastProps) {
   const theme = useTheme();
+  const screenReaderEnabled = useScreenReaderEnabled();
   const queueRef = useRef(toasts);
   const onChangeRef = useRef(onToastsChange);
   const announcedIds = useRef(new Set<SelectionKey>());
@@ -112,7 +119,11 @@ function Toast({
     }
     for (const [id, entry] of timerMap) {
       const toast = toasts.find((item) => Object.is(item.id, id));
-      if (toast?.duration !== entry.duration || dismissedIds.current.has(id)) {
+      if (
+        screenReaderEnabled ||
+        toast?.duration !== entry.duration ||
+        dismissedIds.current.has(id)
+      ) {
         clearTimeout(entry.timer);
         timerMap.delete(id);
       }
@@ -127,6 +138,7 @@ function Toast({
         announcedIds.current.add(toast.id);
       }
       if (
+        !screenReaderEnabled &&
         !dismissedIds.current.has(toast.id) &&
         toast.duration !== undefined &&
         toast.duration > 0
@@ -145,7 +157,7 @@ function Toast({
     return () => {
       for (const entry of timerMap.values()) clearTimeout(entry.timer);
     };
-  }, [toasts]);
+  }, [screenReaderEnabled, toasts]);
 
   return (
     <View
@@ -157,9 +169,6 @@ function Toast({
         const destructive = toast.variant === "destructive";
         return (
           <View
-            accessibilityLabel={toast.title}
-            accessibilityLiveRegion={destructive ? "assertive" : "polite"}
-            accessibilityRole={destructive ? "alert" : undefined}
             key={toast.id}
             style={[
               styles.toast,

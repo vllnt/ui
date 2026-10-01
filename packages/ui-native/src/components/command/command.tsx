@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -41,6 +42,11 @@ export type CommandProps = {
   readonly defaultOpen?: boolean;
   readonly defaultQuery?: string;
   readonly defaultSelectedId?: SelectionKey;
+  /**
+   * Hint spoken on destructive items so their meaning does not rely on
+   * colour. Defaults to "Destructive".
+   */
+  readonly destructiveLabel?: string;
   readonly emptyLabel: string;
   readonly items: readonly CommandItem[];
   readonly label: string;
@@ -52,6 +58,8 @@ export type CommandProps = {
   readonly placeholder: string;
   readonly query?: string;
   readonly ref?: Ref<View>;
+  /** Result count announced after the query changes, e.g. "3 commands". */
+  readonly resultsLabel?: (count: number) => string;
   readonly selectedId?: SelectionKey;
 };
 
@@ -59,6 +67,7 @@ const getItemId = (item: CommandItem) => item.id;
 const styles = StyleSheet.create({
   action: { justifyContent: "center", minHeight: 44 },
   content: { flex: 1, justifyContent: "center" },
+  heading: { paddingHorizontal: 4 },
   input: { borderWidth: 1, minHeight: 44 },
   surface: {
     alignSelf: "center",
@@ -69,12 +78,18 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Searchable command surface represented as a native modal list. */
+/**
+ * Searchable command surface represented as a native modal list. The `label`
+ * renders as the header and screen readers hear it on open; filtered result
+ * counts (via `resultsLabel`) and the empty state reach VoiceOver and
+ * TalkBack.
+ */
 function Command({
   cancelLabel,
   defaultOpen = false,
   defaultQuery = "",
   defaultSelectedId,
+  destructiveLabel = "Destructive",
   emptyLabel,
   items,
   label,
@@ -86,6 +101,7 @@ function Command({
   placeholder,
   query,
   ref,
+  resultsLabel,
   selectedId,
 }: CommandProps) {
   const theme = useTheme();
@@ -107,6 +123,16 @@ function Command({
         value.toLocaleLowerCase().includes(normalizedQuery),
       ),
   );
+  const noResults = filteredItems.length === 0;
+  useAnnounceOnChange(visible ? label : undefined, { initial: true });
+  useAnnounceOnChange(
+    visible && normalizedQuery.length > 0
+      ? noResults
+        ? emptyLabel
+        : resultsLabel?.(filteredItems.length)
+      : undefined,
+    { liveRegion: noResults },
+  );
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
@@ -122,7 +148,6 @@ function Command({
       visible={visible}
     >
       <View
-        accessibilityLabel={label}
         accessibilityRole="menu"
         style={[
           styles.surface,
@@ -135,6 +160,18 @@ function Command({
           },
         ]}
       >
+        <Text
+          accessibilityRole="header"
+          style={[
+            styles.heading,
+            ...typeStyle(theme, "bodySmall", {
+              color: "popoverForeground",
+              fontWeight: theme.typography.fontWeight.heading,
+            }),
+          ]}
+        >
+          {label}
+        </Text>
         <TextInput
           accessibilityLabel={placeholder}
           onChangeText={setCurrentQuery}
@@ -153,7 +190,7 @@ function Command({
           value={currentQuery}
         />
         <ScrollView keyboardShouldPersistTaps="handled">
-          {filteredItems.length === 0 ? (
+          {noResults ? (
             <Text
               accessibilityLiveRegion="polite"
               style={typeStyle(theme, "bodySmall", {
@@ -169,6 +206,9 @@ function Command({
               const selected = isSingleSelected(selection, item, getItemId);
               return (
                 <Pressable
+                  accessibilityHint={
+                    item.destructive ? destructiveLabel : undefined
+                  }
                   accessibilityLabel={item.label}
                   accessibilityRole="menuitem"
                   accessibilityState={{

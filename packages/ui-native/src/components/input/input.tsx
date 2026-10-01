@@ -2,9 +2,14 @@ import { type Ref, useState } from "react";
 
 import { StyleSheet, TextInput, type TextInputProps } from "react-native";
 
+import { useControlGroup } from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 
-/** Props for the token-driven native text input. */
+/**
+ * Props for the token-driven native text input. Name every input with
+ * `accessibilityLabel` (or wrap it in `Field` with a `FieldLabel`); screen
+ * readers treat a placeholder as a hint, not as a name.
+ */
 export type InputProps = TextInputProps & {
   readonly disabled?: boolean;
   readonly ref?: Ref<TextInput>;
@@ -15,8 +20,13 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, minHeight: 44 },
 });
 
-/** Accessible single-line React Native text input. */
+/**
+ * Accessible single-line React Native text input. Inside a named group
+ * (Fieldset) it speaks the group name as its hint and follows the group's
+ * disabled state.
+ */
 function Input({
+  accessibilityHint,
   accessibilityState,
   disabled = false,
   editable,
@@ -28,12 +38,14 @@ function Input({
   ...props
 }: InputProps) {
   const theme = useTheme();
+  const group = useControlGroup();
   const [focused, setFocused] = useState(false);
-  const isEditable = editable !== false && !disabled;
+  const isEditable = editable !== false && !disabled && group.disabled !== true;
 
   return (
     <TextInput
       {...props}
+      accessibilityHint={accessibilityHint ?? group.label}
       accessibilityState={{ ...accessibilityState, disabled: !isEditable }}
       editable={isEditable}
       onBlur={(event) => {

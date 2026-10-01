@@ -9,6 +9,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  decorativeProps,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -66,6 +70,11 @@ function clamp(value: number, min: number, max: number): number {
 /**
  * Accessible adjustable timeline using RN-core increment/decrement actions.
  * Direct drag gestures are intentionally unavailable without a host slider.
+ * The value readout is the adjustable element (it speaks the tick label at
+ * the current value, and lists all tick labels as its hint); the step buttons
+ * are separate siblings so VoiceOver, Switch Control, and Voice Control reach
+ * them. `ref` and `style` apply to the outer layout; the other view props
+ * (such as `testID`) apply to the adjustable element.
  */
 function TimelineScrubber({
   end,
@@ -89,32 +98,37 @@ function TimelineScrubber({
   const change = (offset: number) => {
     setValue(clamp(current + offset, start, safeEnd));
   };
+  const tickLabels = (ticks ?? []).flatMap((tick) =>
+    tick.label === undefined ? [] : [tick.label],
+  );
+  const currentTick = ticks?.find((tick) => tick.value === current)?.label;
   return (
-    <View
-      {...props}
-      accessibilityActions={[
-        { label: labels.decrement, name: "decrement" },
-        { label: labels.increment, name: "increment" },
-      ]}
-      accessibilityLabel={labels.region}
-      accessibilityRole="adjustable"
-      accessibilityValue={{
-        max: safeEnd,
-        min: start,
-        now: current,
-        text: formatValue(current),
-      }}
-      accessible
-      onAccessibilityAction={(event) => {
-        if (event.nativeEvent.actionName === "decrement") change(-safeStep);
-        if (event.nativeEvent.actionName === "increment") change(safeStep);
-      }}
-      ref={ref}
-      style={[{ gap: theme.spacing[1] }, style]}
-    >
-      <NativeText style={typeStyle(theme, "caption", "mutedForeground")}>
-        {formatValue(current)}
-      </NativeText>
+    <View ref={ref} style={[{ gap: theme.spacing[1] }, style]}>
+      <View
+        {...props}
+        accessibilityActions={[
+          { label: labels.decrement, name: "decrement" },
+          { label: labels.increment, name: "increment" },
+        ]}
+        accessibilityHint={joinAccessibilityText(tickLabels, ", ")}
+        accessibilityLabel={labels.region}
+        accessibilityRole="adjustable"
+        accessibilityValue={{
+          max: safeEnd,
+          min: start,
+          now: current,
+          text: joinAccessibilityText([formatValue(current), currentTick], ", "),
+        }}
+        accessible
+        onAccessibilityAction={(event) => {
+          if (event.nativeEvent.actionName === "decrement") change(-safeStep);
+          if (event.nativeEvent.actionName === "increment") change(safeStep);
+        }}
+      >
+        <NativeText style={typeStyle(theme, "caption", "mutedForeground")}>
+          {formatValue(current)}
+        </NativeText>
+      </View>
       <View style={styles.controls}>
         <Pressable
           accessibilityLabel={labels.decrement}
@@ -127,10 +141,7 @@ function TimelineScrubber({
           <NativeText style={{ color: theme.colors.foreground }}>−</NativeText>
         </Pressable>
         <View
-          accessibilityLabel={ticks
-            ?.map((tick) => tick.label)
-            .filter((label) => label !== undefined)
-            .join(", ")}
+          {...decorativeProps}
           style={[
             styles.track,
             {

@@ -141,7 +141,6 @@ function ShareDialog({
       visible={visible}
     >
       <View
-        accessibilityLabel={title}
         style={[
           styles.surface,
           {
@@ -198,7 +197,7 @@ function ShareDialog({
             </Text>
           </Pressable>
           <Pressable
-            accessibilityLabel={available ? shareLabel : unavailableLabel}
+            accessibilityLabel={shareLabel}
             accessibilityRole="button"
             accessibilityState={{
               busy: sharing,
@@ -216,12 +215,8 @@ function ShareDialog({
               },
             ]}
           >
-            <Text
-              accessibilityElementsHidden={!available}
-              importantForAccessibility={available ? "auto" : "no"}
-              style={{ color: theme.colors.primaryForeground }}
-            >
-              {available ? shareLabel : unavailableLabel}
+            <Text style={{ color: theme.colors.primaryForeground }}>
+              {shareLabel}
             </Text>
           </Pressable>
         </View>

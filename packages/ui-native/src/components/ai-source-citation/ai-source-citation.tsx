@@ -25,11 +25,16 @@ export type AISourceCitationProps = Omit<
 };
 
 const styles = StyleSheet.create({
-  root: { borderWidth: 1, width: "100%" },
+  root: { borderWidth: 1, minHeight: 44, width: "100%" },
 });
 
-/** Native citation link using React Native's Linking API by default. */
+/**
+ * Native citation link using React Native's Linking API by default. The link
+ * speaks the full title and source; the snippet (visually truncated) is its
+ * hint.
+ */
 function AISourceCitation({
+  accessibilityHint,
   accessibilityLabel,
   accessibilityState,
   disabled = false,
@@ -49,6 +54,7 @@ function AISourceCitation({
   return (
     <Pressable
       {...props}
+      accessibilityHint={accessibilityHint ?? snippet}
       accessibilityLabel={accessibilityLabel ?? `${title}, ${source}`}
       accessibilityRole="link"
       accessibilityState={{ ...accessibilityState, disabled: isDisabled }}

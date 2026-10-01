@@ -100,7 +100,6 @@ function Sheet({
       visible={visible}
     >
       <View
-        accessibilityLabel={title}
         style={[
           styles.surface,
           horizontal ? styles.horizontal : styles.vertical,
