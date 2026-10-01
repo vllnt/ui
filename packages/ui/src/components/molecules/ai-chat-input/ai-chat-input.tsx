@@ -6,7 +6,7 @@ import { Button } from "../../atoms/button/button";
 import { Textarea } from "../../atoms/textarea/textarea";
 
 const formShellVariants = cva(
-  "rounded-2xl border border-border/70 bg-background shadow-sm",
+  "rounded-2xl border border-input bg-background shadow-sm",
 );
 
 function AIChatInputFooter({

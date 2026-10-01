@@ -54,10 +54,12 @@ describe("component directory lookup", () => {
 
     expect(names).toEqual([...names].sort());
     expect(new Set(names).size).toBe(names.length);
-    for (const { directory, name } of components) {
-      const level = path.basename(path.dirname(directory));
-      expect(COMPONENT_LEVELS).toContain(level);
-      expect(path.basename(directory)).toBe(name);
-    }
+    const misplaced = components.filter(
+      ({ directory, name }) =>
+        !COMPONENT_LEVELS.some(
+          (level) => directory === path.join(componentsRoot, level, name),
+        ),
+    );
+    expect(misplaced).toEqual([]);
   });
 });

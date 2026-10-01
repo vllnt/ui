@@ -51,6 +51,20 @@ describe("Kbd", () => {
     expect(screen.getByLabelText("Ctrl + K")).toBeInTheDocument();
   });
 
+  it("trims whitespace around tokens, including the whole shortcut", () => {
+    stubUserAgent(WIN_UA);
+    render(<Kbd shortcut="  ctrl +  k  " />);
+    expect(screen.getByLabelText("Ctrl + K")).toBeInTheDocument();
+  });
+
+  it("parses shortcuts with long whitespace runs in linear time", () => {
+    stubUserAgent(WIN_UA);
+    const start = performance.now();
+    render(<Kbd shortcut={`ctrl${" ".repeat(50_000)}+k`} />);
+    expect(performance.now() - start).toBeLessThan(1000);
+    expect(screen.getByLabelText("Ctrl + K")).toBeInTheDocument();
+  });
+
   it("expands `mod` to ⌘ on Mac and renders glyphs for special keys", () => {
     stubUserAgent(MAC_UA);
     render(<Kbd shortcut="mod+k" />);

@@ -139,7 +139,16 @@ function pickExtension(type: AIArtifactType, language: string): string {
 }
 
 const SLUG_INVALID_CHARS = /[^\da-z]+/g;
-const SLUG_TRIM = /^-+|-+$/g;
+const FIRST_NON_HYPHEN = /[^-]/;
+// Anchored on a non-hyphen: each hyphen run gets one scan, so this stays linear.
+const LAST_NON_HYPHEN = /[^-]-*$/;
+
+/** Strips leading/trailing hyphens without a backtracking `-+$` regex. */
+function trimHyphens(value: string): string {
+  const start = value.search(FIRST_NON_HYPHEN);
+  if (start === -1) return "";
+  return value.slice(start, value.search(LAST_NON_HYPHEN) + 1);
+}
 
 type FilenameInput = {
   filename?: string;
@@ -157,10 +166,9 @@ function buildFilename({
   if (filename) return filename;
   const base =
     typeof title === "string" && title.length > 0 ? title : "artifact";
-  const slug = base
-    .toLowerCase()
-    .replaceAll(SLUG_INVALID_CHARS, "-")
-    .replaceAll(SLUG_TRIM, "");
+  const slug = trimHyphens(
+    base.toLowerCase().replaceAll(SLUG_INVALID_CHARS, "-"),
+  );
   const safeBase = slug.length > 0 ? slug : "artifact";
   return `${safeBase}.${pickExtension(type, language)}`;
 }

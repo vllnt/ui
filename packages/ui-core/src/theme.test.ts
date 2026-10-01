@@ -3,12 +3,20 @@ import {
   createNativeTheme,
   darkTheme,
   lightTheme,
+  type NativeTheme,
   nativeTokens,
+  type SemanticColorName,
 } from "./index";
 
+function hexChannels(hex: string): number[] {
+  return [1, 3, 5].map((offset) =>
+    Number.parseInt(hex.slice(offset, offset + 2), 16),
+  );
+}
+
 function relativeLuminance(hex: string): number {
-  const channels = [1, 3, 5]
-    .map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16) / 255)
+  const channels = hexChannels(hex)
+    .map((channel) => channel / 255)
     .map((channel) =>
       channel <= 0.040_45
         ? channel / 12.92
@@ -26,6 +34,61 @@ function contrastRatio(first: string, second: string): number {
   return (light + 0.05) / (dark + 0.05);
 }
 
+/** `color` at `alpha` over `surface`, blended per sRGB channel like a renderer. */
+function tint(color: string, alpha: number, surface: string): string {
+  const over = hexChannels(surface);
+  return `#${hexChannels(color)
+    .map((channel, index) =>
+      Math.round(channel * alpha + (over[index] ?? 0) * (1 - alpha))
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
+}
+
+type ColorPair = readonly [SemanticColorName, SemanticColorName];
+
+/** Contrast contract from DESIGN.md §3: text pairs need 4.5:1 (WCAG 1.4.3). */
+const TEXT_PAIRS: readonly ColorPair[] = [
+  ["foreground", "background"],
+  ["cardForeground", "card"],
+  ["popoverForeground", "popover"],
+  ["primaryForeground", "primary"],
+  ["secondaryForeground", "secondary"],
+  ["accentForeground", "accent"],
+  ["destructiveForeground", "destructive"],
+  ["mutedForeground", "background"],
+  ["mutedForeground", "card"],
+  ["mutedForeground", "popover"],
+  ["mutedForeground", "muted"],
+  ["destructive", "background"],
+  ["destructive", "card"],
+  ["destructive", "popover"],
+  ["destructive", "muted"],
+];
+
+/** Control boundaries and the focus ring need 3:1 (WCAG 1.4.11). */
+const BOUNDARY_PAIRS: readonly ColorPair[] = [
+  ["input", "background"],
+  ["input", "card"],
+  ["input", "popover"],
+  ["ring", "background"],
+];
+
+function contrastFailures(
+  colors: NativeTheme["colors"],
+  pairs: readonly ColorPair[],
+  minimum: number,
+): string[] {
+  return pairs
+    .map(([foreground, surface]) => ({
+      ratio: contrastRatio(colors[foreground], colors[surface]),
+      where: `${foreground} on ${surface}`,
+    }))
+    .filter(({ ratio }) => ratio < minimum)
+    .map(({ ratio, where }) => `${where}: ${ratio.toFixed(2)}:1`);
+}
+
 describe("generated design contracts", () => {
   it("emits native-safe colors for both schemes", () => {
     const themes = [lightTheme, darkTheme];
@@ -40,23 +103,24 @@ describe("generated design contracts", () => {
     expect(darkTheme.colors.background).not.toBe("#000000");
   });
 
-  it("keeps native control labels at WCAG AA contrast", () => {
-    expect(
-      [lightTheme, darkTheme].every(
-        (theme) =>
-          contrastRatio(
-            theme.colors.destructive,
-            theme.colors.destructiveForeground,
-          ) >= 4.5,
-      ),
-    ).toBe(true);
-    expect(
-      [lightTheme, darkTheme].every(
-        (theme) =>
-          contrastRatio(theme.colors.primary, theme.colors.primaryForeground) >=
-          4.5,
-      ),
-    ).toBe(true);
+  describe.each([
+    ["light", lightTheme],
+    ["dark", darkTheme],
+  ] as const)("%s contrast contract", (_, theme) => {
+    it("keeps every text pair at 4.5:1", () => {
+      expect(contrastFailures(theme.colors, TEXT_PAIRS, 4.5)).toEqual([]);
+    });
+
+    it("keeps destructive text legible on its 10% tint", () => {
+      const { background, destructive } = theme.colors;
+      expect(
+        contrastRatio(destructive, tint(destructive, 0.1, background)),
+      ).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it("keeps control boundaries and the focus ring at 3:1", () => {
+      expect(contrastFailures(theme.colors, BOUNDARY_PAIRS, 3)).toEqual([]);
+    });
   });
 
   it("converts shared dimensions to native points", () => {
