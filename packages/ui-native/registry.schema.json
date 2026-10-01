@@ -66,7 +66,7 @@
           },
           "source": {
             "type": "string",
-            "pattern": "^src/components/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*\\.tsx$"
+            "pattern": "^src/components/(atoms|molecules|organisms|templates)/[a-z][a-z0-9-]*/[a-z][a-z0-9-]*\\.tsx$"
           }
         },
         "additionalProperties": false

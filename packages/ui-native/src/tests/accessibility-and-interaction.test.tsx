@@ -1,44 +1,48 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react-native";
-import { Image, Pressable, Text } from "react-native";
+import { AccessibilityInfo, Image, Pressable, Text } from "react-native";
 
-import { ActivityLog } from "../components/activity-log/activity-log";
-import { AnimatedTestimonials } from "../components/animated-testimonials/animated-testimonials";
-import { AnimatedText } from "../components/animated-text/animated-text";
+import { AnimatedTestimonials } from "../components/atoms/animated-testimonials/animated-testimonials";
+import { AnimatedText } from "../components/atoms/animated-text/animated-text";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../components/avatar/avatar";
-import { AvatarGroup } from "../components/avatar-group/avatar-group";
-import { Calendar } from "../components/calendar/calendar";
-import { Callout } from "../components/callout/callout";
-import { Carousel } from "../components/carousel/carousel";
-import { CodeBlock } from "../components/code-block/code-block";
-import { ContentIntro } from "../components/content-intro/content-intro";
-import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
-import { EmptyState } from "../components/empty-state/empty-state";
-import { Field, FieldControl, FieldLabel } from "../components/field/field";
-import { Fieldset } from "../components/fieldset/fieldset";
-import { FileUpload } from "../components/file-upload/file-upload";
-import { HorizontalScrollRow } from "../components/horizontal-scroll-row/horizontal-scroll-row";
-import { ListBox } from "../components/list-box/list-box";
-import { LiveFeed } from "../components/live-feed/live-feed";
-import { Marquee } from "../components/marquee/marquee";
-import { Meter } from "../components/meter/meter";
-import { ModelSelector } from "../components/model-selector/model-selector";
-import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
-import { NumberInput } from "../components/number-input/number-input";
-import { OverviewCard } from "../components/overview-board/overview-board";
-import { Pagination } from "../components/pagination/pagination";
-import { PasswordInput } from "../components/password-input/password-input";
-import { PhoneInput } from "../components/phone-input/phone-input";
-import { RangeCalendar } from "../components/range-calendar/range-calendar";
-import { Rating } from "../components/rating/rating";
+} from "../components/atoms/avatar/avatar";
+import { Calendar } from "../components/atoms/calendar/calendar";
+import { Callout } from "../components/atoms/callout/callout";
+import { Carousel } from "../components/atoms/carousel/carousel";
+import { CodeBlock } from "../components/atoms/code-block/code-block";
+import { EmptyState } from "../components/atoms/empty-state/empty-state";
+import { Fieldset } from "../components/atoms/fieldset/fieldset";
+import { FileUpload } from "../components/atoms/file-upload/file-upload";
+import { ListBox } from "../components/atoms/list-box/list-box";
+import { Marquee } from "../components/atoms/marquee/marquee";
+import { Meter } from "../components/atoms/meter/meter";
+import { ModelSelector } from "../components/atoms/model-selector/model-selector";
+import { Rating } from "../components/atoms/rating/rating";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "../components/resizable/resizable";
+} from "../components/atoms/resizable/resizable";
+import { ActivityLog } from "../components/molecules/activity-log/activity-log";
+import { AvatarGroup } from "../components/molecules/avatar-group/avatar-group";
+import { ContentIntro } from "../components/molecules/content-intro/content-intro";
+import {
+  Field,
+  FieldControl,
+  FieldLabel,
+} from "../components/molecules/field/field";
+import { HorizontalScrollRow } from "../components/molecules/horizontal-scroll-row/horizontal-scroll-row";
+import { LiveFeed } from "../components/molecules/live-feed/live-feed";
+import { NavigationMenu } from "../components/molecules/navigation-menu/navigation-menu";
+import { NumberInput } from "../components/molecules/number-input/number-input";
+import { OverviewCard } from "../components/molecules/overview-board/overview-board";
+import { Pagination } from "../components/molecules/pagination/pagination";
+import { PasswordInput } from "../components/molecules/password-input/password-input";
+import { PhoneInput } from "../components/molecules/phone-input/phone-input";
+import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
+import { CountdownTimer } from "../components/organisms/countdown-timer/countdown-timer";
 import { ModalLayer } from "../primitives/modal-layer";
 import type { PickedFile } from "../primitives/platform-services";
 
@@ -384,9 +388,9 @@ it("groups single list selection and limits navigation triggers to one action", 
       />
     </>,
   );
-  expect(screen.getByLabelText("Assignees")).toHaveProp(
-    "accessibilityRole",
-    "radiogroup",
+  expect(screen.getByRole("radio", { name: "Ada" })).toHaveProp(
+    "accessibilityHint",
+    "Assignees",
   );
   fireEvent.press(screen.getByRole("button", { name: "Products" }));
   expect(screen.getByText("Product links")).toBeOnTheScreen();
@@ -449,39 +453,48 @@ it("falls back after group avatar image failures and disables stray handles", ()
     </>,
   );
   expect(screen.queryByText("AD")).toBeNull();
-  fireEvent(screen.getByLabelText("Ada").findByType(Image), "error");
+  fireEvent(
+    screen.getByLabelText("Avatar group, Ada").findByType(Image),
+    "error",
+  );
   expect(screen.getByText("AD")).toBeOnTheScreen();
   expect(
     screen.getByRole("adjustable", { name: "Trailing handle" }),
   ).toBeDisabled();
 });
 
-it("announces feed additions without making clock changes reannounce the group", () => {
-  renderThemed(
-    <LiveFeed
-      events={[
-        {
-          id: "event",
-          severity: "info",
-          timestamp: "2025-01-01T00:00:00Z",
-          title: "Deploy complete",
-        },
-      ]}
-      now="2025-01-01T00:01:00Z"
-      testID="feed"
-    />,
+it("announces feed additions without making clock changes reannounce the group", async () => {
+  jest.useFakeTimers();
+  const announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
+  announceSpy.mockClear();
+  const first = {
+    id: "event",
+    severity: "info" as const,
+    timestamp: "2025-01-01T00:00:00Z",
+    title: "Deploy complete",
+  };
+  const feed = (events: readonly (typeof first)[], now: string) => (
+    <LiveFeed events={events} now={now} testID="feed" />
   );
-  expect(screen.getByText("Deploy complete")).toHaveProp(
-    "accessibilityLiveRegion",
-    "polite",
-  );
+  const view = renderThemed(feed([first], "2025-01-01T00:01:00Z"));
   expect(screen.getByTestId("feed")).not.toHaveProp("accessibilityLiveRegion");
-  expect(
-    screen.UNSAFE_getByProps({
-      accessibilityLabel: "Live feed",
-      accessibilityRole: "list",
-    }).props.accessibilityLiveRegion,
-  ).toBeUndefined();
+  expect(screen.getByText("Deploy complete")).not.toHaveProp(
+    "accessibilityLiveRegion",
+  );
+  view.rerender(themed(feed([first], "2025-01-01T00:02:00Z")));
+  advanceTimers(5000);
+  await flushMicrotasks();
+  expect(announceSpy).not.toHaveBeenCalled();
+  const second = { ...first, id: "next", title: "Rollback started" };
+  view.rerender(themed(feed([second, first], "2025-01-01T00:02:00Z")));
+  const renamed = { ...second, title: "Rollback running" };
+  view.rerender(themed(feed([renamed, first], "2025-01-01T00:02:00Z")));
+  advanceTimers(5000);
+  await flushMicrotasks();
+  expect(announceSpy).toHaveBeenCalledTimes(1);
+  expect(announceSpy).toHaveBeenCalledWith("info: Rollback running");
+  announceSpy.mockRestore();
+  jest.useRealTimers();
 });
 
 async function renderAutoplay(autoplayInterval: number) {
@@ -553,7 +566,10 @@ it("completes reduced motion once and exposes countdown duration errors", async 
     expect(
       screen.getByRole("alert", { name: `${title}: ${zero}` }),
     ).toBeOnTheScreen();
-  expect(screen.getAllByText("00", { exact: true })).toHaveLength(8);
+  expect(
+    screen.getAllByText("00", { exact: true, includeHiddenElements: true }),
+  ).toHaveLength(8);
+  expect(screen.queryAllByText("00", { exact: true })).toHaveLength(0);
   view.rerender(
     themed(
       <AnimatedText

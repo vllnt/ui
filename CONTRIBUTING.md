@@ -62,10 +62,10 @@ pnpm ci:native
 
 ## Adding a native component
 
-1. Add `packages/ui-native/src/components/{name}/{name}.tsx` using React Native core primitives, semantic theme tokens, native accessibility APIs, controlled/uncontrolled state where applicable, and caller-owned selection IDs.
+1. Pick the component's [Atomic Design level](docs/agents/COMPONENTS.md#react-native-vllntui-native) and add `packages/ui-native/src/components/{level}/{name}/{name}.tsx` using React Native core primitives, semantic theme tokens, native accessibility APIs, controlled/uncontrolled state where applicable, and caller-owned selection IDs.
 2. Do not import DOM, Radix, Tailwind, NativeWind, or browser globals. Inject capabilities such as clipboard and file selection when React Native core does not provide a portable service.
-3. Add the component to `packages/ui-native/registry.json` in alphabetical order with honest `portable-options` or `native-adapted` compatibility and its native source path.
-4. Run `pnpm -F @vllnt/ui-native generate:index`; never hand-maintain the generated barrel.
+3. Add the component to `packages/ui-native/registry.json` in alphabetical order with honest `portable-options` or `native-adapted` compatibility and its native source path (`src/components/{level}/{name}/{name}.tsx`).
+4. Run `pnpm -F @vllnt/ui-native generate:index`; never hand-maintain the generated barrel. `pnpm -F @vllnt/ui-native check:atomic` verifies the level against the component's imports.
 5. Add interaction/accessibility tests and run the native checks listed below. Update the Expo catalog when the new family needs integration proof.
 
 Native remains source-only until the manifest reports package availability. Do not describe the planned canary command as installable before publication.

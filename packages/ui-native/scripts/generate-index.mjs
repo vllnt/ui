@@ -1,23 +1,37 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
+import { LEVELS } from "../../../scripts/check-atomic-levels.mjs";
+
 const packageDirectory = resolve(import.meta.dirname, "..");
 const componentsDirectory = join(packageDirectory, "src/components");
 const indexPath = join(packageDirectory, "src/index.ts");
 const registryPath = join(packageDirectory, "registry.json");
 
-const directories = (await readdir(componentsDirectory, { withFileTypes: true }))
-  .filter((entry) => entry.isDirectory())
-  .map((entry) => entry.name)
-  .sort((left, right) => left.localeCompare(right));
+async function componentDirectories(level) {
+  try {
+    const entries = await readdir(join(componentsDirectory, level), { withFileTypes: true });
+    return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  }
+}
+
+const components = [];
+for (const level of LEVELS) {
+  for (const name of await componentDirectories(level)) {
+    components.push({ name, path: `components/${level}/${name}/${name}` });
+  }
+}
+components.sort((left, right) => left.name.localeCompare(right.name));
 
 const missing = [];
 const exports = [];
-for (const name of directories) {
-  const sourcePath = join(componentsDirectory, name, `${name}.tsx`);
+for (const { name, path } of components) {
   try {
-    await readFile(sourcePath, "utf8");
-    exports.push(`export * from "./components/${name}/${name}";`);
+    await readFile(join(packageDirectory, "src", `${path}.tsx`), "utf8");
+    exports.push(`export * from "./${path}";`);
   } catch {
     missing.push(name);
   }
@@ -31,9 +45,18 @@ if (missing.length > 0) {
 
 const manifest = JSON.parse(await readFile(registryPath, "utf8"));
 const manifestNames = manifest.components.map((component) => component.name);
-if (JSON.stringify(manifestNames) !== JSON.stringify(directories)) {
+if (JSON.stringify(manifestNames) !== JSON.stringify(components.map(({ name }) => name))) {
   throw new Error(
     "packages/ui-native/registry.json must list every component directory in alphabetical order.",
+  );
+}
+const staleSources = manifest.components.flatMap((component, index) => {
+  const expected = `src/${components[index].path}.tsx`;
+  return component.source === expected ? [] : [`${component.name} (expected ${expected})`];
+});
+if (staleSources.length > 0) {
+  throw new Error(
+    `packages/ui-native/registry.json sources must match the component folders: ${staleSources.join(", ")}`,
   );
 }
 

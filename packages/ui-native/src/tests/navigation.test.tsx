@@ -2,29 +2,29 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import { Text as NativeText, View } from "react-native";
 
-import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
-import { BottomBar } from "../components/bottom-bar/bottom-bar";
-import { Breadcrumb } from "../components/breadcrumb/breadcrumb";
-import { HorizontalScrollRow } from "../components/horizontal-scroll-row/horizontal-scroll-row";
-import { Menubar } from "../components/menubar/menubar";
-import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
-import { Pagination } from "../components/pagination/pagination";
-import { Sidebar } from "../components/sidebar/sidebar";
+import { BottomBar } from "../components/atoms/bottom-bar/bottom-bar";
 import {
   SidebarProvider,
   useSidebar,
-} from "../components/sidebar-provider/sidebar-provider";
-import { SidebarToggle } from "../components/sidebar-toggle/sidebar-toggle";
-import { StepNavigation } from "../components/step-navigation/step-navigation";
+} from "../components/atoms/sidebar-provider/sidebar-provider";
+import { AnimatedTabs } from "../components/molecules/animated-tabs/animated-tabs";
+import { Breadcrumb } from "../components/molecules/breadcrumb/breadcrumb";
+import { HorizontalScrollRow } from "../components/molecules/horizontal-scroll-row/horizontal-scroll-row";
+import { Menubar } from "../components/molecules/menubar/menubar";
+import { NavigationMenu } from "../components/molecules/navigation-menu/navigation-menu";
+import { Pagination } from "../components/molecules/pagination/pagination";
+import { Sidebar } from "../components/molecules/sidebar/sidebar";
+import { SidebarToggle } from "../components/molecules/sidebar-toggle/sidebar-toggle";
+import { StepNavigation } from "../components/molecules/step-navigation/step-navigation";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/tabs/tabs";
-import { TopBar } from "../components/top-bar/top-bar";
-import { ViewSwitcher } from "../components/view-switcher/view-switcher";
-import { WorkspaceSwitcher } from "../components/workspace-switcher/workspace-switcher";
+} from "../components/molecules/tabs/tabs";
+import { TopBar } from "../components/molecules/top-bar/top-bar";
+import { ViewSwitcher } from "../components/molecules/view-switcher/view-switcher";
+import { WorkspaceSwitcher } from "../components/molecules/workspace-switcher/workspace-switcher";
 import type { LinkingService } from "../primitives/platform-services";
 
 import {
@@ -143,7 +143,7 @@ it("selects animated tabs and workspace radios without routing", () => {
   expect(onWorkspaceChange).toHaveBeenCalledWith("beta");
   expect(screen.getByRole("radio", { name: "Beta" })).toHaveProp(
     "accessibilityState",
-    { checked: true, disabled: undefined, selected: true },
+    { checked: true, disabled: undefined },
   );
   expect(screen.getByText("Beta workspace")).toBeOnTheScreen();
 });
@@ -185,9 +185,12 @@ it("exposes current navigation and invokes callback and link adapters", () => {
   expect(onNavigate).toHaveBeenCalled();
   expect(linking.openUrl).toHaveBeenCalledWith("app://home");
   expect(screen.getByText("Product links")).toBeOnTheScreen();
-  expect(screen.getByLabelText("Settings")).toHaveProp("accessibilityState", {
-    selected: true,
+  const currentCrumb = screen.getByLabelText("Settings");
+  expect(currentCrumb).toHaveProp("accessible", true);
+  expect(currentCrumb).toHaveProp("accessibilityValue", {
+    text: "current page",
   });
+  expect(currentCrumb).toHaveProp("accessibilityHint", "Breadcrumb");
 });
 
 function SidebarState() {
@@ -266,11 +269,16 @@ it("paginates with current and disabled semantics", () => {
     "accessibilityState",
     { disabled: true, selected: false },
   );
-  expect(screen.getByRole("link", { name: "Page 1, current page" })).toHaveProp(
-    "accessibilityState",
-    { disabled: false, selected: true },
-  );
-  fireEvent.press(screen.getByRole("link", { name: "2" }));
+  const currentPage = screen.getByRole("link", { name: "Page 1" });
+  expect(currentPage).toHaveProp("accessibilityState", {
+    disabled: false,
+    selected: true,
+  });
+  expect(currentPage).toHaveProp("accessibilityValue", {
+    text: "current page",
+  });
+  expect(currentPage).toHaveProp("accessibilityHint", "Pagination");
+  fireEvent.press(screen.getByRole("link", { name: "Page 2" }));
   expect(onPageChange).toHaveBeenCalledWith(2);
   expect(linking.openUrl).toHaveBeenCalledWith("app://pages/2");
 });
@@ -336,10 +344,9 @@ it("uses safe-area wrappers and an accessible horizontal ScrollView", () => {
   );
   expect(safeArea).toHaveBeenCalledTimes(2);
   expect(screen.getAllByTestId("safe-area")).toHaveLength(2);
-  const row = screen.UNSAFE_getByProps({
-    accessibilityLabel: "Workspaces",
-    accessibilityRole: "list",
-  });
+  expect(screen.getByRole("header", { name: "Workspaces" })).toBeOnTheScreen();
+  const row = screen.UNSAFE_getByProps({ accessibilityRole: "list" });
+  expect(row.props.accessibilityLabel).toBeUndefined();
   expect(row.props.accessible).not.toBe(true);
   expect(row.props.horizontal).toBe(true);
   fireEvent.scroll(row, { nativeEvent: { contentOffset: { x: 120, y: 0 } } });

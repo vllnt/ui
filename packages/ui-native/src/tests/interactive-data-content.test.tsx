@@ -1,30 +1,30 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text, View } from "react-native";
 
+import { AnimatedList } from "../components/atoms/animated-list/animated-list";
+import { AnimatedTestimonials } from "../components/atoms/animated-testimonials/animated-testimonials";
+import { Carousel } from "../components/atoms/carousel/carousel";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../components/atoms/collapsible/collapsible";
+import { FloatingToolbar } from "../components/atoms/floating-toolbar/floating-toolbar";
+import {
+  calculateScrollProgress,
+  ScrollProgress,
+} from "../components/atoms/scroll-progress/scroll-progress";
+import { Slideshow } from "../components/atoms/slideshow/slideshow";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../components/accordion/accordion";
-import { AnimatedList } from "../components/animated-list/animated-list";
-import { AnimatedTestimonials } from "../components/animated-testimonials/animated-testimonials";
-import { Carousel } from "../components/carousel/carousel";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../components/collapsible/collapsible";
-import { ExpandableCards } from "../components/expandable-cards/expandable-cards";
-import { FAQ as Faq } from "../components/faq/faq";
-import { FloatingToolbar } from "../components/floating-toolbar/floating-toolbar";
-import { InteractiveTimeline } from "../components/interactive-timeline/interactive-timeline";
-import {
-  calculateScrollProgress,
-  ScrollProgress,
-} from "../components/scroll-progress/scroll-progress";
-import { Slideshow } from "../components/slideshow/slideshow";
-import { TreeView } from "../components/tree-view/tree-view";
+} from "../components/molecules/accordion/accordion";
+import { ExpandableCards } from "../components/molecules/expandable-cards/expandable-cards";
+import { FAQ as Faq } from "../components/molecules/faq/faq";
+import { InteractiveTimeline } from "../components/organisms/interactive-timeline/interactive-timeline";
+import { TreeView } from "../components/organisms/tree-view/tree-view";
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 
 const reducedMotionService: ReducedMotionService = {

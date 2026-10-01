@@ -3,16 +3,23 @@ import { createRef } from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text, View } from "react-native";
 
-import { Step, StepByStep } from "../components/step-by-step/step-by-step";
-import { Tabs, TabsContent, TabsTrigger } from "../components/tabs/tabs";
+import {
+  Step,
+  StepByStep,
+} from "../components/atoms/step-by-step/step-by-step";
 import {
   TagsInput,
   type TagsInputProps,
-} from "../components/tags-input/tags-input";
-import { TimeField } from "../components/time-field/time-field";
-import { TimePicker } from "../components/time-picker/time-picker";
-import { TimelineScrubber } from "../components/timeline-scrubber/timeline-scrubber";
-import { Tooltip } from "../components/tooltip/tooltip";
+} from "../components/atoms/tags-input/tags-input";
+import { TimelineScrubber } from "../components/atoms/timeline-scrubber/timeline-scrubber";
+import { Tooltip } from "../components/atoms/tooltip/tooltip";
+import {
+  Tabs,
+  TabsContent,
+  TabsTrigger,
+} from "../components/molecules/tabs/tabs";
+import { TimeField } from "../components/organisms/time-field/time-field";
+import { TimePicker } from "../components/organisms/time-picker/time-picker";
 
 const tagLabels = {
   add: "Add",
@@ -180,13 +187,16 @@ it("registers mounted tab counterparts and removes stale relationships", () => {
     </Tabs>
   );
   render(tree(true));
-  expect(screen.getByRole("tab")).toHaveProp("aria-controls", "tabs-panel-one");
+  expect(screen.getByRole("tab")).not.toHaveProp("aria-controls");
   expect(screen.getByTestId("panel")).toHaveProp(
     "aria-labelledby",
     "tabs-tab-one",
   );
   screen.rerender(tree(false));
-  expect(screen.getByRole("tab").props["aria-controls"]).toBeUndefined();
+  expect(screen.getByRole("tab")).toHaveProp("accessibilityState", {
+    disabled: false,
+    selected: true,
+  });
 });
 
 it("exposes the scrubber as an accessible adjustable target", () => {

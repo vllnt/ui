@@ -1,12 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 
-import { SearchField } from "../components/search-field/search-field";
-import { Slider } from "../components/slider/slider";
-import { StatusBoard } from "../components/status-board/status-board";
-import { Stepper } from "../components/stepper/stepper";
-import { TimePicker } from "../components/time-picker/time-picker";
-import { ToolbarButton } from "../components/toolbar/toolbar";
-import { Tour } from "../components/tour/tour";
+import { Slider } from "../components/atoms/slider/slider";
+import { Stepper } from "../components/atoms/stepper/stepper";
+import { Tour } from "../components/atoms/tour/tour";
+import { SearchField } from "../components/molecules/search-field/search-field";
+import { StatusBoard } from "../components/molecules/status-board/status-board";
+import { ToolbarButton } from "../components/molecules/toolbar/toolbar";
+import { TimePicker } from "../components/organisms/time-picker/time-picker";
 
 const steps = [
   { description: null, id: "one", title: "One" },
@@ -35,7 +35,7 @@ it("normalizes uncontrolled slider state when bounds change", () => {
     max: 20,
     min: 0,
     now: 20,
-    text: undefined,
+    text: "20",
   });
   fireEvent(screen.getByRole("adjustable"), "accessibilityAction", {
     nativeEvent: { actionName: "decrement" },
