@@ -22,6 +22,16 @@
       "maxBytes": 205600
     },
     {
+      "name": "StaticCode (up front)",
+      "export": "StaticCode",
+      "maxBytes": 747200
+    },
+    {
+      "name": "MDXContent (up front)",
+      "export": "MDXContent",
+      "maxBytes": 1279500
+    },
+    {
       "name": "FlowDiagram (up front)",
       "export": "FlowDiagram",
       "maxBytes": 230100

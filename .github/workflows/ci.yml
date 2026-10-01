@@ -47,6 +47,9 @@ jobs:
       - name: Check bundle size budgets
         run: pnpm -F @vllnt/ui size
 
+      - name: Check deep imports in dist resolve under Node ESM
+        run: pnpm -F @vllnt/ui check:dist-imports
+
       - name: Check registry drift
         run: pnpm -F @vllnt/ui-registry registry:check
 
