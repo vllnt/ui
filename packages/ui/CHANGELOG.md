@@ -10,12 +10,67 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - Source-only React Native renderer and shared design contracts for the 0.4.0 canary track; stable Web installation remains unchanged.
 - Localized Native catalog discovery, dependency/capability comparison, and extensible React/React Native source tabs in a single component preview surface.
+- **Accessibility gate** - the Storybook test-runner runs axe-core (WCAG 2.0,
+  2.1 and 2.2, levels A and AA) on every story in the light and dark theme and
+  fails on any violation. A story can turn a rule off only through
+  `parameters.a11y.config.rules` with a written `reason`. (#543)
+- **Optional accessibility props** (English defaults, nothing required):
+  `popoverLabel` on Combobox, MultiSelect, DatePicker, DateRangePicker,
+  TimePicker and ColorPicker; `aria-label` / `aria-labelledby` /
+  `aria-describedby` / `id` on Combobox; `aria-label` / `aria-labelledby` on
+  InlineInput and ScrollArea; NumberInput `incrementLabel` / `decrementLabel`;
+  Marquee and TickerTape `pauseControl` + `labels`; TabsContent `tabIndex`;
+  GanttChartLabels `region`; CompletionDialog `modal`; Pagination `labels`;
+  AIArtifactLabels `content`; ModelSelector `listLabel`; DataTableFilter
+  `ariaLabel`; VideoEmbed `playLabel`. (#543)
+- **New exports** - `moveRovingFocus` (+ `RovingFocusOptions`,
+  `RovingOrientation`), `useReturnFocus` (+ `ReturnFocusHandlers`),
+  `focusCalendarDay`, `CHECKLIST_PROGRESS_EVENT`, `parseChecklistStorageValue`,
+  `MarqueeLabels`, `TickerTapeLabels`, `PaginationLabels`. Registry items now
+  import these from `@vllnt/ui`, so installing them needs a `@vllnt/ui` release
+  that contains them (the registry pins `^0.3.0`, which does not).
+  `registry:integrity` now fails when a registry item imports a name that
+  `@vllnt/ui` does not export. (#543)
+
+### Changed
+
+- **Accessibility behaviour changes** (#543):
+  - Drawer moves focus into its content on open (`autoFocus` now defaults to
+    `true`; pass `autoFocus={false}` for vaul's previous behaviour).
+  - CompletionDialog is built on the Radix dialog: it traps focus, closes on
+    Escape and returns focus to the opener. `modal` (default `true`) maps to
+    Radix `modal`; `modal={false}` leaves the page behind it interactive.
+    Shortcuts work only while focus is inside the dialog, an empty string turns
+    one off, and Enter no longer confirms from any focused element.
+  - Marquee and TickerTape show a 24px pause/play button by default
+    (`pauseControl={false}` hides it). It overlays the top-right corner of the
+    Marquee and the right edge of the TickerTape, and hides under reduced
+    motion, when nothing moves.
+  - Pagination renders a `nav` landmark of single links styled as buttons, with
+    `aria-current="page"` on the current page (it used to nest a button in each
+    link).
+  - CodeBlock syntax colours come from the `--vllnt-code-*` CSS variables
+    (OKLCH channels) instead of JS theme detection. The defaults reach 4.5:1 on
+    the background in light and dark mode for the default theme and every
+    preset; override the variables to restyle.
+  - CommandSeparator renders an `aria-hidden` divider.
+  - Under `prefers-reduced-motion`, components stop their own decorative
+    animation and AnimatedText shows its final text at once; loaders marked
+    `data-motion="essential"` keep spinning, slower. The stylesheet changes
+    motion only on library components, never on your own elements.
+  - TabsContent is a tab stop only when the panel holds no focusable element;
+    the ScrollArea viewport is a tab stop only while its content scrolls.
+  - TreeView supports Home / End, ArrowRight to the first child and ArrowLeft
+    to the parent, and keeps the active row in view.
 
 ### Fixed
 
 - Preserve nested scrolling, reduced-motion behavior and sidebar keyboard focus in the affected Web components.
 - Forward explicit tab accessibility relationships and label/keyboard handlers without changing default tab navigation.
 - Emit JSON-LD graph documents and localized Native discovery metadata without advertising unpublished npm packages.
+- Accessible names, ARIA structure, APG keyboard patterns (tabs, radio groups,
+  listbox, tree, dialogs and focus return), reduced motion and hard-coded
+  palette contrast across the Web components flagged by the #535 audit. (#543)
 
 ## [0.3.0] - 2026-06-26
 

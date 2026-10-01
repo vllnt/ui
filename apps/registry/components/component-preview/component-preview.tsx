@@ -1835,7 +1835,7 @@ function NavigationMenuPreview() {
           <NavigationMenuTrigger>Getting Started</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="p-4 w-[200px]">
-              <NavigationMenuLink className="text-sm">
+              <NavigationMenuLink className="text-sm" href="#introduction">
                 Introduction
               </NavigationMenuLink>
             </div>
@@ -1845,7 +1845,7 @@ function NavigationMenuPreview() {
           <NavigationMenuTrigger>Components</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="p-4 w-[200px]">
-              <NavigationMenuLink className="text-sm">
+              <NavigationMenuLink className="text-sm" href="#components">
                 View all
               </NavigationMenuLink>
             </div>
