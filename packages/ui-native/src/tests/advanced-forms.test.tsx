@@ -1,11 +1,11 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react-native";
 
-import { DateField } from "../components/date-field/date-field";
-import { FileUpload } from "../components/file-upload/file-upload";
-import { InputOTP } from "../components/input-otp/input-otp";
-import { MultiSelect } from "../components/multi-select/multi-select";
-import { RangeCalendar } from "../components/range-calendar/range-calendar";
-import { Select } from "../components/select/select";
+import { FileUpload } from "../components/atoms/file-upload/file-upload";
+import { InputOTP } from "../components/atoms/input-otp/input-otp";
+import { Select } from "../components/atoms/select/select";
+import { DateField } from "../components/molecules/date-field/date-field";
+import { MultiSelect } from "../components/molecules/multi-select/multi-select";
+import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
 import type { FilePickerService } from "../primitives/platform-services";
 
 import { renderThemed, themed } from "./test-utils";

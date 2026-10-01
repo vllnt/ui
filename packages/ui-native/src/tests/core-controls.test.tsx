@@ -7,24 +7,24 @@ import {
 } from "@testing-library/react-native";
 import { Text as NativeText } from "react-native";
 
-import { Checkbox } from "../components/checkbox/checkbox";
-import { CopyButton } from "../components/copy-button/copy-button";
-import { Link } from "../components/link/link";
+import { Checkbox } from "../components/atoms/checkbox/checkbox";
+import { CopyButton } from "../components/atoms/copy-button/copy-button";
+import { Link } from "../components/atoms/link/link";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "../components/radio-group/radio-group";
-import { Slider } from "../components/slider/slider";
-import { Toggle } from "../components/toggle/toggle";
+} from "../components/atoms/radio-group/radio-group";
+import { Slider } from "../components/atoms/slider/slider";
+import { Toggle } from "../components/atoms/toggle/toggle";
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "../components/toggle-group/toggle-group";
+} from "../components/atoms/toggle-group/toggle-group";
 import {
   Toolbar,
   ToolbarButton,
   ToolbarSeparator,
-} from "../components/toolbar/toolbar";
+} from "../components/molecules/toolbar/toolbar";
 import type {
   ClipboardService,
   LinkingService,
@@ -80,12 +80,16 @@ it("supports toggle and checkbox state while blocking disabled changes", () => {
       />
     </>,
   );
-  const toggle = screen.getByRole("button", { name: "Bold" });
+  const toggle = screen.getByRole("togglebutton", { name: "Bold" });
+  expect(toggle).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ checked: false }),
+  );
   fireEvent.press(toggle);
   expect(onPressedChange).toHaveBeenCalledWith(true);
   expect(toggle).toHaveProp(
     "accessibilityState",
-    expect.objectContaining({ selected: true }),
+    expect.objectContaining({ checked: true }),
   );
   const checkbox = screen.getByRole("checkbox", { name: "Terms" });
   expect(checkbox).toHaveProp(
@@ -127,18 +131,18 @@ it("uses caller-owned keys for controlled and uncontrolled toggle groups", () =>
       </ToggleGroup>
     </>,
   );
-  expect(screen.getByLabelText("Alignment")).toHaveProp(
-    "accessibilityRole",
-    "none",
+  expect(screen.getByRole("togglebutton", { name: "Center" })).toHaveProp(
+    "accessibilityHint",
+    "Alignment",
   );
-  fireEvent.press(screen.getByRole("button", { name: "Center" }));
+  fireEvent.press(screen.getByRole("togglebutton", { name: "Center" }));
   expect(onMultipleChange).toHaveBeenCalledWith(["start", 42]);
 
-  fireEvent.press(screen.getByRole("button", { name: "Comfortable" }));
+  fireEvent.press(screen.getByRole("togglebutton", { name: "Comfortable" }));
   expect(onSingleChange).toHaveBeenCalledWith("comfortable");
-  expect(screen.getByRole("button", { name: "Compact" })).toHaveProp(
+  expect(screen.getByRole("togglebutton", { name: "Compact" })).toHaveProp(
     "accessibilityState",
-    expect.objectContaining({ selected: true }),
+    { checked: true, disabled: false },
   );
 });
 
@@ -165,10 +169,10 @@ it("applies repeated toggle-group presses from the latest uncontrolled value", (
     </>,
   );
   act(() => {
-    fireEvent.press(screen.getByRole("button", { name: "Bold" }));
-    fireEvent.press(screen.getByRole("button", { name: "Italic" }));
-    fireEvent.press(screen.getByRole("button", { name: "Small" }));
-    fireEvent.press(screen.getByRole("button", { name: "Small" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Bold" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Italic" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Small" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Small" }));
   });
 
   expect(onMultipleChange.mock.calls).toEqual([
@@ -176,14 +180,14 @@ it("applies repeated toggle-group presses from the latest uncontrolled value", (
     [["bold", "italic"]],
   ]);
   expect(onSingleChange.mock.calls).toEqual([["small"], [undefined]]);
-  for (const [name, selected] of [
-    ["Bold", true],
-    ["Italic", true],
-    ["Small", false],
+  for (const [role, name, checked] of [
+    ["togglebutton", "Bold", true],
+    ["togglebutton", "Italic", true],
+    ["togglebutton", "Small", false],
   ] as const) {
-    expect(screen.getByRole("button", { name })).toHaveProp(
+    expect(screen.getByRole(role, { name })).toHaveProp(
       "accessibilityState",
-      expect.objectContaining({ selected }),
+      expect.objectContaining({ checked }),
     );
   }
 });
@@ -202,14 +206,14 @@ it("keeps controlled toggle-group presses derived from the owner value", () => {
     </ToggleGroup>,
   );
   act(() => {
-    fireEvent.press(screen.getByRole("button", { name: "Bold" }));
-    fireEvent.press(screen.getByRole("button", { name: "Italic" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Bold" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Italic" }));
   });
 
   expect(onValueChange.mock.calls).toEqual([[["bold"]], [["italic"]]]);
-  expect(screen.getByRole("button", { name: "Bold" })).toHaveProp(
+  expect(screen.getByRole("togglebutton", { name: "Bold" })).toHaveProp(
     "accessibilityState",
-    expect.objectContaining({ selected: false }),
+    expect.objectContaining({ checked: false }),
   );
 });
 
@@ -234,9 +238,9 @@ it("selects stable radio values and respects item and group disabled state", () 
       </RadioGroup>
     </>,
   );
-  expect(screen.getByLabelText("Delivery")).toHaveProp(
-    "accessibilityRole",
-    "radiogroup",
+  expect(screen.getByRole("radio", { name: "Standard" })).toHaveProp(
+    "accessibilityHint",
+    "Delivery",
   );
   expect(screen.getByRole("radio", { name: "Standard" })).toHaveProp(
     "accessibilityState",
@@ -263,10 +267,18 @@ it("exposes toolbar semantics and 44-point action targets", () => {
       </ToolbarButton>
     </Toolbar>,
   );
-  const toolbar = screen.getByLabelText("Formatting");
-  expect(toolbar).toHaveProp("accessibilityRole", "toolbar");
-  expect(toolbar).not.toHaveProp("accessible", true);
+  const [toolbar] = screen.UNSAFE_root.findAll(
+    (node: {
+      readonly props: Record<string, unknown>;
+      readonly type: unknown;
+    }) =>
+      typeof node.type === "string" &&
+      node.props.accessibilityRole === "toolbar",
+  );
+  expect(toolbar?.props.accessibilityLabel).toBeUndefined();
+  expect(toolbar?.props.accessible).not.toBe(true);
   const bold = screen.getByRole("button", { name: "Bold" });
+  expect(bold).toHaveProp("accessibilityHint", "Formatting");
   expect(bold).toHaveStyle({ minHeight: 44, minWidth: 44 });
   fireEvent.press(bold);
   expect(onPress).toHaveBeenCalledTimes(1);

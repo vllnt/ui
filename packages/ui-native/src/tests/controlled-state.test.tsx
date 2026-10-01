@@ -2,34 +2,34 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement } from "react";
 import { Text as NativeText, type ViewProps } from "react-native";
 
-import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../components/collapsible/collapsible";
-import {
-  DateField,
-  type ISODateString,
-} from "../components/date-field/date-field";
-import { InlineInput } from "../components/inline-input/inline-input";
+} from "../components/atoms/collapsible/collapsible";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "../components/resizable/resizable";
+} from "../components/atoms/resizable/resizable";
+import { TimelineScrubber } from "../components/atoms/timeline-scrubber/timeline-scrubber";
+import { AnimatedTabs } from "../components/molecules/animated-tabs/animated-tabs";
+import {
+  DateField,
+  type ISODateString,
+} from "../components/molecules/date-field/date-field";
+import { InlineInput } from "../components/molecules/inline-input/inline-input";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/tabs/tabs";
+} from "../components/molecules/tabs/tabs";
+import { ViewSwitcher } from "../components/molecules/view-switcher/view-switcher";
 import {
   type ISOTimeString,
   TimeField,
-} from "../components/time-field/time-field";
-import { TimelineScrubber } from "../components/timeline-scrubber/timeline-scrubber";
-import { ViewSwitcher } from "../components/view-switcher/view-switcher";
+} from "../components/organisms/time-field/time-field";
 
 import { codePreviewTabs, gridListOptions, reducedMotion } from "./test-utils";
 
@@ -59,7 +59,7 @@ function renderControlledTime(value?: ISOTimeString): ReactElement {
   );
 }
 
-it("only points disclosure and tab controls at mounted content", () => {
+it("reports disclosure and tab state without no-op aria-controls", () => {
   render(
     <>
       <Collapsible id="details" reducedMotionService={reducedMotionService}>
@@ -85,17 +85,26 @@ it("only points disclosure and tab controls at mounted content", () => {
     </>,
   );
   const disclosure = screen.getByRole("button", { name: "Details" });
-  expect(disclosure).not.toHaveProp("aria-controls");
+  expect(disclosure).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ expanded: false }),
+  );
   fireEvent.press(disclosure);
-  expect(disclosure).toHaveProp("aria-controls", "details-content");
+  expect(disclosure).not.toHaveProp("aria-controls");
+  expect(disclosure).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ expanded: true }),
+  );
 
   const first = screen.getByRole("tab", { name: "First" });
   const second = screen.getByRole("tab", { name: "Second" });
-  expect(first).toHaveProp("aria-controls", "sections-panel-first");
-  expect(second).not.toHaveProp("aria-controls");
-  fireEvent.press(second);
   expect(first).not.toHaveProp("aria-controls");
-  expect(second).toHaveProp("aria-controls", "sections-panel-second");
+  fireEvent.press(second);
+  expect(second).not.toHaveProp("aria-controls");
+  expect(second).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ selected: true }),
+  );
 });
 
 it("only relates selected animated and switched tabs to semantic-free panels", () => {
@@ -110,15 +119,12 @@ it("only relates selected animated and switched tabs to semantic-free panels", (
       <ViewSwitcher defaultValue="grid" id="layout" options={gridListOptions} />
     </>,
   );
-  for (const [name, panel] of [
-    ["Code", "preview-panel-code"],
-    ["Grid", "layout-panel-grid"],
-  ])
+  for (const name of ["Code", "Grid"])
     expect(screen.getByRole("tab", { name })).toHaveProp(
-      "aria-controls",
-      panel,
+      "accessibilityState",
+      expect.objectContaining({ selected: true }),
     );
-  for (const name of ["Preview", "List"])
+  for (const name of ["Code", "Preview", "Grid", "List"])
     expect(screen.getByRole("tab", { name })).not.toHaveProp("aria-controls");
   expect(screen.queryByRole("summary")).toBeNull();
 });

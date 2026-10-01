@@ -6,13 +6,13 @@ import {
 } from "@testing-library/react-native";
 import { Linking, View } from "react-native";
 
-import { AISourceCitation } from "../components/ai-source-citation/ai-source-citation";
-import { Breadcrumb } from "../components/breadcrumb/breadcrumb";
-import { Menubar } from "../components/menubar/menubar";
-import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
-import { Pagination } from "../components/pagination/pagination";
-import { Sidebar } from "../components/sidebar/sidebar";
-import { SidebarProvider } from "../components/sidebar-provider/sidebar-provider";
+import { SidebarProvider } from "../components/atoms/sidebar-provider/sidebar-provider";
+import { AISourceCitation } from "../components/molecules/ai-source-citation/ai-source-citation";
+import { Breadcrumb } from "../components/molecules/breadcrumb/breadcrumb";
+import { Menubar } from "../components/molecules/menubar/menubar";
+import { NavigationMenu } from "../components/molecules/navigation-menu/navigation-menu";
+import { Pagination } from "../components/molecules/pagination/pagination";
+import { Sidebar } from "../components/molecules/sidebar/sidebar";
 import type { LinkingService } from "../primitives/platform-services";
 
 afterEach(() => {
@@ -91,7 +91,7 @@ it("opens every enabled href with the default native linking adapter", async () 
   fireEvent.press(
     screen.getByRole("link", { name: "Navigation menu destination" }),
   );
-  fireEvent.press(screen.getByRole("link", { name: "2" }));
+  fireEvent.press(screen.getByRole("link", { name: "Page 2" }));
   fireEvent.press(screen.getByRole("button", { name: "Review menu" }));
   fireEvent.press(screen.getByRole("link", { name: "Menubar destination" }));
   fireEvent.press(
@@ -191,7 +191,7 @@ it("reports rejected link opens with their destination context", async () => {
   fireEvent.press(screen.getByRole("link", { name: breadcrumbItem.label }));
   fireEvent.press(screen.getByRole("link", { name: sidebarItem.label }));
   fireEvent.press(screen.getByRole("link", { name: navigationItem.label }));
-  fireEvent.press(screen.getByRole("link", { name: "2" }));
+  fireEvent.press(screen.getByRole("link", { name: "Page 2" }));
   fireEvent.press(screen.getByRole("button", { name: menubarMenu.label }));
   fireEvent.press(screen.getByRole("link", { name: menubarItem.label }));
   fireEvent.press(

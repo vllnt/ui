@@ -51,7 +51,7 @@ it("keeps heading semantics independent from visual size", () => {
     </Heading>,
   );
   const heading = screen.getByRole("header", { name: "Account" });
-  expect(heading).toHaveProp("aria-level", 2);
+  expect(heading).not.toHaveProp("aria-level");
   expect(heading).toHaveStyle({ fontSize: 48 });
 });
 

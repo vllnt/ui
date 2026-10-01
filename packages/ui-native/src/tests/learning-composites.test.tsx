@@ -6,25 +6,28 @@ import {
 } from "@testing-library/react-native";
 import { Text } from "react-native";
 
-import { Checklist } from "../components/checklist/checklist";
-import { CompletionDialog } from "../components/completion-dialog/completion-dialog";
-import { Exercise } from "../components/exercise/exercise";
-import { Flashcard } from "../components/flashcard/flashcard";
-import { KeyboardShortcutsHelp } from "../components/keyboard-shortcuts-help/keyboard-shortcuts-help";
+import { Checklist } from "../components/atoms/checklist/checklist";
+import { CompletionDialog } from "../components/atoms/completion-dialog/completion-dialog";
+import { Exercise } from "../components/atoms/exercise/exercise";
+import { Flashcard } from "../components/atoms/flashcard/flashcard";
+import { KeyboardShortcutsHelp } from "../components/atoms/keyboard-shortcuts-help/keyboard-shortcuts-help";
+import { Quiz } from "../components/atoms/quiz/quiz";
+import { Rating } from "../components/atoms/rating/rating";
+import { SearchDialog } from "../components/atoms/search-dialog/search-dialog";
+import {
+  Step,
+  StepByStep,
+} from "../components/atoms/step-by-step/step-by-step";
+import { Stepper } from "../components/atoms/stepper/stepper";
+import { Tour } from "../components/atoms/tour/tour";
+import { TutorialComplete } from "../components/atoms/tutorial-complete/tutorial-complete";
+import { TutorialFilters } from "../components/atoms/tutorial-filters/tutorial-filters";
 import {
   ProgressTracker,
   ProgressTrackerModule,
   ProgressTrackerModules,
   ProgressTrackerOverview,
-} from "../components/progress-tracker/progress-tracker";
-import { Quiz } from "../components/quiz/quiz";
-import { Rating } from "../components/rating/rating";
-import { SearchDialog } from "../components/search-dialog/search-dialog";
-import { Step, StepByStep } from "../components/step-by-step/step-by-step";
-import { Stepper } from "../components/stepper/stepper";
-import { Tour } from "../components/tour/tour";
-import { TutorialComplete } from "../components/tutorial-complete/tutorial-complete";
-import { TutorialFilters } from "../components/tutorial-filters/tutorial-filters";
+} from "../components/organisms/progress-tracker/progress-tracker";
 
 import { deferred, searchLabels } from "./test-utils";
 
@@ -322,7 +325,10 @@ it("uses safe native modal close routes and honest hardware-keyboard guidance", 
       "These actions are available when a hardware keyboard is connected.",
     ),
   ).toBeOnTheScreen();
-  fireEvent(screen.getByLabelText("Complete lesson"), "accessibilityEscape");
+  fireEvent(
+    screen.getByRole("header", { name: "Complete lesson" }),
+    "accessibilityEscape",
+  );
   expect(onCompletionClose).toHaveBeenCalledWith("accessibilityEscape");
   fireEvent.press(screen.getByRole("button", { name: "Close keyboard help" }));
   expect(onHelpClose).toHaveBeenCalledWith("requestClose");

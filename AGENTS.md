@@ -38,7 +38,7 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 | `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
 | `pnpm -F @vllnt/ui test:coverage` | Vitest with coverage |
 | `pnpm check:circular` | Fail on circular imports |
-| `pnpm check:atomic` | Fail on Atomic Design level violations in `packages/ui/src/components` ([rules](./docs/agents/COMPONENTS.md#atomic-design-levels)) |
+| `pnpm check:atomic` | Fail on Atomic Design level violations in `packages/ui/src/components` and `packages/ui-native/src/components` ([rules](./docs/agents/COMPONENTS.md#atomic-design-levels)) |
 | `pnpm doctor` | react-doctor health scan (top rules) |
 | `pnpm doctor:full` | Verbose full scan with per-file detail |
 | `pnpm doctor:errors` | Scan, exit non-zero on any **error** (CI/pre-commit gate) |

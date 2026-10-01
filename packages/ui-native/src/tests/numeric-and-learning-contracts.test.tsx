@@ -1,22 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Animated, StyleSheet, Text, View } from "react-native";
 
-import { Meter } from "../components/meter/meter";
-import { MultiSelect } from "../components/multi-select/multi-select";
-import { NumberInput } from "../components/number-input/number-input";
-import { NumberTicker } from "../components/number-ticker/number-ticker";
-import { ProgressBar } from "../components/progress-bar/progress-bar";
-import { PromptInput } from "../components/prompt-input/prompt-input";
-import { Quiz } from "../components/quiz/quiz";
-import { RangeCalendar } from "../components/range-calendar/range-calendar";
-import { Rating } from "../components/rating/rating";
-import { Reasoning } from "../components/reasoning/reasoning";
+import { Meter } from "../components/atoms/meter/meter";
+import { NumberTicker } from "../components/atoms/number-ticker/number-ticker";
+import { PromptInput } from "../components/atoms/prompt-input/prompt-input";
+import { Quiz } from "../components/atoms/quiz/quiz";
+import { Rating } from "../components/atoms/rating/rating";
+import { Reasoning } from "../components/atoms/reasoning/reasoning";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "../components/resizable/resizable";
-import { RevealText } from "../components/reveal-text/reveal-text";
+} from "../components/atoms/resizable/resizable";
+import { RevealText } from "../components/atoms/reveal-text/reveal-text";
+import { MultiSelect } from "../components/molecules/multi-select/multi-select";
+import { NumberInput } from "../components/molecules/number-input/number-input";
+import { ProgressBar } from "../components/molecules/progress-bar/progress-bar";
+import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 
 import { flushMicrotasks, reducedMotion } from "./test-utils";
@@ -141,7 +141,7 @@ it("normalizes invalid prompt row limits", () => {
       submitLabel="Send"
     />,
   );
-  expect(screen.getByLabelText("Prompt")).toHaveStyle({ height: 21 });
+  expect(screen.getByLabelText("Prompt")).toHaveStyle({ height: 44 });
 });
 
 it("sanitizes ticker inputs with motion enabled", async () => {

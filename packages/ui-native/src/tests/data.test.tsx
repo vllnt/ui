@@ -1,23 +1,30 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { AccessibilityInfo } from "react-native";
 
-import { ActivityLog } from "../components/activity-log/activity-log";
-import { Alert, AlertDescription, AlertTitle } from "../components/alert/alert";
-import { AvatarGroup } from "../components/avatar-group/avatar-group";
-import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
-import { DataList } from "../components/data-list/data-list";
-import { LiveFeed } from "../components/live-feed/live-feed";
-import { MetricCluster } from "../components/metric-cluster/metric-cluster";
-import { OverviewBoard } from "../components/overview-board/overview-board";
-import { PresenceStack } from "../components/presence-stack/presence-stack";
-import { PresenceSyncIndicator } from "../components/presence-sync-indicator/presence-sync-indicator";
-import { ProgressBar } from "../components/progress-bar/progress-bar";
-import { ProgressCard } from "../components/progress-card/progress-card";
-import { SeverityBadge } from "../components/severity-badge/severity-badge";
-import { StatCard } from "../components/stat-card/stat-card";
-import { StatusBoard } from "../components/status-board/status-board";
-import { StatusIndicator } from "../components/status-indicator/status-indicator";
-import { StickyMetric } from "../components/sticky-metric/sticky-metric";
-import { WorldClockBar } from "../components/world-clock-bar/world-clock-bar";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "../components/atoms/alert/alert";
+import { SeverityBadge } from "../components/atoms/severity-badge/severity-badge";
+import { StatusIndicator } from "../components/atoms/status-indicator/status-indicator";
+import { ActivityLog } from "../components/molecules/activity-log/activity-log";
+import { AvatarGroup } from "../components/molecules/avatar-group/avatar-group";
+import { DataList } from "../components/molecules/data-list/data-list";
+import { LiveFeed } from "../components/molecules/live-feed/live-feed";
+import { MetricCluster } from "../components/molecules/metric-cluster/metric-cluster";
+import { OverviewBoard } from "../components/molecules/overview-board/overview-board";
+import { PresenceStack } from "../components/molecules/presence-stack/presence-stack";
+import { PresenceSyncIndicator } from "../components/molecules/presence-sync-indicator/presence-sync-indicator";
+import { ProgressBar } from "../components/molecules/progress-bar/progress-bar";
+import { StatCard } from "../components/molecules/stat-card/stat-card";
+import { StatusBoard } from "../components/molecules/status-board/status-board";
+import { StickyMetric } from "../components/molecules/sticky-metric/sticky-metric";
+import { WorldClockBar } from "../components/molecules/world-clock-bar/world-clock-bar";
+import { CountdownTimer } from "../components/organisms/countdown-timer/countdown-timer";
+import { ProgressCard } from "../components/organisms/progress-card/progress-card";
+
+import { flushMicrotasks } from "./test-utils";
 
 const fixedNow = "2026-01-01T12:00:00.000Z";
 
@@ -112,7 +119,9 @@ it("renders overview and service status data with explicit status text", () => {
     expect(screen.getByText(text)).toBeOnTheScreen();
 });
 
-it("provides readable status, severity, alert, and sync announcements", () => {
+it("provides readable status, severity, alert, and sync announcements", async () => {
+  const announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
+  announceSpy.mockClear();
   render(
     <>
       <StatusIndicator label="Operational" tone="success" />
@@ -131,10 +140,11 @@ it("provides readable status, severity, alert, and sync announcements", () => {
       name: "Presence sync: Reconnecting, retry 2 of 5",
     }),
   ).toHaveProp("accessibilityLiveRegion", "polite");
-  expect(screen.getByRole("alert")).toHaveProp(
-    "accessibilityLiveRegion",
-    "assertive",
+  await flushMicrotasks();
+  expect(announceSpy).toHaveBeenCalledWith(
+    "Connection lost. Check the network and retry.",
   );
+  announceSpy.mockRestore();
 });
 
 it("renders deterministic countdown and feed times without real timers", () => {
@@ -169,8 +179,12 @@ it("renders deterministic countdown and feed times without real timers", () => {
       name: "Countdown timer: On track, 00 Days, 01 Hours, 01 Minutes, 02 Seconds",
     }),
   ).toBeOnTheScreen();
-  expect(screen.getAllByText("01")).toHaveLength(2);
-  expect(screen.getByText("02")).toBeOnTheScreen();
+  expect(
+    screen.getAllByText("01", { includeHiddenElements: true }),
+  ).toHaveLength(2);
+  expect(
+    screen.getByText("02", { includeHiddenElements: true }),
+  ).toBeOnTheScreen();
   expect(screen.getByText("30s ago")).toBeOnTheScreen();
   expect(screen.getAllByText("1h ago")).toHaveLength(1);
 });

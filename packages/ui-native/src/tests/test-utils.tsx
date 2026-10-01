@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement } from "react";
 import { Text } from "react-native";
 
-import type { SearchDialogLabels } from "../components/search-dialog/search-dialog";
+import type { SearchDialogLabels } from "../components/atoms/search-dialog/search-dialog";
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 import { ThemeProvider, type ThemeSelection } from "../theme/theme-provider";
 

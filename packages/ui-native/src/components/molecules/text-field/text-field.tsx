@@ -1,0 +1,93 @@
+import type { ReactNode, Ref } from "react";
+import {
+  StyleSheet,
+  Text as NativeText,
+  type TextInput,
+  type TextInputProps,
+  View,
+  type ViewProps,
+} from "react-native";
+
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../../primitives/accessibility";
+import { typeStyle } from "../../../primitives/type-style";
+import { useTheme } from "../../../theme/theme-provider";
+import { Input } from "../../atoms/input/input";
+import { Label } from "../../atoms/label/label";
+
+type TextFieldAccessibleLabel =
+  | {
+      readonly accessibilityLabel: string;
+      readonly label?: ReactNode;
+    }
+  | {
+      readonly accessibilityLabel?: string;
+      readonly label: string;
+    };
+
+/** Props for a labelled native text input with helper and error text. */
+export type TextFieldProps = Omit<TextInputProps, "accessibilityLabel"> &
+  TextFieldAccessibleLabel & {
+    readonly description?: string;
+    readonly disabled?: boolean;
+    readonly error?: string;
+    readonly ref?: Ref<TextInput>;
+    readonly rootProps?: ViewProps;
+  };
+
+const styles = StyleSheet.create({ root: { width: "100%" } });
+
+/** Native text input bundled with its visible label, description, and error. */
+function TextField({
+  accessibilityHint,
+  accessibilityLabel,
+  description,
+  error,
+  label,
+  ref,
+  rootProps,
+  ...props
+}: TextFieldProps) {
+  const theme = useTheme();
+  const hint = joinAccessibilityText([error, description, accessibilityHint]);
+  useAnnounceOnChange(error, { liveRegion: true });
+
+  return (
+    <View
+      {...rootProps}
+      style={[styles.root, { gap: theme.spacing[1] }, rootProps?.style]}
+    >
+      {label ? <Label invalid={error !== undefined}>{label}</Label> : null}
+      <Input
+        {...props}
+        accessibilityHint={hint}
+        accessibilityLabel={
+          accessibilityLabel ?? (typeof label === "string" ? label : undefined)
+        }
+        ref={ref}
+      />
+      {description ? (
+        <NativeText style={typeStyle(theme, "bodySmall", "mutedForeground")}>
+          {description}
+        </NativeText>
+      ) : null}
+      {error ? (
+        <NativeText
+          accessibilityLiveRegion="polite"
+          accessibilityRole="alert"
+          style={typeStyle(theme, "bodySmall", {
+            color: "destructive",
+            fontWeight: theme.typography.fontWeight.caption,
+          })}
+        >
+          {error}
+        </NativeText>
+      ) : null}
+    </View>
+  );
+}
+TextField.displayName = "TextField";
+
+export { TextField };

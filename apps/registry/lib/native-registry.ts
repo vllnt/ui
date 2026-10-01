@@ -12,7 +12,11 @@ export const nativeCompatibilitySchema = z.enum([
 const nativeComponentSchema = z.object({
   compatibility: nativeCompatibilitySchema,
   name: z.string().regex(/^[a-z][\da-z-]*$/),
-  source: z.string().regex(/^src\/components(?:\/[a-z][\da-z-]*){2}\.tsx$/),
+  source: z
+    .string()
+    .regex(
+      /^src\/components\/(?:atoms|molecules|organisms|templates)(?:\/[a-z][\da-z-]*){2}\.tsx$/,
+    ),
 });
 
 export const nativeRegistrySchema = z.object({
