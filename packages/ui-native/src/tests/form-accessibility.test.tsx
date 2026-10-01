@@ -1,7 +1,9 @@
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
+import { lightTheme } from "@vllnt/ui-core";
 import { AccessibilityInfo, Text as NativeText } from "react-native";
 
 import { Avatar, AvatarImage } from "../components/avatar/avatar";
+import { Banner } from "../components/banner/banner";
 import { Button } from "../components/button/button";
 import { ButtonGroup } from "../components/button-group/button-group";
 import { Calendar } from "../components/calendar/calendar";
@@ -18,6 +20,7 @@ import {
 } from "../components/field/field";
 import { Fieldset } from "../components/fieldset/fieldset";
 import { FileUpload } from "../components/file-upload/file-upload";
+import { FloatingActionButton } from "../components/floating-action-button/floating-action-button";
 import { Form, FormMessage, FormSubmit } from "../components/form/form";
 import { Input } from "../components/input/input";
 import { InputOTP } from "../components/input-otp/input-otp";
@@ -34,6 +37,7 @@ import { Reasoning } from "../components/reasoning/reasoning";
 import { SearchField } from "../components/search-field/search-field";
 import { Select } from "../components/select/select";
 import { TagsInput } from "../components/tags-input/tags-input";
+import { Text } from "../components/text/text";
 import { TextField } from "../components/text-field/text-field";
 import { TimePicker } from "../components/time-picker/time-picker";
 
@@ -513,6 +517,31 @@ it("describes model rows and announces filtered counts", () => {
   );
   fireEvent.changeText(screen.getByLabelText("Search models"), "fast");
   expect(announceSpy).toHaveBeenLastCalledWith("1 models");
+});
+
+it("gives package text inside filled surfaces the paired foreground", () => {
+  renderThemed(
+    <>
+      <Banner variant="destructive">
+        <Text>Outage</Text>
+      </Banner>
+      <Banner variant="destructive">Degraded</Banner>
+      <FloatingActionButton accessibilityLabel="Create" onPress={jest.fn()}>
+        <Text>New</Text>
+      </FloatingActionButton>
+      <Text>Plain</Text>
+    </>,
+  );
+  for (const text of ["Outage", "Degraded"])
+    expect(screen.getByText(text)).toHaveStyle({
+      color: lightTheme.colors.destructiveForeground,
+    });
+  expect(screen.getByText("New", { includeHiddenElements: true })).toHaveStyle({
+    color: lightTheme.colors.primaryForeground,
+  });
+  expect(screen.getByText("Plain")).toHaveStyle({
+    color: lightTheme.colors.foreground,
+  });
 });
 
 it("hands group names and disabled state to the controls inside", () => {
