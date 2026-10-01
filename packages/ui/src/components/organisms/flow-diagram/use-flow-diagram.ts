@@ -127,14 +127,18 @@ function useCopyToClipboard(reactFlow: ReturnType<typeof useReactFlow>) {
   const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
+  const mounted = useRef(false);
 
   useEffect(() => {
+    mounted.current = true;
     return () => {
+      mounted.current = false;
       clearTimeout(resetTimer.current);
     };
   }, []);
 
   const showResult = useCallback((status: "error" | "success") => {
+    if (!mounted.current) return;
     setCopyStatus(status);
     clearTimeout(resetTimer.current);
     resetTimer.current = setTimeout(() => {

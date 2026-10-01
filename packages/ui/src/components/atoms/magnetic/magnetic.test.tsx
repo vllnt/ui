@@ -1,5 +1,7 @@
+import { Activity, StrictMode } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
 import { stubMatchMedia } from "../../../__tests__/stub-match-media";
@@ -37,6 +39,13 @@ function renderTarget(style?: React.CSSProperties) {
     .spyOn(target, "getBoundingClientRect")
     .mockReturnValue(bounds(0, 0, 100));
   return { layout, target, unmount };
+}
+
+function targetOf(container: HTMLElement): HTMLElement {
+  const target = container.firstChild;
+  if (!(target instanceof HTMLElement)) throw new Error("Expected element");
+  vi.spyOn(target, "getBoundingClientRect").mockReturnValue(bounds(0, 0, 100));
+  return target;
 }
 
 describe("Magnetic", () => {
@@ -116,5 +125,69 @@ describe("Magnetic pointer tracking", () => {
     unmount();
 
     expect(frames.pending()).toBe(0);
+  });
+});
+
+describe("Magnetic lifecycle", () => {
+  beforeEach(() => {
+    stubMatchMedia();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("keeps following the pointer under StrictMode", () => {
+    const frames = stubAnimationFrame();
+    const { container } = render(
+      <StrictMode>
+        <Magnetic>Pull me</Magnetic>
+      </StrictMode>,
+    );
+    const target = targetOf(container);
+
+    movePointer(target, 100, 0);
+    frames.flush();
+
+    expect(target.style.transform).toBe("translate(20px, -20px)");
+  });
+
+  it("resumes after an Activity hide/show cancels a pending frame", () => {
+    const frames = stubAnimationFrame();
+    const view = render(
+      <Activity mode="visible">
+        <Magnetic>Pull me</Magnetic>
+      </Activity>,
+    );
+    const target = targetOf(view.container);
+
+    movePointer(target, 100, 0);
+    view.rerender(
+      <Activity mode="hidden">
+        <Magnetic>Pull me</Magnetic>
+      </Activity>,
+    );
+    view.rerender(
+      <Activity mode="visible">
+        <Magnetic>Pull me</Magnetic>
+      </Activity>,
+    );
+    expect(frames.pending()).toBe(0);
+    movePointer(target, 100, 0);
+    frames.flush();
+
+    expect(target.style.transform).toBe("translate(20px, -20px)");
+  });
+
+  it("runs the cleanup returned by a callback ref", () => {
+    const cleanup = vi.fn();
+    const ref = vi.fn((_node: HTMLDivElement | null) => cleanup);
+    const { unmount } = render(<Magnetic ref={ref}>Pull me</Magnetic>);
+    expect(ref).toHaveBeenCalledWith(expect.any(HTMLDivElement));
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(ref).toHaveBeenCalledTimes(1);
   });
 });

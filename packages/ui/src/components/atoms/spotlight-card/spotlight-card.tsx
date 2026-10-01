@@ -31,6 +31,7 @@ export const SpotlightCard = ({
     return () => {
       if (frame.current !== null) {
         cancelAnimationFrame(frame.current);
+        frame.current = null;
       }
     };
   }, []);

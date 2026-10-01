@@ -1,5 +1,7 @@
+import { StrictMode } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
 import { stubMatchMedia } from "../../../__tests__/stub-match-media";
@@ -105,5 +107,34 @@ describe("Dock", () => {
     frames.flush();
 
     expect(icon.style.transform).toBe("rotate(5deg)");
+  });
+});
+
+describe("Dock lifecycle", () => {
+  beforeEach(() => {
+    stubMatchMedia();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("magnifies under StrictMode, where effects mount twice", () => {
+    const frames = stubAnimationFrame();
+    render(
+      <StrictMode>
+        <Dock data-testid="dock">
+          <DockIcon>Home</DockIcon>
+        </Dock>
+      </StrictMode>,
+    );
+    const icon = screen.getByText("Home");
+    vi.spyOn(icon, "getBoundingClientRect").mockReturnValue(iconBounds(100));
+    frames.flush();
+
+    movePointer(screen.getByTestId("dock"), 124);
+    frames.flush();
+
+    expect(icon.style.transform).toBe("scale(1.5)");
   });
 });

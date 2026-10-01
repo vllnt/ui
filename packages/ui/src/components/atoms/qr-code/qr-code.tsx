@@ -40,18 +40,21 @@ const ENCODING_CACHE_LIMIT = 32;
 const encodingCache = new Map<string, QrEncoding>();
 
 /**
- * Encodes `value` into its module count and SVG path. A small module-level
- * cache keyed on (level, margin, value) lets re-renders with the same inputs
- * skip the encoder. It keeps the latest {@link ENCODING_CACHE_LIMIT} encodings
- * and needs no client hooks.
+ * Encodes `value` into its module count and SVG path. In the browser, a small
+ * module-level cache keyed on (level, margin, value) lets re-renders with the
+ * same inputs skip the encoder. It keeps the latest
+ * {@link ENCODING_CACHE_LIMIT} encodings and needs no client hooks. The
+ * server path skips the cache, so a long-lived process never holds encoded
+ * values such as one-time-password secrets.
  */
 function encodeQrCode(
   value: string,
   level: QrCodeLevel,
   margin: number,
 ): QrEncoding {
+  const cacheable = typeof window !== "undefined";
   const key = `${level}|${margin}|${value}`;
-  const cached = encodingCache.get(key);
+  const cached = cacheable ? encodingCache.get(key) : undefined;
   if (cached) {
     return cached;
   }
@@ -61,6 +64,9 @@ function encodeQrCode(
     count: modules.size,
     path: buildPath(modules.data, modules.size, margin),
   };
+  if (!cacheable) {
+    return encoding;
+  }
   encodingCache.set(key, encoding);
   if (encodingCache.size > ENCODING_CACHE_LIMIT) {
     const oldest = encodingCache.keys().next().value;

@@ -1,3 +1,5 @@
+import { createRef } from "react";
+
 import { act, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -77,5 +79,33 @@ describe("Cursor", () => {
     unmount();
 
     expect(frames.pending()).toBe(0);
+  });
+});
+
+describe("Cursor ref", () => {
+  beforeEach(() => {
+    stubMatchMedia();
+  });
+
+  it("runs the cleanup returned by a callback ref", () => {
+    const cleanup = vi.fn();
+    const ref = vi.fn((_node: HTMLDivElement | null) => cleanup);
+    const { unmount } = render(<Cursor ref={ref} />);
+    expect(ref).toHaveBeenCalledWith(expect.any(HTMLDivElement));
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(ref).toHaveBeenCalledTimes(1);
+  });
+
+  it("clears an object ref on unmount", () => {
+    const ref = createRef<HTMLDivElement>();
+    const { unmount } = render(<Cursor ref={ref} />);
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+
+    unmount();
+
+    expect(ref.current).toBeNull();
   });
 });

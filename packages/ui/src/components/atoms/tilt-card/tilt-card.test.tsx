@@ -1,3 +1,5 @@
+import { Activity, StrictMode } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -37,6 +39,13 @@ function renderTarget(style?: React.CSSProperties) {
     .spyOn(target, "getBoundingClientRect")
     .mockReturnValue(bounds(0, 0, 100));
   return { layout, target, unmount };
+}
+
+function targetOf(container: HTMLElement): HTMLElement {
+  const target = container.firstChild;
+  if (!(target instanceof HTMLElement)) throw new Error("Expected element");
+  vi.spyOn(target, "getBoundingClientRect").mockReturnValue(bounds(0, 0, 100));
+  return target;
 }
 
 describe("TiltCard", () => {
@@ -123,5 +132,73 @@ describe("TiltCard pointer tracking", () => {
     unmount();
 
     expect(frames.pending()).toBe(0);
+  });
+});
+
+describe("TiltCard lifecycle", () => {
+  beforeEach(() => {
+    stubMatchMedia();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("keeps following the pointer under StrictMode", () => {
+    const frames = stubAnimationFrame();
+    const { container } = render(
+      <StrictMode>
+        <TiltCard>Hover me</TiltCard>
+      </StrictMode>,
+    );
+    const target = targetOf(container);
+
+    movePointer(target, 100, 0);
+    frames.flush();
+
+    expect(target.style.transform).toBe(
+      "perspective(800px) rotateX(12deg) rotateY(12deg)",
+    );
+  });
+
+  it("resumes after an Activity hide/show cancels a pending frame", () => {
+    const frames = stubAnimationFrame();
+    const view = render(
+      <Activity mode="visible">
+        <TiltCard>Hover me</TiltCard>
+      </Activity>,
+    );
+    const target = targetOf(view.container);
+
+    movePointer(target, 100, 0);
+    view.rerender(
+      <Activity mode="hidden">
+        <TiltCard>Hover me</TiltCard>
+      </Activity>,
+    );
+    view.rerender(
+      <Activity mode="visible">
+        <TiltCard>Hover me</TiltCard>
+      </Activity>,
+    );
+    expect(frames.pending()).toBe(0);
+    movePointer(target, 100, 0);
+    frames.flush();
+
+    expect(target.style.transform).toBe(
+      "perspective(800px) rotateX(12deg) rotateY(12deg)",
+    );
+  });
+
+  it("runs the cleanup returned by a callback ref", () => {
+    const cleanup = vi.fn();
+    const ref = vi.fn((_node: HTMLDivElement | null) => cleanup);
+    const { unmount } = render(<TiltCard ref={ref}>Hover me</TiltCard>);
+    expect(ref).toHaveBeenCalledWith(expect.any(HTMLDivElement));
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(ref).toHaveBeenCalledTimes(1);
   });
 });

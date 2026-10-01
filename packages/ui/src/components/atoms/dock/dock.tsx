@@ -113,6 +113,7 @@ function useDockMagnifier(): {
     return () => {
       if (frame.current !== null) {
         cancelAnimationFrame(frame.current);
+        frame.current = null;
       }
     };
   }, []);

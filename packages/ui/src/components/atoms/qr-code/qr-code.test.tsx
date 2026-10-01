@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import type * as QrModule from "qrcode";
+import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
 import { QrCode } from "./qr-code";
@@ -76,5 +77,18 @@ describe("QrCode encoding cache", () => {
     rerender(<QrCode level="H" value="https://cache.example/a" />);
     expect(encoder.calls).toBe(callsAfterFirstRender + 1);
     expect(pathOf(container)).not.toBe(firstPath);
+  });
+
+  it("does not cache encodings during server rendering", () => {
+    const value = "otpauth://totp/vllnt?secret=JBSWY3DPEHPK3PXP";
+    const callsBefore = encoder.calls;
+    vi.stubGlobal("window");
+    try {
+      renderToString(<QrCode value={value} />);
+      renderToString(<QrCode value={value} />);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect(encoder.calls).toBe(callsBefore + 2);
   });
 });

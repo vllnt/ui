@@ -82,13 +82,28 @@ export const Cursor = ({
   const visible = usePointerFollower(follower, style?.transform === undefined);
 
   const setReferences = React.useCallback(
-    (node: HTMLDivElement | null): void => {
+    (node: HTMLDivElement | null): (() => void) => {
       follower.current = node;
       if (typeof ref === "function") {
-        ref(node);
-      } else if (ref) {
+        const cleanup = ref(node);
+        return () => {
+          follower.current = null;
+          if (typeof cleanup === "function") {
+            cleanup();
+          } else {
+            ref(null);
+          }
+        };
+      }
+      if (ref) {
         ref.current = node;
       }
+      return () => {
+        follower.current = null;
+        if (ref) {
+          ref.current = null;
+        }
+      };
     },
     [ref],
   );

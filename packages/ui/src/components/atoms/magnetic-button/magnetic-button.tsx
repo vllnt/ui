@@ -39,30 +39,28 @@ function usePrefersReducedMotion(): boolean {
 
 type Point = { x: number; y: number };
 
-type PointerTransformOptions<T extends HTMLElement> = {
+type PointerTransformOptions = {
   /** Builds the `transform` for the latest pointer position. */
   compute: (pointer: Point, bounds: DOMRect) => string;
   /** False under reduced motion, which makes the hook skip pointer moves. */
   enabled: boolean;
   /** True when the consumer passed `style.transform`, which always wins. */
   keepTransform: boolean;
-  ref?: React.Ref<T>;
 };
 
 /**
  * Applies a pointer-driven `transform` at most once per animation frame by
  * writing the element's style directly, so pointer moves never re-render.
- * Leaving the element clears the transform.
+ * Leaving the element clears the transform. The element comes from the
+ * event, so the consumer's `ref` passes through untouched.
  */
 function usePointerTransform<T extends HTMLElement>({
   compute,
   enabled,
   keepTransform,
-  ref,
-}: PointerTransformOptions<T>): {
-  handlePointerLeave: () => void;
+}: PointerTransformOptions): {
+  handlePointerLeave: (event: React.PointerEvent<T>) => void;
   handlePointerMove: (event: React.PointerEvent<T>) => void;
-  setReferences: (node: null | T) => void;
 } {
   const element = React.useRef<null | T>(null);
   const pointer = React.useRef<Point>({ x: 0, y: 0 });
@@ -72,53 +70,45 @@ function usePointerTransform<T extends HTMLElement>({
     return () => {
       if (frame.current !== null) {
         cancelAnimationFrame(frame.current);
+        frame.current = null;
       }
+      element.current = null;
     };
   }, []);
 
-  const setReferences = React.useCallback(
-    (node: null | T): void => {
-      element.current = node;
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (ref) {
-        ref.current = node;
-      }
-    },
-    [ref],
-  );
-
-  const writeTransform = (transform: string): void => {
-    if (element.current && !keepTransform) {
-      element.current.style.transform = transform;
+  const writeTransform = (target: null | T, transform: string): void => {
+    if (target && !keepTransform) {
+      target.style.transform = transform;
     }
   };
 
   const applyFrame = (): void => {
     frame.current = null;
-    if (element.current) {
+    const target = element.current;
+    if (target) {
       writeTransform(
-        compute(pointer.current, element.current.getBoundingClientRect()),
+        target,
+        compute(pointer.current, target.getBoundingClientRect()),
       );
     }
   };
 
   return {
-    handlePointerLeave: () => {
+    handlePointerLeave: (event) => {
       if (frame.current !== null) {
         cancelAnimationFrame(frame.current);
         frame.current = null;
       }
-      writeTransform("");
+      writeTransform(event.currentTarget, "");
     },
     handlePointerMove: (event) => {
       if (!enabled) {
         return;
       }
+      element.current = event.currentTarget;
       pointer.current = { x: event.clientX, y: event.clientY };
       frame.current ??= requestAnimationFrame(applyFrame);
     },
-    setReferences,
   };
 }
 
@@ -141,7 +131,7 @@ export const MagneticButton = ({
   ...props
 }: MagneticButtonProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const reduced = usePrefersReducedMotion();
-  const { handlePointerLeave, handlePointerMove, setReferences } =
+  const { handlePointerLeave, handlePointerMove } =
     usePointerTransform<HTMLButtonElement>({
       compute: (pointer, bounds) => {
         const offsetX = (pointer.x - bounds.left - bounds.width / 2) * strength;
@@ -150,7 +140,6 @@ export const MagneticButton = ({
       },
       enabled: !reduced,
       keepTransform: style?.transform !== undefined,
-      ref,
     });
 
   return (
@@ -161,7 +150,7 @@ export const MagneticButton = ({
       )}
       onPointerLeave={handlePointerLeave}
       onPointerMove={handlePointerMove}
-      ref={setReferences}
+      ref={ref}
       style={style}
       type="button"
       {...props}

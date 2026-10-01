@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -279,6 +285,32 @@ describe("FlowDiagram", () => {
       }),
     );
     expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
+  });
+
+  it("starts no reset timer when a copy finishes after unmount", async () => {
+    const pendingWrite: { resolve?: () => void } = {};
+    flowRuntime.clipboardWrite.mockReturnValue(
+      new Promise<void>((resolve) => {
+        pendingWrite.resolve = resolve;
+      }),
+    );
+    const setTimer = vi.spyOn(globalThis, "setTimeout");
+    const { unmount } = render(
+      <FlowDiagram allowCopy edges={edges} nodes={nodes} />,
+    );
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+    await waitFor(() => {
+      expect(flowRuntime.clipboardWrite).toHaveBeenCalledTimes(1);
+    });
+    unmount();
+    await act(async () => {
+      pendingWrite.resolve?.();
+      await Promise.resolve();
+    });
+
+    expect(setTimer.mock.calls.some(([, delay]) => delay === 2000)).toBe(false);
+    setTimer.mockRestore();
   });
 
   it("clears the copy-status reset timer on unmount", async () => {
