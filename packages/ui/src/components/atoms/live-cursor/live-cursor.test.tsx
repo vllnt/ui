@@ -33,8 +33,10 @@ describe("LiveCursor", () => {
     expect(
       container.querySelector("[data-live-cursor-pointer]"),
     ).toHaveAttribute("fill", "#5b8def");
-    expect(container.querySelector("[data-live-cursor-chip]")).toHaveStyle({
-      "background-color": "#5b8def",
-    });
+    expect(
+      container.querySelector("[data-live-cursor-chip]")?.getAttribute("style"),
+    ).toMatch(
+      /color-mix\(in oklch, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+    );
   });
 });

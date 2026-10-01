@@ -27,7 +27,9 @@ describe("ThreadBubble", () => {
       container.querySelectorAll("[data-thread-bubble-message]"),
     ).toHaveLength(2);
     const author = container.querySelector("[data-thread-bubble-author]");
-    expect(author).toHaveStyle({ color: "#5b8def" });
+    expect(author?.getAttribute("style")).toMatch(
+      /color-mix\(in oklch, (#5b8def|rgb\(91, 141, 239\)) 50%, oklch\(var\(--foreground\)\)\)/,
+    );
     expect(screen.queryByText("Resolve")).not.toBeInTheDocument();
   });
 
