@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { joinAccessibilityText } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
@@ -88,6 +89,7 @@ function Stepper({
   ...props
 }: StepperProps) {
   const theme = useTheme();
+  const groupDisabled = useGroupDisabled(false);
   const [storedStep, setActiveStep] = useControllableState(
     currentStep === undefined
       ? {
@@ -113,7 +115,7 @@ function Stepper({
   const horizontal = orientation === "horizontal";
   const content = steps.map((step, index) => {
     const state = stateFor(index, activeStep);
-    const disabled = step.disabled === true;
+    const disabled = groupDisabled || step.disabled === true;
     return (
       <Pressable
         accessibilityHint={joinAccessibilityText([

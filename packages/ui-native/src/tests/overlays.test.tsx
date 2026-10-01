@@ -21,7 +21,7 @@ import { Toast, type ToastItem } from "../components/toast/toast";
 import { Tooltip } from "../components/tooltip/tooltip";
 import type { ShareService } from "../primitives/platform-services";
 
-import { advanceTimers } from "./test-utils";
+import { advanceTimers, flushMicrotasks } from "./test-utils";
 
 function ToastHarness({ initial }: { readonly initial: readonly ToastItem[] }) {
   const [toasts, setToasts] = useState(initial);
@@ -247,7 +247,7 @@ it("opens tooltip help explicitly by press and does not depend on hover", () => 
   fireEvent.press(screen.getByRole("button", { name: "Close help" }));
 });
 
-it("announces toast entries and removes them with deterministic timers", () => {
+it("announces toast entries and removes them with deterministic timers", async () => {
   jest.useFakeTimers();
   const announce = jest
     .spyOn(AccessibilityInfo, "announceForAccessibility")
@@ -264,6 +264,7 @@ it("announces toast entries and removes them with deterministic timers", () => {
       ]}
     />,
   );
+  await flushMicrotasks();
   expect(announce).toHaveBeenCalledWith("Saved. Your changes are stored.");
   expect(screen.getByText("Saved")).toBeOnTheScreen();
   advanceTimers(1000);

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -110,7 +111,7 @@ function buildMonthDays(month: Date): readonly (Date | undefined)[] {
  */
 function Calendar({
   describeDate,
-  disabled = false,
+  disabled: ownDisabled = false,
   isDateDisabled,
   isDateSelected,
   labels,
@@ -121,6 +122,7 @@ function Calendar({
   style,
   ...props
 }: CalendarProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedDate, setSelectedDate] = useControllableState(selection);
   const [internalMonth, setInternalMonth] = useState(() =>

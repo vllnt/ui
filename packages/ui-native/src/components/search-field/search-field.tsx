@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { focusAccessibility } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { useMergedReferences } from "../../primitives/merge-references";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
@@ -48,7 +49,7 @@ function SearchField({
   accessibilityLabel,
   clearLabel = "Clear search",
   defaultValue = "",
-  disabled = false,
+  disabled: ownDisabled = false,
   onValueChange,
   placeholder = "Search…",
   ref,
@@ -56,6 +57,7 @@ function SearchField({
   value,
   ...props
 }: SearchFieldProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const inputRef = useRef<null | TextInput>(null);
   const mergedRef = useMergedReferences(inputRef, ref);

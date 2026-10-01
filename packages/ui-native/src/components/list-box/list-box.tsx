@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
  * labels on non-focusable containers.
  */
 function ListBox({
-  disabled = false,
+  disabled: ownDisabled = false,
   label,
   mode = "single",
   options,
@@ -53,6 +54,7 @@ function ListBox({
   style,
   ...props
 }: ListBoxProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedIds, setSelectedIds] = useControllableState(selection);
   const getId = useMemo(() => (option: ListBoxOption) => option.id, []);

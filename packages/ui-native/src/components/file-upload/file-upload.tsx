@@ -15,6 +15,7 @@ import {
   focusAccessibility,
   useAnnounceOnChange,
 } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import type {
   FilePickerService,
   PickedFile,
@@ -82,7 +83,7 @@ function uniqueFiles(files: readonly PickedFile[]): readonly PickedFile[] {
  */
 function FileUpload({
   allowMultiple = true,
-  disabled = false,
+  disabled: ownDisabled = false,
   filePicker,
   files: fileState,
   labels,
@@ -91,6 +92,7 @@ function FileUpload({
   style,
   ...props
 }: FileUploadProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [files, setFiles] = useControllableState(fileState);
   const filesRef = useRef(files);

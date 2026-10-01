@@ -7,25 +7,41 @@ import {
   Text as NativeText,
 } from "react-native";
 
+import { AIChatInput } from "../components/ai-chat-input/ai-chat-input";
 import { Alert, AlertTitle } from "../components/alert/alert";
 import { Avatar, AvatarImage } from "../components/avatar/avatar";
 import { AvatarGroup } from "../components/avatar-group/avatar-group";
 import { Banner } from "../components/banner/banner";
 import { Button } from "../components/button/button";
+import { Calendar } from "../components/calendar/calendar";
+import { Carousel } from "../components/carousel/carousel";
 import { Checkbox } from "../components/checkbox/checkbox";
+import { ColorPicker } from "../components/color-picker/color-picker";
+import { CopyButton } from "../components/copy-button/copy-button";
 import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
 import { DataList } from "../components/data-list/data-list";
 import { Fieldset } from "../components/fieldset/fieldset";
+import { FileUpload } from "../components/file-upload/file-upload";
+import { InputOTP } from "../components/input-otp/input-otp";
 import { Item, ItemContent, ItemMedia } from "../components/item/item";
 import { Link } from "../components/link/link";
+import { ListBox } from "../components/list-box/list-box";
+import { PasswordInput } from "../components/password-input/password-input";
+import { PhoneInput } from "../components/phone-input/phone-input";
 import { ProgressCard } from "../components/progress-card/progress-card";
+import { PromptInput } from "../components/prompt-input/prompt-input";
 import {
   RadioGroup,
   RadioGroupItem,
 } from "../components/radio-group/radio-group";
+import { Rating } from "../components/rating/rating";
+import { SearchField } from "../components/search-field/search-field";
+import { SegmentedControl } from "../components/segmented-control/segmented-control";
 import { Select } from "../components/select/select";
+import { Stepper } from "../components/stepper/stepper";
 import { StickyMetric } from "../components/sticky-metric/sticky-metric";
 import { Switch } from "../components/switch/switch";
+import { TagGroup } from "../components/tag-group/tag-group";
 import { TagsInput } from "../components/tags-input/tags-input";
 import { Toast, type ToastItem } from "../components/toast/toast";
 import {
@@ -33,7 +49,7 @@ import {
   ToggleGroupItem,
 } from "../components/toggle-group/toggle-group";
 
-import { flushMicrotasks, renderThemed } from "./test-utils";
+import { flushMicrotasks, renderThemed, themed } from "./test-utils";
 
 type HostNode = {
   readonly props: Record<string, unknown>;
@@ -334,6 +350,201 @@ it("disables every package control inside a disabled fieldset", () => {
   expect(screen.getByRole("switch", { name: "Alerts" })).toBeDisabled();
   expect(screen.getByRole("button", { name: "Plan" })).toBeDisabled();
   expect(screen.getByRole("radio", { name: "Small" })).toBeDisabled();
+});
+
+it("disables the remaining form controls inside a disabled fieldset", () => {
+  const noop = jest.fn();
+  renderThemed(
+    <Fieldset disabled>
+      <SegmentedControl
+        items={[{ id: "grid", label: "Grid" }]}
+        label="Layout"
+        selection={{ defaultValue: "grid", mode: "uncontrolled" }}
+      />
+      <ListBox
+        label="Assignees"
+        options={[{ id: "ada", label: "Ada" }]}
+        selection={{ defaultValue: new Set<string>(), mode: "uncontrolled" }}
+      />
+      <ColorPicker
+        colors={[{ color: "#ff0000", id: "red", label: "Red" }]}
+        label="Accent"
+        selection={{ defaultValue: "red", mode: "uncontrolled" }}
+      />
+      <TagGroup
+        items={[{ id: "native", label: "Native" }]}
+        label="Platforms"
+        onRemove={noop}
+        removeLabel={(label) => `Remove ${label}`}
+        selection={{ defaultValue: new Set<string>(), mode: "uncontrolled" }}
+      />
+      <InputOTP
+        accessibilityLabel="Security code"
+        length={6}
+        valueState={{ defaultValue: "", mode: "uncontrolled" }}
+      />
+      <FileUpload
+        filePicker={{ pickFiles: async () => [] }}
+        files={{ defaultValue: [], mode: "uncontrolled" }}
+        labels={{
+          choose: "Choose files",
+          empty: "No files",
+          failed: "Failed",
+          remove: (name) => `Remove ${name}`,
+          unavailable: "Unavailable",
+        }}
+      />
+      <PromptInput
+        defaultValue="Draft"
+        inputLabel="Prompt"
+        onSubmit={noop}
+        submitLabel="Send prompt"
+      />
+      <AIChatInput
+        defaultValue="Hello"
+        inputLabel="Chat message"
+        onSubmit={noop}
+        submitLabel="Send chat"
+      />
+      <PhoneInput
+        accessibilityLabel="Phone"
+        country={{ code: "FI", dialCode: "+358", label: "Finland" }}
+        onPressCountry={noop}
+      />
+      <Calendar
+        labels={{
+          formatDayAccessibilityLabel: (date) => `Day ${date.getDate()}`,
+          formatMonth: () => "January",
+          formatWeekday: String,
+          nextMonth: "Next month",
+          previousMonth: "Previous month",
+        }}
+        month={new Date(2025, 0, 1)}
+        selection={{ defaultValue: undefined, mode: "uncontrolled" }}
+      />
+      <Rating
+        label="Score"
+        labels={{ option: (value) => `${value} stars`, value: String }}
+      />
+      <Stepper
+        labels={{ step: (step) => `Step ${step.title}`, stepper: "Steps" }}
+        onStepPress={noop}
+        steps={[{ id: "intro", title: "Intro" }]}
+      />
+      <CopyButton
+        clipboard={{ getText: async () => "", setText: async () => {} }}
+        value="code"
+      />
+      <PasswordInput accessibilityLabel="Password" value="secret" />
+      <SearchField accessibilityLabel="Filter" defaultValue="Ada" />
+    </Fieldset>,
+  );
+  for (const [role, name] of [
+    ["radio", "Grid"],
+    ["radio", "Ada"],
+    ["radio", "Red"],
+    ["togglebutton", "Native"],
+    ["button", "Remove Native"],
+    ["button", "Choose files"],
+    ["button", "Send prompt"],
+    ["button", "Send chat"],
+    ["button", "Choose country dialing code"],
+    ["button", "Next month"],
+    ["button", "Day 15"],
+    ["radio", "3 stars"],
+    ["button", "Step Intro"],
+    ["button", "Copy"],
+    ["button", "Show password"],
+    ["button", "Clear search"],
+  ] as const)
+    expect(screen.getByRole(role, { name })).toBeDisabled();
+  expect(screen.getByLabelText("Security code")).toHaveProp("editable", false);
+  expect(screen.getByLabelText("Security code")).toBeDisabled();
+});
+
+it("speaks a data list name as the first row's hint", () => {
+  renderThemed(
+    <>
+      <DataList
+        accessibilityLabel="Billing details"
+        items={[
+          { id: "plan", label: "Plan", value: "Pro" },
+          { id: "seats", label: "Seats", value: "4" },
+        ]}
+      />
+      <DataList
+        accessibilityLabel="Links"
+        items={[
+          {
+            id: "docs",
+            label: "Docs",
+            value: (
+              <Link href="https://example.com" linking={linking}>
+                Runbook
+              </Link>
+            ),
+          },
+        ]}
+      />
+    </>,
+  );
+  expect(screen.getByLabelText("Plan, Pro")).toHaveProp(
+    "accessibilityHint",
+    "Billing details",
+  );
+  expect(screen.getByLabelText("Seats, 4")).not.toHaveProp("accessibilityHint");
+  expect(screen.getByText("Docs")).toHaveProp("accessibilityHint", "Links");
+});
+
+it("forwards React 19 cleanup refs through merged refs exactly once", () => {
+  const cleanup = jest.fn();
+  const ref = jest.fn(() => cleanup);
+  const view = render(<SearchField accessibilityLabel="Filter" ref={ref} />, {
+    createNodeMock: () => ({ focus: jest.fn(), measure: jest.fn() }),
+  });
+  view.rerender(<SearchField accessibilityLabel="Filter" ref={ref} />);
+  view.rerender(<SearchField accessibilityLabel="Find" ref={ref} />);
+  expect(ref).toHaveBeenCalledTimes(1);
+  expect(cleanup).not.toHaveBeenCalled();
+  view.unmount();
+  expect(cleanup).toHaveBeenCalledTimes(1);
+  expect(ref).not.toHaveBeenCalledWith(null);
+});
+
+it("announces carousel slides only when the owner commits the change", async () => {
+  const labels = {
+    next: "Next",
+    position: (index: number, total: number) => `${index} of ${total}`,
+    previous: "Previous",
+    region: "Slides",
+  };
+  const items = [
+    { content: <NativeText>A</NativeText>, id: "a", label: "Alpha" },
+    { content: <NativeText>B</NativeText>, id: "b", label: "Beta" },
+  ];
+  const onChange = jest.fn();
+  const carousel = (selectedId: string, title: string) => (
+    <>
+      <NativeText>{title}</NativeText>
+      <Carousel
+        items={items}
+        labels={labels}
+        onSelectedIdChange={onChange}
+        selectedId={selectedId}
+      />
+    </>
+  );
+  const view = renderThemed(carousel("a", "one"));
+  fireEvent.press(screen.getByRole("button", { name: "Next" }));
+  expect(onChange).toHaveBeenCalledWith("b");
+  view.rerender(themed(carousel("a", "two")));
+  view.rerender(themed(carousel("b", "three")));
+  await flushMicrotasks();
+  expect(announceSpy).not.toHaveBeenCalled();
+  fireEvent.press(screen.getByRole("button", { name: "Previous" }));
+  view.rerender(themed(carousel("a", "three")));
+  await flushMicrotasks();
+  expect(announceSpy).toHaveBeenCalledWith("Alpha, 1 of 2");
 });
 
 function ToastHarness({ onEmpty }: { readonly onEmpty: () => void }) {

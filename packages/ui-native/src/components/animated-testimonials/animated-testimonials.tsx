@@ -180,7 +180,8 @@ function AnimatedTestimonials({
     testimonials.findIndex((item) => item.id === selection),
   );
   const active = testimonials[selectedIndex];
-  const spokenIndex = useRef<number | undefined>(undefined);
+  const requestedIndex = useRef<number | undefined>(undefined);
+  const committedIndex = useRef(selectedIndex);
   const move = useCallback(
     (step: number, spoken = false) => {
       if (testimonials.length === 0) return;
@@ -188,14 +189,17 @@ function AnimatedTestimonials({
         (selectedIndex + step + testimonials.length) % testimonials.length;
       const next = testimonials[nextIndex];
       if (spoken && nextIndex !== selectedIndex)
-        spokenIndex.current = nextIndex;
+        requestedIndex.current = nextIndex;
       if (next) setSelection(next.id);
     },
     [selectedIndex, setSelection, testimonials],
   );
   useEffect(() => {
-    if (spokenIndex.current !== selectedIndex || !active) return;
-    spokenIndex.current = undefined;
+    const changed = committedIndex.current !== selectedIndex;
+    const requested = requestedIndex.current;
+    committedIndex.current = selectedIndex;
+    requestedIndex.current = undefined;
+    if (!changed || requested !== selectedIndex || !active) return;
     announce(
       joinAccessibilityText(
         [
@@ -206,7 +210,7 @@ function AnimatedTestimonials({
         ", ",
       ),
     );
-  }, [active, labels, selectedIndex, testimonials.length]);
+  });
 
   useEffect(() => {
     if (!autoplay || autoplayPaused || reduceMotion || testimonials.length <= 1)

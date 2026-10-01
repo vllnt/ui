@@ -41,10 +41,12 @@ function DataRow({
   density,
   isLast,
   item,
+  listHint,
 }: {
   readonly density: DataListDensity;
   readonly isLast: boolean;
   readonly item: DataListItem;
+  readonly listHint?: string;
 }) {
   const theme = useTheme();
   const verticalPadding =
@@ -61,6 +63,7 @@ function DataRow({
       {...(spoken === undefined
         ? undefined
         : {
+            accessibilityHint: listHint,
             accessibilityLabel: spoken,
             accessibilityRole: "text" as const,
             accessible: true,
@@ -76,7 +79,12 @@ function DataRow({
         },
       ]}
     >
-      <Text size="small" tone="muted" weight="medium">
+      <Text
+        accessibilityHint={spoken === undefined ? listHint : undefined}
+        size="small"
+        tone="muted"
+        weight="medium"
+      >
         {item.label}
       </Text>
       <Text size="small">{item.value}</Text>
@@ -90,11 +98,12 @@ DataRow.displayName = "DataRow";
  * with an `accessibilityLabel`, or with plain-text label and value, is one
  * screen-reader stop that speaks "label, value"; rows with element content
  * (links, custom nodes) keep each part reachable on its own. VoiceOver ignores
- * names on non-focusable containers, so the list itself carries the list
- * role without a name; name it with a visible heading next to it.
+ * names on non-focusable containers, so the list keeps the list role and
+ * speaks its `accessibilityLabel` as the first row's hint; a visible
+ * heading next to the list names it for everyone.
  */
 function DataList({
-  accessibilityLabel: _accessibilityLabel,
+  accessibilityLabel,
   density = "default",
   emptyLabel = "No data available.",
   items,
@@ -120,7 +129,11 @@ function DataList({
     >
       {items.length === 0 ? (
         <View style={{ padding: theme.spacing[4] }}>
-          <Text size="small" tone="muted">
+          <Text
+            accessibilityHint={accessibilityLabel}
+            size="small"
+            tone="muted"
+          >
             {emptyLabel}
           </Text>
         </View>
@@ -131,6 +144,7 @@ function DataList({
             isLast={index === items.length - 1}
             item={item}
             key={item.id}
+            listHint={index === 0 ? accessibilityLabel : undefined}
           />
         ))
       )}

@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
  * non-focusable containers), and option text wraps at large font sizes.
  */
 function SegmentedControl({
-  disabled = false,
+  disabled: ownDisabled = false,
   items,
   label,
   ref,
@@ -54,6 +55,7 @@ function SegmentedControl({
   style,
   ...props
 }: SegmentedControlProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedId, setSelectedId] = useControllableState(selection);
   return (

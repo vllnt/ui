@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -42,13 +43,14 @@ const styles = StyleSheet.create({
  */
 function ColorPicker({
   colors,
-  disabled = false,
+  disabled: ownDisabled = false,
   label,
   ref,
   selection,
   style,
   ...props
 }: ColorPickerProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedId, setSelectedId] = useControllableState(selection);
   return (

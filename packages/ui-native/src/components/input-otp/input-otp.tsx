@@ -14,6 +14,7 @@ import {
   joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -58,6 +59,7 @@ function InputOTP({
   ...props
 }: InputOTPProps) {
   const theme = useTheme();
+  const locked = useGroupDisabled(props.editable === false);
   const [value, setValue] = useControllableState(valueState);
   const error = invalid ? errorText : undefined;
   useAnnounceOnChange(error, { liveRegion: true });
@@ -71,6 +73,8 @@ function InputOTP({
           accessibilityHint,
         ])}
         accessibilityLabel={accessibilityLabel}
+        accessibilityState={{ disabled: locked, ...props.accessibilityState }}
+        editable={!locked}
         inputMode="numeric"
         maxLength={length}
         onChangeText={(nextValue) => {
@@ -80,6 +84,7 @@ function InputOTP({
         style={[
           styles.input,
           theme.typography.scale.body,
+          locked ? { opacity: 0.5 } : undefined,
           {
             backgroundColor: theme.colors.background,
             borderColor: invalid

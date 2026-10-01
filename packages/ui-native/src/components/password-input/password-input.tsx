@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
@@ -37,13 +38,14 @@ const styles = StyleSheet.create({
 
 /** Native secure text input with an explicit show or hide action. */
 function PasswordInput({
-  disabled = false,
+  disabled: ownDisabled = false,
   hideLabel = "Hide password",
   ref,
   showLabel = "Show password",
   style,
   ...props
 }: PasswordInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [visible, setVisible] = useState(false);
   const [toggleWidth, setToggleWidth] = useState(72);

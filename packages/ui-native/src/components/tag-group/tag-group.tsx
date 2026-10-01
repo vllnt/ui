@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
  * because VoiceOver never reads a label on a non-focusable container.
  */
 function TagGroup({
-  disabled = false,
+  disabled: ownDisabled = false,
   items,
   label,
   onRemove,
@@ -59,6 +60,7 @@ function TagGroup({
   style,
   ...props
 }: TagGroupProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const fallbackSelection: ControllableStateOptions<ReadonlySet<string>> = {
     defaultValue: new Set<string>(),

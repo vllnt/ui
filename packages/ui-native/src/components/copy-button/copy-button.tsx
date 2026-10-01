@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import type { ClipboardService } from "../../primitives/platform-services";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
@@ -122,7 +123,7 @@ function CopyButton({
   accessibilityState,
   clipboard,
   copiedLabel = "Copied",
-  disabled = false,
+  disabled: ownDisabled = false,
   errorLabel = "Copy failed",
   label = "Copy",
   onPress,
@@ -134,6 +135,7 @@ function CopyButton({
   value,
   ...props
 }: CopyButtonProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const { copy, status } = useCopyToClipboard({ clipboard, timeout });
   const previousStatus = useRef(status);

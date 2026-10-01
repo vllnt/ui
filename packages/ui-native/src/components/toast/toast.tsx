@@ -3,7 +3,6 @@
 import { type Ref, useEffect, useLayoutEffect, useRef } from "react";
 
 import {
-  AccessibilityInfo,
   Pressable,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { announce } from "../../primitives/accessibility";
 import type { SelectionKey } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import { useScreenReaderEnabled } from "../../primitives/use-screen-reader-enabled";
@@ -141,12 +141,11 @@ function Toast({
     }
     for (const toast of toasts) {
       if (!announcedIds.current.has(toast.id)) {
-        if (typeof AccessibilityInfo.announceForAccessibility === "function")
-          AccessibilityInfo.announceForAccessibility(
-            toast.description
-              ? `${toast.title}. ${toast.description}`
-              : toast.title,
-          );
+        announce(
+          toast.description
+            ? `${toast.title}. ${toast.description}`
+            : toast.title,
+        );
         announcedIds.current.add(toast.id);
       }
       if (

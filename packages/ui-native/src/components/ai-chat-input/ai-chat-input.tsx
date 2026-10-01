@@ -16,6 +16,7 @@ import {
   joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -287,7 +288,7 @@ ComposerShell.displayName = "ComposerShell";
  */
 function AIChatInput({
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
   helperText,
   inputLabel,
   inputProps,
@@ -303,6 +304,7 @@ function AIChatInput({
   value,
   ...viewProps
 }: AIChatInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const stateProps = {
     defaultValue,

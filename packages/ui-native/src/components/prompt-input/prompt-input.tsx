@@ -13,6 +13,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
@@ -313,7 +314,7 @@ PromptFooter.displayName = "PromptFooter";
 /** Auto-growing native prompt composer with explicit return-key behavior. */
 function PromptInput({
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
   inputLabel,
   inputProps,
   isLoading = false,
@@ -330,6 +331,7 @@ function PromptInput({
   value,
   ...viewProps
 }: PromptInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const stateProps = {
     defaultValue,
     disabled,

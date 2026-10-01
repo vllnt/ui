@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -72,11 +73,12 @@ Form.displayName = "Form";
 /** Explicit 44-point action that invokes the nearest Form submission callback. */
 function FormSubmit({
   children,
-  disabled = false,
+  disabled: ownDisabled = false,
   ref,
   style,
   ...props
 }: FormSubmitProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const form = use(FormContext);
   if (!form) throw new Error("FormSubmit must be used within Form");

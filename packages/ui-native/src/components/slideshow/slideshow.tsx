@@ -365,17 +365,19 @@ function Slideshow({
   const currentIndex = foundIndex < 0 ? 0 : foundIndex;
   const current = sections[currentIndex];
   const headingRef = useRef<Text>(null);
-  const focusHeading = useRef(false);
+  const focusRequest = useRef<number | undefined>(undefined);
   const previousIndex = useRef(currentIndex);
   const position = labels.position(currentIndex + 1, sections.length);
   const spokenSection = joinAccessibilityText([current?.title, position], ", ");
   useEffect(() => {
-    if (previousIndex.current === currentIndex) return;
+    const changed = previousIndex.current !== currentIndex;
+    const requested = focusRequest.current;
     previousIndex.current = currentIndex;
-    if (focusHeading.current) focusAccessibility(headingRef);
+    focusRequest.current = undefined;
+    if (!changed) return;
+    if (requested === currentIndex) focusAccessibility(headingRef);
     else announce(spokenSection);
-    focusHeading.current = false;
-  }, [currentIndex, spokenSection]);
+  });
   const close = (reason: ModalLayerCloseReason) => {
     setVisible(false);
     onRequestClose?.(reason);
@@ -439,7 +441,10 @@ function Slideshow({
             labels={labels}
             onNavigate={(id) => {
               if (id === current.id) focusAccessibility(headingRef);
-              else focusHeading.current = true;
+              else
+                focusRequest.current = sections.findIndex(
+                  (section) => section.id === id,
+                );
               setSelection(id);
               setSectionsOpen(false);
             }}

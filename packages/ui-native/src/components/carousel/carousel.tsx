@@ -117,7 +117,8 @@ function Carousel({
   );
   const foundIndex = items.findIndex((item) => item.id === selection);
   const selectedIndex = foundIndex < 0 ? 0 : foundIndex;
-  const spokenIndex = useRef<number | undefined>(undefined);
+  const requestedIndex = useRef<number | undefined>(undefined);
+  const committedIndex = useRef(selectedIndex);
   const move = useCallback(
     (step: number, spoken = false) => {
       const index = targetIndex({
@@ -128,23 +129,26 @@ function Carousel({
       });
       const next = items[index];
       if (!next) return;
-      if (spoken && index !== selectedIndex) spokenIndex.current = index;
+      if (spoken && index !== selectedIndex) requestedIndex.current = index;
       setSelection(next.id);
     },
     [items, loop, selectedIndex, setSelection],
   );
 
   useEffect(() => {
+    const changed = committedIndex.current !== selectedIndex;
+    const requested = requestedIndex.current;
+    committedIndex.current = selectedIndex;
+    requestedIndex.current = undefined;
     const item = items[selectedIndex];
-    if (spokenIndex.current !== selectedIndex || !item) return;
-    spokenIndex.current = undefined;
+    if (!changed || requested !== selectedIndex || !item) return;
     announce(
       joinAccessibilityText(
         [item.label, labels.position(selectedIndex + 1, items.length)],
         ", ",
       ),
     );
-  }, [items, labels, selectedIndex]);
+  });
 
   useEffect(() => {
     if (width <= 0) return;
@@ -179,7 +183,7 @@ function Carousel({
           if (width <= 0) return;
           const index = Math.round(event.nativeEvent.contentOffset.x / width);
           const item = items[index];
-          if (item && index !== selectedIndex) spokenIndex.current = index;
+          if (item && index !== selectedIndex) requestedIndex.current = index;
           if (item) setSelection(item.id);
           if (selectedId !== undefined)
             setSwipeRevision((revision) => revision + 1);

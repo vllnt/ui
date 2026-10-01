@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -118,7 +119,7 @@ function Rating({
   labels,
   max = 5,
   onValueChange,
-  readOnly = false,
+  readOnly: ownReadOnly = false,
   ref,
   showValue = false,
   style,
@@ -126,6 +127,7 @@ function Rating({
   ...props
 }: RatingProps) {
   const theme = useTheme();
+  const readOnly = useGroupDisabled(ownReadOnly);
   const generatedId = useId();
   const safeMax = Number.isFinite(max)
     ? Math.min(MAX_OPTIONS, Math.max(1, Math.round(max)))
