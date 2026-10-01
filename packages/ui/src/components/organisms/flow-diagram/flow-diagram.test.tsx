@@ -33,6 +33,7 @@ const flowRuntime = vi.hoisted(() => {
     getNodesBounds: vi.fn(() => ({ height: 80, width: 120, x: 0, y: 0 })),
     getViewport: vi.fn(() => ({ x: 0, y: 0, zoom: 1 })),
     getViewportForBounds: vi.fn(() => ({ x: 10, y: 20, zoom: 1.25 })),
+    imageLibraryLoads: 0,
     toPng: vi.fn(() => Promise.resolve("data:image/png;base64,diagram")),
     zoomTo: vi.fn(() => Promise.resolve()),
   };
@@ -42,9 +43,10 @@ vi.mock("next-themes", () => ({
   useTheme: () => ({ resolvedTheme: "light" }),
 }));
 
-vi.mock("html-to-image", () => ({
-  toPng: flowRuntime.toPng,
-}));
+vi.mock("html-to-image", () => {
+  flowRuntime.imageLibraryLoads += 1;
+  return { toPng: flowRuntime.toPng };
+});
 
 vi.mock("@xyflow/react", () => ({
   Background: () => <div data-testid="flow-background" />,
@@ -145,6 +147,18 @@ describe("FlowDiagram", () => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     document.body.style.overflow = "";
+  });
+
+  it("loads html-to-image only when the diagram is copied", async () => {
+    render(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
+    expect(flowRuntime.imageLibraryLoads).toBe(0);
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+
+    await waitFor(() => {
+      expect(flowRuntime.clipboardWrite).toHaveBeenCalledTimes(1);
+    });
+    expect(flowRuntime.imageLibraryLoads).toBe(1);
   });
 
   it("renders title, canvas sizing, controls, and graph data", () => {

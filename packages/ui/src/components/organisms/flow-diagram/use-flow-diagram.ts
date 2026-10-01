@@ -7,7 +7,6 @@ import {
   getViewportForBounds,
   useReactFlow,
 } from "@xyflow/react";
-import { toPng } from "html-to-image";
 
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
@@ -103,6 +102,7 @@ async function captureFlowImage(
     throw new Error("Cannot copy: flow viewport element not found");
   }
 
+  const { toPng } = await import("html-to-image");
   const dataUrl = await toPng(flowElement, {
     backgroundColor: "white",
     height: IMAGE_HEIGHT,
