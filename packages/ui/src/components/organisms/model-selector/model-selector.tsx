@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ArrowUpDown, Filter } from "lucide-react";
 
@@ -154,6 +154,7 @@ type HandleModelSelectArguments = {
   handleClose: (nextOpen: boolean) => void;
   id: string;
   onSelectModel: (id: string) => void;
+  releaseGuardLater: (id: string) => void;
   selectionGuardReference: SelectionGuardReference;
 };
 
@@ -161,15 +162,13 @@ function handleModelSelect({
   handleClose,
   id,
   onSelectModel,
+  releaseGuardLater,
   selectionGuardReference,
 }: HandleModelSelectArguments) {
   if (selectionGuardReference.current === id) return;
   selectionGuardReference.current = id;
   onSelectModel(id);
-  setTimeout(() => {
-    if (selectionGuardReference.current === id)
-      selectionGuardReference.current = null;
-  }, 0);
+  releaseGuardLater(id);
   handleClose(false);
 }
 
@@ -234,6 +233,19 @@ function useModelSelectorState({
   const [sortBy, setSortBy] = useState<SortOption>("name");
   const [providerFilter, setProviderFilter] = useState<string>("all");
   const selectionGuardReference = useRef<null | string>(null);
+  const guardReleaseTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => {
+    return () => {
+      clearTimeout(guardReleaseTimer.current);
+    };
+  }, []);
+  const releaseGuardLater = (id: string) => {
+    clearTimeout(guardReleaseTimer.current);
+    guardReleaseTimer.current = setTimeout(() => {
+      if (selectionGuardReference.current === id)
+        selectionGuardReference.current = null;
+    }, 0);
+  };
   const providers = useMemo(() => getProviders(models), [models]);
   const filteredAndSortedModels = useFilteredModels({
     models,
@@ -253,6 +265,7 @@ function useModelSelectorState({
       handleClose,
       id,
       onSelectModel,
+      releaseGuardLater,
       selectionGuardReference,
     });
   };

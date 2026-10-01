@@ -3,7 +3,7 @@
 import { Check, Copy, Terminal as TerminalIcon } from "lucide-react";
 
 import { Button } from "../../atoms/button/button";
-import { useCopyToClipboard } from "../../molecules/copy-button/copy-button";
+import { useCopyToClipboard } from "../../molecules/copy-button/use-copy-to-clipboard";
 
 export type TerminalLine = {
   content: string;

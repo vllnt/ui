@@ -1,6 +1,8 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
+
 import { SearchBar } from "./search-bar";
 
 const mockReplace = vi.fn();
@@ -135,5 +137,30 @@ describe("SearchBar", () => {
 
     // No second emission — the effect must not loop on identity churn.
     expect(onSearch).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("SearchBar URL sync", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    mockSearchParameters = new URLSearchParams();
+  });
+
+  it("syncs an external URL change on the next frame and cancels it on unmount", () => {
+    const frames = stubAnimationFrame();
+    mockSearchParameters = new URLSearchParams("search=buttons");
+    const { rerender, unmount } = render(<SearchBar />);
+
+    mockSearchParameters = new URLSearchParams("search=cards");
+    rerender(<SearchBar />);
+    expect(frames.pending()).toBe(1);
+    frames.flush();
+    expect(screen.getByLabelText("Search posts...")).toHaveValue("cards");
+
+    mockSearchParameters = new URLSearchParams("search=forms");
+    rerender(<SearchBar />);
+    expect(frames.pending()).toBe(1);
+    unmount();
+    expect(frames.pending()).toBe(0);
   });
 });

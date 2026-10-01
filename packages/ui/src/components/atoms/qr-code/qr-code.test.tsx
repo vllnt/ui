@@ -1,7 +1,22 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import type * as QrModule from "qrcode";
+import { renderToString } from "react-dom/server";
+import { describe, expect, it, vi } from "vitest";
 
 import { QrCode } from "./qr-code";
+
+const encoder = vi.hoisted(() => ({ calls: 0 }));
+
+vi.mock("qrcode", async (importOriginal) => {
+  const actual = await importOriginal<typeof QrModule>();
+  return {
+    ...actual,
+    create: (...arguments_: Parameters<typeof actual.create>) => {
+      encoder.calls += 1;
+      return actual.create(...arguments_);
+    },
+  };
+});
 
 const pathOf = (container: HTMLElement) =>
   container.querySelector("path")?.getAttribute("d");
@@ -43,5 +58,37 @@ describe("QrCode", () => {
   it("renders an empty path for an empty value without throwing", () => {
     const { container } = render(<QrCode value="" />);
     expect(pathOf(container)).toBe("");
+  });
+});
+
+describe("QrCode encoding cache", () => {
+  it("reuses the encoding when re-rendered with the same inputs", () => {
+    const { container, rerender } = render(
+      <QrCode value="https://cache.example/a" />,
+    );
+    const firstPath = pathOf(container);
+    const callsAfterFirstRender = encoder.calls;
+
+    rerender(<QrCode className="framed" value="https://cache.example/a" />);
+    rerender(<QrCode size={200} value="https://cache.example/a" />);
+    expect(encoder.calls).toBe(callsAfterFirstRender);
+    expect(pathOf(container)).toBe(firstPath);
+
+    rerender(<QrCode level="H" value="https://cache.example/a" />);
+    expect(encoder.calls).toBe(callsAfterFirstRender + 1);
+    expect(pathOf(container)).not.toBe(firstPath);
+  });
+
+  it("does not cache encodings during server rendering", () => {
+    const value = "otpauth://totp/vllnt?secret=JBSWY3DPEHPK3PXP";
+    const callsBefore = encoder.calls;
+    vi.stubGlobal("window");
+    try {
+      renderToString(<QrCode value={value} />);
+      renderToString(<QrCode value={value} />);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect(encoder.calls).toBe(callsBefore + 2);
   });
 });

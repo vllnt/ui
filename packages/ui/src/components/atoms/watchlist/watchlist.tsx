@@ -23,13 +23,13 @@ export type WatchlistProps = {
   title?: string;
 } & React.HTMLAttributes<HTMLDivElement>;
 
+const PRICE_FORMATTER = new Intl.NumberFormat(undefined, {
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
+});
+
 function formatPrice(price: number | string): string {
-  return typeof price === "number"
-    ? price.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2,
-      })
-    : price;
+  return typeof price === "number" ? PRICE_FORMATTER.format(price) : price;
 }
 
 function WatchlistRow({ item }: { item: WatchlistItem }): React.JSX.Element {

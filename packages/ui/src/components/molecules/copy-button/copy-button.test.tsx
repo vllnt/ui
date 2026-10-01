@@ -79,6 +79,22 @@ describe("CopyButton", () => {
     });
   });
 
+  it("keeps the copied state for 2000 ms when no timeout is given", async () => {
+    render(<CopyButton value="x" />);
+    fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+    await screen.findByRole("button", { name: "Copied!" });
+    act(() => {
+      vi.advanceTimersByTime(1900);
+    });
+    expect(screen.getByRole("button", { name: "Copied!" })).toBeInTheDocument();
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
+    });
+  });
+
   it("respects preventDefault from a caller's onClick", async () => {
     const onClick = vi.fn((event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();

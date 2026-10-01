@@ -3,6 +3,13 @@ import { describe, expect, it, vi } from "vitest";
 
 import { mdxComponents, TutorialMDX } from "./tutorial-mdx";
 
+const compiler = vi.hoisted(() => ({ loaded: vi.fn() }));
+
+vi.mock("@mdx-js/mdx", async (importOriginal) => {
+  compiler.loaded();
+  return importOriginal();
+});
+
 vi.mock("../flow-diagram", () => ({
   FlowDiagram: ({ title }: { title?: string }) => (
     <div data-testid="mock-flow-diagram">{title ?? "Flow diagram"}</div>
@@ -35,6 +42,12 @@ describe("TutorialMDX", () => {
     expect(screen.getByText("Verify")).toBeInTheDocument();
   });
 
+  it("does not load the MDX compiler for plain markdown", () => {
+    render(<TutorialMDX content={"## Plain\n\nNo components here."} />);
+    expect(screen.getByRole("heading", { name: "Plain" })).toBeInTheDocument();
+    expect(compiler.loaded).not.toHaveBeenCalled();
+  });
+
   it("does not treat JSX-like text inside fenced code as MDX", () => {
     const { container } = render(
       <TutorialMDX content={"```tsx\n<Callout>Example</Callout>\n```"} />,
@@ -53,6 +66,7 @@ describe("TutorialMDX", () => {
     });
     expect(await screen.findByRole("alert")).toHaveTextContent("Heads up");
     expect(screen.getByText("Remember the flow.")).toBeInTheDocument();
+    expect(compiler.loaded).toHaveBeenCalledTimes(1);
   });
 
   it("renders the lazy FlowDiagram mapping from MDX content", async () => {

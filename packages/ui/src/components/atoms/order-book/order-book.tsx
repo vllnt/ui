@@ -28,11 +28,18 @@ function withCumulativeTotal(levels: OrderBookLevel[]) {
   });
 }
 
-function formatNumber(value: number, precision = 2) {
-  return value.toLocaleString(undefined, {
-    maximumFractionDigits: precision,
-    minimumFractionDigits: precision,
-  });
+const numberFormatters = new Map<number, Intl.NumberFormat>();
+
+function formatNumber(value: number, precision = 2): string {
+  let formatter = numberFormatters.get(precision);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(undefined, {
+      maximumFractionDigits: precision,
+      minimumFractionDigits: precision,
+    });
+    numberFormatters.set(precision, formatter);
+  }
+  return formatter.format(value);
 }
 
 function BookSide({

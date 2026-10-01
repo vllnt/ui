@@ -29,3 +29,13 @@ describe("OrderBook", () => {
     expect(container).toBeEmptyDOMElement();
   });
 });
+
+describe("OrderBook number formatting", () => {
+  it("formats prices and sizes with their precision on every row", () => {
+    render(<OrderBook asks={asks} bids={bids} precision={2} />);
+    expect(screen.getByText("185.24")).toBeInTheDocument();
+    expect(screen.getAllByText("4.200")).toHaveLength(2);
+    expect(screen.getByText("185.03")).toBeInTheDocument();
+    expect(screen.getByText("21.700")).toBeInTheDocument();
+  });
+});

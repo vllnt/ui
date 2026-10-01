@@ -14,7 +14,7 @@ import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
-import { useCopyToClipboard } from "../../molecules/copy-button/copy-button";
+import { useCopyToClipboard } from "../../molecules/copy-button/use-copy-to-clipboard";
 
 type PrismStyle = SyntaxHighlighterProps["style"];
 
@@ -69,9 +69,10 @@ export function CodeBlock({
   showLanguage = false,
 }: CodeBlockProps) {
   const { copied, copy } = useCopyToClipboard();
-  // react-syntax-highlighter (~10MB) is dynamic-imported on mount so the
-  // @vllnt/ui barrel's static graph never reaches it — barrel consumers that
-  // never render a CodeBlock ship zero bytes of it. Null until the chunk loads.
+  // The Prism build and the two themes in use are dynamic-imported on mount,
+  // by deep path rather than the package root (which also pulls highlight.js
+  // and every theme), so the @vllnt/ui barrel's static graph never reaches
+  // them. Null until the chunks load.
   const [highlighter, setHighlighter] = useState<LoadedHighlighter | null>(
     null,
   );
@@ -86,14 +87,15 @@ export function CodeBlock({
   useEffect(() => {
     let active = true;
     void Promise.all([
-      import("react-syntax-highlighter"),
-      import("react-syntax-highlighter/dist/esm/styles/prism"),
-    ]).then(([module_, styles]) => {
+      import("react-syntax-highlighter/dist/esm/prism"),
+      import("react-syntax-highlighter/dist/esm/styles/prism/one-dark"),
+      import("react-syntax-highlighter/dist/esm/styles/prism/one-light"),
+    ]).then(([prism, oneDark, oneLight]) => {
       if (!active) return;
       setHighlighter({
-        oneDark: styles.oneDark,
-        oneLight: styles.oneLight,
-        SyntaxHighlighter: module_.Prism,
+        oneDark: oneDark.default,
+        oneLight: oneLight.default,
+        SyntaxHighlighter: prism.default,
       });
     });
     return () => {

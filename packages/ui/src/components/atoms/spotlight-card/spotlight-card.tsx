@@ -23,20 +23,49 @@ export const SpotlightCard = ({
   ref,
   ...props
 }: SpotlightCardProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [point, setPoint] = React.useState<Point | undefined>();
+  const spotlight = React.useRef<HTMLSpanElement>(null);
+  const pointer = React.useRef<Point>({ x: 0, y: 0 });
+  const frame = React.useRef<null | number>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (frame.current !== null) {
+        cancelAnimationFrame(frame.current);
+        frame.current = null;
+      }
+    };
+  }, []);
+
+  const moveSpotlight = (): void => {
+    frame.current = null;
+    const node = spotlight.current;
+    if (!node?.parentElement) {
+      return;
+    }
+
+    const bounds = node.parentElement.getBoundingClientRect();
+    const x = pointer.current.x - bounds.left;
+    const y = pointer.current.y - bounds.top;
+    node.style.background = `radial-gradient(180px circle at ${x}px ${y}px, oklch(var(--foreground) / 0.10), transparent 65%)`;
+    node.style.opacity = "1";
+  };
 
   const handlePointerMove = (
     event: React.PointerEvent<HTMLDivElement>,
   ): void => {
-    const bounds = event.currentTarget.getBoundingClientRect();
-    setPoint({
-      x: event.clientX - bounds.left,
-      y: event.clientY - bounds.top,
-    });
+    pointer.current = { x: event.clientX, y: event.clientY };
+    frame.current ??= requestAnimationFrame(moveSpotlight);
   };
 
   const handlePointerLeave = (): void => {
-    setPoint(undefined);
+    if (frame.current !== null) {
+      cancelAnimationFrame(frame.current);
+      frame.current = null;
+    }
+    if (spotlight.current) {
+      spotlight.current.style.background = "";
+      spotlight.current.style.opacity = "0";
+    }
   };
 
   return (
@@ -53,12 +82,8 @@ export const SpotlightCard = ({
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-        style={{
-          background: point
-            ? `radial-gradient(180px circle at ${point.x}px ${point.y}px, oklch(var(--foreground) / 0.10), transparent 65%)`
-            : undefined,
-          opacity: point ? 1 : 0,
-        }}
+        ref={spotlight}
+        style={{ opacity: 0 }}
       />
       <div className="relative z-10">{children}</div>
     </div>

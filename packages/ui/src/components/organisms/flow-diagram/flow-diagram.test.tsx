@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -33,6 +39,7 @@ const flowRuntime = vi.hoisted(() => {
     getNodesBounds: vi.fn(() => ({ height: 80, width: 120, x: 0, y: 0 })),
     getViewport: vi.fn(() => ({ x: 0, y: 0, zoom: 1 })),
     getViewportForBounds: vi.fn(() => ({ x: 10, y: 20, zoom: 1.25 })),
+    imageLibraryLoads: 0,
     toPng: vi.fn(() => Promise.resolve("data:image/png;base64,diagram")),
     zoomTo: vi.fn(() => Promise.resolve()),
   };
@@ -42,9 +49,10 @@ vi.mock("next-themes", () => ({
   useTheme: () => ({ resolvedTheme: "light" }),
 }));
 
-vi.mock("html-to-image", () => ({
-  toPng: flowRuntime.toPng,
-}));
+vi.mock("html-to-image", () => {
+  flowRuntime.imageLibraryLoads += 1;
+  return { toPng: flowRuntime.toPng };
+});
 
 vi.mock("@xyflow/react", () => ({
   Background: () => <div data-testid="flow-background" />,
@@ -145,6 +153,18 @@ describe("FlowDiagram", () => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     document.body.style.overflow = "";
+  });
+
+  it("loads html-to-image only when the diagram is copied", async () => {
+    render(<FlowDiagram allowCopy edges={edges} nodes={nodes} />);
+    expect(flowRuntime.imageLibraryLoads).toBe(0);
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+
+    await waitFor(() => {
+      expect(flowRuntime.clipboardWrite).toHaveBeenCalledTimes(1);
+    });
+    expect(flowRuntime.imageLibraryLoads).toBe(1);
   });
 
   it("renders title, canvas sizing, controls, and graph data", () => {
@@ -265,5 +285,52 @@ describe("FlowDiagram", () => {
       }),
     );
     expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
+  });
+
+  it("starts no reset timer when a copy finishes after unmount", async () => {
+    const pendingWrite: { resolve?: () => void } = {};
+    flowRuntime.clipboardWrite.mockReturnValue(
+      new Promise<void>((resolve) => {
+        pendingWrite.resolve = resolve;
+      }),
+    );
+    const setTimer = vi.spyOn(globalThis, "setTimeout");
+    const { unmount } = render(
+      <FlowDiagram allowCopy edges={edges} nodes={nodes} />,
+    );
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+    await waitFor(() => {
+      expect(flowRuntime.clipboardWrite).toHaveBeenCalledTimes(1);
+    });
+    unmount();
+    await act(async () => {
+      pendingWrite.resolve?.();
+      await Promise.resolve();
+    });
+
+    expect(setTimer.mock.calls.some(([, delay]) => delay === 2000)).toBe(false);
+    setTimer.mockRestore();
+  });
+
+  it("clears the copy-status reset timer on unmount", async () => {
+    const setTimer = vi.spyOn(globalThis, "setTimeout");
+    const clearTimer = vi.spyOn(globalThis, "clearTimeout");
+    const { unmount } = render(
+      <FlowDiagram allowCopy edges={edges} nodes={nodes} />,
+    );
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+    await screen.findByLabelText("Copied!");
+    const resetCall = setTimer.mock.calls.findIndex(
+      ([, delay]) => delay === 2000,
+    );
+    const resetTimer = setTimer.mock.results[resetCall]?.value;
+    unmount();
+
+    expect(resetTimer).toBeDefined();
+    expect(clearTimer).toHaveBeenCalledWith(resetTimer);
+    setTimer.mockRestore();
+    clearTimer.mockRestore();
   });
 });

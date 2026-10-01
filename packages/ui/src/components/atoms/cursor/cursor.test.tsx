@@ -1,23 +1,111 @@
-import { act, render } from "@testing-library/react";
-import { expect, it } from "vitest";
+import { createRef } from "react";
 
+import { act, render } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
 import { stubMatchMedia } from "../../../__tests__/stub-match-media";
 
 import { Cursor } from "./cursor";
 
-it("Cursor renders with a custom class name and follows pointermove", () => {
-  stubMatchMedia();
-  const { container } = render(<Cursor className="custom-class" />);
-  expect(container.firstChild).toHaveClass("custom-class");
-  const event = new Event("pointermove");
-  Object.defineProperty(event, "clientX", { value: 120 });
-  Object.defineProperty(event, "clientY", { value: 80 });
+function movePointer(clientX: number, clientY: number): void {
   act(() => {
-    window.dispatchEvent(event);
+    window.dispatchEvent(
+      new MouseEvent("pointermove", { bubbles: true, clientX, clientY }),
+    );
   });
+}
+
+function follower(container: HTMLElement): HTMLElement {
   const element = container.firstChild;
-  expect(element).toBeInstanceOf(HTMLElement);
-  if (element instanceof HTMLElement) {
-    expect(element.style.transform).toContain("120px");
-  }
+  if (!(element instanceof HTMLElement)) throw new Error("Expected follower");
+  return element;
+}
+
+describe("Cursor", () => {
+  beforeEach(() => {
+    stubMatchMedia();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("renders with a custom class name and follows pointermove", () => {
+    const frames = stubAnimationFrame();
+    const { container } = render(<Cursor className="custom-class" />);
+    const element = follower(container);
+    expect(element).toHaveClass("custom-class", "opacity-0");
+
+    movePointer(120, 80);
+    frames.flush();
+
+    expect(element.style.transform).toBe(
+      "translate(120px, 80px) translate(-50%, -50%)",
+    );
+    expect(element).toHaveClass("opacity-100");
+  });
+
+  it("moves the follower once per frame, to the latest pointer position", () => {
+    const frames = stubAnimationFrame();
+    const { container } = render(<Cursor />);
+
+    movePointer(10, 10);
+    movePointer(20, 20);
+    movePointer(30, 40);
+    expect(frames.pending()).toBe(1);
+    frames.flush();
+
+    expect(follower(container).style.transform).toBe(
+      "translate(30px, 40px) translate(-50%, -50%)",
+    );
+  });
+
+  it("keeps a transform passed through style", () => {
+    const frames = stubAnimationFrame();
+    const { container } = render(<Cursor style={{ transform: "none" }} />);
+
+    movePointer(120, 80);
+    frames.flush();
+
+    expect(follower(container).style.transform).toBe("none");
+  });
+
+  it("cancels a pending frame on unmount", () => {
+    const frames = stubAnimationFrame();
+    const { unmount } = render(<Cursor />);
+    movePointer(120, 80);
+
+    unmount();
+
+    expect(frames.pending()).toBe(0);
+  });
+});
+
+describe("Cursor ref", () => {
+  beforeEach(() => {
+    stubMatchMedia();
+  });
+
+  it("runs the cleanup returned by a callback ref", () => {
+    const cleanup = vi.fn();
+    const ref = vi.fn((_node: HTMLDivElement | null) => cleanup);
+    const { unmount } = render(<Cursor ref={ref} />);
+    expect(ref).toHaveBeenCalledWith(expect.any(HTMLDivElement));
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(ref).toHaveBeenCalledTimes(1);
+  });
+
+  it("clears an object ref on unmount", () => {
+    const ref = createRef<HTMLDivElement>();
+    const { unmount } = render(<Cursor ref={ref} />);
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+
+    unmount();
+
+    expect(ref.current).toBeNull();
+  });
 });

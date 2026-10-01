@@ -97,3 +97,40 @@ describe("Slideshow", () => {
     expect(props.onExit).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("Slideshow navigation timer", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    document.body.style.overflow = "";
+  });
+
+  it("keeps the latest navigation when the user clicks again during the transition", () => {
+    const { props } = renderSlideshow({
+      completedSections: new Set(["intro", "setup", "finish"]),
+      currentIndex: 1,
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    fireEvent.click(screen.getByRole("button", { name: /prev/i }));
+    advanceNavigationTimer();
+
+    expect(props.onNavigate).toHaveBeenCalledTimes(1);
+    expect(props.onNavigate).toHaveBeenCalledWith(0);
+  });
+
+  it("drops a pending navigation when the slideshow unmounts", () => {
+    const { props, view } = renderSlideshow({
+      completedSections: new Set(["intro"]),
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /next/i }));
+    view.unmount();
+    advanceNavigationTimer();
+
+    expect(props.onNavigate).not.toHaveBeenCalled();
+  });
+});

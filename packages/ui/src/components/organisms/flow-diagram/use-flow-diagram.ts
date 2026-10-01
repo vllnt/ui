@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   getNodesBounds,
   getViewportForBounds,
   useReactFlow,
 } from "@xyflow/react";
-import { toPng } from "html-to-image";
 
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
@@ -103,6 +102,7 @@ async function captureFlowImage(
     throw new Error("Cannot copy: flow viewport element not found");
   }
 
+  const { toPng } = await import("html-to-image");
   const dataUrl = await toPng(flowElement, {
     backgroundColor: "white",
     height: IMAGE_HEIGHT,
@@ -124,8 +124,30 @@ async function captureFlowImage(
 
 function useCopyToClipboard(reactFlow: ReturnType<typeof useReactFlow>) {
   const [copyStatus, setCopyStatus] = useState<CopyStatus>("idle");
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      clearTimeout(resetTimer.current);
+    };
+  }, []);
+
+  const showResult = useCallback((status: "error" | "success") => {
+    if (!mounted.current) return;
+    setCopyStatus(status);
+    clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => {
+      setCopyStatus("idle");
+    }, COPY_SUCCESS_DURATION);
+  }, []);
 
   const copyToClipboard = useCallback(async () => {
+    clearTimeout(resetTimer.current);
     setCopyStatus("copying");
 
     try {
@@ -133,18 +155,12 @@ function useCopyToClipboard(reactFlow: ReturnType<typeof useReactFlow>) {
       const clipboardItem = new ClipboardItem({ ["image/png"]: blob });
       await navigator.clipboard.write([clipboardItem]);
 
-      setCopyStatus("success");
-      setTimeout(() => {
-        setCopyStatus("idle");
-      }, COPY_SUCCESS_DURATION);
+      showResult("success");
     } catch (error) {
       console.error("[FlowDiagram] Copy failed:", error);
-      setCopyStatus("error");
-      setTimeout(() => {
-        setCopyStatus("idle");
-      }, COPY_SUCCESS_DURATION);
+      showResult("error");
     }
-  }, [reactFlow]);
+  }, [reactFlow, showResult]);
 
   return { copyStatus, copyToClipboard };
 }

@@ -121,11 +121,13 @@ export const Reasoning = ({
   const contentId = useId();
 
   useEffect(() => {
-    if (isStreaming) {
-      requestAnimationFrame(() => {
-        setIsOpen(true);
-      });
-    }
+    if (!isStreaming) return;
+    const frame = requestAnimationFrame(() => {
+      setIsOpen(true);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [isStreaming]);
 
   const handleToggle = useCallback(() => {
