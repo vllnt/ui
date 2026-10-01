@@ -96,8 +96,6 @@ function AlertDialog({
       visible={visible}
     >
       <View
-        accessibilityLabel={title}
-        accessibilityRole="alert"
         style={[
           styles.surface,
           {

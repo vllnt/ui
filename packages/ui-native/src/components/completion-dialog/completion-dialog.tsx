@@ -62,7 +62,11 @@ const styles = StyleSheet.create({
   surface: { alignSelf: "center", borderWidth: 1, maxWidth: 480, width: "92%" },
 });
 
-/** Native modal handling Android back and accessibility escape through ModalLayer. */
+/**
+ * Native modal handling Android back and accessibility escape through
+ * ModalLayer. Screen readers meet the title header first; the pinned close
+ * button follows it in reading order.
+ */
 function CompletionDialog({
   cancelLabel,
   closeLabel,
@@ -107,7 +111,6 @@ function CompletionDialog({
     >
       <View
         {...surfaceProps}
-        accessibilityLabel={title}
         style={[
           styles.surface,
           {
@@ -121,6 +124,15 @@ function CompletionDialog({
           surfaceProps?.style,
         ]}
       >
+        <Text
+          accessibilityRole="header"
+          style={typeStyle(theme, "bodyLarge", {
+            color: "foreground",
+            fontWeight: theme.typography.fontWeight.heading,
+          })}
+        >
+          {title}
+        </Text>
         <Pressable
           accessibilityLabel={closeLabel}
           accessibilityRole="button"
@@ -133,15 +145,6 @@ function CompletionDialog({
             ×
           </Text>
         </Pressable>
-        <Text
-          accessibilityRole="header"
-          style={typeStyle(theme, "bodyLarge", {
-            color: "foreground",
-            fontWeight: theme.typography.fontWeight.heading,
-          })}
-        >
-          {title}
-        </Text>
         {typeof description === "string" || typeof description === "number" ? (
           <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {description}

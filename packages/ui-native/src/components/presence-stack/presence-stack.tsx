@@ -1,6 +1,7 @@
 import type { Ref } from "react";
 import { Pressable, StyleSheet, View, type ViewProps } from "react-native";
 
+import { joinAccessibilityText } from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -19,6 +20,8 @@ export type PresenceUser = {
 export type PresenceStackLabels = {
   readonly overflowSuffix?: string;
   readonly region?: string;
+  /** Spoken status words. Default to the status keys ("active", "away", ...). */
+  readonly statuses?: Readonly<Partial<Record<PresenceStatus, string>>>;
 };
 
 /** Props for a native live presence stack. */
@@ -49,6 +52,8 @@ const styles = StyleSheet.create({
   root: { alignItems: "center", flexDirection: "row" },
 });
 
+const overflowHitSlop = 6;
+
 function PresenceAvatar({
   index,
   total,
@@ -69,8 +74,6 @@ function PresenceAvatar({
 
   return (
     <View
-      accessibilityLabel={`${user.name}, ${status}`}
-      accessible
       style={[
         styles.avatar,
         {
@@ -116,7 +119,6 @@ function OverflowContent({ count }: { readonly count: number }) {
           backgroundColor: theme.colors.muted,
           borderColor: theme.colors.background,
           borderRadius: theme.radius.full,
-          marginLeft: -theme.spacing[2],
           paddingHorizontal: theme.spacing[1],
         },
       ]}
@@ -138,26 +140,35 @@ function PresenceOverflow({
   readonly label: string;
   readonly onPress?: () => void;
 }) {
+  const theme = useTheme();
+  const overlap = { marginLeft: -theme.spacing[2] };
   if (onPress) {
     return (
       <Pressable
         accessibilityLabel={label}
         accessibilityRole="button"
+        hitSlop={overflowHitSlop}
         onPress={onPress}
+        style={overlap}
       >
         <OverflowContent count={count} />
       </Pressable>
     );
   }
   return (
-    <View accessibilityLabel={label} accessible>
+    <View style={overlap}>
       <OverflowContent count={count} />
     </View>
   );
 }
 PresenceOverflow.displayName = "PresenceOverflow";
 
-/** Native live-presence avatars with textual accessibility status. */
+/**
+ * Native live-presence avatars with textual accessibility status. The avatars
+ * form one screen-reader stop that speaks the region label, every name with
+ * its status, and (when not actionable) the overflow count; an actionable
+ * overflow stays a separate button with a 44-point touch area.
+ */
 function PresenceStack({
   labels,
   max = 5,
@@ -171,24 +182,33 @@ function PresenceStack({
   const hidden = Math.max(0, users.length - visible.length);
   const regionLabel = labels?.region ?? "Live presence";
   const overflowLabel = `${hidden} ${labels?.overflowSuffix ?? "more"}`;
-
+  const groupLabel = joinAccessibilityText(
+    [
+      regionLabel,
+      ...visible.map((user) => {
+        const status = user.status ?? "active";
+        return `${user.name}, ${labels?.statuses?.[status] ?? status}`;
+      }),
+      hidden > 0 && !onOverflowPress ? overflowLabel : undefined,
+    ],
+    "; ",
+  );
   return (
-    <View
-      {...props}
-      accessibilityLabel={regionLabel}
-      accessibilityRole="none"
-      ref={ref}
-      style={[styles.root, style]}
-    >
-      {visible.map((user, index) => (
-        <PresenceAvatar
-          index={index}
-          key={user.id}
-          total={visible.length}
-          user={user}
-        />
-      ))}
-      {hidden > 0 ? (
+    <View {...props} ref={ref} style={[styles.root, style]}>
+      <View accessibilityLabel={groupLabel} accessible style={styles.root}>
+        {visible.map((user, index) => (
+          <PresenceAvatar
+            index={index}
+            key={user.id}
+            total={visible.length}
+            user={user}
+          />
+        ))}
+        {hidden > 0 && !onOverflowPress ? (
+          <PresenceOverflow count={hidden} label={overflowLabel} />
+        ) : null}
+      </View>
+      {hidden > 0 && onOverflowPress ? (
         <PresenceOverflow
           count={hidden}
           label={overflowLabel}

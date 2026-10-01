@@ -9,6 +9,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  decorativeProps,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../badge/badge";
 import { Text } from "../text/text";
@@ -16,11 +20,22 @@ import { Text } from "../text/text";
 /** Execution state for a native AI tool call. */
 export type AIToolCallStatus = "complete" | "error" | "queued" | "running";
 
+/** Localized section and status text; defaults keep the previous English output. */
+export type AIToolCallDisplayLabels = {
+  /** Input section title. Defaults to "Tool input". */
+  readonly input?: string;
+  /** Output section title. Defaults to "Tool output". */
+  readonly output?: string;
+  /** Visible and spoken status names. Defaults to the status value. */
+  readonly status?: Partial<Record<AIToolCallStatus, string>>;
+};
+
 /** Props for a native AI tool call display. */
 export type AIToolCallDisplayProps = Omit<ViewProps, "children"> & {
   readonly description?: string;
   readonly duration?: string;
   readonly input?: string;
+  readonly labels?: AIToolCallDisplayLabels;
   readonly output?: string;
   readonly ref?: Ref<View>;
   readonly status?: AIToolCallStatus;
@@ -94,7 +109,7 @@ function ToolSection({ defaultExpanded, label, value }: ToolSectionProps) {
           {label}
         </Text>
         <NativeText
-          accessibilityElementsHidden
+          {...decorativeProps}
           style={{ color: theme.colors.mutedForeground }}
         >
           {isExpanded ? "−" : "+"}
@@ -121,11 +136,16 @@ function ToolSection({ defaultExpanded, label, value }: ToolSectionProps) {
 }
 ToolSection.displayName = "ToolSection";
 
-/** Native tool execution summary with expandable plain-text payloads. */
+/**
+ * Native tool execution summary with expandable plain-text payloads. It
+ * announces each status transition (queued, running, complete, error) with the
+ * tool name.
+ */
 function AIToolCallDisplay({
   description,
   duration,
   input,
+  labels,
   output,
   ref,
   status = "queued",
@@ -135,6 +155,8 @@ function AIToolCallDisplay({
 }: AIToolCallDisplayProps) {
   const theme = useTheme();
   const defaultExpanded = status !== "complete";
+  const statusLabel = labels?.status?.[status] ?? status;
+  useAnnounceOnChange(`${toolName}, ${statusLabel}`);
 
   return (
     <View
@@ -163,20 +185,20 @@ function AIToolCallDisplay({
               {duration}
             </Text>
           ) : null}
-          <Badge variant={statusVariants[status]}>{status}</Badge>
+          <Badge variant={statusVariants[status]}>{statusLabel}</Badge>
         </View>
       </View>
       {input ? (
         <ToolSection
           defaultExpanded={defaultExpanded}
-          label="Tool input"
+          label={labels?.input ?? "Tool input"}
           value={input}
         />
       ) : null}
       {output ? (
         <ToolSection
           defaultExpanded={defaultExpanded}
-          label="Tool output"
+          label={labels?.output ?? "Tool output"}
           value={output}
         />
       ) : null}

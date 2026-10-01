@@ -10,6 +10,8 @@ import {
   type View,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import type { ClipboardService } from "../../primitives/platform-services";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
@@ -112,12 +114,16 @@ function useCopyToClipboard({
   return { copy, reset, status };
 }
 
-/** Native copy button requiring an injected clipboard adapter to operate. */
+/**
+ * Native copy button requiring an injected clipboard adapter to operate. The
+ * copied and failed states are spoken on both platforms (TalkBack through the
+ * label's live region, iOS through an announcement).
+ */
 function CopyButton({
   accessibilityState,
   clipboard,
   copiedLabel = "Copied",
-  disabled = false,
+  disabled: ownDisabled = false,
   errorLabel = "Copy failed",
   label = "Copy",
   onPress,
@@ -129,6 +135,7 @@ function CopyButton({
   value,
   ...props
 }: CopyButtonProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const { copy, status } = useCopyToClipboard({ clipboard, timeout });
   const previousStatus = useRef(status);
@@ -142,6 +149,11 @@ function CopyButton({
         : unavailable
           ? unavailableLabel
           : label;
+
+  useAnnounceOnChange(
+    status === "copied" || status === "error" ? currentLabel : undefined,
+    { liveRegion: true },
+  );
 
   useEffect(() => {
     if (previousStatus.current !== status) {

@@ -13,6 +13,10 @@ import {
 } from "react-native";
 
 import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
+import {
   isSingleSelected,
   toggleMultipleSelected,
 } from "../../primitives/selection";
@@ -21,6 +25,7 @@ import {
   controllableOptions,
   useControllableState,
 } from "../../primitives/use-controllable-state";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Caller-identified timeline lane. */
@@ -48,8 +53,11 @@ export type InteractiveTimelineEvent = {
 
 /** Localized labels for native timeline controls. */
 export type InteractiveTimelineLabels = {
+  /** Timeline name, spoken as the zoom buttons' hint. */
   readonly region: string;
   readonly zoomIn: string;
+  /** Zoom level announced after it changes. Defaults to "Zoom <n>x". */
+  readonly zoomLevel?: (zoom: number) => string;
   readonly zoomOut: string;
 };
 
@@ -87,7 +95,12 @@ type TimelineLaneProps = {
 };
 
 const styles = StyleSheet.create({
-  category: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  category: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 44,
+    minWidth: 44,
+  },
   categoryRow: { flexDirection: "row" },
   event: {
     justifyContent: "center",
@@ -95,8 +108,8 @@ const styles = StyleSheet.create({
     minWidth: 44,
     position: "absolute",
   },
-  lane: { borderTopWidth: 1, height: 64, position: "relative" },
-  laneLabel: { left: 0, position: "absolute", top: 0, zIndex: 1 },
+  events: { position: "relative" },
+  lane: { borderTopWidth: 1, minHeight: 64 },
   root: { borderWidth: 1, overflow: "hidden" },
   toolbar: { alignItems: "center", flexDirection: "row" },
   zoom: {
@@ -144,15 +157,15 @@ function TimelineLane({
   width,
 }: TimelineLaneProps) {
   const theme = useTheme();
+  const eventHeight = Math.max(
+    44,
+    useFontScaledSize(theme.typography.scale.caption.lineHeight),
+  );
   return (
-    <View
-      accessibilityLabel={track.label}
-      style={[styles.lane, { borderTopColor: theme.colors.border, width }]}
-    >
+    <View style={[styles.lane, { borderTopColor: theme.colors.border, width }]}>
       <Text
-        numberOfLines={1}
+        accessibilityRole="header"
         style={[
-          styles.laneLabel,
           theme.typography.scale.caption,
           {
             backgroundColor: theme.colors.background,
@@ -163,56 +176,69 @@ function TimelineLane({
       >
         {track.label}
       </Text>
-      {events.map((event) => {
-        const geometry = eventGeometry(event, start, end);
-        const eventWidth = Math.max(44, geometry.width * width);
-        const selected = isSingleSelected(
-          selectedId,
-          event,
-          (candidate) => candidate.id,
-        );
-        return (
-          <Pressable
-            accessibilityLabel={`${event.title}, ${formatDate(event.startDate)}`}
-            accessibilityRole="button"
-            accessibilityState={{ selected }}
-            key={event.id}
-            onPress={() => {
-              onSelect(event);
-            }}
-            style={({ pressed }) => [
-              styles.event,
-              {
-                backgroundColor: selected
-                  ? theme.colors.primary
-                  : theme.colors.accent,
-                borderColor: selected ? theme.colors.ring : theme.colors.border,
-                borderRadius: theme.radius.sm,
-                borderWidth: 1,
-                left: Math.max(
-                  0,
-                  Math.min(geometry.left * width, width - eventWidth),
-                ),
-                opacity: pressed ? 0.8 : 1,
-                paddingHorizontal: theme.spacing[2],
-                top: theme.spacing[4],
-                width: eventWidth,
-              },
-            ]}
-          >
-            <Text
-              numberOfLines={1}
-              style={typeStyle(
-                theme,
-                "caption",
-                selected ? "primaryForeground" : "accentForeground",
+      <View style={[styles.events, { height: eventHeight + theme.spacing[2] }]}>
+        {events.map((event) => {
+          const geometry = eventGeometry(event, start, end);
+          const eventWidth = Math.max(44, geometry.width * width);
+          const selected = isSingleSelected(
+            selectedId,
+            event,
+            (candidate) => candidate.id,
+          );
+          return (
+            <Pressable
+              accessibilityHint={event.description}
+              accessibilityLabel={joinAccessibilityText(
+                [
+                  event.title,
+                  event.endDate
+                    ? `${formatDate(event.startDate)} – ${formatDate(event.endDate)}`
+                    : formatDate(event.startDate),
+                ],
+                ", ",
               )}
+              accessibilityRole="button"
+              accessibilityState={{ selected }}
+              key={event.id}
+              onPress={() => {
+                onSelect(event);
+              }}
+              style={({ pressed }) => [
+                styles.event,
+                {
+                  backgroundColor: selected
+                    ? theme.colors.primary
+                    : theme.colors.accent,
+                  borderColor: selected
+                    ? theme.colors.ring
+                    : theme.colors.border,
+                  borderRadius: theme.radius.sm,
+                  borderWidth: 1,
+                  left: Math.max(
+                    0,
+                    Math.min(geometry.left * width, width - eventWidth),
+                  ),
+                  opacity: pressed ? 0.8 : 1,
+                  paddingHorizontal: theme.spacing[2],
+                  top: 0,
+                  width: eventWidth,
+                },
+              ]}
             >
-              {event.title}
-            </Text>
-          </Pressable>
-        );
-      })}
+              <Text
+                numberOfLines={1}
+                style={typeStyle(
+                  theme,
+                  "caption",
+                  selected ? "primaryForeground" : "accentForeground",
+                )}
+              >
+                {event.title}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -221,6 +247,8 @@ TimelineLane.displayName = "TimelineLane";
 /**
  * Horizontally scrollable native timeline with filter, selection, and zoom
  * state. Pinch and browser-style pointer panning are intentionally not claimed.
+ * Lane names are headers, events speak their date range and description, and
+ * zoom changes are announced.
  */
 function InteractiveTimeline({
   categories = [],
@@ -283,6 +311,10 @@ function InteractiveTimeline({
     [onEventPress, setSelection],
   );
   const contentWidth = layoutWidth * clampedZoom(scale);
+  const zoomLevel = clampedZoom(scale);
+  useAnnounceOnChange(
+    labels.zoomLevel ? labels.zoomLevel(zoomLevel) : `Zoom ${zoomLevel}x`,
+  );
   const visibleEvents = events.filter(
     (event) =>
       event.categoryId === undefined || visible.includes(event.categoryId),
@@ -291,7 +323,6 @@ function InteractiveTimeline({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.region}
       onLayout={(event) => {
         setLayoutWidth(Math.max(1, event.nativeEvent.layout.width));
         props.onLayout?.(event);
@@ -314,6 +345,7 @@ function InteractiveTimeline({
         ]}
       >
         <Pressable
+          accessibilityHint={labels.region}
           accessibilityLabel={labels.zoomOut}
           accessibilityRole="button"
           accessibilityState={{ disabled: scale <= 1 }}
@@ -326,6 +358,7 @@ function InteractiveTimeline({
           <Text style={{ color: theme.colors.foreground }}>−</Text>
         </Pressable>
         <Pressable
+          accessibilityHint={labels.region}
           accessibilityLabel={labels.zoomIn}
           accessibilityRole="button"
           accessibilityState={{ disabled: scale >= 8 }}

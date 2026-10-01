@@ -15,7 +15,11 @@ const styles = StyleSheet.create({
   vertical: { height: "100%", width: 1 },
 });
 
-/** Token-driven divider, decorative by default. */
+/**
+ * Token-driven divider, decorative by default. A non-decorative separator
+ * needs an `accessibilityLabel` to become a screen-reader stop, so it never
+ * adds an unnamed stop.
+ */
 function Separator({
   decorative = true,
   orientation = "horizontal",
@@ -24,12 +28,16 @@ function Separator({
   ...props
 }: SeparatorProps) {
   const theme = useTheme();
+  const exposed =
+    !decorative &&
+    props.accessibilityLabel !== undefined &&
+    props.accessibilityLabel !== "";
   return (
     <View
       {...props}
-      accessible={!decorative}
+      accessible={exposed}
       ref={ref}
-      role={decorative ? undefined : "separator"}
+      role={exposed ? "separator" : undefined}
       style={[
         orientation === "horizontal" ? styles.horizontal : styles.vertical,
         { backgroundColor: theme.colors.border },

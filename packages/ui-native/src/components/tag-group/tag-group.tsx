@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -43,9 +44,13 @@ const styles = StyleSheet.create({
   root: { flexDirection: "row", flexWrap: "wrap" },
 });
 
-/** Native tags supporting stable-ID selection and explicit removal. */
+/**
+ * Native tags supporting stable-ID selection and explicit removal. Selectable
+ * tags are toggle buttons; the group `label` is spoken as each tag's hint
+ * because VoiceOver never reads a label on a non-focusable container.
+ */
 function TagGroup({
-  disabled = false,
+  disabled: ownDisabled = false,
   items,
   label,
   onRemove,
@@ -55,6 +60,7 @@ function TagGroup({
   style,
   ...props
 }: TagGroupProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const fallbackSelection: ControllableStateOptions<ReadonlySet<string>> = {
     defaultValue: new Set<string>(),
@@ -66,7 +72,6 @@ function TagGroup({
   const getId = (item: TagGroupItem) => item.id;
   return (
     <View
-      accessibilityLabel={label}
       ref={ref}
       style={[styles.root, { gap: theme.spacing[2] }, style]}
       {...props}
@@ -93,9 +98,13 @@ function TagGroup({
           >
             {selection ? (
               <Pressable
+                accessibilityHint={label}
                 accessibilityLabel={item.label}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: itemDisabled, selected }}
+                accessibilityRole="togglebutton"
+                accessibilityState={{
+                  checked: selected,
+                  disabled: itemDisabled,
+                }}
                 disabled={itemDisabled}
                 onPress={() => {
                   setSelectedIds(
@@ -116,7 +125,10 @@ function TagGroup({
               </Pressable>
             ) : (
               <View style={[styles.action, { paddingLeft: theme.spacing[3] }]}>
-                <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+                <NativeText
+                  accessibilityHint={label}
+                  style={typeStyle(theme, "bodySmall", "foreground")}
+                >
                   {item.label}
                 </NativeText>
               </View>

@@ -3,6 +3,7 @@
 import type { ReactNode, Ref } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -76,7 +77,6 @@ function Drawer({
       visible={visible}
     >
       <View
-        accessibilityLabel={title}
         style={[
           styles.surface,
           {
@@ -90,7 +90,7 @@ function Drawer({
         ]}
       >
         <View
-          accessible={false}
+          {...decorativeProps}
           style={[
             styles.handle,
             {

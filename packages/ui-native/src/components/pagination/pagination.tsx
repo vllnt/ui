@@ -16,6 +16,9 @@ import { Text } from "../text/text";
 
 /** Localizable labels for native pagination. */
 export type PaginationLabels = {
+  /** Spoken value of the current page button. Defaults to "current page". */
+  readonly currentPage?: string;
+  /** Spoken as every button's hint. Defaults to "Pagination". */
   readonly navigation?: string;
   readonly next?: string;
   readonly page?: (page: number) => string;
@@ -46,7 +49,11 @@ const styles = StyleSheet.create({
   row: { alignItems: "center", flexDirection: "row", justifyContent: "center" },
 });
 
-/** Native pagination exposing current, disabled, button, and link semantics. */
+/**
+ * Native pagination exposing current, disabled, button, and link semantics.
+ * Page buttons speak `labels.page` (for example "Page 2"); the current page
+ * adds `labels.currentPage` as its value.
+ */
 function Pagination({
   currentPage,
   getHref,
@@ -77,7 +84,8 @@ function Pagination({
     (_, index) => start + index,
   );
   const resolved = {
-    navigation: labels?.navigation ?? "Pagination",
+    currentPage: labels?.currentPage ?? "current page",
+    navigation: props.accessibilityLabel ?? labels?.navigation ?? "Pagination",
     next: labels?.next ?? "Next page",
     page: labels?.page ?? ((page: number) => `Page ${page}`),
     previous: labels?.previous ?? "Previous page",
@@ -98,11 +106,13 @@ function Pagination({
     current: boolean,
   ) => (
     <Pressable
+      accessibilityHint={resolved.navigation}
       accessibilityLabel={
-        current ? `${resolved.page(page)}, current page` : content
+        content === String(page) ? resolved.page(page) : content
       }
       accessibilityRole={getHref ? "link" : "button"}
       accessibilityState={{ disabled, selected: current }}
+      accessibilityValue={current ? { text: resolved.currentPage } : undefined}
       disabled={disabled}
       key={`${content}-${page}`}
       onPress={() => {
@@ -141,7 +151,7 @@ function Pagination({
   return (
     <View
       {...props}
-      accessibilityLabel={props.accessibilityLabel ?? resolved.navigation}
+      accessibilityLabel={undefined}
       accessibilityRole="none"
       ref={ref}
       style={style}

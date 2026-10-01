@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -23,14 +24,22 @@ export type SliderProps = Omit<
   | "onResponderMove"
   | "onStartShouldSetResponder"
 > & {
+  /** Screen-reader name of the decrement action. Defaults to "Decrease". */
+  readonly decrementLabel?: string;
   readonly defaultValue?: number;
   readonly disabled?: boolean;
+  /** Screen-reader name of the increment action. Defaults to "Increase". */
+  readonly incrementLabel?: string;
   readonly max?: number;
   readonly min?: number;
   readonly onValueChange?: (value: number) => void;
   readonly ref?: Ref<View>;
   readonly step?: number;
   readonly value?: number;
+  /**
+   * Spoken value. Defaults to the number itself so iOS does not read the
+   * position as a percentage of the range.
+   */
   readonly valueText?: string;
 };
 
@@ -63,8 +72,10 @@ function normalizeValue(
  */
 function Slider({
   accessibilityState,
+  decrementLabel = "Decrease",
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
+  incrementLabel = "Increase",
   max = 100,
   min = 0,
   onValueChange,
@@ -75,6 +86,7 @@ function Slider({
   valueText,
   ...props
 }: SliderProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const upperBound = Math.max(min, max);
   const initialValue = normalizeValue(
@@ -123,8 +135,8 @@ function Slider({
     <View
       {...props}
       accessibilityActions={[
-        { label: "Decrease", name: "decrement" },
-        { label: "Increase", name: "increment" },
+        { label: decrementLabel, name: "decrement" },
+        { label: incrementLabel, name: "increment" },
       ]}
       accessibilityRole="adjustable"
       accessibilityState={{ ...accessibilityState, disabled }}
@@ -132,7 +144,7 @@ function Slider({
         max: upperBound,
         min,
         now: currentValue,
-        text: valueText,
+        text: valueText ?? String(currentValue),
       }}
       accessible
       onAccessibilityAction={handleAccessibilityAction}

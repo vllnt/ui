@@ -7,6 +7,10 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import {
+  decorativeProps,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
@@ -15,10 +19,17 @@ import { Text } from "../text/text";
 /** Speaker role controlling the native message surface. */
 export type AIMessageRole = "assistant" | "system" | "tool" | "user";
 
+/** Localized speaker names spoken when a message has no `author`. */
+export type AIMessageBubbleLabels = {
+  readonly roles?: Partial<Record<AIMessageRole, string>>;
+};
+
 /** Props for a native AI conversation message. */
 export type AIMessageBubbleProps = Omit<ViewProps, "children"> & {
   readonly author?: string;
   readonly children: ReactNode;
+  /** Speaker names; English defaults: Assistant, You, System, Tool. */
+  readonly labels?: AIMessageBubbleLabels;
   readonly messageRole?: AIMessageRole;
   readonly ref?: Ref<View>;
   readonly status?: string;
@@ -51,11 +62,26 @@ function resolveBubbleStyle(
   return { backgroundColor: colors.accent, borderColor: colors.border };
 }
 
-function MessageAvatar({ label }: { readonly label: string }) {
+const defaultRoleLabels: Readonly<Record<AIMessageRole, string>> = {
+  assistant: "Assistant",
+  system: "System",
+  tool: "Tool",
+  user: "You",
+};
+
+function MessageAvatar({
+  label,
+  speaker,
+}: {
+  readonly label: string;
+  readonly speaker?: string;
+}) {
   const theme = useTheme();
   return (
     <View
-      accessibilityElementsHidden
+      {...(speaker === undefined
+        ? decorativeProps
+        : { accessibilityLabel: speaker, accessible: true })}
       style={[
         styles.avatar,
         {
@@ -103,10 +129,15 @@ function MessageMeta({
 }
 MessageMeta.displayName = "MessageMeta";
 
-/** Native message bubble preserving assistant, user, system, and tool roles. */
+/**
+ * Native message bubble preserving assistant, user, system, and tool roles.
+ * Without an `author`, the avatar speaks the localized speaker role, so
+ * screen-reader users hear who sent the message; it announces status changes.
+ */
 function AIMessageBubble({
   author,
   children,
+  labels,
   messageRole = "assistant",
   ref,
   status,
@@ -117,6 +148,7 @@ function AIMessageBubble({
   const theme = useTheme();
   const isUser = messageRole === "user";
   const fallbackLabel = (author ?? messageRole).charAt(0).toUpperCase();
+  useAnnounceOnChange(status);
 
   return (
     <View style={styles.wrapper}>
@@ -127,7 +159,14 @@ function AIMessageBubble({
           { gap: theme.spacing[3] },
         ]}
       >
-        <MessageAvatar label={fallbackLabel} />
+        <MessageAvatar
+          label={fallbackLabel}
+          speaker={
+            author
+              ? undefined
+              : (labels?.roles?.[messageRole] ?? defaultRoleLabels[messageRole])
+          }
+        />
 
         <View
           style={[

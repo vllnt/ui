@@ -10,6 +10,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -69,11 +73,28 @@ function ReasoningTrigger({
   onPress,
 }: TriggerProps) {
   const theme = useTheme();
+  const status = isStreaming ? labels.reasoning : labels.reasoned;
+  useAnnounceOnChange(status);
   return (
     <Pressable
       accessibilityLabel={isOpen ? labels.collapse : labels.expand}
       accessibilityRole="button"
-      accessibilityState={{ disabled: isStreaming, expanded: isOpen }}
+      accessibilityState={{
+        busy: isStreaming,
+        disabled: isStreaming,
+        expanded: isOpen,
+      }}
+      accessibilityValue={{
+        text: joinAccessibilityText(
+          [
+            status,
+            typeof duration === "string" || typeof duration === "number"
+              ? String(duration)
+              : undefined,
+          ],
+          ", ",
+        ),
+      }}
       disabled={isStreaming}
       onPress={onPress}
       style={({ pressed }) => [
@@ -91,7 +112,7 @@ function ReasoningTrigger({
           }),
         ]}
       >
-        {isStreaming ? labels.reasoning : labels.reasoned}
+        {status}
       </Text>
       {typeof duration === "string" || typeof duration === "number" ? (
         <Text style={typeStyle(theme, "caption", "mutedForeground")}>

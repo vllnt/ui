@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import { typeStyle } from "../../primitives/type-style";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 import { Button } from "../button/button";
 import { Heading } from "../heading/heading";
@@ -20,6 +21,8 @@ export type ContentIntroSection = {
 
 /** Localizable labels for ContentIntro. */
 export type ContentIntroLabels = {
+  /** Spoken value of a completed section row. Defaults to "completed". */
+  readonly completedSection?: string;
   readonly continueLabel?: string;
   readonly startLabel?: string;
   readonly tableOfContentsLabel?: string;
@@ -41,6 +44,7 @@ export type ContentIntroProps = Omit<ViewProps, "children"> & {
 };
 
 const defaultLabels: Required<ContentIntroLabels> = {
+  completedSection: "completed",
   continueLabel: "Continue Tutorial",
   startLabel: "Start Tutorial",
   tableOfContentsLabel: "Table of Contents",
@@ -54,6 +58,7 @@ const styles = StyleSheet.create({
 });
 
 type SectionListProps = {
+  readonly completedLabel: string;
   readonly completedSections: ReadonlySet<string>;
   readonly isLoading: boolean;
   readonly label: string;
@@ -69,6 +74,7 @@ function SectionMarker({
   readonly index: number;
 }) {
   const theme = useTheme();
+  const size = useFontScaledSize(theme.spacing[6]);
   return (
     <View
       style={[
@@ -78,8 +84,8 @@ function SectionMarker({
             ? theme.colors.primary
             : theme.colors.muted,
           borderRadius: theme.radius.full,
-          height: theme.spacing[6],
-          width: theme.spacing[6],
+          height: size,
+          width: size,
         },
       ]}
     >
@@ -97,12 +103,16 @@ function SectionMarker({
 SectionMarker.displayName = "SectionMarker";
 
 function ContentIntroSectionRow({
+  busy,
   completed,
+  completedLabel,
   index,
   onPress,
   section,
 }: {
+  readonly busy: boolean;
   readonly completed: boolean;
+  readonly completedLabel: string;
   readonly index: number;
   readonly onPress: () => void;
   readonly section: ContentIntroSection;
@@ -112,7 +122,8 @@ function ContentIntroSectionRow({
     <Pressable
       accessibilityLabel={section.title}
       accessibilityRole="button"
-      accessibilityState={{ selected: completed }}
+      accessibilityState={{ busy }}
+      accessibilityValue={completed ? { text: completedLabel } : undefined}
       onPress={onPress}
       style={({ pressed }) => [
         styles.sectionButton,
@@ -146,6 +157,7 @@ function ContentIntroSectionRow({
 ContentIntroSectionRow.displayName = "ContentIntroSectionRow";
 
 function ContentIntroSections({
+  completedLabel,
   completedSections,
   isLoading,
   label,
@@ -167,7 +179,9 @@ function ContentIntroSections({
       </Heading>
       {sections.map((section, index) => (
         <ContentIntroSectionRow
+          busy={isLoading}
           completed={!isLoading && completedSections.has(section.id)}
+          completedLabel={completedLabel}
           index={index}
           key={section.id}
           onPress={() => {
@@ -238,6 +252,8 @@ function ContentIntro({
 }: ContentIntroProps) {
   const theme = useTheme();
   const resolvedLabels: Required<ContentIntroLabels> = {
+    completedSection:
+      labels?.completedSection ?? defaultLabels.completedSection,
     continueLabel: labels?.continueLabel ?? defaultLabels.continueLabel,
     startLabel: labels?.startLabel ?? defaultLabels.startLabel,
     tableOfContentsLabel:
@@ -263,6 +279,7 @@ function ContentIntro({
         {renderIntroContent()}
       </View>
       <ContentIntroSections
+        completedLabel={resolvedLabels.completedSection}
         completedSections={completedSections}
         isLoading={isLoading}
         label={resolvedLabels.tableOfContentsLabel}

@@ -10,6 +10,8 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
 import { useTheme } from "../../theme/theme-provider";
@@ -55,6 +57,7 @@ type RatingOptionProps = {
   readonly allowClear: boolean;
   readonly choice: number;
   readonly generatedId: string;
+  readonly groupLabel: string;
   readonly label: string;
   readonly onSelect: (value: number) => void;
   readonly readOnly: boolean;
@@ -65,6 +68,7 @@ function RatingOption({
   allowClear,
   choice,
   generatedId,
+  groupLabel,
   label,
   onSelect,
   readOnly,
@@ -73,6 +77,7 @@ function RatingOption({
   const selected = choice === activeValue;
   return (
     <Pressable
+      accessibilityHint={groupLabel}
       accessibilityLabel={label}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected, disabled: readOnly }}
@@ -102,7 +107,11 @@ function RatingOption({
 }
 RatingOption.displayName = "RatingOption";
 
-/** Native radio-based rating with 44-point choices and localized value text. */
+/**
+ * Native radio-based rating with 44-point choices and localized value text.
+ * The group `label` is each option's hint, because VoiceOver ignores labels on
+ * non-focusable containers.
+ */
 function Rating({
   allowClear = false,
   defaultValue = 0,
@@ -110,7 +119,7 @@ function Rating({
   labels,
   max = 5,
   onValueChange,
-  readOnly = false,
+  readOnly: ownReadOnly = false,
   ref,
   showValue = false,
   style,
@@ -118,6 +127,7 @@ function Rating({
   ...props
 }: RatingProps) {
   const theme = useTheme();
+  const readOnly = useGroupDisabled(ownReadOnly);
   const generatedId = useId();
   const safeMax = Number.isFinite(max)
     ? Math.min(MAX_OPTIONS, Math.max(1, Math.round(max)))
@@ -136,11 +146,12 @@ function Rating({
         },
   );
   const choices = Array.from({ length: safeMax }, (_, index) => index + 1);
+  const valueText = labels.value(normalize(currentValue, safeMax), safeMax);
+  useAnnounceOnChange(showValue ? valueText : undefined, { liveRegion: true });
 
   return (
     <View
       {...props}
-      accessibilityLabel={label}
       accessibilityRole="radiogroup"
       ref={ref}
       style={[styles.root, { gap: theme.spacing[1] }, style]}
@@ -151,6 +162,7 @@ function Rating({
           allowClear={allowClear}
           choice={choice}
           generatedId={generatedId}
+          groupLabel={label}
           key={choice}
           label={labels.option(choice, safeMax)}
           onSelect={setCurrentValue}
@@ -165,7 +177,7 @@ function Rating({
             marginStart: theme.spacing[2],
           })}
         >
-          {labels.value(normalize(currentValue, safeMax), safeMax)}
+          {valueText}
         </Text>
       ) : null}
     </View>

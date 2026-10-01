@@ -175,7 +175,8 @@ it("keeps flashcard question and answer individually accessible", () => {
       title="Card"
     />,
   );
-  expect(screen.getByLabelText("Prompt").props.accessible).toBe(false);
+  expect(screen.queryByLabelText("Prompt")).toBeNull();
+  expect(screen.getByText("Prompt")).toBeOnTheScreen();
   expect(
     screen.getByRole("text", { name: "Question content" }),
   ).toBeOnTheScreen();

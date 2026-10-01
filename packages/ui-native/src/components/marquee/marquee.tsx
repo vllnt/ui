@@ -20,6 +20,7 @@ import {
 
 import type { ReducedMotionService } from "../../primitives/use-reduced-motion";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
+import { useScreenReaderEnabled } from "../../primitives/use-screen-reader-enabled";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Native marquee speed presets. */
@@ -30,6 +31,11 @@ export type MarqueeProps = Omit<ViewProps, "children"> & {
   readonly children: ReactNode;
   readonly duration?: number;
   readonly gap?: number;
+  /**
+   * Stops the motion and shows the content at rest. Wire it to a visible
+   * pause control so everyone can stop the movement (WCAG 2.2.2).
+   */
+  readonly paused?: boolean;
   readonly reducedMotionService?: ReducedMotionService;
   readonly ref?: Ref<View>;
   readonly repeat?: number;
@@ -166,12 +172,16 @@ MarqueeTrack.displayName = "MarqueeTrack";
 /**
  * Continuous RN Animated content lane. Native core intentionally leaves out
  * hover pausing and edge masks because it lacks those interaction primitives.
+ * The lane rests (no motion) when `paused`, when reduced motion is on, or
+ * while VoiceOver or TalkBack runs, so moving content never shifts under
+ * screen-reader focus.
  */
 function Marquee({
   children,
   duration,
   gap,
   onLayout,
+  paused = false,
   reducedMotionService,
   ref,
   repeat = 1,
@@ -182,7 +192,9 @@ function Marquee({
   ...props
 }: MarqueeProps) {
   const theme = useTheme();
-  const reduceMotion = useReducedMotion(reducedMotionService);
+  const prefersReducedMotion = useReducedMotion(reducedMotionService);
+  const screenReaderEnabled = useScreenReaderEnabled();
+  const reduceMotion = prefersReducedMotion || paused || screenReaderEnabled;
   const [laneSize, setLaneSize] = useState(0);
   const [viewportSize, setViewportSize] = useState(0);
   const resolvedGap =

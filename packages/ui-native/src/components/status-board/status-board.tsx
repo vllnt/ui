@@ -1,6 +1,7 @@
 import type { Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../badge/badge";
 import { Card } from "../card/card";
@@ -37,6 +38,7 @@ export type StatusBoardLabels = {
 
 /** Props for a native service status board. */
 export type StatusBoardProps = Omit<ViewProps, "children"> & {
+  /** Announces a service's name and new status when its status changes. */
   readonly announceChanges?: boolean;
   readonly description?: string;
   readonly emptyLabel?: string;
@@ -110,24 +112,42 @@ function StatusSummary({
 }
 StatusSummary.displayName = "StatusSummary";
 
+function statusColorOf(
+  colors: {
+    readonly accentForeground: string;
+    readonly destructive: string;
+    readonly mutedForeground: string;
+    readonly primary: string;
+    readonly secondaryForeground: string;
+  },
+  status: StatusBoardStatus,
+): string {
+  const values = {
+    critical: colors.destructive,
+    healthy: colors.primary,
+    maintenance: colors.secondaryForeground,
+    offline: colors.mutedForeground,
+    warning: colors.accentForeground,
+  } satisfies Record<StatusBoardStatus, string>;
+  return values[status];
+}
+
 function StatusCard({
+  announceChanges,
   item,
   noMetricLabel,
   presentation,
 }: {
+  readonly announceChanges: boolean;
   readonly item: StatusBoardItem;
   readonly noMetricLabel: string;
   readonly presentation: Record<StatusBoardStatus, StatusPresentation>;
 }) {
   const theme = useTheme();
-  const statusColor = {
-    critical: theme.colors.destructive,
-    healthy: theme.colors.primary,
-    maintenance: theme.colors.secondaryForeground,
-    offline: theme.colors.mutedForeground,
-    warning: theme.colors.accentForeground,
-  } satisfies Record<StatusBoardStatus, string>;
   const current = presentation[item.status];
+  useAnnounceOnChange(
+    announceChanges ? `${item.label}, ${current.label}` : undefined,
+  );
 
   return (
     <Card
@@ -152,7 +172,7 @@ function StatusCard({
               style={[
                 styles.dot,
                 {
-                  backgroundColor: statusColor[item.status],
+                  backgroundColor: statusColorOf(theme.colors, item.status),
                   borderRadius: theme.radius.full,
                 },
               ]}
@@ -180,7 +200,12 @@ function StatusCard({
 }
 StatusCard.displayName = "StatusCard";
 
-/** Native service-health board with textual summaries and caller-stable keys. */
+/**
+ * Native service-health board with textual summaries and caller-stable keys.
+ * The visible heading names the board; with `announceChanges`, it announces
+ * each service whose status changed (both platforms) instead of re-reading the
+ * whole board.
+ */
 function StatusBoard({
   accessibilityLabel,
   announceChanges = false,
@@ -200,8 +225,7 @@ function StatusBoard({
   return (
     <View
       {...props}
-      accessibilityLabel={accessibilityLabel ?? title}
-      accessibilityLiveRegion={announceChanges ? "polite" : "none"}
+      accessibilityLabel={accessibilityLabel}
       ref={ref}
       style={[{ gap: theme.spacing[4] }, style]}
     >
@@ -223,6 +247,7 @@ function StatusBoard({
       ) : (
         items.map((item) => (
           <StatusCard
+            announceChanges={announceChanges}
             item={item}
             key={item.id}
             noMetricLabel={noMetricLabel}

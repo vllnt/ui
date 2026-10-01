@@ -13,7 +13,9 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Explicit availability of the service receiving a prompt. */
@@ -94,13 +96,19 @@ function normalizeRows(rows: number | undefined, fallback: number): number {
     : fallback;
 }
 
+/**
+ * Row heights follow the user's font scale, and one row is never shorter
+ * than the 44-point touch target.
+ */
 function usePromptState(props: PromptInputProps): PromptState {
   const theme = useTheme();
   const minimum = normalizeRows(props.minRows, 1);
   const maximum = Math.max(minimum, normalizeRows(props.maxRows, 8));
-  const rowHeight = theme.typography.scale.bodySmall.lineHeight;
-  const minHeight = minimum * rowHeight;
-  const maxHeight = maximum * rowHeight;
+  const rowHeight = useFontScaledSize(
+    theme.typography.scale.bodySmall.lineHeight,
+  );
+  const minHeight = Math.max(44, minimum * rowHeight);
+  const maxHeight = Math.max(minHeight, maximum * rowHeight);
   const [measuredHeight, setMeasuredHeight] = useState(0);
   const contentHeight = Math.min(
     maxHeight,
@@ -249,7 +257,7 @@ function PromptShell({
         styles.root,
         {
           backgroundColor: theme.colors.background,
-          borderColor: theme.colors.border,
+          borderColor: theme.colors.input,
           borderRadius: theme.radius.lg,
           gap: theme.spacing[2],
           padding: theme.spacing[2],
@@ -306,7 +314,7 @@ PromptFooter.displayName = "PromptFooter";
 /** Auto-growing native prompt composer with explicit return-key behavior. */
 function PromptInput({
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
   inputLabel,
   inputProps,
   isLoading = false,
@@ -323,6 +331,7 @@ function PromptInput({
   value,
   ...viewProps
 }: PromptInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const stateProps = {
     defaultValue,
     disabled,

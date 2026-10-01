@@ -9,6 +9,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  plainText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -60,7 +65,11 @@ const styles = StyleSheet.create({
   side: { borderWidth: 1, minHeight: 160 },
 });
 
-/** Native flashcard with no decorative flip animation, respecting reduced motion by design. */
+/**
+ * Native flashcard with no decorative flip animation, respecting reduced
+ * motion by design. Flipping speaks the shown side (TalkBack through the
+ * side's live region, iOS through an announcement).
+ */
 function Flashcard({
   answer,
   category,
@@ -83,6 +92,14 @@ function Flashcard({
     setFlipped(!isFlipped);
   };
   const actionLabel = isFlipped ? labels.showPrompt : labels.revealAnswer;
+  const sideLabel = isFlipped ? labels.answer : labels.prompt;
+  useAnnounceOnChange(
+    joinAccessibilityText([
+      sideLabel,
+      plainText(isFlipped ? answer : question),
+    ]),
+    { liveRegion: true },
+  );
   return (
     <View
       {...props}
@@ -100,7 +117,13 @@ function Flashcard({
       ]}
     >
       <View style={{ gap: theme.spacing[1] }}>
-        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
+        <Text
+          accessibilityLabel={joinAccessibilityText(
+            [labels.study, category],
+            ", ",
+          )}
+          style={typeStyle(theme, "caption", "mutedForeground")}
+        >
           {category ? `${labels.study} · ${category}` : labels.study}
         </Text>
         <Text
@@ -114,9 +137,7 @@ function Flashcard({
         </Text>
       </View>
       <View
-        accessibilityLabel={isFlipped ? labels.answer : labels.prompt}
         accessibilityLiveRegion="polite"
-        accessible={false}
         style={[
           styles.side,
           {
@@ -129,7 +150,7 @@ function Flashcard({
         ]}
       >
         <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-          {isFlipped ? labels.answer : labels.prompt}
+          {sideLabel}
         </Text>
         {isFlipped ? answer : question}
       </View>

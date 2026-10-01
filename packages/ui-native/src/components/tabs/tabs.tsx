@@ -38,6 +38,7 @@ type TabsContextValue = {
 };
 
 const TabsContext = createContext<TabsContextValue | undefined>(undefined);
+const TabsListLabelContext = createContext<string | undefined>(undefined);
 
 function useTabs(): TabsContextValue {
   const context = use(TabsContext);
@@ -148,8 +149,13 @@ function Tabs({
 }
 Tabs.displayName = "Tabs";
 
-/** Accessible horizontal list of native tab triggers. */
+/**
+ * Accessible horizontal list of native tab triggers. VoiceOver ignores
+ * labels on the non-focusable list, so its `accessibilityLabel` becomes each
+ * tab's hint.
+ */
 function TabsList({
+  accessibilityLabel,
   children,
   contentContainerStyle,
   ref,
@@ -171,7 +177,9 @@ function TabsList({
       showsHorizontalScrollIndicator={false}
       style={style}
     >
-      {children}
+      <TabsListLabelContext value={accessibilityLabel}>
+        {children}
+      </TabsListLabelContext>
     </ScrollView>
   );
 }
@@ -179,6 +187,7 @@ TabsList.displayName = "TabsList";
 
 /** Selectable native tab with selected semantics and stable identifiers. */
 function TabsTrigger({
+  accessibilityHint,
   accessibilityLabel,
   children,
   disabled = false,
@@ -189,6 +198,7 @@ function TabsTrigger({
 }: TabsTriggerProps) {
   const theme = useTheme();
   const tabs = useTabs();
+  const listLabel = use(TabsListLabelContext);
   const { register } = tabs;
   useEffect(() => register("triggers", value), [register, value]);
   const selected = isSingleSelected(
@@ -199,14 +209,10 @@ function TabsTrigger({
   return (
     <Pressable
       {...props}
+      accessibilityHint={accessibilityHint ?? listLabel}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="tab"
       accessibilityState={{ disabled: disabled ?? undefined, selected }}
-      aria-controls={
-        selected && tabs.panels.includes(value)
-          ? `${tabs.baseId}-panel-${value}`
-          : undefined
-      }
       disabled={disabled}
       id={`${tabs.baseId}-tab-${value}`}
       onPress={() => {

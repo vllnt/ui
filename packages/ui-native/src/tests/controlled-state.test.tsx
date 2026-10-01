@@ -59,7 +59,7 @@ function renderControlledTime(value?: ISOTimeString): ReactElement {
   );
 }
 
-it("only points disclosure and tab controls at mounted content", () => {
+it("reports disclosure and tab state without no-op aria-controls", () => {
   render(
     <>
       <Collapsible id="details" reducedMotionService={reducedMotionService}>
@@ -85,17 +85,26 @@ it("only points disclosure and tab controls at mounted content", () => {
     </>,
   );
   const disclosure = screen.getByRole("button", { name: "Details" });
-  expect(disclosure).not.toHaveProp("aria-controls");
+  expect(disclosure).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ expanded: false }),
+  );
   fireEvent.press(disclosure);
-  expect(disclosure).toHaveProp("aria-controls", "details-content");
+  expect(disclosure).not.toHaveProp("aria-controls");
+  expect(disclosure).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ expanded: true }),
+  );
 
   const first = screen.getByRole("tab", { name: "First" });
   const second = screen.getByRole("tab", { name: "Second" });
-  expect(first).toHaveProp("aria-controls", "sections-panel-first");
-  expect(second).not.toHaveProp("aria-controls");
-  fireEvent.press(second);
   expect(first).not.toHaveProp("aria-controls");
-  expect(second).toHaveProp("aria-controls", "sections-panel-second");
+  fireEvent.press(second);
+  expect(second).not.toHaveProp("aria-controls");
+  expect(second).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ selected: true }),
+  );
 });
 
 it("only relates selected animated and switched tabs to semantic-free panels", () => {
@@ -110,15 +119,12 @@ it("only relates selected animated and switched tabs to semantic-free panels", (
       <ViewSwitcher defaultValue="grid" id="layout" options={gridListOptions} />
     </>,
   );
-  for (const [name, panel] of [
-    ["Code", "preview-panel-code"],
-    ["Grid", "layout-panel-grid"],
-  ])
+  for (const name of ["Code", "Grid"])
     expect(screen.getByRole("tab", { name })).toHaveProp(
-      "aria-controls",
-      panel,
+      "accessibilityState",
+      expect.objectContaining({ selected: true }),
     );
-  for (const name of ["Preview", "List"])
+  for (const name of ["Code", "Preview", "Grid", "List"])
     expect(screen.getByRole("tab", { name })).not.toHaveProp("aria-controls");
   expect(screen.queryByRole("summary")).toBeNull();
 });

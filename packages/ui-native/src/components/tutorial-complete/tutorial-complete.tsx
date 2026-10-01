@@ -7,6 +7,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -135,6 +136,7 @@ function TutorialComplete({
     <View {...props} ref={ref} style={[{ gap: theme.spacing[6] }, style]}>
       <View style={[styles.centered, { gap: theme.spacing[3] }]}>
         <View
+          {...decorativeProps}
           style={[
             styles.centered,
             {
@@ -218,6 +220,7 @@ function TutorialComplete({
               ]}
             >
               <Text
+                {...decorativeProps}
                 style={{
                   color: completed
                     ? theme.colors.primary
@@ -228,7 +231,6 @@ function TutorialComplete({
                 {completed ? "✓" : "○"}
               </Text>
               <Text
-                numberOfLines={1}
                 style={typeStyle(theme, "bodySmall", {
                   color: "foreground",
                   flex: 1,
@@ -236,7 +238,12 @@ function TutorialComplete({
               >
                 {section.title}
               </Text>
-              <Text style={{ color: theme.colors.mutedForeground }}>›</Text>
+              <Text
+                {...decorativeProps}
+                style={{ color: theme.colors.mutedForeground }}
+              >
+                ›
+              </Text>
             </Pressable>
           );
         })}
@@ -254,6 +261,7 @@ function TutorialComplete({
           </Text>
           {relatedContent.map((item) => (
             <Pressable
+              accessibilityLabel={`${item.type}, ${item.title}`}
               accessibilityRole="link"
               key={item.id}
               onPress={() => {
@@ -275,7 +283,6 @@ function TutorialComplete({
                 {item.type}
               </Text>
               <Text
-                numberOfLines={1}
                 style={typeStyle(theme, "bodySmall", {
                   color: "foreground",
                   flex: 1,

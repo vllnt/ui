@@ -95,10 +95,9 @@ it("exposes truncation and streaming state accessibly", () => {
   expect(screen.getByTestId("truncated")).toHaveProp("numberOfLines", 1);
   expect(screen.getByTestId("truncated")).toHaveProp("ellipsizeMode", "tail");
   expect(screen.getByLabelText(longTitle)).toBeOnTheScreen();
-  expect(screen.getByLabelText("Generating response")).toHaveProp(
-    "accessibilityLiveRegion",
-    "polite",
-  );
+  const streaming = screen.getByLabelText("Generating response");
+  expect(streaming).not.toHaveProp("accessibilityLiveRegion");
+  expect(streaming).toBeBusy();
   expect(
     screen.getByRole("progressbar", { name: "Loading answer" }),
   ).toHaveProp("accessibilityState", { busy: true });

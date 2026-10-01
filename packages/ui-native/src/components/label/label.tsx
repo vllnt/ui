@@ -5,6 +5,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -17,12 +18,13 @@ export type LabelProps = TextProps & {
 
 /** Token-driven native label text. */
 function Label({
-  disabled = false,
+  disabled: ownDisabled = false,
   invalid = false,
   ref,
   style,
   ...props
 }: LabelProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   return (
     <NativeText

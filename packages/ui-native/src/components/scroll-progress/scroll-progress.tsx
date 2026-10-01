@@ -55,6 +55,7 @@ function ScrollProgress({
       accessibilityLabel={label}
       accessibilityRole="progressbar"
       accessibilityValue={{ max: 100, min: 0, now: Math.round(progress * 100) }}
+      accessible
       ref={ref}
       style={[
         styles.track,

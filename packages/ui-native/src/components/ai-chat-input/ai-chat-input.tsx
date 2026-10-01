@@ -12,6 +12,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -66,6 +71,7 @@ type ComposerState = {
   readonly currentValue: string;
   readonly handleSubmit: () => void;
   readonly handleValueChange: (value: string) => void;
+  readonly hint?: string;
   readonly unavailable: boolean;
 };
 
@@ -97,6 +103,12 @@ function useComposerState(props: AIChatInputProps): ComposerState {
     currentValue,
     handleSubmit,
     handleValueChange,
+    hint: joinAccessibilityText([
+      props.serviceState?.status === "unavailable"
+        ? props.serviceState.message
+        : undefined,
+      props.helperText,
+    ]),
     unavailable,
   };
 }
@@ -113,6 +125,10 @@ function ComposerMessages({
 > & { readonly currentValue: string }) {
   const theme = useTheme();
   const unavailable = serviceState?.status === "unavailable";
+  useAnnounceOnChange(status, { liveRegion: true });
+  useAnnounceOnChange(unavailable ? serviceState.message : undefined, {
+    liveRegion: true,
+  });
   return (
     <View style={[styles.messages, { gap: theme.spacing[1] }]}>
       {[helperText, status].map((message) =>
@@ -202,11 +218,17 @@ function ComposerBody({
 }: ComposerBodyProps) {
   const theme = useTheme();
   const inputId = useId();
+  const editable = !disabled && !state.unavailable;
   return (
     <TextInput
       {...inputProps}
+      accessibilityHint={inputProps?.accessibilityHint ?? state.hint}
       accessibilityLabel={inputLabel}
-      editable={!disabled && !state.unavailable}
+      accessibilityState={{
+        ...inputProps?.accessibilityState,
+        disabled: !editable,
+      }}
+      editable={editable}
       multiline
       nativeID={inputProps?.nativeID ?? inputId}
       onChangeText={state.handleValueChange}
@@ -245,7 +267,7 @@ function ComposerShell({
         styles.root,
         {
           backgroundColor: theme.colors.background,
-          borderColor: theme.colors.border,
+          borderColor: theme.colors.input,
           borderRadius: theme.radius.lg,
           gap: theme.spacing[3],
           padding: theme.spacing[3],
@@ -259,10 +281,14 @@ function ComposerShell({
 }
 ComposerShell.displayName = "ComposerShell";
 
-/** Accessible native multiline chat composer with submit-key handling. */
+/**
+ * Accessible native multiline chat composer with submit-key handling. A
+ * disabled or unavailable composer reports `disabled` with the service message
+ * as the input's hint, and it announces status or availability changes.
+ */
 function AIChatInput({
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
   helperText,
   inputLabel,
   inputProps,
@@ -278,6 +304,7 @@ function AIChatInput({
   value,
   ...viewProps
 }: AIChatInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const stateProps = {
     defaultValue,

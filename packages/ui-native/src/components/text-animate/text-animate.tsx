@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   type ReducedMotionService,
@@ -119,8 +120,9 @@ function TextAnimate({
   return (
     <Animated.View
       {...props}
+      {...(visible ? undefined : decorativeProps)}
       accessibilityLabel={accessibilityLabel ?? children}
-      accessible
+      accessible={visible}
       ref={ref}
       style={[styles.root, style]}
     >

@@ -48,6 +48,11 @@ export type ResizableHandleProps = Omit<
 > & {
   readonly decrementLabel?: string;
   readonly disabled?: boolean;
+  /**
+   * Spoken size of the panel before the handle, in percent. Defaults to
+   * "<n> percent".
+   */
+  readonly formatValue?: (percent: number) => string;
   readonly incrementLabel?: string;
   readonly ref?: Ref<View>;
   readonly step?: number;
@@ -362,6 +367,7 @@ function ResizableHandle({
   accessibilityState,
   decrementLabel = "Decrease previous panel",
   disabled = false,
+  formatValue = (percent: number) => `${percent} percent`,
   handleIndex = 0,
   incrementLabel = "Increase previous panel",
   ref,
@@ -409,7 +415,7 @@ function ResizableHandle({
               max: config.maxSize,
               min: config.minSize,
               now: Math.round(size),
-              text: `${Math.round(size)} percent`,
+              text: formatValue(Math.round(size)),
             }
           : undefined
       }

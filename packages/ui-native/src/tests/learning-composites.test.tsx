@@ -322,7 +322,10 @@ it("uses safe native modal close routes and honest hardware-keyboard guidance", 
       "These actions are available when a hardware keyboard is connected.",
     ),
   ).toBeOnTheScreen();
-  fireEvent(screen.getByLabelText("Complete lesson"), "accessibilityEscape");
+  fireEvent(
+    screen.getByRole("header", { name: "Complete lesson" }),
+    "accessibilityEscape",
+  );
   expect(onCompletionClose).toHaveBeenCalledWith("accessibilityEscape");
   fireEvent.press(screen.getByRole("button", { name: "Close keyboard help" }));
   expect(onHelpClose).toHaveBeenCalledWith("requestClose");

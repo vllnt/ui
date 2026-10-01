@@ -23,6 +23,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import {
@@ -198,9 +199,11 @@ const styles = StyleSheet.create({
 });
 
 function MessageAction({
+  checked,
   label,
   onPress,
 }: {
+  readonly checked?: boolean;
   readonly label: string;
   readonly onPress: () => void;
 }) {
@@ -208,11 +211,16 @@ function MessageAction({
   return (
     <Pressable
       accessibilityLabel={label}
-      accessibilityRole="button"
+      accessibilityRole={checked === undefined ? "button" : "togglebutton"}
+      accessibilityState={checked === undefined ? undefined : { checked }}
       onPress={onPress}
       style={({ pressed }) => [
         styles.action,
-        { borderRadius: theme.radius.sm, paddingHorizontal: theme.spacing[2] },
+        {
+          backgroundColor: checked ? theme.colors.accent : undefined,
+          borderRadius: theme.radius.sm,
+          paddingHorizontal: theme.spacing[2],
+        },
         pressed ? styles.pressed : undefined,
       ]}
     >
@@ -235,7 +243,6 @@ function MessageTools({
   if (!toolCalls || toolCalls.length === 0) return null;
   return (
     <View
-      accessibilityLabel={label}
       accessibilityRole="list"
       style={[
         styles.toolList,
@@ -249,6 +256,7 @@ function MessageTools({
     >
       {toolCalls.map((toolCall) => (
         <Text
+          accessibilityHint={label}
           key={toolCall.id}
           style={typeStyle(theme, "caption", "mutedForeground")}
         >
@@ -263,6 +271,7 @@ MessageTools.displayName = "MessageTools";
 function MessageActions({ messageId }: { readonly messageId: string }) {
   const theme = useTheme();
   const { labels, onFeedback, onRetry } = useConversation();
+  const [feedback, setFeedback] = useState<"negative" | "positive">();
   if (!onRetry && !onFeedback) return null;
   return (
     <View style={[styles.actions, { gap: theme.spacing[1] }]}>
@@ -277,14 +286,18 @@ function MessageActions({ messageId }: { readonly messageId: string }) {
       {onFeedback ? (
         <>
           <MessageAction
+            checked={feedback === "positive"}
             label={labels.positiveFeedback}
             onPress={() => {
+              setFeedback("positive");
               onFeedback(messageId, "positive");
             }}
           />
           <MessageAction
+            checked={feedback === "negative"}
             label={labels.negativeFeedback}
             onPress={() => {
+              setFeedback("negative");
               onFeedback(messageId, "negative");
             }}
           />
@@ -303,7 +316,6 @@ function MessageItem({ message }: { readonly message: ConversationMessage }) {
 
   return (
     <View
-      accessibilityLabel={roleLabel}
       style={[
         styles.message,
         isUser ? styles.messageUser : styles.messageAssistant,
@@ -329,7 +341,8 @@ function MessageItem({ message }: { readonly message: ConversationMessage }) {
         ) : null}
         <MessageTools label={labels.toolCalls} toolCalls={message.toolCalls} />
         <Text
-          accessibilityLiveRegion={message.isStreaming ? "polite" : "none"}
+          accessibilityLabel={`${roleLabel}: ${message.content}`}
+          accessibilityState={{ busy: message.isStreaming === true }}
           style={typeStyle(
             theme,
             "bodySmall",
@@ -345,7 +358,22 @@ function MessageItem({ message }: { readonly message: ConversationMessage }) {
 }
 MessageItem.displayName = "MessageItem";
 
-/** Root state provider for the native conversation compound family. */
+function latestReply(
+  messages: readonly ConversationMessage[],
+  isStreaming: boolean,
+  label: string,
+): string | undefined {
+  const last = messages.at(-1);
+  if (last?.role !== "assistant" || isStreaming || last.isStreaming)
+    return undefined;
+  return `${label}: ${last.content}`;
+}
+
+/**
+ * Root state provider for the native conversation compound family. Each
+ * message speaks its sender before its text; a finished assistant reply is
+ * announced once (never per streamed token).
+ */
 function ConversationThread({
   children,
   isStreaming = false,
@@ -361,6 +389,9 @@ function ConversationThread({
 }: ConversationThreadProps) {
   const scrollViewReference = useRef<ScrollView>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  useAnnounceOnChange(
+    latestReply(messages, isStreaming, labels.assistantMessage),
+  );
 
   const scrollToBottom = useCallback(() => {
     scrollViewReference.current?.scrollToEnd({ animated: false });
@@ -464,19 +495,11 @@ function ConversationMessages({
   ...props
 }: ConversationMessagesProps) {
   const theme = useTheme();
-  const {
-    isAtBottom,
-    labels,
-    messages,
-    onScroll,
-    scrollToBottom,
-    scrollViewRef,
-  } = useConversation();
+  const { isAtBottom, messages, onScroll, scrollToBottom, scrollViewRef } =
+    useConversation();
   return (
     <View {...props} ref={ref} style={[styles.messages, style]}>
       <ScrollView
-        accessibilityLabel={labels.assistantMessage}
-        accessibilityLiveRegion="polite"
         accessibilityRole="list"
         keyboardShouldPersistTaps="handled"
         onContentSizeChange={isAtBottom ? scrollToBottom : undefined}
@@ -601,7 +624,12 @@ function ConversationLoading({
   const theme = useTheme();
   const { isStreaming, labels, messages } = useConversation();
   const lastMessage = messages.at(-1);
-  if (!isStreaming || lastMessage?.role !== "assistant") return null;
+  const visible = isStreaming && lastMessage?.role === "assistant";
+  useAnnounceOnChange(visible ? labels.assistantTyping : undefined, {
+    initial: true,
+    liveRegion: true,
+  });
+  if (!visible) return null;
   return (
     <View {...props} ref={ref} style={style}>
       <Text

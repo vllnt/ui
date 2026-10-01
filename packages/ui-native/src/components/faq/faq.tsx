@@ -116,7 +116,6 @@ function FAQ({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.region}
       ref={ref}
       style={[
         styles.root,
@@ -135,6 +134,7 @@ function FAQ({
         ]}
       >
         <Text
+          accessibilityHint={labels.region}
           accessibilityRole="header"
           style={typeStyle(theme, "bodyLarge", {
             color: "cardForeground",

@@ -5,10 +5,15 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  type Text as NativeTextInstance,
   View,
   type ViewProps,
 } from "react-native";
 
+import {
+  decorativeProps,
+  useFocusWhenShown,
+} from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerPresentationProps,
@@ -41,6 +46,8 @@ export type MenubarMenu = {
 
 /** Props for the native modal menubar contract. */
 export type MenubarProps = Omit<ViewProps, "children" | "ref"> & {
+  /** Name of the button that closes an open menu sheet. Defaults to "Close". */
+  readonly closeLabel?: string;
   readonly defaultOpenMenuId?: string;
   readonly label?: string;
   readonly linking?: LinkingService;
@@ -59,14 +66,25 @@ export type MenubarProps = Omit<ViewProps, "children" | "ref"> & {
 };
 
 const styles = StyleSheet.create({
+  backdrop: { flex: 1 },
+  close: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  heading: { paddingHorizontal: 12, paddingTop: 4 },
   menuItem: { justifyContent: "center", minHeight: 44, minWidth: 44 },
   root: { borderWidth: 1, flexDirection: "row" },
   sheet: { flex: 1, justifyContent: "flex-end" },
   surface: { borderWidth: 1 },
 });
 
-/** Native menubar whose commands use callbacks or an injected link service. */
+/**
+ * Native menubar whose commands use callbacks or an injected link service.
+ * VoiceOver ignores labels on non-focusable containers, so the menubar name
+ * becomes each menu button's hint. An open menu shows its name as a header
+ * (also announced) and closes from its close button, the backdrop, or the
+ * platform escape gesture.
+ */
 function Menubar({
+  accessibilityLabel,
+  closeLabel = "Close",
   defaultOpenMenuId = "",
   label = "Menu bar",
   linking = defaultLinkingService,
@@ -98,11 +116,13 @@ function Menubar({
   const activeMenu = menus.find((menu) =>
     isSingleSelected(activeId, menu, (candidate) => candidate.id),
   );
+  const headingRef = useFocusWhenShown<NativeTextInstance>(
+    activeMenu !== undefined,
+  );
 
   return (
     <View
       {...props}
-      accessibilityLabel={props.accessibilityLabel ?? label}
       accessibilityRole="toolbar"
       ref={ref}
       style={[
@@ -126,6 +146,7 @@ function Menubar({
           );
           return (
             <Pressable
+              accessibilityHint={accessibilityLabel ?? label}
               accessibilityRole="button"
               accessibilityState={{ disabled: menu.disabled, expanded }}
               disabled={menu.disabled}
@@ -163,9 +184,16 @@ function Menubar({
         safeArea={safeArea}
         visible={activeMenu !== undefined}
       >
+        <Pressable
+          {...decorativeProps}
+          accessible={false}
+          onPress={() => {
+            setActiveId("");
+          }}
+          style={styles.backdrop}
+        />
         {activeMenu ? (
           <View
-            accessibilityLabel={activeMenu.label}
             accessibilityRole="menu"
             style={[
               styles.surface,
@@ -178,6 +206,15 @@ function Menubar({
               },
             ]}
           >
+            <Text
+              accessibilityRole="header"
+              ref={headingRef}
+              size="small"
+              style={styles.heading}
+              weight="semibold"
+            >
+              {activeMenu.label}
+            </Text>
             {activeMenu.items.map((item) => (
               <Pressable
                 accessibilityRole={item.href ? "link" : "menuitem"}
@@ -210,6 +247,28 @@ function Menubar({
                 <Text size="small">{item.label}</Text>
               </Pressable>
             ))}
+            <Pressable
+              accessibilityLabel={closeLabel}
+              accessibilityRole="button"
+              onPress={() => {
+                setActiveId("");
+              }}
+              style={({ pressed }) => [
+                styles.close,
+                {
+                  backgroundColor: theme.colors.secondary,
+                  borderRadius: theme.radius.md,
+                  opacity: pressed ? 0.8 : 1,
+                },
+              ]}
+            >
+              <Text
+                size="small"
+                style={{ color: theme.colors.secondaryForeground }}
+              >
+                {closeLabel}
+              </Text>
+            </Pressable>
           </View>
         ) : null}
       </ModalLayer>

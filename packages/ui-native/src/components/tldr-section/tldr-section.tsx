@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -106,7 +107,7 @@ function TLDRSection({
           {label}
         </NativeText>
         <NativeText
-          accessibilityElementsHidden
+          {...decorativeProps}
           style={{ color: theme.colors.mutedForeground }}
         >
           {isExpanded ? "−" : "+"}

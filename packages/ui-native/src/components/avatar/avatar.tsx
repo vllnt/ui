@@ -15,6 +15,8 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 type AvatarContextValue = {
@@ -34,7 +36,11 @@ export type AvatarProps = ViewProps & {
   readonly ref?: Ref<View>;
   readonly size?: number;
 };
-/** Props for the native avatar image. */
+/**
+ * Props for the native avatar image. Pass `accessibilityLabel`, `alt`, or
+ * `aria-label` (the person's name) to expose it as an image; without a name
+ * screen readers skip it.
+ */
 export type AvatarImageProps = ImageProps & { readonly ref?: Ref<Image> };
 /** Props for avatar fallback content. */
 export type AvatarFallbackProps = ViewProps & { readonly ref?: Ref<View> };
@@ -53,6 +59,7 @@ const styles = StyleSheet.create({
 /** Circular frame for an image and fallback content. */
 function Avatar({ children, ref, size = 40, style, ...props }: AvatarProps) {
   const theme = useTheme();
+  const diameter = useFontScaledSize(size);
   const [imageLoaded, setImageLoaded] = useState(false);
   const context = useMemo(
     () => ({ imageLoaded, setImageLoaded }),
@@ -68,8 +75,8 @@ function Avatar({ children, ref, size = 40, style, ...props }: AvatarProps) {
           {
             backgroundColor: theme.colors.muted,
             borderRadius: theme.radius.full,
-            height: size,
-            width: size,
+            height: diameter,
+            width: diameter,
           },
           style,
         ]}
@@ -83,6 +90,7 @@ Avatar.displayName = "Avatar";
 
 /** Native avatar image that removes itself after a load failure, revealing fallback content. */
 function AvatarImage({
+  accessibilityLabel,
   onError,
   onLoad,
   ref,
@@ -106,11 +114,15 @@ function AvatarImage({
     };
   }, [setImageLoaded, sourceKey]);
   if (failedSourceKey === sourceKey) return null;
+  const name = accessibilityLabel ?? props.alt ?? props["aria-label"];
+  const named = name !== undefined && name !== "";
   return (
     <Image
+      {...(named ? undefined : decorativeProps)}
       {...props}
-      accessibilityRole="image"
-      accessible
+      accessibilityLabel={name}
+      accessibilityRole={named ? "image" : undefined}
+      accessible={named}
       onError={(event) => {
         setImageLoaded(false);
         setFailedSourceKey(sourceKey);

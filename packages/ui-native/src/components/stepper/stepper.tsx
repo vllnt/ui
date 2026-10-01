@@ -10,8 +10,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { joinAccessibilityText } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useControllableState } from "../../primitives/use-controllable-state";
+import { useFontScaledSize } from "../../primitives/use-font-scaled-size";
 import { useTheme } from "../../theme/theme-provider";
 
 export type StepperStepState = "complete" | "current" | "upcoming";
@@ -50,12 +53,7 @@ export type StepperProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  marker: {
-    alignItems: "center",
-    height: 32,
-    justifyContent: "center",
-    width: 32,
-  },
+  marker: { alignItems: "center", justifyContent: "center" },
   step: { alignItems: "flex-start", minHeight: 44 },
   vertical: { flexDirection: "row" },
 });
@@ -72,7 +70,11 @@ function stateFor(index: number, current: number): StepperStepState {
   return "upcoming";
 }
 
-/** Scroll-safe native stepper with stable ids and explicit current-step state. */
+/**
+ * Scroll-safe native stepper with stable ids and explicit current-step state.
+ * Each step's hint speaks its meta, description, and the stepper name
+ * (`labels.stepper`); step markers grow with the user's font size.
+ */
 function Stepper({
   currentStep,
   defaultCurrentStep = 1,
@@ -87,6 +89,7 @@ function Stepper({
   ...props
 }: StepperProps) {
   const theme = useTheme();
+  const groupDisabled = useGroupDisabled(false);
   const [storedStep, setActiveStep] = useControllableState(
     currentStep === undefined
       ? {
@@ -107,13 +110,19 @@ function Stepper({
         },
   );
   const activeStep = normalizeStep(storedStep, steps.length);
+  const markerSize = useFontScaledSize(32);
   if (steps.length === 0) return null;
   const horizontal = orientation === "horizontal";
   const content = steps.map((step, index) => {
     const state = stateFor(index, activeStep);
-    const disabled = step.disabled === true;
+    const disabled = groupDisabled || step.disabled === true;
     return (
       <Pressable
+        accessibilityHint={joinAccessibilityText([
+          step.meta,
+          step.description,
+          labels.stepper,
+        ])}
         accessibilityLabel={labels.step(step, state, index, steps.length)}
         accessibilityRole="button"
         accessibilityState={{ disabled, selected: state === "current" }}
@@ -154,6 +163,8 @@ function Stepper({
                   : theme.colors.primary,
               borderRadius: theme.radius.full,
               borderWidth: 1,
+              height: markerSize,
+              width: markerSize,
             },
           ]}
         >
@@ -193,7 +204,6 @@ function Stepper({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.stepper}
       ref={ref}
       style={[
         {

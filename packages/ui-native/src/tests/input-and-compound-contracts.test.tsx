@@ -180,13 +180,16 @@ it("registers mounted tab counterparts and removes stale relationships", () => {
     </Tabs>
   );
   render(tree(true));
-  expect(screen.getByRole("tab")).toHaveProp("aria-controls", "tabs-panel-one");
+  expect(screen.getByRole("tab")).not.toHaveProp("aria-controls");
   expect(screen.getByTestId("panel")).toHaveProp(
     "aria-labelledby",
     "tabs-tab-one",
   );
   screen.rerender(tree(false));
-  expect(screen.getByRole("tab").props["aria-controls"]).toBeUndefined();
+  expect(screen.getByRole("tab")).toHaveProp("accessibilityState", {
+    disabled: false,
+    selected: true,
+  });
 });
 
 it("exposes the scrubber as an accessible adjustable target", () => {

@@ -3,6 +3,10 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  ControlGroupContext,
+  useNestedControlGroup,
+} from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for a visually related native button group. */
@@ -18,7 +22,11 @@ const styles = StyleSheet.create({
   vertical: { alignItems: "stretch", flexDirection: "column" },
 });
 
-/** Groups native actions without changing the semantics of child buttons. */
+/**
+ * Groups native actions without changing the semantics of child buttons.
+ * VoiceOver ignores labels on non-focusable containers, so package buttons
+ * inside speak `label` as their hint.
+ */
 function ButtonGroup({
   children,
   label,
@@ -28,19 +36,21 @@ function ButtonGroup({
   ...props
 }: ButtonGroupProps) {
   const theme = useTheme();
+  const group = useNestedControlGroup({ label });
   return (
-    <View
-      accessibilityLabel={label}
-      ref={ref}
-      style={[
-        orientation === "horizontal" ? styles.horizontal : styles.vertical,
-        { gap: theme.spacing[1] },
-        style,
-      ]}
-      {...props}
-    >
-      {children}
-    </View>
+    <ControlGroupContext value={group}>
+      <View
+        ref={ref}
+        style={[
+          orientation === "horizontal" ? styles.horizontal : styles.vertical,
+          { gap: theme.spacing[1] },
+          style,
+        ]}
+        {...props}
+      >
+        {children}
+      </View>
+    </ControlGroupContext>
   );
 }
 ButtonGroup.displayName = "ButtonGroup";

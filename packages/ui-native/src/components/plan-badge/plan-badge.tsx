@@ -47,15 +47,15 @@ function PlanBadge({
   ...props
 }: PlanBadgeProps) {
   const baseLabel = label ?? tierLabels[tier];
-  const displayLabel =
-    state === "current"
-      ? baseLabel
-      : `${baseLabel} • ${state === "trial" ? "Trial" : "Legacy"}`;
+  const stateLabel =
+    state === "current" ? undefined : state === "trial" ? "Trial" : "Legacy";
+  const displayLabel = stateLabel ? `${baseLabel} • ${stateLabel}` : baseLabel;
+  const spokenLabel = stateLabel ? `${baseLabel}, ${stateLabel}` : baseLabel;
 
   return (
     <Badge
       {...props}
-      accessibilityLabel={accessibilityLabel ?? displayLabel}
+      accessibilityLabel={accessibilityLabel ?? spokenLabel}
       accessible
       ref={ref}
       variant={resolveVariant(tier, state)}

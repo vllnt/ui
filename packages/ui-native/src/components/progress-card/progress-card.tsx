@@ -1,6 +1,10 @@
 import type { Ref } from "react";
 import { Pressable, StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  decorativeProps,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../badge/badge";
 import { Card } from "../card/card";
@@ -42,6 +46,7 @@ type ProgressCardContentProps = {
   readonly metadata: readonly ProgressCardMetadataItem[];
   readonly progressLabel: string;
   readonly style: ProgressCardProps["style"];
+  readonly summarized: boolean;
   readonly tags: readonly ProgressCardTag[];
   readonly title: string;
   readonly value: number;
@@ -60,6 +65,7 @@ function ProgressCardContent({
   metadata,
   progressLabel,
   style,
+  summarized,
   tags,
   title,
   value,
@@ -75,6 +81,7 @@ function ProgressCardContent({
         </Text>
       </View>
       <ProgressBar
+        {...(summarized ? decorativeProps : undefined)}
         completedLabel={progressLabel}
         max={max}
         showLabels
@@ -103,7 +110,32 @@ function ProgressCardContent({
 }
 ProgressCardContent.displayName = "ProgressCardContent";
 
-/** Pressable native card with explicit progress supplied by the caller. */
+function summaryHint(
+  badgeLabel: string | undefined,
+  description: string,
+  extras: readonly { readonly label: string }[],
+) {
+  return joinAccessibilityText([
+    badgeLabel,
+    description,
+    ...extras.map((extra) => extra.label),
+  ]);
+}
+
+function progressText(value: number, max: number, progressLabel: string) {
+  const safeMax = Number.isFinite(max) ? Math.max(0, max) : 0;
+  const safeValue = Number.isFinite(value)
+    ? Math.min(Math.max(0, value), safeMax)
+    : 0;
+  return `${safeValue} / ${safeMax} ${progressLabel}`;
+}
+
+/**
+ * Pressable native card with explicit progress supplied by the caller. As one
+ * screen-reader stop it speaks the title (or `accessibilityLabel`), the
+ * progress as its value, and the badge, description, metadata, and tags as its
+ * hint, so screen-reader users hear everything the card shows.
+ */
 function ProgressCard({
   accessibilityLabel,
   badgeLabel,
@@ -129,15 +161,31 @@ function ProgressCard({
       metadata={metadata}
       progressLabel={progressLabel}
       style={style}
+      summarized={onPress !== undefined || accessibilityLabel !== undefined}
       tags={tags}
       title={title}
       value={value}
     />
   );
 
+  const summary = {
+    accessibilityHint:
+      props.accessibilityHint ??
+      summaryHint(badgeLabel, description, [...metadata, ...tags]),
+    accessibilityLabel: accessibilityLabel ?? title,
+    accessibilityValue: props.accessibilityValue ?? {
+      text: progressText(value, max, progressLabel),
+    },
+  };
   if (!onPress) {
     return (
-      <View {...props} accessibilityLabel={accessibilityLabel} ref={ref}>
+      <View
+        {...props}
+        {...(accessibilityLabel === undefined
+          ? undefined
+          : { ...summary, accessible: props.accessible ?? true })}
+        ref={ref}
+      >
         {content}
       </View>
     );
@@ -145,8 +193,8 @@ function ProgressCard({
   return (
     <Pressable
       {...props}
-      accessibilityLabel={accessibilityLabel ?? title}
-      accessibilityRole="button"
+      {...summary}
+      accessibilityRole={props.accessibilityRole ?? "button"}
       onPress={onPress}
       ref={ref}
       style={({ pressed }) => (pressed ? styles.pressed : undefined)}

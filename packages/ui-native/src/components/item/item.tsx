@@ -8,6 +8,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { decorativeProps } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -20,7 +21,11 @@ export type ItemProps = ItemViewProps & {
   readonly size?: ItemSize;
   readonly variant?: ItemVariant;
 };
-export type ItemMediaProps = ItemViewProps;
+/** Props for the leading media slot of an item. */
+export type ItemMediaProps = ItemViewProps & {
+  /** Hides purely visual media (icons, bullets) from VoiceOver and TalkBack. */
+  readonly decorative?: boolean;
+};
 export type ItemContentProps = ItemViewProps;
 export type ItemActionsProps = ItemViewProps;
 export type ItemTitleProps = ItemTextProps;
@@ -64,8 +69,24 @@ function Item({
 }
 Item.displayName = "Item";
 
-function ItemMedia({ ref, style, ...props }: ItemMediaProps) {
-  return <View {...props} ref={ref} style={[styles.media, style]} />;
+/**
+ * Leading icon or thumbnail slot. Pass `decorative` to hide purely visual
+ * media from VoiceOver and TalkBack on both platforms.
+ */
+function ItemMedia({
+  decorative = false,
+  ref,
+  style,
+  ...props
+}: ItemMediaProps) {
+  return (
+    <View
+      {...(decorative ? decorativeProps : undefined)}
+      {...props}
+      ref={ref}
+      style={[styles.media, style]}
+    />
+  );
 }
 ItemMedia.displayName = "ItemMedia";
 

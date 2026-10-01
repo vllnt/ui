@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { ReactNode, Ref } from "react";
 import {
@@ -12,6 +12,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  announce,
+  focusAccessibility,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -36,6 +41,8 @@ export type SlideshowSection = {
 /** Localized labels for all native slideshow actions. */
 export type SlideshowLabels = {
   readonly closeSections: string;
+  /** Spoken value of a completed section in the section list. Defaults to "Completed". */
+  readonly completed?: string;
   readonly exit: string;
   readonly finish: string;
   readonly markComplete: string;
@@ -102,6 +109,7 @@ const styles = StyleSheet.create({
 });
 
 function SlideshowHeader({
+  headingRef,
   labels,
   onExit,
   onToggleSections,
@@ -110,6 +118,7 @@ function SlideshowHeader({
   sectionTitle,
   title,
 }: {
+  readonly headingRef: Ref<Text>;
   readonly labels: SlideshowLabels;
   readonly onExit: () => void;
   readonly onToggleSections: () => void;
@@ -145,6 +154,7 @@ function SlideshowHeader({
       </Pressable>
       <View style={[styles.titleBlock, { gap: theme.spacing[1] }]}>
         <Text
+          accessibilityRole="header"
           numberOfLines={1}
           style={typeStyle(theme, "caption", "mutedForeground")}
         >
@@ -152,7 +162,7 @@ function SlideshowHeader({
         </Text>
         <Text
           accessibilityRole="header"
-          numberOfLines={1}
+          ref={headingRef}
           style={typeStyle(theme, "bodySmall", {
             color: "foreground",
             fontWeight: theme.typography.fontWeight.caption,
@@ -193,7 +203,6 @@ function SlideshowSections({
   const theme = useTheme();
   return (
     <View
-      accessibilityLabel={labels.sections}
       accessibilityRole="list"
       style={[
         styles.toc,
@@ -207,7 +216,10 @@ function SlideshowSections({
           <Pressable
             accessibilityLabel={section.title}
             accessibilityRole="button"
-            accessibilityState={{ checked: completed, selected }}
+            accessibilityState={{ selected }}
+            accessibilityValue={
+              completed ? { text: labels.completed ?? "Completed" } : undefined
+            }
             key={section.id}
             onPress={() => {
               onNavigate(section.id);
@@ -279,8 +291,7 @@ function SlideshowFooter({
         accessibilityLabel={
           completed ? labels.markIncomplete : labels.markComplete
         }
-        accessibilityRole="checkbox"
-        accessibilityState={{ checked: completed }}
+        accessibilityRole="button"
         onPress={onToggleComplete}
         style={styles.action}
       >
@@ -312,7 +323,10 @@ SlideshowFooter.displayName = "SlideshowFooter";
 
 /**
  * Full-screen native modal slideshow using the shared back, accessibility
- * escape, safe-area, and reduced-motion boundaries. Completion stays caller-owned.
+ * escape, safe-area, and reduced-motion boundaries. Completion stays
+ * caller-owned. Section changes are announced with their position; choosing a
+ * section from the list moves screen-reader focus to the section heading. The
+ * completion button's label states the action it performs.
  */
 function Slideshow({
   completedIds,
@@ -350,6 +364,20 @@ function Slideshow({
   const foundIndex = sections.findIndex((section) => section.id === selection);
   const currentIndex = foundIndex < 0 ? 0 : foundIndex;
   const current = sections[currentIndex];
+  const headingRef = useRef<Text>(null);
+  const focusRequest = useRef<number | undefined>(undefined);
+  const previousIndex = useRef(currentIndex);
+  const position = labels.position(currentIndex + 1, sections.length);
+  const spokenSection = joinAccessibilityText([current?.title, position], ", ");
+  useEffect(() => {
+    const changed = previousIndex.current !== currentIndex;
+    const requested = focusRequest.current;
+    previousIndex.current = currentIndex;
+    focusRequest.current = undefined;
+    if (!changed) return;
+    if (requested === currentIndex) focusAccessibility(headingRef);
+    else announce(spokenSection);
+  });
   const close = (reason: ModalLayerCloseReason) => {
     setVisible(false);
     onRequestClose?.(reason);
@@ -373,7 +401,6 @@ function Slideshow({
     >
       <View
         {...surfaceProps}
-        accessibilityLabel={title}
         style={[
           styles.surface,
           { backgroundColor: theme.colors.background },
@@ -394,6 +421,7 @@ function Slideshow({
           />
         </View>
         <SlideshowHeader
+          headingRef={headingRef}
           labels={labels}
           onExit={() => {
             close("requestClose");
@@ -401,7 +429,7 @@ function Slideshow({
           onToggleSections={() => {
             setSectionsOpen(!sectionsOpen);
           }}
-          position={labels.position(currentIndex + 1, sections.length)}
+          position={position}
           sectionsOpen={sectionsOpen}
           sectionTitle={current.title}
           title={title}
@@ -412,6 +440,11 @@ function Slideshow({
             currentIndex={currentIndex}
             labels={labels}
             onNavigate={(id) => {
+              if (id === current.id) focusAccessibility(headingRef);
+              else
+                focusRequest.current = sections.findIndex(
+                  (section) => section.id === id,
+                );
               setSelection(id);
               setSectionsOpen(false);
             }}

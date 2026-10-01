@@ -27,7 +27,11 @@ const styles = StyleSheet.create({
   trailing: { justifyContent: "flex-end" },
 });
 
-/** Native top bar with caller-owned slots and optional safe-area wrapping. */
+/**
+ * Native top bar with caller-owned slots and optional safe-area wrapping. The
+ * title is a header; its one-line truncation is visual, since screen readers
+ * read the full native text.
+ */
 function TopBar({
   center,
   leading,
@@ -61,7 +65,11 @@ function TopBar({
         {title || subtitle ? (
           <View style={{ flex: 1, minWidth: 0 }}>
             {title ? (
-              <Text numberOfLines={1} weight="medium">
+              <Text
+                accessibilityRole="header"
+                numberOfLines={1}
+                weight="medium"
+              >
                 {title}
               </Text>
             ) : null}

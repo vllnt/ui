@@ -71,7 +71,11 @@ function actionColors(
   };
 }
 
-/** Compact RN-core action bar with explicit host-owned coordinates. */
+/**
+ * Compact RN-core action bar with explicit host-owned coordinates. VoiceOver
+ * ignores labels on non-focusable containers, so `labels.region` is each
+ * action's hint.
+ */
 function FloatingToolbar({
   actions,
   labels,
@@ -85,7 +89,6 @@ function FloatingToolbar({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.region}
       accessibilityRole="toolbar"
       ref={ref}
       style={[
@@ -109,6 +112,7 @@ function FloatingToolbar({
         };
         return (
           <Pressable
+            accessibilityHint={labels.region}
             accessibilityLabel={action.label}
             accessibilityRole="button"
             accessibilityState={{ disabled: action.disabled }}

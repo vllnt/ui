@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -35,21 +36,25 @@ const styles = StyleSheet.create({
   swatch: { borderWidth: 1, height: 28, width: 28 },
 });
 
-/** Preset color selector; arbitrary spectrum picking is intentionally unsupported. */
+/**
+ * Preset color selector; arbitrary spectrum picking is intentionally
+ * unsupported. The selected swatch shows a thicker ring and a bold label (not
+ * a colour change alone); the group `label` is each option's hint.
+ */
 function ColorPicker({
   colors,
-  disabled = false,
+  disabled: ownDisabled = false,
   label,
   ref,
   selection,
   style,
   ...props
 }: ColorPickerProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedId, setSelectedId] = useControllableState(selection);
   return (
     <View
-      accessibilityLabel={label}
       accessibilityRole="radiogroup"
       ref={ref}
       style={[styles.root, { gap: theme.spacing[2] }, style]}
@@ -59,6 +64,7 @@ function ColorPicker({
         const selected = choice.id === selectedId;
         return (
           <Pressable
+            accessibilityHint={label}
             accessibilityLabel={choice.label}
             accessibilityRole="radio"
             accessibilityState={{ checked: selected, disabled }}
@@ -81,10 +87,18 @@ function ColorPicker({
                     ? theme.colors.ring
                     : theme.colors.border,
                   borderRadius: theme.radius.full,
+                  borderWidth: selected ? 3 : 1,
                 },
               ]}
             />
-            <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+            <NativeText
+              style={typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: selected
+                  ? theme.typography.fontWeight.heading
+                  : theme.typography.fontWeight.body,
+              })}
+            >
               {choice.label}
             </NativeText>
           </Pressable>

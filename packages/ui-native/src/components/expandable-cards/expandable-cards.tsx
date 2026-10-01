@@ -3,6 +3,7 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
+import { joinAccessibilityText } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -78,6 +79,10 @@ function ExpandableCard({
       ]}
     >
       <CollapsibleTrigger
+        accessibilityHint={joinAccessibilityText([
+          card.description,
+          labels.region,
+        ])}
         label={expanded ? labels.collapseCard(card) : labels.expandCard(card)}
         style={{ padding: theme.spacing[4] }}
       >
@@ -124,7 +129,6 @@ function ExpandableCards({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.region}
       accessibilityRole="list"
       ref={ref}
       style={[styles.root, { gap: theme.spacing[3] }, style]}

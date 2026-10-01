@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
@@ -34,13 +35,15 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     flexDirection: "row",
     justifyContent: "center",
+    minHeight: 44,
+    minWidth: 44,
   },
   input: { borderRadius: 0, borderWidth: 0, flex: 1 },
   root: {
     alignItems: "center",
     borderWidth: 1,
     flexDirection: "row",
-    minHeight: 40,
+    minHeight: 44,
     overflow: "hidden",
     width: "100%",
   },
@@ -76,6 +79,7 @@ function PhoneCountryPrefix({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
+      accessibilityValue={{ text: `${country.label}, ${country.dialCode}` }}
       disabled={disabled}
       onPress={onPress}
       style={style}
@@ -99,12 +103,13 @@ PhoneCountryPrefix.displayName = "PhoneCountryPrefix";
 function PhoneInput({
   country,
   countryAccessibilityLabel = "Choose country dialing code",
-  disabled = false,
+  disabled: ownDisabled = false,
   onPressCountry,
   ref,
   style,
   ...props
 }: PhoneInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   return (
     <View

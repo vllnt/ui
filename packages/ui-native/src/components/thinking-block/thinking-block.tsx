@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -44,11 +45,9 @@ const styles = StyleSheet.create({
 
 function ThinkingContent({
   contentId,
-  isStreaming,
   thinking,
 }: {
   readonly contentId: string;
-  readonly isStreaming: boolean;
   readonly thinking: string;
 }) {
   const theme = useTheme();
@@ -65,10 +64,7 @@ function ThinkingContent({
         },
       ]}
     >
-      <Text
-        accessibilityLiveRegion={isStreaming ? "polite" : "none"}
-        style={typeStyle(theme, "caption", "mutedForeground")}
-      >
+      <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {thinking}
       </Text>
     </View>
@@ -76,7 +72,11 @@ function ThinkingContent({
 }
 ThinkingContent.displayName = "ThinkingContent";
 
-/** Collapsible text thinking trace for React Native. */
+/**
+ * Collapsible text thinking trace for React Native. The trigger speaks the
+ * visible status as its value and reports `busy` while streaming; it announces
+ * the status when streaming starts and ends, never per token.
+ */
 function ThinkingBlock({
   defaultExpanded = false,
   expanded,
@@ -93,6 +93,8 @@ function ThinkingBlock({
   const controlled = expanded !== undefined;
   const isExpanded = isStreaming || (controlled ? expanded : internalExpanded);
   const contentId = useId();
+  const status = isStreaming ? labels.streaming : labels.thinking;
+  useAnnounceOnChange(status);
   const handleToggle = useCallback(() => {
     const next = !isExpanded;
     if (!controlled) setInternalExpanded(next);
@@ -104,7 +106,12 @@ function ThinkingBlock({
       <Pressable
         accessibilityLabel={isExpanded ? labels.collapse : labels.expand}
         accessibilityRole="button"
-        accessibilityState={{ disabled: isStreaming, expanded: isExpanded }}
+        accessibilityState={{
+          busy: isStreaming,
+          disabled: isStreaming,
+          expanded: isExpanded,
+        }}
+        accessibilityValue={{ text: status }}
         disabled={isStreaming}
         onPress={handleToggle}
         style={({ pressed }) => [
@@ -119,15 +126,11 @@ function ThinkingBlock({
             fontWeight: theme.typography.fontWeight.caption,
           })}
         >
-          {isStreaming ? labels.streaming : labels.thinking}
+          {status}
         </Text>
       </Pressable>
       {isExpanded ? (
-        <ThinkingContent
-          contentId={contentId}
-          isStreaming={isStreaming}
-          thinking={thinking}
-        />
+        <ThinkingContent contentId={contentId} thinking={thinking} />
       ) : null}
     </View>
   );

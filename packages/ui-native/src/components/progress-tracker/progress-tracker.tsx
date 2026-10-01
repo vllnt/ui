@@ -10,6 +10,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  decorativeProps,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
@@ -129,12 +133,7 @@ function ProgressTrackerRoot({
   );
   return (
     <ProgressTrackerContext value={value}>
-      <View
-        {...props}
-        accessibilityLabel={title}
-        ref={ref}
-        style={[{ gap: theme.spacing[6] }, style]}
-      >
+      <View {...props} ref={ref} style={[{ gap: theme.spacing[6] }, style]}>
         {children}
       </View>
     </ProgressTrackerContext>
@@ -253,7 +252,11 @@ export type ProgressTrackerModuleProps = Omit<ViewProps, "children" | "id"> &
     readonly ref?: Ref<View>;
   };
 
-/** Native module card that delegates navigation to the host without web hrefs. */
+/**
+ * Native module card that delegates navigation to the host without web hrefs.
+ * A pressable module is one screen-reader stop: its title is the name, its
+ * status and progress are the value, and the remaining card text is the hint.
+ */
 function ProgressTrackerModule({
   badge,
   completedExercises = 0,
@@ -291,14 +294,11 @@ function ProgressTrackerModule({
     title,
   };
   const locked = status === "locked";
+  const summarized = onPress !== undefined && !locked;
+  const lessonText = `${labels.lessons}: ${completedLessons}/${lessons}`;
+  const exerciseText = `${labels.exercises}: ${completedExercises}/${exercises}`;
   const content = (
-    <Card
-      {...props}
-      accessibilityState={{ disabled: locked }}
-      nativeID={`progress-module-${id}`}
-      ref={ref}
-      style={style}
-    >
+    <Card {...props} nativeID={`progress-module-${id}`} ref={ref} style={style}>
       <CardHeader>
         <View
           style={[
@@ -324,6 +324,7 @@ function ProgressTrackerModule({
       </CardHeader>
       <CardContent style={{ gap: theme.spacing[3] }}>
         <ProgressBar
+          {...(summarized ? decorativeProps : undefined)}
           accessibilityLabel={labels.progressPercent(clampPercent(progress))}
           completedLabel={labels.lessons}
           currentLabel={labels.progressPercent(clampPercent(progress))}
@@ -333,10 +334,10 @@ function ProgressTrackerModule({
         />
         <View style={[styles.row, { gap: theme.spacing[4] }]}>
           <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
-            {labels.lessons}: {completedLessons}/{lessons}
+            {lessonText}
           </Text>
           <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
-            {labels.exercises}: {completedExercises}/{exercises}
+            {exerciseText}
           </Text>
         </View>
         <View style={[styles.row, { gap: theme.spacing[2] }]}>
@@ -350,7 +351,26 @@ function ProgressTrackerModule({
   if (!onPress || locked) return content;
   return (
     <Pressable
+      accessibilityHint={joinAccessibilityText([
+        description,
+        badge,
+        currentLesson ? labels.currentLesson(currentLesson) : undefined,
+        timeSpent,
+        lessonText,
+        exerciseText,
+        ...skills,
+      ])}
+      accessibilityLabel={title}
       accessibilityRole="button"
+      accessibilityValue={{
+        text: joinAccessibilityText(
+          [
+            labels.status[status],
+            labels.progressPercent(clampPercent(progress)),
+          ],
+          ", ",
+        ),
+      }}
       onPress={() => {
         onPress(module);
       }}

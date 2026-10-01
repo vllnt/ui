@@ -8,6 +8,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  ControlGroupContext,
+  useNestedControlGroup,
+} from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
@@ -26,27 +30,35 @@ export type FieldsetContentProps = ViewProps & { readonly ref?: Ref<View> };
 
 const styles = StyleSheet.create({ root: { width: "100%" } });
 
-/** Accessible native grouping surface for related fields. */
+/**
+ * Native grouping surface for related fields. VoiceOver ignores labels and
+ * state on non-focusable containers, so `disabled` reaches the package
+ * buttons and inputs inside, and `accessibilityLabel` becomes their hint.
+ */
 function Fieldset({
-  accessibilityState,
+  accessibilityLabel,
+  accessibilityState: _accessibilityState,
+  children,
   disabled = false,
   ref,
   style,
   ...props
 }: FieldsetProps) {
   const theme = useTheme();
+  const group = useNestedControlGroup({ disabled, label: accessibilityLabel });
   return (
     <View
       {...props}
       accessibilityRole="none"
-      accessibilityState={{ ...accessibilityState, disabled }}
       ref={ref}
       style={[
         styles.root,
         { gap: theme.spacing[4], opacity: disabled ? 0.5 : 1 },
         style,
       ]}
-    />
+    >
+      <ControlGroupContext value={group}>{children}</ControlGroupContext>
+    </View>
   );
 }
 Fieldset.displayName = "Fieldset";

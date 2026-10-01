@@ -35,7 +35,7 @@ it("normalizes uncontrolled slider state when bounds change", () => {
     max: 20,
     min: 0,
     now: 20,
-    text: undefined,
+    text: "20",
   });
   fireEvent(screen.getByRole("adjustable"), "accessibilityAction", {
     nativeEvent: { actionName: "decrement" },

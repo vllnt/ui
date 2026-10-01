@@ -13,6 +13,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import { useReducedMotion } from "../../primitives/use-reduced-motion";
@@ -37,6 +41,8 @@ export type ModelSelectorLabels = {
   readonly close: string;
   readonly description: string;
   readonly noModels: string;
+  /** Model count announced after the search query changes, e.g. "2 models". */
+  readonly results?: (count: number) => string;
   readonly search: string;
   readonly selected: string;
   readonly title: string;
@@ -137,11 +143,24 @@ function ModelRow({
 }) {
   const theme = useTheme();
   const unavailable = model.serviceState?.status === "unavailable";
+  const price = formatPricing?.(model.pricing);
   return (
     <Pressable
+      accessibilityHint={joinAccessibilityText([model.description, price])}
       accessibilityLabel={model.name}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected, disabled: unavailable }}
+      accessibilityValue={{
+        text: joinAccessibilityText(
+          [
+            selected ? labels.selected : undefined,
+            model.serviceState?.status === "unavailable"
+              ? `${labels.unavailable}: ${model.serviceState.message}`
+              : undefined,
+          ],
+          ", ",
+        ),
+      }}
       disabled={unavailable}
       onPress={() => {
         onSelect(model.id);
@@ -172,7 +191,7 @@ function ModelRow({
       <ModelMeta
         labels={labels}
         model={model}
-        price={formatPricing?.(model.pricing)}
+        price={price}
         selected={selected}
       />
     </Pressable>
@@ -382,10 +401,18 @@ function SelectorPanel({
 }) {
   const theme = useTheme();
   const handleSearchChange = state.setQuery;
+  const count = state.filteredModels.length;
+  useAnnounceOnChange(
+    state.query.trim()
+      ? count === 0
+        ? labels.noModels
+        : labels.results?.(count)
+      : undefined,
+    { liveRegion: count === 0 },
+  );
   return (
     <View
       {...viewProps}
-      accessibilityLabel={labels.description}
       ref={reference}
       style={[
         styles.panel,

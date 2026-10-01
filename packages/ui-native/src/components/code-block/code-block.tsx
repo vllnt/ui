@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
 import type { ClipboardService } from "../../primitives/platform-services";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
@@ -160,6 +161,15 @@ function CodeContent({
 }
 CodeContent.displayName = "CodeContent";
 
+function resolveCopyLabel(
+  copied: boolean,
+  available: boolean,
+  labels: CodeBlockProps["copyLabels"],
+) {
+  if (copied) return labels?.copied;
+  return available ? labels?.copy : labels?.unavailable;
+}
+
 /**
  * Renders selectable plain code. Hosts inject syntax rendering and clipboard
  * support explicitly.
@@ -188,11 +198,8 @@ function CodeBlock({
   );
   const copyAvailable = clipboard !== undefined;
   const copied = copiedCode === code;
-  const copyLabel = copied
-    ? copyLabels?.copied
-    : copyAvailable
-      ? copyLabels?.copy
-      : copyLabels?.unavailable;
+  const copyLabel = resolveCopyLabel(copied, copyAvailable, copyLabels);
+  useAnnounceOnChange(copied ? copyLabel : undefined, { liveRegion: true });
   const copy = async () => {
     if (!clipboard) return;
     const currentOperation = ++operation.current;

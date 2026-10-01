@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -39,20 +40,25 @@ export type DateRangePickerProps = Omit<ViewProps, "children"> & {
 
 const styles = StyleSheet.create({
   action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   panel: { borderTopWidth: 1 },
   trigger: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
 });
 
-/** Date-range picker using an accessible native modal calendar. */
+/**
+ * Date-range picker using an accessible native modal calendar. The open
+ * sheet is titled by a `labels.open` header.
+ */
 function DateRangePicker({
-  disabled = false,
+  disabled: ownDisabled = false,
   labels,
   range: rangeState,
   ref,
   style,
   ...props
 }: DateRangePickerProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [range, setRange] = useControllableState(rangeState);
@@ -109,6 +115,18 @@ function DateRangePicker({
             },
           ]}
         >
+          <NativeText
+            accessibilityRole="header"
+            style={[
+              styles.heading,
+              ...typeStyle(theme, "bodySmall", {
+                color: "foreground",
+                fontWeight: theme.typography.fontWeight.heading,
+              }),
+            ]}
+          >
+            {labels.open}
+          </NativeText>
           <RangeCalendar
             disabled={disabled}
             labels={labels}

@@ -9,6 +9,11 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  ControlGroupContext,
+  useControlGroup,
+  useNestedControlGroup,
+} from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
@@ -46,14 +51,22 @@ const styles = StyleSheet.create({
   verticalSeparator: { height: 1, width: "100%" },
 });
 
-/** Token-styled native toolbar that exposes toolbar group semantics. */
+/**
+ * Token-styled native toolbar that exposes toolbar group semantics. VoiceOver
+ * ignores labels on non-focusable containers, so the toolbar's
+ * `accessibilityLabel` becomes the hint of every ToolbarButton and package
+ * Button inside.
+ */
 function Toolbar({
+  accessibilityLabel,
+  children,
   orientation = "horizontal",
   ref,
   style,
   ...props
 }: ToolbarProps) {
   const theme = useTheme();
+  const group = useNestedControlGroup({ label: accessibilityLabel });
   return (
     <View
       {...props}
@@ -71,28 +84,34 @@ function Toolbar({
         },
         style,
       ]}
-    />
+    >
+      <ControlGroupContext value={group}>{children}</ControlGroupContext>
+    </View>
   );
 }
 Toolbar.displayName = "Toolbar";
 
 /** Native toolbar action that preserves the minimum 44-point target. */
 function ToolbarButton({
+  accessibilityHint,
   accessibilityState,
   children,
-  disabled = false,
+  disabled: ownDisabled = false,
   ref,
   style,
   ...props
 }: ToolbarButtonProps) {
   const theme = useTheme();
+  const group = useControlGroup();
+  const disabled = ownDisabled === true || group.disabled === true;
   return (
     <Pressable
       {...props}
+      accessibilityHint={accessibilityHint ?? group.label}
       accessibilityRole="button"
       accessibilityState={{
         ...accessibilityState,
-        disabled: disabled ?? undefined,
+        disabled,
       }}
       disabled={disabled}
       ref={ref}

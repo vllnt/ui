@@ -4,12 +4,23 @@ import { StyleSheet, View, type ViewProps } from "react-native";
 import { useTheme } from "../../theme/theme-provider";
 import { Text } from "../text/text";
 
+/** Localized status words; English defaults keep the previous output. */
+export type ProgressBarLabels = {
+  /** Status when complete. Defaults to "Complete". */
+  readonly complete?: string;
+  /** Loading text for a status. Defaults to `Loading <status in lower case>`. */
+  readonly loading?: (status: string) => string;
+  /** Status while in progress. Defaults to "Progress". */
+  readonly progress?: string;
+};
+
 /** Props for an accessible native progress indicator. */
 export type ProgressBarProps = Omit<ViewProps, "children"> & {
   readonly completedLabel?: string;
   readonly currentLabel?: string;
   readonly isComplete?: boolean;
   readonly isLoading?: boolean;
+  readonly labels?: ProgressBarLabels;
   readonly max: number;
   readonly ref?: Ref<View>;
   readonly showLabels?: boolean;
@@ -55,27 +66,61 @@ function getProgressState(
   };
 }
 
+function resolveStatus({
+  complete,
+  currentLabel,
+  isLoading,
+  labels,
+}: {
+  readonly complete: boolean;
+  readonly currentLabel?: string;
+  readonly isLoading: boolean;
+  readonly labels?: ProgressBarLabels;
+}) {
+  const statusLabel =
+    currentLabel ??
+    (complete
+      ? (labels?.complete ?? "Complete")
+      : (labels?.progress ?? "Progress"));
+  if (!isLoading) return { loadingLabel: undefined, statusLabel };
+  const loadingLabel = labels?.loading
+    ? labels.loading(statusLabel)
+    : `Loading ${statusLabel.toLowerCase()}`;
+  return { loadingLabel, statusLabel };
+}
+
+function spokenProgress(state: ProgressState, loadingLabel?: string) {
+  return loadingLabel === undefined
+    ? {
+        max: state.max,
+        min: 0,
+        now: state.value,
+        text: `${state.percent}%`,
+      }
+    : { text: loadingLabel };
+}
+
 function ProgressLabels({
   completedLabel,
-  isLoading,
+  loadingLabel,
   state,
   statusLabel,
 }: {
   readonly completedLabel: string;
-  readonly isLoading: boolean;
+  readonly loadingLabel?: string;
   readonly state: ProgressState;
   readonly statusLabel: string;
 }) {
   return (
     <View style={styles.labelRow}>
       <Text size="small" weight="medium">
-        {isLoading ? `Loading ${statusLabel.toLowerCase()}` : statusLabel}
+        {loadingLabel ?? statusLabel}
       </Text>
-      {isLoading ? null : (
+      {loadingLabel === undefined ? (
         <Text size="small" tone="muted">
           {state.value} / {state.max} {completedLabel}
         </Text>
-      )}
+      ) : null}
     </View>
   );
 }
@@ -123,10 +168,12 @@ ProgressTrack.displayName = "ProgressTrack";
 /** Native progress bar with clamped values and React Native accessibility state. */
 function ProgressBar({
   accessibilityLabel,
+  accessibilityValue,
   completedLabel = "completed",
   currentLabel,
   isComplete,
   isLoading = false,
+  labels,
   max,
   ref,
   showLabels = true,
@@ -136,8 +183,12 @@ function ProgressBar({
 }: ProgressBarProps) {
   const theme = useTheme();
   const state = getProgressState(max, value, isComplete);
-  const statusLabel =
-    currentLabel ?? (state.complete ? "Complete" : "Progress");
+  const { loadingLabel, statusLabel } = resolveStatus({
+    complete: state.complete,
+    currentLabel,
+    isLoading,
+    labels,
+  });
 
   return (
     <View
@@ -146,14 +197,7 @@ function ProgressBar({
       accessibilityRole="progressbar"
       accessibilityState={{ busy: isLoading }}
       accessibilityValue={
-        isLoading
-          ? { text: `Loading ${statusLabel.toLowerCase()}` }
-          : {
-              max: state.max,
-              min: 0,
-              now: state.value,
-              text: `${state.percent}%`,
-            }
+        accessibilityValue ?? spokenProgress(state, loadingLabel)
       }
       accessible
       ref={ref}
@@ -174,7 +218,7 @@ function ProgressBar({
       {showLabels ? (
         <ProgressLabels
           completedLabel={completedLabel}
-          isLoading={isLoading}
+          loadingLabel={loadingLabel}
           state={state}
           statusLabel={statusLabel}
         />

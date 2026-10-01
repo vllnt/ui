@@ -3,7 +3,6 @@
 import { type Ref, useEffect, useLayoutEffect, useRef } from "react";
 
 import {
-  AccessibilityInfo,
   Pressable,
   StyleSheet,
   Text,
@@ -11,8 +10,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { announce } from "../../primitives/accessibility";
 import type { SelectionKey } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
+import { useScreenReaderEnabled } from "../../primitives/use-screen-reader-enabled";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Controlled native toast queue entry. */
@@ -38,6 +39,18 @@ export type ToastProps = Omit<ViewProps, "children"> & {
   readonly toasts: readonly ToastItem[];
 };
 
+/**
+ * Expiry multiplier while VoiceOver or TalkBack runs (WCAG 2.2.1 asks for at
+ * least ten times the default), so toasts stay long enough to reach without
+ * staying forever.
+ */
+const SCREEN_READER_TIMEOUT_FACTOR = 10;
+
+/** Runs `callback` at `deadline` (epoch milliseconds); the caller clears it. */
+function scheduleAt(deadline: number, callback: () => void) {
+  return setTimeout(callback, Math.max(0, deadline - Date.now()));
+}
+
 const styles = StyleSheet.create({
   action: {
     alignItems: "center",
@@ -56,7 +69,12 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Accessible controlled toast queue with per-instance deterministic timers. */
+/**
+ * Accessible controlled toast queue with per-instance deterministic timers.
+ * Each new toast (title and description) is announced once on both platforms;
+ * while VoiceOver or TalkBack runs, expiry takes ten times longer so users
+ * have time to reach the toast, and it restarts when the screen reader stops.
+ */
 function Toast({
   closeLabel,
   onToastsChange,
@@ -66,6 +84,7 @@ function Toast({
   ...props
 }: ToastProps) {
   const theme = useTheme();
+  const screenReaderEnabled = useScreenReaderEnabled();
   const queueRef = useRef(toasts);
   const onChangeRef = useRef(onToastsChange);
   const announcedIds = useRef(new Set<SelectionKey>());
@@ -110,16 +129,19 @@ function Toast({
     for (const id of announcedIds.current) {
       if (!currentIds.has(id)) announcedIds.current.delete(id);
     }
+    const extension = screenReaderEnabled ? SCREEN_READER_TIMEOUT_FACTOR : 1;
     for (const [id, entry] of timerMap) {
       const toast = toasts.find((item) => Object.is(item.id, id));
-      if (toast?.duration !== entry.duration || dismissedIds.current.has(id)) {
+      const duration =
+        toast?.duration === undefined ? undefined : toast.duration * extension;
+      if (duration !== entry.duration || dismissedIds.current.has(id)) {
         clearTimeout(entry.timer);
         timerMap.delete(id);
       }
     }
     for (const toast of toasts) {
       if (!announcedIds.current.has(toast.id)) {
-        AccessibilityInfo.announceForAccessibility(
+        announce(
           toast.description
             ? `${toast.title}. ${toast.description}`
             : toast.title,
@@ -131,21 +153,22 @@ function Toast({
         toast.duration !== undefined &&
         toast.duration > 0
       ) {
+        const duration = toast.duration * extension;
         const deadline =
-          timerMap.get(toast.id)?.deadline ?? Date.now() + toast.duration;
-        const timer = setTimeout(
-          () => {
+          timerMap.get(toast.id)?.deadline ?? Date.now() + duration;
+        timerMap.set(toast.id, {
+          deadline,
+          duration,
+          timer: scheduleAt(deadline, () => {
             dismiss(toast.id);
-          },
-          Math.max(0, deadline - Date.now()),
-        );
-        timerMap.set(toast.id, { deadline, duration: toast.duration, timer });
+          }),
+        });
       }
     }
     return () => {
       for (const entry of timerMap.values()) clearTimeout(entry.timer);
     };
-  }, [toasts]);
+  }, [screenReaderEnabled, toasts]);
 
   return (
     <View
@@ -157,9 +180,6 @@ function Toast({
         const destructive = toast.variant === "destructive";
         return (
           <View
-            accessibilityLabel={toast.title}
-            accessibilityLiveRegion={destructive ? "assertive" : "polite"}
-            accessibilityRole={destructive ? "alert" : undefined}
             key={toast.id}
             style={[
               styles.toast,

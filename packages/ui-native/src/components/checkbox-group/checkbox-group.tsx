@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -43,9 +44,13 @@ const styles = StyleSheet.create({
   wrap: { flexWrap: "wrap" },
 });
 
-/** Native related-checkbox group backed by stable caller IDs. */
+/**
+ * Native related-checkbox group backed by stable caller IDs. The group
+ * `label` is each checkbox's hint, because VoiceOver ignores labels on
+ * non-focusable containers.
+ */
 function CheckboxGroup({
-  disabled = false,
+  disabled: ownDisabled = false,
   items,
   label,
   orientation = "vertical",
@@ -54,13 +59,12 @@ function CheckboxGroup({
   style,
   ...props
 }: CheckboxGroupProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedIds, setSelectedIds] = useControllableState(selection);
   const getId = (item: CheckboxGroupItem) => item.id;
   return (
     <View
-      accessibilityLabel={label}
-      accessibilityState={{ disabled }}
       ref={ref}
       style={[
         orientation === "horizontal"
@@ -75,6 +79,7 @@ function CheckboxGroup({
         const itemDisabled = disabled || item.disabled === true;
         return (
           <Pressable
+            accessibilityHint={label}
             accessibilityLabel={item.label}
             accessibilityRole="checkbox"
             accessibilityState={{ checked, disabled: itemDisabled }}

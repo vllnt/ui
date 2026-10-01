@@ -21,7 +21,7 @@ import { Toast, type ToastItem } from "../components/toast/toast";
 import { Tooltip } from "../components/tooltip/tooltip";
 import type { ShareService } from "../primitives/platform-services";
 
-import { advanceTimers } from "./test-utils";
+import { advanceTimers, flushMicrotasks } from "./test-utils";
 
 function ToastHarness({ initial }: { readonly initial: readonly ToastItem[] }) {
   const [toasts, setToasts] = useState(initial);
@@ -62,7 +62,10 @@ it("opens and closes a dialog through controls, back, and accessibility escape",
   expect(onOpenChange).toHaveBeenCalledWith(false);
 
   view.rerender(<Dialog {...props} open />);
-  fireEvent(screen.getByLabelText("Preferences"), "accessibilityEscape");
+  fireEvent(
+    screen.getByRole("header", { name: "Preferences" }),
+    "accessibilityEscape",
+  );
   expect(onRequestClose).toHaveBeenCalledWith("accessibilityEscape");
   fireEvent(screen.UNSAFE_getByType(Modal), "requestClose", {
     nativeEvent: {},
@@ -111,10 +114,8 @@ it("reports unavailable and available native sharing truthfully", async () => {
   };
   const unavailable = render(<ShareDialog {...props} shareService={null} />);
 
-  expect(screen.getByText("Sharing unavailable")).toBeOnTheScreen();
-  expect(
-    screen.getByRole("button", { name: "Sharing unavailable" }),
-  ).toBeDisabled();
+  expect(screen.getAllByText("Sharing unavailable")).toHaveLength(1);
+  expect(screen.getByRole("button", { name: "Share now" })).toBeDisabled();
   unavailable.unmount();
 
   const clipboard = { getText: async () => "", setText: async () => {} };
@@ -246,7 +247,7 @@ it("opens tooltip help explicitly by press and does not depend on hover", () => 
   fireEvent.press(screen.getByRole("button", { name: "Close help" }));
 });
 
-it("announces toast entries and removes them with deterministic timers", () => {
+it("announces toast entries and removes them with deterministic timers", async () => {
   jest.useFakeTimers();
   const announce = jest
     .spyOn(AccessibilityInfo, "announceForAccessibility")
@@ -263,6 +264,7 @@ it("announces toast entries and removes them with deterministic timers", () => {
       ]}
     />,
   );
+  await flushMicrotasks();
   expect(announce).toHaveBeenCalledWith("Saved. Your changes are stored.");
   expect(screen.getByText("Saved")).toBeOnTheScreen();
   advanceTimers(1000);

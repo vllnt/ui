@@ -209,14 +209,14 @@ it("links disclosure parts only while their counterparts are mounted", () => {
     "aria-labelledby",
     "details-trigger",
   );
-  expect(screen.getByRole("button", { name: "Toggle" })).toHaveProp(
+  expect(screen.getByRole("button", { name: "Toggle" })).not.toHaveProp(
     "aria-controls",
-    "details-content",
   );
   screen.rerender(tree({ content: false, trigger: true }));
-  expect(
-    screen.getByRole("button", { name: "Toggle" }).props["aria-controls"],
-  ).toBeUndefined();
+  expect(screen.getByRole("button", { name: "Toggle" })).toHaveProp(
+    "accessibilityState",
+    expect.objectContaining({ expanded: true }),
+  );
   screen.rerender(tree({ content: true, trigger: false }));
   expect(
     screen.getByTestId("details-content").props["aria-labelledby"],

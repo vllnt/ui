@@ -61,7 +61,11 @@ function buildLabel(
   link: DocumentSiblingNavLink,
   variant: DocumentSiblingNavVariant,
 ) {
-  return variant === "compact" ? caption : `${caption}: ${link.title}`;
+  if (variant === "compact") return caption;
+  const titled = `${caption}: ${link.title}`;
+  return variant === "with-meta" && link.meta
+    ? `${titled}, ${link.meta}`
+    : titled;
 }
 
 function SiblingText({
@@ -107,6 +111,7 @@ SiblingText.displayName = "SiblingText";
 
 type SiblingLinkProps = {
   readonly caption: string;
+  readonly hint: string;
   readonly link: DocumentSiblingNavLink;
   readonly linking: LinkingService;
   readonly onOpenError?: (error: unknown, link: DocumentSiblingNavLink) => void;
@@ -120,6 +125,7 @@ type SiblingLinkProps = {
 
 function SiblingLink({
   caption,
+  hint,
   link,
   linking,
   onOpenError,
@@ -130,6 +136,7 @@ function SiblingLink({
   const theme = useTheme();
   return (
     <Pressable
+      accessibilityHint={hint}
       accessibilityLabel={buildLabel(caption, link, variant)}
       accessibilityRole="link"
       onPress={() => {
@@ -159,7 +166,11 @@ function SiblingLink({
 }
 SiblingLink.displayName = "SiblingLink";
 
-/** Opens sibling document URLs through an injectable native linking service. */
+/**
+ * Opens sibling document URLs through an injectable native linking service.
+ * Each link speaks its caption, title, and (with-meta) meta, with
+ * `labels.navigation` as its hint.
+ */
 function DocumentSiblingNav({
   labels,
   linking = defaultLinkingService,
@@ -177,13 +188,13 @@ function DocumentSiblingNav({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.navigation}
       ref={ref}
       style={[styles.root, { gap: theme.spacing[3] }, style]}
     >
       {previous ? (
         <SiblingLink
           caption={labels.previous}
+          hint={labels.navigation}
           link={previous}
           linking={linking}
           onOpenError={onOpenError}
@@ -197,6 +208,7 @@ function DocumentSiblingNav({
       {next ? (
         <SiblingLink
           caption={labels.next}
+          hint={labels.navigation}
           link={next}
           linking={linking}
           onOpenError={onOpenError}

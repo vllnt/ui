@@ -12,6 +12,10 @@ import {
   type ViewProps,
 } from "react-native";
 
+import {
+  announce,
+  joinAccessibilityText,
+} from "../../primitives/accessibility";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -82,7 +86,9 @@ function targetIndex({
 
 /**
  * Native horizontal paging surface with swipe gestures and accessible actions.
- * The host supplies stable slide ids and localized control text.
+ * The host supplies stable slide ids and localized control text. The visible
+ * position text is the adjustable element (named by `labels.region`); button
+ * presses and swipes announce the new slide label and position.
  */
 function Carousel({
   defaultSelectedId,
@@ -111,21 +117,38 @@ function Carousel({
   );
   const foundIndex = items.findIndex((item) => item.id === selection);
   const selectedIndex = foundIndex < 0 ? 0 : foundIndex;
+  const requestedIndex = useRef<number | undefined>(undefined);
+  const committedIndex = useRef(selectedIndex);
   const move = useCallback(
-    (step: number) => {
-      const next =
-        items[
-          targetIndex({
-            count: items.length,
-            current: selectedIndex,
-            loop,
-            step,
-          })
-        ];
-      if (next) setSelection(next.id);
+    (step: number, spoken = false) => {
+      const index = targetIndex({
+        count: items.length,
+        current: selectedIndex,
+        loop,
+        step,
+      });
+      const next = items[index];
+      if (!next) return;
+      if (spoken && index !== selectedIndex) requestedIndex.current = index;
+      setSelection(next.id);
     },
     [items, loop, selectedIndex, setSelection],
   );
+
+  useEffect(() => {
+    const changed = committedIndex.current !== selectedIndex;
+    const requested = requestedIndex.current;
+    committedIndex.current = selectedIndex;
+    requestedIndex.current = undefined;
+    const item = items[selectedIndex];
+    if (!changed || requested !== selectedIndex || !item) return;
+    announce(
+      joinAccessibilityText(
+        [item.label, labels.position(selectedIndex + 1, items.length)],
+        ", ",
+      ),
+    );
+  });
 
   useEffect(() => {
     if (width <= 0) return;
@@ -146,17 +169,6 @@ function Carousel({
   return (
     <View
       {...props}
-      accessibilityActions={[
-        { label: labels.previous, name: "decrement" },
-        { label: labels.next, name: "increment" },
-      ]}
-      accessibilityLabel={labels.region}
-      accessibilityRole="adjustable"
-      accessibilityValue={{ text: position }}
-      onAccessibilityAction={(event) => {
-        if (event.nativeEvent.actionName === "decrement") move(-1);
-        if (event.nativeEvent.actionName === "increment") move(1);
-      }}
       onLayout={(event) => {
         setWidth(event.nativeEvent.layout.width);
         onLayout?.(event);
@@ -171,6 +183,7 @@ function Carousel({
           if (width <= 0) return;
           const index = Math.round(event.nativeEvent.contentOffset.x / width);
           const item = items[index];
+          if (item && index !== selectedIndex) requestedIndex.current = index;
           if (item) setSelection(item.id);
           if (selectedId !== undefined)
             setSwipeRevision((revision) => revision + 1);
@@ -183,8 +196,6 @@ function Carousel({
           {items.map((item, index) => (
             <View
               accessibilityElementsHidden={index !== selectedIndex}
-              accessibilityLabel={item.label}
-              accessibilityRole="summary"
               importantForAccessibility={
                 index === selectedIndex ? "yes" : "no-hide-descendants"
               }
@@ -203,7 +214,7 @@ function Carousel({
           accessibilityState={{ disabled: previousDisabled }}
           disabled={previousDisabled}
           onPress={() => {
-            move(-1);
+            move(-1, true);
           }}
           style={styles.action}
         >
@@ -211,16 +222,31 @@ function Carousel({
             {labels.previous}
           </Text>
         </Pressable>
-        <Text style={typeStyle(theme, "caption", "mutedForeground")}>
-          {position}
-        </Text>
+        <View
+          accessibilityActions={[
+            { label: labels.previous, name: "decrement" },
+            { label: labels.next, name: "increment" },
+          ]}
+          accessibilityLabel={labels.region}
+          accessibilityRole="adjustable"
+          accessibilityValue={{ text: position }}
+          accessible
+          onAccessibilityAction={(event) => {
+            if (event.nativeEvent.actionName === "decrement") move(-1);
+            if (event.nativeEvent.actionName === "increment") move(1);
+          }}
+        >
+          <Text style={typeStyle(theme, "caption", "mutedForeground")}>
+            {position}
+          </Text>
+        </View>
         <Pressable
           accessibilityLabel={labels.next}
           accessibilityRole="button"
           accessibilityState={{ disabled: nextDisabled }}
           disabled={nextDisabled}
           onPress={() => {
-            move(1);
+            move(1, true);
           }}
           style={styles.action}
         >

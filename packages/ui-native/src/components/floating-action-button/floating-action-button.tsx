@@ -6,7 +6,9 @@ import {
   type View,
 } from "react-native";
 
+import { TextColorContext } from "../../primitives/text-color";
 import { useTheme } from "../../theme/theme-provider";
+import { Text } from "../text/text";
 
 /** Screen corner used by FloatingActionButton. */
 export type FloatingActionButtonPosition = "bottom-left" | "bottom-right";
@@ -30,7 +32,10 @@ const styles = StyleSheet.create({
   },
 });
 
-/** Native primary floating action without decorative scaling animation. */
+/**
+ * Native primary floating action without decorative scaling animation. Package
+ * `Text` children (and plain string children) use the primary foreground.
+ */
 function FloatingActionButton({
   accessibilityLabel,
   accessibilityState,
@@ -67,7 +72,13 @@ function FloatingActionButton({
         typeof style === "function" ? style(state) : style,
       ]}
     >
-      {children}
+      <TextColorContext value={theme.colors.primaryForeground}>
+        {typeof children === "string" || typeof children === "number" ? (
+          <Text>{children}</Text>
+        ) : (
+          children
+        )}
+      </TextColorContext>
     </Pressable>
   );
 }

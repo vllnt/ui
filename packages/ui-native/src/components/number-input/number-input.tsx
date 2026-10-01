@@ -12,6 +12,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     borderWidth: 1,
     flexDirection: "row",
-    minHeight: 40,
+    minHeight: 44,
     overflow: "hidden",
     width: "100%",
   },
@@ -249,22 +250,16 @@ function NumberControls({
 }
 NumberControls.displayName = "NumberControls";
 
-function performAccessibilityAction(
-  actionName: string,
-  disabled: boolean,
-  state: ReturnType<typeof useNumberState>,
-) {
-  if (disabled) return;
-  if (actionName === "decrement") state.handleDecrement();
-  if (actionName === "increment") state.handleIncrement();
-}
-
-/** Controlled or uncontrolled native number editor with bounded step actions. */
+/**
+ * Controlled or uncontrolled native number editor with bounded step actions.
+ * The text field and its two step buttons are separate accessible elements
+ * on both platforms; the field speaks the current value itself.
+ */
 function NumberInput({
   accessibilityLabel,
   decrementLabel = "Decrement",
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
   incrementLabel = "Increment",
   max,
   min,
@@ -275,6 +270,7 @@ function NumberInput({
   value,
   ...props
 }: NumberInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const state = useNumberState({
     defaultValue,
@@ -289,25 +285,6 @@ function NumberInput({
   return (
     <View
       {...rootProps}
-      accessibilityActions={[
-        { label: decrementLabel, name: "decrement" },
-        { label: incrementLabel, name: "increment" },
-      ]}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="spinbutton"
-      accessibilityState={{ disabled }}
-      accessibilityValue={{
-        max: state.max,
-        min: state.min,
-        now: state.current,
-      }}
-      onAccessibilityAction={(event) => {
-        performAccessibilityAction(
-          event.nativeEvent.actionName,
-          disabled,
-          state,
-        );
-      }}
       style={[
         styles.root,
         {

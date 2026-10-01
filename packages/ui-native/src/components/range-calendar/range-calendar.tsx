@@ -9,11 +9,18 @@ import { Calendar, type CalendarLabels } from "../calendar/calendar";
 
 /** Native date-range value with an optional in-progress end date. */
 export type DateRange = { readonly end?: Date; readonly start: Date };
+/** Calendar labels plus the spoken range endpoints. */
+export type RangeCalendarLabels = CalendarLabels & {
+  /** Value spoken on the last day of the range. Defaults to "Range end". */
+  readonly rangeEnd?: string;
+  /** Value spoken on the first day of the range. Defaults to "Range start". */
+  readonly rangeStart?: string;
+};
 /** Props for a native range-selection calendar. */
 export type RangeCalendarProps = Omit<ViewProps, "children"> & {
   readonly disabled?: boolean;
   readonly isDateDisabled?: (date: Date) => boolean;
-  readonly labels: CalendarLabels;
+  readonly labels: RangeCalendarLabels;
   readonly month?: Date;
   readonly onMonthChange?: (month: Date) => void;
   readonly range: ControllableStateOptions<DateRange | undefined>;
@@ -37,7 +44,15 @@ function normalizeRange(range?: DateRange): DateRange | undefined {
   return { end: start, start: end };
 }
 
-/** Native calendar that chooses an ordered start/end Date range. */
+function sameTime(left: Date, right?: Date): boolean {
+  return left.getTime() === right?.getTime();
+}
+
+/**
+ * Native calendar that chooses an ordered start/end Date range. Days inside
+ * the range report `selected`; the endpoints also speak "Range start" or
+ * "Range end" (localize through `labels`), including while the end is pending.
+ */
 function RangeCalendar({
   range: rangeState,
   ref,
@@ -61,9 +76,18 @@ function RangeCalendar({
     const end = range.end?.getTime() ?? range.start.getTime();
     return timestamp >= range.start.getTime() && timestamp <= end;
   };
+  const describeDate = (date: Date) => {
+    const day = startOfDay(date);
+    if (sameTime(day, range?.start))
+      return props.labels.rangeStart ?? "Range start";
+    return sameTime(day, range?.end)
+      ? (props.labels.rangeEnd ?? "Range end")
+      : undefined;
+  };
   return (
     <Calendar
       {...props}
+      describeDate={describeDate}
       isDateSelected={isDateSelected}
       ref={ref}
       selection={{

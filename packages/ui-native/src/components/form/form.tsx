@@ -10,10 +10,16 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 
-const FormContext = createContext<(() => void) | null>(null);
+type FormContextValue = {
+  readonly label: string;
+  readonly submit: () => void;
+};
+const FormContext = createContext<FormContextValue | null>(null);
 
 /** Props for a native form grouping boundary. */
 export type FormProps = Omit<ViewProps, "children"> & {
@@ -39,14 +45,20 @@ const styles = StyleSheet.create({
   root: { width: "100%" },
 });
 
-/** Native form semantic group; submission occurs only through FormSubmit. */
+/**
+ * Native form grouping boundary; submission occurs only through FormSubmit.
+ * React Native has no form role and VoiceOver ignores labels on non-focusable
+ * containers, so the form `label` is the submit action's hint.
+ */
 function Form({ children, label, onSubmit, ref, style, ...props }: FormProps) {
   const theme = useTheme();
-  const submit = useMemo(() => onSubmit, [onSubmit]);
+  const context = useMemo(
+    () => ({ label, submit: onSubmit }),
+    [label, onSubmit],
+  );
   return (
-    <FormContext value={submit}>
+    <FormContext value={context}>
       <View
-        accessibilityLabel={label}
         ref={ref}
         style={[styles.root, { gap: theme.spacing[4] }, style]}
         {...props}
@@ -61,22 +73,24 @@ Form.displayName = "Form";
 /** Explicit 44-point action that invokes the nearest Form submission callback. */
 function FormSubmit({
   children,
-  disabled = false,
+  disabled: ownDisabled = false,
   ref,
   style,
   ...props
 }: FormSubmitProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
-  const submit = use(FormContext);
-  if (!submit) throw new Error("FormSubmit must be used within Form");
+  const form = use(FormContext);
+  if (!form) throw new Error("FormSubmit must be used within Form");
   return (
     <Pressable
+      accessibilityHint={form.label}
       {...props}
       accessibilityLabel={children}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       disabled={disabled}
-      onPress={submit}
+      onPress={form.submit}
       ref={ref}
       style={[
         styles.action,
@@ -97,9 +111,16 @@ function FormSubmit({
 }
 FormSubmit.displayName = "FormSubmit";
 
-/** Validation message announced only when non-empty. */
+/**
+ * Validation message: TalkBack speaks it through its live region and iOS
+ * receives an announcement whenever a non-empty message appears.
+ */
 function FormMessage({ children, ref, ...props }: FormMessageProps) {
   const theme = useTheme();
+  useAnnounceOnChange(children || undefined, {
+    initial: true,
+    liveRegion: true,
+  });
   if (!children) return null;
   return (
     <View

@@ -9,6 +9,7 @@ import {
   type View,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -40,12 +41,12 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.8 },
 });
 
-/** Accessible native toggle action with selected-state semantics. */
+/** Accessible native toggle button exposing its pressed state as `checked`. */
 function Toggle({
   accessibilityState,
   children,
   defaultPressed = false,
-  disabled = false,
+  disabled: ownDisabled = false,
   onPress,
   onPressedChange,
   pressed,
@@ -54,6 +55,7 @@ function Toggle({
   variant = "default",
   ...props
 }: ToggleProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [isPressed, setIsPressed] = useControllableState(
     controllableOptions(pressed, defaultPressed, onPressedChange),
@@ -75,11 +77,11 @@ function Toggle({
   return (
     <Pressable
       {...props}
-      accessibilityRole="button"
+      accessibilityRole="togglebutton"
       accessibilityState={{
         ...accessibilityState,
+        checked: isPressed,
         disabled: disabled ?? undefined,
-        selected: isPressed,
       }}
       disabled={disabled}
       onPress={(event) => {

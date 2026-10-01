@@ -2,6 +2,10 @@ import { type Ref, useState } from "react";
 
 import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  joinAccessibilityText,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge } from "../badge/badge";
 import { Button } from "../button/button";
@@ -32,6 +36,11 @@ export type ActivityLogProps = Omit<ViewProps, "children"> & {
   readonly nextLabel?: string;
   readonly onPageChange?: (page: number) => void;
   readonly page?: number;
+  /**
+   * Page position text, shown in the header and announced when the page
+   * changes. Defaults to "Page <page> of <total>".
+   */
+  readonly pageLabel?: (page: number, totalPages: number) => string;
   readonly pageSize?: number;
   readonly previousLabel?: string;
   readonly ref?: Ref<View>;
@@ -52,27 +61,27 @@ function positiveInteger(value: number, fallback: number): number {
 }
 
 function ActivityHeader({
-  currentPage,
   description,
+  position,
   title,
-  totalPages,
 }: {
-  readonly currentPage: number;
   readonly description?: string;
+  readonly position: string;
   readonly title: string;
-  readonly totalPages: number;
 }) {
   const theme = useTheme();
   return (
     <View style={{ gap: theme.spacing[1] }}>
-      <Text weight="semibold">{title}</Text>
+      <Text accessibilityRole="header" weight="semibold">
+        {title}
+      </Text>
       {description ? (
         <Text size="small" tone="muted">
           {description}
         </Text>
       ) : null}
       <Text size="caption" tone="muted">
-        Page {currentPage} of {totalPages}
+        {position}
       </Text>
     </View>
   );
@@ -83,7 +92,16 @@ function ActivityRow({ item }: { readonly item: ActivityLogItem }) {
   const theme = useTheme();
   return (
     <View
-      accessibilityRole="text"
+      accessibilityHint={joinAccessibilityText([
+        item.description,
+        item.scope,
+        item.timestamp,
+      ])}
+      accessibilityLabel={joinAccessibilityText(
+        [item.actor, item.action, item.target],
+        ", ",
+      )}
+      accessible
       style={[
         styles.item,
         {
@@ -142,7 +160,11 @@ function ActivityControls({
   return (
     <View style={[styles.controls, { gap: theme.spacing[2] }]}>
       <Button
-        accessibilityLabel={`${previousLabel}, page ${currentPage - 1}`}
+        accessibilityLabel={
+          currentPage === 1
+            ? previousLabel
+            : `${previousLabel}, page ${currentPage - 1}`
+        }
         disabled={currentPage === 1}
         onPress={() => {
           onPageChange(currentPage - 1);
@@ -156,7 +178,11 @@ function ActivityControls({
         Showing {start + 1}–{start + itemCount} of {totalItems}
       </Text>
       <Button
-        accessibilityLabel={`${nextLabel}, page ${currentPage + 1}`}
+        accessibilityLabel={
+          currentPage === totalPages
+            ? nextLabel
+            : `${nextLabel}, page ${currentPage + 1}`
+        }
         disabled={currentPage === totalPages}
         onPress={() => {
           onPageChange(currentPage + 1);
@@ -171,7 +197,15 @@ function ActivityControls({
 }
 ActivityControls.displayName = "ActivityControls";
 
-/** Native paginated activity history with caller-owned entry identifiers. */
+function defaultPageLabel(page: number, totalPages: number) {
+  return `Page ${page} of ${totalPages}`;
+}
+
+/**
+ * Native paginated activity history with caller-owned entry identifiers.
+ * Each entry is one screen-reader stop, and the component announces page
+ * changes.
+ */
 function ActivityLog({
   defaultPage = 1,
   description,
@@ -180,6 +214,7 @@ function ActivityLog({
   nextLabel = "Next",
   onPageChange,
   page,
+  pageLabel = defaultPageLabel,
   pageSize = 5,
   previousLabel = "Previous",
   ref,
@@ -202,6 +237,8 @@ function ActivityLog({
     if (page === undefined) setUncontrolledPage(boundedPage);
     onPageChange?.(boundedPage);
   };
+  const position = pageLabel(currentPage, totalPages);
+  useAnnounceOnChange(position);
 
   return (
     <Card
@@ -210,17 +247,16 @@ function ActivityLog({
       style={[{ gap: theme.spacing[3], padding: theme.spacing[4] }, style]}
     >
       <ActivityHeader
-        currentPage={currentPage}
         description={description}
+        position={position}
         title={title}
-        totalPages={totalPages}
       />
       {items.length === 0 ? (
         <Text size="small" tone="muted">
           {emptyMessage}
         </Text>
       ) : (
-        <ScrollView accessibilityLabel={title} accessibilityRole="list">
+        <ScrollView accessibilityRole="list">
           {visibleItems.map((item) => (
             <ActivityRow item={item} key={item.id} />
           ))}

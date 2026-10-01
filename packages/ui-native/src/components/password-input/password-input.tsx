@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
@@ -22,7 +23,7 @@ export type PasswordInputProps = Omit<TextInputProps, "secureTextEntry"> & {
 };
 
 const styles = StyleSheet.create({
-  input: { flex: 1, paddingRight: 72 },
+  input: { flex: 1 },
   root: { justifyContent: "center", width: "100%" },
   toggle: {
     alignItems: "center",
@@ -37,15 +38,17 @@ const styles = StyleSheet.create({
 
 /** Native secure text input with an explicit show or hide action. */
 function PasswordInput({
-  disabled = false,
+  disabled: ownDisabled = false,
   hideLabel = "Hide password",
   ref,
   showLabel = "Show password",
   style,
   ...props
 }: PasswordInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [visible, setVisible] = useState(false);
+  const [toggleWidth, setToggleWidth] = useState(72);
   const label = visible ? hideLabel : showLabel;
 
   return (
@@ -55,13 +58,16 @@ function PasswordInput({
         disabled={disabled}
         ref={ref}
         secureTextEntry={!visible}
-        style={[styles.input, style]}
+        style={[styles.input, { paddingRight: toggleWidth }, style]}
       />
       <Pressable
         accessibilityLabel={label}
         accessibilityRole="button"
         accessibilityState={{ disabled }}
         disabled={disabled}
+        onLayout={(event) => {
+          setToggleWidth(Math.max(72, event.nativeEvent.layout.width));
+        }}
         onPress={() => {
           setVisible((previous) => !previous);
         }}

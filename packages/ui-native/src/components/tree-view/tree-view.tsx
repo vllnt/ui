@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { joinAccessibilityText } from "../../primitives/accessibility";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import {
@@ -32,6 +33,9 @@ export type TreeViewNode = {
 export type TreeViewLabels = {
   readonly collapseNode: (node: TreeViewNode) => string;
   readonly expandNode: (node: TreeViewNode) => string;
+  /** Spoken nesting depth of a node, starting at 1. Defaults to "Level <n>". */
+  readonly level?: (level: number) => string;
+  /** Tree name, spoken with the level as every node's hint. */
   readonly region: string;
 };
 
@@ -134,6 +138,10 @@ function TreeRow({
           <View style={styles.disclosure} />
         )}
         <Pressable
+          accessibilityHint={joinAccessibilityText([
+            labels.level ? labels.level(depth + 1) : `Level ${depth + 1}`,
+            labels.region,
+          ])}
           accessibilityLabel={node.label}
           accessibilityRole="button"
           accessibilityState={{ disabled: node.disabled, selected }}
@@ -152,7 +160,6 @@ function TreeRow({
         >
           {node.icon}
           <Text
-            numberOfLines={1}
             style={[
               styles.label,
               ...typeStyle(
@@ -192,6 +199,7 @@ TreeRows.displayName = "TreeRows";
 /**
  * Nested native list with separate 44-point disclosure and selection actions.
  * It does not claim the browser tree keyboard pattern on touch platforms.
+ * Each node's hint speaks its level and the tree name (`labels.region`).
  */
 function TreeView({
   defaultExpandedIds = [],
@@ -253,7 +261,6 @@ function TreeView({
   return (
     <View
       {...props}
-      accessibilityLabel={labels.region}
       accessibilityRole="list"
       ref={ref}
       style={[

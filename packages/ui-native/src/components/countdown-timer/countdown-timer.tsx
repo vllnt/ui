@@ -4,6 +4,10 @@ import { type Ref, useEffect, useMemo, useState } from "react";
 
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import {
+  decorativeProps,
+  useAnnounceOnChange,
+} from "../../primitives/accessibility";
 import { useTheme } from "../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../badge/badge";
 import { Card } from "../card/card";
@@ -157,7 +161,6 @@ function TimerHeader({
       <View style={{ flex: 1, gap: theme.spacing[1] }}>
         <Text
           accessibilityLabel={accessibilityLabel}
-          accessibilityLiveRegion="polite"
           accessibilityRole={accessibilityRole}
           weight="semibold"
         >
@@ -180,7 +183,10 @@ function TimerSegments({
 }) {
   const theme = useTheme();
   return (
-    <View style={[styles.segments, { gap: theme.spacing[2] }]}>
+    <View
+      {...decorativeProps}
+      style={[styles.segments, { gap: theme.spacing[2] }]}
+    >
       {segments.map((segment) => (
         <View
           key={segment.id}
@@ -283,7 +289,13 @@ function getTimerPresentation({
   };
 }
 
-/** Native countdown card with fixed-time injection for deterministic rendering. */
+/**
+ * Native countdown card with fixed-time injection for deterministic rendering.
+ * The title speaks the status and remaining time when focused; the ticking
+ * digits stay silent, and the card announces status transitions (on track,
+ * at risk, breached) and nothing else. The progress bar fills with the time
+ * used and speaks the time remaining as its value.
+ */
 function CountdownTimer({
   deadline,
   description,
@@ -312,6 +324,7 @@ function CountdownTimer({
     startedAt: startedAtDate,
     warningThresholdMs,
   });
+  useAnnounceOnChange(`${title}: ${timer.status.label}`);
 
   return (
     <Card
@@ -328,6 +341,7 @@ function CountdownTimer({
       />
       <TimerSegments segments={timer.segments} />
       <ProgressBar
+        accessibilityValue={{ text: timer.durationLabel }}
         completedLabel=""
         currentLabel={labels?.timeRemaining ?? "Time remaining"}
         isComplete={timer.remainingMs <= 0}
