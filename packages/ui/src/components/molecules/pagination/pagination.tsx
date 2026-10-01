@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
 export type PaginationProps = {
@@ -9,6 +10,11 @@ export type PaginationProps = {
   totalPages: number;
 };
 
+/**
+ * Page links wrapped in a `nav` landmark. Each page is a single link styled
+ * as a button (no nested interactive elements) and the current page carries
+ * `aria-current="page"`.
+ */
 export function Pagination({
   baseUrl,
   className,
@@ -25,51 +31,61 @@ export function Pagination({
     startPage = Math.max(1, endPage - maxVisiblePages + 1);
   }
 
-  // Previous button
   const previousButton =
     currentPage > 1 ? (
-      <Link href={`${baseUrl}?page=${currentPage - 1}`} key="prev">
-        <Button size="sm" variant="outline">
-          <span className="text-sm">‹</span>
+      <Button asChild key="prev" size="sm" variant="outline">
+        <Link href={`${baseUrl}?page=${currentPage - 1}`}>
+          <span aria-hidden="true" className="text-sm">
+            ‹
+          </span>
           <span className="sr-only">Previous</span>
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     ) : null;
 
-  // Page numbers
   const pageNumbers = Array.from(
     { length: endPage - startPage + 1 },
     (_, index) => {
       const pageNumber = startPage + index;
+      const isCurrent = pageNumber === currentPage;
       return (
-        <Link href={`${baseUrl}?page=${pageNumber}`} key={pageNumber}>
-          <Button
-            size="sm"
-            variant={pageNumber === currentPage ? "default" : "outline"}
+        <Button
+          asChild
+          key={pageNumber}
+          size="sm"
+          variant={isCurrent ? "default" : "outline"}
+        >
+          <Link
+            aria-current={isCurrent ? "page" : undefined}
+            href={`${baseUrl}?page=${pageNumber}`}
           >
             {pageNumber}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       );
     },
   );
 
-  // Next button
   const nextButton =
     currentPage < totalPages ? (
-      <Link href={`${baseUrl}?page=${currentPage + 1}`} key="next">
-        <Button size="sm" variant="outline">
+      <Button asChild key="next" size="sm" variant="outline">
+        <Link href={`${baseUrl}?page=${currentPage + 1}`}>
           <span className="sr-only">Next</span>
-          <span className="text-sm">›</span>
-        </Button>
-      </Link>
+          <span aria-hidden="true" className="text-sm">
+            ›
+          </span>
+        </Link>
+      </Button>
     ) : null;
 
   const pages = [previousButton, ...pageNumbers, nextButton].filter(Boolean);
 
   return (
-    <div className={`flex items-center justify-center gap-2 ${className}`}>
+    <nav
+      aria-label="Pagination"
+      className={cn("flex items-center justify-center gap-2", className)}
+    >
       {pages}
-    </div>
+    </nav>
   );
 }

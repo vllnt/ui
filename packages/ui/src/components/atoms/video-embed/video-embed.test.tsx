@@ -52,4 +52,11 @@ describe("VideoEmbed", () => {
     );
     expect(screen.getByAltText("Demo")).toHaveAttribute("src", "/poster.png");
   });
+
+  it("names the play button after the video title", () => {
+    render(<VideoEmbed src="https://youtube.com/watch?v=abc" title="Demo" />);
+    expect(
+      screen.getByRole("button", { name: "Play video: Demo" }),
+    ).toBeInTheDocument();
+  });
 });

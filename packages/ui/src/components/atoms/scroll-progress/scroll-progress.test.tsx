@@ -12,4 +12,15 @@ describe("ScrollProgress", () => {
     );
     expect(container.firstChild).toHaveClass("custom-class");
   });
+
+  it("has a default accessible name that consumers can override", () => {
+    const { rerender } = render(<ScrollProgress />);
+    expect(
+      screen.getByRole("progressbar", { name: "Reading progress" }),
+    ).toBeInTheDocument();
+    rerender(<ScrollProgress aria-label="Article progress" />);
+    expect(
+      screen.getByRole("progressbar", { name: "Article progress" }),
+    ).toBeInTheDocument();
+  });
 });

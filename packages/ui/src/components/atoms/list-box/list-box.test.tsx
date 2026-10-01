@@ -49,3 +49,79 @@ describe("ListBox", () => {
     expect(onValueChange).toHaveBeenCalledWith(["apple"]);
   });
 });
+
+describe("ListBox keyboard (WAI-ARIA APG listbox pattern)", () => {
+  function tabStops(options: HTMLElement[]): HTMLElement[] {
+    return options.filter((option) => option.getAttribute("tabindex") === "0");
+  }
+
+  it("has one tab stop, on the selected option", () => {
+    const { getAllByRole, getByRole } = render(
+      <ListBox defaultValue={["pst"]} label="Timezone">
+        <ListBoxItem value="utc">UTC</ListBoxItem>
+        <ListBoxItem value="est">Eastern</ListBoxItem>
+        <ListBoxItem value="pst">Pacific</ListBoxItem>
+      </ListBox>,
+    );
+    expect(tabStops(getAllByRole("option"))).toEqual([
+      getByRole("option", { name: "Pacific" }),
+    ]);
+  });
+
+  it("has one tab stop, on the first enabled option, when nothing or several are selected", () => {
+    const { getAllByRole, getByRole, rerender } = render(
+      <ListBox label="Frameworks" selectionMode="multiple">
+        <ListBoxItem disabled value="angular">
+          Angular
+        </ListBoxItem>
+        <ListBoxItem value="react">React</ListBoxItem>
+        <ListBoxItem value="vue">Vue</ListBoxItem>
+      </ListBox>,
+    );
+    expect(tabStops(getAllByRole("option"))).toEqual([
+      getByRole("option", { name: "React" }),
+    ]);
+    rerender(
+      <ListBox
+        label="Frameworks"
+        selectionMode="multiple"
+        value={["vue", "react"]}
+      >
+        <ListBoxItem disabled value="angular">
+          Angular
+        </ListBoxItem>
+        <ListBoxItem value="react">React</ListBoxItem>
+        <ListBoxItem value="vue">Vue</ListBoxItem>
+      </ListBox>,
+    );
+    expect(tabStops(getAllByRole("option"))).toHaveLength(1);
+  });
+
+  it("moves focus with ArrowDown / ArrowUp / Home / End, skipping disabled options", () => {
+    const { getByRole } = render(
+      <ListBox label="Frameworks" selectionMode="multiple">
+        <ListBoxItem value="react">React</ListBoxItem>
+        <ListBoxItem disabled value="angular">
+          Angular
+        </ListBoxItem>
+        <ListBoxItem value="vue">Vue</ListBoxItem>
+        <ListBoxItem value="svelte">Svelte</ListBoxItem>
+      </ListBox>,
+    );
+    const react = getByRole("option", { name: "React" });
+    react.focus();
+    fireEvent.keyDown(react, { key: "ArrowDown" });
+    const vue = getByRole("option", { name: "Vue" });
+    expect(vue).toHaveFocus();
+    expect(vue).toHaveAttribute("tabindex", "0");
+    expect(react).toHaveAttribute("tabindex", "-1");
+    fireEvent.keyDown(vue, { key: "End" });
+    expect(getByRole("option", { name: "Svelte" })).toHaveFocus();
+    fireEvent.keyDown(getByRole("option", { name: "Svelte" }), {
+      key: "Home",
+    });
+    expect(react).toHaveFocus();
+    fireEvent.keyDown(react, { key: "ArrowUp" });
+    expect(react).toHaveFocus();
+  });
+});

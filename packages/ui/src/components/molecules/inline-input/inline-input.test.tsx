@@ -9,6 +9,32 @@ it("InlineInput renders a visible root that applies custom className", () => {
   expect(container.firstChild).toHaveClass("custom-class");
 });
 
+it("InlineInput forwards an accessible name to the input", () => {
+  render(
+    <>
+      <span id="rename-label">File name</span>
+      <InlineInput
+        aria-labelledby="rename-label"
+        onChange={vi.fn()}
+        onCommit={vi.fn()}
+        value="notes.md"
+      />
+      <InlineInput
+        aria-label="Folder name"
+        onChange={vi.fn()}
+        onCommit={vi.fn()}
+        value="docs"
+      />
+    </>,
+  );
+  expect(screen.getByRole("textbox", { name: "File name" })).toHaveValue(
+    "notes.md",
+  );
+  expect(screen.getByRole("textbox", { name: "Folder name" })).toHaveValue(
+    "docs",
+  );
+});
+
 it("InlineInput focuses on mount and does not refocus after re-render once blurred", () => {
   const onCommit = vi.fn();
   const { rerender } = render(

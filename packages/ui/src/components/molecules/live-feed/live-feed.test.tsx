@@ -51,4 +51,13 @@ describe("LiveFeed", () => {
     expect(screen.getByText("Event 3")).toBeInTheDocument();
     expect(screen.queryByText("Event 0")).not.toBeInTheDocument();
   });
+
+  it("stops its infinite pulse under prefers-reduced-motion", () => {
+    const { container } = render(<LiveFeed events={events} now={now} title="Feed" />);
+    const pulsing = [...container.querySelectorAll('[class*="animate-p"], [class*="animate-spin"]')];
+    expect(pulsing.length).toBeGreaterThan(0);
+    for (const element of pulsing) {
+      expect(element.getAttribute("class")).toContain("motion-reduce:animate-none");
+    }
+  });
 });

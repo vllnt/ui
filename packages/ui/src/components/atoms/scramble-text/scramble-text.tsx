@@ -99,12 +99,8 @@ export const ScrambleText = ({
   }, [duration, reduced, scrambleCharacters, text]);
 
   return (
-    <span
-      aria-label={text}
-      className={cn("font-mono", className)}
-      ref={ref}
-      {...props}
-    >
+    <span className={cn("font-mono", className)} ref={ref} {...props}>
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">{display}</span>
     </span>
   );

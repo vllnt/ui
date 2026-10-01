@@ -2,12 +2,11 @@
  * Functional stubs for next/* modules used in Storybook.
  *
  * Tiered approach:
- * - Passive (Link, Image): render native HTML equivalents
+ * - Passive (Link): renders a native anchor (next/image lives in next-image-stub.ts)
  * - Active (useRouter, usePathname, useSearchParams): return functional mock objects
  *
  * This file is aliased via Vite resolve in main.ts:
  *   next/link -> ./next-stubs.ts
- *   next/image -> ./next-stubs.ts
  *   next/navigation -> ./next-stubs.ts
  */
 import * as React from 'react'
@@ -23,33 +22,6 @@ function Link({
   [key: string]: unknown
 }) {
   return React.createElement('a', { href: String(href), ...props }, children)
-}
-
-/* ---------- next/image ---------- */
-function Image({
-  src,
-  alt,
-  width,
-  height,
-  fill,
-  ...props
-}: {
-  src: string
-  alt: string
-  width?: number
-  height?: number
-  fill?: boolean
-  [key: string]: unknown
-}) {
-  const style = fill ? { objectFit: 'cover' as const, width: '100%', height: '100%' } : {}
-  return React.createElement('img', {
-    src: String(src),
-    alt,
-    width,
-    height,
-    style,
-    ...props,
-  })
 }
 
 /* ---------- next/navigation ---------- */
@@ -82,4 +54,4 @@ function useSearchParams(): URLSearchParams {
 
 /* ---------- exports ---------- */
 export default Link
-export { Link, Image, useRouter, usePathname, useSearchParams, setMockPathname }
+export { Link, useRouter, usePathname, useSearchParams, setMockPathname }

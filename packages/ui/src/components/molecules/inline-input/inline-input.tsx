@@ -6,6 +6,10 @@ import { cn } from "../../../lib/utils";
 import { Input } from "../../atoms/input/input";
 
 export type InlineInputProps = {
+  /** Accessible name when no visible label is associated with the input. */
+  "aria-label"?: string;
+  /** Id of the element that labels the input. */
+  "aria-labelledby"?: string;
   className?: string;
   /** Called when user presses Escape or blurs without changes. */
   onCancel?: () => void;
@@ -29,6 +33,8 @@ function focusOnMount(node: HTMLInputElement | null): void {
  * - Blur: commits the value
  */
 export function InlineInput({
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   className,
   onCancel,
   onChange,
@@ -47,6 +53,8 @@ export function InlineInput({
 
   return (
     <Input
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
       className={cn("flex-1 h-7 text-sm", className)}
       onBlur={() => {
         onCommit(value);

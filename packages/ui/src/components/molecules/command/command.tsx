@@ -31,10 +31,43 @@ type CommandDialogProps = {} & React.ComponentPropsWithoutRef<
   typeof DialogPrimitive.Root
 >;
 
+/**
+ * Remembers the element focused when a dialog opens and moves focus back to it
+ * on close. Radix only restores focus to a `DialogTrigger`; a controlled dialog
+ * opened from anywhere else would otherwise drop focus on `<body>`.
+ */
+function useReturnFocus() {
+  const returnFocusReference = React.useRef<HTMLElement | null>(null);
+
+  return {
+    onCloseAutoFocus: (event: Event) => {
+      const target = returnFocusReference.current;
+      returnFocusReference.current = null;
+      if (target?.isConnected) {
+        event.preventDefault();
+        target.focus();
+      }
+    },
+    onOpenAutoFocus: () => {
+      const active = document.activeElement;
+      returnFocusReference.current =
+        active instanceof HTMLElement && active !== document.body
+          ? active
+          : null;
+    },
+  };
+}
+
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+  const returnFocus = useReturnFocus();
+
   return (
     <Dialog {...props}>
-      <DialogContent className="overflow-hidden p-0 shadow-lg">
+      <DialogContent
+        className="overflow-hidden p-0 shadow-lg"
+        onCloseAutoFocus={returnFocus.onCloseAutoFocus}
+        onOpenAutoFocus={returnFocus.onOpenAutoFocus}
+      >
         <DialogTitle className="sr-only">Command Menu</DialogTitle>
         <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           {children}
@@ -137,7 +170,7 @@ const CommandItem = ({
 }) => (
   <CommandPrimitive.Item
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:opacity-50",
+      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:opacity-50",
       disabled && "pointer-events-none",
       className,
     )}

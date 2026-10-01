@@ -15,7 +15,9 @@ describe("Typewriter", () => {
     const { container } = render(
       <Typewriter className="custom-class" text="Hello" />,
     );
-    expect(screen.getByLabelText("Hello")).toBeInTheDocument();
+    expect(
+      screen.getByText("Hello", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
   });
 
@@ -40,5 +42,13 @@ describe("Typewriter", () => {
     expect(container.querySelector("[aria-hidden='true']")).toHaveTextContent(
       "Hel",
     );
+  });
+
+  it("exposes the full text as screen-reader text, not a prohibited aria-label", () => {
+    const { container } = render(<Typewriter text="Hello" />);
+    expect(container.firstChild).not.toHaveAttribute("aria-label");
+    expect(
+      screen.getByText("Hello", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
   });
 });

@@ -1,9 +1,13 @@
+// manual
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Bold } from "lucide-react";
 
 import { Toggle } from "./toggle";
 
 const meta = {
   args: {
+    "aria-label": "Toggle bold",
+    children: <Bold aria-hidden="true" className="size-4" />,
     size: "default",
     variant: "default",
   },

@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Check } from "lucide-react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
 /** Selection behaviour for a ListBox. */
@@ -13,6 +14,8 @@ type ListBoxContextValue = {
   disabled: boolean;
   select: (value: string) => void;
   selectedValues: string[];
+  setTabStop: (value: string) => void;
+  tabStop: string | undefined;
 };
 
 const ListBoxContext = React.createContext<ListBoxContextValue | null>(null);
@@ -67,7 +70,59 @@ function useListBoxSelection({
   return { select, selectedValues };
 }
 
-/** Accessible single- or multi-select list of options. */
+const OPTION_SELECTOR = '[role="option"]';
+
+function enabledOptionValues(root: HTMLElement): string[] {
+  return [...root.querySelectorAll<HTMLElement>(OPTION_SELECTOR)]
+    .filter((option) => option.getAttribute("aria-disabled") !== "true")
+    .map((option) => option.dataset.value ?? "");
+}
+
+/**
+ * Keeps exactly one option in the tab order (roving tabindex): the option the
+ * user last focused while focus is inside the list, otherwise the first
+ * selected enabled option, otherwise the first enabled option.
+ */
+function useRovingTabStop(selectedValues: string[]) {
+  const rootRef = React.useRef<HTMLDivElement | null>(null);
+  const [tabStop, setTabStop] = React.useState<string | undefined>();
+
+  React.useLayoutEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const values = enabledOptionValues(root);
+    const focusInside = root.contains(document.activeElement);
+    if (focusInside && tabStop !== undefined && values.includes(tabStop)) {
+      return;
+    }
+    const preferred =
+      values.find((entry) => selectedValues.includes(entry)) ?? values[0];
+    if (preferred !== tabStop) setTabStop(preferred);
+  });
+
+  return { rootRef, setTabStop, tabStop };
+}
+
+function assignRef<T>(ref: React.Ref<T> | undefined, node: T | null): void {
+  if (typeof ref === "function") {
+    ref(node);
+  } else if (ref) {
+    ref.current = node;
+  }
+}
+
+function handleListKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+  moveRovingFocus(event, OPTION_SELECTOR, {
+    loop: false,
+    orientation: "vertical",
+  });
+}
+
+/**
+ * Accessible single- or multi-select list of options (WAI-ARIA APG listbox):
+ * one tab stop, ArrowUp / ArrowDown / Home / End move focus between enabled
+ * options, Enter or Space toggles selection.
+ */
 export type ListBoxProps = {
   children: React.ReactNode;
   className?: string;
@@ -96,9 +151,17 @@ const ListBox = ({
     selectionMode,
     value,
   });
+  const { rootRef, setTabStop, tabStop } = useRovingTabStop(selectedValues);
   const context = React.useMemo<ListBoxContextValue>(
-    () => ({ disabled, select, selectedValues }),
-    [disabled, select, selectedValues],
+    () => ({ disabled, select, selectedValues, setTabStop, tabStop }),
+    [disabled, select, selectedValues, setTabStop, tabStop],
+  );
+  const setRefs = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      rootRef.current = node;
+      assignRef(ref, node);
+    },
+    [ref, rootRef],
   );
 
   return (
@@ -110,7 +173,8 @@ const ListBox = ({
           "flex flex-col gap-0.5 rounded-md border border-input bg-background p-1",
           className,
         )}
-        ref={ref}
+        onKeyDown={handleListKeyDown}
+        ref={setRefs}
         role="listbox"
       >
         {children}
@@ -162,11 +226,15 @@ const ListBoxItem = ({
         isDisabled && "pointer-events-none opacity-50",
         className,
       )}
+      data-value={value}
       onClick={activate}
+      onFocus={() => {
+        group.setTabStop(value);
+      }}
       onKeyDown={handleKeyDown}
       ref={ref}
       role="option"
-      tabIndex={isDisabled ? -1 : 0}
+      tabIndex={!isDisabled && group.tabStop === value ? 0 : -1}
     >
       <Check
         className={cn(

@@ -200,7 +200,10 @@ function DataTableComponent<TData extends RowData>({
                     }}
                     value={selectValue}
                   >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger
+                      aria-label={`Filter by ${filter.label}`}
+                      className="w-[180px]"
+                    >
                       <SelectValue placeholder={filter.label} />
                     </SelectTrigger>
                     <SelectContent>

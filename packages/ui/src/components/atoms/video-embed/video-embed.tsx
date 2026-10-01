@@ -64,6 +64,7 @@ export function VideoEmbed({
           />
         ) : (
           <button
+            aria-label={`Play video: ${title}`}
             className="absolute inset-0 w-full h-full flex items-center justify-center group"
             onClick={() => {
               setIsPlaying(true);

@@ -39,6 +39,34 @@ describe("ThemeSwitcher", () => {
     expect(document.documentElement.dataset.theme).toBe("matrix");
   });
 
+  it("exposes a single tab stop on the checked preset (APG radio group)", () => {
+    render(<ThemeSwitcher />);
+    fireEvent.click(screen.getByRole("radio", { name: "Dracula" }));
+    const radios = screen.getAllByRole("radio");
+    const tabStops = radios.filter(
+      (radio) => radio.getAttribute("tabindex") === "0",
+    );
+    expect(tabStops).toEqual([screen.getByRole("radio", { name: "Dracula" })]);
+  });
+
+  it("arrow keys move focus and check the next / previous preset, wrapping", () => {
+    render(<ThemeSwitcher />);
+    const radios = screen.getAllByRole("radio");
+    const first = radios[0];
+    const second = radios[1];
+    const last = radios.at(-1);
+    if (!first || !second || !last) throw new Error("expected presets");
+    fireEvent.click(first);
+    first.focus();
+    fireEvent.keyDown(first, { key: "ArrowRight" });
+    expect(second).toHaveFocus();
+    expect(second).toHaveAttribute("aria-checked", "true");
+    fireEvent.keyDown(second, { key: "ArrowUp" });
+    fireEvent.keyDown(first, { key: "ArrowLeft" });
+    expect(last).toHaveFocus();
+    expect(last).toHaveAttribute("aria-checked", "true");
+  });
+
   it("clicking a swatch persists the preset to localStorage", () => {
     render(<ThemeSwitcher />);
     fireEvent.click(screen.getByRole("radio", { name: "Dracula" }));

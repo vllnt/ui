@@ -4,6 +4,7 @@ import { NumberInput } from "./number-input";
 
 const meta = {
   args: {
+    "aria-label": "Quantity",
     defaultValue: 2,
     min: 0,
     step: 1,

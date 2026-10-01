@@ -88,7 +88,8 @@ export const Typewriter = ({
   const typing = count < text.length;
 
   return (
-    <span aria-label={text} className={cn(className)} ref={ref} {...props}>
+    <span className={cn(className)} ref={ref} {...props}>
+      <span className="sr-only">{text}</span>
       <span aria-hidden="true">{text.slice(0, count)}</span>
       {cursor && typing ? (
         <span

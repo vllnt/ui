@@ -1,9 +1,11 @@
+// manual
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { InlineInput } from "./inline-input";
 
 const meta = {
   args: {
+    "aria-label": "Document title",
     onChange: () => {},
     onCommit: () => {},
     value: "Edit me",

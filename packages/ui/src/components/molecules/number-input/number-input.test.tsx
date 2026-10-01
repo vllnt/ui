@@ -17,4 +17,19 @@ describe("NumberInput", () => {
     fireEvent.change(screen.getByRole("spinbutton"), { target: { value: "" } });
     expect(screen.getByRole("spinbutton")).toHaveValue(null);
   });
+
+  it("names the step buttons and lets consumers override the labels", () => {
+    const { rerender } = render(<NumberInput aria-label="Quantity" />);
+    expect(screen.getByRole("button", { name: "Decrease" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Increase" })).toBeInTheDocument();
+    rerender(
+      <NumberInput
+        aria-label="Quantity"
+        decrementLabel="Remove one"
+        incrementLabel="Add one"
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Remove one" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Add one" })).toBeInTheDocument();
+  });
 });

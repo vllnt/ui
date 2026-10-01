@@ -9,7 +9,9 @@ import {
 describe("AnimatedText", () => {
   it("renders the full accessible label in terminal mode by default with a cursor", () => {
     render(<AnimatedText text="Motion without noise" />);
-    expect(screen.getByLabelText("Motion without noise")).toBeVisible();
+    expect(
+      screen.getByText("Motion without noise", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("█")).toBeInTheDocument();
   });
 
@@ -17,7 +19,11 @@ describe("AnimatedText", () => {
     render(
       <AnimatedText splitBy="word" text="Hello world again" variant="reveal" />,
     );
-    expect(screen.getAllByText(/Hello|world|again/)).toHaveLength(3);
+    expect(
+      screen.getAllByText(/Hello|world|again/, {
+        ignore: "script, style, .sr-only",
+      }),
+    ).toHaveLength(3);
   });
 
   it.each([
@@ -50,7 +56,9 @@ describe("AnimatedText", () => {
     },
   ] as const)("supports $name", ({ props }) => {
     render(<AnimatedText {...props} />);
-    expect(screen.getByLabelText(props.text)).toBeVisible();
+    expect(
+      screen.getByText(props.text, { selector: ".sr-only" }),
+    ).toBeInTheDocument();
   });
 
   it("loads and splits by code point without Intl.Segmenter", async () => {
@@ -66,7 +74,9 @@ describe("AnimatedText", () => {
           variant="reveal"
         />,
       );
-      expect(screen.getByLabelText("a😀b")).toBeVisible();
+      expect(
+        screen.getByText("a😀b", { selector: ".sr-only" }),
+      ).toBeInTheDocument();
       expect(screen.getByText("😀")).toBeInTheDocument();
     } finally {
       Object.defineProperty(Intl, "Segmenter", {
@@ -75,5 +85,23 @@ describe("AnimatedText", () => {
         writable: true,
       });
     }
+  });
+
+  it("uses screen-reader text instead of a prohibited aria-label on the paragraph", () => {
+    const { container } = render(<AnimatedText text="Hi" />);
+    expect(container.firstChild).not.toHaveAttribute("aria-label");
+  });
+
+  it("stops the blinking cursor under prefers-reduced-motion", () => {
+    render(<AnimatedText text="Motion without noise" />);
+    expect(screen.getByText("█")).toHaveClass("motion-reduce:animate-none");
+  });
+
+  it("shows reveal segments without animation under prefers-reduced-motion", () => {
+    render(<AnimatedText text="Hello world" variant="reveal" />);
+    expect(screen.getByText("Hello")).toHaveClass(
+      "motion-reduce:animate-none",
+      "motion-reduce:opacity-100",
+    );
   });
 });

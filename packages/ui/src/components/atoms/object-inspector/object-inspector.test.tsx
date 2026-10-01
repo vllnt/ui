@@ -58,4 +58,13 @@ describe("ObjectInspector", () => {
     expect(screen.getByText("researcher")).toBeInTheDocument();
     expect(screen.getByText("claude-3.7")).toBeInTheDocument();
   });
+
+  it("stops its infinite pulse under prefers-reduced-motion", () => {
+    const { container } = render(<ObjectInspector kind="run" status="running" title="run" />);
+    const pulsing = [...container.querySelectorAll('[class*="animate-p"], [class*="animate-spin"]')];
+    expect(pulsing.length).toBeGreaterThan(0);
+    for (const element of pulsing) {
+      expect(element.getAttribute("class")).toContain("motion-reduce:animate-none");
+    }
+  });
 });

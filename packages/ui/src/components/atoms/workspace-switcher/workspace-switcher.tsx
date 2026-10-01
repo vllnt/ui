@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
 export type WorkspaceOption = {
@@ -20,9 +21,15 @@ export type WorkspaceSwitcherProps = Omit<
   workspaces: WorkspaceOption[];
 };
 
+/**
+ * Segmented radio group for switching workspaces. Keyboard follows the
+ * WAI-ARIA APG radio group pattern: one tab stop on the checked workspace;
+ * arrow keys move focus and check the next / previous workspace (wrapping).
+ */
 const WorkspaceSwitcher = ({
   className,
   defaultValue,
+  onKeyDown,
   onValueChange,
   ref,
   value,
@@ -38,6 +45,16 @@ const WorkspaceSwitcher = ({
     [currentValue, workspaces],
   );
 
+  const hasChecked = currentWorkspace !== undefined;
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    onKeyDown?.(event);
+    moveRovingFocus(event, '[role="radio"]', {
+      activate: true,
+      orientation: "both",
+    });
+  }
+
   function handleSelect(nextValue: string) {
     if (value === undefined) {
       setInternalValue(nextValue);
@@ -51,11 +68,12 @@ const WorkspaceSwitcher = ({
         "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-muted/50 p-1",
         className,
       )}
+      onKeyDown={handleKeyDown}
       ref={ref}
       role="radiogroup"
       {...props}
     >
-      {workspaces.map((workspace) => {
+      {workspaces.map((workspace, index) => {
         const isActive = workspace.id === currentValue;
         return (
           <button
@@ -71,6 +89,7 @@ const WorkspaceSwitcher = ({
               handleSelect(workspace.id);
             }}
             role="radio"
+            tabIndex={isActive || (!hasChecked && index === 0) ? 0 : -1}
             title={workspace.description}
             type="button"
           >

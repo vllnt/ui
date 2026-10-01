@@ -56,7 +56,6 @@ export const SpinningText = ({
 
   return (
     <div
-      aria-label={children}
       className={cn(
         "relative animate-spin motion-reduce:animate-none",
         className,
@@ -71,6 +70,7 @@ export const SpinningText = ({
       }}
       {...props}
     >
+      <span className="sr-only">{children}</span>
       {characters.map((character, index) => (
         <span
           aria-hidden="true"

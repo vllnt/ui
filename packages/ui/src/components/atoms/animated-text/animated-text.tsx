@@ -360,7 +360,7 @@ function getSegmentClasses(
   isRevealed: boolean,
 ): string {
   if (variant === "reveal") {
-    return "inline-block whitespace-pre opacity-0 [animation-duration:var(--vllnt-animated-text-duration)] [animation-fill-mode:forwards] [animation-name:vllnt-animated-text-reveal] [animation-timing-function:cubic-bezier(0.16,1,0.3,1)]";
+    return "inline-block whitespace-pre opacity-0 [animation-duration:var(--vllnt-animated-text-duration)] [animation-fill-mode:forwards] [animation-name:vllnt-animated-text-reveal] [animation-timing-function:cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none motion-reduce:opacity-100";
   }
 
   if (variant === "matrix" || variant === "decipher") {
@@ -396,7 +396,7 @@ function AnimatedTextCursor({
     <span
       aria-hidden="true"
       className={cn(
-        "ml-0.5 inline-block whitespace-pre font-mono [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite]",
+        "ml-0.5 inline-block whitespace-pre font-mono [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite] motion-reduce:animate-none",
         cursorToneClass,
       )}
     >
@@ -446,7 +446,6 @@ export const AnimatedText = ({
 
   return (
     <p
-      aria-label={text}
       className={cn(getContainerClasses(variant), className)}
       ref={ref}
       style={{
@@ -454,6 +453,7 @@ export const AnimatedText = ({
       }}
       {...props}
     >
+      <span className="sr-only">{text}</span>
       {segmentFrames.map((segmentFrame) => (
         <span
           aria-hidden="true"

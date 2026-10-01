@@ -37,4 +37,13 @@ describe("PresenceSyncIndicator", () => {
     const dot = container.querySelector("[data-presence-sync-dot]");
     expect(dot?.getAttribute("class")).toContain("animate-pulse");
   });
+
+  it("stops its infinite pulse under prefers-reduced-motion", () => {
+    const { container } = render(<PresenceSyncIndicator state="syncing" />);
+    const pulsing = [...container.querySelectorAll('[class*="animate-p"], [class*="animate-spin"]')];
+    expect(pulsing.length).toBeGreaterThan(0);
+    for (const element of pulsing) {
+      expect(element.getAttribute("class")).toContain("motion-reduce:animate-none");
+    }
+  });
 });

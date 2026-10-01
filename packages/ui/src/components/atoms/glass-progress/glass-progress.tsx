@@ -2,7 +2,10 @@ import * as React from "react";
 
 import { cn } from "../../../lib/utils";
 
-/** Props for {@link GlassProgress}. */
+/**
+ * Props for {@link GlassProgress}. The progressbar is named `"Progress"`
+ * unless `aria-label` or `aria-labelledby` is passed.
+ */
 export type GlassProgressProps = React.ComponentPropsWithoutRef<"div"> & {
   /** Completion percentage between `0` and `100`. */
   value: number;
@@ -30,6 +33,7 @@ export const GlassProgress = ({
 
   return (
     <div
+      aria-label={props["aria-labelledby"] ? undefined : "Progress"}
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={clamped}

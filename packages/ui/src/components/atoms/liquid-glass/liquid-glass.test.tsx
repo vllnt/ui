@@ -10,3 +10,10 @@ it("LiquidGlass renders its children and applies a custom class name", () => {
   expect(screen.getByText("Content")).toBeInTheDocument();
   expect(container.firstChild).toHaveClass("custom-class");
 });
+
+it("LiquidGlass keeps the animation name out of inline styles so motion-reduce:animate-none can stop it", () => {
+  const { container } = render(<LiquidGlass>Content</LiquidGlass>);
+  const sheen = container.querySelector<HTMLElement>("[aria-hidden]");
+  expect(sheen?.getAttribute("style") ?? "").not.toMatch(/animation(-name)?:/);
+  expect(sheen).toHaveClass("motion-reduce:animate-none");
+});
