@@ -112,3 +112,12 @@ describe("ModelSelector selection guard", () => {
     expect(onSelectModel).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("ModelSelector list label", () => {
+  it("names the searchable model list from listLabel", () => {
+    renderModelSelector({ listLabel: "Modeles" });
+    expect(
+      screen.getByRole("combobox", { name: "Modeles" }),
+    ).toBeInTheDocument();
+  });
+});

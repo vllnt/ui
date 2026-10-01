@@ -78,7 +78,10 @@ const PinBody = (props: PinBodyInput): React.ReactElement => {
         data-comment-pin-body
         style={
           useAccent
-            ? { backgroundColor: props.accent, color: "white" }
+            ? {
+                backgroundColor: `color-mix(in oklab, ${props.accent} 55%, oklch(0 0 0))`,
+                color: "white",
+              }
             : undefined
         }
       >

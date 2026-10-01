@@ -36,3 +36,27 @@ describe("Pagination", () => {
     );
   });
 });
+
+describe("Pagination labels", () => {
+  it("localizes the landmark and the previous / next links", () => {
+    render(
+      <Pagination
+        baseUrl="/blog"
+        currentPage={3}
+        labels={{
+          navigation: "Pages",
+          next: "Suivante",
+          previous: "Precedente",
+        }}
+        totalPages={10}
+      />,
+    );
+    expect(
+      screen.getByRole("navigation", { name: "Pages" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Suivante" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Precedente" }),
+    ).toBeInTheDocument();
+  });
+});

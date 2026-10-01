@@ -53,3 +53,16 @@ describe("CommentPin semantics", () => {
     expect(screen.getByRole("img", { name: "Comment" })).toBeInTheDocument();
   });
 });
+
+describe("CommentPin accent contrast", () => {
+  it("darkens the accent behind the white initial", () => {
+    const { container } = render(
+      <CommentPin authorInitial="B" color="#5b8def" x={0} y={0} />,
+    );
+    expect(
+      container.querySelector("[data-comment-pin-body]")?.getAttribute("style"),
+    ).toMatch(
+      /color-mix\(in oklab, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+    );
+  });
+});

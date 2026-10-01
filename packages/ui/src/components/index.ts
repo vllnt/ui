@@ -800,6 +800,7 @@ export { BlogCard, ContentCard } from "./molecules/blog-card/blog-card";
 export { CategoryFilter } from "./molecules/category-filter/category-filter";
 export {
   Pagination,
+  type PaginationLabels,
   type PaginationProps,
 } from "./molecules/pagination/pagination";
 export {

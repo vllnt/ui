@@ -3,11 +3,29 @@ import Link from "next/link";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
+/** Localizable strings for {@link Pagination}. */
+export type PaginationLabels = {
+  /** Accessible name of the `nav` landmark. Defaults to `"Pagination"`. */
+  navigation?: string;
+  /** Name of the next-page link. Defaults to `"Next"`. */
+  next?: string;
+  /** Name of the previous-page link. Defaults to `"Previous"`. */
+  previous?: string;
+};
+
 export type PaginationProps = {
   baseUrl: string;
   className?: string;
   currentPage: number;
+  /** Localizable accessible names. */
+  labels?: PaginationLabels;
   totalPages: number;
+};
+
+const DEFAULT_LABELS: Required<PaginationLabels> = {
+  navigation: "Pagination",
+  next: "Next",
+  previous: "Previous",
 };
 
 /**
@@ -19,10 +37,12 @@ export function Pagination({
   baseUrl,
   className,
   currentPage,
+  labels,
   totalPages,
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
+  const text = { ...DEFAULT_LABELS, ...labels };
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -38,7 +58,7 @@ export function Pagination({
           <span aria-hidden="true" className="text-sm">
             ‹
           </span>
-          <span className="sr-only">Previous</span>
+          <span className="sr-only">{text.previous}</span>
         </Link>
       </Button>
     ) : null;
@@ -70,7 +90,7 @@ export function Pagination({
     currentPage < totalPages ? (
       <Button asChild key="next" size="sm" variant="outline">
         <Link href={`${baseUrl}?page=${currentPage + 1}`}>
-          <span className="sr-only">Next</span>
+          <span className="sr-only">{text.next}</span>
           <span aria-hidden="true" className="text-sm">
             ›
           </span>
@@ -82,7 +102,7 @@ export function Pagination({
 
   return (
     <nav
-      aria-label="Pagination"
+      aria-label={text.navigation}
       className={cn("flex items-center justify-center gap-2", className)}
     >
       {pages}

@@ -73,3 +73,25 @@ describe("DataTable", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DataTable filter names", () => {
+  it("lets each filter override its trigger name", () => {
+    render(
+      <DataTable
+        columns={columns}
+        data={data}
+        filterableColumns={[
+          {
+            ariaLabel: "Filtrer par statut",
+            columnId: "status",
+            label: "Statut",
+            options: [{ label: "Actif", value: "active" }],
+          },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByRole("combobox", { name: "Filtrer par statut" }),
+    ).toBeInTheDocument();
+  });
+});

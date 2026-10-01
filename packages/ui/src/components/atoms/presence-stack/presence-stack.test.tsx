@@ -17,7 +17,9 @@ describe("PresenceStack", () => {
     expect(
       container.querySelectorAll("[data-presence-stack-user]"),
     ).toHaveLength(3);
-    expect(user("1")).toHaveStyle({ "background-color": "#5b8def" });
+    expect(user("1")?.getAttribute("style")).toMatch(
+      /color-mix\(in oklab, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+    );
     expect(user("1")).toHaveAttribute("title", "Bea");
     expect(user("2")).toHaveAttribute("data-presence-stack-status", "away");
   });
@@ -36,5 +38,16 @@ describe("PresenceStack", () => {
     );
     fireEvent.click(screen.getByRole("button"));
     expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("PresenceStack default colour", () => {
+  it("uses the foreground token pair when a user has no colour", () => {
+    const { container } = render(
+      <PresenceStack users={[{ id: "9", initial: "N", name: "Nia" }]} />,
+    );
+    const avatar = container.querySelector("[data-presence-stack-user='9']");
+    expect(avatar).toHaveClass("bg-foreground", "text-background");
+    expect(avatar).not.toHaveAttribute("style");
   });
 });

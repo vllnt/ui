@@ -44,6 +44,8 @@ export type ModelInfo = {
 };
 
 export type ModelSelectorProps = {
+  /** Accessible name of the searchable model list. Defaults to `"Models"`. */
+  listLabel?: string;
   models: ModelInfo[];
   onOpenChange: (open: boolean) => void;
   onSelectModel: (modelId: string) => void;
@@ -377,6 +379,7 @@ type ModelSelectorFiltersProps = {
  */
 function ModelSelectorBody({
   children,
+  listLabel,
   modelSearchQuery,
   onProviderChange,
   onSearchChange,
@@ -384,10 +387,10 @@ function ModelSelectorBody({
   providerFilter,
   providers,
   sortBy,
-}: ModelSelectorFiltersProps & { children: ReactNode }) {
+}: ModelSelectorFiltersProps & { children: ReactNode; listLabel: string }) {
   return (
     <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_minmax(0,1fr)] items-center gap-x-2">
-      <Command className="contents" label="Models" shouldFilter={false}>
+      <Command className="contents" label={listLabel} shouldFilter={false}>
         <CommandInput
           onValueChange={onSearchChange}
           placeholder="Search models or providers..."
@@ -526,6 +529,7 @@ export function ModelSelector(props: ModelSelectorProps) {
           </DialogDescription>
         </DialogHeader>
         <ModelSelectorBody
+          listLabel={props.listLabel ?? "Models"}
           modelSearchQuery={modelSearchQuery}
           onProviderChange={setProviderFilter}
           onSearchChange={setModelSearchQuery}

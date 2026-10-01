@@ -40,3 +40,15 @@ describe("LiveCursor", () => {
     );
   });
 });
+
+describe("LiveCursor default colour", () => {
+  it("uses the foreground token pair for the chip when no colour is given", () => {
+    const { container } = render(<LiveCursor name="Ana" x={0} y={0} />);
+    const chip = container.querySelector("[data-live-cursor-chip]");
+    expect(chip).toHaveClass("bg-foreground", "text-background");
+    expect(chip).not.toHaveAttribute("style");
+    expect(
+      container.querySelector("[data-live-cursor-pointer]"),
+    ).toHaveAttribute("fill", "oklch(var(--foreground))");
+  });
+});

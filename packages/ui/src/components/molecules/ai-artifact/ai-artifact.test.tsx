@@ -201,3 +201,14 @@ describe("AIArtifactContent keyboard access", () => {
     expect(screen.getByTestId("payload")).toHaveAttribute("tabindex", "0");
   });
 });
+
+describe("AIArtifactContent label", () => {
+  it("takes its region name from the artifact labels", () => {
+    render(
+      <AIArtifact labels={{ content: "Contenu" }} title="Doc" value="">
+        <AIArtifactContent>body</AIArtifactContent>
+      </AIArtifact>,
+    );
+    expect(screen.getByRole("region", { name: "Contenu" })).toBeInTheDocument();
+  });
+});

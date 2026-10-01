@@ -6,6 +6,7 @@ import {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -242,10 +243,43 @@ export type TabsContentProps = {
   children: ReactNode;
   className?: string;
   id?: string;
-  /** Tab order of the panel. Defaults to `0` so the panel is reachable (APG). */
+  /**
+   * Tab order of the panel. By default the panel is a tab stop (`0`) when it
+   * holds no focusable content, so keyboard users can reach it (APG tabs).
+   */
   tabIndex?: number;
   value: string;
 };
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
+/** Whether the panel holds a focusable element, re-checked as it changes. */
+function useHasFocusableContent(
+  panelRef: React.RefObject<HTMLDivElement | null>,
+  isActive: boolean,
+): boolean {
+  const [hasFocusable, setHasFocusable] = useState(false);
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!isActive || !panel) return;
+    const measure = (): void => {
+      setHasFocusable(panel.querySelector(FOCUSABLE) !== null);
+    };
+    measure();
+    if (typeof MutationObserver === "undefined") return;
+    const observer = new MutationObserver(measure);
+    observer.observe(panel, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, [isActive, panelRef]);
+  return hasFocusable;
+}
 
 function TabsContent({
   "aria-hidden": ariaHidden,
@@ -253,12 +287,14 @@ function TabsContent({
   children,
   className,
   id,
-  tabIndex = 0,
+  tabIndex,
   value,
 }: TabsContentProps): React.ReactNode {
   const { activeTab, baseId, registerPanel, tabIds } = useTabsContext();
   const isActive = activeTab === value;
   const panelId = id ?? `${baseId}-panel-${toIdPart(value)}`;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const hasFocusable = useHasFocusableContent(panelRef, isActive);
 
   useEffect(() => {
     if (!isActive) return;
@@ -273,8 +309,9 @@ function TabsContent({
       aria-labelledby={ariaLabelledBy ?? tabIds.get(value)}
       className={cn("pt-4", className)}
       id={panelId}
+      ref={panelRef}
       role="tabpanel"
-      tabIndex={tabIndex}
+      tabIndex={tabIndex ?? (hasFocusable ? undefined : 0)}
     >
       {children}
     </div>

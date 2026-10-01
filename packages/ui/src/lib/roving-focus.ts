@@ -71,12 +71,18 @@ function targetIndex(
   return Math.min(Math.max(next, 0), count - 1);
 }
 
-function enabledItems(
+/**
+ * Enabled items, plus the focused item whether enabled or not, so arrows still
+ * move focus off a disabled item.
+ */
+function navigableItems(
   container: HTMLElement,
   itemSelector: string,
+  target: EventTarget,
 ): HTMLElement[] {
   return [...container.querySelectorAll<HTMLElement>(itemSelector)].filter(
-    (item) => isEnabled(item),
+    (item) =>
+      isEnabled(item) || (target instanceof Node && item.contains(target)),
   );
 }
 
@@ -109,7 +115,7 @@ export function moveRovingFocus(
     target,
   } = event;
   if (defaultPrevented || altKey || ctrlKey || metaKey) return undefined;
-  const items = enabledItems(currentTarget, itemSelector);
+  const items = navigableItems(currentTarget, itemSelector, target);
   const index = items.findIndex(
     (item) => target instanceof Node && item.contains(target),
   );

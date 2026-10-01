@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
@@ -189,5 +189,32 @@ describe("Tabs keyboard (WAI-ARIA APG tabs pattern)", () => {
     a.focus();
     fireEvent.keyDown(a, { key: "ArrowRight" });
     expect(a).toHaveFocus();
+  });
+});
+
+describe("TabsContent tab stop (APG tabs)", () => {
+  it("is a tab stop only when it has no focusable content", async () => {
+    const { rerender } = render(
+      <Tabs defaultValue="a">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Plain text</TabsContent>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("tabindex", "0");
+    rerender(
+      <Tabs defaultValue="a">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">
+          <button type="button">Action</button>
+        </TabsContent>
+      </Tabs>,
+    );
+    await waitFor(() => {
+      expect(screen.getByRole("tabpanel")).not.toHaveAttribute("tabindex");
+    });
   });
 });

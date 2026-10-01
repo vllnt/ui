@@ -44,6 +44,8 @@ export type DataTableFilterOption = {
 };
 
 export type DataTableFilter = {
+  /** Accessible name of the filter trigger. Defaults to `"Filter by <label>"`. */
+  ariaLabel?: string;
   columnId: string;
   label: string;
   options: DataTableFilterOption[];
@@ -201,7 +203,9 @@ function DataTableComponent<TData extends RowData>({
                     value={selectValue}
                   >
                     <SelectTrigger
-                      aria-label={`Filter by ${filter.label}`}
+                      aria-label={
+                        filter.ariaLabel ?? `Filter by ${filter.label}`
+                      }
                       className="w-[180px]"
                     >
                       <SelectValue placeholder={filter.label} />

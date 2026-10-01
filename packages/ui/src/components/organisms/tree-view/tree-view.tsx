@@ -5,6 +5,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useCallback,
+  useEffect,
   useId,
   useMemo,
   useState,
@@ -309,9 +310,20 @@ function useKeyboardHandler(arguments_: {
         setActiveId(nextActiveId(flat, -1, activeId));
         return;
       }
+      if (event.key === "Home" || event.key === "End") {
+        event.preventDefault();
+        setActiveId((event.key === "Home" ? flat[0] : flat.at(-1))?.node.id);
+        return;
+      }
       if (event.key === "ArrowRight" && current?.hasChildren) {
         event.preventDefault();
-        if (!expandedSet.has(current.node.id)) applyExpand(current.node.id);
+        if (expandedSet.has(current.node.id)) {
+          setActiveId(
+            flat.find((entry) => entry.parentId === current.node.id)?.node.id,
+          );
+        } else {
+          applyExpand(current.node.id);
+        }
         return;
       }
       if (event.key === "ArrowLeft" && current) {
@@ -347,6 +359,15 @@ function useActiveItem(flat: FlatNode[]) {
     activeId !== undefined && flat.some((entry) => entry.node.id === activeId)
       ? treeItemId(baseId, activeId)
       : undefined;
+  useEffect(() => {
+    if (activeDescendant === undefined) return;
+    const row = document.querySelector<HTMLElement>(
+      `[id="${activeDescendant}"]`,
+    );
+    const tree = row?.closest('[role="tree"]');
+    if (!row || !tree?.contains(document.activeElement)) return;
+    if ("scrollIntoView" in row) row.scrollIntoView({ block: "nearest" });
+  }, [activeDescendant]);
   return { activeDescendant, activeId, baseId, setActiveId };
 }
 

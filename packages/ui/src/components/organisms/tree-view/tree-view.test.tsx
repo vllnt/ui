@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { type TreeNode, TreeView } from "./tree-view";
@@ -155,5 +155,47 @@ describe("TreeView active descendant", () => {
     expect(activeItem()).toHaveAttribute("role", "treeitem");
     fireEvent.keyDown(tree, { key: "ArrowDown" });
     expect(activeItem()).toHaveAttribute("data-node-id", "node_modules");
+  });
+});
+
+function activeNode() {
+  const id = screen.getByRole("tree").getAttribute("aria-activedescendant");
+  return document.querySelector<HTMLElement>(`[id="${id ?? ""}"]`)?.dataset
+    .nodeId;
+}
+
+describe("TreeView APG navigation", () => {
+  it("Home / End jump to the first / last visible row", () => {
+    render(<TreeView defaultExpanded={["src"]} nodes={NODES} />);
+    const tree = screen.getByRole("tree");
+    fireEvent.keyDown(tree, { key: "End" });
+    expect(activeNode()).toBe("node_modules");
+    fireEvent.keyDown(tree, { key: "Home" });
+    expect(activeNode()).toBe("src");
+  });
+
+  it("ArrowRight on an expanded branch moves to its first child", () => {
+    render(<TreeView defaultExpanded={["src"]} nodes={NODES} />);
+    const tree = screen.getByRole("tree");
+    fireEvent.keyDown(tree, { key: "ArrowRight" });
+    expect(activeNode()).toBe("components");
+    fireEvent.keyDown(tree, { key: "ArrowLeft" });
+    expect(activeNode()).toBe("src");
+  });
+
+  it("scrolls the active row into view", () => {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: scrollIntoView,
+      writable: true,
+    });
+    render(<TreeView nodes={NODES} />);
+    const tree = screen.getByRole("tree");
+    act(() => {
+      tree.focus();
+    });
+    fireEvent.keyDown(tree, { key: "ArrowDown" });
+    expect(scrollIntoView).toHaveBeenLastCalledWith({ block: "nearest" });
   });
 });

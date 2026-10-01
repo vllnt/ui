@@ -41,8 +41,9 @@ function Tooltip({
 /**
  * Trigger that reveals a tooltip bubble on hover or focus.
  *
- * The bubble scales and fades in; closing unmounts it. Escape hides it
- * (WCAG 1.4.13) while focus stays on the trigger.
+ * The bubble scales and fades in; closing unmounts it. While it shows,
+ * Escape hides it (WCAG 1.4.13) without reaching an enclosing dialog, and
+ * focus stays on the trigger.
  *
  * @example
  * ```tsx
@@ -61,7 +62,12 @@ export const AnimatedTooltip = ({
   const close = React.useCallback(() => {
     setOpen(false);
   }, []);
-  useEscapeKey(close, { enabled: open });
+  useEscapeKey(close, {
+    capture: true,
+    enabled: open,
+    preventDefault: true,
+    stopPropagation: true,
+  });
 
   return (
     <div
