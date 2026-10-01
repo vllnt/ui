@@ -643,7 +643,11 @@ export {
   MapZoomIn,
   MapZoomOut,
 } from "./organisms/map-2d/map-2d";
-export { Marquee, type MarqueeProps } from "./atoms/marquee/marquee";
+export {
+  Marquee,
+  type MarqueeLabels,
+  type MarqueeProps,
+} from "./atoms/marquee/marquee";
 export {
   MapTimeline,
   type MapTimelineColor,
@@ -922,6 +926,7 @@ export { TLDRSection } from "./atoms/tldr-section/tldr-section";
 export {
   TickerTape,
   type TickerTapeItem,
+  type TickerTapeLabels,
   type TickerTapeProps,
 } from "./molecules/ticker-tape/ticker-tape";
 export {

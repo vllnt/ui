@@ -184,7 +184,7 @@ export const Marquee = ({
   return (
     <div
       className={cn(
-        "group relative",
+        "group relative overflow-hidden",
         vertical ? "flex h-full flex-col" : "flex w-full flex-row",
         className,
       )}

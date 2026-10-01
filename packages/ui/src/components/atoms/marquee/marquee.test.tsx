@@ -77,3 +77,14 @@ describe("Marquee", () => {
     expect(screen.queryByRole("button")).toBeNull();
   });
 });
+
+describe("Marquee root", () => {
+  it("clips its content at the root so consumer sizing still crops the track", () => {
+    const { container } = render(
+      <Marquee className="h-8">
+        <span>One</span>
+      </Marquee>,
+    );
+    expect(container.firstChild).toHaveClass("overflow-hidden", "h-8");
+  });
+});
