@@ -173,8 +173,40 @@ function buildRevealPlan(
   return revealPlan;
 }
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+/** Progress past every reveal step, so all segments show their final glyph. */
+const COMPLETE = Number.POSITIVE_INFINITY;
+
+function subscribeReducedMotion(onChange: () => void): () => void {
+  const query =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia(REDUCED_MOTION_QUERY)
+      : undefined;
+  query?.addEventListener("change", onChange);
+  return () => {
+    query?.removeEventListener("change", onChange);
+  };
+}
+
+function getReducedMotion(): boolean {
+  return (
+    typeof window.matchMedia === "function" &&
+    window.matchMedia(REDUCED_MOTION_QUERY).matches
+  );
+}
+
+/** Whether the user asks for reduced motion; `false` on the server. */
+function usePrefersReducedMotion(): boolean {
+  return React.useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
+  );
+}
+
 function useRevealProgress(active: boolean, length: number, stagger: number) {
-  const [progress, setProgress] = React.useState(() => (active ? 0 : length));
+  const [progress, setProgress] = React.useState(() => (active ? 0 : COMPLETE));
   const [revealKey, setRevealKey] = React.useState({ active, length, stagger });
 
   if (
@@ -183,7 +215,7 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
     revealKey.stagger !== stagger
   ) {
     setRevealKey({ active, length, stagger });
-    setProgress(active ? 0 : length);
+    setProgress(active ? 0 : COMPLETE);
   }
 
   React.useEffect(() => {
@@ -314,6 +346,8 @@ function useAnimatedTextFrames({
   variant: AnimatedTextVariant;
 }): SegmentFrame[] {
   const isOldSchool = variant !== "reveal";
+  const reducedMotion = usePrefersReducedMotion();
+  const animate = isOldSchool && !reducedMotion;
   const revealPlan = React.useMemo(
     () =>
       isOldSchool
@@ -321,9 +355,9 @@ function useAnimatedTextFrames({
         : Array.from({ length: segments.length }, (_, index) => index),
     [direction, isOldSchool, randomness, segments.length],
   );
-  const progress = useRevealProgress(isOldSchool, segments.length, stagger);
+  const progress = useRevealProgress(animate, segments.length, stagger);
   const matrixFrame = useMatrixFrame({
-    active: variant === "matrix" || variant === "decipher",
+    active: animate && (variant === "matrix" || variant === "decipher"),
     progress,
     randomCharacters,
     revealPlan,

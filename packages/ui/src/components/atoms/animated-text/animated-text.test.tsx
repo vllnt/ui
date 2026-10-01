@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS,
@@ -104,4 +104,40 @@ describe("AnimatedText", () => {
       "motion-reduce:opacity-100",
     );
   });
+});
+
+function stubReducedMotion() {
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    addEventListener: vi.fn(),
+    matches: query === "(prefers-reduced-motion: reduce)",
+    media: query,
+    removeEventListener: vi.fn(),
+  }));
+}
+
+describe("AnimatedText under prefers-reduced-motion", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it.each(["decipher", "matrix", "terminal"] as const)(
+    "shows the final %s text at once, with no scramble or typing",
+    (variant) => {
+      vi.useFakeTimers();
+      stubReducedMotion();
+      const { container } = render(
+        <AnimatedText text="DECRYPT" variant={variant} />,
+      );
+      const visibleText = () =>
+        [...container.querySelectorAll("[aria-hidden='true']")]
+          .map((segment) => segment.textContent)
+          .join("");
+      expect(visibleText()).toBe("DECRYPT");
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+      expect(visibleText()).toBe("DECRYPT");
+    },
+  );
 });

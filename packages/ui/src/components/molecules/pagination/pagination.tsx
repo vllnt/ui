@@ -28,6 +28,16 @@ const DEFAULT_LABELS: Required<PaginationLabels> = {
   previous: "Previous",
 };
 
+function resolveLabels(
+  labels: PaginationLabels | undefined,
+): Required<PaginationLabels> {
+  return {
+    navigation: labels?.navigation ?? DEFAULT_LABELS.navigation,
+    next: labels?.next ?? DEFAULT_LABELS.next,
+    previous: labels?.previous ?? DEFAULT_LABELS.previous,
+  };
+}
+
 /**
  * Page links wrapped in a `nav` landmark. Each page is a single link styled
  * as a button (no nested interactive elements) and the current page carries
@@ -42,7 +52,7 @@ export function Pagination({
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
-  const text = { ...DEFAULT_LABELS, ...labels };
+  const text = resolveLabels(labels);
   const maxVisiblePages = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);

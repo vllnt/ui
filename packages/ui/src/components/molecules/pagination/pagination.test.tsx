@@ -59,4 +59,16 @@ describe("Pagination labels", () => {
       screen.getByRole("link", { name: "Precedente" }),
     ).toBeInTheDocument();
   });
+
+  it("keeps the English default for a label passed as undefined", () => {
+    render(
+      <Pagination
+        baseUrl="/blog"
+        currentPage={3}
+        labels={{ next: undefined }}
+        totalPages={10}
+      />,
+    );
+    expect(screen.getByRole("link", { name: "Next" })).toBeInTheDocument();
+  });
 });
