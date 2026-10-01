@@ -85,12 +85,14 @@ function TutorialCardImpl({
   const isHydrated = useMounted();
 
   useEffect(() => {
-    if (getProgress) {
-      const result = getProgress(tutorial.id);
-      requestAnimationFrame(() => {
-        setProgress(result);
-      });
-    }
+    if (!getProgress) return;
+    const result = getProgress(tutorial.id);
+    const frame = requestAnimationFrame(() => {
+      setProgress(result);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [getProgress, tutorial.id]);
 
   const difficultyVariant = DIFFICULTY_VARIANTS[tutorial.difficulty];

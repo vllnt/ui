@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
 
 import {
   TutorialCard,
@@ -47,5 +49,28 @@ describe("TutorialCard", () => {
       "href",
       "/tutorials/canvas-basics",
     );
+  });
+});
+
+describe("TutorialCard progress loading", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("cancels the pending frame on unmount", () => {
+    const frames = stubAnimationFrame();
+    const { unmount } = render(
+      <TutorialCard
+        getProgress={() => ({ completedCount: 2, totalSections: 6 })}
+        href="/tutorials/canvas-basics"
+        labels={labels}
+        tutorial={tutorial}
+      />,
+    );
+    expect(frames.pending()).toBe(1);
+
+    unmount();
+
+    expect(frames.pending()).toBe(0);
   });
 });

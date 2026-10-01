@@ -34,6 +34,43 @@ function buildPath(data: Uint8Array, count: number, margin: number): string {
   );
 }
 
+type QrEncoding = { count: number; path: string };
+
+const ENCODING_CACHE_LIMIT = 32;
+const encodingCache = new Map<string, QrEncoding>();
+
+/**
+ * Encodes `value` into its module count and SVG path. A small module-level
+ * cache keyed on (level, margin, value) lets re-renders with the same inputs
+ * skip the encoder. It keeps the latest {@link ENCODING_CACHE_LIMIT} encodings
+ * and needs no client hooks.
+ */
+function encodeQrCode(
+  value: string,
+  level: QrCodeLevel,
+  margin: number,
+): QrEncoding {
+  const key = `${level}|${margin}|${value}`;
+  const cached = encodingCache.get(key);
+  if (cached) {
+    return cached;
+  }
+
+  const { modules } = create(value, { errorCorrectionLevel: level });
+  const encoding = {
+    count: modules.size,
+    path: buildPath(modules.data, modules.size, margin),
+  };
+  encodingCache.set(key, encoding);
+  if (encodingCache.size > ENCODING_CACHE_LIMIT) {
+    const oldest = encodingCache.keys().next().value;
+    if (oldest !== undefined) {
+      encodingCache.delete(oldest);
+    }
+  }
+  return encoding;
+}
+
 /**
  * Renders a QR code as a single, theme-aware SVG path. Modules use
  * `currentColor` (inherits `text-foreground`) so the code adapts to the
@@ -53,12 +90,10 @@ const QrCode = ({
   value,
   ...props
 }: QrCodeProps & { ref?: React.Ref<SVGSVGElement> }) => {
-  const modules = value
-    ? create(value, { errorCorrectionLevel: level }).modules
-    : null;
-  const count = modules?.size ?? 0;
+  const { count, path } = value
+    ? encodeQrCode(value, level, margin)
+    : { count: 0, path: "" };
   const dimension = count + margin * 2;
-  const path = modules ? buildPath(modules.data, count, margin) : "";
 
   return (
     <svg

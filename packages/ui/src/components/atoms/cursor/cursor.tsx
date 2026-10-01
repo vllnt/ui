@@ -15,26 +15,49 @@ type Point = {
   y: number;
 };
 
-function usePointerPosition(): Point | undefined {
-  const [point, setPoint] = React.useState<Point>();
+/**
+ * Follows the window pointer, writing the follower's `transform` at most once
+ * per animation frame. Re-renders once, when the first pointer move makes the
+ * follower visible.
+ */
+function usePointerFollower(
+  follower: React.RefObject<HTMLDivElement | null>,
+  enabled: boolean,
+): boolean {
+  const [visible, setVisible] = React.useState(false);
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
 
+    let frame: null | number = null;
+    let point: Point = { x: 0, y: 0 };
+
+    const follow = (): void => {
+      frame = null;
+      setVisible(true);
+      if (enabled && follower.current) {
+        follower.current.style.transform = `translate(${point.x}px, ${point.y}px) translate(-50%, -50%)`;
+      }
+    };
+
     const onMove = (event: PointerEvent): void => {
-      setPoint({ x: event.clientX, y: event.clientY });
+      point = { x: event.clientX, y: event.clientY };
+      frame ??= requestAnimationFrame(follow);
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
 
     return () => {
       window.removeEventListener("pointermove", onMove);
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
     };
-  }, []);
+  }, [enabled, follower]);
 
-  return point;
+  return visible;
 }
 
 /**
@@ -55,22 +78,32 @@ export const Cursor = ({
   style,
   ...props
 }: CursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const point = usePointerPosition();
+  const follower = React.useRef<HTMLDivElement | null>(null);
+  const visible = usePointerFollower(follower, style?.transform === undefined);
+
+  const setReferences = React.useCallback(
+    (node: HTMLDivElement | null): void => {
+      follower.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
 
   return (
     <div
       aria-hidden="true"
       className={cn(
         "pointer-events-none fixed left-0 top-0 z-50 -translate-x-1/2 -translate-y-1/2 rounded-full border border-foreground bg-foreground/20 backdrop-invert transition-transform duration-100 ease-out motion-reduce:transition-none",
-        point ? "opacity-100" : "opacity-0",
+        visible ? "opacity-100" : "opacity-0",
         className,
       )}
-      ref={ref}
+      ref={setReferences}
       style={{
         height: `${size}px`,
-        transform: point
-          ? `translate(${point.x}px, ${point.y}px) translate(-50%, -50%)`
-          : undefined,
         width: `${size}px`,
         ...style,
       }}

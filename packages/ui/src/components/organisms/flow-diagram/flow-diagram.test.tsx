@@ -280,4 +280,25 @@ describe("FlowDiagram", () => {
     );
     expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
   });
+
+  it("clears the copy-status reset timer on unmount", async () => {
+    const setTimer = vi.spyOn(globalThis, "setTimeout");
+    const clearTimer = vi.spyOn(globalThis, "clearTimeout");
+    const { unmount } = render(
+      <FlowDiagram allowCopy edges={edges} nodes={nodes} />,
+    );
+
+    fireEvent.click(screen.getByLabelText("Copy as image"));
+    await screen.findByLabelText("Copied!");
+    const resetCall = setTimer.mock.calls.findIndex(
+      ([, delay]) => delay === 2000,
+    );
+    const resetTimer = setTimer.mock.results[resetCall]?.value;
+    unmount();
+
+    expect(resetTimer).toBeDefined();
+    expect(clearTimer).toHaveBeenCalledWith(resetTimer);
+    setTimer.mockRestore();
+    clearTimer.mockRestore();
+  });
 });

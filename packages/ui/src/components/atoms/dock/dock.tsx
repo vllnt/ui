@@ -10,7 +10,12 @@ export type DockProps = React.ComponentPropsWithoutRef<"div">;
 /** Props for {@link DockIcon}. */
 export type DockIconProps = React.ComponentPropsWithoutRef<"div">;
 
-const DockPointerContext = React.createContext<null | number>(null);
+type DockMagnifier = {
+  /** Adds an icon to the magnified set; the returned function removes it. */
+  register: (icon: HTMLDivElement) => () => void;
+};
+
+const DockMagnifierContext = React.createContext<DockMagnifier | null>(null);
 
 function assignRef(
   ref: React.Ref<HTMLDivElement> | undefined,
@@ -59,6 +64,83 @@ function magnify(distance: number): number {
   return 1 + 0.5 * (1 - clamped / range);
 }
 
+function iconScale(icon: HTMLDivElement, pointerX: null | number): number {
+  if (pointerX === null) {
+    return 1;
+  }
+
+  const bounds = icon.getBoundingClientRect();
+  return magnify(pointerX - (bounds.left + bounds.width / 2));
+}
+
+/**
+ * Tracks the pointer in a ref and rescales the registered icons at most once
+ * per animation frame, writing `transform` directly instead of re-rendering.
+ * Every bounds read in a frame happens before any style write.
+ */
+function useDockMagnifier(): {
+  magnifier: DockMagnifier;
+  trackPointer: (pointerX: null | number) => void;
+} {
+  const reduced = usePrefersReducedMotion();
+  const [icons] = React.useState(() => new Set<HTMLDivElement>());
+  const pointerX = React.useRef<null | number>(null);
+  const reducedReference = React.useRef(reduced);
+  const frame = React.useRef<null | number>(null);
+
+  const scheduleUpdate = React.useCallback((): void => {
+    if (frame.current !== null) {
+      return;
+    }
+
+    frame.current = requestAnimationFrame(() => {
+      frame.current = null;
+      const x = reducedReference.current ? null : pointerX.current;
+      const targets = [...icons];
+      const scales = targets.map((icon) => iconScale(icon, x));
+      targets.forEach((icon, index) => {
+        icon.style.transform = `scale(${scales[index] ?? 1})`;
+      });
+    });
+  }, [icons]);
+
+  React.useEffect(() => {
+    reducedReference.current = reduced;
+    scheduleUpdate();
+  }, [reduced, scheduleUpdate]);
+
+  React.useEffect(() => {
+    return () => {
+      if (frame.current !== null) {
+        cancelAnimationFrame(frame.current);
+      }
+    };
+  }, []);
+
+  const magnifier = React.useMemo<DockMagnifier>(
+    () => ({
+      register: (icon) => {
+        icons.add(icon);
+        scheduleUpdate();
+        return () => {
+          icons.delete(icon);
+        };
+      },
+    }),
+    [icons, scheduleUpdate],
+  );
+
+  const trackPointer = React.useCallback(
+    (nextPointerX: null | number): void => {
+      pointerX.current = nextPointerX;
+      scheduleUpdate();
+    },
+    [scheduleUpdate],
+  );
+
+  return { magnifier, trackPointer };
+}
+
 /**
  * macOS-style dock that magnifies its {@link DockIcon} children near the pointer.
  *
@@ -76,44 +158,30 @@ export const Dock = ({
   ref,
   ...props
 }: DockProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const [pointerX, setPointerX] = React.useState<null | number>(null);
+  const { magnifier, trackPointer } = useDockMagnifier();
 
   return (
-    <DockPointerContext.Provider value={pointerX}>
+    <DockMagnifierContext.Provider value={magnifier}>
       <div
         className={cn(
           "flex items-end gap-2 rounded-2xl border bg-card/60 p-2 backdrop-blur",
           className,
         )}
         onPointerLeave={() => {
-          setPointerX(null);
+          trackPointer(null);
         }}
         onPointerMove={(event) => {
-          setPointerX(event.clientX);
+          trackPointer(event.clientX);
         }}
         ref={ref}
         {...props}
       >
         {children}
       </div>
-    </DockPointerContext.Provider>
+    </DockMagnifierContext.Provider>
   );
 };
 Dock.displayName = "Dock";
-
-function useDockScale(
-  reference: React.RefObject<HTMLDivElement | null>,
-  pointerX: null | number,
-  reduced: boolean,
-): number {
-  if (reduced || pointerX === null || reference.current === null) {
-    return 1;
-  }
-
-  const bounds = reference.current.getBoundingClientRect();
-  const center = bounds.left + bounds.width / 2;
-  return magnify(pointerX - center);
-}
 
 /**
  * Single dock entry that scales up as the pointer moves toward its center.
@@ -132,10 +200,17 @@ export const DockIcon = ({
   style,
   ...props
 }: DockIconProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const pointerX = React.use(DockPointerContext);
-  const reduced = usePrefersReducedMotion();
+  const magnifier = React.use(DockMagnifierContext);
   const reference = React.useRef<HTMLDivElement>(null);
-  const scale = useDockScale(reference, pointerX, reduced);
+  const hasCustomTransform = style?.transform !== undefined;
+
+  React.useEffect(() => {
+    const icon = reference.current;
+    if (!magnifier || !icon || hasCustomTransform) {
+      return;
+    }
+    return magnifier.register(icon);
+  }, [hasCustomTransform, magnifier]);
 
   const setReferences = React.useCallback(
     (node: HTMLDivElement | null): void => {
@@ -152,7 +227,7 @@ export const DockIcon = ({
         className,
       )}
       ref={setReferences}
-      style={{ transform: `scale(${scale})`, ...style }}
+      style={{ transform: "scale(1)", ...style }}
       {...props}
     >
       {children}

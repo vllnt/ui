@@ -35,15 +35,23 @@ export const ScrollProgress = ({
   const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
-    const onScroll = (): void => {
+    let frame: null | number = null;
+    const update = (): void => {
+      frame = null;
       setProgress(computeProgress());
     };
+    const onScroll = (): void => {
+      frame ??= requestAnimationFrame(update);
+    };
 
-    onScroll();
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
     };
   }, []);
 

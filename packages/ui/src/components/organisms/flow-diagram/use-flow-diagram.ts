@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   getNodesBounds,
@@ -124,8 +124,26 @@ async function captureFlowImage(
 
 function useCopyToClipboard(reactFlow: ReturnType<typeof useReactFlow>) {
   const [copyStatus, setCopyStatus] = useState<CopyStatus>("idle");
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(resetTimer.current);
+    };
+  }, []);
+
+  const showResult = useCallback((status: "error" | "success") => {
+    setCopyStatus(status);
+    clearTimeout(resetTimer.current);
+    resetTimer.current = setTimeout(() => {
+      setCopyStatus("idle");
+    }, COPY_SUCCESS_DURATION);
+  }, []);
 
   const copyToClipboard = useCallback(async () => {
+    clearTimeout(resetTimer.current);
     setCopyStatus("copying");
 
     try {
@@ -133,18 +151,12 @@ function useCopyToClipboard(reactFlow: ReturnType<typeof useReactFlow>) {
       const clipboardItem = new ClipboardItem({ ["image/png"]: blob });
       await navigator.clipboard.write([clipboardItem]);
 
-      setCopyStatus("success");
-      setTimeout(() => {
-        setCopyStatus("idle");
-      }, COPY_SUCCESS_DURATION);
+      showResult("success");
     } catch (error) {
       console.error("[FlowDiagram] Copy failed:", error);
-      setCopyStatus("error");
-      setTimeout(() => {
-        setCopyStatus("idle");
-      }, COPY_SUCCESS_DURATION);
+      showResult("error");
     }
-  }, [reactFlow]);
+  }, [reactFlow, showResult]);
 
   return { copyStatus, copyToClipboard };
 }
