@@ -39,11 +39,19 @@ describe("StateBadgeOverlay", () => {
   });
 
   it("stops its infinite pulse under prefers-reduced-motion", () => {
-    const { container } = render(<StateBadgeOverlay state="running" x={0} y={0} />);
-    const pulsing = [...container.querySelectorAll('[class*="animate-p"], [class*="animate-spin"]')];
+    const { container } = render(
+      <StateBadgeOverlay state="running" x={0} y={0} />,
+    );
+    const pulsing = [
+      ...container.querySelectorAll(
+        '[class*="animate-p"], [class*="animate-spin"]',
+      ),
+    ];
     expect(pulsing.length).toBeGreaterThan(0);
-    for (const element of pulsing) {
-      expect(element.getAttribute("class")).toContain("motion-reduce:animate-none");
-    }
+    pulsing.forEach((element) => {
+      expect(element.getAttribute("class")).toContain(
+        "motion-reduce:animate-none",
+      );
+    });
   });
 });

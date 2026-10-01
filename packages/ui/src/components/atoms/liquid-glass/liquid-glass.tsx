@@ -32,9 +32,8 @@ export const LiquidGlass = ({
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 motion-reduce:animate-none"
+        className="pointer-events-none absolute inset-0 [animation:vllnt-liquid-shift_8s_ease-in-out_infinite] motion-reduce:animate-none"
         style={{
-          animation: "vllnt-liquid-shift 8s ease-in-out infinite",
           background:
             "linear-gradient(120deg, transparent, oklch(var(--primary) / 0.18), transparent, oklch(var(--accent) / 0.18), transparent)",
           backgroundSize: "200% 200%",

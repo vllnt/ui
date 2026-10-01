@@ -52,7 +52,7 @@ const STATUS_DOT: Record<ObjectInspectorStatus, string> = {
   failed: "bg-red-500",
   idle: "bg-muted-foreground",
   queued: "bg-amber-500",
-  running: "bg-blue-500 animate-pulse",
+  running: "bg-blue-500 animate-pulse motion-reduce:animate-none",
 };
 
 const STATUS_LABEL: Record<ObjectInspectorStatus, string> = {

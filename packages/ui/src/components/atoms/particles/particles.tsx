@@ -58,11 +58,11 @@ export const Particles = ({
     >
       {particles.map((particle, index) => (
         <span
-          className="absolute rounded-full bg-foreground/30 motion-reduce:animate-none"
+          className="absolute rounded-full bg-foreground/30 [animation-name:vllnt-particle-float] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
           key={index}
           style={{
-            animation: `vllnt-particle-float ${particle.duration}s linear infinite`,
             animationDelay: `${particle.delay}s`,
+            animationDuration: `${particle.duration}s`,
             height: `${particle.size}px`,
             left: `${particle.left}%`,
             top: `${particle.top}%`,

@@ -42,7 +42,7 @@ const STATE_DOT: Record<StateBadgeState, string> = {
   failed: "bg-red-500",
   idle: "bg-muted-foreground",
   queued: "bg-amber-500",
-  running: "bg-blue-500 animate-pulse",
+  running: "bg-blue-500 animate-pulse motion-reduce:animate-none",
   stopped: "bg-muted-foreground",
 };
 

@@ -29,15 +29,21 @@ describe("TickerTape", () => {
 
   it("keeps the animation name out of inline styles so motion-reduce:animate-none can stop it", () => {
     const { container } = render(<TickerTape items={items} />);
-    const track = container.querySelector<HTMLElement>("[data-ticker-tape-track]");
-    expect(track?.getAttribute("style") ?? "").not.toMatch(/animation(-name)?:/);
+    const track = container.querySelector<HTMLElement>(
+      "[data-ticker-tape-track]",
+    );
+    expect(track?.getAttribute("style") ?? "").not.toMatch(
+      /animation(-name)?:/,
+    );
     expect(track).toHaveClass("motion-reduce:animate-none");
     expect(track).toHaveClass("focus-within:[animation-play-state:paused]");
   });
 
   it("offers a keyboard-operable pause control that stops the scroll (WCAG 2.2.2)", () => {
     const { container } = render(<TickerTape items={items} />);
-    const track = container.querySelector<HTMLElement>("[data-ticker-tape-track]");
+    const track = container.querySelector<HTMLElement>(
+      "[data-ticker-tape-track]",
+    );
     fireEvent.click(screen.getByRole("button", { name: "Pause" }));
     expect(track).toHaveClass("[animation-play-state:paused]");
     fireEvent.click(screen.getByRole("button", { name: "Play" }));
@@ -46,7 +52,10 @@ describe("TickerTape", () => {
 
   it("lets hosts localize or opt out of the pause control", () => {
     const { rerender } = render(
-      <TickerTape items={items} labels={{ pause: "Pausar", play: "Reproducir" }} />,
+      <TickerTape
+        items={items}
+        labels={{ pause: "Pausar", play: "Reproducir" }}
+      />,
     );
     expect(screen.getByRole("button", { name: "Pausar" })).toBeInTheDocument();
     rerender(<TickerTape items={items} pauseControl={false} />);

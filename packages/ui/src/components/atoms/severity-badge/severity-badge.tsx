@@ -162,7 +162,7 @@ function SeverityBadge({
           {pulse ? (
             <span
               className={cn(
-                "absolute inline-flex h-full w-full animate-ping rounded-full opacity-60",
+                "absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 motion-reduce:animate-none",
                 DOT_COLOR[level],
               )}
             />

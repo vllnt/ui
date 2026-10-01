@@ -27,9 +27,6 @@ export const BorderBeam = ({
     animationDelay: `${delay}s`,
     animationDirection: reverse ? "reverse" : "normal",
     animationDuration: `${duration}s`,
-    animationIterationCount: "infinite",
-    animationName: "vllnt-border-beam-angle",
-    animationTimingFunction: "linear",
     background: `conic-gradient(from var(--vllnt-border-beam-angle, 90deg), transparent 0deg, transparent 220deg, ${colorFrom} 280deg, ${colorTo} 335deg, transparent 360deg)`,
     borderRadius: "inherit",
     boxSizing: "border-box",
@@ -46,7 +43,7 @@ export const BorderBeam = ({
     <span
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute inset-0 rounded-[inherit]",
+        "pointer-events-none absolute inset-0 rounded-[inherit] [animation-name:vllnt-border-beam-angle] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none",
         className,
       )}
       ref={ref}

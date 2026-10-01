@@ -30,9 +30,6 @@ export const ShineBorder = ({
 }: ShineBorderProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const borderStyle: React.CSSProperties = {
     animationDuration: `${duration}s`,
-    animationIterationCount: "infinite",
-    animationName: "vllnt-border-beam-angle",
-    animationTimingFunction: "linear",
     background:
       "conic-gradient(from var(--vllnt-border-beam-angle, 90deg), oklch(var(--primary) / 0.8), oklch(var(--ring) / 0.3), oklch(var(--primary) / 0.8))",
     mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
@@ -47,7 +44,7 @@ export const ShineBorder = ({
     <div className={cn("relative", className)} ref={ref} {...props}>
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-[inherit] motion-reduce:animate-none"
+        className="pointer-events-none absolute inset-0 rounded-[inherit] [animation-name:vllnt-border-beam-angle] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
         style={borderStyle}
       />
       {children}

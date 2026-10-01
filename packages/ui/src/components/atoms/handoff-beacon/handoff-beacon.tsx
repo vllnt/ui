@@ -14,7 +14,7 @@ export type HandoffBeaconLevel = "info" | "request" | "urgent";
 const LEVEL_RING: Record<HandoffBeaconLevel, string> = {
   info: "ring-blue-500",
   request: "ring-amber-500",
-  urgent: "ring-red-500 animate-pulse",
+  urgent: "ring-red-500 animate-pulse motion-reduce:animate-none",
 };
 
 const LEVEL_DOT: Record<HandoffBeaconLevel, string> = {

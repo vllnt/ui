@@ -19,11 +19,15 @@ describe("Sparkles", () => {
 
   it("keeps the animation name out of inline styles so motion-reduce:animate-none can stop it", () => {
     const { container } = render(<Sparkles count={3} />);
-    const animated = [...container.querySelectorAll<HTMLElement>("[aria-hidden] > span")];
+    const animated = [
+      ...container.querySelectorAll<HTMLElement>("[aria-hidden] > span"),
+    ];
     expect(animated.length).toBeGreaterThan(0);
-    for (const element of animated) {
-      expect(element.getAttribute("style") ?? "").not.toMatch(/animation(-name)?:/);
+    animated.forEach((element) => {
+      expect(element.getAttribute("style") ?? "").not.toMatch(
+        /animation(-name)?:/,
+      );
       expect(element).toHaveClass("motion-reduce:animate-none");
-    }
+    });
   });
 });

@@ -28,8 +28,8 @@ const STATE_DOT: Record<PresenceSyncState, string> = {
   error: "bg-red-500",
   live: "bg-emerald-500",
   offline: "bg-muted-foreground",
-  reconnecting: "bg-amber-500 animate-pulse",
-  syncing: "bg-blue-500 animate-pulse",
+  reconnecting: "bg-amber-500 animate-pulse motion-reduce:animate-none",
+  syncing: "bg-blue-500 animate-pulse motion-reduce:animate-none",
 };
 
 const STATE_TEXT: Record<PresenceSyncState, string> = {

@@ -40,7 +40,9 @@ describe("Marquee", () => {
       </Marquee>,
     );
     const track = container.querySelector<HTMLElement>("[data-marquee-track]");
-    expect(track?.getAttribute("style") ?? "").not.toMatch(/animation(-name)?:/);
+    expect(track?.getAttribute("style") ?? "").not.toMatch(
+      /animation(-name)?:/,
+    );
     expect(track).toHaveClass("motion-reduce:animate-none");
     expect(track).toHaveClass("focus-within:[animation-play-state:paused]");
   });

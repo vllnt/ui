@@ -132,7 +132,7 @@ export const AlertPulse = ({
           "origin-center",
           SEVERITY_STROKE[severity],
           SEVERITY_FILL[severity],
-          reducedMotion ? null : "animate-ping",
+          reducedMotion ? null : "animate-ping motion-reduce:animate-none",
         )}
         cx={size / 2}
         cy={size / 2}
