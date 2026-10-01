@@ -37,6 +37,7 @@ External shared configs (separate npm packages): `@vllnt/eslint-config`, `@vllnt
 | `pnpm test:once` | Vitest single-run workspace-wide |
 | `pnpm -F @vllnt/ui test:visual` | Playwright CT visual snapshots |
 | `pnpm -F @vllnt/ui test:coverage` | Vitest with coverage |
+| `pnpm -F @vllnt/ui size` | Fail when a representative export's bundle exceeds its budget in `packages/ui/scripts/size-budget.json` (run after build; CI gate) |
 | `pnpm check:circular` | Fail on circular imports |
 | `pnpm check:atomic` | Fail on Atomic Design level violations in `packages/ui/src/components` ([rules](./docs/agents/COMPONENTS.md#atomic-design-levels)) |
 | `pnpm doctor` | react-doctor health scan (top rules) |

@@ -89,7 +89,8 @@
     "storybook:generate": "tsx scripts/generate-stories.ts",
     "storybook:generate-docs": "tsx scripts/generate-docs.ts",
     "storybook:verify": "tsx scripts/verify-stories.ts",
-    "check:use-client": "tsx scripts/check-use-client.ts"
+    "check:use-client": "tsx scripts/check-use-client.ts",
+    "size": "node scripts/check-size.mjs"
   },
   "peerDependencies": {
     "next": ">=14.0.0",
@@ -177,6 +178,7 @@
     "@vllnt/typescript": "^1.0.0",
     "autoprefixer": "^10.4.21",
     "axe-core": "4.11.1",
+    "esbuild": "0.27.3",
     "eslint": "^9.39.1",
     "jsdom": "^26.1.0",
     "playwright": "^1.57.0",
