@@ -5,6 +5,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useCallback,
+  useId,
   useMemo,
   useState,
 } from "react";
@@ -133,10 +134,15 @@ function toggleSet(set: ReadonlySet<string>, id: string): string[] {
   return [...next];
 }
 
+function treeItemId(baseId: string, nodeId: string): string {
+  return `${baseId}-item-${encodeURIComponent(nodeId)}`;
+}
+
 type TreeRowProps = {
   active: boolean;
   expanded: boolean;
   flat: FlatNode;
+  id: string;
   onActivate: (id: string) => void;
   onExpand: (id: string) => void;
   onSelect: (id: string) => void;
@@ -147,6 +153,7 @@ function TreeRow({
   active,
   expanded,
   flat,
+  id,
   onActivate,
   onExpand,
   onSelect,
@@ -179,6 +186,7 @@ function TreeRow({
       data-depth={depth}
       data-node-id={node.id}
       data-selected={selected ? "true" : undefined}
+      id={id}
       onClick={activate}
       onKeyDown={handleKeyDown}
       role="treeitem"
@@ -326,10 +334,27 @@ function useKeyboardHandler(arguments_: {
   );
 }
 
+/**
+ * Tracks the keyboard-active row and the id that `aria-activedescendant` on
+ * the tree points at (WAI-ARIA APG tree view, focus stays on the tree).
+ */
+function useActiveItem(flat: FlatNode[]) {
+  const [activeId, setActiveId] = useState<string | undefined>(
+    () => flat[0]?.node.id,
+  );
+  const baseId = useId();
+  const activeDescendant =
+    activeId !== undefined && flat.some((entry) => entry.node.id === activeId)
+      ? treeItemId(baseId, activeId)
+      : undefined;
+  return { activeDescendant, activeId, baseId, setActiveId };
+}
+
 type TreeRowsProps = {
   activeId?: string;
   applyExpand: (id: string) => void;
   applySelect: (id: string) => void;
+  baseId: string;
   expandedSet: ReadonlySet<string>;
   flat: FlatNode[];
   selectedSet: ReadonlySet<string>;
@@ -340,6 +365,7 @@ function TreeRows({
   activeId,
   applyExpand,
   applySelect,
+  baseId,
   expandedSet,
   flat,
   selectedSet,
@@ -352,6 +378,7 @@ function TreeRows({
           active={entry.node.id === activeId}
           expanded={expandedSet.has(entry.node.id)}
           flat={entry}
+          id={treeItemId(baseId, entry.node.id)}
           key={entry.node.id}
           onActivate={setActiveId}
           onExpand={applyExpand}
@@ -421,9 +448,8 @@ export const TreeView = (props: TreeViewProps) => {
     [expandedSet, nodes],
   );
 
-  const [activeId, setActiveId] = useState<string | undefined>(
-    () => flat[0]?.node.id,
-  );
+  const { activeDescendant, activeId, baseId, setActiveId } =
+    useActiveItem(flat);
 
   const handleKeyDown = useKeyboardHandler({
     activeId,
@@ -436,6 +462,7 @@ export const TreeView = (props: TreeViewProps) => {
 
   return (
     <ul
+      aria-activedescendant={activeDescendant}
       aria-label={resolvedLabels.region}
       aria-multiselectable={selectionMode === "multiple" || undefined}
       className={cn(
@@ -452,6 +479,7 @@ export const TreeView = (props: TreeViewProps) => {
         activeId={activeId}
         applyExpand={applyExpand}
         applySelect={applySelect}
+        baseId={baseId}
         expandedSet={expandedSet}
         flat={flat}
         selectedSet={selectedSet}

@@ -40,7 +40,9 @@ describe("WorkspaceSwitcher", () => {
   });
 
   it("exposes a single tab stop on the checked workspace (APG radio group)", () => {
-    render(<WorkspaceSwitcher defaultValue="objects" workspaces={workspaces} />);
+    render(
+      <WorkspaceSwitcher defaultValue="objects" workspaces={workspaces} />,
+    );
     const stops = screen
       .getAllByRole("radio")
       .filter((radio) => radio.getAttribute("tabindex") === "0");

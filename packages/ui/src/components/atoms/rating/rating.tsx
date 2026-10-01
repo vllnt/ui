@@ -27,6 +27,13 @@ export type RatingProps = {
   value?: number;
 };
 
+function handleRadioKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+  moveRovingFocus(event, '[role="radio"]', {
+    activate: true,
+    orientation: "both",
+  });
+}
+
 type RatingStarsProps = {
   activeValue: number;
   hoveredValue: number;
@@ -55,19 +62,13 @@ function RatingStars({
   const displayValue = hoveredValue || activeValue;
   const tabStopValue = activeValue >= 1 && activeValue <= max ? activeValue : 1;
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
-    moveRovingFocus(event, '[role="radio"]', {
-      activate: true,
-      orientation: "both",
-    });
-  };
-
   return (
     <div
       aria-label={label}
       className="inline-flex items-center gap-1"
-      onKeyDown={handleKeyDown}
+      onKeyDown={handleRadioKeyDown}
       role="radiogroup"
+      tabIndex={-1}
     >
       {stars.map((starValue) => {
         const isFilled = starValue <= displayValue;

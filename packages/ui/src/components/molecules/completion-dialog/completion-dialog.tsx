@@ -1,10 +1,12 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { memo, useRef } from "react";
 
-import type { ReactNode } from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import type { KeyboardEvent, ReactNode } from "react";
 
 import type { HeadingTag } from "../../../lib/types";
+import { useReturnFocus } from "../../../lib/use-return-focus";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
@@ -12,10 +14,18 @@ export type CompletionDialogProps = {
   /** Heading tag for the dialog title. Defaults to `h2`. */
   as?: HeadingTag;
   cancelLabel?: string;
+  /**
+   * Single-key shortcut for cancel while focus is inside the dialog. Pass an
+   * empty string to turn it off (WCAG 2.1.4). Defaults to `"S"`.
+   */
   cancelShortcut?: string;
   className?: string;
   closeIcon?: ReactNode;
   confirmLabel?: string;
+  /**
+   * Single-key shortcut for confirm while focus is inside the dialog. Pass an
+   * empty string to turn it off (WCAG 2.1.4). Defaults to `"D"`.
+   */
   confirmShortcut?: string;
   description?: ReactNode;
   isOpen: boolean;
@@ -25,23 +35,21 @@ export type CompletionDialogProps = {
   title: string;
 };
 
-type DialogContentProps = Omit<CompletionDialogProps, "isOpen">;
+type DialogBodyProps = Omit<CompletionDialogProps, "isOpen" | "onClose">;
 
-type DialogCloseButtonProps = Pick<DialogContentProps, "closeIcon" | "onClose">;
+type DialogCloseButtonProps = Pick<DialogBodyProps, "closeIcon">;
 
 function DialogCloseButton({
   closeIcon,
-  onClose,
 }: DialogCloseButtonProps): React.ReactNode {
   return (
-    <button
+    <DialogPrimitive.Close
       aria-label="Close"
-      className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity"
-      onClick={onClose}
-      type="button"
+      className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {closeIcon ?? (
         <svg
+          aria-hidden="true"
           className="size-4"
           fill="none"
           stroke="currentColor"
@@ -55,11 +63,66 @@ function DialogCloseButton({
           />
         </svg>
       )}
-    </button>
+    </DialogPrimitive.Close>
   );
 }
 
-function DialogContent({
+function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
+  return (
+    shortcut !== "" &&
+    !event.altKey &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    event.key.toLowerCase() === shortcut.toLowerCase()
+  );
+}
+
+type DialogActionsProps = Pick<
+  DialogBodyProps,
+  | "cancelLabel"
+  | "cancelShortcut"
+  | "confirmLabel"
+  | "confirmShortcut"
+  | "onCancel"
+  | "onConfirm"
+> & { confirmButtonRef: React.Ref<HTMLButtonElement> };
+
+function DialogActions({
+  cancelLabel,
+  cancelShortcut,
+  confirmButtonRef,
+  confirmLabel,
+  confirmShortcut,
+  onCancel,
+  onConfirm,
+}: DialogActionsProps): React.ReactNode {
+  return (
+    <div className="flex flex-row gap-2">
+      <Button className="flex-1 gap-2" onClick={onCancel} variant="outline">
+        <span>{cancelLabel}</span>
+        {cancelShortcut ? (
+          <kbd className="hidden md:inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-muted rounded">
+            {cancelShortcut}
+          </kbd>
+        ) : null}
+      </Button>
+      <Button
+        className="flex-1 gap-2"
+        onClick={onConfirm}
+        ref={confirmButtonRef}
+      >
+        <span>{confirmLabel}</span>
+        {confirmShortcut ? (
+          <kbd className="hidden md:inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-primary-foreground/20 rounded">
+            {confirmShortcut}
+          </kbd>
+        ) : null}
+      </Button>
+    </div>
+  );
+}
+
+function DialogBody({
   as: Heading = "h2",
   cancelLabel = "Skip",
   cancelShortcut = "S",
@@ -69,177 +132,98 @@ function DialogContent({
   confirmShortcut = "D",
   description,
   onCancel,
-  onClose,
   onConfirm,
   title,
-}: DialogContentProps): React.ReactNode {
+}: DialogBodyProps): React.ReactNode {
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
+  const {
+    onCloseAutoFocus: handleCloseAutoFocus,
+    onOpenAutoFocus: handleOpenAutoFocus,
+  } = useReturnFocus((event) => {
+    event.preventDefault();
     confirmButtonRef.current?.focus();
-  }, []);
+  });
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
+    if (event.defaultPrevented) return;
+    if (matchesShortcut(event, confirmShortcut)) {
+      event.preventDefault();
+      onConfirm();
+    } else if (matchesShortcut(event, cancelShortcut)) {
+      event.preventDefault();
+      onCancel();
+    }
+  };
 
   return (
-    <div
+    <DialogPrimitive.Content
+      {...(description ? {} : { "aria-describedby": undefined })}
       className={cn(
         "relative z-10 w-full max-w-md mx-4 p-6 bg-background border border-border rounded-lg shadow-lg",
         "animate-in fade-in-0 zoom-in-95 duration-200",
         className,
       )}
+      onCloseAutoFocus={handleCloseAutoFocus}
+      onKeyDown={handleKeyDown}
+      onOpenAutoFocus={handleOpenAutoFocus}
     >
-      <DialogCloseButton closeIcon={closeIcon} onClose={onClose} />
+      <DialogCloseButton closeIcon={closeIcon} />
       <div className="mb-4">
-        <Heading className="text-lg font-semibold" id="completion-dialog-title">
-          {title}
-        </Heading>
+        <DialogPrimitive.Title asChild>
+          <Heading className="text-lg font-semibold">{title}</Heading>
+        </DialogPrimitive.Title>
         {description ? (
-          <div className="text-sm text-muted-foreground mt-1.5">
-            {description}
-          </div>
+          <DialogPrimitive.Description asChild>
+            <div className="text-sm text-muted-foreground mt-1.5">
+              {description}
+            </div>
+          </DialogPrimitive.Description>
         ) : null}
       </div>
-      <div className="flex flex-row gap-2">
-        <Button className="flex-1 gap-2" onClick={onCancel} variant="outline">
-          <span>{cancelLabel}</span>
-          {cancelShortcut ? (
-            <kbd className="hidden md:inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-muted rounded">
-              {cancelShortcut}
-            </kbd>
-          ) : null}
-        </Button>
-        <Button
-          className="flex-1 gap-2"
-          onClick={onConfirm}
-          ref={confirmButtonRef}
-        >
-          <span>{confirmLabel}</span>
-          {confirmShortcut ? (
-            <kbd className="hidden md:inline-flex px-1.5 py-0.5 text-[10px] font-mono bg-primary-foreground/20 rounded">
-              {confirmShortcut}
-            </kbd>
-          ) : null}
-        </Button>
-      </div>
-    </div>
+      <DialogActions
+        cancelLabel={cancelLabel}
+        cancelShortcut={cancelShortcut}
+        confirmButtonRef={confirmButtonRef}
+        confirmLabel={confirmLabel}
+        confirmShortcut={confirmShortcut}
+        onCancel={onCancel}
+        onConfirm={onConfirm}
+      />
+    </DialogPrimitive.Content>
   );
 }
 
-type CompletionDialogKeyboardOptions = {
-  cancelShortcut: string;
-  confirmShortcut: string;
-  isOpen: boolean;
-  onCancel: () => void;
-  onClose: () => void;
-  onConfirm: () => void;
-};
-
-function useCompletionDialogKeyboard({
-  cancelShortcut,
-  confirmShortcut,
-  isOpen,
-  onCancel,
-  onClose,
-  onConfirm,
-}: CompletionDialogKeyboardOptions): void {
-  const keyDownHandlerRef = useRef<(event: KeyboardEvent) => void>(() => {
-    return;
-  });
-
-  useEffect(() => {
-    keyDownHandlerRef.current = (event: KeyboardEvent) => {
-      if (!isOpen) return;
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        onClose();
-        return;
-      }
-      if (
-        event.key === "Enter" ||
-        event.key.toLowerCase() === confirmShortcut.toLowerCase()
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
-        onConfirm();
-        return;
-      }
-      if (event.key.toLowerCase() === cancelShortcut.toLowerCase()) {
-        event.preventDefault();
-        event.stopPropagation();
-        onCancel();
-      }
-    };
-  }, [cancelShortcut, confirmShortcut, isOpen, onCancel, onClose, onConfirm]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const onDocumentKeyDown = (event: KeyboardEvent) => {
-      keyDownHandlerRef.current(event);
-    };
-
-    document.addEventListener("keydown", onDocumentKeyDown, true);
-    return () => {
-      document.removeEventListener("keydown", onDocumentKeyDown, true);
-    };
-  }, [isOpen]);
-}
-
+/**
+ * Modal confirmation overlay that covers its positioned container. Built on
+ * the Radix dialog primitive (WAI-ARIA APG modal dialog): focus moves to the
+ * confirm button, Tab cycles inside the dialog, Escape and the backdrop close
+ * it, and focus returns to the element that opened it. The single-key
+ * shortcuts act while focus sits inside the dialog and nowhere else.
+ */
 function CompletionDialogImpl({
-  as,
-  cancelLabel,
-  cancelShortcut = "S",
-  className,
-  closeIcon,
-  confirmLabel,
-  confirmShortcut = "D",
-  description,
   isOpen,
-  onCancel,
   onClose,
-  onConfirm,
-  title,
+  ...props
 }: CompletionDialogProps): React.ReactNode {
-  useCompletionDialogKeyboard({
-    cancelShortcut,
-    confirmShortcut,
-    isOpen,
-    onCancel,
-    onClose,
-    onConfirm,
-  });
-
-  if (!isOpen) return null;
-
   return (
-    <div
-      aria-labelledby="completion-dialog-title"
-      aria-modal="true"
-      className="absolute inset-0 z-[100] flex items-center justify-center"
-      role="dialog"
+    <DialogPrimitive.Root
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+      open={isOpen}
     >
-      <div
-        aria-hidden="true"
-        className={cn(
-          "absolute inset-0 bg-background/80 backdrop-blur-sm",
-          "animate-in fade-in-0 duration-200",
-        )}
-        onClick={onClose}
-      />
-      <DialogContent
-        as={as}
-        cancelLabel={cancelLabel}
-        cancelShortcut={cancelShortcut}
-        className={className}
-        closeIcon={closeIcon}
-        confirmLabel={confirmLabel}
-        confirmShortcut={confirmShortcut}
-        description={description}
-        onCancel={onCancel}
-        onClose={onClose}
-        onConfirm={onConfirm}
-        title={title}
-      />
-    </div>
+      {isOpen ? (
+        <div className="absolute inset-0 z-[100] flex items-center justify-center">
+          <DialogPrimitive.Overlay
+            className={cn(
+              "absolute inset-0 bg-background/80 backdrop-blur-sm",
+              "animate-in fade-in-0 duration-200",
+            )}
+          />
+          <DialogBody {...props} />
+        </div>
+      ) : null}
+    </DialogPrimitive.Root>
   );
 }
 

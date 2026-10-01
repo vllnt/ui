@@ -87,3 +87,16 @@ describe("ModelSelector", () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });
+
+describe("ModelSelector keyboard", () => {
+  it("navigates the model list from the search box and selects with Enter", () => {
+    const onSelectModel = vi.fn();
+    renderModelSelector({ onSelectModel });
+    const search = screen.getByPlaceholderText("Search models or providers...");
+    expect(search.closest("[cmdk-root]")).not.toBeNull();
+    search.focus();
+    fireEvent.keyDown(search, { key: "ArrowDown" });
+    fireEvent.keyDown(search, { key: "Enter" });
+    expect(onSelectModel).toHaveBeenCalledTimes(1);
+  });
+});

@@ -21,6 +21,34 @@ export type WorkspaceSwitcherProps = Omit<
   workspaces: WorkspaceOption[];
 };
 
+function handleRadioKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+  moveRovingFocus(event, '[role="radio"]', {
+    activate: true,
+    orientation: "both",
+  });
+}
+
+function useWorkspaceValue({
+  defaultValue,
+  onValueChange,
+  value,
+  workspaces,
+}: Pick<
+  WorkspaceSwitcherProps,
+  "defaultValue" | "onValueChange" | "value" | "workspaces"
+>): readonly [string, (nextValue: string) => void] {
+  const [internalValue, setInternalValue] = useState(
+    defaultValue ?? workspaces[0]?.id ?? "",
+  );
+  const select = (nextValue: string): void => {
+    if (value === undefined) {
+      setInternalValue(nextValue);
+    }
+    onValueChange?.(nextValue);
+  };
+  return [value ?? internalValue, select];
+}
+
 /**
  * Segmented radio group for switching workspaces. Keyboard follows the
  * WAI-ARIA APG radio group pattern: one tab stop on the checked workspace;
@@ -36,9 +64,12 @@ const WorkspaceSwitcher = ({
   workspaces,
   ...props
 }: WorkspaceSwitcherProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const fallbackValue = defaultValue ?? workspaces[0]?.id ?? "";
-  const [internalValue, setInternalValue] = useState(fallbackValue);
-  const currentValue = value ?? internalValue;
+  const [currentValue, handleSelect] = useWorkspaceValue({
+    defaultValue,
+    onValueChange,
+    value,
+    workspaces,
+  });
 
   const currentWorkspace = useMemo(
     () => workspaces.find((workspace) => workspace.id === currentValue),
@@ -47,30 +78,19 @@ const WorkspaceSwitcher = ({
 
   const hasChecked = currentWorkspace !== undefined;
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-    onKeyDown?.(event);
-    moveRovingFocus(event, '[role="radio"]', {
-      activate: true,
-      orientation: "both",
-    });
-  }
-
-  function handleSelect(nextValue: string) {
-    if (value === undefined) {
-      setInternalValue(nextValue);
-    }
-    onValueChange?.(nextValue);
-  }
-
   return (
     <div
       className={cn(
         "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-muted/50 p-1",
         className,
       )}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(event) => {
+        onKeyDown?.(event);
+        handleRadioKeyDown(event);
+      }}
       ref={ref}
       role="radiogroup"
+      tabIndex={-1}
       {...props}
     >
       {workspaces.map((workspace, index) => {

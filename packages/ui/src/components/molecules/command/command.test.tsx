@@ -9,6 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "./command";
 
 function PaletteHarness() {
@@ -61,10 +62,10 @@ describe("Command", () => {
 
     expect(enabled).toHaveAttribute("data-disabled", "false");
     expect(disabled).toHaveAttribute("data-disabled", "true");
-    for (const item of [enabled, disabled]) {
-      expect(item.className).not.toMatch(/data-\[disabled\]:/);
+    [enabled, disabled].forEach((item) => {
+      expect(item.className).not.toMatch(/data-\[disabled]:/);
       expect(item.className).toContain("data-[disabled=true]:opacity-50");
-    }
+    });
   });
 });
 
@@ -84,5 +85,31 @@ describe("CommandDialog", () => {
     await waitFor(() => {
       expect(opener).toHaveFocus();
     });
+  });
+});
+
+describe("CommandSeparator", () => {
+  it("keeps the listbox free of separator roles and hides while searching", () => {
+    const { container } = render(
+      <Command>
+        <CommandInput placeholder="Search" />
+        <CommandList>
+          <CommandItem>First</CommandItem>
+          <CommandSeparator data-testid="separator" />
+          <CommandItem>Second</CommandItem>
+        </CommandList>
+      </Command>,
+    );
+    expect(
+      screen.getByRole("listbox").querySelector("[role=separator]"),
+    ).toBeNull();
+    expect(screen.getByTestId("separator")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+    fireEvent.change(screen.getByPlaceholderText("Search"), {
+      target: { value: "fir" },
+    });
+    expect(container.querySelector("[data-testid=separator]")).toBeNull();
   });
 });

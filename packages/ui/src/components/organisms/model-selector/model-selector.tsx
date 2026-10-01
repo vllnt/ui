@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { type ReactNode, useMemo, useRef, useState } from "react";
 
 import { ArrowUpDown, Filter } from "lucide-react";
 
@@ -23,11 +23,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../atoms/dropdown-menu/dropdown-menu";
-import { Input } from "../../atoms/input/input";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
 } from "../../molecules/command/command";
@@ -356,7 +356,14 @@ type ModelSelectorFiltersProps = {
   sortBy: SortOption;
 };
 
-function ModelSelectorFilters({
+/**
+ * Search box, filter menus and model list. The search box sits inside the
+ * cmdk root so ArrowUp / ArrowDown / Enter drive the list (WAI-ARIA APG
+ * combobox with listbox popup). The menus stay outside the cmdk root, in the
+ * same grid row, so their own keys never reach the list.
+ */
+function ModelSelectorBody({
+  children,
   modelSearchQuery,
   onProviderChange,
   onSearchChange,
@@ -364,25 +371,25 @@ function ModelSelectorFilters({
   providerFilter,
   providers,
   sortBy,
-}: ModelSelectorFiltersProps) {
+}: ModelSelectorFiltersProps & { children: ReactNode }) {
   return (
-    <div className="flex items-center gap-2 px-1 pb-2 border-b">
-      <div className="flex-1">
-        <Input
-          className="h-9"
-          onChange={(event) => {
-            onSearchChange(event.target.value);
-          }}
+    <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_minmax(0,1fr)] items-center gap-x-2">
+      <Command className="contents" label="Models" shouldFilter={false}>
+        <CommandInput
+          onValueChange={onSearchChange}
           placeholder="Search models or providers..."
           value={modelSearchQuery}
         />
+        {children}
+      </Command>
+      <div className="col-start-2 row-start-1 flex items-center gap-2">
+        <ProviderFilterMenu
+          onChange={onProviderChange}
+          providerFilter={providerFilter}
+          providers={providers}
+        />
+        <SortMenu onChange={onSortChange} sortBy={sortBy} />
       </div>
-      <ProviderFilterMenu
-        onChange={onProviderChange}
-        providerFilter={providerFilter}
-        providers={providers}
-      />
-      <SortMenu onChange={onSortChange} sortBy={sortBy} />
     </div>
   );
 }
@@ -395,21 +402,19 @@ type ModelListProps = {
 
 function ModelList({ models, onSelect, selectedModelId }: ModelListProps) {
   return (
-    <Command className="flex-1" shouldFilter={false}>
-      <CommandList className="max-h-[60vh]">
-        <CommandEmpty>No models found.</CommandEmpty>
-        <CommandGroup>
-          {models.map((model) => (
-            <ModelListItem
-              key={model.id}
-              model={model}
-              onSelect={onSelect}
-              selectedModelId={selectedModelId}
-            />
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </Command>
+    <CommandList className="col-span-2 row-start-2 max-h-[60vh]">
+      <CommandEmpty>No models found.</CommandEmpty>
+      <CommandGroup>
+        {models.map((model) => (
+          <ModelListItem
+            key={model.id}
+            model={model}
+            onSelect={onSelect}
+            selectedModelId={selectedModelId}
+          />
+        ))}
+      </CommandGroup>
+    </CommandList>
   );
 }
 
@@ -507,7 +512,7 @@ export function ModelSelector(props: ModelSelectorProps) {
             Search, filter, and select an AI model
           </DialogDescription>
         </DialogHeader>
-        <ModelSelectorFilters
+        <ModelSelectorBody
           modelSearchQuery={modelSearchQuery}
           onProviderChange={setProviderFilter}
           onSearchChange={setModelSearchQuery}
@@ -515,12 +520,13 @@ export function ModelSelector(props: ModelSelectorProps) {
           providerFilter={providerFilter}
           providers={providers}
           sortBy={sortBy}
-        />
-        <ModelList
-          models={filteredAndSortedModels}
-          onSelect={handleSelect}
-          selectedModelId={props.selectedModelId}
-        />
+        >
+          <ModelList
+            models={filteredAndSortedModels}
+            onSelect={handleSelect}
+            selectedModelId={props.selectedModelId}
+          />
+        </ModelSelectorBody>
       </DialogContent>
     </Dialog>
   );

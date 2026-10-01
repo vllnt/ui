@@ -120,6 +120,7 @@ export const AnimatedTabs = ({
       onKeyDown={handleKeyDown}
       ref={ref}
       role="tablist"
+      tabIndex={-1}
       {...props}
     >
       <span

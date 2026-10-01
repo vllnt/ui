@@ -19,7 +19,7 @@ import { cn } from "../../../lib/utils";
 type TabsContextValue = {
   activeTab: string;
   baseId: string;
-  firstTab: string | undefined;
+  firstTab?: string;
   panelIds: ReadonlyMap<string, string>;
   registerPanel: (value: string, id: string) => () => void;
   registerTab: (value: string, id: string) => () => void;
@@ -29,7 +29,7 @@ type TabsContextValue = {
 
 /**
  * Tracks the element id rendered for each tab value, in mount order, so
- * `aria-controls` / `aria-labelledby` only reference nodes that exist.
+ * `aria-controls` / `aria-labelledby` reference rendered nodes and nothing else.
  */
 function useIdRegistry(): readonly [
   ReadonlyMap<string, string>,
@@ -146,7 +146,7 @@ export type TabsListProps = {
 /**
  * Container for the tab triggers. Implements the WAI-ARIA APG tabs keyboard
  * model: ArrowLeft / ArrowRight move focus between tabs (wrapping), Home / End
- * jump to the first / last tab, and the focused tab is activated. A consumer
+ * jump to the first / last tab, and the focused tab becomes active. A consumer
  * `onKeyDown` runs first; calling `preventDefault()` in it opts out.
  */
 function TabsList({
@@ -210,7 +210,9 @@ function TabsTrigger({
 
   return (
     <button
-      aria-controls={ariaControls ?? (isActive ? panelIds.get(value) : undefined)}
+      aria-controls={
+        ariaControls ?? (isActive ? panelIds.get(value) : undefined)
+      }
       aria-hidden={ariaHidden}
       aria-selected={isActive}
       className={cn(
@@ -259,7 +261,7 @@ function TabsContent({
   const panelId = id ?? `${baseId}-panel-${toIdPart(value)}`;
 
   useEffect(() => {
-    if (!isActive) return undefined;
+    if (!isActive) return;
     return registerPanel(value, panelId);
   }, [isActive, panelId, registerPanel, value]);
 

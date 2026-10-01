@@ -2,9 +2,8 @@
 
 import { memo, Suspense } from "react";
 
-import type { KeyboardEvent } from "react";
-
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { KeyboardEvent } from "react";
 
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
@@ -54,6 +53,7 @@ function ViewSwitcherList({
       )}
       onKeyDown={handleListKeyDown}
       role="tablist"
+      tabIndex={-1}
     >
       {options.map((option, index) => {
         const selected = currentKey === option.key;

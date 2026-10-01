@@ -28,6 +28,11 @@ const toastVariants = cva(
   },
 );
 
+/**
+ * Toast surface. It announces itself as a live region: `role="status"`
+ * (polite) by default and `role="alert"` (assertive) for the destructive
+ * variant. Pass `role` / `aria-live` to override.
+ */
 const Toast = ({
   className,
   ref: reference,
@@ -36,13 +41,19 @@ const Toast = ({
 }: ToastProps &
   VariantProps<typeof toastVariants> & {
     ref?: React.Ref<HTMLDivElement>;
-  }) => (
-  <div
-    className={cn(toastVariants({ variant }), className)}
-    ref={reference}
-    {...props}
-  />
-);
+  }) => {
+  const isDestructive = variant === "destructive";
+  return (
+    <div
+      aria-atomic="true"
+      aria-live={isDestructive ? "assertive" : "polite"}
+      className={cn(toastVariants({ variant }), className)}
+      ref={reference}
+      role={isDestructive ? "alert" : "status"}
+      {...props}
+    />
+  );
+};
 Toast.displayName = "Toast";
 
 const ToastAction = ({
@@ -109,13 +120,7 @@ const ToastDescription = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
   ref?: React.Ref<HTMLDivElement>;
-}) => (
-  <div
-    className={cn("text-sm opacity-90", className)}
-    ref={reference}
-    {...props}
-  />
-);
+}) => <div className={cn("text-sm", className)} ref={reference} {...props} />;
 ToastDescription.displayName = "ToastDescription";
 
 export { Toast, ToastAction, ToastClose, ToastDescription, ToastTitle };

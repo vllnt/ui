@@ -142,3 +142,18 @@ describe("TreeView", () => {
     expect(onSelect).toHaveBeenCalledWith(["button"]);
   });
 });
+
+describe("TreeView active descendant", () => {
+  it("points aria-activedescendant at the active treeitem as it moves", () => {
+    render(<TreeView nodes={NODES} />);
+    const tree = screen.getByRole("tree");
+    const activeItem = () =>
+      document.querySelector(
+        `[id="${tree.getAttribute("aria-activedescendant") ?? ""}"]`,
+      );
+    expect(activeItem()).toHaveAttribute("data-node-id", "src");
+    expect(activeItem()).toHaveAttribute("role", "treeitem");
+    fireEvent.keyDown(tree, { key: "ArrowDown" });
+    expect(activeItem()).toHaveAttribute("data-node-id", "node_modules");
+  });
+});

@@ -35,6 +35,9 @@ export default [
         },
       ],
       'jsx-a11y/lang': 'error',
+      // Component props such as vaul's Drawer `autoFocus` move focus into an
+      // opened dialog (APG); the rule targets DOM autofocus on page load.
+      'jsx-a11y/no-autofocus': ['error', { ignoreNonDOM: true }],
       'jsx-a11y/no-aria-hidden-on-focusable': 'error',
       'jsx-a11y/no-interactive-element-to-noninteractive-role': 'error',
       'jsx-a11y/no-noninteractive-element-interactions': [

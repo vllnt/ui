@@ -97,10 +97,10 @@ describe("Tabs", () => {
   });
 });
 
+const THREE_TABS_DEFAULT: { defaultValue?: string } = { defaultValue: "a" };
+
 describe("Tabs keyboard (WAI-ARIA APG tabs pattern)", () => {
-  function renderThree(
-    props: { defaultValue?: string } = { defaultValue: "a" },
-  ) {
+  function renderThree(props: { defaultValue?: string } = THREE_TABS_DEFAULT) {
     render(
       <Tabs {...props}>
         <TabsList aria-label="Letters">

@@ -50,11 +50,11 @@ describe("ListBox", () => {
   });
 });
 
-describe("ListBox keyboard (WAI-ARIA APG listbox pattern)", () => {
-  function tabStops(options: HTMLElement[]): HTMLElement[] {
-    return options.filter((option) => option.getAttribute("tabindex") === "0");
-  }
+function tabStops(options: HTMLElement[]): HTMLElement[] {
+  return options.filter((option) => option.getAttribute("tabindex") === "0");
+}
 
+describe("ListBox keyboard (WAI-ARIA APG listbox pattern)", () => {
   it("has one tab stop, on the selected option", () => {
     const { getAllByRole, getByRole } = render(
       <ListBox defaultValue={["pst"]} label="Timezone">

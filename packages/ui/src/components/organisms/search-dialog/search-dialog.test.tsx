@@ -169,3 +169,20 @@ describe("SearchDialog", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
+
+describe("SearchDialog focus return", () => {
+  it("returns focus to the search button after Escape", async () => {
+    renderSearchDialog();
+    const trigger = screen.getAllByRole("button")[0];
+    trigger.focus();
+    fireEvent.click(trigger);
+    const dialog = await screen.findByRole("dialog");
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(trigger).toHaveFocus();
+    });
+  });
+});

@@ -15,7 +15,7 @@ type ListBoxContextValue = {
   select: (value: string) => void;
   selectedValues: string[];
   setTabStop: (value: string) => void;
-  tabStop: string | undefined;
+  tabStop?: string;
 };
 
 const ListBoxContext = React.createContext<ListBoxContextValue | null>(null);
@@ -79,11 +79,11 @@ function enabledOptionValues(root: HTMLElement): string[] {
 }
 
 /**
- * Keeps exactly one option in the tab order (roving tabindex): the option the
+ * Keeps a single option in the tab order (roving tabindex): the option the
  * user last focused while focus is inside the list, otherwise the first
  * selected enabled option, otherwise the first enabled option.
  */
-function useRovingTabStop(selectedValues: string[]) {
+function useRovingTabStop(selectedValues: string[], children: React.ReactNode) {
   const rootRef = React.useRef<HTMLDivElement | null>(null);
   const [tabStop, setTabStop] = React.useState<string | undefined>();
 
@@ -98,12 +98,12 @@ function useRovingTabStop(selectedValues: string[]) {
     const preferred =
       values.find((entry) => selectedValues.includes(entry)) ?? values[0];
     if (preferred !== tabStop) setTabStop(preferred);
-  });
+  }, [children, selectedValues, tabStop]);
 
   return { rootRef, setTabStop, tabStop };
 }
 
-function assignRef<T>(ref: React.Ref<T> | undefined, node: T | null): void {
+function assignRef<T>(ref: React.Ref<T> | undefined, node: null | T): void {
   if (typeof ref === "function") {
     ref(node);
   } else if (ref) {
@@ -151,12 +151,15 @@ const ListBox = ({
     selectionMode,
     value,
   });
-  const { rootRef, setTabStop, tabStop } = useRovingTabStop(selectedValues);
+  const { rootRef, setTabStop, tabStop } = useRovingTabStop(
+    selectedValues,
+    children,
+  );
   const context = React.useMemo<ListBoxContextValue>(
     () => ({ disabled, select, selectedValues, setTabStop, tabStop }),
     [disabled, select, selectedValues, setTabStop, tabStop],
   );
-  const setRefs = React.useCallback(
+  const setReferences = React.useCallback(
     (node: HTMLDivElement | null) => {
       rootRef.current = node;
       assignRef(ref, node);
@@ -174,8 +177,9 @@ const ListBox = ({
           className,
         )}
         onKeyDown={handleListKeyDown}
-        ref={setRefs}
+        ref={setReferences}
         role="listbox"
+        tabIndex={-1}
       >
         {children}
       </div>

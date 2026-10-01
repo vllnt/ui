@@ -37,6 +37,7 @@ export function ThemeSwitcher({ className }: ThemeSwitcherProps) {
       className={cn("flex items-center gap-1.5", className)}
       onKeyDown={handleRadioKeyDown}
       role="radiogroup"
+      tabIndex={-1}
     >
       {presets.map((item, index) => {
         const active = mounted && preset === item.name;

@@ -43,8 +43,8 @@ describe("TimePicker keyboard (WAI-ARIA APG listbox pattern)", () => {
     ).toBeInTheDocument();
   });
 
-  it("accepts a custom dialog label", () => {
-    openPicker({ dialogLabel: "Meeting start" });
+  it("accepts a custom popover label", () => {
+    openPicker({ popoverLabel: "Meeting start" });
     expect(
       screen.getByRole("dialog", { name: "Meeting start" }),
     ).toBeInTheDocument();
