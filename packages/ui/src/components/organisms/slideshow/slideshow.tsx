@@ -420,10 +420,24 @@ function SlideshowImpl({
 
   useBodyScrollLock(true);
 
+  const navigationTimer = useRef<null | ReturnType<typeof setTimeout>>(null);
+
+  useEffect(() => {
+    return () => {
+      if (navigationTimer.current !== null) {
+        clearTimeout(navigationTimer.current);
+      }
+    };
+  }, []);
+
   const goToSection = useCallback(
     (index: number, direction: "left" | "right") => {
       setAnimationDirection(direction);
-      setTimeout(() => {
+      if (navigationTimer.current !== null) {
+        clearTimeout(navigationTimer.current);
+      }
+      navigationTimer.current = setTimeout(() => {
+        navigationTimer.current = null;
         onNavigate(index);
         setAnimationDirection(null);
       }, 150);

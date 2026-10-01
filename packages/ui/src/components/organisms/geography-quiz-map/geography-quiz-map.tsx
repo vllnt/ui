@@ -6,8 +6,10 @@ import {
   type ReactNode,
   use,
   useCallback,
+  useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -400,6 +402,12 @@ function useQuizState(arguments_: {
     questionIndex: 0,
     selectedRegionId: undefined,
   });
+  useAdvanceAfterFeedback({
+    feedback: state.feedback,
+    onComplete,
+    questionCount: questions.length,
+    setState,
+  });
 
   const handleSelect = useCallback(
     (regionId: string) => {
@@ -417,42 +425,63 @@ function useQuizState(arguments_: {
           feedback: correct ? "correct" : "incorrect",
           selectedRegionId: regionId,
         };
-        scheduleAdvance(setState, onComplete, questions);
         return next;
       });
     },
-    [onComplete, questions],
+    [questions],
   );
 
   return { handleSelect, state };
 }
 
-function scheduleAdvance(
-  setState: React.Dispatch<React.SetStateAction<QuizState>>,
-  onComplete: ((answers: QuizAnswer[]) => void) | undefined,
-  questions: QuizQuestion[],
-): void {
-  if (typeof window === "undefined") return;
-  window.setTimeout(() => {
-    setState((current) => {
-      const nextIndex = current.questionIndex + 1;
-      if (nextIndex >= questions.length) {
-        onComplete?.(current.answers);
+/**
+ * Moves past the answered question once its feedback has shown for
+ * `FEEDBACK_DURATION_MS`. The timer belongs to the effect, so unmounting
+ * mid-feedback cancels it.
+ */
+function useAdvanceAfterFeedback({
+  feedback,
+  onComplete,
+  questionCount,
+  setState,
+}: {
+  feedback?: Feedback;
+  onComplete?: (answers: QuizAnswer[]) => void;
+  questionCount: number;
+  setState: React.Dispatch<React.SetStateAction<QuizState>>;
+}): void {
+  const onCompleteReference = useRef(onComplete);
+
+  useEffect(() => {
+    onCompleteReference.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => {
+      setState((current) => {
+        const nextIndex = current.questionIndex + 1;
+        if (nextIndex >= questionCount) {
+          onCompleteReference.current?.(current.answers);
+          return {
+            ...current,
+            feedback: undefined,
+            questionIndex: questionCount,
+            selectedRegionId: undefined,
+          };
+        }
         return {
           ...current,
           feedback: undefined,
-          questionIndex: questions.length,
+          questionIndex: nextIndex,
           selectedRegionId: undefined,
         };
-      }
-      return {
-        ...current,
-        feedback: undefined,
-        questionIndex: nextIndex,
-        selectedRegionId: undefined,
-      };
-    });
-  }, FEEDBACK_DURATION_MS);
+      });
+    }, FEEDBACK_DURATION_MS);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [feedback, questionCount, setState]);
 }
 
 /**

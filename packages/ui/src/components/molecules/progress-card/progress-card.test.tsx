@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+import { stubAnimationFrame } from "../../../__tests__/stub-animation-frame";
 
 import { ContentCard } from "./progress-card";
 
@@ -32,5 +34,29 @@ describe("ProgressCard ContentCard", () => {
       <ContentCard badgeLabel="Tutorial" description="d" href="/x" title="t" />,
     );
     expect(screen.getByText("t").closest("a")).toHaveAttribute("href", "/x");
+  });
+});
+
+describe("ContentCard progress loading", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("cancels the pending frame on unmount", () => {
+    const frames = stubAnimationFrame();
+    const { unmount } = render(
+      <ContentCard
+        badgeLabel="Guide"
+        description="Read the docs."
+        getProgress={() => ({ completedCount: 1, totalSections: 2 })}
+        href="/docs"
+        title="Docs"
+      />,
+    );
+    expect(frames.pending()).toBe(1);
+
+    unmount();
+
+    expect(frames.pending()).toBe(0);
   });
 });

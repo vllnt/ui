@@ -6,10 +6,22 @@ import { defineConfig } from "tsup";
 const outputDirectory = resolve(import.meta.dirname, "dist");
 const relativeSpecifierPattern =
   /(\b(?:from|import)\s*(?:\(\s*)?)(["'])(\.\.?\/[^"'?#]+)\2/g;
-const dependencyDirectorySpecifiers = new Map([
+const dependencyDeepSpecifiers = new Map([
+  [
+    "react-syntax-highlighter/dist/esm/prism",
+    "react-syntax-highlighter/dist/esm/prism.js",
+  ],
   [
     "react-syntax-highlighter/dist/esm/styles/prism",
     "react-syntax-highlighter/dist/esm/styles/prism/index.js",
+  ],
+  [
+    "react-syntax-highlighter/dist/esm/styles/prism/one-dark",
+    "react-syntax-highlighter/dist/esm/styles/prism/one-dark.js",
+  ],
+  [
+    "react-syntax-highlighter/dist/esm/styles/prism/one-light",
+    "react-syntax-highlighter/dist/esm/styles/prism/one-light.js",
   ],
 ]);
 
@@ -56,7 +68,7 @@ async function makeEsmSpecifiersResolvable(): Promise<void> {
           /(\b(?:from|import)\s*(?:\(\s*)?)(["'])([^"']+)\2/g,
           (match, prefix: string, quote: string, specifier: string) => {
             const resolvableSpecifier =
-              dependencyDirectorySpecifiers.get(specifier);
+              dependencyDeepSpecifiers.get(specifier);
             return resolvableSpecifier
               ? `${prefix}${quote}${resolvableSpecifier}${quote}`
               : match;

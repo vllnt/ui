@@ -157,3 +157,30 @@ describe("GeographyQuizMap semantics", () => {
     );
   });
 });
+
+describe("GeographyQuizMap feedback timer", () => {
+  it("cancels the pending advance when unmounted during feedback", () => {
+    const onComplete = vi.fn();
+    const { container, unmount } = render(
+      <GeographyQuizMap
+        onComplete={onComplete}
+        questions={[
+          QUESTIONS[0] ?? {
+            answerRegionId: "FR",
+            id: "q1",
+            prompt: "Click on France",
+          },
+        ]}
+        regions={REGIONS}
+      />,
+    );
+    clickRegion(container, "FR");
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+
+    expect(vi.getTimerCount()).toBe(0);
+    flushAdvance();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+});

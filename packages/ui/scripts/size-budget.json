@@ -1,0 +1,46 @@
+{
+  "checks": [
+    { "name": "Button", "export": "Button", "maxBytes": 26600 },
+    { "name": "Badge", "export": "Badge", "maxBytes": 23700 },
+    { "name": "Card", "export": "Card", "maxBytes": 23200 },
+    { "name": "Dialog", "export": "Dialog", "maxBytes": 62300 },
+    { "name": "DataTable", "export": "DataTable", "maxBytes": 183500 },
+    {
+      "name": "CodeBlock (up front)",
+      "export": "CodeBlock",
+      "maxBytes": 31500
+    },
+    {
+      "name": "CodeBlock (with lazy highlighter)",
+      "export": "CodeBlock",
+      "withLazy": true,
+      "maxBytes": 771600
+    },
+    {
+      "name": "TutorialMDX (up front)",
+      "export": "TutorialMDX",
+      "maxBytes": 205600
+    },
+    {
+      "name": "StaticCode (up front)",
+      "export": "StaticCode",
+      "maxBytes": 747200
+    },
+    {
+      "name": "MDXContent (up front)",
+      "export": "MDXContent",
+      "maxBytes": 1279500
+    },
+    {
+      "name": "FlowDiagram (up front)",
+      "export": "FlowDiagram",
+      "maxBytes": 230100
+    },
+    { "name": "cn", "export": "cn", "maxBytes": 22300 },
+    {
+      "name": "* (every export, up front)",
+      "export": "*",
+      "maxBytes": 2803900
+    }
+  ]
+}

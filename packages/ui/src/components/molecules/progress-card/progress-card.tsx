@@ -81,12 +81,14 @@ function ContentCardImpl({
 
   // Load progress after hydration
   useEffect(() => {
-    if (getProgress) {
-      const result = getProgress();
-      requestAnimationFrame(() => {
-        setProgress(result);
-      });
-    }
+    if (!getProgress) return;
+    const result = getProgress();
+    const frame = requestAnimationFrame(() => {
+      setProgress(result);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [getProgress]);
 
   const showProgress = isHydrated && progress && progress.completedCount > 0;

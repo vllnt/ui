@@ -100,3 +100,15 @@ describe("ModelSelector keyboard", () => {
     expect(onSelectModel).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("ModelSelector selection guard", () => {
+  it("ignores a repeated click on the same model within one tick", () => {
+    const onSelectModel = vi.fn();
+    renderModelSelector({ onSelectModel });
+
+    fireEvent.click(getModelItem("Claude 3.5 Sonnet"));
+    fireEvent.click(getModelItem("Claude 3.5 Sonnet"));
+
+    expect(onSelectModel).toHaveBeenCalledTimes(1);
+  });
+});

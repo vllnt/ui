@@ -2,7 +2,6 @@
 
 import { lazy, memo, Suspense, use, useMemo } from "react";
 
-import { evaluate } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime";
 import ReactMarkdown, { type Components } from "react-markdown";
 
@@ -243,10 +242,12 @@ function hasJSXComponents(content: string): boolean {
 function MDXWithSuspense({ className, content }: TutorialMDXProps) {
   const mdxPromise = useMemo(
     () =>
-      evaluate(content, {
-        ...runtime,
-        baseUrl: import.meta.url,
-      }),
+      import("@mdx-js/mdx").then(({ evaluate }) =>
+        evaluate(content, {
+          ...runtime,
+          baseUrl: import.meta.url,
+        }),
+      ),
     [content],
   );
 

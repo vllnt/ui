@@ -53,15 +53,23 @@ function useScrollProgress(
       setProgress(1);
       return;
     }
-    const onScroll = (): void => {
+    let frame: null | number = null;
+    const update = (): void => {
+      frame = null;
       const bounds = node.getBoundingClientRect();
       const span = bounds.height + window.innerHeight;
       setProgress(clamp((window.innerHeight - bounds.top) / span));
     };
-    onScroll();
+    const onScroll = (): void => {
+      frame ??= requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
+      if (frame !== null) {
+        cancelAnimationFrame(frame);
+      }
     };
   }, [enabled, nodeRef]);
 

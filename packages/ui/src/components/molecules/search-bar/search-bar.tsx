@@ -81,12 +81,16 @@ function SearchBarInner({
     }
 
     // Sync if user is not actively typing and values differ
-    if (!isUserTyping.current && query !== searchParameter) {
-      requestAnimationFrame(() => {
-        setQuery(searchParameter);
-        lastDebouncedQueryReference.current = searchParameter;
-      });
+    if (isUserTyping.current || query === searchParameter) {
+      return;
     }
+    const frame = requestAnimationFrame(() => {
+      setQuery(searchParameter);
+      lastDebouncedQueryReference.current = searchParameter;
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [searchParameters, query]); // Include query to properly sync state
 
   // Update URL when debounced query changes
