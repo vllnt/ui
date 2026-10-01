@@ -680,10 +680,12 @@ export {
   CopyButton,
   type CopyButtonProps,
   type CopyButtonVariant,
+} from "./molecules/copy-button/copy-button";
+export {
   useCopyToClipboard,
   type UseCopyToClipboardOptions,
   type UseCopyToClipboardResult,
-} from "./molecules/copy-button/copy-button";
+} from "./molecules/copy-button/use-copy-to-clipboard";
 export { MDXContent } from "./organisms/mdx-content/mdx-content";
 
 // Layout components

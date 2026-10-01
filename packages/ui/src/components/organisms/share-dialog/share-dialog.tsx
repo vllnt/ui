@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../atoms/dialog/dialog";
-import { useCopyToClipboard } from "../../molecules/copy-button/copy-button";
+import { useCopyToClipboard } from "../../molecules/copy-button/use-copy-to-clipboard";
 
 export type SharePlatform = {
   buildUrl: (pageUrl: string, pageTitle: string) => string;
