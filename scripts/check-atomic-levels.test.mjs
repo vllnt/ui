@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,7 +8,8 @@ import { afterEach, test } from "node:test";
 
 import { checkAtomicLevels, findImportSpecifiers } from "./check-atomic-levels.mjs";
 
-const script = join(dirname(fileURLToPath(import.meta.url)), "check-atomic-levels.mjs");
+const scriptsDir = dirname(fileURLToPath(import.meta.url));
+const script = join(scriptsDir, "check-atomic-levels.mjs");
 const roots = [];
 
 const CLEAN = {
@@ -176,6 +177,36 @@ test("the CLI exits 0 when clean, 1 on violations and 2 on bad usage", () => {
 
   const usage = spawnSync(process.execPath, [script], { cwd: clean, encoding: "utf8" });
   assert.equal(usage.status, 2);
+});
+
+test("@vllnt/ui-native check:atomic passes on a copy of the package and fails on an upward import", () => {
+  const root = mkdtempSync(join(tmpdir(), "atomic-levels-native-"));
+  roots.push(root);
+  const packageDir = join(scriptsDir, "../packages/ui-native");
+  const nativeDir = join(root, "packages/ui-native");
+  mkdirSync(join(root, "scripts"));
+  cpSync(script, join(root, "scripts/check-atomic-levels.mjs"));
+  cpSync(join(packageDir, "src"), join(nativeDir, "src"), { recursive: true });
+  const { scripts } = JSON.parse(readFileSync(join(packageDir, "package.json"), "utf8"));
+  const [command, ...args] = scripts["check:atomic"].split(" ");
+  assert.equal(command, "node");
+  const run = () => spawnSync(process.execPath, args, { cwd: nativeDir, encoding: "utf8" });
+
+  const clean = run();
+  assert.equal(clean.status, 0, clean.stderr);
+
+  const button = join(nativeDir, "src/components/atoms/button/button.tsx");
+  writeFileSync(button, `import { Field } from "../../molecules/field/field";\n${readFileSync(button, "utf8")}`);
+  const primitive = join(nativeDir, "src/primitives/control-group.tsx");
+  writeFileSync(
+    primitive,
+    `${readFileSync(primitive, "utf8")}export { Button } from "../components/atoms/button/button";\n`,
+  );
+  const broken = run();
+  assert.equal(broken.status, 1);
+  assert.match(broken.stderr, /Atomic level check failed \(2\)/);
+  assert.match(broken.stderr, /button\.tsx:1 atoms\/button imports molecules\/field: atoms may import no other component/);
+  assert.match(broken.stderr, /control-group\.tsx:\d+ imports "\.\.\/components\/atoms\/button\/button": modules below atoms may not import components/);
 });
 
 test("findImportSpecifiers reports every import form with its line", () => {
