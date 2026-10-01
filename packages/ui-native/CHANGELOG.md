@@ -14,6 +14,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ### Changed
 
+- Components are organised by Atomic Design level under `src/components/{atoms,molecules,organisms}/<name>/` (#535): 105 atoms, 58 molecules, and 8 organisms. `pnpm check:atomic` enforces the levels, and `src/primitives` and `src/theme` may not import components. Public exports are unchanged. Each component's `source` in `registry.json`, published as `native.source` by the registry, now includes the level (for example `src/components/atoms/button/button.tsx`).
 - Screen-reader parity for VoiceOver and TalkBack (#535): semantics VoiceOver ignored on non-focusable Views moved onto focusable elements, visible headers, or item hints; state changes announced on iOS as well as through Android live regions (announcements queued in one tick are spoken once); decorative content hidden on both platforms; touch targets of at least 44 points; fixed boxes and input heights follow the font scale; new optional `labels` fields and props carry the screen-reader text, with the previous English as defaults.
 - `OverviewBoard`/`OverviewCard` metrics and the `StatCard` value are no longer always live regions; pass `announceChanges` to have value changes announced.
 - Single `ToggleGroup` items stay toggle buttons with `checked`; the group label (`accessibilityLabel`) of `RadioGroup`, `ToggleGroup`, `Toolbar`, `ButtonGroup`, `FilterBar`, and `Fieldset` is spoken as each control's hint, and `DataList`'s `accessibilityLabel` as its first row's hint.

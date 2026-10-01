@@ -3,16 +3,23 @@ import { createRef } from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text, View } from "react-native";
 
-import { Step, StepByStep } from "../components/step-by-step/step-by-step";
-import { Tabs, TabsContent, TabsTrigger } from "../components/tabs/tabs";
+import {
+  Step,
+  StepByStep,
+} from "../components/atoms/step-by-step/step-by-step";
 import {
   TagsInput,
   type TagsInputProps,
-} from "../components/tags-input/tags-input";
-import { TimeField } from "../components/time-field/time-field";
-import { TimePicker } from "../components/time-picker/time-picker";
-import { TimelineScrubber } from "../components/timeline-scrubber/timeline-scrubber";
-import { Tooltip } from "../components/tooltip/tooltip";
+} from "../components/atoms/tags-input/tags-input";
+import { TimelineScrubber } from "../components/atoms/timeline-scrubber/timeline-scrubber";
+import { Tooltip } from "../components/atoms/tooltip/tooltip";
+import {
+  Tabs,
+  TabsContent,
+  TabsTrigger,
+} from "../components/molecules/tabs/tabs";
+import { TimeField } from "../components/organisms/time-field/time-field";
+import { TimePicker } from "../components/organisms/time-picker/time-picker";
 
 const tagLabels = {
   add: "Add",

@@ -1,44 +1,48 @@
 import { act, fireEvent, screen, waitFor } from "@testing-library/react-native";
 import { AccessibilityInfo, Image, Pressable, Text } from "react-native";
 
-import { ActivityLog } from "../components/activity-log/activity-log";
-import { AnimatedTestimonials } from "../components/animated-testimonials/animated-testimonials";
-import { AnimatedText } from "../components/animated-text/animated-text";
+import { AnimatedTestimonials } from "../components/atoms/animated-testimonials/animated-testimonials";
+import { AnimatedText } from "../components/atoms/animated-text/animated-text";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../components/avatar/avatar";
-import { AvatarGroup } from "../components/avatar-group/avatar-group";
-import { Calendar } from "../components/calendar/calendar";
-import { Callout } from "../components/callout/callout";
-import { Carousel } from "../components/carousel/carousel";
-import { CodeBlock } from "../components/code-block/code-block";
-import { ContentIntro } from "../components/content-intro/content-intro";
-import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
-import { EmptyState } from "../components/empty-state/empty-state";
-import { Field, FieldControl, FieldLabel } from "../components/field/field";
-import { Fieldset } from "../components/fieldset/fieldset";
-import { FileUpload } from "../components/file-upload/file-upload";
-import { HorizontalScrollRow } from "../components/horizontal-scroll-row/horizontal-scroll-row";
-import { ListBox } from "../components/list-box/list-box";
-import { LiveFeed } from "../components/live-feed/live-feed";
-import { Marquee } from "../components/marquee/marquee";
-import { Meter } from "../components/meter/meter";
-import { ModelSelector } from "../components/model-selector/model-selector";
-import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
-import { NumberInput } from "../components/number-input/number-input";
-import { OverviewCard } from "../components/overview-board/overview-board";
-import { Pagination } from "../components/pagination/pagination";
-import { PasswordInput } from "../components/password-input/password-input";
-import { PhoneInput } from "../components/phone-input/phone-input";
-import { RangeCalendar } from "../components/range-calendar/range-calendar";
-import { Rating } from "../components/rating/rating";
+} from "../components/atoms/avatar/avatar";
+import { Calendar } from "../components/atoms/calendar/calendar";
+import { Callout } from "../components/atoms/callout/callout";
+import { Carousel } from "../components/atoms/carousel/carousel";
+import { CodeBlock } from "../components/atoms/code-block/code-block";
+import { EmptyState } from "../components/atoms/empty-state/empty-state";
+import { Fieldset } from "../components/atoms/fieldset/fieldset";
+import { FileUpload } from "../components/atoms/file-upload/file-upload";
+import { ListBox } from "../components/atoms/list-box/list-box";
+import { Marquee } from "../components/atoms/marquee/marquee";
+import { Meter } from "../components/atoms/meter/meter";
+import { ModelSelector } from "../components/atoms/model-selector/model-selector";
+import { Rating } from "../components/atoms/rating/rating";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "../components/resizable/resizable";
+} from "../components/atoms/resizable/resizable";
+import { ActivityLog } from "../components/molecules/activity-log/activity-log";
+import { AvatarGroup } from "../components/molecules/avatar-group/avatar-group";
+import { ContentIntro } from "../components/molecules/content-intro/content-intro";
+import {
+  Field,
+  FieldControl,
+  FieldLabel,
+} from "../components/molecules/field/field";
+import { HorizontalScrollRow } from "../components/molecules/horizontal-scroll-row/horizontal-scroll-row";
+import { LiveFeed } from "../components/molecules/live-feed/live-feed";
+import { NavigationMenu } from "../components/molecules/navigation-menu/navigation-menu";
+import { NumberInput } from "../components/molecules/number-input/number-input";
+import { OverviewCard } from "../components/molecules/overview-board/overview-board";
+import { Pagination } from "../components/molecules/pagination/pagination";
+import { PasswordInput } from "../components/molecules/password-input/password-input";
+import { PhoneInput } from "../components/molecules/phone-input/phone-input";
+import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
+import { CountdownTimer } from "../components/organisms/countdown-timer/countdown-timer";
 import { ModalLayer } from "../primitives/modal-layer";
 import type { PickedFile } from "../primitives/platform-services";
 

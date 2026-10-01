@@ -17,7 +17,7 @@ const nativeMetadata = {
   channel: "canary",
   compatibility: "portable-options",
   package: "@vllnt/ui-native",
-  source: "src/components/button/button.tsx",
+  source: "src/components/atoms/button/button.tsx",
   status: "experimental",
 } as const;
 

@@ -63,6 +63,31 @@ The level is the higher of steps 1 and 2. When unsure, pick the lower level — 
 
 ---
 
+## React Native (`@vllnt/ui-native`)
+
+The native renderer uses the same levels, import rules and checker:
+
+```
+packages/ui-native/src/
+  components/
+    atoms/{name}/      # button, text, card, dialog, select, tooltip, …
+    molecules/{name}/  # field, search-bar, tabs, accordion, date-picker, …
+    organisms/{name}/  # date-range-picker, time-picker, tree-view, interactive-timeline, …
+  primitives/          # shared interaction, accessibility, motion and platform-service modules
+  theme/               # ThemeProvider
+  tests/               # cross-component contract suites
+  index.ts             # generated barrel — never edit by hand
+```
+
+A component folder holds `{name}.tsx` plus its own helpers and unit tests (`atoms/button/button-styles.ts`, `molecules/combobox/combobox.test.tsx`). Import another component as `../{other}/{other}` within the same level and `../../{level}/{other}/{other}` across levels; shared modules are `../../../primitives/{module}` and `../../../theme/theme-provider`.
+
+- **Level:** follow [Choosing a level](#choosing-a-level) with the native component's own imports. The two platforms can differ: web `accordion` is an atom, while the native one composes `Collapsible` and is a molecule. Promotions follow web, so `interactive-timeline` (data visualisation) and `tree-view` (data grid) are organisms on both.
+- **Below atoms:** `src/primitives/` and `src/theme/` may not import a component. `pnpm -F @vllnt/ui-native check:atomic` passes them to the checker with `--base`; the root `pnpm check:atomic` and `pnpm ci:native` both run it.
+- **Barrel and manifest:** `pnpm -F @vllnt/ui-native generate:index` writes `src/index.ts`, sorted by component name across levels. Each `registry.json` entry's `source` is `src/components/{level}/{name}/{name}.tsx`, and `generate:index:check` fails when a name or a source path drifts. The registry site publishes this path as `native.source` (`/r/{name}.json`, `/r/native/registry.json`, `llms-full.txt`, MCP), so moving a native component changes its public source path.
+- **Moving a component:** `git mv` the folder; fix the relative imports inside it, in its importers and in `src/tests/`; update its `source` in `registry.json`; then run `pnpm -F @vllnt/ui-native generate:index`, `pnpm ci:native`, and `pnpm -F @vllnt/ui-registry registry:build` (which rewrites `native.source` in `apps/registry/registry.json`) followed by `registry:integrity`. The ESLint overrides match `src/components/*/{name}/**`, so they need no change.
+
+---
+
 ## The ref-as-prop + displayName contract
 
 `@vllnt/ui` targets **React 19** (peer `react`/`react-dom` `>=19.0.0`). Components accept `ref` as a normal prop — `forwardRef` is gone — and read context with `use()` instead of `useContext()`.

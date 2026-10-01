@@ -1,17 +1,17 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { StyleSheet, Text, View } from "react-native";
 
-import { AvatarGroup } from "../components/avatar-group/avatar-group";
-import { Calendar } from "../components/calendar/calendar";
-import { RangeCalendar } from "../components/range-calendar/range-calendar";
+import { Calendar } from "../components/atoms/calendar/calendar";
 import {
   calculateScrollProgress,
   ScrollProgress,
-} from "../components/scroll-progress/scroll-progress";
-import { StatCard } from "../components/stat-card/stat-card";
-import { Stepper } from "../components/stepper/stepper";
-import { TextReveal } from "../components/text-reveal/text-reveal";
-import { TutorialComplete } from "../components/tutorial-complete/tutorial-complete";
+} from "../components/atoms/scroll-progress/scroll-progress";
+import { Stepper } from "../components/atoms/stepper/stepper";
+import { TextReveal } from "../components/atoms/text-reveal/text-reveal";
+import { TutorialComplete } from "../components/atoms/tutorial-complete/tutorial-complete";
+import { AvatarGroup } from "../components/molecules/avatar-group/avatar-group";
+import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
+import { StatCard } from "../components/molecules/stat-card/stat-card";
 
 import { flushMicrotasks, reducedMotion } from "./test-utils";
 

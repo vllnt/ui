@@ -7,24 +7,24 @@ import {
 } from "@testing-library/react-native";
 import { Text as NativeText } from "react-native";
 
-import { Checkbox } from "../components/checkbox/checkbox";
-import { CopyButton } from "../components/copy-button/copy-button";
-import { Link } from "../components/link/link";
+import { Checkbox } from "../components/atoms/checkbox/checkbox";
+import { CopyButton } from "../components/atoms/copy-button/copy-button";
+import { Link } from "../components/atoms/link/link";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "../components/radio-group/radio-group";
-import { Slider } from "../components/slider/slider";
-import { Toggle } from "../components/toggle/toggle";
+} from "../components/atoms/radio-group/radio-group";
+import { Slider } from "../components/atoms/slider/slider";
+import { Toggle } from "../components/atoms/toggle/toggle";
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "../components/toggle-group/toggle-group";
+} from "../components/atoms/toggle-group/toggle-group";
 import {
   Toolbar,
   ToolbarButton,
   ToolbarSeparator,
-} from "../components/toolbar/toolbar";
+} from "../components/molecules/toolbar/toolbar";
 import type {
   ClipboardService,
   LinkingService,

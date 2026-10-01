@@ -1,18 +1,18 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { AccessibilityInfo, Text } from "react-native";
 
-import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
-import { Combobox } from "../components/combobox/combobox";
-import { Command } from "../components/command/command";
-import { CompletionDialog } from "../components/completion-dialog/completion-dialog";
-import { ContextMenu } from "../components/context-menu/context-menu";
-import { DatePicker } from "../components/date-picker/date-picker";
-import { DropdownMenu } from "../components/dropdown-menu/dropdown-menu";
-import { ExpandableCards } from "../components/expandable-cards/expandable-cards";
-import { FAQ as Faq } from "../components/faq/faq";
-import { Menubar } from "../components/menubar/menubar";
-import { SearchDialog } from "../components/search-dialog/search-dialog";
-import { Tabs, TabsList, TabsTrigger } from "../components/tabs/tabs";
+import { Command } from "../components/atoms/command/command";
+import { CompletionDialog } from "../components/atoms/completion-dialog/completion-dialog";
+import { ContextMenu } from "../components/atoms/context-menu/context-menu";
+import { DropdownMenu } from "../components/atoms/dropdown-menu/dropdown-menu";
+import { SearchDialog } from "../components/atoms/search-dialog/search-dialog";
+import { AnimatedTabs } from "../components/molecules/animated-tabs/animated-tabs";
+import { Combobox } from "../components/molecules/combobox/combobox";
+import { DatePicker } from "../components/molecules/date-picker/date-picker";
+import { ExpandableCards } from "../components/molecules/expandable-cards/expandable-cards";
+import { FAQ as Faq } from "../components/molecules/faq/faq";
+import { Menubar } from "../components/molecules/menubar/menubar";
+import { Tabs, TabsList, TabsTrigger } from "../components/molecules/tabs/tabs";
 
 import { flushMicrotasks, reducedMotion, searchLabels } from "./test-utils";
 

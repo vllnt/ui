@@ -1,22 +1,22 @@
 import { fireEvent, screen } from "@testing-library/react-native";
 import { Text as NativeText } from "react-native";
 
-import { Button } from "../components/button/button";
-import { ButtonGroup } from "../components/button-group/button-group";
-import { CategoryFilter } from "../components/category-filter/category-filter";
-import { CheckboxGroup } from "../components/checkbox-group/checkbox-group";
-import { ColorPicker } from "../components/color-picker/color-picker";
-import { Combobox } from "../components/combobox/combobox";
-import { DatePicker } from "../components/date-picker/date-picker";
-import { DateRangePicker } from "../components/date-range-picker/date-range-picker";
-import { FilterBar } from "../components/filter-bar/filter-bar";
-import { Form, FormSubmit } from "../components/form/form";
-import { ListBox } from "../components/list-box/list-box";
-import { NativeSelect } from "../components/native-select/native-select";
-import { SegmentedControl } from "../components/segmented-control/segmented-control";
-import { TagGroup } from "../components/tag-group/tag-group";
-import { TagsInput } from "../components/tags-input/tags-input";
-import { TimePicker } from "../components/time-picker/time-picker";
+import { Button } from "../components/atoms/button/button";
+import { ButtonGroup } from "../components/atoms/button-group/button-group";
+import { CheckboxGroup } from "../components/atoms/checkbox-group/checkbox-group";
+import { ColorPicker } from "../components/atoms/color-picker/color-picker";
+import { FilterBar } from "../components/atoms/filter-bar/filter-bar";
+import { Form, FormSubmit } from "../components/atoms/form/form";
+import { ListBox } from "../components/atoms/list-box/list-box";
+import { SegmentedControl } from "../components/atoms/segmented-control/segmented-control";
+import { TagGroup } from "../components/atoms/tag-group/tag-group";
+import { TagsInput } from "../components/atoms/tags-input/tags-input";
+import { CategoryFilter } from "../components/molecules/category-filter/category-filter";
+import { Combobox } from "../components/molecules/combobox/combobox";
+import { DatePicker } from "../components/molecules/date-picker/date-picker";
+import { NativeSelect } from "../components/molecules/native-select/native-select";
+import { DateRangePicker } from "../components/organisms/date-range-picker/date-range-picker";
+import { TimePicker } from "../components/organisms/time-picker/time-picker";
 
 import { renderThemed } from "./test-utils";
 

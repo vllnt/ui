@@ -2,44 +2,44 @@ import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import { lightTheme } from "@vllnt/ui-core";
 import { AccessibilityInfo, Text as NativeText } from "react-native";
 
-import { Avatar, AvatarImage } from "../components/avatar/avatar";
-import { Banner } from "../components/banner/banner";
-import { Button } from "../components/button/button";
-import { ButtonGroup } from "../components/button-group/button-group";
-import { Calendar } from "../components/calendar/calendar";
-import { Checkbox } from "../components/checkbox/checkbox";
-import { CheckboxGroup } from "../components/checkbox-group/checkbox-group";
-import { ContentIntro } from "../components/content-intro/content-intro";
-import { Exercise } from "../components/exercise/exercise";
+import { Avatar, AvatarImage } from "../components/atoms/avatar/avatar";
+import { Button } from "../components/atoms/button/button";
+import { ButtonGroup } from "../components/atoms/button-group/button-group";
+import { Calendar } from "../components/atoms/calendar/calendar";
+import { Checkbox } from "../components/atoms/checkbox/checkbox";
+import { CheckboxGroup } from "../components/atoms/checkbox-group/checkbox-group";
+import { Exercise } from "../components/atoms/exercise/exercise";
+import { Fieldset } from "../components/atoms/fieldset/fieldset";
+import { FileUpload } from "../components/atoms/file-upload/file-upload";
+import { Form, FormMessage, FormSubmit } from "../components/atoms/form/form";
+import { Input } from "../components/atoms/input/input";
+import { InputOTP } from "../components/atoms/input-otp/input-otp";
+import { Link } from "../components/atoms/link/link";
+import { ModelSelector } from "../components/atoms/model-selector/model-selector";
+import { Quiz } from "../components/atoms/quiz/quiz";
+import { Rating } from "../components/atoms/rating/rating";
+import { Reasoning } from "../components/atoms/reasoning/reasoning";
+import { Select } from "../components/atoms/select/select";
+import { TagsInput } from "../components/atoms/tags-input/tags-input";
+import { Text } from "../components/atoms/text/text";
+import { Banner } from "../components/molecules/banner/banner";
+import { ContentIntro } from "../components/molecules/content-intro/content-intro";
 import {
   Field,
   FieldControl,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "../components/field/field";
-import { Fieldset } from "../components/fieldset/fieldset";
-import { FileUpload } from "../components/file-upload/file-upload";
-import { FloatingActionButton } from "../components/floating-action-button/floating-action-button";
-import { Form, FormMessage, FormSubmit } from "../components/form/form";
-import { Input } from "../components/input/input";
-import { InputOTP } from "../components/input-otp/input-otp";
-import { Link } from "../components/link/link";
-import { ModelSelector } from "../components/model-selector/model-selector";
-import { MultiSelect } from "../components/multi-select/multi-select";
-import { PhoneInput } from "../components/phone-input/phone-input";
-import { ProgressBar } from "../components/progress-bar/progress-bar";
-import { ProgressCard } from "../components/progress-card/progress-card";
-import { Quiz } from "../components/quiz/quiz";
-import { RangeCalendar } from "../components/range-calendar/range-calendar";
-import { Rating } from "../components/rating/rating";
-import { Reasoning } from "../components/reasoning/reasoning";
-import { SearchField } from "../components/search-field/search-field";
-import { Select } from "../components/select/select";
-import { TagsInput } from "../components/tags-input/tags-input";
-import { Text } from "../components/text/text";
-import { TextField } from "../components/text-field/text-field";
-import { TimePicker } from "../components/time-picker/time-picker";
+} from "../components/molecules/field/field";
+import { FloatingActionButton } from "../components/molecules/floating-action-button/floating-action-button";
+import { MultiSelect } from "../components/molecules/multi-select/multi-select";
+import { PhoneInput } from "../components/molecules/phone-input/phone-input";
+import { ProgressBar } from "../components/molecules/progress-bar/progress-bar";
+import { RangeCalendar } from "../components/molecules/range-calendar/range-calendar";
+import { SearchField } from "../components/molecules/search-field/search-field";
+import { TextField } from "../components/molecules/text-field/text-field";
+import { ProgressCard } from "../components/organisms/progress-card/progress-card";
+import { TimePicker } from "../components/organisms/time-picker/time-picker";
 
 import { flushMicrotasks, renderThemed, themed } from "./test-utils";
 

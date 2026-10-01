@@ -2,29 +2,29 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import { Text as NativeText, View } from "react-native";
 
-import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
-import { BottomBar } from "../components/bottom-bar/bottom-bar";
-import { Breadcrumb } from "../components/breadcrumb/breadcrumb";
-import { HorizontalScrollRow } from "../components/horizontal-scroll-row/horizontal-scroll-row";
-import { Menubar } from "../components/menubar/menubar";
-import { NavigationMenu } from "../components/navigation-menu/navigation-menu";
-import { Pagination } from "../components/pagination/pagination";
-import { Sidebar } from "../components/sidebar/sidebar";
+import { BottomBar } from "../components/atoms/bottom-bar/bottom-bar";
 import {
   SidebarProvider,
   useSidebar,
-} from "../components/sidebar-provider/sidebar-provider";
-import { SidebarToggle } from "../components/sidebar-toggle/sidebar-toggle";
-import { StepNavigation } from "../components/step-navigation/step-navigation";
+} from "../components/atoms/sidebar-provider/sidebar-provider";
+import { AnimatedTabs } from "../components/molecules/animated-tabs/animated-tabs";
+import { Breadcrumb } from "../components/molecules/breadcrumb/breadcrumb";
+import { HorizontalScrollRow } from "../components/molecules/horizontal-scroll-row/horizontal-scroll-row";
+import { Menubar } from "../components/molecules/menubar/menubar";
+import { NavigationMenu } from "../components/molecules/navigation-menu/navigation-menu";
+import { Pagination } from "../components/molecules/pagination/pagination";
+import { Sidebar } from "../components/molecules/sidebar/sidebar";
+import { SidebarToggle } from "../components/molecules/sidebar-toggle/sidebar-toggle";
+import { StepNavigation } from "../components/molecules/step-navigation/step-navigation";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/tabs/tabs";
-import { TopBar } from "../components/top-bar/top-bar";
-import { ViewSwitcher } from "../components/view-switcher/view-switcher";
-import { WorkspaceSwitcher } from "../components/workspace-switcher/workspace-switcher";
+} from "../components/molecules/tabs/tabs";
+import { TopBar } from "../components/molecules/top-bar/top-bar";
+import { ViewSwitcher } from "../components/molecules/view-switcher/view-switcher";
+import { WorkspaceSwitcher } from "../components/molecules/workspace-switcher/workspace-switcher";
 import type { LinkingService } from "../primitives/platform-services";
 
 import {

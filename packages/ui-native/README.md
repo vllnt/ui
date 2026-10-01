@@ -68,9 +68,9 @@ The package has no DOM, Radix UI, Tailwind CSS, NativeWind, or browser-global de
 
 ## Source organization
 
-- `src/components/<name>/<name>.tsx`: flat kebab-case component folders, matching Web; component-specific helpers and unit tests belong beside the implementation (for example, `button/button-styles.ts`).
-- `src/primitives/`: shared Native interaction, platform-service, selection, and motion utilities, with their colocated tests.
-- `src/theme/`: Native theme provider; portable tokens remain in `@vllnt/ui-core`.
+- `src/components/<level>/<name>/<name>.tsx`: kebab-case component folders grouped by Atomic Design level (`atoms`, `molecules`, `organisms`), matching Web; component-specific helpers and unit tests belong beside the implementation (for example, `atoms/button/button-styles.ts`). Levels and import rules are in [COMPONENTS.md](../../docs/agents/COMPONENTS.md#react-native-vllntui-native); `pnpm -F @vllnt/ui-native check:atomic` enforces them.
+- `src/primitives/`: shared Native interaction, platform-service, selection, and motion utilities, with their colocated tests. They sit below atoms and never import a component.
+- `src/theme/`: Native theme provider; portable tokens remain in `@vllnt/ui-core`. Like primitives, it never imports a component.
 - `src/tests/`: cross-component family and integration suites, named for their contracts rather than review batches.
 - `src/index.ts`: generated public exports. No extra folder barrels or public import changes are required.
 

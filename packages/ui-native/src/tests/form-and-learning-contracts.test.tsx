@@ -3,11 +3,11 @@ import { useState } from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import { Text } from "react-native";
 
-import { DateField } from "../components/date-field/date-field";
-import { FileUpload } from "../components/file-upload/file-upload";
-import { Flashcard } from "../components/flashcard/flashcard";
-import { InlineInput } from "../components/inline-input/inline-input";
-import { InteractiveTimeline } from "../components/interactive-timeline/interactive-timeline";
+import { FileUpload } from "../components/atoms/file-upload/file-upload";
+import { Flashcard } from "../components/atoms/flashcard/flashcard";
+import { DateField } from "../components/molecules/date-field/date-field";
+import { InlineInput } from "../components/molecules/inline-input/inline-input";
+import { InteractiveTimeline } from "../components/organisms/interactive-timeline/interactive-timeline";
 import type { PickedFile } from "../primitives/platform-services";
 
 import { deferred } from "./test-utils";

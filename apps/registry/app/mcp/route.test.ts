@@ -61,7 +61,7 @@ describe("platform-aware MCP tools", () => {
       },
       package: "@vllnt/ui-native",
       platform: "native",
-      source: { path: "src/components/button/button.tsx" },
+      source: { path: "src/components/atoms/button/button.tsx" },
       status: "experimental",
     });
   });
