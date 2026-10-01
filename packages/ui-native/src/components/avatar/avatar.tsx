@@ -120,7 +120,7 @@ function AvatarImage({
     <Image
       {...(named ? undefined : decorativeProps)}
       {...props}
-      accessibilityLabel={accessibilityLabel}
+      accessibilityLabel={name}
       accessibilityRole={named ? "image" : undefined}
       accessible={named}
       onError={(event) => {

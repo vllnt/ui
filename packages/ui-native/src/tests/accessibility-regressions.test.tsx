@@ -222,6 +222,10 @@ it("names avatar images from alt or aria-label", () => {
     "accessible",
     true,
   );
+  expect(screen.getByRole("image", { name: "Ada" })).toHaveProp(
+    "accessibilityLabel",
+    "Ada",
+  );
   expect(screen.getAllByRole("image")).toHaveLength(2);
 });
 
