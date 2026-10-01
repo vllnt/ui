@@ -56,8 +56,8 @@ export const SparklineGrid = (props: SparklineGridProps) => {
         const isPositive = item.change >= 0;
         const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
         const strokeClass = isPositive
-          ? "text-emerald-600 dark:text-emerald-400"
-          : "text-rose-600 dark:text-rose-400";
+          ? "text-emerald-700 dark:text-emerald-400"
+          : "text-rose-700 dark:text-rose-400";
 
         return (
           <section
@@ -77,8 +77,8 @@ export const SparklineGrid = (props: SparklineGridProps) => {
                 className={cn(
                   "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium tabular-nums",
                   isPositive
-                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                    : "border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                    ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                    : "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400",
                 )}
               >
                 <TrendIcon className="size-3.5" />

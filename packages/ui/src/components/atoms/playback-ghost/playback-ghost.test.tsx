@@ -31,11 +31,27 @@ describe("PlaybackGhost", () => {
     },
   );
 
-  it.each([
-    ["opacity into 0..1", { opacity: 5 }, { opacity: "1" }],
-    ["size to a sane minimum", { size: 4 }, { "min-width": "16px" }],
-  ])("clamps %s", (_case, props, style) => {
-    const { container } = render(<PlaybackGhost {...props} x={0} y={0} />);
-    expect(ghost(container)).toHaveStyle(style);
+  it("clamps opacity into 0..1 on the ghost frame", () => {
+    const { container } = render(<PlaybackGhost opacity={5} x={0} y={0} />);
+    expect(container.querySelector("[data-playback-ghost-frame]")).toHaveStyle({
+      opacity: "1",
+    });
+  });
+
+  it("clamps size to a sane minimum", () => {
+    const { container } = render(<PlaybackGhost size={4} x={0} y={0} />);
+    expect(ghost(container)).toHaveStyle({ "min-width": "16px" });
+  });
+
+  it("fades the frame but keeps the label text at full opacity (WCAG 1.4.3)", () => {
+    const { container } = render(
+      <PlaybackGhost label="research" opacity={0.2} x={0} y={0} />,
+    );
+    expect(ghost(container)?.getAttribute("style") ?? "").not.toMatch(
+      /opacity/,
+    );
+    expect(container.querySelector("[data-playback-ghost-frame]")).toHaveStyle({
+      opacity: "0.2",
+    });
   });
 });

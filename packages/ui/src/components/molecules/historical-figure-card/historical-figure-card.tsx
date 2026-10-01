@@ -289,7 +289,7 @@ function FigureQuote({ quote }: FigureQuoteProps): ReactNode {
     <blockquote className="border-l-2 border-primary/40 pl-3 text-sm italic text-muted-foreground">
       “{quote.text}”
       {quote.source ? (
-        <footer className="mt-1 text-xs not-italic text-muted-foreground/80">
+        <footer className="mt-1 text-xs not-italic text-muted-foreground">
           {quote.source}
         </footer>
       ) : null}

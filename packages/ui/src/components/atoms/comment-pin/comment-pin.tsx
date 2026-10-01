@@ -87,7 +87,7 @@ const PinBody = (props: PinBodyInput): React.ReactElement => {
       {showBadge ? (
         <span
           aria-hidden="true"
-          className="absolute -right-1 -top-1 inline-flex min-h-[14px] min-w-[14px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-medium text-white"
+          className="absolute -right-1 -top-1 inline-flex min-h-[14px] min-w-[14px] items-center justify-center rounded-full bg-red-700 px-1 text-[9px] font-medium text-white"
           data-comment-pin-unread
         >
           {props.unread}

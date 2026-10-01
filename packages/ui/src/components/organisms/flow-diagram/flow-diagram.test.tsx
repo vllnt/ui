@@ -13,6 +13,7 @@ type MockFlowNode = {
 
 type MockReactFlowProps = {
   children?: React.ReactNode;
+  className?: string;
   colorMode?: string;
   edges: { id: string; source: string; target: string }[];
   nodes: MockFlowNode[];
@@ -53,6 +54,7 @@ vi.mock("@xyflow/react", () => ({
   getViewportForBounds: flowRuntime.getViewportForBounds,
   ReactFlow: ({
     children,
+    className,
     colorMode,
     edges,
     nodes,
@@ -65,7 +67,7 @@ vi.mock("@xyflow/react", () => ({
 
     return (
       <div
-        className="react-flow__viewport"
+        className={`react-flow__viewport ${className ?? ""}`}
         data-color-mode={colorMode}
         data-edge-count={edges.length}
         data-node-count={nodes.length}
@@ -265,5 +267,15 @@ describe("FlowDiagram", () => {
       }),
     );
     expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
+  });
+});
+
+describe("FlowDiagram node colours", () => {
+  it("drives node colours from the card tokens in both colour modes", () => {
+    render(<FlowDiagram edges={[]} nodes={[]} />);
+    expect(screen.getByTestId("react-flow")).toHaveClass(
+      "[--xy-node-background-color:oklch(var(--card))]",
+      "[--xy-node-color:oklch(var(--card-foreground))]",
+    );
   });
 });

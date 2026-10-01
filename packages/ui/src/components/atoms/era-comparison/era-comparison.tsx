@@ -37,7 +37,7 @@ export type EraColor =
 const ERA_PALETTE: Record<EraColor, { accent: string; chip: string }> = {
   amber: {
     accent: "bg-amber-500",
-    chip: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    chip: "bg-amber-500/15 text-amber-800 dark:text-amber-300",
   },
   blue: {
     accent: "bg-blue-500",

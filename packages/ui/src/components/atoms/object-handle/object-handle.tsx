@@ -36,7 +36,7 @@ const ObjectHandle = ({
       <span>•</span>
     </span>
     <span>{label}</span>
-    {hint ? <span className="text-muted-foreground/80">{hint}</span> : null}
+    {hint ? <span className="text-muted-foreground">{hint}</span> : null}
   </button>
 );
 

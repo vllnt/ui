@@ -94,11 +94,13 @@ export const LiveCursor = ({
         <span
           className="ml-2 mt-2 inline-flex flex-col rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
           data-live-cursor-chip
-          style={{ backgroundColor: resolvedColor }}
+          style={{
+            backgroundColor: `color-mix(in oklch, ${resolvedColor} 55%, oklch(0 0 0))`,
+          }}
         >
           <span>{name}</span>
           {status ? (
-            <span className="text-[9px] opacity-80" data-live-cursor-status>
+            <span className="text-[9px]" data-live-cursor-status>
               {status}
             </span>
           ) : null}

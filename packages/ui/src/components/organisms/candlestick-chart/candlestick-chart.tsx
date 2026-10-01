@@ -144,8 +144,8 @@ function CandleMarks({
     const bodyHeight = Math.max(Math.abs(openY - closeY), 3);
     const isBullish = candle.close >= candle.open;
     const colorClass = isBullish
-      ? "text-emerald-600 dark:text-emerald-400"
-      : "text-rose-600 dark:text-rose-400";
+      ? "text-emerald-700 dark:text-emerald-400"
+      : "text-rose-700 dark:text-rose-400";
 
     return (
       <g className={colorClass} key={`${candle.label}-${index.toString()}`}>
@@ -196,8 +196,8 @@ function SessionPill({ sessionChange }: { sessionChange: number }) {
       className={cn(
         "inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-medium",
         isPositive
-          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-          : "border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400",
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+          : "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400",
       )}
     >
       <TrendIcon className="size-4" />

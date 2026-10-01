@@ -61,7 +61,10 @@ export type PlaybackGhostProps = {
   label?: ReactNode;
   /** Localizable strings. */
   labels?: PlaybackGhostLabels;
-  /** Ghost opacity `0..1`. Defaults to `0.4`. */
+  /**
+   * Ghost frame opacity `0..1`. Defaults to `0.4`. The label keeps full
+   * opacity so it stays readable (WCAG 1.4.3).
+   */
   opacity?: number;
   /** Ghost size in pixels. Defaults to `40`. */
   size?: number;
@@ -126,7 +129,7 @@ export const PlaybackGhost = ({
     <div
       aria-label={ariaLabel}
       className={cn(
-        "pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-md border border-dashed border-border/70 bg-background/40 px-2 py-1 text-xs text-foreground backdrop-blur-sm",
+        "pointer-events-none absolute z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground",
         className,
       )}
       data-playback-ghost
@@ -137,18 +140,23 @@ export const PlaybackGhost = ({
         left: x,
         minHeight: safeSize,
         minWidth: safeSize,
-        opacity: safeOpacity,
         top: y,
       }}
       {...rest}
     >
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 rounded-md border border-dashed border-border/70 bg-background/40 backdrop-blur-sm"
+        data-playback-ghost-frame
+        style={{ opacity: safeOpacity }}
+      />
       {kind ? (
-        <span aria-hidden="true" className="text-muted-foreground">
+        <span aria-hidden="true" className="relative">
           {KIND_GLYPH[kind]}
         </span>
       ) : null}
       {label ? (
-        <span className="truncate" data-playback-ghost-label>
+        <span className="relative truncate" data-playback-ghost-label>
           {label}
         </span>
       ) : null}

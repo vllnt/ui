@@ -66,7 +66,11 @@ const Message = (props: { message: ThreadMessage }): React.ReactElement => {
           className="font-semibold"
           data-thread-bubble-author
           style={
-            message.authorColor ? { color: message.authorColor } : undefined
+            message.authorColor
+              ? {
+                  color: `color-mix(in oklch, ${message.authorColor} 50%, oklch(var(--foreground)))`,
+                }
+              : undefined
           }
         >
           {message.author}

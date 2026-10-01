@@ -42,8 +42,8 @@ function getTone(change: number) {
       ? "border-emerald-500/30 bg-emerald-500/10"
       : "border-rose-500/30 bg-rose-500/10",
     trendClassName: isPositive
-      ? "text-emerald-600 dark:text-emerald-400"
-      : "text-rose-600 dark:text-rose-400",
+      ? "text-emerald-700 dark:text-emerald-400"
+      : "text-rose-700 dark:text-rose-400",
   };
 }
 

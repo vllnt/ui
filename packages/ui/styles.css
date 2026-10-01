@@ -94,6 +94,32 @@
   }
 }
 
+/* CodeBlock syntax colours: every token meets WCAG AA (4.5:1) on the
+   block background in its theme. */
+:root {
+  --vllnt-code-text: #383a42;
+  --vllnt-code-comment: #6b7280;
+  --vllnt-code-keyword: #a626a4;
+  --vllnt-code-string: #2e7d32;
+  --vllnt-code-function: #1d4ed8;
+  --vllnt-code-number: #986801;
+  --vllnt-code-class: #8a5a00;
+  --vllnt-code-variable: #b42318;
+  --vllnt-code-operator: #383a42;
+}
+
+.dark {
+  --vllnt-code-text: #abb2bf;
+  --vllnt-code-comment: #8b929e;
+  --vllnt-code-keyword: #c678dd;
+  --vllnt-code-string: #98c379;
+  --vllnt-code-function: #61afef;
+  --vllnt-code-number: #d19a66;
+  --vllnt-code-class: #e5c07b;
+  --vllnt-code-variable: #e06c75;
+  --vllnt-code-operator: #abb2bf;
+}
+
 /* Reduced motion safety net (DESIGN.md §8): when the user asks for less
    motion, animations and transitions collapse to their end state. Elements
    whose motion is the feedback itself (a loading spinner) opt out with
