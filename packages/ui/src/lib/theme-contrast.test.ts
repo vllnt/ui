@@ -112,12 +112,19 @@ function contrast(first: readonly number[], second: readonly number[]): number {
   return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05);
 }
 
+/** A token's value; throws so a missing token cannot pass as black. */
+function token(colors: Palette, name: string): string {
+  const value = colors[name];
+  if (!value) throw new Error(`Missing --${name}`);
+  return value;
+}
+
 function failures(colors: Palette, pairs: readonly Pair[], minimum: number) {
   return pairs
     .map(([foreground, surface]) => ({
       ratio: contrast(
-        oklchToRgb(colors[foreground] ?? ""),
-        oklchToRgb(colors[surface] ?? ""),
+        oklchToRgb(token(colors, foreground)),
+        oklchToRgb(token(colors, surface)),
       ),
       where: `${foreground} on ${surface}`,
     }))
@@ -145,11 +152,11 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
   });
 
   it("keeps destructive text legible on its 10% tint", () => {
-    const destructive = colors.destructive ?? "";
+    const destructive = token(colors, "destructive");
     expect(
       contrast(
         oklchToRgb(destructive),
-        tenPercentTint(destructive, colors.background ?? ""),
+        tenPercentTint(destructive, token(colors, "background")),
       ),
     ).toBeGreaterThanOrEqual(4.5);
   });
