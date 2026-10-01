@@ -78,7 +78,10 @@ const PinBody = (props: PinBodyInput): React.ReactElement => {
         data-comment-pin-body
         style={
           useAccent
-            ? { backgroundColor: props.accent, color: "white" }
+            ? {
+                backgroundColor: `color-mix(in oklab, ${props.accent} 55%, oklch(0 0 0))`,
+                color: "white",
+              }
             : undefined
         }
       >
@@ -87,7 +90,7 @@ const PinBody = (props: PinBodyInput): React.ReactElement => {
       {showBadge ? (
         <span
           aria-hidden="true"
-          className="absolute -right-1 -top-1 inline-flex min-h-[14px] min-w-[14px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-medium text-white"
+          className="absolute -right-1 -top-1 inline-flex min-h-[14px] min-w-[14px] items-center justify-center rounded-full bg-red-700 px-1 text-[9px] font-medium text-white"
           data-comment-pin-unread
         >
           {props.unread}
@@ -154,7 +157,7 @@ export const CommentPin = ({
   );
   return (
     <div
-      aria-label={ariaLabel}
+      aria-label={onActivate ? undefined : ariaLabel}
       className={cn(
         "absolute z-30 inline-flex -translate-x-1/2 -translate-y-1/2",
         className,
@@ -162,7 +165,7 @@ export const CommentPin = ({
       data-comment-pin
       data-comment-pin-state={state}
       ref={ref}
-      role="img"
+      role={onActivate ? undefined : "img"}
       style={{ left: x, top: y }}
       {...rest}
     >

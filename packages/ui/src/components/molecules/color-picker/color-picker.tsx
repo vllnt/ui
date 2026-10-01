@@ -80,6 +80,8 @@ export type ColorPickerProps = {
   className?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  /** Accessible name of the picker popover dialog. Defaults to "Choose colour". */
+  popoverLabel?: string;
   swatches?: string[];
   value?: string;
 };
@@ -88,6 +90,7 @@ const ColorPicker = ({
   className,
   defaultValue = "#3b82f6",
   onValueChange,
+  popoverLabel = "Choose colour",
   ref,
   swatches = presetSwatches,
   value,
@@ -119,7 +122,11 @@ const ColorPicker = ({
           <span className="uppercase tabular-nums">{currentValue}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-56 space-y-3">
+      <PopoverContent
+        align="start"
+        aria-label={popoverLabel}
+        className="w-56 space-y-3"
+      >
         <SwatchGrid
           onSelect={update}
           selected={currentValue}

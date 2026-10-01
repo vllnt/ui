@@ -74,6 +74,41 @@ describe("ViewSwitcher", () => {
     });
   });
 
+  it("keeps a single tab stop on the selected view", () => {
+    render(<ViewSwitcher defaultKey="series" options={defaultOptions} />);
+    expect(screen.getByRole("tab", { name: "All" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+    expect(screen.getByRole("tab", { name: "Series" })).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
+  });
+
+  it("moves focus with arrow keys, Home and End without navigating (APG tabs, manual activation)", () => {
+    render(
+      <ViewSwitcher
+        options={[...defaultOptions, { key: "grid", label: "Grid" }]}
+      />,
+    );
+    const all = screen.getByRole("tab", { name: "All" });
+    all.focus();
+    fireEvent.keyDown(all, { key: "ArrowRight" });
+    expect(screen.getByRole("tab", { name: "Series" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Series" }), {
+      key: "End",
+    });
+    expect(screen.getByRole("tab", { name: "Grid" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Grid" }), {
+      key: "Home",
+    });
+    expect(all).toHaveFocus();
+    fireEvent.keyDown(all, { key: "ArrowLeft" });
+    expect(screen.getByRole("tab", { name: "Grid" })).toHaveFocus();
+    expect(mockPush).not.toHaveBeenCalled();
+  });
+
   it("preserves other search params", () => {
     mockSearchParameters = new URLSearchParams("category=design");
     render(<ViewSwitcher options={defaultOptions} />);

@@ -176,7 +176,7 @@ const StatusIndicator = ({
           aria-hidden="true"
           className={cn(
             dotVariants({ size, tone }),
-            pulse ? "animate-pulse" : undefined,
+            pulse ? "animate-pulse motion-reduce:animate-none" : undefined,
           )}
         />
       ) : null}

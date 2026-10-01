@@ -643,7 +643,11 @@ export {
   MapZoomIn,
   MapZoomOut,
 } from "./organisms/map-2d/map-2d";
-export { Marquee, type MarqueeProps } from "./atoms/marquee/marquee";
+export {
+  Marquee,
+  type MarqueeLabels,
+  type MarqueeProps,
+} from "./atoms/marquee/marquee";
 export {
   MapTimeline,
   type MapTimelineColor,
@@ -796,6 +800,7 @@ export { BlogCard, ContentCard } from "./molecules/blog-card/blog-card";
 export { CategoryFilter } from "./molecules/category-filter/category-filter";
 export {
   Pagination,
+  type PaginationLabels,
   type PaginationProps,
 } from "./molecules/pagination/pagination";
 export {
@@ -922,6 +927,7 @@ export { TLDRSection } from "./atoms/tldr-section/tldr-section";
 export {
   TickerTape,
   type TickerTapeItem,
+  type TickerTapeLabels,
   type TickerTapeProps,
 } from "./molecules/ticker-tape/ticker-tape";
 export {
@@ -1030,8 +1036,10 @@ export {
 } from "./molecules/annotation/annotation";
 export {
   Checklist,
+  CHECKLIST_PROGRESS_EVENT,
   type ChecklistItem,
   type ChecklistProps,
+  parseChecklistStorageValue,
 } from "./atoms/checklist/checklist";
 export {
   CivilizationCard,

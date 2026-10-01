@@ -60,8 +60,8 @@ function BookSide({
       : "bg-emerald-500/12 border-emerald-500/15";
   const priceClassName =
     accent === "ask"
-      ? "text-rose-600 dark:text-rose-400"
-      : "text-emerald-600 dark:text-emerald-400";
+      ? "text-rose-700 dark:text-rose-400"
+      : "text-emerald-700 dark:text-emerald-400";
 
   return (
     <div className="space-y-2">

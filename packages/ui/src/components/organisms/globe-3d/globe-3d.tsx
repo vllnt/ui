@@ -647,7 +647,7 @@ export const Globe3D = ({
             {children}
           </Sphere>
         </div>
-        <DataSummary titleId={titleId}>{children}</DataSummary>
+        <DataSummary titleId={`${titleId}-summary`}>{children}</DataSummary>
       </section>
     </GlobeContext.Provider>
   );

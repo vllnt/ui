@@ -61,7 +61,7 @@ export const LiveCursor = ({
 }: LiveCursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const { className, color, labels, name, status, x, y, ...rest } = props;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
-  const resolvedColor = color ?? "var(--foreground)";
+  const resolvedColor = color ?? "oklch(var(--foreground))";
   return (
     <div
       aria-label={
@@ -92,13 +92,22 @@ export const LiveCursor = ({
       </svg>
       {name === null || name === undefined ? null : (
         <span
-          className="ml-2 mt-2 inline-flex flex-col rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
+          className={cn(
+            "ml-2 mt-2 inline-flex flex-col rounded-md px-1.5 py-0.5 text-[10px] font-medium shadow-sm",
+            color ? "text-white" : "bg-foreground text-background",
+          )}
           data-live-cursor-chip
-          style={{ backgroundColor: resolvedColor }}
+          style={
+            color
+              ? {
+                  backgroundColor: `color-mix(in oklab, ${color} 55%, oklch(0 0 0))`,
+                }
+              : undefined
+          }
         >
           <span>{name}</span>
           {status ? (
-            <span className="text-[9px] opacity-80" data-live-cursor-status>
+            <span className="text-[9px]" data-live-cursor-status>
               {status}
             </span>
           ) : null}

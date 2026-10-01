@@ -81,10 +81,7 @@ function isHtmlElement(target: EventTarget | null): target is HTMLElement {
   return target instanceof HTMLElement;
 }
 
-function isInteractiveDescendant(
-  element: HTMLElement,
-  container: HTMLDivElement,
-) {
+function isInteractiveDescendant(element: HTMLElement, container: HTMLElement) {
   const interactiveAncestor = element.closest(INTERACTIVE_ELEMENT_SELECTOR);
 
   return (
@@ -116,7 +113,7 @@ function hasScrollableAxis(element: HTMLElement, axis: "x" | "y") {
 
 function hasScrollableAncestor(
   element: HTMLElement,
-  container: HTMLDivElement,
+  container: HTMLElement,
   delta: { x: number; y: number },
 ): boolean {
   if (!container.contains(element) || element === container) {
@@ -136,7 +133,7 @@ function hasScrollableAncestor(
 }
 
 function shouldHandleCanvasKeyboardEvent(
-  event: ReactKeyboardEvent<HTMLDivElement>,
+  event: ReactKeyboardEvent<HTMLElement>,
 ) {
   if (
     isHtmlElement(event.target) &&
@@ -151,7 +148,7 @@ function shouldHandleCanvasKeyboardEvent(
 
 function shouldHandleCanvasWheelEvent(
   event: WheelEvent,
-  container: HTMLDivElement,
+  container: HTMLElement,
 ) {
   if (
     isHtmlElement(event.target) &&
@@ -167,7 +164,7 @@ function shouldHandleCanvasWheelEvent(
 }
 
 function isPanGesture(
-  event: ReactPointerEvent<HTMLDivElement>,
+  event: ReactPointerEvent<HTMLElement>,
   isSpacePressed: boolean,
 ) {
   return event.button === 1 || (event.button === 0 && isSpacePressed);
@@ -186,7 +183,7 @@ function createViewportKeyHandler({
   viewportRef: ViewportReference;
   zoomStep: number;
 }) {
-  return (event: ReactKeyboardEvent<HTMLDivElement>) => {
+  return (event: ReactKeyboardEvent<HTMLElement>) => {
     if (event.key === "+" || event.key === "=") {
       event.preventDefault();
       setViewport({
@@ -303,7 +300,7 @@ function useCanvasKeyboardInteractions({
   viewportRef,
   zoomStep,
 }: {
-  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerRef: React.RefObject<HTMLElement | null>;
   nudgeViewport: (deltaX: number, deltaY: number) => void;
   resetViewport: () => void;
   setViewport: (viewport: CanvasViewport) => void;
@@ -323,7 +320,7 @@ function useCanvasKeyboardInteractions({
   });
 
   const handleKeyDown = useCallback(
-    (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    (event: ReactKeyboardEvent<HTMLElement>) => {
       if (!shouldHandleCanvasKeyboardEvent(event)) {
         return;
       }
@@ -345,18 +342,15 @@ function useCanvasKeyboardInteractions({
     [nudgeViewport, resetViewport, setViewport, viewportRef, zoomStep],
   );
 
-  const handleKeyUp = useCallback(
-    (event: ReactKeyboardEvent<HTMLDivElement>) => {
-      if (!shouldHandleCanvasKeyboardEvent(event)) {
-        return;
-      }
+  const handleKeyUp = useCallback((event: ReactKeyboardEvent<HTMLElement>) => {
+    if (!shouldHandleCanvasKeyboardEvent(event)) {
+      return;
+    }
 
-      if (event.key === " ") {
-        setIsSpacePressed(false);
-      }
-    },
-    [],
-  );
+    if (event.key === " ") {
+      setIsSpacePressed(false);
+    }
+  }, []);
 
   const handleBlur = useCallback(() => {
     setIsSpacePressed(false);
@@ -372,7 +366,7 @@ function useCanvasWheel({
   viewportRef,
   zoomStep,
 }: {
-  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerRef: React.RefObject<HTMLElement | null>;
   nudgeViewport: (deltaX: number, deltaY: number) => void;
   setViewport: (viewport: CanvasViewport) => void;
   viewportRef: ViewportReference;
@@ -413,7 +407,7 @@ function useCanvasWheel({
 }
 
 function endCanvasDrag(
-  event: ReactPointerEvent<HTMLDivElement>,
+  event: ReactPointerEvent<HTMLElement>,
   dragOriginRef: React.RefObject<DragOrigin | null>,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
@@ -437,7 +431,7 @@ function useCanvasPointerInteractions({
   const [isDragging, setIsDragging] = useState(false);
 
   const handlePointerDown = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (event: ReactPointerEvent<HTMLElement>) => {
       if (!isPanGesture(event, isSpacePressed)) {
         return;
       }
@@ -458,7 +452,7 @@ function useCanvasPointerInteractions({
   );
 
   const handlePointerMove = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (event: ReactPointerEvent<HTMLElement>) => {
       const dragOrigin = dragOriginRef.current;
       if (!dragOrigin) {
         return;
@@ -474,14 +468,14 @@ function useCanvasPointerInteractions({
   );
 
   const handlePointerCancel = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (event: ReactPointerEvent<HTMLElement>) => {
       endCanvasDrag(event, dragOriginRef, setIsDragging);
     },
     [],
   );
 
   const handlePointerUp = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (event: ReactPointerEvent<HTMLElement>) => {
       endCanvasDrag(event, dragOriginRef, setIsDragging);
     },
     [],
@@ -534,17 +528,17 @@ function useCanvasViewHandle(
 
 type CanvasInteractionLayerProps = {
   children: React.ReactNode;
-  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerRef: React.RefObject<HTMLElement | null>;
   instructionsId: string;
   isDragging: boolean;
   isSpacePressed: boolean;
   onBlur: () => void;
-  onKeyDown: (event: ReactKeyboardEvent<HTMLDivElement>) => void;
-  onKeyUp: (event: ReactKeyboardEvent<HTMLDivElement>) => void;
-  onPointerCancel: (event: ReactPointerEvent<HTMLDivElement>) => void;
-  onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => void;
-  onPointerMove: (event: ReactPointerEvent<HTMLDivElement>) => void;
-  onPointerUp: (event: ReactPointerEvent<HTMLDivElement>) => void;
+  onKeyDown: (event: ReactKeyboardEvent<HTMLElement>) => void;
+  onKeyUp: (event: ReactKeyboardEvent<HTMLElement>) => void;
+  onPointerCancel: (event: ReactPointerEvent<HTMLElement>) => void;
+  onPointerDown: (event: ReactPointerEvent<HTMLElement>) => void;
+  onPointerMove: (event: ReactPointerEvent<HTMLElement>) => void;
+  onPointerUp: (event: ReactPointerEvent<HTMLElement>) => void;
   viewport: CanvasViewport;
 };
 
@@ -564,12 +558,12 @@ function CanvasInteractionLayer({
   viewport,
 }: CanvasInteractionLayerProps) {
   return (
-    <div
+    <section
       aria-describedby={instructionsId}
       aria-label="Canvas workspace"
       aria-roledescription="canvas"
       className={cn(
-        "relative h-full w-full select-none touch-none outline-none",
+        "relative h-full w-full select-none touch-none outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
         isDragging || isSpacePressed
           ? "cursor-grab active:cursor-grabbing"
           : "cursor-default",
@@ -583,7 +577,6 @@ function CanvasInteractionLayer({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       ref={containerRef}
-      role="button"
       tabIndex={0}
     >
       <div className="sr-only" id={instructionsId}>
@@ -591,7 +584,7 @@ function CanvasInteractionLayer({
         minus, or control wheel to zoom. Press zero to reset the viewport.
       </div>
       {children}
-    </div>
+    </section>
   );
 }
 
@@ -641,7 +634,7 @@ const CanvasView = ({
   ...props
 }: CanvasViewProps & { ref?: React.Ref<CanvasViewHandle> }) => {
   const instructionsId = useId();
-  const interactionRef = useRef<HTMLDivElement>(null);
+  const interactionRef = useRef<HTMLElement>(null);
   const viewportState = useViewportState({
     defaultViewport,
     maxZoom,

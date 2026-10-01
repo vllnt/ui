@@ -32,7 +32,7 @@ const STATE_TONE: Record<StateBadgeState, string> = {
   failed: "border-red-500/40 bg-red-500/15 text-red-700 dark:text-red-300",
   idle: "border-border bg-muted/40 text-muted-foreground",
   queued:
-    "border-amber-500/40 bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    "border-amber-500/40 bg-amber-500/15 text-amber-800 dark:text-amber-300",
   running: "border-blue-500/40 bg-blue-500/15 text-blue-700 dark:text-blue-300",
   stopped: "border-border bg-background text-foreground",
 };
@@ -42,7 +42,7 @@ const STATE_DOT: Record<StateBadgeState, string> = {
   failed: "bg-red-500",
   idle: "bg-muted-foreground",
   queued: "bg-amber-500",
-  running: "bg-blue-500 animate-pulse",
+  running: "bg-blue-500 animate-pulse motion-reduce:animate-none",
   stopped: "bg-muted-foreground",
 };
 

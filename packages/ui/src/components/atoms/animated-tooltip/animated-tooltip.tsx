@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { useEscapeKey } from "../../../lib/use-escape-key";
 import { cn } from "../../../lib/utils";
 
 /** Side of the trigger the tooltip appears on. */
@@ -40,7 +41,9 @@ function Tooltip({
 /**
  * Trigger that reveals a tooltip bubble on hover or focus.
  *
- * The bubble scales and fades in; closing unmounts it.
+ * The bubble scales and fades in; closing unmounts it. While it shows,
+ * Escape hides it (WCAG 1.4.13) without reaching an enclosing dialog, and
+ * focus stays on the trigger.
  *
  * @example
  * ```tsx
@@ -56,6 +59,15 @@ export const AnimatedTooltip = ({
   ...props
 }: AnimatedTooltipProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [open, setOpen] = React.useState(false);
+  const close = React.useCallback(() => {
+    setOpen(false);
+  }, []);
+  useEscapeKey(close, {
+    capture: true,
+    enabled: open,
+    preventDefault: true,
+    stopPropagation: true,
+  });
 
   return (
     <div

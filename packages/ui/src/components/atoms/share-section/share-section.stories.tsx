@@ -1,3 +1,4 @@
+// manual
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { ShareSection } from "./share-section";
@@ -5,6 +6,12 @@ import { ShareSection } from "./share-section";
 const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
 const meta = {
+  args: {
+    shareOn: "Share on",
+    shareTitle: "Share this article",
+    title: "Accessible components",
+    url: "https://ui.vllnt.ai",
+  },
   argTypes: {
     as: {
       control: "select",

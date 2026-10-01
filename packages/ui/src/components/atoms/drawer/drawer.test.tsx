@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
 import {
   Drawer,
@@ -35,5 +35,43 @@ describe("Drawer", () => {
     );
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Description")).toBeInTheDocument();
+  });
+});
+
+describe("Drawer focus (WAI-ARIA APG modal dialog)", () => {
+  beforeAll(() => {
+    if (typeof window.matchMedia === "function") return;
+    Object.defineProperty(window, "matchMedia", {
+      configurable: true,
+      value: (query: string) => ({
+        addEventListener: vi.fn(),
+        addListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+        matches: false,
+        media: query,
+        onchange: undefined,
+        removeEventListener: vi.fn(),
+        removeListener: vi.fn(),
+      }),
+      writable: true,
+    });
+  });
+
+  it("moves focus into the drawer when it opens", async () => {
+    render(
+      <Drawer>
+        <DrawerTrigger>Open drawer</DrawerTrigger>
+        <DrawerContent>
+          <DrawerTitle>Settings</DrawerTitle>
+          <DrawerDescription>Adjust your preferences.</DrawerDescription>
+          <button type="button">Save</button>
+        </DrawerContent>
+      </Drawer>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Open drawer" }));
+    const dialog = await screen.findByRole("dialog");
+    await waitFor(() => {
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    });
   });
 });

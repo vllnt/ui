@@ -35,3 +35,15 @@ describe("Tour", () => {
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("Tour step dots", () => {
+  it("use 24px targets and mark the current step", () => {
+    render(<Tour steps={steps} />);
+    const current = screen.getByRole("button", { name: "Go to Navigation" });
+    expect(current).toHaveClass("size-6");
+    expect(current).toHaveAttribute("aria-current", "step");
+    expect(
+      screen.getByRole("button", { name: "Go to Progress" }),
+    ).not.toHaveAttribute("aria-current");
+  });
+});

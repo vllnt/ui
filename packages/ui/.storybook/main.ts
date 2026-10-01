@@ -39,7 +39,7 @@ export default defineMain({
           ...(config.resolve?.alias ?? {}),
           '@': resolve(__dirname, '../src'),
           'next/link': resolve(__dirname, './next-stubs.ts'),
-          'next/image': resolve(__dirname, './next-stubs.ts'),
+          'next/image': resolve(__dirname, './next-image-stub.ts'),
           'next/navigation': resolve(__dirname, './next-stubs.ts'),
           'next-themes': resolve(__dirname, './next-themes-stub.ts'),
         },

@@ -18,7 +18,10 @@ function CodeLine({ highlightLines, line, lineNumber }: CodeLineProps) {
   const isHighlighted = highlightLines.includes(lineNumber);
   return (
     <div className={cn("flex", isHighlighted && "bg-primary/10 -mx-4 px-4")}>
-      <span className="select-none w-8 text-right pr-4 text-muted-foreground/50">
+      <span
+        aria-hidden="true"
+        className="select-none w-8 text-right pr-4 text-muted-foreground"
+      >
         {lineNumber}
       </span>
       <span>{line}</span>

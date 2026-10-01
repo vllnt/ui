@@ -72,6 +72,35 @@ describe("ToastAction", () => {
   });
 });
 
+describe("Toast announcements", () => {
+  it("announces default toasts politely and destructive toasts as alerts", () => {
+    render(
+      <>
+        <Toast>
+          <ToastTitle>Saved</ToastTitle>
+        </Toast>
+        <Toast variant="destructive">
+          <ToastTitle>Payment failed</ToastTitle>
+          <ToastDescription>Update your card.</ToastDescription>
+        </Toast>
+      </>,
+    );
+    const status = screen.getByRole("status");
+    expect(status).toHaveTextContent("Saved");
+    expect(status).toHaveAttribute("aria-live", "polite");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("Payment failed");
+    expect(alert).toHaveAttribute("aria-live", "assertive");
+  });
+
+  it("keeps the description at full opacity for contrast", () => {
+    render(<ToastDescription>Update your card.</ToastDescription>);
+    expect(screen.getByText("Update your card.").className).not.toMatch(
+      /opacity-/,
+    );
+  });
+});
+
 describe("toast + Toaster", () => {
   it("shows a toast() message in the mounted Toaster", async () => {
     render(<Toaster theme="light" />);

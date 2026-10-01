@@ -43,4 +43,19 @@ describe("AlertPulse", () => {
     const ring = container.querySelector("[data-alert-pulse-ring]");
     expect(ring?.getAttribute("class")).not.toContain("animate-ping");
   });
+
+  it("stops its infinite pulse under prefers-reduced-motion", () => {
+    const { container } = render(<AlertPulse cx={0} cy={0} />);
+    const pulsing = [
+      ...container.querySelectorAll(
+        '[class*="animate-p"], [class*="animate-spin"]',
+      ),
+    ];
+    expect(pulsing.length).toBeGreaterThan(0);
+    pulsing.forEach((element) => {
+      expect(element.getAttribute("class")).toContain(
+        "motion-reduce:animate-none",
+      );
+    });
+  });
 });

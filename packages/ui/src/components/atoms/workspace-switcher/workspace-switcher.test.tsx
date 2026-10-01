@@ -39,6 +39,39 @@ describe("WorkspaceSwitcher", () => {
     expect(onValueChange).toHaveBeenCalledWith("signals");
   });
 
+  it("exposes a single tab stop on the checked workspace (APG radio group)", () => {
+    render(
+      <WorkspaceSwitcher defaultValue="objects" workspaces={workspaces} />,
+    );
+    const stops = screen
+      .getAllByRole("radio")
+      .filter((radio) => radio.getAttribute("tabindex") === "0");
+    expect(stops).toEqual([screen.getByRole("radio", { name: "Objects" })]);
+  });
+
+  it("arrow keys move focus and check the next / previous workspace", () => {
+    const onValueChange = vi.fn();
+    const onKeyDown = vi.fn();
+    render(
+      <WorkspaceSwitcher
+        onKeyDown={onKeyDown}
+        onValueChange={onValueChange}
+        workspaces={workspaces}
+      />,
+    );
+    const first = screen.getByRole("radio", { name: "Orchestrate" });
+    first.focus();
+    fireEvent.keyDown(first, { key: "ArrowDown" });
+    const objects = screen.getByRole("radio", { name: "Objects" });
+    expect(objects).toHaveFocus();
+    expect(objects).toHaveAttribute("aria-checked", "true");
+    expect(onValueChange).toHaveBeenLastCalledWith("objects");
+    fireEvent.keyDown(objects, { key: "ArrowLeft" });
+    fireEvent.keyDown(first, { key: "ArrowLeft" });
+    expect(screen.getByRole("radio", { name: "Signals" })).toHaveFocus();
+    expect(onKeyDown).toHaveBeenCalledTimes(3);
+  });
+
   it("respects a controlled value", () => {
     render(<WorkspaceSwitcher value="objects" workspaces={workspaces} />);
     expect(screen.getByRole("radio", { name: "Objects" })).toHaveAttribute(

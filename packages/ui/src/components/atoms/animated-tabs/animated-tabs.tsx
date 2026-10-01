@@ -2,6 +2,7 @@
 
 import * as React from "react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
 /** A single tab descriptor. */
@@ -40,11 +41,13 @@ function TabButton({
   label,
   onSelect,
   reference,
+  tabStop,
 }: {
   active: boolean;
   label: string;
   onSelect: () => void;
   reference: (node: HTMLButtonElement | null) => void;
+  tabStop: boolean;
 }) {
   return (
     <button
@@ -56,6 +59,7 @@ function TabButton({
       onClick={onSelect}
       ref={reference}
       role="tab"
+      tabIndex={tabStop ? 0 : -1}
       type="button"
     >
       {label}
@@ -67,6 +71,8 @@ function TabButton({
  * Row of tabs with a pill that slides behind the active tab.
  *
  * Respects `prefers-reduced-motion`: the pill jumps without sliding.
+ * Keyboard follows the WAI-ARIA APG tabs pattern: one tab stop, ArrowLeft /
+ * ArrowRight (wrapping), Home and End move focus and select the tab.
  *
  * @example
  * ```tsx
@@ -76,6 +82,7 @@ function TabButton({
 export const AnimatedTabs = ({
   className,
   defaultValue,
+  onKeyDown,
   onValueChange,
   ref,
   tabs,
@@ -97,14 +104,23 @@ export const AnimatedTabs = ({
     onValueChange?.(value);
   };
 
+  const hasActiveTab = tabs.some((tab) => tab.value === active);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    onKeyDown?.(event);
+    moveRovingFocus(event, '[role="tab"]', { activate: true });
+  };
+
   return (
     <div
       className={cn(
         "relative inline-flex items-center gap-1 rounded-lg border border-border bg-muted p-1",
         className,
       )}
+      onKeyDown={handleKeyDown}
       ref={ref}
       role="tablist"
+      tabIndex={-1}
       {...props}
     >
       <span
@@ -112,7 +128,7 @@ export const AnimatedTabs = ({
         className="absolute top-1 z-0 h-[calc(100%-0.5rem)] rounded-md bg-primary transition-all duration-300 ease-out motion-reduce:transition-none"
         style={{ left: indicator.left, width: indicator.width }}
       />
-      {tabs.map((tab) => (
+      {tabs.map((tab, index) => (
         <TabButton
           active={tab.value === active}
           key={tab.value}
@@ -127,6 +143,7 @@ export const AnimatedTabs = ({
               buttons.current.set(tab.value, node);
             }
           }}
+          tabStop={tab.value === active || (!hasActiveTab && index === 0)}
         />
       ))}
     </div>

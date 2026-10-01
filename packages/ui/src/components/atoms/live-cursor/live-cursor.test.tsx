@@ -33,8 +33,22 @@ describe("LiveCursor", () => {
     expect(
       container.querySelector("[data-live-cursor-pointer]"),
     ).toHaveAttribute("fill", "#5b8def");
-    expect(container.querySelector("[data-live-cursor-chip]")).toHaveStyle({
-      "background-color": "#5b8def",
-    });
+    expect(
+      container.querySelector("[data-live-cursor-chip]")?.getAttribute("style"),
+    ).toMatch(
+      /color-mix\(in oklab, (#5b8def|rgb\(91, 141, 239\)) 55%, oklch\(0 0 0\)\)/,
+    );
+  });
+});
+
+describe("LiveCursor default colour", () => {
+  it("uses the foreground token pair for the chip when no colour is given", () => {
+    const { container } = render(<LiveCursor name="Ana" x={0} y={0} />);
+    const chip = container.querySelector("[data-live-cursor-chip]");
+    expect(chip).toHaveClass("bg-foreground", "text-background");
+    expect(chip).not.toHaveAttribute("style");
+    expect(
+      container.querySelector("[data-live-cursor-pointer]"),
+    ).toHaveAttribute("fill", "oklch(var(--foreground))");
   });
 });

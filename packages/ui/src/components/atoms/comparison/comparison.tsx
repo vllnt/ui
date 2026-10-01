@@ -29,7 +29,7 @@ const variantConfig = {
   },
   good: {
     className: "border-green-500/30 bg-green-500/5",
-    headerClass: "bg-green-500/10 text-green-700 dark:text-green-300",
+    headerClass: "bg-green-500/10 text-green-800 dark:text-green-300",
     icon: Check,
     iconClass: "text-green-500",
   },
@@ -140,7 +140,7 @@ export function BeforeAfter({ after, before, title }: BeforeAfterProps) {
           <ArrowRight className="size-6 text-muted-foreground" />
         </div>
         <div className="rounded-lg border border-green-500/30 bg-green-500/5 overflow-hidden">
-          <div className="px-4 py-2 bg-green-500/10 text-green-700 dark:text-green-300 font-medium text-sm flex items-center gap-2">
+          <div className="px-4 py-2 bg-green-500/10 text-green-800 dark:text-green-300 font-medium text-sm flex items-center gap-2">
             <Check className="size-4" />
             After
           </div>

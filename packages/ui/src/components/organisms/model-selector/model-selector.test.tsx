@@ -88,6 +88,19 @@ describe("ModelSelector", () => {
   });
 });
 
+describe("ModelSelector keyboard", () => {
+  it("navigates the model list from the search box and selects with Enter", () => {
+    const onSelectModel = vi.fn();
+    renderModelSelector({ onSelectModel });
+    const search = screen.getByPlaceholderText("Search models or providers...");
+    expect(search.closest("[cmdk-root]")).not.toBeNull();
+    search.focus();
+    fireEvent.keyDown(search, { key: "ArrowDown" });
+    fireEvent.keyDown(search, { key: "Enter" });
+    expect(onSelectModel).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("ModelSelector selection guard", () => {
   it("ignores a repeated click on the same model within one tick", () => {
     const onSelectModel = vi.fn();
@@ -97,5 +110,14 @@ describe("ModelSelector selection guard", () => {
     fireEvent.click(getModelItem("Claude 3.5 Sonnet"));
 
     expect(onSelectModel).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("ModelSelector list label", () => {
+  it("names the searchable model list from listLabel", () => {
+    renderModelSelector({ listLabel: "Modeles" });
+    expect(
+      screen.getByRole("combobox", { name: "Modeles" }),
+    ).toBeInTheDocument();
   });
 });

@@ -26,7 +26,7 @@ const COLOR_PALETTE: Record<
 > = {
   amber: {
     band: "bg-amber-500/15",
-    chip: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    chip: "bg-amber-500/15 text-amber-800 dark:text-amber-300",
     marker: "border-amber-500 bg-amber-500",
   },
   blue: {

@@ -40,4 +40,23 @@ describe("SelectionHalo", () => {
       "true",
     );
   });
+
+  it("exposes the halo as a named group that keeps its visible label", () => {
+    render(<SelectionHalo bounds={SQUARE} label="3 selected" />);
+    const halo = screen.getByRole("group", { name: "Selection" });
+    expect(halo).toHaveTextContent("3 selected");
+  });
+});
+
+describe("SelectionHalo pulse", () => {
+  it("pulses only the ring, keeps the label opaque and honours reduced motion", () => {
+    const { container } = render(
+      <SelectionHalo bounds={SQUARE} label="3 selected" pulsing />,
+    );
+    const label = container.querySelector("[data-selection-label]");
+    expect(label?.closest(".animate-pulse")).toBeNull();
+    const pulse = container.querySelector(".animate-pulse");
+    expect(pulse).toHaveClass("motion-reduce:animate-none");
+    expect(pulse).toHaveAttribute("aria-hidden", "true");
+  });
 });

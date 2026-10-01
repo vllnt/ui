@@ -9,19 +9,62 @@ import {
 } from "react";
 
 import { Check, Copy } from "lucide-react";
-import { useTheme } from "next-themes";
 import type { SyntaxHighlighterProps } from "react-syntax-highlighter";
 
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import { useCopyToClipboard } from "../../molecules/copy-button/use-copy-to-clipboard";
 
-type PrismStyle = SyntaxHighlighterProps["style"];
+type PrismStyle = NonNullable<SyntaxHighlighterProps["style"]>;
 
 type LoadedHighlighter = {
-  oneDark: PrismStyle;
-  oneLight: PrismStyle;
   SyntaxHighlighter: ComponentType<SyntaxHighlighterProps>;
+};
+
+/**
+ * Token colours come from `--vllnt-code-*` custom properties (styles.css),
+ * so the palette follows the active light / dark theme without detecting it
+ * in JS, and every token meets WCAG AA (4.5:1) on the block background.
+ */
+function codeToken(name: string, fallback: string): { color: string } {
+  return { color: `oklch(var(--vllnt-code-${name}, ${fallback}))` };
+}
+
+const CODE_THEME: PrismStyle = {
+  atrule: codeToken("keyword", "0.5236 0.211 328.8"),
+  "attr-name": codeToken("number", "0.5237 0.1156 76.9"),
+  "attr-value": codeToken("string", "0.5084 0.1347 144.2"),
+  boolean: codeToken("number", "0.5237 0.1156 76.9"),
+  builtin: codeToken("class", "0.5078 0.108 73.3"),
+  cdata: codeToken("comment", "0.521 0.0234 264.4"),
+  char: codeToken("string", "0.5084 0.1347 144.2"),
+  "class-name": codeToken("class", "0.5078 0.108 73.3"),
+  'code[class*="language-"]': codeToken("text", "0.3496 0.0141 274.5"),
+  comment: {
+    ...codeToken("comment", "0.521 0.0234 264.4"),
+    fontStyle: "italic",
+  },
+  constant: codeToken("number", "0.5237 0.1156 76.9"),
+  deleted: codeToken("variable", "0.5003 0.1821 29.5"),
+  doctype: codeToken("comment", "0.521 0.0234 264.4"),
+  entity: codeToken("operator", "0.3496 0.0141 274.5"),
+  function: codeToken("function", "0.4882 0.2172 264.4"),
+  important: codeToken("keyword", "0.5236 0.211 328.8"),
+  inserted: codeToken("string", "0.5084 0.1347 144.2"),
+  keyword: codeToken("keyword", "0.5236 0.211 328.8"),
+  number: codeToken("number", "0.5237 0.1156 76.9"),
+  operator: codeToken("operator", "0.3496 0.0141 274.5"),
+  'pre[class*="language-"]': codeToken("text", "0.3496 0.0141 274.5"),
+  prolog: codeToken("comment", "0.521 0.0234 264.4"),
+  property: codeToken("variable", "0.5003 0.1821 29.5"),
+  punctuation: codeToken("operator", "0.3496 0.0141 274.5"),
+  regex: codeToken("string", "0.5084 0.1347 144.2"),
+  selector: codeToken("string", "0.5084 0.1347 144.2"),
+  string: codeToken("string", "0.5084 0.1347 144.2"),
+  symbol: codeToken("number", "0.5237 0.1156 76.9"),
+  tag: codeToken("variable", "0.5003 0.1821 29.5"),
+  url: codeToken("operator", "0.3496 0.0141 274.5"),
+  variable: codeToken("variable", "0.5003 0.1821 29.5"),
 };
 
 type CodeBlockProps = {
@@ -69,34 +112,22 @@ export function CodeBlock({
   showLanguage = false,
 }: CodeBlockProps) {
   const { copied, copy } = useCopyToClipboard();
-  // The Prism build and the two themes in use are dynamic-imported on mount,
-  // by deep path rather than the package root (which also pulls highlight.js
-  // and every theme), so the @vllnt/ui barrel's static graph never reaches
-  // them. Null until the chunks load.
+  // The Prism build is dynamic-imported on mount, by deep path rather than
+  // the package root (which also pulls highlight.js and every theme), so the
+  // @vllnt/ui barrel's static graph never reaches it. Token colours come
+  // from CSS variables (CODE_THEME). Null until the chunk loads.
   const [highlighter, setHighlighter] = useState<LoadedHighlighter | null>(
     null,
   );
-  const { systemTheme, theme } = useTheme();
-
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
-  const isDark = resolvedTheme !== "light";
   const code = extractTextFromChildren(children);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let active = true;
-    void Promise.all([
-      import("react-syntax-highlighter/dist/esm/prism"),
-      import("react-syntax-highlighter/dist/esm/styles/prism/one-dark"),
-      import("react-syntax-highlighter/dist/esm/styles/prism/one-light"),
-    ]).then(([prism, oneDark, oneLight]) => {
+    void import("react-syntax-highlighter/dist/esm/prism").then((prism) => {
       if (!active) return;
-      setHighlighter({
-        oneDark: oneDark.default,
-        oneLight: oneLight.default,
-        SyntaxHighlighter: prism.default,
-      });
+      setHighlighter({ SyntaxHighlighter: prism.default });
     });
     return () => {
       active = false;
@@ -127,7 +158,6 @@ export function CodeBlock({
   };
 
   const SyntaxHighlighter = highlighter?.SyntaxHighlighter;
-  const codeStyle = isDark ? highlighter?.oneDark : highlighter?.oneLight;
 
   return (
     <div
@@ -158,7 +188,7 @@ export function CodeBlock({
               padding: "1rem",
             }}
             language={language}
-            style={codeStyle}
+            style={CODE_THEME}
           >
             {code}
           </SyntaxHighlighter>

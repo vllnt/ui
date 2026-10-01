@@ -112,4 +112,29 @@ describe("MultiSelect", () => {
     expect(selectedOption).toHaveAttribute("aria-selected", "true");
     expect(disabledOption).toHaveAttribute("aria-disabled", "true");
   });
+
+  it("names its popover dialog after the trigger label or popoverLabel", () => {
+    const { unmount } = render(
+      <MultiSelect aria-label="Frameworks" options={OPTIONS} />,
+    );
+    fireEvent.keyDown(screen.getByRole("combobox", { name: "Frameworks" }), {
+      key: "ArrowDown",
+    });
+    expect(
+      screen.getByRole("dialog", { name: "Frameworks" }),
+    ).toBeInTheDocument();
+    unmount();
+
+    render(
+      <MultiSelect
+        aria-label="Frameworks"
+        options={OPTIONS}
+        popoverLabel="Choose frameworks"
+      />,
+    );
+    fireEvent.keyDown(screen.getByRole("combobox"), { key: "ArrowDown" });
+    expect(
+      screen.getByRole("dialog", { name: "Choose frameworks" }),
+    ).toBeInTheDocument();
+  });
 });

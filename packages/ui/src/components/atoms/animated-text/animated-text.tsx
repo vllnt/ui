@@ -173,8 +173,40 @@ function buildRevealPlan(
   return revealPlan;
 }
 
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+/** Progress past every reveal step, so all segments show their final glyph. */
+const COMPLETE = Number.POSITIVE_INFINITY;
+
+function subscribeReducedMotion(onChange: () => void): () => void {
+  const query =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia(REDUCED_MOTION_QUERY)
+      : undefined;
+  query?.addEventListener("change", onChange);
+  return () => {
+    query?.removeEventListener("change", onChange);
+  };
+}
+
+function getReducedMotion(): boolean {
+  return (
+    typeof window.matchMedia === "function" &&
+    window.matchMedia(REDUCED_MOTION_QUERY).matches
+  );
+}
+
+/** Whether the user asks for reduced motion; `false` on the server. */
+function usePrefersReducedMotion(): boolean {
+  return React.useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotion,
+    () => false,
+  );
+}
+
 function useRevealProgress(active: boolean, length: number, stagger: number) {
-  const [progress, setProgress] = React.useState(() => (active ? 0 : length));
+  const [progress, setProgress] = React.useState(() => (active ? 0 : COMPLETE));
   const [revealKey, setRevealKey] = React.useState({ active, length, stagger });
 
   if (
@@ -183,7 +215,7 @@ function useRevealProgress(active: boolean, length: number, stagger: number) {
     revealKey.stagger !== stagger
   ) {
     setRevealKey({ active, length, stagger });
-    setProgress(active ? 0 : length);
+    setProgress(active ? 0 : COMPLETE);
   }
 
   React.useEffect(() => {
@@ -314,6 +346,8 @@ function useAnimatedTextFrames({
   variant: AnimatedTextVariant;
 }): SegmentFrame[] {
   const isOldSchool = variant !== "reveal";
+  const reducedMotion = usePrefersReducedMotion();
+  const animate = isOldSchool && !reducedMotion;
   const revealPlan = React.useMemo(
     () =>
       isOldSchool
@@ -321,9 +355,9 @@ function useAnimatedTextFrames({
         : Array.from({ length: segments.length }, (_, index) => index),
     [direction, isOldSchool, randomness, segments.length],
   );
-  const progress = useRevealProgress(isOldSchool, segments.length, stagger);
+  const progress = useRevealProgress(animate, segments.length, stagger);
   const matrixFrame = useMatrixFrame({
-    active: variant === "matrix" || variant === "decipher",
+    active: animate && (variant === "matrix" || variant === "decipher"),
     progress,
     randomCharacters,
     revealPlan,
@@ -360,7 +394,7 @@ function getSegmentClasses(
   isRevealed: boolean,
 ): string {
   if (variant === "reveal") {
-    return "inline-block whitespace-pre opacity-0 [animation-duration:var(--vllnt-animated-text-duration)] [animation-fill-mode:forwards] [animation-name:vllnt-animated-text-reveal] [animation-timing-function:cubic-bezier(0.16,1,0.3,1)]";
+    return "inline-block whitespace-pre opacity-0 [animation-duration:var(--vllnt-animated-text-duration)] [animation-fill-mode:forwards] [animation-name:vllnt-animated-text-reveal] [animation-timing-function:cubic-bezier(0.16,1,0.3,1)] motion-reduce:animate-none motion-reduce:opacity-100";
   }
 
   if (variant === "matrix" || variant === "decipher") {
@@ -396,7 +430,7 @@ function AnimatedTextCursor({
     <span
       aria-hidden="true"
       className={cn(
-        "ml-0.5 inline-block whitespace-pre font-mono [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite]",
+        "ml-0.5 inline-block whitespace-pre font-mono [animation:vllnt-terminal-cursor-blink_1s_steps(1,end)_infinite] motion-reduce:animate-none",
         cursorToneClass,
       )}
     >
@@ -446,7 +480,6 @@ export const AnimatedText = ({
 
   return (
     <p
-      aria-label={text}
       className={cn(getContainerClasses(variant), className)}
       ref={ref}
       style={{
@@ -454,6 +487,7 @@ export const AnimatedText = ({
       }}
       {...props}
     >
+      <span className="sr-only">{text}</span>
       {segmentFrames.map((segmentFrame) => (
         <span
           aria-hidden="true"

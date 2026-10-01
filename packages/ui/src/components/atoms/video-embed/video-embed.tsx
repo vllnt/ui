@@ -8,6 +8,8 @@ import { cn } from "../../../lib/utils";
 
 export type VideoEmbedProps = {
   aspectRatio?: "1/1" | "4/3" | "16/9";
+  /** Accessible name of the play button. Defaults to `"Play video: <title>"`. */
+  playLabel?: string;
   src: string;
   thumbnail?: string;
   title: string;
@@ -31,6 +33,7 @@ function getEmbedUrl(source: string, type: string): string {
 
 export function VideoEmbed({
   aspectRatio = "16/9",
+  playLabel,
   src,
   thumbnail,
   title,
@@ -64,6 +67,7 @@ export function VideoEmbed({
           />
         ) : (
           <button
+            aria-label={playLabel ?? `Play video: ${title}`}
             className="absolute inset-0 w-full h-full flex items-center justify-center group"
             onClick={() => {
               setIsPlaying(true);

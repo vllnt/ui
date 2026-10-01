@@ -74,8 +74,8 @@ function WatchlistRow({ item }: { item: WatchlistItem }): React.JSX.Element {
         className={cn(
           "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-medium tabular-nums",
           isPositive
-            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-            : "border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400",
+            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+            : "border-rose-500/30 bg-rose-500/10 text-rose-700 dark:text-rose-400",
         )}
       >
         <TrendIcon className="size-3" />
@@ -121,11 +121,11 @@ export const Watchlist = ({
           </Heading>
         </div>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-emerald-600 dark:text-emerald-400">
+          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-emerald-700 dark:text-emerald-400">
             <ArrowUpRight className="size-3" />
             {advancing} up
           </span>
-          <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-1 text-rose-600 dark:text-rose-400">
+          <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-1 text-rose-700 dark:text-rose-400">
             <ArrowDownRight className="size-3" />
             {declining} down
           </span>

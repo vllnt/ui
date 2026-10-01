@@ -35,6 +35,18 @@ const TEXT_PAIRS: readonly Pair[] = [
   ["destructive", "muted"],
 ];
 
+const CODE_TOKENS = [
+  "text",
+  "comment",
+  "keyword",
+  "string",
+  "function",
+  "number",
+  "class",
+  "variable",
+  "operator",
+] as const;
+
 const BOUNDARY_PAIRS: readonly Pair[] = [
   ["input", "background"],
   ["input", "card"],
@@ -60,10 +72,22 @@ function block(css: string, selector: string): Palette {
   return declarations(css.slice(start, css.indexOf("}", start)));
 }
 
+/** CodeBlock `--vllnt-code-*` defaults from the shipped styles.css. */
+function codeDefaults(mode: Mode): Palette {
+  const css = readFileSync(join(THEMES_DIR, "..", "styles.css"), "utf8");
+  const selector = mode === "light" ? ":root" : ".dark";
+  const start = css.indexOf(`\n${selector} {\n  --vllnt-code-`);
+  if (start === -1) throw new Error(`Missing CodeBlock tokens for ${mode}`);
+  return declarations(css.slice(start, css.indexOf("}", start)));
+}
+
 /** Resolve the cascade: base mode, then the preset, then the preset's `.dark`. */
 function palette(preset: string, mode: Mode): Palette {
   const base = readTheme("default.css");
-  const own = block(base, mode === "light" ? ":root" : ".dark");
+  const own = {
+    ...codeDefaults(mode),
+    ...block(base, mode === "light" ? ":root" : ".dark"),
+  };
   if (preset === "default") return own;
   const presets = readTheme("presets.css");
   const selector = `html[data-theme="${preset}"]`;
@@ -159,6 +183,13 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
         tenPercentTint(destructive, token(colors, "background")),
       ),
     ).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("keeps CodeBlock syntax tokens at 4.5:1 on the background", () => {
+    const pairs = CODE_TOKENS.map(
+      (name) => [`vllnt-code-${name}`, "background"] as const,
+    );
+    expect(failures(colors, pairs, 4.5)).toEqual([]);
   });
 
   it("keeps control boundaries and the focus ring at 3:1", () => {

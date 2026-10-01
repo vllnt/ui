@@ -4,7 +4,10 @@ import * as React from "react";
 
 import { cn } from "../../../lib/utils";
 
-/** Props for {@link ScrollProgress}. */
+/**
+ * Props for {@link ScrollProgress}. The progressbar takes the name
+ * `"Reading progress"` unless you pass `aria-label` or `aria-labelledby`.
+ */
 export type ScrollProgressProps = React.ComponentPropsWithoutRef<"div">;
 
 function computeProgress(): number {
@@ -57,6 +60,7 @@ export const ScrollProgress = ({
 
   return (
     <div
+      aria-label={props["aria-labelledby"] ? undefined : "Reading progress"}
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={Math.round(progress)}

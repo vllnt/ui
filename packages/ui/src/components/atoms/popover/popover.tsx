@@ -10,6 +10,10 @@ const PopoverTrigger = PopoverPrimitive.Trigger;
 
 const PopoverAnchor = PopoverPrimitive.Anchor;
 
+/**
+ * Popover panel. Radix renders it as `role="dialog"`, so give it an accessible
+ * name with `aria-label` or `aria-labelledby` (WAI-ARIA dialog pattern).
+ */
 const PopoverContent = ({
   align = "center",
   className,

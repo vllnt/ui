@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { Marquee } from "./marquee";
@@ -31,5 +31,60 @@ describe("Marquee", () => {
       </Marquee>,
     );
     expect(container.querySelector("[style*='10s']")).toBeTruthy();
+  });
+
+  it("keeps the animation name out of inline styles so motion-reduce:animate-none can stop it", () => {
+    const { container } = render(
+      <Marquee>
+        <span>One</span>
+      </Marquee>,
+    );
+    const track = container.querySelector<HTMLElement>("[data-marquee-track]");
+    expect(track?.getAttribute("style") ?? "").not.toMatch(
+      /animation(-name)?:/,
+    );
+    expect(track).toHaveClass("motion-reduce:animate-none");
+    expect(track).toHaveClass("focus-within:[animation-play-state:paused]");
+  });
+
+  it("offers a keyboard-operable pause control that stops the scroll (WCAG 2.2.2)", () => {
+    const { container } = render(
+      <Marquee>
+        <span>One</span>
+      </Marquee>,
+    );
+    const track = container.querySelector<HTMLElement>("[data-marquee-track]");
+    const pause = screen.getByRole("button", { name: "Pause" });
+    expect(track).not.toHaveClass("[animation-play-state:paused]");
+    fireEvent.click(pause);
+    expect(track).toHaveClass("[animation-play-state:paused]");
+    fireEvent.click(screen.getByRole("button", { name: "Play" }));
+    expect(track).not.toHaveClass("[animation-play-state:paused]");
+  });
+
+  it("localizes the pause control and lets hosts opt out of it", () => {
+    const { rerender } = render(
+      <Marquee labels={{ pause: "Pausar", play: "Reproducir" }}>
+        <span>One</span>
+      </Marquee>,
+    );
+    expect(screen.getByRole("button", { name: "Pausar" })).toBeInTheDocument();
+    rerender(
+      <Marquee pauseControl={false}>
+        <span>One</span>
+      </Marquee>,
+    );
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+});
+
+describe("Marquee root", () => {
+  it("clips its content at the root so consumer sizing still crops the track", () => {
+    const { container } = render(
+      <Marquee className="h-8">
+        <span>One</span>
+      </Marquee>,
+    );
+    expect(container.firstChild).toHaveClass("overflow-hidden", "h-8");
   });
 });

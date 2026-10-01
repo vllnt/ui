@@ -63,7 +63,7 @@ const Grid = (props: { entries: PropertyEntry[] }): React.ReactElement => (
         >
           <span>{entry.label}</span>
           {entry.sublabel ? (
-            <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70">
+            <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
               {entry.sublabel}
             </span>
           ) : null}

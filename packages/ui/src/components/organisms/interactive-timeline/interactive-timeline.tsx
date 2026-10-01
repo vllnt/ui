@@ -44,19 +44,19 @@ const COLOR_PALETTE: Record<
   amber: {
     bar: "bg-amber-500/80",
     chip: "border-amber-400 text-amber-700 dark:text-amber-300",
-    chipActive: "bg-amber-500 text-white border-amber-500",
+    chipActive: "bg-amber-700 text-white border-amber-700",
     dot: "border-amber-500 bg-amber-500",
   },
   blue: {
     bar: "bg-blue-500/80",
     chip: "border-blue-400 text-blue-700 dark:text-blue-300",
-    chipActive: "bg-blue-500 text-white border-blue-500",
+    chipActive: "bg-blue-700 text-white border-blue-700",
     dot: "border-blue-500 bg-blue-500",
   },
   emerald: {
     bar: "bg-emerald-500/80",
     chip: "border-emerald-400 text-emerald-700 dark:text-emerald-300",
-    chipActive: "bg-emerald-500 text-white border-emerald-500",
+    chipActive: "bg-emerald-700 text-white border-emerald-700",
     dot: "border-emerald-500 bg-emerald-500",
   },
   neutral: {
@@ -68,19 +68,19 @@ const COLOR_PALETTE: Record<
   purple: {
     bar: "bg-purple-500/80",
     chip: "border-purple-400 text-purple-700 dark:text-purple-300",
-    chipActive: "bg-purple-500 text-white border-purple-500",
+    chipActive: "bg-purple-700 text-white border-purple-700",
     dot: "border-purple-500 bg-purple-500",
   },
   red: {
     bar: "bg-red-500/80",
     chip: "border-red-400 text-red-700 dark:text-red-300",
-    chipActive: "bg-red-500 text-white border-red-500",
+    chipActive: "bg-red-700 text-white border-red-700",
     dot: "border-red-500 bg-red-500",
   },
   rose: {
     bar: "bg-rose-500/80",
     chip: "border-rose-400 text-rose-700 dark:text-rose-300",
-    chipActive: "bg-rose-500 text-white border-rose-500",
+    chipActive: "bg-rose-700 text-white border-rose-700",
     dot: "border-rose-500 bg-rose-500",
   },
 };

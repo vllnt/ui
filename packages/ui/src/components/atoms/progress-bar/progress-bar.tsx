@@ -37,8 +37,8 @@ export function ProgressBar({
         <div className="flex items-center justify-between mb-2 h-5">
           {isLoading ? (
             <>
-              <span className="h-5 w-16 bg-muted rounded animate-pulse" />
-              <span className="h-5 w-24 bg-muted rounded animate-pulse" />
+              <span className="h-5 w-16 bg-muted rounded animate-pulse motion-reduce:animate-none" />
+              <span className="h-5 w-24 bg-muted rounded animate-pulse motion-reduce:animate-none" />
             </>
           ) : (
             <>

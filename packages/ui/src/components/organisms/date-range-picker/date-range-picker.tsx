@@ -5,6 +5,7 @@ import * as React from "react";
 import { CalendarIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 
+import { focusCalendarDay } from "../../../lib/focus-calendar-day";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -40,6 +41,8 @@ export type DateRangePickerProps = {
   numberOfMonths?: number;
   onValueChange?: (range?: DateRange) => void;
   placeholder?: string;
+  /** Accessible name of the calendar popover dialog. Defaults to "Choose date range". */
+  popoverLabel?: string;
   value?: DateRange;
 };
 
@@ -50,6 +53,7 @@ const DateRangePicker = ({
   numberOfMonths = 2,
   onValueChange,
   placeholder = "Pick a date range",
+  popoverLabel = "Choose date range",
   ref,
   value,
 }: DateRangePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
@@ -79,12 +83,18 @@ const DateRangePicker = ({
           ref={ref}
           variant="outline"
         >
-          <CalendarIcon className="mr-2 size-4" />
+          <CalendarIcon aria-hidden="true" className="mr-2 size-4" />
           {label ?? placeholder}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className={cn("w-auto p-0", className)}>
+      <PopoverContent
+        align="start"
+        aria-label={popoverLabel}
+        className={cn("w-auto p-0", className)}
+        onOpenAutoFocus={focusCalendarDay}
+      >
         <Calendar
+          defaultMonth={selected?.from}
           mode="range"
           numberOfMonths={numberOfMonths}
           onSelect={handleSelect}

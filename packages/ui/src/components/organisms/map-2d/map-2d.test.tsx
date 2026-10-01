@@ -32,6 +32,17 @@ describe("Map2D", () => {
     const image = container.querySelector("image");
     expect(image).toHaveAttribute("href", "/world.svg");
     expect(image).toHaveAttribute("aria-label", "World map");
+    expect(image).toHaveAttribute("role", "img");
+  });
+
+  it("hides an unlabelled backdrop from assistive technology", () => {
+    const { container } = render(
+      <Map2D backdrop="/world.svg" center={[0, 0]} />,
+    );
+    expect(container.querySelector("image")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
   });
 
   it("renders a marker button per MapMarker child and fires onSelect on click", () => {

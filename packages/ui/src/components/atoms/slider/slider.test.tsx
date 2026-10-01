@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { Slider } from "./slider";
@@ -35,5 +35,26 @@ describe("Slider", () => {
       <Slider className="extra" defaultValue={[40]} max={100} step={1} />,
     );
     expect(container.firstChild).toHaveClass("extra");
+  });
+
+  it("names the thumb from aria-label and aria-labelledby", () => {
+    const { rerender } = render(
+      <Slider aria-label="Volume" defaultValue={[40]} max={100} step={1} />,
+    );
+    expect(screen.getByRole("slider", { name: "Volume" })).toBeInTheDocument();
+    rerender(
+      <>
+        <span id="slider-label">Brightness</span>
+        <Slider
+          aria-labelledby="slider-label"
+          defaultValue={[40]}
+          max={100}
+          step={1}
+        />
+      </>,
+    );
+    expect(
+      screen.getByRole("slider", { name: "Brightness" }),
+    ).toBeInTheDocument();
   });
 });

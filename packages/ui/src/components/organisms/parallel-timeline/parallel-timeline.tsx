@@ -395,10 +395,11 @@ export const ParallelTimeline = ({
     <section
       aria-label={resolvedLabels.region}
       className={cn(
-        "flex w-full flex-col overflow-x-auto rounded-2xl border bg-background text-foreground",
+        "flex w-full flex-col overflow-x-auto rounded-2xl border bg-background text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className,
       )}
       ref={ref}
+      tabIndex={0}
       {...rest}
     >
       <div className="flex items-stretch gap-3 border-b border-border">

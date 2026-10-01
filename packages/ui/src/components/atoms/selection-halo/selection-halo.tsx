@@ -22,7 +22,7 @@ export type SelectionBounds = {
  * @public
  */
 export type SelectionHaloLabels = {
-  /** Aria-label for the halo. Defaults to `"Selection"`. */
+  /** Accessible name of the halo (`role="group"`). Defaults to `"Selection"`. */
   region?: string;
 };
 
@@ -73,13 +73,14 @@ export const SelectionHalo = ({
     <div
       aria-label={resolvedLabels.region}
       className={cn(
-        "pointer-events-none absolute z-20 rounded-md ring-2 ring-primary",
-        pulsing ? "animate-pulse" : "",
+        "pointer-events-none absolute z-20 rounded-md",
+        pulsing ? "" : "ring-2 ring-primary",
         className,
       )}
       data-pulsing={pulsing ? "true" : undefined}
       data-selection-halo
       ref={ref}
+      role="group"
       style={{
         height: `${bounds.height.toString()}px`,
         left: `${bounds.x.toString()}px`,
@@ -88,6 +89,12 @@ export const SelectionHalo = ({
       }}
       {...rest}
     >
+      {pulsing ? (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-md ring-2 ring-primary animate-pulse motion-reduce:animate-none"
+        />
+      ) : null}
       {(["nw", "ne", "se", "sw"] as const).map((corner) => (
         <span
           aria-hidden="true"

@@ -393,10 +393,11 @@ export const ConversationMessages = ({
       <div
         aria-label="Conversation messages"
         aria-live="polite"
-        className="absolute inset-0 overflow-y-auto"
+        className="absolute inset-0 overflow-y-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         onScroll={handleScroll}
         ref={scrollContainerRef}
         role="log"
+        tabIndex={0}
       >
         <div className="flex flex-col p-4">
           {messages.map((message) => (
@@ -518,14 +519,14 @@ export const ConversationLoading = ({
       role="status"
     >
       <span
-        className="size-2 animate-pulse rounded-full bg-muted-foreground"
+        className="size-2 animate-pulse rounded-full bg-muted-foreground motion-reduce:animate-none"
         style={{ animationDelay: "-0.3s" }}
       />
       <span
-        className="size-2 animate-pulse rounded-full bg-muted-foreground"
+        className="size-2 animate-pulse rounded-full bg-muted-foreground motion-reduce:animate-none"
         style={{ animationDelay: "-0.15s" }}
       />
-      <span className="size-2 animate-pulse rounded-full bg-muted-foreground" />
+      <span className="size-2 animate-pulse rounded-full bg-muted-foreground motion-reduce:animate-none" />
     </div>
   );
 };

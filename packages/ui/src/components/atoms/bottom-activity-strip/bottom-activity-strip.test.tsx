@@ -54,3 +54,10 @@ describe("BottomActivityStrip", () => {
     ).not.toBeInTheDocument();
   });
 });
+
+describe("BottomActivityStrip keyboard access", () => {
+  it("lets keyboard users focus the horizontally scrolling region", () => {
+    render(<BottomActivityStrip events={[]} />);
+    expect(screen.getByRole("region")).toHaveAttribute("tabindex", "0");
+  });
+});

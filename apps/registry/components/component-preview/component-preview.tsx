@@ -595,6 +595,7 @@ function ComboboxPreview() {
   return (
     <div className="w-full max-w-sm">
       <Combobox
+        aria-label="Framework"
         options={[
           { label: "Next.js", value: "next.js" },
           { label: "React", value: "react" },
@@ -630,7 +631,7 @@ function FileUploadPreview() {
 function NumberInputPreview() {
   return (
     <div className="w-full max-w-xs">
-      <NumberInput defaultValue={2} min={0} />
+      <NumberInput aria-label="Quantity" defaultValue={2} min={0} />
     </div>
   );
 }
@@ -869,6 +870,7 @@ function MultiSelectPreview() {
   return (
     <div className="w-full max-w-sm">
       <MultiSelect
+        aria-label="Frameworks"
         defaultValue={["react", "vue"]}
         options={[
           { label: "React", value: "react" },
@@ -1107,6 +1109,7 @@ function InlineInputPreview() {
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">Click the input to edit:</p>
       <InlineInput
+        aria-label="Title"
         onChange={setValue}
         onCommit={(v) => {
           setValue(v);
@@ -1505,7 +1508,7 @@ function TextareaPreview() {
 function SelectPreview() {
   return (
     <Select>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger aria-label="Fruit" className="w-[180px]">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
@@ -1539,7 +1542,7 @@ function RadioGroupPreview() {
 function SliderPreview() {
   return (
     <div className="w-full max-w-sm">
-      <Slider defaultValue={[50]} max={100} step={1} />
+      <Slider aria-label="Volume" defaultValue={[50]} max={100} step={1} />
     </div>
   );
 }
@@ -1578,7 +1581,7 @@ function ToggleGroupPreview() {
 
 function InputOTPPreview() {
   return (
-    <InputOTP maxLength={6}>
+    <InputOTP aria-label="One-time code" maxLength={6}>
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -1786,7 +1789,10 @@ function HoverCardPreview() {
 function ContextMenuPreview() {
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+      <ContextMenuTrigger
+        className="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        tabIndex={0}
+      >
         Right click here
       </ContextMenuTrigger>
       <ContextMenuContent className="w-48">
@@ -1829,7 +1835,7 @@ function NavigationMenuPreview() {
           <NavigationMenuTrigger>Getting Started</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="p-4 w-[200px]">
-              <NavigationMenuLink className="text-sm">
+              <NavigationMenuLink className="text-sm" href="#introduction">
                 Introduction
               </NavigationMenuLink>
             </div>
@@ -1839,7 +1845,7 @@ function NavigationMenuPreview() {
           <NavigationMenuTrigger>Components</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="p-4 w-[200px]">
-              <NavigationMenuLink className="text-sm">
+              <NavigationMenuLink className="text-sm" href="#components">
                 View all
               </NavigationMenuLink>
             </div>

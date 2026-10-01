@@ -194,3 +194,21 @@ describe("AIArtifact", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("AIArtifactContent keyboard access", () => {
+  it("lets keyboard users focus and scroll the payload", () => {
+    render(<AIArtifactContent data-testid="payload">body</AIArtifactContent>);
+    expect(screen.getByTestId("payload")).toHaveAttribute("tabindex", "0");
+  });
+});
+
+describe("AIArtifactContent label", () => {
+  it("takes its region name from the artifact labels", () => {
+    render(
+      <AIArtifact labels={{ content: "Contenu" }} title="Doc" value="">
+        <AIArtifactContent>body</AIArtifactContent>
+      </AIArtifact>,
+    );
+    expect(screen.getByRole("region", { name: "Contenu" })).toBeInTheDocument();
+  });
+});

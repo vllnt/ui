@@ -94,6 +94,35 @@
   }
 }
 
+/* CodeBlock syntax colours as OKLCH channels ("L C H"), consumed as
+   oklch(var(--vllnt-code-*)). Each token keeps WCAG AA (4.5:1) on the
+   --background of the default theme and of every preset in themes/presets.css,
+   in light and dark (src/lib/theme-contrast.test.ts). A preset or custom theme
+   can override any --vllnt-code-* variable. */
+:root {
+  --vllnt-code-text: 0.3496 0.0141 274.5;
+  --vllnt-code-comment: 0.521 0.0234 264.4;
+  --vllnt-code-keyword: 0.5236 0.211 328.8;
+  --vllnt-code-string: 0.5084 0.1347 144.2;
+  --vllnt-code-function: 0.4882 0.2172 264.4;
+  --vllnt-code-number: 0.5237 0.1156 76.9;
+  --vllnt-code-class: 0.5078 0.108 73.3;
+  --vllnt-code-variable: 0.5003 0.1821 29.5;
+  --vllnt-code-operator: 0.3496 0.0141 274.5;
+}
+
+.dark {
+  --vllnt-code-text: 0.7621 0.0202 263;
+  --vllnt-code-comment: 0.6981 0.0196 261.3;
+  --vllnt-code-keyword: 0.7186 0.1635 318.2;
+  --vllnt-code-string: 0.7683 0.1103 133;
+  --vllnt-code-function: 0.7304 0.1213 245.3;
+  --vllnt-code-number: 0.7273 0.0949 63.8;
+  --vllnt-code-class: 0.8249 0.097 82.3;
+  --vllnt-code-variable: 0.7159 0.1448 17;
+  --vllnt-code-operator: 0.7621 0.0202 263;
+}
+
 /* Safe area utilities for notched/rounded devices (iPhone, etc.) */
 @layer utilities {
   @keyframes vllnt-marquee-x {

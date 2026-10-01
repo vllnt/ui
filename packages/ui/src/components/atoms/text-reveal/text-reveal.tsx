@@ -76,14 +76,24 @@ function useScrollProgress(
   return progress;
 }
 
-function wordOpacity(progress: number, total: number, index: number): number {
-  return Math.min(Math.max(progress * total - index, 0.2), 1);
+function wordReveal(progress: number, total: number, index: number): number {
+  return Math.min(Math.max(progress * total - index, 0), 1);
+}
+
+/**
+ * Word colour between `--muted-foreground` (unrevealed) and `--foreground`
+ * (revealed), so every step keeps at least the muted-text contrast.
+ */
+function wordColor(reveal: number): string {
+  return `color-mix(in oklab, oklch(var(--foreground)) ${Math.round(reveal * 100).toString()}%, oklch(var(--muted-foreground)))`;
 }
 
 /**
  * Brightens each word in turn as the block scrolls through the viewport.
+ * Unrevealed words use the muted text colour, so they stay readable, and
+ * assistive technology reads the full sentence once.
  *
- * Respects `prefers-reduced-motion`: every word stays full opacity.
+ * Respects `prefers-reduced-motion`: every word shows at full colour.
  *
  * @example
  * ```tsx
@@ -103,7 +113,6 @@ export const TextReveal = ({
 
   return (
     <div
-      aria-label={children}
       className={cn("flex flex-wrap gap-x-[0.25em]", className)}
       ref={(node) => {
         nodeRef.current = node;
@@ -115,12 +124,15 @@ export const TextReveal = ({
       }}
       {...props}
     >
+      <span className="sr-only">{children}</span>
       {words.map((word, index) => (
         <span
           aria-hidden="true"
-          className="text-foreground transition-opacity duration-300"
+          className="transition-colors duration-300"
           key={`${word}-${index}`}
-          style={{ opacity: wordOpacity(progress, words.length, index) }}
+          style={{
+            color: wordColor(wordReveal(progress, words.length, index)),
+          }}
         >
           {word}
         </span>

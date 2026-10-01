@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Children,
   type ComponentPropsWithoutRef,
   createContext,
   type ReactNode,
@@ -435,14 +436,9 @@ type EventListProps = {
 };
 
 function EventList({ activeId, children }: EventListProps): ReactNode {
-  if (!Array.isArray(children)) {
-    return (
-      <ol className="relative flex flex-col px-4 pb-6 md:px-6">{children}</ol>
-    );
-  }
   return (
     <ol className="relative flex flex-col px-4 pb-6 md:px-6">
-      {children.map((child, index) => (
+      {Children.toArray(children).map((child, index) => (
         <li
           className="group block list-none"
           data-active={

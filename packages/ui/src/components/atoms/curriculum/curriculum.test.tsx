@@ -171,3 +171,21 @@ describe("CurriculumLesson", () => {
     expect(screen.getByText("HTML Basics")).toHaveClass("line-through");
   });
 });
+
+describe("Curriculum accessible names", () => {
+  it("names the module list as a group and exposes prerequisites as text", () => {
+    render(
+      inModule(
+        <CurriculumLesson
+          id="lesson-1"
+          prerequisites={["html-basics", "css-layout"]}
+          title="Flexbox"
+        />,
+      ),
+    );
+    expect(screen.getByRole("group", { name: "Course" })).toBeInTheDocument();
+    expect(
+      screen.getByText("Requires: html-basics, css-layout"),
+    ).toBeInTheDocument();
+  });
+});

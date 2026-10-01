@@ -1,4 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { useState } from "react";
+
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { ShareDialog, type SharePlatform } from "./share-dialog";
@@ -45,5 +47,36 @@ describe("ShareDialog", () => {
     expect(screen.getByText("Send")).toBeInTheDocument();
     expect(screen.getByText("Share this run")).toBeInTheDocument();
     expect(screen.getByText("Get link")).toBeInTheDocument();
+  });
+});
+
+function ControlledShare() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        onClick={() => {
+          setOpen(true);
+        }}
+        type="button"
+      >
+        Share page
+      </button>
+      <ShareDialog onOpenChange={setOpen} open={open} platforms={platforms} />
+    </>
+  );
+}
+
+describe("ShareDialog focus return", () => {
+  it("returns focus to the external opener after Escape", async () => {
+    render(<ControlledShare />);
+    const opener = screen.getByRole("button", { name: "Share page" });
+    opener.focus();
+    fireEvent.click(opener);
+    const dialog = await screen.findByRole("dialog");
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    await waitFor(() => {
+      expect(opener).toHaveFocus();
+    });
   });
 });

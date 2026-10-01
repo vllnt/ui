@@ -170,7 +170,11 @@ function SubmitButton({
   if (status === "sending") {
     content = (
       <>
-        <Loader2 aria-hidden="true" className="mr-2 size-4 animate-spin" />
+        <Loader2
+          aria-hidden="true"
+          className="mr-2 size-4 animate-spin motion-reduce:[animation-duration:1.5s]"
+          data-motion="essential"
+        />
         {labels.sending}
       </>
     );

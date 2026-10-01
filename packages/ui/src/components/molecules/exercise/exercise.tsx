@@ -10,9 +10,9 @@ import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 
 const difficultyConfig = {
-  easy: { className: "text-green-600 dark:text-green-400", label: "Easy" },
-  hard: { className: "text-red-600 dark:text-red-400", label: "Hard" },
-  medium: { className: "text-amber-600 dark:text-amber-400", label: "Medium" },
+  easy: { className: "text-green-800 dark:text-green-400", label: "Easy" },
+  hard: { className: "text-red-700 dark:text-red-400", label: "Hard" },
+  medium: { className: "text-amber-800 dark:text-amber-400", label: "Medium" },
 };
 
 type HeaderProps = {

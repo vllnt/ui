@@ -13,4 +13,19 @@ describe("Skeleton", () => {
     const { container } = render(<Skeleton />);
     expect(container.firstChild).toBeVisible();
   });
+
+  it("stops its infinite pulse under prefers-reduced-motion", () => {
+    const { container } = render(<Skeleton />);
+    const pulsing = [
+      ...container.querySelectorAll(
+        '[class*="animate-p"], [class*="animate-spin"]',
+      ),
+    ];
+    expect(pulsing.length).toBeGreaterThan(0);
+    pulsing.forEach((element) => {
+      expect(element.getAttribute("class")).toContain(
+        "motion-reduce:animate-none",
+      );
+    });
+  });
 });

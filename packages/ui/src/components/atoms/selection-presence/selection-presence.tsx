@@ -99,7 +99,9 @@ export const SelectionPresence = ({
         <span
           className="absolute -top-5 left-0 inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm"
           data-selection-presence-chip
-          style={{ backgroundColor: accent }}
+          style={{
+            backgroundColor: `color-mix(in oklab, ${accent} 55%, oklch(0 0 0))`,
+          }}
         >
           {name}
         </span>

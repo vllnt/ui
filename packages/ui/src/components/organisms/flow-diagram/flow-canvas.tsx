@@ -39,6 +39,9 @@ type FlowCanvasProps = {
 };
 
 const REACT_FLOW_CLASS = [
+  "[--xy-node-background-color:oklch(var(--card))]",
+  "[--xy-node-color:oklch(var(--card-foreground))]",
+  "[--xy-node-border:1px_solid_oklch(var(--border))]",
   // Node container styling — no !important on bg/color so inline styles take precedence
   "[&_.react-flow__node]:rounded-md",
   "[&_.react-flow__node]:border",

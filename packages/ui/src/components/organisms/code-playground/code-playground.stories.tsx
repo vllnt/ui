@@ -1,3 +1,4 @@
+// manual
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { CodePlayground } from "./code-playground";
@@ -5,6 +6,12 @@ import { CodePlayground } from "./code-playground";
 const headingTagOptions = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
 const meta = {
+  args: {
+    children: "const greeting = 'Hello';\nconsole.log(greeting);",
+    filename: "greeting.ts",
+    language: "typescript",
+    title: "Log a greeting",
+  },
   argTypes: {
     as: {
       control: "select",

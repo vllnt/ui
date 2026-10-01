@@ -34,4 +34,19 @@ describe("HandoffBeacon", () => {
     expect(container.querySelector("[data-handoff-card]")).toBeInTheDocument();
     expect(screen.getByText("Schema mismatch")).toBeInTheDocument();
   });
+
+  it("stops its infinite pulse under prefers-reduced-motion", () => {
+    const { container } = render(<HandoffBeacon level="urgent" x={0} y={0} />);
+    const pulsing = [
+      ...container.querySelectorAll(
+        '[class*="animate-p"], [class*="animate-spin"]',
+      ),
+    ];
+    expect(pulsing.length).toBeGreaterThan(0);
+    pulsing.forEach((element) => {
+      expect(element.getAttribute("class")).toContain(
+        "motion-reduce:animate-none",
+      );
+    });
+  });
 });

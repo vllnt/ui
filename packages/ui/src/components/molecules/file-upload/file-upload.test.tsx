@@ -26,3 +26,14 @@ describe("FileUpload", () => {
     expect(screen.getByText("avatar.png")).toBeVisible();
   });
 });
+
+describe("FileUpload keyboard semantics", () => {
+  it("has one keyboard control, the native file input, inside a label dropzone", () => {
+    const { container } = render(<FileUpload />);
+    const input = screen.getByLabelText("Choose files", { selector: "input" });
+    expect(input).not.toHaveAttribute("tabindex", "-1");
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(container.querySelector("[tabindex='0']")).toBeNull();
+    expect(input.closest("label")).not.toBeNull();
+  });
+});

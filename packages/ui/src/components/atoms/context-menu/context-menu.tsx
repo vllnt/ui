@@ -7,6 +7,12 @@ import { cn } from "../../../lib/utils";
 
 const ContextMenu = ContextMenuPrimitive.Root;
 
+/**
+ * Region that opens the menu on right-click. Keyboard users open it with
+ * Shift+F10 or the ContextMenu key while the region has focus, so make the
+ * region focusable (`tabIndex={0}`) with a visible focus style, or offer the
+ * same actions through another control (WAI-ARIA APG menu pattern).
+ */
 const ContextMenuTrigger = ContextMenuPrimitive.Trigger;
 
 const ContextMenuGroup = ContextMenuPrimitive.Group;

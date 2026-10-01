@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
@@ -94,5 +94,127 @@ describe("Tabs", () => {
       "aria-labelledby",
       "tab-a",
     );
+  });
+});
+
+const THREE_TABS_DEFAULT: { defaultValue?: string } = { defaultValue: "a" };
+
+describe("Tabs keyboard (WAI-ARIA APG tabs pattern)", () => {
+  function renderThree(props: { defaultValue?: string } = THREE_TABS_DEFAULT) {
+    render(
+      <Tabs {...props}>
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+          <TabsTrigger value="c">C</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+        <TabsContent value="c">Panel C</TabsContent>
+      </Tabs>,
+    );
+    return {
+      a: screen.getByRole("tab", { name: "A" }),
+      b: screen.getByRole("tab", { name: "B" }),
+      c: screen.getByRole("tab", { name: "C" }),
+    };
+  }
+
+  it("keeps a single tab stop on the active tab", () => {
+    const { a, b, c } = renderThree();
+    expect(a).toHaveAttribute("tabindex", "0");
+    expect(b).toHaveAttribute("tabindex", "-1");
+    expect(c).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("makes the first tab the tab stop when no tab is active", () => {
+    const { a, b } = renderThree({});
+    expect(a).toHaveAttribute("tabindex", "0");
+    expect(b).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("moves focus and activates with ArrowRight / ArrowLeft, wrapping", () => {
+    const { a, b, c } = renderThree();
+    a.focus();
+    fireEvent.keyDown(a, { key: "ArrowRight" });
+    expect(b).toHaveFocus();
+    expect(screen.getByText("Panel B")).toBeInTheDocument();
+    expect(b).toHaveAttribute("tabindex", "0");
+    expect(a).toHaveAttribute("tabindex", "-1");
+    fireEvent.keyDown(b, { key: "ArrowLeft" });
+    fireEvent.keyDown(a, { key: "ArrowLeft" });
+    expect(c).toHaveFocus();
+    expect(screen.getByText("Panel C")).toBeInTheDocument();
+  });
+
+  it("moves to the first and last tab with Home / End", () => {
+    const { a, b, c } = renderThree({ defaultValue: "b" });
+    b.focus();
+    fireEvent.keyDown(b, { key: "End" });
+    expect(c).toHaveFocus();
+    fireEvent.keyDown(c, { key: "Home" });
+    expect(a).toHaveFocus();
+    expect(screen.getByText("Panel A")).toBeInTheDocument();
+  });
+
+  it("links the active tab and its panel with generated ids", () => {
+    const { a } = renderThree();
+    const panel = screen.getByRole("tabpanel");
+    expect(a.id).not.toBe("");
+    expect(panel.id).not.toBe("");
+    expect(a).toHaveAttribute("aria-controls", panel.id);
+    expect(panel).toHaveAttribute("aria-labelledby", a.id);
+    expect(panel).toHaveAttribute("tabindex", "0");
+  });
+
+  it("never points aria-controls at a panel that is not rendered", () => {
+    const { b } = renderThree();
+    expect(b).not.toHaveAttribute("aria-controls");
+  });
+
+  it("defers to a consumer onKeyDown that handles the key", () => {
+    render(
+      <Tabs defaultValue="a">
+        <TabsList
+          onKeyDown={(event) => {
+            event.preventDefault();
+          }}
+        >
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+      </Tabs>,
+    );
+    const a = screen.getByRole("tab", { name: "A" });
+    a.focus();
+    fireEvent.keyDown(a, { key: "ArrowRight" });
+    expect(a).toHaveFocus();
+  });
+});
+
+describe("TabsContent tab stop (APG tabs)", () => {
+  it("is a tab stop only when it has no focusable content", async () => {
+    const { rerender } = render(
+      <Tabs defaultValue="a">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Plain text</TabsContent>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("tabindex", "0");
+    rerender(
+      <Tabs defaultValue="a">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">
+          <button type="button">Action</button>
+        </TabsContent>
+      </Tabs>,
+    );
+    await waitFor(() => {
+      expect(screen.getByRole("tabpanel")).not.toHaveAttribute("tabindex");
+    });
   });
 });

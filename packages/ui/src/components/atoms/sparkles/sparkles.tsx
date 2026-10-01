@@ -57,11 +57,11 @@ export const Sparkles = ({
       >
         {sparkles.map((sparkle, index) => (
           <span
-            className="absolute rotate-45 rounded-[1px] bg-foreground motion-reduce:animate-none"
+            className="absolute rotate-45 rounded-[1px] bg-foreground [animation-name:vllnt-sparkle] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
             key={index}
             style={{
-              animation: `vllnt-sparkle ${sparkle.duration}s linear infinite`,
               animationDelay: `${sparkle.delay}s`,
+              animationDuration: `${sparkle.duration}s`,
               height: `${sparkle.size}px`,
               left: `${sparkle.left}%`,
               top: `${sparkle.top}%`,

@@ -97,20 +97,26 @@ function TourFooter({
       >
         Previous
       </Button>
-      <div className="flex gap-2">
+      <div className="-mx-[7px] flex">
         {steps.map((step, index) => (
           <button
+            aria-current={index === currentStep ? "step" : undefined}
             aria-label={`Go to ${step.title}`}
-            className={cn(
-              "size-2.5 rounded-full transition-colors",
-              index === currentStep ? "bg-primary" : "bg-muted-foreground/30",
-            )}
+            className="flex size-6 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             key={step.id}
             onClick={() => {
               onStepSelect(index);
             }}
             type="button"
-          />
+          >
+            <span
+              aria-hidden="true"
+              className={cn(
+                "size-2.5 rounded-full transition-colors",
+                index === currentStep ? "bg-primary" : "bg-muted-foreground/30",
+              )}
+            />
+          </button>
         ))}
       </div>
       {isLastStep ? (

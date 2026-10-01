@@ -234,7 +234,7 @@ function Stage({
     <svg
       className="block h-full w-full"
       preserveAspectRatio="xMidYMid meet"
-      role="img"
+      role="group"
       viewBox={`0 0 ${VIEWBOX_WIDTH.toString()} ${VIEWBOX_HEIGHT.toString()}`}
     >
       <rect
@@ -246,10 +246,12 @@ function Stage({
       />
       {backdrop ? (
         <image
+          aria-hidden={backdropAlt ? undefined : "true"}
           aria-label={backdropAlt}
           height={VIEWBOX_HEIGHT}
           href={backdrop}
           preserveAspectRatio="xMidYMid slice"
+          role={backdropAlt ? "img" : undefined}
           width={VIEWBOX_WIDTH}
           x="0"
           y="0"

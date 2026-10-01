@@ -35,6 +35,7 @@ export function KeyConcept({
           </span>
         ) : (
           <svg
+            aria-hidden="true"
             className="size-5 text-primary flex-shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
@@ -48,12 +49,12 @@ export function KeyConcept({
             />
           </svg>
         )}
-        <div className="flex-1 min-w-0">
+        <dl className="flex-1 min-w-0">
           <dt className="font-bold text-foreground mb-1">{term}</dt>
           <dd className="text-sm text-muted-foreground [&>p]:mb-0">
             {children}
           </dd>
-        </div>
+        </dl>
       </div>
     </div>
   );
@@ -82,6 +83,7 @@ export function Glossary({
           <span className="size-4">{icon}</span>
         ) : (
           <svg
+            aria-hidden="true"
             className="size-4"
             fill="none"
             stroke="currentColor"
@@ -97,7 +99,7 @@ export function Glossary({
         )}
         {title}
       </Heading>
-      <dl className="space-y-2">{children}</dl>
+      <div className="space-y-2">{children}</div>
     </div>
   );
 }

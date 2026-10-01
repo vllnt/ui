@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useId, useReducer, useRef, useState } from "react";
 
 type TLDRSectionProps = {
   children: React.ReactNode;
@@ -18,6 +18,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
   const [showSkeleton, dispatchSkeleton] = useReducer(skeletonReducer, false);
   const hasBeenOpenedRef = useRef(false);
   const timerReference = useRef<NodeJS.Timeout | null>(null);
+  const regionId = useId();
 
   useEffect(() => {
     if (isExpanded && !hasBeenOpenedRef.current) {
@@ -59,6 +60,8 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
   return (
     <div className="my-8 rounded-lg border border-border bg-muted/30 overflow-hidden">
       <button
+        aria-controls={isExpanded ? regionId : undefined}
+        aria-expanded={isExpanded}
         className="flex items-center justify-between w-full px-4 py-3 hover:bg-muted/50 transition-colors"
         onClick={() => {
           setIsExpanded(!isExpanded);
@@ -67,6 +70,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       >
         <div className="flex items-center gap-3">
           <svg
+            aria-hidden="true"
             className="size-5 text-muted-foreground"
             fill="none"
             stroke="currentColor"
@@ -83,6 +87,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
           <span className="text-sm font-medium text-foreground">{label}</span>
         </div>
         <svg
+          aria-hidden="true"
           className={`size-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
           fill="none"
           stroke="currentColor"
@@ -98,20 +103,20 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
         </svg>
       </button>
       {isExpanded ? (
-        <div className="px-4 pb-4 pt-2 border-t border-border">
+        <div className="px-4 pb-4 pt-2 border-t border-border" id={regionId}>
           {showSkeleton ? (
             <div className="space-y-3">
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-5/6">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-4/5">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-3/4">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
             </div>
           ) : (

@@ -44,4 +44,19 @@ describe("TLDRSection", () => {
       vi.useRealTimers();
     }
   });
+
+  it("exposes its disclosure state and controls the rendered region", () => {
+    render(
+      <TLDRSection label="TLDR">
+        <p>Body content</p>
+      </TLDRSection>,
+    );
+    const toggle = screen.getByRole("button", { name: "TLDR" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(toggle).not.toHaveAttribute("aria-controls");
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    const regionId = toggle.getAttribute("aria-controls") ?? "";
+    expect(document.querySelector(`[id="${regionId}"]`)).toBeInTheDocument();
+  });
 });

@@ -120,7 +120,7 @@ const SIGN_BY_TYPE: Record<TransactionType, "negative" | "positive"> = {
 
 const AMOUNT_CLASS: Record<"negative" | "positive", string> = {
   negative: "text-destructive",
-  positive: "text-emerald-600 dark:text-emerald-400",
+  positive: "text-emerald-700 dark:text-emerald-400",
 };
 
 const STATUS_VARIANT: Record<

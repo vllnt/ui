@@ -110,3 +110,19 @@ describe("PrimarySourceViewer", () => {
     );
   });
 });
+
+describe("PrimarySourceTranscription landmark", () => {
+  it("is a named region nested in the viewer, not a nested complementary landmark", () => {
+    render(
+      <PrimarySourceViewer source={SOURCE} title="Magna Carta">
+        <PrimarySourceTranscription>
+          <p>John, by the grace of God</p>
+        </PrimarySourceTranscription>
+      </PrimarySourceViewer>,
+    );
+    expect(
+      screen.getByRole("region", { name: "Transcription" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("complementary")).not.toBeInTheDocument();
+  });
+});

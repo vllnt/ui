@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { SnapGuides } from "./snap-guides";
@@ -40,5 +40,17 @@ describe("SnapGuides", () => {
   it("renders nothing when guides is empty", () => {
     const { container } = render(<SnapGuides guides={[]} />);
     expect(container.querySelector("[data-snap-guide-id]")).toBeNull();
+  });
+
+  it("exposes the guide layer as a named graphic, not a labelled generic", () => {
+    render(
+      <SnapGuides
+        guides={[{ id: "x", orientation: "vertical", x: 10 }]}
+        labels={{ region: "Alignment guides" }}
+      />,
+    );
+    expect(
+      screen.getByRole("img", { name: "Alignment guides" }),
+    ).toBeInTheDocument();
   });
 });

@@ -3,9 +3,10 @@
 import * as React from "react";
 
 import type * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Command as CommandPrimitive } from "cmdk";
+import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { Search } from "lucide-react";
 
+import { useReturnFocus } from "../../../lib/use-return-focus";
 import { cn } from "../../../lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "../../atoms/dialog/dialog";
 
@@ -32,9 +33,18 @@ type CommandDialogProps = {} & React.ComponentPropsWithoutRef<
 >;
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+  const {
+    onCloseAutoFocus: handleCloseAutoFocus,
+    onOpenAutoFocus: handleOpenAutoFocus,
+  } = useReturnFocus();
+
   return (
     <Dialog {...props}>
-      <DialogContent className="overflow-hidden p-0 shadow-lg">
+      <DialogContent
+        className="overflow-hidden p-0 shadow-lg"
+        onCloseAutoFocus={handleCloseAutoFocus}
+        onOpenAutoFocus={handleOpenAutoFocus}
+      >
         <DialogTitle className="sr-only">Command Menu</DialogTitle>
         <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
           {children}
@@ -112,19 +122,31 @@ const CommandGroup = ({
 );
 CommandGroup.displayName = CommandPrimitive.Group.displayName;
 
+/**
+ * Visual divider between groups. It renders as a hidden decoration rather
+ * than `role="separator"`, which a listbox may not contain (WAI-ARIA 1.2).
+ * Like cmdk's separator it hides while a search query is active unless you
+ * pass `alwaysRender`.
+ */
 const CommandSeparator = ({
+  alwaysRender = false,
   className,
   ref: reference,
   ...props
 }: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator> & {
   ref?: React.Ref<React.ComponentRef<typeof CommandPrimitive.Separator>>;
-}) => (
-  <CommandPrimitive.Separator
-    className={cn("-mx-1 h-px bg-border", className)}
-    ref={reference}
-    {...props}
-  />
-);
+}) => {
+  const searching = useCommandState((state) => state.search !== "");
+  if (searching && !alwaysRender) return null;
+  return (
+    <div
+      aria-hidden="true"
+      className={cn("-mx-1 h-px bg-border", className)}
+      ref={reference}
+      {...props}
+    />
+  );
+};
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
 const CommandItem = ({
@@ -137,7 +159,7 @@ const CommandItem = ({
 }) => (
   <CommandPrimitive.Item
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:opacity-50",
+      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled=true]:opacity-50",
       disabled && "pointer-events-none",
       className,
     )}

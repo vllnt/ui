@@ -15,8 +15,18 @@ describe("TextReveal", () => {
     const { container } = render(
       <TextReveal className="custom-class">Read this line</TextReveal>,
     );
-    expect(screen.getByLabelText("Read this line")).toBeInTheDocument();
+    expect(
+      screen.getByText("Read this line", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
+  });
+
+  it("exposes the sentence as screen-reader text, not a prohibited aria-label", () => {
+    const { container } = render(<TextReveal>Read this line</TextReveal>);
+    expect(container.firstChild).not.toHaveAttribute("aria-label");
+    expect(
+      screen.getByText("Read this line", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -48,7 +58,9 @@ describe("TextReveal scrolling", () => {
       });
     const { container, unmount } = render(<TextReveal>One Two</TextReveal>);
     const words = container.querySelectorAll("span");
-    expect(words[1]).toHaveStyle({ opacity: "0.2" });
+    expect(words[1]?.getAttribute("style")).toContain(
+      "oklch(var(--foreground)) 0%",
+    );
     layout.mockClear();
     layout.mockReturnValue({
       bottom: 0,
@@ -69,7 +81,9 @@ describe("TextReveal scrolling", () => {
     frames.flush();
 
     expect(layout).toHaveBeenCalledTimes(1);
-    expect(words[1]).toHaveStyle({ opacity: "1" });
+    expect(words[1]?.getAttribute("style")).toContain(
+      "oklch(var(--foreground)) 100%",
+    );
 
     fireEvent.scroll(window);
     unmount();

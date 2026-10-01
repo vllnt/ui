@@ -46,6 +46,7 @@ import {
   COMPONENT_LEVELS,
   findComponentDirectory,
 } from "../lib/component-directory";
+import { collectPublicExports } from "../lib/public-exports";
 import type {
   A11ySchema,
   NativeRegistry,
@@ -163,28 +164,6 @@ const DYNAMIC_SIBLING_IMPORT_PATTERN = new RegExp(
 
 const packageEntry = join(repoRoot, "packages/ui/src/index.ts");
 
-/** Public `@vllnt/ui` export names, read from the package's re-export chain. */
-const collectPublicExports = (file: string, names = new Set<string>()) => {
-  const source = readFileSync(file, "utf8");
-  for (const [, list] of source.matchAll(/export\s+(?:type\s+)?\{([^}]*)\}/g)) {
-    for (const entry of (list ?? "").split(",")) {
-      const binding = entry.replace(/^\s*type\s+/, "").trim();
-      const exported = binding.split(/\s+as\s+/).at(-1)?.trim();
-      if (exported) names.add(exported);
-    }
-  }
-  for (const [, specifier] of source.matchAll(
-    /export\s+\*\s+from\s+["'](\.{1,2}\/[^"']+)["']/g,
-  )) {
-    const base = join(dirname(file), specifier ?? "");
-    const target = [`${base}.ts`, `${base}.tsx`, join(base, "index.ts")].find(
-      (candidate) => existsSync(candidate),
-    );
-    if (target) collectPublicExports(target, names);
-  }
-  return names;
-};
-
 const publicExports = collectPublicExports(packageEntry);
 
 /**
@@ -212,9 +191,9 @@ const rewriteImports = (source: string): string => {
   let code = source;
 
   // `../../../lib/<module>` → `@vllnt/ui`. Matches any single-segment kebab-case
-  // lib module (utils, types, theme-presets, use-*, …) at any depth; every lib
-  // module is re-exported from the public @vllnt/ui barrel, so this rewrite is
-  // always safe and new lib modules are covered automatically.
+  // lib module (utils, types, theme-presets, use-*, …) at any depth. The rewrite
+  // is only safe for bindings the public barrel (packages/ui/src/index.ts)
+  // exports; `registry:integrity` fails when a shim imports anything else.
   code = code.replace(
     /from\s+["'](?:\.\.\/)+lib\/[a-z][a-z0-9-]*["']/g,
     `from "${PACKAGE_NAME}"`,

@@ -13,6 +13,9 @@
  *      pins it via PUBLISHED_VERSION; this asserts the committed result is sane.
  *   4. Shim portability — generated shims must not keep relative imports
  *      (static or dynamic); they are installed as standalone files.
+ *   5. Shim imports resolve — every name a shim imports from "@vllnt/ui" must
+ *      be a public export of the package (packages/ui/src/index.ts), otherwise
+ *      the installed file fails to type-check (TS2305).
  *
  * Usage: pnpm -F @vllnt/ui-registry registry:integrity
  */
@@ -22,11 +25,13 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { listComponentDirectories } from "../lib/component-directory";
+import { collectPublicExports, importedNames } from "../lib/public-exports";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(scriptDir, "../../..");
 const componentsRoot = join(repoRoot, "packages/ui/src/components");
 const registryJsonPath = join(repoRoot, "apps/registry/registry.json");
+const packageEntry = join(repoRoot, "packages/ui/src/index.ts");
 const nativeRegistryPath = join(repoRoot, "packages/ui-native/registry.json");
 
 /**
@@ -145,6 +150,7 @@ for (const item of registry.items) {
 // Shims are installed standalone by shadcn: any relative specifier left after
 // the @vllnt/ui rewrite would point at a file the consumer does not have.
 const RELATIVE_SPECIFIER = /(?:\bfrom\s+|\bimport\s*\(\s*)["']\.{1,2}\//;
+const publicExports = collectPublicExports(packageEntry);
 for (const item of registry.items) {
   for (const file of item.files ?? []) {
     const shimPath = join(repoRoot, "apps/registry", file.path);
@@ -154,9 +160,19 @@ for (const item of registry.items) {
       );
       continue;
     }
-    if (RELATIVE_SPECIFIER.test(readFileSync(shimPath, "utf8"))) {
+    const shimSource = readFileSync(shimPath, "utf8");
+    if (RELATIVE_SPECIFIER.test(shimSource)) {
       errors.push(
         `Shim "${file.path}" still imports a relative path; shadcn installs would break.`,
+      );
+    }
+    const missing = importedNames(shimSource, "@vllnt/ui").filter(
+      (name) => !publicExports.has(name),
+    );
+    if (missing.length > 0) {
+      errors.push(
+        `Shim "${file.path}" imports ${missing.join(", ")} from "@vllnt/ui", ` +
+          `which the package does not export. Export them from packages/ui/src/index.ts.`,
       );
     }
   }

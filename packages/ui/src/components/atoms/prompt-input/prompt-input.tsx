@@ -164,7 +164,10 @@ function PromptInputActions({
         type="submit"
       >
         {isLoading ? (
-          <LoaderCircle className="size-4 animate-spin" />
+          <LoaderCircle
+            className="size-4 animate-spin motion-reduce:[animation-duration:1.5s]"
+            data-motion="essential"
+          />
         ) : (
           <SendHorizontal className="size-4" />
         )}

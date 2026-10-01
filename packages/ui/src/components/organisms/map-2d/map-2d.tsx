@@ -583,10 +583,12 @@ function Stage({ backdrop, backdropAlt, children }: StageProps): ReactNode {
       <rect className="fill-muted" height={height} width={width} x="0" y="0" />
       {backdrop ? (
         <image
+          aria-hidden={backdropAlt ? undefined : "true"}
           aria-label={backdropAlt}
           height={height}
           href={backdrop}
           preserveAspectRatio="xMidYMid slice"
+          role={backdropAlt ? "img" : undefined}
           width={width}
           x="0"
           y="0"

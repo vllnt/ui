@@ -151,11 +151,11 @@ function LessonMeta({
     <div className="flex flex-shrink-0 items-center gap-2">
       {prerequisitesLabel ? (
         <span
-          aria-label={prerequisitesLabel}
           className="flex items-center gap-1 text-xs text-muted-foreground"
           title={prerequisitesLabel}
         >
           <Link2 aria-hidden="true" className="size-3" />
+          <span className="sr-only">{prerequisitesLabel}</span>
         </span>
       ) : null}
       {difficulty ? (
@@ -300,7 +300,7 @@ function CurriculumRoot({
             </div>
           )}
         </div>
-        <div aria-label={title} className="divide-y">
+        <div aria-label={title} className="divide-y" role="group">
           {children}
         </div>
       </div>

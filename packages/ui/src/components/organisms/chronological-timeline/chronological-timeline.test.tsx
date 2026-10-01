@@ -108,3 +108,16 @@ describe("ChronologicalTimeline", () => {
     ).toThrow(/ChronoEvent used outside/);
   });
 });
+
+describe("ChronologicalTimeline list semantics", () => {
+  it("wraps a single event in a list item", () => {
+    render(
+      <ChronologicalTimeline title="Firsts">
+        <ChronoEvent date="1957" id="sputnik" title="Sputnik 1" />
+      </ChronologicalTimeline>,
+    );
+    const list = screen.getByRole("list");
+    expect(list.children).toHaveLength(1);
+    expect(list.firstElementChild?.tagName).toBe("LI");
+  });
+});

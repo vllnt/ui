@@ -118,7 +118,6 @@ type FileUploadDropzoneProps = {
   dropzoneText: string;
   helperText: string;
   isDragging: boolean;
-  onActivate: () => void;
   onDragStateChange: (dragging: boolean) => void;
   onFilesDrop: (files: FileList) => void;
 };
@@ -130,18 +129,11 @@ function FileUploadDropzone({
   dropzoneText,
   helperText,
   isDragging,
-  onActivate,
   onDragStateChange,
   onFilesDrop,
 }: FileUploadDropzoneProps) {
   return (
     <div
-      className={cn(
-        "flex min-h-40 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-input bg-background px-6 py-8 text-center transition-colors",
-        isDragging && "border-primary bg-accent/40",
-        disabled && "cursor-not-allowed opacity-50",
-      )}
-      onClick={onActivate}
       onDragEnter={(event) => {
         event.preventDefault();
         if (!disabled) {
@@ -162,25 +154,28 @@ function FileUploadDropzone({
           onFilesDrop(event.dataTransfer.files);
         }
       }}
-      onKeyDown={(event) => {
-        if ((event.key === "Enter" || event.key === " ") && !disabled) {
-          event.preventDefault();
-          onActivate();
-        }
-      }}
-      role="button"
-      tabIndex={disabled ? -1 : 0}
     >
-      <UploadCloud className="mb-3 size-10 text-muted-foreground" />
-      <div className="space-y-1">
-        <p className="font-medium">{dropzoneText}</p>
-        <p className="text-sm text-muted-foreground">{helperText}</p>
-      </div>
-      <span className="mt-4 inline-flex h-10 items-center justify-center rounded-md border border-input bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm">
-        <FileUp className="mr-2 size-4" />
-        {browseLabel}
-      </span>
-      {children}
+      <label
+        className={cn(
+          "flex min-h-40 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-input bg-background px-6 py-8 text-center transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-offset-2",
+          isDragging && "border-primary bg-accent/40",
+          disabled && "cursor-not-allowed opacity-50",
+        )}
+      >
+        <UploadCloud
+          aria-hidden="true"
+          className="mb-3 size-10 text-muted-foreground"
+        />
+        <div className="space-y-1">
+          <p className="font-medium">{dropzoneText}</p>
+          <p className="text-sm text-muted-foreground">{helperText}</p>
+        </div>
+        <span className="mt-4 inline-flex h-10 items-center justify-center rounded-md border border-input bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm">
+          <FileUp aria-hidden="true" className="mr-2 size-4" />
+          {browseLabel}
+        </span>
+        {children}
+      </label>
     </div>
   );
 }
@@ -224,7 +219,6 @@ function FileUploadComponent({
   ref: reference,
   ...props
 }: FileUploadProps & { ref?: React.Ref<HTMLInputElement> }) {
-  const inputReference = React.useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = React.useState(false);
   const { addFiles, removeFile, resolvedFiles } = useFileUploadState(
     files,
@@ -240,11 +234,6 @@ function FileUploadComponent({
         dropzoneText={dropzoneText}
         helperText={helperText}
         isDragging={isDragging}
-        onActivate={() => {
-          if (!disabled) {
-            inputReference.current?.click();
-          }
-        }}
         onDragStateChange={setIsDragging}
         onFilesDrop={addFiles}
       >
@@ -261,7 +250,6 @@ function FileUploadComponent({
             }
           }}
           ref={(node) => {
-            inputReference.current = node;
             assignInputReference(reference, node);
           }}
           type="file"

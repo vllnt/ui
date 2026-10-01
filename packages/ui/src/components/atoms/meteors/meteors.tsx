@@ -33,8 +33,8 @@ type MeteorStyle = React.CSSProperties & {
 function meteorStyle(meteor: Meteor): MeteorStyle {
   return {
     "--vllnt-meteor-angle": "215deg",
-    animation: `vllnt-meteor ${meteor.duration}s linear infinite`,
     animationDelay: `${meteor.delay}s`,
+    animationDuration: `${meteor.duration}s`,
     left: `${meteor.left}%`,
     top: `${meteor.top}%`,
   };
@@ -70,7 +70,7 @@ export const Meteors = ({
     >
       {meteors.map((meteor, index) => (
         <span
-          className="absolute h-0.5 w-0.5 rounded-full bg-muted-foreground motion-reduce:animate-none"
+          className="absolute h-0.5 w-0.5 rounded-full bg-muted-foreground [animation-name:vllnt-meteor] [animation-iteration-count:infinite] [animation-timing-function:linear] motion-reduce:animate-none"
           key={index}
           style={meteorStyle(meteor)}
         >

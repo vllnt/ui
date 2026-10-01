@@ -48,6 +48,8 @@ export type AIArtifactType =
  * @public
  */
 export type AIArtifactLabels = {
+  /** Accessible name of the scrolling content region. Defaults to `"Artifact content"`. */
+  content?: string;
   /** Aria-label after a successful copy. Defaults to `"Copied"`. */
   copied?: string;
   /** Aria-label for the copy control. Defaults to `"Copy"`. */
@@ -65,6 +67,7 @@ export type AIArtifactLabels = {
 };
 
 const DEFAULT_LABELS = {
+  content: "Artifact content",
   copied: "Copied",
   copy: "Copy",
   download: "Download",
@@ -664,11 +667,14 @@ export const AIArtifactContent = ({
   ...rest
 }: ComponentPropsWithoutRef<"div"> & { ref?: React.Ref<HTMLDivElement> }) => (
   <div
+    aria-label={useAIArtifact().labels.content}
     className={cn(
-      "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground",
+      "min-h-[6rem] overflow-auto rounded-lg border border-border bg-muted/20 p-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className,
     )}
     ref={ref}
+    role="region"
+    tabIndex={0}
     {...rest}
   />
 );

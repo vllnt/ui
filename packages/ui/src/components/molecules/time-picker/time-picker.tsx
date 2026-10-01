@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Clock } from "lucide-react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 import { Button } from "../../atoms/button/button";
 import {
@@ -31,15 +32,38 @@ type TimeColumnProps = {
   label: string;
   onSelect: (value: string) => void;
   options: string[];
+  ref?: React.Ref<HTMLDivElement>;
   selected: string;
 };
 
-function TimeColumn({ label, onSelect, options, selected }: TimeColumnProps) {
+/**
+ * WAI-ARIA APG listbox with a roving tabindex: the selected option (or the
+ * first) is the column's single tab stop; ArrowUp / ArrowDown, Home / End and
+ * PageUp / PageDown move focus and select.
+ */
+function TimeColumn({
+  label,
+  onSelect,
+  options,
+  ref,
+  selected,
+}: TimeColumnProps) {
+  const tabStop = options.includes(selected) ? selected : options[0];
   return (
     <div
       aria-label={label}
       className="flex max-h-56 flex-col gap-1 overflow-y-auto px-1"
+      onKeyDown={(event) => {
+        moveRovingFocus(event, '[role="option"]', {
+          activate: true,
+          loop: false,
+          orientation: "vertical",
+          pageStep: 5,
+        });
+      }}
+      ref={ref}
       role="listbox"
+      tabIndex={-1}
     >
       {options.map((option) => (
         <button
@@ -54,6 +78,7 @@ function TimeColumn({ label, onSelect, options, selected }: TimeColumnProps) {
             onSelect(option);
           }}
           role="option"
+          tabIndex={option === tabStop ? 0 : -1}
           type="button"
         >
           {option}
@@ -63,6 +88,13 @@ function TimeColumn({ label, onSelect, options, selected }: TimeColumnProps) {
   );
 }
 
+function focusTabStop(column: HTMLDivElement | null, event: Event): void {
+  const stop = column?.querySelector<HTMLElement>('[tabindex="0"]');
+  if (!stop) return;
+  event.preventDefault();
+  stop.focus();
+}
+
 /** Popover-based time selector built from hour and minute columns. */
 export type TimePickerProps = {
   className?: string;
@@ -70,6 +102,8 @@ export type TimePickerProps = {
   minuteStep?: number;
   onValueChange?: (value: string) => void;
   placeholder?: string;
+  /** Accessible name of the popover dialog. Defaults to "Choose time". */
+  popoverLabel?: string;
   value?: string;
 };
 
@@ -79,11 +113,13 @@ const TimePicker = ({
   minuteStep = 5,
   onValueChange,
   placeholder = "Select time",
+  popoverLabel = "Choose time",
   ref,
   value,
 }: TimePickerProps & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [internalValue, setInternalValue] = React.useState(defaultValue);
   const currentValue = value ?? internalValue;
+  const hourColumnRef = React.useRef<HTMLDivElement>(null);
   const { hour, minute } = splitTime(currentValue);
 
   const commit = (nextHour: string, nextMinute: string) => {
@@ -107,11 +143,18 @@ const TimePicker = ({
           ref={ref}
           variant="outline"
         >
-          <Clock className="mr-2 size-4" />
+          <Clock aria-hidden="true" className="mr-2 size-4" />
           {currentValue || placeholder}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-auto p-2">
+      <PopoverContent
+        align="start"
+        aria-label={popoverLabel}
+        className="w-auto p-2"
+        onOpenAutoFocus={(event) => {
+          focusTabStop(hourColumnRef.current, event);
+        }}
+      >
         <div className="flex gap-2">
           <TimeColumn
             label="Hour"
@@ -119,6 +162,7 @@ const TimePicker = ({
               commit(nextHour, minute);
             }}
             options={buildOptions(24, 1)}
+            ref={hourColumnRef}
             selected={hour}
           />
           <TimeColumn

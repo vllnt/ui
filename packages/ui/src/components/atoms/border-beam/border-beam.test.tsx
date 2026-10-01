@@ -12,4 +12,18 @@ describe("BorderBeam", () => {
     expect(container.firstChild).toHaveClass("custom-class");
     expect(container.firstChild).toHaveStyle({ padding: "3px" });
   });
+
+  it("keeps the animation name out of inline styles so motion-reduce:animate-none can stop it", () => {
+    const { container } = render(<BorderBeam />);
+    const animated = [
+      ...container.querySelectorAll<HTMLElement>("[aria-hidden]"),
+    ];
+    expect(animated.length).toBeGreaterThan(0);
+    animated.forEach((element) => {
+      expect(element.getAttribute("style") ?? "").not.toMatch(
+        /animation(-name)?:/,
+      );
+      expect(element).toHaveClass("motion-reduce:animate-none");
+    });
+  });
 });

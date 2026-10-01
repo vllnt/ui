@@ -11,7 +11,11 @@ export type NumberInputProps = Omit<
   React.ComponentPropsWithoutRef<"input">,
   "defaultValue" | "onChange" | "type" | "value"
 > & {
+  /** Accessible name of the decrement button. Defaults to `"Decrease"`. */
+  decrementLabel?: string;
   defaultValue?: number;
+  /** Accessible name of the increment button. Defaults to `"Increase"`. */
+  incrementLabel?: string;
   onValueChange?: (value?: number) => void;
   step?: number;
   value?: number;
@@ -67,14 +71,17 @@ function clampNumber(
 function StepButton({
   direction,
   disabled,
+  label,
   onClick,
 }: {
   direction: "decrement" | "increment";
   disabled?: boolean;
+  label: string;
   onClick: () => void;
 }) {
   return (
     <Button
+      aria-label={label}
       className={cn(
         "h-full px-3",
         direction === "decrement"
@@ -135,8 +142,10 @@ function NumberInputField({
 
 function NumberInputComponent({
   className,
+  decrementLabel = "Decrease",
   defaultValue,
   disabled,
+  incrementLabel = "Increase",
   max,
   min,
   onValueChange,
@@ -172,6 +181,7 @@ function NumberInputComponent({
       <StepButton
         direction="decrement"
         disabled={disabled}
+        label={decrementLabel}
         onClick={() => {
           handleStepChange(-1);
         }}
@@ -193,6 +203,7 @@ function NumberInputComponent({
       <StepButton
         direction="increment"
         disabled={disabled}
+        label={incrementLabel}
         onClick={() => {
           handleStepChange(1);
         }}

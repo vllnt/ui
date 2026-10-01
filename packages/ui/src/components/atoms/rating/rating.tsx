@@ -3,8 +3,9 @@
 import { useMemo, useState } from "react";
 
 import { Star } from "lucide-react";
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
 const sizeClasses = {
@@ -25,6 +26,13 @@ export type RatingProps = {
   size?: keyof typeof sizeClasses;
   value?: number;
 };
+
+function handleRadioKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
+  moveRovingFocus(event, '[role="radio"]', {
+    activate: true,
+    orientation: "both",
+  });
+}
 
 type RatingStarsProps = {
   activeValue: number;
@@ -52,12 +60,15 @@ function RatingStars({
     [max],
   );
   const displayValue = hoveredValue || activeValue;
+  const tabStopValue = activeValue >= 1 && activeValue <= max ? activeValue : 1;
 
   return (
     <div
       aria-label={label}
       className="inline-flex items-center gap-1"
+      onKeyDown={handleRadioKeyDown}
       role="radiogroup"
+      tabIndex={-1}
     >
       {stars.map((starValue) => {
         const isFilled = starValue <= displayValue;
@@ -88,6 +99,7 @@ function RatingStars({
               onHoverChange(0);
             }}
             role="radio"
+            tabIndex={starValue === tabStopValue ? 0 : -1}
             type="button"
           >
             <Star

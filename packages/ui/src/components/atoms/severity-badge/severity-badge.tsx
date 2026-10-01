@@ -32,47 +32,50 @@ const severityBadgeVariants = cva(
         tone: "outline",
       },
       {
-        className: "border-transparent bg-orange-500 text-white",
+        className: "border-transparent bg-orange-700 text-white",
         level: "high",
         tone: "solid",
       },
       {
-        className: "border-orange-500/30 bg-orange-500/10 text-orange-600",
+        className:
+          "border-orange-500/30 bg-orange-500/10 text-orange-800 dark:text-orange-300",
         level: "high",
         tone: "soft",
       },
       {
-        className: "border-orange-500/40 text-orange-600",
+        className: "border-orange-500/40 text-orange-800 dark:text-orange-300",
         level: "high",
         tone: "outline",
       },
       {
-        className: "border-transparent bg-amber-500 text-white",
+        className: "border-transparent bg-amber-700 text-white",
         level: "medium",
         tone: "solid",
       },
       {
-        className: "border-amber-500/30 bg-amber-500/10 text-amber-600",
+        className:
+          "border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300",
         level: "medium",
         tone: "soft",
       },
       {
-        className: "border-amber-500/40 text-amber-600",
+        className: "border-amber-500/40 text-amber-800 dark:text-amber-300",
         level: "medium",
         tone: "outline",
       },
       {
-        className: "border-transparent bg-sky-500 text-white",
+        className: "border-transparent bg-sky-700 text-white",
         level: "low",
         tone: "solid",
       },
       {
-        className: "border-sky-500/30 bg-sky-500/10 text-sky-600",
+        className:
+          "border-sky-500/30 bg-sky-500/10 text-sky-800 dark:text-sky-300",
         level: "low",
         tone: "soft",
       },
       {
-        className: "border-sky-500/40 text-sky-600",
+        className: "border-sky-500/40 text-sky-800 dark:text-sky-300",
         level: "low",
         tone: "outline",
       },
@@ -162,7 +165,7 @@ function SeverityBadge({
           {pulse ? (
             <span
               className={cn(
-                "absolute inline-flex h-full w-full animate-ping rounded-full opacity-60",
+                "absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 motion-reduce:animate-none",
                 DOT_COLOR[level],
               )}
             />

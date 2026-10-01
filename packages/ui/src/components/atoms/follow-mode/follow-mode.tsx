@@ -18,12 +18,12 @@ export type FollowModeColor =
   | "rose";
 
 const PALETTE: Record<FollowModeColor, { chip: string; ring: string }> = {
-  amber: { chip: "bg-amber-500 text-white", ring: "ring-amber-500" },
-  blue: { chip: "bg-blue-500 text-white", ring: "ring-blue-500" },
-  emerald: { chip: "bg-emerald-500 text-white", ring: "ring-emerald-500" },
-  purple: { chip: "bg-purple-500 text-white", ring: "ring-purple-500" },
-  red: { chip: "bg-red-500 text-white", ring: "ring-red-500" },
-  rose: { chip: "bg-rose-500 text-white", ring: "ring-rose-500" },
+  amber: { chip: "bg-amber-700 text-white", ring: "ring-amber-500" },
+  blue: { chip: "bg-blue-700 text-white", ring: "ring-blue-500" },
+  emerald: { chip: "bg-emerald-700 text-white", ring: "ring-emerald-500" },
+  purple: { chip: "bg-purple-700 text-white", ring: "ring-purple-500" },
+  red: { chip: "bg-red-700 text-white", ring: "ring-red-500" },
+  rose: { chip: "bg-rose-700 text-white", ring: "ring-rose-500" },
 };
 
 /**

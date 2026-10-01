@@ -46,7 +46,10 @@ function AIChatInputFooter({
         type="submit"
       >
         {isSubmitting ? (
-          <LoaderCircle className="mr-2 size-4 animate-spin" />
+          <LoaderCircle
+            className="mr-2 size-4 animate-spin motion-reduce:[animation-duration:1.5s]"
+            data-motion="essential"
+          />
         ) : (
           <SendHorizontal className="mr-2 size-4" />
         )}

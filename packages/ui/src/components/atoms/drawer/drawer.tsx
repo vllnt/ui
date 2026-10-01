@@ -4,11 +4,18 @@ import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "../../../lib/utils";
 
+/**
+ * Bottom sheet built on vaul. Focus moves into the content when it opens
+ * (WAI-ARIA APG modal dialog); pass `autoFocus={false}` to keep vaul's
+ * default of leaving focus on the trigger.
+ */
 const Drawer = ({
+  autoFocus = true,
   shouldScaleBackground = true,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
   <DrawerPrimitive.Root
+    autoFocus={autoFocus}
     shouldScaleBackground={shouldScaleBackground}
     {...props}
   />

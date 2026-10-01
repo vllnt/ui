@@ -31,7 +31,7 @@ export type SnapGuide =
  * @public
  */
 export type SnapGuidesLabels = {
-  /** Aria-label for the layer. Defaults to `"Snap guides"`. */
+  /** Accessible name of the guide layer (`role="img"`). Defaults to `"Snap guides"`. */
   region?: string;
 };
 
@@ -81,6 +81,7 @@ export const SnapGuides = ({
       className={cn("pointer-events-none absolute inset-0 z-30", className)}
       data-snap-guide-count={guides.length}
       ref={ref}
+      role="img"
       {...rest}
     >
       {guides.map((guide) => {

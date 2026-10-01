@@ -62,7 +62,7 @@ function InteractiveStep({
           className={cn(
             "flex size-8 items-center justify-center rounded-full text-sm font-bold transition-colors",
             isCompleted
-              ? "bg-green-500 text-white"
+              ? "bg-green-700 text-white"
               : "bg-primary text-primary-foreground",
           )}
           onClick={onToggle}

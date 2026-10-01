@@ -111,3 +111,10 @@ describe("ParallelTimeline", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("ParallelTimeline keyboard access", () => {
+  it("lets keyboard users focus the horizontally scrolling region", () => {
+    render(<ParallelTimeline endYear={500} startYear={-500} tracks={TRACKS} />);
+    expect(screen.getByRole("region")).toHaveAttribute("tabindex", "0");
+  });
+});

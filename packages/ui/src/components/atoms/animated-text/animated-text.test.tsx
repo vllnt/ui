@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { act, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   ANIMATED_TEXT_RANDOM_CHARACTER_PRESETS,
@@ -9,7 +9,9 @@ import {
 describe("AnimatedText", () => {
   it("renders the full accessible label in terminal mode by default with a cursor", () => {
     render(<AnimatedText text="Motion without noise" />);
-    expect(screen.getByLabelText("Motion without noise")).toBeVisible();
+    expect(
+      screen.getByText("Motion without noise", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("█")).toBeInTheDocument();
   });
 
@@ -17,7 +19,11 @@ describe("AnimatedText", () => {
     render(
       <AnimatedText splitBy="word" text="Hello world again" variant="reveal" />,
     );
-    expect(screen.getAllByText(/Hello|world|again/)).toHaveLength(3);
+    expect(
+      screen.getAllByText(/Hello|world|again/, {
+        ignore: "script, style, .sr-only",
+      }),
+    ).toHaveLength(3);
   });
 
   it.each([
@@ -50,7 +56,9 @@ describe("AnimatedText", () => {
     },
   ] as const)("supports $name", ({ props }) => {
     render(<AnimatedText {...props} />);
-    expect(screen.getByLabelText(props.text)).toBeVisible();
+    expect(
+      screen.getByText(props.text, { selector: ".sr-only" }),
+    ).toBeInTheDocument();
   });
 
   it("loads and splits by code point without Intl.Segmenter", async () => {
@@ -66,7 +74,9 @@ describe("AnimatedText", () => {
           variant="reveal"
         />,
       );
-      expect(screen.getByLabelText("a😀b")).toBeVisible();
+      expect(
+        screen.getByText("a😀b", { selector: ".sr-only" }),
+      ).toBeInTheDocument();
       expect(screen.getByText("😀")).toBeInTheDocument();
     } finally {
       Object.defineProperty(Intl, "Segmenter", {
@@ -76,4 +86,58 @@ describe("AnimatedText", () => {
       });
     }
   });
+
+  it("uses screen-reader text instead of a prohibited aria-label on the paragraph", () => {
+    const { container } = render(<AnimatedText text="Hi" />);
+    expect(container.firstChild).not.toHaveAttribute("aria-label");
+  });
+
+  it("stops the blinking cursor under prefers-reduced-motion", () => {
+    render(<AnimatedText text="Motion without noise" />);
+    expect(screen.getByText("█")).toHaveClass("motion-reduce:animate-none");
+  });
+
+  it("shows reveal segments without animation under prefers-reduced-motion", () => {
+    render(<AnimatedText text="Hello world" variant="reveal" />);
+    expect(screen.getByText("Hello")).toHaveClass(
+      "motion-reduce:animate-none",
+      "motion-reduce:opacity-100",
+    );
+  });
+});
+
+function stubReducedMotion() {
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    addEventListener: vi.fn(),
+    matches: query === "(prefers-reduced-motion: reduce)",
+    media: query,
+    removeEventListener: vi.fn(),
+  }));
+}
+
+describe("AnimatedText under prefers-reduced-motion", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it.each(["decipher", "matrix", "terminal"] as const)(
+    "shows the final %s text at once, with no scramble or typing",
+    (variant) => {
+      vi.useFakeTimers();
+      stubReducedMotion();
+      const { container } = render(
+        <AnimatedText text="DECRYPT" variant={variant} />,
+      );
+      const visibleText = () =>
+        [...container.querySelectorAll("[aria-hidden='true']")]
+          .map((segment) => segment.textContent)
+          .join("");
+      expect(visibleText()).toBe("DECRYPT");
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+      expect(visibleText()).toBe("DECRYPT");
+    },
+  );
 });

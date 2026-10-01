@@ -8,7 +8,17 @@ describe("SpinningText", () => {
     const { container } = render(
       <SpinningText className="custom-class">orbit</SpinningText>,
     );
-    expect(screen.getByLabelText("orbit")).toBeInTheDocument();
+    expect(
+      screen.getByText("orbit", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
     expect(container.firstChild).toHaveClass("custom-class");
+  });
+
+  it("exposes the text as screen-reader text, not a prohibited aria-label", () => {
+    const { container } = render(<SpinningText>orbit</SpinningText>);
+    expect(container.firstChild).not.toHaveAttribute("aria-label");
+    expect(
+      screen.getByText("orbit", { selector: ".sr-only" }),
+    ).toBeInTheDocument();
   });
 });

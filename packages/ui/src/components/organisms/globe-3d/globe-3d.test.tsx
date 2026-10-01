@@ -47,3 +47,19 @@ describe("Globe3D", () => {
     );
   });
 });
+
+describe("Globe3D landmarks", () => {
+  it("names the globe and its data summary distinctly without duplicate ids", () => {
+    const { container } = render(<Globe3D autoRotate={false} />);
+    const regions = screen.getAllByRole("region");
+    const names = regions.map(
+      (region) =>
+        document.querySelector(
+          `[id="${region.getAttribute("aria-labelledby") ?? ""}"]`,
+        )?.textContent,
+    );
+    expect(new Set(names).size).toBe(regions.length);
+    const ids = [...container.querySelectorAll("[id]")].map((node) => node.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+});

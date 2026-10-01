@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { ColorPicker } from "./color-picker";
@@ -17,5 +17,20 @@ describe("ColorPicker", () => {
     const onValueChange = vi.fn();
     render(<ColorPicker onValueChange={onValueChange} />);
     expect(onValueChange).not.toHaveBeenCalled();
+  });
+
+  it("names its popover dialog, overridable with popoverLabel", () => {
+    const { unmount } = render(<ColorPicker />);
+    fireEvent.click(screen.getByRole("button"));
+    expect(
+      screen.getByRole("dialog", { name: "Choose colour" }),
+    ).toBeInTheDocument();
+    unmount();
+
+    render(<ColorPicker popoverLabel="Brand colour" />);
+    fireEvent.click(screen.getByRole("button"));
+    expect(
+      screen.getByRole("dialog", { name: "Brand colour" }),
+    ).toBeInTheDocument();
   });
 });

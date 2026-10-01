@@ -10,6 +10,7 @@ const meta = {
       { label: "SvelteKit", value: "sveltekit" },
       { label: "Vue", value: "vue" },
     ],
+    "aria-label": "Framework",
     placeholder: "Select framework",
   },
   component: Combobox,

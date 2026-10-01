@@ -53,4 +53,45 @@ describe("DataTable", () => {
     fireEvent.click(screen.getByLabelText("Select row 1"));
     expect(screen.getByText("1 selected")).toBeVisible();
   });
+
+  it("names each column filter trigger", () => {
+    render(
+      <DataTable
+        columns={columns}
+        data={data}
+        filterableColumns={[
+          {
+            columnId: "status",
+            label: "Status",
+            options: [{ label: "Active", value: "active" }],
+          },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByRole("combobox", { name: "Filter by Status" }),
+    ).toBeInTheDocument();
+  });
+});
+
+describe("DataTable filter names", () => {
+  it("lets each filter override its trigger name", () => {
+    render(
+      <DataTable
+        columns={columns}
+        data={data}
+        filterableColumns={[
+          {
+            ariaLabel: "Filtrer par statut",
+            columnId: "status",
+            label: "Statut",
+            options: [{ label: "Actif", value: "active" }],
+          },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByRole("combobox", { name: "Filtrer par statut" }),
+    ).toBeInTheDocument();
+  });
 });

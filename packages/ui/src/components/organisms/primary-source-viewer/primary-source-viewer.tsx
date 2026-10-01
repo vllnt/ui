@@ -443,7 +443,7 @@ export const PrimarySourceTranscription = ({
   ref,
   ...rest
 }: ComponentPropsWithoutRef<"aside"> & { ref?: React.Ref<HTMLDivElement> }) => (
-  <aside
+  <section
     aria-label="Transcription"
     className={cn(
       "flex h-full flex-col gap-2 border-l border-border bg-background p-4 text-sm leading-relaxed",
@@ -456,7 +456,7 @@ export const PrimarySourceTranscription = ({
       Transcription
     </h3>
     <div className="space-y-2 text-foreground">{children}</div>
-  </aside>
+  </section>
 );
 PrimarySourceTranscription.displayName = "PrimarySourceTranscription";
 

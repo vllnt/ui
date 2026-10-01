@@ -5,20 +5,57 @@ import {
   use,
   useCallback,
   useEffect,
+  useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
-// Context for tabs state
 type TabsContextValue = {
   activeTab: string;
+  baseId: string;
+  firstTab?: string;
+  panelIds: ReadonlyMap<string, string>;
+  registerPanel: (value: string, id: string) => () => void;
+  registerTab: (value: string, id: string) => () => void;
   setActiveTab: (value: string) => void;
+  tabIds: ReadonlyMap<string, string>;
 };
+
+/**
+ * Tracks the element id rendered for each tab value, in mount order, so
+ * `aria-controls` / `aria-labelledby` reference rendered nodes and nothing else.
+ */
+function useIdRegistry(): readonly [
+  ReadonlyMap<string, string>,
+  (value: string, id: string) => () => void,
+] {
+  const [ids, setIds] = useState<ReadonlyMap<string, string>>(new Map());
+  const register = useCallback((value: string, id: string) => {
+    setIds((current) =>
+      current.get(value) === id ? current : new Map(current).set(value, id),
+    );
+    return () => {
+      setIds((current) => {
+        if (current.get(value) !== id) return current;
+        const next = new Map(current);
+        next.delete(value);
+        return next;
+      });
+    };
+  }, []);
+  return [ids, register];
+}
+
+function toIdPart(value: string): string {
+  return encodeURIComponent(value);
+}
 
 const TabsContext = createContext<null | TabsContextValue>(null);
 
@@ -65,9 +102,32 @@ function Tabs({
     [isControlled],
   );
 
+  const baseId = useId();
+  const [tabIds, registerTab] = useIdRegistry();
+  const [panelIds, registerPanel] = useIdRegistry();
+  const [firstTab] = tabIds.keys();
+
   const contextValue = useMemo(
-    () => ({ activeTab, setActiveTab: handleSetActiveTab }),
-    [activeTab, handleSetActiveTab],
+    () => ({
+      activeTab,
+      baseId,
+      firstTab,
+      panelIds,
+      registerPanel,
+      registerTab,
+      setActiveTab: handleSetActiveTab,
+      tabIds,
+    }),
+    [
+      activeTab,
+      baseId,
+      firstTab,
+      handleSetActiveTab,
+      panelIds,
+      registerPanel,
+      registerTab,
+      tabIds,
+    ],
   );
 
   return (
@@ -84,17 +144,28 @@ export type TabsListProps = {
   onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 };
 
+/**
+ * Container for the tab triggers. Implements the WAI-ARIA APG tabs keyboard
+ * model: ArrowLeft / ArrowRight move focus between tabs (wrapping), Home / End
+ * jump to the first / last tab, and the focused tab becomes active. A consumer
+ * `onKeyDown` runs first; calling `preventDefault()` in it opts out.
+ */
 function TabsList({
   "aria-label": ariaLabel,
   children,
   className,
   onKeyDown,
 }: TabsListProps): React.ReactNode {
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
+    onKeyDown?.(event);
+    moveRovingFocus(event, '[role="tab"]', { activate: true });
+  };
+
   return (
     <div
       aria-label={ariaLabel}
       className={cn("flex border-b border-border overflow-x-auto", className)}
-      onKeyDown={onKeyDown}
+      onKeyDown={handleKeyDown}
       role="tablist"
       tabIndex={-1}
     >
@@ -122,12 +193,27 @@ function TabsTrigger({
   tabIndex,
   value,
 }: TabsTriggerProps): React.ReactNode {
-  const { activeTab, setActiveTab } = useTabsContext();
+  const {
+    activeTab,
+    baseId,
+    firstTab,
+    panelIds,
+    registerTab,
+    setActiveTab,
+    tabIds,
+  } = useTabsContext();
   const isActive = activeTab === value;
+  const tabId = id ?? `${baseId}-tab-${toIdPart(value)}`;
+  const hasActiveTab = tabIds.has(activeTab);
+  const isTabStop = isActive || (!hasActiveTab && firstTab === value);
+
+  useEffect(() => registerTab(value, tabId), [registerTab, tabId, value]);
 
   return (
     <button
-      aria-controls={ariaControls}
+      aria-controls={
+        ariaControls ?? (isActive ? panelIds.get(value) : undefined)
+      }
       aria-hidden={ariaHidden}
       aria-selected={isActive}
       className={cn(
@@ -138,12 +224,12 @@ function TabsTrigger({
           : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50",
         className,
       )}
-      id={id}
+      id={tabId}
       onClick={() => {
         setActiveTab(value);
       }}
       role="tab"
-      tabIndex={tabIndex}
+      tabIndex={tabIndex ?? (isTabStop ? 0 : -1)}
       type="button"
     >
       {children}
@@ -157,8 +243,43 @@ export type TabsContentProps = {
   children: ReactNode;
   className?: string;
   id?: string;
+  /**
+   * Tab order of the panel. By default the panel is a tab stop (`0`) when it
+   * holds no focusable content, so keyboard users can reach it (APG tabs).
+   */
+  tabIndex?: number;
   value: string;
 };
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
+/** Whether the panel holds a focusable element, re-checked as it changes. */
+function useHasFocusableContent(
+  panelRef: React.RefObject<HTMLDivElement | null>,
+  isActive: boolean,
+): boolean {
+  const [hasFocusable, setHasFocusable] = useState(false);
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!isActive || !panel) return;
+    const measure = (): void => {
+      setHasFocusable(panel.querySelector(FOCUSABLE) !== null);
+    };
+    measure();
+    if (typeof MutationObserver === "undefined") return;
+    const observer = new MutationObserver(measure);
+    observer.observe(panel, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, [isActive, panelRef]);
+  return hasFocusable;
+}
 
 function TabsContent({
   "aria-hidden": ariaHidden,
@@ -166,19 +287,31 @@ function TabsContent({
   children,
   className,
   id,
+  tabIndex,
   value,
 }: TabsContentProps): React.ReactNode {
-  const { activeTab } = useTabsContext();
+  const { activeTab, baseId, registerPanel, tabIds } = useTabsContext();
+  const isActive = activeTab === value;
+  const panelId = id ?? `${baseId}-panel-${toIdPart(value)}`;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const hasFocusable = useHasFocusableContent(panelRef, isActive);
 
-  if (activeTab !== value) return null;
+  useEffect(() => {
+    if (!isActive) return;
+    return registerPanel(value, panelId);
+  }, [isActive, panelId, registerPanel, value]);
+
+  if (!isActive) return null;
 
   return (
     <div
       aria-hidden={ariaHidden}
-      aria-labelledby={ariaLabelledBy}
+      aria-labelledby={ariaLabelledBy ?? tabIds.get(value)}
       className={cn("pt-4", className)}
-      id={id}
+      id={panelId}
+      ref={panelRef}
       role="tabpanel"
+      tabIndex={tabIndex ?? (hasFocusable ? undefined : 0)}
     >
       {children}
     </div>
