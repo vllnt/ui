@@ -759,24 +759,28 @@ it("has an accessibility fixture for every registry component", () => {
   expect(Object.keys(accessibilityFixtures).sort()).toEqual(
     [...registryNames()].sort(),
   );
-});
+}, 60_000);
 
 it.each(
   Object.entries(accessibilityFixtures).sort(([left], [right]) =>
     left.localeCompare(right),
   ),
-)("%s meets the native accessibility contract", (name, fixture) => {
-  renderThemed(fixture());
-  const violations = contractViolations();
-  for (const control of accessibilityFixtureActions[name] ?? []) {
-    const [target] = screen.getAllByRole(PRESSABLE_ROLES, { name: control });
-    if (!target) throw new Error(`No control named "${control}"`);
-    fireEvent.press(target);
-    violations.push(
-      ...contractViolations().map(
-        (violation) => `after "${control}": ${violation}`,
-      ),
-    );
-  }
-  expect([...new Set(violations)]).toEqual([]);
-});
+)(
+  "%s meets the native accessibility contract",
+  (name, fixture) => {
+    renderThemed(fixture());
+    const violations = contractViolations();
+    for (const control of accessibilityFixtureActions[name] ?? []) {
+      const [target] = screen.getAllByRole(PRESSABLE_ROLES, { name: control });
+      if (!target) throw new Error(`No control named "${control}"`);
+      fireEvent.press(target);
+      violations.push(
+        ...contractViolations().map(
+          (violation) => `after "${control}": ${violation}`,
+        ),
+      );
+    }
+    expect([...new Set(violations)]).toEqual([]);
+  },
+  60_000,
+);

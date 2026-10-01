@@ -40,9 +40,13 @@ const styles = StyleSheet.create({
 });
 
 function useDimensions(size: AvatarGroupSize) {
-  const diameter = useFontScaledSize({ lg: 48, md: 40, sm: 32 }[size]);
+  const baseDiameter = { lg: 48, md: 40, sm: 32 }[size];
+  const diameter = useFontScaledSize(baseDiameter);
   const overlap = { lg: 16, md: 12, sm: 10 }[size];
-  return { diameter, overlap: Math.round(overlap * (diameter / 40)) };
+  return {
+    diameter,
+    overlap: Math.round((overlap * diameter) / baseDiameter),
+  };
 }
 
 function AvatarItem({

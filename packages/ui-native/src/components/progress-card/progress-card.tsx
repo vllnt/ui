@@ -110,6 +110,18 @@ function ProgressCardContent({
 }
 ProgressCardContent.displayName = "ProgressCardContent";
 
+function summaryHint(
+  badgeLabel: string | undefined,
+  description: string,
+  extras: readonly { readonly label: string }[],
+) {
+  return joinAccessibilityText([
+    badgeLabel,
+    description,
+    ...extras.map((extra) => extra.label),
+  ]);
+}
+
 function progressText(value: number, max: number, progressLabel: string) {
   const safeMax = Number.isFinite(max) ? Math.max(0, max) : 0;
   const safeValue = Number.isFinite(value)
@@ -157,14 +169,13 @@ function ProgressCard({
   );
 
   const summary = {
-    accessibilityHint: joinAccessibilityText([
-      badgeLabel,
-      description,
-      ...metadata.map((item) => item.label),
-      ...tags.map((tag) => tag.label),
-    ]),
+    accessibilityHint:
+      props.accessibilityHint ??
+      summaryHint(badgeLabel, description, [...metadata, ...tags]),
     accessibilityLabel: accessibilityLabel ?? title,
-    accessibilityValue: { text: progressText(value, max, progressLabel) },
+    accessibilityValue: props.accessibilityValue ?? {
+      text: progressText(value, max, progressLabel),
+    },
   };
   if (!onPress) {
     return (
@@ -172,7 +183,7 @@ function ProgressCard({
         {...props}
         {...(accessibilityLabel === undefined
           ? undefined
-          : { ...summary, accessible: true })}
+          : { ...summary, accessible: props.accessible ?? true })}
         ref={ref}
       >
         {content}
@@ -183,7 +194,7 @@ function ProgressCard({
     <Pressable
       {...props}
       {...summary}
-      accessibilityRole="button"
+      accessibilityRole={props.accessibilityRole ?? "button"}
       onPress={onPress}
       ref={ref}
       style={({ pressed }) => (pressed ? styles.pressed : undefined)}

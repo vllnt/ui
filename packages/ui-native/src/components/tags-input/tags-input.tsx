@@ -12,7 +12,8 @@ import {
 } from "react-native";
 
 import { focusAccessibility } from "../../primitives/accessibility";
-import { mergeReferences } from "../../primitives/merge-references";
+import { useGroupDisabled } from "../../primitives/control-group";
+import { useMergedReferences } from "../../primitives/merge-references";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
 import { useControllableState } from "../../primitives/use-controllable-state";
@@ -61,7 +62,7 @@ function normalize(tags: readonly string[]): readonly string[] {
 
 /** Native tag editor that commits text via keyboard action or an explicit button. */
 function TagsInput({
-  disabled = false,
+  disabled: ownDisabled = false,
   editable = true,
   labels,
   onSubmitEditing,
@@ -72,10 +73,12 @@ function TagsInput({
   tags: state,
   ...props
 }: TagsInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [tags, setTags] = useControllableState(state);
   const [draft, setDraft] = useState("");
   const inputRef = useRef<null | TextInput>(null);
+  const mergedRef = useMergedReferences(inputRef, ref);
   const locked = disabled || !editable || readOnly;
   const addDisabled = locked || draft.trim().length === 0;
   const commit = () => {
@@ -139,7 +142,7 @@ function TagsInput({
       <TextInput
         {...props}
         accessibilityLabel={labels.input}
-        accessibilityState={{ disabled: locked }}
+        accessibilityState={{ disabled: locked, ...props.accessibilityState }}
         editable={!locked}
         onChangeText={(text) => {
           if (!locked) setDraft(text);
@@ -151,7 +154,7 @@ function TagsInput({
         placeholder={placeholder}
         placeholderTextColor={theme.colors.mutedForeground}
         readOnly={readOnly}
-        ref={mergeReferences(inputRef, ref)}
+        ref={mergedRef}
         returnKeyType="done"
         style={[styles.input, ...typeStyle(theme, "bodySmall", "foreground")]}
         value={draft}

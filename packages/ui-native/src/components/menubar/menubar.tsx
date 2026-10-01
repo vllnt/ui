@@ -5,13 +5,14 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  type Text as NativeTextInstance,
   View,
   type ViewProps,
 } from "react-native";
 
 import {
   decorativeProps,
-  useAnnounceOnChange,
+  useFocusWhenShown,
 } from "../../primitives/accessibility";
 import {
   ModalLayer,
@@ -115,7 +116,9 @@ function Menubar({
   const activeMenu = menus.find((menu) =>
     isSingleSelected(activeId, menu, (candidate) => candidate.id),
   );
-  useAnnounceOnChange(activeMenu?.label, { initial: true });
+  const headingRef = useFocusWhenShown<NativeTextInstance>(
+    activeMenu !== undefined,
+  );
 
   return (
     <View
@@ -205,6 +208,7 @@ function Menubar({
           >
             <Text
               accessibilityRole="header"
+              ref={headingRef}
               size="small"
               style={styles.heading}
               weight="semibold"

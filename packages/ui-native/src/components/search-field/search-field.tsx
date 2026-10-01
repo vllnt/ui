@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import { focusAccessibility } from "../../primitives/accessibility";
-import { mergeReferences } from "../../primitives/merge-references";
+import { useMergedReferences } from "../../primitives/merge-references";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 
@@ -58,6 +58,7 @@ function SearchField({
 }: SearchFieldProps) {
   const theme = useTheme();
   const inputRef = useRef<null | TextInput>(null);
+  const mergedRef = useMergedReferences(inputRef, ref);
   const [internalValue, setInternalValue] = useState(defaultValue);
   const currentValue = value ?? internalValue;
   const readOnly =
@@ -77,7 +78,7 @@ function SearchField({
         inputMode="search"
         onChangeText={update}
         placeholder={placeholder}
-        ref={mergeReferences(inputRef, ref)}
+        ref={mergedRef}
         returnKeyType={props.returnKeyType ?? "search"}
         style={[styles.input, style]}
         value={currentValue}

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { decorativeProps } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import {
   isSingleSelected,
   type SelectionKey,
@@ -87,7 +88,7 @@ function RadioGroup(groupProps: RadioGroupProps) {
     accessibilityState: _accessibilityState,
     children,
     defaultValue,
-    disabled = false,
+    disabled: ownDisabled = false,
     onValueChange,
     orientation = "vertical",
     ref,
@@ -95,6 +96,7 @@ function RadioGroup(groupProps: RadioGroupProps) {
     value,
     ...props
   } = groupProps;
+  const disabled = useGroupDisabled(ownDisabled);
   const [selectedValue, setSelectedValue] = useControllableState(
     "value" in groupProps
       ? { mode: "controlled", onChange: onValueChange, value }

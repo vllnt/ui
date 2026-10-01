@@ -10,6 +10,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -46,13 +47,14 @@ const styles = StyleSheet.create({
  * open sheet is titled by a `labels.open` header.
  */
 function DatePicker({
-  disabled = false,
+  disabled: ownDisabled = false,
   labels,
   ref,
   selection,
   style,
   ...props
 }: DatePickerProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [date, setDate] = useControllableState(selection);

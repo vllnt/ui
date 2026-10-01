@@ -119,6 +119,7 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
+  ItemMedia,
   ItemTitle,
   KeyboardShortcutsHelp,
   Label,
@@ -495,7 +496,23 @@ const dataDisplay: Readonly<Record<string, AccessibilityFixture>> = {
   ),
   "data-list": () => (
     <DataList
-      items={[{ id: "region", label: "Region", value: "North America" }]}
+      items={[
+        { id: "region", label: "Region", value: "North America" },
+        {
+          id: "owner",
+          label: "Owner",
+          value: <NativeText accessibilityRole="text">Ada Lovelace</NativeText>,
+        },
+        {
+          id: "docs",
+          label: "Docs",
+          value: (
+            <Link href="https://example.com/docs" linking={linking}>
+              Runbook
+            </Link>
+          ),
+        },
+      ]}
     />
   ),
   "live-feed": () => (
@@ -1553,6 +1570,9 @@ const layout: Readonly<Record<string, AccessibilityFixture>> = {
   ),
   item: () => (
     <Item variant="outline">
+      <ItemMedia decorative>
+        <NativeText>•</NativeText>
+      </ItemMedia>
       <ItemContent>
         <ItemTitle>Account</ItemTitle>
         <ItemDescription>Profile details</ItemDescription>

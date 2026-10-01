@@ -138,9 +138,9 @@ it("uses caller-owned keys for controlled and uncontrolled toggle groups", () =>
   fireEvent.press(screen.getByRole("togglebutton", { name: "Center" }));
   expect(onMultipleChange).toHaveBeenCalledWith(["start", 42]);
 
-  fireEvent.press(screen.getByRole("radio", { name: "Comfortable" }));
+  fireEvent.press(screen.getByRole("togglebutton", { name: "Comfortable" }));
   expect(onSingleChange).toHaveBeenCalledWith("comfortable");
-  expect(screen.getByRole("radio", { name: "Compact" })).toHaveProp(
+  expect(screen.getByRole("togglebutton", { name: "Compact" })).toHaveProp(
     "accessibilityState",
     { checked: true, disabled: false },
   );
@@ -171,8 +171,8 @@ it("applies repeated toggle-group presses from the latest uncontrolled value", (
   act(() => {
     fireEvent.press(screen.getByRole("togglebutton", { name: "Bold" }));
     fireEvent.press(screen.getByRole("togglebutton", { name: "Italic" }));
-    fireEvent.press(screen.getByRole("radio", { name: "Small" }));
-    fireEvent.press(screen.getByRole("radio", { name: "Small" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Small" }));
+    fireEvent.press(screen.getByRole("togglebutton", { name: "Small" }));
   });
 
   expect(onMultipleChange.mock.calls).toEqual([
@@ -183,7 +183,7 @@ it("applies repeated toggle-group presses from the latest uncontrolled value", (
   for (const [role, name, checked] of [
     ["togglebutton", "Bold", true],
     ["togglebutton", "Italic", true],
-    ["radio", "Small", false],
+    ["togglebutton", "Small", false],
   ] as const) {
     expect(screen.getByRole(role, { name })).toHaveProp(
       "accessibilityState",

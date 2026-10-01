@@ -83,9 +83,14 @@ function Alert({
       current[part] === text ? current : { ...current, [part]: text },
     );
   }, []);
+  const liveRegion =
+    accessibilityLiveRegion ??
+    (variant === "destructive" ? "assertive" : "polite");
   useAnnounceOnChange(
-    accessibilityLabel ??
-      joinAccessibilityText([texts.title, texts.description]),
+    liveRegion === "none"
+      ? undefined
+      : (accessibilityLabel ??
+          joinAccessibilityText([texts.title, texts.description])),
     { initial: true, liveRegion: true },
   );
 
@@ -93,10 +98,8 @@ function Alert({
     <AlertTextContext value={setText}>
       <View
         {...props}
-        accessibilityLiveRegion={
-          accessibilityLiveRegion ??
-          (variant === "destructive" ? "assertive" : "polite")
-        }
+        accessibilityLabel={accessibilityLabel}
+        accessibilityLiveRegion={liveRegion}
         ref={ref}
         style={[
           {

@@ -29,16 +29,31 @@ type AnnounceOnChangeOptions = AnnounceOptions & {
   readonly initial?: boolean;
 };
 
+const pendingAnnouncements: string[] = [];
+
+function flushAnnouncements() {
+  const text = [...new Set(pendingAnnouncements.splice(0))].join(". ");
+  if (
+    text.length > 0 &&
+    typeof AccessibilityInfo.announceForAccessibility === "function"
+  )
+    AccessibilityInfo.announceForAccessibility(text);
+}
+
 /**
  * Speaks a message through the active screen reader. iOS has no live regions,
  * so route every state change that users must hear without moving focus
- * through this helper.
+ * through this helper. Messages queued in the same tick (for example two
+ * field errors after one submit) become one announcement, because each new
+ * announcement interrupts the previous one.
  */
 function announce(message: string | undefined, options: AnnounceOptions = {}) {
   const text = message?.trim();
   if (!text) return;
   if (options.liveRegion === true && Platform.OS === "android") return;
-  AccessibilityInfo.announceForAccessibility(text);
+  if (pendingAnnouncements.length === 0)
+    void Promise.resolve().then(flushAnnouncements);
+  pendingAnnouncements.push(text);
 }
 
 /**
@@ -62,12 +77,32 @@ function isHostInstance(value: unknown): value is HostInstance {
   return typeof value === "object" && value !== null && "measure" in value;
 }
 
-/** Moves screen-reader focus to a mounted host element (View, Text, TextInput). */
+/**
+ * Moves screen-reader focus to a mounted host element (View, Text, TextInput).
+ * Does nothing where the platform lacks `sendAccessibilityEvent` (for example
+ * react-native-web).
+ */
 function focusAccessibility(target: RefObject<unknown>) {
   const node = target.current;
-  if (isHostInstance(node)) {
+  if (
+    isHostInstance(node) &&
+    typeof AccessibilityInfo.sendAccessibilityEvent === "function"
+  ) {
     AccessibilityInfo.sendAccessibilityEvent(node, "focus");
   }
+}
+
+/**
+ * Moves screen-reader focus to the attached element (a sheet or menu
+ * title) each time `shown` turns true, so the title speaks once without a
+ * separate announcement.
+ */
+function useFocusWhenShown<T>(shown: boolean) {
+  const target = useRef<T>(null);
+  useEffect(() => {
+    if (shown) focusAccessibility(target);
+  }, [shown]);
+  return target;
 }
 
 /**
@@ -91,15 +126,23 @@ function useRevealFocus<T>(revealed: boolean) {
   };
 }
 
+function plainTextPart(node: ReactNode): string | undefined {
+  if (node === null || node === undefined || typeof node === "boolean")
+    return "";
+  return plainText(node);
+}
+
 /**
  * Returns the plain text of string, number, or array children, or
  * `undefined` when the content contains elements whose text is unknown.
+ * Inside arrays, `null`, `undefined`, and booleans (conditional children such
+ * as `{required && "*"}`) count as empty text.
  */
 function plainText(node: ReactNode): string | undefined {
   if (typeof node === "string") return node;
   if (typeof node === "number") return String(node);
   if (!Array.isArray(node)) return undefined;
-  const parts = node.map((child: ReactNode) => plainText(child));
+  const parts = node.map((child: ReactNode) => plainTextPart(child));
   return parts.every((part) => part !== undefined) ? parts.join("") : undefined;
 }
 
@@ -124,5 +167,6 @@ export {
   joinAccessibilityText,
   plainText,
   useAnnounceOnChange,
+  useFocusWhenShown,
   useRevealFocus,
 };

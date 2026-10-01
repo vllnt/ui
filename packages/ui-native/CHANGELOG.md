@@ -12,6 +12,13 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - Machine-readable availability, compatibility, source, peer dependency, and installation metadata in `registry.json`.
 - Generated barrel/manifest drift checks, native boundary checks, Jest interaction coverage, and packed-package validation.
 
+### Changed
+
+- Screen-reader parity for VoiceOver and TalkBack (#535): semantics VoiceOver ignored on non-focusable Views moved onto focusable elements, visible headers, or item hints; state changes announced on iOS as well as through Android live regions (announcements queued in one tick are spoken once); decorative content hidden on both platforms; touch targets of at least 44 points; fixed boxes and input heights follow the font scale; new optional `labels` fields and props carry the screen-reader text, with the previous English as defaults.
+- `OverviewBoard`/`OverviewCard` metrics and the `StatCard` value are no longer always live regions; pass `announceChanges` to have value changes announced.
+- Single `ToggleGroup` items stay toggle buttons with `checked`; the group label (`accessibilityLabel`) of `RadioGroup`, `ToggleGroup`, `Toolbar`, `ButtonGroup`, `FilterBar`, and `Fieldset` is spoken as each control's hint, and a disabled `Fieldset` disables the package controls inside it.
+- `Toast` expiry takes ten times longer while a screen reader runs; `Marquee` stops while a screen reader runs and accepts `paused`.
+
 ### Fixed
 
 - `Calendar` and `RangeCalendar` keep years 0–99 instead of remapping them to 1900–1999.

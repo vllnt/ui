@@ -20,6 +20,8 @@ import { StatusIndicator } from "../components/status-indicator/status-indicator
 import { StickyMetric } from "../components/sticky-metric/sticky-metric";
 import { WorldClockBar } from "../components/world-clock-bar/world-clock-bar";
 
+import { flushMicrotasks } from "./test-utils";
+
 const fixedNow = "2026-01-01T12:00:00.000Z";
 
 it("renders empty and populated caller-keyed data collections", () => {
@@ -113,7 +115,7 @@ it("renders overview and service status data with explicit status text", () => {
     expect(screen.getByText(text)).toBeOnTheScreen();
 });
 
-it("provides readable status, severity, alert, and sync announcements", () => {
+it("provides readable status, severity, alert, and sync announcements", async () => {
   const announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
   announceSpy.mockClear();
   render(
@@ -134,6 +136,7 @@ it("provides readable status, severity, alert, and sync announcements", () => {
       name: "Presence sync: Reconnecting, retry 2 of 5",
     }),
   ).toHaveProp("accessibilityLiveRegion", "polite");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledWith(
     "Connection lost. Check the network and retry.",
   );

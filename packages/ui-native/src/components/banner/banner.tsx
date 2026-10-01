@@ -145,13 +145,14 @@ function Banner({
 }: BannerProps) {
   const theme = useTheme();
   const [dismissed, setDismissed] = useState(false);
-  const liveRegion = liveRegionFor(variant);
+  const liveRegion = props.accessibilityLiveRegion ?? liveRegionFor(variant);
+  const announces = liveRegion !== undefined && liveRegion !== "none";
   const destructive = variant === "destructive";
   const foreground = destructive
     ? theme.colors.destructiveForeground
     : theme.colors.foreground;
   useAnnounceOnChange(
-    liveRegion && !dismissed
+    announces && !dismissed
       ? (accessibilityLabel ?? textContent(children))
       : undefined,
     { initial: true, liveRegion: true },
@@ -161,6 +162,7 @@ function Banner({
   return (
     <View
       {...props}
+      accessibilityLabel={accessibilityLabel}
       accessibilityLiveRegion={liveRegion}
       ref={ref}
       style={[

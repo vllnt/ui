@@ -21,7 +21,11 @@ export type ItemProps = ItemViewProps & {
   readonly size?: ItemSize;
   readonly variant?: ItemVariant;
 };
-export type ItemMediaProps = ItemViewProps;
+/** Props for the leading media slot of an item. */
+export type ItemMediaProps = ItemViewProps & {
+  /** Hides purely visual media (icons, bullets) from VoiceOver and TalkBack. */
+  readonly decorative?: boolean;
+};
 export type ItemContentProps = ItemViewProps;
 export type ItemActionsProps = ItemViewProps;
 export type ItemTitleProps = ItemTextProps;
@@ -66,14 +70,18 @@ function Item({
 Item.displayName = "Item";
 
 /**
- * Leading icon or thumbnail slot. Decorative by default (hidden from
- * VoiceOver and TalkBack); override `accessibilityElementsHidden` and
- * `importantForAccessibility` for media that carries meaning.
+ * Leading icon or thumbnail slot. Pass `decorative` to hide purely visual
+ * media from VoiceOver and TalkBack on both platforms.
  */
-function ItemMedia({ ref, style, ...props }: ItemMediaProps) {
+function ItemMedia({
+  decorative = false,
+  ref,
+  style,
+  ...props
+}: ItemMediaProps) {
   return (
     <View
-      {...decorativeProps}
+      {...(decorative ? decorativeProps : undefined)}
       {...props}
       ref={ref}
       style={[styles.media, style]}

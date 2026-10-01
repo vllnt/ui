@@ -89,6 +89,17 @@ function resolveStatus({
   return { loadingLabel, statusLabel };
 }
 
+function spokenProgress(state: ProgressState, loadingLabel?: string) {
+  return loadingLabel === undefined
+    ? {
+        max: state.max,
+        min: 0,
+        now: state.value,
+        text: `${state.percent}%`,
+      }
+    : { text: loadingLabel };
+}
+
 function ProgressLabels({
   completedLabel,
   loadingLabel,
@@ -157,6 +168,7 @@ ProgressTrack.displayName = "ProgressTrack";
 /** Native progress bar with clamped values and React Native accessibility state. */
 function ProgressBar({
   accessibilityLabel,
+  accessibilityValue,
   completedLabel = "completed",
   currentLabel,
   isComplete,
@@ -185,14 +197,7 @@ function ProgressBar({
       accessibilityRole="progressbar"
       accessibilityState={{ busy: isLoading }}
       accessibilityValue={
-        loadingLabel === undefined
-          ? {
-              max: state.max,
-              min: 0,
-              now: state.value,
-              text: `${state.percent}%`,
-            }
-          : { text: loadingLabel }
+        accessibilityValue ?? spokenProgress(state, loadingLabel)
       }
       accessible
       ref={ref}

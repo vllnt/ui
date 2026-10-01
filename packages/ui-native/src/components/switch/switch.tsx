@@ -4,6 +4,7 @@ import {
   type SwitchProps as NativeSwitchProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 
 /** Props for the controlled native binary switch. */
@@ -17,11 +18,12 @@ export type SwitchProps = Omit<NativeSwitchProps, "onValueChange" | "value"> & {
 function Switch({
   accessibilityState,
   checked,
-  disabled = false,
+  disabled: ownDisabled = false,
   onCheckedChange,
   ref,
   ...props
 }: SwitchProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   return (
     <NativeSwitch

@@ -43,28 +43,27 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * Accessible native action with the same semantic variants as the web Button.
- * Inside a named group (ButtonGroup, FilterBar, Fieldset) it speaks the group
- * name as its hint and follows the group's disabled state. The icon size
- * grows with the user's font scale.
- */
-function Button({
+type ButtonFrameProps = ButtonProps & {
+  /** Square side of an icon button, already scaled with the font. */
+  readonly iconSize?: number;
+};
+
+function ButtonFrame({
   accessibilityHint,
   accessibilityLabel,
   accessibilityState,
   children,
   disabled = false,
+  iconSize,
   ref,
   size = "default",
   style,
   textStyle,
   variant = "default",
   ...props
-}: ButtonProps) {
+}: ButtonFrameProps) {
   const theme = useTheme();
   const group = useControlGroup();
-  const iconSize = useFontScaledSize(44);
   const isDisabled = disabled === true || group.disabled === true;
   const resolved = resolveButtonStyles(theme, variant, size);
   const content = (
@@ -94,7 +93,9 @@ function Button({
         styles.base,
         { borderRadius: theme.radius.md, gap: theme.spacing[2] },
         resolved.container,
-        size === "icon" ? { height: iconSize, width: iconSize } : undefined,
+        iconSize === undefined
+          ? undefined
+          : { height: iconSize, width: iconSize },
         state.pressed ? styles.pressed : undefined,
         isDisabled ? styles.disabled : undefined,
         typeof style === "function" ? style(state) : style,
@@ -102,6 +103,27 @@ function Button({
     >
       {content}
     </Pressable>
+  );
+}
+ButtonFrame.displayName = "ButtonFrame";
+
+function IconButtonFrame(props: ButtonProps) {
+  const iconSize = useFontScaledSize(44);
+  return <ButtonFrame {...props} iconSize={iconSize} />;
+}
+IconButtonFrame.displayName = "IconButtonFrame";
+
+/**
+ * Accessible native action with the same semantic variants as the web Button.
+ * Inside a named group (ButtonGroup, FilterBar, Fieldset) it speaks the group
+ * name as its hint and follows the group's disabled state. An icon
+ * button (`size="icon"`) grows with the user's font scale.
+ */
+function Button(props: ButtonProps) {
+  return props.size === "icon" ? (
+    <IconButtonFrame {...props} />
+  ) : (
+    <ButtonFrame {...props} />
   );
 }
 Button.displayName = "Button";

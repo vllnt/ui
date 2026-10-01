@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { decorativeProps } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -56,7 +57,7 @@ function Checkbox({
   accessibilityState,
   checked,
   defaultChecked = false,
-  disabled = false,
+  disabled: ownDisabled = false,
   label,
   onCheckedChange,
   onPress,
@@ -64,6 +65,7 @@ function Checkbox({
   style,
   ...props
 }: CheckboxProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [current, setCurrent] = useControllableState(
     controllableOptions(checked, defaultChecked, onCheckedChange),
@@ -119,7 +121,12 @@ function Checkbox({
         ) : null}
       </View>
       {label ? (
-        <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
+        <NativeText
+          style={typeStyle(theme, "bodySmall", {
+            color: "foreground",
+            flexShrink: 1,
+          })}
+        >
           {label}
         </NativeText>
       ) : null}

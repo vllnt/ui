@@ -41,7 +41,7 @@ import { Text } from "../components/text/text";
 import { TextField } from "../components/text-field/text-field";
 import { TimePicker } from "../components/time-picker/time-picker";
 
-import { renderThemed, themed } from "./test-utils";
+import { flushMicrotasks, renderThemed, themed } from "./test-utils";
 
 const hostNode = () => ({ measure: jest.fn() });
 let announceSpy: jest.SpyInstance;
@@ -65,7 +65,7 @@ const calendarLabels = {
   previousMonth: "Previous month",
 };
 
-it("names field controls from their visible label and speaks errors", () => {
+it("names field controls from their visible label and speaks errors", async () => {
   const field = (invalid: boolean) => (
     <Field invalid={invalid}>
       <FieldLabel>Username</FieldLabel>
@@ -85,10 +85,11 @@ it("names field controls from their visible label and speaks errors", () => {
     "Already used. Public identifier",
   );
   expect(screen.getByTestId("control")).not.toHaveProp("aria-invalid");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledWith("Already used");
 });
 
-it("announces text-field, form, and one-time-code errors when they appear", () => {
+it("announces text-field, form, and one-time-code errors once per update", async () => {
   const view = renderThemed(
     <>
       <TextField label="Email" value="" />
@@ -131,15 +132,18 @@ it("announces text-field, form, and one-time-code errors when they appear", () =
     "accessibilityHint",
     "Profile",
   );
+  await flushMicrotasks();
+  expect(announceSpy).toHaveBeenCalledTimes(1);
+  const [spoken] = announceSpy.mock.lastCall ?? [];
   for (const message of [
     "Required",
     "Wrong code",
     "Fix the highlighted fields",
   ])
-    expect(announceSpy).toHaveBeenCalledWith(message);
+    expect(spoken).toContain(message);
 });
 
-it("speaks the current value of picker triggers and titles their sheets", () => {
+it("speaks the current value of picker triggers and titles their sheets", async () => {
   renderThemed(
     <>
       <Select
@@ -200,8 +204,10 @@ it("speaks the current value of picker triggers and titles their sheets", () => 
   expect(screen.getByRole("header", { name: "Fruits" })).toBeOnTheScreen();
   fireEvent.press(screen.getByRole("button", { name: "Tags" }));
   fireEvent.changeText(screen.getByLabelText("Search tags"), "we");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("1 tags");
   fireEvent.changeText(screen.getByLabelText("Search tags"), "zz");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("No match");
   fireEvent.press(screen.getByRole("button", { name: "Start time" }));
   expect(screen.getByRole("radio", { name: "Hour, 07" })).toHaveProp(
@@ -307,12 +313,14 @@ it("announces picked files and exposes rating and checkbox group names", async (
   await act(async () => {
     fireEvent.press(screen.getByRole("button", { name: "Choose files" }));
   });
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledWith("Added b.txt");
   expect(screen.getByRole("radio", { name: "3 stars" })).toHaveProp(
     "accessibilityHint",
     "Lesson rating",
   );
   fireEvent.press(screen.getByRole("radio", { name: "3 stars" }));
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledWith("3 of 5");
   expect(screen.getByRole("checkbox", { name: "Email" })).toHaveProp(
     "accessibilityHint",
@@ -320,7 +328,7 @@ it("announces picked files and exposes rating and checkbox group names", async (
   );
 });
 
-it("announces calendar months and names range endpoints", () => {
+it("announces calendar months and names range endpoints", async () => {
   renderThemed(
     <>
       <Calendar
@@ -346,6 +354,7 @@ it("announces calendar months and names range endpoints", () => {
     </>,
   );
   fireEvent.press(screen.getAllByRole("button", { name: "Next month" })[0]);
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledWith("2025-2");
   expect(screen.getByRole("button", { name: "Range day 10" })).toHaveProp(
     "accessibilityValue",
@@ -437,7 +446,7 @@ it("exposes learning state without colour or selected-only cues", () => {
   );
 });
 
-it("keeps visible status and progress in composed names", () => {
+it("keeps visible status and progress in composed names", async () => {
   const reasoningLabels = {
     collapse: "Hide reasoning",
     expand: "Show reasoning",
@@ -479,10 +488,11 @@ it("keeps visible status and progress in composed names", () => {
     "accessibilityValue",
     { text: "Reasoned, 3s" },
   );
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledWith("Reasoned");
 });
 
-it("describes model rows and announces filtered counts", () => {
+it("describes model rows and announces filtered counts", async () => {
   renderThemed(
     <ModelSelector
       defaultOpen
@@ -516,6 +526,7 @@ it("describes model rows and announces filtered counts", () => {
     { text: "Unavailable: Maintenance" },
   );
   fireEvent.changeText(screen.getByLabelText("Search models"), "fast");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("1 models");
 });
 

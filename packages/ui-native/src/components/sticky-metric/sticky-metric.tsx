@@ -103,7 +103,10 @@ function useMetricSemantics({
       ? joinAccessibilityText([name, valueText], ", ")
       : undefined,
   );
-  if (name === undefined || valueText === undefined) return;
+  if (name === undefined || valueText === undefined)
+    return accessibilityLabel === undefined
+      ? undefined
+      : { accessibilityLabel, accessible: true };
   return {
     accessibilityLabel: name,
     accessibilityValue: {

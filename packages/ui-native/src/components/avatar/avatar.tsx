@@ -37,8 +37,9 @@ export type AvatarProps = ViewProps & {
   readonly size?: number;
 };
 /**
- * Props for the native avatar image. Pass `accessibilityLabel` (the person's
- * name) to expose it as an image; without a name screen readers skip it.
+ * Props for the native avatar image. Pass `accessibilityLabel`, `alt`, or
+ * `aria-label` (the person's name) to expose it as an image; without a name
+ * screen readers skip it.
  */
 export type AvatarImageProps = ImageProps & { readonly ref?: Ref<Image> };
 /** Props for avatar fallback content. */
@@ -113,7 +114,8 @@ function AvatarImage({
     };
   }, [setImageLoaded, sourceKey]);
   if (failedSourceKey === sourceKey) return null;
-  const named = accessibilityLabel !== undefined && accessibilityLabel !== "";
+  const name = accessibilityLabel ?? props.alt ?? props["aria-label"];
+  const named = name !== undefined && name !== "";
   return (
     <Image
       {...(named ? undefined : decorativeProps)}

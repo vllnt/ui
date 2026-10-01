@@ -112,18 +112,18 @@ function eventSummary(event: LiveFeedEvent) {
  * the newest. Clock ticks never re-announce.
  */
 function useNewestEventAnnouncement(newest?: LiveFeedEvent, intervalMs = 2000) {
-  const previousId = useRef(newest?.id);
+  const announcedId = useRef(newest?.id);
   const lastAnnouncedAt = useRef(0);
   const id = newest?.id;
   const message = newest ? eventSummary(newest) : undefined;
   useEffect(() => {
-    if (message === undefined || id === previousId.current) return;
-    previousId.current = id;
+    if (message === undefined || id === announcedId.current) return;
     const delay = Math.max(
       0,
       lastAnnouncedAt.current + intervalMs - Date.now(),
     );
     const timer = setTimeout(() => {
+      announcedId.current = id;
       lastAnnouncedAt.current = Date.now();
       announce(message);
     }, delay);

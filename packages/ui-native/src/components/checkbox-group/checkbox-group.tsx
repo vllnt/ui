@@ -9,6 +9,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
  * non-focusable containers.
  */
 function CheckboxGroup({
-  disabled = false,
+  disabled: ownDisabled = false,
   items,
   label,
   orientation = "vertical",
@@ -58,6 +59,7 @@ function CheckboxGroup({
   style,
   ...props
 }: CheckboxGroupProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [selectedIds, setSelectedIds] = useControllableState(selection);
   const getId = (item: CheckboxGroupItem) => item.id;

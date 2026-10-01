@@ -459,7 +459,7 @@ it("falls back after group avatar image failures and disables stray handles", ()
   ).toBeDisabled();
 });
 
-it("announces feed additions without making clock changes reannounce the group", () => {
+it("announces feed additions without making clock changes reannounce the group", async () => {
   jest.useFakeTimers();
   const announceSpy = jest.spyOn(AccessibilityInfo, "announceForAccessibility");
   announceSpy.mockClear();
@@ -479,12 +479,16 @@ it("announces feed additions without making clock changes reannounce the group",
   );
   view.rerender(themed(feed([first], "2025-01-01T00:02:00Z")));
   advanceTimers(5000);
+  await flushMicrotasks();
   expect(announceSpy).not.toHaveBeenCalled();
   const second = { ...first, id: "next", title: "Rollback started" };
   view.rerender(themed(feed([second, first], "2025-01-01T00:02:00Z")));
+  const renamed = { ...second, title: "Rollback running" };
+  view.rerender(themed(feed([renamed, first], "2025-01-01T00:02:00Z")));
   advanceTimers(5000);
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenCalledTimes(1);
-  expect(announceSpy).toHaveBeenCalledWith("info: Rollback started");
+  expect(announceSpy).toHaveBeenCalledWith("info: Rollback running");
   announceSpy.mockRestore();
   jest.useRealTimers();
 });

@@ -39,6 +39,13 @@ export type ToastProps = Omit<ViewProps, "children"> & {
   readonly toasts: readonly ToastItem[];
 };
 
+/**
+ * Expiry multiplier while VoiceOver or TalkBack runs (WCAG 2.2.1 asks for at
+ * least ten times the default), so toasts stay long enough to reach without
+ * staying forever.
+ */
+const SCREEN_READER_TIMEOUT_FACTOR = 10;
+
 /** Runs `callback` at `deadline` (epoch milliseconds); the caller clears it. */
 function scheduleAt(deadline: number, callback: () => void) {
   return setTimeout(callback, Math.max(0, deadline - Date.now()));
@@ -65,8 +72,8 @@ const styles = StyleSheet.create({
 /**
  * Accessible controlled toast queue with per-instance deterministic timers.
  * Each new toast (title and description) is announced once on both platforms;
- * while VoiceOver or TalkBack runs, toasts do not expire so users have time to
- * reach them, and expiry restarts when the screen reader stops.
+ * while VoiceOver or TalkBack runs, expiry takes ten times longer so users
+ * have time to reach the toast, and it restarts when the screen reader stops.
  */
 function Toast({
   closeLabel,
@@ -122,37 +129,37 @@ function Toast({
     for (const id of announcedIds.current) {
       if (!currentIds.has(id)) announcedIds.current.delete(id);
     }
+    const extension = screenReaderEnabled ? SCREEN_READER_TIMEOUT_FACTOR : 1;
     for (const [id, entry] of timerMap) {
       const toast = toasts.find((item) => Object.is(item.id, id));
-      if (
-        screenReaderEnabled ||
-        toast?.duration !== entry.duration ||
-        dismissedIds.current.has(id)
-      ) {
+      const duration =
+        toast?.duration === undefined ? undefined : toast.duration * extension;
+      if (duration !== entry.duration || dismissedIds.current.has(id)) {
         clearTimeout(entry.timer);
         timerMap.delete(id);
       }
     }
     for (const toast of toasts) {
       if (!announcedIds.current.has(toast.id)) {
-        AccessibilityInfo.announceForAccessibility(
-          toast.description
-            ? `${toast.title}. ${toast.description}`
-            : toast.title,
-        );
+        if (typeof AccessibilityInfo.announceForAccessibility === "function")
+          AccessibilityInfo.announceForAccessibility(
+            toast.description
+              ? `${toast.title}. ${toast.description}`
+              : toast.title,
+          );
         announcedIds.current.add(toast.id);
       }
       if (
-        !screenReaderEnabled &&
         !dismissedIds.current.has(toast.id) &&
         toast.duration !== undefined &&
         toast.duration > 0
       ) {
+        const duration = toast.duration * extension;
         const deadline =
-          timerMap.get(toast.id)?.deadline ?? Date.now() + toast.duration;
+          timerMap.get(toast.id)?.deadline ?? Date.now() + duration;
         timerMap.set(toast.id, {
           deadline,
-          duration: toast.duration,
+          duration,
           timer: scheduleAt(deadline, () => {
             dismiss(toast.id);
           }),

@@ -12,6 +12,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { useTheme } from "../../theme/theme-provider";
 import { Input } from "../input/input";
 
@@ -258,7 +259,7 @@ function NumberInput({
   accessibilityLabel,
   decrementLabel = "Decrement",
   defaultValue,
-  disabled = false,
+  disabled: ownDisabled = false,
   incrementLabel = "Increment",
   max,
   min,
@@ -269,6 +270,7 @@ function NumberInput({
   value,
   ...props
 }: NumberInputProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const state = useNumberState({
     defaultValue,

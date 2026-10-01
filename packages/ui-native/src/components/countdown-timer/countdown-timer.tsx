@@ -228,13 +228,10 @@ function getProgress({
   readonly remainingMs: number;
   readonly startedAt?: Date;
 }): { readonly max: number; readonly value: number } {
-  if (!startedAt) return { max: 1, value: remainingMs <= 0 ? 0 : 1 };
+  if (!startedAt) return { max: 1, value: remainingMs <= 0 ? 1 : 0 };
   const max = Math.max(0, deadline.getTime() - startedAt.getTime());
-  const elapsed = Math.min(
-    max,
-    Math.max(0, now.getTime() - startedAt.getTime()),
-  );
-  return { max, value: max - elapsed };
+  const value = Math.min(max, Math.max(0, now.getTime() - startedAt.getTime()));
+  return { max, value };
 }
 
 function getTimerPresentation({
@@ -296,8 +293,8 @@ function getTimerPresentation({
  * Native countdown card with fixed-time injection for deterministic rendering.
  * The title speaks the status and remaining time when focused; the ticking
  * digits stay silent, and the card announces status transitions (on track,
- * at risk, breached) and nothing else. The progress bar reports the time
- * remaining.
+ * at risk, breached) and nothing else. The progress bar fills with the time
+ * used and speaks the time remaining as its value.
  */
 function CountdownTimer({
   deadline,
@@ -344,6 +341,7 @@ function CountdownTimer({
       />
       <TimerSegments segments={timer.segments} />
       <ProgressBar
+        accessibilityValue={{ text: timer.durationLabel }}
         completedLabel=""
         currentLabel={labels?.timeRemaining ?? "Time remaining"}
         isComplete={timer.remainingMs <= 0}

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { toggleMultipleSelected } from "../../primitives/selection";
 import { typeStyle } from "../../primitives/type-style";
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
  * filtered result count or empty message is announced while searching.
  */
 function MultiSelect({
-  disabled = false,
+  disabled: ownDisabled = false,
   labels,
   options,
   ref,
@@ -73,6 +74,7 @@ function MultiSelect({
   style,
   ...props
 }: MultiSelectProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [selectedIds, setSelectedIds] = useControllableState(selection);

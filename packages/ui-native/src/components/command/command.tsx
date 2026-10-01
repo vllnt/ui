@@ -10,7 +10,10 @@ import {
   View,
 } from "react-native";
 
-import { useAnnounceOnChange } from "../../primitives/accessibility";
+import {
+  useAnnounceOnChange,
+  useFocusWhenShown,
+} from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -124,7 +127,7 @@ function Command({
       ),
   );
   const noResults = filteredItems.length === 0;
-  useAnnounceOnChange(visible ? label : undefined, { initial: true });
+  const headingRef = useFocusWhenShown<Text>(visible);
   useAnnounceOnChange(
     visible && normalizedQuery.length > 0
       ? noResults
@@ -162,6 +165,7 @@ function Command({
       >
         <Text
           accessibilityRole="header"
+          ref={headingRef}
           style={[
             styles.heading,
             ...typeStyle(theme, "bodySmall", {

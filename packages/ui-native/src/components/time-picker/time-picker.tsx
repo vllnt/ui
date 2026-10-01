@@ -11,6 +11,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -64,7 +65,7 @@ function validTime(value: string): value is ISOTimeString {
  * its column, so "07" is heard as an hour or a minute.
  */
 function TimePicker({
-  disabled = false,
+  disabled: ownDisabled = false,
   labels,
   minuteStep = 5,
   ref,
@@ -72,6 +73,7 @@ function TimePicker({
   style,
   ...props
 }: TimePickerProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [value, setValue] = useControllableState(selection);

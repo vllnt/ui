@@ -49,17 +49,22 @@ function DataRow({
   const theme = useTheme();
   const verticalPadding =
     density === "compact" ? theme.spacing[3] : theme.spacing[4];
+  const label = plainText(item.label);
+  const value = plainText(item.value);
+  const spoken =
+    item.accessibilityLabel ??
+    (label === undefined || value === undefined
+      ? undefined
+      : joinAccessibilityText([label, value], ", "));
   return (
     <View
-      accessibilityLabel={
-        item.accessibilityLabel ??
-        joinAccessibilityText(
-          [plainText(item.label), plainText(item.value)],
-          ", ",
-        )
-      }
-      accessibilityRole="text"
-      accessible
+      {...(spoken === undefined
+        ? undefined
+        : {
+            accessibilityLabel: spoken,
+            accessibilityRole: "text" as const,
+            accessible: true,
+          })}
       style={[
         styles.row,
         {
@@ -81,8 +86,10 @@ function DataRow({
 DataRow.displayName = "DataRow";
 
 /**
- * Native key-value metadata list with caller-supplied stable item ids. Each
- * row is one screen-reader stop that speaks "label, value". VoiceOver ignores
+ * Native key-value metadata list with caller-supplied stable item ids. A row
+ * with an `accessibilityLabel`, or with plain-text label and value, is one
+ * screen-reader stop that speaks "label, value"; rows with element content
+ * (links, custom nodes) keep each part reachable on its own. VoiceOver ignores
  * names on non-focusable containers, so the list itself carries the list
  * role without a name; name it with a visible heading next to it.
  */

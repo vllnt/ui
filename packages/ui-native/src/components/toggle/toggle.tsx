@@ -9,6 +9,7 @@ import {
   type View,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import { typeStyle } from "../../primitives/type-style";
 import {
   controllableOptions,
@@ -45,7 +46,7 @@ function Toggle({
   accessibilityState,
   children,
   defaultPressed = false,
-  disabled = false,
+  disabled: ownDisabled = false,
   onPress,
   onPressedChange,
   pressed,
@@ -54,6 +55,7 @@ function Toggle({
   variant = "default",
   ...props
 }: ToggleProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [isPressed, setIsPressed] = useControllableState(
     controllableOptions(pressed, defaultPressed, onPressedChange),

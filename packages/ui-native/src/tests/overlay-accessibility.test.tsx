@@ -14,7 +14,7 @@ import { Menubar } from "../components/menubar/menubar";
 import { SearchDialog } from "../components/search-dialog/search-dialog";
 import { Tabs, TabsList, TabsTrigger } from "../components/tabs/tabs";
 
-import { reducedMotion, searchLabels } from "./test-utils";
+import { flushMicrotasks, reducedMotion, searchLabels } from "./test-utils";
 
 const hostNode = () => ({ measure: jest.fn() });
 let announceSpy: jest.SpyInstance;
@@ -35,7 +35,7 @@ const menuItems = [
   { destructive: true, id: "delete", label: "Delete" },
 ];
 
-it("titles open menus, announces them, and marks destructive items without colour", () => {
+it("titles open menus, focuses the title, and marks destructive items without colour", async () => {
   render(
     <>
       <DropdownMenu
@@ -52,11 +52,13 @@ it("titles open menus, announces them, and marks destructive items without colou
         label="Row actions"
       />
     </>,
+    { createNodeMock: hostNode },
   );
-  for (const name of ["File actions", "Row actions"]) {
+  await flushMicrotasks();
+  for (const name of ["File actions", "Row actions"])
     expect(screen.getByRole("header", { name })).toBeOnTheScreen();
-    expect(announceSpy).toHaveBeenCalledWith(name);
-  }
+  expect(focusSpy).toHaveBeenCalledTimes(2);
+  expect(announceSpy).not.toHaveBeenCalled();
   const [dropdownDelete, contextDelete] = screen.getAllByRole("menuitem", {
     name: "Delete",
   });
@@ -65,7 +67,7 @@ it("titles open menus, announces them, and marks destructive items without colou
   expect(screen.queryByLabelText("File actions")).toBeNull();
 });
 
-it("announces command and combobox result counts and empty states", () => {
+it("announces command and combobox result counts and empty states", async () => {
   render(
     <>
       <Command
@@ -103,16 +105,19 @@ it("announces command and combobox result counts and empty states", () => {
     "Destructive",
   );
   fireEvent.changeText(screen.getByLabelText("Search commands"), "open");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("1 commands");
   fireEvent.changeText(screen.getByLabelText("Search commands"), "zzz");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("No commands");
   fireEvent.press(screen.getByRole("button", { name: "Status" }));
   expect(screen.getByRole("header", { name: "Statuses" })).toBeOnTheScreen();
   fireEvent.changeText(screen.getByLabelText("Search statuses"), "rea");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("1 statuses");
 });
 
-it("names menubar menus and closes an open sheet from its close button or backdrop", () => {
+it("names menubar menus and closes an open sheet from its close button or backdrop", async () => {
   render(
     <Menubar
       closeLabel="Fermer"
@@ -121,13 +126,16 @@ it("names menubar menus and closes an open sheet from its close button or backdr
         { id: "file", items: [{ id: "new", label: "New" }], label: "File" },
       ]}
     />,
+    { createNodeMock: hostNode },
   );
   const file = screen.getByRole("button", { name: "File" });
   expect(file).toHaveProp("accessibilityHint", "Main menu");
   expect(screen.queryByLabelText("Main menu")).toBeNull();
   fireEvent.press(file);
   expect(screen.getByRole("header", { name: "File" })).toBeOnTheScreen();
-  expect(announceSpy).toHaveBeenCalledWith("File");
+  await flushMicrotasks();
+  expect(focusSpy).toHaveBeenCalledTimes(1);
+  expect(announceSpy).not.toHaveBeenCalledWith("File");
   fireEvent.press(screen.getByRole("button", { name: "Fermer" }));
   expect(screen.queryByRole("menuitem", { name: "New" })).toBeNull();
   fireEvent.press(file);
@@ -145,7 +153,7 @@ it("names menubar menus and closes an open sheet from its close button or backdr
   expect(screen.queryByRole("menuitem", { name: "New" })).toBeNull();
 });
 
-it("titles search, announces results, and keeps focus after clearing", () => {
+it("titles search, announces results, and keeps focus after clearing", async () => {
   render(
     <SearchDialog
       defaultOpen
@@ -157,12 +165,14 @@ it("titles search, announces results, and keeps focus after clearing", () => {
   );
   expect(screen.getByRole("header", { name: "Search docs" })).toBeOnTheScreen();
   fireEvent.changeText(screen.getByLabelText("Search"), "butt");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("1 results");
   expect(screen.getByRole("button", { name: "Button" })).toHaveProp(
     "accessibilityHint",
     "Pressable action",
   );
   fireEvent.changeText(screen.getByLabelText("Search"), "zzz");
+  await flushMicrotasks();
   expect(announceSpy).toHaveBeenLastCalledWith("No results");
   fireEvent.press(screen.getByRole("button", { name: "Clear" }));
   expect(focusSpy).toHaveBeenCalledTimes(1);

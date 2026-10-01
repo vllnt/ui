@@ -92,7 +92,7 @@ it("renders representative foundation compositions", () => {
       <Separator accessibilityLabel="Section break" decorative={false} />
       <Skeleton accessibilityLabel="Loading profile" testID="skeleton" />
       <Item variant="outline">
-        <ItemMedia>
+        <ItemMedia decorative>
           <NativeText>•</NativeText>
         </ItemMedia>
         <ItemContent>

@@ -15,6 +15,7 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
  * (via `labels.results`) and the empty state reach VoiceOver and TalkBack.
  */
 function Combobox({
-  disabled = false,
+  disabled: ownDisabled = false,
   labels,
   onOpenChange,
   options,
@@ -87,6 +88,7 @@ function Combobox({
   style,
   ...props
 }: ComboboxProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [selectedId, setSelectedId] = useControllableState(selection);

@@ -3,7 +3,7 @@
 import type { Ref } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { useAnnounceOnChange } from "../../primitives/accessibility";
+import { useFocusWhenShown } from "../../primitives/accessibility";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -71,7 +71,7 @@ function ContextMenu({
   const [visible, setVisible] = useControllableState(
     controllableOptions(open, defaultOpen, onOpenChange),
   );
-  useAnnounceOnChange(visible ? label : undefined, { initial: true });
+  const headingRef = useFocusWhenShown<Text>(visible);
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
@@ -102,6 +102,7 @@ function ContextMenu({
       >
         <Text
           accessibilityRole="header"
+          ref={headingRef}
           style={[
             styles.heading,
             ...typeStyle(theme, "bodySmall", {

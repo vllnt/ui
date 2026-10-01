@@ -15,6 +15,7 @@ import {
   decorativeProps,
   useAnnounceOnChange,
 } from "../../primitives/accessibility";
+import { useGroupDisabled } from "../../primitives/control-group";
 import { ModalLayer } from "../../primitives/modal-layer";
 import { typeStyle } from "../../primitives/type-style";
 import type { ControllableStateOptions } from "../../primitives/use-controllable-state";
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
  * its value; the open list is titled by a `labels.options` header.
  */
 function Select({
-  disabled = false,
+  disabled: ownDisabled = false,
   errorText,
   invalid = false,
   labels,
@@ -88,6 +89,7 @@ function Select({
   style,
   ...props
 }: SelectProps) {
+  const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [selectedId, setSelectedId] = useControllableState(selection);

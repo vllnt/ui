@@ -18,6 +18,14 @@ function useControlGroup(): ControlGroup {
   return use(ControlGroupContext);
 }
 
+/**
+ * Combines a control's own `disabled` prop with the enclosing group's
+ * disabled state (for example a disabled `Fieldset`).
+ */
+function useGroupDisabled(disabled: boolean | null | undefined): boolean {
+  return disabled === true || use(ControlGroupContext).disabled === true;
+}
+
 /** Merges a group's own name and state with any enclosing group. */
 function useNestedControlGroup(own: ControlGroup): ControlGroup {
   const outer = use(ControlGroupContext);
@@ -27,4 +35,9 @@ function useNestedControlGroup(own: ControlGroup): ControlGroup {
 }
 
 export type { ControlGroup };
-export { ControlGroupContext, useControlGroup, useNestedControlGroup };
+export {
+  ControlGroupContext,
+  useControlGroup,
+  useGroupDisabled,
+  useNestedControlGroup,
+};

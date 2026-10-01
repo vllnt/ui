@@ -19,6 +19,7 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { useGroupDisabled } from "../../primitives/control-group";
 import {
   isMultipleSelected,
   type SelectionKey,
@@ -70,7 +71,6 @@ type ToggleGroupContextValue = {
   readonly groupLabel?: string;
   readonly selectedKeys: ReadonlySet<SelectionKey>;
   readonly toggle: (key: SelectionKey) => void;
-  readonly type: ToggleGroupProps["type"];
 };
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(
@@ -118,7 +118,8 @@ function notifyValueChange(
 
 /**
  * Native toggle group using caller-owned item values for stable selection.
- * Single groups expose radio items; multiple groups expose toggle buttons.
+ * Every item is a toggle button reporting `checked`; a single group lets the
+ * pressed item be released again, so items are not radios.
  * VoiceOver ignores labels on non-focusable containers, so the group's
  * `accessibilityLabel` becomes each item's hint.
  */
@@ -127,7 +128,7 @@ function ToggleGroup(props: ToggleGroupProps) {
     accessibilityLabel,
     children,
     defaultValue: _defaultValue,
-    disabled = false,
+    disabled: ownDisabled = false,
     onValueChange: _onValueChange,
     orientation = "horizontal",
     ref,
@@ -136,6 +137,7 @@ function ToggleGroup(props: ToggleGroupProps) {
     value: _value,
     ...viewProps
   } = props;
+  const disabled = useGroupDisabled(ownDisabled);
   const controlled = "value" in props;
   const [selectedKeys, setSelectedKeys] = useControllableState(
     controlled
@@ -176,7 +178,6 @@ function ToggleGroup(props: ToggleGroupProps) {
         if (!controlled) latestKeysRef.current = nextKeys;
         setSelectedKeys(nextKeys);
       },
-      type: props.type,
     }),
     [
       accessibilityLabel,
@@ -192,7 +193,7 @@ function ToggleGroup(props: ToggleGroupProps) {
   return (
     <View
       {...viewProps}
-      accessibilityRole={props.type === "single" ? "radiogroup" : "none"}
+      accessibilityRole="none"
       ref={ref}
       style={[
         orientation === "horizontal" ? styles.horizontal : styles.vertical,
@@ -224,7 +225,6 @@ function ToggleGroupItem({
   }
   const theme = useTheme();
   const selected = isMultipleSelected(context.selectedKeys, value, identity);
-  const single = context.type === "single";
   const isDisabled = Boolean(context.disabled || disabled);
   const content =
     typeof children === "number" || typeof children === "string" ? (
@@ -244,7 +244,7 @@ function ToggleGroupItem({
     <Pressable
       {...props}
       accessibilityHint={accessibilityHint ?? context.groupLabel}
-      accessibilityRole={single ? "radio" : "togglebutton"}
+      accessibilityRole="togglebutton"
       accessibilityState={{
         ...accessibilityState,
         checked: selected,
