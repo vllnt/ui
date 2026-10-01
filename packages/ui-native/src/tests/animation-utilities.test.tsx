@@ -2,15 +2,15 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type * as TestingLibrary from "@testing-library/react-native/pure";
 import { Text as NativeText } from "react-native";
 
-import type * as AnimatedTextModule from "../components/animated-text/animated-text";
-import { AnimatedText } from "../components/animated-text/animated-text";
-import { Marquee } from "../components/marquee/marquee";
-import { NumberTicker } from "../components/number-ticker/number-ticker";
+import type * as AnimatedTextModule from "../components/atoms/animated-text/animated-text";
+import { AnimatedText } from "../components/atoms/animated-text/animated-text";
+import { Marquee } from "../components/atoms/marquee/marquee";
+import { NumberTicker } from "../components/atoms/number-ticker/number-ticker";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "../components/resizable/resizable";
+} from "../components/atoms/resizable/resizable";
 
 import { reducedMotion, renderThemed } from "./test-utils";
 
@@ -47,7 +47,7 @@ it("loads AnimatedText and splits by code point without Intl.Segmenter", () => {
         "@testing-library/react-native/pure",
       );
       const isolated = jest.requireActual<typeof AnimatedTextModule>(
-        "../components/animated-text/animated-text",
+        "../components/atoms/animated-text/animated-text",
       );
       testing.render(
         <isolated.AnimatedText

@@ -3,11 +3,11 @@ import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import {
   SearchDialog,
   type SearchItem,
-} from "../components/search-dialog/search-dialog";
-import { ShareDialog } from "../components/share-dialog/share-dialog";
-import { ShareSection } from "../components/share-section/share-section";
-import { Terminal } from "../components/terminal/terminal";
-import { Toast, type ToastItem } from "../components/toast/toast";
+} from "../components/atoms/search-dialog/search-dialog";
+import { ShareDialog } from "../components/atoms/share-dialog/share-dialog";
+import { ShareSection } from "../components/atoms/share-section/share-section";
+import { Terminal } from "../components/atoms/terminal/terminal";
+import { Toast, type ToastItem } from "../components/atoms/toast/toast";
 import type { ShareResult } from "../primitives/platform-services";
 
 import {

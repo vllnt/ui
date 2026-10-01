@@ -8,20 +8,20 @@ import {
   AgentStepDetailText,
   AgentStepProgress,
   AgentStepTitle,
-} from "../components/agent-activity/agent-activity";
-import { AIChatInput } from "../components/ai-chat-input/ai-chat-input";
-import { ChainOfThought } from "../components/chain-of-thought/chain-of-thought";
+} from "../components/atoms/agent-activity/agent-activity";
+import { AIChatInput } from "../components/atoms/ai-chat-input/ai-chat-input";
+import { ChainOfThought } from "../components/atoms/chain-of-thought/chain-of-thought";
+import { ModelSelector } from "../components/atoms/model-selector/model-selector";
+import { PromptInput } from "../components/atoms/prompt-input/prompt-input";
+import { Reasoning } from "../components/atoms/reasoning/reasoning";
+import { ThinkingBlock } from "../components/atoms/thinking-block/thinking-block";
 import {
   ConversationEmpty,
   ConversationLoading,
   ConversationMessages,
   ConversationSuggestions,
   ConversationThread,
-} from "../components/conversation-thread/conversation-thread";
-import { ModelSelector } from "../components/model-selector/model-selector";
-import { PromptInput } from "../components/prompt-input/prompt-input";
-import { Reasoning } from "../components/reasoning/reasoning";
-import { ThinkingBlock } from "../components/thinking-block/thinking-block";
+} from "../components/molecules/conversation-thread/conversation-thread";
 
 const thinkingLabels = {
   collapse: "Hide thinking",

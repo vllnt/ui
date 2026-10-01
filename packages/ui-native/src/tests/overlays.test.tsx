@@ -8,17 +8,17 @@ import {
 } from "@testing-library/react-native";
 import { AccessibilityInfo, Modal, Text } from "react-native";
 
-import { AlertDialog } from "../components/alert-dialog/alert-dialog";
-import { Command } from "../components/command/command";
-import { ContextMenu } from "../components/context-menu/context-menu";
-import { Dialog } from "../components/dialog/dialog";
-import { Drawer } from "../components/drawer/drawer";
-import { DropdownMenu } from "../components/dropdown-menu/dropdown-menu";
-import { Popover } from "../components/popover/popover";
-import { ShareDialog } from "../components/share-dialog/share-dialog";
-import { Sheet } from "../components/sheet/sheet";
-import { Toast, type ToastItem } from "../components/toast/toast";
-import { Tooltip } from "../components/tooltip/tooltip";
+import { AlertDialog } from "../components/atoms/alert-dialog/alert-dialog";
+import { Command } from "../components/atoms/command/command";
+import { ContextMenu } from "../components/atoms/context-menu/context-menu";
+import { Dialog } from "../components/atoms/dialog/dialog";
+import { Drawer } from "../components/atoms/drawer/drawer";
+import { DropdownMenu } from "../components/atoms/dropdown-menu/dropdown-menu";
+import { Popover } from "../components/atoms/popover/popover";
+import { ShareDialog } from "../components/atoms/share-dialog/share-dialog";
+import { Sheet } from "../components/atoms/sheet/sheet";
+import { Toast, type ToastItem } from "../components/atoms/toast/toast";
+import { Tooltip } from "../components/atoms/tooltip/tooltip";
 import type { ShareService } from "../primitives/platform-services";
 
 import { advanceTimers, flushMicrotasks } from "./test-utils";

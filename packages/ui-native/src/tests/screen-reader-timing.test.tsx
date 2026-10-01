@@ -3,8 +3,8 @@ import { useState } from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import { AccessibilityInfo, Animated, Text } from "react-native";
 
-import { Marquee } from "../components/marquee/marquee";
-import { Toast, type ToastItem } from "../components/toast/toast";
+import { Marquee } from "../components/atoms/marquee/marquee";
+import { Toast, type ToastItem } from "../components/atoms/toast/toast";
 
 import { flushMicrotasks, reducedMotion } from "./test-utils";
 

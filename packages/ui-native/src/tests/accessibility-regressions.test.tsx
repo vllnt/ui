@@ -7,47 +7,47 @@ import {
   Text as NativeText,
 } from "react-native";
 
-import { AIChatInput } from "../components/ai-chat-input/ai-chat-input";
-import { Alert, AlertTitle } from "../components/alert/alert";
-import { Avatar, AvatarImage } from "../components/avatar/avatar";
-import { AvatarGroup } from "../components/avatar-group/avatar-group";
-import { Banner } from "../components/banner/banner";
-import { Button } from "../components/button/button";
-import { Calendar } from "../components/calendar/calendar";
-import { Carousel } from "../components/carousel/carousel";
-import { Checkbox } from "../components/checkbox/checkbox";
-import { ColorPicker } from "../components/color-picker/color-picker";
-import { CopyButton } from "../components/copy-button/copy-button";
-import { CountdownTimer } from "../components/countdown-timer/countdown-timer";
-import { DataList } from "../components/data-list/data-list";
-import { Fieldset } from "../components/fieldset/fieldset";
-import { FileUpload } from "../components/file-upload/file-upload";
-import { InputOTP } from "../components/input-otp/input-otp";
-import { Item, ItemContent, ItemMedia } from "../components/item/item";
-import { Link } from "../components/link/link";
-import { ListBox } from "../components/list-box/list-box";
-import { PasswordInput } from "../components/password-input/password-input";
-import { PhoneInput } from "../components/phone-input/phone-input";
-import { ProgressCard } from "../components/progress-card/progress-card";
-import { PromptInput } from "../components/prompt-input/prompt-input";
+import { AIChatInput } from "../components/atoms/ai-chat-input/ai-chat-input";
+import { Alert, AlertTitle } from "../components/atoms/alert/alert";
+import { Avatar, AvatarImage } from "../components/atoms/avatar/avatar";
+import { Button } from "../components/atoms/button/button";
+import { Calendar } from "../components/atoms/calendar/calendar";
+import { Carousel } from "../components/atoms/carousel/carousel";
+import { Checkbox } from "../components/atoms/checkbox/checkbox";
+import { ColorPicker } from "../components/atoms/color-picker/color-picker";
+import { CopyButton } from "../components/atoms/copy-button/copy-button";
+import { Fieldset } from "../components/atoms/fieldset/fieldset";
+import { FileUpload } from "../components/atoms/file-upload/file-upload";
+import { InputOTP } from "../components/atoms/input-otp/input-otp";
+import { Item, ItemContent, ItemMedia } from "../components/atoms/item/item";
+import { Link } from "../components/atoms/link/link";
+import { ListBox } from "../components/atoms/list-box/list-box";
+import { PromptInput } from "../components/atoms/prompt-input/prompt-input";
 import {
   RadioGroup,
   RadioGroupItem,
-} from "../components/radio-group/radio-group";
-import { Rating } from "../components/rating/rating";
-import { SearchField } from "../components/search-field/search-field";
-import { SegmentedControl } from "../components/segmented-control/segmented-control";
-import { Select } from "../components/select/select";
-import { Stepper } from "../components/stepper/stepper";
-import { StickyMetric } from "../components/sticky-metric/sticky-metric";
-import { Switch } from "../components/switch/switch";
-import { TagGroup } from "../components/tag-group/tag-group";
-import { TagsInput } from "../components/tags-input/tags-input";
-import { Toast, type ToastItem } from "../components/toast/toast";
+} from "../components/atoms/radio-group/radio-group";
+import { Rating } from "../components/atoms/rating/rating";
+import { SegmentedControl } from "../components/atoms/segmented-control/segmented-control";
+import { Select } from "../components/atoms/select/select";
+import { Stepper } from "../components/atoms/stepper/stepper";
+import { Switch } from "../components/atoms/switch/switch";
+import { TagGroup } from "../components/atoms/tag-group/tag-group";
+import { TagsInput } from "../components/atoms/tags-input/tags-input";
+import { Toast, type ToastItem } from "../components/atoms/toast/toast";
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "../components/toggle-group/toggle-group";
+} from "../components/atoms/toggle-group/toggle-group";
+import { AvatarGroup } from "../components/molecules/avatar-group/avatar-group";
+import { Banner } from "../components/molecules/banner/banner";
+import { DataList } from "../components/molecules/data-list/data-list";
+import { PasswordInput } from "../components/molecules/password-input/password-input";
+import { PhoneInput } from "../components/molecules/phone-input/phone-input";
+import { SearchField } from "../components/molecules/search-field/search-field";
+import { StickyMetric } from "../components/molecules/sticky-metric/sticky-metric";
+import { CountdownTimer } from "../components/organisms/countdown-timer/countdown-timer";
+import { ProgressCard } from "../components/organisms/progress-card/progress-card";
 
 import { flushMicrotasks, renderThemed, themed } from "./test-utils";
 

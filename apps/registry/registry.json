@@ -30,7 +30,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/accordion/accordion.tsx",
+        "source": "src/components/molecules/accordion/accordion.tsx",
         "status": "experimental"
       }
     },
@@ -83,7 +83,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/activity-log/activity-log.tsx",
+        "source": "src/components/molecules/activity-log/activity-log.tsx",
         "status": "experimental"
       }
     },
@@ -115,7 +115,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/agent-activity/agent-activity.tsx",
+        "source": "src/components/atoms/agent-activity/agent-activity.tsx",
         "status": "experimental"
       }
     },
@@ -147,7 +147,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/ai-artifact/ai-artifact.tsx",
+        "source": "src/components/molecules/ai-artifact/ai-artifact.tsx",
         "status": "experimental"
       }
     },
@@ -179,7 +179,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/ai-chat-input/ai-chat-input.tsx",
+        "source": "src/components/atoms/ai-chat-input/ai-chat-input.tsx",
         "status": "experimental"
       }
     },
@@ -211,7 +211,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/ai-message-bubble/ai-message-bubble.tsx",
+        "source": "src/components/molecules/ai-message-bubble/ai-message-bubble.tsx",
         "status": "experimental"
       }
     },
@@ -266,7 +266,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/ai-source-citation/ai-source-citation.tsx",
+        "source": "src/components/molecules/ai-source-citation/ai-source-citation.tsx",
         "status": "experimental"
       }
     },
@@ -297,7 +297,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/ai-streaming-text/ai-streaming-text.tsx",
+        "source": "src/components/atoms/ai-streaming-text/ai-streaming-text.tsx",
         "status": "experimental"
       }
     },
@@ -330,7 +330,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/ai-tool-call-display/ai-tool-call-display.tsx",
+        "source": "src/components/molecules/ai-tool-call-display/ai-tool-call-display.tsx",
         "status": "experimental"
       }
     },
@@ -361,7 +361,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/alert/alert.tsx",
+        "source": "src/components/atoms/alert/alert.tsx",
         "status": "experimental"
       }
     },
@@ -392,7 +392,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/alert-dialog/alert-dialog.tsx",
+        "source": "src/components/atoms/alert-dialog/alert-dialog.tsx",
         "status": "experimental"
       }
     },
@@ -511,7 +511,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/animated-list/animated-list.tsx",
+        "source": "src/components/atoms/animated-list/animated-list.tsx",
         "status": "experimental"
       }
     },
@@ -542,7 +542,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/animated-tabs/animated-tabs.tsx",
+        "source": "src/components/molecules/animated-tabs/animated-tabs.tsx",
         "status": "experimental"
       }
     },
@@ -573,7 +573,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/animated-testimonials/animated-testimonials.tsx",
+        "source": "src/components/atoms/animated-testimonials/animated-testimonials.tsx",
         "status": "experimental"
       }
     },
@@ -604,7 +604,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/animated-text/animated-text.tsx",
+        "source": "src/components/atoms/animated-text/animated-text.tsx",
         "status": "experimental"
       }
     },
@@ -701,7 +701,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/aspect-ratio/aspect-ratio.tsx",
+        "source": "src/components/atoms/aspect-ratio/aspect-ratio.tsx",
         "status": "experimental"
       }
     },
@@ -754,7 +754,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/avatar/avatar.tsx",
+        "source": "src/components/atoms/avatar/avatar.tsx",
         "status": "experimental"
       }
     },
@@ -785,7 +785,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/avatar-group/avatar-group.tsx",
+        "source": "src/components/molecules/avatar-group/avatar-group.tsx",
         "status": "experimental"
       }
     },
@@ -816,7 +816,7 @@
         "channel": "canary",
         "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "source": "src/components/badge/badge.tsx",
+        "source": "src/components/atoms/badge/badge.tsx",
         "status": "experimental"
       }
     },
@@ -850,7 +850,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/banner/banner.tsx",
+        "source": "src/components/molecules/banner/banner.tsx",
         "status": "experimental"
       }
     },
@@ -947,7 +947,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/blur-reveal/blur-reveal.tsx",
+        "source": "src/components/atoms/blur-reveal/blur-reveal.tsx",
         "status": "experimental"
       }
     },
@@ -1022,7 +1022,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/bottom-bar/bottom-bar.tsx",
+        "source": "src/components/atoms/bottom-bar/bottom-bar.tsx",
         "status": "experimental"
       }
     },
@@ -1053,7 +1053,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/breadcrumb/breadcrumb.tsx",
+        "source": "src/components/molecules/breadcrumb/breadcrumb.tsx",
         "status": "experimental"
       }
     },
@@ -1147,7 +1147,7 @@
         "channel": "canary",
         "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "source": "src/components/button/button.tsx",
+        "source": "src/components/atoms/button/button.tsx",
         "status": "experimental"
       }
     },
@@ -1178,7 +1178,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/button-group/button-group.tsx",
+        "source": "src/components/atoms/button-group/button-group.tsx",
         "status": "experimental"
       }
     },
@@ -1209,7 +1209,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/calendar/calendar.tsx",
+        "source": "src/components/atoms/calendar/calendar.tsx",
         "status": "experimental"
       }
     },
@@ -1240,7 +1240,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/callout/callout.tsx",
+        "source": "src/components/atoms/callout/callout.tsx",
         "status": "experimental"
       }
     },
@@ -1337,7 +1337,7 @@
         "channel": "canary",
         "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "source": "src/components/card/card.tsx",
+        "source": "src/components/atoms/card/card.tsx",
         "status": "experimental"
       }
     },
@@ -1390,7 +1390,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/carousel/carousel.tsx",
+        "source": "src/components/atoms/carousel/carousel.tsx",
         "status": "experimental"
       }
     },
@@ -1421,7 +1421,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/category-filter/category-filter.tsx",
+        "source": "src/components/molecules/category-filter/category-filter.tsx",
         "status": "experimental"
       }
     },
@@ -1453,7 +1453,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/chain-of-thought/chain-of-thought.tsx",
+        "source": "src/components/atoms/chain-of-thought/chain-of-thought.tsx",
         "status": "experimental"
       }
     },
@@ -1506,7 +1506,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/checkbox/checkbox.tsx",
+        "source": "src/components/atoms/checkbox/checkbox.tsx",
         "status": "experimental"
       }
     },
@@ -1537,7 +1537,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/checkbox-group/checkbox-group.tsx",
+        "source": "src/components/atoms/checkbox-group/checkbox-group.tsx",
         "status": "experimental"
       }
     },
@@ -1568,7 +1568,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/checklist/checklist.tsx",
+        "source": "src/components/atoms/checklist/checklist.tsx",
         "status": "experimental"
       }
     },
@@ -1666,7 +1666,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/code-block/code-block.tsx",
+        "source": "src/components/atoms/code-block/code-block.tsx",
         "status": "experimental"
       }
     },
@@ -1719,7 +1719,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/collapsible/collapsible.tsx",
+        "source": "src/components/atoms/collapsible/collapsible.tsx",
         "status": "experimental"
       }
     },
@@ -1750,7 +1750,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/color-picker/color-picker.tsx",
+        "source": "src/components/atoms/color-picker/color-picker.tsx",
         "status": "experimental"
       }
     },
@@ -1886,7 +1886,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/combobox/combobox.tsx",
+        "source": "src/components/molecules/combobox/combobox.tsx",
         "status": "experimental"
       }
     },
@@ -1917,7 +1917,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/command/command.tsx",
+        "source": "src/components/atoms/command/command.tsx",
         "status": "experimental"
       }
     },
@@ -1992,7 +1992,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/completion-dialog/completion-dialog.tsx",
+        "source": "src/components/atoms/completion-dialog/completion-dialog.tsx",
         "status": "experimental"
       }
     },
@@ -2045,7 +2045,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/content-intro/content-intro.tsx",
+        "source": "src/components/molecules/content-intro/content-intro.tsx",
         "status": "experimental"
       }
     },
@@ -2098,7 +2098,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/context-menu/context-menu.tsx",
+        "source": "src/components/atoms/context-menu/context-menu.tsx",
         "status": "experimental"
       }
     },
@@ -2151,7 +2151,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/conversation-thread/conversation-thread.tsx",
+        "source": "src/components/molecules/conversation-thread/conversation-thread.tsx",
         "status": "experimental"
       }
     },
@@ -2205,7 +2205,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/copy-button/copy-button.tsx",
+        "source": "src/components/atoms/copy-button/copy-button.tsx",
         "status": "experimental"
       }
     },
@@ -2236,7 +2236,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/countdown-timer/countdown-timer.tsx",
+        "source": "src/components/organisms/countdown-timer/countdown-timer.tsx",
         "status": "experimental"
       }
     },
@@ -2267,7 +2267,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/credit-badge/credit-badge.tsx",
+        "source": "src/components/molecules/credit-badge/credit-badge.tsx",
         "status": "experimental"
       }
     },
@@ -2342,7 +2342,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/data-list/data-list.tsx",
+        "source": "src/components/molecules/data-list/data-list.tsx",
         "status": "experimental"
       }
     },
@@ -2396,7 +2396,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/date-field/date-field.tsx",
+        "source": "src/components/molecules/date-field/date-field.tsx",
         "status": "experimental"
       }
     },
@@ -2427,7 +2427,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/date-picker/date-picker.tsx",
+        "source": "src/components/molecules/date-picker/date-picker.tsx",
         "status": "experimental"
       }
     },
@@ -2458,7 +2458,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/date-range-picker/date-range-picker.tsx",
+        "source": "src/components/organisms/date-range-picker/date-range-picker.tsx",
         "status": "experimental"
       }
     },
@@ -2509,7 +2509,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/dialog/dialog.tsx",
+        "source": "src/components/atoms/dialog/dialog.tsx",
         "status": "experimental"
       }
     },
@@ -2588,7 +2588,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/document-sibling-nav/document-sibling-nav.tsx",
+        "source": "src/components/atoms/document-sibling-nav/document-sibling-nav.tsx",
         "status": "experimental"
       }
     },
@@ -2641,7 +2641,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/drawer/drawer.tsx",
+        "source": "src/components/atoms/drawer/drawer.tsx",
         "status": "experimental"
       }
     },
@@ -2672,7 +2672,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/dropdown-menu/dropdown-menu.tsx",
+        "source": "src/components/atoms/dropdown-menu/dropdown-menu.tsx",
         "status": "experimental"
       }
     },
@@ -2734,7 +2734,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/empty-state/empty-state.tsx",
+        "source": "src/components/atoms/empty-state/empty-state.tsx",
         "status": "experimental"
       }
     },
@@ -2787,7 +2787,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/exercise/exercise.tsx",
+        "source": "src/components/atoms/exercise/exercise.tsx",
         "status": "experimental"
       }
     },
@@ -2818,7 +2818,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/expandable-cards/expandable-cards.tsx",
+        "source": "src/components/molecules/expandable-cards/expandable-cards.tsx",
         "status": "experimental"
       }
     },
@@ -2849,7 +2849,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/faq/faq.tsx",
+        "source": "src/components/molecules/faq/faq.tsx",
         "status": "experimental"
       }
     },
@@ -2880,7 +2880,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/field/field.tsx",
+        "source": "src/components/molecules/field/field.tsx",
         "status": "experimental"
       }
     },
@@ -2911,7 +2911,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/fieldset/fieldset.tsx",
+        "source": "src/components/atoms/fieldset/fieldset.tsx",
         "status": "experimental"
       }
     },
@@ -2942,7 +2942,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/file-upload/file-upload.tsx",
+        "source": "src/components/atoms/file-upload/file-upload.tsx",
         "status": "experimental"
       }
     },
@@ -2973,7 +2973,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/filter-bar/filter-bar.tsx",
+        "source": "src/components/atoms/filter-bar/filter-bar.tsx",
         "status": "experimental"
       }
     },
@@ -3004,7 +3004,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/flashcard/flashcard.tsx",
+        "source": "src/components/atoms/flashcard/flashcard.tsx",
         "status": "experimental"
       }
     },
@@ -3035,7 +3035,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/floating-action-button/floating-action-button.tsx",
+        "source": "src/components/molecules/floating-action-button/floating-action-button.tsx",
         "status": "experimental"
       }
     },
@@ -3088,7 +3088,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/floating-toolbar/floating-toolbar.tsx",
+        "source": "src/components/atoms/floating-toolbar/floating-toolbar.tsx",
         "status": "experimental"
       }
     },
@@ -3163,7 +3163,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/form/form.tsx",
+        "source": "src/components/atoms/form/form.tsx",
         "status": "experimental"
       }
     },
@@ -3304,7 +3304,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/glass-progress/glass-progress.tsx",
+        "source": "src/components/atoms/glass-progress/glass-progress.tsx",
         "status": "experimental"
       }
     },
@@ -3357,7 +3357,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/grid/grid.tsx",
+        "source": "src/components/atoms/grid/grid.tsx",
         "status": "experimental"
       }
     },
@@ -3436,7 +3436,7 @@
         "channel": "canary",
         "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "source": "src/components/heading/heading.tsx",
+        "source": "src/components/atoms/heading/heading.tsx",
         "status": "experimental"
       }
     },
@@ -3557,7 +3557,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/horizontal-scroll-row/horizontal-scroll-row.tsx",
+        "source": "src/components/molecules/horizontal-scroll-row/horizontal-scroll-row.tsx",
         "status": "experimental"
       }
     },
@@ -3632,7 +3632,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/inline-input/inline-input.tsx",
+        "source": "src/components/molecules/inline-input/inline-input.tsx",
         "status": "experimental"
       }
     },
@@ -3663,7 +3663,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/input/input.tsx",
+        "source": "src/components/atoms/input/input.tsx",
         "status": "experimental"
       }
     },
@@ -3694,7 +3694,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/input-group/input-group.tsx",
+        "source": "src/components/molecules/input-group/input-group.tsx",
         "status": "experimental"
       }
     },
@@ -3725,7 +3725,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/input-otp/input-otp.tsx",
+        "source": "src/components/atoms/input-otp/input-otp.tsx",
         "status": "experimental"
       }
     },
@@ -3756,7 +3756,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/interactive-timeline/interactive-timeline.tsx",
+        "source": "src/components/organisms/interactive-timeline/interactive-timeline.tsx",
         "status": "experimental"
       }
     },
@@ -3787,7 +3787,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/item/item.tsx",
+        "source": "src/components/atoms/item/item.tsx",
         "status": "experimental"
       }
     },
@@ -3885,7 +3885,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx",
+        "source": "src/components/atoms/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx",
         "status": "experimental"
       }
     },
@@ -3939,7 +3939,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/label/label.tsx",
+        "source": "src/components/atoms/label/label.tsx",
         "status": "experimental"
       }
     },
@@ -4059,7 +4059,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/link/link.tsx",
+        "source": "src/components/atoms/link/link.tsx",
         "status": "experimental"
       }
     },
@@ -4112,7 +4112,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/list-box/list-box.tsx",
+        "source": "src/components/atoms/list-box/list-box.tsx",
         "status": "experimental"
       }
     },
@@ -4165,7 +4165,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/live-feed/live-feed.tsx",
+        "source": "src/components/molecules/live-feed/live-feed.tsx",
         "status": "experimental"
       }
     },
@@ -4306,7 +4306,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/marquee/marquee.tsx",
+        "source": "src/components/atoms/marquee/marquee.tsx",
         "status": "experimental"
       }
     },
@@ -4362,7 +4362,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/menubar/menubar.tsx",
+        "source": "src/components/molecules/menubar/menubar.tsx",
         "status": "experimental"
       }
     },
@@ -4415,7 +4415,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/meter/meter.tsx",
+        "source": "src/components/atoms/meter/meter.tsx",
         "status": "experimental"
       }
     },
@@ -4446,7 +4446,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/metric-cluster/metric-cluster.tsx",
+        "source": "src/components/molecules/metric-cluster/metric-cluster.tsx",
         "status": "experimental"
       }
     },
@@ -4544,7 +4544,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/model-selector/model-selector.tsx",
+        "source": "src/components/atoms/model-selector/model-selector.tsx",
         "status": "experimental"
       }
     },
@@ -4575,7 +4575,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/multi-select/multi-select.tsx",
+        "source": "src/components/molecules/multi-select/multi-select.tsx",
         "status": "experimental"
       }
     },
@@ -4628,7 +4628,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/native-select/native-select.tsx",
+        "source": "src/components/molecules/native-select/native-select.tsx",
         "status": "experimental"
       }
     },
@@ -4681,7 +4681,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/navigation-menu/navigation-menu.tsx",
+        "source": "src/components/molecules/navigation-menu/navigation-menu.tsx",
         "status": "experimental"
       }
     },
@@ -4735,7 +4735,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/number-input/number-input.tsx",
+        "source": "src/components/molecules/number-input/number-input.tsx",
         "status": "experimental"
       }
     },
@@ -4766,7 +4766,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/number-ticker/number-ticker.tsx",
+        "source": "src/components/atoms/number-ticker/number-ticker.tsx",
         "status": "experimental"
       }
     },
@@ -4885,7 +4885,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/overview-board/overview-board.tsx",
+        "source": "src/components/molecules/overview-board/overview-board.tsx",
         "status": "experimental"
       }
     },
@@ -4916,7 +4916,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/pagination/pagination.tsx",
+        "source": "src/components/molecules/pagination/pagination.tsx",
         "status": "experimental"
       }
     },
@@ -4947,7 +4947,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/panel/panel.tsx",
+        "source": "src/components/atoms/panel/panel.tsx",
         "status": "experimental"
       }
     },
@@ -5022,7 +5022,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/password-input/password-input.tsx",
+        "source": "src/components/molecules/password-input/password-input.tsx",
         "status": "experimental"
       }
     },
@@ -5053,7 +5053,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/phone-input/phone-input.tsx",
+        "source": "src/components/molecules/phone-input/phone-input.tsx",
         "status": "experimental"
       }
     },
@@ -5106,7 +5106,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/plan-badge/plan-badge.tsx",
+        "source": "src/components/molecules/plan-badge/plan-badge.tsx",
         "status": "experimental"
       }
     },
@@ -5181,7 +5181,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/popover/popover.tsx",
+        "source": "src/components/atoms/popover/popover.tsx",
         "status": "experimental"
       }
     },
@@ -5212,7 +5212,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/presence-stack/presence-stack.tsx",
+        "source": "src/components/molecules/presence-stack/presence-stack.tsx",
         "status": "experimental"
       }
     },
@@ -5243,7 +5243,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/presence-sync-indicator/presence-sync-indicator.tsx",
+        "source": "src/components/molecules/presence-sync-indicator/presence-sync-indicator.tsx",
         "status": "experimental"
       }
     },
@@ -5363,7 +5363,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/progress-bar/progress-bar.tsx",
+        "source": "src/components/molecules/progress-bar/progress-bar.tsx",
         "status": "experimental"
       }
     },
@@ -5394,7 +5394,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/progress-card/progress-card.tsx",
+        "source": "src/components/organisms/progress-card/progress-card.tsx",
         "status": "experimental"
       }
     },
@@ -5425,7 +5425,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/progress-tracker/progress-tracker.tsx",
+        "source": "src/components/organisms/progress-tracker/progress-tracker.tsx",
         "status": "experimental"
       }
     },
@@ -5479,7 +5479,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/prompt-input/prompt-input.tsx",
+        "source": "src/components/atoms/prompt-input/prompt-input.tsx",
         "status": "experimental"
       }
     },
@@ -5603,7 +5603,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/quiz/quiz.tsx",
+        "source": "src/components/atoms/quiz/quiz.tsx",
         "status": "experimental"
       }
     },
@@ -5656,7 +5656,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/radio-group/radio-group.tsx",
+        "source": "src/components/atoms/radio-group/radio-group.tsx",
         "status": "experimental"
       }
     },
@@ -5687,7 +5687,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/range-calendar/range-calendar.tsx",
+        "source": "src/components/molecules/range-calendar/range-calendar.tsx",
         "status": "experimental"
       }
     },
@@ -5718,7 +5718,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/rating/rating.tsx",
+        "source": "src/components/atoms/rating/rating.tsx",
         "status": "experimental"
       }
     },
@@ -5750,7 +5750,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/reasoning/reasoning.tsx",
+        "source": "src/components/atoms/reasoning/reasoning.tsx",
         "status": "experimental"
       }
     },
@@ -5803,7 +5803,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/resizable/resizable.tsx",
+        "source": "src/components/atoms/resizable/resizable.tsx",
         "status": "experimental"
       }
     },
@@ -5834,7 +5834,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/reveal-text/reveal-text.tsx",
+        "source": "src/components/atoms/reveal-text/reveal-text.tsx",
         "status": "experimental"
       }
     },
@@ -5887,7 +5887,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/role-badge/role-badge.tsx",
+        "source": "src/components/molecules/role-badge/role-badge.tsx",
         "status": "experimental"
       }
     },
@@ -6050,7 +6050,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/scramble-text/scramble-text.tsx",
+        "source": "src/components/atoms/scramble-text/scramble-text.tsx",
         "status": "experimental"
       }
     },
@@ -6103,7 +6103,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/scroll-progress/scroll-progress.tsx",
+        "source": "src/components/atoms/scroll-progress/scroll-progress.tsx",
         "status": "experimental"
       }
     },
@@ -6134,7 +6134,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/search-bar/search-bar.tsx",
+        "source": "src/components/molecules/search-bar/search-bar.tsx",
         "status": "experimental"
       }
     },
@@ -6165,7 +6165,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/search-dialog/search-dialog.tsx",
+        "source": "src/components/atoms/search-dialog/search-dialog.tsx",
         "status": "experimental"
       }
     },
@@ -6196,7 +6196,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/search-field/search-field.tsx",
+        "source": "src/components/molecules/search-field/search-field.tsx",
         "status": "experimental"
       }
     },
@@ -6227,7 +6227,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/segmented-control/segmented-control.tsx",
+        "source": "src/components/atoms/segmented-control/segmented-control.tsx",
         "status": "experimental"
       }
     },
@@ -6258,7 +6258,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/select/select.tsx",
+        "source": "src/components/atoms/select/select.tsx",
         "status": "experimental"
       }
     },
@@ -6333,7 +6333,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/separator/separator.tsx",
+        "source": "src/components/atoms/separator/separator.tsx",
         "status": "experimental"
       }
     },
@@ -6364,7 +6364,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/severity-badge/severity-badge.tsx",
+        "source": "src/components/atoms/severity-badge/severity-badge.tsx",
         "status": "experimental"
       }
     },
@@ -6395,7 +6395,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/share-dialog/share-dialog.tsx",
+        "source": "src/components/atoms/share-dialog/share-dialog.tsx",
         "status": "experimental"
       }
     },
@@ -6426,7 +6426,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/share-section/share-section.tsx",
+        "source": "src/components/atoms/share-section/share-section.tsx",
         "status": "experimental"
       }
     },
@@ -6457,7 +6457,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/sheet/sheet.tsx",
+        "source": "src/components/atoms/sheet/sheet.tsx",
         "status": "experimental"
       }
     },
@@ -6510,7 +6510,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/shimmer-text/shimmer-text.tsx",
+        "source": "src/components/atoms/shimmer-text/shimmer-text.tsx",
         "status": "experimental"
       }
     },
@@ -6585,7 +6585,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/sidebar/sidebar.tsx",
+        "source": "src/components/molecules/sidebar/sidebar.tsx",
         "status": "experimental"
       }
     },
@@ -6616,7 +6616,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/sidebar-provider/sidebar-provider.tsx",
+        "source": "src/components/atoms/sidebar-provider/sidebar-provider.tsx",
         "status": "experimental"
       }
     },
@@ -6648,7 +6648,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/sidebar-toggle/sidebar-toggle.tsx",
+        "source": "src/components/molecules/sidebar-toggle/sidebar-toggle.tsx",
         "status": "experimental"
       }
     },
@@ -6679,7 +6679,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/skeleton/skeleton.tsx",
+        "source": "src/components/atoms/skeleton/skeleton.tsx",
         "status": "experimental"
       }
     },
@@ -6710,7 +6710,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/slider/slider.tsx",
+        "source": "src/components/atoms/slider/slider.tsx",
         "status": "experimental"
       }
     },
@@ -6741,7 +6741,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/slideshow/slideshow.tsx",
+        "source": "src/components/atoms/slideshow/slideshow.tsx",
         "status": "experimental"
       }
     },
@@ -6838,7 +6838,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/spinner/spinner.tsx",
+        "source": "src/components/atoms/spinner/spinner.tsx",
         "status": "experimental"
       }
     },
@@ -6869,7 +6869,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/spinning-text/spinning-text.tsx",
+        "source": "src/components/atoms/spinning-text/spinning-text.tsx",
         "status": "experimental"
       }
     },
@@ -6922,7 +6922,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/stat-card/stat-card.tsx",
+        "source": "src/components/molecules/stat-card/stat-card.tsx",
         "status": "experimental"
       }
     },
@@ -6975,7 +6975,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/status-board/status-board.tsx",
+        "source": "src/components/molecules/status-board/status-board.tsx",
         "status": "experimental"
       }
     },
@@ -7006,7 +7006,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/status-indicator/status-indicator.tsx",
+        "source": "src/components/atoms/status-indicator/status-indicator.tsx",
         "status": "experimental"
       }
     },
@@ -7037,7 +7037,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/step-by-step/step-by-step.tsx",
+        "source": "src/components/atoms/step-by-step/step-by-step.tsx",
         "status": "experimental"
       }
     },
@@ -7068,7 +7068,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/step-navigation/step-navigation.tsx",
+        "source": "src/components/molecules/step-navigation/step-navigation.tsx",
         "status": "experimental"
       }
     },
@@ -7099,7 +7099,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/stepper/stepper.tsx",
+        "source": "src/components/atoms/stepper/stepper.tsx",
         "status": "experimental"
       }
     },
@@ -7130,7 +7130,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/sticky-metric/sticky-metric.tsx",
+        "source": "src/components/molecules/sticky-metric/sticky-metric.tsx",
         "status": "experimental"
       }
     },
@@ -7205,7 +7205,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/switch/switch.tsx",
+        "source": "src/components/atoms/switch/switch.tsx",
         "status": "experimental"
       }
     },
@@ -7302,7 +7302,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tabs/tabs.tsx",
+        "source": "src/components/molecules/tabs/tabs.tsx",
         "status": "experimental"
       }
     },
@@ -7333,7 +7333,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tag-group/tag-group.tsx",
+        "source": "src/components/atoms/tag-group/tag-group.tsx",
         "status": "experimental"
       }
     },
@@ -7364,7 +7364,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tags-input/tags-input.tsx",
+        "source": "src/components/atoms/tags-input/tags-input.tsx",
         "status": "experimental"
       }
     },
@@ -7395,7 +7395,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/terminal/terminal.tsx",
+        "source": "src/components/atoms/terminal/terminal.tsx",
         "status": "experimental"
       }
     },
@@ -7430,7 +7430,7 @@
         "channel": "canary",
         "compatibility": "portable-options",
         "package": "@vllnt/ui-native",
-        "source": "src/components/text/text.tsx",
+        "source": "src/components/atoms/text/text.tsx",
         "status": "experimental"
       }
     },
@@ -7461,7 +7461,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/text-animate/text-animate.tsx",
+        "source": "src/components/atoms/text-animate/text-animate.tsx",
         "status": "experimental"
       }
     },
@@ -7492,7 +7492,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/text-field/text-field.tsx",
+        "source": "src/components/molecules/text-field/text-field.tsx",
         "status": "experimental"
       }
     },
@@ -7523,7 +7523,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/text-reveal/text-reveal.tsx",
+        "source": "src/components/atoms/text-reveal/text-reveal.tsx",
         "status": "experimental"
       }
     },
@@ -7554,7 +7554,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/text-shimmer/text-shimmer.tsx",
+        "source": "src/components/atoms/text-shimmer/text-shimmer.tsx",
         "status": "experimental"
       }
     },
@@ -7585,7 +7585,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/textarea/textarea.tsx",
+        "source": "src/components/molecules/textarea/textarea.tsx",
         "status": "experimental"
       }
     },
@@ -7705,7 +7705,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/thinking-block/thinking-block.tsx",
+        "source": "src/components/atoms/thinking-block/thinking-block.tsx",
         "status": "experimental"
       }
     },
@@ -7824,7 +7824,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/time-field/time-field.tsx",
+        "source": "src/components/organisms/time-field/time-field.tsx",
         "status": "experimental"
       }
     },
@@ -7855,7 +7855,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/time-picker/time-picker.tsx",
+        "source": "src/components/organisms/time-picker/time-picker.tsx",
         "status": "experimental"
       }
     },
@@ -7909,7 +7909,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/timeline-scrubber/timeline-scrubber.tsx",
+        "source": "src/components/atoms/timeline-scrubber/timeline-scrubber.tsx",
         "status": "experimental"
       }
     },
@@ -7940,7 +7940,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tldr-section/tldr-section.tsx",
+        "source": "src/components/atoms/tldr-section/tldr-section.tsx",
         "status": "experimental"
       }
     },
@@ -7971,7 +7971,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/toast/toast.tsx",
+        "source": "src/components/atoms/toast/toast.tsx",
         "status": "experimental"
       }
     },
@@ -8002,7 +8002,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/toggle/toggle.tsx",
+        "source": "src/components/atoms/toggle/toggle.tsx",
         "status": "experimental"
       }
     },
@@ -8033,7 +8033,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/toggle-group/toggle-group.tsx",
+        "source": "src/components/atoms/toggle-group/toggle-group.tsx",
         "status": "experimental"
       }
     },
@@ -8064,7 +8064,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/toolbar/toolbar.tsx",
+        "source": "src/components/molecules/toolbar/toolbar.tsx",
         "status": "experimental"
       }
     },
@@ -8095,7 +8095,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tooltip/tooltip.tsx",
+        "source": "src/components/atoms/tooltip/tooltip.tsx",
         "status": "experimental"
       }
     },
@@ -8126,7 +8126,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/top-bar/top-bar.tsx",
+        "source": "src/components/molecules/top-bar/top-bar.tsx",
         "status": "experimental"
       }
     },
@@ -8157,7 +8157,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tour/tour.tsx",
+        "source": "src/components/atoms/tour/tour.tsx",
         "status": "experimental"
       }
     },
@@ -8210,7 +8210,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tree-view/tree-view.tsx",
+        "source": "src/components/organisms/tree-view/tree-view.tsx",
         "status": "experimental"
       }
     },
@@ -8241,7 +8241,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/truncated-text/truncated-text.tsx",
+        "source": "src/components/atoms/truncated-text/truncated-text.tsx",
         "status": "experimental"
       }
     },
@@ -8294,7 +8294,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tutorial-complete/tutorial-complete.tsx",
+        "source": "src/components/atoms/tutorial-complete/tutorial-complete.tsx",
         "status": "experimental"
       }
     },
@@ -8325,7 +8325,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/tutorial-filters/tutorial-filters.tsx",
+        "source": "src/components/atoms/tutorial-filters/tutorial-filters.tsx",
         "status": "experimental"
       }
     },
@@ -8400,7 +8400,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/typewriter/typewriter.tsx",
+        "source": "src/components/atoms/typewriter/typewriter.tsx",
         "status": "experimental"
       }
     },
@@ -8497,7 +8497,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/view-switcher/view-switcher.tsx",
+        "source": "src/components/molecules/view-switcher/view-switcher.tsx",
         "status": "experimental"
       }
     },
@@ -8594,7 +8594,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/workspace-switcher/workspace-switcher.tsx",
+        "source": "src/components/molecules/workspace-switcher/workspace-switcher.tsx",
         "status": "experimental"
       }
     },
@@ -8647,7 +8647,7 @@
         "channel": "canary",
         "compatibility": "native-adapted",
         "package": "@vllnt/ui-native",
-        "source": "src/components/world-clock-bar/world-clock-bar.tsx",
+        "source": "src/components/molecules/world-clock-bar/world-clock-bar.tsx",
         "status": "experimental"
       }
     },

@@ -1,6 +1,13 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text as NativeText, View } from "react-native";
 
+import { AIStreamingText } from "../components/atoms/ai-streaming-text/ai-streaming-text";
+import { AspectRatio } from "../components/atoms/aspect-ratio/aspect-ratio";
+import { Callout } from "../components/atoms/callout/callout";
+import { GlassProgress } from "../components/atoms/glass-progress/glass-progress";
+import { Spinner } from "../components/atoms/spinner/spinner";
+import { TLDRSection } from "../components/atoms/tldr-section/tldr-section";
+import { TruncatedText } from "../components/atoms/truncated-text/truncated-text";
 import {
   AIArtifact,
   AIArtifactContent,
@@ -9,22 +16,15 @@ import {
   AIArtifactToolbar,
   AIArtifactVersion,
   AIArtifactVersions,
-} from "../components/ai-artifact/ai-artifact";
-import { AIMessageBubble } from "../components/ai-message-bubble/ai-message-bubble";
-import { AISourceCitation } from "../components/ai-source-citation/ai-source-citation";
-import { AIStreamingText } from "../components/ai-streaming-text/ai-streaming-text";
-import { AIToolCallDisplay } from "../components/ai-tool-call-display/ai-tool-call-display";
-import { AspectRatio } from "../components/aspect-ratio/aspect-ratio";
-import { Callout } from "../components/callout/callout";
-import { ContentIntro } from "../components/content-intro/content-intro";
-import { CreditBadge } from "../components/credit-badge/credit-badge";
-import { FloatingActionButton } from "../components/floating-action-button/floating-action-button";
-import { GlassProgress } from "../components/glass-progress/glass-progress";
-import { PlanBadge } from "../components/plan-badge/plan-badge";
-import { RoleBadge } from "../components/role-badge/role-badge";
-import { Spinner } from "../components/spinner/spinner";
-import { TLDRSection } from "../components/tldr-section/tldr-section";
-import { TruncatedText } from "../components/truncated-text/truncated-text";
+} from "../components/molecules/ai-artifact/ai-artifact";
+import { AIMessageBubble } from "../components/molecules/ai-message-bubble/ai-message-bubble";
+import { AISourceCitation } from "../components/molecules/ai-source-citation/ai-source-citation";
+import { AIToolCallDisplay } from "../components/molecules/ai-tool-call-display/ai-tool-call-display";
+import { ContentIntro } from "../components/molecules/content-intro/content-intro";
+import { CreditBadge } from "../components/molecules/credit-badge/credit-badge";
+import { FloatingActionButton } from "../components/molecules/floating-action-button/floating-action-button";
+import { PlanBadge } from "../components/molecules/plan-badge/plan-badge";
+import { RoleBadge } from "../components/molecules/role-badge/role-badge";
 
 it.each([
   [

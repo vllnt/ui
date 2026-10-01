@@ -7,8 +7,8 @@ import {
 } from "@testing-library/react-native";
 import { Animated, Text } from "react-native";
 
-import { AnimatedList } from "../components/animated-list/animated-list";
-import { AnimatedTestimonials } from "../components/animated-testimonials/animated-testimonials";
+import { AnimatedList } from "../components/atoms/animated-list/animated-list";
+import { AnimatedTestimonials } from "../components/atoms/animated-testimonials/animated-testimonials";
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 
 const labels = {

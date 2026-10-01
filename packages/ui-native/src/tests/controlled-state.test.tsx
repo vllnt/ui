@@ -2,34 +2,34 @@ import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement } from "react";
 import { Text as NativeText, type ViewProps } from "react-native";
 
-import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../components/collapsible/collapsible";
-import {
-  DateField,
-  type ISODateString,
-} from "../components/date-field/date-field";
-import { InlineInput } from "../components/inline-input/inline-input";
+} from "../components/atoms/collapsible/collapsible";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "../components/resizable/resizable";
+} from "../components/atoms/resizable/resizable";
+import { TimelineScrubber } from "../components/atoms/timeline-scrubber/timeline-scrubber";
+import { AnimatedTabs } from "../components/molecules/animated-tabs/animated-tabs";
+import {
+  DateField,
+  type ISODateString,
+} from "../components/molecules/date-field/date-field";
+import { InlineInput } from "../components/molecules/inline-input/inline-input";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/tabs/tabs";
+} from "../components/molecules/tabs/tabs";
+import { ViewSwitcher } from "../components/molecules/view-switcher/view-switcher";
 import {
   type ISOTimeString,
   TimeField,
-} from "../components/time-field/time-field";
-import { TimelineScrubber } from "../components/timeline-scrubber/timeline-scrubber";
-import { ViewSwitcher } from "../components/view-switcher/view-switcher";
+} from "../components/organisms/time-field/time-field";
 
 import { codePreviewTabs, gridListOptions, reducedMotion } from "./test-utils";
 

@@ -7,19 +7,19 @@ import {
 } from "@testing-library/react-native";
 import { Text as NativeText, View } from "react-native";
 
-import { BlurReveal } from "../components/blur-reveal/blur-reveal";
-import { CodeBlock } from "../components/code-block/code-block";
-import { DocumentSiblingNav } from "../components/document-sibling-nav/document-sibling-nav";
-import { RevealText } from "../components/reveal-text/reveal-text";
-import { ScrambleText } from "../components/scramble-text/scramble-text";
-import { ShareSection } from "../components/share-section/share-section";
-import { ShimmerText } from "../components/shimmer-text/shimmer-text";
-import { SpinningText } from "../components/spinning-text/spinning-text";
-import { Terminal } from "../components/terminal/terminal";
-import { TextAnimate } from "../components/text-animate/text-animate";
-import { TextReveal } from "../components/text-reveal/text-reveal";
-import { TextShimmer } from "../components/text-shimmer/text-shimmer";
-import { Typewriter } from "../components/typewriter/typewriter";
+import { BlurReveal } from "../components/atoms/blur-reveal/blur-reveal";
+import { CodeBlock } from "../components/atoms/code-block/code-block";
+import { DocumentSiblingNav } from "../components/atoms/document-sibling-nav/document-sibling-nav";
+import { RevealText } from "../components/atoms/reveal-text/reveal-text";
+import { ScrambleText } from "../components/atoms/scramble-text/scramble-text";
+import { ShareSection } from "../components/atoms/share-section/share-section";
+import { ShimmerText } from "../components/atoms/shimmer-text/shimmer-text";
+import { SpinningText } from "../components/atoms/spinning-text/spinning-text";
+import { Terminal } from "../components/atoms/terminal/terminal";
+import { TextAnimate } from "../components/atoms/text-animate/text-animate";
+import { TextReveal } from "../components/atoms/text-reveal/text-reveal";
+import { TextShimmer } from "../components/atoms/text-shimmer/text-shimmer";
+import { Typewriter } from "../components/atoms/typewriter/typewriter";
 
 import { advanceTimers, flushMicrotasks, reducedMotion } from "./test-utils";
 

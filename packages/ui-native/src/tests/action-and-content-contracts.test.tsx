@@ -7,21 +7,21 @@ import {
 } from "@testing-library/react-native";
 import { Animated, ScrollView, Text } from "react-native";
 
-import { AgentStepProgress } from "../components/agent-activity/agent-activity";
-import { AIChatInput } from "../components/ai-chat-input/ai-chat-input";
-import { AnimatedTabs } from "../components/animated-tabs/animated-tabs";
-import { BlurReveal } from "../components/blur-reveal/blur-reveal";
-import { Callout } from "../components/callout/callout";
-import { Checklist } from "../components/checklist/checklist";
-import { CodeBlock } from "../components/code-block/code-block";
+import { AgentStepProgress } from "../components/atoms/agent-activity/agent-activity";
+import { AIChatInput } from "../components/atoms/ai-chat-input/ai-chat-input";
+import { BlurReveal } from "../components/atoms/blur-reveal/blur-reveal";
+import { Callout } from "../components/atoms/callout/callout";
+import { Checklist } from "../components/atoms/checklist/checklist";
+import { CodeBlock } from "../components/atoms/code-block/code-block";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../components/collapsible/collapsible";
-import { Command } from "../components/command/command";
-import { CompletionDialog } from "../components/completion-dialog/completion-dialog";
-import { useCopyToClipboard } from "../components/copy-button/copy-button";
+} from "../components/atoms/collapsible/collapsible";
+import { Command } from "../components/atoms/command/command";
+import { CompletionDialog } from "../components/atoms/completion-dialog/completion-dialog";
+import { useCopyToClipboard } from "../components/atoms/copy-button/copy-button";
+import { AnimatedTabs } from "../components/molecules/animated-tabs/animated-tabs";
 import { ThemeProvider } from "../theme/theme-provider";
 
 import { deferred, renderThemed } from "./test-utils";
