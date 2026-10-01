@@ -79,7 +79,7 @@ export const designTokens = {
       },
       "mutedForeground": {
         "cssVariable": "--muted-foreground",
-        "light": "0.5555 0 0",
+        "light": "0.525 0 0",
         "dark": "0.7153 0 0",
         "role": "Secondary text"
       },
@@ -97,14 +97,14 @@ export const designTokens = {
       },
       "destructive": {
         "cssVariable": "--destructive",
-        "light": "0.6368 0.2078 25.326",
-        "dark": "0.3959 0.1331 25.721",
+        "light": "0.55 0.2078 25.326",
+        "dark": "0.7 0.18 25.721",
         "role": "Destructive action and error surface"
       },
       "destructiveForeground": {
         "cssVariable": "--destructive-foreground",
         "light": "0.9848 0 0",
-        "dark": "0.9848 0 0",
+        "dark": "0.2044 0 0",
         "role": "Text on destructive surfaces"
       },
       "border": {
@@ -115,9 +115,9 @@ export const designTokens = {
       },
       "input": {
         "cssVariable": "--input",
-        "light": "0.9219 0 0",
-        "dark": "0.2686 0 0",
-        "role": "Input border"
+        "light": "0.66 0 0",
+        "dark": "0.49 0 0",
+        "role": "Form-control boundary (3:1 against background, card, popover)"
       },
       "ring": {
         "cssVariable": "--ring",
@@ -368,10 +368,10 @@ export const nativeTokens = {
       "mutedForeground": "#a3a3a3",
       "accent": "#262626",
       "accentForeground": "#fafafa",
-      "destructive": "#7f1d1d",
-      "destructiveForeground": "#fafafa",
+      "destructive": "#fa6961",
+      "destructiveForeground": "#171717",
       "border": "#262626",
-      "input": "#262626",
+      "input": "#606060",
       "ring": "#d4d4d4"
     },
     "light": {
@@ -386,13 +386,13 @@ export const nativeTokens = {
       "secondary": "#f5f5f5",
       "secondaryForeground": "#171717",
       "muted": "#f5f5f5",
-      "mutedForeground": "#737373",
+      "mutedForeground": "#6a6a6a",
       "accent": "#f5f5f5",
       "accentForeground": "#171717",
-      "destructive": "#c92f32",
+      "destructive": "#cf1f29",
       "destructiveForeground": "#fafafa",
       "border": "#e5e5e5",
-      "input": "#e5e5e5",
+      "input": "#929292",
       "ring": "#0a0a0a"
     }
   },

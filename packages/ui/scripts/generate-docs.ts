@@ -578,6 +578,7 @@ function analyzeComponent(dirPath: string, registryItems: RegistryItem[]): Compo
 
 function escapeForMdx(str: string): string {
   return str
+    .replace(/\\/g, '\\\\')
     .replace(/\|/g, '\\|')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -587,6 +588,7 @@ function escapeForMdx(str: string): string {
 
 function escapeForMdxTable(str: string): string {
   return str
+    .replace(/\\/g, '\\\\')
     .replace(/\|/g, '\\|')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
