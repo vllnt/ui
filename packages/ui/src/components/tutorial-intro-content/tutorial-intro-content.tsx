@@ -168,11 +168,10 @@ const serverMarkdownComponents = {
 
 // Strip MDX component tags for server rendering (they render on client)
 function stripMDXComponents(content: string): string {
-  let cleaned = content.replaceAll(/<[A-Z][A-Za-z]*[^>]*\/>/g, "");
-  cleaned = cleaned.replaceAll(
-    /<[A-Z][A-Za-z]*[^>]*>[\S\s]*?<\/[A-Z][A-Za-z]*>/g,
-    "",
-  );
+  // `[^<>]*` keeps each scan inside one tag, so repeated unclosed `<A` runs
+  // cannot trigger polynomial backtracking.
+  let cleaned = content.replaceAll(/<[A-Z][^<>]*\/>/g, "");
+  cleaned = cleaned.replaceAll(/<[A-Z][^<>]*>[\S\s]*?<\/[A-Z][A-Za-z]*>/g, "");
   return cleaned;
 }
 
