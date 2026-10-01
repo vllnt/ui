@@ -7,7 +7,7 @@ export type SpinnerProps = {
 /**
  * Loading indicator. Under `prefers-reduced-motion` it keeps turning, slower,
  * because the motion is the loading feedback itself (`data-motion="essential"`
- * exempts it from the global reduced-motion rule in styles.css).
+ * marks it for audits).
  */
 function Spinner({ className, size = "md", ...props }: SpinnerProps) {
   return (

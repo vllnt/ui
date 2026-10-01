@@ -53,7 +53,12 @@ function StepMarkerIcon({
     return <X className="size-3.5" />;
   }
   if (status === "active") {
-    return <LoaderCircle className="size-3.5 animate-spin" />;
+    return (
+      <LoaderCircle
+        className="size-3.5 animate-spin motion-reduce:[animation-duration:1.5s]"
+        data-motion="essential"
+      />
+    );
   }
   return <span>{index + 1}</span>;
 }

@@ -55,7 +55,9 @@ export function ThinkingBlock({
         <span>
           Thinking
           {isStreaming ? (
-            <span className="ml-1 animate-pulse">&hellip;</span>
+            <span className="ml-1 animate-pulse motion-reduce:animate-none">
+              &hellip;
+            </span>
           ) : null}
         </span>
       </button>
@@ -65,7 +67,9 @@ export function ThinkingBlock({
           id={contentId}
         >
           {thinking}
-          {isStreaming ? <span className="animate-pulse">|</span> : null}
+          {isStreaming ? (
+            <span className="animate-pulse motion-reduce:animate-none">|</span>
+          ) : null}
         </div>
       ) : null}
     </div>

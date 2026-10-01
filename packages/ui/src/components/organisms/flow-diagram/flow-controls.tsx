@@ -52,7 +52,12 @@ function ControlButton({
 function getCopyIcon(status: CopyStatus | undefined) {
   switch (status) {
     case "copying":
-      return <Loader2 className="size-4 animate-spin" />;
+      return (
+        <Loader2
+          className="size-4 animate-spin motion-reduce:[animation-duration:1.5s]"
+          data-motion="essential"
+        />
+      );
     case "success":
       return <Check className="size-4 text-green-500" />;
     case "error":

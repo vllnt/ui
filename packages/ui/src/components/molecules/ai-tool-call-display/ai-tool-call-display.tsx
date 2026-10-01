@@ -42,7 +42,9 @@ const statusIconMap: Record<AIToolCallStatus, React.ReactNode> = {
   complete: <CheckCircle2 className="size-4" />,
   error: <AlertCircle className="size-4" />,
   queued: <Clock3 className="size-4" />,
-  running: <Wrench className="size-4 animate-pulse" />,
+  running: (
+    <Wrench className="size-4 animate-pulse motion-reduce:animate-none" />
+  ),
 };
 
 const AIToolCallDisplay = ({

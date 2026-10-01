@@ -76,7 +76,13 @@ const DEFAULT_STATUS_ICON: Record<AgentStepStatus, ReactNode> = {
   completed: <CheckCircle2 aria-hidden="true" className="size-4" />,
   error: <AlertTriangle aria-hidden="true" className="size-4" />,
   pending: <Circle aria-hidden="true" className="size-4" />,
-  running: <Loader2 aria-hidden="true" className="size-4 animate-spin" />,
+  running: (
+    <Loader2
+      aria-hidden="true"
+      className="size-4 animate-spin motion-reduce:[animation-duration:1.5s]"
+      data-motion="essential"
+    />
+  ),
   skipped: <MinusCircle aria-hidden="true" className="size-4" />,
 };
 

@@ -120,21 +120,6 @@
   --vllnt-code-operator: #abb2bf;
 }
 
-/* Reduced motion safety net (DESIGN.md §8): when the user asks for less
-   motion, animations and transitions collapse to their end state. Elements
-   whose motion is the feedback itself (a loading spinner) opt out with
-   data-motion="essential". */
-@media (prefers-reduced-motion: reduce) {
-  *:not([data-motion="essential"]),
-  *:not([data-motion="essential"])::before,
-  *:not([data-motion="essential"])::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 /* Safe area utilities for notched/rounded devices (iPhone, etc.) */
 @layer utilities {
   @keyframes vllnt-marquee-x {

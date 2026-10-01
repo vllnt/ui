@@ -52,7 +52,7 @@ function FlowDiagramWithSuspense(
       fallback={
         <div
           aria-label="Loading diagram..."
-          className="h-96 bg-muted animate-pulse rounded-lg"
+          className="h-96 bg-muted animate-pulse rounded-lg motion-reduce:animate-none"
         />
       }
     >

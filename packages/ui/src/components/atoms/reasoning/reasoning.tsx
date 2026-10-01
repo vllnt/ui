@@ -46,7 +46,11 @@ function ReasoningTrigger({
         {isStreaming ? "Reasoning" : "Reasoned"}
         {typeof duration === "number" ? ` for ${duration}s` : null}
       </span>
-      {isStreaming ? <span className="animate-pulse">&hellip;</span> : null}
+      {isStreaming ? (
+        <span className="animate-pulse motion-reduce:animate-none">
+          &hellip;
+        </span>
+      ) : null}
       <ChevronDown
         className={cn(
           "ml-auto size-4 shrink-0 transition-transform",
@@ -90,7 +94,10 @@ function ReasoningContent({
         <div className="whitespace-pre-wrap">{children}</div>
       )}
       {isStreaming ? (
-        <span aria-hidden className="ml-0.5 animate-pulse">
+        <span
+          aria-hidden
+          className="ml-0.5 animate-pulse motion-reduce:animate-none"
+        >
           &#9611;
         </span>
       ) : null}

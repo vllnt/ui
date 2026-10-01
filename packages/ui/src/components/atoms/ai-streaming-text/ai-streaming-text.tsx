@@ -34,7 +34,7 @@ const AIStreamingText = ({
       {isStreaming && showCursor ? (
         <span
           aria-hidden="true"
-          className="ml-0.5 inline-block animate-pulse text-muted-foreground"
+          className="ml-0.5 inline-block animate-pulse text-muted-foreground motion-reduce:animate-none"
         >
           {cursor}
         </span>

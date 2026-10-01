@@ -107,16 +107,16 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
           {showSkeleton ? (
             <div className="space-y-3">
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-5/6">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-4/5">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
               <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-3/4">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
             </div>
           ) : (
