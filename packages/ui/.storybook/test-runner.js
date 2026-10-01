@@ -61,6 +61,7 @@ function exceptionsFor(context, parameters) {
   return { disabledRules: disabled.map((rule) => rule.id), skip };
 }
 
+/** Waits (at most 1s) for finite animations so axe sees settled colours. */
 async function settle(page) {
   await page.evaluate(async () => {
     const finite = document
@@ -69,30 +70,34 @@ async function settle(page) {
       .map((animation) => animation.finished.catch(() => undefined));
     await Promise.race([
       Promise.all(finite),
-      new Promise((resolve) => setTimeout(resolve, 2000)),
+      new Promise((resolve) => setTimeout(resolve, 1000)),
     ]);
     await new Promise((resolve) => requestAnimationFrame(() => resolve()));
   });
 }
 
+/** Switches the addon-themes global and waits for the class on <html>. */
 async function setTheme(page, theme) {
-  await page.evaluate(async (next) => {
-    const root = document.documentElement;
-    const channel = window.__STORYBOOK_ADDONS_CHANNEL__;
-    if (root.classList.contains("dark") === (next === "dark")) return;
-    const rendered = new Promise((resolve) => {
-      const timer = setTimeout(resolve, 3000);
-      channel.once("storyRendered", () => {
-        clearTimeout(timer);
-        resolve();
-      });
+  const isDark = theme === "dark";
+  const current = await page.evaluate(() =>
+    document.documentElement.classList.contains("dark"),
+  );
+  if (current === isDark) return;
+  await page.evaluate((next) => {
+    window.__STORYBOOK_ADDONS_CHANNEL__.emit("updateGlobals", {
+      globals: { theme: next },
     });
-    channel.emit("updateGlobals", { globals: { theme: next } });
-    await rendered;
   }, theme);
   await page.waitForFunction(
-    (next) => document.documentElement.classList.contains("dark") === (next === "dark"),
-    theme,
+    (dark) => document.documentElement.classList.contains("dark") === dark,
+    isDark,
+    { timeout: 5000 },
+  );
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
   );
 }
 

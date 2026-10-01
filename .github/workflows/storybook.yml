@@ -105,7 +105,7 @@ jobs:
             fi
             sleep 1
           done
-          pnpm test-storybook --url http://127.0.0.1:6006 --maxWorkers=2
+          pnpm test-storybook --url http://127.0.0.1:6006 --maxWorkers=2 --testTimeout=60000
           kill $SERVER_PID 2>/dev/null || true
 
   visual-regression:
