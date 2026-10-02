@@ -1,0 +1,43 @@
+---
+title: Appliquer les tokens semantiques aux interfaces React
+description: Personnaliser VLLNT UI avec des variables CSS et des classes semantiques plutot que des couleurs fixes.
+type: docs
+---
+
+## Choisir les roles avant les couleurs
+
+Un token semantique decrit une fonction : `background` est une surface, `foreground` un texte lisible, `border` une separation et `ring` un indicateur de focus. Ces roles resistent mieux aux changements de theme qu'un nom de couleur. Utilisez `bg-background`, `text-foreground` et `border-border` au lieu d'une palette uniquement claire.
+
+La [reference de design](/design) documente le systeme. Le [guide des themes](/docs/theming) explique la configuration. Commencez par [l'installation](/docs/installation) pour ne pas confondre styles absents et erreurs de theme.
+
+## Conserver la configuration du package
+
+Avec le package, importez `@vllnt/ui/styles.css` une fois et utilisez `@vllnt/ui/tailwind-preset`. Le fichier `@vllnt/ui/themes/default.css` ne contient que des variables et ne remplace pas la feuille complete. Avec la copie de sources, votre propre build Tailwind doit generer les classes des composants copies.
+
+```tsx
+import { Button } from "@vllnt/ui";
+
+export function ResponseActions() {
+  return (
+    <section className="rounded-md border border-border bg-background p-4 text-foreground">
+      <h2 className="mb-2 text-xl font-semibold">Actions de la reponse</h2>
+      <p className="mb-4 text-muted-foreground">Verifiez la reponse avant de l'enregistrer.</p>
+      <Button>Enregistrer la reponse</Button>
+    </section>
+  );
+}
+```
+
+Cet exemple ne gere que la presentation. Branchez l'enregistrement et ses etats en cours et en erreur dans votre application. Donnez aux actions des noms accessibles precis.
+
+## Choisir la bonne portee
+
+Les variables du theme peuvent etre remplacees a la racine ou sur un conteneur. Les couleurs du jeu de tokens utilisent des canaux OKLCH : conservez le format attendu au lieu de coller une valeur hexadecimale dans une variable de canaux. Modifiez les paires surface et texte ensemble et controlez le contraste dans les deux themes.
+
+La typographie a aussi des roles. `--font-sans` controle le corps, `--font-display` les titres des primitives de fondation et `--font-mono` le code. Les primitives de fondation consomment les variables de taille ; des classes arbitraires de votre application ne consomment pas automatiquement tous ces tokens. Utilisez les primitives documentees pour un controle typographique global.
+
+## Auditer les etats interactifs
+
+Une capture au repos ne suffit pas. Verifiez le survol, le focus, les controles desactives, les erreurs et la selection. Gardez le focus clavier visible et ne communiquez jamais un statut par la couleur seule. Verifiez un contraste d'au moins 4.5:1 pour le texte courant et 3:1 pour le grand texte et les elements non textuels selon WCAG AA.
+
+Utilisez l'echelle d'espacement de quatre points, des bordures sobres et des titres semibold. Testez les petits ecrans et les longs libelles traduits. Appliquez les memes controles aux [messages IA](/guides/ai-ui) et aux [reponses en streaming](/guides/streaming-ui).

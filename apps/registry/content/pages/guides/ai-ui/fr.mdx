@@ -1,0 +1,41 @@
+---
+title: Construire une interface IA avec React
+description: Composer les messages IA avec VLLNT UI tout en gardant les appels au modele, la persistance et les permissions dans votre application.
+type: docs
+---
+
+## Separer presentation et execution
+
+Une interface IA doit distinguer les messages utilisateur, les reponses, les outils et les erreurs. VLLNT UI fournit des composants de presentation, pas un serveur de modele, une base de conversations ou une politique de permissions. Gardez les secrets et les controles sur le serveur. Traitez les textes generes et les resultats des outils comme des donnees non fiables.
+
+Commencez par le [guide d'installation](/docs/installation). Avec le package, importez `@vllnt/ui/styles.css` une fois et configurez le preset Tailwind. Avec la copie de sources, incluez les dossiers des composants dans le scan Tailwind. La bibliotheque cible React 19.
+
+## Afficher les messages explicitement
+
+`AIMessageBubble` accepte `messageRole`, `author`, `status` et des enfants. Le role choisit la presentation visuelle : ce n'est ni un schema de fournisseur ni une autorisation d'execution.
+
+```tsx
+import { AIMessageBubble } from "@vllnt/ui";
+
+export function AssistantReply({ text }: { text: string }) {
+  return (
+    <AIMessageBubble messageRole="assistant" author="Assistant">
+      {text}
+    </AIMessageBubble>
+  );
+}
+```
+
+Passez du texte brut si le formatage riche est inutile. React echappe ce texte. Si vous ajoutez du markdown ou du HTML, examinez le traitement des liens et du HTML par le moteur de rendu. Utilisez un identifiant stable pour chaque message, pas son texte changeant comme cle React.
+
+## Representer le cycle de la requete
+
+Gerez les etats inactif, en cours, termine, annule et en erreur dans votre application. Une reponse en attente n'est pas une reponse vide reussie. Conservez le brouillon en cas d'echec, affichez une erreur utile et proposez une nouvelle tentative explicite. Evitez les requetes doubles lors de pressions repetees.
+
+Distinguez les resultats des outils du texte de l'assistant. Demandez confirmation avant une operation importante et validez les arguments sur le serveur. Un badge de statut informe ; il ne protege pas une operation.
+
+## Verifier avant livraison
+
+Testez le clavier, les champs nommes, les longs messages, les petits ecrans et les themes clair et sombre. Verifiez le focus apres l'envoi et l'annonce des erreurs sans relire toute la conversation. N'envoyez pas les prompts prives aux outils analytiques.
+
+Continuez avec le [rendu en streaming](/guides/streaming-ui), consultez [AIMessageBubble](/components/ai-message-bubble) ou appliquez les [tokens semantiques](/guides/design-tokens).

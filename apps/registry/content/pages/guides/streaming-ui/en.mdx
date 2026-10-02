@@ -1,0 +1,47 @@
+---
+title: Render streaming AI responses in React
+description: Use AIStreamingText for accumulated response text and keep transport, cancellation, and error handling explicit.
+type: docs
+---
+
+## A renderer is not a transport
+
+`AIStreamingText` renders the text available so far. It does not open a connection, decode server events, or call a model. Your application owns those operations. See the [AI interface guide](/guides/ai-ui) for the boundary between message presentation and execution.
+
+Install the library using the [package or registry setup](/docs/installation). Import the full stylesheet once for package usage. The following component consumes application state rather than simulating a stream with timers.
+
+```tsx
+import { AIMessageBubble, AIStreamingText } from "@vllnt/ui";
+
+export function StreamingReply({
+  text,
+  pending,
+}: {
+  text: string;
+  pending: boolean;
+}) {
+  return (
+    <AIMessageBubble messageRole="assistant" author="Assistant">
+      <AIStreamingText text={text} isStreaming={pending} />
+    </AIMessageBubble>
+  );
+}
+```
+
+## Accumulate text once
+
+Pass the complete accumulated string through `text`, not only the latest fragment. Decode bytes with a streaming decoder and parse the protocol before updating UI state. Network chunks are not guaranteed to align with characters, JSON objects, or event boundaries. Keep protocol parsing outside the renderer and test split multibyte characters.
+
+`isStreaming` controls the pending cursor and the component's polite live region. `showCursor` can hide the cursor, and `cursor` changes its glyph. None of these props cancel a request. Use an application-owned abort controller or your transport's cancellation API for that.
+
+## Handle interruptions honestly
+
+On completion, set `isStreaming` to false and retain the final text. On failure, keep partial output visibly incomplete and show a separate error with a retry action. On cancellation, clear the pending state without claiming the answer finished. Ignore late updates from older requests so they cannot overwrite a newer conversation.
+
+Batch very frequent updates if they cause excessive rendering. Measure with representative long responses rather than assuming every token needs an immediate React update. Do not insert untrusted output through `dangerouslySetInnerHTML`.
+
+## Test assistive technology and motion
+
+The renderer uses `aria-live="polite"` while streaming and hides its cursor from assistive technology. Actual announcement behavior varies by screen reader: verify that rapid updates do not overwhelm users. Consider an application-level final-response announcement strategy if needed. Check reduced-motion behavior in the consuming application's styles, keyboard cancellation, and text wrapping on small screens.
+
+Inspect the [AIStreamingText API](/components/ai-streaming-text) and keep response surfaces consistent with the [design token guide](/guides/design-tokens).
