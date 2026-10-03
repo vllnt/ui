@@ -87,6 +87,8 @@ implementation evidence; a Penpot canvas does not prove them.
 
 Use [the recovery workflow](README.md) after each accepted design batch. Keep
 native named versions for quick rollback and native exports outside the server
-for disaster recovery. The initial release preserves the historical full and
-newer partial archives without claiming an automatic merge or continuous sync.
+for disaster recovery. The prepared snapshot set preserves the historical full and
+newer partial archives locally, without claiming an automatic merge or
+continuous sync. Native archive upload to GitHub awaits explicit approval;
+only the tracking records and recovery tooling are being committed.
 No scheduled automation has been restarted.

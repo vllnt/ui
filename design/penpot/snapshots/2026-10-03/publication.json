@@ -1,0 +1,12 @@
+{
+  "status": "pending-native-archive-upload-approval",
+  "intendedRelease": "https://github.com/vllnt/ui/releases/tag/penpot-snapshot-2026-10-03",
+  "nativeAssetsUploaded": false,
+  "downloadedCopyVerified": false,
+  "localArchiveVerification": "Both archives passed SHA-256, CRC and committed inventory checks on 2026-10-03.",
+  "reason": "The repository is public. Explicit approval for uploading the two native design payloads is pending.",
+  "assets": [
+    "vllnt-ui-native-complete-with-starter-2026-10-02.penpot",
+    "vllnt-ui-partial-native-refresh-2026-10-03.penpot"
+  ]
+}

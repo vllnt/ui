@@ -1,13 +1,17 @@
 # Penpot design snapshots
 
-Native, editable Penpot exports are stored as GitHub release assets. Git tracks
-their exact SHA-256 checksums, file inventories, revisions, library links and
-qualification notes. This saves the design outside the Penpot server without
-putting hundreds of megabytes into every clone. No Git LFS or Python packages
+Git tracks the exact SHA-256 checksums, file inventories, revisions, library
+links and qualification notes of native, editable Penpot exports. Versioned
+GitHub release assets are the proposed off-server storage, keeping hundreds of
+megabytes out of every clone. No Git LFS or Python packages
 are required. The checker requires Python 3.9 or newer.
 
-[Initial recovery release](https://github.com/vllnt/ui/releases/tag/penpot-snapshot-2026-10-03)
-— [migration status and remaining work](STATUS.md).
+**Publication pending:** the two native archives remain local; no archive has
+been uploaded to GitHub. Explicit approval to upload their editable contents
+is pending. The release URL in the receipts is a reserved destination, and the
+download commands below become usable only after publication. See the
+[publication record](snapshots/2026-10-03/publication.json) and
+[migration status and remaining work](STATUS.md).
 
 ## Current recovery points
 
