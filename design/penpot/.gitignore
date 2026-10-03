@@ -1,0 +1,5 @@
+# Native exports live in versioned GitHub release assets.
+*.penpot
+*.zip
+downloads/
+__pycache__/

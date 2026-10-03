@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "exportedOn": "2026-10-03",
+  "scope": "PARTIAL: 15 canonical modules listed in this receipt; excludes 24 modules and Starter",
+  "note": "Combined from native exports with 3037 identical overlaps; preserves 129 source boards, 873 component definitions and 54998 original shapes plus 3 Selection variant containers. Saved structure/CRC/SHA checked; combined archive native reimport/reopen and visual acceptance are not yet proven. Not an automatic overlay for the complete snapshot.",
+  "release": "https://github.com/vllnt/ui/releases/tag/penpot-snapshot-2026-10-03",
+  "asset": {
+    "name": "vllnt-ui-partial-native-refresh-2026-10-03.penpot",
+    "bytes": 68988603,
+    "sha256": "854731617ba8df4294d3374d6096548103bd98d0a0a99b48e4ca2c9282c764c1"
+  },
+  "inventory": {
+    "generatedBy": "penpot/2.18.0",
+    "archiveMembers": 56617,
+    "totals": {
+      "files": 15,
+      "sharedLibraries": 15,
+      "pages": 15,
+      "shapes": 55001,
+      "components": 873,
+      "libraryRelations": 45
+    },
+    "files": [
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c78",
+        "name": "VLLNT UI — 02 Atoms · 01",
+        "revision": 4,
+        "modifiedAt": "2026-10-02T14:33:26.165379Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 434,
+        "components": 43,
+        "filePayloadSha256": "d051ad2380f2a029450b2075996913757333dbd0bf91015a4ba3eec028be9289"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7b",
+        "name": "VLLNT UI — 02 Atoms · 02",
+        "revision": 7,
+        "modifiedAt": "2026-10-03T05:33:27.417967Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 4685,
+        "components": 184,
+        "filePayloadSha256": "cbff5d7199f225c53298305d05e979d44f7ec4ea621473640c794c0ad79d9d44"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7c",
+        "name": "VLLNT UI — 03 Molecules · 01",
+        "revision": 2,
+        "modifiedAt": "2026-10-03T06:37:04.208326Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 2850,
+        "components": 140,
+        "filePayloadSha256": "08c04d33a79c89d07a652690a6ccdfd9d4f3ff902b77d6f9b9ef5e20c5ca115c"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7d",
+        "name": "VLLNT UI — 04 Organisms · 01",
+        "revision": 3,
+        "modifiedAt": "2026-10-03T09:56:13.792891Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 5755,
+        "components": 112,
+        "filePayloadSha256": "dfb2cdba112b45bec671b28718bd40a3248a7ce255d42327c398c0db5804822d"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c81",
+        "name": "VLLNT UI — 09 Legacy catalog · 01",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:14:36.410871Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 3,
+        "components": 1,
+        "filePayloadSha256": "f03d3e19652051cd2efe7a4091e49ac63fdc7c98727e5aafdc8a5c076f8edd61"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c82",
+        "name": "VLLNT UI — 02 Atoms · 03",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:14:39.302351Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 3378,
+        "components": 67,
+        "filePayloadSha256": "b9707b84daf60b91cfb70cf4e9066ed95ee533027f524a06f3213b1c1bc4f5dd"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c83",
+        "name": "VLLNT UI — 03 Molecules · 02",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:14:42.256134Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 1023,
+        "components": 67,
+        "filePayloadSha256": "940d4ca9cdf4ee5448c97aa777d6b72d89dcc68a8701a13ff29f1120e986e586"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "name": "VLLNT UI — 02 Atoms · 04",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:14:44.621056Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 258,
+        "components": 1,
+        "filePayloadSha256": "1e8e3337e74459e86a2a9b0564f27557d3e59db7bb8653eb8317e00baed12af9"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c86",
+        "name": "VLLNT UI — 03 Molecules · 03",
+        "revision": 1,
+        "modifiedAt": "2026-10-03T05:28:43.634437Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 10867,
+        "components": 34,
+        "filePayloadSha256": "df28770dc65de8b60fc1e33667acf19cf3f1106f546ebe3de3bb4219282527a0"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8b",
+        "name": "VLLNT UI — 04 Organisms · 02",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:15:17.519766Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 815,
+        "components": 19,
+        "filePayloadSha256": "234a4149e44c3e1dc2df1f2cef5d6dc11a76662485fceca9d11b8e95155bc5f0"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8c",
+        "name": "VLLNT UI — 01 Foundations · 04",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:15:19.982012Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 273,
+        "components": 8,
+        "filePayloadSha256": "dd5636e92e0af24a55c1d82ca4d2a2adbf63289ca213e019bdc99a5dc2624ff1"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "name": "VLLNT UI — 03 Molecules · 07",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T20:26:42.613771Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 14142,
+        "components": 98,
+        "filePayloadSha256": "b997e1458535b75c4b2fb6e119249989dacaafb9ba37a3282f93efe7fb552de3"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8f",
+        "name": "VLLNT UI — 04 Organisms · 03",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:15:48.606408Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 1650,
+        "components": 24,
+        "filePayloadSha256": "b8223e031794f7eccc654dd001d8538c35b4f6f85583189db8b7461cf876dd77"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c92",
+        "name": "VLLNT UI — 04 Organisms · 04",
+        "revision": 3,
+        "modifiedAt": "2026-10-03T11:02:49.239173Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 8605,
+        "components": 71,
+        "filePayloadSha256": "1d85986650452400f73739c226c107006448b9523e1394d218f83176b7830203"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "name": "VLLNT UI — 05 Templates · 03",
+        "revision": 1,
+        "modifiedAt": "2026-10-02T14:16:50.621253Z",
+        "sharedLibrary": true,
+        "pages": 1,
+        "shapes": 263,
+        "components": 4,
+        "filePayloadSha256": "28a483a44a2615ae3279f588b1c14bf91ada6c4626d4c1b3171b33a55592c2a6"
+      }
+    ],
+    "libraryRelations": [
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c7b",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c7c",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c7d",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c81",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c82",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c82",
+        "503b8235-8be1-80bf-8008-ba6ae7797c7b"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c82",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c83",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c83",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "503b8235-8be1-80bf-8008-ba6ae7797c7b"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "503b8235-8be1-80bf-8008-ba6ae7797c82"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c86",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c86",
+        "503b8235-8be1-80bf-8008-ba6ae7797c7b"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c86",
+        "503b8235-8be1-80bf-8008-ba6ae7797c7c"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c86",
+        "503b8235-8be1-80bf-8008-ba6ae7797c82"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8b",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8b",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8c",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8c",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8c",
+        "503b8235-8be1-80bf-8008-ba6ae7797c8b"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c7b"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c82"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c85"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c86"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "503b8235-8be1-80bf-8008-ba6ae7797c8c"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8f",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8f",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8f",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c8f",
+        "503b8235-8be1-80bf-8008-ba6ae7797c8c"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c92",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c92",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c92",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c92",
+        "503b8235-8be1-80bf-8008-ba6ae7797c8f"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "503b8235-8be1-80bf-8008-ba6ae7797c78"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "503b8235-8be1-80bf-8008-ba6ae7797c7d"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "503b8235-8be1-80bf-8008-ba6ae7797c81"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "503b8235-8be1-80bf-8008-ba6ae7797c83"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "503b8235-8be1-80bf-8008-ba6ae7797c8f"
+      ],
+      [
+        "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "503b8235-8be1-80bf-8008-ba6ae7797c92"
+      ]
+    ]
+  }
+}

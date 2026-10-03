@@ -1,0 +1,303 @@
+{
+  "checkedOn": "2026-10-03",
+  "scope": "Saved archives and current library catalog; not full live visual/runtime acceptance",
+  "archives": {
+    "historical-full": {
+      "files": 40,
+      "sharedLibraries": 29,
+      "relations": 159,
+      "components": 1854,
+      "shapes": 245024,
+      "sourceBoardsExpected": 210,
+      "structureErrorCount": 1,
+      "structureErrors": [
+        "canonical file names differ"
+      ],
+      "verdict": "HOLD_STRUCTURAL_FINDINGS",
+      "sha256MatchesReceipt": true,
+      "crcFirstBadMember": null,
+      "missingSourceShapes": 0,
+      "missingSourceComponents": 0,
+      "missingSourceBoards": 0,
+      "missingTokenBindings": 0,
+      "pendingFonts": 2166
+    },
+    "latest-partial": {
+      "files": 15,
+      "sharedLibraries": 15,
+      "relations": 45,
+      "components": 873,
+      "shapes": 55001,
+      "sourceBoardsExpected": 129,
+      "structureErrorCount": 0,
+      "structureErrors": [],
+      "verdict": "PASS_PARTIAL_STRUCTURAL_COVERAGE",
+      "sha256MatchesReceipt": true,
+      "crcFirstBadMember": null,
+      "missingSourceShapes": 0,
+      "missingSourceComponents": 0,
+      "missingSourceBoards": 0,
+      "missingTokenBindings": 0,
+      "pendingFonts": 1270
+    }
+  },
+  "historicalFullScopeQualification": {
+    "scope": "Saved historical archive: 39 canonical modules plus the explicitly identified Starter; no new native reopen or visual acceptance",
+    "checks": {
+      "exactKnownStarterOnly": true,
+      "onlyNameScopeFinding": true,
+      "noMissingSourceShapes": true,
+      "noMissingSourceComponents": true,
+      "noMissingSourceBoards": true,
+      "noMissingTokenBindings": true,
+      "shaMatches": true,
+      "crcPass": true,
+      "canonicalModules": true
+    },
+    "verdict": "PASS_SAVED_39_MODULES_PLUS_STARTER",
+    "rawAuditorVerdictPreserved": "HOLD_STRUCTURAL_FINDINGS"
+  },
+  "libraryCountReconciliation": {
+    "checkedAt": "2026-10-03T19:54:57.289496+00:00",
+    "liveLibraries": 29,
+    "liveVisibleEntries": 1844,
+    "historicalDefinitions": 1854,
+    "missingLibraries": [],
+    "extraLibraries": [],
+    "files": [
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c78",
+        "name": "VLLNT UI — 02 Atoms · 01",
+        "liveVisibleEntries": 43,
+        "historicalDefinitions": 43,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7b",
+        "name": "VLLNT UI — 02 Atoms · 02",
+        "liveVisibleEntries": 174,
+        "historicalDefinitions": 184,
+        "difference": -10,
+        "explanation": "13 Selection states grouped into 3 families; 10 fewer visible entries"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7c",
+        "name": "VLLNT UI — 03 Molecules · 01",
+        "liveVisibleEntries": 140,
+        "historicalDefinitions": 140,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7d",
+        "name": "VLLNT UI — 04 Organisms · 01",
+        "liveVisibleEntries": 112,
+        "historicalDefinitions": 112,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c7e",
+        "name": "VLLNT UI — 05 Templates · 01",
+        "liveVisibleEntries": 1,
+        "historicalDefinitions": 1,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c81",
+        "name": "VLLNT UI — 09 Legacy catalog · 01",
+        "liveVisibleEntries": 1,
+        "historicalDefinitions": 1,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c82",
+        "name": "VLLNT UI — 02 Atoms · 03",
+        "liveVisibleEntries": 67,
+        "historicalDefinitions": 67,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c83",
+        "name": "VLLNT UI — 03 Molecules · 02",
+        "liveVisibleEntries": 67,
+        "historicalDefinitions": 67,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c85",
+        "name": "VLLNT UI — 02 Atoms · 04",
+        "liveVisibleEntries": 1,
+        "historicalDefinitions": 1,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c86",
+        "name": "VLLNT UI — 03 Molecules · 03",
+        "liveVisibleEntries": 34,
+        "historicalDefinitions": 34,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c87",
+        "name": "VLLNT UI — 02 Atoms · 05",
+        "liveVisibleEntries": 50,
+        "historicalDefinitions": 50,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c88",
+        "name": "VLLNT UI — 03 Molecules · 04",
+        "liveVisibleEntries": 6,
+        "historicalDefinitions": 6,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c89",
+        "name": "VLLNT UI — 03 Molecules · 05",
+        "liveVisibleEntries": 176,
+        "historicalDefinitions": 176,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8a",
+        "name": "VLLNT UI — 03 Molecules · 06",
+        "liveVisibleEntries": 120,
+        "historicalDefinitions": 120,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8b",
+        "name": "VLLNT UI — 04 Organisms · 02",
+        "liveVisibleEntries": 19,
+        "historicalDefinitions": 19,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8c",
+        "name": "VLLNT UI — 01 Foundations · 04",
+        "liveVisibleEntries": 8,
+        "historicalDefinitions": 8,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8d",
+        "name": "VLLNT UI — 02 Atoms · 06",
+        "liveVisibleEntries": 26,
+        "historicalDefinitions": 26,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8e",
+        "name": "VLLNT UI — 03 Molecules · 07",
+        "liveVisibleEntries": 98,
+        "historicalDefinitions": 98,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c8f",
+        "name": "VLLNT UI — 04 Organisms · 03",
+        "liveVisibleEntries": 24,
+        "historicalDefinitions": 24,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c90",
+        "name": "VLLNT UI — 01 Foundations · 05",
+        "liveVisibleEntries": 13,
+        "historicalDefinitions": 13,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c91",
+        "name": "VLLNT UI — 03 Molecules · 08",
+        "liveVisibleEntries": 87,
+        "historicalDefinitions": 87,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c92",
+        "name": "VLLNT UI — 04 Organisms · 04",
+        "liveVisibleEntries": 71,
+        "historicalDefinitions": 71,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c93",
+        "name": "VLLNT UI — 03 Molecules · 09",
+        "liveVisibleEntries": 141,
+        "historicalDefinitions": 141,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c94",
+        "name": "VLLNT UI — 04 Organisms · 05",
+        "liveVisibleEntries": 94,
+        "historicalDefinitions": 94,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c95",
+        "name": "VLLNT UI — 04 Organisms · 06",
+        "liveVisibleEntries": 187,
+        "historicalDefinitions": 187,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c96",
+        "name": "VLLNT UI — 04 Organisms · 07",
+        "liveVisibleEntries": 9,
+        "historicalDefinitions": 9,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c97",
+        "name": "VLLNT UI — 05 Templates · 02",
+        "liveVisibleEntries": 17,
+        "historicalDefinitions": 17,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c98",
+        "name": "VLLNT UI — 04 Organisms · 08",
+        "liveVisibleEntries": 54,
+        "historicalDefinitions": 54,
+        "difference": 0,
+        "explanation": "same"
+      },
+      {
+        "id": "503b8235-8be1-80bf-8008-ba6ae7797c99",
+        "name": "VLLNT UI — 05 Templates · 03",
+        "liveVisibleEntries": 4,
+        "historicalDefinitions": 4,
+        "difference": 0,
+        "explanation": "same"
+      }
+    ]
+  },
+  "caution": "Recorded font counts are archive-specific; later fixes and private trials must not be silently deducted from them."
+}
