@@ -1,7 +1,7 @@
 # ui.vllnt.com — component registry/docs site (standalone output).
 # Built from vllnt/ui monorepo, app: apps/registry. Workspace dep: @vllnt/ui.
 
-FROM node:22-alpine@sha256:968df39aedcea65eeb078fb336ed7191baf48f972b4479711397108be0966920 AS builder
+FROM node:22.23.4-alpine@sha256:ce8d97f7cfc7c5386421eb932df20a29df99b1a7f469f6157d5c9956702ffadc AS builder
 WORKDIR /src
 
 RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
@@ -20,7 +20,7 @@ RUN pnpm --filter @vllnt/ui-registry build
 
 # ---
 
-FROM node:22-alpine@sha256:968df39aedcea65eeb078fb336ed7191baf48f972b4479711397108be0966920 AS runtime
+FROM node:22.23.4-alpine@sha256:ce8d97f7cfc7c5386421eb932df20a29df99b1a7f469f6157d5c9956702ffadc AS runtime
 WORKDIR /app
 
 # npm is build tooling only. Removing it from the final image also removes its
