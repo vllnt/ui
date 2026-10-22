@@ -2,7 +2,7 @@
 # Build from repo root so pnpm workspace links resolve.
 # Final image: nginx-unprivileged serving the static export.
 
-FROM node:24-alpine@sha256:d1b3b4da11eefd5941e7f0b9cf17783fc99d9c6fc34884a665f40a06dbdfc94f AS build
+FROM node:24.22.1-alpine@sha256:6a1c190e17215d844926b0677f4bf87273ff7d5e54db06d3b5b5863ab0b09a3d AS build
 WORKDIR /src
 
 # Install pnpm matching the project version
