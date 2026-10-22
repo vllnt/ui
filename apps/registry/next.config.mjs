@@ -12,9 +12,6 @@ const nextConfig = {
   productionBrowserSourceMaps: true,
   // Allow .mdx extensions for files
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-  experimental: {
-    cssChunking: 'strict',
-  },
   // Ensure the workspace UI package is transpiled and tree-shaken correctly
   transpilePackages: ['@vllnt/ui'],
 }
