@@ -1,0 +1,11 @@
+name: Leak Gate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  leak-gate:
+    uses: vllnt/.github/.github/workflows/leak-gate.yml@main
+    secrets: inherit
