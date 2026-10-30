@@ -1,0 +1,43 @@
+---
+title: Apply semantic design tokens to React interfaces
+description: Theme VLLNT UI through CSS variables and semantic utilities instead of hardcoded component colors.
+type: docs
+---
+
+## Choose roles before colors
+
+A semantic token describes a responsibility: `background` is a surface, `foreground` is readable text, `border` separates regions, and `ring` marks focus. These roles survive theme changes better than a literal color name. Use `bg-background`, `text-foreground`, and `border-border` in application layouts rather than hardcoding a light-only palette.
+
+The [design reference](/design) documents the system. The [theming guide](/docs/theming) covers configuration. Start with the [installation guide](/docs/installation) before changing tokens so missing styles are not mistaken for theme bugs.
+
+## Keep the package setup intact
+
+Package consumers import `@vllnt/ui/styles.css` once and use `@vllnt/ui/tailwind-preset`. The variables-only `@vllnt/ui/themes/default.css` is not a replacement for the full stylesheet. Source-copy consumers must generate the utilities used by their copied components through their own Tailwind build.
+
+```tsx
+import { Button } from "@vllnt/ui";
+
+export function ResponseActions() {
+  return (
+    <section className="rounded-md border border-border bg-background p-4 text-foreground">
+      <h2 className="mb-2 text-xl font-semibold">Response actions</h2>
+      <p className="mb-4 text-muted-foreground">Review the answer before saving.</p>
+      <Button>Save answer</Button>
+    </section>
+  );
+}
+```
+
+This is presentation only; wire the save operation and its pending and error states in your application. Keep accessible action names specific to the operation.
+
+## Override at the right scope
+
+Theme variables can be overridden on a root or a scoped container. Color values use OKLCH channels in the token set, so preserve the expected format rather than pasting a hex value into a channel variable. Change paired surface and foreground tokens together and verify contrast in both themes.
+
+Typography also has roles. `--font-sans` controls body text, `--font-display` controls foundation headings and display text, and `--font-mono` controls code. Foundation primitives consume type-scale variables; arbitrary application classes do not automatically consume every typography token. Prefer the documented foundation primitives when theme-wide type control matters.
+
+## Audit interaction states
+
+A screenshot of the resting state is not enough. Check hover, focus, disabled controls, errors, and selected items. Maintain visible keyboard focus and never communicate status through color alone. Verify normal text contrast of at least 4.5:1 and large text and non-text UI contrast of at least 3:1 where required by WCAG AA.
+
+Use the four-point spacing scale, restrained borders, and semibold headings. Test narrow layouts and long translated labels. Apply these same checks to [AI message surfaces](/guides/ai-ui) and [streaming responses](/guides/streaming-ui).
