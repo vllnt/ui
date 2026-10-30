@@ -22,7 +22,7 @@ Merge can trigger existing Web canary publication and conditionally Native canar
 
 ## Scope, evidence, and exclusions
 
-Read-only audit of `/Users/bntvllnt/Github/vllnt/ui-native-platform`, branch `feat/react-native-platform`, HEAD `811451e3cb223f8513e069f3dfee4471fb65d126` plus ongoing dirty repairs. Only this new report was written. Existing dirty `.github/workflows/native-canary.yml` (dist-tag authentication) and `CHANGELOG.md` were inspected, not overwritten. Their dirty state matters: committed HEAD lacks the separate dist-tag credential repair.
+Read-only audit of a local `vllnt/ui` checkout, branch `feat/react-native-platform`, HEAD `811451e3cb223f8513e069f3dfee4471fb65d126` plus ongoing dirty repairs. Only this new report was written. Existing dirty `.github/workflows/native-canary.yml` (dist-tag authentication) and `CHANGELOG.md` were inspected, not overwritten. Their dirty state matters: committed HEAD lacks the separate dist-tag credential repair.
 
 Parent owns task62 tracking; no task tool is available in this child. Completed steps: establish trigger/version facts; review adoption/release boundaries and existing audit evidence; produce ranked gaps, gates, and bounded follow-up. No agents, dependencies, full builds, Next processes, credential reads, npm writes, push, merge, deployment, or live owner-setting changes.
 
