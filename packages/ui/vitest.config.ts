@@ -9,8 +9,6 @@ export default defineConfig({
     },
   },
   test: {
-    // Shared dev hosts: keep test parallelism low.
-    maxWorkers: 2,
     coverage: {
       exclude: [
         "src/components/**/index.ts",
@@ -28,6 +26,8 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     include: ["src/**/*.test.{ts,tsx}"],
+    // Shared dev hosts: keep test parallelism low.
+    maxWorkers: 2,
     setupFiles: ["./src/test-setup.ts"],
   },
 });
