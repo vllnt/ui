@@ -81,4 +81,100 @@ describe("useFocusContainment", () => {
     fireEvent.click(screen.getByRole("button", { name: "last" }));
     expect(opener).toHaveFocus();
   });
+
+  it("returns focus to the opener when a child uses autoFocus", () => {
+    function AutoFocusHarness() {
+      const [open, setOpen] = useState(false);
+      const reference = useRef<HTMLDivElement>(null);
+      useFocusContainment(reference, open);
+      return (
+        <>
+          <button
+            onClick={() => {
+              setOpen(true);
+            }}
+            type="button"
+          >
+            opener
+          </button>
+          {open ? (
+            <div ref={reference}>
+              {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
+              <input aria-label="field" autoFocus />
+              <button
+                onClick={() => {
+                  setOpen(false);
+                }}
+                type="button"
+              >
+                close
+              </button>
+            </div>
+          ) : null}
+        </>
+      );
+    }
+    render(<AutoFocusHarness />);
+    const opener = screen.getByRole("button", { name: "opener" });
+    opener.focus();
+    fireEvent.click(opener);
+    expect(screen.getByRole("textbox", { name: "field" })).toHaveFocus();
+    fireEvent.click(screen.getByRole("button", { name: "close" }));
+    expect(opener).toHaveFocus();
+  });
+
+  it("lets only the most recently enabled containment handle Tab", () => {
+    function Nested() {
+      const outerReference = useRef<HTMLDivElement>(null);
+      const innerReference = useRef<HTMLDivElement>(null);
+      const [inner, setInner] = useState(false);
+      useFocusContainment(outerReference, true);
+      useFocusContainment(innerReference, inner);
+      return (
+        <>
+          <div ref={outerReference}>
+            <button
+              onClick={() => {
+                setInner(true);
+              }}
+              type="button"
+            >
+              outer-a
+            </button>
+            <button type="button">outer-b</button>
+          </div>
+          {inner ? (
+            <div ref={innerReference}>
+              <button type="button">inner-a</button>
+              <button type="button">inner-b</button>
+            </div>
+          ) : null}
+        </>
+      );
+    }
+    render(<Nested />);
+    fireEvent.click(screen.getByRole("button", { name: "outer-a" }));
+    screen.getByRole("button", { name: "inner-b" }).focus();
+    fireEvent.keyDown(document.activeElement ?? document.body, { key: "Tab" });
+    expect(screen.getByRole("button", { name: "inner-a" })).toHaveFocus();
+  });
+
+  it("skips inert ancestors and hidden inputs", () => {
+    function Skip() {
+      const reference = useRef<HTMLDivElement>(null);
+      useFocusContainment(reference, true);
+      return (
+        <div ref={reference}>
+          <button type="button">only</button>
+          <div {...{ inert: "" }}>
+            <button type="button">inert-child</button>
+          </div>
+          <input type="hidden" />
+        </div>
+      );
+    }
+    render(<Skip />);
+    fireEvent.keyDown(document.activeElement ?? document.body, { key: "Tab" });
+    expect(screen.getByRole("button", { name: "only" })).toHaveFocus();
+  });
 });
