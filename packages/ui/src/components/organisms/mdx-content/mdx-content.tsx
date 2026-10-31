@@ -193,7 +193,7 @@ export async function MDXContent({
 
   const customComponents = buildCustomComponents(components);
   // Markdown and MDX call these with props parsed from `content`.
-  const allComponents = { ...MDXComponents, ...customComponents } as Components;
+  const allComponents = { ...MDXComponents, ...customComponents };
 
   if (enableMDX && hasJSX) {
     let Component: MDXModule["default"] | undefined;

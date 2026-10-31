@@ -1,14 +1,13 @@
 {
   "extends": "@vllnt/typescript/react.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "incremental": false,
     "lib": ["ES2022"],
     "paths": {
       "@/*": ["./src/*"]
     },
     "target": "ES2020",
-    "types": ["jest", "react", "react-native"]
+    "types": ["jest", "node", "react", "react-native"]
   },
   "include": ["src", "tests", "jest.config.cjs", "tsup.config.ts"]
 }

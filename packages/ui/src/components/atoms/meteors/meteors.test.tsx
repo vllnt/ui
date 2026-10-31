@@ -11,7 +11,7 @@ describe("Meteors", () => {
 
   it("renders the requested meteor count", () => {
     const { container } = render(<Meteors count={4} />);
-    expect(container.querySelectorAll(":scope > span")).toHaveLength(4);
+    expect(container.querySelectorAll(":scope > div > span")).toHaveLength(4);
   });
 
   it("keeps the animation name out of inline styles so motion-reduce:animate-none can stop it", () => {

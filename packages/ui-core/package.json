@@ -65,11 +65,11 @@
     "typecheck": "tsc --noEmit --project tsconfig.build.json"
   },
   "devDependencies": {
-    "@vllnt/eslint-config": "^1.0.0",
-    "@vllnt/typescript": "^1.0.0",
-    "eslint": "^9.39.1",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.3",
+    "@vllnt/eslint-config": "^2.0.0",
+    "@vllnt/typescript": "^2.0.0",
+    "eslint": "^9.39.5",
+    "tsup": "^9.0.0",
+    "typescript": "~6.0.3",
     "vitest": "^4.1.12"
   }
 }
