@@ -65,32 +65,38 @@ export const darkTheme: NativeTheme = {
   colorScheme: "dark",
 };
 
-/** Creates a native theme while preserving every required semantic token. */
+/** Merges `override` onto `base`, ignoring `undefined` values so a token is never erased. */
+function merge<T extends object>(base: T, override?: Partial<T>): T {
+  const defined = Object.entries(override ?? {}).filter(
+    ([, value]) => value !== undefined,
+  );
+  return { ...base, ...Object.fromEntries(defined) };
+}
+
+/**
+ * Creates a native theme while preserving every required semantic token.
+ * `undefined` override values keep the default; any scheme other than
+ * `"dark"` produces the light theme.
+ */
 export function createNativeTheme(
   colorScheme: ThemeColorScheme,
   override: NativeThemeOverride = {},
 ): NativeTheme {
   const base = colorScheme === "dark" ? darkTheme : lightTheme;
   return {
-    colors: { ...base.colors, ...override.colors },
-    colorScheme,
+    colors: merge(base.colors, override.colors),
+    colorScheme: base.colorScheme,
     motion: {
-      duration: {
-        ...base.motion.duration,
-        ...override.motion?.duration,
-      },
+      duration: merge(base.motion.duration, override.motion?.duration),
     },
-    radius: { ...base.radius, ...override.radius },
-    spacing: { ...base.spacing, ...override.spacing },
+    radius: merge(base.radius, override.radius),
+    spacing: merge(base.spacing, override.spacing),
     typography: {
-      fontWeight: {
-        ...base.typography.fontWeight,
-        ...override.typography?.fontWeight,
-      },
-      scale: {
-        ...base.typography.scale,
-        ...override.typography?.scale,
-      },
+      fontWeight: merge(
+        base.typography.fontWeight,
+        override.typography?.fontWeight,
+      ),
+      scale: merge(base.typography.scale, override.typography?.scale),
     },
   };
 }

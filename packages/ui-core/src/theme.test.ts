@@ -163,3 +163,28 @@ describe("createNativeTheme", () => {
     expect(theme.spacing[2]).toBe(darkTheme.spacing[2]);
   });
 });
+
+describe("createNativeTheme input handling", () => {
+  it("keeps the default token when an override value is undefined", () => {
+    const theme = createNativeTheme("light", {
+      colors: { primary: undefined },
+      spacing: { [4]: undefined },
+    });
+
+    expect(theme.colors.primary).toBe(lightTheme.colors.primary);
+    expect(theme.spacing[4]).toBe(lightTheme.spacing[4]);
+  });
+
+  it("falls back to the light theme for an unknown color scheme", () => {
+    const theme = createNativeTheme("system" as never);
+
+    expect(theme.colorScheme).toBe("light");
+    expect(theme.colors).toEqual(lightTheme.colors);
+  });
+
+  it("does not mutate the shared themes", () => {
+    createNativeTheme("dark", { colors: { primary: "#123456" } });
+
+    expect(darkTheme.colors.primary).not.toBe("#123456");
+  });
+});
