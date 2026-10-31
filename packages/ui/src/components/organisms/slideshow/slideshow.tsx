@@ -110,6 +110,7 @@ function SlideshowHeader({
         >
           {isTocOpen ? (
             <svg
+              aria-hidden="true"
               className="size-5"
               fill="none"
               stroke="currentColor"
@@ -124,6 +125,7 @@ function SlideshowHeader({
             </svg>
           ) : (
             <svg
+              aria-hidden="true"
               className="size-5"
               fill="none"
               stroke="currentColor"
@@ -154,6 +156,7 @@ function SlideshowHeader({
           type="button"
         >
           <svg
+            aria-hidden="true"
             className="size-5"
             fill="none"
             stroke="currentColor"
@@ -240,6 +243,7 @@ function SlideshowToc({
             type="button"
           >
             <svg
+              aria-hidden="true"
               className="size-4"
               fill="none"
               stroke="currentColor"
@@ -280,6 +284,7 @@ function SlideshowToc({
                 >
                   {isCompleted ? (
                     <svg
+                      aria-hidden="true"
                       className="size-3 text-background"
                       fill="none"
                       stroke="currentColor"
@@ -343,6 +348,7 @@ function SlideshowNav({
         type="button"
       >
         <svg
+          aria-hidden="true"
           className="size-4"
           fill="none"
           stroke="currentColor"
@@ -365,6 +371,7 @@ function SlideshowNav({
         <span>{isLastSection ? labels.finishLabel : labels.nextLabel}</span>
         {!isLastSection && (
           <svg
+            aria-hidden="true"
             className="size-4"
             fill="none"
             stroke="currentColor"

@@ -71,6 +71,7 @@ export function ProTip({
             <span className="size-4">{icon}</span>
           ) : (
             <svg
+              aria-hidden="true"
               className="size-4"
               fill="none"
               stroke="currentColor"
@@ -118,6 +119,7 @@ function CommonMistakeFix({
           </span>
         ) : (
           <svg
+            aria-hidden="true"
             className="size-5 text-green-500 flex-shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
@@ -165,6 +167,7 @@ export function CommonMistake({
             </span>
           ) : (
             <svg
+              aria-hidden="true"
               className="size-5 text-red-500 flex-shrink-0 mt-0.5"
               fill="none"
               stroke="currentColor"

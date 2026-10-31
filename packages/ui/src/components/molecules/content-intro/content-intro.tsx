@@ -107,6 +107,7 @@ function ContentIntroToc({
                 >
                   {isCompleted ? (
                     <svg
+                      aria-hidden="true"
                       className="size-3"
                       fill="none"
                       stroke="currentColor"
@@ -172,6 +173,7 @@ function ContentIntroStickyBar({
             size="lg"
           >
             <svg
+              aria-hidden="true"
               className="size-5"
               fill="none"
               stroke="currentColor"

@@ -100,6 +100,7 @@ function TocHeader({
       >
         {closeIcon ?? (
           <svg
+            aria-hidden="true"
             className="size-5"
             fill="none"
             stroke="currentColor"
@@ -217,6 +218,7 @@ function TocSectionList({
                 >
                   {isCompleted ? (
                     <svg
+                      aria-hidden="true"
                       className="size-3"
                       fill="none"
                       stroke="currentColor"

@@ -30,6 +30,7 @@ export type KeyboardShortcutsHelpProps = {
 function DefaultCloseIcon(): React.ReactNode {
   return (
     <svg
+      aria-hidden="true"
       className="size-5"
       fill="none"
       stroke="currentColor"
