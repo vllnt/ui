@@ -9,6 +9,8 @@ export default defineConfig({
     },
   },
   test: {
+    // Shared dev hosts: keep test parallelism low.
+    maxWorkers: 2,
     coverage: {
       exclude: [
         "src/components/**/index.ts",
