@@ -54,15 +54,15 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
+/** NaN falls back to the lower bound; ±Infinity clamps to the range. */
 function normalizeValue(
   value: number,
   min: number,
   max: number,
   step: number,
 ): number {
-  if (max <= min) return min;
-  const safeStep = step > 0 ? step : 1;
-  const stepped = min + Math.round((value - min) / safeStep) * safeStep;
+  if (max <= min || Number.isNaN(value)) return min;
+  const stepped = min + Math.round((value - min) / step) * step;
   return clamp(stepped, min, max);
 }
 
@@ -76,11 +76,11 @@ function Slider({
   defaultValue,
   disabled: ownDisabled = false,
   incrementLabel = "Increase",
-  max = 100,
-  min = 0,
+  max: maxProperty = 100,
+  min: minProperty = 0,
   onValueChange,
   ref,
-  step = 1,
+  step: stepProperty = 1,
   style,
   value,
   valueText,
@@ -88,6 +88,11 @@ function Slider({
 }: SliderProps) {
   const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
+  // Non-finite bounds and non-positive steps would render NaN styles.
+  const min = Number.isFinite(minProperty) ? minProperty : 0;
+  const max = Number.isFinite(maxProperty) ? maxProperty : min + 100;
+  const step =
+    Number.isFinite(stepProperty) && stepProperty > 0 ? stepProperty : 1;
   const upperBound = Math.max(min, max);
   const initialValue = normalizeValue(
     value ?? defaultValue ?? min,
@@ -124,10 +129,10 @@ function Slider({
   };
   const handleAccessibilityAction = (event: AccessibilityActionEvent) => {
     if (event.nativeEvent.actionName === "increment") {
-      update(currentValue + (step > 0 ? step : 1));
+      update(currentValue + step);
     }
     if (event.nativeEvent.actionName === "decrement") {
-      update(currentValue - (step > 0 ? step : 1));
+      update(currentValue - step);
     }
   };
 

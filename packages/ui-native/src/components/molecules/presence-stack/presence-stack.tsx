@@ -178,7 +178,11 @@ function PresenceStack({
   users,
   ...props
 }: PresenceStackProps) {
-  const visible = users.slice(0, Math.max(0, max));
+  // NaN means no limit, like AvatarGroup.
+  const visible = users.slice(
+    0,
+    Number.isNaN(max) ? undefined : Math.max(0, max),
+  );
   const hidden = Math.max(0, users.length - visible.length);
   const regionLabel = labels?.region ?? "Live presence";
   const overflowLabel = `${hidden} ${labels?.overflowSuffix ?? "more"}`;

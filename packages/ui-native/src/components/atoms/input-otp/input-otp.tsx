@@ -41,6 +41,14 @@ const styles = StyleSheet.create({
   input: { borderWidth: 1, minHeight: 44, textAlign: "center", width: "100%" },
 });
 
+const DEFAULT_LENGTH = 6;
+
+/** Whole code length; NaN, infinite, zero, and negative lengths fall back to six digits. */
+function codeLength(length: number): number {
+  if (!Number.isFinite(length) || length < 1) return DEFAULT_LENGTH;
+  return Math.floor(length);
+}
+
 function normalizeCode(value: string, length: number): string {
   return value.replaceAll(/\D/g, "").slice(0, length);
 }
@@ -51,7 +59,7 @@ function InputOTP({
   accessibilityLabel = "One-time code",
   errorText,
   invalid = false,
-  length,
+  length: lengthProperty,
   ref,
   rootProps,
   style,
@@ -59,6 +67,7 @@ function InputOTP({
   ...props
 }: InputOTPProps) {
   const theme = useTheme();
+  const length = codeLength(lengthProperty);
   const locked = useGroupDisabled(props.editable === false);
   const [value, setValue] = useControllableState(valueState);
   const error = invalid ? errorText : undefined;
