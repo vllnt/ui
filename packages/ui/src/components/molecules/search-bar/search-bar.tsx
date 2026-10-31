@@ -9,7 +9,7 @@ import { useEventCallback } from "../../../lib/use-event-callback";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
 
-type SearchBarProps = {
+export type SearchBarProps = {
   className?: string;
   onSearch?: (query: string) => void;
   placeholder?: string;

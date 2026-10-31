@@ -9,7 +9,7 @@ export type BreadcrumbItem = {
   label: React.ReactNode;
 };
 
-type BreadcrumbProps = {
+export type BreadcrumbProps = {
   className?: string;
   items: BreadcrumbItem[];
   separator?: "arrow" | "chevron" | "slash";

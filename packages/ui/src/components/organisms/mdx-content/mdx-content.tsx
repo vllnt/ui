@@ -13,7 +13,7 @@ import { StaticCode } from "../static-code/static-code";
  */
 type MDXComponent = React.JSXElementConstructor<never>;
 
-type MDXContentProps = {
+export type MDXContentProps = {
   components?: Record<string, MDXComponent>;
   content: string;
   enableMDX?: boolean;

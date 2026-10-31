@@ -1845,3 +1845,25 @@ export {
   type DisplayProps,
 } from "./atoms/display/display";
 export { Prose, type ProseProps } from "./atoms/prose/prose";
+
+// Props types
+export type { BreadcrumbProps } from "./atoms/breadcrumb/breadcrumb";
+export type { CommandDialogProps } from "./molecules/command/command";
+export type { SheetContentProps } from "./atoms/sheet/sheet";
+export type { CarouselProps } from "./molecules/carousel/carousel";
+export type { CodeBlockProps } from "./organisms/code-block/code-block";
+export type { MDXContentProps } from "./organisms/mdx-content/mdx-content";
+export type { SidebarProps } from "./molecules/sidebar/sidebar";
+export type { TableOfContentsProps } from "./atoms/table-of-contents/table-of-contents";
+export type { CategoryFilterProps } from "./molecules/category-filter/category-filter";
+export type { SearchBarProps } from "./molecules/search-bar/search-bar";
+export type { ShareSectionProps } from "./atoms/share-section/share-section";
+export type { SearchDialogProps } from "./organisms/search-dialog/search-dialog";
+export type { LangProviderProps } from "./atoms/lang-provider/lang-provider";
+export type { ThemeToggleProps } from "./molecules/theme-toggle/theme-toggle";
+export type { ProfileSectionProps } from "./molecules/profile-section/profile-section";
+export type { TLDRSectionProps } from "./atoms/tldr-section/tldr-section";
+export type { AreaChartProps } from "./organisms/chart/area-chart";
+export type { BarChartProps } from "./organisms/chart/bar-chart";
+export type { LineChartProps } from "./organisms/chart/line-chart";
+export type { ThemePresetProviderProps } from "./atoms/theme-preset-provider/theme-preset-provider";

@@ -67,7 +67,7 @@ const CODE_THEME: PrismStyle = {
   variable: codeToken("variable", "0.5003 0.1821 29.5"),
 };
 
-type CodeBlockProps = {
+export type CodeBlockProps = {
   children: ReactNode;
   className?: string;
   language?: string;

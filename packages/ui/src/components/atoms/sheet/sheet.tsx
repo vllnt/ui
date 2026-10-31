@@ -51,7 +51,7 @@ const sheetVariants = cva(
   },
 );
 
-type SheetContentProps = {} & React.ComponentPropsWithoutRef<
+export type SheetContentProps = {} & React.ComponentPropsWithoutRef<
   typeof SheetPrimitive.Content
 > &
   VariantProps<typeof sheetVariants>;

@@ -28,7 +28,7 @@ const Command = ({
 );
 Command.displayName = CommandPrimitive.displayName;
 
-type CommandDialogProps = {} & React.ComponentPropsWithoutRef<
+export type CommandDialogProps = {} & React.ComponentPropsWithoutRef<
   typeof DialogPrimitive.Root
 >;
 

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { Badge } from "../../atoms/badge/badge";
 
-type CategoryFilterProps = {
+export type CategoryFilterProps = {
   categories: string[];
   lang: string;
 };

@@ -26,7 +26,7 @@ export type SidebarSection = {
   title?: string;
 };
 
-type SidebarProps = {
+export type SidebarProps = {
   ariaLabel?: string;
   closeLabel?: string;
   id?: string;
