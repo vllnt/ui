@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **New hooks** - `useFocusContainment` (trap Tab inside a custom modal and
+  restore focus on close) and `useEventCallback` (stable callback that always
+  calls the latest closure). Registry items import them from `@vllnt/ui`.
 - **Props types exported from the barrel** - `BreadcrumbProps`,
   `CommandDialogProps`, `SheetContentProps`, `CarouselProps`, `CodeBlockProps`,
   `MDXContentProps`, `SidebarProps`, `TableOfContentsProps`,
