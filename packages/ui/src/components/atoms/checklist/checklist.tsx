@@ -81,7 +81,7 @@ function ChecklistItemRow({
       >
         {isChecked ? (
           <svg
-            className="size-5 text-green-500 flex-shrink-0 mt-0.5"
+            className="size-5 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

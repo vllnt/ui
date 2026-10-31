@@ -74,4 +74,14 @@ describe("Rating", () => {
     fireEvent.keyDown(two, { key: "ArrowRight" });
     expect(onValueChange).toHaveBeenLastCalledWith(3);
   });
+
+  it("uses a filled-star color with at least 3:1 contrast on light and dark", () => {
+    render(<Rating label="Quality" value={2} />);
+
+    // amber-600 on white is 3.2:1; amber-500 on the dark background is above 8:1.
+    expect(screen.getByLabelText("2 stars")).toHaveClass(
+      "text-amber-600",
+      "dark:text-amber-500",
+    );
+  });
 });

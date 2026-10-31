@@ -116,7 +116,7 @@ export function Summary({
                 className="flex items-start gap-2 text-sm"
                 key={`${takeaway}-${index.toString()}`}
               >
-                <CheckCircle2 className="size-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="size-4 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                 <span className="text-muted-foreground">{takeaway}</span>
               </li>
             ))}
