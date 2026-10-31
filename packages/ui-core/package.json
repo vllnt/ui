@@ -13,7 +13,12 @@
   "bugs": {
     "url": "https://github.com/vllnt/ui/issues"
   },
-  "keywords": ["design-system", "design-tokens", "typescript", "ui"],
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "typescript",
+    "ui"
+  ],
   "type": "module",
   "main": "./src/index.ts",
   "module": "./src/index.ts",
@@ -55,14 +60,14 @@
   "scripts": {
     "build": "pnpm tokens:check && tsup",
     "clean": "rm -rf dist node_modules coverage",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint --cache --cache-location node_modules/.cache/eslint/ .",
+    "lint:fix": "eslint --cache --cache-location node_modules/.cache/eslint/ . --fix",
     "pack:check": "node scripts/check-packed-package.mjs",
     "test": "vitest",
     "test:once": "vitest run",
     "tokens:check": "node ../design/scripts/generate-tokens.mjs --check",
     "tokens:generate": "node ../design/scripts/generate-tokens.mjs",
-    "typecheck": "tsc --noEmit --project tsconfig.build.json"
+    "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsc/typecheck.tsbuildinfo --project tsconfig.build.json"
   },
   "devDependencies": {
     "@vllnt/eslint-config": "^2.0.0",

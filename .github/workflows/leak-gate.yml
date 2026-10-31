@@ -8,4 +8,5 @@ permissions:
 jobs:
   leak-gate:
     uses: vllnt/.github/.github/workflows/leak-gate.yml@main
-    secrets: inherit
+    secrets:
+      LEAK_GATE_EXTRA_PATTERNS: ${{ secrets.LEAK_GATE_EXTRA_PATTERNS }}

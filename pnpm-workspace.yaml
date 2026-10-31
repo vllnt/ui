@@ -1,3 +1,82 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# Supply-chain settings (pnpm 11). A dependency version must be at least
+# 7 days old before it can be resolved; first-party @vllnt packages are exempt.
+minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - "@vllnt/*"
+# Fail the install when a dependency has an install script that is not
+# listed in allowBuilds, and refuse git/tarball URLs in transitive deps.
+strictDepBuilds: true
+blockExoticSubdeps: true
+# Refuse a version whose publish trust (provenance / trusted publisher) is
+# weaker than an earlier release of the same package.
+trustPolicy: no-downgrade
+# Exact versions that lost publish trust upstream (Expo SDK 57 patch line,
+# shadcn canary, a few transitive packages). Exact pins: newer releases are checked.
+trustPolicyExclude:
+  - "@expo/cli@57.0.32"
+  - "@expo/config-plugins@57.0.11"
+  - "@expo/config@57.0.10"
+  - "@expo/fingerprint@0.20.14"
+  - "@expo/image-utils@0.11.6"
+  - "@expo/inline-modules@0.1.8"
+  - "@expo/local-build-cache-provider@57.0.9"
+  - "@expo/metro-config@57.0.13"
+  - "@expo/metro-file-map@57.0.4"
+  - "@expo/prebuild-config@57.0.19"
+  - "@expo/require-utils@57.0.6"
+  - "@expo/router-server@57.0.14"
+  - "babel-preset-expo@57.0.16"
+  - "expo-asset@57.0.20"
+  - "expo-constants@57.0.22"
+  - "expo-modules-autolinking@57.0.16"
+  - "expo-modules-core@57.0.24"
+  - "expo-modules-jsi@57.1.3"
+  - "expo@57.0.31"
+  - "shadcn@4.2.0-canary.0" # apps/registry follows the shadcn canary dist-tag, published without provenance
+  - "semver@6.3.1" # transitive of the Expo toolchain
+  - "tailwind-merge@2.6.1" # held at 2.x (tailwind 3); this release lost trust upstream
+  - "ua-parser-js@1.0.41" # transitive (fbjs > react-native-web, native catalog)
+  - "undici-types@6.21.0" # types-only, pulled by @types/node 22
+
+# Security and gate overrides. Each one says why it is kept; drop it when the
+# parent package moves past the vulnerable range.
+overrides:
+  # Hold: 7.1.x adds react-hooks/set-state-in-effect errors on existing hooks
+  # (animated-text, number-ticker, scramble-text, use-live-date); fixing them
+  # would change runtime behavior. Revisit when those hooks are reworked.
+  "eslint-plugin-react-hooks": "7.0.1"
+  # GHSA-27r3-jxmh-p828 (high): shadcn > @modelcontextprotocol/sdk > express pins body-parser 2.2.x.
+  "body-parser@>=2.0.0 <2.4.0": "2.4.0"
+  # GHSA-mrhx-c7xc-m3w5 (high): @expo/cli pins zod ^3.25.76, which has no patched 3.x release.
+  # Only used for the Expo dev-tools MCP schema; verified with ci:native.
+  "@expo/cli>zod": "4.6.7"
+  # Critical/high handlebars advisories (GHSA-8r5x-fm3f-whwj and others) via
+  # @vllnt/eslint-config > eslint-plugin-boundaries > @boundaries/elements.
+  "handlebars@<4.7.10": "4.7.10"
+  # GHSA-ggr8-5vv4-36mx (high): eslint-plugin-functional > deepmerge-ts 7.x.
+  "deepmerge-ts@<8.0.0": "8.0.2"
+  # GHSA-rj75-hqrm-r3gf / GHSA-w9m9-85wc-3x92: tailwindcss 3 > postcss-selector-parser 6.0/6.1.
+  "postcss-selector-parser@<6.1.5": "6.1.5"
+  # GHSA-p498-v437-472g (moderate): @humanfs/node via @typescript-eslint/utils.
+  "@humanfs/node@<0.16.8": "0.17.0"
+  # GHSA-4x5r-pxfx-6jf8 (low): @babel/core <=7.29.0 via expo config plugins.
+  "@babel/core@<7.29.6": "7.29.7"
+  # valibot <=1.4.1 advisory (moderate, prod): @hookform/resolvers resolves 1.2.0 without it.
+  "valibot@<1.4.2": "1.5.0"
+  # uuid <11.1.1 advisory (moderate, dev): @storybook/test-runner > jest-junit pulls uuid 8.
+  "uuid@<11.1.1": "11.1.1"
+
+# Dependency install scripts: deny by default. With strictDepBuilds, a package
+# whose script is not listed here fails the install. Every entry is blocked:
+# the native binaries ship as optionalDependencies, so builds, tests and CI
+# pass without running any of these scripts.
+allowBuilds:
+  "@parcel/watcher": false # prebuilt binaries come from optionalDependencies; the script only compiles a fallback
+  "@swc/core": false # platform binary comes from optionalDependencies; postinstall is a sanity check
+  esbuild: false # binary comes from @esbuild/* optionalDependencies; postinstall only validates it
+  msw: false # postinstall copies a service worker into a public dir; not used here
+  unrs-resolver: false # napi-postinstall only fetches a fallback wasm binary

@@ -9,6 +9,8 @@ export default defineConfig({
     },
   },
   test: {
+    // Shared dev hosts: keep test parallelism low.
+    maxWorkers: 2,
     environment: "node",
     globals: true,
     include: ["lib/**/*.test.ts", "app/**/*.test.ts"],
