@@ -10,6 +10,8 @@ Release automation can regenerate this file from Conventional Commits with
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-31
+
 ### Added
 
 - **Props types exported from the barrel** - `BreadcrumbProps`,
@@ -60,6 +62,23 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Changed
 
+- **Colour tokens meet WCAG AA** (#538). The default light theme uses a darker
+  `--muted-foreground`, `--destructive` and `--input`; in the dark theme
+  `--destructive` is lighter with a dark foreground and `--input` is lighter, so
+  input borders are easier to see in both. Presets adjust `--primary`,
+  `--destructive`, `--input` and `--ring` the same way. Visual snapshots change.
+- **Font tokens on `:root`** - `styles.css` now defines `--font-sans`,
+  `--font-display` and `--font-mono` on `:root`. If your app sets variables
+  with these names, declare them later in the cascade or on `body` so yours win.
+- **Lighter imports** (#541) - CodeBlock renders its code as plain text first
+  and highlights it once the Prism build loads on the client; TutorialMDX loads
+  the MDX compiler only for content with JSX, and FlowDiagram loads
+  `html-to-image` only when copied. Apps that use neither `toast` nor
+  `Toaster` no longer bundle sonner.
+- **Smaller package** - the tarball has 361 files instead of 659: the
+  per-component re-export stubs and `dist/test-setup.js` are gone.
+  Only the `exports` entry points are public, so imports do not change.
+
 - **Peer dependency ranges now match what the package needs.** `next` is
   `>=15.0.0` (Next 14 peers React 18, which the React 19 build cannot use),
   `tailwindcss` is `^3.4.0` (components use `size-*`, `text-balance` and
@@ -108,10 +127,15 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Fixed
 
+- **Tailwind preset dependency** - `tailwindcss-animate`, which
+  `@vllnt/ui/tailwind-preset` imports, is now a runtime dependency. With 0.3.0
+  the preset failed to load unless the app installed it.
 - **Duplicate React keys** - Terminal, FileUpload, AvatarGroup, Breadcrumb and
   about 20 other list renderers no longer key rows by content or label alone,
   so repeated or blank entries stop triggering duplicate-key errors. FileUpload
-  ignores a file that is already in the list, so removal removes one entry.
+  adds an identical file (same name, size and lastModified) once, so removal
+  removes one entry, and a selection that adds nothing new does not call
+  `onFilesChange`.
 - **`"use client"` directives** - Toolbar, Stepper, AIChatInput, ObjectCard,
   OverviewBoard and ZoomHUD use event handlers or browser globals and now carry
   the directive. `check:use-client` also flags handler props and browser globals.
@@ -127,10 +151,6 @@ Release automation can regenerate this file from Conventional Commits with
 - Accessible names, ARIA structure, APG keyboard patterns (tabs, radio groups,
   listbox, tree, dialogs and focus return), reduced motion and hard-coded
   palette contrast across the Web components flagged by the #535 audit. (#543)
-
-- **FileUpload duplicates** - Selecting identical files (same name, size and
-  lastModified) adds them once, and a selection that adds nothing new no longer
-  calls `onFilesChange`.
 
 ## [0.3.0] - 2026-06-26
 

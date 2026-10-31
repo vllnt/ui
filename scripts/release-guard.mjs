@@ -10,14 +10,11 @@ export function assertNativeCanary(version) {
   return version;
 }
 
-/** Web 0.4+ stays canary-only until a separately reviewed promotion change. */
+/** Web 0.3.x and 0.4.x may publish stable; newer bases need a separately reviewed change. */
 export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
   if (ref !== "refs/heads/main") throw new Error("Publication requires main");
   if (!/^0\.(?:3|4)\.(?:0|[1-9]\d*)$/.test(web)) throw new Error("Unsupported Web release base");
-  if (mode === "stable") {
-    if (!/^0\.3\./.test(web)) throw new Error("0.4.0 release hold: separate reviewed promotion and verification required");
-    return web;
-  }
+  if (mode === "stable") return web;
   if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
   if (mode === "web-canary") return `${web}-canary.sha${sha.slice(0, 7)}`;
   if (mode !== "native-canary") throw new Error("Unsupported release channel");

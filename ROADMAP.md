@@ -1,11 +1,11 @@
 # Roadmap
 
 > **Goal:** the design-system foundation for building UI fast — the @vllnt/ui component registry (web + native), the `@vllnt/ui-cli` DX gate, and `@vllnt/front-studio` + `@vllnt/ui-toolbar` (verify · review · author, API-first) — for humans and agents alike.
-> **Now:** `component-sidebar` — finish `.5`/`.6`, then ship `@vllnt/ui@0.4.0`.
+> **Now:** ship `@vllnt/ui@0.4.0` stable (release-ready on main; see `RELEASING.md`), then `component-sidebar` `.5`/`.6`.
 > **Next:** `native-parity` pilot validation · `agent-ui-cli` (MVP) · `ai-elements-parity`.
 > **Horizon (gated):** the front-studio line (`studio` → `studio-hub` — after the CLI ships + a real need).
 > **Visibility track:** SEO/GEO phases — `search-consolidation` → `ai-toolchain-registration` → `visibility-measurement` → `seo-content-engine` → `backlink-authority`. Diagnosis: infra is DONE (`agent-surface`) but GSC shows indexed-yet-buried (141 pages, 2 clicks/90d, 0 AI-query visibility) + a dead `.com` twin outranking the live `.ai`. Full plan: [strategy dossier](https://claude.ai/code/artifact/6e2359db-a626-4226-aa54-a9e53ecfd766).
-> **Last updated:** 2026-09-03
+> **Last updated:** 2026-10-31
 > **Channels:** `@latest` = `0.3.0` · `@canary` = `0.4.0-canary.<sha>` (auto-publishes on every merge to main). Tracking: [milestone 0.3.0](https://github.com/vllnt/ui/milestone/1)
 
 Convention: phases are kebab-case outcome slugs, ordered DONE → ACTIVE → PLANNED. Tasks carry stable `<slug>.<n>` IDs; functional tasks pair with a `Validate`/`E2E` task. History is never deleted. Shipped 0.3.0 detail lives in `CHANGELOG.md` and the 197 closed issues; phases below summarize it.

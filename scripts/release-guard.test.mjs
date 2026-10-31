@@ -9,16 +9,18 @@ import { releaseVersion } from "./release-guard.mjs";
 const input = { web: "0.4.0", core: "0.1.0", native: "0.1.0", ref: "refs/heads/main", sha: "a".repeat(40), run: "42" };
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("stable hold cannot be bypassed by a newer version or channel", () => {
-  for (const web of ["0.4.0", "0.4.1", "0.5.0", "1.0.0", "0.4.0-canary.1"]) {
+test("stable rejects newer bases, prereleases and unknown channels", () => {
+  for (const web of ["0.5.0", "1.0.0", "0.4.0-canary.1", "0.4.01", "0.2.9"]) {
     assert.throws(() => releaseVersion({ ...input, web, mode: "stable" }));
   }
   for (const mode of ["latest", "release", "next", ""]) assert.throws(() => releaseVersion({ ...input, mode }));
 });
-test("existing stable 0.3 maintenance is preserved on main only", () => {
-  assert.equal(releaseVersion({ ...input, web: "0.3.1", mode: "stable" }), "0.3.1");
-  for (const mode of ["stable", "web-canary", "native-canary"]) {
-    assert.throws(() => releaseVersion({ ...input, web: "0.3.1", mode, ref: "refs/heads/other" }));
+test("stable 0.4 release and 0.3 maintenance publish from main only", () => {
+  for (const web of ["0.4.0", "0.4.1", "0.3.1"]) {
+    assert.equal(releaseVersion({ ...input, web, mode: "stable" }), web);
+    for (const mode of ["stable", "web-canary", "native-canary"]) {
+      assert.throws(() => releaseVersion({ ...input, web, mode, ref: "refs/heads/other" }));
+    }
   }
 });
 test("canaries derive prerelease versions from validated inputs", () => {
@@ -43,6 +45,7 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.ok(web.indexOf("release-guard.mjs web-canary") < web.indexOf('npm version "$CANARY_VERSION"'));
   assert.match(web, /publish "\$TARBALL" --tag canary/);
   assert.match(web, /publish "\$TARBALL" --tag latest/);
+  assert.match(web.slice(web.indexOf("  release:")), /environment: npm-release/);
   assert.ok(native.indexOf("release-guard.mjs native-canary") < native.indexOf("npm@11.18.0 whoami"));
   assert.match(native, /--tag "\$STAGING_TAG"/);
   assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary/);
