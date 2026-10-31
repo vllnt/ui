@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "../../../lib/utils";
 
 const FOCUSABLE_SELECTOR = [

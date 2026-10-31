@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
+  fileUsesClientOnlyApis,
   fileUsesHooks,
   hasUseClientDirective,
   stripNonCode,
@@ -14,6 +15,7 @@ const SKIPPED_SUFFIXES = [
   ".stories.tsx",
   ".test.tsx",
   ".visual.tsx",
+  ".visual.fixture.tsx",
   ".spec.tsx",
 ] as const;
 
@@ -305,6 +307,38 @@ export function Badge({ className }: { className?: string }) {
   });
 });
 
+describe("fileUsesClientOnlyApis", () => {
+  it.each([
+    ["inline JSX handler", "const A = () => <button onClick={() => go()} />"],
+    [
+      "handler bound to a differently named prop",
+      "<button onClick={onZoomIn} />",
+    ],
+    ["handler bound to a local function", "<form onSubmit={handleSubmit} />"],
+    ["document access", "const el = document.activeElement"],
+    ["window access", "window.addEventListener('resize', f)"],
+    ["navigator access", "const ok = navigator.clipboard"],
+    ["localStorage access", "localStorage.getItem('k')"],
+    ["browser global inside a template expression", "`${window.innerWidth}px`"],
+  ])("flags %s", (_name, source) => {
+    expect(fileUsesClientOnlyApis(source)).toBe(true);
+  });
+
+  it.each([
+    ["same-name handler forward", "<button onClick={onClick} />"],
+    ["props spread", "<button {...props} />"],
+    ["typeof window guard", "const ssr = typeof window === 'undefined'"],
+    ["typeof document guard", "if (typeof document !== 'undefined') {}"],
+    ["global named in a string", "const s = 'document.body'"],
+    ["global named in a comment", "// uses window.matchMedia"],
+    ["property named like a global", "const x = owner.document"],
+    ["object key named like a global", "const o = { window: 1 }"],
+    ["handler type in a prop signature", "type P = { onClick?: () => void }"],
+  ])("ignores %s", (_name, source) => {
+    expect(fileUsesClientOnlyApis(source)).toBe(false);
+  });
+});
+
 describe("hasUseClientDirective", () => {
   describe("true positives — directive present", () => {
     it.each([
@@ -371,7 +405,7 @@ describe("hasUseClientDirective", () => {
 });
 
 describe("client directives", () => {
-  it("marks hook-based shipped components as client components", () => {
+  it("marks hook, handler and browser-global components as client components", () => {
     const missingDirectiveFiles = listTypeScriptFiles(COMPONENTS_ROOT).reduce<
       string[]
     >((missingFiles, filePath) => {
@@ -380,7 +414,10 @@ describe("client directives", () => {
       }
 
       const source = readFileSync(filePath, "utf8");
-      if (fileUsesHooks(source) && !hasUseClientDirective(source)) {
+      if (
+        (fileUsesHooks(source) || fileUsesClientOnlyApis(source)) &&
+        !hasUseClientDirective(source)
+      ) {
         missingFiles.push(
           filePath.replace(`${COMPONENTS_ROOT}/`, "components/"),
         );

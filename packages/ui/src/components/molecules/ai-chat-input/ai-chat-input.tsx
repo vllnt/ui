@@ -1,3 +1,5 @@
+"use client";
+
 import { cva } from "class-variance-authority";
 import { LoaderCircle, SendHorizontal } from "lucide-react";
 
