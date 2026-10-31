@@ -6,7 +6,7 @@ FROM node:24.22.1-alpine@sha256:6a1c190e17215d844926b0677f4bf87273ff7d5e54db06d3
 WORKDIR /src
 
 # Install pnpm matching the project version
-RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+RUN corepack enable && corepack prepare pnpm@11.28.8 --activate
 
 # Copy lockfile + manifest first for layer caching
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./

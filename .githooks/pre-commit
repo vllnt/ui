@@ -23,4 +23,4 @@ if [ -z "$files" ]; then
 fi
 
 echo "react-doctor: scanning staged files…"
-printf '%s\n' "$files" | npx --yes react-doctor . --offline --changed-files-from /dev/stdin --fail-on error
+printf '%s\n' "$files" | pnpm exec react-doctor . --offline --changed-files-from /dev/stdin --fail-on error

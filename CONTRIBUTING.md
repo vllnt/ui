@@ -11,7 +11,7 @@ Thanks for wanting to contribute. This repo welcomes issues, bug reports, and PR
 
 ## Development setup
 
-Requirements: Node 22+, pnpm 9+, git.
+Requirements: Node 22+, pnpm 11 (pinned via `packageManager`), git.
 
 ```bash
 git clone https://github.com/vllnt/ui.git
