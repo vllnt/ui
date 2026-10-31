@@ -60,7 +60,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   the MDX compiler only for content with JSX, and FlowDiagram loads
   `html-to-image` only when copied. Apps that use neither `toast` nor
   `Toaster` no longer bundle sonner.
-- **Smaller package** - the tarball has 358 files instead of 659: the
+- **Smaller package** - the tarball has 361 files instead of 659: the
   per-component re-export stubs and `dist/test-setup.js` are gone.
   Only the `exports` entry points are public, so imports do not change.
 
