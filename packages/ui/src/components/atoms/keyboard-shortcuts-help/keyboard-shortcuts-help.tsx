@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
+import { useFocusContainment } from "../../../lib/use-focus-containment";
 import { cn } from "../../../lib/utils";
 
 export type KeyboardShortcut = {
@@ -29,6 +30,7 @@ export type KeyboardShortcutsHelpProps = {
 function DefaultCloseIcon(): React.ReactNode {
   return (
     <svg
+      aria-hidden="true"
       className="size-5"
       fill="none"
       stroke="currentColor"
@@ -49,10 +51,10 @@ function ShortcutsList({
 }: Pick<KeyboardShortcutsHelpProps, "shortcuts">): React.ReactNode {
   return (
     <div className="space-y-3">
-      {shortcuts.map((shortcut) => (
+      {shortcuts.map((shortcut, index) => (
         <div
           className="flex items-center justify-between text-sm"
-          key={shortcut.description}
+          key={`${shortcut.description}-${index.toString()}`}
         >
           <span className="text-muted-foreground">{shortcut.description}</span>
           <div className="flex gap-1">
@@ -82,6 +84,10 @@ function KeyboardShortcutsHelpImpl({
   title = "Keyboard Shortcuts",
 }: KeyboardShortcutsHelpProps): React.ReactNode {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Declared before the focus effect so the opener gets recorded first.
+  useFocusContainment(dialogRef, isOpen);
 
   // Move focus to the close button when the modal opens.
   useEffect(() => {
@@ -100,6 +106,7 @@ function KeyboardShortcutsHelpImpl({
       aria-labelledby="shortcuts-title"
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center"
+      ref={dialogRef}
       role="dialog"
     >
       {/* Backdrop */}

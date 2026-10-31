@@ -358,7 +358,11 @@ function OverviewRing({
   return (
     <div className="mx-auto flex flex-col items-center gap-3 text-center">
       <div className="relative flex size-36 items-center justify-center">
-        <svg className="size-36 -rotate-90" viewBox="0 0 120 120">
+        <svg
+          className="size-36 -rotate-90"
+          role="presentation"
+          viewBox="0 0 120 120"
+        >
           <circle
             className="stroke-muted"
             cx="60"

@@ -30,6 +30,7 @@ function QuizResultIcon({
 }: QuizResultIconProps): React.ReactNode {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       fill="none"
       stroke="currentColor"
@@ -164,6 +165,7 @@ function QuizHeader({ Heading, question }: QuizHeaderProps): React.ReactNode {
   return (
     <div className="flex items-start gap-3 mb-4">
       <svg
+        aria-hidden="true"
         className="size-5 text-primary flex-shrink-0 mt-0.5"
         fill="none"
         stroke="currentColor"

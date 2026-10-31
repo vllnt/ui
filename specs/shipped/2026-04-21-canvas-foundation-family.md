@@ -4,8 +4,8 @@
 Implement issue #132: **Infinite canvas foundation & operator chrome — shell, rail, dock, viewport**.
 
 ## Worktree context
-- Repo: `/home/ubuntu/ui`
-- Worktree: `/home/ubuntu/ui/.worktrees/canvas-foundation-family`
+- Repo: `.` (repository root)
+- Worktree: `.worktrees/canvas-foundation-family`
 - Branch: `feat/canvas-foundation-family`
 - Base: `feat/storybook`
 

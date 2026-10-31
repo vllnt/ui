@@ -16,7 +16,7 @@ type SocialLink = {
   label: string;
 };
 
-type ProfileSectionProps = {
+export type ProfileSectionProps = {
   /** Heading tag for the profile name. Defaults to `h3`. */
   as?: HeadingTag;
   compact?: boolean;

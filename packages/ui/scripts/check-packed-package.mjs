@@ -137,11 +137,15 @@ async function assertNodeResolution(manifest, packedDirectory) {
   await mkdir(dirname(packageTarget), { recursive: true });
   await symlink(packedDirectory, packageTarget, "dir");
 
-  const optionalPeers = new Set(
-    Object.entries(manifest.peerDependenciesMeta ?? {})
+  // `next` and `next-themes` are replaced by stubs below; linking the real
+  // packages first would make the stub writes land inside node_modules.
+  const stubbedPeers = new Set(["next", "next-themes"]);
+  const optionalPeers = new Set([
+    ...stubbedPeers,
+    ...Object.entries(manifest.peerDependenciesMeta ?? {})
       .filter(([, metadata]) => metadata?.optional === true)
       .map(([name]) => name),
-  );
+  ]);
   const installedPackages = new Set([
     ...Object.keys(manifest.dependencies ?? {}),
     ...Object.keys(manifest.peerDependencies ?? {}).filter(

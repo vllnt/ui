@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { AvatarGroup } from "./avatar-group";
 
@@ -23,5 +23,23 @@ describe("AvatarGroup", () => {
   it("renders overflow count when max is provided", () => {
     render(<AvatarGroup items={items} max={3} />);
     expect(screen.getByText("+1")).toBeVisible();
+  });
+});
+
+describe("AvatarGroup keys", () => {
+  it("renders avatars sharing the same alt without duplicate-key errors", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    render(
+      <AvatarGroup
+        items={[
+          { alt: "User", fallback: "A" },
+          { alt: "User", fallback: "B" },
+        ]}
+      />,
+    );
+    expect(screen.getByText("A")).toBeVisible();
+    expect(screen.getByText("B")).toBeVisible();
+    expect(error).not.toHaveBeenCalled();
+    error.mockRestore();
   });
 });

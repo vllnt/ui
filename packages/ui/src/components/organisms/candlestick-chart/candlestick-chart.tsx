@@ -101,8 +101,8 @@ function PriceGrid({
     };
   });
 
-  return ticks.map((tick) => (
-    <g key={tick.y}>
+  return ticks.map((tick, index) => (
+    <g key={`${tick.y.toString()}-${index.toString()}`}>
       <line
         stroke="oklch(var(--border))"
         strokeDasharray="4 6"

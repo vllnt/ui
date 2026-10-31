@@ -85,7 +85,7 @@ describe("SearchBar", () => {
 
   // Regression: the debounced URL-sync effect called the `onSearch` prop
   // directly (react-doctor no-prop-callback-in-effect). It now routes through
-  // a useEffectEvent, which must (a) always invoke the LATEST callback after a
+  // a stable event callback, which must (a) always invoke the LATEST callback after a
   // parent swaps it, and (b) skip a fresh callback identity for an
   // already-emitted query, so the parent cannot drive an update loop.
   it("invokes the latest onSearch after the parent swaps the callback", () => {

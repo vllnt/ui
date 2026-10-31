@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../../atoms/dropdown-menu/dropdown-menu";
 
-type ThemeToggleProps = {
+export type ThemeToggleProps = {
   dict: {
     theme: {
       dark: string;

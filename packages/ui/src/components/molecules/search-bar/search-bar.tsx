@@ -1,14 +1,15 @@
 "use client";
 
-import { Suspense, useEffect, useEffectEvent, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useDebounce } from "../../../lib/use-debounce";
+import { useEventCallback } from "../../../lib/use-event-callback";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
 
-type SearchBarProps = {
+export type SearchBarProps = {
   className?: string;
   onSearch?: (query: string) => void;
   placeholder?: string;
@@ -63,10 +64,11 @@ function SearchBarInner({
   const lastSetSearchParameterReference = useRef<string>("");
   const lastDebouncedQueryReference = useRef<string>("");
 
-  // Notify parent without making `onSearch` a reactive effect dependency:
-  // an Effect Event always sees the latest prop but never re-triggers the
-  // effect, so a parent passing a fresh callback can't drive an update loop.
-  const emitSearch = useEffectEvent((nextQuery: string) => {
+  // The effect below depends on whether `onSearch` exists, never on its
+  // identity: this event callback always calls the latest prop, so a parent
+  // passing a fresh callback does not re-run the effect.
+  const hasOnSearch = Boolean(onSearch);
+  const emitSearch = useEventCallback((nextQuery: string) => {
     onSearch?.(nextQuery);
   });
 
@@ -113,7 +115,7 @@ function SearchBarInner({
 
     lastDebouncedQueryReference.current = trimmedQuery;
 
-    if (onSearch) {
+    if (hasOnSearch) {
       emitSearch(trimmedQuery);
       return;
     }
@@ -138,7 +140,7 @@ function SearchBarInner({
     // router.replace is the App Router client-side navigation primitive;
     // react-doctor's nextjs-no-client-side-redirect targets window.location.
     router.replace(`?${newUrl}`);
-  }, [debouncedQuery, router, onSearch, searchParameters]);
+  }, [debouncedQuery, emitSearch, hasOnSearch, router, searchParameters]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

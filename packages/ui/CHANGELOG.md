@@ -8,6 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- **New hooks** - `useFocusContainment` (trap Tab inside a custom modal and
+  restore focus on close) and `useEventCallback` (stable callback that always
+  calls the latest closure). Registry items import them from `@vllnt/ui`.
+- **Props types exported from the barrel** - `BreadcrumbProps`,
+  `CommandDialogProps`, `SheetContentProps`, `CarouselProps`, `CodeBlockProps`,
+  `MDXContentProps`, `SidebarProps`, `TableOfContentsProps`,
+  `CategoryFilterProps`, `SearchBarProps`, `ShareSectionProps`,
+  `SearchDialogProps`, `LangProviderProps`, `ThemeToggleProps`,
+  `ProfileSectionProps`, `TLDRSectionProps`, `AreaChartProps`, `BarChartProps`,
+  `LineChartProps` and `ThemePresetProviderProps`.
+
 - Source-only React Native renderer and shared design contracts for the 0.4.0 canary track; stable Web installation remains unchanged.
 - Localized Native catalog discovery, dependency/capability comparison, and extensible React/React Native source tabs in a single component preview surface.
 - **Accessibility gate** - the Storybook test-runner runs axe-core (WCAG 2.0,
@@ -33,6 +44,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `@vllnt/ui` does not export. (#543)
 
 ### Changed
+
+- **Peer dependency ranges now match what the package needs.** `next` is
+  `>=15.0.0` (Next 14 peers React 18, which the React 19 build cannot use),
+  `tailwindcss` is `^3.4.0` (components use `size-*`, `text-balance` and
+  `has-[]`, and the preset and CSS are Tailwind v3 only), and `next-themes` is
+  now a required peer because the root entry imports it. `next` stays optional
+  in metadata, but the root entry still imports `next/link`, `next/image` and
+  `next/navigation`, so non-Next apps must alias them (see the README
+  workaround). `react` and `react-dom` stay `>=19.0.0`: SearchBar and Slideshow
+  no longer call React 19.2's `useEffectEvent`, so 19.0 and 19.1 work.
 
 - **Accessibility behaviour changes** (#543):
   - Drawer moves focus into its content on open (`autoFocus` now defaults to
@@ -65,12 +86,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Fixed
 
+- **Duplicate React keys** - Terminal, FileUpload, AvatarGroup, Breadcrumb and
+  about 20 other list renderers no longer key rows by content or label alone,
+  so repeated or blank entries stop triggering duplicate-key errors. FileUpload
+  ignores a file that is already in the list, so removal removes one entry.
+- **`"use client"` directives** - Toolbar, Stepper, AIChatInput, ObjectCard,
+  OverviewBoard and ZoomHUD use event handlers or browser globals and now carry
+  the directive. `check:use-client` also flags handler props and browser globals.
+- **Focus in custom dialogs** - KeyboardShortcutsHelp, TableOfContentsPanel,
+  the FlowDiagram fullscreen view and the Slideshow contents panel keep Tab and
+  Shift+Tab inside the dialog and return focus to the opener on close.
+- **DataTable** sortable headers expose `aria-sort`.
+- **Contrast** - Rating stars and the green success icons in Checklist,
+  Curriculum and LearningObjectives reach 3:1 against the background in light
+  and dark themes.
+- **Decorative inline `<svg>` icons** are hidden from assistive technology.
+
 - Preserve nested scrolling, reduced-motion behavior and sidebar keyboard focus in the affected Web components.
 - Forward explicit tab accessibility relationships and label/keyboard handlers without changing default tab navigation.
 - Emit JSON-LD graph documents and localized Native discovery metadata without advertising unpublished npm packages.
 - Accessible names, ARIA structure, APG keyboard patterns (tabs, radio groups,
   listbox, tree, dialogs and focus return), reduced motion and hard-coded
   palette contrast across the Web components flagged by the #535 audit. (#543)
+
+- **FileUpload duplicates** - Selecting identical files (same name, size and
+  lastModified) adds them once, and a selection that adds nothing new no longer
+  calls `onFilesChange`.
 
 ## [0.3.0] - 2026-06-26
 

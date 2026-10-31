@@ -4,8 +4,8 @@
 Implement issue #133: **Spatial objects & durable views — object card, edges, groups, ports**.
 
 ## Worktree context
-- Repo: `/home/ubuntu/ui`
-- Worktree: `/home/ubuntu/ui/.worktrees/canvas-objects-family`
+- Repo: `.` (repository root)
+- Worktree: `.worktrees/canvas-objects-family`
 - Branch: `feat/canvas-objects-family`
 - Base: `feat/storybook`
 

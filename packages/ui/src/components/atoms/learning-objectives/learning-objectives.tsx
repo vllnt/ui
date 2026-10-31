@@ -34,8 +34,11 @@ export function LearningObjectives({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {objectives.map((objective) => (
-          <li className="flex items-start gap-2" key={objective}>
+        {objectives.map((objective, index) => (
+          <li
+            className="flex items-start gap-2"
+            key={`${objective}-${index.toString()}`}
+          >
             <CheckCircle2 className="size-4 text-primary flex-shrink-0 mt-0.5" />
             <span className="text-sm text-muted-foreground">{objective}</span>
           </li>
@@ -70,10 +73,10 @@ export function Prerequisites({
         ) : null}
       </div>
       <ul className="space-y-2">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <li
             className="flex items-start gap-2 text-sm text-muted-foreground"
-            key={item}
+            key={`${item}-${index.toString()}`}
           >
             <span className="text-primary">•</span>
             {item}
@@ -108,9 +111,12 @@ export function Summary({
             Key Takeaways
           </p>
           <ul className="space-y-1">
-            {keyTakeaways.map((takeaway) => (
-              <li className="flex items-start gap-2 text-sm" key={takeaway}>
-                <CheckCircle2 className="size-4 text-green-500 flex-shrink-0 mt-0.5" />
+            {keyTakeaways.map((takeaway, index) => (
+              <li
+                className="flex items-start gap-2 text-sm"
+                key={`${takeaway}-${index.toString()}`}
+              >
+                <CheckCircle2 className="size-4 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                 <span className="text-muted-foreground">{takeaway}</span>
               </li>
             ))}

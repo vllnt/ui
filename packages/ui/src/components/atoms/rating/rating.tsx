@@ -79,8 +79,8 @@ function RatingStars({
             aria-label={`${starValue} ${starValue === 1 ? "star" : "stars"}`}
             className={cn(
               "rounded-sm text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              !readOnly && "hover:text-amber-500",
-              isFilled && "text-amber-500",
+              !readOnly && "hover:text-amber-600 dark:hover:text-amber-500",
+              isFilled && "text-amber-600 dark:text-amber-500",
             )}
             disabled={readOnly}
             key={starValue}

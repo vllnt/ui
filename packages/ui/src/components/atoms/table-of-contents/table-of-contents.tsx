@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { HeadingTag } from "../../../lib/types";
 import { cn } from "../../../lib/utils";
 
-type TableOfContentsProps = {
+export type TableOfContentsProps = {
   /** Heading tag for the "On This Page" label. Defaults to `h3`. */
   as?: HeadingTag;
   /** Heading label. Override to translate it. Defaults to `On This Page`. */

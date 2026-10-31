@@ -1,3 +1,5 @@
+"use client";
+
 import { Check, Circle } from "lucide-react";
 import type { ReactNode } from "react";
 

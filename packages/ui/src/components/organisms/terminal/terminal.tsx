@@ -53,10 +53,10 @@ export function Terminal({
       </div>
       <div className="relative">
         <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
-          {lines.map((line) => (
+          {lines.map((line, index) => (
             <div
               className="flex items-start"
-              key={`${line.type}-${line.content}`}
+              key={`${index.toString()}-${line.type}`}
             >
               {line.type === "command" && (
                 <>
@@ -138,10 +138,10 @@ export function SimpleTerminal({
       </div>
       <div className="relative">
         <div className="p-4 font-mono text-sm space-y-1 overflow-x-auto">
-          {lines.map((line) => (
+          {lines.map((line, index) => (
             <div
               className="flex items-start"
-              key={`${line.type}-${line.content}`}
+              key={`${index.toString()}-${line.type}`}
             >
               {line.type === "command" && (
                 <>

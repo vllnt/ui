@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -76,5 +78,57 @@ describe("TableOfContentsPanel", () => {
       />,
     );
     expect(screen.queryByText("Reset Progress")).not.toBeInTheDocument();
+  });
+});
+
+describe("TableOfContentsPanel focus management", () => {
+  function Harness() {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <button
+          onClick={() => {
+            setOpen(true);
+          }}
+          type="button"
+        >
+          opener
+        </button>
+        <TableOfContentsPanel
+          {...baseProps}
+          isOpen={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+        />
+      </>
+    );
+  }
+
+  it("keeps Tab inside the panel and returns focus to the opener", () => {
+    render(<Harness />);
+    const opener = screen.getByRole("button", { name: "opener" });
+    opener.focus();
+    fireEvent.click(opener);
+    const close = screen.getByRole("button", {
+      name: "Close table of contents",
+    });
+    expect(close).toHaveFocus();
+
+    const panel = screen.getByRole("dialog");
+    const buttons = panel.querySelectorAll<HTMLElement>("button");
+    const last = buttons.item(buttons.length - 1);
+    last.focus();
+    fireEvent.keyDown(last, { key: "Tab" });
+    expect(panel.contains(document.activeElement)).toBe(true);
+    expect(document.activeElement).not.toBe(opener);
+    fireEvent.keyDown(document.activeElement ?? document.body, {
+      key: "Tab",
+      shiftKey: true,
+    });
+    expect(panel.contains(document.activeElement)).toBe(true);
+
+    fireEvent.click(close);
+    expect(opener).toHaveFocus();
   });
 });

@@ -12,6 +12,14 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Added
 
+- **Props types exported from the barrel** - `BreadcrumbProps`,
+  `CommandDialogProps`, `SheetContentProps`, `CarouselProps`, `CodeBlockProps`,
+  `MDXContentProps`, `SidebarProps`, `TableOfContentsProps`,
+  `CategoryFilterProps`, `SearchBarProps`, `ShareSectionProps`,
+  `SearchDialogProps`, `LangProviderProps`, `ThemeToggleProps`,
+  `ProfileSectionProps`, `TLDRSectionProps`, `AreaChartProps`, `BarChartProps`,
+  `LineChartProps` and `ThemePresetProviderProps`.
+
 - **Cross-platform foundation** — added the framework-free `@vllnt/ui-core` token/contract package, an experimental source-only `@vllnt/ui-native` renderer with 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules, plus a private Expo catalog for Android/iOS Metro validation. The URL-driven registry UI, unified platform-aware catalog and installation page, component pages, search, llms surfaces, JSON-LD, native manifest, and MCP expose truthful Web/Native availability. No supported native npm release exists yet (a manually bootstrapped name-reservation pre-release has no provenance); existing `@vllnt/ui` exports and stable publishing remain unchanged. (#479)
 - **Component family landing pages** - every component family has a standalone,
   SEO-oriented landing at `/families/[category]`, plus a `/families` index. One
@@ -52,6 +60,16 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Changed
 
+- **Peer dependency ranges now match what the package needs.** `next` is
+  `>=15.0.0` (Next 14 peers React 18, which the React 19 build cannot use),
+  `tailwindcss` is `^3.4.0` (components use `size-*`, `text-balance` and
+  `has-[]`, and the preset and CSS are Tailwind v3 only), and `next-themes` is
+  now a required peer because the root entry imports it. `next` stays optional
+  in metadata, but the root entry still imports `next/link`, `next/image` and
+  `next/navigation`, so non-Next apps must alias them (see the README
+  workaround). `react` and `react-dom` stay `>=19.0.0`: SearchBar and Slideshow
+  no longer call React 19.2's `useEffectEvent`, so 19.0 and 19.1 work.
+
 - **AI family consolidated onto the shared template** - the bespoke `/ai` hub is
   gone; `/ai` now permanently redirects to `/families/ai`, which renders through
   the same family template. AI components are recategorized out of the
@@ -90,9 +108,29 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Fixed
 
+- **Duplicate React keys** - Terminal, FileUpload, AvatarGroup, Breadcrumb and
+  about 20 other list renderers no longer key rows by content or label alone,
+  so repeated or blank entries stop triggering duplicate-key errors. FileUpload
+  ignores a file that is already in the list, so removal removes one entry.
+- **`"use client"` directives** - Toolbar, Stepper, AIChatInput, ObjectCard,
+  OverviewBoard and ZoomHUD use event handlers or browser globals and now carry
+  the directive. `check:use-client` also flags handler props and browser globals.
+- **Focus in custom dialogs** - KeyboardShortcutsHelp, TableOfContentsPanel,
+  the FlowDiagram fullscreen view and the Slideshow contents panel keep Tab and
+  Shift+Tab inside the dialog and return focus to the opener on close.
+- **DataTable** sortable headers expose `aria-sort`.
+- **Contrast** - Rating stars and the green success icons in Checklist,
+  Curriculum and LearningObjectives reach 3:1 against the background in light
+  and dark themes.
+- **Decorative inline `<svg>` icons** are hidden from assistive technology.
+
 - Accessible names, ARIA structure, APG keyboard patterns (tabs, radio groups,
   listbox, tree, dialogs and focus return), reduced motion and hard-coded
   palette contrast across the Web components flagged by the #535 audit. (#543)
+
+- **FileUpload duplicates** - Selecting identical files (same name, size and
+  lastModified) adds them once, and a selection that adds nothing new no longer
+  calls `onFilesChange`.
 
 ## [0.3.0] - 2026-06-26
 

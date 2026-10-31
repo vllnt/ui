@@ -121,7 +121,7 @@ function ContentCardImpl({
           {metadata.length > 0 ? (
             <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
               {metadata.map((item, index) => (
-                <span key={item}>
+                <span key={`${item}-${index.toString()}`}>
                   {index > 0 ? <span className="mr-2">•</span> : null}
                   {item}
                 </span>
@@ -132,8 +132,12 @@ function ContentCardImpl({
           {/* Tags */}
           {tags.length > 0 ? (
             <div className="flex flex-wrap gap-1">
-              {tags.map((tag) => (
-                <Badge className="text-xs" key={tag} variant="outline">
+              {tags.map((tag, index) => (
+                <Badge
+                  className="text-xs"
+                  key={`${tag}-${index.toString()}`}
+                  variant="outline"
+                >
                   {tag}
                 </Badge>
               ))}

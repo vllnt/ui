@@ -46,7 +46,7 @@ function buildShareUrl(
   }
 }
 
-type ShareSectionProps = {
+export type ShareSectionProps = {
   /** Heading tag for the share title. Defaults to `h3`. */
   as?: HeadingTag;
   buildUrl?: (platform: SharePlatform, url: string, title: string) => string;

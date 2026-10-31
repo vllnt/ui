@@ -64,7 +64,7 @@ function useKeyboardShortcut(callback: () => void) {
   }, [callback]);
 }
 
-type SearchDialogProps = {
+export type SearchDialogProps = {
   buttonText?: string;
   buttonTextMobile?: string;
   docsEmptyText?: string;

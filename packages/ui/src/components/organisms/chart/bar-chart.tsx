@@ -72,7 +72,7 @@ export const BarChart = ({
             <rect
               fill={`url(#${gradientId})`}
               height={barHeight}
-              key={`${point.label ?? index}-${point.value}`}
+              key={`${point.label ?? "bar"}-${index.toString()}`}
               rx={4}
               width={barWidth}
               x={x}

@@ -70,6 +70,16 @@ export type DataTableProps<TData extends RowData> =
     searchPlaceholder?: string;
   };
 
+function getAriaSort(column: {
+  getCanSort: () => boolean;
+  getIsSorted: () => "asc" | "desc" | false;
+}): "ascending" | "descending" | "none" | undefined {
+  if (!column.getCanSort()) return undefined;
+  const direction = column.getIsSorted();
+  if (direction === "asc") return "ascending";
+  return direction === "desc" ? "descending" : "none";
+}
+
 function SortIcon({ direction }: { direction: "asc" | "desc" | false }) {
   if (direction === "asc") {
     return <ArrowUp className="size-4" />;
@@ -233,7 +243,10 @@ function DataTableComponent<TData extends RowData>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    aria-sort={getAriaSort(header.column)}
+                    key={header.id}
+                  >
                     {header.isPlaceholder ? null : header.column.getCanSort() ? (
                       <Button
                         className="-ml-3 h-8 px-3 text-xs font-medium"

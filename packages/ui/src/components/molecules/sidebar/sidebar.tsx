@@ -26,7 +26,7 @@ export type SidebarSection = {
   title?: string;
 };
 
-type SidebarProps = {
+export type SidebarProps = {
   ariaLabel?: string;
   closeLabel?: string;
   id?: string;
@@ -181,12 +181,12 @@ function FamilyList({
         Components
       </div>
       <div className="space-y-0.5">
-        {sections.map((section) =>
+        {sections.map((section, index) =>
           section.href ? (
             <Link
               className={FAMILY_ROW_CLASS}
               href={section.href}
-              key={section.title}
+              key={`${section.title ?? ""}-${index.toString()}`}
               onClick={() => {
                 if (isMobile) {
                   onNavigate();
@@ -198,7 +198,7 @@ function FamilyList({
           ) : (
             <button
               className={FAMILY_ROW_CLASS}
-              key={section.title}
+              key={`${section.title ?? ""}-${index.toString()}`}
               onClick={() => {
                 onOpen(section.title ?? "");
               }}

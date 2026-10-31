@@ -207,8 +207,11 @@ export const StatusBoard = ({
       </div>
 
       <div className={cn("grid gap-4", getColumnsClassName(columns))}>
-        {items.map((item) => (
-          <StatusBoardCard item={item} key={item.label} />
+        {items.map((item, index) => (
+          <StatusBoardCard
+            item={item}
+            key={`${item.label}-${index.toString()}`}
+          />
         ))}
       </div>
     </div>

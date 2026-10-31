@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useReducer, useRef, useState } from "react";
 
-type TLDRSectionProps = {
+export type TLDRSectionProps = {
   children: React.ReactNode;
   label: string;
 };

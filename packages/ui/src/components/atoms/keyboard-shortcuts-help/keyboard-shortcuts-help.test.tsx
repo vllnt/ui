@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -58,5 +60,47 @@ describe("KeyboardShortcutsHelp", () => {
     );
     act();
     expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("KeyboardShortcutsHelp focus management", () => {
+  function Harness() {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <button
+          onClick={() => {
+            setOpen(true);
+          }}
+          type="button"
+        >
+          opener
+        </button>
+        <KeyboardShortcutsHelp
+          isOpen={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+          shortcuts={shortcuts}
+        />
+      </>
+    );
+  }
+
+  it("keeps Tab inside the dialog and returns focus to the opener", () => {
+    render(<Harness />);
+    const opener = screen.getByRole("button", { name: "opener" });
+    opener.focus();
+    fireEvent.click(opener);
+    const close = screen.getByRole("button", { name: "Close shortcuts help" });
+    expect(close).toHaveFocus();
+
+    fireEvent.keyDown(close, { key: "Tab" });
+    expect(close).toHaveFocus();
+    fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
+    expect(close).toHaveFocus();
+
+    fireEvent.click(close);
+    expect(opener).toHaveFocus();
   });
 });

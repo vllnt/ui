@@ -55,6 +55,7 @@ const ConnectorEdge = ({
       {...props}
     >
       <svg
+        aria-hidden="true"
         className="overflow-visible"
         height={height}
         viewBox={`0 0 ${width} ${height}`}

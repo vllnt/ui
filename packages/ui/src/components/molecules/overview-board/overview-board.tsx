@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertCircle, ArrowRight, Inbox, ListTodo, Siren } from "lucide-react";
 import type { ReactNode } from "react";
 

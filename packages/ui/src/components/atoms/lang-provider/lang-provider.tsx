@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 import type { SupportedLanguage } from "../../../lib/types";
 
-type LangProviderProps = {
+export type LangProviderProps = {
   defaultLanguage?: SupportedLanguage;
   supportedLanguages?: SupportedLanguage[];
 };

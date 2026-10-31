@@ -1,13 +1,15 @@
 /**
  * 'use client' Directive Check
  *
- * Verifies every component source file that uses React hooks starts with a
+ * Verifies every component source file that uses React hooks, JSX event
+ * handlers or browser globals (window, document, ...) starts with a
  * `'use client'` directive. Components without the directive crash Next.js
- * App Router consumers at SSR time (React Server Components cannot use hooks).
+ * App Router consumers (React Server Components cannot use hooks, attach
+ * handlers or read browser globals).
  *
  * Scans `src/components/**\/*.tsx` (excluding stories/tests/visual stubs) and
- * fails with exit code 1 if any file references a React hook without the
- * directive in its prologue (before any imports).
+ * fails with exit code 1 if any such file lacks the directive in its prologue
+ * (before any imports).
  *
  * Usage: pnpm -F @vllnt/ui check:use-client
  */
@@ -31,6 +33,7 @@ const EXCLUDED_SUFFIXES = [
   '.stories.tsx',
   '.test.tsx',
   '.visual.tsx',
+  '.visual.fixture.tsx',
   '.spec.tsx',
 ]
 
@@ -281,6 +284,30 @@ export function fileUsesHooks(source: string): boolean {
 }
 
 /**
+ * Matches an event-handler JSX prop with a value. `onX={onX}` (same name on
+ * both sides) is a plain forward of a prop and is not flagged by itself.
+ */
+// Known limits (regex, not a parser): the handler value match stops at the first
+// `}`, so handlers with nested braces are only partly inspected; `window` /
+// `document` used in type positions can be flagged as false positives.
+const HANDLER_PROP_PATTERN = /\b(on[A-Z][A-Za-z0-9]*)\s*=\s*\{\s*([^}]*?)\s*\}/g
+const BROWSER_GLOBAL_PATTERN =
+  /(?<!typeof\s)(?<![.\w$])(?:window|document|navigator|localStorage|sessionStorage)\b(?!\s*:)/
+
+/**
+ * Returns true when the file wires JSX event handlers or reads browser
+ * globals. Server Components cannot do either, so such a file needs the
+ * directive even when it calls no hook. Same-name prop forwarding
+ * (`onClick={onClick}`) and `typeof window` guards are not counted.
+ */
+export function fileUsesClientOnlyApis(source: string): boolean {
+  const stripped = stripNonCode(source)
+  const handlers = [...stripped.matchAll(HANDLER_PROP_PATTERN)]
+  if (handlers.some(([, name, value]) => value !== name)) return true
+  return BROWSER_GLOBAL_PATTERN.test(stripped)
+}
+
+/**
  * Returns true when `'use client'` appears in the directive prologue — i.e.
  * before any import or non-comment code. Leading blank lines, `//` comments,
  * and `/* … *\/` block comments (including those whose body lines lack a
@@ -330,14 +357,14 @@ function main(): void {
 
   for (const file of files) {
     const source = readFileSync(file, 'utf8')
-    if (!fileUsesHooks(source)) continue
+    if (!fileUsesHooks(source) && !fileUsesClientOnlyApis(source)) continue
     if (hasUseClientDirective(source)) continue
     missing.push(relative(PACKAGE_ROOT, file))
   }
 
   if (missing.length > 0) {
     console.error(
-      `Missing "use client" directive in ${missing.length} component(s) that use React hooks:\n`,
+      `Missing "use client" directive in ${missing.length} component(s) that use hooks, event handlers or browser globals:\n`,
     )
     for (const path of missing) {
       console.error(`  - ${path}`)

@@ -94,4 +94,28 @@ describe("DataTable filter names", () => {
       screen.getByRole("combobox", { name: "Filtrer par statut" }),
     ).toBeInTheDocument();
   });
+
+  it("exposes aria-sort on sortable headers", () => {
+    render(<DataTable columns={columns} data={data} />);
+    const header = screen.getByRole("columnheader", { name: /revenue/i });
+    expect(header).toHaveAttribute("aria-sort", "none");
+    fireEvent.click(screen.getByRole("button", { name: /revenue/i }));
+    expect(header).toHaveAttribute("aria-sort", "descending");
+    fireEvent.click(screen.getByRole("button", { name: /revenue/i }));
+    expect(header).toHaveAttribute("aria-sort", "ascending");
+  });
+
+  it("omits aria-sort on columns that cannot sort", () => {
+    render(
+      <DataTable
+        columns={[
+          { accessorKey: "customer", enableSorting: false, header: "Customer" },
+        ]}
+        data={data}
+      />,
+    );
+    expect(
+      screen.getByRole("columnheader", { name: /customer/i }),
+    ).not.toHaveAttribute("aria-sort");
+  });
 });

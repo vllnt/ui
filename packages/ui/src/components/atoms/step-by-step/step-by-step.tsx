@@ -70,6 +70,7 @@ function InteractiveStep({
         >
           {isCompleted ? (
             <svg
+              aria-hidden="true"
               className="size-4"
               fill="none"
               stroke="currentColor"
@@ -120,6 +121,7 @@ function InteractiveStep({
 function StepByStepTitleIcon(): React.ReactNode {
   return (
     <svg
+      aria-hidden="true"
       className="size-5 text-primary"
       fill="none"
       stroke="currentColor"

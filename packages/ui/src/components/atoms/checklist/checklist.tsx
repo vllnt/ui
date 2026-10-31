@@ -81,7 +81,8 @@ function ChecklistItemRow({
       >
         {isChecked ? (
           <svg
-            className="size-5 text-green-500 flex-shrink-0 mt-0.5"
+            aria-hidden="true"
+            className="size-5 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -95,6 +96,7 @@ function ChecklistItemRow({
           </svg>
         ) : (
           <svg
+            aria-hidden="true"
             className="size-5 text-muted-foreground flex-shrink-0 mt-0.5"
             fill="none"
             stroke="currentColor"
@@ -147,6 +149,7 @@ function ChecklistHeader({
     <div className="flex items-center justify-between mb-3">
       <Heading className="font-semibold flex items-center gap-2">
         <svg
+          aria-hidden="true"
           className="size-5 text-primary"
           fill="none"
           stroke="currentColor"

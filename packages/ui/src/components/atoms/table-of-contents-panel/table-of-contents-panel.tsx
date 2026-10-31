@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEscapeKey } from "../../../lib/use-escape-key";
+import { useFocusContainment } from "../../../lib/use-focus-containment";
 import { cn } from "../../../lib/utils";
 
 export type TOCSection = {
@@ -42,6 +43,9 @@ function useTocPanelBehavior(
 } {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Declared before the focus effect so the opener gets recorded first.
+  useFocusContainment(panelRef, isOpen);
 
   // Move focus to the close button when the panel opens.
   useEffect(() => {
@@ -96,6 +100,7 @@ function TocHeader({
       >
         {closeIcon ?? (
           <svg
+            aria-hidden="true"
             className="size-5"
             fill="none"
             stroke="currentColor"
@@ -213,6 +218,7 @@ function TocSectionList({
                 >
                   {isCompleted ? (
                     <svg
+                      aria-hidden="true"
                       className="size-3"
                       fill="none"
                       stroke="currentColor"

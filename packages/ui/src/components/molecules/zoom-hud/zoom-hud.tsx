@@ -1,3 +1,5 @@
+"use client";
+
 import { Minus, Plus, RotateCcw } from "lucide-react";
 
 import { cn } from "../../../lib/utils";

@@ -86,7 +86,9 @@ function statusLabel(status: LessonStatus): string {
 
 function statusIcon(status: LessonStatus): ReactNode {
   if (status === "completed") {
-    return <CheckCircle2 className="size-4 flex-shrink-0 text-green-500" />;
+    return (
+      <CheckCircle2 className="size-4 flex-shrink-0 text-green-600 dark:text-green-500" />
+    );
   }
   if (status === "in-progress") {
     return <PlayCircle className="size-4 flex-shrink-0 text-primary" />;

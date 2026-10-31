@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useEffectEvent,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
+import { useEventCallback } from "../../../lib/use-event-callback";
+import { useFocusContainment } from "../../../lib/use-focus-containment";
 import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 import { CompletionDialog } from "../../molecules/completion-dialog/completion-dialog";
@@ -115,6 +110,7 @@ function SlideshowHeader({
         >
           {isTocOpen ? (
             <svg
+              aria-hidden="true"
               className="size-5"
               fill="none"
               stroke="currentColor"
@@ -129,6 +125,7 @@ function SlideshowHeader({
             </svg>
           ) : (
             <svg
+              aria-hidden="true"
               className="size-5"
               fill="none"
               stroke="currentColor"
@@ -159,6 +156,7 @@ function SlideshowHeader({
           type="button"
         >
           <svg
+            aria-hidden="true"
             className="size-5"
             fill="none"
             stroke="currentColor"
@@ -202,6 +200,7 @@ function SlideshowToc({
   sections: SlideshowSection[];
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  useFocusContainment(panelRef, isOpen);
 
   if (!isOpen) return null;
 
@@ -244,6 +243,7 @@ function SlideshowToc({
             type="button"
           >
             <svg
+              aria-hidden="true"
               className="size-4"
               fill="none"
               stroke="currentColor"
@@ -284,6 +284,7 @@ function SlideshowToc({
                 >
                   {isCompleted ? (
                     <svg
+                      aria-hidden="true"
                       className="size-3 text-background"
                       fill="none"
                       stroke="currentColor"
@@ -347,6 +348,7 @@ function SlideshowNav({
         type="button"
       >
         <svg
+          aria-hidden="true"
           className="size-4"
           fill="none"
           stroke="currentColor"
@@ -369,6 +371,7 @@ function SlideshowNav({
         <span>{isLastSection ? labels.finishLabel : labels.nextLabel}</span>
         {!isLastSection && (
           <svg
+            aria-hidden="true"
             className="size-4"
             fill="none"
             stroke="currentColor"
@@ -487,7 +490,7 @@ function SlideshowImpl({
     [currentIndex, goToSection],
   );
 
-  const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+  const onKeyDown = useEventCallback((event: KeyboardEvent) => {
     if (isCompletionDialogOpen) return;
     if (event.key === "Escape") {
       event.preventDefault();
@@ -519,7 +522,7 @@ function SlideshowImpl({
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, []);
+  }, [onKeyDown]);
 
   if (!currentSection || !mounted) return null;
 

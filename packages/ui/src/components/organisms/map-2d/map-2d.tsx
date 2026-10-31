@@ -348,6 +348,7 @@ export const MapMarker = ({
         {...rest}
       >
         <svg
+          aria-hidden="true"
           className="pointer-events-none size-6 overflow-visible"
           viewBox="-10 -10 20 20"
         >

@@ -145,6 +145,7 @@ function AccordionTrigger({
         </span>
       ) : (
         <svg
+          aria-hidden="true"
           className={cn(
             "size-4 flex-shrink-0 transition-transform duration-200",
             isOpen && "rotate-180",

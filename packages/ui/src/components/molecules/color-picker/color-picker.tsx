@@ -54,7 +54,7 @@ type SwatchGridProps = {
 function SwatchGrid({ onSelect, selected, swatches }: SwatchGridProps) {
   return (
     <div className="grid grid-cols-6 gap-2" role="group">
-      {swatches.map((swatch) => (
+      {swatches.map((swatch, index) => (
         <button
           aria-label={swatch}
           aria-pressed={swatch.toLowerCase() === selected.toLowerCase()}
@@ -63,7 +63,7 @@ function SwatchGrid({ onSelect, selected, swatches }: SwatchGridProps) {
             swatch.toLowerCase() === selected.toLowerCase() &&
               "ring-2 ring-ring",
           )}
-          key={swatch}
+          key={`${swatch}-${index.toString()}`}
           onClick={() => {
             onSelect(swatch);
           }}
