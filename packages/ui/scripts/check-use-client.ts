@@ -287,6 +287,9 @@ export function fileUsesHooks(source: string): boolean {
  * Matches an event-handler JSX prop with a value. `onX={onX}` (same name on
  * both sides) is a plain forward of a prop and is not flagged by itself.
  */
+// Known limits (regex, not a parser): the handler value match stops at the first
+// `}`, so handlers with nested braces are only partly inspected; `window` /
+// `document` used in type positions can be flagged as false positives.
 const HANDLER_PROP_PATTERN = /\b(on[A-Z][A-Za-z0-9]*)\s*=\s*\{\s*([^}]*?)\s*\}/g
 const BROWSER_GLOBAL_PATTERN =
   /(?<!typeof\s)(?<![.\w$])(?:window|document|navigator|localStorage|sessionStorage)\b(?!\s*:)/

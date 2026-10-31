@@ -49,7 +49,34 @@ export default defineConfig({
 });
 ```
 
-`next-stubs/link.js` renders an `<a href>`, `image.js` an `<img src>`, and `navigation.js` exports `usePathname` (returns `"/"`), `useRouter` (no-op methods) and `useSearchParams` (empty `URLSearchParams`). Plain Node ESM import is not supported.
+Stub files (workaround for non-Next bundlers; place them in `next-stubs/`):
+
+```jsx
+// next-stubs/link.js
+import { createElement } from "react";
+export default function Link({ href, prefetch, replace, scroll, ...props }) {
+  return createElement("a", { href: typeof href === "string" ? href : href?.pathname, ...props });
+}
+```
+
+```jsx
+// next-stubs/image.js
+import { createElement } from "react";
+export default function Image({ src, alt = "", fill, priority, quality, placeholder, blurDataURL, loader, unoptimized, ...props }) {
+  return createElement("img", { src: typeof src === "string" ? src : src?.src, alt, ...props });
+}
+```
+
+```js
+// next-stubs/navigation.js
+export const usePathname = () => "/";
+export const useRouter = () => ({
+  push() {}, replace() {}, back() {}, forward() {}, refresh() {}, prefetch() {},
+});
+export const useSearchParams = () => new URLSearchParams();
+```
+
+Plain Node ESM import is not supported.
 
 ## Setup
 
