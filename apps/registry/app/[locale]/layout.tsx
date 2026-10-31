@@ -153,8 +153,13 @@ export default async function LocaleLayout({ children, params }: Props) {
             </div>
           </SidebarProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
+        {/* These scripts exist on Vercel's platform; on any other host they 404 on every page. */}
+        {process.env.VERCEL === "1" ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

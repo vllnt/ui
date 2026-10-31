@@ -38,20 +38,12 @@ const SINGLE_H1_ROUTES = new Set([
 ]);
 
 /**
- * Off-Vercel analytics/speed-insights scripts 404 on this platform (expected
- * noise). Resource-load failures surface as a generic "Failed to load resource"
- * console error whose URL lives in location(), not text() — so match both the
- * known hosts and the generic resource-load message. Real app errors (uncaught
- * exceptions via pageerror, next-intl MISSING_MESSAGE) are unaffected.
+ * Resource-load failures surface as a generic "Failed to load resource"
+ * console error whose URL lives in location(), not text(), so they are not
+ * counted here. Real app errors (uncaught exceptions via pageerror, next-intl
+ * MISSING_MESSAGE) are unaffected.
  */
-const IGNORED_CONSOLE = [
-  "vercel",
-  "va.vercel-scripts",
-  "speed-insights",
-  "_vercel/insights",
-  "favicon",
-  "failed to load resource",
-];
+const IGNORED_CONSOLE = ["favicon", "failed to load resource"];
 
 function frPath(route: string): string {
   return route === "/" ? "/fr" : `/fr${route}`;
