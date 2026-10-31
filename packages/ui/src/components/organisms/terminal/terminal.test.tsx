@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Terminal } from "./terminal";
 
@@ -27,5 +27,21 @@ describe("Terminal", () => {
   it("hides the copy button when copyable is false", () => {
     render(<Terminal copyable={false} lines={sampleLines} />);
     expect(screen.queryByLabelText(/copy/i)).not.toBeInTheDocument();
+  });
+});
+
+describe("Terminal keys", () => {
+  it("renders repeated and blank lines without duplicate-key errors", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    const lines = [
+      { content: "", type: "output" },
+      { content: "", type: "output" },
+      { content: "ls", type: "command" },
+      { content: "ls", type: "command" },
+    ] as const;
+    const { container } = render(<Terminal lines={lines} />);
+    expect(container.querySelectorAll(".flex.items-start")).toHaveLength(4);
+    expect(error).not.toHaveBeenCalled();
+    error.mockRestore();
   });
 });

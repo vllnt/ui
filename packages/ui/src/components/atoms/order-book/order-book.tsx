@@ -80,12 +80,12 @@ function BookSide({
           <span className="text-right">Total</span>
         </div>
         <div className="space-y-1">
-          {levels.map((level) => {
+          {levels.map((level, index) => {
             const width = `${((level.total ?? 0) / maxTotal) * 100}%`;
             return (
               <div
                 className="relative overflow-hidden rounded-xl border border-transparent px-3 py-2"
-                key={`${accent}-${level.price}-${level.size}`}
+                key={`${accent}-${level.price}-${index.toString()}`}
               >
                 <div
                   className={cn(

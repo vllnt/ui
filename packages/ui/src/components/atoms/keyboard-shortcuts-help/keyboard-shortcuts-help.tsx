@@ -49,10 +49,10 @@ function ShortcutsList({
 }: Pick<KeyboardShortcutsHelpProps, "shortcuts">): React.ReactNode {
   return (
     <div className="space-y-3">
-      {shortcuts.map((shortcut) => (
+      {shortcuts.map((shortcut, index) => (
         <div
           className="flex items-center justify-between text-sm"
-          key={shortcut.description}
+          key={`${shortcut.description}-${index.toString()}`}
         >
           <span className="text-muted-foreground">{shortcut.description}</span>
           <div className="flex gap-1">

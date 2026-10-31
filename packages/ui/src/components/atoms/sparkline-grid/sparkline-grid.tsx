@@ -52,7 +52,7 @@ export const SparklineGrid = (props: SparklineGridProps) => {
       ref={reference}
       {...rest}
     >
-      {items.map((item) => {
+      {items.map((item, index) => {
         const isPositive = item.change >= 0;
         const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
         const strokeClass = isPositive
@@ -62,7 +62,7 @@ export const SparklineGrid = (props: SparklineGridProps) => {
         return (
           <section
             className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm"
-            key={item.label}
+            key={`${item.label}-${index.toString()}`}
           >
             <div className="mb-4 flex items-start justify-between gap-3">
               <div>

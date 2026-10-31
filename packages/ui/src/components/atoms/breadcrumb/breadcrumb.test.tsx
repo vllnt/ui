@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { Breadcrumb, type BreadcrumbItem } from "./breadcrumb";
 
@@ -30,5 +30,23 @@ describe("Breadcrumb", () => {
   it("respects the separator prop", () => {
     render(<Breadcrumb items={sample} separator="slash" />);
     expect(screen.getAllByText("/").length).toBeGreaterThan(0);
+  });
+});
+
+describe("Breadcrumb keys", () => {
+  it("renders repeated labels without duplicate-key errors", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    render(
+      <Breadcrumb
+        items={[
+          { href: "/a", label: "Docs" },
+          { href: "/a/b", label: "Docs" },
+          { label: "Page" },
+        ]}
+      />,
+    );
+    expect(screen.getAllByText("Docs")).toHaveLength(2);
+    expect(error).not.toHaveBeenCalled();
+    error.mockRestore();
   });
 });

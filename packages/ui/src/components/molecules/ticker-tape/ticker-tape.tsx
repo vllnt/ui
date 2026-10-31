@@ -82,14 +82,14 @@ function formatPrice(price: number | string) {
 function TickerTapeRow({ items }: { items: TickerTapeItem[] }) {
   return (
     <div className="flex min-w-max items-center gap-3 p-3">
-      {items.map((item) => {
+      {items.map((item, index) => {
         const isPositive = item.change >= 0;
         const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
 
         return (
           <div
             className="flex min-w-[12rem] items-center gap-3 rounded-full border border-border/70 bg-background/80 px-3 py-2 shadow-sm"
-            key={`${item.symbol}-${item.price}-${item.change}`}
+            key={`${item.symbol}-${index.toString()}`}
           >
             <div className="flex min-w-0 flex-col">
               <span className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">

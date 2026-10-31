@@ -89,8 +89,8 @@ function ObjectCardMetrics({ metrics }: Pick<ObjectCardProps, "metrics">) {
 
   return (
     <dl className="grid grid-cols-2 gap-3 rounded-2xl border border-border/60 bg-background/75 p-3">
-      {metrics.map((metric) => (
-        <div className="space-y-1" key={metric.label}>
+      {metrics.map((metric, index) => (
+        <div className="space-y-1" key={`${metric.label}-${index.toString()}`}>
           <dt className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
             {metric.label}
           </dt>
@@ -110,7 +110,7 @@ function ObjectCardActions({ actions }: Pick<ObjectCardProps, "actions">) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {actions.map((action) => {
+      {actions.map((action, index) => {
         const handleActionClick = () => {
           action.onClick?.();
         };
@@ -118,7 +118,7 @@ function ObjectCardActions({ actions }: Pick<ObjectCardProps, "actions">) {
         return (
           <Button
             className="rounded-full"
-            key={action.label}
+            key={`${action.label}-${index.toString()}`}
             onClick={handleActionClick}
             size="sm"
             type="button"

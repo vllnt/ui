@@ -132,8 +132,12 @@ export const MarketTreemap = ({
         </p>
       </div>
       <div className="grid auto-rows-[120px] grid-cols-1 gap-3 md:auto-rows-[120px] md:grid-cols-4">
-        {items.map((item) => (
-          <MarketTreemapTile item={item} key={item.label} maxValue={maxValue} />
+        {items.map((item, index) => (
+          <MarketTreemapTile
+            item={item}
+            key={`${item.label}-${index.toString()}`}
+            maxValue={maxValue}
+          />
         ))}
       </div>
     </div>

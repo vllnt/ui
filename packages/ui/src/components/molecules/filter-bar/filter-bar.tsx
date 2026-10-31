@@ -161,7 +161,7 @@ function TagFilter({
         ) : null}
       </div>
       <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => {
+        {tags.map((tag, index) => {
           const isActive = currentTags.includes(tag);
           return (
             <Badge
@@ -171,7 +171,7 @@ function TagFilter({
                   ? "bg-primary text-primary-foreground border-transparent"
                   : "hover:bg-muted",
               )}
-              key={tag}
+              key={`${tag}-${index.toString()}`}
               onClick={() => {
                 onTagToggle(tag);
               }}
@@ -221,8 +221,8 @@ function ActiveFiltersSummary({
           {difficultyLabel}
         </Badge>
       ) : null}
-      {currentTags.map((tag) => (
-        <Badge key={tag} variant="secondary">
+      {currentTags.map((tag, index) => (
+        <Badge key={`${tag}-${index.toString()}`} variant="secondary">
           {tag}
         </Badge>
       ))}

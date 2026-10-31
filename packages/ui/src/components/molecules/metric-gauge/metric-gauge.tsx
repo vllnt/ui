@@ -183,10 +183,10 @@ function GaugeDial({
 function GaugeLegend({ thresholds }: { thresholds: MetricGaugeThreshold[] }) {
   return (
     <div className="flex flex-wrap gap-2">
-      {thresholds.map((threshold) => (
+      {thresholds.map((threshold, index) => (
         <div
           className="flex items-center gap-2 rounded-md border px-2.5 py-1 text-xs"
-          key={`${threshold.label}-${threshold.value}`}
+          key={`${threshold.label}-${index.toString()}`}
         >
           <span
             aria-hidden="true"

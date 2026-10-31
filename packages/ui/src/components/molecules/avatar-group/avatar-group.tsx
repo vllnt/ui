@@ -84,7 +84,7 @@ const AvatarGroup = ({
       {visibleItems.map((item, index) => (
         <Avatar
           className={avatarItemVariants({ size })}
-          key={item.src ?? item.alt}
+          key={`${item.src ?? item.alt}-${index.toString()}`}
           style={{ zIndex: visibleItems.length - index }}
         >
           {item.src ? <AvatarImage alt={item.alt} src={item.src} /> : null}

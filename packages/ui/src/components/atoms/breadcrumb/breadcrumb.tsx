@@ -45,9 +45,7 @@ export function Breadcrumb({
       {items.map((item, index) => (
         <div
           className="flex items-center"
-          key={
-            typeof item.label === "string" ? item.label : `breadcrumb-${index}`
-          }
+          key={`${typeof item.label === "string" ? item.label : "breadcrumb"}-${index.toString()}`}
         >
           {index > 0 && (
             <span className="mx-2">

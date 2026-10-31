@@ -37,3 +37,40 @@ describe("FileUpload keyboard semantics", () => {
     expect(input.closest("label")).not.toBeNull();
   });
 });
+
+describe("FileUpload duplicate files", () => {
+  it("lists the same file once and removes exactly one entry", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    const onFilesChange = vi.fn();
+    const make = () =>
+      new File(["x"], "a.txt", { lastModified: 1, type: "text/plain" });
+    const other = new File(["yy"], "b.txt", { lastModified: 2 });
+    render(<FileUpload multiple onFilesChange={onFilesChange} />);
+    const input = screen.getByLabelText("Choose files", { selector: "input" });
+
+    fireEvent.change(input, { target: { files: [make(), other] } });
+    fireEvent.change(input, { target: { files: [make()] } });
+
+    expect(screen.getAllByText("a.txt")).toHaveLength(1);
+    expect(screen.getAllByText("b.txt")).toHaveLength(1);
+    expect(onFilesChange).toHaveBeenLastCalledWith([
+      expect.objectContaining({ name: "a.txt" }),
+      expect.objectContaining({ name: "b.txt" }),
+    ]);
+
+    fireEvent.click(screen.getByLabelText("Remove a.txt"));
+    expect(screen.queryByText("a.txt")).not.toBeInTheDocument();
+    expect(screen.getByText("b.txt")).toBeVisible();
+    expect(error).not.toHaveBeenCalled();
+    error.mockRestore();
+  });
+
+  it("does not warn about keys when a controlled list repeats a file", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => null);
+    const file = new File(["x"], "dup.txt", { lastModified: 1 });
+    render(<FileUpload files={[file, file]} />);
+    expect(screen.getAllByText("dup.txt")).toHaveLength(2);
+    expect(error).not.toHaveBeenCalled();
+    error.mockRestore();
+  });
+});

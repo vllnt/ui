@@ -139,7 +139,7 @@ function SearchBarInner({
     // router.replace is the App Router client-side navigation primitive;
     // react-doctor's nextjs-no-client-side-redirect targets window.location.
     router.replace(`?${newUrl}`);
-  }, [debouncedQuery, router, onSearch, searchParameters]);
+  }, [debouncedQuery, emitSearch, router, onSearch, searchParameters]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

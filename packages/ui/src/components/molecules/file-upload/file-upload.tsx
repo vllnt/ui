@@ -18,6 +18,12 @@ export type FileUploadProps = Omit<
   onFilesChange?: (files: File[]) => void;
 };
 
+function isSameFile(a: File, b: File): boolean {
+  return (
+    a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
+  );
+}
+
 function useFileUploadState(
   controlledFiles: File[] | undefined,
   multiple: boolean,
@@ -43,8 +49,20 @@ function useFileUploadState(
   const addFiles = React.useCallback(
     (incomingFiles: File[] | FileList) => {
       const nextFiles = [...incomingFiles];
+      if (!multiple) {
+        updateFiles(nextFiles.slice(0, 1));
+        return;
+      }
+      // Identical files (name, size, mtime) collapse to one entry, so list keys stay
+      // unique and removing an entry removes that file alone.
       updateFiles(
-        multiple ? [...resolvedFiles, ...nextFiles] : nextFiles.slice(0, 1),
+        nextFiles.reduce(
+          (accepted, file) =>
+            accepted.some((existing) => isSameFile(existing, file))
+              ? accepted
+              : [...accepted, file],
+          resolvedFiles,
+        ),
       );
     },
     [multiple, resolvedFiles, updateFiles],
@@ -53,14 +71,7 @@ function useFileUploadState(
   const removeFile = React.useCallback(
     (fileToRemove: File) => {
       updateFiles(
-        resolvedFiles.filter(
-          (file) =>
-            !(
-              file.name === fileToRemove.name &&
-              file.size === fileToRemove.size &&
-              file.lastModified === fileToRemove.lastModified
-            ),
-        ),
+        resolvedFiles.filter((file) => !isSameFile(file, fileToRemove)),
       );
     },
     [resolvedFiles, updateFiles],
@@ -193,10 +204,10 @@ function FileUploadList({
 
   return (
     <ul className="space-y-2">
-      {files.map((file) => (
+      {files.map((file, index) => (
         <FileListItem
           file={file}
-          key={`${file.name}-${file.lastModified}-${file.size}`}
+          key={`${file.name}-${file.lastModified.toString()}-${file.size.toString()}-${index.toString()}`}
           onRemove={() => {
             onRemove(file);
           }}

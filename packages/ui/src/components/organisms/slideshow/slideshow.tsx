@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -519,7 +513,7 @@ function SlideshowImpl({
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, []);
+  }, [onKeyDown]);
 
   if (!currentSection || !mounted) return null;
 

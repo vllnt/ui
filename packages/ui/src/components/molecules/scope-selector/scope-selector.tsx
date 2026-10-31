@@ -214,9 +214,9 @@ function ScopeSearchResults({
 }) {
   return (
     <div className="space-y-2 p-1">
-      {results.map(({ node, path }) => (
+      {results.map(({ node, path }, index) => (
         <ScopeOptionButton
-          key={getPathLabel(path)}
+          key={`${getPathLabel(path)}-${index.toString()}`}
           node={node}
           onBrowse={onBrowse}
           onSelect={onSelect}
