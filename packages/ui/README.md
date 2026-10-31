@@ -92,7 +92,9 @@ export default {
   presets: [uiPreset],
   content: [
     "./src/**/*.{ts,tsx}",
-    // The preset auto-includes @vllnt/ui content paths
+    // Required: Tailwind 3 ignores a preset's `content` once your config sets
+    // its own, so list the package's compiled components here.
+    "./node_modules/@vllnt/ui/dist/**/*.js",
   ],
 };
 ```
@@ -113,6 +115,8 @@ import "@vllnt/ui/styles.css";
 ```
 
 This imports Tailwind base/components/utilities + default theme variables + safe-area utilities.
+
+If TypeScript reports TS2882 for this import (newer versions check side-effect imports), add `declare module "*.css";` to a `.d.ts` file in your app.
 
 ### 3. Use Components
 

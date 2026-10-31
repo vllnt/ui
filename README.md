@@ -92,7 +92,9 @@ import uiPreset from "@vllnt/ui/tailwind-preset";
 
 export default {
   presets: [uiPreset],
-  content: ["./src/**/*.{ts,tsx}"],
+  // Tailwind 3 ignores a preset's `content` once you set your own, so include
+  // the package's compiled components.
+  content: ["./src/**/*.{ts,tsx}", "./node_modules/@vllnt/ui/dist/**/*.js"],
 };
 ```
 

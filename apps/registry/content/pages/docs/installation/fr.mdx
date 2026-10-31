@@ -35,7 +35,7 @@ Ensuite, importez une seule fois la feuille de style complete du paquet depuis l
 import "@vllnt/ui/styles.css";
 ```
 
-Ajoutez le preset Tailwind de VLLNT UI et gardez le code source de votre application dans l'analyse de contenu de Tailwind :
+Ajoutez le preset Tailwind de VLLNT UI. Listez le code source de votre application et les composants compilés du paquet dans `content` : Tailwind 3 ignore le `content` d'un preset dès que votre configuration définit le sien.
 
 ```ts
 // tailwind.config.ts
@@ -43,7 +43,12 @@ import uiPreset from "@vllnt/ui/tailwind-preset";
 
 export default {
   presets: [uiPreset],
-  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./node_modules/@vllnt/ui/dist/**/*.js",
+  ],
 };
 ```
 
@@ -71,7 +76,7 @@ Remplacez `button` par n'importe quel slug de composant depuis l'[index des comp
 
 Les installations par paquet et les installations par registre necessitent une configuration legerement differente :
 
-- Les installations par paquet importent `@vllnt/ui/styles.css` une seule fois, utilisent `@vllnt/ui/tailwind-preset` et analysent les fichiers source de votre application dans `content`.
+- Les installations par paquet importent `@vllnt/ui/styles.css` une seule fois, utilisent `@vllnt/ui/tailwind-preset` et analysent les fichiers source de votre application ainsi que `node_modules/@vllnt/ui/dist` dans `content`.
 - Les installations par registre copient le code source du composant dans votre application. Gardez Tailwind configure pour les styles de votre application et assurez-vous que l'analyse de contenu de Tailwind inclut les chemins de destination ou la CLI shadcn ecrit ces composants copies.
 
 ```ts
