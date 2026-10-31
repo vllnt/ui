@@ -18,7 +18,8 @@ test("pages request no Vercel-only scripts off Vercel", async ({ page }) => {
     if (isVercelScript(request)) requested.push(request.url());
   });
 
-  await page.goto("/");
+  const response = await page.goto("/");
+  expect(response?.ok()).toBe(true);
   // The scripts are injected after hydration, which can end after `load`.
   await page
     .waitForRequest(isVercelScript, { timeout: 10_000 })
