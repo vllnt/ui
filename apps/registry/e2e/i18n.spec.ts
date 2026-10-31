@@ -39,8 +39,8 @@ const SINGLE_H1_ROUTES = new Set([
 
 /**
  * Resource-load failures surface as a generic "Failed to load resource"
- * console error whose URL lives in location(), not text(), so they are not
- * counted here. Real app errors (uncaught exceptions via pageerror, next-intl
+ * console error whose URL lives in location(), not text(), so this list
+ * ignores them. Real app errors (uncaught exceptions via pageerror, next-intl
  * MISSING_MESSAGE) are unaffected.
  */
 const IGNORED_CONSOLE = ["favicon", "failed to load resource"];

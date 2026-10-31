@@ -1,28 +1,28 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Request, test } from "@playwright/test";
 
 /**
  * The site is self-hosted. Vercel serves its analytics scripts only on its own
  * platform, so off Vercel every page that requests them gets two 404s.
  */
+function isVercelScript(request: Request): boolean {
+  const url = new URL(request.url());
+  return (
+    url.pathname.startsWith("/_vercel/") ||
+    url.hostname === "va.vercel-scripts.com"
+  );
+}
+
 test("pages request no Vercel-only scripts off Vercel", async ({ page }) => {
-  // The scripts are injected after hydration; give that time to happen.
-  const vercelScript = page
-    .waitForRequest(
-      (request) => {
-        const url = new URL(request.url());
-        return (
-          url.pathname.startsWith("/_vercel/") ||
-          url.hostname === "va.vercel-scripts.com"
-        );
-      },
-      { timeout: 15_000 },
-    )
-    .then(
-      (request) => request.url(),
-      () => null,
-    );
+  const requested: string[] = [];
+  page.on("request", (request) => {
+    if (isVercelScript(request)) requested.push(request.url());
+  });
 
   await page.goto("/");
+  // The scripts are injected after hydration, which can end after `load`.
+  await page
+    .waitForRequest(isVercelScript, { timeout: 10_000 })
+    .catch(() => undefined);
 
-  expect(await vercelScript).toBeNull();
+  expect(requested).toEqual([]);
 });
