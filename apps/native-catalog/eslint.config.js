@@ -17,6 +17,8 @@ export default [
     },
     rules: {
       "@next/next/no-html-link-for-pages": "off",
+      // Demo handlers discard their argument with `void arg;`.
+      "@typescript-eslint/no-meaningless-void-operator": "off",
     },
   },
   {

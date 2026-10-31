@@ -1,7 +1,6 @@
 {
   "extends": "@vllnt/typescript/react.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },

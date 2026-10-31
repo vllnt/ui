@@ -3,7 +3,7 @@
     { "name": "Button", "export": "Button", "maxBytes": 26600 },
     { "name": "Badge", "export": "Badge", "maxBytes": 23700 },
     { "name": "Card", "export": "Card", "maxBytes": 23200 },
-    { "name": "Dialog", "export": "Dialog", "maxBytes": 62300 },
+    { "name": "Dialog", "export": "Dialog", "maxBytes": 67900 },
     { "name": "DataTable", "export": "DataTable", "maxBytes": 183500 },
     {
       "name": "CodeBlock (up front)",

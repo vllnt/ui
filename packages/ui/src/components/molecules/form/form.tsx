@@ -266,7 +266,7 @@ function createManagedSubmitHandler<TFieldValues extends FieldValues>(
 function createSubmitHandler(
   nativeSubmit: FormNativeSubmitHandler,
   handleValidatedSubmit:
-    | ((event?: React.BaseSyntheticEvent) => Promise<void>)
+    | ((event?: React.BaseSyntheticEvent) => Promise<unknown>)
     | undefined,
 ): FormNativeSubmitHandler {
   return async (event) => {

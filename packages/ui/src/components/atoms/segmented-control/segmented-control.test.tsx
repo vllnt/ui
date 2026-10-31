@@ -60,7 +60,7 @@ describe("SegmentedControl", () => {
   it("supports keyboard navigation and exposes radio semantics", async () => {
     renderSegmentedControl({ defaultValue: "overview" });
 
-    const group = screen.getByRole("group", { name: "View mode" });
+    const group = screen.getByRole("radiogroup", { name: "View mode" });
     const overview = screen.getByRole("radio", { name: "Overview" });
     const details = screen.getByRole("radio", { name: "Details" });
     const settings = screen.getByRole("radio", { name: "Settings" });

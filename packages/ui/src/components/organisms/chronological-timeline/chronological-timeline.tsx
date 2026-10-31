@@ -528,7 +528,7 @@ function isReactElementWithEventId(
   if (!activeId) return false;
   if (typeof child !== "object" || child === null) return false;
   if (!("props" in child)) return false;
-  const props = (child as { props: unknown }).props;
+  const props = child.props;
   if (typeof props !== "object" || props === null) return false;
   const id = (props as { id?: unknown }).id;
   return typeof id === "string" && id === activeId;
@@ -537,7 +537,7 @@ function isReactElementWithEventId(
 function getChildKey(child: unknown, fallback: number): number | string {
   if (typeof child !== "object" || child === null) return fallback;
   if (!("key" in child)) return fallback;
-  const key = (child as { key: unknown }).key;
+  const key = child.key;
   if (typeof key === "string" || typeof key === "number") return key;
   return fallback;
 }

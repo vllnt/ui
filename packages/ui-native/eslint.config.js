@@ -20,6 +20,9 @@ export default [
     },
     rules: {
       "@next/next/no-html-link-for-pages": "off",
+      // `void unusedSetter;` keeps the lazily initialised `useState` pair that
+      // `react/hook-use-state` requires without an unused-variable error.
+      "@typescript-eslint/no-meaningless-void-operator": "off",
       "jsx-a11y/label-has-associated-control": "off",
     },
   },
