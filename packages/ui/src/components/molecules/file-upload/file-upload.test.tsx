@@ -38,6 +38,8 @@ describe("FileUpload keyboard semantics", () => {
   });
 });
 
+const make = () => new File(["x"], "a.txt", { lastModified: 1 });
+
 describe("FileUpload duplicate files", () => {
   it("lists the same file once and removes exactly one entry", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => null);
@@ -72,5 +74,14 @@ describe("FileUpload duplicate files", () => {
     expect(screen.getAllByText("dup.txt")).toHaveLength(2);
     expect(error).not.toHaveBeenCalled();
     error.mockRestore();
+  });
+
+  it("does not call onFilesChange when every incoming file is a duplicate", () => {
+    const onFilesChange = vi.fn();
+    render(<FileUpload multiple onFilesChange={onFilesChange} />);
+    const input = screen.getByLabelText("Choose files", { selector: "input" });
+    fireEvent.change(input, { target: { files: [make()] } });
+    fireEvent.change(input, { target: { files: [make()] } });
+    expect(onFilesChange).toHaveBeenCalledTimes(1);
   });
 });

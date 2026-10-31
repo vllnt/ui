@@ -55,15 +55,15 @@ function useFileUploadState(
       }
       // Identical files (name, size, mtime) collapse to one entry, so list keys stay
       // unique and removing an entry removes that file alone.
-      updateFiles(
-        nextFiles.reduce(
-          (accepted, file) =>
-            accepted.some((existing) => isSameFile(existing, file))
-              ? accepted
-              : [...accepted, file],
-          resolvedFiles,
-        ),
+      const merged = nextFiles.reduce(
+        (accepted, file) =>
+          accepted.some((existing) => isSameFile(existing, file))
+            ? accepted
+            : [...accepted, file],
+        resolvedFiles,
       );
+      if (merged.length === resolvedFiles.length) return;
+      updateFiles(merged);
     },
     [multiple, resolvedFiles, updateFiles],
   );

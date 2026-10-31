@@ -109,6 +109,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   listbox, tree, dialogs and focus return), reduced motion and hard-coded
   palette contrast across the Web components flagged by the #535 audit. (#543)
 
+- **FileUpload duplicates** - Selecting identical files (same name, size and
+  lastModified) adds them once, and a selection that adds nothing new no longer
+  calls `onFilesChange`.
+
 ## [0.3.0] - 2026-06-26
 
 ### Added
