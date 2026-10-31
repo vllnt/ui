@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `ProfileSectionProps`, `TLDRSectionProps`, `AreaChartProps`, `BarChartProps`,
   `LineChartProps` and `ThemePresetProviderProps`.
 
-- Source-only React Native renderer and shared design contracts for the 0.4.0 canary track; stable Web installation remains unchanged.
+- Source-only React Native renderer and shared design contracts (`@vllnt/ui-core`, `@vllnt/ui-native`). They are experimental and not published with this release; installing `@vllnt/ui` is unchanged.
 - Localized Native catalog discovery, dependency/capability comparison, and extensible React/React Native source tabs in a single component preview surface.
 - **Accessibility gate** - the Storybook test-runner runs axe-core (WCAG 2.0,
   2.1 and 2.2, levels A and AA) on every story in the light and dark theme and

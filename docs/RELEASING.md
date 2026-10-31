@@ -48,6 +48,7 @@ Go to **Actions → Publish → Run workflow** on `main` (or run `gh workflow ru
 CI will:
 
 - Run quality gates (lint / typecheck / build / test).
+- Wait for a maintainer to approve the `npm-release` deployment; nothing below runs before that.
 - Read the version from `packages/ui/package.json`. **Fails fast** if a matching `v{x.y.z}` tag already exists — catches dispatches against stale main.
 - Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes.
 - Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
