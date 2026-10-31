@@ -76,7 +76,7 @@ Remplacez `button` par n'importe quel slug de composant depuis l'[index des comp
 
 Les installations par paquet et les installations par registre necessitent une configuration legerement differente :
 
-- Les installations par paquet importent `@vllnt/ui/styles.css` une seule fois, utilisent `@vllnt/ui/tailwind-preset` et analysent les fichiers source de votre application ainsi que `node_modules/@vllnt/ui/dist` dans `content` (Tailwind 3 ignore le `content` d'un preset dès que votre configuration définit le sien).
+- Les installations par paquet importent `@vllnt/ui/styles.css` une seule fois, utilisent `@vllnt/ui/tailwind-preset` et analysent les fichiers source de votre application ainsi que `node_modules/@vllnt/ui/dist` dans `content`.
 - Les installations par registre copient le code source du composant dans votre application. Gardez Tailwind configure pour les styles de votre application et assurez-vous que l'analyse de contenu de Tailwind inclut les chemins de destination ou la CLI shadcn ecrit ces composants copies.
 
 ```ts
