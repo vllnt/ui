@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
 
 const DEFAULT_LENGTH = 6;
 
-/** Whole code length; NaN, zero, and negative lengths fall back to six digits. */
+/** Whole code length; NaN, infinite, zero, and negative lengths fall back to six digits. */
 function codeLength(length: number): number {
-  if (Number.isNaN(length) || length < 1) return DEFAULT_LENGTH;
+  if (!Number.isFinite(length) || length < 1) return DEFAULT_LENGTH;
   return Math.floor(length);
 }
 

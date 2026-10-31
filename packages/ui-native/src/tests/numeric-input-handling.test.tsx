@@ -101,7 +101,7 @@ describe("InputOTP length", () => {
     />
   );
 
-  it.each([NAN, 0, -3])(
+  it.each([NAN, POSITIVE_INFINITY, 0, -3])(
     "accepts a six digit code when length is %s",
     (length) => {
       render(otp(length));
