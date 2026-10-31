@@ -8,9 +8,13 @@ test("pages request no Vercel-only scripts off Vercel", async ({ page }) => {
   // The scripts are injected after hydration; give that time to happen.
   const vercelScript = page
     .waitForRequest(
-      (request) =>
-        request.url().includes("/_vercel/") ||
-        request.url().includes("va.vercel-scripts.com"),
+      (request) => {
+        const url = new URL(request.url());
+        return (
+          url.pathname.startsWith("/_vercel/") ||
+          url.hostname === "va.vercel-scripts.com"
+        );
+      },
       { timeout: 15_000 },
     )
     .then(
