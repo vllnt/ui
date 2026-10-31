@@ -72,9 +72,6 @@ importers:
       '@vllnt/eslint-config':
         specifier: ^2.0.0
         version: 2.0.0(@typescript-eslint/parser@8.72.0(eslint@9.39.5(jiti@1.21.7)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(convex@1.48.0(react@19.2.3))(eslint@9.39.5(jiti@1.21.7)(supports-color@8.1.1))(prettier@3.8.1)(supports-color@8.1.1)(turbo@2.11.10)(typescript@6.0.3)
-      '@vllnt/typescript':
-        specifier: ^2.0.0
-        version: 2.0.0(typescript@6.0.3)
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
