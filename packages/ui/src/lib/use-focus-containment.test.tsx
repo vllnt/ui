@@ -159,6 +159,58 @@ describe("useFocusContainment", () => {
     expect(screen.getByRole("button", { name: "inner-a" })).toHaveFocus();
   });
 
+  it("does not restore focus to an element that blurred to nothing", () => {
+    function Controlled({ open }: { open: boolean }) {
+      const reference = useRef<HTMLDivElement>(null);
+      useFocusContainment(reference, open);
+      return (
+        <>
+          <button type="button">stale</button>
+          {open ? (
+            <div ref={reference}>
+              <button type="button">inside</button>
+            </div>
+          ) : null}
+        </>
+      );
+    }
+    const { rerender } = render(<Controlled open={false} />);
+    const stale = screen.getByRole("button", { name: "stale" });
+    stale.focus();
+    stale.blur();
+    rerender(<Controlled open />);
+    expect(screen.getByRole("button", { name: "inside" })).toHaveFocus();
+    rerender(<Controlled open={false} />);
+    expect(stale).not.toHaveFocus();
+  });
+
+  it("leaves focus in the upper containment when a lower one closes", () => {
+    function Stacked({ lower, upper }: { lower: boolean; upper: boolean }) {
+      const lowerReference = useRef<HTMLDivElement>(null);
+      const upperReference = useRef<HTMLDivElement>(null);
+      useFocusContainment(lowerReference, lower);
+      useFocusContainment(upperReference, upper);
+      return (
+        <>
+          <button type="button">page</button>
+          <div ref={lowerReference}>
+            <button type="button">lower</button>
+          </div>
+          <div ref={upperReference}>
+            <button type="button">upper</button>
+          </div>
+        </>
+      );
+    }
+    const { rerender } = render(<Stacked lower={false} upper={false} />);
+    screen.getByRole("button", { name: "page" }).focus();
+    rerender(<Stacked lower upper={false} />);
+    rerender(<Stacked lower upper />);
+    expect(screen.getByRole("button", { name: "upper" })).toHaveFocus();
+    rerender(<Stacked lower={false} upper />);
+    expect(screen.getByRole("button", { name: "upper" })).toHaveFocus();
+  });
+
   it("skips inert ancestors and hidden inputs", () => {
     function Skip() {
       const reference = useRef<HTMLDivElement>(null);

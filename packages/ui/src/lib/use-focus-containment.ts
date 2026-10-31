@@ -51,8 +51,11 @@ function containTab(event: KeyboardEvent, container: HTMLElement): void {
  * modal opened. For Radix dialogs use `useReturnFocus` instead; they already
  * trap focus.
  *
- * The opener is the last element that lost focus before the hook became enabled,
- * so children that use `autoFocus` (focused during commit) do not hide it.
+ * The opener is the focused element when the hook becomes enabled, or, when a
+ * child took focus during commit (`autoFocus`), the element that handed focus
+ * directly to it. A blur to nothing (a click on empty page space) records no
+ * opener. On close, focus moves back to the opener when this modal or the body
+ * still holds it, so closing a lower modal leaves focus in the modal above it.
  *
  * @param containerReference - ref to the modal element.
  * @param enabled - true while the modal is open.
@@ -61,12 +64,15 @@ export function useFocusContainment(
   containerReference: RefObject<HTMLElement | null>,
   enabled: boolean,
 ): void {
-  const lastBlurred = useRef<Node | null>(null);
+  const lastBlurred = useRef<Node | undefined>(undefined);
 
   useEffect(() => {
     if (enabled) return;
     const handleFocusOut = (event: FocusEvent): void => {
-      if (event.target instanceof Node) lastBlurred.current = event.target;
+      lastBlurred.current =
+        event.relatedTarget instanceof Node && event.target instanceof Node
+          ? event.target
+          : undefined;
     };
     document.addEventListener("focusout", handleFocusOut, true);
     return () => {
@@ -83,9 +89,10 @@ export function useFocusContainment(
       active && active !== document.body && !container?.contains(active)
         ? active
         : lastBlurred.current;
+    lastBlurred.current = undefined;
     const token = Symbol("focus-containment");
     activeContainments.push(token);
-    if (container && !container.contains(opener)) {
+    if (container && !(opener && container.contains(opener))) {
       getFocusable(container)[0]?.focus();
     }
 
@@ -100,7 +107,11 @@ export function useFocusContainment(
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
       activeContainments.splice(activeContainments.indexOf(token), 1);
+      const focused = document.activeElement;
+      const focusStillHere =
+        !focused || focused === document.body || container?.contains(focused);
       if (
+        focusStillHere &&
         opener instanceof HTMLElement &&
         opener !== document.body &&
         opener.isConnected
