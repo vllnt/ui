@@ -133,4 +133,25 @@ describe("Slideshow navigation timer", () => {
 
     expect(props.onNavigate).not.toHaveBeenCalled();
   });
+
+  it("keeps Tab inside the table of contents and restores focus on close", () => {
+    renderSlideshow();
+    const opener = screen.getByRole("button", {
+      name: "Open table of contents",
+    });
+    opener.focus();
+    fireEvent.click(opener);
+
+    const dialog = screen.getByRole("dialog");
+    const close = screen.getByRole("button", { name: "Close" });
+    const buttons = dialog.querySelectorAll<HTMLElement>("button");
+    const last = buttons.item(buttons.length - 1);
+    last.focus();
+    fireEvent.keyDown(last, { key: "Tab" });
+    expect(dialog.contains(document.activeElement)).toBe(true);
+    expect(document.activeElement).not.toBe(last);
+
+    fireEvent.click(close);
+    expect(opener).toHaveFocus();
+  });
 });

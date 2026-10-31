@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
 import { useEventCallback } from "../../../lib/use-event-callback";
+import { useFocusContainment } from "../../../lib/use-focus-containment";
 import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 import { CompletionDialog } from "../../molecules/completion-dialog/completion-dialog";
@@ -196,6 +197,7 @@ function SlideshowToc({
   sections: SlideshowSection[];
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
+  useFocusContainment(panelRef, isOpen);
 
   if (!isOpen) return null;
 

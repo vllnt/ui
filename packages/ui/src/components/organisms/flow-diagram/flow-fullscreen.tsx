@@ -1,11 +1,12 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useRef } from "react";
 
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 
 import { useEscapeKey } from "../../../lib/use-escape-key";
+import { useFocusContainment } from "../../../lib/use-focus-containment";
 import { cn } from "../../../lib/utils";
 
 import type { FlowFullscreenProps } from "./types";
@@ -15,6 +16,8 @@ export const FlowFullscreen = memo(function FlowFullscreen({
   isOpen,
   onClose,
 }: FlowFullscreenProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusContainment(dialogRef, isOpen);
   useEscapeKey(onClose, { enabled: isOpen, target: "document" });
 
   if (!isOpen) return null;
@@ -30,6 +33,7 @@ export const FlowFullscreen = memo(function FlowFullscreen({
         "fixed inset-0 z-[9999] flex flex-col bg-background",
         "animate-in fade-in duration-200",
       )}
+      ref={dialogRef}
       role="dialog"
     >
       {/* Header with close button */}
