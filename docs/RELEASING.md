@@ -14,15 +14,17 @@ Consume the latest canary locally:
 pnpm add @vllnt/ui@canary
 ```
 
-## 0.4.0 canary-only hold
+## Release guard
 
-`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Web remains on base 0.4.0; core/Native share the independent 0.1.0 canary base. Manual stable dispatch rejects 0.4.x and all newer/unknown bases before Git tagging or npm publication; only existing Web 0.3.x maintenance remains eligible. All publication modes require `refs/heads/main`. There is no input or repository-variable override for this hold. Promotion requires a separate reviewed code change and the exit evidence in `PR506_CANARY_GAP_REVIEW.md`.
+`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. All publication modes require `refs/heads/main`. Manual stable dispatch accepts Web bases 0.3.x and 0.4.x and rejects prereleases and every newer or unknown base before Git tagging or npm publication; a newer base needs a separately reviewed change to the guard. Core/Native keep the independent 0.1.0 canary base and have no stable mode. There is no input or repository-variable override.
 
-Matching main pushes may publish Web prereleases under `canary`, never `latest`. Native publication is unconditionally disabled in the workflow until a separately reviewed enabling change. The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Stable Web registry installs stay pinned to 0.3.0; Native discovery remains source-only/unavailable.
+Matching main pushes publish Web prereleases under `canary`, never `latest`. Native publication is unconditionally disabled in the workflow until a separately reviewed enabling change (see `PR506_CANARY_GAP_REVIEW.md`). The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Native discovery remains source-only/unavailable.
 
-Run `node --test scripts/release-guard.test.mjs` to verify hold, version derivation and workflow wiring. No publish command is executed by these tests.
+The stable `release` job runs in the protected `npm-release` environment (deployment branch `main` only, required reviewer). A dispatch therefore waits until a maintainer approves the deployment in the run page; nothing is tagged or published before that approval.
 
-## Stable release (PR-driven, no PAT; 0.3.x only during hold)
+Run `node --test scripts/release-guard.test.mjs` to verify the guard, version derivation and workflow wiring. No publish command is executed by these tests.
+
+## Stable release (PR-driven, no PAT)
 
 The release workflow does not push commits to `main`. Version bumps land via normal PRs so branch protection stays in effect and no PAT / bypass is required.
 
@@ -41,7 +43,7 @@ Merge the PR normally. The canary workflow on `main` will immediately publish `@
 
 ### 2. Dispatch the release
 
-Go to **Actions → Publish → Run workflow** on `main`. No inputs.
+Go to **Actions → Publish → Run workflow** on `main` (or run `gh workflow run publish.yml --ref main`). No inputs. Approve the pending `npm-release` deployment on the run page when the quality job has passed.
 
 CI will:
 

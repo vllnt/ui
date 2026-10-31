@@ -89,6 +89,9 @@ jobs:
     needs: quality
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    # Protected environment: main-only deployment branch and a required reviewer,
+    # so every stable publish waits for an explicit maintainer approval.
+    environment: npm-release
     permissions:
       contents: write
       id-token: write
