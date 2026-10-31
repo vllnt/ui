@@ -1,10 +1,11 @@
 "use client";
 
-import { Suspense, useEffect, useEffectEvent, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useDebounce } from "../../../lib/use-debounce";
+import { useEventCallback } from "../../../lib/use-event-callback";
 import { Button } from "../../atoms/button/button";
 import { Input } from "../../atoms/input/input";
 
@@ -64,9 +65,9 @@ function SearchBarInner({
   const lastDebouncedQueryReference = useRef<string>("");
 
   // Notify parent without making `onSearch` a reactive effect dependency:
-  // an Effect Event always sees the latest prop but never re-triggers the
+  // a stable event callback always sees the latest prop but never re-triggers the
   // effect, so a parent passing a fresh callback can't drive an update loop.
-  const emitSearch = useEffectEvent((nextQuery: string) => {
+  const emitSearch = useEventCallback((nextQuery: string) => {
     onSearch?.(nextQuery);
   });
 

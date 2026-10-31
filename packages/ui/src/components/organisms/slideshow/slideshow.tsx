@@ -4,7 +4,6 @@ import {
   memo,
   useCallback,
   useEffect,
-  useEffectEvent,
   useRef,
   useState,
 } from "react";
@@ -14,6 +13,7 @@ import { createPortal } from "react-dom";
 
 import type { HeadingTag } from "../../../lib/types";
 import { useBodyScrollLock } from "../../../lib/use-body-scroll-lock";
+import { useEventCallback } from "../../../lib/use-event-callback";
 import { useMounted } from "../../../lib/use-mounted";
 import { cn } from "../../../lib/utils";
 import { CompletionDialog } from "../../molecules/completion-dialog/completion-dialog";
@@ -487,7 +487,7 @@ function SlideshowImpl({
     [currentIndex, goToSection],
   );
 
-  const onKeyDown = useEffectEvent((event: KeyboardEvent) => {
+  const onKeyDown = useEventCallback((event: KeyboardEvent) => {
     if (isCompletionDialogOpen) return;
     if (event.key === "Escape") {
       event.preventDefault();

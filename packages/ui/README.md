@@ -15,14 +15,41 @@ pnpm add @vllnt/ui
 Required:
 
 ```bash
-pnpm add react react-dom tailwindcss
+pnpm add react react-dom tailwindcss next-themes
 ```
 
-Optional (only if using ThemeProvider, NavbarSaas, or other Next.js-specific components):
+`react` and `react-dom` >= 19.0.0, `tailwindcss` ^3.4.0, `next-themes` >= 0.4.0 (a React-only library; it works outside Next.js).
+
+Next.js (>= 15.0.0) is an optional peer, but the root entry imports `next/link`, `next/image` and `next/navigation` at module level. Install `next` unless you alias those modules (below).
 
 ```bash
-pnpm add next next-themes
+pnpm add next
 ```
+
+#### Without Next.js (workaround)
+
+Importing anything from `@vllnt/ui` loads every component, including the ones that use `next/*`. In a bundler without Next.js (for example Vite), alias the three modules to small stubs. Verified to build with Vite 7; runtime behaviour of the stubbed components (`Breadcrumb`, `Pagination`, `Sidebar`, `SearchBar`, `NavbarSaas`, ...) is not guaranteed.
+
+```ts
+// vite.config.ts - workaround, not an officially supported setup
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vite";
+
+const stub = (file: string) =>
+  fileURLToPath(new URL(`./next-stubs/${file}`, import.meta.url));
+
+export default defineConfig({
+  resolve: {
+    alias: [
+      { find: /^next\/link$/, replacement: stub("link.js") },
+      { find: /^next\/image$/, replacement: stub("image.js") },
+      { find: /^next\/navigation$/, replacement: stub("navigation.js") },
+    ],
+  },
+});
+```
+
+`next-stubs/link.js` renders an `<a href>`, `image.js` an `<img src>`, and `navigation.js` exports `usePathname` (returns `"/"`), `useRouter` (no-op methods) and `useSearchParams` (empty `URLSearchParams`). Plain Node ESM import is not supported.
 
 ## Setup
 
@@ -436,10 +463,10 @@ import type {
 
 ## Requirements
 
-- React >= 18.0.0
-- Tailwind CSS >= 3.0.0
-- Next.js >= 14.0.0 (optional — only for `ThemeProvider`, `NavbarSaas`, `LangProvider`)
-- `next-themes` >= 0.4.0 (optional — only for `ThemeProvider`, `ThemeToggle`)
+- React >= 19.0.0
+- Tailwind CSS ^3.4.0 (`size-*`, `text-balance` and `has-[...]` utilities need 3.4; Tailwind 4 is not supported)
+- `next-themes` >= 0.4.0 (required peer)
+- Next.js >= 15.0.0 (optional peer, but the root entry imports `next/*`; see Peer Dependencies for the no-Next workaround). Next 14 only supports React 18.
 
 ## License
 
