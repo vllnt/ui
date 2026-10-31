@@ -20,7 +20,7 @@
  *
  * Infra vs code: a reachable Storybook
  * that is MISSING a referenced story is a real bug → FAIL. A Storybook origin
- * that is unreachable (tailnet-only, not provisioned for this PR, transient
+ * that is unreachable (private-network only, not provisioned for this PR, transient
  * 5xx) is infra → SKIP, never a false red that blocks a promote.
  */
 
@@ -101,7 +101,7 @@ test.beforeAll(async ({ browser }) => {
 test("every deployed preview id resolves to a real story in the live Storybook", async () => {
   test.skip(
     live.ids === null,
-    `Storybook origin ${live.origin} unreachable (tailnet/infra or preview not provisioned) — skipping live id assertions`,
+    `Storybook origin ${live.origin} unreachable (private network or infra or preview not provisioned) — skipping live id assertions`,
   );
 
   const missing: string[] = [];

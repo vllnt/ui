@@ -9,8 +9,8 @@ Add dark and light preview handling to the ui registry component preview so the 
 - No unrelated registry layout refactor
 
 ## Constraints
-- Repo: `/home/ubuntu/ui`
-- Worktree: `/home/ubuntu/ui/.worktrees/registry-preview-theme-modes`
+- Repo: `.` (repository root)
+- Worktree: `.worktrees/registry-preview-theme-modes`
 - Branch: `feat/registry-preview-theme-modes`
 - Base: `feat/storybook`
 - Follow repo-local `CLAUDE.md`
