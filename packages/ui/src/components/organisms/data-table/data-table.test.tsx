@@ -102,7 +102,7 @@ describe("DataTable filter names", () => {
     fireEvent.click(screen.getByRole("button", { name: /revenue/i }));
     expect(header).toHaveAttribute("aria-sort", "descending");
     fireEvent.click(screen.getByRole("button", { name: /revenue/i }));
-    expect(header).toHaveAttribute("aria-sort", "descending");
+    expect(header).toHaveAttribute("aria-sort", "ascending");
   });
 
   it("omits aria-sort on columns that cannot sort", () => {
