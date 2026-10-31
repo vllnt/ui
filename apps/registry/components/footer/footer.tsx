@@ -8,7 +8,6 @@ const STORYBOOK_URL = "https://storybook.vllnt.com";
 const SPONSOR_URL = "https://github.com/sponsors/bntvllnt";
 const REPORT_URL =
   "https://github.com/vllnt/ui/issues/new?template=bug_report.yml&labels=bug";
-const DISCUSSIONS_URL = "https://github.com/vllnt/ui/discussions";
 const LICENSE_URL = "https://github.com/vllnt/ui/blob/main/LICENSE";
 const COC_URL = "https://github.com/vllnt/ui/blob/main/CODE_OF_CONDUCT.md";
 
@@ -73,7 +72,6 @@ const COLUMNS: readonly FooterColumn[] = [
         labelKey: "requestComponent",
       },
       { href: REPORT_URL, kind: "external", labelKey: "reportBug" },
-      { href: DISCUSSIONS_URL, kind: "external", labelKey: "discussions" },
       { href: SPONSOR_URL, kind: "external", labelKey: "sponsor" },
     ],
     titleKey: "community",
