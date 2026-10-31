@@ -75,15 +75,16 @@ Rules:
 ```bash
 pnpm add @vllnt/ui
 # peers (required):
-pnpm add react react-dom tailwindcss
-# optional — only for ThemeProvider / Next-specific components:
-pnpm add next next-themes
+pnpm add react react-dom tailwindcss next-themes
+# optional peer, but the root entry imports next/link, next/image and
+# next/navigation, so install it unless your bundler aliases them:
+pnpm add next
 ```
 
-Peer ranges: `react >=18`, `react-dom >=18`, `tailwindcss >=3`. `next` and
-`next-themes` are optional peers.
+Peer ranges: `react >=19.0.0`, `react-dom >=19.0.0`, `tailwindcss ^3.4.0`,
+`next-themes >=0.4.0`, `next >=15.0.0` (optional).
 
-**1. Tailwind preset** — pulls in theme colors, animations, content paths,
+**1. Tailwind preset** — pulls in theme colors, animations,
 class-based dark mode (`darkMode: ["class"]`) and `tailwindcss-animate`:
 
 ```ts
@@ -91,7 +92,10 @@ class-based dark mode (`darkMode: ["class"]`) and `tailwindcss-animate`:
 import uiPreset from "@vllnt/ui/tailwind-preset";
 
 export default {
-  presets: [uiPreset], // auto-includes @vllnt/ui content paths
+  presets: [uiPreset],
+  // Tailwind 3 ignores a preset's `content` once you set your own: list your
+  // source and the package's compiled components.
+  content: ["./src/**/*.{ts,tsx}", "./node_modules/@vllnt/ui/dist/**/*.js"],
 };
 ```
 
@@ -133,13 +137,13 @@ a component's `className` with conditional classes (last class wins on conflict)
 
 ### Theming / dark mode
 
-Colors are **HSL CSS variables**. Override after importing styles. Dark mode is
+Colors are **OKLCH channel variables** (`L C H`, read as `oklch(var(--name) / <alpha>)`). Override after importing styles. Dark mode is
 class-based — put `class="dark"` on `<html>`/`<body>` (or drive it with
 `next-themes`):
 
 ```css
-:root      { --background: 0 0% 100%; --foreground: 240 10% 4%; /* … */ }
-.dark      { --background: 240 10% 4%; --foreground: 0 0% 98%;  /* … */ }
+:root      { --background: 1 0 0; --foreground: 0.1445 0 0; /* … */ }
+.dark      { --background: 0 0 0; --foreground: 0.9848 0 0;  /* … */ }
 ```
 
 ---

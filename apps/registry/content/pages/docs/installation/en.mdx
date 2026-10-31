@@ -35,7 +35,7 @@ Then import the full package stylesheet once from your app entry, such as `app/l
 import "@vllnt/ui/styles.css";
 ```
 
-Add the VLLNT UI Tailwind preset and keep your application source in Tailwind content scanning:
+Add the VLLNT UI Tailwind preset. List your application source and the package's compiled components in `content`: Tailwind 3 ignores a preset's `content` once your config sets its own.
 
 ```ts
 // tailwind.config.ts
@@ -43,7 +43,12 @@ import uiPreset from "@vllnt/ui/tailwind-preset";
 
 export default {
   presets: [uiPreset],
-  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./node_modules/@vllnt/ui/dist/**/*.js",
+  ],
 };
 ```
 
@@ -71,7 +76,7 @@ Replace `button` with any component slug from the [component index](/components)
 
 Package installs and registry installs need slightly different setup:
 
-- Package installs import `@vllnt/ui/styles.css` once, use `@vllnt/ui/tailwind-preset`, and scan your app source files in `content`.
+- Package installs import `@vllnt/ui/styles.css` once, use `@vllnt/ui/tailwind-preset`, and scan your app source files plus `node_modules/@vllnt/ui/dist` in `content`.
 - Registry installs copy component source into your app. Keep Tailwind configured for your app styles, and make sure Tailwind content scanning includes the destination paths where the shadcn CLI writes those copied components.
 
 ```ts

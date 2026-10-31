@@ -127,6 +127,11 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Fixed
 
+- **Setup docs** - the Tailwind config in both READMEs, the installation page
+  and the agent skill now lists `./node_modules/@vllnt/ui/dist/**/*.js` in
+  `content`. Tailwind 3 ignores a preset's `content` once the app sets its own,
+  so the documented config generated no component styles. The agent skill's
+  peer ranges and colour format (OKLCH) are corrected too.
 - **Tailwind preset dependency** - `tailwindcss-animate`, which
   `@vllnt/ui/tailwind-preset` imports, is now a runtime dependency. With 0.3.0
   the preset failed to load unless the app installed it.
