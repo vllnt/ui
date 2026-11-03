@@ -13,6 +13,13 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - Generated barrel/manifest drift checks, native boundary checks, Jest interaction coverage, and packed-package validation.
 - Jest render tests cover the compound parts that no test rendered before (`AgentStepDuration`, `AIArtifactEditButton`, `ConversationHeader`, `ConversationScrollButton`, `ConversationTitle`, `ProgressTrackerBadge`, `ProgressTrackerStat`, `ProgressTrackerStats`, `SimpleTerminal`).
 
+- Props the web components already had, added to the native components with the same names and value sets:
+  - `size` (`"default" | "lg" | "sm"`) on `Toggle`, `ToggleGroup` (also per `ToggleGroupItem`), and `SegmentedControl`; `variant` (`"default" | "outline"`) on `ToggleGroup` (also per `ToggleGroupItem`; as on web, a value set on the group takes precedence over the item). Targets keep the 44-point minimum, so `sm` tightens the padding and `lg` grows to the theme's `spacing[12]` (48 points).
+  - `size` (`"lg" | "md" | "sm"`) on `Rating`, taken from the theme type scale (`h4`, `h5`, `body`). The default stays `lg`, the size native ratings always rendered; web defaults to `md`.
+  - `disabled` on `Textarea`, `DateField`, `TimeField`, and `InputOTP` (their runtime already followed `Input`; `InputOTP` now locks the field), and on `Collapsible`, which disables its trigger.
+  - `onComplete` on `InputOTP`, called with the code when the value changes from incomplete to complete (including a controlled value that becomes complete). `disabled` now also reports the disabled accessibility state even when the caller passes `accessibilityState={{ disabled: false }}`.
+  - Web names for props that native already had under another name; the native name wins when both are passed and stays supported: `orientation` on `ResizablePanelGroup` (`direction`), `onFlipChange` on `Flashcard` (`onFlippedChange`), and `expanded`, `defaultExpanded`, `onExpandedChange`, `selected`, `defaultSelected`, `onSelect` on `TreeView` (`expandedIds`, `defaultExpandedIds`, `onExpandedIdsChange`, `selectedIds`, `defaultSelectedIds`, `onSelectedIdsChange`).
+
 ### Changed
 
 - Components are organised by Atomic Design level under `src/components/{atoms,molecules,organisms}/<name>/` (#535): 105 atoms, 58 molecules, and 8 organisms. `pnpm check:atomic` enforces the levels, and `src/primitives` and `src/theme` may not import components. Public exports are unchanged. Each component's `source` in `registry.json`, published as `native.source` by the registry, now includes the level (for example `src/components/atoms/button/button.tsx`).

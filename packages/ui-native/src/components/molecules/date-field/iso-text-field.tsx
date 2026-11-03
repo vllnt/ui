@@ -2,12 +2,7 @@
 
 import { type Ref, useState } from "react";
 
-import {
-  Text as NativeText,
-  type TextInput,
-  type TextInputProps,
-  View,
-} from "react-native";
+import { Text as NativeText, type TextInput, View } from "react-native";
 
 import {
   joinAccessibilityText,
@@ -19,11 +14,11 @@ import {
   useControllableState,
 } from "../../../primitives/use-controllable-state";
 import { useTheme } from "../../../theme/theme-provider";
-import { Input } from "../../atoms/input/input";
+import { Input, type InputProps } from "../../atoms/input/input";
 
 /** Props shared by the text-based native ISO date and time fields. */
 type ISOTextFieldProps<TValue extends string> = Omit<
-  TextInputProps,
+  InputProps,
   "defaultValue" | "onChangeText" | "value"
 > & {
   readonly labels: {
