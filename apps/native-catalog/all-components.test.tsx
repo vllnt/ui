@@ -15,8 +15,8 @@ import { nativeComponentNames } from "./catalog-metadata";
 const RENDER_TIMEOUT = 120_000;
 
 /**
- * Fixtures that open a native modal on mount, each with text that only its
- * open modal shows. The catalog keeps exactly these behind a Show button.
+ * Fixtures that open a native modal on mount, each with text that appears in
+ * its open modal. The catalog keeps these, and no others, behind a Show button.
  */
 const modalFixtureText: Readonly<Record<string, string>> = {
   "alert-dialog": "Delete workspace?",
