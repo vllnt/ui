@@ -10,16 +10,16 @@ The package base is **0.1.0**, not a published stable release. Core and Native c
 
 - 171 native component modules are listed in [`registry.json`](registry.json).
 - `availability` is `source` and `installation.available` is `false`.
-- React 19 and React Native 0.81 or newer are required.
-- Android/iOS Metro export, real-device, VoiceOver, and TalkBack validation remain release gates.
+- React 19.1+ and React Native 0.81 or newer are required.
+- CI runs the Android/iOS Metro export of the private Expo catalog. Real-device, VoiceOver, and TalkBack validation remain release gates.
 
-The planned command after the first stable publication (`0.1.0`) is:
+The planned command, once the first synchronized canary is published and the manifest reports `installation.available: true`, is:
 
 ```bash
-pnpm add @vllnt/ui-native
+pnpm add @vllnt/ui-native@canary
 ```
 
-Pre-release builds use the `canary` dist-tag. Until a supported release is published, use the repository workspace and private Expo catalog for local evaluation.
+Native publishes to the `canary` dist-tag only; no stable channel exists yet. Until a supported release is published, use the repository workspace and private Expo catalog for local evaluation.
 
 ## Local use
 
