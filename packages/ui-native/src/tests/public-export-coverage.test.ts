@@ -24,7 +24,7 @@ function readTestSources(): string {
     throw new TypeError("Jest did not report the path of this test file.");
   }
   const sourceDirectory = dirname(dirname(testPath));
-  return readdirSync(sourceDirectory, { recursive: true })
+  return readdirSync(sourceDirectory, { encoding: "utf8", recursive: true })
     .filter((file) => sourceFile.test(file) && testLocation.test(file))
     .map((file) => join(sourceDirectory, file))
     .filter((path) => path !== testPath)
