@@ -5,7 +5,7 @@
   "channel": "canary",
   "status": "experimental",
   "availability": "source",
-  "minimumReact": "19.0.0",
+  "minimumReact": "19.1.0",
   "minimumReactNative": "0.81.0",
   "installation": {
     "available": false,
@@ -13,7 +13,7 @@
     "reason": "Only a manually bootstrapped pre-release exists on npm; it has no build provenance and is not a supported install. The first workflow-built synchronized canary has not been published."
   },
   "peerDependencies": {
-    "react": ">=19.0.0 <20",
+    "react": ">=19.1.0 <20",
     "react-native": ">=0.81.0 <1"
   },
   "components": [

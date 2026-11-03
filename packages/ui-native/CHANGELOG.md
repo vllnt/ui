@@ -11,6 +11,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - Controlled/uncontrolled state, caller-owned selection, reduced-motion observation, native modal layering, safe-area injection, and typed platform-service adapters.
 - Machine-readable availability, compatibility, source, peer dependency, and installation metadata in `registry.json`.
 - Generated barrel/manifest drift checks, native boundary checks, Jest interaction coverage, and packed-package validation.
+- Jest render tests cover the compound parts that no test rendered before (`AgentStepDuration`, `AIArtifactEditButton`, `ConversationHeader`, `ConversationScrollButton`, `ConversationTitle`, `ProgressTrackerBadge`, `ProgressTrackerStat`, `ProgressTrackerStats`, `SimpleTerminal`).
 
 ### Changed
 
@@ -21,6 +22,8 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - A disabled `Fieldset` disables the package form controls inside it: `Button`, `Input` and the inputs built on it, `ToolbarButton`, `Checkbox`, `CheckboxGroup`, `Switch`, `RadioGroup`, `Toggle`, `ToggleGroup`, `SegmentedControl`/`CategoryFilter`, `ListBox`, `ColorPicker`, `TagGroup`, `TagsInput`, `InputOTP`, `NumberInput`, `PasswordInput`, `SearchField`, `PhoneInput`, `Slider`, `Rating` (read-only), `Select`/`NativeSelect`, `MultiSelect`, `Combobox`, `TimePicker`, `Calendar`, `DatePicker`, `DateRangePicker`, `FileUpload`, `PromptInput`, `AIChatInput`, `Stepper`, `CopyButton`, `FormSubmit`, and `Label` styling.
 - Screen-reader announcements made by the components are now asynchronous: messages are queued and spoken once per tick (one microtask later). Tests that assert `AccessibilityInfo.announceForAccessibility` calls must flush pending promises first (for example `await act(async () => {})`).
 - `Toast` expiry takes ten times longer while a screen reader runs; `Marquee` stops while a screen reader runs and accepts `paused`.
+- The `react` peer range is now `>=19.1.0 <20` and `minimumReact` in `registry.json` is `19.1.0`. Every `react-native` release in the `>=0.81.0 <1` peer range already requires React 19.1 or newer, so React 19.0 could never satisfy both peers. The `react-native` range is unchanged.
+- README and docs describe the install as `pnpm add @vllnt/ui-native@canary` (canary dist-tag only, no stable channel yet, install not yet available) and list Android/iOS Metro export as a CI check rather than a remaining gate.
 
 ### Fixed
 

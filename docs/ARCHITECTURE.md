@@ -58,7 +58,7 @@ Web components remain self-contained under `packages/ui/src/components/{level}/{
 
 ### React Native
 
-`@vllnt/ui-native` targets React 19 and React Native 0.81 or newer. Its source manifest currently lists 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Components consume the generated theme through `ThemeProvider`, expose React Native props, meet native touch-target and accessibility requirements, and have no DOM, Radix, Tailwind, NativeWind, or browser-global dependency.
+`@vllnt/ui-native` targets React 19.1+ and React Native 0.81 or newer. Its source manifest currently lists 171 foundation, form, data, content, AI, learning, motion, utility, control, overlay, and navigation modules. Components consume the generated theme through `ThemeProvider`, expose React Native props, meet native touch-target and accessibility requirements, and have no DOM, Radix, Tailwind, NativeWind, or browser-global dependency.
 
 Native components live under `packages/ui-native/src/components/{level}/{name}` with the same Atomic Design levels and import rules as web ([COMPONENTS.md](./agents/COMPONENTS.md#react-native-vllntui-native)). `src/primitives` and `src/theme` sit below atoms, and the generated `src/index.ts` is the public barrel. A component's level can differ between platforms because each follows its own imports.
 
