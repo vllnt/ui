@@ -12,7 +12,7 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ### Changed
 
-- README describes the install as `pnpm add @vllnt/ui-core@canary`. Core publishes to the `canary` dist-tag only, together with `@vllnt/ui-native`, and has no stable channel yet.
+- README documents the install command.
 
 ### Fixed
 
