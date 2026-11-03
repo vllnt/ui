@@ -327,7 +327,9 @@ test("native publish step: skips published versions, requires the exact ui-core 
   try {
     const publishes = (result) => result.published.trim().replace(dir, "");
     assert.match(publishes(run({})), /^publish \/pack\.tgz --tag latest --provenance --access public$/);
-    assert.match(publishes(run({ self: "exit 0" })), /^publish /);
+    for (const self of ["exit 0", "echo 0.2.1", "echo 'npm warn x' >&2"]) {
+      assert.deepEqual([run({ self }).status, run({ self }).published], [1, ""], self);
+    }
     assert.deepEqual([run({ self: "echo 0.2.0" }).status, run({ self: "echo 0.2.0" }).published], [0, ""]);
     for (const self of ["echo 'npm error code ETIMEDOUT' >&2; exit 1", "echo 'npm error code E403' >&2; exit 1"]) {
       assert.deepEqual([run({ self }).status, run({ self }).published], [1, ""], self);
@@ -337,8 +339,9 @@ test("native publish step: skips published versions, requires the exact ui-core 
     assert.equal(notPublished.status, 1);
     assert.equal(notPublished.published, "");
     assert.match(notPublished.output, /@vllnt\/ui-core@0\.1\.0 is not on npm; tag ui-core-v0\.1\.0 first/);
-    assert.equal(run({ core: "echo 'npm error code E503' >&2; exit 1" }).status, 1);
-    assert.equal(run({ core: "echo 'npm error code E503' >&2; exit 1" }).published, "");
+    for (const core of ["echo 'npm error code E503' >&2; exit 1", "exit 0", "echo 0.1.1"]) {
+      assert.deepEqual([run({ core }).status, run({ core }).published], [1, ""], core);
+    }
     // The packed manifest must carry the exact core version and no workspace protocol.
     for (const packed of [manifest({ "@vllnt/ui-core": "workspace:*" }), manifest({ "@vllnt/ui-core": "^0.1.0" }), manifest({}), manifest({ "@vllnt/ui-core": "0.1.0", other: "workspace:^" })]) {
       const result = run({ packed });
