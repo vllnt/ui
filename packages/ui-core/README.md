@@ -8,13 +8,13 @@ The package base is **0.1.0**. Core and Native will use the same `0.1.0-canary.<
 
 ## Planned install
 
-After the first stable publication (`0.1.0`):
+Once the first synchronized canary is published:
 
 ```bash
-pnpm add @vllnt/ui-core
+pnpm add @vllnt/ui-core@canary
 ```
 
-Pre-release builds use the `canary` dist-tag. Until a supported release is published, use this package only from the repository workspace.
+Core publishes to the `canary` dist-tag only, together with `@vllnt/ui-native`; no stable channel exists yet. Until a supported release is published, use this package only from the repository workspace.
 
 ## Use
 
