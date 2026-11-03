@@ -1,0 +1,127 @@
+name: Native Release
+
+# Stable (@latest) for @vllnt/ui-core and @vllnt/ui-native: only a pushed
+# ui-core-vX.Y.Z or ui-native-vX.Y.Z tag. Neither pattern matches Web's v*.*.* tags.
+# The quality job verifies the tag (stable semver, equals the package version, commit on
+# main, CHANGELOG entry) before the protected npm-release deployment asks for approval.
+# Npm trusted publishing (OIDC) with provenance; no npm token, and this workflow never
+# creates tags. Publish core first, wait for it on npm, then tag native.
+
+on:
+  push:
+    tags: ["ui-core-v*.*.*", "ui-native-v*.*.*"]
+
+# A release is never cancelled.
+concurrency:
+  group: native-release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Native Release Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      name: ${{ steps.release.outputs.name }}
+      dir: ${{ steps.release.outputs.dir }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history and remote refs: the tagged commit is checked against origin/main.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Verify release tag
+        id: release
+        run: node scripts/release-guard.mjs package-release >> "$GITHUB_OUTPUT"
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: node --test scripts/release-guard.test.mjs
+
+      - run: pnpm ci:native
+
+  release:
+    name: Publish Release
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Protected environment: required reviewer, so every stable publish waits for an
+    # explicit maintainer approval. Its deployment rules must allow the ui-core-v*.*.* and
+    # ui-native-v*.*.* tags.
+    environment: npm-release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        env:
+          PKG: ${{ needs.quality.outputs.name }}
+        run: pnpm --filter "${PKG}..." build
+
+      - name: Publish to npm
+        env:
+          PKG: ${{ needs.quality.outputs.name }}
+          PKG_DIR: ${{ needs.quality.outputs.dir }}
+          VERSION: ${{ needs.quality.outputs.version }}
+        run: |
+          set -euo pipefail
+          sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
+          unset NODE_AUTH_TOKEN
+          # A re-run after a later step failed must not try to republish. An empty answer or
+          # a registry E404 means "not published" (a wrong guess is safe: republishing an
+          # existing version fails with E403); any other npm view failure aborts the step.
+          PUBLISHED=$(bash "$GITHUB_WORKSPACE/scripts/npm-published.sh" "${PKG}@${VERSION}")
+          if [ "$PUBLISHED" = yes ]; then
+            echo "${PKG}@${VERSION} is already published"
+            exit 0
+          fi
+          # Native pins the exact core version (pnpm rewrites workspace:* at pack time).
+          CORE_VERSION=
+          if [ "$PKG" = "@vllnt/ui-native" ]; then
+            CORE_VERSION=$(node -p "require('./packages/ui-core/package.json').version")
+            case "$CORE_VERSION" in *[!0-9.]*) echo "::error::packages/ui-core version ${CORE_VERSION} is not stable"; exit 1 ;; esac
+            if [ "$(bash "$GITHUB_WORKSPACE/scripts/npm-published.sh" "@vllnt/ui-core@${CORE_VERSION}")" != yes ]; then
+              echo "::error::@vllnt/ui-core@${CORE_VERSION} is not on npm; tag ui-core-v${CORE_VERSION} first and wait for it to publish."
+              exit 1
+            fi
+          fi
+          TARBALL=$(pnpm --dir "$PKG_DIR" pack --pack-destination /tmp | tail -1)
+          PACKED=$(tar -xOf "$TARBALL" package/package.json) EXPECT_CORE="$CORE_VERSION" node -e '
+            const manifest = JSON.parse(process.env.PACKED);
+            const bad = [];
+            if (manifest.name !== process.env.PKG) bad.push("name");
+            if (manifest.version !== process.env.VERSION) bad.push("version");
+            if (process.env.EXPECT_CORE && manifest.dependencies?.["@vllnt/ui-core"] !== process.env.EXPECT_CORE) bad.push("@vllnt/ui-core dependency");
+            if (process.env.PACKED.includes("workspace:")) bad.push("workspace protocol");
+            if (bad.length > 0) {
+              console.error("::error::Packed manifest mismatch: " + bad.join(", "));
+              process.exit(1);
+            }
+          '
+          npx --yes npm@11.18.0 publish "$TARBALL" --tag latest --provenance --access public

@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
@@ -29,14 +30,52 @@ export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
   return assertNativeCanary(`${core}-canary.${run}.sha${sha.slice(0, 12)}`);
 }
 
+const PACKAGES = { "ui-core": "@vllnt/ui-core", "ui-native": "@vllnt/ui-native" };
+
+/**
+ * Core and Native publish stable from their own `<dir>-v<X.Y.Z>` tag push, never from a `v*` tag
+ * (those belong to Web). The version must be stable semver and equal that package's version;
+ * the tagged commit must be on main (`onMain`, from git history) and the package CHANGELOG must
+ * have a `## [X.Y.Z]` section. Callers pass `versions` and `changelogs` keyed by package directory.
+ */
+export function packageRelease({ ref, versions, changelogs, onMain }) {
+  const match = /^refs\/tags\/(ui-core|ui-native)-v([^/]+)$/.exec(ref ?? "");
+  if (!match) throw new Error("Package publication requires a ui-core-v<X.Y.Z> or ui-native-v<X.Y.Z> tag");
+  const [, dir, version] = match;
+  if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(version)) throw new Error(`Tag version ${version} is not stable X.Y.Z`);
+  if (versions[dir] !== version) throw new Error(`Tag version ${version} does not match packages/${dir} version ${versions[dir]}`);
+  if (onMain !== true) throw new Error("Tagged commit is not on origin/main");
+  if (!changelogs[dir].split("\n").some((line) => line.startsWith(`## [${version}]`))) {
+    throw new Error(`packages/${dir}/CHANGELOG.md has no ## [${version}] section`);
+  }
+  return { dir, name: PACKAGES[dir], version };
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const version = (name) => JSON.parse(readFileSync(new URL(`../packages/${name}/package.json`, import.meta.url), "utf8")).version;
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+  const version = (name) => JSON.parse(read(`packages/${name}/package.json`)).version;
   try {
     if (process.argv.length !== 3) throw new Error("Expected one release mode; no overrides supported");
-    console.log(releaseVersion({
-      mode: process.argv[2], web: version("ui"), core: version("ui-core"), native: version("ui-native"),
-      ref: process.env.GITHUB_REF, sha: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_NUMBER,
-    }));
+    if (process.argv[2] === "package-release") {
+      const { GITHUB_REF: ref, GITHUB_SHA: sha } = process.env;
+      if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
+      const git = spawnSync("git", ["merge-base", "--is-ancestor", sha, "origin/main"], { cwd: root });
+      const dirs = Object.keys(PACKAGES);
+      const { dir, name, version: tagged } = packageRelease({
+        ref,
+        versions: Object.fromEntries(dirs.map((d) => [d, version(d)])),
+        changelogs: Object.fromEntries(dirs.map((d) => [d, read(`packages/${d}/CHANGELOG.md`)])),
+        onMain: git.status === 0,
+      });
+      // GITHUB_OUTPUT lines for the workflow.
+      console.log(`name=${name}\ndir=packages/${dir}\nversion=${tagged}`);
+    } else {
+      console.log(releaseVersion({
+        mode: process.argv[2], web: version("ui"), core: version("ui-core"), native: version("ui-native"),
+        ref: process.env.GITHUB_REF, sha: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_NUMBER,
+      }));
+    }
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;
