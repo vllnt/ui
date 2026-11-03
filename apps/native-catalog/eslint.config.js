@@ -24,6 +24,10 @@ export default [
   {
     files: ["**/*.test.{ts,tsx}"],
     rules: {
+      // `@types/react-test-renderer` is not installed, so instance queries
+      // return `any`.
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
       "max-lines-per-function": "off",
     },
   },
