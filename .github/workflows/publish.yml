@@ -1,8 +1,16 @@
 name: Publish
 
+# Canary: every push to main touching the package paths below.
+# Stable (@latest): only a pushed vX.Y.Z tag, so the release is always traceable to a
+# tag. The release job checks the tag matches packages/ui/package.json, is on main and
+# has a CHANGELOG.md entry. Both channels use npm trusted publishing (OIDC) with
+# provenance; this workflow holds no npm token and never creates tags itself.
+
 on:
   push:
     branches: [main]
+    tags: ["v*.*.*"]
+    # Not evaluated for tag pushes.
     paths:
       - "packages/ui/**"
       - "scripts/release-guard*"
@@ -10,11 +18,11 @@ on:
       - "cliff.toml"
       - "pnpm-lock.yaml"
       - ".github/workflows/publish.yml"
-  workflow_dispatch: {}
 
+# A newer main push supersedes an in-flight canary; a release is never cancelled.
 concurrency:
-  group: publish-${{ github.event_name }}
-  cancel-in-progress: true
+  group: publish-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 permissions:
   contents: read
@@ -54,7 +62,7 @@ jobs:
   canary:
     name: Publish Canary
     needs: quality
-    if: github.event_name == 'push'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -90,10 +98,10 @@ jobs:
   release:
     name: Publish Release
     needs: quality
-    if: github.event_name == 'workflow_dispatch'
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
-    # Protected environment: main-only deployment branch and a required reviewer,
-    # so every stable publish waits for an explicit maintainer approval.
+    # Protected environment: required reviewer, so every stable publish waits for an
+    # explicit maintainer approval. Its deployment rules must allow v*.*.* tags.
     environment: npm-release
     permissions:
       contents: write
@@ -101,9 +109,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Full history and branches: the tagged commit is checked against origin/main.
           fetch-depth: 0
-          # Credentials stay: the Tag release step pushes the v* tag with git.
-          persist-credentials: true
+          persist-credentials: false
 
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
@@ -113,19 +121,15 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
-      - run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm build
-
-      - name: Read version + guard against retag
+      - name: Verify release tag
         id: version
         working-directory: packages/ui
         run: |
+          # The guard fails closed unless the tag is v<packages/ui version> on a supported base.
           VERSION=$(node ../../scripts/release-guard.mjs stable)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          if git -C "$GITHUB_WORKSPACE" rev-parse "v${VERSION}" >/dev/null 2>&1; then
-            echo "::error::Tag v${VERSION} already exists on this repo. Bump packages/ui/package.json on main via a PR before dispatching."
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag ${GITHUB_REF_NAME} is not on main. Tag a commit that is already on origin/main."
             exit 1
           fi
 
@@ -146,7 +150,7 @@ jobs:
           ' CHANGELOG.md > /tmp/release-notes.md
 
           if [ ! -s /tmp/release-notes.md ]; then
-            echo "::error::CHANGELOG.md must include a ${VERSION} release section before dispatch."
+            echo "::error::CHANGELOG.md must include a ${VERSION} release section before tagging."
             exit 1
           fi
 
@@ -161,29 +165,35 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           if ! grep -Eq "^## \\[?${VERSION}\\]?|^## \\[?v${VERSION}\\]?" CHANGELOG.md packages/ui/CHANGELOG.md; then
-            echo "::error::CHANGELOG.md or packages/ui/CHANGELOG.md must include a ${VERSION} release section before dispatch."
+            echo "::error::CHANGELOG.md or packages/ui/CHANGELOG.md must include a ${VERSION} release section before tagging."
             exit 1
           fi
 
-      - name: Tag release
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v${{ steps.version.outputs.version }}" -m "v${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}"
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
 
       - name: Publish to npm
         working-directory: packages/ui
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
-          TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
-          npx --yes npm@11.18.0 publish "$TARBALL" --tag latest --provenance --access public
+          PKG=$(node -p "require('./package.json').name")
+          # A re-run after a later step failed must not try to republish.
+          if [ -n "$(npx --yes npm@11.18.0 view "${PKG}@${VERSION}" version 2>/dev/null || true)" ]; then
+            echo "${PKG}@${VERSION} is already published"
+          else
+            TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
+            npx --yes npm@11.18.0 publish "$TARBALL" --tag latest --provenance --access public
+          fi
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
         run: |
-          gh release create "v${{ steps.version.outputs.version }}" \
-            --title "v${{ steps.version.outputs.version }}" \
-            --notes-file /tmp/release-notes.md
+          gh release view "$TAG" >/dev/null 2>&1 \
+            || gh release create "$TAG" --verify-tag --title "$TAG" --notes-file /tmp/release-notes.md

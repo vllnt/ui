@@ -7,19 +7,26 @@ import { test } from "node:test";
 import { releaseVersion } from "./release-guard.mjs";
 
 const input = { web: "0.4.0", core: "0.1.0", native: "0.1.0", ref: "refs/heads/main", sha: "a".repeat(40), run: "42" };
+const tag = (web) => `refs/tags/v${web}`;
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("stable rejects newer bases, prereleases and unknown channels", () => {
   for (const web of ["0.5.0", "1.0.0", "0.4.0-canary.1", "0.4.01", "0.2.9"]) {
-    assert.throws(() => releaseVersion({ ...input, web, mode: "stable" }));
+    assert.throws(() => releaseVersion({ ...input, web, mode: "stable", ref: tag(web) }), /Unsupported Web release base/);
   }
   for (const mode of ["latest", "release", "next", ""]) assert.throws(() => releaseVersion({ ...input, mode }));
 });
-test("stable 0.4 release and 0.3 maintenance publish from main only", () => {
+test("stable 0.4 release and 0.3 maintenance publish from their own v tag only", () => {
   for (const web of ["0.4.0", "0.4.1", "0.3.1"]) {
-    assert.equal(releaseVersion({ ...input, web, mode: "stable" }), web);
-    for (const mode of ["stable", "web-canary", "native-canary"]) {
-      assert.throws(() => releaseVersion({ ...input, web, mode, ref: "refs/heads/other" }));
+    assert.equal(releaseVersion({ ...input, web, mode: "stable", ref: tag(web) }), web);
+    const wrongRefs = ["refs/heads/main", "refs/heads/other", "refs/tags/v0.4.9", `refs/tags/${web}`, `refs/tags/v${web}-rc.1`, `refs/tags/v${web}1`, "", undefined];
+    for (const ref of wrongRefs) assert.throws(() => releaseVersion({ ...input, web, mode: "stable", ref }), /requires tag/);
+  }
+});
+test("canaries publish from main only, never from a tag", () => {
+  for (const mode of ["web-canary", "native-canary"]) {
+    for (const ref of ["refs/heads/other", tag("0.4.0"), "", undefined]) {
+      assert.throws(() => releaseVersion({ ...input, mode, ref }), /requires main/);
     }
   }
 });
@@ -41,11 +48,19 @@ test("checked-in bases, availability and stable install pin remain coherent", ()
 test("workflow guards precede mutations and channels stay explicit", () => {
   const web = read(".github/workflows/publish.yml");
   const native = read(".github/workflows/native-canary.yml");
-  assert.ok(web.indexOf("release-guard.mjs stable") < web.indexOf("git tag -a"));
+  assert.ok(web.indexOf("release-guard.mjs stable") < web.indexOf("--tag latest"));
   assert.ok(web.indexOf("release-guard.mjs web-canary") < web.indexOf('npm version "$CANARY_VERSION"'));
   assert.match(web, /publish "\$TARBALL" --tag canary/);
   assert.match(web, /publish "\$TARBALL" --tag latest/);
-  assert.match(web.slice(web.indexOf("  release:")), /environment: npm-release/);
+  const canary = web.slice(web.indexOf("  canary:"), web.indexOf("  release:"));
+  const release = web.slice(web.indexOf("  release:"));
+  assert.match(release, /environment: npm-release/);
+  assert.match(web, /tags: \["v\*\.\*\.\*"\]/);
+  assert.doesNotMatch(web, /workflow_dispatch|git tag|git push/);
+  assert.match(canary, /if: github\.ref == 'refs\/heads\/main'/);
+  assert.match(release, /if: startsWith\(github\.ref, 'refs\/tags\/v'\)/);
+  assert.match(release, /git merge-base --is-ancestor "\$GITHUB_SHA" origin\/main/);
+  assert.match(release, /persist-credentials: false/);
   assert.ok(native.indexOf("release-guard.mjs native-canary") < native.indexOf("npm@11.18.0 whoami"));
   assert.match(native, /--tag "\$STAGING_TAG"/);
   assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary/);
