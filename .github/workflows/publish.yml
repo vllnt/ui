@@ -134,14 +134,13 @@ jobs:
           fi
 
       - name: Read changelog release notes
-        id: changelog
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           awk -v version="$VERSION" '
             /^## / {
               if (capture) exit
-              if ($0 ~ "^## \\[?" version "\\]?") {
+              if (index($0, "## [" version "]") == 1) {
                 capture = 1
                 next
               }
@@ -151,21 +150,6 @@ jobs:
 
           if [ ! -s /tmp/release-notes.md ]; then
             echo "::error::CHANGELOG.md must include a ${VERSION} release section before tagging."
-            exit 1
-          fi
-
-          {
-            echo "body<<CHANGELOG_EOF"
-            cat /tmp/release-notes.md
-            echo "CHANGELOG_EOF"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Confirm changelog entry exists
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          if ! grep -Eq "^## \\[?${VERSION}\\]?|^## \\[?v${VERSION}\\]?" CHANGELOG.md packages/ui/CHANGELOG.md; then
-            echo "::error::CHANGELOG.md or packages/ui/CHANGELOG.md must include a ${VERSION} release section before tagging."
             exit 1
           fi
 
@@ -179,6 +163,7 @@ jobs:
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
+          set -euo pipefail
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
           PKG=$(node -p "require('./package.json').name")

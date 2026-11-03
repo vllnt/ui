@@ -22,6 +22,8 @@ Matching main pushes publish Web prereleases under `canary`, never `latest`. Nat
 
 The stable `release` job runs in the protected `npm-release` environment (required reviewer). A tag push therefore waits until a maintainer approves the deployment in the run page; nothing is published before that approval. The environment's deployment rules must allow `v*.*.*` tags, otherwise the tag run is rejected before any step runs.
 
+The workflow file and guard that run are the ones in the tagged commit, so the ancestor-of-`main` check catches mistakes, not someone who can push tags. Restrict who can create `v*.*.*` tags with a repository tag ruleset, and confirm the tagged commit is on `main` when approving the deployment.
+
 Run `node --test scripts/release-guard.test.mjs` to verify the guard, version derivation and workflow wiring. No publish command is executed by these tests.
 
 ## Stable release (PR-driven, no PAT)
@@ -56,7 +58,7 @@ CI will:
 - Run quality gates (lint / typecheck / build / test).
 - Wait for a maintainer to approve the `npm-release` deployment; nothing below runs before that.
 - Verify the tag. `release-guard.mjs stable` requires it to be exactly `v{x.y.z}` for the `packages/ui/package.json` version on a supported base, and the tagged commit must be an ancestor of `origin/main`.
-- Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes. **Fails** if the section is missing.
+- Read the `CHANGELOG.md` section headed exactly `## [{x.y.z}]` and use it as the GitHub Release notes. **Fails** if the section is missing.
 - `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`, skipped when that version is already on npm. The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
 - Create the GitHub Release for the tag, skipped when it already exists.
 

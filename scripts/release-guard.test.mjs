@@ -48,7 +48,7 @@ test("checked-in bases, availability and stable install pin remain coherent", ()
 test("workflow guards precede mutations and channels stay explicit", () => {
   const web = read(".github/workflows/publish.yml");
   const native = read(".github/workflows/native-canary.yml");
-  assert.ok(web.indexOf("release-guard.mjs stable") < web.indexOf("--tag latest"));
+  assert.match(web, /release-guard\.mjs stable[\s\S]*--tag latest/);
   assert.ok(web.indexOf("release-guard.mjs web-canary") < web.indexOf('npm version "$CANARY_VERSION"'));
   assert.match(web, /publish "\$TARBALL" --tag canary/);
   assert.match(web, /publish "\$TARBALL" --tag latest/);
@@ -61,12 +61,25 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.match(release, /if: startsWith\(github\.ref, 'refs\/tags\/v'\)/);
   assert.match(release, /git merge-base --is-ancestor "\$GITHUB_SHA" origin\/main/);
   assert.match(release, /persist-credentials: false/);
+  assert.match(release, /gh release create "\$TAG" --verify-tag/);
   assert.ok(native.indexOf("release-guard.mjs native-canary") < native.indexOf("npm@11.18.0 whoami"));
   assert.match(native, /--tag "\$STAGING_TAG"/);
   assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary/);
   assert.match(native, /if: \$\{\{ false \}\}/);
   assert.match(native, /dist-tag add "@vllnt\/ui-native@\$\{CANARY_VERSION\}" canary/);
   for (const workflow of [web, native]) assert.match(workflow, /node --test scripts\/release-guard.test.mjs/);
+});
+test("release notes come from the exact CHANGELOG section of the released version", () => {
+  const program = read(".github/workflows/publish.yml").match(/awk -v version="\$VERSION" '([^']+)' CHANGELOG\.md/)?.[1];
+  assert.ok(program, "release notes awk program must exist in publish.yml");
+  const changelog = [
+    "# Changelog", "## [Unreleased]", "- next", "## [0.4.10] - 2026-11-02", "- ten", "## [0.4.1] - 2026-11-01", "- one", "- more",
+    "## [0.4.0-rc.1]", "- rc", "## [0.4.0] - 2026-10-31", "- zero", "## [0.3.0] - 2026-06-26", "- old", "",
+  ].join("\n");
+  const notes = (version) => spawnSync("awk", ["-v", `version=${version}`, program], { input: changelog, encoding: "utf8" }).stdout;
+  assert.equal(notes("0.4.1"), "- one\n- more\n");
+  assert.equal(notes("0.4.0"), "- zero\n");
+  assert.equal(notes("0.4.2"), "");
 });
 test("native publisher distinguishes unpublished versions from registry failures", () => {
   const workflow = read(".github/workflows/native-canary.yml");
