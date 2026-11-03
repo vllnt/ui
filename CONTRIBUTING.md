@@ -79,7 +79,7 @@ Native remains source-only until the manifest reports package availability. Do n
 
 ## Releases
 
-Stable `@vllnt/ui` versions are prepared in a normal version-bump PR. A maintainer then dispatches `.github/workflows/publish.yml` from `main`; the workflow validates the pre-bumped version, publishes with OIDC-signed provenance, tags it, and creates the GitHub release. Web canaries publish automatically after pushes to `main`.
+Stable `@vllnt/ui` versions are prepared in a normal version-bump PR. A maintainer then pushes the matching `vX.Y.Z` tag for the merged commit on `main` (`git fetch origin && git tag -a vX.Y.Z origin/main -m vX.Y.Z && git push origin vX.Y.Z`); `.github/workflows/publish.yml` validates the tag against the pre-bumped version, publishes with OIDC-signed provenance, and creates the GitHub release. Web canaries publish automatically after pushes to `main`.
 
 `@vllnt/ui-core` and `@vllnt/ui-native` are experimental and share the `0.1.0` canary base. `.github/workflows/native-canary.yml` runs quality gates, but publication is unconditionally disabled pending a separate hardening/enabling review. The retained synchronized-pair implementation has no manual dispatch, stable tag, Git tag, or GitHub Release path. Stable promotion and native availability remain subject to separate validation holds. See [docs/RELEASING.md](docs/RELEASING.md).
 

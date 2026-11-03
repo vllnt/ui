@@ -1,6 +1,6 @@
 # Releasing @vllnt/ui
 
-Releases are cut from `main` by a maintainer via GitHub Actions. Canary builds ship automatically.
+Stable releases are published by a maintainer pushing a `vX.Y.Z` tag on `main`; GitHub Actions does the rest. Canary builds ship automatically.
 
 ## Canary (automatic, on every push to `main`)
 
@@ -16,11 +16,11 @@ pnpm add @vllnt/ui@canary
 
 ## Release guard
 
-`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. All publication modes require `refs/heads/main`. Manual stable dispatch accepts Web bases 0.3.x and 0.4.x and rejects prereleases and every newer or unknown base before Git tagging or npm publication; a newer base needs a separately reviewed change to the guard. Core/Native keep the independent 0.1.0 canary base and have no stable mode. There is no input or repository-variable override.
+`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Canary modes require `refs/heads/main`. Stable requires the `refs/tags/v{version}` tag push for the exact `packages/ui` version, so a branch run or a mismatched tag can never publish `latest`. Stable accepts Web bases 0.3.x and 0.4.x and rejects prereleases and every newer or unknown base before npm publication; a newer base needs a separately reviewed change to the guard. Core/Native keep the independent 0.1.0 canary base and have no stable mode. There is no input or repository-variable override.
 
 Matching main pushes publish Web prereleases under `canary`, never `latest`. Native publication is unconditionally disabled in the workflow until a separately reviewed enabling change (see `PR506_CANARY_GAP_REVIEW.md`). The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Native discovery remains source-only/unavailable.
 
-The stable `release` job runs in the protected `npm-release` environment (deployment branch `main` only, required reviewer). A dispatch therefore waits until a maintainer approves the deployment in the run page; nothing is tagged or published before that approval.
+The stable `release` job runs in the protected `npm-release` environment (required reviewer). A tag push therefore waits until a maintainer approves the deployment in the run page; nothing is published before that approval. The environment's deployment rules must allow `v*.*.*` tags, otherwise the tag run is rejected before any step runs.
 
 Run `node --test scripts/release-guard.test.mjs` to verify the guard, version derivation and workflow wiring. No publish command is executed by these tests.
 
@@ -41,19 +41,26 @@ Do **not** touch `PUBLISHED_VERSION` in `apps/registry/scripts/inline-component-
 
 Merge the PR normally. The canary workflow on `main` will immediately publish `@vllnt/ui@{x.y.z}-canary.{sha}` — a dress-rehearsal of the release tarball.
 
-### 2. Dispatch the release
+### 2. Tag the release
 
-Go to **Actions → Publish → Run workflow** on `main` (or run `gh workflow run publish.yml --ref main`). No inputs. Approve the pending `npm-release` deployment on the run page when the quality job has passed.
+Pushing the tag is the release trigger; the workflow never creates tags. Tag the merged version-bump commit on `main`:
+
+```bash
+git fetch origin && git tag -a vX.Y.Z origin/main -m vX.Y.Z && git push origin vX.Y.Z
+```
+
+`origin/main` must still be the commit whose `packages/ui/package.json` carries `X.Y.Z`. Approve the pending `npm-release` deployment on the run page when the quality job has passed.
 
 CI will:
 
 - Run quality gates (lint / typecheck / build / test).
 - Wait for a maintainer to approve the `npm-release` deployment; nothing below runs before that.
-- Read the version from `packages/ui/package.json`. **Fails fast** if a matching `v{x.y.z}` tag already exists — catches dispatches against stale main.
-- Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes.
-- Push an annotated tag `v{x.y.z}` (tags are not blocked by branch protection; `GITHUB_TOKEN` is sufficient).
-- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`. The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
-- Create the GitHub Release for the new tag.
+- Verify the tag. `release-guard.mjs stable` requires it to be exactly `v{x.y.z}` for the `packages/ui/package.json` version on a supported base, and the tagged commit must be an ancestor of `origin/main`.
+- Read the `CHANGELOG.md` section for the package version and use it as the GitHub Release notes. **Fails** if the section is missing.
+- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`, skipped when that version is already on npm. The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
+- Create the GitHub Release for the tag, skipped when it already exists.
+
+After a transient failure, re-run the failed jobs of the tag run; the publish and release steps skip work that is already done. A tag that failed verification published nothing. Confirm that npm has no such version, then fix `main` through a PR and push a new tag (see [Rollback](#rollback) before deleting any tag).
 
 ### 3. Point the registry at the published version (post-publish)
 
