@@ -111,6 +111,35 @@ it("preserves the selected single file when the picker returns no files", async 
   expect(onChange).not.toHaveBeenCalled();
 });
 
+it.each([
+  { allowMultiple: undefined, expected: false, multiple: false },
+  { allowMultiple: undefined, expected: true, multiple: true },
+  { allowMultiple: false, expected: false, multiple: undefined },
+  { allowMultiple: false, expected: false, multiple: true },
+  { allowMultiple: true, expected: true, multiple: false },
+])(
+  "resolves allowMultiple=$allowMultiple and multiple=$multiple to $expected",
+  async ({ allowMultiple, expected, multiple }) => {
+    const second = { name: "Second", uri: "file:///second" };
+    const pickFiles = jest.fn(async () => [file, second]);
+    const onChange = jest.fn();
+    render(
+      <FileUpload
+        allowMultiple={allowMultiple}
+        filePicker={{ pickFiles }}
+        files={{ defaultValue: [], mode: "uncontrolled", onChange }}
+        labels={fileLabels}
+        multiple={multiple}
+      />,
+    );
+    await act(async () => {
+      fireEvent.press(screen.getByRole("button", chooseFiles));
+    });
+    expect(pickFiles).toHaveBeenCalledWith({ allowMultiple: expected });
+    expect(onChange).toHaveBeenCalledWith(expected ? [file, second] : [file]);
+  },
+);
+
 it("allows only one pending picker and exposes busy state", async () => {
   const pending = deferredFiles();
   const pickFiles = jest.fn(() => pending.promise);

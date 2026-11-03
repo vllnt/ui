@@ -4,6 +4,8 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ## [Unreleased]
 
+## [0.1.0] - Unreleased
+
 ### Added
 
 - Experimental source-only React Native renderer with 171 component modules spanning foundation, forms, data, content, AI, learning, motion, utilities, controls, overlays, and navigation.
@@ -19,6 +21,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `disabled` on `Textarea`, `DateField`, `TimeField`, and `InputOTP` (their runtime already followed `Input`; `InputOTP` now locks the field), and on `Collapsible`, which disables its trigger.
   - `onComplete` on `InputOTP`, called with the code when the value changes from incomplete to complete (including a controlled value that becomes complete). `disabled` now also reports the disabled accessibility state even when the caller passes `accessibilityState={{ disabled: false }}`.
   - Web names for props that native already had under another name; the native name wins when both are passed and stays supported: `orientation` on `ResizablePanelGroup` (`direction`), `onFlipChange` on `Flashcard` (`onFlippedChange`), and `expanded`, `defaultExpanded`, `onExpandedChange`, `selected`, `defaultSelected`, `onSelect` on `TreeView` (`expandedIds`, `defaultExpandedIds`, `onExpandedIdsChange`, `selectedIds`, `defaultSelectedIds`, `onSelectedIdsChange`).
+  - `multiple` on `FileUpload`, the web name for `allowMultiple`; `allowMultiple` wins when both are passed and stays supported. The default stays multi-select.
 
 ### Changed
 
@@ -30,7 +33,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - Screen-reader announcements made by the components are now asynchronous: messages are queued and spoken once per tick (one microtask later). Tests that assert `AccessibilityInfo.announceForAccessibility` calls must flush pending promises first (for example `await act(async () => {})`).
 - `Toast` expiry takes ten times longer while a screen reader runs; `Marquee` stops while a screen reader runs and accepts `paused`.
 - The `react` peer range is now `>=19.1.0 <20` and `minimumReact` in `registry.json` is `19.1.0`. Every `react-native` release in the `>=0.81.0 <1` peer range already requires React 19.1 or newer, so React 19.0 could never satisfy both peers. The `react-native` range is unchanged.
-- README and docs describe the install as `pnpm add @vllnt/ui-native@canary` (canary dist-tag only, no stable channel yet, install not yet available) and list Android/iOS Metro export as a CI check rather than a remaining gate.
+- README and docs document the install command and the supported React and React Native ranges, and list Android/iOS Metro export as a CI check rather than a remaining gate.
 - The accessibility fixtures in `src/tests` no longer import Testing Library, so the private Expo catalog can render one example of every component in its All components view. Test-only change: nothing in the published package changes.
 
 ### Fixed
@@ -48,6 +51,3 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - `Typewriter` and `ScrambleText` step, time, and sample scramble characters by Unicode code point, so emoji and other surrogate pairs are never split.
 - `AnimatedText` no longer constructs `Intl.Segmenter` at module load, so importing it on engines without `Intl.Segmenter` (Hermes) no longer throws; it splits by grapheme when available and by code point otherwise.
 
-### Availability
-
-- No supported npm version is published. A manually bootstrapped pre-release (`0.1.0-canary.20260917105553.sha7466647a4ba5`) reserves the package names for `@vllnt/ui-core` and `@vllnt/ui-native`; it has no build provenance and npm's `latest` tag points at it. The renderer remains `availability: "source"` with `installation.available: false` until synchronized canary publication and device/accessibility gates pass.

@@ -46,6 +46,8 @@ export type FileUploadProps = Omit<ViewProps, "children"> & {
   readonly files: ControllableStateOptions<readonly PickedFile[]>;
   readonly labels: FileUploadLabels;
   readonly mimeTypes?: readonly string[];
+  /** Web name for `allowMultiple`; `allowMultiple` takes precedence. */
+  readonly multiple?: boolean;
   readonly ref?: Ref<View>;
 };
 
@@ -82,16 +84,18 @@ function uniqueFiles(files: readonly PickedFile[]): readonly PickedFile[] {
  * screen-reader focus to the choose action.
  */
 function FileUpload({
-  allowMultiple = true,
+  allowMultiple: allowMultipleOption,
   disabled: ownDisabled = false,
   filePicker,
   files: fileState,
   labels,
   mimeTypes,
+  multiple,
   ref,
   style,
   ...props
 }: FileUploadProps) {
+  const allowMultiple = allowMultipleOption ?? multiple ?? true;
   const disabled = useGroupDisabled(ownDisabled);
   const theme = useTheme();
   const [files, setFiles] = useControllableState(fileState);

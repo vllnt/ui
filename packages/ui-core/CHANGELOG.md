@@ -4,13 +4,15 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ## [Unreleased]
 
+## [0.1.0] - Unreleased
+
 ### Added
 
 - Initial platform-neutral token, theme, platform metadata, and portable component contracts.
 
 ### Changed
 
-- README describes the install as `pnpm add @vllnt/ui-core@canary`. Core publishes to the `canary` dist-tag only, together with `@vllnt/ui-native`, and has no stable channel yet.
+- README documents the install command.
 
 ### Fixed
 
