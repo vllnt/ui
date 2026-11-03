@@ -82,7 +82,7 @@ test("release notes come from the exact CHANGELOG section of the released versio
   assert.equal(notes("0.4.0"), "- zero\n");
   assert.equal(notes("0.4.2"), "");
 });
-test("stable publish step: an empty answer or E404 means unpublished, any other lookup error aborts", () => {
+test("stable publish step: an exact version skips, E404 publishes, any other lookup answer aborts", () => {
   const web = read(".github/workflows/publish.yml");
   const step = web.match(/- name: Publish to npm\n[\s\S]*?\n {8}run: \|\n([\s\S]*?)\n\n {6}- name:/)?.[1];
   assert.ok(step, "Publish to npm step must exist in publish.yml");
@@ -108,7 +108,9 @@ test("stable publish step: an empty answer or E404 means unpublished, any other 
   try {
     const cases = [
       ["echo 0.4.0", 0, false],
-      ["exit 0", 0, true],
+      ["exit 0", 1, false],
+      ["echo 0.4.1", 1, false],
+      ["echo 'npm warn deprecated x' >&2", 1, false],
       ["echo 'npm error code E404' >&2; exit 1", 0, true],
       ["echo 'npm error code ETIMEDOUT' >&2; exit 1", 1, false],
       ["echo 'npm error code E503' >&2; exit 1", 1, false],
@@ -120,6 +122,38 @@ test("stable publish step: an empty answer or E404 means unpublished, any other 
       assert.equal(result.published !== "", publishes, view);
       if (publishes) assert.match(result.published, /publish \/tmp\/vllnt-ui-0\.4\.0\.tgz --tag latest --provenance --access public/);
     }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test("npm-published.sh: yes only for the exact version, no only for E404, everything else fails", () => {
+  const dir = mkdtempSync(join(tmpdir(), "npm-published-"));
+  const script = fileURLToPath(new URL("npm-published.sh", import.meta.url));
+  const run = (view, spec = "@vllnt/ui@0.4.0") => {
+    writeFileSync(join(dir, "npm"), `#!/usr/bin/env bash\n${view}\n`, { mode: 0o755 });
+    return spawnSync("bash", [script, spec], { encoding: "utf8", env: { ...process.env, PATH: `${dir}:${process.env.PATH}` } });
+  };
+  const cases = [
+    ["echo 0.4.0", 0, "yes"],
+    ["echo 0.4.0; echo 'npm warn config x' >&2", 0, "yes"],
+    ["echo 0.4.1", 1, ""],
+    ["printf '0.4.0\\n0.4.1\\n'", 1, ""],
+    ["exit 0", 1, ""],
+    ["echo 'npm warn deprecated @vllnt/ui@0.4.0: x' >&2", 1, ""],
+    ["echo 'npm error code E404' >&2; exit 1", 0, "no"],
+    ["echo 'npm error code E500' >&2; exit 1", 1, ""],
+    ["echo 'npm error code ETIMEDOUT' >&2; exit 1", 1, ""],
+    ["exit 1", 1, ""],
+  ];
+  try {
+    for (const [view, status, stdout] of cases) {
+      const result = run(view);
+      assert.equal(result.status, status, view);
+      assert.equal(result.stdout.trim(), stdout, view);
+    }
+    assert.equal(run("echo 0.4.0", "@vllnt/ui").status, 2);
+    assert.equal(run("echo 0.4.0", "").status, 2);
+    assert.match(run("echo 0.4.1").stderr, /expected '0\.4\.0'/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
