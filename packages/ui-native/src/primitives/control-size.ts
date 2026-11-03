@@ -13,7 +13,10 @@ export function controlSizeStyle(
   size: ControlSize,
 ): ViewStyle {
   if (size === "lg") {
-    return { minHeight: 48, paddingHorizontal: theme.spacing[4] };
+    return {
+      minHeight: Math.max(44, theme.spacing[12]),
+      paddingHorizontal: theme.spacing[4],
+    };
   }
   if (size === "sm") {
     return { minHeight: 44, paddingHorizontal: theme.spacing[2] };

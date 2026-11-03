@@ -75,10 +75,10 @@ export type ToggleGroupProps =
 export type ToggleGroupItemProps = Omit<PressableProps, "children"> & {
   readonly children: ReactNode;
   readonly ref?: Ref<View>;
-  /** Overrides the group size for this item. */
+  /** Used when the group sets no size; the group size takes precedence, as on web. */
   readonly size?: ToggleGroupSize;
   readonly value: SelectionKey;
-  /** Overrides the group variant for this item. */
+  /** Used when the group sets no variant; the group variant takes precedence, as on web. */
   readonly variant?: ToggleGroupVariant;
 };
 
@@ -86,9 +86,9 @@ type ToggleGroupContextValue = {
   readonly disabled: boolean;
   readonly groupLabel?: string;
   readonly selectedKeys: ReadonlySet<SelectionKey>;
-  readonly size: ToggleGroupSize;
+  readonly size?: ToggleGroupSize;
   readonly toggle: (key: SelectionKey) => void;
-  readonly variant: ToggleGroupVariant;
+  readonly variant?: ToggleGroupVariant;
 };
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(
@@ -150,11 +150,11 @@ function ToggleGroup(props: ToggleGroupProps) {
     onValueChange: _onValueChange,
     orientation = "horizontal",
     ref,
-    size = "default",
+    size,
     style,
     type: _type,
     value: _value,
-    variant = "default",
+    variant,
     ...viewProps
   } = props;
   const disabled = useGroupDisabled(ownDisabled);
@@ -252,7 +252,7 @@ function ToggleGroupItem({
   const theme = useTheme();
   const selected = isMultipleSelected(context.selectedKeys, value, identity);
   const isDisabled = Boolean(context.disabled || disabled);
-  const outlined = (variant ?? context.variant) === "outline";
+  const outlined = (context.variant ?? variant) === "outline";
   const content =
     typeof children === "number" || typeof children === "string" ? (
       <NativeText
@@ -291,7 +291,7 @@ function ToggleGroupItem({
           borderRadius: theme.radius.md,
           borderWidth: outlined ? 1 : 0,
           opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
-          ...controlSizeStyle(theme, size ?? context.size),
+          ...controlSizeStyle(theme, context.size ?? size ?? "default"),
         },
         typeof style === "function" ? style(state) : style,
       ]}

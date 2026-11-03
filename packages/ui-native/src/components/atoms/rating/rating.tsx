@@ -45,7 +45,8 @@ export type RatingProps = Omit<ViewProps, "children"> & {
 };
 
 const MAX_OPTIONS = 100;
-const GLYPH_SIZE: Record<RatingSize, number> = { lg: 24, md: 20, sm: 16 };
+/** Theme type-scale entries whose font size each rating size uses. */
+const GLYPH_SCALE = { lg: "h4", md: "h5", sm: "body" } as const;
 const styles = StyleSheet.create({
   option: {
     alignItems: "center",
@@ -108,7 +109,7 @@ function RatingOption({
             choice <= activeValue
               ? theme.colors.primary
               : theme.colors.mutedForeground,
-          fontSize: GLYPH_SIZE[size],
+          fontSize: theme.typography.scale[GLYPH_SCALE[size]].fontSize,
         }}
       >
         {choice <= activeValue ? "★" : "☆"}

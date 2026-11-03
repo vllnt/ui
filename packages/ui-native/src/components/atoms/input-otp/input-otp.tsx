@@ -1,6 +1,7 @@
 "use client";
 
-import type { Ref } from "react";
+import { type Ref, useEffect, useRef } from "react";
+
 import {
   StyleSheet,
   Text as NativeText,
@@ -76,6 +77,12 @@ function InputOTP({
   const length = codeLength(lengthProperty);
   const locked = useGroupDisabled(disabled || props.editable === false);
   const [value, setValue] = useControllableState(valueState);
+  const complete = value.length === length;
+  const wasComplete = useRef(complete);
+  useEffect(() => {
+    if (complete && !wasComplete.current) onComplete?.(value);
+    wasComplete.current = complete;
+  }, [complete, onComplete, value]);
   const error = invalid ? errorText : undefined;
   useAnnounceOnChange(error, { liveRegion: true });
   return (
@@ -88,16 +95,12 @@ function InputOTP({
           accessibilityHint,
         ])}
         accessibilityLabel={accessibilityLabel}
-        accessibilityState={{ disabled: locked, ...props.accessibilityState }}
+        accessibilityState={{ ...props.accessibilityState, disabled: locked }}
         editable={!locked}
         inputMode="numeric"
         maxLength={length}
         onChangeText={(nextValue) => {
-          const code = normalizeCode(nextValue, length);
-          setValue(code);
-          if (code.length === length && value.length !== length) {
-            onComplete?.(code);
-          }
+          setValue(normalizeCode(nextValue, length));
         }}
         ref={ref}
         style={[
