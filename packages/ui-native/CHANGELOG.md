@@ -24,6 +24,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - `Toast` expiry takes ten times longer while a screen reader runs; `Marquee` stops while a screen reader runs and accepts `paused`.
 - The `react` peer range is now `>=19.1.0 <20` and `minimumReact` in `registry.json` is `19.1.0`. Every `react-native` release in the `>=0.81.0 <1` peer range already requires React 19.1 or newer, so React 19.0 could never satisfy both peers. The `react-native` range is unchanged.
 - README and docs describe the install as `pnpm add @vllnt/ui-native@canary` (canary dist-tag only, no stable channel yet, install not yet available) and list Android/iOS Metro export as a CI check rather than a remaining gate.
+- The accessibility fixtures in `src/tests` no longer import Testing Library, so the private Expo catalog can render one example of every component in its All components view. Test-only change: nothing in the published package changes.
 
 ### Fixed
 
