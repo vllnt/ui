@@ -9,12 +9,17 @@
 set -euo pipefail
 
 SPEC=${1:-}
-# Scoped names start with "@", so the version separator is the last "@" after the first character.
-case "${SPEC#?}" in
-  *@?*) ;;
-  *) echo "Usage: npm-published.sh <package>@<exact version>" >&2; exit 2 ;;
-esac
+# Split on the last "@" (scoped names start with one). The name and an exact semver
+# version (prerelease and build allowed) are both required; dist-tags, ranges and
+# partial versions are rejected before npm is called.
+NAME=${SPEC%@*}
 WANT=${SPEC##*@}
+NAME_RE='^(@[^@/]+/)?[^@/]+$'
+VERSION_RE='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+if [[ "$SPEC" != *@* || ! "$NAME" =~ $NAME_RE || ! "$WANT" =~ $VERSION_RE ]]; then
+  echo "Usage: npm-published.sh <package>@<exact version>" >&2
+  exit 2
+fi
 
 ERR=$(mktemp)
 trap 'rm -f "$ERR"' EXIT

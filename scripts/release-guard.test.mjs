@@ -151,8 +151,22 @@ test("npm-published.sh: yes only for the exact version, no only for E404, everyt
       assert.equal(result.status, status, view);
       assert.equal(result.stdout.trim(), stdout, view);
     }
-    assert.equal(run("echo 0.4.0", "@vllnt/ui").status, 2);
-    assert.equal(run("echo 0.4.0", "").status, 2);
+    // Only an exact version reaches npm; everything else exits 2 without calling it.
+    const calls = join(dir, "calls");
+    const called = (spec) => {
+      rmSync(calls, { force: true });
+      const result = run(`echo called >> "${calls}"; echo 0.4.0`, spec);
+      let made = false;
+      try { readFileSync(calls); made = true; } catch {}
+      return { status: result.status, made };
+    };
+    for (const spec of ["@vllnt/ui@latest", "@vllnt/ui@^0.4.0", "@vllnt/ui@~0.4.0", "@vllnt/ui@0.4", "@vllnt/ui@0.4.x", "@vllnt/ui@>=0.4.0", "@vllnt/ui@", "@vllnt/ui", "@vllnt/ui@0.4.0@1.0.0", "@vllnt/ui@v0.4.0", "@vllnt/ui@0.4.0 ", "@0.4.0", "ui@@0.4.0", "@vllnt/@0.4.0", "", "ui"]) {
+      assert.deepEqual(called(spec), { status: 2, made: false }, JSON.stringify(spec));
+    }
+    for (const spec of ["@vllnt/ui@0.4.0", "ui@0.4.0", "@vllnt/ui-core@0.1.0-canary.1.sha0123456789ab", "@vllnt/ui@1.0.0-rc.1+build.5"]) {
+      const result = called(spec);
+      assert.ok(result.made && result.status !== 2, spec);
+    }
     assert.match(run("echo 0.4.1").stderr, /expected '0\.4\.0'/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
