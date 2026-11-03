@@ -4,6 +4,8 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ## [Unreleased]
 
+## [0.1.0] - Unreleased
+
 ### Added
 
 - Experimental source-only React Native renderer with 171 component modules spanning foundation, forms, data, content, AI, learning, motion, utilities, controls, overlays, and navigation.
@@ -19,6 +21,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `disabled` on `Textarea`, `DateField`, `TimeField`, and `InputOTP` (their runtime already followed `Input`; `InputOTP` now locks the field), and on `Collapsible`, which disables its trigger.
   - `onComplete` on `InputOTP`, called with the code when the value changes from incomplete to complete (including a controlled value that becomes complete). `disabled` now also reports the disabled accessibility state even when the caller passes `accessibilityState={{ disabled: false }}`.
   - Web names for props that native already had under another name; the native name wins when both are passed and stays supported: `orientation` on `ResizablePanelGroup` (`direction`), `onFlipChange` on `Flashcard` (`onFlippedChange`), and `expanded`, `defaultExpanded`, `onExpandedChange`, `selected`, `defaultSelected`, `onSelect` on `TreeView` (`expandedIds`, `defaultExpandedIds`, `onExpandedIdsChange`, `selectedIds`, `defaultSelectedIds`, `onSelectedIdsChange`).
+  - `multiple` on `FileUpload`, the web name for `allowMultiple`; `allowMultiple` wins when both are passed and stays supported. The default stays multi-select (web defaults to single).
 
 ### Changed
 
