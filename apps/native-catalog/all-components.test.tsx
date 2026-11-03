@@ -60,13 +60,26 @@ function namesWithShowButton() {
   );
 }
 
-/** What one modal fixture shows now: an open modal and its own text. */
+/**
+ * What one modal fixture holds now. `mounted` is true while any `Modal`
+ * instance exists, even a closed one, and `text` also counts hidden elements,
+ * so an unmounted fixture leaves nothing behind.
+ */
 function modalState(name: string) {
+  const entry = entryQueries(name);
   return {
     modal: hasOpenModal(name),
+    mounted: entry.UNSAFE_queryAllByType(Modal).length > 0,
     name,
-    text: entryQueries(name).queryByText(modalFixtureText[name] ?? "") !== null,
+    text:
+      entry.queryByText(modalFixtureText[name] ?? "", {
+        includeHiddenElements: true,
+      }) !== null,
   };
+}
+
+function unmounted(name: string) {
+  return { modal: false, mounted: false, name, text: false };
 }
 
 function openAllComponents() {
@@ -108,17 +121,22 @@ describe("native catalog all components", () => {
         nativeComponentNames.filter((name) => name in modalFixtureText),
       );
       modalFixtureNames.forEach((name) => {
-        expect(modalState(name)).toEqual({ modal: false, name, text: false });
+        expect(modalState(name)).toEqual(unmounted(name));
 
         fireEvent.press(
           entryQueries(name).getByRole("button", { name: `Show ${name}` }),
         );
-        expect(modalState(name)).toEqual({ modal: true, name, text: true });
+        expect(modalState(name)).toEqual({
+          modal: true,
+          mounted: true,
+          name,
+          text: true,
+        });
 
         fireEvent.press(
           entryQueries(name).getByRole("button", { name: `Hide ${name}` }),
         );
-        expect(modalState(name)).toEqual({ modal: false, name, text: false });
+        expect(modalState(name)).toEqual(unmounted(name));
       });
     },
     RENDER_TIMEOUT,
