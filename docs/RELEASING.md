@@ -59,7 +59,7 @@ CI will:
 - Wait for a maintainer to approve the `npm-release` deployment; nothing below runs before that.
 - Verify the tag. `release-guard.mjs stable` requires it to be exactly `v{x.y.z}` for the `packages/ui/package.json` version on a supported base, and the tagged commit must be an ancestor of `origin/main`.
 - Read the `CHANGELOG.md` section headed exactly `## [{x.y.z}]` and use it as the GitHub Release notes. **Fails** if the section is missing.
-- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`, skipped when that version is already on npm. The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
+- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`, skipped when that version is already on npm (`scripts/npm-published.sh`: only a registry not-found counts as unpublished, any other lookup error fails the run instead of risking a duplicate publish). The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
 - Create the GitHub Release for the tag, skipped when it already exists.
 
 After a transient failure, re-run the failed jobs of the tag run; the publish and release steps skip work that is already done. A tag that failed verification published nothing. Confirm that npm has no such version, then fix `main` through a PR and push a new tag (see [Rollback](#rollback) before deleting any tag).

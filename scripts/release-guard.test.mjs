@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 import { releaseVersion } from "./release-guard.mjs";
 
@@ -80,6 +81,48 @@ test("release notes come from the exact CHANGELOG section of the released versio
   assert.equal(notes("0.4.1"), "- one\n- more\n");
   assert.equal(notes("0.4.0"), "- zero\n");
   assert.equal(notes("0.4.2"), "");
+});
+test("stable publish step treats only a registry E404 as unpublished", () => {
+  const web = read(".github/workflows/publish.yml");
+  const step = web.match(/- name: Publish to npm\n[\s\S]*?\n {8}run: \|\n([\s\S]*?)\n\n {6}- name:/)?.[1];
+  assert.ok(step, "Publish to npm step must exist in publish.yml");
+  const script = step.replace(/^ {10}/gm, "");
+  const dir = mkdtempSync(join(tmpdir(), "publish-step-"));
+  const bin = (name, body) => writeFileSync(join(dir, name), `#!/usr/bin/env bash\n${body}\n`, { mode: 0o755 });
+  bin("pnpm", "echo /tmp/vllnt-ui-0.4.0.tgz");
+  bin("npx", 'shift 2; exec npm "$@"');
+  writeFileSync(join(dir, "package.json"), JSON.stringify({ name: "@vllnt/ui", version: "0.4.0" }));
+  writeFileSync(join(dir, "npmrc"), "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n");
+  const run = (view) => {
+    bin("npm", `if [ "$1" = view ]; then ${view}; fi\nif [ "$1" = publish ]; then echo "$@" >> "${dir}/published"; fi`);
+    rmSync(join(dir, "published"), { force: true });
+    const result = spawnSync("bash", ["-e", "-c", script], {
+      cwd: dir,
+      encoding: "utf8",
+      env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, VERSION: "0.4.0", NPM_CONFIG_USERCONFIG: join(dir, "npmrc"), GITHUB_WORKSPACE: fileURLToPath(new URL("..", import.meta.url)) },
+    });
+    let published = "";
+    try { published = readFileSync(join(dir, "published"), "utf8"); } catch {}
+    return { status: result.status, published };
+  };
+  try {
+    const cases = [
+      ["echo 0.4.0", 0, false],
+      ["exit 0", 0, true],
+      ["echo 'npm error code E404' >&2; exit 1", 0, true],
+      ["echo 'npm error code ETIMEDOUT' >&2; exit 1", 1, false],
+      ["echo 'npm error code E503' >&2; exit 1", 1, false],
+      ["echo 'npm error code E403' >&2; exit 1", 1, false],
+    ];
+    for (const [view, status, publishes] of cases) {
+      const result = run(view);
+      assert.equal(result.status, status, view);
+      assert.equal(result.published !== "", publishes, view);
+      if (publishes) assert.match(result.published, /publish \/tmp\/vllnt-ui-0\.4\.0\.tgz --tag latest --provenance --access public/);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 test("native publisher distinguishes unpublished versions from registry failures", () => {
   const workflow = read(".github/workflows/native-canary.yml");
