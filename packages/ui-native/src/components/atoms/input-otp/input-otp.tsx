@@ -29,9 +29,13 @@ export type InputOTPProps = Omit<
   TextInputProps,
   "defaultValue" | "maxLength" | "onChangeText" | "value"
 > & {
+  /** Locks the input like `editable={false}`, matching the web prop. */
+  readonly disabled?: boolean;
   readonly errorText?: string;
   readonly invalid?: boolean;
   readonly length: number;
+  /** Called with the code when the last digit is entered. */
+  readonly onComplete?: (value: string) => void;
   readonly ref?: Ref<TextInput>;
   readonly rootProps?: ViewProps;
   readonly valueState: ControllableStateOptions<string>;
@@ -57,9 +61,11 @@ function normalizeCode(value: string, length: number): string {
 function InputOTP({
   accessibilityHint,
   accessibilityLabel = "One-time code",
+  disabled = false,
   errorText,
   invalid = false,
   length: lengthProperty,
+  onComplete,
   ref,
   rootProps,
   style,
@@ -68,7 +74,7 @@ function InputOTP({
 }: InputOTPProps) {
   const theme = useTheme();
   const length = codeLength(lengthProperty);
-  const locked = useGroupDisabled(props.editable === false);
+  const locked = useGroupDisabled(disabled || props.editable === false);
   const [value, setValue] = useControllableState(valueState);
   const error = invalid ? errorText : undefined;
   useAnnounceOnChange(error, { liveRegion: true });
@@ -87,7 +93,11 @@ function InputOTP({
         inputMode="numeric"
         maxLength={length}
         onChangeText={(nextValue) => {
-          setValue(normalizeCode(nextValue, length));
+          const code = normalizeCode(nextValue, length);
+          setValue(code);
+          if (code.length === length && value.length !== length) {
+            onComplete?.(code);
+          }
         }}
         ref={ref}
         style={[

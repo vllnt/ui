@@ -21,6 +21,10 @@ import {
 
 import { useGroupDisabled } from "../../../primitives/control-group";
 import {
+  type ControlSize,
+  controlSizeStyle,
+} from "../../../primitives/control-size";
+import {
   isMultipleSelected,
   type SelectionKey,
   selectSingle,
@@ -30,6 +34,12 @@ import { typeStyle } from "../../../primitives/type-style";
 import { useControllableState } from "../../../primitives/use-controllable-state";
 import { useTheme } from "../../../theme/theme-provider";
 
+/** Visual treatment shared by the items of a native toggle group. */
+export type ToggleGroupVariant = "default" | "outline";
+
+/** Size scale shared by the items of a native toggle group. */
+export type ToggleGroupSize = ControlSize;
+
 /** Layout axis for a native toggle group. */
 export type ToggleGroupOrientation = "horizontal" | "vertical";
 
@@ -38,6 +48,8 @@ type ToggleGroupBaseProps = Omit<ViewProps, "children"> & {
   readonly disabled?: boolean;
   readonly orientation?: ToggleGroupOrientation;
   readonly ref?: Ref<View>;
+  readonly size?: ToggleGroupSize;
+  readonly variant?: ToggleGroupVariant;
 };
 
 type ToggleGroupSingleProps = ToggleGroupBaseProps & {
@@ -63,14 +75,20 @@ export type ToggleGroupProps =
 export type ToggleGroupItemProps = Omit<PressableProps, "children"> & {
   readonly children: ReactNode;
   readonly ref?: Ref<View>;
+  /** Overrides the group size for this item. */
+  readonly size?: ToggleGroupSize;
   readonly value: SelectionKey;
+  /** Overrides the group variant for this item. */
+  readonly variant?: ToggleGroupVariant;
 };
 
 type ToggleGroupContextValue = {
   readonly disabled: boolean;
   readonly groupLabel?: string;
   readonly selectedKeys: ReadonlySet<SelectionKey>;
+  readonly size: ToggleGroupSize;
   readonly toggle: (key: SelectionKey) => void;
+  readonly variant: ToggleGroupVariant;
 };
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue | undefined>(
@@ -132,9 +150,11 @@ function ToggleGroup(props: ToggleGroupProps) {
     onValueChange: _onValueChange,
     orientation = "horizontal",
     ref,
+    size = "default",
     style,
     type: _type,
     value: _value,
+    variant = "default",
     ...viewProps
   } = props;
   const disabled = useGroupDisabled(ownDisabled);
@@ -167,6 +187,7 @@ function ToggleGroup(props: ToggleGroupProps) {
       disabled: disabled ?? undefined,
       groupLabel: accessibilityLabel,
       selectedKeys,
+      size,
       toggle(key) {
         const currentKeys = controlled ? selectedKeys : latestKeysRef.current;
         const nextKeys: ReadonlySet<SelectionKey> =
@@ -178,6 +199,7 @@ function ToggleGroup(props: ToggleGroupProps) {
         if (!controlled) latestKeysRef.current = nextKeys;
         setSelectedKeys(nextKeys);
       },
+      variant,
     }),
     [
       accessibilityLabel,
@@ -186,6 +208,8 @@ function ToggleGroup(props: ToggleGroupProps) {
       props.type,
       selectedKeys,
       setSelectedKeys,
+      size,
+      variant,
     ],
   );
   const theme = useTheme();
@@ -215,8 +239,10 @@ function ToggleGroupItem({
   disabled = false,
   onPress,
   ref,
+  size,
   style,
   value,
+  variant,
   ...props
 }: ToggleGroupItemProps) {
   const context = use(ToggleGroupContext);
@@ -226,6 +252,7 @@ function ToggleGroupItem({
   const theme = useTheme();
   const selected = isMultipleSelected(context.selectedKeys, value, identity);
   const isDisabled = Boolean(context.disabled || disabled);
+  const outlined = (variant ?? context.variant) === "outline";
   const content =
     typeof children === "number" || typeof children === "string" ? (
       <NativeText
@@ -260,9 +287,11 @@ function ToggleGroupItem({
         styles.item,
         {
           backgroundColor: selected ? theme.colors.accent : "transparent",
+          borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
+          borderWidth: outlined ? 1 : 0,
           opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
-          paddingHorizontal: theme.spacing[3],
+          ...controlSizeStyle(theme, size ?? context.size),
         },
         typeof style === "function" ? style(state) : style,
       ]}

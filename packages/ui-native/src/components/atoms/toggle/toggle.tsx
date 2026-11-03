@@ -10,6 +10,10 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import {
+  type ControlSize,
+  controlSizeStyle,
+} from "../../../primitives/control-size";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -20,6 +24,9 @@ import { useTheme } from "../../../theme/theme-provider";
 /** Native visual treatments for a toggle action. */
 export type ToggleVariant = "default" | "outline";
 
+/** Native size scale of a toggle; targets stay at least 44 points. */
+export type ToggleSize = ControlSize;
+
 /** Props for a controlled or uncontrolled native toggle button. */
 export type ToggleProps = Omit<PressableProps, "children"> & {
   readonly children: ReactNode;
@@ -27,6 +34,7 @@ export type ToggleProps = Omit<PressableProps, "children"> & {
   readonly onPressedChange?: (pressed: boolean) => void;
   readonly pressed?: boolean;
   readonly ref?: Ref<View>;
+  readonly size?: ToggleSize;
   readonly variant?: ToggleVariant;
 };
 
@@ -51,6 +59,7 @@ function Toggle({
   onPressedChange,
   pressed,
   ref,
+  size = "default",
   style,
   variant = "default",
   ...props
@@ -96,7 +105,7 @@ function Toggle({
           borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
           borderWidth: variant === "outline" ? 1 : 0,
-          paddingHorizontal: theme.spacing[3],
+          ...controlSizeStyle(theme, size),
           paddingVertical: theme.spacing[2],
         },
         state.pressed ? styles.pressed : undefined,
