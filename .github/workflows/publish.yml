@@ -167,8 +167,9 @@ jobs:
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
           unset NODE_AUTH_TOKEN
           PKG=$(node -p "require('./package.json').name")
-          # A re-run after a later step failed must not try to republish. Only a registry
-          # E404 means "not published"; any other npm view failure aborts the step here.
+          # A re-run after a later step failed must not try to republish. An empty answer or
+          # a registry E404 means "not published" (a wrong guess is safe: republishing an
+          # existing version fails with E403); any other npm view failure aborts the step.
           PUBLISHED=$(bash "$GITHUB_WORKSPACE/scripts/npm-published.sh" "${PKG}@${VERSION}")
           if [ "$PUBLISHED" = yes ]; then
             echo "${PKG}@${VERSION} is already published"

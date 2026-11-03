@@ -82,7 +82,7 @@ test("release notes come from the exact CHANGELOG section of the released versio
   assert.equal(notes("0.4.0"), "- zero\n");
   assert.equal(notes("0.4.2"), "");
 });
-test("stable publish step treats only a registry E404 as unpublished", () => {
+test("stable publish step: an empty answer or E404 means unpublished, any other lookup error aborts", () => {
   const web = read(".github/workflows/publish.yml");
   const step = web.match(/- name: Publish to npm\n[\s\S]*?\n {8}run: \|\n([\s\S]*?)\n\n {6}- name:/)?.[1];
   assert.ok(step, "Publish to npm step must exist in publish.yml");
