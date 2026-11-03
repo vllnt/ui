@@ -1,6 +1,7 @@
 "use client";
 
-import type { Ref } from "react";
+import { type Ref, useEffect, useRef } from "react";
+
 import {
   StyleSheet,
   Text as NativeText,
@@ -29,9 +30,13 @@ export type InputOTPProps = Omit<
   TextInputProps,
   "defaultValue" | "maxLength" | "onChangeText" | "value"
 > & {
+  /** Locks the input like `editable={false}`, matching the web prop. */
+  readonly disabled?: boolean;
   readonly errorText?: string;
   readonly invalid?: boolean;
   readonly length: number;
+  /** Called with the code when the last digit is entered. */
+  readonly onComplete?: (value: string) => void;
   readonly ref?: Ref<TextInput>;
   readonly rootProps?: ViewProps;
   readonly valueState: ControllableStateOptions<string>;
@@ -57,9 +62,11 @@ function normalizeCode(value: string, length: number): string {
 function InputOTP({
   accessibilityHint,
   accessibilityLabel = "One-time code",
+  disabled = false,
   errorText,
   invalid = false,
   length: lengthProperty,
+  onComplete,
   ref,
   rootProps,
   style,
@@ -68,8 +75,14 @@ function InputOTP({
 }: InputOTPProps) {
   const theme = useTheme();
   const length = codeLength(lengthProperty);
-  const locked = useGroupDisabled(props.editable === false);
+  const locked = useGroupDisabled(disabled || props.editable === false);
   const [value, setValue] = useControllableState(valueState);
+  const complete = value.length === length;
+  const wasComplete = useRef(complete);
+  useEffect(() => {
+    if (complete && !wasComplete.current) onComplete?.(value);
+    wasComplete.current = complete;
+  }, [complete, onComplete, value]);
   const error = invalid ? errorText : undefined;
   useAnnounceOnChange(error, { liveRegion: true });
   return (
@@ -82,7 +95,7 @@ function InputOTP({
           accessibilityHint,
         ])}
         accessibilityLabel={accessibilityLabel}
-        accessibilityState={{ disabled: locked, ...props.accessibilityState }}
+        accessibilityState={{ ...props.accessibilityState, disabled: locked }}
         editable={!locked}
         inputMode="numeric"
         maxLength={length}

@@ -30,6 +30,8 @@ export type ResizablePanelGroupProps = Omit<ViewProps, "children"> & {
   readonly children: ReactNode;
   readonly direction?: ResizableDirection;
   readonly onSizesChange?: (sizes: readonly number[]) => void;
+  /** Web name for `direction`; `direction` takes precedence. */
+  readonly orientation?: ResizableDirection;
   readonly ref?: Ref<View>;
 };
 
@@ -242,12 +244,14 @@ function indexResizableChildren(children: ReactNode): ReactNode {
  */
 function ResizablePanelGroup({
   children,
-  direction = "horizontal",
+  direction: ownDirection,
   onSizesChange,
+  orientation,
   ref,
   style,
   ...props
 }: ResizablePanelGroupProps) {
+  const direction = ownDirection ?? orientation ?? "horizontal";
   const configs = useMemo(() => getPanelConfigs(children), [children]);
   const configSignature = JSON.stringify(configs);
   const [sizeState, setSizeState] = useState<ResizableSizeState>(() => ({

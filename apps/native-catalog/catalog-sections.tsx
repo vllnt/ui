@@ -48,6 +48,14 @@ import { nativeComponentCount } from "./catalog-metadata";
 
 const themeSelections: readonly ThemeSelection[] = ["system", "light", "dark"];
 
+export type CatalogView = "all" | "highlights";
+
+const catalogViews: readonly CatalogView[] = ["highlights", "all"];
+const catalogViewLabels: Readonly<Record<CatalogView, string>> = {
+  all: "All components",
+  highlights: "Highlights",
+};
+
 function Row({ children }: { readonly children: ReactNode }) {
   const theme = useTheme();
   return (
@@ -104,6 +112,33 @@ export function ThemeSection({
             variant={value === selection ? "default" : "outline"}
           >
             {value[0]?.toUpperCase() + value.slice(1)}
+          </Button>
+        ))}
+      </Row>
+    </Section>
+  );
+}
+
+export function ViewSection({
+  onChange,
+  selection,
+}: {
+  readonly onChange: (selection: CatalogView) => void;
+  readonly selection: CatalogView;
+}) {
+  return (
+    <Section title="View">
+      <Row>
+        {catalogViews.map((value) => (
+          <Button
+            key={value}
+            onPress={() => {
+              onChange(value);
+            }}
+            size="sm"
+            variant={value === selection ? "default" : "outline"}
+          >
+            {catalogViewLabels[value]}
           </Button>
         ))}
       </Row>
