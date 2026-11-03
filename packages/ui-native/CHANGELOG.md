@@ -11,7 +11,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - Controlled/uncontrolled state, caller-owned selection, reduced-motion observation, native modal layering, safe-area injection, and typed platform-service adapters.
 - Machine-readable availability, compatibility, source, peer dependency, and installation metadata in `registry.json`.
 - Generated barrel/manifest drift checks, native boundary checks, Jest interaction coverage, and packed-package validation.
-- Jest render tests cover the compound parts that no test rendered before (`AgentStepDuration`, `AIArtifactEditButton`, `ConversationHeader`, `ConversationScrollButton`, `ConversationTitle`, `ProgressTrackerBadge`, `ProgressTrackerStat`, `ProgressTrackerStats`, `SimpleTerminal`), and a guard test fails when a public export is not rendered by any test or accessibility fixture.
+- Jest render tests cover the compound parts that no test rendered before (`AgentStepDuration`, `AIArtifactEditButton`, `ConversationHeader`, `ConversationScrollButton`, `ConversationTitle`, `ProgressTrackerBadge`, `ProgressTrackerStat`, `ProgressTrackerStats`, `SimpleTerminal`).
 
 ### Changed
 
