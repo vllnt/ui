@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **Product themes stylesheet** - `@vllnt/ui/themes/products.css` ships the
+  Maia and PaaS themes as `html[data-theme="maia"]` and
+  `html[data-theme="paas"]`, each with a `.dark` block. It is generated from
+  `packages/design/tokens.json`. Load Figtree (Maia) and JetBrains Mono
+  (Maia, PaaS) in your app; the package does not ship the fonts.
+- **Status and diff colors** - CSS variables `--success`, `--warning`,
+  `--info`, their `-foreground` pairs, `--diff-added` and `--diff-removed` in
+  `themes/default.css` and `styles.css`, and matching Tailwind colors
+  (`success`, `warning`, `info`, `diff.added`, `diff.removed`) in the preset.
+- **Label type step** - `--font-size-label`, `--line-height-label` and
+  `--font-weight-label`.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added
