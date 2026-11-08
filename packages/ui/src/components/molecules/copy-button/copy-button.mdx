@@ -5,7 +5,7 @@ import * as Stories from './copy-button.stories'
 
 # CopyButton
 
-Click-to-copy utility with confirmation feedback. Copies `value` to the clipboard via the async Clipboard API and announces success to assistive tech.
+Click-to-copy utility with confirmation feedback. Copies `value` to the clipboard via the async Clipboard API, or a temporary textarea copy where that API is missing (plain http), and announces success to assistive tech.
 
 <Primary />
 
@@ -70,3 +70,5 @@ const { copied, copy, reset } = useCopyToClipboard({ timeout: 2000 })
 
 await copy('hello')
 ```
+
+`copy` resolves to `false` when the copy fails, and `copied` stays `false`.

@@ -21,6 +21,7 @@ import {
   Pencil,
 } from "lucide-react";
 
+import { copyText } from "../../../lib/copy-text";
 import { cn } from "../../../lib/utils";
 import { Badge } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
@@ -174,21 +175,6 @@ function buildFilename({
   );
   const safeBase = slug.length > 0 ? slug : "artifact";
   return `${safeBase}.${pickExtension(type, language)}`;
-}
-
-async function writeToClipboard(value: string): Promise<boolean> {
-  if (
-    typeof navigator === "undefined" ||
-    typeof navigator.clipboard?.writeText !== "function"
-  ) {
-    return false;
-  }
-  try {
-    await navigator.clipboard.writeText(value);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 function downloadValueAsFile(value: string, filename: string): void {
@@ -358,7 +344,7 @@ function useArtifactController(
   );
 
   const copy = useCallback(async () => {
-    const ok = await writeToClipboard(value);
+    const ok = await copyText(value);
     if (!ok) return false;
     flagCopied();
     return true;
