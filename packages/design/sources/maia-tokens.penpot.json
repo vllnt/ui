@@ -1,0 +1,343 @@
+{
+  "Maia/dark": {
+    "color": {
+      "background": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "foreground": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "muted": {
+        "$value": "#161616",
+        "$type": "color"
+      },
+      "muted-foreground": {
+        "$value": "#A4A4A4",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#2E2E2E",
+        "$type": "color"
+      },
+      "input": {
+        "$value": "#696969",
+        "$type": "color"
+      },
+      "accent": {
+        "$value": "#F46CBF",
+        "$type": "color"
+      },
+      "accent-foreground": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "surface-raised": {
+        "$value": "#0C0C0C",
+        "$type": "color"
+      },
+      "status": {
+        "implemented": {
+          "$value": "#56D57B",
+          "$type": "color"
+        },
+        "candidate": {
+          "$value": "#76ACFC",
+          "$type": "color"
+        },
+        "planned": {
+          "$value": "#A4A4A4",
+          "$type": "color"
+        },
+        "unsupported": {
+          "$value": "#F97770",
+          "$type": "color"
+        },
+        "deprecated": {
+          "$value": "#EDB345",
+          "$type": "color"
+        }
+      },
+      "state": {
+        "running": {
+          "$value": "{color.status.candidate}",
+          "$type": "color"
+        },
+        "attention": {
+          "$value": "{color.status.deprecated}",
+          "$type": "color"
+        },
+        "done": {
+          "$value": "{color.status.implemented}",
+          "$type": "color"
+        },
+        "failed": {
+          "$value": "{color.status.unsupported}",
+          "$type": "color"
+        },
+        "idle": {
+          "$value": "{color.status.planned}",
+          "$type": "color"
+        }
+      },
+      "diff": {
+        "removed": {
+          "$value": "#321816",
+          "$type": "color"
+        },
+        "added": {
+          "$value": "#112B19",
+          "$type": "color"
+        }
+      }
+    }
+  },
+  "Maia/light": {
+    "color": {
+      "background": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "foreground": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "muted": {
+        "$value": "#F5F5F5",
+        "$type": "color"
+      },
+      "muted-foreground": {
+        "$value": "#636363",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#E4E4E4",
+        "$type": "color"
+      },
+      "input": {
+        "$value": "#868686",
+        "$type": "color"
+      },
+      "accent": {
+        "$value": "#BE148B",
+        "$type": "color"
+      },
+      "accent-foreground": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      },
+      "surface-raised": {
+        "$value": "#FAFAFA",
+        "$type": "color"
+      },
+      "status": {
+        "implemented": {
+          "$value": "#0A7E3A",
+          "$type": "color"
+        },
+        "candidate": {
+          "$value": "#145EC1",
+          "$type": "color"
+        },
+        "planned": {
+          "$value": "#636363",
+          "$type": "color"
+        },
+        "unsupported": {
+          "$value": "#BE2323",
+          "$type": "color"
+        },
+        "deprecated": {
+          "$value": "#945F0E",
+          "$type": "color"
+        }
+      },
+      "state": {
+        "running": {
+          "$value": "{color.status.candidate}",
+          "$type": "color"
+        },
+        "attention": {
+          "$value": "{color.status.deprecated}",
+          "$type": "color"
+        },
+        "done": {
+          "$value": "{color.status.implemented}",
+          "$type": "color"
+        },
+        "failed": {
+          "$value": "{color.status.unsupported}",
+          "$type": "color"
+        },
+        "idle": {
+          "$value": "{color.status.planned}",
+          "$type": "color"
+        }
+      },
+      "diff": {
+        "removed": {
+          "$value": "#F7E5E5",
+          "$type": "color"
+        },
+        "added": {
+          "$value": "#E2F0E7",
+          "$type": "color"
+        }
+      }
+    }
+  },
+  "Maia/core": {
+    "spacing": {
+      "1": {
+        "$value": "4",
+        "$type": "spacing"
+      },
+      "2": {
+        "$value": "8",
+        "$type": "spacing"
+      },
+      "3": {
+        "$value": "12",
+        "$type": "spacing"
+      },
+      "4": {
+        "$value": "16",
+        "$type": "spacing"
+      },
+      "5": {
+        "$value": "20",
+        "$type": "spacing"
+      },
+      "6": {
+        "$value": "24",
+        "$type": "spacing"
+      },
+      "8": {
+        "$value": "32",
+        "$type": "spacing"
+      },
+      "10": {
+        "$value": "40",
+        "$type": "spacing"
+      },
+      "12": {
+        "$value": "48",
+        "$type": "spacing"
+      },
+      "16": {
+        "$value": "64",
+        "$type": "spacing"
+      }
+    },
+    "radius": {
+      "sm": {
+        "$value": "6",
+        "$type": "borderRadius"
+      },
+      "md": {
+        "$value": "8",
+        "$type": "borderRadius"
+      },
+      "lg": {
+        "$value": "12",
+        "$type": "borderRadius"
+      },
+      "xl": {
+        "$value": "16",
+        "$type": "borderRadius"
+      },
+      "full": {
+        "$value": "999",
+        "$type": "borderRadius"
+      }
+    },
+    "font": {
+      "size": {
+        "xs": {
+          "$value": "12",
+          "$type": "fontSizes"
+        },
+        "sm": {
+          "$value": "13",
+          "$type": "fontSizes"
+        },
+        "base": {
+          "$value": "14",
+          "$type": "fontSizes"
+        },
+        "md": {
+          "$value": "16",
+          "$type": "fontSizes"
+        },
+        "lg": {
+          "$value": "20",
+          "$type": "fontSizes"
+        },
+        "xl": {
+          "$value": "28",
+          "$type": "fontSizes"
+        },
+        "xxl": {
+          "$value": "36",
+          "$type": "fontSizes"
+        }
+      },
+      "weight": {
+        "regular": {
+          "$value": "400",
+          "$type": "fontWeights"
+        },
+        "medium": {
+          "$value": "500",
+          "$type": "fontWeights"
+        },
+        "semibold": {
+          "$value": "600",
+          "$type": "fontWeights"
+        }
+      },
+      "family": {
+        "sans": {
+          "$value": [
+            "Figtree"
+          ],
+          "$type": "fontFamilies"
+        },
+        "mono": {
+          "$value": [
+            "JetBrains Mono"
+          ],
+          "$type": "fontFamilies"
+        }
+      }
+    }
+  },
+  "$themes": [
+    {
+      "name": "Light",
+      "group": "Maia",
+      "selectedTokenSets": {
+        "Maia/dark": "disabled",
+        "Maia/light": "enabled",
+        "Maia/core": "enabled"
+      }
+    },
+    {
+      "name": "Dark",
+      "group": "Maia",
+      "selectedTokenSets": {
+        "Maia/dark": "enabled",
+        "Maia/light": "disabled",
+        "Maia/core": "enabled"
+      }
+    }
+  ],
+  "$metadata": {
+    "tokenSetOrder": [
+      "Maia/core",
+      "Maia/light",
+      "Maia/dark"
+    ]
+  }
+}

@@ -12,7 +12,8 @@
     "radius",
     "elevation",
     "motion",
-    "iconography"
+    "iconography",
+    "themes"
   ],
   "properties": {
     "$schema": { "type": "string" },
@@ -90,6 +91,12 @@
         "color": { "type": "string", "minLength": 1 }
       },
       "additionalProperties": false
+    },
+    "themes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9]*$" },
+      "additionalProperties": { "$ref": "#/$defs/theme" }
     }
   },
   "$defs": {
@@ -140,6 +147,62 @@
       "type": "object",
       "minProperties": 1,
       "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "themeColors": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/oklchChannel" }
+    },
+    "themeTypeScale": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "fontSize": { "$ref": "#/$defs/cssLength" },
+        "lineHeight": { "type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$" }
+      },
+      "additionalProperties": false
+    },
+    "theme": {
+      "type": "object",
+      "required": ["label", "description"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "defaultMode": { "enum": ["light", "dark"] },
+        "color": {
+          "type": "object",
+          "required": ["light", "dark"],
+          "properties": {
+            "light": { "$ref": "#/$defs/themeColors" },
+            "dark": { "$ref": "#/$defs/themeColors" }
+          },
+          "additionalProperties": false
+        },
+        "typography": {
+          "type": "object",
+          "minProperties": 1,
+          "properties": {
+            "fontFamily": { "$ref": "#/$defs/stringMap" },
+            "fontWeight": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+              }
+            },
+            "scale": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": { "$ref": "#/$defs/themeTypeScale" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "radius": { "$ref": "#/$defs/stringMap" }
+      },
+      "additionalProperties": false
     },
     "typeScale": {
       "type": "object",

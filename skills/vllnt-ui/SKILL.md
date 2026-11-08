@@ -131,6 +131,8 @@ export function Example() {
 | `@vllnt/ui/tailwind-preset` | Tailwind preset config |
 | `@vllnt/ui/styles.css` | Tailwind base + theme variables + utilities |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only |
+| `@vllnt/ui/themes/presets.css` | Built-in color presets, applied via `data-theme` |
+| `@vllnt/ui/themes/products.css` | Product themes `maia` and `paas` (generated), applied via `data-theme` |
 
 `cn()` merges Tailwind classes via `clsx` + `tailwind-merge` — use it to combine
 a component's `className` with conditional classes (last class wins on conflict).
@@ -145,6 +147,16 @@ class-based — put `class="dark"` on `<html>`/`<body>` (or drive it with
 :root      { --background: 1 0 0; --foreground: 0.1445 0 0; /* … */ }
 .dark      { --background: 0 0 0; --foreground: 0.9848 0 0;  /* … */ }
 ```
+
+Product themes: import `@vllnt/ui/themes/products.css` after the styles, then set
+`data-theme="maia"` or `data-theme="paas"` on `<html>`; keep `class="dark"` for dark
+mode (`<html data-theme="maia" class="dark">`). Each is a complete palette plus fonts
+and type steps. Don't add product-specific color roles: use the core ones.
+In `@vllnt/ui-core`, `productThemes` holds the same themes as native values, and
+`tamaguiTokens` is the input for Tamagui's `createTokens` and `tamaguiThemes` the
+`themes` input for `createTamagui({ themes })` (plain objects, no Tamagui dependency).
+Maia's Label is capitals in the design; add `uppercase` where you use that type step.
+The theme switcher and `useThemePreset` do not know the product themes yet.
 
 ---
 
@@ -199,9 +211,9 @@ layout (margins, width), and let `cn()` resolve conflicts.
 
 | Axis | Rule |
 |------|------|
-| Color | Semantic tokens only: `bg-background`, `text-foreground`, `bg-muted`, `text-muted-foreground`, `border-border`, `ring-ring`, `bg-accent`, `bg-destructive`. WCAG AA contrast (≥4.5:1 body, ≥3:1 large/non-text). |
+| Color | Semantic tokens only: `bg-background`, `text-foreground`, `bg-muted`, `text-muted-foreground`, `border-border`, `ring-ring`, `bg-accent`, `bg-destructive`. Status: `bg-success` / `bg-warning` / `bg-info` (text on them: `text-*-foreground`; as text: `text-success` etc.); diffs: `bg-diff-added` / `bg-diff-removed`. WCAG AA contrast (≥4.5:1 body, ≥3:1 large/non-text). |
 | Type | Headings `font-semibold` (600) — **never** `font-bold`. Body 400. Mono via `font-mono`. Tabular nums for data: `tabular-nums`. |
-| Spacing | 4-pt scale → Tailwind `1/2/3/4/6/8/12/16`. Never arbitrary `gap-[7px]`. One axis: `gap-x-N` / `gap-y-N`. |
+| Spacing | 4-pt scale → Tailwind `1/2/3/4/5/6/8/10/12/16`. Never arbitrary `gap-[7px]`. One axis: `gap-x-N` / `gap-y-N`. |
 | Radius | `rounded-md` (8px) default for cards/popovers/dialogs; `rounded-full` pills/avatars; `rounded-lg` panels/sheets. |
 | Elevation | Mostly flat: `border` + `bg-background`. `shadow-lg` only for popovers/dialogs. No colored/glow shadows. |
 | Motion | <200ms, `ease-out`, translate <8px / scale ±2%. No bounce easings. Respect `prefers-reduced-motion`. |

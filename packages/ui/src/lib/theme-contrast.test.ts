@@ -17,6 +17,8 @@ type Pair = readonly [string, string];
 
 const THEMES_DIR = join(__dirname, "..", "..", "themes");
 
+const PRODUCT_THEMES: readonly string[] = ["maia", "paas"];
+
 const TEXT_PAIRS: readonly Pair[] = [
   ["foreground", "background"],
   ["card-foreground", "card"],
@@ -33,6 +35,17 @@ const TEXT_PAIRS: readonly Pair[] = [
   ["destructive", "card"],
   ["destructive", "popover"],
   ["destructive", "muted"],
+];
+
+const STATUS_PAIRS: readonly Pair[] = [
+  ["foreground", "diff-added"],
+  ["foreground", "diff-removed"],
+  ...(["info", "success", "warning"] as const).flatMap((role): Pair[] => [
+    [`${role}-foreground`, role],
+    ...(["background", "card", "popover", "muted"] as const).map(
+      (surface): Pair => [role, surface],
+    ),
+  ]),
 ];
 
 const CODE_TOKENS = [
@@ -81,20 +94,25 @@ function codeDefaults(mode: Mode): Palette {
   return declarations(css.slice(start, css.indexOf("}", start)));
 }
 
-/** Resolve the cascade: base mode, then the preset, then the preset's `.dark`. */
-function palette(preset: string, mode: Mode): Palette {
+/**
+ * Resolve the cascade: base mode, then the theme, then the theme's `.dark`.
+ * Presets live in presets.css, product themes in the generated products.css.
+ */
+function palette(theme: string, mode: Mode): Palette {
   const base = readTheme("default.css");
   const own = {
     ...codeDefaults(mode),
     ...block(base, mode === "light" ? ":root" : ".dark"),
   };
-  if (preset === "default") return own;
-  const presets = readTheme("presets.css");
-  const selector = `html[data-theme="${preset}"]`;
+  if (theme === "default") return own;
+  const css = readTheme(
+    PRODUCT_THEMES.includes(theme) ? "products.css" : "presets.css",
+  );
+  const selector = `html[data-theme="${theme}"]`;
   return {
     ...own,
-    ...block(presets, selector),
-    ...(mode === "dark" ? block(presets, `${selector}.dark`) : {}),
+    ...block(css, selector),
+    ...(mode === "dark" ? block(css, `${selector}.dark`) : {}),
   };
 }
 
@@ -164,7 +182,38 @@ function tenPercentTint(color: string, surface: string): number[] {
   );
 }
 
-const CASES = THEME_PRESETS.flatMap(({ name }) =>
+/**
+ * Presets inherit the success, warning and info roles from the core theme. These
+ * five miss 4.5:1 on one of their own surfaces in the listed modes. Tracked in
+ * https://github.com/vllnt/ui/issues/579. Each gap runs under `it.fails`, so a
+ * preset that passes again has to leave this list.
+ */
+const KNOWN_STATUS_GAPS: Readonly<Record<string, readonly Mode[]>> = {
+  claude: ["light"],
+  dracula: ["dark", "light"],
+  dusk: ["light"],
+  nord: ["dark", "light"],
+  synthwave: ["light"],
+};
+
+function illegibleOnTint(colors: Palette, roles: readonly string[]): string[] {
+  return roles.filter((role) => {
+    const color = token(colors, role);
+    return (
+      contrast(
+        oklchToRgb(color),
+        tenPercentTint(color, token(colors, "background")),
+      ) < 4.5
+    );
+  });
+}
+
+const THEME_NAMES = [
+  ...THEME_PRESETS.map(({ name }) => name),
+  ...PRODUCT_THEMES,
+];
+
+const CASES = THEME_NAMES.flatMap((name) =>
   (["light", "dark"] as const).map((mode) => [name, mode] as const),
 );
 
@@ -176,13 +225,18 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
   });
 
   it("keeps destructive text legible on its 10% tint", () => {
-    const destructive = token(colors, "destructive");
-    expect(
-      contrast(
-        oklchToRgb(destructive),
-        tenPercentTint(destructive, token(colors, "background")),
+    expect(illegibleOnTint(colors, ["destructive"])).toEqual([]);
+  });
+
+  const statusIt = KNOWN_STATUS_GAPS[preset]?.includes(mode) ? it.fails : it;
+
+  statusIt("keeps the status and diff colors legible", () => {
+    expect([
+      ...failures(colors, STATUS_PAIRS, 4.5),
+      ...illegibleOnTint(colors, ["info", "success", "warning"]).map(
+        (role) => `${role} on its 10% tint`,
       ),
-    ).toBeGreaterThanOrEqual(4.5);
+    ]).toEqual([]);
   });
 
   it("keeps CodeBlock syntax tokens at 4.5:1 on the background", () => {

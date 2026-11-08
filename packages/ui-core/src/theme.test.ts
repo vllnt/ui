@@ -2,10 +2,14 @@ import {
   componentContracts,
   createNativeTheme,
   darkTheme,
+  designTokens,
   lightTheme,
   type NativeTheme,
   nativeTokens,
+  productThemes,
   type SemanticColorName,
+  tamaguiThemes,
+  tamaguiTokens,
 } from "./index";
 
 function hexChannels(hex: string): number[] {
@@ -48,6 +52,29 @@ function tint(color: string, alpha: number, surface: string): string {
 
 type ColorPair = readonly [SemanticColorName, SemanticColorName];
 
+const STATUS_ON_COLOR = {
+  destructive: "destructiveForeground",
+  info: "infoForeground",
+  success: "successForeground",
+  warning: "warningForeground",
+} as const satisfies Record<string, SemanticColorName>;
+
+type StatusRole = keyof typeof STATUS_ON_COLOR;
+
+const STATUS_ROLES: readonly StatusRole[] = [
+  "destructive",
+  "info",
+  "success",
+  "warning",
+];
+
+const STATUS_SURFACES = [
+  "background",
+  "card",
+  "popover",
+  "muted",
+] as const satisfies readonly SemanticColorName[];
+
 /** Contrast contract from DESIGN.md §3: text pairs need 4.5:1 (WCAG 1.4.3). */
 const TEXT_PAIRS: readonly ColorPair[] = [
   ["foreground", "background"],
@@ -56,15 +83,16 @@ const TEXT_PAIRS: readonly ColorPair[] = [
   ["primaryForeground", "primary"],
   ["secondaryForeground", "secondary"],
   ["accentForeground", "accent"],
-  ["destructiveForeground", "destructive"],
   ["mutedForeground", "background"],
   ["mutedForeground", "card"],
   ["mutedForeground", "popover"],
   ["mutedForeground", "muted"],
-  ["destructive", "background"],
-  ["destructive", "card"],
-  ["destructive", "popover"],
-  ["destructive", "muted"],
+  ["foreground", "diffAdded"],
+  ["foreground", "diffRemoved"],
+  ...STATUS_ROLES.flatMap((role): ColorPair[] => [
+    [STATUS_ON_COLOR[role], role],
+    ...STATUS_SURFACES.map((surface): ColorPair => [role, surface]),
+  ]),
 ];
 
 /** Control boundaries and the focus ring need 3:1 (WCAG 1.4.11). */
@@ -89,11 +117,24 @@ function contrastFailures(
     .map(({ ratio, where }) => `${where}: ${ratio.toFixed(2)}:1`);
 }
 
+const SEMANTIC_ROLES = Object.keys(designTokens.color.semantic);
+
+const COLOR_SETS: readonly (readonly [string, NativeTheme["colors"]])[] = [
+  ["core light", lightTheme.colors],
+  ["core dark", darkTheme.colors],
+  ["maia light", productThemes.maia.colors.light],
+  ["maia dark", productThemes.maia.colors.dark],
+  ["paas light", productThemes.paas.colors.light],
+  ["paas dark", productThemes.paas.colors.dark],
+];
+
 describe("generated design contracts", () => {
   it("emits native-safe colors for both schemes", () => {
     const themes = [lightTheme, darkTheme];
     expect(
-      themes.every((theme) => Object.keys(theme.colors).length === 19),
+      themes.every(
+        (theme) => Object.keys(theme.colors).length === SEMANTIC_ROLES.length,
+      ),
     ).toBe(true);
     expect(
       themes
@@ -103,23 +144,39 @@ describe("generated design contracts", () => {
     expect(darkTheme.colors.background).not.toBe("#000000");
   });
 
-  describe.each([
-    ["light", lightTheme],
-    ["dark", darkTheme],
-  ] as const)("%s contrast contract", (_, theme) => {
+  it("defines the status and diff roles next to the shadcn set", () => {
+    expect(SEMANTIC_ROLES).toEqual(
+      expect.arrayContaining([
+        "success",
+        "successForeground",
+        "warning",
+        "warningForeground",
+        "info",
+        "infoForeground",
+        "diffAdded",
+        "diffRemoved",
+      ]),
+    );
+  });
+
+  describe.each(COLOR_SETS)("%s contrast contract", (_, colors) => {
     it("keeps every text pair at 4.5:1", () => {
-      expect(contrastFailures(theme.colors, TEXT_PAIRS, 4.5)).toEqual([]);
+      expect(contrastFailures(colors, TEXT_PAIRS, 4.5)).toEqual([]);
     });
 
-    it("keeps destructive text legible on its 10% tint", () => {
-      const { background, destructive } = theme.colors;
-      expect(
-        contrastRatio(destructive, tint(destructive, 0.1, background)),
-      ).toBeGreaterThanOrEqual(4.5);
+    it("keeps status text legible on its 10% tint", () => {
+      const failures = STATUS_ROLES.filter(
+        (role) =>
+          contrastRatio(
+            colors[role],
+            tint(colors[role], 0.1, colors.background),
+          ) < 4.5,
+      );
+      expect(failures).toEqual([]);
     });
 
     it("keeps control boundaries and the focus ring at 3:1", () => {
-      expect(contrastFailures(theme.colors, BOUNDARY_PAIRS, 3)).toEqual([]);
+      expect(contrastFailures(colors, BOUNDARY_PAIRS, 3)).toEqual([]);
     });
   });
 
@@ -149,7 +206,144 @@ describe("generated design contracts", () => {
   });
 });
 
+describe("product themes", () => {
+  it.each(Object.entries(productThemes))(
+    "%s defines every core role in both modes",
+    (_, theme) => {
+      expect(Object.keys(theme.colors.light).sort()).toEqual(
+        [...SEMANTIC_ROLES].sort(),
+      );
+      expect(Object.keys(theme.colors.dark).sort()).toEqual(
+        [...SEMANTIC_ROLES].sort(),
+      );
+    },
+  );
+
+  it("maps Maia's accent onto primary and keeps core accent a quiet surface", () => {
+    const { dark, light } = productThemes.maia.colors;
+    expect(dark.primary).toBe("#f46cbf");
+    expect(dark.background).toBe("#000000");
+    expect(light.primary).toBe("#be148b");
+    expect(light.background).toBe("#ffffff");
+    expect(dark.accent).toBe(dark.muted);
+    expect(light.accent).toBe(light.muted);
+  });
+
+  it("keeps PaaS on the core neutrals and status tones", () => {
+    const { dark, light } = productThemes.paas.colors;
+    expect(light.primary).toBe(lightTheme.colors.primary);
+    expect(dark.primary).toBe(darkTheme.colors.primary);
+    expect(light.success).toBe(lightTheme.colors.success);
+    expect(dark.warning).toBe(darkTheme.colors.warning);
+    expect(productThemes.paas.defaultMode).toBe("dark");
+    expect(productThemes.maia.defaultMode).toBeNull();
+  });
+
+  it("sets each theme's typefaces", () => {
+    expect(productThemes.maia.typography.fontFamily).toEqual({
+      display: "Figtree",
+      mono: "JetBrains Mono",
+      sans: "Figtree",
+    });
+    expect(productThemes.paas.typography.fontFamily).toEqual({
+      display: "JetBrains Mono",
+      mono: "JetBrains Mono",
+      sans: "JetBrains Mono",
+    });
+  });
+
+  it("carries Maia's type scale and radius steps in points", () => {
+    const { radius, typography } = productThemes.maia;
+    expect(radius).toMatchObject({ lg: 12, md: 8, sm: 6, xl: 16 });
+    expect(typography.scale.display.fontSize).toBe(28);
+    expect(typography.scale.h5.fontSize).toBe(20);
+    expect(typography.scale.h6.fontSize).toBe(15);
+    expect(typography.scale.body.fontSize).toBe(14);
+    expect(typography.scale.bodySmall.fontSize).toBe(13);
+    expect(typography.scale.caption.fontSize).toBe(12);
+    expect(typography.scale.label.fontSize).toBe(11);
+    expect(typography.fontWeight).toMatchObject({
+      body: 400,
+      caption: 500,
+      display: 700,
+      heading: 600,
+      label: 700,
+    });
+  });
+
+  it("leaves product-specific status names out of the core roles", () => {
+    expect(
+      SEMANTIC_ROLES.filter((role) =>
+        /implemented|candidate|deprecated|unsupported|planned|attention/i.test(
+          role,
+        ),
+      ),
+    ).toEqual([]);
+  });
+});
+
+describe("tamagui output", () => {
+  it("keys one theme per product and mode", () => {
+    expect(Object.keys(tamaguiThemes).sort()).toEqual([
+      "maia_dark",
+      "maia_light",
+      "paas_dark",
+      "paas_light",
+    ]);
+  });
+
+  it("derives each theme from the matching product palette", () => {
+    expect(tamaguiThemes.maia_dark).toMatchObject({
+      background: productThemes.maia.colors.dark.background,
+      borderColor: productThemes.maia.colors.dark.border,
+      color: productThemes.maia.colors.dark.foreground,
+      primary: "#f46cbf",
+    });
+    expect(tamaguiThemes.paas_light).toMatchObject({
+      background: productThemes.paas.colors.light.background,
+      borderColor: productThemes.paas.colors.light.border,
+      color: productThemes.paas.colors.light.foreground,
+    });
+  });
+
+  it("gives every theme the same keys with hex values", () => {
+    const [first, ...rest] = Object.values(tamaguiThemes);
+    const keys = Object.keys(first ?? {}).sort();
+    expect(rest.map((theme) => Object.keys(theme).sort())).toEqual(
+      rest.map(() => keys),
+    );
+    expect(
+      Object.values(tamaguiThemes)
+        .flatMap((theme) => Object.values(theme))
+        .every((color) => /^#[\da-f]{6}$/.test(color)),
+    ).toBe(true);
+  });
+
+  it("exposes the groups Tamagui's createTokens takes", () => {
+    expect(Object.keys(tamaguiTokens).sort()).toEqual([
+      "color",
+      "radius",
+      "size",
+      "space",
+      "zIndex",
+    ]);
+    expect(tamaguiTokens.space[5]).toBe(20);
+    expect(tamaguiTokens.space[10]).toBe(40);
+    expect(tamaguiTokens.radius.xl).toBe(16);
+    expect(tamaguiTokens.color.primaryDark).toBe(darkTheme.colors.primary);
+  });
+});
+
 describe("createNativeTheme", () => {
+  it("accepts a product palette as its color override", () => {
+    const theme = createNativeTheme("dark", {
+      colors: productThemes.maia.colors.dark,
+    });
+
+    expect(theme.colors.primary).toBe("#f46cbf");
+    expect(theme.colors.background).toBe("#000000");
+  });
+
   it("merges semantic overrides without dropping defaults", () => {
     const theme = createNativeTheme("dark", {
       colors: { primary: "#123456" },
