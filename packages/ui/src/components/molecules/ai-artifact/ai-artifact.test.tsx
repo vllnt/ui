@@ -18,7 +18,7 @@ type ClipboardLike = {
   writeText: (value: string) => Promise<void>;
 };
 
-function setClipboard(clipboard: ClipboardLike): () => void {
+function setClipboard(clipboard: ClipboardLike | undefined): () => void {
   const original = Object.getOwnPropertyDescriptor(navigator, "clipboard");
   Object.defineProperty(navigator, "clipboard", {
     configurable: true,
@@ -83,6 +83,7 @@ describe("AIArtifact", () => {
 
     afterEach(() => {
       restoreClipboard();
+      Reflect.deleteProperty(document, "execCommand");
     });
 
     it("writes the value to the clipboard and flips the label", async () => {
@@ -92,6 +93,30 @@ describe("AIArtifact", () => {
         expect(writeText).toHaveBeenCalledWith(VALUE);
       });
       await screen.findByRole("button", { name: "Copied" });
+    });
+
+    it("copies through the textarea fallback when the Clipboard API is missing", async () => {
+      const execCommand = vi.fn<(command: string) => boolean>(() => true);
+      Object.defineProperty(document, "execCommand", {
+        configurable: true,
+        value: execCommand,
+        writable: true,
+      });
+      restoreClipboard();
+      restoreClipboard = setClipboard(undefined);
+      withToolbar(<AIArtifactCopyButton />);
+      fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+      await screen.findByRole("button", { name: "Copied" });
+      expect(execCommand).toHaveBeenCalledWith("copy");
+    });
+
+    it("keeps the Copy label when neither copy path works", async () => {
+      restoreClipboard();
+      restoreClipboard = setClipboard(undefined);
+      withToolbar(<AIArtifactCopyButton />);
+      fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+      await Promise.resolve();
+      expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
     });
 
     it("does not fire the reset timer after the artifact unmounts", async () => {

@@ -153,8 +153,9 @@ ButtonTrigger.displayName = "CopyButton.Trigger";
  * Click-to-copy button with confirmation feedback.
  *
  * Composes {@link Button} and {@link Tooltip}. Copies `value` to the clipboard
- * via the async Clipboard API and announces success to assistive tech via a
- * visually hidden status region.
+ * via the async Clipboard API, or a textarea copy where that API is missing
+ * (plain http), and announces success to assistive tech via a visually hidden
+ * status region.
  *
  * @example
  * ```tsx

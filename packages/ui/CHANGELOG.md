@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- **`copyText` helper** - `copyText(value): Promise<boolean>` is exported from `@vllnt/ui`. It writes text through the Clipboard API, falls back to a temporary textarea and `document.execCommand("copy")` when that API is missing or rejects, and resolves to `false` when neither path works.
+
+### Fixed
+
+- **Copy works without the Clipboard API** - `useCopyToClipboard` (and so `CopyButton`, `CodeBlock`, `Terminal` and the other copy controls) and `AIArtifactCopyButton` now fall back to a temporary textarea and `document.execCommand("copy")` when `navigator.clipboard` is absent (plain http, such as a Tailnet IP) or `writeText` rejects. The fallback works inside modal dialogs (`dialog` and `alertdialog` roles, and native `dialog` elements) and leaves the text the user had selected on the page selected. `copy` still resolves to `false`, and `copied` stays `false`, when both paths fail. `FlowDiagram` copies a PNG, so it has no text fallback and keeps reporting "Copy failed".
+- **Close buttons meet the 24 px target size (WCAG 2.5.8)** - the close button in `DialogContent`, `SheetContent` and `CompletionDialog` was 16 px. It is now at least 24x24 px around the same 16 px icon, and the icon keeps its position in the corner.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added

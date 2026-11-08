@@ -30,6 +30,7 @@ export {
   type ThemePreset,
   type ThemePresetName,
 } from "./lib/theme-presets";
+export { copyText } from "./lib/copy-text";
 export { formatChange, normalizeDate } from "./lib/format";
 export { focusCalendarDay } from "./lib/focus-calendar-day";
 export {
