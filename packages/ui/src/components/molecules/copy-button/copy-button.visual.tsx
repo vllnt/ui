@@ -15,6 +15,9 @@ import {
   AlertDialogTitle,
 } from "../alert-dialog/alert-dialog";
 import { CopyButton } from "./copy-button";
+import { CopyFromMenuPreview } from "./copy-button.visual.fixture";
+
+const STALE_VALUE = "STALE_CLIPBOARD_VALUE";
 
 async function removeClipboardApi(page: Page): Promise<void> {
   await page.evaluate(() => {
@@ -24,6 +27,51 @@ async function removeClipboardApi(page: Page): Promise<void> {
     });
   });
   expect(await page.evaluate(() => navigator.clipboard)).toBeUndefined();
+}
+
+async function rejectClipboardAfter(page: Page, delay: number): Promise<void> {
+  await page.evaluate((milliseconds) => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: () =>
+          new Promise((_resolve, reject) => {
+            setTimeout(() => {
+              reject(new Error("denied"));
+            }, milliseconds);
+          }),
+      },
+    });
+  }, delay);
+}
+
+/**
+ * Puts a known old value on the system clipboard. The clipboard outlives a
+ * test, so a copy that silently fails would otherwise paste a value left by
+ * an earlier run and still pass.
+ */
+async function seedStaleClipboard(page: Page): Promise<void> {
+  const target = page.getByLabel("Paste target");
+  await target.fill(STALE_VALUE);
+  await target.press("ControlOrMeta+A");
+  await target.press("ControlOrMeta+C");
+  await target.fill("");
+  await target.press("ControlOrMeta+V");
+  await expect(target).toHaveValue(STALE_VALUE);
+  await target.fill("");
+}
+
+async function expectPasted(page: Page, value: string): Promise<void> {
+  const target = page.getByLabel("Paste target");
+  await target.press("ControlOrMeta+V");
+  await expect(target).toHaveValue(value);
+}
+
+async function copyThenExpectPasted(page: Page, value: string): Promise<void> {
+  await seedStaleClipboard(page);
+  await page.getByRole("button", { name: "Copy" }).click();
+  await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+  await expectPasted(page, value);
 }
 
 test.describe("CopyButton Visual", () => {
@@ -50,19 +98,13 @@ test.describe("CopyButton Visual", () => {
     test("copies to the system clipboard", async ({ mount, page }) => {
       await mount(
         <>
-          <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+          <CopyButton value="PAGE_KEY_2b9e" variant="button" />
           <textarea aria-label="Paste target" />
         </>,
       );
       await removeClipboardApi(page);
 
-      await page.getByRole("button", { name: "Copy" }).click();
-      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
-      await page.getByLabel("Paste target").press("ControlOrMeta+V");
-
-      await expect(page.getByLabel("Paste target")).toHaveValue(
-        "EXAMPLE_API_KEY",
-      );
+      await copyThenExpectPasted(page, "PAGE_KEY_2b9e");
     });
 
     test("copies from inside a modal dialog that traps focus", async ({
@@ -74,20 +116,49 @@ test.describe("CopyButton Visual", () => {
           <DialogContent>
             <DialogTitle>Keys</DialogTitle>
             <DialogDescription>Copy the key.</DialogDescription>
-            <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+            <CopyButton value="DIALOG_KEY_7f3a" variant="button" />
             <textarea aria-label="Paste target" />
           </DialogContent>
         </Dialog>,
       );
       await removeClipboardApi(page);
 
+      await copyThenExpectPasted(page, "DIALOG_KEY_7f3a");
+    });
+
+    test("copies from a dialog when the click leaves focus on the dialog itself", async ({
+      mount,
+      page,
+    }) => {
+      await mount(
+        <Dialog open>
+          <DialogContent>
+            <DialogTitle>Keys</DialogTitle>
+            <DialogDescription>Copy the key.</DialogDescription>
+            <CopyButton value="SAFARI_KEY_e6b2" variant="button" />
+            <textarea aria-label="Paste target" />
+          </DialogContent>
+        </Dialog>,
+      );
+      await removeClipboardApi(page);
+      await seedStaleClipboard(page);
+      await page.evaluate(() => {
+        const dialog = document.querySelector<HTMLElement>('[role="dialog"]');
+        const button = document.querySelector("button[aria-label='Copy']");
+        if (!dialog || !button) throw new Error("missing dialog or button");
+        button.addEventListener("mousedown", (event) => {
+          event.preventDefault();
+        });
+        dialog.focus();
+      });
+      expect(
+        await page.evaluate(() => document.activeElement?.getAttribute("role")),
+      ).toBe("dialog");
+
       await page.getByRole("button", { name: "Copy" }).click();
       await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
-      await page.getByLabel("Paste target").press("ControlOrMeta+V");
 
-      await expect(page.getByLabel("Paste target")).toHaveValue(
-        "EXAMPLE_API_KEY",
-      );
+      await expectPasted(page, "SAFARI_KEY_e6b2");
     });
 
     test("copies from inside an alert dialog that traps focus", async ({
@@ -99,7 +170,7 @@ test.describe("CopyButton Visual", () => {
           <AlertDialogContent>
             <AlertDialogTitle>Keys</AlertDialogTitle>
             <AlertDialogDescription>Copy the key.</AlertDialogDescription>
-            <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+            <CopyButton value="ALERT_KEY_c41d" variant="button" />
             <textarea aria-label="Paste target" />
             <AlertDialogCancel>Dismiss</AlertDialogCancel>
           </AlertDialogContent>
@@ -107,13 +178,7 @@ test.describe("CopyButton Visual", () => {
       );
       await removeClipboardApi(page);
 
-      await page.getByRole("button", { name: "Copy" }).click();
-      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
-      await page.getByLabel("Paste target").press("ControlOrMeta+V");
-
-      await expect(page.getByLabel("Paste target")).toHaveValue(
-        "EXAMPLE_API_KEY",
-      );
+      await copyThenExpectPasted(page, "ALERT_KEY_c41d");
     });
 
     test("copies from inside a native modal dialog", async ({
@@ -122,7 +187,7 @@ test.describe("CopyButton Visual", () => {
     }) => {
       await mount(
         <dialog>
-          <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+          <CopyButton value="NATIVE_KEY_95e0" variant="button" />
           <textarea aria-label="Paste target" />
         </dialog>,
       );
@@ -131,13 +196,19 @@ test.describe("CopyButton Visual", () => {
       });
       await removeClipboardApi(page);
 
-      await page.getByRole("button", { name: "Copy" }).click();
-      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
-      await page.getByLabel("Paste target").press("ControlOrMeta+V");
+      await copyThenExpectPasted(page, "NATIVE_KEY_95e0");
+    });
 
-      await expect(page.getByLabel("Paste target")).toHaveValue(
-        "EXAMPLE_API_KEY",
-      );
+    test("copies from a modal dropdown menu item", async ({ mount, page }) => {
+      await mount(<CopyFromMenuPreview value="MENU_KEY_d8a6" />);
+      await removeClipboardApi(page);
+      await seedStaleClipboard(page);
+
+      await page.getByRole("button", { name: "Actions" }).click();
+      await page.getByRole("menuitem", { name: "Copy key" }).click();
+      await expect(page.getByRole("menu")).toBeHidden();
+
+      await expectPasted(page, "MENU_KEY_d8a6");
     });
 
     test("leaves no tooltip open after copying", async ({ mount, page }) => {
@@ -183,6 +254,56 @@ test.describe("CopyButton Visual", () => {
       expect(await page.evaluate(() => window.getSelection()?.toString())).toBe(
         "Selected page text",
       );
+    });
+
+    test("gives keyboard focus back to the button after copying", async ({
+      mount,
+      page,
+    }) => {
+      await mount(<CopyButton value="EXAMPLE_API_KEY" variant="button" />);
+      await removeClipboardApi(page);
+
+      await page.keyboard.press("Tab");
+      await expect(page.getByRole("button", { name: "Copy" })).toBeFocused();
+      await page.keyboard.press("Enter");
+
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeFocused();
+    });
+  });
+
+  test.describe("when the Clipboard API rejects late", () => {
+    test("does not reopen the tooltip the pointer already left", async ({
+      mount,
+      page,
+    }) => {
+      await mount(<CopyButton value="EXAMPLE_API_KEY" />);
+      await rejectClipboardAfter(page, 500);
+      const tooltip = page.locator('[role="tooltip"]');
+      const button = page.getByRole("button", { name: "Copy" });
+
+      await button.hover();
+      await expect(tooltip).toHaveCount(1);
+      await button.click();
+      await page.mouse.move(5, 5);
+      await expect(tooltip).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "Copy" })).toBeVisible();
+
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+      await expect(tooltip).toHaveCount(0);
+    });
+
+    test("gives keyboard focus back to the button after copying", async ({
+      mount,
+      page,
+    }) => {
+      await mount(<CopyButton value="EXAMPLE_API_KEY" variant="button" />);
+      await rejectClipboardAfter(page, 300);
+
+      await page.keyboard.press("Tab");
+      await expect(page.getByRole("button", { name: "Copy" })).toBeFocused();
+      await page.keyboard.press("Enter");
+
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeFocused();
     });
   });
 });

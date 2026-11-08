@@ -121,7 +121,7 @@ describe("useCopyToClipboard", () => {
       expect(document.querySelector("textarea")).toBeNull();
     });
 
-    it("gives focus back to the element that had it", async () => {
+    it("gives focus back to the element that had it from the keyboard", async () => {
       const button = document.createElement("button");
       document.body.append(button);
       button.focus();
@@ -131,39 +131,61 @@ describe("useCopyToClipboard", () => {
       expect(document.activeElement).toBe(button);
     });
 
+    it("does not move focus back onto an element the pointer focused", async () => {
+      const button = document.createElement("button");
+      document.body.append(button);
+      button.focus();
+      vi.spyOn(button, "matches").mockReturnValue(false);
+      const focus = vi.spyOn(button, "focus");
+
+      await copyValue("secret");
+
+      expect(focus).not.toHaveBeenCalled();
+      expect(document.activeElement).not.toBe(button);
+    });
+
     it.each([
       [
-        "a dialog",
+        "next to a focused button",
         () => {
           const host = document.createElement("div");
-          host.setAttribute("role", "dialog");
-          return host;
+          const focused = document.createElement("button");
+          host.append(focused);
+          return { focused, host };
         },
       ],
       [
-        "an alert dialog",
+        "next to a focused input",
         () => {
           const host = document.createElement("div");
-          host.setAttribute("role", "alertdialog");
-          return host;
+          const focused = document.createElement("input");
+          host.append(focused);
+          return { focused, host };
         },
       ],
       [
-        "a native dialog",
+        "inside a focused container",
+        () => {
+          const host = document.createElement("div");
+          host.tabIndex = -1;
+          return { focused: host, host };
+        },
+      ],
+      [
+        "inside a focused native dialog",
         () => {
           const host = document.createElement("dialog");
           host.setAttribute("open", "");
-          return host;
+          host.tabIndex = -1;
+          return { focused: host, host };
         },
       ],
     ])(
-      "mounts the textarea inside %s so its focus trap keeps it",
-      async (_name, createHost) => {
-        const host = createHost();
-        const button = document.createElement("button");
-        host.append(button);
+      "mounts the textarea %s so a focus trap around it keeps it",
+      async (_name, create) => {
+        const { focused, host } = create();
         document.body.append(host);
-        button.focus();
+        focused.focus();
         let seen: FieldSnapshot | undefined;
         execCommand.mockImplementation(() => {
           seen = snapshotField();
@@ -176,6 +198,30 @@ describe("useCopyToClipboard", () => {
         expect(host.querySelector("textarea")).toBeNull();
       },
     );
+
+    it("mounts the textarea in the body when nothing has focus", async () => {
+      let seen: FieldSnapshot | undefined;
+      execCommand.mockImplementation(() => {
+        seen = snapshotField();
+        return true;
+      });
+
+      await copyValue("secret");
+
+      expect(seen?.parent).toBe(document.body);
+    });
+
+    it("sizes the textarea at 16px so iOS does not zoom into it", async () => {
+      let fontSize = "";
+      execCommand.mockImplementation(() => {
+        fontSize = document.querySelector("textarea")?.style.fontSize ?? "";
+        return true;
+      });
+
+      await copyValue("secret");
+
+      expect(fontSize).toBe("16px");
+    });
 
     it("keeps the page text selection the user had before copying", async () => {
       const selection = selectPageText("page text");
