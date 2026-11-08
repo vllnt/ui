@@ -1,10 +1,43 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const designDirectory = join(dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = join(designDirectory, "..", "..");
+
+const generatorInputs = [
+  "packages/design/component-contracts.json",
+  "packages/design/component-contracts.schema.json",
+  "packages/design/scripts/generate-tokens.mjs",
+  "packages/design/sources",
+  "packages/design/tokens.json",
+  "packages/design/tokens.schema.json",
+  "packages/ui/styles.css",
+  "packages/ui/themes",
+];
+
+const generatedOutputs = [
+  "packages/design/generated/penpot-tokens.json",
+  "packages/ui-core/component-contracts.json",
+  "packages/ui-core/component-contracts.schema.json",
+  "packages/ui-core/src/generated/design-tokens.ts",
+  "packages/ui-core/tokens.json",
+  "packages/ui-core/tokens.schema.json",
+  "packages/ui/styles.css",
+  "packages/ui/themes/default.css",
+  "packages/ui/themes/products.css",
+];
+
 const readText = (path) => readFileSync(join(designDirectory, path), "utf8");
 const readJson = (path) => JSON.parse(readText(path));
 
@@ -246,11 +279,54 @@ describe("products.css", () => {
   });
 });
 
-describe("generator", () => {
-  it("never reads the design source copies", () => {
-    assert.doesNotMatch(
-      readText("scripts/generate-tokens.mjs"),
-      /sources\/|\.penpot\.json/,
+/** Run the generator in a scratch copy of the repository, after `mutate` edits its `sources/`. */
+function generateWithSources(mutate) {
+  const root = mkdtempSync(join(tmpdir(), "design-sources-"));
+  try {
+    for (const path of generatorInputs) {
+      cpSync(join(repositoryRoot, path), join(root, path), { recursive: true });
+    }
+    mutate(join(root, "packages/design/sources"));
+    const run = spawnSync(
+      process.execPath,
+      ["packages/design/scripts/generate-tokens.mjs"],
+      { cwd: root, encoding: "utf8" },
     );
-  });
+    assert.equal(run.status, 0, run.stderr);
+    return Object.fromEntries(
+      generatedOutputs.map((path) => [
+        path,
+        readFileSync(join(root, path), "utf8"),
+      ]),
+    );
+  } finally {
+    rmSync(root, { force: true, recursive: true });
+  }
+}
+
+describe("generator", () => {
+  const maiaCopy = "maia-tokens.penpot.json";
+  const expected = Object.fromEntries(
+    generatedOutputs.map((path) => [
+      path,
+      readFileSync(join(repositoryRoot, path), "utf8"),
+    ]),
+  );
+  const mutations = {
+    "a changed": (sources) => {
+      const copy = join(sources, maiaCopy);
+      writeFileSync(
+        copy,
+        readFileSync(copy, "utf8").replaceAll(/#[\dA-Fa-f]{6}\b/g, "#010203"),
+      );
+    },
+    "a corrupt": (sources) => writeFileSync(join(sources, maiaCopy), "not json"),
+    "a missing": (sources) => rmSync(sources, { force: true, recursive: true }),
+  };
+
+  for (const [name, mutate] of Object.entries(mutations)) {
+    it(`writes the same outputs with ${name} design source copy`, () => {
+      assert.deepEqual(generateWithSources(mutate), expected);
+    });
+  }
 });
