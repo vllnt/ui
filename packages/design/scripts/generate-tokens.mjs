@@ -21,9 +21,11 @@ const paths = {
   ),
   coreTokens: join(repositoryRoot, "packages/ui-core/tokens.json"),
   coreTokensSchema: join(repositoryRoot, "packages/ui-core/tokens.schema.json"),
+  penpotTokens: join(designDirectory, "generated/penpot-tokens.json"),
   tokens: join(designDirectory, "tokens.json"),
   tokensSchema: join(designDirectory, "tokens.schema.json"),
   uiDefaultTheme: join(repositoryRoot, "packages/ui/themes/default.css"),
+  uiProductThemes: join(repositoryRoot, "packages/ui/themes/products.css"),
   uiStyles: join(repositoryRoot, "packages/ui/styles.css"),
 };
 
@@ -58,13 +60,84 @@ const expectedSemanticColors = [
   "accentForeground",
   "destructive",
   "destructiveForeground",
+  "success",
+  "successForeground",
+  "warning",
+  "warningForeground",
+  "info",
+  "infoForeground",
+  "diffAdded",
+  "diffRemoved",
   "border",
   "input",
   "ring",
 ];
 
+const modes = ["dark", "light"];
+
+// Tamagui requires a zIndex token group; core has no z-index scale, so this is
+// Tamagui's conventional ladder rather than a value read from tokens.json.
+const tamaguiZIndex = { 0: 0, 1: 100, 2: 200, 3: 300, 4: 400, 5: 500 };
+
+// Tamagui theme keys that differ from the core role name.
+const tamaguiRoleAliases = { border: "borderColor", foreground: "color" };
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+const mapValues = (object, map) =>
+  Object.fromEntries(
+    Object.entries(object).map(([key, value]) => [key, map(value, key)]),
+  );
+
+function validateChannels(label, value) {
+  const channels = value.split(/\s+/).map(Number);
+  assert(
+    channels.length === 3 && channels.every(Number.isFinite),
+    `${label} must contain three OKLCH channels.`,
+  );
+  assert(
+    channels[0] >= 0 && channels[0] <= 1 && channels[1] >= 0,
+    `${label} has out-of-range OKLCH channels.`,
+  );
+}
+
+function validateThemes() {
+  const { fontFamily, fontWeight, scale } = designTokens.typography;
+  const themes = Object.entries(designTokens.themes ?? {});
+  assert(themes.length > 0, "tokens.json must define at least one product theme.");
+
+  for (const [name, theme] of themes) {
+    assert(
+      /^[a-z][a-z0-9]*$/.test(name) && name !== "core",
+      `Theme ${name} must be lowercase alphanumeric and not "core".`,
+    );
+    for (const mode of modes) {
+      for (const [role, value] of Object.entries(theme.color?.[mode] ?? {})) {
+        assert(
+          role in designTokens.color.semantic,
+          `Theme ${name}.color.${mode}.${role} is not a core color role.`,
+        );
+        validateChannels(`Theme ${name}.color.${mode}.${role}`, value);
+      }
+    }
+    for (const [group, core] of [
+      ["fontFamily", fontFamily],
+      ["fontWeight", fontWeight],
+      ["scale", scale],
+    ]) {
+      for (const step of Object.keys(theme.typography?.[group] ?? {})) {
+        assert(
+          step in core,
+          `Theme ${name}.typography.${group}.${step} is not a core token.`,
+        );
+      }
+    }
+    for (const step of Object.keys(theme.radius ?? {})) {
+      assert(step in designTokens.radius, `Theme ${name}.radius.${step} is not a core radius.`);
+    }
+  }
 }
 
 function validateSource() {
@@ -90,15 +163,7 @@ function validateSource() {
     assert(!variables.has(color.cssVariable), `Duplicate CSS variable ${color.cssVariable}.`);
     variables.add(color.cssVariable);
     for (const mode of ["light", "dark"]) {
-      const channels = color[mode].split(/\s+/).map(Number);
-      assert(
-        channels.length === 3 && channels.every(Number.isFinite),
-        `Color ${name}.${mode} must contain three OKLCH channels.`,
-      );
-      assert(
-        channels[0] >= 0 && channels[0] <= 1 && channels[1] >= 0,
-        `Color ${name}.${mode} has out-of-range OKLCH channels.`,
-      );
+      validateChannels(`Color ${name}.${mode}`, color[mode]);
     }
   }
 
@@ -109,6 +174,8 @@ function validateSource() {
       `Typography ${name} is missing lineHeightCssVariable.`,
     );
   }
+
+  validateThemes();
 
   for (const [component, contract] of Object.entries(
     componentContracts.components ?? {},
@@ -210,6 +277,20 @@ function remToPoints(value) {
   return Number(match[1]) * 16;
 }
 
+function lengthToPoints(value) {
+  return value.endsWith("rem") ? remToPoints(value) : Number.parseFloat(value);
+}
+
+function typeScaleToPoints(scale) {
+  return mapValues(scale, (step) => {
+    const fontSize = remToPoints(step.fontSize);
+    return {
+      fontSize,
+      lineHeight: Number((fontSize * Number(step.lineHeight)).toFixed(3)),
+    };
+  });
+}
+
 function milliseconds(value) {
   const match = /^([0-9]+(?:\.[0-9]+)?)ms$/.exec(value);
   assert(match, `Expected an ms value, received ${value}.`);
@@ -275,8 +356,11 @@ function nativeTokens() {
     for (const [surface, foreground] of [
       ["card", "cardForeground"],
       ["destructive", "destructiveForeground"],
+      ["info", "infoForeground"],
       ["primary", "primaryForeground"],
       ["secondary", "secondaryForeground"],
+      ["success", "successForeground"],
+      ["warning", "warningForeground"],
     ]) {
       assert(
         contrastRatio(colors[mode][surface], colors[mode][foreground]) >= 4.5,
@@ -285,50 +369,292 @@ function nativeTokens() {
     }
   }
 
-  const spacing = Object.fromEntries(
-    Object.entries(designTokens.spacing.scale).map(([name, value]) => [
-      name,
-      remToPoints(value),
-    ]),
-  );
-  const radius = Object.fromEntries(
-    Object.entries(designTokens.radius).map(([name, value]) => [
-      name,
-      value.endsWith("rem") ? remToPoints(value) : Number.parseFloat(value),
-    ]),
-  );
-  const typeScale = Object.fromEntries(
-    Object.entries(designTokens.typography.scale).map(([name, step]) => {
-      const fontSize = remToPoints(step.fontSize);
-      return [
-        name,
-        {
-          fontSize,
-          lineHeight: Number((fontSize * Number(step.lineHeight)).toFixed(3)),
-        },
-      ];
-    }),
-  );
-  const fontWeight = Object.fromEntries(
-    Object.entries(designTokens.typography.fontWeight).map(([name, weight]) => [
-      name,
-      weight.value,
-    ]),
-  );
-  const duration = Object.fromEntries(
-    Object.entries(designTokens.motion.duration).map(([name, value]) => [
-      name,
-      milliseconds(value),
-    ]),
-  );
-
   return {
     color: colors,
-    motion: { duration },
-    radius,
-    spacing,
-    typography: { fontWeight, scale: typeScale },
+    motion: { duration: mapValues(designTokens.motion.duration, milliseconds) },
+    radius: mapValues(designTokens.radius, lengthToPoints),
+    spacing: mapValues(designTokens.spacing.scale, remToPoints),
+    typography: {
+      fontWeight: mapValues(
+        designTokens.typography.fontWeight,
+        (weight) => weight.value,
+      ),
+      scale: typeScaleToPoints(designTokens.typography.scale),
+    },
   };
+}
+
+/** Core tokens with a product theme's overrides applied, still in source units. */
+function resolveTheme(theme) {
+  const { fontFamily, fontWeight, scale } = designTokens.typography;
+  return {
+    colors: Object.fromEntries(
+      modes.map((mode) => [
+        mode,
+        {
+          ...mapValues(designTokens.color.semantic, (color) => color[mode]),
+          ...theme.color?.[mode],
+        },
+      ]),
+    ),
+    fontFamily: {
+      ...mapValues(fontFamily, (family) => family.value),
+      ...theme.typography?.fontFamily,
+    },
+    fontWeight: {
+      ...mapValues(fontWeight, (weight) => weight.value),
+      ...theme.typography?.fontWeight,
+    },
+    radius: { ...designTokens.radius, ...theme.radius },
+    scale: mapValues(scale, (step, name) => ({
+      fontSize: step.fontSize,
+      lineHeight: step.lineHeight,
+      ...theme.typography?.scale?.[name],
+    })),
+  };
+}
+
+const familyByVariable = Object.fromEntries(
+  Object.entries(designTokens.typography.fontFamily).map(([name, family]) => [
+    family.cssVariable,
+    name,
+  ]),
+);
+
+/** The family a `var(--font-x)` stack points at, or undefined for a literal stack. */
+function referencedFamily(stack) {
+  const variable = /^var\((--[a-z-]+)\)$/.exec(stack.trim())?.[1];
+  if (variable === undefined) return undefined;
+  assert(variable in familyByVariable, `Unknown font variable ${variable}.`);
+  return familyByVariable[variable];
+}
+
+/** First face of a font stack: the one name native and design tools can load. */
+function primaryFace(stack, families) {
+  const reference = referencedFamily(stack);
+  if (reference) return primaryFace(families[reference], families);
+  return stack.split(",")[0].trim().replaceAll(/^['"]|['"]$/g, "");
+}
+
+function productThemeTokens() {
+  return mapValues(designTokens.themes, (theme) => {
+    const resolved = resolveTheme(theme);
+    return {
+      colors: mapValues(resolved.colors, (palette) =>
+        mapValues(palette, oklchToHex),
+      ),
+      defaultMode: theme.defaultMode ?? null,
+      label: theme.label,
+      radius: mapValues(resolved.radius, lengthToPoints),
+      typography: {
+        fontFamily: mapValues(resolved.fontFamily, (stack) =>
+          primaryFace(stack, resolved.fontFamily),
+        ),
+        fontWeight: resolved.fontWeight,
+        scale: typeScaleToPoints(resolved.scale),
+      },
+    };
+  });
+}
+
+function tamaguiThemeColors(palette) {
+  const theme = Object.fromEntries(
+    Object.entries(palette).map(([role, value]) => [
+      tamaguiRoleAliases[role] ?? role,
+      value,
+    ]),
+  );
+  return { ...theme, placeholderColor: palette.mutedForeground };
+}
+
+/** Plain objects shaped for Tamagui's `createTokens` / `createTamagui`; no Tamagui import. */
+function tamaguiTokens() {
+  const native = nativeTokens();
+  const capitalize = (word) => word[0].toUpperCase() + word.slice(1);
+  return {
+    color: Object.fromEntries(
+      Object.entries(native.color).flatMap(([mode, palette]) =>
+        Object.entries(palette).map(([role, value]) => [
+          `${role}${capitalize(mode)}`,
+          value,
+        ]),
+      ),
+    ),
+    radius: native.radius,
+    size: native.spacing,
+    space: native.spacing,
+    zIndex: tamaguiZIndex,
+  };
+}
+
+function tamaguiThemes() {
+  return Object.fromEntries(
+    Object.entries(productThemeTokens()).flatMap(([name, theme]) =>
+      modes.map((mode) => [
+        `${name}_${mode}`,
+        tamaguiThemeColors(theme.colors[mode]),
+      ]),
+    ),
+  );
+}
+
+function paletteLines(palette, indentation) {
+  return Object.entries(designTokens.color.semantic).map(
+    ([role, color]) => `${indentation}${color.cssVariable}: ${palette[role]};`,
+  );
+}
+
+/** CSS custom properties for the typography a theme overrides (nothing it inherits). */
+function themeTypographyLines(theme, indentation) {
+  const { fontFamily, fontWeight, scale } = designTokens.typography;
+  const typography = theme.typography ?? {};
+  const lines = [];
+  for (const [name, stack] of Object.entries(typography.fontFamily ?? {})) {
+    lines.push(`${indentation}${fontFamily[name].cssVariable}: ${cssFontFamily(stack)};`);
+  }
+  for (const [name, value] of Object.entries(typography.fontWeight ?? {})) {
+    if (fontWeight[name].cssVariable) {
+      lines.push(`${indentation}${fontWeight[name].cssVariable}: ${value};`);
+    }
+  }
+  for (const [name, step] of Object.entries(typography.scale ?? {})) {
+    if (step.fontSize) {
+      lines.push(`${indentation}${scale[name].cssVariable}: ${step.fontSize};`);
+    }
+    if (step.lineHeight) {
+      lines.push(
+        `${indentation}${scale[name].lineHeightCssVariable}: ${step.lineHeight};`,
+      );
+    }
+  }
+  return lines;
+}
+
+function renderProductThemes() {
+  const blocks = Object.entries(designTokens.themes).flatMap(([name, theme]) => {
+    const resolved = resolveTheme(theme);
+    const selector = `html[data-theme="${name}"]`;
+    return [
+      `${selector} {`,
+      ...paletteLines(resolved.colors.light, "  "),
+      `  --radius: ${resolved.radius.md};`,
+      ...themeTypographyLines(theme, "  "),
+      "}",
+      "",
+      `${selector}.dark {`,
+      ...paletteLines(resolved.colors.dark, "  "),
+      "}",
+      "",
+    ];
+  });
+  return [
+    "/*",
+    " * Product themes. Generated from packages/design/tokens.json; do not edit.",
+    " * Applied via `data-theme=\"<name>\"` on the document root; the `.dark` class",
+    " * selects the dark palette. Each palette is complete (core roles plus the",
+    " * theme's overrides), as OKLCH channels (\"L C H\") read as oklch(var(--x)).",
+    " * Fonts, type steps and --radius are set once and apply in both modes.",
+    " * The `html[data-theme]` prefix outranks the base `.dark` class.",
+    " */",
+    "",
+    ...blocks,
+  ].join("\n");
+}
+
+const penpotToken = (value, type) => ({ $value: value, $type: type });
+const penpotNumber = (length) => String(Number(lengthToPoints(length).toFixed(3)));
+const penpotWeight = (weight) => penpotToken(String(weight), "fontWeights");
+const penpotRadius = (length) => penpotToken(penpotNumber(length), "borderRadius");
+const penpotSize = (length) => penpotToken(penpotNumber(length), "fontSizes");
+
+/** A font-family token: a reference for `var(--font-x)`, else the primary face. */
+function penpotFamily(stack) {
+  const reference = referencedFamily(stack);
+  return penpotToken(
+    reference ? `{font.family.${reference}}` : [primaryFace(stack, {})],
+    "fontFamilies",
+  );
+}
+
+/** Only what a theme overrides; the core set supplies the rest. */
+function penpotThemeOverrides(theme) {
+  const { fontFamily, fontWeight, scale } = theme.typography ?? {};
+  const sizes = Object.entries(scale ?? {}).filter(([, step]) => step.fontSize);
+  const font = {
+    ...(fontFamily && { family: mapValues(fontFamily, penpotFamily) }),
+    ...(sizes.length > 0 && {
+      size: Object.fromEntries(
+        sizes.map(([name, step]) => [name, penpotSize(step.fontSize)]),
+      ),
+    }),
+    ...(fontWeight && { weight: mapValues(fontWeight, penpotWeight) }),
+  };
+  return {
+    ...(Object.keys(font).length > 0 && { font }),
+    ...(theme.radius && { radius: mapValues(theme.radius, penpotRadius) }),
+  };
+}
+
+function penpotTokens() {
+  const themeNames = Object.keys(designTokens.themes);
+  const core = resolveTheme({});
+  const setNames = [
+    "vllnt/core",
+    ...themeNames.flatMap((name) => modes.map((mode) => `vllnt/${name}/${mode}`)),
+  ];
+
+  const sets = {
+    "vllnt/core": {
+      font: {
+        family: mapValues(core.fontFamily, penpotFamily),
+        size: mapValues(core.scale, (step) => penpotSize(step.fontSize)),
+        weight: mapValues(core.fontWeight, penpotWeight),
+      },
+      radius: mapValues(core.radius, penpotRadius),
+      spacing: mapValues(designTokens.spacing.scale, (value) =>
+        penpotToken(penpotNumber(value), "spacing"),
+      ),
+    },
+  };
+
+  for (const [name, theme] of Object.entries(designTokens.themes)) {
+    const resolved = resolveTheme(theme);
+    for (const mode of modes) {
+      sets[`vllnt/${name}/${mode}`] = {
+        color: Object.fromEntries(
+          Object.entries(designTokens.color.semantic).map(([role, color]) => [
+            color.cssVariable.slice(2),
+            penpotToken(
+              oklchToHex(resolved.colors[mode][role]).toUpperCase(),
+              "color",
+            ),
+          ]),
+        ),
+        ...penpotThemeOverrides(theme),
+      };
+    }
+  }
+
+  const themes = themeNames.flatMap((name) =>
+    modes.map((mode) => ({
+      group: name,
+      name: mode === "dark" ? "Dark" : "Light",
+      selectedTokenSets: Object.fromEntries(
+        setNames.map((setName) => [
+          setName,
+          setName === "vllnt/core" || setName === `vllnt/${name}/${mode}`
+            ? "enabled"
+            : "disabled",
+        ]),
+      ),
+    })),
+  );
+
+  return `${JSON.stringify(
+    { ...sets, $themes: themes, $metadata: { tokenSetOrder: setNames } },
+    null,
+    2,
+  )}\n`;
 }
 
 function renderGeneratedTypeScript() {
@@ -341,6 +667,15 @@ function renderGeneratedTypeScript() {
     `export const componentContracts = ${serialize(componentContracts)} as const;`,
     "",
     `export const nativeTokens = ${serialize(nativeTokens())} as const;`,
+    "",
+    "/** Product themes resolved to native units: sRGB hex, points, primary font faces. */",
+    `export const productThemes = ${serialize(productThemeTokens())} as const;`,
+    "",
+    "/** Plain object for Tamagui's `createTokens`; this package does not depend on Tamagui. */",
+    `export const tamaguiTokens = ${serialize(tamaguiTokens())} as const;`,
+    "",
+    "/** Plain object for Tamagui's `createTamagui({ themes })`, keyed `<theme>_<mode>`. */",
+    `export const tamaguiThemes = ${serialize(tamaguiThemes())} as const;`,
     "",
     "export type BadgeVariant =",
     "  (typeof componentContracts.components.badge.variants)[number];",
@@ -359,6 +694,8 @@ function renderGeneratedTypeScript() {
     "export type TextWeight =",
     "  (typeof componentContracts.components.text.weights)[number];",
     "export type SemanticColorName = keyof typeof nativeTokens.color.light;",
+    "export type ProductThemeName = keyof typeof productThemes;",
+    "export type TamaguiThemeName = keyof typeof tamaguiThemes;",
     "",
   ].join("\n");
 }
@@ -368,8 +705,10 @@ validateSource();
 const currentStyles = await readFile(paths.uiStyles, "utf8");
 const outputs = new Map([
   [paths.uiDefaultTheme, renderDefaultTheme()],
+  [paths.uiProductThemes, renderProductThemes()],
   [paths.uiStyles, replaceStylesThemeBlock(currentStyles)],
   [paths.coreGenerated, renderGeneratedTypeScript()],
+  [paths.penpotTokens, penpotTokens()],
   [paths.coreTokens, await readFile(paths.tokens, "utf8")],
   [paths.coreTokensSchema, await readFile(paths.tokensSchema, "utf8")],
   [paths.coreContracts, await readFile(paths.contracts, "utf8")],
