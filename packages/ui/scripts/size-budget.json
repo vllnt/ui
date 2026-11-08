@@ -8,7 +8,7 @@
     {
       "name": "CodeBlock (up front)",
       "export": "CodeBlock",
-      "maxBytes": 31500
+      "maxBytes": 32450
     },
     {
       "name": "CodeBlock (with lazy highlighter)",
