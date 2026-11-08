@@ -142,6 +142,7 @@ export function Example() {
 | `@vllnt/ui/styles.css` | Full styles (Tailwind base + theme variables + utilities) |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only (no Tailwind base) |
 | `@vllnt/ui/themes/presets.css` | Built-in color presets (applied via `data-theme`) |
+| `@vllnt/ui/themes/products.css` | Product themes `maia` and `paas` (generated; applied via `data-theme`) |
 
 ## Theming
 
@@ -190,6 +191,25 @@ Import `@vllnt/ui/themes/presets.css` and switch between built-in color presets
 at runtime with `<ThemeSwitcher />` (or `setThemePreset` / `useThemePreset`),
 which set `data-theme` on the document root. Render `<ThemePresetProvider />`
 once near the root to restore the saved preset before paint.
+
+### Product themes
+
+`@vllnt/ui/themes/products.css` adds two full product themes, generated from
+`packages/design/tokens.json`. Import it after `styles.css`, set
+`data-theme="maia"` or `data-theme="paas"` on `<html>`, and keep using the
+`dark` class for dark mode:
+
+```html
+<html data-theme="maia" class="dark">
+```
+
+- `maia`: pink primary, Figtree and JetBrains Mono, tighter type scale and radius.
+- `paas`: core neutrals and status tones in JetBrains Mono. Dark is the design
+  default; light works too.
+
+Both define `success`, `warning`, `info`, `diff-added` and `diff-removed` roles
+(the core theme defines them as well). Web `--radius` carries the theme's
+`md` step only; the other radius steps ship in the `@vllnt/ui-core` outputs.
 
 To design and export your own theme, use the visual editor at
 [`/themes`](https://ui.vllnt.com/themes) — it exports a CSS block, a
