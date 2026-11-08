@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import type { ComponentProps, ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -111,11 +117,23 @@ describe("AIArtifact", () => {
     });
 
     it("keeps the Copy label when neither copy path works", async () => {
+      const execCommand = vi.fn<(command: string) => boolean>(() => false);
+      Object.defineProperty(document, "execCommand", {
+        configurable: true,
+        value: execCommand,
+        writable: true,
+      });
       restoreClipboard();
       restoreClipboard = setClipboard(undefined);
       withToolbar(<AIArtifactCopyButton />);
-      fireEvent.click(screen.getByRole("button", { name: "Copy" }));
-      await Promise.resolve();
+      await act(async () => {
+        fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+      expect(execCommand).toHaveBeenCalledWith("copy");
+      expect(
+        screen.queryByRole("button", { name: "Copied" }),
+      ).not.toBeInTheDocument();
       expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument();
     });
 
