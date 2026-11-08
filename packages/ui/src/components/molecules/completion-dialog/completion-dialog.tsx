@@ -54,7 +54,7 @@ function DialogCloseButton({
   return (
     <DialogPrimitive.Close
       aria-label="Close"
-      className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="absolute right-3 top-3 inline-flex min-h-6 min-w-6 items-center justify-center rounded-sm p-1 opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {closeIcon ?? (
         <svg

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- **Close buttons meet the 24 px target size (WCAG 2.5.8)** - the close button in `DialogContent`, `SheetContent` and `CompletionDialog` was 16 px. It is now at least 24x24 px around the same 16 px icon, and the icon keeps its position in the corner.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added

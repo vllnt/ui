@@ -9,6 +9,34 @@ import {
 } from "./sheet";
 
 test.describe("Sheet Visual", () => {
+  test("close button is at least 24x24 around a 16px icon", async ({
+    mount,
+    page,
+  }) => {
+    await mount(
+      <Sheet open>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Sheet Title</SheetTitle>
+            <SheetDescription>Sheet description content.</SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>,
+    );
+    const close = page.getByRole("button", { exact: true, name: "Close" });
+    const target = await close.evaluate((element) => ({
+      height: element.clientHeight,
+      width: element.clientWidth,
+    }));
+    const iconWidth = await close
+      .locator("svg")
+      .evaluate((element) => getComputedStyle(element).width);
+
+    expect(target.width).toBeGreaterThanOrEqual(24);
+    expect(target.height).toBeGreaterThanOrEqual(24);
+    expect(iconWidth).toBe("16px");
+  });
+
   test("default", async ({ mount, page }) => {
     await mount(
       <Sheet open>
