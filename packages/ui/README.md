@@ -204,8 +204,14 @@ once near the root to restore the saved preset before paint.
 ```
 
 - `maia`: pink primary, Figtree and JetBrains Mono, tighter type scale and radius.
+  Its Label step is capitals in the design: add `uppercase` where you use it.
 - `paas`: core neutrals and status tones in JetBrains Mono. Dark is the design
   default; light works too.
+
+The package does not ship fonts. Load Figtree (Maia) and JetBrains Mono (Maia
+and PaaS) in your app, for example with `next/font` or a font `<link>`; without
+them the themes fall back to the system font stack (`system-ui` for Maia,
+`ui-monospace` for PaaS).
 
 Both define `success`, `warning`, `info`, `diff-added` and `diff-removed` roles
 (the core theme defines them as well). Web `--radius` carries the theme's

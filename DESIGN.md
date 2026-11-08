@@ -122,7 +122,7 @@ foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (da
 - Text on `bg-primary` / `bg-secondary` / `bg-accent` / `bg-destructive` / `bg-success` / `bg-warning` / `bg-info` uses that surface's `*-foreground`. `--muted-foreground` is only guaranteed on background, card, popover, and muted.
 - Put light text on a destructive fill with `text-destructive-foreground`, never `text-white`: dark mode pairs a light red with dark text.
 - New themes and presets must pass the contract test before merging. Keep new values inside the sRGB gamut so the measured ratio matches what renders.
-- Hand-written presets in `themes/presets.css` do not define the status or diff roles; they inherit the default theme's. On five presets (dracula, synthwave, nord, claude, dusk) those inherited tones fall below 4.5:1 on some preset surfaces, so use the status roles with a preset only after checking the pair. Product themes define every role.
+- Hand-written presets in `themes/presets.css` do not define the status or diff roles; they inherit the default theme's. On five presets (dracula, synthwave, nord, claude, dusk) those inherited tones fall below 4.5:1 on some preset surfaces, so use the status roles with a preset only after checking the pair (tracked in [#579](https://github.com/vllnt/ui/issues/579)). Product themes define every role. The theme switcher and `useThemePreset` do not know the product themes yet (also #579).
 
 ### Product themes
 
@@ -157,7 +157,7 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 | Output | Path | For |
 |--------|------|-----|
 | Product theme CSS | `packages/ui/themes/products.css` | Web (`@vllnt/ui/themes/products.css`) |
-| Theme objects | `productThemes`, `tamaguiTokens`, `tamaguiThemes` in `@vllnt/ui-core` | Native; plain objects shaped for Tamagui (`createTokens`, `themes` keyed `maia_dark`, `paas_light`), no Tamagui dependency |
+| Theme objects | `productThemes`, `tamaguiTokens`, `tamaguiThemes` in `@vllnt/ui-core` | Native; plain objects, no Tamagui dependency: `tamaguiTokens` is the input for `createTokens`, `tamaguiThemes` (keyed `maia_dark`, `paas_light`) the `themes` input for `createTamagui({ themes })` |
 | Penpot token sets | `packages/design/generated/penpot-tokens.json` | Penpot import: sets `vllnt/core`, `vllnt/<theme>/<mode>`, plus themes and set order |
 
 ---
@@ -190,7 +190,7 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 | Label | `--font-size-label` | 0.75rem (12px) | 600 (`--font-weight-label`) | 1.4 |
 | Code | inherit | inherit | 400 mono | 1.5 |
 
-Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/700; its Mono 12/400 is `font-mono` at the Caption size with the body weight. Maia's Display weight (700) and Label weight (700) are theme-level exceptions to the rule below; core stays at 600. Steps a theme does not set (H1 to H4, Body large) keep the core size.
+Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/700; its Mono 12/400 is `font-mono` at the Caption size with the body weight. Maia's Display weight (700) and Label weight (700) are theme-level exceptions to the rule below; core stays at 600. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.
 
 **Rules**
 - The `Text` / `Heading` / `Display` / `Prose` foundation primitives consume the tokens above — style them by overriding tokens, not by forking the components.
