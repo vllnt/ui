@@ -182,11 +182,19 @@ function tenPercentTint(color: string, surface: string): number[] {
   );
 }
 
-/** Roles whose palette `packages/design/tokens.json` owns (hand-written presets inherit them). */
-const OWNS_STATUS_ROLES: ReadonlySet<string> = new Set([
-  "default",
-  ...PRODUCT_THEMES,
-]);
+/**
+ * Presets inherit the success, warning and info roles from the core theme. These
+ * five miss 4.5:1 on one of their own surfaces in the listed modes. Tracked in
+ * https://github.com/vllnt/ui/issues/579. Each gap runs under `it.fails`, so a
+ * preset that passes again has to leave this list.
+ */
+const KNOWN_STATUS_GAPS: Readonly<Record<string, readonly Mode[]>> = {
+  claude: ["light"],
+  dracula: ["dark", "light"],
+  dusk: ["light"],
+  nord: ["dark", "light"],
+  synthwave: ["light"],
+};
 
 function illegibleOnTint(colors: Palette, roles: readonly string[]): string[] {
   return roles.filter((role) => {
@@ -220,21 +228,16 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
     expect(illegibleOnTint(colors, ["destructive"])).toEqual([]);
   });
 
-  it.runIf(OWNS_STATUS_ROLES.has(preset))(
-    "keeps the status and diff pairs at 4.5:1",
-    () => {
-      expect(failures(colors, STATUS_PAIRS, 4.5)).toEqual([]);
-    },
-  );
+  const statusIt = KNOWN_STATUS_GAPS[preset]?.includes(mode) ? it.fails : it;
 
-  it.runIf(OWNS_STATUS_ROLES.has(preset))(
-    "keeps info, success and warning legible on their 10% tint",
-    () => {
-      expect(illegibleOnTint(colors, ["info", "success", "warning"])).toEqual(
-        [],
-      );
-    },
-  );
+  statusIt("keeps the status and diff colors legible", () => {
+    expect([
+      ...failures(colors, STATUS_PAIRS, 4.5),
+      ...illegibleOnTint(colors, ["info", "success", "warning"]).map(
+        (role) => `${role} on its 10% tint`,
+      ),
+    ]).toEqual([]);
+  });
 
   it("keeps CodeBlock syntax tokens at 4.5:1 on the background", () => {
     const pairs = CODE_TOKENS.map(
