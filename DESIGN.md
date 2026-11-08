@@ -122,7 +122,7 @@ foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (da
 - Text on `bg-primary` / `bg-secondary` / `bg-accent` / `bg-destructive` / `bg-success` / `bg-warning` / `bg-info` uses that surface's `*-foreground`. `--muted-foreground` is only guaranteed on background, card, popover, and muted.
 - Put light text on a destructive fill with `text-destructive-foreground`, never `text-white`: dark mode pairs a light red with dark text.
 - New themes and presets must pass the contract test before merging. Keep new values inside the sRGB gamut so the measured ratio matches what renders.
-- Hand-written presets in `themes/presets.css` do not define the status or diff roles; they inherit the default theme's. On six presets (dracula, synthwave, nord, claude, dusk, aura) those inherited tones fall below 4.5:1 on some preset surfaces, so use the status roles with a preset only after checking the pair. Product themes define every role.
+- Hand-written presets in `themes/presets.css` do not define the status or diff roles; they inherit the default theme's. On five presets (dracula, synthwave, nord, claude, dusk) those inherited tones fall below 4.5:1 on some preset surfaces, so use the status roles with a preset only after checking the pair. Product themes define every role.
 
 ### Product themes
 
