@@ -26,7 +26,7 @@ function setExecCommand(value: ((command: string) => boolean) | undefined) {
 
 type FieldSnapshot = {
   focused: boolean;
-  insideDialog: boolean;
+  parent: Element | null;
   selected: string;
   value: string;
 };
@@ -36,10 +36,22 @@ function snapshotField(): FieldSnapshot | undefined {
   if (!field) return undefined;
   return {
     focused: document.activeElement === field,
-    insideDialog: field.closest('[role="dialog"]') !== null,
+    parent: field.parentElement,
     selected: field.value.slice(field.selectionStart, field.selectionEnd),
     value: field.value,
   };
+}
+
+function selectPageText(text: string): null | Selection {
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+  document.body.append(paragraph);
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = document.getSelection();
+  selection?.removeAllRanges();
+  selection?.addRange(range);
+  return selection;
 }
 
 async function copyValue(value: string) {
@@ -119,23 +131,83 @@ describe("useCopyToClipboard", () => {
       expect(document.activeElement).toBe(button);
     });
 
-    it("mounts the textarea inside an open dialog so its focus trap keeps it", async () => {
-      const dialog = document.createElement("div");
-      dialog.setAttribute("role", "dialog");
-      const button = document.createElement("button");
-      dialog.append(button);
-      document.body.append(dialog);
-      button.focus();
-      let seen: FieldSnapshot | undefined;
+    it.each([
+      [
+        "a dialog",
+        () => {
+          const host = document.createElement("div");
+          host.setAttribute("role", "dialog");
+          return host;
+        },
+      ],
+      [
+        "an alert dialog",
+        () => {
+          const host = document.createElement("div");
+          host.setAttribute("role", "alertdialog");
+          return host;
+        },
+      ],
+      [
+        "a native dialog",
+        () => {
+          const host = document.createElement("dialog");
+          host.setAttribute("open", "");
+          return host;
+        },
+      ],
+    ])(
+      "mounts the textarea inside %s so its focus trap keeps it",
+      async (_name, createHost) => {
+        const host = createHost();
+        const button = document.createElement("button");
+        host.append(button);
+        document.body.append(host);
+        button.focus();
+        let seen: FieldSnapshot | undefined;
+        execCommand.mockImplementation(() => {
+          seen = snapshotField();
+          return true;
+        });
+
+        await copyValue("secret");
+
+        expect(seen?.parent).toBe(host);
+        expect(host.querySelector("textarea")).toBeNull();
+      },
+    );
+
+    it("keeps the page text selection the user had before copying", async () => {
+      const selection = selectPageText("page text");
       execCommand.mockImplementation(() => {
-        seen = snapshotField();
+        document.getSelection()?.removeAllRanges();
         return true;
       });
 
       await copyValue("secret");
 
-      expect(seen?.insideDialog).toBe(true);
-      expect(dialog.querySelector("textarea")).toBeNull();
+      expect(selection?.rangeCount).toBe(1);
+      expect(selection?.toString()).toBe("page text");
+    });
+
+    it("keeps the page text selection when the copy command fails", async () => {
+      const selection = selectPageText("page text");
+      execCommand.mockImplementation(() => {
+        document.getSelection()?.removeAllRanges();
+        return false;
+      });
+
+      await copyValue("secret");
+
+      expect(selection?.toString()).toBe("page text");
+    });
+
+    it("does not invent a selection when the page had none", async () => {
+      document.getSelection()?.removeAllRanges();
+
+      await copyValue("secret");
+
+      expect(document.getSelection()?.rangeCount).toBe(0);
     });
 
     it("reports failure when the browser refuses the copy command", async () => {

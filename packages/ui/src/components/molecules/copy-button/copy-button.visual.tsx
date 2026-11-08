@@ -7,6 +7,13 @@ import {
   DialogDescription,
   DialogTitle,
 } from "../../atoms/dialog/dialog";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+} from "../alert-dialog/alert-dialog";
 import { CopyButton } from "./copy-button";
 
 async function removeClipboardApi(page: Page): Promise<void> {
@@ -80,6 +87,101 @@ test.describe("CopyButton Visual", () => {
 
       await expect(page.getByLabel("Paste target")).toHaveValue(
         "EXAMPLE_API_KEY",
+      );
+    });
+
+    test("copies from inside an alert dialog that traps focus", async ({
+      mount,
+      page,
+    }) => {
+      await mount(
+        <AlertDialog open>
+          <AlertDialogContent>
+            <AlertDialogTitle>Keys</AlertDialogTitle>
+            <AlertDialogDescription>Copy the key.</AlertDialogDescription>
+            <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+            <textarea aria-label="Paste target" />
+            <AlertDialogCancel>Dismiss</AlertDialogCancel>
+          </AlertDialogContent>
+        </AlertDialog>,
+      );
+      await removeClipboardApi(page);
+
+      await page.getByRole("button", { name: "Copy" }).click();
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+      await page.getByLabel("Paste target").press("ControlOrMeta+V");
+
+      await expect(page.getByLabel("Paste target")).toHaveValue(
+        "EXAMPLE_API_KEY",
+      );
+    });
+
+    test("copies from inside a native modal dialog", async ({
+      mount,
+      page,
+    }) => {
+      await mount(
+        <dialog>
+          <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+          <textarea aria-label="Paste target" />
+        </dialog>,
+      );
+      await page.evaluate(() => {
+        document.querySelector("dialog")?.showModal();
+      });
+      await removeClipboardApi(page);
+
+      await page.getByRole("button", { name: "Copy" }).click();
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+      await page.getByLabel("Paste target").press("ControlOrMeta+V");
+
+      await expect(page.getByLabel("Paste target")).toHaveValue(
+        "EXAMPLE_API_KEY",
+      );
+    });
+
+    test("leaves no tooltip open after copying", async ({ mount, page }) => {
+      await mount(<CopyButton value="EXAMPLE_API_KEY" />);
+      await removeClipboardApi(page);
+      const tooltip = page.locator('[role="tooltip"]');
+      const button = page.getByRole("button", { name: "Copy" });
+
+      await button.hover();
+      await expect(tooltip).toHaveCount(1);
+      await button.click();
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+      await page.mouse.move(5, 5);
+
+      await expect(tooltip).toHaveCount(0);
+    });
+
+    test("keeps the text the user selected on the page", async ({
+      mount,
+      page,
+    }) => {
+      await mount(
+        <>
+          <p>Selected page text</p>
+          <CopyButton value="EXAMPLE_API_KEY" variant="button" />
+        </>,
+      );
+      await removeClipboardApi(page);
+      await page.evaluate(() => {
+        const paragraph = document.querySelector("p");
+        if (!paragraph) throw new Error("missing paragraph");
+        const range = document.createRange();
+        range.selectNodeContents(paragraph);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+      });
+
+      await page.getByRole("button", { name: "Copy" }).focus();
+      await page.keyboard.press("Enter");
+      await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+
+      expect(await page.evaluate(() => window.getSelection()?.toString())).toBe(
+        "Selected page text",
       );
     });
   });

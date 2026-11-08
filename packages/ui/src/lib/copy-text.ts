@@ -22,19 +22,34 @@ function createCopyField(value: string): HTMLTextAreaElement {
   const field = document.createElement("textarea");
   field.value = value;
   field.readOnly = true;
-  Object.assign(field.style, {
-    left: "-9999px",
-    opacity: "0",
-    position: "fixed",
-    top: "0",
-  });
+  field.style.cssText = "left:-9999px;opacity:0;position:fixed;top:0";
   return field;
+}
+
+function saveSelection(): Range[] {
+  const selection = document.getSelection();
+  if (!selection) return [];
+  return Array.from({ length: selection.rangeCount }, (_, index) =>
+    selection.getRangeAt(index),
+  );
+}
+
+function restoreSelection(ranges: Range[]): void {
+  const selection = document.getSelection();
+  if (!selection) return;
+  selection.removeAllRanges();
+  ranges.forEach((range) => {
+    selection.addRange(range);
+  });
 }
 
 function copyWithTextarea(value: string): boolean {
   if (typeof document === "undefined") return false;
   const previous = document.activeElement;
-  const host = previous?.closest('[role="dialog"]') ?? document.body;
+  const selection = saveSelection();
+  const host =
+    previous?.closest('[role="dialog"],[role="alertdialog"],dialog[open]') ??
+    document.body;
   const field = createCopyField(value);
   host.append(field);
   try {
@@ -45,6 +60,7 @@ function copyWithTextarea(value: string): boolean {
     return false;
   } finally {
     field.remove();
+    restoreSelection(selection);
     if (previous instanceof HTMLElement) {
       previous.focus({ preventScroll: true });
     }
@@ -58,8 +74,10 @@ function copyWithTextarea(value: string): boolean {
  * (https, localhost). When the API is absent (plain http, such as a Tailnet IP)
  * or `writeText` rejects, it falls back to a temporary off-screen textarea and
  * `document.execCommand("copy")`. The textarea mounts inside the open dialog
- * that holds focus, if any: a modal focus trap would otherwise take the
- * selection back and leave the clipboard empty. Resolves to `false` when
+ * that holds focus, if any (a `dialog` or `alertdialog` role, or a native
+ * `dialog` element): a modal focus trap would otherwise take the selection
+ * back and leave the clipboard empty. The fallback gives back the text the
+ * user had selected on the page and the focus. Resolves to `false` when
  * neither path works.
  *
  * Call it from a user gesture such as a click handler; browsers refuse
