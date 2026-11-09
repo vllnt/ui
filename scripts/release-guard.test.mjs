@@ -31,6 +31,15 @@ test("canaries derive prerelease versions from validated inputs", () => {
     assert.throws(() => releaseVersion({ ...input, ...changes, mode: "native-canary" }));
   }
 });
+test("core canary shares the native canary series and needs only a valid core base", () => {
+  assert.equal(releaseVersion({ ...input, mode: "core-canary" }), releaseVersion({ ...input, mode: "native-canary" }));
+  assert.equal(releaseVersion({ ...input, native: "0.9.9", mode: "core-canary" }), "0.1.0-canary.42.shaaaaaaaaaaaaa");
+  assert.equal(releaseVersion({ ...input, sha: "0123456789ab" + "c".repeat(28), mode: "core-canary" }), "0.1.0-canary.42.sha0123456789ab");
+  for (const changes of [{ core: "0.4.0" }, { core: "0.1.0-canary.1" }, { core: "0.1.1" }, { run: "0" }, { run: "01" }, { run: undefined }, { sha: "bad" }, { sha: "A".repeat(40) }, { ref: "refs/heads/other" }, { ref: "refs/tags/v0.1.0" }]) {
+    assert.throws(() => releaseVersion({ ...input, ...changes, mode: "core-canary" }), undefined, JSON.stringify(changes));
+  }
+  for (const mode of ["core", "core-stable", "pair", "canary"]) assert.throws(() => releaseVersion({ ...input, mode }));
+});
 test("checked-in bases, availability and stable install pin remain coherent", () => {
   assert.equal(JSON.parse(read("packages/ui/package.json")).version, "0.4.0");
   for (const name of ["ui-core", "ui-native"]) assert.equal(JSON.parse(read(`packages/${name}/package.json`)).version, "0.1.0");
