@@ -1,8 +1,5 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { releaseVersion } from "./release-guard.mjs";
 
@@ -55,41 +52,45 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.match(web, /publish "\$TARBALL" --tag canary/);
   assert.match(web, /publish "\$TARBALL" --tag latest/);
   assert.match(web.slice(web.indexOf("  release:")), /environment: npm-release/);
-  assert.ok(native.indexOf("release-guard.mjs native-canary") < native.indexOf("npm@11.18.0 whoami"));
-  assert.match(native, /--tag "\$STAGING_TAG"/);
-  assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary/);
-  assert.match(native, /if: \$\{\{ false \}\}/);
-  assert.match(native, /dist-tag add "@vllnt\/ui-native@\$\{CANARY_VERSION\}" canary/);
   for (const workflow of [web, native]) assert.match(workflow, /node --test scripts\/release-guard.test.mjs/);
 });
-test("native publisher distinguishes unpublished versions from registry failures", () => {
-  const workflow = read(".github/workflows/native-canary.yml");
-  const fn = workflow.match(/^( +)version_state\(\) \{\n[\s\S]*?^\1\}\n/m);
-  assert.ok(fn, "version_state() must exist in native-canary.yml");
-  const body = fn[0].replace(new RegExp(`^${fn[1]}`, "gm"), "");
-  const dir = mkdtempSync(join(tmpdir(), "version-state-"));
-  const npmStub = join(dir, "npm");
-  const run = (stub) => {
-    writeFileSync(npmStub, `#!/usr/bin/env bash\n${stub}\n`, { mode: 0o755 });
-    return spawnSync("bash", ["-c", `set -euo pipefail\n${body}\nversion_state "@vllnt/ui-core@0.1.0-canary.1.shaaaaaaaaaaaaa"`], {
-      encoding: "utf8",
-      env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, RUNNER_TEMP: dir },
-    });
-  };
-  const cases = [
-    ["echo 0.1.0-canary.1.shaaaaaaaaaaaaa", 0, "present"],
-    ["exit 0", 0, "absent"],
-    ["echo 'npm error code E404' >&2; exit 1", 0, "absent"],
-    ["echo 'npm error code ETIMEDOUT' >&2; exit 1", 1, ""],
-    ["echo 'npm error code E503' >&2; exit 1", 1, ""],
-  ];
-  try {
-    for (const [stub, status, stdout] of cases) {
-      const result = run(stub);
-      assert.equal(result.status, status, stub);
-      assert.equal(result.stdout.trim(), stdout, stub);
-    }
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
+test("core and native canaries are variable-gated, canary-only, and core never waits for Expo", () => {
+  const native = read(".github/workflows/native-canary.yml");
+  const script = read("scripts/publish-canary.sh");
+  const job = (id) => native.match(new RegExp(`^  ${id}:\\n[\\s\\S]*?(?=^  \\S|(?![\\s\\S]))`, "m"))?.[0] ?? assert.fail(`job ${id} missing`);
+  const commands = (id) => job(id).split("\n").filter((line) => /^\s+(- )?run:/.test(line));
+  const [coreQuality, publishCore, quality, pair] = ["core-quality", "publish-core", "quality", "publish"].map(job);
+
+  // Each path has its own off-by-default switch.
+  assert.match(publishCore, /if: \$\{\{ vars\.CORE_CANARY_PUBLISH == 'true' \}\}/);
+  assert.match(pair, /vars\.NATIVE_CANARY_PUBLISH == 'true'/);
+  assert.doesNotMatch(native, /if: \$\{\{ false \}\}/);
+  // ui-core's canary needs only core's own gate; nothing on its path mentions native or Expo.
+  assert.match(publishCore, /^    needs: core-quality$/m);
+  for (const command of [...commands("core-quality"), ...commands("publish-core")]) assert.doesNotMatch(command, /ci:native|native|expo/i);
+  assert.match(coreQuality, /pnpm -F @vllnt\/ui-core lint[\s\S]*typecheck[\s\S]*build[\s\S]*test:once[\s\S]*pack:check/);
+  // The pair stays behind the full native gate and goes after the core job.
+  assert.match(quality, /pnpm ci:native/);
+  assert.match(pair, /^    needs: \[quality, publish-core\]$/m);
+  assert.match(pair, /needs\.quality\.result == 'success'/);
+  assert.match(pair, /needs\.publish-core\.result/);
+  // Publication happens only through the shared script, in the protected environment, with OIDC.
+  assert.match(publishCore, /bash scripts\/publish-canary\.sh core$/m);
+  assert.match(pair, /bash scripts\/publish-canary\.sh pair$/m);
+  for (const publish of [publishCore, pair]) {
+    assert.match(publish, /environment: npm-native-canary/);
+    assert.match(publish, /id-token: write/);
+    assert.match(publish, /NPM_DIST_TAG_TOKEN: \$\{\{ secrets\.NPM_DIST_TAG_TOKEN \}\}/);
   }
+  for (const gate of [coreQuality, quality]) assert.doesNotMatch(gate, /id-token|environment:|secrets\./);
+  assert.doesNotMatch(native, /--tag latest|workflow_dispatch|pull_request|scripts\/native-canary/);
+  assert.match(native, /branches: \[main\]/);
+
+  // The script: guard first, modes bound to guard channels, staging then canary, never latest.
+  assert.match(script, /^  core\) GUARD_MODE="core-canary" ;;$/m);
+  assert.match(script, /^    GUARD_MODE="native-canary"$/m);
+  assert.ok(script.indexOf('release-guard.mjs "$GUARD_MODE"') < script.indexOf("whoami"));
+  assert.match(script, /publish "\$\{TARBALLS\[i\]\}" --tag "\$STAGING_TAG" --provenance --access public/);
+  assert.match(script, /dist-tag add "\$\{NAMES\[i\]\}@\$\{CANARY_VERSION\}" canary/);
+  assert.doesNotMatch(script, /--tag "?latest|dist-tag (add|rm) [^\n]* "?latest\b/);
 });
