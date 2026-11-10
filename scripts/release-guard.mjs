@@ -10,9 +10,15 @@ export function assertNativeCanary(version) {
   return version;
 }
 
-/** Web 0.3.x and 0.4.x may publish stable; newer bases need a separately reviewed change. */
+/**
+ * Web 0.3.x and 0.4.x may publish stable; newer bases need a separately reviewed change.
+ * Stable publishes only from its own `v<version>` tag push; every other mode only from main.
+ * That the tagged commit is on main needs git history, so the workflow checks it.
+ */
 export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
-  if (ref !== "refs/heads/main") throw new Error("Publication requires main");
+  if (mode === "stable") {
+    if (ref !== `refs/tags/v${web}`) throw new Error(`Stable publication requires tag v${web}`);
+  } else if (ref !== "refs/heads/main") throw new Error("Publication requires main");
   if (!/^0\.(?:3|4)\.(?:0|[1-9]\d*)$/.test(web)) throw new Error("Unsupported Web release base");
   if (mode === "stable") return web;
   if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
