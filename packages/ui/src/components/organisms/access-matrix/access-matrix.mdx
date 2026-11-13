@@ -1,0 +1,95 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './access-matrix.stories'
+
+<Meta of={Stories} />
+
+# AccessMatrix
+
+Shows which permissions each subject holds, as a table (`grid`) or as one list entry per subject (`list`). Every cell is `granted`, `denied` or `inherited`. Pure presentation: the host owns the value, applies `onChange`, and picks the mode.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/access-matrix.json
+```
+
+## Import
+
+```tsx
+import { AccessMatrix } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<AccessMatrix
+  title="Team permissions"
+  subjects={[
+    { id: 'owners', label: 'Owners', description: 'Manage members and billing' },
+    { id: 'viewers', label: 'Viewers' },
+  ]}
+  permissions={[
+    { id: 'read', label: 'Read' },
+    { id: 'write', label: 'Write' },
+  ]}
+  value={{
+    owners: { read: 'granted', write: 'granted' },
+    viewers: { read: 'inherited', write: 'denied' },
+  }}
+  onChange={(subjectId, permissionId, next) => save(subjectId, permissionId, next)}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Modes
+
+- `grid` (default): a real `<table>` with `<th scope="col">` for each permission and `<th scope="row">` for each subject. Cells show a glyph, and the state word is announced to screen readers.
+- `list`: one `<ul>` entry per subject, listing each permission with its state as a visible word. Use it for the phone layout. The component has no breakpoint logic: the host chooses the mode.
+
+<Canvas of={Stories.List} />
+
+## Editing
+
+Without `onChange` the matrix is read-only. With `onChange`, granted and denied cells (in both modes) are buttons named `<subject>, <permission>: <state>`. A press calls `onChange(subjectId, permissionId, next)` with the opposite state, `granted` or `denied`. Inherited cells are never buttons and never call `onChange`.
+
+<Canvas of={Stories.Interactive} />
+
+## Labels
+
+`labels` replaces the three state words (`granted`, `denied`, `inherited`); any word left out keeps its English default. The words are shown in `list` mode, announced in `grid` mode, and used in each button name.
+
+<Canvas of={Stories.CustomLabels} />
+
+## Edge cases
+
+- A missing `value[subjectId][permissionId]` reads as `denied`.
+- With no subjects or no permissions the matrix renders its title only, with no table or list. The host owns the empty state.
+- When at least one cell is inherited, the header shows a small key for the inherited glyph.
+
+## API Reference
+
+<Controls />
+
+## Penpot mapping
+
+Family `organism / Access matrix` (lock 1.x, 2 mains).
+
+| Penpot | Code |
+| --- | --- |
+| Axis `Mode: grid` | `mode="grid"` (default) |
+| Axis `Mode: list` | `mode="list"` |
+| Layer `Surface` | the `<section>` root (`rounded-lg border bg-card`) |
+| Layer `Header` / `Title` | the `<h3>` from `title` |
+| Layer `Header` / `Inherited` | the inherited key, shown when a cell is inherited |
+| Layer `Grid` (header row and rows) | the `<table>`: permission column headers, subject row headers |
+| Layer `List` (entries) | the `<ul>`: one entry per subject |
+
+Not built from Penpot: the layer layout was taken from the build brief, not read from the Penpot file, so any Penpot value beyond the layer names above (spacing, glyph shapes, state colours) is not matched. States use the `success`, `muted-foreground` and `info` roles with a glyph and a word, so colour never carries state alone.
+
+## Notes
+
+- The title is an `<h3>`. Place the matrix under an `<h2>`, or rename the level in a wrapper.
+- Pair with `Table`, `Badge` and `DataTable` for the rest of a permissions screen.
