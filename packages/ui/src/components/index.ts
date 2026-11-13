@@ -521,7 +521,15 @@ export {
   type TransactionListSubscriptionRowProps,
   type TransactionType,
 } from "./molecules/transaction-list/transaction-list";
-export { Avatar, AvatarFallback, AvatarImage } from "./atoms/avatar/avatar";
+export {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  type AvatarPresence,
+  type AvatarProps,
+  type AvatarShape,
+  type AvatarSize,
+} from "./atoms/avatar/avatar";
 export {
   AvatarGroup,
   type AvatarGroupItem,
