@@ -5576,6 +5576,28 @@
       ]
     },
     {
+      "name": "pull-quote",
+      "type": "registry:component",
+      "title": "Pull Quote",
+      "description": "Highlighted quotation lifted out of long-form content: a short decorative rule, the quote and an optional attribution.",
+      "files": [
+        {
+          "path": "registry/default/pull-quote/pull-quote.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "content",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "qr-code",
       "type": "registry:component",
       "title": "QR Code",
