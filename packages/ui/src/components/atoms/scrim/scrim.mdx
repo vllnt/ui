@@ -1,0 +1,71 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './scrim.stories'
+
+<Meta of={Stories} />
+
+# Scrim
+
+Flat full-bleed overlay that dims the surface behind a panel, sheet or pane. It is a black veil in every theme mode (light and dark), so it reads the same wherever it is mounted. Decorative only: it renders a `div` with `aria-hidden="true"` and no content.
+
+It fills its nearest positioned ancestor (`absolute inset-0`). Put it inside a `position: relative` parent, or pass `className="fixed"` to cover the viewport; the position is the host's choice.
+
+Distinct from `ProgressiveBlur`: that atom softens one edge with directional blur; `Scrim` is a flat color veil with no blur.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/scrim.json
+```
+
+## Import
+
+```tsx
+import { Scrim } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<div className="relative">
+  <Content />
+  <Scrim level="strong" />
+</div>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Dim
+
+`level="dim"` (the default) is `bg-black/50`: a light veil that keeps the surface behind readable, such as the backdrop of a side panel.
+
+<Canvas of={Stories.Dim} sourceState="shown" />
+
+## Strong
+
+`level="strong"` is `bg-black/80`: a heavy veil that hides what is behind it, such as the backdrop of a modal sheet.
+
+<Canvas of={Stories.Strong} sourceState="shown" />
+
+## Penpot mapping
+
+The Penpot family `atom / Scrim` (lock 1.x) has four mains on the axis Level: `blur`, `dim`, `fade`, `strong`.
+
+| Penpot Level | Code | Status |
+|--------------|------|--------|
+| `dim` | `level="dim"` (`bg-black/50`) | Built |
+| `strong` | `level="strong"` (`bg-black/80`) | Built |
+| `blur` | `ProgressiveBlur` (`atoms/progressive-blur`) | Not built here: stays with the existing directional blur atom |
+| `fade` | none | Not built |
+
+## Notes
+
+- Both levels live in one `cva` (`scrimVariants`), so binding the scrim color to a token later is a single edit.
+- The color is black in every theme mode (owner answer F4), not a theme role.
+- Overlay only: `Scrim` does not trap focus, lock scroll or handle clicks. Pass `onClick` through props to dismiss, and pair it with a dialog or sheet for the accessible behavior.
+- Follow-up adopters: `Sheet` (`bg-black/80`) and the `TableOfContentsPanel` backdrop (`bg-black/50`) still use raw classes and can adopt `Scrim` in their own slices.
