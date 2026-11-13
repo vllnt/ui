@@ -113,6 +113,12 @@ export {
   useFormField,
 } from "./molecules/form/form";
 export {
+  SettingsList,
+  SettingsListItem,
+  type SettingsListItemProps,
+  type SettingsListProps,
+} from "./organisms/settings-list/settings-list";
+export {
   MultiSelect,
   type MultiSelectOption,
   type MultiSelectProps,
