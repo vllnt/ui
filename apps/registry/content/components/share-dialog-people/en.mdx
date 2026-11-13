@@ -1,0 +1,34 @@
+---
+title: "Share Dialog People"
+description: "Content panel of a people-sharing dialog with a share link, people with role menus, and an invite form. Install Share Dialog People from the VLLNT UI registry with the shadcn CLI."
+keywords:
+  - "share-dialog-people"
+  - "share-dialog-people component"
+  - "react share-dialog-people"
+  - "shadcn share-dialog-people"
+  - "overlay component"
+---
+Content panel of a people-sharing dialog: a share link, the people who have access with a role menu each, and an invite form. Part of the overlay family in VLLNT UI, it ships as a
+machine-readable registry entry — copy the source directly into your app with
+the shadcn CLI and own it, no runtime dependency on a component library.
+
+Pass `people` and `roles`, then switch between the `list` and `invite` panels with `kind` and `onKindChange`. Set `linkUrl` to show the share link row. Wrap the panel in a `Dialog` or `Sheet` yourself: the host owns the data and every side effect, and the panel sends no invites and holds no permission logic. `layout` picks the `desktop` or `phone` density, `labels` overrides every visible and screen-reader string, and `onRemove` adds a Remove choice to each role menu.
+
+<Preview />
+
+## Installation
+
+Add Share Dialog People to your project with the shadcn CLI. The source lands in your
+codebase, ready to adapt:
+
+<Install />
+
+## Source
+
+<Code />
+
+## Stories
+
+Explore every variant and state in the interactive Storybook:
+
+<Stories />

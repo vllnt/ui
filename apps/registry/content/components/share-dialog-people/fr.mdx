@@ -1,0 +1,35 @@
+---
+title: "Share Dialog People"
+description: "Panneau de contenu d'une boite de dialogue de partage avec des personnes : lien de partage, personnes ayant acces avec un menu de role chacune, et formulaire d'invitation. Installez Share Dialog People depuis le registre VLLNT UI avec la CLI shadcn."
+keywords:
+  - "partage avec des personnes"
+  - "composant partage de personnes"
+  - "share-dialog-people react"
+  - "share-dialog-people shadcn"
+  - "composant overlay"
+---
+Panneau de contenu d'une boite de dialogue de partage avec des personnes : un lien de partage, les personnes qui ont acces avec un menu de role chacune, et un formulaire d'invitation. Fait partie de la famille overlay dans VLLNT UI, il est publie comme
+entree de registre lisible par machine — copiez la source directement dans votre
+application avec la CLI shadcn et possedez-la, sans dependance d'execution a une
+bibliotheque de composants.
+
+Passez `people` et `roles`, puis basculez entre les panneaux `list` et `invite` avec `kind` et `onKindChange`. Renseignez `linkUrl` pour afficher la ligne du lien de partage. Enveloppez vous-meme le panneau dans un `Dialog` ou un `Sheet` : l'application hote possede les donnees et tous les effets de bord, et le panneau n'envoie aucune invitation et ne porte aucune logique de permissions. `layout` choisit la densite `desktop` ou `phone`, `labels` remplace chaque texte visible et chaque texte pour lecteur d'ecran, et `onRemove` ajoute a chaque menu de role un choix pour retirer la personne.
+
+<Preview />
+
+## Installation
+
+Ajoutez Share Dialog People a votre projet avec la CLI shadcn. La source arrive dans votre
+code, prete a etre adaptee :
+
+<Install />
+
+## Source
+
+<Code />
+
+## Stories
+
+Explorez chaque variante et chaque etat dans le Storybook interactif :
+
+<Stories />
