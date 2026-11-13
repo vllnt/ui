@@ -16,6 +16,9 @@ export {
 } from "./atoms/button/button";
 export {
   CookieConsent,
+  type CookieConsentActions,
+  type CookieConsentLabels,
+  type CookieConsentLayout,
   type CookieConsentProps,
   cookieConsentVariants,
 } from "./molecules/cookie-consent/cookie-consent";
