@@ -322,6 +322,7 @@ export {
   TagGroup,
   TagGroupItem,
   type TagGroupItemProps,
+  type TagGroupLabels,
   type TagGroupProps,
   type TagSelectionMode,
 } from "./atoms/tag-group/tag-group";
@@ -355,6 +356,7 @@ export {
   SheetDescription,
   SheetFooter,
   SheetHeader,
+  type SheetLabels,
   SheetOverlay,
   SheetPortal,
   SheetTitle,
@@ -501,6 +503,7 @@ export {
   TimelineItem,
   type TimelineItemProps,
   type TimelineItemStatus,
+  type TimelineLabels,
   type TimelineOrientation,
   type TimelineProps,
   timelineVariants,
