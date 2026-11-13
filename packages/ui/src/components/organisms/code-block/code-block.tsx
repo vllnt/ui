@@ -3,6 +3,7 @@
 import {
   type ComponentType,
   type ReactNode,
+  type Ref,
   useEffect,
   useRef,
   useState,
@@ -67,11 +68,28 @@ const CODE_THEME: PrismStyle = {
   variable: codeToken("variable", "0.5003 0.1821 29.5"),
 };
 
+const WRAP_CLASS = "whitespace-pre-wrap break-words";
+
+/**
+ * Props for {@link CodeBlock}.
+ *
+ * @public
+ */
 export type CodeBlockProps = {
+  /** Source code to display. Nested elements contribute their text. */
   children: ReactNode;
+  /** Class name merged onto the root element. */
   className?: string;
+  /** Prism language used to highlight the code. Defaults to `"typescript"`. */
   language?: string;
+  /** Show the language label over the code. Ignored when `title` renders a header, which always shows it. */
   showLanguage?: boolean;
+  /** Number each line. Defaults to `false`. Numbers are not part of the copied text. */
+  showLineNumbers?: boolean;
+  /** File name or label. When set, a header row shows it with the language label and the Copy button. */
+  title?: ReactNode;
+  /** Wrap long lines instead of scrolling horizontally. Defaults to `false`. */
+  wrap?: boolean;
 };
 
 function extractTextFromChildren(node: ReactNode): string {
@@ -105,12 +123,31 @@ function findScrollableParent(
   return findScrollableParent(element.parentElement);
 }
 
+/**
+ * Syntax-highlighted code with a Copy button. Pass `title` for a header row
+ * (file name, language, Copy), `wrap` to wrap long lines and `showLineNumbers`
+ * to number them. A successful copy shows a visible `Copied` word, announced
+ * through a polite live region.
+ *
+ * @example
+ * ```tsx
+ * <CodeBlock language="tsx" showLineNumbers title="app.tsx" wrap>
+ *   {source}
+ * </CodeBlock>
+ * ```
+ *
+ * @public
+ */
 export function CodeBlock({
   children,
   className,
   language = "typescript",
+  ref,
   showLanguage = false,
-}: CodeBlockProps) {
+  showLineNumbers = false,
+  title,
+  wrap = false,
+}: CodeBlockProps & { ref?: Ref<HTMLDivElement> }) {
   const { copied, copy } = useCopyToClipboard();
   // The Prism build is dynamic-imported on mount, by deep path rather than
   // the package root (which also pulls highlight.js and every theme), so the
@@ -158,6 +195,39 @@ export function CodeBlock({
   };
 
   const SyntaxHighlighter = highlighter?.SyntaxHighlighter;
+  const hasHeader = Boolean(title);
+
+  const languageLabel = (
+    <span className="mr-2 text-xs font-mono text-muted-foreground uppercase tracking-wider">
+      {language}
+    </span>
+  );
+
+  const Icon = copied ? Check : Copy;
+
+  const copyControl = (
+    <>
+      <span
+        aria-live="polite"
+        className={cn(
+          "text-xs text-muted-foreground",
+          copied && "rounded-sm bg-background px-1",
+        )}
+        role="status"
+      >
+        {copied ? "Copied" : null}
+      </span>
+      <Button
+        aria-label="Copy code"
+        className="size-8"
+        onClick={handleCopy}
+        size="icon"
+        variant="ghost"
+      >
+        <Icon className="size-3" />
+      </Button>
+    </>
+  );
 
   return (
     <div
@@ -165,7 +235,17 @@ export function CodeBlock({
         "relative w-full overflow-hidden rounded-md border bg-background",
         className,
       )}
+      ref={ref}
     >
+      {hasHeader ? (
+        <div className="flex items-center justify-between gap-2 border-b bg-muted/50 py-1 pl-4 pr-2">
+          <span className="min-w-0 truncate font-mono text-xs">{title}</span>
+          <div className="flex shrink-0 items-center">
+            {languageLabel}
+            {copyControl}
+          </div>
+        </div>
+      ) : null}
       <div
         className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
         ref={scrollRef}
@@ -173,10 +253,14 @@ export function CodeBlock({
         {SyntaxHighlighter ? (
           <SyntaxHighlighter
             codeTagProps={{
-              className: "font-mono text-sm",
+              className: cn(
+                "font-mono text-sm [&_.linenumber]:!not-italic",
+                wrap && WRAP_CLASS,
+              ),
               style: {
                 background: "transparent",
                 display: "block",
+                whiteSpace: wrap ? "pre-wrap" : "pre",
               },
             }}
             customStyle={{
@@ -188,36 +272,29 @@ export function CodeBlock({
               padding: "1rem",
             }}
             language={language}
+            showLineNumbers={showLineNumbers}
             style={CODE_THEME}
           >
             {code}
           </SyntaxHighlighter>
         ) : (
-          <pre className="m-0 min-w-fit overflow-y-hidden p-4 font-mono text-sm">
+          <pre
+            className={cn(
+              "m-0 min-w-fit overflow-y-hidden p-4 font-mono text-sm",
+              wrap && WRAP_CLASS,
+            )}
+          >
             <code className="block bg-transparent">{code}</code>
           </pre>
         )}
-        <div className="absolute right-2 top-2 flex items-center gap-2">
-          {showLanguage ? (
-            <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
-              {language}
-            </span>
-          ) : null}
-          <Button
-            aria-label={copied ? "Copied" : "Copy code"}
-            className="size-8"
-            onClick={handleCopy}
-            size="icon"
-            variant="ghost"
-          >
-            {copied ? (
-              <Check className="size-3" />
-            ) : (
-              <Copy className="size-3" />
-            )}
-          </Button>
-        </div>
+        {hasHeader ? null : (
+          <div className="absolute right-2 top-2 flex items-center">
+            {showLanguage ? languageLabel : null}
+            {copyControl}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+CodeBlock.displayName = "CodeBlock";
