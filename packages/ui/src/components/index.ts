@@ -1373,6 +1373,15 @@ export {
   type ShareDialogProps,
 } from "./organisms/share-dialog/share-dialog";
 export {
+  ShareDialogPeople,
+  type ShareDialogPeopleKind,
+  type ShareDialogPeopleLabels,
+  type ShareDialogPeopleLayout,
+  type ShareDialogPeoplePerson,
+  type ShareDialogPeopleProps,
+  type ShareDialogPeopleRole,
+} from "./organisms/share-dialog-people/share-dialog-people";
+export {
   type SharePlatformConfig,
   SocialFAB,
   type SocialFabActionConfig,
