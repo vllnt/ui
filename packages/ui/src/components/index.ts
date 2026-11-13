@@ -923,6 +923,15 @@ export {
   type SubscriptionCardProps,
   type SubscriptionCardStatus,
 } from "./organisms/subscription-card/subscription-card";
+export {
+  OrderSummary,
+  type OrderSummaryLayout,
+  type OrderSummaryLine,
+  type OrderSummaryPromo,
+  type OrderSummaryPromoLabels,
+  type OrderSummaryPromoStatus,
+  type OrderSummaryProps,
+} from "./organisms/order-summary/order-summary";
 export { TLDRSection } from "./atoms/tldr-section/tldr-section";
 export {
   TickerTape,
