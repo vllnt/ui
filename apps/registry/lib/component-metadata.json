@@ -1748,6 +1748,26 @@
       {
         "id": "utility-cookieconsent--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-cookieconsent--with-title",
+        "name": "With Title"
+      },
+      {
+        "id": "utility-cookieconsent--custom-labels",
+        "name": "Custom Labels"
+      },
+      {
+        "id": "utility-cookieconsent--bar",
+        "name": "Bar"
+      },
+      {
+        "id": "utility-cookieconsent--equal-actions",
+        "name": "Equal Actions"
+      },
+      {
+        "id": "utility-cookieconsent--bar-with-title-and-equal-actions",
+        "name": "Bar With Title And Equal Actions"
       }
     ],
     "title": "Cookie Consent"
@@ -5109,6 +5129,30 @@
     ],
     "title": "Scramble Text"
   },
+  "scrim": {
+    "category": "overlay",
+    "defaultStoryId": "effects-scrim--default",
+    "description": "Flat full-bleed overlay that dims the surface behind a panel, sheet or pane.",
+    "name": "scrim",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "effects-scrim--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-scrim--dim",
+        "name": "Dim"
+      },
+      {
+        "id": "effects-scrim--strong",
+        "name": "Strong"
+      }
+    ],
+    "title": "Scrim"
+  },
   "scroll-area": {
     "category": "utility",
     "defaultStoryId": "utility-scrollarea--default",
@@ -5390,6 +5434,42 @@
     ],
     "title": "Share Dialog"
   },
+  "share-dialog-people": {
+    "category": "overlay",
+    "defaultStoryId": "utility-sharedialogpeople--default",
+    "description": "Content panel of a people-sharing dialog with a share link, people with role menus, and an invite form.",
+    "name": "share-dialog-people",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "utility-sharedialogpeople--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-sharedialogpeople--invite",
+        "name": "Invite"
+      },
+      {
+        "id": "utility-sharedialogpeople--phone",
+        "name": "Phone"
+      },
+      {
+        "id": "utility-sharedialogpeople--phone-invite",
+        "name": "Phone Invite"
+      },
+      {
+        "id": "utility-sharedialogpeople--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "utility-sharedialogpeople--without-link",
+        "name": "Without Link"
+      }
+    ],
+    "title": "Share Dialog People"
+  },
   "share-section": {
     "category": "content",
     "defaultStoryId": "content-sharesection--default",
@@ -5428,6 +5508,10 @@
       {
         "id": "overlay-sheet--left",
         "name": "Left"
+      },
+      {
+        "id": "overlay-sheet--custom-close-label",
+        "name": "Custom Close Label"
       },
       {
         "id": "overlay-sheet--bottom",
@@ -6046,6 +6130,14 @@
       {
         "id": "navigation-tabs--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-tabs--variant-pill",
+        "name": "Variant Pill"
+      },
+      {
+        "id": "navigation-tabs--variant-link",
+        "name": "Variant Link"
       }
     ],
     "title": "Tabs"
@@ -6067,6 +6159,10 @@
       {
         "id": "form-taggroup--removable",
         "name": "Removable"
+      },
+      {
+        "id": "form-taggroup--custom-remove-label",
+        "name": "Custom Remove Label"
       }
     ],
     "title": "Tag Group"
@@ -6478,6 +6574,10 @@
       {
         "id": "content-timeline--with-rich-content",
         "name": "With Rich Content"
+      },
+      {
+        "id": "content-timeline--status-labels",
+        "name": "Status Labels"
       },
       {
         "id": "content-timeline--color-overrides",
