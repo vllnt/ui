@@ -14,6 +14,7 @@ import { Spinner } from "../../atoms/spinner/spinner";
 
 const DEFAULT_APPLY_LABEL = "Apply";
 const DEFAULT_CHECKOUT_LABEL = "Checkout";
+const DEFAULT_PROMO_ERROR = "This code can't be applied";
 const DEFAULT_PROMO_TITLE = "Promo code";
 
 const surfaceVariants = cva("flex w-full flex-col", {
@@ -63,6 +64,12 @@ export type OrderSummaryPromoStatus = "applying" | "error" | "idle";
 export type OrderSummaryPromoLabels = {
   /** Apply button word, also shown next to the spinner. Defaults to `"Apply"`. */
   apply?: string;
+  /**
+   * Error words announced as an alert when `status="error"` and no `hint` is
+   * given, so the error never rests on colour alone. Defaults to English words
+   * saying the code does not apply.
+   */
+  error?: string;
   /** Input placeholder. No placeholder when omitted. */
   placeholder?: string;
   /** Visible label of the input. Defaults to `"Promo code"`. */
@@ -77,8 +84,8 @@ export type OrderSummaryPromoLabels = {
 export type OrderSummaryPromo = {
   /**
    * Text under the input. With `status="error"` the hint carries the error
-   * message and screen readers announce it as an alert; pass one whenever the
-   * status is `error`.
+   * message and screen readers announce it as an alert. Without a hint, the
+   * error shows `labels.error` instead; a given hint always wins.
    */
   hint?: string;
   /** Strings for the promo area. */
@@ -169,7 +176,8 @@ function PromoForm({ promo }: PromoFormProps): React.JSX.Element {
   const status = promo.status ?? "idle";
   const isApplying = status === "applying";
   const isError = status === "error";
-  const hint = promo.hint ?? "";
+  const errorWords = promo.labels?.error ?? DEFAULT_PROMO_ERROR;
+  const hint = promo.hint || (isError ? errorWords : "");
 
   const handleSubmit = (event: React.SyntheticEvent<HTMLFormElement>): void => {
     event.preventDefault();

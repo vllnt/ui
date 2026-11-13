@@ -228,13 +228,61 @@ describe("OrderSummary promo", () => {
     expect(input).toHaveAccessibleDescription("This code has expired.");
   });
 
-  it("marks the input invalid without describing it when error has no hint", () => {
+  it("announces the default error words when error has no hint", () => {
     renderSummary({ promo: buildPromo({ status: "error" }) });
+
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("This code can't be applied");
 
     const input = screen.getByLabelText("Promo code");
     expect(input).toHaveAttribute("aria-invalid", "true");
-    expect(input).not.toHaveAttribute("aria-describedby");
+    expect(input).toHaveAttribute("aria-describedby", alert.id);
+    expect(input).toHaveAccessibleDescription("This code can't be applied");
+  });
+
+  it("announces the default error words when the hint is empty", () => {
+    renderSummary({ promo: buildPromo({ hint: "", status: "error" }) });
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "This code can't be applied",
+    );
+  });
+
+  it("uses the error label when error has no hint", () => {
+    renderSummary({
+      promo: buildPromo({
+        labels: { error: "Ce code est invalide" },
+        status: "error",
+      }),
+    });
+
+    expect(screen.getByRole("alert")).toHaveTextContent("Ce code est invalide");
+  });
+
+  it("lets a given hint win over the error label", () => {
+    renderSummary({
+      promo: buildPromo({
+        hint: "This code has expired.",
+        labels: { error: "Ce code est invalide" },
+        status: "error",
+      }),
+    });
+
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("This code has expired.");
+    expect(alert).not.toHaveTextContent("Ce code est invalide");
+  });
+
+  it("shows no error words outside the error status", () => {
+    renderSummary({
+      promo: buildPromo({ labels: { error: "Ce code est invalide" } }),
+    });
+
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.queryByText("Ce code est invalide")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Promo code")).not.toHaveAttribute(
+      "aria-describedby",
+    );
   });
 
   it("disables apply and shows a spinner with the apply word while applying", () => {
