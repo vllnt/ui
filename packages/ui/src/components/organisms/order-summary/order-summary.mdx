@@ -1,0 +1,79 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './order-summary.stories'
+
+<Meta of={Stories} />
+
+# OrderSummary
+
+Checkout summary — priced rows, a total, an optional promo code form and a checkout button. Pure presentation: the host formats every value, owns the cart and the promo state, and reacts to `onApply` and `onCheckout`.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/order-summary.json
+```
+
+## Import
+
+```tsx
+import { OrderSummary } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<OrderSummary
+  title="Order summary"
+  lines={[
+    { label: 'Subtotal', value: '$120.00' },
+    { label: 'Shipping', value: '$8.00' },
+    { label: 'Tax', value: '$10.24' },
+  ]}
+  total={{ label: 'Total', value: '$138.24' }}
+  promo={{
+    value: code,
+    onValueChange: setCode,
+    onApply: applyCode,
+    status: promoStatus,
+    hint: promoError,
+  }}
+  onCheckout={startCheckout}
+  checkoutLoading={isPaying}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Penpot mapping
+
+Built from the Penpot family `organism / Order summary` (lock 1.x, 6 mains).
+
+| Penpot axis | Penpot value | Code |
+|-------------|--------------|------|
+| Layout | `desktop` | `layout="desktop"` (default) |
+| Layout | `phone` | `layout="phone"` — tighter padding and spacing only; the width comes from the container |
+| Status | `default` | `promo.status="idle"` (default) |
+| Status | `applying-promo` | `promo.status="applying"` |
+| Status | `error` | `promo.status="error"` |
+
+Not built:
+
+- **Grain** on the Surface layer — the library has no grain texture; the surface is a plain `Card`.
+- **Leading icon** and **Trailing icon** on the checkout button — there is no icon slot. Only the Spinner is built (`checkoutLoading`).
+
+## Notes
+
+- Values are preformatted strings. The component does no currency, rounding or locale work.
+- The lines and the total share one `<dl>`: each line is a `<dt>` label and a `<dd>` value, and the total is always the last pair. The divider sits between that list and the promo form.
+- The root is a `<section>`. With a `title` it renders an `<h2>` and the section is named after it; without one there is no heading and no accessible name.
+- The promo area is a `<form>` with a labelled input. Do not render `OrderSummary` with `promo` inside another `<form>`: HTML does not allow nested forms.
+- While `promo.status="applying"` the apply button is disabled and shows a Spinner next to the `labels.apply` word, and submitting does not call `onApply`.
+- With `promo.status="error"` the input gets `aria-invalid` and the `hint` renders with `role="alert"`, linked to the input through `aria-describedby`. Pass a `hint` to say why the code failed; without one the same element shows `labels.error` (default `"This code can't be applied"`), so the error is never shown by colour alone.
+- With `checkoutLoading` the checkout button gets `aria-busy`, shows a Spinner and is disabled, so `onCheckout` cannot fire twice.
+- Pair with `SubscriptionCard` and `WalletCard` for the rest of the billing surface.

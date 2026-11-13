@@ -4881,6 +4881,28 @@
       ]
     },
     {
+      "name": "order-summary",
+      "type": "registry:component",
+      "title": "Order Summary",
+      "description": "Order summary with priced rows, a total, an optional promo code form and a checkout button.",
+      "files": [
+        {
+          "path": "registry/default/order-summary/order-summary.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "billing",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "overview-board",
       "type": "registry:component",
       "title": "Overview Board",
