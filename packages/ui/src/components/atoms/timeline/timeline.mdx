@@ -74,6 +74,39 @@ Pass children to a `TimelineItem` for rich content (lists, code blocks, embedded
 
 <Canvas of={Stories.ColorOverrides} sourceState="shown" />
 
+## Status text alternative
+
+The marker is decorative (`aria-hidden`), so each `TimelineItem` renders a visually hidden word for its `status`. The words are English by default and localizable through `labels`.
+
+| Status | Default word |
+| ------ | ------------ |
+| `completed` | `Completed` |
+| `active` | `In progress` |
+| `upcoming` | `Upcoming` |
+
+- `labels` on `Timeline` applies to every item; `labels` on a `TimelineItem` overrides it for that item. A status you leave out keeps its default.
+- An empty string omits the word for that status.
+
+<Canvas of={Stories.StatusLabels} sourceState="shown" />
+
+## Penpot mapping
+
+Family `organism / Timeline` (4 mains), axis `Kind`.
+
+| Penpot | Code |
+| ------ | ---- |
+| `Kind=vertical` | `orientation="vertical"` (default) |
+| `Kind=horizontal` | `orientation="horizontal"` |
+| `Kind=interactive` | Not built here — use `InteractiveTimeline` |
+| `Kind=parallel` | Not built here — use `ParallelTimeline` |
+
+| Top layer | Code |
+| --------- | ---- |
+| `Items` | `TimelineItem` |
+| `Lanes` | Not built (parallel kind only) |
+| `Surface` | Not built |
+| `Title` | Not built |
+
 ## Notes
 
 - Set `isLast` on the trailing item to drop the connector line below / right of the marker.
