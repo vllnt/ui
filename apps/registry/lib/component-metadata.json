@@ -1655,6 +1655,38 @@
     ],
     "title": "Credit Badge"
   },
+  "cta-band": {
+    "category": "content",
+    "defaultStoryId": "layout-ctaband--default",
+    "description": "Full-width call-to-action band with title, description, optional icon and divider, and an actions slot.",
+    "name": "cta-band",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "layout-ctaband--default",
+        "name": "Default"
+      },
+      {
+        "id": "layout-ctaband--muted",
+        "name": "Muted"
+      },
+      {
+        "id": "layout-ctaband--with-icon-and-divider",
+        "name": "With Icon And Divider"
+      },
+      {
+        "id": "layout-ctaband--single-action",
+        "name": "Single Action"
+      },
+      {
+        "id": "layout-ctaband--three-actions",
+        "name": "Three Actions"
+      }
+    ],
+    "title": "CTA Band"
+  },
   "curriculum": {
     "category": "learning",
     "defaultStoryId": "learning-curriculum--default",
