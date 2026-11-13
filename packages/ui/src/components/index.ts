@@ -1147,7 +1147,10 @@ export {
 } from "./organisms/primary-source-viewer/primary-source-viewer";
 export {
   ProgressBar,
+  type ProgressBarMode,
   type ProgressBarProps,
+  type ProgressBarSize,
+  type ProgressBarTone,
 } from "./atoms/progress-bar/progress-bar";
 export {
   ContentCard as ProgressCard,
