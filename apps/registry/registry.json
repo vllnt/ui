@@ -6165,6 +6165,28 @@
       }
     },
     {
+      "name": "scrim",
+      "type": "registry:component",
+      "title": "Scrim",
+      "description": "Flat full-bleed overlay that dims the surface behind a panel, sheet or pane.",
+      "files": [
+        {
+          "path": "registry/default/scrim/scrim.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "overlay",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "scroll-area",
       "type": "registry:component",
       "title": "Scroll Area",
@@ -6530,6 +6552,28 @@
         "source": "src/components/atoms/share-dialog/share-dialog.tsx",
         "status": "experimental"
       }
+    },
+    {
+      "name": "share-dialog-people",
+      "type": "registry:component",
+      "title": "Share Dialog People",
+      "description": "Content panel of a people-sharing dialog with a share link, people with role menus, and an invite form.",
+      "files": [
+        {
+          "path": "registry/default/share-dialog-people/share-dialog-people.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "overlay",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "share-section",
