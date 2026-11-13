@@ -1707,6 +1707,7 @@ export {
   type ProgressiveBlurDirection,
   type ProgressiveBlurProps,
 } from "./atoms/progressive-blur/progressive-blur";
+export { Scrim, type ScrimProps } from "./atoms/scrim/scrim";
 export {
   type RevealDirection,
   RevealText,
