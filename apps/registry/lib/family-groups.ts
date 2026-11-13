@@ -405,6 +405,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
           "card",
           "carousel",
           "collapsible",
+          "cta-band",
           "expandable-cards",
           "faq",
           "slideshow",

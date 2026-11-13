@@ -2272,6 +2272,28 @@
       }
     },
     {
+      "name": "cta-band",
+      "type": "registry:component",
+      "title": "CTA Band",
+      "description": "Full-width call-to-action band with title, description, optional icon and divider, and an actions slot.",
+      "files": [
+        {
+          "path": "registry/default/cta-band/cta-band.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "content",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "curriculum",
       "type": "registry:component",
       "title": "Curriculum",

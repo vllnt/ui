@@ -859,6 +859,11 @@ export {
   type CreditBadgeStatus,
 } from "./molecules/credit-badge/credit-badge";
 export {
+  CtaBand,
+  type CtaBandProps,
+  type CtaBandTone,
+} from "./organisms/cta-band/cta-band";
+export {
   MarketTreemap,
   type MarketTreemapItem,
   type MarketTreemapProps,

@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './cta-band.stories'
+
+<Meta of={Stories} />
+
+# CtaBand
+
+Full-width call-to-action band: a title with an optional icon, description and divider, followed by a row of actions. The actions sit beside the copy from the `md` breakpoint and stack under it on small screens.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/cta-band.json
+```
+
+## Import
+
+```tsx
+import { CtaBand } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<CtaBand
+  title="Ship your next release faster"
+  description="Free for personal projects. No credit card required."
+  actions={
+    <>
+      <Button>Get started</Button>
+      <Button variant="outline">Talk to sales</Button>
+    </>
+  }
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Tone
+
+`tone="default"` sits on the page background. `tone="muted"` uses the muted surface and switches the description to the foreground colour to keep body-text contrast.
+
+<Canvas of={Stories.Muted} sourceState="shown" />
+
+## Icon and divider
+
+`icon` is decorative and hidden from assistive technology. `divider` draws a rule between the header and the description.
+
+<Canvas of={Stories.WithIconAndDivider} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- Renders a `<section>`. Pass `aria-labelledby` or `aria-label` to expose it as a landmark.
+- `headingLevel` sets the semantic rank (`h1`–`h6`) so the document outline stays correct; the visual size does not change with it.
+- `actions` is a slot: pass one to three buttons or links. Nothing in the band needs client JavaScript, so it renders in a React Server Component.
