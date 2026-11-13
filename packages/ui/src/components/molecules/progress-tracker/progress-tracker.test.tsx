@@ -96,6 +96,34 @@ describe("ProgressTracker", () => {
     expect(screen.getByText("Hooks")).toBeVisible();
   });
 
+  it("renders exactly one non-nested progressbar per module card", () => {
+    const [firstModule, secondModule] = modules;
+
+    if (!firstModule || !secondModule) {
+      throw new Error("Expected seeded modules for this test");
+    }
+
+    render(
+      <ProgressTracker modules={modules} overallProgress={65} streak={7}>
+        <ProgressTrackerModules>
+          <ProgressTrackerModule {...firstModule} />
+          <ProgressTrackerModule {...secondModule} />
+        </ProgressTrackerModules>
+      </ProgressTracker>,
+    );
+
+    const bars = screen.getAllByRole("progressbar");
+
+    expect(bars).toHaveLength(2);
+    for (const bar of bars) {
+      expect(bar.querySelector('[role="progressbar"]')).toBeNull();
+      expect(bar.parentElement?.closest('[role="progressbar"]')).toBeNull();
+    }
+    expect(
+      screen.getByRole("progressbar", { name: /react fundamentals progress/i }),
+    ).toHaveAttribute("aria-valuenow", "40");
+  });
+
   it("uses Checklist persistence when checklist items and a persist key are provided", () => {
     localStorage.setItem(
       "checklist:react-fundamentals",

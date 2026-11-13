@@ -595,22 +595,15 @@ function ModuleProgress({
 
   return (
     <div className="space-y-2">
-      <div
+      <ProgressBar
         aria-label={`${title} progress`}
-        aria-valuemax={100}
-        aria-valuemin={0}
-        aria-valuenow={progressPercent}
-        role="progressbar"
-      >
-        <ProgressBar
-          completedLabel="lessons"
-          currentLabel={`${progressPercent}% complete`}
-          isComplete={isComplete}
-          max={resolvedLessonTotal}
-          showLabels
-          value={progressValue}
-        />
-      </div>
+        currentLabel={`${progressPercent}% complete`}
+        isComplete={isComplete}
+        max={100}
+        showLabels
+        value={progressPercent}
+        valueLabel={`${progressValue} / ${resolvedLessonTotal} lessons`}
+      />
       <div className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
         <span>
           Lessons:{" "}
