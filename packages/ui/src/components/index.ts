@@ -8,7 +8,11 @@ export {
   type BannerVariant,
   bannerVariants,
 } from "./atoms/banner/banner";
-export { Breadcrumb, type BreadcrumbItem } from "./atoms/breadcrumb/breadcrumb";
+export {
+  Breadcrumb,
+  type BreadcrumbItem,
+  type BreadcrumbLabels,
+} from "./atoms/breadcrumb/breadcrumb";
 export {
   Button,
   type ButtonProps,
