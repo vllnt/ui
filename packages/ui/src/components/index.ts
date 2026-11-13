@@ -470,6 +470,17 @@ export {
   type DataTableProps,
 } from "./organisms/data-table/data-table";
 export {
+  AccessMatrix,
+  type AccessMatrixChangeHandler,
+  type AccessMatrixLabels,
+  type AccessMatrixMode,
+  type AccessMatrixPermission,
+  type AccessMatrixProps,
+  type AccessMatrixState,
+  type AccessMatrixSubject,
+  type AccessMatrixValue,
+} from "./organisms/access-matrix/access-matrix";
+export {
   DataList,
   DataListItem,
   type DataListItemProps,
