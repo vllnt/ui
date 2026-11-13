@@ -65,3 +65,29 @@ import {
 
 <Canvas of={Stories.Bottom} sourceState="shown" />
 
+## Close button
+
+`SheetContent` renders a real `<button>` with a 24 x 24 px hit area (the icon stays 16 px) and a visible focus ring. Its accessible name is `Close` by default; set `labels.close` to localize it.
+
+```tsx
+<SheetContent labels={{ close: 'Fermer' }}>…</SheetContent>
+```
+
+<Canvas of={Stories.CustomCloseLabel} sourceState="shown" />
+## Penpot mapping
+
+Family `molecule / Sheet` (40 mains).
+
+| Penpot axis | Value | Code |
+| ----------- | ----- | ---- |
+| `Placement` | `bottom`, `left`, `right`, `top` | `side` |
+| `Placement` | `depth-stacked` | Not built |
+| `Detent` | `full`, `large`, `medium`, `small` | Not built (no detent prop) |
+| `Modality` | `modal` | Built (Radix `Dialog` default) |
+| `Modality` | `non-modal` | Not built: `Sheet` passes `modal={false}` through, but `SheetContent` always renders the scrim |
+
+| Top layer | Code |
+| --------- | ---- |
+| `Panel` | `SheetContent` |
+| `Scrim` | `SheetOverlay` |
+

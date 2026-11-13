@@ -66,6 +66,29 @@ export const Left: Story = {
   ),
 };
 
+export const CustomCloseLabel: Story = {
+  render: () => (
+    <Sheet>
+      <SheetTrigger asChild>
+        <button
+          className="rounded bg-primary px-4 py-2 text-primary-foreground"
+          type="button"
+        >
+          Ouvrir
+        </button>
+      </SheetTrigger>
+      <SheetContent labels={{ close: "Fermer" }}>
+        <SheetHeader>
+          <SheetTitle>Panneau</SheetTitle>
+          <SheetDescription>
+            The close button is announced as "Fermer".
+          </SheetDescription>
+        </SheetHeader>
+      </SheetContent>
+    </Sheet>
+  ),
+};
+
 export const Bottom: Story = {
   render: () => (
     <Sheet>

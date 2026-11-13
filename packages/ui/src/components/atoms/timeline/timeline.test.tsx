@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { Timeline, TimelineItem } from "./timeline";
+import { Timeline, TimelineItem, type TimelineItemStatus } from "./timeline";
 
 describe("Timeline", () => {
   it("renders an ordered list with item titles", () => {
@@ -78,4 +78,127 @@ describe("Timeline", () => {
       expect(screen.getByText("A")).toBeInTheDocument();
     },
   );
+});
+
+describe("Timeline status text alternative", () => {
+  it.each<[TimelineItemStatus, string]>([
+    ["completed", "Completed"],
+    ["active", "In progress"],
+    ["upcoming", "Upcoming"],
+  ])("exposes a visually hidden word for the %s status", (status, word) => {
+    render(
+      <Timeline>
+        <TimelineItem isLast status={status} title="A" />
+      </Timeline>,
+    );
+    const item = screen.getByRole("listitem");
+    const hidden = within(item).getByText(word);
+
+    expect(hidden).toHaveClass("sr-only");
+    expect(hidden.closest('[aria-hidden="true"]')).toBeNull();
+    expect(item).toHaveTextContent(word);
+  });
+
+  it("keeps the marker glyph decorative", () => {
+    render(
+      <Timeline>
+        <TimelineItem isLast status="completed" title="A" />
+      </Timeline>,
+    );
+    const item = screen.getByRole("listitem");
+
+    expect(item.querySelectorAll('[aria-hidden="true"]')).toHaveLength(1);
+    expect(item.querySelector('[aria-hidden="true"]')).not.toContainElement(
+      within(item).getByText("Completed"),
+    );
+  });
+
+  it("falls back to the upcoming word when status is omitted", () => {
+    render(
+      <Timeline>
+        <TimelineItem isLast title="A" />
+      </Timeline>,
+    );
+
+    expect(screen.getByRole("listitem")).toHaveTextContent("Upcoming");
+  });
+
+  it("renders the word for an item used outside a Timeline", () => {
+    render(
+      <ol>
+        <TimelineItem isLast status="active" title="A" />
+      </ol>,
+    );
+
+    expect(screen.getByText("In progress")).toHaveClass("sr-only");
+  });
+
+  it("overrides the words through Timeline labels and keeps the other defaults", () => {
+    render(
+      <Timeline labels={{ completed: "Terminé" }}>
+        <TimelineItem status="completed" title="A" />
+        <TimelineItem isLast status="active" title="B" />
+      </Timeline>,
+    );
+    const [first, second] = screen.getAllByRole("listitem");
+
+    expect(first).toHaveTextContent("Terminé");
+    expect(first).not.toHaveTextContent("Completed");
+    expect(second).toHaveTextContent("In progress");
+  });
+
+  it("lets an item labels override the Timeline labels", () => {
+    render(
+      <Timeline labels={{ active: "En cours" }}>
+        <TimelineItem labels={{ active: "Actuel" }} status="active" title="A" />
+        <TimelineItem isLast status="active" title="B" />
+      </Timeline>,
+    );
+    const [first, second] = screen.getAllByRole("listitem");
+
+    expect(first).toHaveTextContent("Actuel");
+    expect(first).not.toHaveTextContent("En cours");
+    expect(second).toHaveTextContent("En cours");
+  });
+
+  it("falls back to the default when a label is undefined", () => {
+    render(
+      <Timeline labels={{ completed: undefined }}>
+        <TimelineItem isLast status="completed" title="A" />
+      </Timeline>,
+    );
+
+    expect(screen.getByRole("listitem")).toHaveTextContent("Completed");
+  });
+
+  it("omits the hidden word when a label is an empty string", () => {
+    render(
+      <Timeline labels={{ completed: "" }}>
+        <TimelineItem isLast status="completed" title="A" />
+      </Timeline>,
+    );
+
+    expect(
+      within(screen.getByRole("listitem")).queryByText("Completed"),
+    ).toBeNull();
+    expect(screen.getByRole("listitem").querySelector(".sr-only")).toBeNull();
+  });
+
+  it("does not forward labels to the list element", () => {
+    const { container } = render(
+      <Timeline labels={{ completed: "Done" }}>
+        <TimelineItem isLast labels={{ completed: "Done" }} title="A" />
+      </Timeline>,
+    );
+
+    expect(container.querySelector("ol")).not.toHaveAttribute("labels");
+    expect(container.querySelector("li")).not.toHaveAttribute("labels");
+  });
+
+  it("renders an empty list without items", () => {
+    render(<Timeline labels={{ completed: "Done" }} />);
+
+    expect(screen.getByRole("list")).toBeEmptyDOMElement();
+    expect(screen.queryAllByRole("listitem")).toHaveLength(0);
+  });
 });
