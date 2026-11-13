@@ -1845,6 +1845,7 @@ export {
   type DisplayProps,
 } from "./atoms/display/display";
 export { Prose, type ProseProps } from "./atoms/prose/prose";
+export { PullQuote, type PullQuoteProps } from "./atoms/pull-quote/pull-quote";
 
 // Props types
 export type { BreadcrumbProps } from "./atoms/breadcrumb/breadcrumb";
