@@ -12,7 +12,7 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Added
 
-- Total component count: **319** (up from 313).
+- Total component count: **321** (up from 313).
 
 ## [0.4.0] - 2026-10-31
 
