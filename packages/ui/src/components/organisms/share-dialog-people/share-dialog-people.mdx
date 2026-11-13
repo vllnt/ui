@@ -1,0 +1,113 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './share-dialog-people.stories'
+
+<Meta of={Stories} />
+
+# ShareDialogPeople
+
+Content panel of a people-sharing dialog: a share link, the people who have access with a role menu each, and an invite form. The host wraps it in `Dialog` or `Sheet` and owns the data, `kind` and every side effect. The panel sends no invites and holds no permission logic.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/share-dialog-people.json
+```
+
+## Import
+
+```tsx
+import { ShareDialogPeople } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+const roles = [
+  { label: 'Viewer', value: 'viewer' },
+  { label: 'Editor', value: 'editor' },
+]
+
+const people = [
+  { email: 'ada@example.com', id: 'ada', name: 'Ada Lovelace', role: 'editor' },
+]
+
+const [kind, setKind] = useState<'invite' | 'list'>('list')
+
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <ShareDialogPeople
+      kind={kind}
+      linkUrl="https://example.com/share/launch-plan"
+      onCopyLink={copyLink}
+      onDone={() => setOpen(false)}
+      onInvite={sendInvite}
+      onKindChange={setKind}
+      onRemove={removePerson}
+      onRoleChange={changeRole}
+      people={people}
+      roles={roles}
+    />
+  </DialogContent>
+</Dialog>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+| Prop | Type | Required | Description |
+| ---- | ---- | -------- | ----------- |
+| `people` | `ShareDialogPeoplePerson[]` | Yes | People with access: `id`, `name`, `role` (a `roles` value), optional `email` and `avatarSrc` |
+| `roles` | `ShareDialogPeopleRole[]` | Yes | Roles to pick from: `{ label, value }`. The invite form starts on the first one, so list the least access first |
+| `kind` | `"list" \| "invite"` | No | Panel to display, default `list`. The host owns it |
+| `layout` | `"desktop" \| "phone"` | No | Density only, default `desktop` |
+| `title` | `string` | No | Heading and accessible name of the root group, default `Share` |
+| `linkUrl` | `string` | No | Share link for the link row. Without it the row does not render |
+| `labels` | `Partial<ShareDialogPeopleLabels>` | No | Overrides for every visible and screen-reader string |
+| `onRoleChange` | `(id: string, role: string) => void` | No | A person's role changed |
+| `onRemove` | `(id: string) => void` | No | Adds a Remove choice to every role menu and calls this when it is picked |
+| `onCopyLink` | `() => void` | No | Copy link clicked. The host does the copying |
+| `onInvite` | `(email: string, role: string) => void` | No | Send clicked with a valid email. The email is trimmed |
+| `onKindChange` | `(kind: "list" \| "invite") => void` | No | Invite button (`"invite"`) or Back (`"list"`) clicked |
+| `onClose` | `() => void` | No | Renders the close button and calls this when it is clicked |
+| `onDone` | `() => void` | No | Done clicked |
+| `className` | `string` | No | Merged into the root |
+| `ref` | `React.Ref<HTMLElement>` | No | Ref to the root `section` |
+
+## Accessibility
+
+- The root is a `section` with `role="group"`, labelled by the title heading.
+- Each person's role menu is named `<person> role` (`labels.personRole`). The invite form's email input and role menu are named too, and the note describes the email input.
+- The close button is named `Close` (`labels.close`) and is 40 px square.
+- Status and destructive choices carry a word (`Remove`), never colour alone. Colours are semantic tokens.
+
+## Penpot mapping
+
+Family `organism / Share dialog (people)`, lock 1.x, 4 mains.
+
+| Penpot | Code |
+| ------ | ---- |
+| Layout = `desktop` / `phone` | `layout` prop: panel padding and gaps, avatar size, role menu width, and on `phone` the actions stack at full width |
+| Kind = `list` / `invite` | `kind` prop, default `list` |
+| Surface | root `section`: border and card surface |
+| Header: Title, Close | `h2` title and the close button |
+| Body: Link row, Divider, Entry 1..3 | link row (`linkUrl`), `Separator`, one entry per item of `people` |
+| Invite: Invite input, Note | email `Input` with a role menu, and the note under it |
+| Actions: Done, Invite (list) / Back, Send (invite) | the buttons of each kind |
+
+Not built from Penpot, or added beyond it:
+
+- Fixed pixel sizes: the spacing scale and tokens apply instead.
+- Close renders only when `onClose` is set, because `DialogContent` already draws its own close button.
+- A fixed count of three entries: `people` is data driven.
+- Remove is not a Penpot layer. When `onRemove` is set it appears as the last choice of each role menu.
+- Copying to the clipboard, sending invites, permission rules and the `Dialog` wrapper are the host's job.
+
+## Notes
+
+- Radix `Dialog` expects its own `DialogTitle`. Render one with the `sr-only` class, or wrap the panel in a `Sheet`.
+- Email validation is the browser's: the input is `type="email"` and `required`.
