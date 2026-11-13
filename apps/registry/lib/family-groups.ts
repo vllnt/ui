@@ -157,7 +157,12 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "Modal dialogs for confirming actions, focusing attention, and sharing content, including alert and share dialogs.",
         heading: "Modal Dialogs",
-        slugs: ["alert-dialog", "dialog", "share-dialog"],
+        slugs: [
+          "alert-dialog",
+          "dialog",
+          "share-dialog",
+          "share-dialog-people",
+        ],
       },
       {
         blurb:
@@ -181,7 +186,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "Transient toasts, canvas edge labels, and zoom HUD controls for feedback and on-canvas overlays.",
         heading: "Notifications & Overlays",
-        slugs: ["toast", "edge-label", "zoom-hud"],
+        slugs: ["toast", "edge-label", "zoom-hud", "scrim"],
       },
     ],
   },
