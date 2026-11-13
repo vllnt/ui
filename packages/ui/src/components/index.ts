@@ -186,6 +186,15 @@ export {
   type AIToolCallStatus,
 } from "./molecules/ai-tool-call-display/ai-tool-call-display";
 export {
+  ApprovalRequest,
+  type ApprovalRequestLabels,
+  type ApprovalRequestPlacement,
+  type ApprovalRequestProps,
+  type ApprovalRequestRemember,
+  type ApprovalRequestRisk,
+  type ApprovalRequestStatus,
+} from "./molecules/approval-request/approval-request";
+export {
   AISidebar,
   AISidebarClose,
   AISidebarContent,
