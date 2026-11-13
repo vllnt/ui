@@ -653,6 +653,28 @@
       ]
     },
     {
+      "name": "approval-request",
+      "type": "registry:component",
+      "title": "Approval Request",
+      "description": "Asks the user to approve or deny one action, such as an agent running a command.",
+      "files": [
+        {
+          "path": "registry/default/approval-request/approval-request.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "ai",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "area-chart",
       "type": "registry:component",
       "title": "Area Chart",
