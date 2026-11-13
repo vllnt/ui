@@ -1,0 +1,101 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './settings-list.stories'
+
+<Meta of={Stories} />
+
+# SettingsList
+
+Grouped list of settings rows: an optional heading and description above rows that carry a label, a value, a switch or a chevron link. Pure presentation; the host owns the settings state and what each row does.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/settings-list.json
+```
+
+## Import
+
+```tsx
+import { SettingsList, SettingsListItem } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SettingsList title="Personal settings" description="Manage your profile and alerts.">
+  <SettingsListItem
+    label="Account"
+    description="Profile, email and password"
+    href="/account"
+    leading={<Avatar><AvatarFallback>BN</AvatarFallback></Avatar>}
+  />
+  <SettingsListItem
+    label="Notifications"
+    description="Push alerts for mentions and replies"
+    control={<Switch checked={enabled} onCheckedChange={setEnabled} />}
+  />
+  <SettingsListItem label="Privacy" meta="Friends only" onClick={openPrivacy} />
+</SettingsList>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## Variants
+
+`variant` is `inset-grouped` (default) or `plain`.
+
+- `inset-grouped`: a rounded, bordered surface (`bg-card`) with a divider between rows.
+- `plain`: no surface, only the header divider and the row dividers.
+
+<Canvas of={Stories.Plain} sourceState="shown" />
+
+## Rows
+
+A row has at most one trailing control. The prop types reject every other combination.
+
+| Props | Row renders | Trailing |
+|-------|-------------|----------|
+| none | static `<div>` | none |
+| `control` | static `<div>` | the element, for example a `Switch` |
+| `href` | `<a href>` | chevron (hide with `chevron={false}`) |
+| `onClick` | `<button type="button">` | chevron (hide with `chevron={false}`) |
+
+`label` is required. `description`, `meta` (right-side value text) and `leading` (an `Avatar` or an icon) are optional.
+
+## Accessibility
+
+- The root is a `<section>` labelled by `title`. Without a `title` it has no accessible name and is not a landmark.
+- Rows are `<li>` elements of a `<ul>`; dividers come from CSS (`divide-y`), not extra elements.
+- A `control` element is labelled by the row label (`aria-labelledby`) and described by the row description (`aria-describedby`). ARIA props the control already sets are kept.
+- `href` and `onClick` rows are a real link or button with a visible focus ring. The chevron is decorative (`aria-hidden`).
+- Pass `aria-hidden` on a decorative `leading` icon yourself.
+
+## API Reference
+
+<Controls />
+
+## Penpot mapping
+
+Penpot family `organism / Settings list` (lock 1.x, 2 mains).
+
+| Penpot | Code |
+|--------|------|
+| axis `Style` (`inset-grouped`, `plain`) | `variant` (not `style`, which would shadow React's `style` prop) |
+| Surface | root `<section>` classes of the `inset-grouped` variant |
+| Header (Header text, Description, Divider) | `title`, `description` and the header `border-b` |
+| Divider 1 to 3 | `divide-y` on the `<ul>` |
+| Account, Notifications, Privacy, Sounds | demo rows built from `SettingsListItem` (`leading`, `label`, `description`, `meta`, `control`, `href`) |
+| Avatar, Text, Meta, Switch, Chevron | `leading`, `label` and `description`, `meta`, `control`, `chevron` |
+
+Not built:
+
+- Surface grain: the texture layer has no code counterpart.
+- The four named rows are demo content, not built-in rows.
+- `plain` keeps the dividers and the 16px row inset so row text lines up with the header; it only drops the surface.
+
+## Notes
+
+- Interactive rows reuse `itemVariants` from `Item` for layout.
+- The list is a plain `<ul>`; the global reset removes the list marker, which some Safari versions treat as removing list semantics.
