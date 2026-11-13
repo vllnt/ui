@@ -2899,6 +2899,26 @@
         "name": "Mod Shortcut"
       },
       {
+        "id": "core-kbd--platform-mac",
+        "name": "Platform Mac"
+      },
+      {
+        "id": "core-kbd--platform-win",
+        "name": "Platform Win"
+      },
+      {
+        "id": "core-kbd--variant-bracket",
+        "name": "Variant Bracket"
+      },
+      {
+        "id": "core-kbd--bracket-shortcut-mac",
+        "name": "Bracket Shortcut Mac"
+      },
+      {
+        "id": "core-kbd--bracket-shortcut-win",
+        "name": "Bracket Shortcut Win"
+      },
+      {
         "id": "core-kbd--composed",
         "name": "Composed"
       }
