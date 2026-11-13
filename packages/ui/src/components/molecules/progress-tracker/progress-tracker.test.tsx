@@ -115,10 +115,9 @@ describe("ProgressTracker", () => {
     const bars = screen.getAllByRole("progressbar");
 
     expect(bars).toHaveLength(2);
-    for (const bar of bars) {
-      expect(bar.querySelector('[role="progressbar"]')).toBeNull();
-      expect(bar.parentElement?.closest('[role="progressbar"]')).toBeNull();
-    }
+    expect(
+      bars.filter((bar) => bar.parentElement?.closest('[role="progressbar"]')),
+    ).toHaveLength(0);
     expect(
       screen.getByRole("progressbar", { name: /react fundamentals progress/i }),
     ).toHaveAttribute("aria-valuenow", "40");
