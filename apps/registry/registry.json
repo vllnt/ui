@@ -4,6 +4,28 @@
   "homepage": "https://ui.vllnt.com",
   "items": [
     {
+      "name": "access-matrix",
+      "type": "registry:component",
+      "title": "Access Matrix",
+      "description": "Shows which permissions each subject holds, as a table or as one list entry per subject.",
+      "files": [
+        {
+          "path": "registry/default/access-matrix/access-matrix.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "data",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "accordion",
       "type": "registry:component",
       "title": "Accordion",
