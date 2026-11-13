@@ -1248,6 +1248,7 @@ export {
   type TabsProps,
   TabsTrigger,
   type TabsTriggerProps,
+  type TabsVariant,
 } from "./atoms/tabs/tabs";
 export {
   SimpleTerminal,

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import type { TabsVariant } from "./tabs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 function renderTabs(onValueChange?: (value: string) => void) {
@@ -217,4 +218,246 @@ describe("TabsContent tab stop (APG tabs)", () => {
       expect(screen.getByRole("tabpanel")).not.toHaveAttribute("tabindex");
     });
   });
+});
+
+function renderVariant(variant?: TabsVariant) {
+  const view = render(
+    <Tabs defaultValue="a" variant={variant}>
+      <TabsList aria-label="Letters">
+        <TabsTrigger value="a">A</TabsTrigger>
+        <TabsTrigger value="b">B</TabsTrigger>
+      </TabsList>
+      <TabsContent value="a">Panel A</TabsContent>
+      <TabsContent value="b">Panel B</TabsContent>
+    </Tabs>,
+  );
+  return {
+    a: screen.getByRole("tab", { name: "A" }),
+    b: screen.getByRole("tab", { name: "B" }),
+    list: screen.getByRole("tablist"),
+    unmount: view.unmount,
+  };
+}
+
+const FOCUS_RING_CLASSES = [
+  "focus-visible:outline-none",
+  "focus-visible:ring-2",
+  "focus-visible:ring-inset",
+  "focus-visible:ring-ring",
+];
+
+describe("Tabs roles and aria state", () => {
+  it("exposes the tablist, tab and tabpanel roles", () => {
+    renderVariant();
+    expect(screen.getByRole("tablist")).toBeInTheDocument();
+    expect(screen.getAllByRole("tab")).toHaveLength(2);
+    expect(screen.getAllByRole("tabpanel")).toHaveLength(1);
+  });
+
+  it("moves aria-selected, data-state and the panel with the active tab", () => {
+    const { a, b } = renderVariant();
+    expect(a).toHaveAttribute("aria-selected", "true");
+    expect(a).toHaveAttribute("data-state", "active");
+    expect(b).toHaveAttribute("aria-selected", "false");
+    expect(b).toHaveAttribute("data-state", "inactive");
+    fireEvent.click(b);
+    expect(a).toHaveAttribute("aria-selected", "false");
+    expect(a).toHaveAttribute("data-state", "inactive");
+    expect(b).toHaveAttribute("aria-selected", "true");
+    expect(b).toHaveAttribute("data-state", "active");
+    const panel = screen.getByRole("tabpanel");
+    expect(panel).toHaveTextContent("Panel B");
+    expect(panel).toHaveAttribute("aria-labelledby", b.id);
+    expect(b).toHaveAttribute("aria-controls", panel.id);
+  });
+
+  it("follows a controlled value", () => {
+    const { rerender } = render(
+      <Tabs value="a">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tab", { name: "A" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    rerender(
+      <Tabs value="b">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+        <TabsContent value="b">Panel B</TabsContent>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tab", { name: "B" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("tab", { name: "A" })).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
+    expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel B");
+  });
+
+  it("selects no tab and renders no panel when the value matches nothing", () => {
+    render(
+      <Tabs defaultValue="missing">
+        <TabsList aria-label="Letters">
+          <TabsTrigger value="a">A</TabsTrigger>
+          <TabsTrigger value="b">B</TabsTrigger>
+        </TabsList>
+        <TabsContent value="a">Panel A</TabsContent>
+      </Tabs>,
+    );
+    screen.getAllByRole("tab").forEach((tab) => {
+      expect(tab).toHaveAttribute("aria-selected", "false");
+      expect(tab).toHaveAttribute("data-state", "inactive");
+    });
+    expect(screen.queryByRole("tabpanel")).not.toBeInTheDocument();
+  });
+
+  it("renders an empty tablist without tabs or panels", () => {
+    render(
+      <Tabs defaultValue="a">
+        <TabsList aria-label="Empty">{null}</TabsList>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tablist")).toBeEmptyDOMElement();
+    expect(screen.queryByRole("tab")).not.toBeInTheDocument();
+    expect(screen.queryByRole("tabpanel")).not.toBeInTheDocument();
+  });
+
+  it("throws when a trigger is used outside Tabs", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {
+      /* React logs the thrown error; keep the test output clean */
+    });
+    expect(() => render(<TabsTrigger value="a">A</TabsTrigger>)).toThrow(
+      "Tab components must be used within a Tabs component",
+    );
+    error.mockRestore();
+  });
+});
+
+describe("Tabs variant", () => {
+  it("renders the underline classes by default", () => {
+    const { a, b, list } = renderVariant();
+    expect(list).toHaveClass("border-b", "border-border", "overflow-x-auto");
+    [a, b].forEach((tab) => {
+      expect(tab).toHaveClass("border-b-2", "-mb-px", "px-4", "py-2");
+      expect(tab).not.toHaveClass("rounded-full");
+    });
+    expect(a).toHaveClass(
+      "data-[state=active]:border-primary",
+      "data-[state=active]:text-primary",
+    );
+    expect(b).toHaveClass(
+      "data-[state=inactive]:border-transparent",
+      "data-[state=inactive]:text-muted-foreground",
+    );
+  });
+
+  it("renders the same classes for variant=underline and no variant", () => {
+    const unset = renderVariant();
+    const unsetClasses = [unset.a.className, unset.list.className];
+    unset.unmount();
+    const explicit = renderVariant("underline");
+    expect([explicit.a.className, explicit.list.className]).toEqual(
+      unsetClasses,
+    );
+  });
+
+  it("renders the pill classes: filled active trigger, no bottom border", () => {
+    const { a, b, list } = renderVariant("pill");
+    expect(list).not.toHaveClass("border-b");
+    expect(list).toHaveClass("gap-1");
+    [a, b].forEach((tab) => {
+      expect(tab).toHaveClass("rounded-full");
+      expect(tab).not.toHaveClass("border-b-2");
+      expect(tab).not.toHaveClass("-mb-px");
+    });
+    expect(a).toHaveClass(
+      "data-[state=active]:bg-muted",
+      "data-[state=active]:text-foreground",
+    );
+    expect(b).toHaveClass("data-[state=inactive]:text-muted-foreground");
+  });
+
+  it("renders the link classes: text only, underlined when active or hovered", () => {
+    const { a, b, list } = renderVariant("link");
+    expect(list).not.toHaveClass("border-b");
+    [a, b].forEach((tab) => {
+      expect(tab).toHaveClass("underline-offset-4");
+      expect(tab).not.toHaveClass("border-b-2");
+      expect(tab).not.toHaveClass("rounded-full");
+    });
+    expect(a).toHaveClass(
+      "data-[state=active]:text-foreground",
+      "data-[state=active]:underline",
+    );
+    expect(b).toHaveClass(
+      "data-[state=inactive]:text-muted-foreground",
+      "data-[state=inactive]:hover:underline",
+    );
+  });
+
+  it.each<TabsVariant | undefined>([undefined, "underline", "pill", "link"])(
+    "gives every trigger the focus-visible ring (variant %s)",
+    (variant) => {
+      const { a, b } = renderVariant(variant);
+      [a, b].forEach((tab) => {
+        expect(tab).toHaveClass(...FOCUS_RING_CLASSES);
+      });
+    },
+  );
+
+  it("keeps a consumer className next to the variant classes", () => {
+    render(
+      <Tabs defaultValue="a" variant="pill">
+        <TabsList className="list-extra">
+          <TabsTrigger className="trigger-extra" value="a">
+            A
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>,
+    );
+    expect(screen.getByRole("tablist")).toHaveClass("list-extra", "gap-1");
+    expect(screen.getByRole("tab")).toHaveClass(
+      "trigger-extra",
+      "rounded-full",
+    );
+  });
+
+  it("falls back to the underline list outside Tabs", () => {
+    render(<TabsList aria-label="Standalone">{null}</TabsList>);
+    expect(screen.getByRole("tablist")).toHaveClass(
+      "border-b",
+      "border-border",
+    );
+  });
+
+  it.each<TabsVariant>(["pill", "link"])(
+    "keeps arrow, Home and End navigation (variant %s)",
+    (variant) => {
+      const { a, b } = renderVariant(variant);
+      a.focus();
+      fireEvent.keyDown(a, { key: "ArrowRight" });
+      expect(b).toHaveFocus();
+      expect(b).toHaveAttribute("aria-selected", "true");
+      expect(a).toHaveAttribute("aria-selected", "false");
+      expect(screen.getByRole("tabpanel")).toHaveTextContent("Panel B");
+      fireEvent.keyDown(b, { key: "Home" });
+      expect(a).toHaveFocus();
+      expect(a).toHaveAttribute("aria-selected", "true");
+      fireEvent.keyDown(a, { key: "End" });
+      expect(b).toHaveFocus();
+    },
+  );
 });
