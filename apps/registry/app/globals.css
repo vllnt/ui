@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: var(--font-mono);
 }
 
 @layer utilities {

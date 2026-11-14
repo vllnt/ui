@@ -41,7 +41,7 @@ test.describe("Typography token wiring (#465)", () => {
     const defaultWeight = await heading.evaluate(
       (node) => getComputedStyle(node).fontWeight,
     );
-    expect(defaultFamily.toLowerCase()).toContain("system-ui");
+    expect(defaultFamily.toLowerCase()).toMatch(/^inter, system-ui/);
     expect(defaultWeight).toBe("600");
 
     // A brand theme overrides the tokens — no library edit, no extra className.
@@ -69,7 +69,7 @@ test.describe("Typography token wiring (#465)", () => {
     const family = await page
       .getByText("Body copy")
       .evaluate((node) => getComputedStyle(node).fontFamily);
-    expect(family.toLowerCase()).toContain("system-ui");
+    expect(family.toLowerCase()).toMatch(/^inter, system-ui/);
   });
 });
 
