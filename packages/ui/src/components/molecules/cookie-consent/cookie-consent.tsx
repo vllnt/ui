@@ -401,16 +401,20 @@ const CookieConsent = ({
       )}
 
       {showCloseButton ? (
+        // The button is the 24px hit area (WCAG 2.5.8); -m-px keeps the 22px
+        // circle drawn by the span where the button used to sit.
         <button
           aria-label={labels?.close ?? DEFAULT_LABELS.close}
           className={cn(
-            "absolute rounded-full border bg-background p-1 text-muted-foreground hover:text-foreground",
+            "absolute -m-px grid size-6 place-items-center text-muted-foreground hover:text-foreground",
             isBar ? "right-2 top-2" : "-right-2 -top-2",
           )}
           onClick={handleClose}
           type="button"
         >
-          <X className="size-3" />
+          <span className="rounded-full border bg-background p-1">
+            <X className="size-3" />
+          </span>
         </button>
       ) : null}
     </div>

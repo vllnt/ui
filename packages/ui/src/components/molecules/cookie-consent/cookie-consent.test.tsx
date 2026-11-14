@@ -481,6 +481,25 @@ describe("CookieConsent", () => {
       expect(close).not.toHaveClass("-right-2", "-top-2");
     });
 
+    it.each(["card", "bar"] as const)(
+      "keeps a 24px close target around the 22px circle in the %s layout",
+      (layout) => {
+        render(
+          <CookieConsent layout={layout} open={true} showCloseButton={true} />,
+        );
+        const close = screen.getByRole("button", {
+          name: "Close cookie consent",
+        });
+        expect(close).toHaveClass("size-6");
+        expect(close.firstElementChild).toHaveClass(
+          "rounded-full",
+          "border",
+          "bg-background",
+          "p-1",
+        );
+      },
+    );
+
     it("animates the bar in after the mount delay", async () => {
       render(<CookieConsent layout="bar" open={true} />);
       const dialog = screen.getByRole("dialog");
