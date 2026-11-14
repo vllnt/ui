@@ -29,10 +29,10 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
 
-      # Node built-ins only, so it needs no install and fails fast. This job is not gated
+      # Node built-ins plus bash, jq and tar (all on the runner), so it needs no install and fails fast. This job is not gated
       # by "Detect affected areas", so it covers PRs touching the publish workflows too.
       - name: Check release guard
-        run: node --test scripts/release-guard.test.mjs
+        run: node --test scripts/release-guard.test.mjs scripts/publish-canary.test.mjs
 
       - run: pnpm install --frozen-lockfile
 
