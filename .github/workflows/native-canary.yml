@@ -1,4 +1,14 @@
-name: Native Canary
+name: Core and Native Canary
+
+# Canary builds of @vllnt/ui-core and @vllnt/ui-native, from main, on the `canary` dist-tag only.
+# The workflow file name is what npm trusted publishing is bound to: do not rename it.
+#
+# Two publish paths, each behind its own repository variable. Unset (the default) means the job is
+# skipped, not failed:
+#   CORE_CANARY_PUBLISH_ENABLED   = true  -> core-publish   @vllnt/ui-core, after core-quality only
+#   NATIVE_CANARY_PUBLISH_ENABLED = true  -> native-publish @vllnt/ui-core + @vllnt/ui-native,
+#                                            after native-quality (pnpm ci:native, Expo Doctor)
+# Nothing publishes until the owner sets them. Setup: docs/RELEASING.md.
 
 on:
   push:
@@ -6,6 +16,7 @@ on:
     paths:
       - "packages/design/**"
       - "scripts/release-guard*"
+      - "scripts/publish-canary*"
       - "packages/ui-core/**"
       - "packages/ui-native/**"
       - "apps/native-catalog/**"
@@ -15,15 +26,80 @@ on:
       - "turbo.json"
       - ".github/workflows/native-canary.yml"
 
-concurrency:
-  group: native-canary-main
-  cancel-in-progress: false
-
 permissions:
   contents: read
 
 jobs:
-  quality:
+  core-quality:
+    name: Core Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      # ui-core and what it needs only. Expo and the React Native toolchain are not installed,
+      # and nothing below runs ci:native or Expo Doctor.
+      - run: pnpm install --frozen-lockfile --filter '@vllnt/ui-core...'
+
+      - run: node --test scripts/release-guard.test.mjs
+
+      - run: pnpm -F @vllnt/ui-core lint
+
+      - run: pnpm -F @vllnt/ui-core typecheck
+
+      # Includes the design token drift check (tokens:check).
+      - run: pnpm -F @vllnt/ui-core build
+
+      - run: pnpm -F @vllnt/ui-core test:once
+
+      - run: pnpm -F @vllnt/ui-core pack:check
+
+  core-publish:
+    name: Publish Core Canary
+    needs: core-quality
+    if: ${{ vars.CORE_CANARY_PUBLISH_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Same environment as native-publish: one trusted-publisher entry per package covers both jobs.
+    environment: npm-native-canary
+    # Publishes of one kind queue instead of running together; a superseded one stands down.
+    concurrency:
+      group: native-canary-core-publish
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile --filter '@vllnt/ui-core...'
+
+      - name: Build publication artifacts
+        run: pnpm -F @vllnt/ui-core build
+
+      - name: Publish core canary
+        run: bash scripts/publish-canary.sh core
+
+  native-quality:
     name: Native Quality Gates
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -45,15 +121,18 @@ jobs:
 
       - run: pnpm ci:native
 
-  publish:
+  native-publish:
     name: Publish Native Canary Pair
-    # Hold: bootstrap, registry-failure handling, Expo Doctor and device validation
-    # require separate review before restoring the enable-variable gate.
-    if: ${{ false }}
-    needs: quality
+    # Waits for core-publish (skipped is fine, failed is not) so the two never write the same
+    # core version at once; a core version core-publish already pushed for this commit is reused.
+    needs: [native-quality, core-publish]
+    if: ${{ !cancelled() && vars.NATIVE_CANARY_PUBLISH_ENABLED == 'true' && needs.native-quality.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.core-publish.result) }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: npm-native-canary
+    concurrency:
+      group: native-canary-pair-publish
+      cancel-in-progress: false
     permissions:
       contents: read
       id-token: write
@@ -78,232 +157,4 @@ jobs:
       - name: Publish synchronized canaries
         env:
           NPM_DIST_TAG_TOKEN: ${{ secrets.NPM_DIST_TAG_TOKEN }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          CANARY_VERSION="$(node scripts/release-guard.mjs native-canary)"
-          CORE_DIR="packages/ui-core"
-          NATIVE_DIR="packages/ui-native"
-
-          test "$(node -p "require('./${CORE_DIR}/package.json').name")" = "@vllnt/ui-core"
-          test "$(node -p "require('./${NATIVE_DIR}/package.json').name")" = "@vllnt/ui-native"
-          if [[ -z "${NPM_DIST_TAG_TOKEN:-}" ]]; then
-            echo "::error::NPM_DIST_TAG_TOKEN is required for dist-tag promotion and rollback because npm trusted publishing authenticates publish commands only"
-            exit 1
-          fi
-          DIST_TAG_NPMRC="$RUNNER_TEMP/npm-dist-tag.npmrc"
-          printf '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n' >"$DIST_TAG_NPMRC"
-          NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 whoami >/dev/null
-
-          CORE_BASE="$(node -p "require('./${CORE_DIR}/package.json').version")"
-          NATIVE_BASE="$(node -p "require('./${NATIVE_DIR}/package.json').version")"
-          test "$CORE_BASE" = "$NATIVE_BASE"
-          case "$CORE_BASE" in
-            *-*) echo "::error::Base package versions must not be prereleases"; exit 1 ;;
-          esac
-
-          current_main_sha() {
-            git ls-remote --exit-code origin refs/heads/main | awk '{print $1}'
-          }
-          REMOTE_MAIN_SHA="$(current_main_sha)"
-          test -n "$REMOTE_MAIN_SHA"
-          if [[ "$REMOTE_MAIN_SHA" != "$GITHUB_SHA" ]]; then
-            echo "::notice::Skipping superseded canary run for ${GITHUB_SHA}"
-            exit 0
-          fi
-
-          STAGING_TAG="run-${GITHUB_RUN_ID}"
-
-          read_tags() {
-            local package="$1"
-            local output_file error_file output
-            output_file="$(mktemp "$RUNNER_TEMP/npm-view-output.XXXXXX")"
-            error_file="$(mktemp "$RUNNER_TEMP/npm-view-error.XXXXXX")"
-            if npm view "$package" dist-tags --json >"$output_file" 2>"$error_file"; then
-              output="$(cat "$output_file")"
-              rm -f "$output_file" "$error_file"
-              [[ -n "$output" ]] || output='{}'
-              if ! jq -e 'type == "object"' <<<"$output" >/dev/null; then
-                echo "::error::npm returned invalid dist-tag data for ${package}" >&2
-                return 1
-              fi
-              printf '%s\n' "$output"
-              return 0
-            fi
-            if grep -q 'E404' "$output_file" "$error_file"; then
-              rm -f "$output_file" "$error_file"
-              printf '{}\n'
-              return 0
-            fi
-            cat "$output_file" "$error_file" >&2
-            rm -f "$output_file" "$error_file"
-            return 1
-          }
-          tag_value() {
-            jq -r --arg tag "$2" '.[$tag] // ""' <<<"$1"
-          }
-          version_state() {
-            local spec="$1"
-            local output_file error_file output
-            output_file="$(mktemp "$RUNNER_TEMP/npm-view-output.XXXXXX")"
-            error_file="$(mktemp "$RUNNER_TEMP/npm-view-error.XXXXXX")"
-            if npm view "$spec" version >"$output_file" 2>"$error_file"; then
-              output="$(cat "$output_file")"
-              rm -f "$output_file" "$error_file"
-              if [[ -n "$output" ]]; then echo present; else echo absent; fi
-              return 0
-            fi
-            if grep -q 'E404' "$output_file" "$error_file"; then
-              rm -f "$output_file" "$error_file"
-              echo absent
-              return 0
-            fi
-            echo "::error::Could not determine whether ${spec} is published" >&2
-            cat "$output_file" "$error_file" >&2
-            rm -f "$output_file" "$error_file"
-            return 1
-          }
-
-          CORE_TAGS_BEFORE="$(read_tags @vllnt/ui-core)"
-          NATIVE_TAGS_BEFORE="$(read_tags @vllnt/ui-native)"
-          CORE_LATEST_BEFORE="$(tag_value "$CORE_TAGS_BEFORE" latest)"
-          NATIVE_LATEST_BEFORE="$(tag_value "$NATIVE_TAGS_BEFORE" latest)"
-          CORE_CANARY_BEFORE="$(tag_value "$CORE_TAGS_BEFORE" canary)"
-          NATIVE_CANARY_BEFORE="$(tag_value "$NATIVE_TAGS_BEFORE" canary)"
-
-          npm version "$CANARY_VERSION" --prefix "$CORE_DIR" --no-git-tag-version --ignore-scripts
-          npm version "$CANARY_VERSION" --prefix "$NATIVE_DIR" --no-git-tag-version --ignore-scripts
-          node - "$NATIVE_DIR/package.json" "$CANARY_VERSION" <<'NODE'
-          const fs = require("node:fs");
-          const [manifestPath, version] = process.argv.slice(2);
-          const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
-          manifest.dependencies["@vllnt/ui-core"] = version;
-          fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-          NODE
-
-          PACK_DIR="$RUNNER_TEMP/native-packs"
-          mkdir -p "$PACK_DIR"
-          CORE_TARBALL="$(pnpm --dir "$CORE_DIR" pack --pack-destination "$PACK_DIR" | tail -n1)"
-          NATIVE_TARBALL="$(pnpm --dir "$NATIVE_DIR" pack --pack-destination "$PACK_DIR" | tail -n1)"
-
-          test "$(tar -xOf "$CORE_TARBALL" package/package.json | jq -r '.name')" = "@vllnt/ui-core"
-          test "$(tar -xOf "$CORE_TARBALL" package/package.json | jq -r '.version')" = "$CANARY_VERSION"
-          test "$(tar -xOf "$NATIVE_TARBALL" package/package.json | jq -r '.name')" = "@vllnt/ui-native"
-          test "$(tar -xOf "$NATIVE_TARBALL" package/package.json | jq -r '.version')" = "$CANARY_VERSION"
-          test "$(tar -xOf "$NATIVE_TARBALL" package/package.json | jq -r '.["react-native"]')" = "./dist/index.js"
-          tar -tf "$NATIVE_TARBALL" | grep -qx 'package/dist/index.js'
-          test "$(tar -xOf "$NATIVE_TARBALL" package/package.json | jq -r '.dependencies["@vllnt/ui-core"]')" = "$CANARY_VERSION"
-          if tar -xOf "$NATIVE_TARBALL" package/package.json | grep -q 'workspace:'; then
-            echo "::error::Packed native manifest still contains a workspace protocol"
-            exit 1
-          fi
-
-          PROMOTION_STARTED=false
-          remove_owned_tag() {
-            local package="$1"
-            local tag="$2"
-            local expected="$3"
-            local tags current
-            tags="$(read_tags "$package")" || return 1
-            current="$(tag_value "$tags" "$tag")"
-            [[ -n "$current" ]] || return 0
-            if [[ "$current" != "$expected" ]]; then
-              echo "::error::Refusing to remove ${package} tag ${tag}: expected ${expected}, found ${current}"
-              return 1
-            fi
-            NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag rm "$package" "$tag" || return 1
-            tags="$(read_tags "$package")" || return 1
-            [[ -z "$(tag_value "$tags" "$tag")" ]]
-          }
-          cleanup_staging() {
-            local failed=0
-            remove_owned_tag @vllnt/ui-core "$STAGING_TAG" "$CANARY_VERSION" || failed=1
-            remove_owned_tag @vllnt/ui-native "$STAGING_TAG" "$CANARY_VERSION" || failed=1
-            return "$failed"
-          }
-          on_exit() {
-            local status=$?
-            local recovery_failed=0
-            trap - EXIT
-            if [[ $status -ne 0 && "$PROMOTION_STARTED" = true ]]; then
-              restore_pair || recovery_failed=1
-            fi
-            cleanup_staging || recovery_failed=1
-            if [[ $recovery_failed -ne 0 ]]; then
-              echo "::error::Could not fully restore npm dist-tags"
-              [[ $status -ne 0 ]] || status=1
-            fi
-            exit "$status"
-          }
-          trap on_exit EXIT
-
-          CORE_STATE="$(version_state "@vllnt/ui-core@${CANARY_VERSION}")"
-          if [[ "$CORE_STATE" = absent ]]; then
-            npx --yes npm@11.18.0 publish "$CORE_TARBALL" --tag "$STAGING_TAG" --provenance --access public
-          fi
-
-          for attempt in $(seq 1 12); do
-            [[ "$(version_state "@vllnt/ui-core@${CANARY_VERSION}")" = present ]] && break
-            sleep 5
-          done
-          test "$(version_state "@vllnt/ui-core@${CANARY_VERSION}")" = present
-
-          NATIVE_STATE="$(version_state "@vllnt/ui-native@${CANARY_VERSION}")"
-          if [[ "$NATIVE_STATE" = absent ]]; then
-            npx --yes npm@11.18.0 publish "$NATIVE_TARBALL" --tag "$STAGING_TAG" --provenance --access public
-          fi
-
-          for attempt in $(seq 1 12); do
-            [[ "$(version_state "@vllnt/ui-native@${CANARY_VERSION}")" = present ]] && break
-            sleep 5
-          done
-          test "$(version_state "@vllnt/ui-native@${CANARY_VERSION}")" = present
-
-          REMOTE_MAIN_SHA="$(current_main_sha)"
-          test -n "$REMOTE_MAIN_SHA"
-          if [[ "$REMOTE_MAIN_SHA" != "$GITHUB_SHA" ]]; then
-            echo "::notice::Skipping canary promotion because main advanced to ${REMOTE_MAIN_SHA}"
-            exit 0
-          fi
-
-          restore_tag() {
-            local package="$1"
-            local previous="$2"
-            local tags current
-            tags="$(read_tags "$package")" || return 1
-            current="$(tag_value "$tags" canary)"
-            [[ "$current" = "$previous" ]] && return 0
-            if [[ -n "$current" && "$current" != "$CANARY_VERSION" ]]; then
-              echo "::error::Refusing to overwrite unexpected ${package} canary ${current}"
-              return 1
-            fi
-            if [[ -n "$previous" ]]; then
-              NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag add "${package}@${previous}" canary || return 1
-            else
-              remove_owned_tag "$package" canary "$CANARY_VERSION" || return 1
-            fi
-            tags="$(read_tags "$package")" || return 1
-            [[ "$(tag_value "$tags" canary)" = "$previous" ]]
-          }
-
-          restore_pair() {
-            local failed=0
-            restore_tag @vllnt/ui-core "$CORE_CANARY_BEFORE" || failed=1
-            restore_tag @vllnt/ui-native "$NATIVE_CANARY_BEFORE" || failed=1
-            return "$failed"
-          }
-
-          PROMOTION_STARTED=true
-          NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag add "@vllnt/ui-core@${CANARY_VERSION}" canary
-          NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npx --yes npm@11.18.0 dist-tag add "@vllnt/ui-native@${CANARY_VERSION}" canary
-
-          CORE_TAGS_AFTER="$(read_tags @vllnt/ui-core)"
-          NATIVE_TAGS_AFTER="$(read_tags @vllnt/ui-native)"
-          test "$(tag_value "$CORE_TAGS_AFTER" canary)" = "$CANARY_VERSION"
-          test "$(tag_value "$NATIVE_TAGS_AFTER" canary)" = "$CANARY_VERSION"
-          test "$(tag_value "$CORE_TAGS_AFTER" latest)" = "$CORE_LATEST_BEFORE"
-          test "$(tag_value "$NATIVE_TAGS_AFTER" latest)" = "$NATIVE_LATEST_BEFORE"
-
-          PROMOTION_STARTED=false
-          exit 0
+        run: bash scripts/publish-canary.sh pair
