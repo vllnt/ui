@@ -88,7 +88,7 @@ Turborepo orders package builds through workspace dependencies. The native CI jo
 |----------|----------------|
 | `ci.yml` | Existing workspace gates plus an isolated native package/Expo job |
 | `publish.yml` | Existing `@vllnt/ui` canary and stable releases |
-| `native-canary.yml` | Native quality gates; synchronized core/native publication unconditionally disabled |
+| `native-canary.yml` | Core and native quality gates; core canary and synchronized core/native canary publication, each behind its own repository variable (off by default) |
 | `storybook.yml` | Existing web Storybook build and deployment |
 
 ## Platform-aware registry
@@ -115,4 +115,4 @@ Web installation remains shadcn-based. Native installation is unavailable while 
 
 ## Release boundaries
 
-The existing `publish.yml` remains exclusively responsible for `@vllnt/ui`, including stable releases. Core and Native share the independent `0.1.0` base. `native-canary.yml` runs quality gates but its publication job is unconditionally disabled. Its retained staged canary implementation requires a separate hardening/enabling review; it has no manual dispatch, stable publication, Git tag, or GitHub Release path. See [releasing](RELEASING.md) for the publication and validation holds.
+The existing `publish.yml` remains exclusively responsible for `@vllnt/ui`, including stable releases. Core and Native share the independent `0.1.0` base. `native-canary.yml` publishes canaries on the `canary` dist-tag only, through `scripts/publish-canary.sh`: a core-only job gated on ui-core's own checks, and a core/native pair job gated on the native quality gate (including Expo Doctor). Each is behind its own repository variable, unset by default; it has no manual dispatch, stable publication, Git tag, or GitHub Release path. See [releasing](RELEASING.md) for the publication and validation holds.
