@@ -1,0 +1,84 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './approval-request.stories'
+
+<Meta of={Stories} />
+
+# ApprovalRequest
+
+Asks the user to approve or deny one action, such as an agent running a command. It shows the risk and the status as words, the action in monospace, and, while the request is pending, Approve and Deny buttons with an optional "remember my choice" checkbox. Pure presentation: the host decides what happens on approve or deny and owns any Dialog.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/approval-request.json
+```
+
+## Import
+
+```tsx
+import { ApprovalRequest } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<ApprovalRequest
+  title="Delete build output"
+  action="rm -rf ./dist"
+  detail="Deletes the build output. This cannot be undone."
+  risk="high"
+  onApprove={approve}
+  onDeny={deny}
+  remember={{ label: 'Always allow this command', onCheckedChange: setRemember }}
+/>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Behavior
+
+- The root is a `<fieldset>`, so it exposes `role="group"` named by the title. `disabled` disables the buttons and the checkbox, for example while the host sends the decision.
+- Risk and status are always words (a Badge with text), never colour alone. The status badge is a `role="status"` region, so a change from pending to approved, denied or expired is announced.
+- While `status` is `pending` the buttons are real `type="button"` buttons. In every other status the buttons and the remember checkbox are not rendered and the status word stays. `onApprove` and `onDeny` are only called from those buttons.
+- Words come from `labels` and fall back to English defaults: `Low risk`, `Medium risk`, `High risk`, `Pending`, `Approved`, `Denied`, `Expired`, `Approve`, `Deny`, `Remember my choice`. A missing, empty or blank entry keeps the default, so no state is ever shown without a word.
+- `placement` only changes the surface (`inline` card, `hud` compact popover surface, `dialog` roomy surface with a shadow). The host supplies any Dialog, overlay or positioning.
+- Footer order is Deny then Approve, so Approve sits at the end on wide screens and on top when stacked on a phone.
+
+## Penpot mapping
+
+Penpot family `molecule / Approval request` (lock 1.x, 36 mains).
+
+| Penpot axis | Values | Code |
+|-------------|--------|------|
+| Status | approved, denied, expired, pending | `status` (default `pending`) |
+| Risk | high, low, medium | `risk` (default `low`) |
+| Placement | dialog, hud, inline | `placement` (default `inline`) |
+
+| Penpot layer | Code |
+|--------------|------|
+| Surface | the `<fieldset>` root, styled by `placement` |
+| Header | risk Badge and status Badge |
+| Title | `title` |
+| Detail | `detail` |
+| Action | `action`, in a monospace `<code>` block |
+| Divider | `<hr>`, rendered with the footer while pending |
+| Remember | `remember` (Checkbox and Label), pending only |
+| Footer | Approve and Deny buttons, pending only |
+
+Not built from Penpot:
+
+- Dialog wrapping: the host supplies any Dialog (`placement="dialog"` is the surface only).
+- Pixel sizes and exact colours: spacing and colours come from the semantic tokens (`bg-card`, `bg-popover`, `border`, `primary`, `destructive`, `success`, `warning`, `info`).
+- Remember and Footer on approved, denied and expired: they are inputs to a decision, so they are not rendered once the request is resolved.
+- The Penpot sizing edit and tool-call integration (`AIToolCallDisplay`) are separate rows.
+
+## Notes
+
+- `success`, `warning` and `info` colours come from `@vllnt/ui/tailwind-preset`. Without the preset those badges fall back to the neutral outline look and still show their word.
+- Pair with `AIToolCallDisplay` to show the tool call that is waiting for approval.

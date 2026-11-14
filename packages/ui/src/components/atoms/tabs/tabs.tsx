@@ -12,10 +12,42 @@ import {
   useState,
 } from "react";
 
+import { cva } from "class-variance-authority";
 import type { KeyboardEvent, ReactNode } from "react";
 
 import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
+
+/**
+ * Look of the tab triggers (Penpot `Style` axis): `underline` is the default,
+ * `pill` fills the active trigger, `link` is plain text. Penpot's `segment`
+ * style is the `SegmentedControl` component, not a Tabs variant.
+ */
+export type TabsVariant = "link" | "pill" | "underline";
+
+const tabsListVariants = cva("flex overflow-x-auto", {
+  variants: {
+    variant: {
+      link: "",
+      pill: "gap-1",
+      underline: "border-b border-border",
+    },
+  },
+});
+
+const tabsTriggerVariants = cva(
+  "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
+  {
+    variants: {
+      variant: {
+        link: "underline-offset-4 data-[state=active]:text-foreground data-[state=active]:underline data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground data-[state=inactive]:hover:underline",
+        pill: "rounded-full data-[state=active]:bg-muted data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/50 data-[state=inactive]:hover:text-foreground",
+        underline:
+          "-mb-px border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:border-muted-foreground/50 data-[state=inactive]:hover:text-foreground",
+      },
+    },
+  },
+);
 
 type TabsContextValue = {
   activeTab: string;
@@ -26,6 +58,7 @@ type TabsContextValue = {
   registerTab: (value: string, id: string) => () => void;
   setActiveTab: (value: string) => void;
   tabIds: ReadonlyMap<string, string>;
+  variant: TabsVariant;
 };
 
 /**
@@ -73,14 +106,21 @@ export type TabsProps = {
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   value?: string;
+  /** Look of the triggers, shared with `Tabs.List` and `Tabs.Trigger`. Defaults to `underline`. */
+  variant?: TabsVariant;
 };
 
+/**
+ * Root of a tabs group. Holds the active value and the `variant` that
+ * `Tabs.List` and `Tabs.Trigger` read from context.
+ */
 function Tabs({
   children,
   className,
   defaultValue = "",
   onValueChange,
   value,
+  variant = "underline",
 }: TabsProps): React.ReactNode {
   const [internalTab, setInternalTab] = useState(defaultValue);
   const isControlled = value !== undefined;
@@ -117,6 +157,7 @@ function Tabs({
       registerTab,
       setActiveTab: handleSetActiveTab,
       tabIds,
+      variant,
     }),
     [
       activeTab,
@@ -127,6 +168,7 @@ function Tabs({
       registerPanel,
       registerTab,
       tabIds,
+      variant,
     ],
   );
 
@@ -148,7 +190,8 @@ export type TabsListProps = {
  * Container for the tab triggers. Implements the WAI-ARIA APG tabs keyboard
  * model: ArrowLeft / ArrowRight move focus between tabs (wrapping), Home / End
  * jump to the first / last tab, and the focused tab becomes active. A consumer
- * `onKeyDown` runs first; calling `preventDefault()` in it opts out.
+ * `onKeyDown` runs first; calling `preventDefault()` in it opts out. Outside a
+ * `Tabs` it falls back to the `underline` look.
  */
 function TabsList({
   "aria-label": ariaLabel,
@@ -156,6 +199,7 @@ function TabsList({
   className,
   onKeyDown,
 }: TabsListProps): React.ReactNode {
+  const variant = use(TabsContext)?.variant ?? "underline";
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>): void => {
     onKeyDown?.(event);
     moveRovingFocus(event, '[role="tab"]', { activate: true });
@@ -164,7 +208,7 @@ function TabsList({
   return (
     <div
       aria-label={ariaLabel}
-      className={cn("flex border-b border-border overflow-x-auto", className)}
+      className={cn(tabsListVariants({ variant }), className)}
       onKeyDown={handleKeyDown}
       role="tablist"
       tabIndex={-1}
@@ -184,6 +228,11 @@ export type TabsTriggerProps = {
   value: string;
 };
 
+/**
+ * A tab trigger (`role="tab"`). It sets `aria-selected` and `data-state`
+ * (`"active"` or `"inactive"`) from the selected tab; the look follows the
+ * `Tabs` variant and every variant draws a `focus-visible` ring.
+ */
 function TabsTrigger({
   "aria-controls": ariaControls,
   "aria-hidden": ariaHidden,
@@ -201,6 +250,7 @@ function TabsTrigger({
     registerTab,
     setActiveTab,
     tabIds,
+    variant,
   } = useTabsContext();
   const isActive = activeTab === value;
   const tabId = id ?? `${baseId}-tab-${toIdPart(value)}`;
@@ -216,14 +266,8 @@ function TabsTrigger({
       }
       aria-hidden={ariaHidden}
       aria-selected={isActive}
-      className={cn(
-        "px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors",
-        "border-b-2 -mb-px",
-        isActive
-          ? "border-primary text-primary"
-          : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50",
-        className,
-      )}
+      className={cn(tabsTriggerVariants({ variant }), className)}
+      data-state={isActive ? "active" : "inactive"}
       id={tabId}
       onClick={() => {
         setActiveTab(value);

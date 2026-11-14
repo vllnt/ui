@@ -4,6 +4,28 @@
   "homepage": "https://ui.vllnt.com",
   "items": [
     {
+      "name": "access-matrix",
+      "type": "registry:component",
+      "title": "Access Matrix",
+      "description": "Shows which permissions each subject holds, as a table or as one list entry per subject.",
+      "files": [
+        {
+          "path": "registry/default/access-matrix/access-matrix.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "data",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "accordion",
       "type": "registry:component",
       "title": "Accordion",
@@ -646,6 +668,28 @@
         "@vllnt/ui@^0.3.0"
       ],
       "category": "learning",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "approval-request",
+      "type": "registry:component",
+      "title": "Approval Request",
+      "description": "Asks the user to approve or deny one action, such as an agent running a command.",
+      "files": [
+        {
+          "path": "registry/default/approval-request/approval-request.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "ai",
       "version": "0.3.0",
       "stability": "stable",
       "platforms": [
@@ -2270,6 +2314,28 @@
         "source": "src/components/molecules/credit-badge/credit-badge.tsx",
         "status": "experimental"
       }
+    },
+    {
+      "name": "cta-band",
+      "type": "registry:component",
+      "title": "CTA Band",
+      "description": "Full-width call-to-action band with title, description, optional icon and divider, and an actions slot.",
+      "files": [
+        {
+          "path": "registry/default/cta-band/cta-band.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "content",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "curriculum",
@@ -4859,6 +4925,28 @@
       ]
     },
     {
+      "name": "order-summary",
+      "type": "registry:component",
+      "title": "Order Summary",
+      "description": "Order summary with priced rows, a total, an optional promo code form and a checkout button.",
+      "files": [
+        {
+          "path": "registry/default/order-summary/order-summary.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "billing",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "overview-board",
       "type": "registry:component",
       "title": "Overview Board",
@@ -5554,6 +5642,28 @@
       ]
     },
     {
+      "name": "pull-quote",
+      "type": "registry:component",
+      "title": "Pull Quote",
+      "description": "Highlighted quotation lifted out of long-form content: a short decorative rule, the quote and an optional attribution.",
+      "files": [
+        {
+          "path": "registry/default/pull-quote/pull-quote.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "content",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "qr-code",
       "type": "registry:component",
       "title": "QR Code",
@@ -6055,6 +6165,28 @@
       }
     },
     {
+      "name": "scrim",
+      "type": "registry:component",
+      "title": "Scrim",
+      "description": "Flat full-bleed overlay that dims the surface behind a panel, sheet or pane.",
+      "files": [
+        {
+          "path": "registry/default/scrim/scrim.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "overlay",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "scroll-area",
       "type": "registry:component",
       "title": "Scroll Area",
@@ -6338,6 +6470,28 @@
       }
     },
     {
+      "name": "settings-list",
+      "type": "registry:component",
+      "title": "Settings List",
+      "description": "Settings section with an optional heading and description above a list of rows.",
+      "files": [
+        {
+          "path": "registry/default/settings-list/settings-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "form",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "severity-badge",
       "type": "registry:component",
       "title": "Severity Badge",
@@ -6398,6 +6552,28 @@
         "source": "src/components/atoms/share-dialog/share-dialog.tsx",
         "status": "experimental"
       }
+    },
+    {
+      "name": "share-dialog-people",
+      "type": "registry:component",
+      "title": "Share Dialog People",
+      "description": "Content panel of a people-sharing dialog with a share link, people with role menus, and an invite form.",
+      "files": [
+        {
+          "path": "registry/default/share-dialog-people/share-dialog-people.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "overlay",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "share-section",

@@ -12,6 +12,8 @@ Dismissible cookie-consent banner with positional variants and accept / reject a
 machine-readable registry entry — copy the source directly into your app with
 the shadcn CLI and own it, no runtime dependency on a component library.
 
+Set `title` to add a heading that also names the dialog, `layout="bar"` for a full-width band along the bottom edge instead of the floating card, and `actions="equal"` to render accept and decline as the same outline button. `labels` overrides the accessible names of the dialog (`region`) and the close button (`close`), so every string can be localized. The component only renders the banner: store the choice from `onAccept`, `onDecline` or `onOpenChange`.
+
 <Preview />
 
 ## Installation

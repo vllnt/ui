@@ -1,4 +1,32 @@
 {
+  "access-matrix": {
+    "category": "data",
+    "defaultStoryId": "data-accessmatrix--default",
+    "description": "Shows which permissions each subject holds, as a table or as one list entry per subject.",
+    "name": "access-matrix",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "data-accessmatrix--default",
+        "name": "Default"
+      },
+      {
+        "id": "data-accessmatrix--list",
+        "name": "List"
+      },
+      {
+        "id": "data-accessmatrix--interactive",
+        "name": "Interactive"
+      },
+      {
+        "id": "data-accessmatrix--custom-labels",
+        "name": "Custom Labels"
+      }
+    ],
+    "title": "Access Matrix"
+  },
   "accordion": {
     "category": "content",
     "defaultStoryId": "content-accordion--default",
@@ -526,6 +554,58 @@
     ],
     "title": "Annotation"
   },
+  "approval-request": {
+    "category": "ai",
+    "defaultStoryId": "ai-approvalrequest--default",
+    "description": "Asks the user to approve or deny one action, such as an agent running a command.",
+    "name": "approval-request",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "ai-approvalrequest--default",
+        "name": "Default"
+      },
+      {
+        "id": "ai-approvalrequest--low-risk",
+        "name": "Low Risk"
+      },
+      {
+        "id": "ai-approvalrequest--high-risk",
+        "name": "High Risk"
+      },
+      {
+        "id": "ai-approvalrequest--approved",
+        "name": "Approved"
+      },
+      {
+        "id": "ai-approvalrequest--denied",
+        "name": "Denied"
+      },
+      {
+        "id": "ai-approvalrequest--expired",
+        "name": "Expired"
+      },
+      {
+        "id": "ai-approvalrequest--without-remember",
+        "name": "Without Remember"
+      },
+      {
+        "id": "ai-approvalrequest--hud",
+        "name": "Hud"
+      },
+      {
+        "id": "ai-approvalrequest--dialog",
+        "name": "Dialog"
+      },
+      {
+        "id": "ai-approvalrequest--custom-labels",
+        "name": "Custom Labels"
+      }
+    ],
+    "title": "Approval Request"
+  },
   "area-chart": {
     "category": "data",
     "defaultStoryId": "",
@@ -599,6 +679,46 @@
       {
         "id": "core-avatar--default",
         "name": "Default"
+      },
+      {
+        "id": "core-avatar--sizes",
+        "name": "Sizes"
+      },
+      {
+        "id": "core-avatar--shapes",
+        "name": "Shapes"
+      },
+      {
+        "id": "core-avatar--presence",
+        "name": "Presence"
+      },
+      {
+        "id": "core-avatar--presence-sizes",
+        "name": "Presence Sizes"
+      },
+      {
+        "id": "core-avatar--presence-square",
+        "name": "Presence Square"
+      },
+      {
+        "id": "core-avatar--presence-labels",
+        "name": "Presence Labels"
+      },
+      {
+        "id": "core-avatar--kind-person",
+        "name": "Kind Person"
+      },
+      {
+        "id": "core-avatar--kind-initials",
+        "name": "Kind Initials"
+      },
+      {
+        "id": "core-avatar--kind-org",
+        "name": "Kind Org"
+      },
+      {
+        "id": "core-avatar--kind-agent",
+        "name": "Kind Agent"
       }
     ],
     "title": "Avatar"
@@ -832,6 +952,30 @@
       {
         "id": "navigation-breadcrumb--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-breadcrumb--current-page",
+        "name": "Current Page"
+      },
+      {
+        "id": "navigation-breadcrumb--collapsed",
+        "name": "Collapsed"
+      },
+      {
+        "id": "navigation-breadcrumb--localised",
+        "name": "Localised"
+      },
+      {
+        "id": "navigation-breadcrumb--custom-link-component",
+        "name": "Custom Link Component"
+      },
+      {
+        "id": "navigation-breadcrumb--slash",
+        "name": "Slash"
+      },
+      {
+        "id": "navigation-breadcrumb--minimal",
+        "name": "Minimal"
       }
     ],
     "title": "Breadcrumb"
@@ -1272,6 +1416,30 @@
       {
         "id": "content-codeblock--default",
         "name": "Default"
+      },
+      {
+        "id": "content-codeblock--titled",
+        "name": "Titled"
+      },
+      {
+        "id": "content-codeblock--line-numbers",
+        "name": "Line Numbers"
+      },
+      {
+        "id": "content-codeblock--wrapped",
+        "name": "Wrapped"
+      },
+      {
+        "id": "content-codeblock--scrolling",
+        "name": "Scrolling"
+      },
+      {
+        "id": "content-codeblock--full",
+        "name": "Full"
+      },
+      {
+        "id": "content-codeblock--dark",
+        "name": "Dark"
       }
     ],
     "title": "Code Block"
@@ -1580,6 +1748,26 @@
       {
         "id": "utility-cookieconsent--default",
         "name": "Default"
+      },
+      {
+        "id": "utility-cookieconsent--with-title",
+        "name": "With Title"
+      },
+      {
+        "id": "utility-cookieconsent--custom-labels",
+        "name": "Custom Labels"
+      },
+      {
+        "id": "utility-cookieconsent--bar",
+        "name": "Bar"
+      },
+      {
+        "id": "utility-cookieconsent--equal-actions",
+        "name": "Equal Actions"
+      },
+      {
+        "id": "utility-cookieconsent--bar-with-title-and-equal-actions",
+        "name": "Bar With Title And Equal Actions"
       }
     ],
     "title": "Cookie Consent"
@@ -1654,6 +1842,38 @@
       }
     ],
     "title": "Credit Badge"
+  },
+  "cta-band": {
+    "category": "content",
+    "defaultStoryId": "layout-ctaband--default",
+    "description": "Full-width call-to-action band with title, description, optional icon and divider, and an actions slot.",
+    "name": "cta-band",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "layout-ctaband--default",
+        "name": "Default"
+      },
+      {
+        "id": "layout-ctaband--muted",
+        "name": "Muted"
+      },
+      {
+        "id": "layout-ctaband--with-icon-and-divider",
+        "name": "With Icon And Divider"
+      },
+      {
+        "id": "layout-ctaband--single-action",
+        "name": "Single Action"
+      },
+      {
+        "id": "layout-ctaband--three-actions",
+        "name": "Three Actions"
+      }
+    ],
+    "title": "CTA Band"
   },
   "curriculum": {
     "category": "learning",
@@ -2899,6 +3119,26 @@
         "name": "Mod Shortcut"
       },
       {
+        "id": "core-kbd--platform-mac",
+        "name": "Platform Mac"
+      },
+      {
+        "id": "core-kbd--platform-win",
+        "name": "Platform Win"
+      },
+      {
+        "id": "core-kbd--variant-bracket",
+        "name": "Variant Bracket"
+      },
+      {
+        "id": "core-kbd--bracket-shortcut-mac",
+        "name": "Bracket Shortcut Mac"
+      },
+      {
+        "id": "core-kbd--bracket-shortcut-win",
+        "name": "Bracket Shortcut Win"
+      },
+      {
         "id": "core-kbd--composed",
         "name": "Composed"
       }
@@ -3759,6 +3999,42 @@
     ],
     "title": "Order Book"
   },
+  "order-summary": {
+    "category": "billing",
+    "defaultStoryId": "account-billing-ordersummary--default",
+    "description": "Order summary with priced rows, a total, an optional promo code form and a checkout button.",
+    "name": "order-summary",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "account-billing-ordersummary--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-ordersummary--phone",
+        "name": "Phone"
+      },
+      {
+        "id": "account-billing-ordersummary--without-promo",
+        "name": "Without Promo"
+      },
+      {
+        "id": "account-billing-ordersummary--promo-applying",
+        "name": "Promo Applying"
+      },
+      {
+        "id": "account-billing-ordersummary--promo-error",
+        "name": "Promo Error"
+      },
+      {
+        "id": "account-billing-ordersummary--checkout-loading",
+        "name": "Checkout Loading"
+      }
+    ],
+    "title": "Order Summary"
+  },
   "overview-board": {
     "category": "data",
     "defaultStoryId": "layout-overviewboard--default",
@@ -4177,6 +4453,58 @@
       {
         "id": "data-progressbar--default",
         "name": "Default"
+      },
+      {
+        "id": "data-progressbar--complete",
+        "name": "Complete"
+      },
+      {
+        "id": "data-progressbar--loading",
+        "name": "Loading"
+      },
+      {
+        "id": "data-progressbar--neutral",
+        "name": "Neutral"
+      },
+      {
+        "id": "data-progressbar--info",
+        "name": "Info"
+      },
+      {
+        "id": "data-progressbar--success",
+        "name": "Success"
+      },
+      {
+        "id": "data-progressbar--warning",
+        "name": "Warning"
+      },
+      {
+        "id": "data-progressbar--danger",
+        "name": "Danger"
+      },
+      {
+        "id": "data-progressbar--small",
+        "name": "Small"
+      },
+      {
+        "id": "data-progressbar--large",
+        "name": "Large"
+      },
+      {
+        "id": "data-progressbar--indeterminate",
+        "name": "Indeterminate"
+      },
+      {
+        "id": "data-progressbar--step-label",
+        "name": "Step Label"
+      },
+      {
+        "id": "data-progressbar--show-value",
+        "name": "Show Value"
+      },
+      {
+        "id": "data-progressbar--without-labels",
+        "name": "Without Labels"
       }
     ],
     "title": "Progress Bar"
@@ -4339,6 +4667,34 @@
       }
     ],
     "title": "Prose"
+  },
+  "pull-quote": {
+    "category": "content",
+    "defaultStoryId": "core-pullquote--default",
+    "description": "Highlighted quotation lifted out of long-form content: a short decorative rule, the quote and an optional attribution.",
+    "name": "pull-quote",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "core-pullquote--default",
+        "name": "Default"
+      },
+      {
+        "id": "core-pullquote--large",
+        "name": "Large"
+      },
+      {
+        "id": "core-pullquote--without-cite",
+        "name": "Without Cite"
+      },
+      {
+        "id": "core-pullquote--large-without-cite",
+        "name": "Large Without Cite"
+      }
+    ],
+    "title": "Pull Quote"
   },
   "qr-code": {
     "category": "core",
@@ -4773,6 +5129,30 @@
     ],
     "title": "Scramble Text"
   },
+  "scrim": {
+    "category": "overlay",
+    "defaultStoryId": "effects-scrim--default",
+    "description": "Flat full-bleed overlay that dims the surface behind a panel, sheet or pane.",
+    "name": "scrim",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "effects-scrim--default",
+        "name": "Default"
+      },
+      {
+        "id": "effects-scrim--dim",
+        "name": "Dim"
+      },
+      {
+        "id": "effects-scrim--strong",
+        "name": "Strong"
+      }
+    ],
+    "title": "Scrim"
+  },
   "scroll-area": {
     "category": "utility",
     "defaultStoryId": "utility-scrollarea--default",
@@ -4976,6 +5356,34 @@
     ],
     "title": "Separator"
   },
+  "settings-list": {
+    "category": "form",
+    "defaultStoryId": "account-billing-settingslist--default",
+    "description": "Settings section with an optional heading and description above a list of rows.",
+    "name": "settings-list",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "account-billing-settingslist--default",
+        "name": "Default"
+      },
+      {
+        "id": "account-billing-settingslist--plain",
+        "name": "Plain"
+      },
+      {
+        "id": "account-billing-settingslist--without-header",
+        "name": "Without Header"
+      },
+      {
+        "id": "account-billing-settingslist--empty",
+        "name": "Empty"
+      }
+    ],
+    "title": "Settings List"
+  },
   "severity-badge": {
     "category": "data",
     "defaultStoryId": "data-severitybadge--default",
@@ -5026,6 +5434,42 @@
     ],
     "title": "Share Dialog"
   },
+  "share-dialog-people": {
+    "category": "overlay",
+    "defaultStoryId": "utility-sharedialogpeople--default",
+    "description": "Content panel of a people-sharing dialog with a share link, people with role menus, and an invite form.",
+    "name": "share-dialog-people",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "utility-sharedialogpeople--default",
+        "name": "Default"
+      },
+      {
+        "id": "utility-sharedialogpeople--invite",
+        "name": "Invite"
+      },
+      {
+        "id": "utility-sharedialogpeople--phone",
+        "name": "Phone"
+      },
+      {
+        "id": "utility-sharedialogpeople--phone-invite",
+        "name": "Phone Invite"
+      },
+      {
+        "id": "utility-sharedialogpeople--empty",
+        "name": "Empty"
+      },
+      {
+        "id": "utility-sharedialogpeople--without-link",
+        "name": "Without Link"
+      }
+    ],
+    "title": "Share Dialog People"
+  },
   "share-section": {
     "category": "content",
     "defaultStoryId": "content-sharesection--default",
@@ -5064,6 +5508,10 @@
       {
         "id": "overlay-sheet--left",
         "name": "Left"
+      },
+      {
+        "id": "overlay-sheet--custom-close-label",
+        "name": "Custom Close Label"
       },
       {
         "id": "overlay-sheet--bottom",
@@ -5682,6 +6130,14 @@
       {
         "id": "navigation-tabs--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-tabs--variant-pill",
+        "name": "Variant Pill"
+      },
+      {
+        "id": "navigation-tabs--variant-link",
+        "name": "Variant Link"
       }
     ],
     "title": "Tabs"
@@ -5703,6 +6159,10 @@
       {
         "id": "form-taggroup--removable",
         "name": "Removable"
+      },
+      {
+        "id": "form-taggroup--custom-remove-label",
+        "name": "Custom Remove Label"
       }
     ],
     "title": "Tag Group"
@@ -6114,6 +6574,10 @@
       {
         "id": "content-timeline--with-rich-content",
         "name": "With Rich Content"
+      },
+      {
+        "id": "content-timeline--status-labels",
+        "name": "Status Labels"
       },
       {
         "id": "content-timeline--color-overrides",

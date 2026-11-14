@@ -145,6 +145,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
           "item",
           "file-upload",
           "newsletter-signup",
+          "settings-list",
         ],
       },
     ],
@@ -156,7 +157,12 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "Modal dialogs for confirming actions, focusing attention, and sharing content, including alert and share dialogs.",
         heading: "Modal Dialogs",
-        slugs: ["alert-dialog", "dialog", "share-dialog"],
+        slugs: [
+          "alert-dialog",
+          "dialog",
+          "share-dialog",
+          "share-dialog-people",
+        ],
       },
       {
         blurb:
@@ -180,7 +186,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "Transient toasts, canvas edge labels, and zoom HUD controls for feedback and on-canvas overlays.",
         heading: "Notifications & Overlays",
-        slugs: ["toast", "edge-label", "zoom-hud"],
+        slugs: ["toast", "edge-label", "zoom-hud", "scrim"],
       },
     ],
   },
@@ -283,6 +289,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
           "data-list",
           "usage-breakdown",
           "comparison",
+          "access-matrix",
         ],
       },
       {
@@ -405,6 +412,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
           "card",
           "carousel",
           "collapsible",
+          "cta-band",
           "expandable-cards",
           "faq",
           "slideshow",
@@ -437,6 +445,7 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
           "content-intro",
           "document-sibling-nav",
           "mdx-content",
+          "pull-quote",
           "share-section",
           "terminal",
           "timeline",
@@ -647,7 +656,12 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "Pricing tables, auto-reload controls, and transaction history for subscription billing, credits, and payment management.",
         heading: "Billing & Payments",
-        slugs: ["auto-reload", "pricing-table", "transaction-list"],
+        slugs: [
+          "auto-reload",
+          "order-summary",
+          "pricing-table",
+          "transaction-list",
+        ],
       },
     ],
   },
@@ -686,7 +700,12 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         blurb:
           "Agent activity chains, tool-call traces, and source citations that make AI agent execution transparent and verifiable.",
         heading: "Agent Tools & Citations",
-        slugs: ["agent-activity", "ai-tool-call-display", "ai-source-citation"],
+        slugs: [
+          "agent-activity",
+          "ai-tool-call-display",
+          "ai-source-citation",
+          "approval-request",
+        ],
       },
       {
         blurb:

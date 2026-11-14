@@ -179,7 +179,7 @@ export const designTokens = {
     "fontFamily": {
       "sans": {
         "cssVariable": "--font-sans",
-        "value": "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         "role": "Body + UI text"
       },
       "display": {
@@ -189,7 +189,7 @@ export const designTokens = {
       },
       "mono": {
         "cssVariable": "--font-mono",
-        "value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+        "value": "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
         "role": "Code + tabular"
       }
     },

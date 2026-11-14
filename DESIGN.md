@@ -168,9 +168,9 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 
 | Family | CSS variable | Default | Role |
 |--------|--------------|---------|------|
-| Sans | `--font-sans` | system sans stack | Body + UI text (`Text`, `Prose`) |
+| Sans | `--font-sans` | Inter, then the system sans stack | Body + UI text (`Text`, `Prose`) |
 | Display | `--font-display` | `var(--font-sans)` | Headings + hero (`Heading`, `Display`) — set a serif/display face here for a brand identity |
-| Mono | `--font-mono` | system mono stack | Code, tabular |
+| Mono | `--font-mono` | JetBrains Mono, then the system mono stack | Code, tabular |
 
 **Type scale** — each step is a token (`--font-size-*`); heading/display weight is a token too (`--font-weight-heading`, `--font-weight-display`). Overriding any of these restyles the foundation primitives.
 
@@ -195,7 +195,7 @@ Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/
 **Rules**
 - The `Text` / `Heading` / `Display` / `Prose` foundation primitives consume the tokens above — style them by overriding tokens, not by forking the components.
 - Headings use `font-semibold` (600), **never** `font-bold` (700+) at display sizes — letter shapes crush. The heading weight token defaults to 600.
-- Code uses the system mono stack via `font-mono`.
+- Code uses the core mono stack (JetBrains Mono, then the system mono stack) via `font-mono`.
 - Tabular numerals for data tables, charts, transactions: `font-variant-numeric: tabular-nums`.
 
 ---

@@ -5,7 +5,7 @@ import * as Stories from './code-block.stories'
 
 # Code Block
 
-Syntax-highlighted code display with copy support.
+Syntax-highlighted code display with copy support, an optional header, wrapping and line numbers.
 
 <Primary />
 
@@ -35,6 +35,57 @@ import { CodeBlock } from '@vllnt/ui'
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `language` | `string` | No | - |
-| `showLanguage` | `boolean` | No | `true` or `false` |
+| `children` | `ReactNode` | Yes | Source code. Nested elements contribute their text. |
+| `className` | `string` | No | Merged onto the root element. |
+| `language` | `string` | No | Prism language. Defaults to `typescript`. |
+| `showLanguage` | `boolean` | No | Shows the language label over the code. Ignored when `title` renders a header, which always shows it. |
+| `showLineNumbers` | `boolean` | No | Numbers every line. Defaults to `false`. Numbers are not part of the copied text. |
+| `title` | `ReactNode` | No | File name or label. Renders a header row with the title, the language label and the Copy button. Empty renders no header. |
+| `wrap` | `boolean` | No | Wraps long lines. Defaults to `false`, which scrolls horizontally. |
+| `ref` | `Ref<HTMLDivElement>` | No | Ref to the root element. |
 
+Without `title`, `wrap` and `showLineNumbers` the block renders as before.
+
+## Header
+
+`title` adds a header row: the file name on the left, the language label and the Copy button on the right. A long title truncates.
+
+<Canvas of={Stories.Titled} sourceState="shown" />
+
+## Line numbers
+
+<Canvas of={Stories.LineNumbers} sourceState="shown" />
+
+## Wrap
+
+`wrap` wraps long lines onto the next row. Without it a long line scrolls sideways.
+
+<Canvas of={Stories.Wrapped} sourceState="shown" />
+
+<Canvas of={Stories.Scrolling} sourceState="shown" />
+
+## Copy state
+
+After a successful copy the Copy control shows a visible `Copied` word for about two seconds. The word sits in a polite live region (`role="status"`, `aria-live="polite"`), so assistive technology announces it. The button keeps the accessible name `Copy code` in every state. When the clipboard is unavailable or refuses the write, nothing changes.
+
+## Theme
+
+Token colours come from the `--vllnt-code-*` custom properties, so the block follows the active light or dark theme. The background is `bg-background`.
+
+<Canvas of={Stories.Dark} sourceState="shown" />
+
+## Penpot mapping
+
+Penpot family `organism / Code block` has the axes Mode, Wrap and Lines.
+
+| Penpot axis | Value | Code |
+| ----------- | ----- | ---- |
+| Wrap | `off` | `wrap={false}` (default) |
+| Wrap | `on` | `wrap` |
+| Lines | `plain` | `showLineNumbers={false}` (default) |
+| Lines | `numbered` | `showLineNumbers` |
+| Mode | `static` | Synonym for the existing `StaticCode` component (server-rendered, fixed dark theme) |
+| Mode | `tabbed` | Not built |
+| Mode | `diff` | Not built |
+
+Header layer: `title`. Copy state: the `Copied` word described above.

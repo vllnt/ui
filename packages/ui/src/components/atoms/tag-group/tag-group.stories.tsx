@@ -32,3 +32,19 @@ export const Removable: Story = {
     </TagGroup>
   ),
 };
+
+export const CustomRemoveLabel: Story = {
+  render: () => (
+    <TagGroup
+      label="Filtres appliqués"
+      labels={{ remove: (tag) => `Supprimer ${tag}` }}
+    >
+      <TagGroupItem onRemove={() => undefined} value="ouvert">
+        Ouvert
+      </TagGroupItem>
+      <TagGroupItem onRemove={() => undefined} value="moi">
+        Assigné à moi
+      </TagGroupItem>
+    </TagGroup>
+  ),
+};

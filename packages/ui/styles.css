@@ -42,9 +42,9 @@
     /* Typography — theme-overridable font tokens (issue #465). Override any of
        these on a theme scope to restyle the Text/Heading/Display/Prose primitives
        without editing the library. Defaults reproduce the house style (sans, 600). */
-    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --font-display: var(--font-sans);
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     --font-weight-heading: 600;
     --font-weight-display: 600;
     --font-weight-label: 600;

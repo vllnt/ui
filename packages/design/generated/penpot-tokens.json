@@ -4,7 +4,7 @@
       "family": {
         "sans": {
           "$value": [
-            "system-ui"
+            "Inter"
           ],
           "$type": "fontFamilies"
         },
@@ -14,7 +14,7 @@
         },
         "mono": {
           "$value": [
-            "ui-monospace"
+            "JetBrains Mono"
           ],
           "$type": "fontFamilies"
         }

@@ -10,6 +10,10 @@ Release automation can regenerate this file from Conventional Commits with
 
 ## [Unreleased]
 
+### Added
+
+- Total component count: **321** (up from 313).
+
 ## [0.4.0] - 2026-10-31
 
 ### Added

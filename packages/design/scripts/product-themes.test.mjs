@@ -255,6 +255,90 @@ describe("tokens.json themes", () => {
   });
 });
 
+describe("core fonts", () => {
+  const { fontFamily } = tokens.typography;
+  const defaultCss = readText("../ui/themes/default.css");
+  const stylesCss = readText("../ui/styles.css");
+  const uiCoreTokens = readText("../ui-core/tokens.json");
+  const uiCoreTs = readText("../ui-core/src/generated/design-tokens.ts");
+
+  it("sets Inter first in the core sans stack, then the system fallbacks", () => {
+    assert.match(fontFamily.sans.value, /^Inter, system-ui, /);
+    assert.match(fontFamily.sans.value, /sans-serif$/);
+  });
+
+  it("sets JetBrains Mono first in the core mono stack, then the system fallbacks", () => {
+    assert.match(fontFamily.mono.value, /^'JetBrains Mono', ui-monospace, /);
+    assert.match(fontFamily.mono.value, /monospace$/);
+  });
+
+  it("keeps the display face pointing at sans", () => {
+    assert.equal(fontFamily.display.value, "var(--font-sans)");
+  });
+
+  it("writes the same core stacks to every generated surface", () => {
+    for (const [name, css] of [
+      ["themes/default.css", defaultCss],
+      ["styles.css", stylesCss],
+    ]) {
+      assert.match(
+        css,
+        /--font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;/,
+        name,
+      );
+      assert.match(
+        css,
+        /--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;/,
+        name,
+      );
+      assert.match(css, /--font-display: var\(--font-sans\);/, name);
+    }
+    assert.equal(uiCoreTokens, readText("tokens.json"));
+    assert.ok(uiCoreTs.includes(fontFamily.sans.value), "ui-core design-tokens.ts sans");
+    assert.ok(uiCoreTs.includes(fontFamily.mono.value), "ui-core design-tokens.ts mono");
+    assert.deepEqual(penpot["vllnt/core"].font.family.sans.$value, ["Inter"]);
+    assert.deepEqual(penpot["vllnt/core"].font.family.mono.$value, ["JetBrains Mono"]);
+    assert.equal(penpot["vllnt/core"].font.family.display.$value, "{font.family.sans}");
+  });
+
+  it("leaves the product theme stacks unchanged", () => {
+    const figtree =
+      "'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    const jetbrains =
+      "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    assert.deepEqual(tokens.themes.maia.typography.fontFamily, {
+      sans: figtree,
+      display: figtree,
+      mono: jetbrains,
+    });
+    assert.deepEqual(tokens.themes.paas.typography.fontFamily, {
+      sans: jetbrains,
+      display: jetbrains,
+      mono: jetbrains,
+    });
+    const doubleQuoted = (stack) => stack.replaceAll("'", '"');
+    assert.deepEqual(productsCss.match(/--font-(?:sans|display|mono): .*;/g), [
+      `--font-sans: ${doubleQuoted(figtree)};`,
+      `--font-display: ${doubleQuoted(figtree)};`,
+      `--font-mono: ${doubleQuoted(jetbrains)};`,
+      `--font-sans: ${doubleQuoted(jetbrains)};`,
+      `--font-display: ${doubleQuoted(jetbrains)};`,
+      `--font-mono: ${doubleQuoted(jetbrains)};`,
+    ]);
+    assert.deepEqual(penpot["vllnt/maia/dark"].font.family.sans.$value, ["Figtree"]);
+    assert.deepEqual(penpot["vllnt/maia/dark"].font.family.mono.$value, ["JetBrains Mono"]);
+    for (const mode of modes) {
+      for (const face of ["sans", "display", "mono"]) {
+        assert.deepEqual(
+          penpot[`vllnt/paas/${mode}`].font.family[face].$value,
+          ["JetBrains Mono"],
+          `paas ${mode} ${face}`,
+        );
+      }
+    }
+  });
+});
+
 describe("products.css", () => {
   for (const name of themeNames) {
     for (const mode of modes) {
