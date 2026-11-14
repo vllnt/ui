@@ -27,45 +27,59 @@ type LoadedHighlighter = {
  * so the palette follows the active light / dark theme without detecting it
  * in JS, and every token meets WCAG AA (4.5:1) on the block background.
  */
-function codeToken(name: string, fallback: string): { color: string } {
-  return { color: `oklch(var(--vllnt-code-${name}, ${fallback}))` };
+const TOKEN_FALLBACKS = {
+  class: "0.5078 0.108 73.3",
+  comment: "0.521 0.0234 264.4",
+  function: "0.4882 0.2172 264.4",
+  keyword: "0.5236 0.211 328.8",
+  number: "0.5237 0.1156 76.9",
+  operator: "0.3496 0.0141 274.5",
+  string: "0.5084 0.1347 144.2",
+  text: "0.3496 0.0141 274.5",
+  variable: "0.5003 0.1821 29.5",
+};
+
+function codeToken(name: keyof typeof TOKEN_FALLBACKS): { color: string } {
+  return {
+    color: `oklch(var(--vllnt-code-${name}, ${TOKEN_FALLBACKS[name]}))`,
+  };
 }
 
 const CODE_THEME: PrismStyle = {
-  atrule: codeToken("keyword", "0.5236 0.211 328.8"),
-  "attr-name": codeToken("number", "0.5237 0.1156 76.9"),
-  "attr-value": codeToken("string", "0.5084 0.1347 144.2"),
-  boolean: codeToken("number", "0.5237 0.1156 76.9"),
-  builtin: codeToken("class", "0.5078 0.108 73.3"),
-  cdata: codeToken("comment", "0.521 0.0234 264.4"),
-  char: codeToken("string", "0.5084 0.1347 144.2"),
-  "class-name": codeToken("class", "0.5078 0.108 73.3"),
-  'code[class*="language-"]': codeToken("text", "0.3496 0.0141 274.5"),
+  atrule: codeToken("keyword"),
+  "attr-name": codeToken("number"),
+  "attr-value": codeToken("string"),
+  boolean: codeToken("number"),
+  builtin: codeToken("class"),
+  cdata: codeToken("comment"),
+  char: codeToken("string"),
+  "class-name": codeToken("class"),
+  'code[class*="language-"]': codeToken("text"),
   comment: {
-    ...codeToken("comment", "0.521 0.0234 264.4"),
+    ...codeToken("comment"),
     fontStyle: "italic",
   },
-  constant: codeToken("number", "0.5237 0.1156 76.9"),
-  deleted: codeToken("variable", "0.5003 0.1821 29.5"),
-  doctype: codeToken("comment", "0.521 0.0234 264.4"),
-  entity: codeToken("operator", "0.3496 0.0141 274.5"),
-  function: codeToken("function", "0.4882 0.2172 264.4"),
-  important: codeToken("keyword", "0.5236 0.211 328.8"),
-  inserted: codeToken("string", "0.5084 0.1347 144.2"),
-  keyword: codeToken("keyword", "0.5236 0.211 328.8"),
-  number: codeToken("number", "0.5237 0.1156 76.9"),
-  operator: codeToken("operator", "0.3496 0.0141 274.5"),
-  'pre[class*="language-"]': codeToken("text", "0.3496 0.0141 274.5"),
-  prolog: codeToken("comment", "0.521 0.0234 264.4"),
-  property: codeToken("variable", "0.5003 0.1821 29.5"),
-  punctuation: codeToken("operator", "0.3496 0.0141 274.5"),
-  regex: codeToken("string", "0.5084 0.1347 144.2"),
-  selector: codeToken("string", "0.5084 0.1347 144.2"),
-  string: codeToken("string", "0.5084 0.1347 144.2"),
-  symbol: codeToken("number", "0.5237 0.1156 76.9"),
-  tag: codeToken("variable", "0.5003 0.1821 29.5"),
-  url: codeToken("operator", "0.3496 0.0141 274.5"),
-  variable: codeToken("variable", "0.5003 0.1821 29.5"),
+  constant: codeToken("number"),
+  deleted: codeToken("variable"),
+  doctype: codeToken("comment"),
+  entity: codeToken("operator"),
+  function: codeToken("function"),
+  important: codeToken("keyword"),
+  inserted: codeToken("string"),
+  keyword: codeToken("keyword"),
+  number: codeToken("number"),
+  operator: codeToken("operator"),
+  'pre[class*="language-"]': codeToken("text"),
+  prolog: codeToken("comment"),
+  property: codeToken("variable"),
+  punctuation: codeToken("operator"),
+  regex: codeToken("string"),
+  selector: codeToken("string"),
+  string: codeToken("string"),
+  symbol: codeToken("number"),
+  tag: codeToken("variable"),
+  url: codeToken("operator"),
+  variable: codeToken("variable"),
 };
 
 const WRAP_CLASS = "whitespace-pre-wrap break-words";
@@ -232,7 +246,7 @@ export function CodeBlock({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden rounded-md border bg-background",
+        "relative w-full overflow-hidden rounded-md border bg-background text-foreground",
         className,
       )}
       ref={ref}
@@ -247,8 +261,11 @@ export function CodeBlock({
         </div>
       ) : null}
       <div
-        className="relative overflow-x-auto overflow-y-hidden touch-pan-y"
+        aria-label={`${language} code`}
+        className="relative overflow-x-auto overflow-y-hidden touch-pan-y focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         ref={scrollRef}
+        role="region"
+        tabIndex={0}
       >
         {SyntaxHighlighter ? (
           <SyntaxHighlighter

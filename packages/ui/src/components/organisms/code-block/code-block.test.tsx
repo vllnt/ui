@@ -300,6 +300,31 @@ describe("CodeBlock wrap", () => {
   );
 });
 
+describe("CodeBlock scroll region", () => {
+  it("is a keyboard-focusable region named after the default language", () => {
+    render(<CodeBlock>{SNIPPET}</CodeBlock>);
+    const region = screen.getByRole("region", { name: "typescript code" });
+    expect(region).toHaveAttribute("tabindex", "0");
+    expect(region).toHaveClass("overflow-x-auto");
+    region.focus();
+    expect(region).toHaveFocus();
+  });
+
+  it("names the region after the language prop", () => {
+    render(<CodeBlock language="tsx">{SNIPPET}</CodeBlock>);
+    expect(
+      screen.getByRole("region", { name: "tsx code" }),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the region when a title renders a header", () => {
+    render(<CodeBlock title="app.tsx">{SNIPPET}</CodeBlock>);
+    expect(
+      screen.getByRole("region", { name: "typescript code" }),
+    ).toHaveAttribute("tabindex", "0");
+  });
+});
+
 describe("CodeBlock line numbers", () => {
   it(
     "renders no numbers by default",
@@ -383,6 +408,7 @@ describe("CodeBlock default render", () => {
       "rounded-md",
       "border",
       "bg-background",
+      "text-foreground",
     );
     expect(getHeader(container)).toBeNull();
     expect(container.querySelectorAll("button")).toHaveLength(1);
