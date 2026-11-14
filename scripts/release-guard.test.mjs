@@ -20,6 +20,21 @@ const job = (workflow, id) => {
   const end = rest.slice(1).search(/\n  [a-z][\w-]*:\n/);
   return (end < 0 ? rest : rest.slice(0, end + 1)).split("\n").filter((line) => !/^\s*#/.test(line)).join("\n");
 };
+/** The workflow-level `permissions:` block with comment lines dropped; "" when there is none. */
+const topLevelPermissions = (workflow) => {
+  const lines = workflow.split("\n").filter((line) => !/^\s*#/.test(line));
+  const start = lines.findIndex((line) => /^permissions:/.test(line));
+  if (start < 0) return "";
+  const block = [lines[start]];
+  for (const line of lines.slice(start + 1)) {
+    if (!/^\s+\S/.test(line)) break;
+    block.push(line);
+  }
+  return block.join("\n");
+};
+/** Job-level grants cannot be wider than this default, so it must stay read-only. */
+const assertReadOnlyDefault = (workflow) =>
+  assert.equal(topLevelPermissions(workflow), "permissions:\n  contents: read", "workflow-level permissions must be exactly contents: read");
 const harness = (t, options) => {
   const h = createHarness(options);
   t.after(h.cleanup);
@@ -119,15 +134,48 @@ test("core canary is gated on ui-core alone, and each publish path has its own s
   assert.match(nativePublish, /contains\(fromJSON\('\["success","skipped"\]'\), needs\.core-publish\.result\)/);
   assert.doesNotMatch(nativePublish, /CORE_CANARY_PUBLISH_ENABLED/);
   assert.match(nativePublish, /bash scripts\/publish-canary\.sh pair\n/);
-  // Only the publish jobs get the OIDC token and the environment; runs of one kind never overlap.
+  // Only the publish jobs get the OIDC token and the environment.
   for (const block of [coreQuality, nativeQuality]) assert.doesNotMatch(block, /id-token|environment:|NPM_DIST_TAG_TOKEN/);
   for (const block of [corePublish, nativePublish]) {
     assert.match(block, /environment: npm-native-canary\n/);
     assert.match(block, /id-token: write/);
     assert.match(block, /cancel-in-progress: false/);
   }
+  // One concurrency group for both publish jobs, so a pair promotion cannot race a core publish.
+  const group = (block) => block.match(/\n {6}group: (\S+)\n/)?.[1];
+  assert.ok(group(corePublish), "core-publish needs a concurrency group");
+  assert.equal(group(nativePublish), group(corePublish));
+  // A skipped core-publish is tolerated with !cancelled(); always() would also publish a cancelled run.
+  assert.match(nativePublish, /if: \$\{\{ !cancelled\(\) && /);
+  assert.doesNotMatch(workflow, /always\(\)/);
+  // No job leaves the checkout token behind in .git/config.
+  for (const block of [coreQuality, corePublish, nativeQuality, nativePublish]) {
+    assert.match(block, /uses: actions\/checkout@[0-9a-f]{40} # v\S+\n\s+with:\n\s+persist-credentials: false\n/);
+  }
+  assertReadOnlyDefault(workflow);
   assert.doesNotMatch(workflow, /workflow_dispatch|pull_request/);
   for (const line of workflow.split("\n").filter((text) => /\buses:/.test(text))) assert.match(line, /@[0-9a-f]{40} # v/, "actions are pinned by SHA");
+});
+test("the workflow default stays read-only: top-level grants are rejected", () => {
+  const workflow = read(".github/workflows/native-canary.yml");
+  assert.equal(topLevelPermissions(workflow), "permissions:\n  contents: read");
+  const readOnly = "permissions:\n  contents: read\n";
+  assert.ok(workflow.includes(`\n${readOnly}`));
+  const widened = (extra) => workflow.replace(readOnly, `${readOnly}${extra}`);
+  const mutants = {
+    "id-token: write": widened("  id-token: write\n"),
+    "contents: write": workflow.replace(readOnly, "permissions:\n  contents: write\n"),
+    "extra contents: write": widened("  contents: write\n"),
+    "packages: write": widened("  packages: write\n"),
+    "write-all": workflow.replace(readOnly, "permissions: write-all\n"),
+    "no permissions block": workflow.replace(readOnly, ""),
+  };
+  for (const [name, text] of Object.entries(mutants)) {
+    assert.notEqual(text, workflow, `mutant ${name} must change the workflow`);
+    assert.throws(() => assertReadOnlyDefault(text), /workflow-level permissions/, name);
+  }
+  // Job-level blocks and comments are not the workflow default.
+  assert.doesNotThrow(() => assertReadOnlyDefault(workflow.replace("jobs:\n", "# permissions:\n#   id-token: write\njobs:\n")));
 });
 test("supply-chain policy is untouched by the canary paths", () => {
   const policy = read("pnpm-workspace.yaml");
@@ -216,11 +264,32 @@ test("core canary refuses to create a package that is not on npm yet", (t) => {
   assert.match(result.output, /Bootstrap it by hand/);
 });
 test("registry errors stop a core canary instead of reading as absence", (t) => {
-  for (const command of ["view-tags", "view-version"]) {
-    const result = harness(t).run("core", { fail: [{ command, package: CORE, error: "ETIMEDOUT" }] });
-    assert.notEqual(result.status, 0, command);
-    assert.deepEqual(result.publishes, [], command);
+  // `skip` registry calls succeed first: view-tags runs before the upload (skip 0) and after it (skip 1).
+  const cases = [
+    { command: "view-tags", skip: 0, uploaded: 0 },
+    { command: "view-tags", skip: 1, uploaded: 1 },
+    { command: "view-version", skip: 0, uploaded: 0 },
+  ];
+  for (const { command, skip, uploaded } of cases) {
+    const label = `${command} after ${skip} successful call(s)`;
+    const result = harness(t).run("core", { fail: [{ command, package: CORE, error: "ETIMEDOUT", skip }] });
+    assert.notEqual(result.status, 0, label);
+    assert.equal(result.publishes.length, uploaded, label);
+    // Failing is not enough: a masked error also stops the run (as "not bootstrapped"), so the
+    // run must name the registry error and must not blame a missing package.
+    assert.match(result.output, /ETIMEDOUT/, label);
+    assert.doesNotMatch(result.output, /Bootstrap it by hand/, label);
   }
+});
+test("a registry 404 on the dist-tags reads as a missing package, any other error does not", (t) => {
+  const missing = harness(t).run("core", { fail: [{ command: "view-tags", package: CORE, error: "E404" }] });
+  assert.notEqual(missing.status, 0);
+  assert.match(missing.output, /Bootstrap it by hand/);
+  const broken = harness(t).run("core", { fail: [{ command: "view-tags", package: CORE, error: "E503" }] });
+  assert.notEqual(broken.status, 0);
+  assert.match(broken.output, /E503/);
+  assert.doesNotMatch(broken.output, /Bootstrap it by hand/);
+  for (const result of [missing, broken]) assert.deepEqual(result.publishes, []);
 });
 test("a core upload that moves latest fails the run", (t) => {
   const result = harness(t).run("core", { quirks: { publishMovesLatest: true } });
@@ -264,6 +333,26 @@ test("pair stages both packages, pins core exactly and promotes both tags togeth
     assert.equal(call.configToken, call.args[0] !== "publish", call.args.join(" "));
     assert.equal(call.envToken, call.args[0] === "publish" ? null : "fake-dist-tag-token", call.args.join(" "));
   }
+});
+test("the dist-tag token reaches only the dist-tag commands", (t) => {
+  const tokenCommands = new Set(["whoami", "dist-tag"]);
+  for (const mode of ["core", "pair"]) {
+    // The harness exports NPM_DIST_TAG_TOKEN to the script, as the workflow step env does.
+    const result = harness(t).run(mode);
+    assert.equal(result.status, 0, `${mode}: ${result.output}`);
+    for (const call of result.calls) {
+      const label = `${mode}: ${call.tool} ${call.args.join(" ")}`;
+      assert.equal(call.distTokenByName, false, `${label} must not see NPM_DIST_TAG_TOKEN`);
+      assert.equal(call.distTokenByValue, call.tool === "npm" && tokenCommands.has(call.args[0]), label);
+    }
+  }
+  // The pair run did exercise the processes that must stay blind: pack, npx, the OIDC upload, git.
+  const pair = harness(t).run("pair");
+  const saw = (match) => pair.calls.some(match);
+  assert.ok(saw((call) => call.tool === "pnpm" && call.args.includes("pack")), "pnpm pack observed");
+  assert.ok(saw((call) => call.tool === "npm" && call.args[0] === "publish" && call.viaNpx), "npx upload observed");
+  assert.ok(saw((call) => call.tool === "git"), "git observed");
+  assert.ok(saw((call) => call.args[0] === "dist-tag" && call.distTokenByValue), "dist-tag still gets the token");
 });
 test("pair keeps working after a core canary of the same commit", (t) => {
   const h = harness(t);
@@ -309,6 +398,14 @@ test("pair leaves canary untouched and clears staging when the native upload fai
   assert.deepEqual(result.registry[CORE].tags, { latest: BOOTSTRAP });
   assert.deepEqual(result.registry[NATIVE].tags, { latest: BOOTSTRAP });
   assert.deepEqual(distTags(result, "add"), []);
+});
+test("pair fails when staging cleanup cannot read the registry instead of assuming the tag is gone", (t) => {
+  // view-tags for core: before (1st), after promotion (2nd), then the staging cleanup (3rd).
+  const result = harness(t).run("pair", { fail: [{ command: "view-tags", package: CORE, error: "ETIMEDOUT", skip: 2 }] });
+  assert.notEqual(result.status, 0, result.output);
+  assert.match(result.output, /Could not fully restore npm dist-tags/);
+  assert.equal(result.registry[CORE].tags["run-9001"], VERSION, "the unread staging tag is left for a person to see");
+  for (const name of [CORE, NATIVE]) assert.equal(result.registry[name].tags.canary, VERSION, "promotion itself had succeeded");
 });
 test("pair stands down without promoting when main advances during the upload", (t) => {
   const result = harness(t).run("pair", { mainShas: [SHA, OTHER_SHA] });

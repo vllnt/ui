@@ -5,7 +5,8 @@
 #                                    npm trusted publishing (OIDC) only: no secret needed.
 #   scripts/publish-canary.sh pair   @vllnt/ui-core + @vllnt/ui-native, staged under a run tag and
 #                                    promoted together. Needs NPM_DIST_TAG_TOKEN, because OIDC
-#                                    authenticates `npm publish` only, not `npm dist-tag`.
+#                                    authenticates `npm publish` only, not `npm dist-tag`. The token
+#                                    is only ever handed to `npm whoami` and `npm dist-tag`.
 #
 # Rules enforced here and exercised by scripts/release-guard.test.mjs:
 #   - the version only comes from scripts/release-guard.mjs (0.1.0-canary.<run>.sha<12 hex>)
@@ -216,7 +217,7 @@ publish_pair() {
   CANARY_VERSION="$(node scripts/release-guard.mjs native-canary)"
   test "$(package_field "$CORE_DIR" name)" = "$CORE_NAME"
   test "$(package_field "$NATIVE_DIR" name)" = "$NATIVE_NAME"
-  if [[ -z "${NPM_DIST_TAG_TOKEN:-}" ]]; then
+  if [[ -z "$DIST_TAG_TOKEN" ]]; then
     echo "::error::NPM_DIST_TAG_TOKEN is required for dist-tag promotion and rollback because npm trusted publishing authenticates publish commands only"
     exit 1
   fi
@@ -301,9 +302,10 @@ NODE
   echo "::notice::${CORE_NAME}@${CANARY_VERSION} and ${NATIVE_NAME}@${CANARY_VERSION} are on the canary tag"
 }
 
-# dist-tag commands use their own user config holding the dist-tag token.
+# dist-tag commands use their own user config holding the dist-tag token. This is the only place
+# the token leaves the shell variable: pnpm, npx and the OIDC upload never receive it.
 npm_with_token() {
-  NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$NPM_DIST_TAG_TOKEN" npm_pinned "$@"
+  NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$DIST_TAG_TOKEN" npm_pinned "$@"
 }
 
 # Removes `tag` only while it still points at the version this run published.
@@ -375,6 +377,11 @@ on_pair_exit() {
 }
 
 main() {
+  # The workflow step exports the secret. Move it into a plain shell variable and drop it from the
+  # environment before anything runs, so child processes cannot read it (see npm_with_token).
+  DIST_TAG_TOKEN="${NPM_DIST_TAG_TOKEN:-}"
+  export -n DIST_TAG_TOKEN
+  unset NPM_DIST_TAG_TOKEN
   case "${1:-}" in
     core) publish_core ;;
     pair) publish_pair ;;

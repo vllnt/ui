@@ -71,9 +71,11 @@ jobs:
     timeout-minutes: 15
     # Same environment as native-publish: one trusted-publisher entry per package covers both jobs.
     environment: npm-native-canary
-    # Publishes of one kind queue instead of running together; a superseded one stands down.
+    # One group for both publish jobs: a pair promotion never overlaps a core publish, and publishes
+    # queue instead of running together. A superseded run stands down. GitHub keeps one pending job
+    # per group, so a late arrival can replace a pending one; the next push to main publishes again.
     concurrency:
-      group: native-canary-core-publish
+      group: native-canary-publish
       cancel-in-progress: false
     permissions:
       contents: read
@@ -130,8 +132,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: npm-native-canary
+    # Same group as core-publish: do not split it.
     concurrency:
-      group: native-canary-pair-publish
+      group: native-canary-publish
       cancel-in-progress: false
     permissions:
       contents: read

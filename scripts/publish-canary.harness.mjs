@@ -34,6 +34,9 @@ function runFake(tool, args) {
   const call = {
     tool, args, viaNpx: process.env.FAKE_VIA_NPX === "1",
     configToken: /_authToken/.test(configText), envToken: process.env.NODE_AUTH_TOKEN ?? null,
+    // Whether the dist-tag secret is readable by this process: under its own name, or under any name.
+    distTokenByName: "NPM_DIST_TAG_TOKEN" in process.env,
+    distTokenByValue: Object.values(process.env).includes(DIST_TAG_TOKEN),
   };
   state.calls.push(call);
   const fail = (code) => { process.stderr.write(`npm error code ${code}\n`); save(); process.exit(1); };
