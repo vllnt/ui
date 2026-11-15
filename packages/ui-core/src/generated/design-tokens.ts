@@ -26,7 +26,7 @@ export const designTokens = {
       "card": {
         "cssVariable": "--card",
         "light": "1 0 0",
-        "dark": "0.1445 0 0",
+        "dark": "0.1822 0 0",
         "role": "Card and contained surface"
       },
       "cardForeground": {
@@ -38,7 +38,7 @@ export const designTokens = {
       "popover": {
         "cssVariable": "--popover",
         "light": "1 0 0",
-        "dark": "0.1445 0 0",
+        "dark": "0.2046 0 0",
         "role": "Popover, menu, and floating surface"
       },
       "popoverForeground": {
@@ -74,7 +74,7 @@ export const designTokens = {
       "muted": {
         "cssVariable": "--muted",
         "light": "0.9703 0 0",
-        "dark": "0.2686 0 0",
+        "dark": "0.1445 0 0",
         "role": "Subtle surface"
       },
       "mutedForeground": {
@@ -164,7 +164,7 @@ export const designTokens = {
       "input": {
         "cssVariable": "--input",
         "light": "0.66 0 0",
-        "dark": "0.49 0 0",
+        "dark": "0.505 0 0",
         "role": "Form-control boundary (3:1 against background, card, popover)"
       },
       "ring": {
@@ -533,15 +533,15 @@ export const nativeTokens = {
     "dark": {
       "background": "#050505",
       "foreground": "#fafafa",
-      "card": "#0a0a0a",
+      "card": "#121212",
       "cardForeground": "#fafafa",
-      "popover": "#0a0a0a",
+      "popover": "#171717",
       "popoverForeground": "#fafafa",
       "primary": "#fafafa",
       "primaryForeground": "#171717",
       "secondary": "#262626",
       "secondaryForeground": "#fafafa",
-      "muted": "#262626",
+      "muted": "#0a0a0a",
       "mutedForeground": "#a3a3a3",
       "accent": "#262626",
       "accentForeground": "#fafafa",
@@ -556,7 +556,7 @@ export const nativeTokens = {
       "diffAdded": "#102b17",
       "diffRemoved": "#3b1816",
       "border": "#262626",
-      "input": "#606060",
+      "input": "#656565",
       "ring": "#d4d4d4"
     },
     "light": {
@@ -820,15 +820,15 @@ export const productThemes = {
       "dark": {
         "background": "#000000",
         "foreground": "#fafafa",
-        "card": "#0a0a0a",
+        "card": "#121212",
         "cardForeground": "#fafafa",
-        "popover": "#0a0a0a",
+        "popover": "#171717",
         "popoverForeground": "#fafafa",
         "primary": "#fafafa",
         "primaryForeground": "#171717",
         "secondary": "#262626",
         "secondaryForeground": "#fafafa",
-        "muted": "#262626",
+        "muted": "#0a0a0a",
         "mutedForeground": "#a3a3a3",
         "accent": "#262626",
         "accentForeground": "#fafafa",
@@ -843,7 +843,7 @@ export const productThemes = {
         "diffAdded": "#102b17",
         "diffRemoved": "#3b1816",
         "border": "#262626",
-        "input": "#606060",
+        "input": "#656565",
         "ring": "#d4d4d4"
       },
       "light": {
@@ -958,15 +958,15 @@ export const tamaguiTokens = {
   "color": {
     "backgroundDark": "#050505",
     "foregroundDark": "#fafafa",
-    "cardDark": "#0a0a0a",
+    "cardDark": "#121212",
     "cardForegroundDark": "#fafafa",
-    "popoverDark": "#0a0a0a",
+    "popoverDark": "#171717",
     "popoverForegroundDark": "#fafafa",
     "primaryDark": "#fafafa",
     "primaryForegroundDark": "#171717",
     "secondaryDark": "#262626",
     "secondaryForegroundDark": "#fafafa",
-    "mutedDark": "#262626",
+    "mutedDark": "#0a0a0a",
     "mutedForegroundDark": "#a3a3a3",
     "accentDark": "#262626",
     "accentForegroundDark": "#fafafa",
@@ -981,7 +981,7 @@ export const tamaguiTokens = {
     "diffAddedDark": "#102b17",
     "diffRemovedDark": "#3b1816",
     "borderDark": "#262626",
-    "inputDark": "#606060",
+    "inputDark": "#656565",
     "ringDark": "#d4d4d4",
     "backgroundLight": "#ffffff",
     "foregroundLight": "#0a0a0a",
@@ -1118,15 +1118,15 @@ export const tamaguiThemes = {
   "paas_dark": {
     "background": "#000000",
     "color": "#fafafa",
-    "card": "#0a0a0a",
+    "card": "#121212",
     "cardForeground": "#fafafa",
-    "popover": "#0a0a0a",
+    "popover": "#171717",
     "popoverForeground": "#fafafa",
     "primary": "#fafafa",
     "primaryForeground": "#171717",
     "secondary": "#262626",
     "secondaryForeground": "#fafafa",
-    "muted": "#262626",
+    "muted": "#0a0a0a",
     "mutedForeground": "#a3a3a3",
     "accent": "#262626",
     "accentForeground": "#fafafa",
@@ -1141,7 +1141,7 @@ export const tamaguiThemes = {
     "diffAdded": "#102b17",
     "diffRemoved": "#3b1816",
     "borderColor": "#262626",
-    "input": "#606060",
+    "input": "#656565",
     "ring": "#d4d4d4",
     "placeholderColor": "#a3a3a3"
   },

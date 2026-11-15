@@ -250,3 +250,30 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
     expect(failures(colors, BOUNDARY_PAIRS, 3)).toEqual([]);
   });
 });
+
+const SURFACE_LADDER = ["background", "muted", "card", "popover"] as const;
+const ACTIONABLE_FILLS = ["secondary", "accent", "border"] as const;
+
+function lightness(colors: Palette, name: string): number {
+  return Number(token(colors, name).split(/\s+/)[0]);
+}
+
+describe("default dark surface ladder", () => {
+  const colors = palette("default", "dark");
+
+  it("raises lightness with elevation: background, muted, card, popover", () => {
+    const inversions = SURFACE_LADDER.slice(1).filter(
+      (name, index) =>
+        lightness(colors, name) <=
+        lightness(colors, SURFACE_LADDER[index] ?? "background"),
+    );
+    expect(inversions).toEqual([]);
+  });
+
+  it("keeps actionable fills and hairlines lighter than every surface", () => {
+    const tooDark = ACTIONABLE_FILLS.filter(
+      (name) => lightness(colors, name) <= lightness(colors, "popover"),
+    );
+    expect(tooDark).toEqual([]);
+  });
+});

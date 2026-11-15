@@ -68,8 +68,10 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 |-------|------|-------|------|
 | `--background` | Page surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
 | `--foreground` | Primary text | `0.1445 0 0` (#0a0a0a) | `0.9848 0 0` (#fafafa) |
-| `--card` / `--popover` | Contained / floating surface | `1 0 0` (#ffffff) | `0.1445 0 0` (#0a0a0a) |
-| `--muted` | Subtle surface (`--secondary` and `--accent` share it) | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--card` | Raised, contained surface | `1 0 0` (#ffffff) | `0.1822 0 0` (#121212) |
+| `--popover` | Overlay surface: menus, popovers, dialogs | `1 0 0` (#ffffff) | `0.2046 0 0` (#171717) |
+| `--muted` | Sunken bands and quiet fills | `0.9703 0 0` (#f5f5f5) | `0.1445 0 0` (#0a0a0a) |
+| `--secondary` / `--accent` | Actionable fills; hover, selected and data-state feedback | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
 | `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.7153 0 0` (#a3a3a3) |
 | `--destructive` | Danger fill **and** danger text | `0.55 0.2078 25.326` (#cf1f29) | `0.7 0.18 25.721` (#fa6961) |
 | `--destructive-foreground` | Text on a destructive fill | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
@@ -79,8 +81,28 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--success-foreground` / `--warning-foreground` / `--info-foreground` | Text on that fill (same pairing as destructive) | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
 | `--diff-added` / `--diff-removed` | Added / removed line surfaces; `--foreground` is the text on them | `0.94 0.04 150` (#d9f3dd) / `0.94 0.03 25` (#ffe4e1) | `0.26 0.05 150` (#102b17) / `0.26 0.055 25` (#3b1816) |
 | `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.2686 0 0` (#262626) |
-| `--input` | Form-control boundary | `0.66 0 0` (#929292) | `0.49 0 0` (#606060) |
+| `--input` | Form-control boundary | `0.66 0 0` (#929292) | `0.505 0 0` (#656565) |
 | `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
+
+**Dark surface ladder.** In dark mode elevation goes up in lightness, so a
+raised surface is never darker than what it sits on:
+
+```
+background #000000 -> muted #0a0a0a -> card #121212 -> popover #171717
+                                                       (actionable fills and
+                                                        --border: #262626)
+```
+
+A muted band holds cards, and a popover opens above a card. The steps are
+small on purpose (1.05 to 1.06:1 each). `--secondary`, `--accent` and
+`--border` stay at #262626 so hover, selected and hairline states remain
+clearly visible. In light mode `--muted`, `--secondary` and `--accent` are one
+value, so the split only shows in dark. Hover, focus, active, selected and
+data-state feedback on an actionable element uses `bg-accent` (or
+`bg-accent/50`), never `bg-muted`: in dark, `--muted` is nearly the page color.
+`packages/ui/src/components/muted-state-feedback.test.ts` enforces it. Product
+themes that override these roles keep their own values; PaaS has no color
+overrides, so it follows the core ladder.
 
 In dark mode `--destructive` is a light red paired with a dark
 `--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both
@@ -110,10 +132,10 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 | Control boundary | `--input` against background, card, popover | 3:1 |
 | Focus ring | `--ring` against background | 3:1 |
 
-Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.00 (dark, on muted);
-destructive text 5.41 / 4.96 (light), 7.26 / 5.23 (dark, on background / muted);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.34 (dark, on background);
-success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 8.07 / 8.56 / 6.62 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
+Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 7.85 (dark, on muted), 7.11 (dark, on popover, the lowest of the four surfaces);
+destructive text 5.41 / 4.96 (light), 7.26 / 6.84 (dark, on background / muted);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.60 / 3.08 (dark, on background / popover, the lowest of the three surfaces);
+success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 10.56 / 11.20 / 8.67 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
 foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
 

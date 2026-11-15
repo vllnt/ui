@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- **Dark surface ladder** - the default dark theme now raises lightness with
+  elevation: `--muted` `0.1445` (#0a0a0a), `--card` `0.1822` (#121212),
+  `--popover` `0.2046` (#171717) above `--background` (#000000).
+  `--secondary`, `--accent` and `--border` stay `0.2686` (#262626). Before,
+  `--muted` was `0.2686` and `--card` / `--popover` were `0.1445`, so a muted
+  band was lighter than the cards inside it. Dark `--input` rises from `0.49`
+  to `0.505` (#656565) so the control boundary keeps 3:1 on the lighter card
+  and popover. Light mode is unchanged. Themes
+  that override these roles (presets, Maia) keep their values; PaaS and any
+  app that reads the dark `--muted`, `--card` or `--popover` directly get the
+  new ones.
+- **Hover, selected and data-state fills use `accent`** - 32 component files
+  (`Table`, `Tabs` pill, `Toggle`, `Slideshow`, `FilterBar` and others) used
+  `bg-muted` for that feedback, which is now almost the page color in dark.
+  They use `bg-accent` with the same opacity. In the default, Maia and PaaS
+  themes light mode and the previous dark look are unchanged because `--accent`
+  equals the old `--muted` there. Theme presets set `--accent` to a brand color,
+  so their hover fills now follow it.
+  `SegmentedControl`, `ViewSwitcher`, `WorkspaceSwitcher` and the `PricingTable`
+  period toggle draw their track with `bg-accent` for the same reason: the
+  selected segment is `bg-background` on that track.
+
 ### Added
 
 - **Product themes stylesheet** - `@vllnt/ui/themes/products.css` ships the
