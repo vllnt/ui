@@ -14,7 +14,7 @@ export function StorybookLink({ label, storyId }: StorybookLinkProps) {
 
   return (
     <a
-      className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       href={storybookUrl.toString()}
       rel="noopener noreferrer"
       target="_blank"

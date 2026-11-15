@@ -65,7 +65,7 @@ export function buildComponentMdxKit(context: ComponentMdxContext): MdxKit {
     return (
       <div className="not-prose my-6">
         <a
-          className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           href="#code"
         >
           {sourceLinkLabel}

@@ -267,7 +267,7 @@ function HeaderContent({ locale }: HeaderProps) {
           </div>
           <a
             aria-label={t("githubLabel")}
-            className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
+            className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
             href={GITHUB_URL}
             rel="noreferrer"
             target="_blank"

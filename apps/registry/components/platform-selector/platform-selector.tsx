@@ -55,7 +55,7 @@ export function PlatformSelector({
         return (
           <Link
             aria-current={active ? "page" : undefined}
-            className="inline-flex min-h-11 shrink-0 items-center rounded-sm px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-foreground aria-[current=page]:text-background"
+            className="inline-flex min-h-11 shrink-0 items-center rounded-sm px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-foreground aria-[current=page]:text-background"
             href={withPlatformQuery(
               pathname,
               searchParameters,
