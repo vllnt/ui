@@ -132,7 +132,7 @@ const MIGRATED_FILLS: readonly (readonly [string, readonly string[]])[] = [
 const CLASS_DELIMITERS = /[\s"'`{}]+/;
 
 const MUTED_FILL =
-  /((?:[^\s"'`{}]+:)*)bg-muted(?:\/[^\s"'`{}]+)?(?=[\s"'`}]|$)/g;
+  /((?:[^\s"':`{}]+:)*)bg-muted(?:\/[^\s"'`{}]+)?(?=[\s"'`}]|$)/g;
 
 const STATE_VARIANT =
   /(?:^|:)(?:hover|focus|focus-visible|focus-within|active|group-hover|group-focus|peer-[\w-]+|aria-[\w-]+|data-\[[^\]]+]|open|checked|selected)(?=:)/;
