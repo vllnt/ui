@@ -24,7 +24,7 @@ const AISourceCitation = ({
   return (
     <a
       className={cn(
-        "group inline-flex max-w-full flex-col gap-2 rounded-xl border border-border/70 bg-background px-3 py-2 text-left shadow-sm transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "group inline-flex max-w-full flex-col gap-2 rounded-xl border border-border/70 bg-background px-3 py-2 text-left shadow-sm transition-colors hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         className,
       )}
       href={href}

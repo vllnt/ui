@@ -62,7 +62,7 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
       <button
         aria-controls={isExpanded ? regionId : undefined}
         aria-expanded={isExpanded}
-        className="flex items-center justify-between w-full px-4 py-3 hover:bg-accent/50 transition-colors"
+        className="flex items-center justify-between w-full px-4 py-3 hover:bg-secondary/50 transition-colors"
         onClick={() => {
           setIsExpanded(!isExpanded);
         }}

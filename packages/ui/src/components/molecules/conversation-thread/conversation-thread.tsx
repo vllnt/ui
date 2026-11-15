@@ -125,7 +125,7 @@ function MessageActions({ messageId }: MessageActionsProps) {
       {onRetry ? (
         <button
           aria-label="Retry message"
-          className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          className="rounded p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           onClick={() => {
             onRetry(messageId);
           }}
@@ -138,7 +138,7 @@ function MessageActions({ messageId }: MessageActionsProps) {
         <>
           <button
             aria-label="Positive feedback"
-            className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="rounded p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             onClick={() => {
               onFeedback(messageId, "positive");
             }}
@@ -148,7 +148,7 @@ function MessageActions({ messageId }: MessageActionsProps) {
           </button>
           <button
             aria-label="Negative feedback"
-            className="rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            className="rounded p-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             onClick={() => {
               onFeedback(messageId, "negative");
             }}
@@ -456,7 +456,7 @@ export const ConversationSuggestions = ({
     >
       {suggestions.map((suggestion) => (
         <button
-          className="rounded-full border bg-background px-4 py-2 text-sm transition-colors hover:bg-accent"
+          className="rounded-full border bg-background px-4 py-2 text-sm transition-colors hover:bg-secondary"
           key={suggestion}
           onClick={() => onSend?.(suggestion)}
           type="button"
@@ -482,7 +482,7 @@ export const ConversationScrollButton = ({
     <button
       aria-label="Scroll to bottom"
       className={cn(
-        "absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full border bg-background shadow-md transition-colors hover:bg-accent",
+        "absolute bottom-4 right-4 flex size-8 items-center justify-center rounded-full border bg-background shadow-md transition-colors hover:bg-secondary",
         className,
       )}
       onClick={scrollToBottom}

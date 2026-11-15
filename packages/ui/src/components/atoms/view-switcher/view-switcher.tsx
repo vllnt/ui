@@ -48,7 +48,7 @@ function ViewSwitcherList({
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-lg border bg-accent p-1",
+        "inline-flex items-center rounded-lg border bg-secondary p-1",
         className,
       )}
       onKeyDown={handleListKeyDown}

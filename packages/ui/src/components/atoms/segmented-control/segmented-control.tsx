@@ -8,7 +8,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../../lib/utils";
 
 const segmentedControlVariants = cva(
-  "inline-flex w-full items-center rounded-lg bg-accent p-1 text-muted-foreground",
+  "inline-flex w-full items-center rounded-lg bg-secondary p-1 text-muted-foreground",
   {
     defaultVariants: {
       size: "default",

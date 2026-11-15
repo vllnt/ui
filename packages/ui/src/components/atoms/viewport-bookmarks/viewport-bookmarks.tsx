@@ -67,8 +67,8 @@ const Row = (props: {
   const rowClass =
     "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs transition-colors";
   const activeClass = active
-    ? "bg-accent/60 text-foreground"
-    : "text-muted-foreground hover:bg-accent/30 hover:text-foreground";
+    ? "bg-secondary/60 text-foreground"
+    : "text-muted-foreground hover:bg-secondary/30 hover:text-foreground";
   if (onSelect) {
     return (
       <button

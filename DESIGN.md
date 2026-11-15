@@ -71,7 +71,8 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--card` | Raised, contained surface | `1 0 0` (#ffffff) | `0.1822 0 0` (#121212) |
 | `--popover` | Overlay surface: menus, popovers, dialogs | `1 0 0` (#ffffff) | `0.2046 0 0` (#171717) |
 | `--muted` | Sunken bands and quiet fills | `0.9703 0 0` (#f5f5f5) | `0.1445 0 0` (#0a0a0a) |
-| `--secondary` / `--accent` | Actionable fills; hover, selected and data-state feedback | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--secondary` | Hover, selected, active and data-state fills; control tracks | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--accent` | Fills that pair with `--accent-foreground` (menu items, ghost buttons); a brand color in presets | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
 | `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.7153 0 0` (#a3a3a3) |
 | `--destructive` | Danger fill **and** danger text | `0.55 0.2078 25.326` (#cf1f29) | `0.7 0.18 25.721` (#fa6961) |
 | `--destructive-foreground` | Text on a destructive fill | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
@@ -98,11 +99,16 @@ small on purpose (1.05 to 1.06:1 each). `--secondary`, `--accent` and
 `--border` stay at #262626 so hover, selected and hairline states remain
 clearly visible. In light mode `--muted`, `--secondary` and `--accent` are one
 value, so the split only shows in dark. Hover, focus, active, selected and
-data-state feedback on an actionable element uses `bg-accent` (or
-`bg-accent/50`), never `bg-muted`: in dark, `--muted` is nearly the page color.
-`packages/ui/src/components/muted-state-feedback.test.ts` enforces it. Product
-themes that override these roles keep their own values; PaaS has no color
-overrides, so it follows the core ladder.
+data-state feedback on an actionable element uses `bg-secondary` (or
+`bg-secondary/50`), never `bg-muted`: in dark, `--muted` is nearly the page
+color. Not `bg-accent` either: presets set `--accent` to a brand color, while
+their `--secondary` stays a quiet neutral that keeps the row text readable (6.65
+to 12.53:1 across the dark presets). Menu items and ghost buttons keep
+`bg-accent` with `text-accent-foreground`.
+`packages/ui/src/components/muted-state-feedback.test.ts` and
+`apps/registry/lib/hover-fills.test.ts` enforce it. Product themes that
+override these roles keep their own values; PaaS has no color overrides, so it
+follows the core ladder.
 
 In dark mode `--destructive` is a light red paired with a dark
 `--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both

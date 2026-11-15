@@ -129,7 +129,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
               </p>
             </div>
             <Link
-              className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-accent"
+              className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-secondary"
               href={`/components/${component.name}`}
             >
               {t("backToComponent")}

@@ -19,15 +19,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   that override these roles (presets, Maia) keep their values; PaaS and any
   app that reads the dark `--muted`, `--card` or `--popover` directly get the
   new ones.
-- **Hover, selected and data-state fills use `accent`** - 32 component files
+- **Hover, selected and data-state fills use `secondary`** - 32 component files
   (`Table`, `Tabs` pill, `Toggle`, `Slideshow`, `FilterBar` and others) used
   `bg-muted` for that feedback, which is now almost the page color in dark.
-  They use `bg-accent` with the same opacity. In the default, Maia and PaaS
-  themes light mode and the previous dark look are unchanged because `--accent`
-  equals the old `--muted` there. Theme presets set `--accent` to a brand color,
-  so their hover fills now follow it.
+  They use `bg-secondary` with the same opacity. In the default and PaaS themes
+  the fill is the same color as before in light and dark, because `--secondary`
+  equals the old `--muted` there. Theme presets keep a quiet neutral
+  `--secondary` (their `--accent` is a brand color), so text on these fills
+  stays at 6.65 to 12.53:1 in dark. The Maia theme has its own dark `--muted`
+  (`0.2002`) and a core dark `--secondary` (`0.2686`), so its dark hover fills
+  are one step lighter than before.
   `SegmentedControl`, `ViewSwitcher`, `WorkspaceSwitcher` and the `PricingTable`
-  period toggle draw their track with `bg-accent` for the same reason: the
+  period toggle draw their track with `bg-secondary` for the same reason: the
   selected segment is `bg-background` on that track.
 
 ### Added

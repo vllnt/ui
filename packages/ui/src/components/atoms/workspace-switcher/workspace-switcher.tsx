@@ -81,7 +81,7 @@ const WorkspaceSwitcher = ({
   return (
     <div
       className={cn(
-        "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-accent/50 p-1",
+        "inline-flex min-w-0 items-center gap-1 rounded-full border border-border/70 bg-secondary/50 p-1",
         className,
       )}
       onKeyDown={(event) => {

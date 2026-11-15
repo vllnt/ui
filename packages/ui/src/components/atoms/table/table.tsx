@@ -70,7 +70,7 @@ const TableRow = ({
 }) => (
   <tr
     className={cn(
-      "border-b transition-colors hover:bg-accent/50 data-[state=selected]:bg-accent",
+      "border-b transition-colors hover:bg-secondary/50 data-[state=selected]:bg-secondary",
       className,
     )}
     ref={ref}

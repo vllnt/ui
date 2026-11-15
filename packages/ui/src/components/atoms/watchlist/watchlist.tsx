@@ -37,7 +37,7 @@ function WatchlistRow({ item }: { item: WatchlistItem }): React.JSX.Element {
   const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
 
   return (
-    <li className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-accent/40">
+    <li className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary/40">
       <span
         aria-hidden="true"
         className={cn(

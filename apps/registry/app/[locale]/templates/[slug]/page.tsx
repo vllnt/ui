@@ -150,7 +150,7 @@ export default async function TemplatePage(props: Props) {
                   {template.components.map((component) => (
                     <li key={component}>
                       <Link
-                        className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm hover:bg-accent"
+                        className="inline-flex h-8 items-center rounded-md border border-border px-3 text-sm hover:bg-secondary"
                         href={`/components/${component}`}
                       >
                         {component}
@@ -166,7 +166,7 @@ export default async function TemplatePage(props: Props) {
                 <h2 className="text-lg font-semibold">{t("links")}</h2>
                 <div className="mt-4 grid gap-3">
                   <a
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-accent"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-secondary"
                     href={githubUrl}
                     rel="noreferrer"
                     target="_blank"

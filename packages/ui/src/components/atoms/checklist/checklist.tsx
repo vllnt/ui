@@ -73,7 +73,7 @@ function ChecklistItemRow({
     <li>
       <button
         className={cn(
-          "w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors hover:bg-accent/50",
+          "w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors hover:bg-secondary/50",
           isChecked && "opacity-60",
         )}
         onClick={onToggle}

@@ -209,8 +209,8 @@ function ModuleTrigger({
       aria-expanded={isExpanded}
       className={cn(
         "w-full flex items-start justify-between gap-3 rounded-md px-6 py-4 text-left transition-colors",
-        "hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        isExpanded && "bg-accent/30",
+        "hover:bg-secondary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+        isExpanded && "bg-secondary/30",
       )}
       onClick={toggle}
       type="button"
@@ -393,7 +393,7 @@ function CurriculumLesson({
       className={cn(
         "flex items-center gap-3 px-6 py-3 pl-10 text-sm transition-colors",
         isLocked ? "cursor-not-allowed opacity-60" : "",
-        !isLocked && href ? "cursor-pointer hover:bg-accent/40" : "",
+        !isLocked && href ? "cursor-pointer hover:bg-secondary/40" : "",
         className,
       )}
     >
