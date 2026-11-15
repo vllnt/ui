@@ -20,6 +20,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - **Label type step** - `--font-size-label`, `--line-height-label` and
   `--font-weight-label`.
 
+### Fixed
+
+- **Accordion accessibility** - each trigger now has `aria-controls` pointing
+  at its panel, and each panel is a `region` labelled by its trigger. Closed
+  panels are `inert`, so screen readers no longer read closed answers and Tab
+  skips links inside them. The open and close animation is unchanged.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added
