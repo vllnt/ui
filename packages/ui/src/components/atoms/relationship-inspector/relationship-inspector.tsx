@@ -103,7 +103,7 @@ const Row = (props: { edge: RelationshipEdge }): React.ReactElement => {
     };
     return (
       <button
-        className="flex w-full items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex w-full items-center gap-2 rounded-md border border-transparent px-2 py-1.5 text-left transition-colors hover:border-border hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-relationship-direction={edge.direction}
         data-relationship-row
         onClick={handleActivateRelationship}

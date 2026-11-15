@@ -186,7 +186,7 @@ const renderOverflow = (input: {
         aria-label={aria}
         className={cn(
           className,
-          "transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "transition-colors hover:bg-accent/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         )}
         data-presence-stack-overflow
         onClick={input.handleClick}

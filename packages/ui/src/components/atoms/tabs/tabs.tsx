@@ -41,7 +41,7 @@ const tabsTriggerVariants = cva(
     variants: {
       variant: {
         link: "underline-offset-4 data-[state=active]:text-foreground data-[state=active]:underline data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground data-[state=inactive]:hover:underline",
-        pill: "rounded-full data-[state=active]:bg-muted data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/50 data-[state=inactive]:hover:text-foreground",
+        pill: "rounded-full data-[state=active]:bg-accent data-[state=active]:text-foreground data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-accent/50 data-[state=inactive]:hover:text-foreground",
         underline:
           "-mb-px border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:border-muted-foreground/50 data-[state=inactive]:hover:text-foreground",
       },
