@@ -251,29 +251,39 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
   });
 });
 
-const SURFACE_LADDER = ["background", "muted", "card", "popover"] as const;
-const ACTIONABLE_FILLS = ["secondary", "accent", "border"] as const;
+const BLACK_SURFACES = ["background", "muted", "card", "popover"] as const;
+const GREY_FILLS = ["secondary", "accent", "border"] as const;
 
-function lightness(colors: Palette, name: string): number {
-  return Number(token(colors, name).split(/\s+/)[0]);
+/** Rendered sRGB of every named token that is not `expected`. */
+function offColor(
+  colors: Palette,
+  names: readonly string[],
+  expected: readonly number[],
+): string[] {
+  return names
+    .filter(
+      (name) =>
+        oklchToRgb(token(colors, name)).join(",") !== expected.join(","),
+    )
+    .map((name) => `${name}: ${oklchToRgb(token(colors, name)).join(",")}`);
 }
 
-describe("default dark surface ladder", () => {
+describe("default dark theme is pure black with hairline borders", () => {
   const colors = palette("default", "dark");
 
-  it("raises lightness with elevation: background, muted, card, popover", () => {
-    const inversions = SURFACE_LADDER.slice(1).filter(
-      (name, index) =>
-        lightness(colors, name) <=
-        lightness(colors, SURFACE_LADDER[index] ?? "background"),
-    );
-    expect(inversions).toEqual([]);
+  it("renders background, muted, card and popover as #000000", () => {
+    expect(offColor(colors, BLACK_SURFACES, [0, 0, 0])).toEqual([]);
   });
 
-  it("keeps actionable fills and hairlines lighter than every surface", () => {
-    const tooDark = ACTIONABLE_FILLS.filter(
-      (name) => lightness(colors, name) <= lightness(colors, "popover"),
+  it("renders hover, selected and active fills and the border as #262626", () => {
+    expect(offColor(colors, GREY_FILLS, [38, 38, 38])).toEqual([]);
+  });
+
+  it("matches PaaS, which has no color overrides of its own", () => {
+    const paas = palette("paas", "dark");
+    const different = [...BLACK_SURFACES, ...GREY_FILLS, "input"].filter(
+      (name) => token(paas, name) !== token(colors, name),
     );
-    expect(tooDark).toEqual([]);
+    expect(different).toEqual([]);
   });
 });

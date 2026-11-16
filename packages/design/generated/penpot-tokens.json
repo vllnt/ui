@@ -580,7 +580,7 @@
         "$type": "color"
       },
       "card": {
-        "$value": "#121212",
+        "$value": "#000000",
         "$type": "color"
       },
       "card-foreground": {
@@ -588,7 +588,7 @@
         "$type": "color"
       },
       "popover": {
-        "$value": "#171717",
+        "$value": "#000000",
         "$type": "color"
       },
       "popover-foreground": {
@@ -612,7 +612,7 @@
         "$type": "color"
       },
       "muted": {
-        "$value": "#0A0A0A",
+        "$value": "#000000",
         "$type": "color"
       },
       "muted-foreground": {
@@ -672,7 +672,7 @@
         "$type": "color"
       },
       "input": {
-        "$value": "#656565",
+        "$value": "#606060",
         "$type": "color"
       },
       "ring": {

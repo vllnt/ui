@@ -13,7 +13,7 @@ const SKIPPED_SUFFIXES = [
 ] as const;
 
 const FIX =
-  "Use bg-secondary at the same opacity (DESIGN.md, Dark surface ladder).";
+  "Use bg-secondary at the same opacity (DESIGN.md, Dark surfaces are pure black).";
 
 /**
  * Still on the old pattern in a separate change. Remove this exemption when
@@ -23,9 +23,9 @@ const PENDING_MIGRATION = join("atoms", "accordion", "accordion.tsx");
 
 /**
  * Fills that moved off `bg-muted`: each file with its classes, one entry per
- * occurrence. Dark `--muted` is the darkest surface, so these use `--secondary`:
- * it matches the old muted fill in the default theme and stays readable under
- * the text in every preset, where `--accent` is a brand color.
+ * occurrence. Dark `--muted` is the page color (#000000), so these use
+ * `--secondary`: it matches the old muted fill in the default theme and stays
+ * readable under the text in every preset, where `--accent` is a brand color.
  */
 const MIGRATED_FILLS: readonly (readonly [string, readonly string[]])[] = [
   [
@@ -191,7 +191,7 @@ describe("muted fill as state feedback", () => {
       );
     expect(
       offenders,
-      `bg-muted is almost the page color in dark and cannot show a state. ${FIX}`,
+      `bg-muted is the page color in dark and cannot show a state. ${FIX}`,
     ).toEqual([]);
   });
 });
