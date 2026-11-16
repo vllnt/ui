@@ -98,7 +98,7 @@ function ContentIntroToc({
                   className={cn(
                     "flex-shrink-0 size-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
                     isLoading &&
-                      "animate-pulse bg-muted motion-reduce:animate-none",
+                      "animate-pulse bg-secondary motion-reduce:animate-none",
                     !isLoading &&
                       isCompleted &&
                       "bg-foreground text-background",

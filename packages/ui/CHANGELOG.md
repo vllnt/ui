@@ -34,6 +34,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `SegmentedControl`, `ViewSwitcher`, `WorkspaceSwitcher` and the `PricingTable`
   period toggle draw their track with `bg-secondary` for the same reason: the
   selected segment is `bg-background` on that track.
+- **Skeletons, tracks and handles use `secondary`** - 29 `bg-muted` fills in 23
+  component files were the whole visual of their element: `Skeleton`, the
+  `ProgressBar`, `Meter`, `Tour`, `Checklist`, `UsageBreakdown` and other
+  progress, meter and usage tracks, the `Drawer` handle, the empty cells of
+  `ActivityHeatmap` and the neutral `GanttChart` bar. They use `bg-secondary`
+  (#262626) with the same opacity, because `bg-muted` is the page color in dark
+  and they would disappear. Chips, code spans and panels keep `bg-muted`: their
+  text and border carry them. A test fails on a `bg-muted` skeleton or bar.
 
 ### Added
 

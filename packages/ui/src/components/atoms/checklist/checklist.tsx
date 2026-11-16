@@ -245,7 +245,7 @@ export function Checklist({
         title={title}
         total={items.length}
       />
-      <div className="h-1 bg-muted rounded-full mb-4 overflow-hidden">
+      <div className="h-1 bg-secondary rounded-full mb-4 overflow-hidden">
         <div
           className={cn(
             "h-full transition-all duration-300",

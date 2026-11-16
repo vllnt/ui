@@ -106,16 +106,16 @@ export function TLDRSection({ children, label }: TLDRSectionProps) {
         <div className="px-4 pb-4 pt-2 border-t border-border" id={regionId}>
           {showSkeleton ? (
             <div className="space-y-3">
-              <div className="relative h-4 bg-muted/50 rounded overflow-hidden">
+              <div className="relative h-4 bg-secondary/50 rounded overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
-              <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-5/6">
+              <div className="relative h-4 bg-secondary/50 rounded overflow-hidden w-5/6">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
-              <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-4/5">
+              <div className="relative h-4 bg-secondary/50 rounded overflow-hidden w-4/5">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
-              <div className="relative h-4 bg-muted/50 rounded overflow-hidden w-3/4">
+              <div className="relative h-4 bg-secondary/50 rounded overflow-hidden w-3/4">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent animate-shimmer motion-reduce:animate-none" />
               </div>
             </div>

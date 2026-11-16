@@ -95,8 +95,9 @@ separated by --border (#262626)
 hover, selected and active fills: --secondary, --accent (#262626)
 ```
 
-Grey stays only for `--muted-foreground` text, `--border`, `--input` and the
-hover, selected and active fills (`--secondary`, `--accent`). So a raised
+Grey stays only for `--muted-foreground` text, `--border`, `--input`, the
+hover, selected and active fills (`--secondary`, `--accent`) and structural
+fills (below). So a raised
 surface (card, popover, menu, dialog, panel) draws `border` (the `--border`
 hairline); a `bg-card` or `bg-popover` without one is invisible on the page.
 The hairline is 1.39:1 against black, a depth cue and not a control boundary
@@ -109,7 +110,15 @@ brand color, while their `--secondary` stays a quiet neutral that keeps the row
 text readable (6.65 to 12.53:1 across the dark presets). Menu items and ghost
 buttons keep `bg-accent` with `text-accent-foreground`.
 `packages/ui/src/components/muted-state-feedback.test.ts` and
-`apps/registry/lib/hover-fills.test.ts` enforce it. Product themes that
+`apps/registry/lib/hover-fills.test.ts` enforce it.
+
+A **structural fill** is a fill that is the whole visual of its element:
+skeletons, progress, meter and usage tracks, the drawer handle, empty heatmap
+cells and the neutral Gantt bar. It uses `bg-secondary` (#262626), at the same
+opacity as before. Chips, code spans and panels keep `bg-muted`: their text and
+border carry them.
+`packages/ui/src/components/black-surface-borders.test.ts` and
+`apps/registry/lib/structural-fills.test.ts` enforce it. Product themes that
 override these roles keep their own values; PaaS has no color overrides, so it
 follows the core theme.
 

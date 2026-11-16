@@ -71,7 +71,7 @@ const EMPTY_SLIDESHOW_LABELS: SlideshowLabels = {};
 
 function SlideshowProgress({ progress }: { progress: number }) {
   return (
-    <div className="absolute top-0 left-0 right-0 h-1 bg-muted z-10">
+    <div className="absolute top-0 left-0 right-0 h-1 bg-secondary z-10">
       <div
         className="h-full bg-foreground transition-all duration-300 ease-out"
         style={{ width: `${progress}%` }}

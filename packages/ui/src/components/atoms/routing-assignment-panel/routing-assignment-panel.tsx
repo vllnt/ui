@@ -108,7 +108,7 @@ const RowBody = (props: {
       {load === null ? null : (
         <span
           aria-hidden="true"
-          className="h-1 w-full overflow-hidden rounded-full bg-muted/40"
+          className="h-1 w-full overflow-hidden rounded-full bg-secondary/40"
         >
           <span
             className="block h-full rounded-full bg-foreground/50"

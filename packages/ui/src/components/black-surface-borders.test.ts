@@ -22,12 +22,31 @@ const CLASS_DELIMITERS = /[\s"'`{}]+/;
 const SURFACE_FILL = /^bg-(?:card|popover)(?:\/\d+)?$/;
 const BORDER_WIDTH = /^border(?:-[belr-txy])?(?:-\d+)?$/;
 const MUTED_FILL = /^bg-muted(?:\/\d+)?$/;
+const SECONDARY_FILL = /^bg-secondary(?:\/\d+)?$/;
 const HAIRLINE_SIZE = /^[hw]-px$/;
+/** A skeleton pulses; a track or handle is a bar at most 0.5rem tall. */
+const SKELETON_OR_BAR = /^(?:animate-pulse|h-(?:0\.5|1|1\.5|2))$/;
+
+/**
+ * Structural fills whose class is not beside the size classes (a tone map or a
+ * list), so SKELETON_OR_BAR cannot see them. Each file with the number of
+ * static `bg-secondary` fills it must keep, counting the ones SKELETON_OR_BAR
+ * also finds.
+ */
+const SECONDARY_STRUCTURAL_FILLS: readonly (readonly [string, number])[] = [
+  ["atoms/meter/meter.tsx", 2], // track and empty segment
+  ["atoms/tldr-section/tldr-section.tsx", 4], // skeleton lines
+  ["organisms/activity-heatmap/activity-heatmap.tsx", 1], // empty cell
+  ["organisms/gantt-chart/gantt-chart.tsx", 1], // neutral bar
+  ["organisms/historic-timeline/historic-timeline.tsx", 1], // neutral era band
+];
 
 const SURFACE_FIX =
   "A bg-card or bg-popover fill is #000000 in dark, the page color. Draw its edge with border (the --border hairline).";
 const DIVIDER_FIX =
   "bg-muted is #000000 in dark, so this divider disappears. Use bg-border.";
+const STRUCTURAL_FIX =
+  "bg-muted is #000000 in dark, so a skeleton, track or handle drawn only with this fill disappears. Use bg-secondary (#262626) at the same opacity.";
 
 /** The class name without its variant prefix: `data-[x]:hover:bg-card` is `bg-card`. */
 function baseClass(name: string): string {
@@ -47,15 +66,36 @@ function lacksBorder(source: string): boolean {
   );
 }
 
-/** Lines that give a one-pixel divider a muted fill. */
-function mutedDividers(source: string): string[] {
+/** Lines that fill a shape (matched by `shape`) with bg-muted. */
+function mutedFills(source: string, shape: RegExp): string[] {
   return source.split("\n").filter((line) => {
     const classes = classesOf(line).map((name) => baseClass(name));
     return (
-      classes.some((name) => HAIRLINE_SIZE.test(name)) &&
+      classes.some((name) => shape.test(name)) &&
       classes.some((name) => MUTED_FILL.test(name))
     );
   });
+}
+
+/** Lines that give a one-pixel divider a muted fill. */
+function mutedDividers(source: string): string[] {
+  return mutedFills(source, HAIRLINE_SIZE);
+}
+
+/** Lines that fill a skeleton, track or handle with bg-muted. */
+function mutedStructuralFills(source: string): string[] {
+  return mutedFills(source, SKELETON_OR_BAR);
+}
+
+/** Missing static bg-secondary fills in a source, as `expected N, found M`. */
+function missingSecondaryFills(
+  source: string,
+  expected: number,
+): string | undefined {
+  const found = classesOf(source).filter((name) =>
+    SECONDARY_FILL.test(name),
+  ).length;
+  return found < expected ? `expected ${expected}, found ${found}` : undefined;
 }
 
 function listSourceFiles(directory: string): string[] {
@@ -106,5 +146,56 @@ describe("one-pixel dividers on a black page", () => {
       mutedDividers(source).map((line) => `${file}: ${line.trim()}`),
     );
     expect(offenders, DIVIDER_FIX).toEqual([]);
+  });
+});
+
+describe("skeletons, tracks and handles on a black page", () => {
+  it("flags a muted skeleton or bar and passes a secondary one", () => {
+    expect(
+      mutedStructuralFills('"animate-pulse rounded-md bg-muted"'),
+    ).toHaveLength(1);
+    expect(
+      mutedStructuralFills('"h-2 overflow-hidden rounded-full bg-muted"'),
+    ).toHaveLength(1);
+    expect(mutedStructuralFills('"h-1 w-full bg-muted/40"')).toHaveLength(1);
+    expect(
+      mutedStructuralFills('"animate-pulse rounded-md bg-secondary"'),
+    ).toEqual([]);
+    expect(
+      mutedStructuralFills('"h-2 overflow-hidden rounded-full bg-secondary"'),
+    ).toEqual([]);
+    expect(
+      mutedStructuralFills('"h-5 rounded border bg-muted px-1.5"'),
+    ).toEqual([]);
+  });
+
+  it("are filled with bg-secondary in every component file", () => {
+    const offenders = sources.flatMap(({ file, source }) =>
+      mutedStructuralFills(source).map((line) => `${file}: ${line.trim()}`),
+    );
+    expect(offenders, STRUCTURAL_FIX).toEqual([]);
+  });
+
+  it("reports a pinned fill that went back to bg-muted", () => {
+    expect(missingSecondaryFills('"bg-secondary/50"', 1)).toBeUndefined();
+    expect(missingSecondaryFills('"bg-muted/50"', 1)).toBe(
+      "expected 1, found 0",
+    );
+    expect(missingSecondaryFills('"hover:bg-secondary/50"', 1)).toBe(
+      "expected 1, found 0",
+    );
+  });
+
+  it("keeps the fills in tone maps and lists on bg-secondary", () => {
+    const regressions = SECONDARY_STRUCTURAL_FILLS.flatMap(
+      ([file, expected]) => {
+        const message = missingSecondaryFills(
+          readFileSync(join(COMPONENTS_ROOT, file), "utf8"),
+          expected,
+        );
+        return message ? [`${file}: ${message}`] : [];
+      },
+    );
+    expect(regressions, STRUCTURAL_FIX).toEqual([]);
   });
 });

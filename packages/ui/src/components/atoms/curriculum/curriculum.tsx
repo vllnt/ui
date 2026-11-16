@@ -121,7 +121,7 @@ function ProgressBar({
   if (total === 0) return null;
   return (
     <div className="mt-1 flex items-center gap-2">
-      <div className="h-1.5 max-w-[120px] flex-1 overflow-hidden rounded-full bg-muted">
+      <div className="h-1.5 max-w-[120px] flex-1 overflow-hidden rounded-full bg-secondary">
         <div
           className="h-full rounded-full bg-primary transition-all"
           style={{ width: `${progressPct}%` }}

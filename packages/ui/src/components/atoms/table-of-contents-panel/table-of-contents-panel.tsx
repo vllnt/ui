@@ -160,7 +160,7 @@ function TocProgress({
           {completionCount} / {totalSections} ({completionPercent}%)
         </span>
       </div>
-      <div className="mt-2 h-2 rounded-full bg-muted">
+      <div className="mt-2 h-2 rounded-full bg-secondary">
         <div
           className="h-full rounded-full bg-primary transition-all duration-300"
           style={{ width: `${completionPercent}%` }}

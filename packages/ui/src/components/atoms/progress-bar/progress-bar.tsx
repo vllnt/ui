@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../../lib/utils";
 
-const progressBarTrackVariants = cva("overflow-hidden rounded-full bg-muted", {
+const progressBarTrackVariants = cva("overflow-hidden rounded-full bg-secondary", {
   defaultVariants: {
     size: "md",
   },
@@ -144,8 +144,8 @@ function ProgressBarHeader(props: ProgressBarHeaderProps): React.ReactNode {
     <div className="flex items-center justify-between mb-2 h-5">
       {props.isLoading ? (
         <>
-          <span className="h-5 w-16 bg-muted rounded animate-pulse motion-reduce:animate-none" />
-          <span className="h-5 w-24 bg-muted rounded animate-pulse motion-reduce:animate-none" />
+          <span className="h-5 w-16 bg-secondary rounded animate-pulse motion-reduce:animate-none" />
+          <span className="h-5 w-24 bg-secondary rounded animate-pulse motion-reduce:animate-none" />
         </>
       ) : (
         <>
