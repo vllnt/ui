@@ -6,18 +6,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../../lib/utils";
 
-const progressBarTrackVariants = cva("overflow-hidden rounded-full bg-secondary", {
-  defaultVariants: {
-    size: "md",
-  },
-  variants: {
-    size: {
-      lg: "h-3",
-      md: "h-2",
-      sm: "h-1",
+const progressBarTrackVariants = cva(
+  "overflow-hidden rounded-full bg-secondary",
+  {
+    defaultVariants: {
+      size: "md",
+    },
+    variants: {
+      size: {
+        lg: "h-3",
+        md: "h-2",
+        sm: "h-1",
+      },
     },
   },
-});
+);
 
 const progressBarFillVariants = cva("h-full", {
   defaultVariants: {
