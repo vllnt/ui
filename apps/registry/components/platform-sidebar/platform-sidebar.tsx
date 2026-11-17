@@ -1,12 +1,19 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
+import { useMemo } from "react";
 
 import { Sidebar, type SidebarSection } from "@vllnt/ui";
-import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { PathnameContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
+import { useLocale, useTranslations } from "next-intl";
 
-import { getPlatform, withPlatformQuery } from "@/lib/platform";
+import { useForwardedQuery } from "@/components/forwarded-query";
+import { getPathname, usePathname } from "@/i18n/routing";
+import {
+  getPlatform,
+  type PlatformContext,
+  withPlatformQuery,
+} from "@/lib/platform";
+import { publicVariant } from "@/lib/platform-variant";
 
 import nativeManifest from "../../../../packages/ui-native/registry.json";
 
@@ -15,23 +22,36 @@ const NATIVE_COMPONENT_NAMES = new Set(
 );
 
 type PlatformSidebarProps = {
+  /** Platform the prerendered page shows, so its server HTML links it. */
+  readonly platform?: PlatformContext;
   readonly sections: SidebarSection[];
 };
 
-type SidebarWithQueryProps = PlatformSidebarProps & {
-  readonly ariaLabel: string;
-  readonly closeLabel: string;
-};
+/**
+ * The URL the browser shows for this page. A prerendered default-locale page
+ * renders under `/en/...` and a platform variant under `/p/<platform>/...`,
+ * while the browser shows the public URL, so the library sidebar would mark a
+ * different current page on the server than in the browser and fail to hydrate
+ * in place.
+ */
+function usePublicPathname(): string {
+  const locale = useLocale();
+  const pathname = usePathname();
 
-function SidebarWithQuery({
-  ariaLabel,
-  closeLabel,
-  sections,
-}: SidebarWithQueryProps) {
-  const searchParameters = useSearchParams();
-  const query = searchParameters.toString();
+  return getPathname({
+    href: publicVariant(pathname)?.pathname ?? pathname,
+    locale,
+  });
+}
+
+/** Preserves capability-filter and unrelated query state across sidebar links. */
+export function PlatformSidebar({ platform, sections }: PlatformSidebarProps) {
+  const t = useTranslations("sidebar");
+  const forwardedQuery = useForwardedQuery();
+  const publicPathname = usePublicPathname();
   const platformSections = useMemo(() => {
-    const parameters = new URLSearchParams(query);
+    const parameters =
+      forwardedQuery ?? new URLSearchParams(platform ? { platform } : {});
     const selectedPlatform = getPlatform(
       parameters.get("platform") ?? undefined,
       "all",
@@ -57,39 +77,15 @@ function SidebarWithQuery({
           })),
       }))
       .filter((section) => !section.family || section.items.length > 0);
-  }, [query, sections]);
+  }, [forwardedQuery, platform, sections]);
 
   return (
-    <Sidebar
-      ariaLabel={ariaLabel}
-      closeLabel={closeLabel}
-      sections={platformSections}
-    />
-  );
-}
-SidebarWithQuery.displayName = "SidebarWithQuery";
-
-/** Preserves capability-filter and unrelated query state across sidebar links. */
-export function PlatformSidebar({ sections }: PlatformSidebarProps) {
-  const t = useTranslations("sidebar");
-  const ariaLabel = t("navigationLabel");
-  const closeLabel = t("closeNavigation");
-
-  return (
-    <Suspense
-      fallback={
-        <Sidebar
-          ariaLabel={ariaLabel}
-          closeLabel={closeLabel}
-          sections={sections}
-        />
-      }
-    >
-      <SidebarWithQuery
-        ariaLabel={ariaLabel}
-        closeLabel={closeLabel}
-        sections={sections}
+    <PathnameContext value={publicPathname}>
+      <Sidebar
+        ariaLabel={t("navigationLabel")}
+        closeLabel={t("closeNavigation")}
+        sections={platformSections}
       />
-    </Suspense>
+    </PathnameContext>
   );
 }

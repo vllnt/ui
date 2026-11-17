@@ -140,7 +140,10 @@ export default async function DocsSlugPage(props: Props) {
           }),
         ])}
       />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
+      <PlatformSidebar
+        platform={getPlatform(platformParameter, "all")}
+        sections={await getSidebarSections(undefined, locale)}
+      />
       <main
         className="flex-1 overflow-y-auto bg-background"
         data-pagefind-ignore={platformParameter === undefined ? undefined : ""}

@@ -76,6 +76,7 @@ export default async function FamiliesPage({ params }: Props) {
           url: canonical(PATHNAME, locale),
         }),
       ]}
+      platform={getPlatform(platformParameter, "all")}
       searchable={platformParameter === undefined}
       sections={await getSidebarSections(undefined, locale)}
     >

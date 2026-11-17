@@ -98,6 +98,7 @@ export default async function ComponentsPage({ params }: Props) {
           url: canonical(catalogPathname, locale),
         }),
       ]}
+      platform={selectedPlatform}
       searchable={platform === undefined}
       sections={await getSidebarSections(undefined, locale)}
     >

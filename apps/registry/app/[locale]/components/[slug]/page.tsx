@@ -333,6 +333,7 @@ export default async function ComponentPage(props: Props) {
         ])}
       />
       <PlatformSidebar
+        platform={platform}
         sections={await getSidebarSections(
           getCategoryForComponent(slug),
           locale,

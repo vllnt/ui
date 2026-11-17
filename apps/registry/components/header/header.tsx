@@ -1,7 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
-
 import {
   Button,
   DropdownMenu,
@@ -12,9 +10,9 @@ import {
   SearchDialog,
 } from "@vllnt/ui";
 import { ChevronDown, Languages } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { useForwardedQuery } from "@/components/forwarded-query";
 import { GitHubMark } from "@/components/github-mark";
 import { searchPagefind } from "@/components/header/pagefind-search";
 import {
@@ -34,61 +32,17 @@ type HeaderProps = {
   readonly locale: Locale;
 };
 
-export function Header(props: HeaderProps) {
-  return (
-    <Suspense fallback={<HeaderFallback {...props} />}>
-      <HeaderContent {...props} />
-    </Suspense>
-  );
-}
+const NO_QUERY = new URLSearchParams();
 
-function HeaderFallback({ locale }: HeaderProps) {
-  const t = useTranslations("header");
-  const navItems = [
-    { href: localizePathname("/", locale), title: t("navGetStarted") },
-    { href: localizePathname("/docs", locale), title: t("navDocs") },
-    {
-      href: localizePathname("/philosophy", locale),
-      title: t("navPhilosophy"),
-    },
-    { href: localizePathname("/design", locale), title: t("navDesign") },
-    {
-      href: localizePathname("/components", locale),
-      title: t("navComponents"),
-    },
-    {
-      href: localizePathname("/templates", locale),
-      title: t("navTemplates"),
-    },
-    { href: localizePathname("/themes", locale), title: t("navThemes") },
-    {
-      href: localizePathname("/request-component", locale),
-      title: t("navRequest"),
-    },
-  ];
-
-  return (
-    <NavbarSaas
-      brand={
-        <Link
-          className="truncate text-xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          href={localizePathname("/", locale)}
-        >
-          VLLNT UI
-        </Link>
-      }
-      closeSidebarLabel={t("closeNavigation")}
-      navItems={navItems}
-      openSidebarLabel={t("openNavigation")}
-      sidebarId="site-sidebar"
-    />
-  );
-}
-
-function HeaderContent({ locale }: HeaderProps) {
+/**
+ * Site header. Its links keep the browser query, which the page can read after
+ * hydration, so the prerendered HTML carries the plain links and the query
+ * joins them in place.
+ */
+export function Header({ locale }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParameters = useSearchParams();
+  const searchParameters = useForwardedQuery() ?? NO_QUERY;
   const common = useTranslations("common");
   const t = useTranslations("header");
   const activePlatform = getPlatform(

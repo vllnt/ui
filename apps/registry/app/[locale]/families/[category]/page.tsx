@@ -140,6 +140,7 @@ export default async function FamilyPage({ params }: Props) {
         ])}
       />
       <PlatformSidebar
+        platform={getPlatform(platformParameter, "all")}
         sections={await getSidebarSections(group.category, locale)}
       />
       <main
