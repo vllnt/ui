@@ -3,6 +3,7 @@ import createMiddleware from "next-intl/middleware";
 
 import { routing } from "@/i18n/routing";
 import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
+import { publicVariant, variantPathname } from "@/lib/platform-variant";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -20,6 +21,40 @@ function nativeDocsRedirect(request: NextRequest): NextResponse | undefined {
     : "/docs/installation";
   target.searchParams.set("platform", "native");
   return NextResponse.redirect(target, 308);
+}
+
+/** Sends a direct hit on a private variant URL to its public form. */
+function variantRedirect(request: NextRequest): NextResponse | undefined {
+  const target = publicVariant(request.nextUrl.pathname);
+  if (!target) return undefined;
+
+  const url = request.nextUrl.clone();
+  url.pathname = target.pathname;
+  url.searchParams.set("platform", target.platform);
+
+  return NextResponse.redirect(url, 308);
+}
+
+/**
+ * Prerendered pages cannot read `?platform=`, so the middleware rewrites a
+ * platform query to the prerendered copy for that platform. Redirects pass through.
+ */
+function platformVariant(
+  request: NextRequest,
+  response: NextResponse,
+): NextResponse {
+  const variant = variantPathname(
+    request.nextUrl.pathname,
+    request.nextUrl.searchParams.get("platform") ?? undefined,
+  );
+  if (!variant || response.headers.has("location")) return response;
+
+  const rewritten = NextResponse.rewrite(new URL(variant, request.url));
+  response.headers.forEach((value, key) => {
+    if (!key.startsWith("x-middleware-")) rewritten.headers.set(key, value);
+  });
+
+  return rewritten;
 }
 
 export default function middleware(request: NextRequest): NextResponse {
@@ -52,7 +87,19 @@ export default function middleware(request: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  return intlMiddleware(request);
+  const redirect = variantRedirect(request);
+  if (redirect) return redirect;
+
+  const response = intlMiddleware(request);
+  /**
+   * next-intl sets NEXT_LOCALE on any document request whose locale differs
+   * from Accept-Language, which includes every crawler. Public GETs must stay
+   * cookie-free so a CDN can cache them; the language switcher writes the cookie
+   * in the browser when a visitor picks a language.
+   */
+  response.headers.delete("set-cookie");
+
+  return platformVariant(request, response);
 }
 
 export const config = {

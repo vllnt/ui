@@ -39,11 +39,7 @@ import {
   techArticleLd,
 } from "@/lib/jsonld";
 import { generateOGImageURL, pageMetadata } from "@/lib/og";
-import {
-  getPlatform,
-  type PlatformQuery,
-  withPlatformQuery,
-} from "@/lib/platform";
+import { getPlatform, variantQuery, withPlatformQuery } from "@/lib/platform";
 import { findComponent, registry } from "@/lib/registry";
 import { canonical, localizePathname } from "@/lib/seo";
 import { oembedUrl, withRef } from "@/lib/share";
@@ -56,12 +52,13 @@ import {
 import { getRegistryGeneratedAt } from "@/lib/stats";
 
 type Props = {
-  params: Promise<{ locale: Locale; slug: string }>;
-  searchParams: Promise<PlatformQuery>;
+  params: Promise<{ locale: Locale; platform?: string; slug: string }>;
 };
 
 const STORYBOOK_URL =
   process.env.NEXT_PUBLIC_STORYBOOK_URL ?? "http://localhost:6006";
+
+export const revalidate = 86_400;
 
 export async function generateStaticParams() {
   const slugs = registry.items.map((item) => item.name);
@@ -129,10 +126,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ComponentPage(props: Props) {
-  const [{ locale, slug }, query] = await Promise.all([
-    props.params,
-    props.searchParams,
-  ]);
+  const { locale, platform: platformParameter, slug } = await props.params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.component");
   const common = await getTranslations("common");
@@ -160,7 +154,8 @@ export default async function ComponentPage(props: Props) {
     meta?.description ??
     component.description ??
     "";
-  const platform = getPlatform(query.platform, "all");
+  const platform = getPlatform(platformParameter, "all");
+  const query = variantQuery(platform);
 
   // The browser preview stays on the Web implementation. Paired Native source
   // is available from the source selector when this component supports it.
@@ -343,7 +338,10 @@ export default async function ComponentPage(props: Props) {
           locale,
         )}
       />
-      <main className="flex-1 overflow-y-auto bg-background overflow-x-hidden">
+      <main
+        className="flex-1 overflow-y-auto bg-background overflow-x-hidden"
+        data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
+      >
         <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
           <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_200px] gap-8">
             <div className="min-w-0">

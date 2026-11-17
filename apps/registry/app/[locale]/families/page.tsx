@@ -8,11 +8,7 @@ import { PlatformSelector } from "@/components/platform-selector";
 import { Link, type Locale } from "@/i18n/routing";
 import { breadcrumbTrailLd, collectionPageLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/og";
-import {
-  getPlatform,
-  type PlatformQuery,
-  withPlatformQuery,
-} from "@/lib/platform";
+import { getPlatform, variantQuery, withPlatformQuery } from "@/lib/platform";
 import { registry } from "@/lib/registry";
 import { canonical, localizePathname } from "@/lib/seo";
 import {
@@ -23,9 +19,10 @@ import {
 } from "@/lib/sidebar-sections";
 
 type Props = {
-  readonly params: Promise<{ locale: Locale }>;
-  readonly searchParams: Promise<PlatformQuery>;
+  readonly params: Promise<{ locale: Locale; platform?: string }>;
 };
+
+export const revalidate = 86_400;
 
 const PATHNAME = "/families";
 const TITLE = "Component families";
@@ -43,12 +40,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function FamiliesPage({ params, searchParams }: Props) {
-  const [{ locale }, query] = await Promise.all([params, searchParams]);
+export default async function FamiliesPage({ params }: Props) {
+  const { locale, platform: platformParameter } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.families");
   const common = await getTranslations("common");
-  const platform = getPlatform(query.platform);
+  const platform = getPlatform(platformParameter);
+  const query = variantQuery(platform);
   const platformsByName = new Map(
     registry.items.map((item) => [item.name, item.platforms]),
   );
@@ -78,6 +76,7 @@ export default async function FamiliesPage({ params, searchParams }: Props) {
           url: canonical(PATHNAME, locale),
         }),
       ]}
+      searchable={platformParameter === undefined}
       sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto px-4 py-16 lg:px-8">
@@ -111,7 +110,11 @@ export default async function FamiliesPage({ params, searchParams }: Props) {
           <p className="text-muted-foreground text-sm mt-2">
             {t("familyCount", { count: visibleGroups.length })}
           </p>
-          <PlatformSelector className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
+          <PlatformSelector
+            className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
+            pathname={PATHNAME}
+            platform={platform}
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

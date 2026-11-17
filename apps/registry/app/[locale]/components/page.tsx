@@ -8,11 +8,7 @@ import { Link, type Locale } from "@/i18n/routing";
 import { getPageContent } from "@/lib/content";
 import { breadcrumbTrailLd, collectionPageLd } from "@/lib/jsonld";
 import { frontmatterPageMetadata, pageMetadata } from "@/lib/og";
-import {
-  getPlatform,
-  type PlatformQuery,
-  withPlatformQuery,
-} from "@/lib/platform";
+import { getPlatform, variantQuery, withPlatformQuery } from "@/lib/platform";
 import { registry } from "@/lib/registry";
 import { canonical } from "@/lib/seo";
 import {
@@ -22,21 +18,19 @@ import {
 } from "@/lib/sidebar-sections";
 
 type Props = {
-  readonly params: Promise<{ locale: Locale }>;
-  readonly searchParams: Promise<PlatformQuery>;
+  readonly params: Promise<{ locale: Locale; platform?: string }>;
 };
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
-  const [{ locale }, query] = await Promise.all([params, searchParams]);
+export const revalidate = 86_400;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, platform } = await params;
   const [{ frontmatter }, t] = await Promise.all([
     getPageContent("components", locale),
     getTranslations({ locale, namespace: "pages.components" }),
   ]);
 
-  if (getPlatform(query.platform, "all") !== "native") {
+  if (getPlatform(platform, "all") !== "native") {
     return frontmatterPageMetadata(frontmatter, {
       locale,
       pathname: "/components",
@@ -54,12 +48,13 @@ export async function generateMetadata({
   });
 }
 
-export default async function ComponentsPage({ params, searchParams }: Props) {
-  const [{ locale }, query] = await Promise.all([params, searchParams]);
+export default async function ComponentsPage({ params }: Props) {
+  const { locale, platform } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("pages.components");
   const common = await getTranslations("common");
-  const selectedPlatform = getPlatform(query.platform, "all");
+  const selectedPlatform = getPlatform(platform, "all");
+  const query = variantQuery(selectedPlatform);
   const platformsByName = new Map(
     registry.items.map((item) => [item.name, item.platforms]),
   );
@@ -103,6 +98,7 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
           url: canonical(catalogPathname, locale),
         }),
       ]}
+      searchable={platform === undefined}
       sections={await getSidebarSections(undefined, locale)}
     >
       <div className="container mx-auto px-4 py-16 lg:px-8">
@@ -112,6 +108,8 @@ export default async function ComponentsPage({ params, searchParams }: Props) {
           <PlatformSelector
             className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
             includeAll
+            pathname="/components"
+            platform={selectedPlatform}
           />
         </div>
 

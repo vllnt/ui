@@ -1,0 +1,111 @@
+import { defaultLocale, type Locale, locales } from "@/i18n/locales";
+import { getPlatform } from "@/lib/platform";
+import type { ComponentPlatform } from "@/lib/registry";
+
+/**
+ * Catalog pages render at build time, so their HTML cannot read `?platform=`.
+ * Each platform instead gets its own prerendered copy under a private
+ * `/<locale>/p/<platform>/...` route, and the middleware rewrites the public
+ * URL (`/components/button?platform=native`) to it. The copy is never a public URL.
+ */
+export const PLATFORM_VARIANTS = [
+  "native",
+  "web",
+] as const satisfies readonly ComponentPlatform[];
+
+const VARIANT_NAMES: readonly string[] = PLATFORM_VARIANTS;
+
+/**
+ * Whether a route parameter names a platform that has a variant copy.
+ *
+ * @param value - raw `platform` route parameter
+ * @returns `true` for `native` and `web`
+ */
+export function isPlatformVariant(
+  value: string | undefined,
+): value is (typeof PLATFORM_VARIANTS)[number] {
+  return value !== undefined && VARIANT_NAMES.includes(value);
+}
+
+/** Route families whose HTML depends on the platform, and what the clean URL means for each. */
+const VARIANT_ROUTES: readonly {
+  readonly fallback: "all" | ComponentPlatform;
+  readonly pattern: RegExp;
+}[] = [
+  { fallback: "all", pattern: /^\/components(?:\/[^/]+)?$/ },
+  { fallback: "web", pattern: /^\/docs\/installation$/ },
+  { fallback: "web", pattern: /^\/families(?:\/[^/]+)?$/ },
+];
+
+const PRIVATE_PATTERN = new RegExp(
+  `^/p/(${PLATFORM_VARIANTS.join("|")})(/.*)$`,
+);
+
+type SplitPath = {
+  readonly locale: Locale;
+  readonly pathname: string;
+  readonly prefixed: boolean;
+};
+
+function splitLocale(pathname: string): SplitPath {
+  const locale = locales.find(
+    (entry) => pathname === `/${entry}` || pathname.startsWith(`/${entry}/`),
+  );
+  if (!locale) return { locale: defaultLocale, pathname, prefixed: false };
+
+  return {
+    locale,
+    pathname: pathname.slice(locale.length + 1) || "/",
+    prefixed: true,
+  };
+}
+
+/**
+ * Internal route that holds the prerendered copy of a public URL for one
+ * platform, or `undefined` when the clean page already is that copy.
+ *
+ * @param pathname - public pathname as received (`/fr/components/button`)
+ * @param platform - raw `platform` query value, if the URL has one
+ * @returns Internal pathname such as `/fr/p/native/components/button`
+ * @example
+ * variantPathname("/components/button", "native"); // "/en/p/native/components/button"
+ */
+export function variantPathname(
+  pathname: string,
+  platform: string | undefined,
+): string | undefined {
+  const variant = getPlatform(platform, "all");
+  const path = splitLocale(pathname);
+  const route = VARIANT_ROUTES.find((entry) =>
+    entry.pattern.test(path.pathname),
+  );
+  const defaultPrefix = path.prefixed && path.locale === defaultLocale;
+  if (!variant || !route || route.fallback === variant || defaultPrefix) {
+    return undefined;
+  }
+
+  return `/${path.locale}/p/${variant}${path.pathname}`;
+}
+
+/**
+ * Public URL of a private variant route, for redirecting direct hits so the
+ * copy never becomes a second indexable URL.
+ *
+ * @param pathname - pathname as received (`/fr/p/native/components/button`)
+ * @returns Public pathname and platform, or `undefined` for any other path
+ * @example
+ * publicVariant("/p/native/components/button");
+ * // { pathname: "/components/button", platform: "native" }
+ */
+export function publicVariant(
+  pathname: string,
+): undefined | { pathname: string; platform: ComponentPlatform } {
+  const path = splitLocale(pathname);
+  const [, platform, rest] = PRIVATE_PATTERN.exec(path.pathname) ?? [];
+  const variant = getPlatform(platform, "all");
+  if (!variant || !rest) return undefined;
+  const prefix =
+    path.prefixed && path.locale !== defaultLocale ? `/${path.locale}` : "";
+
+  return { pathname: `${prefix}${rest}`, platform: variant };
+}
