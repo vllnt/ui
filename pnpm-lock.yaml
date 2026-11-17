@@ -6,7 +6,6 @@ settings:
 
 overrides:
   eslint-plugin-react-hooks: 7.0.1
-  body-parser@>=2.0.0 <2.4.0: 2.4.0
   '@expo/cli>zod': 4.6.7
   handlebars@<4.7.10: 4.7.10
   deepmerge-ts@<8.0.0: 8.0.2

@@ -48,8 +48,6 @@ overrides:
   # (animated-text, number-ticker, scramble-text, use-live-date); fixing them
   # would change runtime behavior. Revisit when those hooks are reworked.
   "eslint-plugin-react-hooks": "7.0.1"
-  # GHSA-27r3-jxmh-p828 (high): shadcn > @modelcontextprotocol/sdk > express pins body-parser 2.2.x.
-  "body-parser@>=2.0.0 <2.4.0": "2.4.0"
   # GHSA-mrhx-c7xc-m3w5 (high): @expo/cli pins zod ^3.25.76, which has no patched 3.x release.
   # Only used for the Expo dev-tools MCP schema; verified with ci:native.
   "@expo/cli>zod": "4.6.7"
