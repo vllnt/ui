@@ -158,21 +158,32 @@ test.describe("platform-aware component discovery", () => {
     await expect(page).toHaveURL(/\/components\/.+\?platform=native&ref=e2e$/);
 
     const sidebar = page.getByRole("complementary");
+    const sidebarButton = sidebar.getByRole("link", {
+      name: "Button",
+      exact: true,
+    });
+    await expect(sidebarButton).toHaveAttribute("href", /ref=e2e/);
     await clickUntilUrl(
       page,
-      sidebar.getByRole("link", { name: "Button", exact: true }),
+      sidebarButton,
       "/components/button?platform=native&ref=e2e",
     );
 
+    const headerComponents = page
+      .getByRole("link", { name: "Components", exact: true })
+      .first();
+    await expect(headerComponents).toHaveAttribute("href", /ref=e2e/);
     await clickUntilUrl(
       page,
-      page.getByRole("link", { name: "Components", exact: true }).first(),
+      headerComponents,
       "/components?platform=native&ref=e2e",
     );
 
+    const frenchLink = page.getByRole("link", { name: "fr", exact: true });
+    await expect(frenchLink).toHaveAttribute("href", /ref=e2e/);
     await clickUntilUrl(
       page,
-      page.getByRole("link", { name: "fr", exact: true }),
+      frenchLink,
       "/fr/components?platform=native&ref=e2e",
     );
   });
