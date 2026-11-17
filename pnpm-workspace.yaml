@@ -68,6 +68,14 @@ overrides:
   "valibot@<1.4.2": "1.5.0"
   # uuid <11.1.1 advisory (moderate, dev): @storybook/test-runner > jest-junit pulls uuid 8.
   "uuid@<11.1.1": "11.1.1"
+  # GHSA-3g3m-2fjr-6pw4 (medium): glob 9-13 AbortSignal bypass; the fix exists only in 14.
+  # Pulled by jest 30 (^10), the Expo toolchain and the Storybook docgen plugin (^13), all build/test only.
+  # glob 14 keeps the API those callers use (glob, globSync, hasMagic, escape); verified with lint, build, Storybook tests and ci:native.
+  "glob@>=9.0.0 <14.0.2": "14.0.2"
+  # GHSA-g3hv-75wg-m249 (medium): minimatch 7-10 globparts amplification; the fix exists only in 11.
+  # Pulled by glob, typescript-estree, @expo/fingerprint and @ts-morph/common. Callers only use minimatch() and Minimatch#match;
+  # minimatch 11 dropped makeRe, which none of them call. Drop with the glob override once the parents move to glob 14 / minimatch 11.
+  "minimatch@>=7.0.0 <11.0.1": "11.0.1"
 
 # Dependency install scripts: deny by default. With strictDepBuilds, a package
 # whose script is not listed here fails the install. Every entry is blocked:
