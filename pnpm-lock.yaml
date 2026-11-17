@@ -57,9 +57,6 @@ importers:
         specifier: ^0.21.4
         version: 0.21.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
     devDependencies:
-      '@react-native/babel-preset':
-        specifier: 0.86.3
-        version: 0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
       '@testing-library/react-native':
         specifier: ^13.3.3
         version: 13.3.3(jest@29.7.0(@types/node@22.20.5)(supports-color@8.1.1))(react-native@0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(@react-native/jest-preset@0.86.3(@babel/core@7.29.7(supports-color@8.1.1))(react@19.2.3)(supports-color@8.1.1))(@types/react@19.3.0)(react@19.2.3)(supports-color@8.1.1))(react-test-renderer@19.2.3(react@19.2.3))(react@19.2.3)
@@ -72,9 +69,6 @@ importers:
       '@vllnt/eslint-config':
         specifier: ^2.0.0
         version: 2.0.0(@typescript-eslint/parser@8.72.0(eslint@9.39.5(jiti@1.21.7)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(convex@1.48.0(react@19.2.3))(eslint@9.39.5(jiti@1.21.7)(supports-color@8.1.1))(prettier@3.8.1)(supports-color@8.1.1)(turbo@2.11.10)(typescript@6.0.3)
-      babel-jest:
-        specifier: ^29.7.0
-        version: 29.7.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
       eslint:
         specifier: ^9.39.5
         version: 9.39.5(jiti@1.21.7)(supports-color@8.1.1)
@@ -491,9 +485,6 @@ importers:
       '@vllnt/typescript':
         specifier: ^2.0.0
         version: 2.0.0(typescript@6.0.3)
-      babel-jest:
-        specifier: ^29.7.0
-        version: 29.7.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
       eslint:
         specifier: ^9.39.5
         version: 9.39.5(jiti@1.21.7)(supports-color@8.1.1)
