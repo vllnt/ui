@@ -14,8 +14,8 @@ blockExoticSubdeps: true
 # Refuse a version whose publish trust (provenance / trusted publisher) is
 # weaker than an earlier release of the same package.
 trustPolicy: no-downgrade
-# Exact versions that lost publish trust upstream (Expo SDK 57 patch line,
-# shadcn canary, a few transitive packages). Exact pins: newer releases are checked.
+# Exact versions that lost publish trust upstream (Expo SDK 57 patch line and a
+# few transitive packages). Exact pins: newer releases are checked.
 trustPolicyExclude:
   - "@expo/cli@57.0.32"
   - "@expo/config-plugins@57.0.11"
