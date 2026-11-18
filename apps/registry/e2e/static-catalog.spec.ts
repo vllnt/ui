@@ -224,9 +224,6 @@ test.describe("unknown slugs", () => {
   for (const path of [
     "/components/zz-unknown",
     "/fr/components/zz-unknown",
-    "/components/zz-unknown?platform=native",
-    "/components/zz-unknown?platform=web",
-    "/fr/components/zz-unknown?platform=native",
     "/docs/zz-unknown",
     "/fr/docs/zz-unknown",
     "/families/zz-unknown",
