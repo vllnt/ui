@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { publicVariant, variantPathname } from "./platform-variant";
+import {
+  publicPagePathname,
+  publicVariant,
+  variantPathname,
+} from "./platform-variant";
 
 describe("variantPathname", () => {
   it.each([
@@ -61,5 +65,20 @@ describe("publicVariant", () => {
       pathname: "/fr/components/button",
       platform: "native",
     });
+  });
+});
+
+describe("publicPagePathname", () => {
+  it.each([
+    ["/p/native/components/button", "/components/button"],
+    ["/p/web/components", "/components"],
+    ["/en/p/native/docs/installation", "/docs/installation"],
+    ["/fr/p/native/families/ai", "/fr/families/ai"],
+    ["/components/button", "/components/button"],
+    ["/fr/components/button", "/fr/components/button"],
+    ["/", "/"],
+    ["/pricing", "/pricing"],
+  ])("renders %s as %s", (pathname, expected) => {
+    expect(publicPagePathname(pathname)).toBe(expected);
   });
 });

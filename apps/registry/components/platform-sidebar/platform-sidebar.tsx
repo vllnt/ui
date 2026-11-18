@@ -13,7 +13,7 @@ import {
   type PlatformContext,
   withPlatformQuery,
 } from "@/lib/platform";
-import { publicVariant } from "@/lib/platform-variant";
+import { publicPagePathname } from "@/lib/platform-variant";
 
 import nativeManifest from "../../../../packages/ui-native/registry.json";
 
@@ -38,10 +38,7 @@ function usePublicPathname(): string {
   const locale = useLocale();
   const pathname = usePathname();
 
-  return getPathname({
-    href: publicVariant(pathname)?.pathname ?? pathname,
-    locale,
-  });
+  return getPathname({ href: publicPagePathname(pathname), locale });
 }
 
 /** Preserves capability-filter and unrelated query state across sidebar links. */

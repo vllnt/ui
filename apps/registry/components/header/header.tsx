@@ -23,6 +23,7 @@ import {
   useRouter,
 } from "@/i18n/routing";
 import { getPlatform, withPlatformQuery } from "@/lib/platform";
+import { publicPagePathname } from "@/lib/platform-variant";
 import { localizePathname } from "@/lib/seo";
 import registryData from "@/registry.json";
 
@@ -41,7 +42,7 @@ const NO_QUERY = new URLSearchParams();
  */
 export function Header({ locale }: HeaderProps) {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = publicPagePathname(usePathname());
   const searchParameters = useForwardedQuery() ?? NO_QUERY;
   const common = useTranslations("common");
   const t = useTranslations("header");

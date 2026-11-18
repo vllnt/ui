@@ -109,3 +109,18 @@ export function publicVariant(
 
   return { pathname: `${prefix}${rest}`, platform: variant };
 }
+
+/**
+ * The pathname a visitor sees for the current page. A platform variant renders
+ * under its private route, so shell links built from the route would point at
+ * a private URL.
+ *
+ * @param pathname - pathname of the current route, with or without a locale
+ * @returns The public pathname, or `pathname` unchanged for a public route
+ * @example
+ * publicPagePathname("/p/native/components/button"); // "/components/button"
+ * publicPagePathname("/components/button"); // "/components/button"
+ */
+export function publicPagePathname(pathname: string): string {
+  return publicVariant(pathname)?.pathname ?? pathname;
+}
