@@ -95,9 +95,13 @@ export default function middleware(request: NextRequest): NextResponse {
    * next-intl sets NEXT_LOCALE on any document request whose locale differs
    * from Accept-Language, which includes every crawler. Public GETs must stay
    * cookie-free so a CDN can cache them; the language switcher writes the cookie
-   * in the browser when a visitor picks a language.
+   * in the browser when a visitor picks a language. The cookie travels in two
+   * headers: `set-cookie` on the response, and `x-middleware-set-cookie`, which
+   * Next re-emits as `set-cookie` on whatever route answers after the middleware
+   * (a page that redirects, for example).
    */
   response.headers.delete("set-cookie");
+  response.headers.delete("x-middleware-set-cookie");
 
   return platformVariant(request, response);
 }
