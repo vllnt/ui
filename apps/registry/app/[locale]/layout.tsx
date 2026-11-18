@@ -12,6 +12,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import type React from "react";
 
+import { ForwardedQueryProvider } from "@/components/forwarded-query";
 import { Header } from "@/components/header";
 import { routing } from "@/i18n/routing";
 import {
@@ -142,13 +143,18 @@ export default async function LocaleLayout({ children, params }: Props) {
           <SidebarProvider>
             <div className="flex h-full flex-col overflow-hidden">
               <NextIntlClientProvider>
-                <Header locale={locale} />
-                <div className="flex flex-1 overflow-hidden">
-                  <script
-                    {...jsonLdScriptAttributes([organizationLd(), websiteLd()])}
-                  />
-                  {children}
-                </div>
+                <ForwardedQueryProvider>
+                  <Header locale={locale} />
+                  <div className="flex flex-1 overflow-hidden">
+                    <script
+                      {...jsonLdScriptAttributes([
+                        organizationLd(),
+                        websiteLd(),
+                      ])}
+                    />
+                    {children}
+                  </div>
+                </ForwardedQueryProvider>
               </NextIntlClientProvider>
             </div>
           </SidebarProvider>

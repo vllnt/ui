@@ -1,29 +1,29 @@
-"use client";
+import { getTranslations } from "next-intl/server";
 
-import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
-
-import { Link, usePathname } from "@/i18n/routing";
-import { getPlatform, withPlatformQuery } from "@/lib/platform";
+import { Link } from "@/i18n/routing";
+import { type PlatformContext, withPlatformQuery } from "@/lib/platform";
 import type { ComponentPlatform } from "@/lib/registry";
 
 type PlatformSelectorProps = {
   readonly className?: string;
   readonly includeAll?: boolean;
+  /** Unlocalized pathname of the page the options link to. */
+  readonly pathname: string;
+  /** Platform the page shows; `undefined` means the full catalog. */
+  readonly platform: PlatformContext;
 };
 
-/** URL-backed filter for component implementation availability. */
-export function PlatformSelector({
+/**
+ * Filter for component implementation availability. The links point at the
+ * platform variants of the current page, so it renders on prerendered pages.
+ */
+export async function PlatformSelector({
   className,
   includeAll = false,
+  pathname,
+  platform,
 }: PlatformSelectorProps) {
-  const pathname = usePathname();
-  const searchParameters = useSearchParams();
-  const t = useTranslations("common");
-  const selected = getPlatform(
-    searchParameters.get("platform") ?? undefined,
-    includeAll ? "all" : "web",
-  );
+  const t = await getTranslations("common");
   const allOption: {
     label: string;
     platform: "all" | ComponentPlatform;
@@ -51,16 +51,12 @@ export function PlatformSelector({
       }
     >
       {options.map((option) => {
-        const active = option.platform === (selected ?? "all");
+        const active = option.platform === (platform ?? "all");
         return (
           <Link
             aria-current={active ? "page" : undefined}
             className="inline-flex min-h-11 shrink-0 items-center rounded-sm px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-foreground aria-[current=page]:text-background"
-            href={withPlatformQuery(
-              pathname,
-              searchParameters,
-              option.platform,
-            )}
+            href={withPlatformQuery(pathname, {}, option.platform)}
             key={option.platform}
           >
             {option.label}
