@@ -1,21 +1,28 @@
 import { notFound } from "next/navigation";
 
-import ComponentPage from "@/app/[locale]/components/[slug]/page";
-import { isPlatformVariant } from "@/lib/platform-variant";
+import ComponentPage, {
+  generateStaticParams as componentStaticParameters,
+} from "@/app/[locale]/components/[slug]/page";
+import { isPlatformVariant, PLATFORM_VARIANTS } from "@/lib/platform-variant";
 
 type Props = Parameters<typeof ComponentPage>[0];
 
 export { generateMetadata } from "@/app/[locale]/components/[slug]/page";
 
+export const dynamicParams = false;
 export const revalidate = 86_400;
 
 /**
- * The first request for a variant copy renders and caches it. Building 2
- * platforms x 2 locales x every component up front would multiply the build
- * time for pages with low traffic.
+ * Both platforms for every component and locale. The clean URL shows the full
+ * catalog, so `web` and `native` each differ from it and each needs a copy.
+ * Docs and families need one copy, `native`: their clean URL already shows `web`.
  */
-export function generateStaticParams(): Record<string, string>[] {
-  return [];
+export async function generateStaticParams() {
+  const parameters = await componentStaticParameters();
+
+  return PLATFORM_VARIANTS.flatMap((platform) =>
+    parameters.map((entry) => ({ ...entry, platform })),
+  );
 }
 
 export default async function PlatformComponentPage(props: Props) {

@@ -60,6 +60,13 @@ const STORYBOOK_URL =
 
 export const revalidate = 86_400;
 
+/**
+ * `generateStaticParams` below covers every component, so an unknown slug gets
+ * a 404 that no cache stores. Without this flag, each unknown slug would render
+ * once and keep its 404 for a day.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const slugs = registry.items.map((item) => item.name);
 

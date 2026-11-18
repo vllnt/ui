@@ -38,6 +38,9 @@ type Props = {
 
 export const revalidate = 86_400;
 
+/** `generateStaticParams` covers every family, so an unknown category is a 404 that no cache stores. */
+export const dynamicParams = false;
+
 function findFamily(category: string) {
   return groupedComponents.find((group) => group.category === category);
 }

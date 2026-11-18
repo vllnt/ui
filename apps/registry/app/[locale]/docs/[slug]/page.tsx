@@ -29,6 +29,9 @@ type Props = {
 
 export const revalidate = 86_400;
 
+/** `generateStaticParams` covers every docs page, so an unknown slug is a 404 that no cache stores. */
+export const dynamicParams = false;
+
 export function generateStaticParams(): { locale: Locale; slug: string }[] {
   return routing.locales.flatMap((locale) =>
     DOCS_PAGES.map((page) => ({ locale, slug: page.slug })),
