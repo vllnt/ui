@@ -16,21 +16,50 @@ test.describe("health check", () => {
   });
 });
 
-test.describe("public pages stay cookie-free and cacheable", () => {
-  for (const path of [
-    "/",
-    "/components",
-    "/components/button",
-    "/fr/components/button",
-    "/docs/installation",
-    "/families/form",
-  ]) {
-    test(`${path} sets no cookie`, async ({ request }) => {
-      const response = await request.get(path);
+const LANGUAGE_HEADERS: {
+  readonly headers: Record<string, string>;
+  readonly label: string;
+}[] = [
+  { label: "no Accept-Language", headers: {} },
+  { label: "Accept-Language en", headers: { "accept-language": "en" } },
+  { label: "Accept-Language fr", headers: { "accept-language": "fr" } },
+];
 
-      expect(response.status()).toBe(200);
-      expect(response.headers()["set-cookie"]).toBeUndefined();
-    });
+test.describe("public pages stay cookie-free and cacheable", () => {
+  for (const { headers, label } of LANGUAGE_HEADERS) {
+    for (const path of [
+      "/",
+      "/components",
+      "/components/button",
+      "/fr/components/button",
+      "/docs/installation",
+      "/families/form",
+    ]) {
+      test(`${path} sets no cookie with ${label}`, async ({ request }) => {
+        const response = await request.get(path, {
+          headers,
+          maxRedirects: 0,
+        });
+
+        expect(response.status()).toBeLessThan(400);
+        expect(response.headers()["set-cookie"]).toBeUndefined();
+      });
+    }
+
+    for (const path of ["/native", "/fr/native", "/native?platform=web"]) {
+      test(`${path} redirects without a cookie with ${label}`, async ({
+        request,
+      }) => {
+        const response = await request.get(path, {
+          headers,
+          maxRedirects: 0,
+        });
+
+        expect(response.status()).toBeGreaterThanOrEqual(300);
+        expect(response.status()).toBeLessThan(400);
+        expect(response.headers()["set-cookie"]).toBeUndefined();
+      });
+    }
   }
 
   for (const path of [
@@ -165,4 +194,55 @@ test.describe("platform variants", () => {
 
     expect(response.status()).toBe(404);
   });
+
+  test("language links on a variant page point at public URLs", async ({
+    request,
+  }) => {
+    for (const path of [
+      "/components/button?platform=native",
+      "/components/button?platform=web",
+      "/fr/components/button?platform=native",
+      "/families?platform=native",
+      "/docs/installation?platform=native",
+    ]) {
+      const response = await request.get(path);
+      const header = /<header[\s\S]*?<\/header>/.exec(await response.text());
+
+      expect(header?.[0], path).toBeDefined();
+      expect(header?.[0], path).not.toContain("/p/native");
+      expect(header?.[0], path).not.toContain("/p/web");
+    }
+  });
+});
+
+/**
+ * With `dynamicParams = false` an unknown slug gets the shared `_not-found`
+ * prerender. Its `x-nextjs-cache: HIT` header names that one entry, not a new
+ * entry per slug, so the check is on `Cache-Control`, the header a CDN obeys.
+ */
+test.describe("unknown slugs", () => {
+  for (const path of [
+    "/components/zz-unknown",
+    "/fr/components/zz-unknown",
+    "/components/zz-unknown?platform=native",
+    "/components/zz-unknown?platform=web",
+    "/fr/components/zz-unknown?platform=native",
+    "/docs/zz-unknown",
+    "/fr/docs/zz-unknown",
+    "/families/zz-unknown",
+    "/fr/families/zz-unknown",
+    "/families/zz-unknown?platform=native",
+  ]) {
+    test(`${path} is a 404 that no cache keeps`, async ({ request }) => {
+      for (const attempt of [1, 2]) {
+        const response = await request.get(path);
+
+        expect(response.status(), `attempt ${attempt.toString()}`).toBe(404);
+        const cacheControl = response.headers()["cache-control"] ?? "";
+
+        expect(cacheControl).not.toMatch(/s-maxage/);
+        expect(cacheControl).toMatch(/no-store/);
+      }
+    });
+  }
 });
