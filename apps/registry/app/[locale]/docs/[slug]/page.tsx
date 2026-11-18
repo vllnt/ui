@@ -19,18 +19,18 @@ import {
 } from "@/lib/jsonld";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
 import { frontmatterPageMetadata } from "@/lib/og";
-import {
-  getPlatform,
-  type PlatformQuery,
-  withPlatformQuery,
-} from "@/lib/platform";
+import { getPlatform, withPlatformQuery } from "@/lib/platform";
 import { canonical, localizePathname } from "@/lib/seo";
 import { getSidebarSections } from "@/lib/sidebar-sections";
 
 type Props = {
-  params: Promise<{ locale: Locale; slug: string }>;
-  searchParams: Promise<PlatformQuery>;
+  params: Promise<{ locale: Locale; platform?: string; slug: string }>;
 };
+
+export const revalidate = 86_400;
+
+/** `generateStaticParams` covers every docs page, so an unknown slug is a 404 that no cache stores. */
+export const dynamicParams = false;
 
 export function generateStaticParams(): { locale: Locale; slug: string }[] {
   return routing.locales.flatMap((locale) =>
@@ -77,10 +77,7 @@ async function readChangelog(): Promise<string> {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const [{ locale, slug }, searchParameters] = await Promise.all([
-    props.params,
-    props.searchParams,
-  ]);
+  const { locale, platform: platformParameter, slug } = await props.params;
   const docsPage = getDocsPage(slug);
 
   if (!docsPage) {
@@ -91,7 +88,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const platform =
     docsPage.slug === "installation"
-      ? getPlatform(searchParameters.platform, "web")
+      ? getPlatform(platformParameter, "web")
       : undefined;
   const contentSlug = platform === "native" ? "native" : docsPage.slug;
   const { frontmatter } = await getPageContent(`docs/${contentSlug}`, locale);
@@ -103,10 +100,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function DocsSlugPage(props: Props) {
-  const [{ locale, slug }, searchParameters] = await Promise.all([
-    props.params,
-    props.searchParams,
-  ]);
+  const { locale, platform: platformParameter, slug } = await props.params;
   setRequestLocale(locale);
 
   const docsPage = getDocsPage(slug);
@@ -117,7 +111,7 @@ export default async function DocsSlugPage(props: Props) {
 
   const platform =
     docsPage.slug === "installation"
-      ? getPlatform(searchParameters.platform, "web")
+      ? getPlatform(platformParameter, "web")
       : undefined;
   const contentSlug = platform === "native" ? "native" : docsPage.slug;
   const { content, frontmatter } = await getPageContent(
@@ -149,8 +143,14 @@ export default async function DocsSlugPage(props: Props) {
           }),
         ])}
       />
-      <PlatformSidebar sections={await getSidebarSections(undefined, locale)} />
-      <main className="flex-1 overflow-y-auto bg-background">
+      <PlatformSidebar
+        platform={getPlatform(platformParameter, "all")}
+        sections={await getSidebarSections(undefined, locale)}
+      />
+      <main
+        className="flex-1 overflow-y-auto bg-background"
+        data-pagefind-ignore={platformParameter === undefined ? undefined : ""}
+      >
         <div className="container mx-auto px-4 py-16 lg:px-8">
           <div className="mb-8">
             <Breadcrumb
@@ -166,7 +166,11 @@ export default async function DocsSlugPage(props: Props) {
               {frontmatter.description}
             </p>
             {docsPage.slug === "installation" ? (
-              <PlatformSelector className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1" />
+              <PlatformSelector
+                className="mt-6 flex min-h-11 w-fit max-w-full items-center gap-1 overflow-x-auto rounded-md border border-border p-1"
+                pathname={getDocsPath(docsPage)}
+                platform={platform}
+              />
             ) : null}
           </div>
 
