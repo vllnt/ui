@@ -124,6 +124,7 @@ Read these in order. Each is BLOCKING — violations keep a PR in draft.
 
 | File | What |
 |------|------|
+| [`docs/agents/LANES.md`](./docs/agents/LANES.md) | Web and native lanes: who owns which paths, shared-change requests, merge order, CI by lane. **Read before touching a path outside your lane.** |
 | [`docs/agents/RULES.md`](./docs/agents/RULES.md) | The 15 BLOCKING rules — process + code quality. **Read first.** |
 | [`docs/agents/PR_PLAYBOOK.md`](./docs/agents/PR_PLAYBOOK.md) | Ship checklist: diff sanity → gates → evidence → body refresh → ready |
 | [`docs/agents/COMPONENTS.md`](./docs/agents/COMPONENTS.md) | Component patterns: ref-as-prop + displayName, semantic root, ARIA, events, props |

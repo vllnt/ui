@@ -2,7 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    # s3/** integration branches get the same gates as main, so a combined branch is never
+    # merged into main untested.
+    branches: [main, "s3/**"]
   push:
     branches: [main]
 
@@ -14,8 +16,32 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  quality:
-    name: Quality Gates
+  # Node built-ins only: no install, fails fast, and runs on every PR whatever it touches
+  # (the publish workflows and release scripts included).
+  repo:
+    name: Repo Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Check release guard
+        run: node --test scripts/release-guard.test.mjs
+
+      - name: Check the atomic level checker
+        run: node --test scripts/check-atomic-levels.test.mjs
+
+  # WEB lane (docs/agents/LANES.md): @vllnt/ui, the registry and Storybook, plus the shared
+  # packages they build on.
+  web:
+    name: Web Quality Gates
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -29,11 +55,6 @@ jobs:
           node-version-file: .node-version
           cache: pnpm
 
-      # Node built-ins only, so it needs no install and fails fast. This job is not gated
-      # by "Detect affected areas", so it covers PRs touching the publish workflows too.
-      - name: Check release guard
-        run: node --test scripts/release-guard.test.mjs
-
       - run: pnpm install --frozen-lockfile
 
       - name: Lint
@@ -43,13 +64,15 @@ jobs:
         run: pnpm -F @vllnt/ui-registry lint
 
       - name: Check atomic design levels
-        run: node --test scripts/check-atomic-levels.test.mjs && pnpm check:atomic
+        run: pnpm -F @vllnt/ui check:atomic
 
       - name: Typecheck
         run: pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json
 
+      # The web packages and everything they depend on; the native packages build in
+      # "Native Package Gates".
       - name: Build
-        run: pnpm build
+        run: pnpm turbo build --concurrency=2 --filter='@vllnt/ui-registry...' --filter='@vllnt/ui...'
 
       - name: Check bundle size budgets
         run: pnpm -F @vllnt/ui size
@@ -64,7 +87,7 @@ jobs:
         run: pnpm -F @vllnt/ui-registry registry:integrity
 
       - name: Test
-        run: pnpm test:once
+        run: pnpm turbo test:once --concurrency=2 --filter=@vllnt/ui --filter=@vllnt/ui-registry
 
       - name: Check "use client" directives
         run: pnpm -F @vllnt/ui check:use-client
@@ -100,6 +123,7 @@ jobs:
     name: Detect affected areas
     runs-on: ubuntu-latest
     outputs:
+      core: ${{ steps.areas.outputs.core }}
       native: ${{ steps.areas.outputs.native }}
       web: ${{ steps.areas.outputs.web }}
     steps:
@@ -116,17 +140,63 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$EVENT" != "pull_request" ]; then
-            echo "native=true" >> "$GITHUB_OUTPUT"
-            echo "web=true" >> "$GITHUB_OUTPUT"
+            printf 'core=true\nnative=true\nweb=true\n' >> "$GITHUB_OUTPUT"
             exit 0
           fi
           changed=$(git diff --name-only "$BASE" HEAD)
-          shared='^(package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|turbo\.json|\.node-version|\.github/workflows/ci\.yml|packages/design/)'
-          native="$shared|^(packages/ui-core/|packages/ui-native/|apps/native-catalog/|scripts/check-atomic-levels)"
-          web="$shared|^(packages/ui/|packages/ui-core/|packages/ui-native/|apps/registry/)"
-          if grep -qE "$native" <<< "$changed"; then echo "native=true"; else echo "native=false"; fi >> "$GITHUB_OUTPUT"
-          if grep -qE "$web" <<< "$changed"; then echo "web=true"; else echo "web=false"; fi >> "$GITHUB_OUTPUT"
+          # SHARED paths (docs/agents/LANES.md) trigger every lane.
+          shared='^(package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|turbo\.json|\.node-version|\.github/workflows/ci\.yml|packages/design/|packages/ui-core/)'
+          core="$shared"
+          native="$shared|^(packages/ui-native/|apps/native-catalog/|scripts/check-atomic-levels)"
+          web="$shared|^(packages/ui/|apps/registry/|apps/storybook/|scripts/check-atomic-levels)"
+          {
+            if grep -qE "$core" <<< "$changed"; then echo "core=true"; else echo "core=false"; fi
+            if grep -qE "$native" <<< "$changed"; then echo "native=true"; else echo "native=false"; fi
+            if grep -qE "$web" <<< "$changed"; then echo "web=true"; else echo "web=false"; fi
+          } >> "$GITHUB_OUTPUT"
           cat "$GITHUB_OUTPUT"
+
+  # SHARED tokens and @vllnt/ui-core, which both lanes consume.
+  core:
+    name: Core Quality Gates
+    needs: changes
+    if: needs.changes.outputs.core == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile --filter '@vllnt/ui-core...' --filter '@vllnt/design-source...'
+
+      - name: Check generated tokens are in sync
+        run: pnpm tokens:check
+
+      - name: Lint and test the token source
+        run: pnpm -F @vllnt/design-source lint && pnpm -F @vllnt/design-source test:once
+
+      - name: Lint ui-core
+        run: pnpm -F @vllnt/ui-core lint
+
+      - name: Typecheck ui-core
+        run: pnpm -F @vllnt/ui-core typecheck
+
+      - name: Build ui-core
+        run: pnpm -F @vllnt/ui-core build
+
+      - name: Test ui-core
+        run: pnpm -F @vllnt/ui-core test:once
+
+      - name: Check the ui-core package contents
+        run: pnpm -F @vllnt/ui-core pack:check
 
   native:
     name: Native Package Gates
@@ -186,3 +256,21 @@ jobs:
           name: playwright-report
           path: apps/registry/playwright-report
           retention-days: 7
+
+  # One always-reporting check for branch protection: it passes when every lane job either
+  # passed or was skipped as unaffected, and fails on any failure or cancellation.
+  required:
+    name: required
+    if: always()
+    needs: [changes, repo, web, core, native, e2e]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every affected lane passed
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if jq -e 'any(.[]; . == "failure" or . == "cancelled")' <<< "$RESULTS" > /dev/null; then
+            echo "::error::A required CI job failed or was cancelled"
+            exit 1
+          fi
