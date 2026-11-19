@@ -69,8 +69,10 @@ The token file follows `tokens.schema.json`:
   `floating`). Each mode is a list of layers `{ offsetX, offsetY, blur, spread,
   color, inset }`; the generator writes `--shadow-<name>` in both modes and the
   Penpot `shadow` tokens (light in `vllnt/core`, dark in each `<theme>/dark` set).
-- `spacing.page-gutter`, `spacing.page-gutter-wide`: `{ value: "{spacing.N}", role }`
-  aliases of the scale (16 below 1024 px, 32 from 1024 px).
+- `spacing.page-gutter`, `spacing.page-gutter-tablet`, `spacing.page-gutter-desktop`:
+  `{ value: "{spacing.N}", role }` aliases of the scale, the page padding of the
+  shared site shell (20 below 768 px, 48 from 768 px, 96 from 1200 px).
+- `size.page-max`: the maximum width of the page column (1440 px).
 - `size.measure-narrow`: the narrow text column width (480 px).
 - `motion`: allowed durations, easing, and reduced-motion behavior.
 - `iconography`: icon library, sizes, stroke, and color policy.

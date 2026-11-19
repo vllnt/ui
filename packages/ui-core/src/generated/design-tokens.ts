@@ -375,15 +375,20 @@ export const designTokens = {
       "8": "2rem",
       "10": "2.5rem",
       "12": "3rem",
-      "16": "4rem"
+      "16": "4rem",
+      "24": "6rem"
     },
     "page-gutter": {
-      "value": "{spacing.4}",
-      "role": "Horizontal page padding below 1024 px (16)"
+      "value": "{spacing.5}",
+      "role": "Horizontal page padding below 768 px (20)"
     },
-    "page-gutter-wide": {
-      "value": "{spacing.8}",
-      "role": "Horizontal page padding from 1024 px (32)"
+    "page-gutter-tablet": {
+      "value": "{spacing.12}",
+      "role": "Horizontal page padding from 768 px (48)"
+    },
+    "page-gutter-desktop": {
+      "value": "{spacing.24}",
+      "role": "Horizontal page padding from 1200 px (96)"
     }
   },
   "radius": {
@@ -405,6 +410,10 @@ export const designTokens = {
     "measure-narrow": {
       "value": "30rem",
       "role": "Narrow text column width (480), for rich text in a tight container"
+    },
+    "page-max": {
+      "value": "90rem",
+      "role": "Maximum width of the page column (1440), centred; the gutters above are its side padding"
     },
     "target": {
       "min": {
@@ -566,7 +575,7 @@ export const designTokens = {
   "themes": {
     "maia": {
       "label": "Maia",
-      "description": "Maia product theme (Ink): no accent, the primary is the ink colour inverted per mode, black and white neutrals, Inter with JetBrains Mono. Overrides core roles only; every other role inherits core.",
+      "description": "Maia product theme (Ink): no accent, the primary is the ink colour inverted per mode, black and white neutrals, Inter with JetBrains Mono. The primary is pure black (#000000) in light on purpose; core keeps #171717. Overrides core roles only; every other role inherits core.",
       "color": {
         "light": {
           "background": "1 0 0",
@@ -838,7 +847,8 @@ export const nativeTokens = {
     "8": 32,
     "10": 40,
     "12": 48,
-    "16": 64
+    "16": 64,
+    "24": 96
   },
   "typography": {
     "fontWeight": {
@@ -1259,7 +1269,8 @@ export const tamaguiTokens = {
     "8": 32,
     "10": 40,
     "12": 48,
-    "16": 64
+    "16": 64,
+    "24": 96
   },
   "space": {
     "1": 4,
@@ -1271,7 +1282,8 @@ export const tamaguiTokens = {
     "8": 32,
     "10": 40,
     "12": 48,
-    "16": 64
+    "16": 64,
+    "24": 96
   },
   "zIndex": {
     "0": 0,

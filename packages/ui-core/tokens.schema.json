@@ -75,12 +75,19 @@
     },
     "spacing": {
       "type": "object",
-      "required": ["unit", "scale", "page-gutter", "page-gutter-wide"],
+      "required": [
+        "unit",
+        "scale",
+        "page-gutter",
+        "page-gutter-tablet",
+        "page-gutter-desktop"
+      ],
       "properties": {
         "unit": { "$ref": "#/$defs/cssLength" },
         "scale": { "$ref": "#/$defs/stringMap" },
         "page-gutter": { "$ref": "#/$defs/token" },
-        "page-gutter-wide": { "$ref": "#/$defs/token" }
+        "page-gutter-tablet": { "$ref": "#/$defs/token" },
+        "page-gutter-desktop": { "$ref": "#/$defs/token" }
       },
       "additionalProperties": false
     },

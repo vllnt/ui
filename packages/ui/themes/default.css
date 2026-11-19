@@ -61,10 +61,12 @@
   --line-height-label: 1.4;
   --radius-control: 0.375rem;
   --radius-surface: 0.5rem;
-  --spacing-page-gutter: 1rem;
-  --spacing-page-gutter-wide: 2rem;
+  --spacing-page-gutter: 1.25rem;
+  --spacing-page-gutter-tablet: 3rem;
+  --spacing-page-gutter-desktop: 6rem;
   --size-control-xs: 2rem;
   --size-measure-narrow: 30rem;
+  --size-page-max: 90rem;
   --size-target-min: 2.75rem;
   --opacity-grain: 1;
   --opacity-contact: 1;

@@ -95,7 +95,7 @@ const mapValues = (object, map) =>
 const radiusRoles = ["control", "surface"];
 
 /** Page gutter spacing tokens (F5): aliases of a spacing scale step, named as in the Penpot libraries. */
-const spacingRoles = ["page-gutter", "page-gutter-wide"];
+const spacingRoles = ["page-gutter", "page-gutter-tablet", "page-gutter-desktop"];
 
 /** The scale step inside a `{spacing.4}` reference. */
 const spacingStep = (reference) => /^\{spacing\.([0-9]+)\}$/.exec(reference)?.[1];

@@ -116,12 +116,12 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 | Danger text | `--destructive` on background, card, popover, muted, and on its own 10% tint (`bg-destructive/10`) | 4.5:1 |
 | Status text | `--success`, `--warning`, `--info` on background, card, popover, muted, and on their own 10% tint | 4.5:1 |
 | Diff text | `--foreground` on `--diff-added` and `--diff-removed` | 4.5:1 |
-| Control boundary | `--input` against background, card, popover | 3:1 |
+| Control boundary | `--input` against background, card, popover, muted | 3:1 |
 | Focus ring | `--ring` against background | 3:1 |
 
 Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.00 (dark, on muted);
 destructive text 5.41 / 4.96 (light), 7.26 / 5.23 (dark, on background / muted);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light), 3.83 (dark) on background, 3.69 (light), 3.61 (dark) on card and popover (on muted: 3.39 light, 2.76 dark, below 3:1 and outside the rule);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light), 3.83 (dark) on background, 3.69 (light), 3.61 (dark) on card and popover, 3.39 (light), 2.76 (dark) on muted (dark muted at #262626 misses 3:1; with muted #000000 it is 3.83);
 success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 8.07 / 8.56 / 6.62 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
 foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
@@ -131,6 +131,7 @@ foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (da
 - Text on `bg-primary` / `bg-secondary` / `bg-accent` / `bg-destructive` / `bg-success` / `bg-warning` / `bg-info` uses that surface's `*-foreground`. `--muted-foreground` is only guaranteed on background, card, popover, and muted.
 - Put light text on a destructive fill with `text-destructive-foreground`, never `text-white`: dark mode pairs a light red with dark text.
 - New themes and presets must pass the contract test before merging. Keep new values inside the sRGB gamut so the measured ratio matches what renders.
+- The muted row of the control-boundary rule holds for the default, Maia and PaaS themes. All 12 presets in `themes/presets.css` miss it in both modes (`--input` on `--muted` is 2.48:1 to 2.81:1); they are listed as known gaps in `theme-contrast.test.ts`, tracked in https://github.com/vllnt/ui/issues/618. A new preset has to meet it.
 - Hand-written presets in `themes/presets.css` do not define the status or diff roles; they inherit the default theme's. On five presets (dracula, synthwave, nord, claude, dusk) those inherited tones fall below 4.5:1 on some preset surfaces, so use the status roles with a preset only after checking the pair (tracked in [#579](https://github.com/vllnt/ui/issues/579)). Product themes define every role. The theme switcher and `useThemePreset` do not know the product themes yet (also #579).
 
 ### Product themes
@@ -139,7 +140,7 @@ A product theme is a named override layer on the core tokens, authored in the `t
 
 | Theme | `data-theme` | Identity |
 |-------|--------------|----------|
-| Maia | `maia` | Ink: no accent, `--primary` is the ink colour (#000000 light, #FFFFFF dark) on white / black, core Inter + JetBrains Mono, weights 400 to 600, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
+| Maia | `maia` | Ink: no accent, `--primary` is the ink colour (#000000 light, #FFFFFF dark; pure black on purpose, while core `--primary` stays #171717 in light) on white / black, core Inter + JetBrains Mono, weights 400 to 600, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
 | PaaS | `paas` | Core neutrals and status tones, JetBrains Mono for sans, display and mono. Dark is the design default; light works too. No accent: `--primary` stays the core neutral |
 
 Maia's palette comes from a Penpot export kept for review in `packages/design/sources/` (the generator never reads it). That copy is the 8 Nov pink export. Maia is now Ink (owner decision, 11 Nov): the export's `accent` no longer becomes `--primary`, its Figtree faces and its 700 weights are not used, and every other value still follows it. Its product-specific names map onto core roles:
@@ -225,17 +226,20 @@ Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/
 | `space-10` | 40px | Large control height, loose section break |
 | `space-12` | 48px | Page section |
 | `space-16` | 64px | Hero / landing block |
+| `space-24` | 96px | Page gutter from 1200 px |
 
 **Rules**
 - Stay on the scale. Never `gap-[7px]` etc.
 - One axis at a time on flex children — use `gap-y-N` or `gap-x-N`, not `gap-N` when only one axis is needed.
 
-**Page gutter.** Two role tokens alias the scale for the horizontal page padding. Read them instead of repeating `px-4` / `px-8`.
+**Page column.** Three role tokens alias the scale for the horizontal page padding, and one sets the column's maximum width. They equal the page column of the live shared site shell (20 px, 48 px from 768 px, 96 px from 1200 px, at most 1440 px wide), so the Penpot libraries, which follow these values, and the shell agree. Read them instead of repeating `px-5` / `px-12` / `px-24`. The breakpoints (768, 1200) belong to the shell and are not tokens.
 
 | Token | CSS variable | Value | Use |
 |-------|--------------|-------|-----|
-| `spacing.page-gutter` | `--spacing-page-gutter` | 16px (`space-4`) | Page padding below 1024 px |
-| `spacing.page-gutter-wide` | `--spacing-page-gutter-wide` | 32px (`space-8`) | Page padding from 1024 px |
+| `spacing.page-gutter` | `--spacing-page-gutter` | 20px (`space-5`) | Page padding below 768 px |
+| `spacing.page-gutter-tablet` | `--spacing-page-gutter-tablet` | 48px (`space-12`) | Page padding from 768 px |
+| `spacing.page-gutter-desktop` | `--spacing-page-gutter-desktop` | 96px (`space-24`) | Page padding from 1200 px |
+| `size.page-max` | `--size-page-max` | 1440px (90rem) | Maximum width of the page column |
 
 **Narrow measure.** `size.measure-narrow` (`--size-measure-narrow`, 480px) is the width of a narrow text column, for rich text in a tight container.
 

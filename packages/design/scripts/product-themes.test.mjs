@@ -153,7 +153,8 @@ describe("penpot-tokens.json", () => {
  * the ink colour inverted per mode, Inter, no weight 700. The export copy in
  * `sources/` is the 8 Nov pink export, so three things no longer follow it: the
  * primary (its `accent`), the sans and display faces, and the 700 weights. Every
- * other value is still checked against it.
+ * other value is still checked against it. The light primary is pure black
+ * (#000000) on purpose (owner, 19 Nov 2026); core keeps #171717.
  */
 const inkPrimary = { dark: "#FFFFFF", light: "#000000" };
 

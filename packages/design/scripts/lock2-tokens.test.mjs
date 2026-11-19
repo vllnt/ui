@@ -280,19 +280,46 @@ describe("shadow tokens (K-shadow-overlay)", () => {
   });
 });
 
-describe("spacing.page-gutter and spacing.page-gutter-wide (F5)", () => {
-  it("aliases spacing steps 4 (16) and 8 (32) in vllnt/core", () => {
+/**
+ * The page column of the live shared site shell: side padding 20 px, 48 px from
+ * 768 px and 96 px from 1200 px, at most 1440 px wide. The tokens equal those
+ * numbers, so the Penpot libraries (which follow the code values) and the shell
+ * agree. The breakpoints are the shell's own and are not tokens.
+ */
+describe("page column tokens (spacing.page-gutter, -tablet, -desktop and size.page-max)", () => {
+  const gutters = [
+    ["page-gutter", "5", "20", "1.25rem"],
+    ["page-gutter-tablet", "12", "48", "3rem"],
+    ["page-gutter-desktop", "24", "96", "6rem"],
+  ];
+
+  it("aliases spacing steps 5, 12 and 24 in vllnt/core", () => {
     const spacing = penpot["vllnt/core"].spacing;
-    assert.deepEqual(spacing["page-gutter"], { $type: "spacing", $value: "{spacing.4}" });
-    assert.deepEqual(spacing["page-gutter-wide"], { $type: "spacing", $value: "{spacing.8}" });
-    assert.equal(spacing[4].$value, "16");
-    assert.equal(spacing[8].$value, "32");
+    for (const [name, step, pixels] of gutters) {
+      assert.deepEqual(spacing[name], { $type: "spacing", $value: `{spacing.${step}}` }, name);
+      assert.equal(spacing[step].$value, pixels, `spacing.${step}`);
+    }
   });
 
-  it("exposes both as CSS variables with the resolved length", () => {
+  it("no longer carries the 16 / 32 pair", () => {
+    assert.equal(penpot["vllnt/core"].spacing["page-gutter-wide"], undefined);
     for (const css of [defaultCss, stylesCss]) {
-      assert.match(css, /--spacing-page-gutter: 1rem;/);
-      assert.match(css, /--spacing-page-gutter-wide: 2rem;/);
+      assert.doesNotMatch(css, /--spacing-page-gutter-wide/);
+    }
+  });
+
+  it("exposes each as a CSS variable with the resolved length", () => {
+    for (const css of [defaultCss, stylesCss]) {
+      for (const [name, , , length] of gutters) {
+        assert.match(css, new RegExp(`--spacing-${name}: ${length};`), name);
+      }
+    }
+  });
+
+  it("sets size.page-max to 1440 in vllnt/core and 90rem in CSS", () => {
+    assert.deepEqual(penpot["vllnt/core"].size["page-max"], { $type: "sizing", $value: "1440" });
+    for (const css of [defaultCss, stylesCss]) {
+      assert.match(css, /--size-page-max: 90rem;/);
     }
   });
 });
@@ -350,6 +377,11 @@ describe("Maia Ink (K-ink-regen)", () => {
       const { color } = penpot[`vllnt/maia/${mode}`];
       assert.equal(color.primary.$value, color.foreground.$value, mode);
     }
+  });
+
+  it("keeps the light primary pure black on purpose, while core keeps #171717", () => {
+    assert.equal(penpot["vllnt/maia/light"].color.primary.$value, "#000000");
+    assert.equal(penpot["vllnt/paas/light"].color.primary.$value, "#171717");
   });
 
   it("carries no Figtree and none of the old pink accent hexes in the tokens or the stylesheets", () => {

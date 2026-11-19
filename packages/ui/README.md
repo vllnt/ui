@@ -203,8 +203,9 @@ once near the root to restore the saved preset before paint.
 <html data-theme="maia" class="dark">
 ```
 
-- `maia` (Ink): no accent; `--primary` is the ink colour (black in light, white
-  in dark). Core Inter plus JetBrains Mono, weights 400 to 600, tighter type
+- `maia` (Ink): no accent; `--primary` is the ink colour (pure black `#000000`
+  in light on purpose, while core keeps `#171717`; white in dark). Core Inter
+  plus JetBrains Mono, weights 400 to 600, tighter type
   scale and radius. Its Label step is capitals in the design: add `uppercase`
   where you use it.
 - `paas`: core neutrals and status tones in JetBrains Mono. Dark is the design

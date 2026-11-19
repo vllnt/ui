@@ -248,6 +248,10 @@
         "$value": "480",
         "$type": "sizing"
       },
+      "page-max": {
+        "$value": "1440",
+        "$type": "sizing"
+      },
       "target": {
         "min": {
           "$value": "44",
@@ -296,12 +300,20 @@
         "$value": "64",
         "$type": "spacing"
       },
-      "page-gutter": {
-        "$value": "{spacing.4}",
+      "24": {
+        "$value": "96",
         "$type": "spacing"
       },
-      "page-gutter-wide": {
-        "$value": "{spacing.8}",
+      "page-gutter": {
+        "$value": "{spacing.5}",
+        "$type": "spacing"
+      },
+      "page-gutter-tablet": {
+        "$value": "{spacing.12}",
+        "$type": "spacing"
+      },
+      "page-gutter-desktop": {
+        "$value": "{spacing.24}",
         "$type": "spacing"
       }
     }

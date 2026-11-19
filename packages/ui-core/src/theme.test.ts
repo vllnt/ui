@@ -184,6 +184,7 @@ describe("generated design contracts", () => {
     expect(nativeTokens.spacing[1]).toBe(4);
     expect(nativeTokens.spacing[4]).toBe(16);
     expect(nativeTokens.spacing[16]).toBe(64);
+    expect(nativeTokens.spacing[24]).toBe(96);
     expect(nativeTokens.radius).toMatchObject({ full: 9999, md: 8 });
     expect(nativeTokens.typography.scale.body).toEqual({
       fontSize: 16,
@@ -226,6 +227,7 @@ describe("product themes", () => {
     expect(dark.background).toBe("#000000");
     expect(light.primary).toBe("#000000");
     expect(light.primary).toBe(light.foreground);
+    expect(lightTheme.colors.primary).toBe("#171717");
     expect(light.background).toBe("#ffffff");
     expect(dark.accent).toBe(dark.muted);
     expect(light.accent).toBe(light.muted);
