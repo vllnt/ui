@@ -159,7 +159,7 @@ function LifespanBar({
   return (
     <div
       aria-label={`${label}: ${formatYear(birthYear) ?? ""} – ${formatYear(deathYear) ?? ""}`}
-      className="relative mt-2 h-1.5 w-full rounded-full bg-muted"
+      className="relative mt-2 h-1.5 w-full rounded-full bg-secondary"
       role="img"
     >
       <span

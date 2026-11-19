@@ -35,10 +35,16 @@ const [designTokens, componentContracts] = await Promise.all([
   parseJson(paths.contracts),
 ]);
 
-// Renderer-specific adjustment: DESIGN.md bans pure-black backgrounds on native.
+// Renderer-specific adjustment: the pure-black dark surfaces are web-only for
+// now. The native base palette keeps its #050505 page and the lifted card,
+// popover and muted values, because native components draw tracks and
+// skeletons with `muted` alone and would vanish on a near-black page.
 const nativeColorOverrides = {
   dark: {
     background: "#050505",
+    card: "#0a0a0a",
+    popover: "#0a0a0a",
+    muted: "#262626",
   },
   light: {},
 };

@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
@@ -10,9 +11,15 @@ export function assertNativeCanary(version) {
   return version;
 }
 
-/** Web 0.3.x and 0.4.x may publish stable; newer bases need a separately reviewed change. */
+/**
+ * Web 0.3.x and 0.4.x may publish stable; newer bases need a separately reviewed change.
+ * Stable publishes only from its own `v<version>` tag push; every other mode only from main.
+ * That the tagged commit is on main needs git history, so the workflow checks it.
+ */
 export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
-  if (ref !== "refs/heads/main") throw new Error("Publication requires main");
+  if (mode === "stable") {
+    if (ref !== `refs/tags/v${web}`) throw new Error(`Stable publication requires tag v${web}`);
+  } else if (ref !== "refs/heads/main") throw new Error("Publication requires main");
   if (mode === "core-canary") return coreCanaryVersion({ core, sha, run });
   if (!/^0\.(?:3|4)\.(?:0|[1-9]\d*)$/.test(web)) throw new Error("Unsupported Web release base");
   if (mode === "stable") return web;
@@ -22,6 +29,24 @@ export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
   if (core !== "0.1.0" || native !== core) throw new Error("Core/Native must share the 0.1.0 base");
   if (!/^[1-9]\d*$/.test(run ?? "")) throw new Error("Invalid canary run number");
   return assertNativeCanary(`${core}-canary.${run}.sha${sha.slice(0, 12)}`);
+}
+
+/**
+ * The npm dist-tag for a stable publish. Only a version above the current `latest` may take
+ * `latest`; an older line (a 0.3.x maintenance release after 0.4.0) goes to `release-<major>.<minor>`
+ * so a tag on an old commit can never move `latest` backwards.
+ */
+export function stableDistTag(version, latest) {
+  const parse = (value, name) => {
+    const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(value ?? "");
+    if (!match) throw new Error(`Expected a stable x.y.z ${name}, got "${value ?? ""}"`);
+    return match.slice(1).map(Number);
+  };
+  const next = parse(version, "release version");
+  const current = parse(latest, "npm latest");
+  const order = next.map((part, index) => part - current[index]).find((diff) => diff !== 0) ?? 0;
+  if (order === 0) throw new Error(`${version} is already the npm latest`);
+  return order > 0 ? "latest" : `release-${next[0]}.${next[1]}`;
 }
 
 /**
@@ -35,11 +60,65 @@ function coreCanaryVersion({ core, sha, run }) {
   return assertNativeCanary(`${core}-canary.${run}.sha${sha.slice(0, 12)}`);
 }
 
+const PACKAGES = { "ui-core": "@vllnt/ui-core", "ui-native": "@vllnt/ui-native" };
+
+/**
+ * Core and Native publish stable from their own `<dir>-v<X.Y.Z>` tag push, never from a `v*` tag
+ * (those belong to Web). The version must be stable semver and equal that package's version;
+ * the tagged commit must be on main (`onMain`, from git history) and the package CHANGELOG must
+ * have a `## [X.Y.Z]` section that is not marked Unreleased (a date or nothing after the `]`).
+ * This is the Core/Native rule only; Web's `v*` stable path does not apply it. Callers pass `versions` and `changelogs` keyed by package directory.
+ */
+export function packageRelease({ ref, versions, changelogs, onMain }) {
+  const match = /^refs\/tags\/(ui-core|ui-native)-v([^/]+)$/.exec(ref ?? "");
+  if (!match) throw new Error("Package publication requires a ui-core-v<X.Y.Z> or ui-native-v<X.Y.Z> tag");
+  const [, dir, version] = match;
+  if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(version)) throw new Error(`Tag version ${version} is not stable X.Y.Z`);
+  if (versions[dir] !== version) throw new Error(`Tag version ${version} does not match packages/${dir} version ${versions[dir]}`);
+  if (onMain !== true) throw new Error("Tagged commit is not on origin/main");
+  const prefix = `## [${version}]`;
+  const heading = changelogs[dir].split("\n").find((line) => line.startsWith(prefix));
+  if (heading === undefined) throw new Error(`packages/${dir}/CHANGELOG.md has no ## [${version}] section`);
+  if (/unreleased/i.test(heading.slice(prefix.length))) {
+    throw new Error(`packages/${dir}/CHANGELOG.md still marks [${version}] as Unreleased; the release PR must date it`);
+  }
+  return { dir, name: PACKAGES[dir], version };
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const version = (name) => JSON.parse(readFileSync(new URL(`../packages/${name}/package.json`, import.meta.url), "utf8")).version;
   try {
     if (process.argv.length !== 3) throw new Error("Expected one release mode; no overrides supported");
     const mode = process.argv[2];
+    if (mode === "dist-tag") {
+      console.log(stableDistTag(process.env.RELEASE_VERSION, process.env.NPM_LATEST));
+      process.exit(0);
+    }
+    if (mode === "package-release") {
+      const root = fileURLToPath(new URL("..", import.meta.url));
+      // A missing CHANGELOG reads as empty, so it fails the same "no section" gate as a missing heading.
+      const read = (path) => {
+        try {
+          return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+        } catch (error) {
+          if (error.code === "ENOENT") return "";
+          throw error;
+        }
+      };
+      const { GITHUB_REF: ref, GITHUB_SHA: sha } = process.env;
+      if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
+      const git = spawnSync("git", ["merge-base", "--is-ancestor", sha, "origin/main"], { cwd: root });
+      const dirs = Object.keys(PACKAGES);
+      const { dir, name, version: tagged } = packageRelease({
+        ref,
+        versions: Object.fromEntries(dirs.map((d) => [d, version(d)])),
+        changelogs: Object.fromEntries(dirs.map((d) => [d, read(`packages/${d}/CHANGELOG.md`)])),
+        onMain: git.status === 0,
+      });
+      // GITHUB_OUTPUT lines for the workflow.
+      console.log(`name=${name}\ndir=packages/${dir}\nversion=${tagged}`);
+      process.exit(0);
+    }
     // core-canary reads ui-core alone: other manifests must not be able to affect it.
     const bases = mode === "core-canary" ? { core: version("ui-core") }
       : { web: version("ui"), core: version("ui-core"), native: version("ui-native") };

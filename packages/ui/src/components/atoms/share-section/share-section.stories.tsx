@@ -10,7 +10,7 @@ const meta = {
     shareOn: "Share on",
     shareTitle: "Share this article",
     title: "Accessible components",
-    url: "https://ui.vllnt.ai",
+    url: "https://ui.vllnt.com",
   },
   argTypes: {
     as: {

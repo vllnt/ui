@@ -162,7 +162,7 @@ export function ComponentThumbnail({
             title={t("previewTitle", { name: title })}
           />
         ) : (
-          <div className="size-full animate-pulse bg-muted motion-reduce:animate-none" />
+          <div className="size-full animate-pulse bg-secondary motion-reduce:animate-none" />
         )}
       </div>
     </div>

@@ -25,7 +25,7 @@ library: 200+ accessible components built on **Radix UI** primitives,
 **Tailwind CSS**, and **CVA** (class-variance-authority). Shipped on public npm
 and as a shadcn-compatible registry at `https://ui.vllnt.com/r`.
 
-- Docs: https://ui.vllnt.com · Storybook: https://storybook.vllnt.ai
+- Docs: https://ui.vllnt.com · Storybook: https://storybook.vllnt.com
 - npm: https://www.npmjs.com/package/@vllnt/ui
 - Machine docs: https://ui.vllnt.com/llms.txt / https://ui.vllnt.com/llms-full.txt
 

@@ -8,6 +8,7 @@ name: Core and Native Canary
 #   CORE_CANARY_PUBLISH_ENABLED   = true  -> core-publish   @vllnt/ui-core, after core-quality only
 #   NATIVE_CANARY_PUBLISH_ENABLED = true  -> native-publish @vllnt/ui-core + @vllnt/ui-native,
 #                                            after native-quality (pnpm ci:native, Expo Doctor)
+# Both paths publish over OIDC only, straight to `canary`: no secret, no dist-tag command.
 # Nothing publishes until the owner sets them. Setup: docs/RELEASING.md.
 
 on:
@@ -71,7 +72,7 @@ jobs:
     timeout-minutes: 15
     # Same environment as native-publish: one trusted-publisher entry per package covers both jobs.
     environment: npm-native-canary
-    # One group for both publish jobs: a pair promotion never overlaps a core publish, and publishes
+    # One group for both publish jobs: a pair publish never overlaps a core publish, and publishes
     # queue instead of running together. A superseded run stands down. GitHub keeps one pending job
     # per group, so a late arrival can replace a pending one; the next push to main publishes again.
     concurrency:
@@ -157,7 +158,6 @@ jobs:
       - name: Build publication artifacts
         run: pnpm --filter '@vllnt/ui-native...' build
 
+      # OIDC trusted publishing only: no secret is passed. core, then native, each straight to canary.
       - name: Publish synchronized canaries
-        env:
-          NPM_DIST_TAG_TOKEN: ${{ secrets.NPM_DIST_TAG_TOKEN }}
         run: bash scripts/publish-canary.sh pair

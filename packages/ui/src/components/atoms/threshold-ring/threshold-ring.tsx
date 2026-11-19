@@ -199,7 +199,7 @@ export const ThresholdRing = ({
       {...rest}
     >
       <circle
-        className="stroke-muted"
+        className="stroke-secondary"
         cx={geom.cx}
         cy={geom.cy}
         fill="none"
