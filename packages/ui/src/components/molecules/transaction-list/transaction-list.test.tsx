@@ -128,12 +128,29 @@ describe("TransactionList", () => {
     expect(screen.getByText("AI OS Pro")).toBeInTheDocument();
   });
 
-  it("renders the active badge and active-border style", () => {
+  it("renders the active badge on a neutral row", () => {
     const { container } = renderSubscription();
     expect(screen.getByText("Active")).toBeInTheDocument();
     const subscriptionRow = container.querySelector("[data-status]");
     expect(subscriptionRow).toHaveAttribute("data-status", "active");
+    expect(subscriptionRow?.className).not.toMatch(/emerald/);
   });
+
+  it.each([
+    ["active", "Active", "text-success"],
+    ["trialing", "Trial", "text-info"],
+    ["past_due", "Past due", "text-destructive"],
+    ["canceled", "Canceled", "text-muted-foreground"],
+  ] as const)(
+    "status %s puts its colour on the badge dot, not the surface",
+    (status, label, dotClass) => {
+      renderSubscription({ plan: "Plan", status });
+      const chip = screen.getByText(label);
+      expect(chip.querySelector("[data-badge-dot]")).toHaveClass(dotClass);
+      expect(chip).toHaveClass("bg-secondary");
+      expect(chip.className).not.toMatch(/bg-destructive|bg-primary/);
+    },
+  );
 
   it("renders the renewal date when provided", () => {
     renderSubscription({ renewsAt: Date.UTC(2025, 3, 15) });

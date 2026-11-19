@@ -29,6 +29,14 @@ import { Badge } from '@vllnt/ui'
 
 <Canvas of={Stories.Default} sourceState="shown" />
 
+For a status chip, set a `tone` and a `dot`. The dot carries the status colour; the label stays foreground on a neutral surface, so the chip never tints.
+
+```tsx
+<Badge dot tone="success">Active</Badge>
+```
+
+<Canvas of={Stories.WithDot} sourceState="shown" />
+
 ## API Reference
 
 <Controls />
@@ -43,6 +51,11 @@ import { Badge } from '@vllnt/ui'
 | `destructive` | - |
 | `outline` | - |
 | `secondary` | - |
+| `soft` | - |
+
+`destructive` is deprecated. Use `tone="danger-solid"` for the same filled chip, or `tone="danger"` with a `dot` for a calmer one.
+
+When a status `tone` is set and `variant` is not, the surface is `secondary`.
 
 <Canvas of={Stories.VariantDestructive} sourceState="shown" />
 
@@ -50,3 +63,53 @@ import { Badge } from '@vllnt/ui'
 
 <Canvas of={Stories.VariantSecondary} sourceState="shown" />
 
+<Canvas of={Stories.VariantSoft} sourceState="shown" />
+
+### tone
+
+| Value | What it does |
+| ----- | ------------ |
+| `neutral` | Dot in the muted text colour |
+| `primary` | Dot in the primary colour |
+| `info` | Dot in the info colour |
+| `success` | Dot in the success colour |
+| `warning` | Dot in the warning colour |
+| `danger` | Dot in the destructive colour |
+| `solid` | Filled primary surface; ignores `variant` |
+| `danger-tint` | Tinted destructive surface; ignores `variant`. The only tinted tone |
+| `danger-solid` | Filled destructive surface; ignores `variant` |
+
+Colour is never the only signal: the label says the status in words. The dot is `aria-hidden`.
+
+<Canvas of={Stories.Tones} sourceState="shown" />
+
+### size
+
+| Value | Default | Use |
+| ----- | ------- | --- |
+| `default` | Yes | 12px label, 22px tall |
+| `header` | - | 14px, 30px tall, page headers |
+| `sm` | - | 11px, 20px tall, dense lists and tables |
+| `inline` | - | 10px, 18px tall, inside running text |
+
+Heights shrink in that order: `header`, `default`, `sm`, `inline`.
+
+<Canvas of={Stories.Sizes} sourceState="shown" />
+
+### border
+
+| Value | Default | Effect |
+| ----- | ------- | ------ |
+| omitted | Yes | The border the `variant` draws |
+| `none` | - | No border |
+| `strong` | - | Full-contrast 1px border |
+
+<Canvas of={Stories.Borders} sourceState="shown" />
+
+### dot
+
+`dot` adds a leading status dot. Without a `tone` it follows the label colour.
+
+## Penpot
+
+`variant`, `tone`, `size` and `border` are the Penpot Badge axes `Variant`, `Tone`, `Size` and `Border`, with the same values.

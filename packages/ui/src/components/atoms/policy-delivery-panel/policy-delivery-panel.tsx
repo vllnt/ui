@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -17,12 +18,10 @@ const STATUS_LABEL: Record<PolicyStatus, string> = {
   enforced: "Enforced",
 };
 
-const STATUS_TONE: Record<PolicyStatus, string> = {
-  advisory:
-    "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  disabled: "border-border bg-muted/40 text-muted-foreground",
-  enforced:
-    "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+const STATUS_TONE: Record<PolicyStatus, StatusTone> = {
+  advisory: "warning",
+  disabled: "neutral",
+  enforced: "success",
 };
 
 /**
@@ -83,11 +82,14 @@ const RowBody = (props: { policy: PolicyEntry }): React.ReactElement => {
           {policy.name}
         </span>
         <span
-          className={cn(
-            "rounded-full border px-1.5 py-0.5 text-[10px] uppercase tracking-wide",
-            STATUS_TONE[policy.status],
-          )}
+          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-foreground"
+          data-policy-status-chip
         >
+          <span
+            aria-hidden="true"
+            className={statusDotVariants({ tone: STATUS_TONE[policy.status] })}
+            data-policy-status-dot
+          />
           {STATUS_LABEL[policy.status]}
         </span>
       </span>

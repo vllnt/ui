@@ -570,7 +570,8 @@ export const componentContracts = {
         "default",
         "destructive",
         "outline",
-        "secondary"
+        "secondary",
+        "soft"
       ]
     },
     "button": {

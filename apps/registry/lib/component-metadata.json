@@ -769,6 +769,26 @@
       {
         "id": "core-badge--variant-secondary",
         "name": "Variant Secondary"
+      },
+      {
+        "id": "core-badge--variant-soft",
+        "name": "Variant Soft"
+      },
+      {
+        "id": "core-badge--with-dot",
+        "name": "With Dot"
+      },
+      {
+        "id": "core-badge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "core-badge--sizes",
+        "name": "Sizes"
+      },
+      {
+        "id": "core-badge--borders",
+        "name": "Borders"
       }
     ],
     "title": "Badge"

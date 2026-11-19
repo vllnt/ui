@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "../../../lib/utils";
-import { Badge } from "../../atoms/badge/badge";
+import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 
 const CENTS_PER_UNIT = 100;
 const DEFAULT_LOCALE = "en-US";
@@ -123,14 +123,11 @@ const AMOUNT_CLASS: Record<"negative" | "positive", string> = {
   positive: "text-emerald-700 dark:text-emerald-400",
 };
 
-const STATUS_VARIANT: Record<
-  SubscriptionStatus,
-  "default" | "destructive" | "outline" | "secondary"
-> = {
-  active: "default",
-  canceled: "secondary",
-  past_due: "destructive",
-  trialing: "outline",
+const STATUS_TONE: Record<SubscriptionStatus, BadgeProps["tone"]> = {
+  active: "success",
+  canceled: "neutral",
+  past_due: "danger",
+  trialing: "info",
 };
 
 const STATUS_LABEL_KEY: Record<
@@ -417,15 +414,11 @@ export const TransactionListSubscriptionRow = ({
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
   const formatted = formatTransactionAmount(amountCents, { currency, locale });
   const intervalSuffix = INTERVAL_LABEL[interval];
-  const isActive = status === "active";
 
   return (
     <div
       className={cn(
-        "flex items-start justify-between gap-3 rounded-lg border px-3 py-2",
-        isActive
-          ? "border-emerald-500/40 bg-emerald-500/5"
-          : "border-border bg-muted/20",
+        "flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/20 px-3 py-2",
         className,
       )}
       data-status={status}
@@ -435,7 +428,7 @@ export const TransactionListSubscriptionRow = ({
       <div className="flex min-w-0 flex-col gap-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-sm font-semibold text-foreground">{plan}</p>
-          <Badge variant={STATUS_VARIANT[status]}>
+          <Badge dot tone={STATUS_TONE[status]}>
             {resolvedLabels[STATUS_LABEL_KEY[status]]}
           </Badge>
         </div>
