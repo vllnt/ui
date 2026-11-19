@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
 
 /**
  * Accessible native toggle button exposing its pressed state as `checked`. A
- * pressed toggle also gets a thicker border, so the state reads without colour.
+ * pressed toggle also draws a border frame inside its box, so the state reads
+ * without colour and the toggle never changes size.
  */
 function Toggle({
   accessibilityState,

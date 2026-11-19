@@ -13,12 +13,13 @@ import { SegmentedControl } from "../components/atoms/segmented-control/segmente
 import { Toggle } from "../components/atoms/toggle/toggle";
 import { interactionTokens } from "../primitives/interaction-state";
 
+import { findHost, frameOf, type LayoutBox, layoutBox } from "./layout-box";
 import { pressIn, renderThemed, styleOf } from "./test-utils";
 
 /**
  * Affordance contract (#633), phase 1: Button, Toggle, Checkbox, RadioGroup
  * and SegmentedControl show every state of the shared set through the
- * interaction tokens.
+ * interaction tokens, and no state changes a control's outer box.
  */
 
 const tokens = interactionTokens(lightTheme);
@@ -31,9 +32,11 @@ type Control = {
   /** Renders the control with one unselected target the tests act on. */
   readonly render: (disabled: boolean) => ReactElement;
   readonly role: "button" | "checkbox" | "radio" | "togglebutton";
+  /** Renders the same control with that target selected; absent when it cannot be. */
+  readonly selected?: () => ReactElement;
 };
 
-function segmented(disabled: boolean): ReactElement {
+function segmented(disabled: boolean, selectedId = "grid"): ReactElement {
   return (
     <SegmentedControl
       disabled={disabled}
@@ -42,12 +45,33 @@ function segmented(disabled: boolean): ReactElement {
         { id: "list", label: "List" },
       ]}
       label="Layout"
-      selection={{ defaultValue: "grid", mode: "uncontrolled" }}
+      selection={{ defaultValue: selectedId, mode: "uncontrolled" }}
     />
   );
 }
 
+function delivery(disabled: boolean, selectedValue = "express"): ReactElement {
+  return (
+    <RadioGroup accessibilityLabel="Delivery" defaultValue={selectedValue}>
+      <RadioGroupItem disabled={disabled} value="standard">
+        Standard
+      </RadioGroupItem>
+      <RadioGroupItem value="express">Express</RadioGroupItem>
+    </RadioGroup>
+  );
+}
+
 const CONTROLS: Readonly<Record<string, Control>> = {
+  Button: {
+    hover: "dim",
+    name: "Save",
+    render: (disabled) => (
+      <Button disabled={disabled} onPress={noop}>
+        Save
+      </Button>
+    ),
+    role: "button",
+  },
   Checkbox: {
     hover: "tint",
     name: "Accept",
@@ -55,31 +79,28 @@ const CONTROLS: Readonly<Record<string, Control>> = {
       <Checkbox accessibilityLabel="Accept" disabled={disabled} />
     ),
     role: "checkbox",
+    selected: () => <Checkbox accessibilityLabel="Accept" defaultChecked />,
   },
   RadioGroupItem: {
     hover: "tint",
     name: "Standard",
-    render: (disabled) => (
-      <RadioGroup accessibilityLabel="Delivery" defaultValue="express">
-        <RadioGroupItem disabled={disabled} value="standard">
-          Standard
-        </RadioGroupItem>
-        <RadioGroupItem value="express">Express</RadioGroupItem>
-      </RadioGroup>
-    ),
+    render: delivery,
     role: "radio",
+    selected: () => delivery(false, "standard"),
   },
   SegmentedControl: {
     hover: "dim",
     name: "List",
     render: segmented,
     role: "radio",
+    selected: () => segmented(false, "list"),
   },
   Toggle: {
     hover: "tint",
     name: "Bold",
     render: (disabled) => <Toggle disabled={disabled}>Bold</Toggle>,
     role: "togglebutton",
+    selected: () => <Toggle defaultPressed>Bold</Toggle>,
   },
 };
 
@@ -142,34 +163,139 @@ describe.each(Object.entries(CONTROLS))("%s", (_title, control) => {
   });
 });
 
-describe("selected cue", () => {
-  it("thickens the border of a pressed Toggle only", () => {
+function boxOf({ name, role }: Control): LayoutBox {
+  return layoutBox(findHost(role, name));
+}
+
+function hover(control: Control): void {
+  fire(control, "hoverIn");
+}
+
+function focus(control: Control): void {
+  fire(control, "focus");
+}
+
+function press(control: Control): void {
+  pressIn(screen.getByRole(control.role, { name: control.name }));
+}
+
+const SINGLE_STATES = [
+  ["hovered", hover],
+  ["focused", focus],
+  ["pressed", press],
+] as const;
+
+const SELECTABLE = Object.entries(CONTROLS).flatMap(([title, control]) =>
+  control.selected ? [[title, control, control.selected] as const] : [],
+);
+
+describe.each(Object.entries(CONTROLS))("%s outer box", (_title, control) => {
+  it.each(SINGLE_STATES)("is the same at rest and when %s", (_state, act) => {
+    renderThemed(control.render(false));
+    const rest = boxOf(control);
+    act(control);
+    expect(boxOf(control)).toEqual(rest);
+  });
+
+  it("is the same when hovered, focused and pressed together", () => {
+    renderThemed(control.render(false));
+    const rest = boxOf(control);
+    hover(control);
+    focus(control);
+    press(control);
+    expect(boxOf(control)).toEqual(rest);
+  });
+
+  it("is the same when disabled", () => {
+    const { unmount } = renderThemed(control.render(false));
+    const rest = boxOf(control);
+    unmount();
+    renderThemed(control.render(true));
+    expect(boxOf(control)).toEqual(rest);
+  });
+});
+
+describe.each(SELECTABLE)(
+  "%s outer box when selected",
+  (_title, control, renderSelected) => {
+    it("is the same as when unselected", () => {
+      const { unmount } = renderThemed(control.render(false));
+      const rest = boxOf(control);
+      unmount();
+      renderThemed(renderSelected());
+      expect(boxOf(control)).toEqual(rest);
+    });
+
+    it("is the same when selected, hovered, focused and pressed together", () => {
+      const { unmount } = renderThemed(control.render(false));
+      const rest = boxOf(control);
+      unmount();
+      renderThemed(renderSelected());
+      hover(control);
+      focus(control);
+      press(control);
+      expect(boxOf(control)).toEqual(rest);
+    });
+  },
+);
+
+describe("selection frame", () => {
+  const SELECTED = {
+    borderColor: tokens.selectedBorder.color,
+    borderWidth: tokens.selectedBorder.width,
+  };
+
+  it("frames a pressed Toggle and leaves an unpressed one transparent", () => {
     renderThemed(
       <>
         <Toggle defaultPressed>On</Toggle>
         <Toggle>Off</Toggle>
       </>,
     );
-    expect(
-      styleOf(screen.getByRole("togglebutton", { name: "On" })).borderWidth,
-    ).toBe(tokens.selectedBorder.width);
-    expect(
-      styleOf(screen.getByRole("togglebutton", { name: "Off" })).borderWidth,
-    ).toBe(0);
+    expect(frameOf(findHost("togglebutton", "On"))?.style).toMatchObject(
+      SELECTED,
+    );
+    expect(frameOf(findHost("togglebutton", "Off"))?.style).toMatchObject({
+      borderColor: "transparent",
+      borderWidth: tokens.selectedBorder.width,
+    });
   });
 
-  it("thickens the border of the selected segment only", () => {
+  it("frames the selected segment only", () => {
     renderThemed(segmented(false));
-    expect(
-      styleOf(screen.getByRole("radio", { name: "Grid" })).borderWidth,
-    ).toBe(tokens.selectedBorder.width);
-    expect(
-      styleOf(screen.getByRole("radio", { name: "List" })).borderWidth,
-    ).toBeUndefined();
+    expect(frameOf(findHost("radio", "Grid"))?.style).toMatchObject(SELECTED);
+    expect(frameOf(findHost("radio", "List"))?.style.borderColor).toBe(
+      "transparent",
+    );
+  });
+
+  it("keeps an outline Toggle's own border and frames inside it", () => {
+    renderThemed(
+      <Toggle defaultPressed variant="outline">
+        Bold
+      </Toggle>,
+    );
+    const host = findHost("togglebutton", "Bold");
+    expect(styleOf(host).borderWidth).toBe(1);
+    expect(frameOf(host)?.style).toMatchObject({
+      ...SELECTED,
+      borderRadius: lightTheme.radius.md - 1,
+    });
+  });
+
+  it("adds no frame to controls that show selection with a mark", () => {
+    renderThemed(
+      <>
+        <Checkbox accessibilityLabel="Accept" defaultChecked />
+        {delivery(false, "standard")}
+      </>,
+    );
+    expect(frameOf(findHost("checkbox", "Accept"))).toBeUndefined();
+    expect(frameOf(findHost("radio", "Standard"))).toBeUndefined();
   });
 });
 
-describe("Button", () => {
+describe("Button variants", () => {
   const variants = [
     ["default", lightTheme.colors.primary],
     ["destructive", lightTheme.colors.destructive],

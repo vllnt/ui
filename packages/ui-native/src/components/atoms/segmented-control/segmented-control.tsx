@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
 
 /**
  * Native segmented control with radio semantics and 44-point targets. The
- * selected option gets a thicker border besides its raised surface. The
+ * selected option draws a border frame inside its box besides its raised
+ * surface, so selecting never changes its size. The
  * group `label` is each option's hint (VoiceOver ignores labels on
  * non-focusable containers), and option text wraps at large font sizes.
  */

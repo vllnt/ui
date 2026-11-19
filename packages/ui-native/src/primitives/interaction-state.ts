@@ -27,7 +27,10 @@ export type InteractionTokens = {
   /** Hover fill for controls that rest on a transparent surface. */
   readonly hoverSurface: string;
   readonly pressedOpacity: number;
-  /** Selected cue that does not rely on colour: a thicker border. */
+  /**
+   * Selected cue that does not rely on colour: a border drawn by the selection
+   * frame inside the control's box, so selecting never changes its size.
+   */
   readonly selectedBorder: {
     readonly color: string;
     readonly width: number;
@@ -90,8 +93,10 @@ function hoverStyle(
 /**
  * Style delta a state set applies on top of a control's resting style.
  * Disabled wins over hover, press and focus; a selected control keeps its own
- * surface on hover and always keeps its border cue. Pure and motion-free, so
- * safe under reduced motion.
+ * surface on hover. No state touches width, height, padding or border, so no
+ * state changes the control's box; the selection cue is
+ * {@link selectedFrameStyle}. Pure and motion-free, so safe under reduced
+ * motion.
  *
  * @param theme - Active native theme.
  * @param state - Which states are active; omitted flags count as false.
@@ -106,17 +111,8 @@ function interactionStyle(
   options: InteractionStyleOptions = {},
 ): ViewStyle {
   const tokens = interactionTokens(theme);
-  const selected: ViewStyle =
-    state.selected === true
-      ? {
-          borderColor: tokens.selectedBorder.color,
-          borderWidth: tokens.selectedBorder.width,
-        }
-      : {};
-  if (state.disabled === true)
-    return { ...selected, opacity: tokens.disabledOpacity };
+  if (state.disabled === true) return { opacity: tokens.disabledOpacity };
   return {
-    ...selected,
     ...(state.hovered === true && state.selected !== true
       ? hoverStyle(tokens, options)
       : undefined),
@@ -127,4 +123,41 @@ function interactionStyle(
   };
 }
 
-export { interactionStyle, interactionTokens };
+/**
+ * Style of the selection frame a selectable control draws over its content.
+ * The frame lies out of the flow, fills the padding box and keeps one border
+ * width in every state, so selecting changes its colour and nothing that
+ * sizes the control. Its corners follow the control's own, minus the
+ * control's border.
+ *
+ * @param theme - Active native theme.
+ * @param selected - `true` when the control shows its selected colour.
+ * @param resting - The control's resting style, read for its corner radius and
+ * border width.
+ * @returns A frame style with `position: "absolute"`.
+ * @example
+ * selectedFrameStyle(theme, true).borderWidth; // 2
+ */
+function selectedFrameStyle(
+  theme: NativeTheme,
+  selected: boolean,
+  resting: ViewStyle = {},
+): ViewStyle {
+  const { selectedBorder } = interactionTokens(theme);
+  const radius =
+    typeof resting.borderRadius === "number" ? resting.borderRadius : 0;
+  const border =
+    typeof resting.borderWidth === "number" ? resting.borderWidth : 0;
+  return {
+    borderColor: selected ? selectedBorder.color : "transparent",
+    borderRadius: Math.max(0, radius - border),
+    borderWidth: selectedBorder.width,
+    bottom: 0,
+    left: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+  };
+}
+
+export { interactionStyle, interactionTokens, selectedFrameStyle };

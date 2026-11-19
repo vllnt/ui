@@ -4,6 +4,7 @@ import { fireEvent, screen } from "@testing-library/react-native";
 import { lightTheme } from "@vllnt/ui-core";
 import { Text, type View, type ViewStyle } from "react-native";
 
+import { findHost, frameOf, layoutBox } from "../tests/layout-box";
 import { pressIn, renderThemed, styleOf } from "../tests/test-utils";
 
 import { type InteractionState, interactionTokens } from "./interaction-state";
@@ -23,10 +24,18 @@ function fire(event: string): void {
   fireEvent(saveButton(), event);
 }
 
+function saveBox() {
+  return layoutBox(findHost("button", "Save"));
+}
+
+function saveFrame() {
+  return frameOf(findHost("button", "Save"));
+}
+
 function renderPressable(
   props: Partial<ComponentProps<typeof InteractivePressable>> = {},
-): void {
-  renderThemed(
+) {
+  return renderThemed(
     <InteractivePressable
       accessibilityLabel="Save"
       accessibilityRole="button"
@@ -84,17 +93,6 @@ describe("InteractivePressable", () => {
     renderPressable();
     pressIn(saveButton());
     expect(saveStyle().opacity).toBe(tokens.pressedOpacity);
-  });
-
-  it("marks a selected control with a border and keeps its press handler", () => {
-    const onPress = jest.fn();
-    renderPressable({ onPress, selected: true });
-    expect(saveStyle()).toMatchObject({
-      borderColor: tokens.selectedBorder.color,
-      borderWidth: tokens.selectedBorder.width,
-    });
-    fireEvent.press(saveButton());
-    expect(onPress).toHaveBeenCalledTimes(1);
   });
 
   it("dims a disabled control and ignores hover and focus", () => {
@@ -155,5 +153,68 @@ describe("InteractivePressable", () => {
       "accessibilityState",
       expect.objectContaining({ busy: true }),
     );
+  });
+});
+
+describe("InteractivePressable selection frame", () => {
+  it("draws a transparent frame at rest on a selectable control", () => {
+    renderPressable({ selected: false });
+    expect(saveFrame()?.style).toMatchObject({
+      borderColor: "transparent",
+      borderWidth: tokens.selectedBorder.width,
+    });
+  });
+
+  it("draws the frame in the selected colour and keeps the press handler", () => {
+    const onPress = jest.fn();
+    renderPressable({ onPress, selected: true });
+    expect(saveFrame()?.style).toMatchObject({
+      borderColor: tokens.selectedBorder.color,
+      borderWidth: tokens.selectedBorder.width,
+    });
+    expect(saveStyle().borderWidth).toBeUndefined();
+    fireEvent.press(saveButton());
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it("adds no frame to a control that is never selectable", () => {
+    renderPressable();
+    expect(saveFrame()).toBeUndefined();
+  });
+
+  it("lies out of the flow, ignores touches and hides from assistive tech", () => {
+    renderPressable({ selected: true });
+    const frame = saveFrame();
+    expect(frame?.style.position).toBe("absolute");
+    expect(frame?.props.pointerEvents).toBe("none");
+    expect(frame?.props.accessibilityElementsHidden).toBe(true);
+    expect(frame?.props.importantForAccessibility).toBe("no-hide-descendants");
+  });
+
+  it("follows the caller's corners inside the caller's border", () => {
+    renderPressable({
+      selected: true,
+      style: { borderRadius: 10, borderWidth: 1 },
+    });
+    expect(saveFrame()?.style.borderRadius).toBe(9);
+  });
+
+  it("keeps the box identical in every state, caller border and padding included", () => {
+    const style: ViewStyle = { borderWidth: 1, padding: 8 };
+    const { unmount } = renderPressable({ selected: false, style });
+    const rest = saveBox();
+    fire("hoverIn");
+    expect(saveBox()).toEqual(rest);
+    fire("focus");
+    expect(saveBox()).toEqual(rest);
+    pressIn(saveButton());
+    expect(saveBox()).toEqual(rest);
+    unmount();
+    renderPressable({ selected: true, style });
+    expect(saveBox()).toEqual(rest);
+    fire("hoverIn");
+    fire("focus");
+    pressIn(saveButton());
+    expect(saveBox()).toEqual(rest);
   });
 });

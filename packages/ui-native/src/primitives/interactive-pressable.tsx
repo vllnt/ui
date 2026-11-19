@@ -6,14 +6,20 @@ import {
   Pressable,
   type PressableProps,
   type StyleProp,
-  type View,
+  StyleSheet,
+  View,
   type ViewStyle,
 } from "react-native";
 
 import { useTheme } from "../theme/theme-provider";
 
+import { decorativeProps } from "./accessibility";
 import { targetFloorStyle } from "./control-size";
-import { type InteractionState, interactionStyle } from "./interaction-state";
+import {
+  type InteractionState,
+  interactionStyle,
+  selectedFrameStyle,
+} from "./interaction-state";
 
 /** Props for {@link InteractivePressable}. */
 export type InteractivePressableProps = Omit<
@@ -25,7 +31,11 @@ export type InteractivePressableProps = Omit<
   /** The control paints its own fill, so hover dims it instead of tinting. */
   readonly filled?: boolean;
   readonly ref?: Ref<View>;
-  /** Marks the control selected, which adds the non-colour border cue. */
+  /**
+   * Marks a selectable control. Any boolean draws the selection frame, which
+   * is transparent until `true`, so selecting never changes the control's
+   * size. Leave it undefined for a control that is never selectable.
+   */
   readonly selected?: boolean;
   /** Resting style; interaction states layer on top of it. */
   readonly style?:
@@ -33,15 +43,43 @@ export type InteractivePressableProps = Omit<
     | StyleProp<ViewStyle>;
 };
 
+function restingStyleOf(
+  style: InteractivePressableProps["style"],
+  state: InteractionState,
+): StyleProp<ViewStyle> {
+  return typeof style === "function" ? style(state) : style;
+}
+
+type SelectionFrameProps = {
+  readonly state: InteractionState;
+  readonly style: InteractivePressableProps["style"];
+};
+
+/** Decorative border frame that sits inside a selectable control's box. */
+function SelectionFrame({ state, style }: SelectionFrameProps): ReactNode {
+  const theme = useTheme();
+  const resting = StyleSheet.flatten(restingStyleOf(style, state));
+  return (
+    <View
+      {...decorativeProps}
+      pointerEvents="none"
+      style={selectedFrameStyle(theme, state.selected, resting)}
+    />
+  );
+}
+
 /**
  * The one pressable of the affordance contract (#633). It wraps React Native's
  * Pressable, tracks hover and focus beside press, and layers the shared state
- * styles (pressed, hovered, focused, selected, disabled) and the touch-target
- * floor over the caller's resting style. Caller handlers still run.
+ * styles (pressed, hovered, focused, disabled) and the touch-target floor over
+ * the caller's resting style. A selectable control also draws a selection
+ * frame inside its box. Caller handlers still run.
  *
- * React Native has no `:focus-visible`, so any focus shows the ring. The
- * states change style instantly; this primitive adds no transition, so it
- * needs no reduced-motion branch.
+ * No state changes the control's size: state styles never touch width, height,
+ * padding or border, the focus ring is an outline, and the selection frame
+ * lies out of the flow. React Native has no `:focus-visible`, so any focus
+ * shows the ring. States change style instantly; this primitive adds no
+ * transition, so it needs no reduced-motion branch.
  *
  * @param props - Pressable props plus `selected`, `filled` and function
  * children or style that receive the full interaction state.
@@ -60,7 +98,7 @@ function InteractivePressable({
   onHoverIn,
   onHoverOut,
   ref,
-  selected = false,
+  selected,
   style,
   ...props
 }: InteractivePressableProps): ReactNode {
@@ -72,7 +110,7 @@ function InteractivePressable({
     focused,
     hovered,
     pressed,
-    selected,
+    selected: selected === true,
   });
 
   return (
@@ -100,14 +138,22 @@ function InteractivePressable({
         const state = stateOf(pressed);
         return [
           targetFloorStyle(theme),
-          typeof style === "function" ? style(state) : style,
+          restingStyleOf(style, state),
           interactionStyle(theme, state, { filled }),
         ];
       }}
     >
-      {typeof children === "function"
-        ? ({ pressed }) => children(stateOf(pressed))
-        : children}
+      {({ pressed }) => {
+        const state = stateOf(pressed);
+        return (
+          <>
+            {typeof children === "function" ? children(state) : children}
+            {selected === undefined ? null : (
+              <SelectionFrame state={state} style={style} />
+            )}
+          </>
+        );
+      }}
     </Pressable>
   );
 }
