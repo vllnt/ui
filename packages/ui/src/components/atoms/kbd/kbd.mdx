@@ -5,7 +5,7 @@ import * as Stories from './kbd.stories'
 
 # Kbd
 
-Keyboard key indicator for displaying shortcuts. Pass a single child for one key, or use the `shortcut` prop with a `+`-delimited string for platform-aware multi-key combos.
+Keyboard key indicator for displaying shortcuts. Pass a single child for one key, or use the `shortcut` prop with a `+`-delimited string for platform-aware multi-key combos. The `platform` prop forces Mac or Windows labels, and the `bracket` variant drops the key cap for `[K]`-style keys.
 
 <Primary />
 
@@ -51,14 +51,43 @@ Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
 
 <Canvas of={Stories.SizeLg} sourceState="shown" />
 
+## Variants
+
+| Value | Default | Look |
+| ----- | ------- | ---- |
+| `default` | Yes | Boxed key cap with a hairline border and shadow |
+| `bracket` | - | No key cap; the key sits between decorative `[` `]` brackets |
+
+The `variant` prop is the Penpot `Style` axis (`style` is already the HTML inline-style attribute). Brackets are hidden from assistive tech, so a shortcut keeps the same accessible name in both variants.
+
+<Canvas of={Stories.VariantBracket} sourceState="shown" />
+
+<Canvas of={Stories.BracketShortcutMac} sourceState="shown" />
+
+## Platform
+
+| Value | Default | Effect on `shortcut` |
+| ----- | ------- | -------------------- |
+| `auto` | Yes | Follows the browser user agent |
+| `mac` | - | Always Mac labels |
+| `win` | - | Always Windows / Linux labels |
+
+`platform` only changes how a `shortcut` is expanded. Explicit `children` render as given.
+
+On Mac, `mod` and `meta` render a vector command icon (not the `⌘` text glyph) with the accessible name `Command`. Because a shortcut is exposed as one image, the wrapper label reads `Command + K`.
+
+<Canvas of={Stories.PlatformMac} sourceState="shown" />
+
+<Canvas of={Stories.PlatformWin} sourceState="shown" />
+
 ## Shortcut prop
 
 The `shortcut` prop expands a `+`-delimited token list. Special tokens:
 
 | Token | Mac | Other |
 | ----- | --- | ----- |
-| `mod` | `⌘` | `Ctrl` |
-| `meta` | `⌘` | `Win` |
+| `mod` | command icon | `Ctrl` |
+| `meta` | command icon | `Win` |
 | `ctrl` | `⌃` | `Ctrl` |
 | `alt` | `⌥` | `Alt` |
 | `shift` | `⇧` | `Shift` |

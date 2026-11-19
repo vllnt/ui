@@ -102,7 +102,7 @@ test.describe("platform-aware component discovery", () => {
 
     for (const component of nativeComponents) {
       await expect(
-        main.locator(`a[href="/components/${component}?platform=native&ref=e2e"]`),
+        main.locator(`a[href="/components/${component}?platform=native"]`),
       ).toHaveCount(1);
     }
     await expect(
@@ -137,13 +137,13 @@ test.describe("platform-aware component discovery", () => {
     await clickUntilUrl(
       page,
       main.getByRole("link", { name: "Web", exact: true }),
-      "/components?platform=web&ref=e2e",
+      "/components?platform=web",
     );
     const webFirstSection = await main.locator("section").first().boundingBox();
     expect(webFirstSection?.y).toBeCloseTo(nativeFirstSection?.y ?? 0, 2);
   });
 
-  test("preserves platform and unrelated query state across navigation", async ({
+  test("keeps the platform in page links and the full query in navigation", async ({
     page,
   }) => {
     await page.goto("/components?platform=native&ref=e2e");
@@ -153,28 +153,37 @@ test.describe("platform-aware component discovery", () => {
       .getByRole("link", { name: "View component" })
       .first();
     const firstComponentHref = await firstComponentLink.getAttribute("href");
-    expect(firstComponentHref).toMatch(
-      /^\/components\/.+\?platform=native&ref=e2e$/,
-    );
-    await page.goto(firstComponentHref ?? "");
+    expect(firstComponentHref).toMatch(/^\/components\/[^?]+\?platform=native$/);
+    await page.goto(`${firstComponentHref}&ref=e2e`);
     await expect(page).toHaveURL(/\/components\/.+\?platform=native&ref=e2e$/);
 
     const sidebar = page.getByRole("complementary");
+    const sidebarButton = sidebar.getByRole("link", {
+      name: "Button",
+      exact: true,
+    });
+    await expect(sidebarButton).toHaveAttribute("href", /ref=e2e/);
     await clickUntilUrl(
       page,
-      sidebar.getByRole("link", { name: "Button", exact: true }),
+      sidebarButton,
       "/components/button?platform=native&ref=e2e",
     );
 
+    const headerComponents = page
+      .getByRole("link", { name: "Components", exact: true })
+      .first();
+    await expect(headerComponents).toHaveAttribute("href", /ref=e2e/);
     await clickUntilUrl(
       page,
-      page.getByRole("link", { name: "Components", exact: true }).first(),
+      headerComponents,
       "/components?platform=native&ref=e2e",
     );
 
+    const frenchLink = page.getByRole("link", { name: "fr", exact: true });
+    await expect(frenchLink).toHaveAttribute("href", /ref=e2e/);
     await clickUntilUrl(
       page,
-      page.getByRole("link", { name: "fr", exact: true }),
+      frenchLink,
       "/fr/components?platform=native&ref=e2e",
     );
   });
@@ -199,7 +208,7 @@ test.describe("platform-aware component discovery", () => {
       page
         .getByRole("navigation", { name: "Filter by implementation" })
         .getByRole("link", { name: "Web", exact: true }),
-      "/docs/installation?platform=web&ref=e2e",
+      "/docs/installation?platform=web",
     );
     await expect(
       page.getByRole("heading", { name: "Web prerequisites" }),

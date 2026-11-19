@@ -1,9 +1,10 @@
 "use client";
 
 import type { Ref } from "react";
-import type { TextInput, TextInputProps } from "react-native";
+import type { TextInput } from "react-native";
 
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
+import type { InputProps } from "../../atoms/input/input";
 import { useISOTextField } from "../../molecules/date-field/iso-text-field";
 
 /** Local wall-clock time ISO contract without a date or timezone. */
@@ -16,7 +17,7 @@ export type TimeFieldLabels = {
 };
 /** Props for a native ISO wall-clock editor. */
 export type TimeFieldProps = Omit<
-  TextInputProps,
+  InputProps,
   "defaultValue" | "onChangeText" | "value"
 > & {
   readonly labels: TimeFieldLabels;

@@ -1,6 +1,6 @@
 # @vllnt/ui
 
-React component library — 313 components built on Radix UI primitives, Tailwind CSS, and CVA.
+React component library — 321 components built on Radix UI primitives, Tailwind CSS, and CVA.
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history.
 
@@ -142,6 +142,7 @@ export function Example() {
 | `@vllnt/ui/styles.css` | Full styles (Tailwind base + theme variables + utilities) |
 | `@vllnt/ui/themes/default.css` | Theme CSS variables only (no Tailwind base) |
 | `@vllnt/ui/themes/presets.css` | Built-in color presets (applied via `data-theme`) |
+| `@vllnt/ui/themes/products.css` | Product themes `maia` and `paas` (generated; applied via `data-theme`) |
 
 ## Theming
 
@@ -190,6 +191,32 @@ Import `@vllnt/ui/themes/presets.css` and switch between built-in color presets
 at runtime with `<ThemeSwitcher />` (or `setThemePreset` / `useThemePreset`),
 which set `data-theme` on the document root. Render `<ThemePresetProvider />`
 once near the root to restore the saved preset before paint.
+
+### Product themes
+
+`@vllnt/ui/themes/products.css` adds two full product themes, generated from
+`packages/design/tokens.json`. Import it after `styles.css`, set
+`data-theme="maia"` or `data-theme="paas"` on `<html>`, and keep using the
+`dark` class for dark mode:
+
+```html
+<html data-theme="maia" class="dark">
+```
+
+- `maia`: pink primary, Figtree and JetBrains Mono, tighter type scale and radius.
+  Its Label step is capitals in the design: add `uppercase` where you use it.
+- `paas`: core neutrals and status tones in JetBrains Mono. Dark is the design
+  default; light works too.
+
+The package does not ship fonts. Core puts Inter (sans) and JetBrains Mono
+(mono) first, then the system stacks. Load Inter, JetBrains Mono (core, Maia and
+PaaS) and Figtree (Maia) in your app, for example with `next/font` or a font
+`<link>`; without them each stack falls back to the system font stack
+(`system-ui` for core sans and Maia, `ui-monospace` for core mono and PaaS).
+
+Both define `success`, `warning`, `info`, `diff-added` and `diff-removed` roles
+(the core theme defines them as well). Web `--radius` carries the theme's
+`md` step only; the other radius steps ship in the `@vllnt/ui-core` outputs.
 
 To design and export your own theme, use the visual editor at
 [`/themes`](https://ui.vllnt.com/themes) — it exports a CSS block, a

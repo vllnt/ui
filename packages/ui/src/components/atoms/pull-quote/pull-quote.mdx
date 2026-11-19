@@ -1,0 +1,84 @@
+import { Meta, Primary, Controls, Story, Canvas, Source } from '@storybook/addon-docs/blocks'
+import * as Stories from './pull-quote.stories'
+
+<Meta of={Stories} />
+
+# PullQuote
+
+Highlighted quotation lifted out of long-form content: a short decorative rule, the quote and an optional attribution. Renders a `<figure>` with a `<blockquote>` and, when `cite` is set, a `<figcaption>`. Pure presentation: it composes no other component and holds no state.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/pull-quote.json
+```
+
+## Import
+
+```tsx
+import { PullQuote } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<PullQuote cite="Ada Lovelace, Notes on the Engine" size="lg">
+  The engine weaves algebraic patterns, just as the loom weaves flowers and leaves.
+</PullQuote>
+```
+
+<Canvas of={Stories.Default} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Variants
+
+### size
+
+| Value | Default | Quote type | Cite type |
+| ----- | ------- | ---------- | --------- |
+| `md` | Yes | `--font-size-h4` | `--font-size-body-sm` |
+| `lg` | - | `--font-size-h2` (display type) | `--font-size-body` |
+
+<Canvas of={Stories.Large} sourceState="shown" />
+
+## States
+
+### Without `cite`
+
+No `<figcaption>` is rendered when `cite` is missing or empty.
+
+<Canvas of={Stories.WithoutCite} sourceState="shown" />
+
+<Canvas of={Stories.LargeWithoutCite} sourceState="shown" />
+
+## Accessibility
+
+- The root is a `<figure>`; the quote is a `<blockquote>` and the attribution is its `<figcaption>`, a direct child of the figure.
+- The rule is a decorative `<span>` with `aria-hidden="true"`.
+- Colour carries no meaning: the rule is `bg-primary`, the quote `text-foreground` and the cite `text-muted-foreground`.
+
+## Penpot mapping
+
+Family `atom / Pull-quote` (lock 1.x), 2 mains. Top layers: `Rule`, `Body`.
+
+| Penpot | Code |
+| ------ | ---- |
+| Axis `Size`: `lg` \| `md` | prop `size`: `"lg"` \| `"md"` (default `md`) |
+| `Rule` | `<span aria-hidden>` before the quote, `bg-primary`; `h-1 w-16` (`lg`), `h-0.5 w-12` (`md`) |
+| `Body` > `Quote` | `<blockquote>` holding `children` |
+| `Body` > `Cite` | `<figcaption>` holding `cite`, only when `cite` is set |
+
+Not built from Penpot:
+
+- `Body` has no wrapper element. `<figcaption>` must be a direct child of `<figure>`, so the `<figure>` is the Body column and the Rule sits at its top.
+- Rule bar length, thickness and gap values and the quote and cite type steps are chosen from the existing tokens. They were not read from Penpot.
+- Existing `Typography` `variant="blockquote"` is unchanged.
+
+## Notes
+
+- Pair with `Prose` for long-form pages, and cap the width with `className` (for example `max-w-prose`).

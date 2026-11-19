@@ -10,6 +10,10 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import {
+  type ControlSize,
+  controlSizeStyle,
+} from "../../../primitives/control-size";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -22,6 +26,9 @@ export type SegmentedControlItem = {
   readonly label: string;
 };
 
+/** Native size scale of a segmented control; targets stay at least 44 points. */
+export type SegmentedControlSize = ControlSize;
+
 /** Props for a native single-selection segmented control. */
 export type SegmentedControlProps = Omit<ViewProps, "children"> & {
   readonly disabled?: boolean;
@@ -29,6 +36,7 @@ export type SegmentedControlProps = Omit<ViewProps, "children"> & {
   readonly label: string;
   readonly ref?: Ref<View>;
   readonly selection: ControllableStateOptions<string>;
+  readonly size?: SegmentedControlSize;
 };
 
 const styles = StyleSheet.create({
@@ -52,6 +60,7 @@ function SegmentedControl({
   label,
   ref,
   selection,
+  size = "default",
   style,
   ...props
 }: SegmentedControlProps) {
@@ -91,7 +100,7 @@ function SegmentedControl({
                   : theme.colors.muted,
                 borderRadius: theme.radius.md,
                 opacity: itemDisabled ? 0.5 : 1,
-                paddingHorizontal: theme.spacing[3],
+                ...controlSizeStyle(theme, size),
               },
             ]}
           >

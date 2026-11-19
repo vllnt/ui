@@ -1,9 +1,10 @@
 "use client";
 
 import type { Ref } from "react";
-import type { TextInput, TextInputProps } from "react-native";
+import type { TextInput } from "react-native";
 
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
+import type { InputProps } from "../../atoms/input/input";
 
 import { useISOTextField } from "./iso-text-field";
 
@@ -17,7 +18,7 @@ export type DateFieldLabels = {
 };
 /** Props for a native ISO calendar-date editor. */
 export type DateFieldProps = Omit<
-  TextInputProps,
+  InputProps,
   "defaultValue" | "onChangeText" | "value"
 > & {
   readonly labels: DateFieldLabels;

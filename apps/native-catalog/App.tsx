@@ -10,9 +10,11 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, View } from "react-native";
 
+import { AllComponentsSection } from "./all-components";
 import { nativeComponentCount } from "./catalog-metadata";
 import {
   CardSection,
+  type CatalogView,
   CompositeSection,
   DataSection,
   FormSection,
@@ -20,6 +22,7 @@ import {
   NavigationSection,
   OverlaySection,
   ThemeSection,
+  ViewSection,
 } from "./catalog-sections";
 
 function CatalogContent({
@@ -32,6 +35,7 @@ function CatalogContent({
   const theme = useTheme();
   const [presses, setPresses] = useState(0);
   const [alertsEnabled, setAlertsEnabled] = useState(true);
+  const [view, setView] = useState<CatalogView>("highlights");
   const incrementPresses = () => {
     setPresses((value) => value + 1);
   };
@@ -61,16 +65,23 @@ function CatalogContent({
           </Text>
         </View>
         <ThemeSection onChange={onThemeChange} selection={themeSelection} />
-        <FoundationSection onPress={incrementPresses} presses={presses} />
-        <FormSection
-          enabled={alertsEnabled}
-          onEnabledChange={setAlertsEnabled}
-        />
-        <DataSection />
-        <NavigationSection />
-        <OverlaySection />
-        <CompositeSection />
-        <CardSection onPress={incrementPresses} />
+        <ViewSection onChange={setView} selection={view} />
+        {view === "all" ? (
+          <AllComponentsSection />
+        ) : (
+          <>
+            <FoundationSection onPress={incrementPresses} presses={presses} />
+            <FormSection
+              enabled={alertsEnabled}
+              onEnabledChange={setAlertsEnabled}
+            />
+            <DataSection />
+            <NavigationSection />
+            <OverlaySection />
+            <CompositeSection />
+            <CardSection onPress={incrementPresses} />
+          </>
+        )}
       </View>
     </ScrollView>
   );

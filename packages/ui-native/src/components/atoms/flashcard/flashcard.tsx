@@ -42,6 +42,8 @@ export type FlashcardProps = Omit<ViewProps, "children"> & {
   readonly flipped?: boolean;
   readonly hint?: string;
   readonly labels: FlashcardLabels;
+  /** Web name for `onFlippedChange`; `onFlippedChange` takes precedence. */
+  readonly onFlipChange?: (flipped: boolean) => void;
   readonly onFlippedChange?: (flipped: boolean) => void;
   readonly question: ReactNode;
   readonly ref?: Ref<View>;
@@ -77,6 +79,7 @@ function Flashcard({
   flipped,
   hint,
   labels,
+  onFlipChange,
   onFlippedChange,
   question,
   ref,
@@ -86,7 +89,11 @@ function Flashcard({
 }: FlashcardProps) {
   const theme = useTheme();
   const [isFlipped, setFlipped] = useControllableState(
-    controllableOptions(flipped, defaultFlipped, onFlippedChange),
+    controllableOptions(
+      flipped,
+      defaultFlipped,
+      onFlippedChange ?? onFlipChange,
+    ),
   );
   const toggle = () => {
     setFlipped(!isFlipped);

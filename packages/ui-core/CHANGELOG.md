@@ -6,11 +6,31 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ### Added
 
+- `productThemes`: the Maia and PaaS themes (colors per mode, fonts, type
+  scale, radius, default mode), generated from `packages/design/tokens.json`.
+- `tamaguiTokens` and `tamaguiThemes`: plain objects in the shape Tamagui takes
+  for `createTokens` and `createTamagui({ themes })`, with themes keyed
+  `<theme>_<mode>`. No Tamagui dependency.
+- Core tokens `success`, `warning`, `info` (with foregrounds), `diffAdded`,
+  `diffRemoved`, spacing `5` and `10`, radius `xl`, and a `label` type step.
+
+### Changed
+
+- The PaaS product theme's dark `card`, `popover` and `muted` are now
+  `#000000` (`productThemes.paas` and `tamaguiThemes.paas_dark`), following
+  the web's pure-black dark surfaces. `nativeTokens` and `tamaguiTokens` keep
+  their dark values (`#050505` page, `#0a0a0a` card and popover, `#262626`
+  muted).
+
+## [0.1.0] - Unreleased
+
+### Added
+
 - Initial platform-neutral token, theme, platform metadata, and portable component contracts.
 
 ### Changed
 
-- README describes the install as `pnpm add @vllnt/ui-core@canary`. Core publishes to the `canary` dist-tag only, together with `@vllnt/ui-native`, and has no stable channel yet.
+- README documents the install command.
 
 ### Fixed
 

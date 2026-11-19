@@ -79,7 +79,7 @@ const ActionButton = (props: {
   };
   return (
     <button
-      className="group relative flex size-12 flex-col items-center justify-center gap-0.5 rounded-md border border-transparent text-[10px] uppercase tracking-wide text-muted-foreground transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="group relative flex size-12 flex-col items-center justify-center gap-0.5 rounded-md border border-transparent text-[10px] uppercase tracking-wide text-muted-foreground transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       data-jarvis-action={action.id}
       data-jarvis-tone={tone}
       onClick={handleActivateAction}
@@ -156,7 +156,7 @@ export const JarvisDock = ({
           <span aria-hidden="true" className="mx-1 h-8 w-px bg-border" />
           <button
             aria-label={resolvedLabels.paletteTrigger}
-            className="flex size-12 items-center justify-center rounded-md border border-transparent text-base text-muted-foreground transition-colors hover:border-border hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex size-12 items-center justify-center rounded-md border border-transparent text-base text-muted-foreground transition-colors hover:border-border hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             data-jarvis-palette-trigger
             onClick={handlePalette}
             type="button"

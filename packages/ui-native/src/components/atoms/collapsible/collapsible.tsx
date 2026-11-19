@@ -32,6 +32,8 @@ import { useTheme } from "../../../theme/theme-provider";
 export type CollapsibleProps = Omit<ViewProps, "children" | "ref"> & {
   readonly children: ReactNode;
   readonly defaultOpen?: boolean;
+  /** Disables the trigger so the content state cannot be toggled. */
+  readonly disabled?: boolean;
   readonly id: string;
   readonly onOpenChange?: (open: boolean) => void;
   readonly open?: boolean;
@@ -59,6 +61,7 @@ type CollapsiblePart = "content" | "trigger";
 
 type CollapsibleContextValue = {
   readonly contentMounted: boolean;
+  readonly disabled: boolean;
   readonly id: string;
   readonly open: boolean;
   readonly reduceMotion: boolean;
@@ -91,6 +94,7 @@ const styles = StyleSheet.create({
 function Collapsible({
   children,
   defaultOpen = false,
+  disabled = false,
   id,
   onOpenChange,
   open,
@@ -113,6 +117,7 @@ function Collapsible({
   const value = useMemo(
     () => ({
       contentMounted: mounted.content > 0,
+      disabled,
       id,
       open: expanded,
       reduceMotion,
@@ -122,7 +127,7 @@ function Collapsible({
       },
       triggerMounted: mounted.trigger > 0,
     }),
-    [expanded, id, mounted, reduceMotion, register, setExpanded],
+    [disabled, expanded, id, mounted, reduceMotion, register, setExpanded],
   );
   return (
     <CollapsibleContext value={value}>
@@ -137,7 +142,7 @@ Collapsible.displayName = "Collapsible";
 /** Accessible 44-point disclosure control for native collapsible content. */
 function CollapsibleTrigger({
   children,
-  disabled = false,
+  disabled: ownDisabled = false,
   label,
   ref,
   style,
@@ -145,6 +150,7 @@ function CollapsibleTrigger({
 }: CollapsibleTriggerProps) {
   const theme = useTheme();
   const collapsible = useCollapsible();
+  const disabled = ownDisabled === true || collapsible.disabled;
   const { register } = collapsible;
   useEffect(() => register("trigger"), [register]);
   const handlePress = () => {
@@ -156,7 +162,7 @@ function CollapsibleTrigger({
       accessibilityLabel={label}
       accessibilityRole="button"
       accessibilityState={{
-        disabled: disabled === true,
+        disabled,
         expanded: collapsible.open,
       }}
       disabled={disabled}

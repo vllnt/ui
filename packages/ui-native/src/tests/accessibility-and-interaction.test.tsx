@@ -210,6 +210,17 @@ const avatar = (uri: string, onError?: () => void) => (
   </Avatar>
 );
 
+it("fills the avatar frame with its image", () => {
+  renderThemed(avatar("working"));
+  expect(screen.getByLabelText("Avatar")).toHaveStyle({
+    bottom: 0,
+    left: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+  });
+});
+
 it("removes a failed avatar image and restores it for a new source", () => {
   const onError = jest.fn();
   renderThemed(avatar("broken", onError));

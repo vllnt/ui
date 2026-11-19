@@ -13,7 +13,10 @@ import {
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { typeStyle } from "../../../primitives/type-style";
-import { useControllableState } from "../../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../../primitives/use-controllable-state";
 import { useTheme } from "../../../theme/theme-provider";
 
 /** Caller-localized labels for a native rating. */
@@ -21,6 +24,9 @@ export type RatingLabels = {
   readonly option: (value: number, max: number) => string;
   readonly value: (value: number, max: number) => string;
 };
+
+/** Glyph size of a native rating; each option keeps a 44-point target. */
+export type RatingSize = "lg" | "md" | "sm";
 
 /** Props for a controlled or uncontrolled native rating. */
 export type RatingProps = Omit<ViewProps, "children"> & {
@@ -33,10 +39,14 @@ export type RatingProps = Omit<ViewProps, "children"> & {
   readonly readOnly?: boolean;
   readonly ref?: Ref<View>;
   readonly showValue?: boolean;
+  /** Glyph size; defaults to `lg`, the size native ratings always rendered. */
+  readonly size?: RatingSize;
   readonly value?: number;
 };
 
 const MAX_OPTIONS = 100;
+/** Theme type-scale entries whose font size each rating size uses. */
+const GLYPH_SCALE = { lg: "h4", md: "h5", sm: "body" } as const;
 const styles = StyleSheet.create({
   option: {
     alignItems: "center",
@@ -61,6 +71,7 @@ type RatingOptionProps = {
   readonly label: string;
   readonly onSelect: (value: number) => void;
   readonly readOnly: boolean;
+  readonly size: RatingSize;
 };
 
 function RatingOption({
@@ -72,6 +83,7 @@ function RatingOption({
   label,
   onSelect,
   readOnly,
+  size,
 }: RatingOptionProps) {
   const theme = useTheme();
   const selected = choice === activeValue;
@@ -97,7 +109,7 @@ function RatingOption({
             choice <= activeValue
               ? theme.colors.primary
               : theme.colors.mutedForeground,
-          fontSize: 24,
+          fontSize: theme.typography.scale[GLYPH_SCALE[size]].fontSize,
         }}
       >
         {choice <= activeValue ? "★" : "☆"}
@@ -122,6 +134,7 @@ function Rating({
   readOnly: ownReadOnly = false,
   ref,
   showValue = false,
+  size = "lg",
   style,
   value,
   ...props
@@ -133,17 +146,11 @@ function Rating({
     ? Math.min(MAX_OPTIONS, Math.max(1, Math.round(max)))
     : 5;
   const [currentValue, setCurrentValue] = useControllableState(
-    value === undefined
-      ? {
-          defaultValue: normalize(defaultValue, safeMax),
-          mode: "uncontrolled",
-          onChange: onValueChange,
-        }
-      : {
-          mode: "controlled",
-          onChange: onValueChange,
-          value: normalize(value, safeMax),
-        },
+    controllableOptions(
+      value === undefined ? undefined : normalize(value, safeMax),
+      normalize(defaultValue, safeMax),
+      onValueChange,
+    ),
   );
   const choices = Array.from({ length: safeMax }, (_, index) => index + 1);
   const valueText = labels.value(normalize(currentValue, safeMax), safeMax);
@@ -167,6 +174,7 @@ function Rating({
           label={labels.option(choice, safeMax)}
           onSelect={setCurrentValue}
           readOnly={readOnly}
+          size={size}
         />
       ))}
       {showValue ? (

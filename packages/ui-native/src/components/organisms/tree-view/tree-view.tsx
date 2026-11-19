@@ -41,14 +41,26 @@ export type TreeViewLabels = {
 
 /** Props for controlled or uncontrolled native tree state. */
 export type TreeViewProps = Omit<ViewProps, "children" | "ref"> & {
+  /** Web name for `defaultExpandedIds`; the `Ids` name takes precedence. */
+  readonly defaultExpanded?: readonly string[];
   readonly defaultExpandedIds?: readonly string[];
+  /** Web name for `defaultSelectedIds`; the `Ids` name takes precedence. */
+  readonly defaultSelected?: readonly string[];
   readonly defaultSelectedIds?: readonly string[];
+  /** Web name for `expandedIds`; the `Ids` name takes precedence. */
+  readonly expanded?: readonly string[];
   readonly expandedIds?: readonly string[];
   readonly labels: TreeViewLabels;
   readonly nodes: readonly TreeViewNode[];
+  /** Web name for `onExpandedIdsChange`; the `Ids` name takes precedence. */
+  readonly onExpandedChange?: (ids: readonly string[]) => void;
   readonly onExpandedIdsChange?: (ids: readonly string[]) => void;
+  /** Web name for `onSelectedIdsChange`; the `Ids` name takes precedence. */
+  readonly onSelect?: (ids: readonly string[]) => void;
   readonly onSelectedIdsChange?: (ids: readonly string[]) => void;
   readonly ref?: Ref<View>;
+  /** Web name for `selectedIds`; the `Ids` name takes precedence. */
+  readonly selected?: readonly string[];
   readonly selectedIds?: readonly string[];
   readonly selectionMode?: "multiple" | "single";
 };
@@ -202,15 +214,21 @@ TreeRows.displayName = "TreeRows";
  * Each node's hint speaks its level and the tree name (`labels.region`).
  */
 function TreeView({
-  defaultExpandedIds = [],
-  defaultSelectedIds = [],
-  expandedIds,
+  defaultExpanded,
+  defaultExpandedIds = defaultExpanded ?? [],
+  defaultSelected,
+  defaultSelectedIds = defaultSelected ?? [],
+  expanded: expandedAlias,
+  expandedIds = expandedAlias,
   labels,
   nodes,
-  onExpandedIdsChange,
-  onSelectedIdsChange,
+  onExpandedChange,
+  onExpandedIdsChange = onExpandedChange,
+  onSelect: onSelectAlias,
+  onSelectedIdsChange = onSelectAlias,
   ref,
-  selectedIds,
+  selected: selectedAlias,
+  selectedIds = selectedAlias,
   selectionMode = "single",
   style,
   ...props

@@ -236,7 +236,7 @@ import {
   WorldClockBar,
 } from "../index";
 
-import { codePreviewTabs, gridListOptions, searchLabels } from "./test-utils";
+import { codePreviewTabs, gridListOptions, searchLabels } from "./fixture-data";
 
 /** Renders one representative, consumer-labelled use of a component. */
 export type AccessibilityFixture = () => ReactElement;

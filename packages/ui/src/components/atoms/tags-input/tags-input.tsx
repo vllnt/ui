@@ -150,7 +150,7 @@ function TagList({ disabled, onRemove, tags }: TagListProps) {
           <span>{tag}</span>
           <button
             aria-label={`Remove ${tag}`}
-            className="rounded-sm text-muted-foreground outline-none ring-offset-background transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
             disabled={disabled}
             onClick={(event) => {
               event.stopPropagation();

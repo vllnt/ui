@@ -8,7 +8,11 @@ export {
   type BannerVariant,
   bannerVariants,
 } from "./atoms/banner/banner";
-export { Breadcrumb, type BreadcrumbItem } from "./atoms/breadcrumb/breadcrumb";
+export {
+  Breadcrumb,
+  type BreadcrumbItem,
+  type BreadcrumbLabels,
+} from "./atoms/breadcrumb/breadcrumb";
 export {
   Button,
   type ButtonProps,
@@ -16,6 +20,9 @@ export {
 } from "./atoms/button/button";
 export {
   CookieConsent,
+  type CookieConsentActions,
+  type CookieConsentLabels,
+  type CookieConsentLayout,
   type CookieConsentProps,
   cookieConsentVariants,
 } from "./molecules/cookie-consent/cookie-consent";
@@ -113,6 +120,12 @@ export {
   useFormField,
 } from "./molecules/form/form";
 export {
+  SettingsList,
+  SettingsListItem,
+  type SettingsListItemProps,
+  type SettingsListProps,
+} from "./organisms/settings-list/settings-list";
+export {
   MultiSelect,
   type MultiSelectOption,
   type MultiSelectProps,
@@ -175,6 +188,15 @@ export {
   type AIToolCallDisplayProps,
   type AIToolCallStatus,
 } from "./molecules/ai-tool-call-display/ai-tool-call-display";
+export {
+  ApprovalRequest,
+  type ApprovalRequestLabels,
+  type ApprovalRequestPlacement,
+  type ApprovalRequestProps,
+  type ApprovalRequestRemember,
+  type ApprovalRequestRisk,
+  type ApprovalRequestStatus,
+} from "./molecules/approval-request/approval-request";
 export {
   AISidebar,
   AISidebarClose,
@@ -322,6 +344,7 @@ export {
   TagGroup,
   TagGroupItem,
   type TagGroupItemProps,
+  type TagGroupLabels,
   type TagGroupProps,
   type TagSelectionMode,
 } from "./atoms/tag-group/tag-group";
@@ -355,6 +378,7 @@ export {
   SheetDescription,
   SheetFooter,
   SheetHeader,
+  type SheetLabels,
   SheetOverlay,
   SheetPortal,
   SheetTitle,
@@ -470,6 +494,17 @@ export {
   type DataTableProps,
 } from "./organisms/data-table/data-table";
 export {
+  AccessMatrix,
+  type AccessMatrixChangeHandler,
+  type AccessMatrixLabels,
+  type AccessMatrixMode,
+  type AccessMatrixPermission,
+  type AccessMatrixProps,
+  type AccessMatrixState,
+  type AccessMatrixSubject,
+  type AccessMatrixValue,
+} from "./organisms/access-matrix/access-matrix";
+export {
   DataList,
   DataListItem,
   type DataListItemProps,
@@ -501,6 +536,7 @@ export {
   TimelineItem,
   type TimelineItemProps,
   type TimelineItemStatus,
+  type TimelineLabels,
   type TimelineOrientation,
   type TimelineProps,
   timelineVariants,
@@ -521,7 +557,15 @@ export {
   type TransactionListSubscriptionRowProps,
   type TransactionType,
 } from "./molecules/transaction-list/transaction-list";
-export { Avatar, AvatarFallback, AvatarImage } from "./atoms/avatar/avatar";
+export {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  type AvatarPresence,
+  type AvatarProps,
+  type AvatarShape,
+  type AvatarSize,
+} from "./atoms/avatar/avatar";
 export {
   AvatarGroup,
   type AvatarGroupItem,
@@ -859,6 +903,11 @@ export {
   type CreditBadgeStatus,
 } from "./molecules/credit-badge/credit-badge";
 export {
+  CtaBand,
+  type CtaBandProps,
+  type CtaBandTone,
+} from "./organisms/cta-band/cta-band";
+export {
   MarketTreemap,
   type MarketTreemapItem,
   type MarketTreemapProps,
@@ -923,6 +972,15 @@ export {
   type SubscriptionCardProps,
   type SubscriptionCardStatus,
 } from "./organisms/subscription-card/subscription-card";
+export {
+  OrderSummary,
+  type OrderSummaryLayout,
+  type OrderSummaryLine,
+  type OrderSummaryPromo,
+  type OrderSummaryPromoLabels,
+  type OrderSummaryPromoStatus,
+  type OrderSummaryProps,
+} from "./organisms/order-summary/order-summary";
 export { TLDRSection } from "./atoms/tldr-section/tldr-section";
 export {
   TickerTape,
@@ -1138,7 +1196,10 @@ export {
 } from "./organisms/primary-source-viewer/primary-source-viewer";
 export {
   ProgressBar,
+  type ProgressBarMode,
   type ProgressBarProps,
+  type ProgressBarSize,
+  type ProgressBarTone,
 } from "./atoms/progress-bar/progress-bar";
 export {
   ContentCard as ProgressCard,
@@ -1193,6 +1254,7 @@ export {
   type TabsProps,
   TabsTrigger,
   type TabsTriggerProps,
+  type TabsVariant,
 } from "./atoms/tabs/tabs";
 export {
   SimpleTerminal,
@@ -1313,6 +1375,15 @@ export {
   type SharePlatform as ShareDialogPlatform,
   type ShareDialogProps,
 } from "./organisms/share-dialog/share-dialog";
+export {
+  ShareDialogPeople,
+  type ShareDialogPeopleKind,
+  type ShareDialogPeopleLabels,
+  type ShareDialogPeopleLayout,
+  type ShareDialogPeoplePerson,
+  type ShareDialogPeopleProps,
+  type ShareDialogPeopleRole,
+} from "./organisms/share-dialog-people/share-dialog-people";
 export {
   type SharePlatformConfig,
   SocialFAB,
@@ -1707,6 +1778,7 @@ export {
   type ProgressiveBlurDirection,
   type ProgressiveBlurProps,
 } from "./atoms/progressive-blur/progressive-blur";
+export { Scrim, type ScrimProps } from "./atoms/scrim/scrim";
 export {
   type RevealDirection,
   RevealText,
@@ -1845,6 +1917,7 @@ export {
   type DisplayProps,
 } from "./atoms/display/display";
 export { Prose, type ProseProps } from "./atoms/prose/prose";
+export { PullQuote, type PullQuoteProps } from "./atoms/pull-quote/pull-quote";
 
 // Props types
 export type { BreadcrumbProps } from "./atoms/breadcrumb/breadcrumb";

@@ -1,10 +1,10 @@
 import type { Ref } from "react";
-import { StyleSheet, type TextInput, type TextInputProps } from "react-native";
+import { StyleSheet, type TextInput } from "react-native";
 
-import { Input } from "../../atoms/input/input";
+import { Input, type InputProps } from "../../atoms/input/input";
 
 /** Props for the native multiline text input. */
-export type TextareaProps = Omit<TextInputProps, "multiline"> & {
+export type TextareaProps = Omit<InputProps, "multiline" | "ref"> & {
   readonly ref?: Ref<TextInput>;
 };
 
