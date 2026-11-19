@@ -27,6 +27,8 @@
     "predev": "pnpm build:renderer",
     "preios": "pnpm build:renderer",
     "test:once": "jest --runInBand",
+    "test:scripts": "node --test scripts/verify-published.test.mjs",
+    "verify:published": "node scripts/verify-published.mjs",
     "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsc/typecheck.tsbuildinfo"
   },
   "dependencies": {
