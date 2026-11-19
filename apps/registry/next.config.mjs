@@ -14,11 +14,6 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   // Ensure the workspace UI package is transpiled and tree-shaken correctly
   transpilePackages: ['@vllnt/ui'],
-  experimental: {
-    // With a `[locale]` root segment the router guesses that `/docs/components` is locale "docs" and requests
-    // a page that does not exist; the 404 is retried without end, so a visible link keeps the page fetching.
-    optimisticRouting: false,
-  },
 }
 
 const withMDX = createMDX({
