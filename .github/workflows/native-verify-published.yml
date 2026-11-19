@@ -1,16 +1,14 @@
 name: Native Verify Published
 
-# Validates a PUBLISHED @vllnt/ui-core + @vllnt/ui-native pair from the npm tarballs, not from
-# workspace source: a clean Expo app and a copy of apps/native-catalog, each installed outside the
-# workspace (typecheck, Jest, `expo export` for iOS and Android). The check is
-# apps/native-catalog/scripts/verify-published.mjs.
+# Re-validates a PUBLISHED @vllnt/ui-core + @vllnt/ui-native pair from the npm tarballs, by hand:
+# for a release candidate, or to repeat a canary check. It is manual-only on purpose. The check for
+# each canary runs in native-canary.yml, right after the pair publishes (job verify-published),
+# on the commit that was pushed, not on a checkout of someone else's head.
 #
-#   workflow_run       after "Core and Native Canary" succeeds on main: finds the pair published for
-#                      that head SHA (canary versions end in `.sha<first 12 of the SHA>`). No pair for
-#                      the SHA (publishing is off, or the commit was superseded) is a no-op, not a failure.
-#   workflow_dispatch  re-validates any published pair, such as a release candidate. The checkout is
-#                      the ref the workflow runs from: dispatch it from the commit or tag the pair was
-#                      built from, because the catalog sources and tests under test come from that ref.
+# The check is apps/native-catalog/scripts/verify-published.mjs: a clean Expo app and a copy of
+# apps/native-catalog, each installed from npm outside the workspace (typecheck, Jest,
+# `expo export` for iOS and Android). The catalog sources and tests under test come from the ref
+# this workflow runs on, so run it from the commit or tag the pair was built from.
 #
 # Read-only and secret-free: it only talks to the public npm registry.
 
@@ -21,85 +19,28 @@ on:
         description: Exact version of @vllnt/ui-native and @vllnt/ui-core, or a dist-tag of ui-native
         required: true
         type: string
-  workflow_run:
-    workflows: ["Core and Native Canary"]
-    types: [completed]
-    branches: [main]
 
 permissions:
   contents: read
 
-concurrency:
-  group: native-verify-published-${{ github.event.workflow_run.head_sha || inputs.version }}
-  cancel-in-progress: false
-
 jobs:
   verify:
     name: Verify Published Pair
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # The commit the canary was built from; for a manual run, the ref it was dispatched on.
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
 
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
+      # No package cache: the scratch installs must resolve from the registry, not from a restored store.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .node-version
 
-      - name: Resolve the version to verify
-        id: version
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          INPUT_VERSION: ${{ inputs.version }}
-        run: |
-          set -euo pipefail
-          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            echo "version=${INPUT_VERSION}" >>"$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # Canary versions are 0.1.0-canary.<run>.sha<first 12 hex of the commit>.
-          sha12="${HEAD_SHA:0:12}"
-          found=""
-          for attempt in 1 2 3; do
-            if ! times="$(npm view @vllnt/ui-native time --json 2>"$RUNNER_TEMP/npm-view.err")"; then
-              # A registry error is never read as "not published"; only a 404 (never published) is.
-              if grep -q 'E404' "$RUNNER_TEMP/npm-view.err"; then
-                times='{}'
-              else
-                cat "$RUNNER_TEMP/npm-view.err" >&2
-                exit 1
-              fi
-            fi
-            # Newest match first, in case one commit was published more than once.
-            found="$(jq -r --arg suffix ".sha${sha12}" \
-              'to_entries | map(select(.key | endswith($suffix))) | sort_by(.value) | last | .key // empty' \
-              <<<"$times")"
-            if [[ -n "$found" || "$attempt" -eq 3 ]]; then
-              break
-            fi
-            # npm's metadata can trail a publish by a short while.
-            sleep 20
-          done
-
-          if [[ -z "$found" ]]; then
-            echo "::notice::no pair published for ${HEAD_SHA}"
-            echo "no pair published for \`${HEAD_SHA}\`: @vllnt/ui-native has no version ending in \`.sha${sha12}\`. Nothing to verify." >>"$GITHUB_STEP_SUMMARY"
-            echo "version=" >>"$GITHUB_OUTPUT"
-            exit 0
-          fi
-          echo "Found ${found} for ${HEAD_SHA}"
-          echo "version=${found}" >>"$GITHUB_OUTPUT"
-
       - name: Verify the published pair
-        if: ${{ steps.version.outputs.version != '' }}
         env:
-          VERSION: ${{ steps.version.outputs.version }}
+          VERSION: ${{ inputs.version }}
         run: node apps/native-catalog/scripts/verify-published.mjs "$VERSION"

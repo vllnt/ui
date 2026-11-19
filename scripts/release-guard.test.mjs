@@ -324,6 +324,126 @@ test("the workflow default stays read-only: top-level grants are rejected", () =
   // Job-level blocks and comments are not the workflow default.
   assert.doesNotThrow(() => assertReadOnlyDefault(workflow.replace("jobs:\n", "# permissions:\n#   id-token: write\njobs:\n")));
 });
+/** The `permissions:` block of one job (4-space indent), as its indented lines; "" when it has none. */
+const jobPermissions = (block) => block.match(/\n {4}permissions:\n((?: {6}\S[^\n]*(?:\n|$))+)/)?.[1] ?? "";
+/** The post-publish check: after the pair, read-only, no environment, token or secret, pinned, no cache. */
+const assertVerifyJob = (workflow) => {
+  const verify = job(workflow, "verify-published");
+  assert.match(verify, /\n {4}needs: native-publish\n/, "must run after the pair publish, and nothing else");
+  assert.match(verify, /\n {4}if: \$\{\{ needs\.native-publish\.result == 'success' \}\}\n/, "must run only when the pair publish succeeded");
+  assert.equal(jobPermissions(verify), "      contents: read\n", "job permissions must be exactly contents: read");
+  assert.doesNotMatch(verify, /id-token|environment:|secrets\.|NPM_DIST_TAG_TOKEN|NODE_AUTH_TOKEN|GITHUB_TOKEN|github\.token|registry-url|concurrency:/, "no token, environment or secret");
+  assert.doesNotMatch(verify, /\bcache:/, "no package cache: the scratch installs resolve from the registry");
+  assert.doesNotMatch(verify, /\n\s+ref:/, "checks out the pushed commit, not another ref");
+  assert.match(verify, /uses: actions\/checkout@[0-9a-f]{40} # v\S+\n\s+with:\n\s+persist-credentials: false\n/, "checkout must not keep the token");
+  const uses = verify.split("\n").filter((line) => /\buses:/.test(line));
+  assert.equal(uses.length, 3, "checkout, pnpm and node setup only");
+  for (const line of uses) assert.match(line, /@[0-9a-f]{40} # v/, "actions are pinned by SHA");
+  // The version is the one the publish job computed (same guard), and only an exact hit is verified.
+  assert.match(verify, /\n\s+version="\$\(node scripts\/release-guard\.mjs native-canary\)"\n/);
+  assert.match(verify, /npm-published\.sh "@vllnt\/ui-native@\$\{version\}"/);
+  assert.match(verify, /if: \$\{\{ steps\.version\.outputs\.version != '' \}\}\n\s+env:\n\s+VERSION: \$\{\{ steps\.version\.outputs\.version \}\}\n\s+run: node apps\/native-catalog\/scripts\/verify-published\.mjs "\$VERSION"\n/);
+};
+test("verify-published runs after the pair publish with no environment, token or secret", () => {
+  const workflow = read(".github/workflows/native-canary.yml");
+  assertVerifyJob(workflow);
+  // The job is last, so no other job needs it: a failure fails the run (and the health alert), it cannot block a publish.
+  assert.ok(!/needs:.*verify-published/.test(workflow));
+  // Every job keeps its own shape: only the publish jobs hold the OIDC token and the environment.
+  assert.equal(workflow.match(/id-token: write/g).length, 2);
+  assert.equal(workflow.match(/environment: npm-native-canary/g).length, 2);
+  // Each mistake is rejected, one at a time, and only inside the verify job.
+  const at = workflow.indexOf("\n  verify-published:\n");
+  const mutate = (change) => workflow.slice(0, at) + change(workflow.slice(at));
+  const mutants = {
+    "OIDC token": mutate((text) => text.replace("      contents: read\n", "      contents: read\n      id-token: write\n")),
+    "contents: write": mutate((text) => text.replace("      contents: read\n", "      contents: write\n")),
+    "no permissions block": mutate((text) => text.replace("    permissions:\n      contents: read\n", "")),
+    "environment": mutate((text) => text.replace("    needs: native-publish\n", "    needs: native-publish\n    environment: npm-native-canary\n")),
+    "needs the quality job instead": mutate((text) => text.replace("    needs: native-publish\n", "    needs: native-quality\n")),
+    "runs after a failed publish": mutate((text) => text.replace("${{ needs.native-publish.result == 'success' }}", "${{ !cancelled() }}")),
+    "secret": mutate((text) => text.replace("          VERSION: ${{ steps.version.outputs.version }}\n", "          VERSION: ${{ steps.version.outputs.version }}\n          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}\n")),
+    "token env": mutate((text) => text.replace("        run: node apps", "        env:\n          NODE_AUTH_TOKEN: x\n        run: node apps")),
+    "package cache": mutate((text) => text.replace("          node-version-file: .node-version\n", "          node-version-file: .node-version\n          cache: pnpm\n")),
+    "registry-url": mutate((text) => text.replace("          node-version-file: .node-version\n", "          node-version-file: .node-version\n          registry-url: https://registry.npmjs.org\n")),
+    "another ref": mutate((text) => text.replace("        with:\n          persist-credentials: false\n", "        with:\n          ref: ${{ github.head_ref }}\n          persist-credentials: false\n")),
+    "checkout keeps its token": mutate((text) => text.replace("persist-credentials: false", "persist-credentials: true")),
+    "unpinned action": mutate((text) => text.replace(/actions\/setup-node@[0-9a-f]{40} # v\S+/, "actions/setup-node@v7")),
+    "extra action": mutate((text) => `${text}\n      - uses: actions/cache@${"a".repeat(40)} # v4.0.0\n`),
+    "another version source": mutate((text) => text.replace('version="$(node scripts/release-guard.mjs native-canary)"', 'version="$(npm view @vllnt/ui-native dist-tags.canary)"')),
+  };
+  for (const [name, text] of Object.entries(mutants)) {
+    assert.notEqual(text, workflow, `mutant ${name} must change the workflow`);
+    assert.throws(() => assertVerifyJob(text), undefined, name);
+  }
+});
+test("verify-published step: verifies the exact pair this run published, stands down quietly when none exists", (t) => {
+  const workflow = read(".github/workflows/native-canary.yml");
+  const step = job(workflow, "verify-published").match(/- name: Find the version this run published\n[\s\S]*?\n {8}run: \|\n([\s\S]*?)\n\n {6}- name:/)?.[1];
+  assert.ok(step, "Find the version this run published step must exist");
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const dir = mkdtempSync(join(tmpdir(), "verify-step-"));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const sha = `8d4b5cd620ae${"0".repeat(28)}`;
+  const version = "0.1.0-canary.42.sha8d4b5cd620ae";
+  const run = (view, env = {}) => {
+    writeFileSync(join(dir, "npm"), `#!/usr/bin/env bash\necho "$@" >> "${dir}/calls"\n${view}\n`, { mode: 0o755 });
+    rmSync(join(dir, "calls"), { force: true });
+    writeFileSync(join(dir, "output"), "");
+    const result = spawnSync("bash", ["--noprofile", "--norc", "-eo", "pipefail", "-c", step.replace(/^ {10}/gm, "")], {
+      cwd: root,
+      encoding: "utf8",
+      env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, GITHUB_REF: "refs/heads/main", GITHUB_SHA: sha, GITHUB_RUN_NUMBER: "42", GITHUB_OUTPUT: join(dir, "output"), ...env },
+    });
+    let calls = "";
+    try { calls = readFileSync(join(dir, "calls"), "utf8"); } catch {}
+    return { status: result.status, stdout: result.stdout, output: readFileSync(join(dir, "output"), "utf8"), calls };
+  };
+  // The exact version npm serves for this run's commit is the one that gets verified.
+  const found = run(`echo ${version}`);
+  assert.equal(found.status, 0);
+  assert.equal(found.output, `version=${version}\n`);
+  assert.equal(found.calls, `view @vllnt/ui-native@${version} version\n`);
+  // Not on npm (E404): the publish stood down because main moved on. A notice, an empty output, success.
+  const absent = run("echo 'npm error code E404' >&2; exit 1");
+  assert.equal(absent.status, 0);
+  assert.equal(absent.output, "version=\n");
+  assert.match(absent.stdout, new RegExp(`::notice::no pair published for ${sha}`));
+  // Anything else is not "absent": the job fails and verifies nothing.
+  for (const view of [
+    "echo 'npm error code ETIMEDOUT' >&2; exit 1",
+    "echo 'npm error code E503' >&2; exit 1",
+    "echo 0.1.0-canary.41.sha8d4b5cd620ae",
+    "exit 0",
+    "echo 'npm warn deprecated x' >&2",
+  ]) {
+    const result = run(view);
+    assert.notEqual(result.status, 0, view);
+    assert.equal(result.output, "", view);
+  }
+  // The guard runs before npm is touched: a run that is not main never reaches the registry.
+  const offMain = run(`echo ${version}`, { GITHUB_REF: "refs/heads/other" });
+  assert.notEqual(offMain.status, 0);
+  assert.equal(offMain.calls, "");
+  assert.equal(offMain.output, "");
+});
+test("the manual verify workflow stays manual-only, read-only and cache-free", () => {
+  const workflow = code(read(".github/workflows/native-verify-published.yml"));
+  // The only trigger is a manual dispatch with the version input. A trigger that checks out another
+  // run's head commit (CodeQL: actions/cache-poisoning/poisonable-step) must not come back.
+  const triggers = workflow.slice(workflow.indexOf("on:\n"), workflow.indexOf("\npermissions:"));
+  assert.deepEqual([...triggers.matchAll(/^ {2}(\w+):/gm)].map((match) => match[1]), ["workflow_dispatch"]);
+  assert.match(triggers, /\n {6}version:\n {8}description: .+\n {8}required: true\n/);
+  assert.doesNotMatch(workflow, /workflow_run|head_sha|pull_request|\n\s+ref:|\bcache:|id-token|environment:|secrets\.|registry-url/);
+  assertReadOnlyDefault(workflow);
+  const uses = workflow.split("\n").filter((line) => /\buses:/.test(line));
+  assert.equal(uses.length, 3);
+  for (const line of uses) assert.match(line, /@[0-9a-f]{40} # v/, "actions are pinned by SHA");
+  assert.match(workflow, /uses: actions\/checkout@[0-9a-f]{40} # v\S+\n\s+with:\n\s+persist-credentials: false\n/);
+  // The input reaches the script through the environment, never interpolated into the command.
+  assert.match(workflow, /env:\n\s+VERSION: \$\{\{ inputs\.version \}\}\n\s+run: node apps\/native-catalog\/scripts\/verify-published\.mjs "\$VERSION"\n/);
+  assert.doesNotMatch(workflow, /run: .*\$\{\{/);
+});
 test("supply-chain policy is untouched by the canary paths", () => {
   const policy = read("pnpm-workspace.yaml");
   assert.match(policy, /^minimumReleaseAge: 10080$/m);
