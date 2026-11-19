@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, use, useCallback, useMemo, useState } from "react";
+import {
+  createContext,
+  use,
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 
 import type { ReactNode } from "react";
 
@@ -8,12 +15,30 @@ import { cn } from "../../../lib/utils";
 
 // Context for accordion state
 type AccordionContextValue = {
+  baseId: string;
   openItems: Set<string>;
   toggleItem: (value: string) => void;
   type: "multiple" | "single";
 };
 
 const AccordionContext = createContext<AccordionContextValue | null>(null);
+
+/**
+ * Builds the DOM id of an item's trigger or panel. The id replaces each
+ * character of `value` outside `[A-Za-z0-9-]` with `_<hex code>_`, so it has
+ * no whitespace and two different values never produce the same id.
+ */
+function getPartId(
+  baseId: string,
+  part: "content" | "trigger",
+  value: string,
+): string {
+  const key = value.replaceAll(
+    /[^\dA-Za-z-]/g,
+    (character) => `_${(character.codePointAt(0) ?? 0).toString(16)}_`,
+  );
+  return `${baseId}-${part}-${key}`;
+}
 
 function useAccordionContext(): AccordionContextValue {
   const context = use(AccordionContext);
@@ -36,6 +61,7 @@ function Accordion({
   defaultValue,
   type = "single",
 }: AccordionProps): React.ReactNode {
+  const baseId = useId();
   const [openItems, setOpenItems] = useState<Set<string>>(() => {
     if (!defaultValue) return new Set();
     if (Array.isArray(defaultValue)) return new Set(defaultValue);
@@ -61,8 +87,8 @@ function Accordion({
   );
 
   const contextValue = useMemo(
-    () => ({ openItems, toggleItem, type }),
-    [openItems, toggleItem, type],
+    () => ({ baseId, openItems, toggleItem, type }),
+    [baseId, openItems, toggleItem, type],
   );
 
   return (
@@ -116,11 +142,12 @@ function AccordionTrigger({
   icon,
   value,
 }: AccordionTriggerProps): React.ReactNode {
-  const { openItems, toggleItem } = useAccordionContext();
+  const { baseId, openItems, toggleItem } = useAccordionContext();
   const isOpen = openItems.has(value);
 
   return (
     <button
+      aria-controls={getPartId(baseId, "content", value)}
       aria-expanded={isOpen}
       className={cn(
         "w-full flex items-center justify-between p-4 text-left font-medium transition-colors",
@@ -128,6 +155,7 @@ function AccordionTrigger({
         isOpen && "bg-muted/30",
         className,
       )}
+      id={getPartId(baseId, "trigger", value)}
       onClick={() => {
         toggleItem(value);
       }}
@@ -177,15 +205,19 @@ function AccordionContent({
   className,
   value,
 }: AccordionContentProps): React.ReactNode {
-  const { openItems } = useAccordionContext();
+  const { baseId, openItems } = useAccordionContext();
   const isOpen = openItems.has(value);
 
   return (
     <div
+      aria-labelledby={getPartId(baseId, "trigger", value)}
       className={cn(
         "overflow-hidden transition-all duration-200",
         isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0",
       )}
+      id={getPartId(baseId, "content", value)}
+      inert={!isOpen}
+      role="region"
     >
       <div
         className={cn(
