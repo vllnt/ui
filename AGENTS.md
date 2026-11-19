@@ -20,7 +20,7 @@ This file is the **index**. Detailed rules live in [`docs/agents/`](./docs/agent
 | Path | Purpose | Published |
 |------|---------|-----------|
 | `packages/ui/` | `@vllnt/ui` component library | npm (public) |
-| `apps/registry/` | `ui.vllnt.ai` — Next.js registry + docs site | deployed (Vercel) |
+| `apps/registry/` | `ui.vllnt.com` — Next.js registry + docs site | deployed (Vercel) |
 | `skills/` | Agent skills (e.g. `vllnt-ui` — how to consume `@vllnt/ui` + the design system) | — |
 | `.github/workflows/` | CI: `ci.yml`, `publish.yml`, `storybook.yml`, `pr-issue-link.yml` | — |
 
@@ -124,6 +124,7 @@ Read these in order. Each is BLOCKING — violations keep a PR in draft.
 
 | File | What |
 |------|------|
+| [`docs/agents/LANES.md`](./docs/agents/LANES.md) | Web and native lanes: who owns which paths, shared-change requests, merge order, CI by lane. **Read before touching a path outside your lane.** |
 | [`docs/agents/RULES.md`](./docs/agents/RULES.md) | The 15 BLOCKING rules — process + code quality. **Read first.** |
 | [`docs/agents/PR_PLAYBOOK.md`](./docs/agents/PR_PLAYBOOK.md) | Ship checklist: diff sanity → gates → evidence → body refresh → ready |
 | [`docs/agents/COMPONENTS.md`](./docs/agents/COMPONENTS.md) | Component patterns: ref-as-prop + displayName, semantic root, ARIA, events, props |
@@ -145,7 +146,7 @@ Repository-wide docs (audience = contributors, not just agents):
 
 The most-violated rules in PR review history:
 
-0. **Design rules are mandatory for UI work.** Any UI suggestion or component/site change must follow [`DESIGN.md`](./DESIGN.md) (live at `https://ui.vllnt.ai/DESIGN.md`) and the machine-readable tokens in [`packages/design/tokens.json`](./packages/design/tokens.json). List any intentional deviation in the PR body.
+0. **Design rules are mandatory for UI work.** Any UI suggestion or component/site change must follow [`DESIGN.md`](./DESIGN.md) (live at `https://ui.vllnt.com/DESIGN.md`) and the machine-readable tokens in [`packages/design/tokens.json`](./packages/design/tokens.json). List any intentional deviation in the PR body.
 1. **Workspace gates green at HEAD** ([R6](./docs/agents/RULES.md#r6--workspace-gates-green-at-head)). Touched-file passes alone are not ship-OK. Run `pnpm -F @vllnt/ui lint && pnpm check:atomic && pnpm -F @vllnt/ui exec tsc --noEmit --project tsconfig.build.json && pnpm build && pnpm test:once` — all must be green.
 2. **PR body matches HEAD** ([R3](./docs/agents/RULES.md#r3--pr-body-matches-head)). After every push, rewrite the body to match the current head. Stale claims block ship.
 3. **Linked issue required** ([R5](./docs/agents/RULES.md#r5--linked-issue-required)). Every PR must reference a GitHub issue. Accepted keywords: `close` / `closes` / `closed`, `fix` / `fixes` / `fixed`, `resolve` / `resolves` / `resolved`, or repo phrases `Part of` / `Related to` — all case-insensitive, optional colon — followed by `#123` or `owner/repo#123`.
