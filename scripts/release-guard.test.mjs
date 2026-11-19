@@ -444,6 +444,23 @@ test("the manual verify workflow stays manual-only, read-only and cache-free", (
   assert.match(workflow, /env:\n\s+VERSION: \$\{\{ inputs\.version \}\}\n\s+run: node apps\/native-catalog\/scripts\/verify-published\.mjs "\$VERSION"\n/);
   assert.doesNotMatch(workflow, /run: .*\$\{\{/);
 });
+test("ui-core and ui-native export one entry for types, react-native, import and require: types first, default last", () => {
+  for (const name of ["ui-core", "ui-native"]) {
+    const manifest = JSON.parse(read(`packages/${name}/package.json`));
+    for (const [where, map] of [["exports", manifest.exports], ["publishConfig.exports", manifest.publishConfig?.exports]]) {
+      const entry = map?.["."];
+      const label = `@vllnt/${name} ${where}["."]`;
+      assert.ok(entry && typeof entry === "object", `${label} must be a conditions object`);
+      const keys = Object.keys(entry);
+      assert.equal(keys[0], "types", `${label}: types must come first, got ${keys.join(", ")}`);
+      assert.equal(keys.at(-1), "default", `${label}: default must come last, got ${keys.join(", ")}`);
+      for (const condition of ["react-native", "import", "default"]) assert.ok(keys.includes(condition), `${label} needs ${condition}`);
+      // Jest (require, no import condition) and Metro (react-native) must land on the file import lands on.
+      assert.equal(entry["react-native"], entry.import, `${label}: react-native must point at the import file`);
+      assert.equal(entry.default, entry.import, `${label}: default must point at the import file`);
+    }
+  }
+});
 test("supply-chain policy is untouched by the canary paths", () => {
   const policy = read("pnpm-workspace.yaml");
   assert.match(policy, /^minimumReleaseAge: 10080$/m);
