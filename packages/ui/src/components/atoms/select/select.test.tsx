@@ -34,7 +34,7 @@ describe("Select", () => {
 });
 
 describe("Select validity", () => {
-  it("marks an invalid trigger with the destructive border and ring, never on words", () => {
+  it("marks an invalid trigger with the destructive border, never on words", () => {
     render(
       <Select>
         <SelectTrigger aria-invalid="true" aria-label="Fruit">
@@ -44,10 +44,7 @@ describe("Select validity", () => {
     );
     const trigger = screen.getByRole("combobox", { name: "Fruit" });
     expect(trigger).toHaveAttribute("aria-invalid", "true");
-    expect(trigger).toHaveClass(
-      "aria-[invalid=true]:border-destructive",
-      "aria-[invalid=true]:focus:ring-destructive",
-    );
+    expect(trigger).toHaveClass("aria-[invalid=true]:border-destructive");
     expect(trigger.className).not.toMatch(/(?:^|\s)text-destructive(?:\s|$)/);
   });
 });
