@@ -1,5 +1,59 @@
 {
   "vllnt/core": {
+    "brand": {
+      "status": {
+        "candidate": {
+          "light": {
+            "$value": "{color.info}",
+            "$type": "color"
+          },
+          "dark": {
+            "$value": "{color.info}",
+            "$type": "color"
+          }
+        },
+        "deprecated": {
+          "light": {
+            "$value": "{color.warning}",
+            "$type": "color"
+          },
+          "dark": {
+            "$value": "{color.warning}",
+            "$type": "color"
+          }
+        },
+        "implemented": {
+          "light": {
+            "$value": "{color.success}",
+            "$type": "color"
+          },
+          "dark": {
+            "$value": "{color.success}",
+            "$type": "color"
+          }
+        },
+        "planned": {
+          "light": {
+            "$value": "{color.muted-foreground}",
+            "$type": "color"
+          },
+          "dark": {
+            "$value": "{color.muted-foreground}",
+            "$type": "color"
+          }
+        },
+        "unsupported": {
+          "light": {
+            "$value": "{color.destructive}",
+            "$type": "color"
+          },
+          "dark": {
+            "$value": "{color.destructive}",
+            "$type": "color"
+          }
+        }
+      }
+    },
     "font": {
       "family": {
         "sans": {
@@ -92,6 +146,16 @@
         }
       }
     },
+    "opacity": {
+      "grain": {
+        "$value": "1",
+        "$type": "opacity"
+      },
+      "contact": {
+        "$value": "1",
+        "$type": "opacity"
+      }
+    },
     "radius": {
       "none": {
         "$value": "0",
@@ -116,6 +180,26 @@
       "full": {
         "$value": "9999",
         "$type": "borderRadius"
+      },
+      "control": {
+        "$value": "6",
+        "$type": "borderRadius"
+      },
+      "surface": {
+        "$value": "8",
+        "$type": "borderRadius"
+      }
+    },
+    "size": {
+      "control-xs": {
+        "$value": "32",
+        "$type": "sizing"
+      },
+      "target": {
+        "min": {
+          "$value": "44",
+          "$type": "sizing"
+        }
       }
     },
     "spacing": {
@@ -270,6 +354,24 @@
       "ring": {
         "$value": "#D4D4D4",
         "$type": "color"
+      },
+      "badge-label": {
+        "danger": {
+          "$value": "{color.destructive}",
+          "$type": "color"
+        },
+        "info": {
+          "$value": "{color.info}",
+          "$type": "color"
+        },
+        "success": {
+          "$value": "{color.success}",
+          "$type": "color"
+        },
+        "warning": {
+          "$value": "{color.warning}",
+          "$type": "color"
+        }
       }
     },
     "font": {
@@ -474,6 +576,24 @@
       "ring": {
         "$value": "#0A0A0A",
         "$type": "color"
+      },
+      "badge-label": {
+        "danger": {
+          "$value": "{color.destructive}",
+          "$type": "color"
+        },
+        "info": {
+          "$value": "{color.info}",
+          "$type": "color"
+        },
+        "success": {
+          "$value": "{color.success}",
+          "$type": "color"
+        },
+        "warning": {
+          "$value": "{color.warning}",
+          "$type": "color"
+        }
       }
     },
     "font": {
@@ -580,7 +700,7 @@
         "$type": "color"
       },
       "card": {
-        "$value": "#0A0A0A",
+        "$value": "#000000",
         "$type": "color"
       },
       "card-foreground": {
@@ -588,7 +708,7 @@
         "$type": "color"
       },
       "popover": {
-        "$value": "#0A0A0A",
+        "$value": "#000000",
         "$type": "color"
       },
       "popover-foreground": {
@@ -612,7 +732,7 @@
         "$type": "color"
       },
       "muted": {
-        "$value": "#262626",
+        "$value": "#000000",
         "$type": "color"
       },
       "muted-foreground": {
@@ -678,6 +798,24 @@
       "ring": {
         "$value": "#D4D4D4",
         "$type": "color"
+      },
+      "badge-label": {
+        "danger": {
+          "$value": "{color.destructive}",
+          "$type": "color"
+        },
+        "info": {
+          "$value": "{color.info}",
+          "$type": "color"
+        },
+        "success": {
+          "$value": "{color.success}",
+          "$type": "color"
+        },
+        "warning": {
+          "$value": "{color.warning}",
+          "$type": "color"
+        }
       }
     },
     "font": {
@@ -700,6 +838,16 @@
           ],
           "$type": "fontFamilies"
         }
+      }
+    },
+    "opacity": {
+      "grain": {
+        "$value": "0",
+        "$type": "opacity"
+      },
+      "contact": {
+        "$value": "0",
+        "$type": "opacity"
       }
     }
   },
@@ -812,6 +960,24 @@
       "ring": {
         "$value": "#0A0A0A",
         "$type": "color"
+      },
+      "badge-label": {
+        "danger": {
+          "$value": "{color.destructive}",
+          "$type": "color"
+        },
+        "info": {
+          "$value": "{color.info}",
+          "$type": "color"
+        },
+        "success": {
+          "$value": "{color.success}",
+          "$type": "color"
+        },
+        "warning": {
+          "$value": "{color.warning}",
+          "$type": "color"
+        }
       }
     },
     "font": {
@@ -834,6 +1000,16 @@
           ],
           "$type": "fontFamilies"
         }
+      }
+    },
+    "opacity": {
+      "grain": {
+        "$value": "0",
+        "$type": "opacity"
+      },
+      "contact": {
+        "$value": "0",
+        "$type": "opacity"
       }
     }
   },

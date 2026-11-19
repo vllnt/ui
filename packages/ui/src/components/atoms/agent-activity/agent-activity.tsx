@@ -476,7 +476,7 @@ export const AgentStepProgress = ({
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={clamped}
-      className={cn("h-1.5 w-full rounded-full bg-muted", className)}
+      className={cn("h-1.5 w-full rounded-full bg-secondary", className)}
       ref={ref}
       role="progressbar"
       {...rest}

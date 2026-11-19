@@ -18,7 +18,7 @@ import { cn } from "../../../lib/utils";
 import type { CopyStatus, FlowControlsProps } from "./types";
 
 const BUTTON_CLASS =
-  "flex size-8 items-center justify-center rounded hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
+  "flex size-8 items-center justify-center rounded hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
 
 type ControlButtonProps = {
   disabled?: boolean;

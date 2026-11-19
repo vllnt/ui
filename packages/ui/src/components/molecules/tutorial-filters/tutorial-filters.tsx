@@ -88,7 +88,7 @@ function DifficultyFilter({
               className={`px-3 py-1 text-sm rounded-lg border transition-colors ${
                 isActive
                   ? "bg-primary text-primary-foreground border-transparent"
-                  : "bg-background text-foreground border-border hover:bg-muted"
+                  : "bg-background text-foreground border-border hover:bg-secondary"
               }`}
               disabled={isPending}
               key={difficulty}
@@ -147,7 +147,7 @@ function TagFilter({
               className={`cursor-pointer transition-all ${
                 isActive
                   ? "bg-primary text-primary-foreground border-transparent"
-                  : "hover:bg-muted"
+                  : "hover:bg-secondary"
               }`}
               key={`${tag}-${index.toString()}`}
               onClick={() => {

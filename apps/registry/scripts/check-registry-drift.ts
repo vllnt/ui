@@ -19,6 +19,7 @@ import { execSync } from "node:child_process";
 const TRACKED_PATHS = [
   "apps/registry/registry.json",
   "apps/registry/lib/component-metadata.json",
+  "apps/registry/lib/component-slugs.json",
 ];
 
 const repoRoot = execSync("git rev-parse --show-toplevel", {

@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  publicPagePathname,
-  publicVariant,
-  variantPathname,
-} from "./platform-variant";
+import { registry } from "@/lib/registry";
+
+import componentSlugs from "./component-slugs.json";
+import { publicPagePathname, publicVariant } from "./platform-variant";
+import { variantPathname } from "./platform-variant-rewrite";
+
+describe("component-slugs.json", () => {
+  it("lists every registry component", () => {
+    expect(componentSlugs).toEqual(
+      registry.items.map((item) => item.name).sort(),
+    );
+  });
+});
 
 describe("variantPathname", () => {
   it.each([
@@ -34,6 +42,9 @@ describe("variantPathname", () => {
     ["/templates", "native"],
     ["/", "native"],
     ["/en/components/button", "native"],
+    ["/components/zz-unknown", "native"],
+    ["/components/zz-unknown", "web"],
+    ["/fr/components/zz-unknown", "native"],
   ])("leaves %s?platform=%s on the clean page", (pathname, platform) => {
     expect(variantPathname(pathname, platform)).toBeUndefined();
   });
