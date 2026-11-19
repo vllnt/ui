@@ -8,6 +8,10 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 - Affordance contract (#633): `InteractivePressable` and `interactionStyle` in `src/primitives` give a control one state set (rest, hover, focus, pressed, selected, disabled) from local `interactionTokens`, with a focus ring, a non-colour selected border and the 44-point floor. No state changes a control's size: the focus ring is an outline and a selectable control draws its selected border as a frame inside its box. `Button`, `Toggle`, `Checkbox`, `RadioGroup` and `SegmentedControl` use it, replacing their literal pressed (0.8) and disabled (0.5) opacities; a ghost `Button` underlines its label on hover, focus and press. Public props and exports are unchanged. A lint rule bans raw `Pressable` in `src/components` outside a shrinking allowlist, and the accessibility contract gains reduced-motion (C1), state-flip (C3) and static-surface (R11) rules.
 
+### Changed
+
+- Affordance contract phase 2 (#633): the other 86 components that pressed through React Native's `Pressable` (53 atoms, 27 molecules, 6 organisms) now use `InteractivePressable`, so every interactive control shares the state set and the 44-point floor, and selectable ones (tabs, list and menu rows, calendar days, tags, segments) draw the non-colour selected border. Their literal pressed and disabled opacities are gone. Public props, exports, roles and accessibility states are unchanged. The lint ban on `Pressable` in `src/components` no longer has an allowlist.
+
 ## [0.1.0] - Unreleased
 
 ### Added

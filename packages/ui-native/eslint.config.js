@@ -1,15 +1,5 @@
 import { react } from "@vllnt/eslint-config";
 
-/*
- * Affordance contract (#633): components press through InteractivePressable
- * (src/primitives), which owns hover, focus, press, selected and disabled
- * styling and the touch-target floor. These files still import React Native's
- * Pressable and are migrated in later phases. Delete an entry when its file
- * migrates. Never add one; new components use InteractivePressable.
- */
-const LEGACY_PRESSABLE_FILES = [
-];
-
 export default [
   {
     ignores: [
@@ -44,7 +34,6 @@ export default [
   },
   {
     files: ["src/components/**/*.{ts,tsx}"],
-    ignores: LEGACY_PRESSABLE_FILES,
     rules: {
       "no-restricted-imports": [
         "error",
