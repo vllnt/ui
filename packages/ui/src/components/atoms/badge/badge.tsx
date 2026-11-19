@@ -64,7 +64,7 @@ const badgeVariants = cva(
         outline: "text-foreground",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        soft: "border-transparent bg-muted text-foreground hover:bg-muted/80",
+        soft: "border-transparent bg-muted text-foreground hover:bg-secondary/80",
       },
     },
   },
