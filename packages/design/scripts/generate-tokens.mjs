@@ -94,6 +94,20 @@ const mapValues = (object, map) =>
 /** Radius role names (D14). Fixed in every theme, so a theme cannot override them. */
 const radiusRoles = ["control", "surface"];
 
+/** Page gutter spacing tokens (F5): aliases of a spacing scale step, named as in the Penpot libraries. */
+const spacingRoles = ["page-gutter", "page-gutter-wide"];
+
+/** The scale step inside a `{spacing.4}` reference. */
+const spacingStep = (reference) => /^\{spacing\.([0-9]+)\}$/.exec(reference)?.[1];
+
+/** A spacing role's length: the scale value its alias points at. */
+const spacingRoleValue = (role) =>
+  designTokens.spacing.scale[spacingStep(designTokens.spacing[role].value)];
+
+/** One shadow layer as a CSS `box-shadow` layer. */
+const cssShadowLayer = (layer) =>
+  `${layer.inset ? "inset " : ""}${layer.offsetX}px ${layer.offsetY}px ${layer.blur}px ${layer.spread}px ${layer.color}`;
+
 /** Leaves of a nested `{ value, role }` token group as `[path, leaf]` pairs. */
 function tokenLeaves(group, path) {
   return Object.entries(group).flatMap(([key, node]) =>
@@ -203,6 +217,17 @@ function validateTokenGroups(colorRoles) {
   for (const role of radiusRoles) {
     assert(role in designTokens.radius, `radius.${role} is missing.`);
   }
+  for (const role of spacingRoles) {
+    assert(
+      spacingRoleValue(role) !== undefined,
+      `spacing.${role} must reference a spacing scale step as {spacing.<step>}.`,
+    );
+  }
+  for (const [name, token] of Object.entries(designTokens.shadow)) {
+    for (const mode of modes) {
+      assert(token[mode].length > 0, `shadow.${name}.${mode} needs at least one layer.`);
+    }
+  }
 }
 
 function validateSource() {
@@ -295,10 +320,21 @@ function scalarLines(indentation) {
     ...radiusRoles.map(
       (role) => `${indentation}--radius-${role}: ${designTokens.radius[role]};`,
     ),
+    ...spacingRoles.map(
+      (role) => `${indentation}--spacing-${role}: ${spacingRoleValue(role)};`,
+    ),
     ...[...sizeLeaves, ...opacityLeaves].map(
       ([path, leaf]) => `${indentation}${pathVariable(path)}: ${leaf.value};`,
     ),
   ];
+}
+
+/** `--shadow-<name>`: the token's layers for one mode as a CSS `box-shadow` value. */
+function shadowLines(mode, indentation) {
+  return Object.entries(designTokens.shadow).map(
+    ([name, token]) =>
+      `${indentation}--shadow-${name}: ${token[mode].map(cssShadowLayer).join(", ")};`,
+  );
 }
 
 /** Under a coarse pointer, each size token with a `coarse` reference takes that token's value. */
@@ -326,9 +362,11 @@ function renderDefaultTheme() {
     ...declarationLines("light", "  "),
     ...typographyLines("  "),
     ...scalarLines("  "),
+    ...shadowLines("light", "  "),
     "}",
     ".dark {",
     ...declarationLines("dark", "  "),
+    ...shadowLines("dark", "  "),
     "}",
     ...coarsePointerLines(""),
     "",
@@ -353,9 +391,11 @@ function renderStylesThemeBlock() {
     ...declarationLines("light", "    "),
     ...typography,
     ...scalarLines("    "),
+    ...shadowLines("light", "    "),
     "  }",
     "  .dark {",
     ...declarationLines("dark", "    "),
+    ...shadowLines("dark", "    "),
     "  }",
     ...coarsePointerLines("  "),
     "}",
@@ -739,12 +779,23 @@ function penpotTokens() {
         penpotToken(value, "opacity"),
       ),
       radius: mapValues(core.radius, penpotRadius),
+      shadow: mapValues(designTokens.shadow, (token) =>
+        penpotToken(token.light, "shadow"),
+      ),
       size: penpotGroup(designTokens.size, (value) =>
         penpotToken(penpotNumber(value), "sizing"),
       ),
-      spacing: mapValues(designTokens.spacing.scale, (value) =>
-        penpotToken(penpotNumber(value), "spacing"),
-      ),
+      spacing: {
+        ...mapValues(designTokens.spacing.scale, (value) =>
+          penpotToken(penpotNumber(value), "spacing"),
+        ),
+        ...Object.fromEntries(
+          spacingRoles.map((role) => [
+            role,
+            penpotToken(designTokens.spacing[role].value, "spacing"),
+          ]),
+        ),
+      },
     },
   };
 
@@ -767,6 +818,11 @@ function penpotTokens() {
             colorReference,
           ),
         },
+        ...(mode === "dark" && {
+          shadow: mapValues(designTokens.shadow, (token) =>
+            penpotToken(token.dark, "shadow"),
+          ),
+        }),
         ...penpotThemeOverrides(theme),
       };
     }

@@ -64,7 +64,14 @@ The token file follows `tokens.schema.json`:
   core roles: `color.light` / `color.dark` (OKLCH channels), `typography`
   (`fontFamily`, `fontWeight`, `scale`), `radius` and `opacity`. Every key must
   already exist in the core, so a theme cannot add roles.
-- `elevation`: allowed shadow tokens.
+- `elevation`: allowed shadow tokens (Tailwind classes; not exported to Penpot).
+- `shadow`: `{ role, light, dark }` library shadows (`raised`, `overlay`,
+  `floating`). Each mode is a list of layers `{ offsetX, offsetY, blur, spread,
+  color, inset }`; the generator writes `--shadow-<name>` in both modes and the
+  Penpot `shadow` tokens (light in `vllnt/core`, dark in each `<theme>/dark` set).
+- `spacing.page-gutter`, `spacing.page-gutter-wide`: `{ value: "{spacing.N}", role }`
+  aliases of the scale (16 below 1024 px, 32 from 1024 px).
+- `size.measure-narrow`: the narrow text column width (480 px).
 - `motion`: allowed durations, easing, and reduced-motion behavior.
 - `iconography`: icon library, sizes, stroke, and color policy.
 

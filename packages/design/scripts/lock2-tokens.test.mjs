@@ -188,3 +188,182 @@ describe("opacity.grain and opacity.contact (D12)", () => {
     );
   });
 });
+
+/** One shadow layer in the libraries' token format (all offsets in px, strings). */
+const shadowLayer = (offsetY, blur, color, inset = false) => ({
+  blur: String(blur),
+  color,
+  inset,
+  offsetX: "0",
+  offsetY: String(offsetY),
+  spread: "0",
+});
+
+/**
+ * The libraries' shadow tokens (lock 2 readback, 18 Nov 2026): `vllnt/core` holds the
+ * light value, `vllnt/mode/dark` the dark one. The additive and increased-contrast
+ * sets hold no shadow (every layer is transparent); code has no such mode.
+ */
+const libraryShadows = {
+  floating: {
+    dark: [shadowLayer(16, 40, "#00000099"), shadowLayer(1, 0, "#FFFFFF29", true)],
+    light: [shadowLayer(16, 40, "#0000002E")],
+  },
+  overlay: {
+    dark: [shadowLayer(8, 24, "#00000080"), shadowLayer(1, 0, "#FFFFFF1F", true)],
+    light: [shadowLayer(8, 24, "#00000024")],
+  },
+  raised: {
+    dark: [
+      shadowLayer(1, 3, "#00000066"),
+      shadowLayer(1, 2, "#0000003D"),
+      shadowLayer(1, 0, "#FFFFFF14", true),
+    ],
+    light: [shadowLayer(1, 3, "#0000001A"), shadowLayer(1, 2, "#0000000F")],
+  },
+};
+
+describe("shadow tokens (K-shadow-overlay)", () => {
+  it("sets raised, overlay and floating on vllnt/core with the library's light layers", () => {
+    const core = penpot["vllnt/core"].shadow;
+    assert.deepEqual(Object.keys(core).sort(), Object.keys(libraryShadows));
+    for (const [name, layers] of Object.entries(libraryShadows)) {
+      assert.deepEqual(core[name], { $type: "shadow", $value: layers.light }, name);
+    }
+  });
+
+  it("makes shadow.overlay the 0/8/24 black 14% drop shadow", () => {
+    const [layer, ...rest] = penpot["vllnt/core"].shadow.overlay.$value;
+    assert.equal(rest.length, 0);
+    assert.deepEqual(
+      [layer.offsetX, layer.offsetY, layer.blur, layer.spread, layer.color],
+      ["0", "8", "24", "0", "#00000024"],
+    );
+    const alpha = Number.parseInt(layer.color.slice(7), 16) / 255;
+    assert.ok(alpha > 0.139 && alpha < 0.142, `alpha ${alpha}`);
+  });
+
+  for (const name of themeNames) {
+    it(`gives vllnt/${name}/dark the library's dark layers and vllnt/${name}/light none`, () => {
+      const dark = penpot[`vllnt/${name}/dark`].shadow;
+      for (const [token, layers] of Object.entries(libraryShadows)) {
+        assert.deepEqual(dark[token], { $type: "shadow", $value: layers.dark }, token);
+      }
+      assert.equal(penpot[`vllnt/${name}/light`].shadow, undefined);
+    });
+  }
+
+  it("exposes --shadow-* in :root for light and in .dark for dark", () => {
+    const cssLayer = (layer) =>
+      `${layer.inset ? "inset " : ""}${layer.offsetX}px ${layer.offsetY}px ${layer.blur}px ${layer.spread}px ${layer.color}`;
+    for (const css of [defaultCss, stylesCss]) {
+      const dark = css.slice(css.indexOf(".dark {"));
+      const light = css.slice(0, css.indexOf(".dark {"));
+      for (const [name, layers] of Object.entries(libraryShadows)) {
+        assert.ok(
+          light.includes(`--shadow-${name}: ${layers.light.map(cssLayer).join(", ")};`),
+          `light ${name}`,
+        );
+        assert.ok(
+          dark.includes(`--shadow-${name}: ${layers.dark.map(cssLayer).join(", ")};`),
+          `dark ${name}`,
+        );
+      }
+    }
+  });
+
+  it("leaves elevation.* as it was: it is not a library token set", () => {
+    assert.deepEqual(Object.keys(tokens.elevation), ["none", "sm", "md", "lg"]);
+    for (const set of penpot.$metadata.tokenSetOrder) {
+      assert.equal(penpot[set].elevation, undefined, set);
+    }
+  });
+});
+
+describe("spacing.page-gutter and spacing.page-gutter-wide (F5)", () => {
+  it("aliases spacing steps 4 (16) and 8 (32) in vllnt/core", () => {
+    const spacing = penpot["vllnt/core"].spacing;
+    assert.deepEqual(spacing["page-gutter"], { $type: "spacing", $value: "{spacing.4}" });
+    assert.deepEqual(spacing["page-gutter-wide"], { $type: "spacing", $value: "{spacing.8}" });
+    assert.equal(spacing[4].$value, "16");
+    assert.equal(spacing[8].$value, "32");
+  });
+
+  it("exposes both as CSS variables with the resolved length", () => {
+    for (const css of [defaultCss, stylesCss]) {
+      assert.match(css, /--spacing-page-gutter: 1rem;/);
+      assert.match(css, /--spacing-page-gutter-wide: 2rem;/);
+    }
+  });
+});
+
+describe("size.measure-narrow (F7)", () => {
+  it("is 480 in vllnt/core and 30rem in CSS", () => {
+    assert.deepEqual(penpot["vllnt/core"].size["measure-narrow"], {
+      $type: "sizing",
+      $value: "480",
+    });
+    for (const css of [defaultCss, stylesCss]) {
+      assert.match(css, /--size-measure-narrow: 30rem;/);
+    }
+  });
+});
+
+/** WCAG relative luminance and contrast ratio of two `#RRGGBB` colours. */
+function contrastRatio(first, second) {
+  const luminance = (hex) => {
+    const [red, green, blue] = [1, 3, 5]
+      .map((index) => Number.parseInt(hex.slice(index, index + 2), 16) / 255)
+      .map((value) => (value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+  };
+  const [high, low] = [luminance(first), luminance(second)].sort((a, b) => b - a);
+  return (high + 0.05) / (low + 0.05);
+}
+
+describe("color.input (K-input-border-contrast)", () => {
+  const libraryInput = { dark: "#696969", light: "#858585" };
+
+  for (const mode of modes) {
+    it(`matches the library's ${mode} value`, () => {
+      assert.equal(penpot[`vllnt/paas/${mode}`].color.input.$value, libraryInput[mode]);
+    });
+
+    it(`keeps 3:1 against the ${mode} background, card and popover`, () => {
+      const { color } = penpot[`vllnt/paas/${mode}`];
+      for (const surface of ["background", "card", "popover"]) {
+        const ratio = contrastRatio(color.input.$value, color[surface].$value);
+        assert.ok(ratio >= 3, `${surface}: ${ratio.toFixed(2)}`);
+      }
+    });
+  }
+
+  it("reaches 3:1 on the light muted band, which the old value (2.85) missed", () => {
+    const { color } = penpot["vllnt/paas/light"];
+    assert.ok(contrastRatio(color.input.$value, color.muted.$value) >= 3);
+  });
+});
+
+describe("Maia Ink (K-ink-regen)", () => {
+  it("has no accent: the primary is the foreground colour in both modes", () => {
+    for (const mode of modes) {
+      const { color } = penpot[`vllnt/maia/${mode}`];
+      assert.equal(color.primary.$value, color.foreground.$value, mode);
+    }
+  });
+
+  it("carries no Figtree and none of the old pink accent hexes in the tokens or the stylesheets", () => {
+    const sources = [
+      JSON.stringify(tokens.themes.maia),
+      JSON.stringify(penpot["vllnt/maia/light"]),
+      JSON.stringify(penpot["vllnt/maia/dark"]),
+      productsCss.slice(
+        productsCss.indexOf('html[data-theme="maia"] {'),
+        productsCss.indexOf('html[data-theme="paas"] {'),
+      ),
+    ];
+    for (const source of sources) {
+      assert.doesNotMatch(source, /Figtree|F46CBF|BE148B/i);
+    }
+  });
+});

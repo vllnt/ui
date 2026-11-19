@@ -79,7 +79,7 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--success-foreground` / `--warning-foreground` / `--info-foreground` | Text on that fill (same pairing as destructive) | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
 | `--diff-added` / `--diff-removed` | Added / removed line surfaces; `--foreground` is the text on them | `0.94 0.04 150` (#d9f3dd) / `0.94 0.03 25` (#ffe4e1) | `0.26 0.05 150` (#102b17) / `0.26 0.055 25` (#3b1816) |
 | `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.2686 0 0` (#262626) |
-| `--input` | Form-control boundary | `0.66 0 0` (#929292) | `0.49 0 0` (#606060) |
+| `--input` | Form-control boundary | `0.6167 0 0` (#858585) | `0.5208 0 0` (#696969) |
 | `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
 
 In dark mode `--destructive` is a light red paired with a dark
@@ -121,7 +121,7 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 
 Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.00 (dark, on muted);
 destructive text 5.41 / 4.96 (light), 7.26 / 5.23 (dark, on background / muted);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.34 (dark, on background);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light), 3.83 (dark) on background, 3.69 (light), 3.61 (dark) on card and popover (on muted: 3.39 light, 2.76 dark, below 3:1 and outside the rule);
 success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 8.07 / 8.56 / 6.62 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
 foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
@@ -139,14 +139,14 @@ A product theme is a named override layer on the core tokens, authored in the `t
 
 | Theme | `data-theme` | Identity |
 |-------|--------------|----------|
-| Maia | `maia` | Pink `--primary` (#BE148B light, #F46CBF dark) on white / black, Figtree + JetBrains Mono, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
+| Maia | `maia` | Ink: no accent, `--primary` is the ink colour (#000000 light, #FFFFFF dark) on white / black, core Inter + JetBrains Mono, weights 400 to 600, tighter scale, radius sm 6 / md 8 / lg 12 / xl 16 |
 | PaaS | `paas` | Core neutrals and status tones, JetBrains Mono for sans, display and mono. Dark is the design default; light works too. No accent: `--primary` stays the core neutral |
 
-Maia's palette comes from a Penpot export kept for review in `packages/design/sources/` (the generator never reads it). Its product-specific names map onto core roles:
+Maia's palette comes from a Penpot export kept for review in `packages/design/sources/` (the generator never reads it). That copy is the 8 Nov pink export. Maia is now Ink (owner decision, 11 Nov): the export's `accent` no longer becomes `--primary`, its Figtree faces and its 700 weights are not used, and every other value still follows it. Its product-specific names map onto core roles:
 
 | Maia token | Core role |
 |------------|-----------|
-| `accent` | `--primary` (and `--primary-foreground` from `accent-foreground`) |
+| `accent` | not mapped (Ink: `--primary` is the ink colour, `--primary-foreground` its inverse) |
 | `muted` | `--muted`; core `--accent` is the same subtle surface |
 | `muted-foreground`, `status.planned`, `state.idle` | `--muted-foreground` |
 | `surface-raised` | `--card` and `--popover` |
@@ -199,7 +199,7 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 | Label | `--font-size-label` | 0.75rem (12px) | 600 (`--font-weight-label`) | 1.4 |
 | Code | inherit | inherit | 400 mono | 1.5 |
 
-Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/700; its Mono 12/400 is `font-mono` at the Caption size with the body weight. Maia's Display weight (700) and Label weight (700) are theme-level exceptions to the rule below; core stays at 600. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.
+Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/600; its Mono 12/400 is `font-mono` at the Caption size with the body weight. No theme uses weight 700. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.
 
 **Rules**
 - The `Text` / `Heading` / `Display` / `Prose` foundation primitives consume the tokens above — style them by overriding tokens, not by forking the components.
@@ -229,6 +229,15 @@ Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/
 **Rules**
 - Stay on the scale. Never `gap-[7px]` etc.
 - One axis at a time on flex children — use `gap-y-N` or `gap-x-N`, not `gap-N` when only one axis is needed.
+
+**Page gutter.** Two role tokens alias the scale for the horizontal page padding. Read them instead of repeating `px-4` / `px-8`.
+
+| Token | CSS variable | Value | Use |
+|-------|--------------|-------|-----|
+| `spacing.page-gutter` | `--spacing-page-gutter` | 16px (`space-4`) | Page padding below 1024 px |
+| `spacing.page-gutter-wide` | `--spacing-page-gutter-wide` | 32px (`space-8`) | Page padding from 1024 px |
+
+**Narrow measure.** `size.measure-narrow` (`--size-measure-narrow`, 480px) is the width of a narrow text column, for rich text in a tight container.
 
 ---
 
@@ -263,6 +272,14 @@ Use sparingly. Most components are flat with `border` + `bg-background`.
 | `shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.1)` (popovers, dialogs) |
 
 No coloured shadows. No multi-layered glow effects.
+
+**Library shadows.** Three shadow tokens carry the Penpot library's values, with a separate set per mode (dark adds an inset 1px top highlight). They are emitted as CSS variables and as Penpot `shadow` tokens; the Tailwind classes above are unchanged.
+
+| Token | Variable | Light | Dark |
+|-------|----------|-------|------|
+| `shadow.raised` | `--shadow-raised` | `0 1px 3px #0000001A, 0 1px 2px #0000000F` | `0 1px 3px #00000066, 0 1px 2px #0000003D, inset 0 1px 0 #FFFFFF14` |
+| `shadow.overlay` | `--shadow-overlay` | `0 8px 24px #00000024` | `0 8px 24px #00000080, inset 0 1px 0 #FFFFFF1F` |
+| `shadow.floating` | `--shadow-floating` | `0 16px 40px #0000002E` | `0 16px 40px #00000099, inset 0 1px 0 #FFFFFF29` |
 
 **Grain and contact layers.** Two opacity tokens set how strong a Surface grain or contact-shadow layer is when a component draws one. Nothing draws either unless it opts in.
 

@@ -219,11 +219,13 @@ describe("product themes", () => {
     },
   );
 
-  it("maps Maia's accent onto primary and keeps core accent a quiet surface", () => {
+  it("makes Maia's primary the ink colour (Ink: no accent) and keeps core accent a quiet surface", () => {
     const { dark, light } = productThemes.maia.colors;
-    expect(dark.primary).toBe("#f46cbf");
+    expect(dark.primary).toBe("#ffffff");
+    expect(dark.primary).toBe(dark.foreground);
     expect(dark.background).toBe("#000000");
-    expect(light.primary).toBe("#be148b");
+    expect(light.primary).toBe("#000000");
+    expect(light.primary).toBe(light.foreground);
     expect(light.background).toBe("#ffffff");
     expect(dark.accent).toBe(dark.muted);
     expect(light.accent).toBe(light.muted);
@@ -241,9 +243,9 @@ describe("product themes", () => {
 
   it("sets each theme's typefaces", () => {
     expect(productThemes.maia.typography.fontFamily).toEqual({
-      display: "Figtree",
+      display: "Inter",
       mono: "JetBrains Mono",
-      sans: "Figtree",
+      sans: "Inter",
     });
     expect(productThemes.paas.typography.fontFamily).toEqual({
       display: "JetBrains Mono",
@@ -265,9 +267,9 @@ describe("product themes", () => {
     expect(typography.fontWeight).toMatchObject({
       body: 400,
       caption: 500,
-      display: 700,
+      display: 600,
       heading: 600,
-      label: 700,
+      label: 600,
     });
   });
 
@@ -297,7 +299,7 @@ describe("tamagui output", () => {
       background: productThemes.maia.colors.dark.background,
       borderColor: productThemes.maia.colors.dark.border,
       color: productThemes.maia.colors.dark.foreground,
-      primary: "#f46cbf",
+      primary: "#ffffff",
     });
     expect(tamaguiThemes.paas_light).toMatchObject({
       background: productThemes.paas.colors.light.background,
@@ -340,7 +342,8 @@ describe("createNativeTheme", () => {
       colors: productThemes.maia.colors.dark,
     });
 
-    expect(theme.colors.primary).toBe("#f46cbf");
+    expect(theme.colors.primary).toBe("#ffffff");
+    expect(theme.colors.primary).not.toBe(darkTheme.colors.primary);
     expect(theme.colors.background).toBe("#000000");
   });
 
