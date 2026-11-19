@@ -153,7 +153,7 @@ function ReviewSections({
           const isCompleted = completedSections.has(section.id);
           return (
             <button
-              className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors text-left"
+              className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary/50 transition-colors text-left"
               key={section.id}
               onClick={() => {
                 onGoToSection(index);
@@ -202,7 +202,7 @@ function RelatedContentList({
       <div className="space-y-2">
         {relatedContent.map((item) => (
           <LinkComponent
-            className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors"
+            className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-secondary/50 transition-colors"
             href={item.href}
             key={item.href}
           >

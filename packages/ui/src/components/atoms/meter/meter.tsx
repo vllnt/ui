@@ -70,7 +70,7 @@ const Meter = ({
       aria-valuenow={current}
       aria-valuetext={valueText}
       className={cn(
-        "h-2 w-full overflow-hidden rounded-full bg-muted",
+        "h-2 w-full overflow-hidden rounded-full bg-secondary",
         segmentCount > 0 && "flex gap-0.5 bg-transparent",
         className,
       )}
@@ -85,7 +85,7 @@ const Meter = ({
               "h-full flex-1 rounded-full",
               index < filledSegments
                 ? meterFillVariants({ variant })
-                : "bg-muted",
+                : "bg-secondary",
             )}
             key={`meter-segment-${index}`}
           />

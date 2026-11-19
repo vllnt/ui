@@ -38,6 +38,30 @@ describe("StateBadgeOverlay", () => {
     expect(screen.getByLabelText("State: Complete")).toBeInTheDocument();
   });
 
+  it.each([
+    ["complete", "text-success"],
+    ["failed", "text-destructive"],
+    ["idle", "text-muted-foreground"],
+    ["queued", "text-warning"],
+    ["running", "text-info"],
+    ["stopped", "text-muted-foreground"],
+  ] as const)(
+    "state %s puts its colour on the dot and keeps a neutral surface",
+    (state, dotClass) => {
+      const { container } = render(
+        <StateBadgeOverlay state={state} x={0} y={0} />,
+      );
+      const badge = container.querySelector("[data-state-badge-overlay]");
+      expect(container.querySelector("[data-state-badge-dot]")).toHaveClass(
+        dotClass,
+      );
+      expect(badge).toHaveClass("bg-secondary", "text-foreground");
+      expect(badge?.className).not.toMatch(
+        /(?:bg|border|text)-(?:amber|blue|emerald|red|sky|slate|violet)-/,
+      );
+    },
+  );
+
   it("stops its infinite pulse under prefers-reduced-motion", () => {
     const { container } = render(
       <StateBadgeOverlay state="running" x={0} y={0} />,

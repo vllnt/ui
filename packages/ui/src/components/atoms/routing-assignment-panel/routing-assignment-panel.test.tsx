@@ -34,6 +34,25 @@ describe("RoutingAssignmentPanel", () => {
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
+  it.each([
+    ["Primary", "text-success"],
+    ["Fallback", "text-warning"],
+    ["Shadow", "text-muted-foreground"],
+  ] as const)(
+    "role chip %s puts its colour on the dot and keeps a neutral surface",
+    (label, dotClass) => {
+      render(<RoutingAssignmentPanel assignments={sample} />);
+      const chip = screen.getByText(label);
+      expect(chip.querySelector("[data-routing-role-dot]")).toHaveClass(
+        dotClass,
+      );
+      expect(chip).toHaveClass("bg-secondary");
+      expect(chip.className).not.toMatch(
+        /(?:bg|border)-(?:amber|emerald|red|sky|slate)-|\/(?:5|10|40)\b/,
+      );
+    },
+  );
+
   it("invokes onActivate when an interactive row is clicked", () => {
     const handleActivate = vi.fn();
     render(

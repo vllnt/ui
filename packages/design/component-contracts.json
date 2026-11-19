@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "components": {
     "badge": {
-      "variants": ["default", "destructive", "outline", "secondary"]
+      "variants": ["default", "destructive", "outline", "secondary", "soft"]
     },
     "button": {
       "sizes": ["default", "icon", "lg", "sm"],

@@ -13,7 +13,7 @@ COPY apps ./apps
 
 RUN pnpm install --frozen-lockfile --filter "@vllnt/ui-registry..." --include-workspace-root
 
-ARG NEXT_PUBLIC_STORYBOOK_URL=https://storybook.vllnt.ai
+ARG NEXT_PUBLIC_STORYBOOK_URL=https://storybook.vllnt.com
 ENV NEXT_PUBLIC_STORYBOOK_URL=$NEXT_PUBLIC_STORYBOOK_URL
 
 RUN pnpm --filter @vllnt/ui-registry build

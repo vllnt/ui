@@ -46,13 +46,13 @@ export default async function NotFound() {
             {common("browseComponents")}
           </Link>
           <Link
-            className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+            className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
             href="/docs"
           >
             {common("readDocs")}
           </Link>
           <a
-            className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+            className="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
             href={REQUEST_URL}
             rel="noreferrer"
             target="_blank"
@@ -69,7 +69,7 @@ export default async function NotFound() {
             {POPULAR_COMPONENTS.map((component) => (
               <li key={component.slug}>
                 <Link
-                  className="block rounded-md border border-border px-4 py-3 text-sm font-medium hover:bg-muted"
+                  className="block rounded-md border border-border px-4 py-3 text-sm font-medium hover:bg-secondary"
                   href={`/components/${component.slug}`}
                 >
                   {component.name}

@@ -58,7 +58,7 @@ library.
 
 Machine clients use `packages/design/tokens.json`. The JSON schema is
 documented in `packages/design/tokens.schema.json` and groups tokens by color,
-typography, spacing, radius, elevation, motion, and iconography.
+typography, spacing, radius, size, opacity, elevation, motion, and iconography.
 
 ### Semantic tokens (consumer-facing)
 
@@ -68,8 +68,11 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 |-------|------|-------|------|
 | `--background` | Page surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
 | `--foreground` | Primary text | `0.1445 0 0` (#0a0a0a) | `0.9848 0 0` (#fafafa) |
-| `--card` / `--popover` | Contained / floating surface | `1 0 0` (#ffffff) | `0.1445 0 0` (#0a0a0a) |
-| `--muted` | Subtle surface (`--secondary` and `--accent` share it) | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--card` | Raised, contained surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
+| `--popover` | Overlay surface: menus, popovers, dialogs | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
+| `--muted` | Sunken bands and quiet fills | `0.9703 0 0` (#f5f5f5) | `0 0 0` (#000000) |
+| `--secondary` | Hover, selected, active and data-state fills; control tracks | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--accent` | Fills that pair with `--accent-foreground` (menu items, ghost buttons); a brand color in presets | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
 | `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.7153 0 0` (#a3a3a3) |
 | `--destructive` | Danger fill **and** danger text | `0.55 0.2078 25.326` (#cf1f29) | `0.7 0.18 25.721` (#fa6961) |
 | `--destructive-foreground` | Text on a destructive fill | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
@@ -82,14 +85,60 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--input` | Form-control boundary | `0.66 0 0` (#929292) | `0.49 0 0` (#606060) |
 | `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
 
+**Dark surfaces are pure black.** In dark mode `--background`, `--muted`,
+`--card` and `--popover` are all `0 0 0` (#000000). Hairlines separate the
+surfaces, not lightness:
+
+```
+background = muted = card = popover = #000000
+separated by --border (#262626)
+hover, selected and active fills: --secondary, --accent (#262626)
+```
+
+Grey stays only for `--muted-foreground` text, `--border`, `--input`, the
+hover, selected and active fills (`--secondary`, `--accent`) and structural
+fills (below). So a raised
+surface (card, popover, menu, dialog, panel) draws `border` (the `--border`
+hairline); a `bg-card` or `bg-popover` without one is invisible on the page.
+The hairline is 1.39:1 against black, a depth cue and not a control boundary
+(`--input` carries that). In light mode `--muted`, `--secondary` and `--accent`
+are one value, so the split only shows in dark. Hover, focus, active, selected
+and data-state feedback on an actionable element uses `bg-secondary` (or
+`bg-secondary/50`), never `bg-muted`: in dark, `--muted` is the page color, so
+the fill would not show. Not `bg-accent` either: presets set `--accent` to a
+brand color, while their `--secondary` stays a quiet neutral that keeps the row
+text readable (6.65 to 12.53:1 across the dark presets). Menu items and ghost
+buttons keep `bg-accent` with `text-accent-foreground`.
+`packages/ui/src/components/muted-state-feedback.test.ts` and
+`apps/registry/lib/hover-fills.test.ts` enforce it.
+
+A **structural fill** is a fill that is the whole visual of its element:
+skeletons, progress, meter and usage tracks, the drawer handle, empty heatmap
+cells and the neutral Gantt bar. It uses `bg-secondary` (#262626), at the same
+opacity as before. Chips, code spans and panels keep `bg-muted`: their text and
+border carry them.
+`packages/ui/src/components/black-surface-borders.test.ts` and
+`apps/registry/lib/structural-fills.test.ts` enforce it. Product themes that
+override these roles keep their own values; PaaS has no color overrides, so it
+follows the core theme.
+
 In dark mode `--destructive` is a light red paired with a dark
 `--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both
 readable text on a near-black surface and a fill behind white text.
 
+### Penpot alias names
+
+The Penpot libraries carry two token groups that name an existing role instead of adding a colour. `tokens.json` and the Penpot token sets keep the names so a Penpot binding resolves; the web has no variable for them, so use the role.
+
+| Penpot token | Resolves to | On the web |
+|--------------|-------------|------------|
+| `color.badge-label.success` / `warning` / `info` / `danger` | `{color.success}` / `{color.warning}` / `{color.info}` / `{color.destructive}` | the `success`, `warning`, `info` or `destructive` role |
+| `brand.status.<status>.light` / `.dark` | `implemented` `{color.success}`, `candidate` `{color.info}`, `planned` `{color.muted-foreground}`, `unsupported` `{color.destructive}`, `deprecated` `{color.warning}` (the same in both modes) | the role in the middle column |
+
 ### Anti-patterns
 - **Never** use `bg-black` / `text-white` / `bg-white`. Use `bg-background` / `bg-foreground` / `text-foreground` so dark mode works.
 - **Never** use `bg-gray-500` / Tailwind palette literals. Pick a semantic token.
-- **Pure black** (`#000`) is banned for backgrounds — use `--background`.
+- **Hard-coded black** (`#000`, `bg-black`) is banned for backgrounds — use `--background`, which is pure black in dark on web.
 
 ### Contrast
 WCAG 2.2 **AA** minimum: text ≥ **4.5:1** (large text ≥ 3:1), non-text UI such as control boundaries and focus rings ≥ **3:1**.
@@ -110,10 +159,10 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 | Control boundary | `--input` against background, card, popover | 3:1 |
 | Focus ring | `--ring` against background | 3:1 |
 
-Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.00 (dark, on muted);
-destructive text 5.41 / 4.96 (light), 7.26 / 5.23 (dark, on background / muted);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.34 (dark, on background);
-success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 8.07 / 8.56 / 6.62 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
+Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 8.33 (dark, on every surface: they are all #000000);
+destructive text 5.41 / 4.96 (light), 7.26 (dark, on every surface);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.11 (light), 3.34 (dark, on every surface);
+success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 11.20 / 11.88 / 9.19 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
 foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
 
@@ -126,7 +175,7 @@ foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (da
 
 ### Product themes
 
-A product theme is a named override layer on the core tokens, authored in the `themes` block of `packages/design/tokens.json`. It overrides existing roles (colors per mode, fonts, type steps, `--radius`); it never adds product-specific role names to the core. Apply one with `data-theme` on `<html>`; the `dark` class still picks the mode. `themes/products.css` is generated, so edit `tokens.json` and run `pnpm tokens:generate`.
+A product theme is a named override layer on the core tokens, authored in the `themes` block of `packages/design/tokens.json`. It overrides existing roles (colors per mode, fonts, type steps, `--radius`, `--opacity-grain` and `--opacity-contact`); it never adds product-specific role names to the core. Apply one with `data-theme` on `<html>`; the `dark` class still picks the mode. `themes/products.css` is generated, so edit `tokens.json` and run `pnpm tokens:generate`.
 
 | Theme | `data-theme` | Identity |
 |-------|--------------|----------|
@@ -233,8 +282,12 @@ Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/
 | `radius-lg` | 12px |
 | `radius-xl` | 16px |
 | `radius-full` | 9999px |
+| `radius-control` | 6px (`--radius-control`) |
+| `radius-surface` | 8px (`--radius-surface`) |
 
 Cards, popovers, dialogs use `radius-md`. Pills, avatars use `radius-full`. Long surfaces (panels, sheets) use `radius-lg`.
+
+`radius-control` and `radius-surface` are role names for controls (buttons, inputs) and surfaces (cards, panels). The Penpot libraries use the same two names, but their `md`, `lg` and `xl` are 6, 8 and 12 where the code's are 8, 12 and 16. To get the same pixels in code and in Penpot, use the role names, not the `md` / `lg` / `xl` steps. Themes cannot override the two roles.
 
 ---
 
@@ -250,6 +303,13 @@ Use sparingly. Most components are flat with `border` + `bg-background`.
 | `shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.1)` (popovers, dialogs) |
 
 No coloured shadows. No multi-layered glow effects.
+
+**Grain and contact layers.** Two opacity tokens set how strong a Surface grain or contact-shadow layer is when a component draws one. Nothing draws either unless it opts in.
+
+| Token | Value |
+|-------|-------|
+| `--opacity-grain` | 1 (PaaS theme: 0) |
+| `--opacity-contact` | 1 (PaaS theme: 0) |
 
 ---
 
@@ -323,6 +383,17 @@ No coloured shadows. No multi-layered glow effects.
 - Animations respect `prefers-reduced-motion`.
 - Components shipping a defined ARIA pattern (combobox, dialog, menu, tabs) declare their full keyboard map in `meta.json` per #255.
 
+### Touch targets
+
+| Token | Value | Role |
+|-------|-------|------|
+| `--size-target-min` | 44px | Smallest hit target for a touch pointer |
+| `--size-control-xs` | 32px; 44px under `@media (pointer: coarse)` | Extra-small control height |
+
+`themes/default.css` and `styles.css` declare both. Under `@media (pointer: coarse)` they set `--size-control-xs: var(--size-target-min)` and change nothing else. A component reaches 44px by sizing from these variables; `Button` `lg` is already 44. Each component adopts them in its own change.
+
+The Penpot libraries keep one `size.target.min` and `size.control-xs` per density (compact 24, regular 32, touch 44). Code has one value per name: `size.target.min` is the touch value (44) and `size.control-xs` the regular one (32).
+
 ---
 
 ## 12. Voice & writing
@@ -346,7 +417,7 @@ No coloured shadows. No multi-layered glow effects.
 | `<div>` with `onClick` | Loses keyboard + a11y semantics; use `Button` |
 | Em-dash chains in copy (3+ in a row) | Unreadable |
 | `Submit` / `OK` / `Click here` button labels | Don't name the action |
-| Pure black backgrounds | Eye strain in dark mode |
+| Hard-coded black backgrounds (`#000`, `bg-black`) | Bypasses tokens; dark `--background` is already pure black |
 | Auto-play hero video | Performance + motion sensitivity |
 | Modal on modal | Restructure the flow |
 | `eslint-disable` to bypass a rule | Fix the root cause |

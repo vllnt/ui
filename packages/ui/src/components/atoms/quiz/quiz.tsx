@@ -58,7 +58,7 @@ function QuizOptionButton({
   return (
     <button
       className={cn(
-        "w-full text-left p-3 rounded-md border transition-colors hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary",
+        "w-full text-left p-3 rounded-md border transition-colors hover:bg-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary",
         isSelected && !submitted && "border-primary bg-primary/10",
         showResult && option.correct && "border-green-500 bg-green-500/10",
         showResult && !option.correct && "border-red-500 bg-red-500/10",
@@ -200,7 +200,7 @@ function QuizActions({
     <div className="flex gap-2">
       {submitted ? (
         <button
-          className="px-3 py-1.5 text-sm rounded-md border border-border hover:bg-muted transition-colors"
+          className="px-3 py-1.5 text-sm rounded-md border border-border hover:bg-secondary transition-colors"
           onClick={onReset}
           type="button"
         >

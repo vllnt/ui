@@ -229,6 +229,15 @@ test.describe("unknown slugs", () => {
     "/families/zz-unknown",
     "/fr/families/zz-unknown",
     "/families/zz-unknown?platform=native",
+    "/build/zz-unknown",
+    "/fr/build/zz-unknown",
+    "/components/zz-unknown/playground",
+    "/fr/components/zz-unknown/playground",
+    "/templates/zz-unknown",
+    "/fr/templates/zz-unknown",
+    "/components/zz-unknown?platform=native",
+    "/components/zz-unknown?platform=web",
+    "/fr/components/zz-unknown?platform=native",
   ]) {
     test(`${path} is a 404 that no cache keeps`, async ({ request }) => {
       for (const attempt of [1, 2]) {
@@ -242,4 +251,107 @@ test.describe("unknown slugs", () => {
       }
     });
   }
+});
+
+test.describe("agent readiness", () => {
+  test("robots.txt carries a Content-Signal line in every group", async ({
+    request,
+  }) => {
+    const response = await request.get("/robots.txt");
+    const groups = (await response.text()).trim().split("\n\n");
+    const agentGroups = groups.filter((group) =>
+      group.startsWith("User-Agent:"),
+    );
+
+    expect(response.status()).toBe(200);
+    expect(agentGroups.length).toBeGreaterThan(1);
+    for (const group of agentGroups) {
+      expect(group).toContain(
+        "Content-Signal: search=yes, ai-input=yes, ai-train=yes",
+      );
+    }
+  });
+
+  for (const path of [
+    "/",
+    "/design",
+    "/docs/installation",
+    "/components/button",
+    "/fr/components/button",
+    "/fr/docs/cli",
+  ]) {
+    test(`${path} answers Accept: text/markdown with markdown`, async ({
+      request,
+    }) => {
+      const response = await request.get(path, {
+        headers: { accept: "text/markdown" },
+        maxRedirects: 0,
+      });
+      const headers = response.headers();
+
+      expect(response.status()).toBe(200);
+      expect(headers["content-type"]).toMatch(/^text\/markdown/);
+      expect(headers["vary"]).toMatch(/\bAccept\b/i);
+      expect(headers["cache-control"]).toMatch(/^private/);
+      expect(headers["set-cookie"]).toBeUndefined();
+      expect(await response.text()).toMatch(/^# /);
+    });
+
+    test(`${path} still answers a browser with HTML`, async ({
+      request,
+    }) => {
+      const response = await request.get(path, {
+        headers: {
+          accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        },
+        maxRedirects: 0,
+      });
+
+      expect(response.status()).toBe(200);
+      expect(response.headers()["content-type"]).toMatch(/^text\/html/);
+    });
+  }
+
+  test("a page without a markdown twin answers HTML to a markdown client", async ({
+    request,
+  }) => {
+    const response = await request.get("/templates", {
+      headers: { accept: "text/markdown" },
+    });
+
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toMatch(/^text\/html/);
+  });
+
+  test("the markdown route is not a public URL", async ({ request }) => {
+    const response = await request.get("/md/en/docs/cli");
+
+    expect(response.status()).toBe(404);
+  });
+
+  test("/.well-known/api-catalog is an RFC 9727 linkset", async ({
+    request,
+  }) => {
+    const response = await request.get("/.well-known/api-catalog");
+    const body: unknown = await response.json();
+
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-type"]).toBe(
+      'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"',
+    );
+    expect(body).toMatchObject({
+      linkset: [
+        {
+          anchor: "https://ui.vllnt.com/r/registry.json",
+          item: expect.arrayContaining([
+            expect.objectContaining({
+              href: "https://ui.vllnt.com/r/button.json",
+            }),
+          ]),
+        },
+        { anchor: "https://ui.vllnt.com/mcp" },
+      ],
+    });
+  });
 });

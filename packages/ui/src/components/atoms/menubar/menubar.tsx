@@ -225,7 +225,7 @@ const MenubarSeparator = ({
   ref?: React.Ref<React.ComponentRef<typeof MenubarPrimitive.Separator>>;
 }) => (
   <MenubarPrimitive.Separator
-    className={cn("-m-1 h-px bg-muted", className)}
+    className={cn("-m-1 h-px bg-border", className)}
     ref={ref}
     {...props}
   />

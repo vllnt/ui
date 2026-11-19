@@ -1236,8 +1236,8 @@ function SearchBarPreview() {
     <React.Suspense
       fallback={
         <div className="flex gap-2">
-          <div className="flex-1 h-10 bg-muted rounded-md animate-pulse" />
-          <div className="h-10 w-20 bg-muted rounded-md animate-pulse" />
+          <div className="flex-1 h-10 bg-secondary rounded-md animate-pulse" />
+          <div className="h-10 w-20 bg-secondary rounded-md animate-pulse" />
         </div>
       }
     >
@@ -1452,7 +1452,7 @@ function SidebarPreview() {
     <div className="w-64 border rounded-lg overflow-hidden">
       <div className="space-y-2 bg-background p-4">
         <div className="h-3 w-20 rounded bg-muted-foreground/30" />
-        <div className="h-8 rounded bg-muted" />
+        <div className="h-8 rounded bg-secondary" />
         <div className="h-8 rounded border border-border" />
         <div className="h-8 rounded border border-border" />
       </div>
@@ -2045,7 +2045,7 @@ function AspectRatioPreview() {
   return (
     <div className="w-[200px]">
       <AspectRatio
-        className="bg-muted rounded-md flex items-center justify-center"
+        className="bg-secondary rounded-md flex items-center justify-center"
         ratio={16 / 9}
       >
         <span className="text-sm text-muted-foreground">16:9</span>
