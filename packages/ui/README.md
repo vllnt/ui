@@ -1,8 +1,32 @@
 # @vllnt/ui
 
-React component library — 324 components built on Radix UI primitives, Tailwind CSS, and CVA.
+React components built on Radix UI primitives, Tailwind CSS, and CVA. For humans and AI agents.
 
 See [CHANGELOG.md](./CHANGELOG.md) for release history.
+
+## For AI agents
+
+An agent can read this library as text and JSON, without scraping pages. The site is <https://ui.vllnt.com>.
+
+| URL | Returns |
+| --- | --- |
+| `https://ui.vllnt.com/llms.txt` | A short plain-text overview: install steps, docs links, and components grouped by category. |
+| `https://ui.vllnt.com/llms-full.txt` | One long text file: guides, the design guide, latest release notes, templates, and a summary of every component. |
+| `https://ui.vllnt.com/r/registry.json` | JSON index of every component in the shadcn registry. |
+| `https://ui.vllnt.com/r/<name>` | One component as a shadcn registry item, with its source files inline. |
+| `https://ui.vllnt.com/r/themes?t=<token>` | A shadcn theme item decoded from a theme token made in the theme editor. |
+| `https://ui.vllnt.com/r/design.json` | The design tokens as JSON. |
+| `https://ui.vllnt.com/design.txt` | The design guide as plain text. `https://ui.vllnt.com/DESIGN.md` is the same guide as Markdown. |
+| `https://ui.vllnt.com/mcp` | An MCP server. It speaks JSON-RPC 2.0 over HTTP POST and has four read-only tools: `search_components`, `get_component`, `list_categories`, `list_platforms`. A GET returns server info. |
+| `https://ui.vllnt.com/.well-known/api-catalog` | A catalog of these APIs (RFC 9727 linkset). |
+
+The home page, the design and philosophy pages, and most docs and component pages also answer in Markdown. Send `Accept: text/markdown` to the same URL. A wildcard `Accept` does not select Markdown; the header must name `text/markdown`.
+
+```bash
+curl -H "Accept: text/markdown" https://ui.vllnt.com/components/button
+```
+
+More: <https://ui.vllnt.com/docs/agents>.
 
 ## Install
 
