@@ -1,12 +1,12 @@
 import type { Ref } from "react";
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
   type View,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 import { useSidebar } from "../../atoms/sidebar-provider/sidebar-provider";
@@ -25,8 +25,6 @@ const styles = StyleSheet.create({
   root: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -45,7 +43,7 @@ function SidebarToggle({
   const label = accessibilityLabel ?? (open ? closeLabel : openLabel);
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityLabel={label}
       accessibilityRole="button"
@@ -56,9 +54,7 @@ function SidebarToggle({
       style={(state) => [
         styles.root,
         {
-          backgroundColor: state.pressed ? theme.colors.accent : "transparent",
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : state.pressed ? 0.8 : 1,
         },
         typeof style === "function" ? style(state) : style,
       ]}
@@ -69,7 +65,7 @@ function SidebarToggle({
       >
         {open ? "×" : "≡"}
       </NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 SidebarToggle.displayName = "SidebarToggle";

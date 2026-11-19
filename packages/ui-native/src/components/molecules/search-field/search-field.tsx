@@ -3,7 +3,6 @@
 import { type Ref, useRef, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   type TextInput,
@@ -13,6 +12,7 @@ import {
 
 import { focusAccessibility } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useMergedReferences } from "../../../primitives/merge-references";
 import { useTheme } from "../../../theme/theme-provider";
 import { Input } from "../../atoms/input/input";
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     bottom: 0,
     justifyContent: "center",
-    minWidth: 44,
     position: "absolute",
     right: 0,
     top: 0,
@@ -86,7 +85,7 @@ function SearchField({
         value={currentValue}
       />
       {currentValue.length > 0 ? (
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={clearLabel}
           accessibilityRole="button"
           accessibilityState={{ disabled: readOnly }}
@@ -100,7 +99,7 @@ function SearchField({
           <NativeText style={{ color: theme.colors.mutedForeground }}>
             ×
           </NativeText>
-        </Pressable>
+        </InteractivePressable>
       ) : null}
     </View>
   );

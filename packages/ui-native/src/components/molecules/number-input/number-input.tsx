@@ -3,7 +3,6 @@
 import { type Ref, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   type TextInput,
@@ -13,6 +12,8 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Input } from "../../atoms/input/input";
 
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: "100%",
   },
-  step: { alignItems: "center", justifyContent: "center", minWidth: 44 },
+  step: { alignItems: "center", justifyContent: "center" },
 });
 
 function getBounds(min?: number, max?: number) {
@@ -147,7 +148,7 @@ function NumberStep({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={label}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
@@ -158,7 +159,7 @@ function NumberStep({
       <NativeText style={{ color: theme.colors.foreground }}>
         {symbol}
       </NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 NumberStep.displayName = "NumberStep";
@@ -291,7 +292,7 @@ function NumberInput({
           backgroundColor: theme.colors.background,
           borderColor: theme.colors.input,
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : 1,
+          opacity: disabled ? interactionTokens(theme).disabledOpacity : 1,
         },
         rootProps?.style,
       ]}

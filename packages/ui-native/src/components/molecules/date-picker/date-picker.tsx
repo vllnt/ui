@@ -3,7 +3,6 @@
 import { type Ref, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -35,11 +35,11 @@ export type DatePickerProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
   panel: { borderTopWidth: 1 },
-  trigger: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
+  trigger: { borderWidth: 1, justifyContent: "center" },
 });
 
 /**
@@ -66,7 +66,7 @@ function DatePicker({
   };
   return (
     <View ref={ref} style={style} {...props}>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
@@ -83,7 +83,6 @@ function DatePicker({
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.input,
             borderRadius: theme.radius.md,
-            opacity: disabled ? 0.5 : 1,
             paddingHorizontal: theme.spacing[3],
           },
         ]}
@@ -97,7 +96,7 @@ function DatePicker({
         >
           {date ? labels.formatValue(date) : labels.placeholder}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       <ModalLayer
         animationType={reducedMotion ? "none" : "fade"}
         contentProps={{ style: styles.modal }}
@@ -133,7 +132,7 @@ function DatePicker({
             labels={labels}
             selection={{ mode: "controlled", onChange: choose, value: date }}
           />
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"
             onPress={() => {
@@ -144,7 +143,7 @@ function DatePicker({
             <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </ModalLayer>
     </View>

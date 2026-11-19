@@ -1,12 +1,12 @@
 import type { Ref } from "react";
 import {
   Linking,
-  Pressable,
   type PressableProps,
   StyleSheet,
   type View,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
 
@@ -25,7 +25,7 @@ export type AISourceCitationProps = Omit<
 };
 
 const styles = StyleSheet.create({
-  root: { borderWidth: 1, minHeight: 44, width: "100%" },
+  root: { borderWidth: 1, width: "100%" },
 });
 
 /**
@@ -52,7 +52,7 @@ function AISourceCitation({
   const isDisabled = disabled === true;
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityHint={accessibilityHint ?? snippet}
       accessibilityLabel={accessibilityLabel ?? `${title}, ${source}`}
@@ -72,13 +72,10 @@ function AISourceCitation({
       style={(state) => [
         styles.root,
         {
-          backgroundColor: state.pressed
-            ? theme.colors.muted
-            : theme.colors.background,
+          backgroundColor: theme.colors.background,
           borderColor: theme.colors.border,
           borderRadius: theme.radius.lg,
           gap: theme.spacing[2],
-          opacity: isDisabled ? 0.5 : state.pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[3],
           paddingVertical: theme.spacing[2],
         },
@@ -96,7 +93,7 @@ function AISourceCitation({
           {snippet}
         </Text>
       ) : null}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 AISourceCitation.displayName = "AISourceCitation";

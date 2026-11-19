@@ -1,14 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  type ViewProps,
-} from "react-native";
+import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { isSingleSelected } from "../../../primitives/selection";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -37,8 +32,6 @@ const styles = StyleSheet.create({
   item: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   list: { flexDirection: "row" },
 });
@@ -92,7 +85,7 @@ function WorkspaceSwitcher({
             (candidate) => candidate.id,
           );
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityHint={workspace.description}
               accessibilityLabel={workspace.label}
               accessibilityRole="radio"
@@ -105,16 +98,14 @@ function WorkspaceSwitcher({
               onPress={() => {
                 setSelectedValue(workspace.id);
               }}
-              style={({ pressed }) => [
+              selected={active}
+              style={[
                 styles.item,
                 {
                   backgroundColor: active
                     ? theme.colors.background
-                    : pressed
-                      ? theme.colors.accent
-                      : "transparent",
+                    : "transparent",
                   borderRadius: theme.radius.full,
-                  opacity: workspace.disabled ? 0.5 : pressed ? 0.8 : 1,
                   paddingHorizontal: theme.spacing[3],
                 },
               ]}
@@ -126,7 +117,7 @@ function WorkspaceSwitcher({
               >
                 {workspace.label}
               </Text>
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </ScrollView>
