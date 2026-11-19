@@ -130,7 +130,7 @@ function KeyboardShortcutsHelpImpl({
           </Heading>
           <button
             aria-label="Close shortcuts help"
-            className="flex size-8 items-center justify-center rounded-md hover:bg-muted"
+            className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
             onClick={onClose}
             ref={closeButtonRef}
             type="button"

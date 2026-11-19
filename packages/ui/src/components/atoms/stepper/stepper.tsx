@@ -83,7 +83,7 @@ function StepperItem({
         className={cn(
           "flex w-full items-start gap-3 rounded-lg text-left transition-colors",
           clickable
-            ? "hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            ? "hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             : "cursor-default",
           isVertical ? "p-2" : "flex-col items-start p-2 md:p-0",
         )}

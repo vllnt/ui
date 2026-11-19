@@ -61,7 +61,7 @@ const DrawerContent = ({
       ref={ref}
       {...props}
     >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-secondary" />
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>

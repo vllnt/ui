@@ -121,7 +121,7 @@ function ProgressBar({
   if (total === 0) return null;
   return (
     <div className="mt-1 flex items-center gap-2">
-      <div className="h-1.5 max-w-[120px] flex-1 overflow-hidden rounded-full bg-muted">
+      <div className="h-1.5 max-w-[120px] flex-1 overflow-hidden rounded-full bg-secondary">
         <div
           className="h-full rounded-full bg-primary transition-all"
           style={{ width: `${progressPct}%` }}
@@ -209,8 +209,8 @@ function ModuleTrigger({
       aria-expanded={isExpanded}
       className={cn(
         "w-full flex items-start justify-between gap-3 rounded-md px-6 py-4 text-left transition-colors",
-        "hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        isExpanded && "bg-muted/30",
+        "hover:bg-secondary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+        isExpanded && "bg-secondary/30",
       )}
       onClick={toggle}
       type="button"
@@ -393,7 +393,7 @@ function CurriculumLesson({
       className={cn(
         "flex items-center gap-3 px-6 py-3 pl-10 text-sm transition-colors",
         isLocked ? "cursor-not-allowed opacity-60" : "",
-        !isLocked && href ? "cursor-pointer hover:bg-muted/40" : "",
+        !isLocked && href ? "cursor-pointer hover:bg-secondary/40" : "",
         className,
       )}
     >

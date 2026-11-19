@@ -39,13 +39,13 @@ async function HeroActions({ componentCount }: { componentCount: number }) {
         <ArrowRight className="size-4" />
       </Link>
       <Link
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
         href="/docs"
       >
         {t("readDocs")}
       </Link>
       <a
-        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+        className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
         href={GITHUB_URL}
         rel="noreferrer"
         target="_blank"
@@ -141,7 +141,7 @@ async function RendererChoices() {
               {t("nativeDescription")}
             </p>
             <Link
-              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               href="/components?platform=native"
             >
               {t("browseNative")}
@@ -316,7 +316,7 @@ async function ReleasesStrip() {
             </p>
           </div>
           <Link
-            className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+            className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-secondary"
             href="/releases"
           >
             {t("viewAll")}
@@ -367,7 +367,7 @@ async function CommunityCTA() {
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <a
-            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
             href={GITHUB_URL}
             rel="noreferrer"
             target="_blank"
@@ -376,7 +376,7 @@ async function CommunityCTA() {
             {t("starGithub")}
           </a>
           <a
-            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
             href={REQUEST_URL}
             rel="noreferrer"
             target="_blank"
@@ -384,7 +384,7 @@ async function CommunityCTA() {
             {t("requestComponent")}
           </a>
           <a
-            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+            className="inline-flex h-11 items-center gap-2 rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
             href={STORYBOOK_URL}
             rel="noreferrer"
             target="_blank"

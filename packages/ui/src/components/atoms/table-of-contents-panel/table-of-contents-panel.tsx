@@ -93,7 +93,7 @@ function TocHeader({
       </Heading>
       <button
         aria-label="Close table of contents"
-        className="flex size-8 items-center justify-center rounded-md hover:bg-muted"
+        className="flex size-8 items-center justify-center rounded-md hover:bg-secondary"
         onClick={onClose}
         ref={closeButtonRef}
         type="button"
@@ -128,7 +128,7 @@ function TocFooter({ onReset, resetLabel }: TocFooterProps): React.ReactNode {
   return (
     <div className="border-t border-border px-4 py-3">
       <button
-        className="w-full rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+        className="w-full rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
         onClick={onReset}
         type="button"
       >
@@ -160,7 +160,7 @@ function TocProgress({
           {completionCount} / {totalSections} ({completionPercent}%)
         </span>
       </div>
-      <div className="mt-2 h-2 rounded-full bg-muted">
+      <div className="mt-2 h-2 rounded-full bg-secondary">
         <div
           className="h-full rounded-full bg-primary transition-all duration-300"
           style={{ width: `${completionPercent}%` }}
@@ -200,7 +200,7 @@ function TocSectionList({
                   "flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors",
                   isCurrent
                     ? "bg-primary/10 text-primary font-medium"
-                    : "hover:bg-muted text-foreground",
+                    : "hover:bg-secondary text-foreground",
                 )}
                 onClick={() => {
                   onSelectSection(index);
