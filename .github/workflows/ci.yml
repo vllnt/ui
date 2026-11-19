@@ -36,6 +36,9 @@ jobs:
       - name: Check the atomic level checker
         run: node --test scripts/check-atomic-levels.test.mjs
 
+      - name: Check the native health alert
+        run: node --test scripts/native-health.test.mjs
+
   # WEB lane (docs/agents/LANES.md): @vllnt/ui, the registry and Storybook, plus the shared
   # packages they build on.
   web:

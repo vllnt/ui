@@ -6,6 +6,7 @@ export default [
       ".expo/**",
       "dist/**",
       "node_modules/**",
+      "scripts/**",
       "eslint.config.js",
       "*.config.cjs",
     ],

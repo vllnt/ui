@@ -1,5 +1,101 @@
 import { react } from "@vllnt/eslint-config";
 
+/*
+ * Affordance contract (#633): components press through InteractivePressable
+ * (src/primitives), which owns hover, focus, press, selected and disabled
+ * styling and the touch-target floor. These files still import React Native's
+ * Pressable and are migrated in later phases. Delete an entry when its file
+ * migrates. Never add one; new components use InteractivePressable.
+ */
+const LEGACY_PRESSABLE_FILES = [
+  "src/components/atoms/agent-activity/agent-activity.tsx",
+  "src/components/atoms/ai-chat-input/ai-chat-input.tsx",
+  "src/components/atoms/alert-dialog/alert-dialog.tsx",
+  "src/components/atoms/animated-testimonials/animated-testimonials.tsx",
+  "src/components/atoms/calendar/calendar.tsx",
+  "src/components/atoms/carousel/carousel.tsx",
+  "src/components/atoms/checkbox-group/checkbox-group.tsx",
+  "src/components/atoms/checklist/checklist.tsx",
+  "src/components/atoms/code-block/code-block.tsx",
+  "src/components/atoms/collapsible/collapsible.tsx",
+  "src/components/atoms/color-picker/color-picker.tsx",
+  "src/components/atoms/command/command.tsx",
+  "src/components/atoms/completion-dialog/completion-dialog.tsx",
+  "src/components/atoms/context-menu/context-menu.tsx",
+  "src/components/atoms/copy-button/copy-button.tsx",
+  "src/components/atoms/dialog/dialog.tsx",
+  "src/components/atoms/document-sibling-nav/document-sibling-nav.tsx",
+  "src/components/atoms/drawer/drawer.tsx",
+  "src/components/atoms/dropdown-menu/dropdown-menu.tsx",
+  "src/components/atoms/exercise/exercise.tsx",
+  "src/components/atoms/file-upload/file-upload.tsx",
+  "src/components/atoms/flashcard/flashcard.tsx",
+  "src/components/atoms/floating-toolbar/floating-toolbar.tsx",
+  "src/components/atoms/form/form.tsx",
+  "src/components/atoms/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx",
+  "src/components/atoms/link/link.tsx",
+  "src/components/atoms/list-box/list-box.tsx",
+  "src/components/atoms/model-selector/model-selector.tsx",
+  "src/components/atoms/popover/popover.tsx",
+  "src/components/atoms/prompt-input/prompt-input.tsx",
+  "src/components/atoms/quiz/quiz.tsx",
+  "src/components/atoms/rating/rating.tsx",
+  "src/components/atoms/reasoning/reasoning.tsx",
+  "src/components/atoms/search-dialog/search-dialog.tsx",
+  "src/components/atoms/select/select.tsx",
+  "src/components/atoms/share-dialog/share-dialog.tsx",
+  "src/components/atoms/share-section/share-section.tsx",
+  "src/components/atoms/sheet/sheet.tsx",
+  "src/components/atoms/slideshow/slideshow.tsx",
+  "src/components/atoms/step-by-step/step-by-step.tsx",
+  "src/components/atoms/stepper/stepper.tsx",
+  "src/components/atoms/tag-group/tag-group.tsx",
+  "src/components/atoms/tags-input/tags-input.tsx",
+  "src/components/atoms/terminal/terminal.tsx",
+  "src/components/atoms/thinking-block/thinking-block.tsx",
+  "src/components/atoms/timeline-scrubber/timeline-scrubber.tsx",
+  "src/components/atoms/tldr-section/tldr-section.tsx",
+  "src/components/atoms/toast/toast.tsx",
+  "src/components/atoms/toggle-group/toggle-group.tsx",
+  "src/components/atoms/tooltip/tooltip.tsx",
+  "src/components/atoms/tour/tour.tsx",
+  "src/components/atoms/tutorial-complete/tutorial-complete.tsx",
+  "src/components/atoms/tutorial-filters/tutorial-filters.tsx",
+  "src/components/molecules/ai-artifact/ai-artifact.tsx",
+  "src/components/molecules/ai-source-citation/ai-source-citation.tsx",
+  "src/components/molecules/ai-tool-call-display/ai-tool-call-display.tsx",
+  "src/components/molecules/animated-tabs/animated-tabs.tsx",
+  "src/components/molecules/banner/banner.tsx",
+  "src/components/molecules/breadcrumb/breadcrumb.tsx",
+  "src/components/molecules/combobox/combobox.tsx",
+  "src/components/molecules/content-intro/content-intro.tsx",
+  "src/components/molecules/conversation-thread/conversation-thread.tsx",
+  "src/components/molecules/date-picker/date-picker.tsx",
+  "src/components/molecules/floating-action-button/floating-action-button.tsx",
+  "src/components/molecules/menubar/menubar.tsx",
+  "src/components/molecules/multi-select/multi-select.tsx",
+  "src/components/molecules/navigation-menu/navigation-menu.tsx",
+  "src/components/molecules/number-input/number-input.tsx",
+  "src/components/molecules/pagination/pagination.tsx",
+  "src/components/molecules/password-input/password-input.tsx",
+  "src/components/molecules/phone-input/phone-input.tsx",
+  "src/components/molecules/presence-stack/presence-stack.tsx",
+  "src/components/molecules/search-field/search-field.tsx",
+  "src/components/molecules/sidebar-toggle/sidebar-toggle.tsx",
+  "src/components/molecules/sidebar/sidebar.tsx",
+  "src/components/molecules/step-navigation/step-navigation.tsx",
+  "src/components/molecules/tabs/tabs.tsx",
+  "src/components/molecules/toolbar/toolbar.tsx",
+  "src/components/molecules/view-switcher/view-switcher.tsx",
+  "src/components/molecules/workspace-switcher/workspace-switcher.tsx",
+  "src/components/organisms/date-range-picker/date-range-picker.tsx",
+  "src/components/organisms/interactive-timeline/interactive-timeline.tsx",
+  "src/components/organisms/progress-card/progress-card.tsx",
+  "src/components/organisms/progress-tracker/progress-tracker.tsx",
+  "src/components/organisms/time-picker/time-picker.tsx",
+  "src/components/organisms/tree-view/tree-view.tsx",
+];
+
 export default [
   {
     ignores: [
@@ -30,6 +126,25 @@ export default [
     files: ["src/index.ts"],
     rules: {
       "simple-import-sort/exports": "off",
+    },
+  },
+  {
+    files: ["src/components/**/*.{ts,tsx}"],
+    ignores: LEGACY_PRESSABLE_FILES,
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              importNames: ["Pressable"],
+              message:
+                "Use InteractivePressable from src/primitives (affordance contract #633)",
+              name: "react-native",
+            },
+          ],
+        },
+      ],
     },
   },
   {

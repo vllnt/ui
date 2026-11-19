@@ -26,7 +26,9 @@
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "react-native": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
     },
     "./tokens.json": "./tokens.json",
     "./contracts.json": "./component-contracts.json"
@@ -41,7 +43,9 @@
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
-        "import": "./dist/index.js"
+        "react-native": "./dist/index.js",
+        "import": "./dist/index.js",
+        "default": "./dist/index.js"
       },
       "./tokens.json": "./tokens.json",
       "./contracts.json": "./component-contracts.json"

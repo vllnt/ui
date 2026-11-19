@@ -16,7 +16,6 @@ import {
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
-import { useReducedMotion } from "../../../primitives/use-reduced-motion";
 import { useTheme } from "../../../theme/theme-provider";
 
 /** Caller-identified timeline milestone. */
@@ -89,7 +88,6 @@ function TimelineScrubber({
   ...props
 }: TimelineScrubberProps) {
   const theme = useTheme();
-  useReducedMotion();
   const safeEnd = end > start ? end : start + 1;
   const safeStep = Number.isFinite(step) && step > 0 ? step : 1;
   const [value, setValue] = useControllableState(valueState);

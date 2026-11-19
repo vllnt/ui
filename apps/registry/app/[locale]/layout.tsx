@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SidebarProvider, ThemePresetProvider, ThemeProvider } from "@vllnt/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import type React from "react";
@@ -15,6 +16,7 @@ import type React from "react";
 import { ForwardedQueryProvider } from "@/components/forwarded-query";
 import { Header } from "@/components/header";
 import { routing } from "@/i18n/routing";
+import { CF_BEACON_SRC, cloudflareBeaconToken } from "@/lib/cloudflare-beacon";
 import {
   jsonLdScriptAttributes,
   organizationLd,
@@ -115,6 +117,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   setRequestLocale(locale);
+  const beaconToken = cloudflareBeaconToken();
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -159,6 +162,13 @@ export default async function LocaleLayout({ children, params }: Props) {
             </div>
           </SidebarProvider>
         </ThemeProvider>
+        {beaconToken ? (
+          <Script
+            data-cf-beacon={JSON.stringify({ token: beaconToken })}
+            src={CF_BEACON_SRC}
+            strategy="afterInteractive"
+          />
+        ) : null}
         {/* These scripts exist on Vercel's platform; on any other host they 404 on every page. */}
         {process.env.VERCEL === "1" ? (
           <>

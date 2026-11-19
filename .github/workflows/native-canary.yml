@@ -8,6 +8,10 @@ name: Core and Native Canary
 #   CORE_CANARY_PUBLISH_ENABLED   = true  -> core-publish   @vllnt/ui-core, after core-quality only
 #   NATIVE_CANARY_PUBLISH_ENABLED = true  -> native-publish @vllnt/ui-core + @vllnt/ui-native,
 #                                            after native-quality (pnpm ci:native, Expo Doctor)
+# Both paths publish over OIDC only, straight to `canary`: no secret, no dist-tag command.
+# After native-publish succeeds, verify-published installs the pair it just published from npm into
+# a clean Expo app and a copy of the catalog, outside the workspace, and checks both. It has no
+# environment, token or secret. A failure fails the run, so the health alert reports it.
 # Nothing publishes until the owner sets them. Setup: docs/RELEASING.md.
 
 on:
@@ -71,7 +75,7 @@ jobs:
     timeout-minutes: 15
     # Same environment as native-publish: one trusted-publisher entry per package covers both jobs.
     environment: npm-native-canary
-    # One group for both publish jobs: a pair promotion never overlaps a core publish, and publishes
+    # One group for both publish jobs: a pair publish never overlaps a core publish, and publishes
     # queue instead of running together. A superseded run stands down. GitHub keeps one pending job
     # per group, so a late arrival can replace a pending one; the next push to main publishes again.
     concurrency:
@@ -157,7 +161,49 @@ jobs:
       - name: Build publication artifacts
         run: pnpm --filter '@vllnt/ui-native...' build
 
+      # OIDC trusted publishing only: no secret is passed. core, then native, each straight to canary.
       - name: Publish synchronized canaries
-        env:
-          NPM_DIST_TAG_TOKEN: ${{ secrets.NPM_DIST_TAG_TOKEN }}
         run: bash scripts/publish-canary.sh pair
+
+  verify-published:
+    name: Verify Published Pair
+    # Only after the pair went up. A skipped native-publish (variable unset) skips this job too.
+    needs: native-publish
+    if: ${{ needs.native-publish.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    # Read-only: no environment, no OIDC token, no secret. It only reads the public registry.
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      # No package cache: the scratch installs must resolve from the registry, not from a restored store.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      # The version is the one native-publish computed: same guard, same run number, same commit.
+      # publish-canary.sh stands down without publishing when main has moved on, and still succeeds;
+      # then the version is not on npm (E404) and there is nothing to verify. Any other registry answer fails.
+      - name: Find the version this run published
+        id: version
+        run: |
+          version="$(node scripts/release-guard.mjs native-canary)"
+          published="$(bash scripts/npm-published.sh "@vllnt/ui-native@${version}")"
+          if [[ "$published" == yes ]]; then
+            echo "version=${version}" >>"$GITHUB_OUTPUT"
+          else
+            echo "::notice::no pair published for ${GITHUB_SHA}: ${version} is not on npm, the publish stood down"
+            echo "version=" >>"$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify the published pair
+        if: ${{ steps.version.outputs.version != '' }}
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: node apps/native-catalog/scripts/verify-published.mjs "$VERSION"

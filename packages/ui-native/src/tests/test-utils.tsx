@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactElement } from "react";
+import { type StyleProp, StyleSheet, type TextStyle } from "react-native";
 
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 import { ThemeProvider, type ThemeSelection } from "../theme/theme-provider";
@@ -64,6 +65,38 @@ export function reducedMotion(
         ? () => new Promise(() => void 0)
         : async () => preference,
   };
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === "object" && value !== null;
+}
+
+function isStyleProperty(value: unknown): value is StyleProp<TextStyle> {
+  return value === undefined || value === false || isRecord(value);
+}
+
+/**
+ * Flattened style of a rendered view or text host, or an empty style when it
+ * has none. The node is `unknown` because the test renderer ships no type
+ * declarations.
+ */
+export function styleOf(node: unknown): TextStyle {
+  const style =
+    isRecord(node) && isRecord(node.props) ? node.props.style : undefined;
+  return isStyleProperty(style) ? StyleSheet.flatten(style) : {};
+}
+
+/**
+ * Minimal responder grant that puts a Pressable host into its pressed state,
+ * which `fireEvent.press` skips because `press` calls `onPress` alone.
+ */
+export function pressIn(node: unknown): void {
+  fireEvent(node, "responderGrant", {
+    currentTarget: undefined,
+    nativeEvent: { changedTouches: [], target: 1, timestamp: 0, touches: [] },
+    persist: ignoreSettlement,
+    touchHistory: { indexOfSingleActiveTouch: -1, mostRecentTimeStamp: 0 },
+  });
 }
 
 /** Lets already-queued promise callbacks settle inside `act`. */
