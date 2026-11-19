@@ -50,6 +50,7 @@ jobs:
 
       - run: node --test scripts/release-guard.test.mjs
 
+      # The same gate as ci.yml "Native Package Gates"; it covers ui-core too. Keep them in step.
       - run: pnpm ci:native
 
   release:

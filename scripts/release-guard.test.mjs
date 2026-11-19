@@ -747,6 +747,12 @@ test("package-release CLI checks the tagged commit against origin/main in git", 
     const ok = run("refs/tags/ui-native-v0.2.0", main);
     assert.equal(ok.status, 0, ok.stderr);
     assert.equal(ok.stdout, "name=@vllnt/ui-native\ndir=packages/ui-native\nversion=0.2.0\n");
+    // A missing CHANGELOG fails the section gate with its message, and never blocks the other package.
+    rmSync(join(dir, "packages/ui-core/CHANGELOG.md"));
+    const noLog = run("refs/tags/ui-core-v0.1.0", main);
+    assert.equal(noLog.status, 1);
+    assert.match(noLog.stderr, /packages\/ui-core\/CHANGELOG\.md has no ## \[0\.1\.0\] section/);
+    assert.equal(run("refs/tags/ui-native-v0.2.0", main).status, 0);
     for (const [ref, sha, message] of [
       ["refs/tags/ui-native-v0.2.0", offMain, /not on origin\/main/],
       ["refs/tags/ui-native-v0.2.0", "bad", /Invalid commit SHA/],

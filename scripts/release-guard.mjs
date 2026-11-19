@@ -92,7 +92,15 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     }
     if (mode === "package-release") {
       const root = fileURLToPath(new URL("..", import.meta.url));
-      const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+      // A missing CHANGELOG reads as empty, so it fails the same "no section" gate as a missing heading.
+      const read = (path) => {
+        try {
+          return readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+        } catch (error) {
+          if (error.code === "ENOENT") return "";
+          throw error;
+        }
+      };
       const { GITHUB_REF: ref, GITHUB_SHA: sha } = process.env;
       if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
       const git = spawnSync("git", ["merge-base", "--is-ancestor", sha, "origin/main"], { cwd: root });
