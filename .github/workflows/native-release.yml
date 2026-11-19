@@ -3,7 +3,7 @@ name: Native Release
 # Stable (@latest) for @vllnt/ui-core and @vllnt/ui-native: only a pushed
 # ui-core-vX.Y.Z or ui-native-vX.Y.Z tag. Neither pattern matches Web's v*.*.* tags.
 # The quality job verifies the tag (stable semver, equals the package version, commit on
-# main, CHANGELOG entry) before the protected npm-release deployment asks for approval.
+# main, dated CHANGELOG entry) before the protected npm-release deployment asks for approval.
 # Npm trusted publishing (OIDC) with provenance; no npm token, and this workflow never
 # creates tags. Publish core first, wait for it on npm, then tag native.
 

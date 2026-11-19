@@ -704,6 +704,21 @@ test("package tags reject other tags, prereleases, wrong versions, off-main comm
   bad({ changelogs: { ...nativeInput.changelogs, "ui-native": "## [Unreleased]\n## [0.2.01]\n## [0.2.0-rc.1]\n## 0.2.0\n" } }, /no ## \[0\.2\.0\] section/);
   bad({ ref: "refs/tags/ui-core-v0.1.0", changelogs: { ...nativeInput.changelogs, "ui-core": "" } }, /no ## \[0\.1\.0\] section/);
 });
+test("package tags need a dated CHANGELOG heading: Unreleased is rejected, dated and bare headings pass", () => {
+  const release = (heading, ref = "refs/tags/ui-native-v0.2.0", dir = "ui-native") =>
+    packageRelease({ ...nativeInput, ref, changelogs: { ...nativeInput.changelogs, [dir]: `# Changelog\n## [Unreleased]\n${heading}\n- note\n` } });
+  for (const heading of ["## [0.2.0] - 2026-11-03", "## [0.2.0]", "## [0.2.0] - 2026-11-03 (first release)"]) {
+    assert.equal(release(heading).version, "0.2.0", heading);
+  }
+  for (const heading of ["## [0.2.0] - Unreleased", "## [0.2.0] - unreleased", "## [0.2.0] (UNRELEASED)", "## [0.2.0]-Unreleased", "## [0.2.0] Unreleased"]) {
+    assert.throws(() => release(heading), new Error("packages/ui-native/CHANGELOG.md still marks [0.2.0] as Unreleased; the release PR must date it"), heading);
+  }
+  // Same rule for ui-core, with its own path and version in the message.
+  assert.throws(() => release("## [0.1.0] - Unreleased", "refs/tags/ui-core-v0.1.0", "ui-core"), /packages\/ui-core\/CHANGELOG\.md still marks \[0\.1\.0\] as Unreleased; the release PR must date it/);
+  // Only the released version's own heading counts: the `## [Unreleased]` section and other versions' headings do not.
+  assert.equal(release("## [0.2.0] - 2026-11-03\n## [0.1.0] - Unreleased").version, "0.2.0");
+  assert.throws(() => release("## [0.2.1] - 2026-11-03\n## [0.1.0] - Unreleased"), /has no ## \[0\.2\.0\] section/);
+});
 test("a Web v tag never reaches the package guard or the native workflow, and package tags never reach Web", () => {
   const nativeTags = ["refs/tags/ui-core-v0.1.0", "refs/tags/ui-native-v0.2.0"];
   for (const ref of nativeTags) {
@@ -764,6 +779,12 @@ test("package-release CLI checks the tagged commit against origin/main in git", 
       assert.equal(result.stdout, "");
       assert.match(result.stderr, message);
     }
+    // An Unreleased heading stops the CLI too, with the message and no output for the workflow.
+    writeFileSync(join(dir, "packages/ui-native/CHANGELOG.md"), "## [Unreleased]\n## [0.2.0] - Unreleased\n");
+    const undated = run("refs/tags/ui-native-v0.2.0", main);
+    assert.equal(undated.status, 1);
+    assert.equal(undated.stdout, "");
+    assert.match(undated.stderr, /packages\/ui-native\/CHANGELOG\.md still marks \[0\.2\.0\] as Unreleased; the release PR must date it/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

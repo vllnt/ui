@@ -66,7 +66,8 @@ const PACKAGES = { "ui-core": "@vllnt/ui-core", "ui-native": "@vllnt/ui-native" 
  * Core and Native publish stable from their own `<dir>-v<X.Y.Z>` tag push, never from a `v*` tag
  * (those belong to Web). The version must be stable semver and equal that package's version;
  * the tagged commit must be on main (`onMain`, from git history) and the package CHANGELOG must
- * have a `## [X.Y.Z]` section. Callers pass `versions` and `changelogs` keyed by package directory.
+ * have a `## [X.Y.Z]` section that is not marked Unreleased (a date or nothing after the `]`).
+ * This is the Core/Native rule only; Web's `v*` stable path does not apply it. Callers pass `versions` and `changelogs` keyed by package directory.
  */
 export function packageRelease({ ref, versions, changelogs, onMain }) {
   const match = /^refs\/tags\/(ui-core|ui-native)-v([^/]+)$/.exec(ref ?? "");
@@ -75,8 +76,11 @@ export function packageRelease({ ref, versions, changelogs, onMain }) {
   if (!/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(version)) throw new Error(`Tag version ${version} is not stable X.Y.Z`);
   if (versions[dir] !== version) throw new Error(`Tag version ${version} does not match packages/${dir} version ${versions[dir]}`);
   if (onMain !== true) throw new Error("Tagged commit is not on origin/main");
-  if (!changelogs[dir].split("\n").some((line) => line.startsWith(`## [${version}]`))) {
-    throw new Error(`packages/${dir}/CHANGELOG.md has no ## [${version}] section`);
+  const prefix = `## [${version}]`;
+  const heading = changelogs[dir].split("\n").find((line) => line.startsWith(prefix));
+  if (heading === undefined) throw new Error(`packages/${dir}/CHANGELOG.md has no ## [${version}] section`);
+  if (/unreleased/i.test(heading.slice(prefix.length))) {
+    throw new Error(`packages/${dir}/CHANGELOG.md still marks [${version}] as Unreleased; the release PR must date it`);
   }
   return { dir, name: PACKAGES[dir], version };
 }

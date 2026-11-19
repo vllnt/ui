@@ -138,11 +138,11 @@ Prerequisites (owner actions):
 - The owner lifts the native validation hold and approves native publication. The canary variables in `native-canary.yml` do not affect this workflow.
 - A trusted publisher on npm for each package (repository `vllnt/ui`, workflow `native-release.yml`, environment `npm-release`).
 - The `npm-release` environment's deployment rules allow `ui-core-v*.*.*` and `ui-native-v*.*.*`, and a tag ruleset restricts who can create them.
-- A release PR on `main` bumps `packages/<pkg>/package.json` and cuts `## [X.Y.Z]` in `packages/<pkg>/CHANGELOG.md`.
+- A release PR on `main` bumps `packages/<pkg>/package.json` and cuts `## [X.Y.Z] - YYYY-MM-DD` in `packages/<pkg>/CHANGELOG.md`, replacing any `- Unreleased` marker; the guard rejects a heading that still says Unreleased.
 
 Tag the merged commit: `git fetch origin && git tag -a ui-core-vX.Y.Z origin/main -m ui-core-vX.Y.Z && git push origin ui-core-vX.Y.Z`.
 
-`release-guard.mjs package-release` runs before the `npm-release` approval is requested and fails unless the version is stable `X.Y.Z`, equals the package version, the tagged commit is an ancestor of `origin/main`, and the package CHANGELOG has `## [X.Y.Z]`. The release job then packs, checks the manifest (name, version, exact core dependency, no `workspace:`), and runs `npm publish --tag latest --provenance` unless that version is already on npm (`scripts/npm-published.sh`; only a not-found answer counts as unpublished). Re-run failed jobs after a transient failure. The workflow creates no tags or GitHub Release.
+`release-guard.mjs package-release` runs before the `npm-release` approval is requested and fails unless the version is stable `X.Y.Z`, equals the package version, the tagged commit is an ancestor of `origin/main`, and the package CHANGELOG has a `## [X.Y.Z]` heading that is not marked Unreleased (`## [X.Y.Z] - YYYY-MM-DD`, or a bare `## [X.Y.Z]`). The release job then packs, checks the manifest (name, version, exact core dependency, no `workspace:`), and runs `npm publish --tag latest --provenance` unless that version is already on npm (`scripts/npm-published.sh`; only a not-found answer counts as unpublished). Re-run failed jobs after a transient failure. The workflow creates no tags or GitHub Release.
 
 ## Versioning policy
 
