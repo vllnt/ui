@@ -131,6 +131,6 @@ export default function middleware(request: NextRequest): NextResponse {
 export const config = {
   matcher: [
     "/design.md",
-    "/((?!api|healthz|_next|_vercel|mcp|embed|r/|\\.well-known/|atom\\.xml|rss\\.xml|design\\.txt|llms\\.txt|llms-full\\.txt|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|.*\\.[^/]+$).*)",
+    "/((?!api|healthz|_next|_vercel|mcp|embed|apple-icon|r/|\\.well-known/|atom\\.xml|rss\\.xml|design\\.txt|llms\\.txt|llms-full\\.txt|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|.*\\.[^/]+$).*)",
   ],
 };
