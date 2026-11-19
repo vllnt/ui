@@ -151,8 +151,8 @@ function AccordionTrigger({
       aria-expanded={isOpen}
       className={cn(
         "w-full flex items-center justify-between p-4 text-left font-medium transition-colors",
-        "hover:bg-muted/50",
-        isOpen && "bg-muted/30",
+        "hover:bg-secondary/50",
+        isOpen && "bg-secondary/30",
         className,
       )}
       id={getPartId(baseId, "trigger", value)}

@@ -16,18 +16,16 @@ const FIX =
   "Use bg-secondary at the same opacity (DESIGN.md, Dark surfaces are pure black).";
 
 /**
- * Still on the old pattern in a separate change. Remove this exemption when
- * the accordion moves to the secondary token.
- */
-const PENDING_MIGRATION = join("atoms", "accordion", "accordion.tsx");
-
-/**
  * Fills that moved off `bg-muted`: each file with its classes, one entry per
  * occurrence. Dark `--muted` is the page color (#000000), so these use
  * `--secondary`: it matches the old muted fill in the default theme and stays
  * readable under the text in every preset, where `--accent` is a brand color.
  */
 const MIGRATED_FILLS: readonly (readonly [string, readonly string[]])[] = [
+  [
+    "atoms/accordion/accordion.tsx",
+    ["bg-secondary/30", "hover:bg-secondary/50"],
+  ],
   [
     "atoms/ai-source-citation/ai-source-citation.tsx",
     ["hover:bg-secondary/40"],
@@ -183,7 +181,6 @@ describe("muted fill as state feedback", () => {
   it("is not used for hover, focus, active, selected or data-state styles", () => {
     const offenders = listSourceFiles(COMPONENTS_ROOT)
       .map((path) => relative(COMPONENTS_ROOT, path))
-      .filter((file) => file !== PENDING_MIGRATION)
       .flatMap((file) =>
         mutedStateFills(readFileSync(join(COMPONENTS_ROOT, file), "utf8")).map(
           (fill) => `${file}: ${fill}`,
