@@ -134,7 +134,7 @@ test("cleanEnvironment removes the workspace NODE_PATH, node_modules PATH entrie
 
 test("cleanEnvironment keeps PNPM_HOME and every PATH entry outside the workspace, even under node_modules", () => {
   const entries = {
-    runnerPnpm: "/home/runner/setup-pnpm/node_modules/.bin",
+    runnerPnpm: "/runner/setup-pnpm/node_modules/.bin",
     rootBin: "/repo/node_modules/.bin",
     catalogBin: "/repo/apps/native-catalog/node_modules/.bin",
     storeBin: "/repo/node_modules/.pnpm/node_modules/.bin",
@@ -158,7 +158,7 @@ test("cleanEnvironment keeps PNPM_HOME and every PATH entry outside the workspac
 });
 
 test("cleanEnvironment takes this repository as the workspace by default", () => {
-  const runnerPnpm = "/home/runner/setup-pnpm/node_modules/.bin";
+  const runnerPnpm = "/runner/setup-pnpm/node_modules/.bin";
   const cleaned = cleanEnvironment({
     PATH: [join(root, "node_modules/.bin"), join(root, "apps/native-catalog/node_modules/.bin"), runnerPnpm, "/usr/bin"].join(":"),
   });

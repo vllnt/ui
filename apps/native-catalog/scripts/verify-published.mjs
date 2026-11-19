@@ -162,7 +162,7 @@ export function scratchWorkspaceYaml({ exclude, minimumReleaseAge }) {
 /**
  * A PATH entry that `pnpm run` adds for the workspace: an absolute path under the workspace root
  * that sits inside a node_modules. Everything else stays, notably PNPM_HOME, which
- * pnpm/action-setup puts in a node_modules of its own (/home/runner/setup-pnpm/node_modules/.bin)
+ * pnpm/action-setup puts in a node_modules of its own (<runner>/setup-pnpm/node_modules/.bin)
  * outside the workspace. A relative entry is left alone: it resolves in the child's directory.
  */
 function isWorkspaceBin(entry, workspaceRoot) {
