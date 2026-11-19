@@ -341,7 +341,7 @@ async function ReleasesStrip() {
                 {release.summary}
               </p>
               <Link
-                className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
+                className="mt-4 inline-flex min-h-6 items-center gap-1 text-sm font-medium"
                 href={`/releases#${release.anchor}`}
               >
                 {t("readNotes")}

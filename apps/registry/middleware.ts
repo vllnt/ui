@@ -3,7 +3,8 @@ import createMiddleware from "next-intl/middleware";
 
 import { routing } from "@/i18n/routing";
 import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
-import { publicVariant, variantPathname } from "@/lib/platform-variant";
+import { publicVariant } from "@/lib/platform-variant";
+import { variantPathname } from "@/lib/platform-variant-rewrite";
 
 const intlMiddleware = createMiddleware(routing);
 
