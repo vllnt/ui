@@ -75,7 +75,7 @@ export function TableOfContents({
             {sections.map((section) => (
               <button
                 className={cn(
-                  "block text-left text-sm transition-colors",
+                  "block min-h-6 text-left text-sm transition-colors",
                   "hover:text-foreground",
                   activeSection === section.id
                     ? "text-foreground font-medium"

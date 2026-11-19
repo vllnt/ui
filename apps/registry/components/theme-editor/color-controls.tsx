@@ -34,7 +34,7 @@ function ColorRow({
       <div className="flex items-center gap-1.5">
         <input
           aria-label={`${label} OKLCH channels`}
-          className="w-24 rounded border border-border bg-transparent px-1.5 py-0.5 text-right font-mono text-xs text-muted-foreground focus:text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          className="w-24 rounded border border-border bg-transparent px-1.5 py-1 text-right font-mono text-xs text-muted-foreground focus:text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
           onChange={(event) => {
             onChange(name, event.target.value);
           }}

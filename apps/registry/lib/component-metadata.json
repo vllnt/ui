@@ -5618,6 +5618,10 @@
       {
         "id": "navigation-sidebar--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-sidebar--with-pathname",
+        "name": "With Pathname"
       }
     ],
     "title": "Sidebar"

@@ -116,8 +116,12 @@ function runFake(tool, args) {
     const [name, version] = splitSpec(rest[0]);
     injected("view-version", name);
     if (!registry(name)) fail("E404");
+    // npm accepts an upload before it serves it ("Your package is being processed"): the version
+    // stays invisible to `npm view` for the number of polls the publish was told to hide it for.
+    const hiddenFor = state.processing[`${name}@${version}`] ?? 0;
+    if (hiddenFor > 0) state.processing[`${name}@${version}`] = hiddenFor - 1;
     save();
-    if (registry(name).versions.includes(version)) process.stdout.write(`${version}\n`);
+    if (hiddenFor === 0 && registry(name).versions.includes(version)) process.stdout.write(`${version}\n`);
   } else if (command === "publish") {
     const manifest = JSON.parse(spawnSync("tar", ["-xOf", rest[0], "package/package.json"], { encoding: "utf8" }).stdout);
     injected("publish", manifest.name);
@@ -131,6 +135,7 @@ function runFake(tool, args) {
     entry.tags[tag] = manifest.version;
     if (!entry.tags.latest) entry.tags.latest = manifest.version; // implicit latest on a first upload
     if (state.quirks.publishMovesLatest) entry.tags.latest = manifest.version;
+    if (state.quirks.visibleAfterPolls) state.processing[`${manifest.name}@${manifest.version}`] = state.quirks.visibleAfterPolls;
     state.publishes.push({ name: manifest.name, version: manifest.version, tag, args: rest, manifest });
     save();
   } else if (command === "dist-tag" && rest[0] === "add") {
@@ -188,7 +193,7 @@ export function createHarness({ without = [] } = {}) {
       [CORE]: { versions: [BOOTSTRAP], tags: { latest: BOOTSTRAP } },
       [NATIVE]: { versions: [BOOTSTRAP], tags: { latest: BOOTSTRAP } },
     },
-    calls: [], publishes: [], failures: [], quirks: {}, gitCalls: 0,
+    calls: [], publishes: [], failures: [], quirks: {}, gitCalls: 0, processing: {},
   };
   const read = () => JSON.parse(readFileSync(statePath, "utf8"));
   const write = (next) => writeFileSync(statePath, JSON.stringify(next, null, 2));
@@ -211,7 +216,11 @@ export function createHarness({ without = [] } = {}) {
     seed(edit) { const next = read(); edit(next.registry); write(next); },
     /** Edits a fixture package manifest for every later run. */
     setManifest(dir, apply) { manifestEdits.push({ dir, apply }); },
-    /** Runs the script as the workflow does. `fail`: [{command, package?, error, skip?, times?}]. */
+    /**
+     * Runs the script as the workflow does. `fail`: [{command, package?, error, skip?, times?}].
+     * `quirks`: `publishMovesLatest`; `visibleAfterPolls: n` hides every uploaded version from
+     * `npm view <name>@<version>` for its next n polls.
+     */
     run(mode, { env = {}, mainShas = [SHA], fail = [], quirks = {} } = {}) {
       resetManifests();
       const next = read();

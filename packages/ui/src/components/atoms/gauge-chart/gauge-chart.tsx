@@ -146,7 +146,7 @@ export const GaugeChart = ({
         width={size}
       >
         <path
-          className="stroke-muted"
+          className="stroke-secondary"
           d={arc({ center, end: 360, radius, start: 180 })}
           fill="none"
           strokeLinecap="round"

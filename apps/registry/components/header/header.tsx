@@ -195,6 +195,7 @@ export function Header({ locale }: HeaderProps) {
                       aria-current={entry === locale ? "page" : undefined}
                       href={preserveQuery(pathname)}
                       locale={entry}
+                      prefetch={false}
                     >
                       {entry.toUpperCase()}
                     </Link>
@@ -215,6 +216,7 @@ export function Header({ locale }: HeaderProps) {
                 href={preserveQuery(pathname)}
                 key={entry}
                 locale={entry}
+                prefetch={false}
               >
                 {entry}
               </Link>
@@ -222,7 +224,7 @@ export function Header({ locale }: HeaderProps) {
           </div>
           <a
             aria-label={t("githubLabel")}
-            className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
+            className="hidden size-11 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:inline-flex"
             href={GITHUB_URL}
             rel="noreferrer"
             target="_blank"

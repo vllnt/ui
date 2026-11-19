@@ -7,9 +7,12 @@
     "version",
     "source",
     "color",
+    "brand",
     "typography",
     "spacing",
     "radius",
+    "size",
+    "opacity",
     "elevation",
     "motion",
     "iconography",
@@ -37,7 +40,16 @@
           "type": "object",
           "minProperties": 1,
           "additionalProperties": { "$ref": "#/$defs/semanticColor" }
-        }
+        },
+        "badge-label": { "$ref": "#/$defs/tokenGroup" }
+      },
+      "additionalProperties": false
+    },
+    "brand": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/tokenGroup" }
       },
       "additionalProperties": false
     },
@@ -70,6 +82,8 @@
       "additionalProperties": false
     },
     "radius": { "$ref": "#/$defs/stringMap" },
+    "size": { "$ref": "#/$defs/tokenGroup" },
+    "opacity": { "$ref": "#/$defs/tokenGroup" },
     "elevation": { "$ref": "#/$defs/stringMap" },
     "motion": {
       "type": "object",
@@ -148,6 +162,29 @@
       "minProperties": 1,
       "additionalProperties": { "type": "string", "minLength": 1 }
     },
+    "token": {
+      "type": "object",
+      "required": ["value", "role"],
+      "properties": {
+        "value": { "type": "string", "minLength": 1 },
+        "coarse": {
+          "type": "string",
+          "pattern": "^\\{[a-z][a-z0-9.-]*\\}$"
+        },
+        "role": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tokenGroup": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "oneOf": [
+          { "$ref": "#/$defs/token" },
+          { "$ref": "#/$defs/tokenGroup" }
+        ]
+      }
+    },
     "themeColors": {
       "type": "object",
       "minProperties": 1,
@@ -200,7 +237,8 @@
           },
           "additionalProperties": false
         },
-        "radius": { "$ref": "#/$defs/stringMap" }
+        "radius": { "$ref": "#/$defs/stringMap" },
+        "opacity": { "$ref": "#/$defs/stringMap" }
       },
       "additionalProperties": false
     },

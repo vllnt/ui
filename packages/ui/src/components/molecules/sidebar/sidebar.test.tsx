@@ -25,9 +25,14 @@ vi.mock("next/link", () => ({
     children,
     href,
     onClick,
+    prefetch,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href: string;
+    prefetch?: boolean;
+  }) => (
     <a
+      data-prefetch={prefetch === undefined ? undefined : String(prefetch)}
       href={href}
       {...props}
       onClick={(event) => {
@@ -131,6 +136,86 @@ describe("Sidebar", () => {
       "/docs/forms",
     );
   });
+
+  it("marks the page named by the pathname prop instead of the router pathname", async () => {
+    render(
+      <SidebarProvider>
+        <Sidebar pathname="/docs/forms" sections={sections} />
+        <SidebarStateProbe />
+      </SidebarProvider>,
+    );
+    await expectState("open");
+
+    expect(screen.getByRole("link", { name: "Forms" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(
+      screen.getByRole("link", { name: "Components" }),
+    ).not.toHaveAttribute("aria-current");
+  });
+
+  it("falls back to the router pathname when the pathname prop is omitted", async () => {
+    renderSidebar();
+    await expectState("open");
+
+    expect(screen.getByRole("link", { name: "Components" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "Forms" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  });
+
+  it("leaves link prefetching to the router unless the prefetch prop is set", async () => {
+    renderSidebar();
+    await expectState("open");
+
+    expect(screen.getByRole("link", { name: "Forms" })).not.toHaveAttribute(
+      "data-prefetch",
+    );
+  });
+
+  it.each([
+    [
+      "the section and family-list links",
+      "/docs/components",
+      ["Overview", "Forms", "Core"],
+    ],
+    ["the open family's links", "/components/button", ["Core", "Button"]],
+  ])(
+    "turns prefetching off for %s when prefetch is false",
+    async (_name, pathname, names) => {
+      mockPathname = pathname;
+      render(
+        <SidebarProvider>
+          <Sidebar
+            prefetch={false}
+            sections={[
+              ...sections,
+              {
+                family: true,
+                href: "/families/core",
+                items: [{ href: "/components/button", title: "Button" }],
+                title: "Core",
+              },
+            ]}
+          />
+          <SidebarStateProbe />
+        </SidebarProvider>,
+      );
+      await expectState("open");
+
+      expect(
+        names.map(
+          (name) =>
+            screen.getByRole("link", { name: new RegExp(name) }).dataset
+              .prefetch,
+        ),
+      ).toEqual(names.map(() => "false"));
+    },
+  );
 
   it("supports explicit current state for query-backed navigation", async () => {
     renderSidebar([

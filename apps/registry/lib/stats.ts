@@ -1,3 +1,6 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { registry, type RegistryComponent } from "@/lib/registry";
 
 import packageJson from "../../../packages/ui/package.json";
@@ -12,7 +15,23 @@ export function getLibraryVersion(): string {
   return registry.version ?? PACKAGE.version;
 }
 
+/** The registry index the build serves as /r/registry.json (see stamp-registry-metadata.ts). */
+const BUILT_INDEX = join(process.cwd(), "public/r/registry.json");
+
+/**
+ * The time the build generated the served registry: the build's own stamp on
+ * /r/registry.json, or the committed registry's stamp before a registry build.
+ *
+ * @returns ISO timestamp, or `undefined` when neither source has one
+ */
 export function getRegistryGeneratedAt(): string | undefined {
+  if (existsSync(BUILT_INDEX)) {
+    const built = JSON.parse(readFileSync(BUILT_INDEX, "utf8")) as {
+      generatedAt?: unknown;
+    };
+    if (typeof built.generatedAt === "string") return built.generatedAt;
+  }
+
   return registry.generatedAt;
 }
 

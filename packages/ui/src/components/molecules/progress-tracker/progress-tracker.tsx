@@ -364,7 +364,7 @@ function OverviewRing({
           viewBox="0 0 120 120"
         >
           <circle
-            className="stroke-muted"
+            className="stroke-secondary"
             cx="60"
             cy="60"
             fill="none"
