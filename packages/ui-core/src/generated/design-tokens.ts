@@ -163,8 +163,8 @@ export const designTokens = {
       },
       "input": {
         "cssVariable": "--input",
-        "light": "0.66 0 0",
-        "dark": "0.49 0 0",
+        "light": "0.6167 0 0",
+        "dark": "0.5208 0 0",
         "role": "Form-control boundary (3:1 against background, card, popover)"
       },
       "ring": {
@@ -375,7 +375,20 @@ export const designTokens = {
       "8": "2rem",
       "10": "2.5rem",
       "12": "3rem",
-      "16": "4rem"
+      "16": "4rem",
+      "24": "6rem"
+    },
+    "page-gutter": {
+      "value": "{spacing.5}",
+      "role": "Horizontal page padding below 768 px (20)"
+    },
+    "page-gutter-tablet": {
+      "value": "{spacing.12}",
+      "role": "Horizontal page padding from 768 px (48)"
+    },
+    "page-gutter-desktop": {
+      "value": "{spacing.24}",
+      "role": "Horizontal page padding from 1200 px (96)"
     }
   },
   "radius": {
@@ -393,6 +406,14 @@ export const designTokens = {
       "value": "2rem",
       "coarse": "{size.target.min}",
       "role": "Extra-small control height (32). Under a coarse pointer it rises to size.target.min"
+    },
+    "measure-narrow": {
+      "value": "30rem",
+      "role": "Narrow text column width (480), for rich text in a tight container"
+    },
+    "page-max": {
+      "value": "90rem",
+      "role": "Maximum width of the page column (1440), centred; the gutters above are its side padding"
     },
     "target": {
       "min": {
@@ -416,6 +437,117 @@ export const designTokens = {
     "sm": "0 1px 2px rgba(0, 0, 0, 0.05)",
     "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
     "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+  },
+  "shadow": {
+    "raised": {
+      "role": "Shadow of a raised surface, the lowest step",
+      "light": [
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "3",
+          "spread": "0",
+          "color": "#0000001A",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "2",
+          "spread": "0",
+          "color": "#0000000F",
+          "inset": false
+        }
+      ],
+      "dark": [
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "3",
+          "spread": "0",
+          "color": "#00000066",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "2",
+          "spread": "0",
+          "color": "#0000003D",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "0",
+          "spread": "0",
+          "color": "#FFFFFF14",
+          "inset": true
+        }
+      ]
+    },
+    "overlay": {
+      "role": "Shadow of an overlay: dialog, command palette, popover, tooltip",
+      "light": [
+        {
+          "offsetX": "0",
+          "offsetY": "8",
+          "blur": "24",
+          "spread": "0",
+          "color": "#00000024",
+          "inset": false
+        }
+      ],
+      "dark": [
+        {
+          "offsetX": "0",
+          "offsetY": "8",
+          "blur": "24",
+          "spread": "0",
+          "color": "#00000080",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "0",
+          "spread": "0",
+          "color": "#FFFFFF1F",
+          "inset": true
+        }
+      ]
+    },
+    "floating": {
+      "role": "Shadow of a floating surface, the highest step",
+      "light": [
+        {
+          "offsetX": "0",
+          "offsetY": "16",
+          "blur": "40",
+          "spread": "0",
+          "color": "#0000002E",
+          "inset": false
+        }
+      ],
+      "dark": [
+        {
+          "offsetX": "0",
+          "offsetY": "16",
+          "blur": "40",
+          "spread": "0",
+          "color": "#00000099",
+          "inset": false
+        },
+        {
+          "offsetX": "0",
+          "offsetY": "1",
+          "blur": "0",
+          "spread": "0",
+          "color": "#FFFFFF29",
+          "inset": true
+        }
+      ]
+    }
   },
   "motion": {
     "duration": {
@@ -443,7 +575,7 @@ export const designTokens = {
   "themes": {
     "maia": {
       "label": "Maia",
-      "description": "Maia product theme: pink primary on black and white neutrals, Figtree with JetBrains Mono. Overrides core roles only; every other role inherits core.",
+      "description": "Maia product theme (Ink): no accent, the primary is the ink colour inverted per mode, black and white neutrals, Inter with JetBrains Mono. The primary is pure black (#000000) in light on purpose; core keeps #171717. Overrides core roles only; every other role inherits core.",
       "color": {
         "light": {
           "background": "1 0 0",
@@ -452,7 +584,7 @@ export const designTokens = {
           "cardForeground": "0 0 0",
           "popover": "0.9851 0 0",
           "popoverForeground": "0 0 0",
-          "primary": "0.54 0.2202 345.03",
+          "primary": "0 0 0",
           "primaryForeground": "1 0 0",
           "muted": "0.9702 0 0",
           "mutedForeground": "0.4997 0 0",
@@ -478,7 +610,7 @@ export const designTokens = {
           "cardForeground": "1 0 0",
           "popover": "0.1543 0 0",
           "popoverForeground": "1 0 0",
-          "primary": "0.7208 0.1894 345.3",
+          "primary": "1 0 0",
           "primaryForeground": "0 0 0",
           "muted": "0.2002 0 0",
           "mutedForeground": "0.7187 0 0",
@@ -500,16 +632,14 @@ export const designTokens = {
       },
       "typography": {
         "fontFamily": {
-          "sans": "'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-          "display": "'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           "mono": "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
         },
         "fontWeight": {
-          "display": 700,
+          "display": 600,
           "heading": 600,
           "body": 400,
           "caption": 500,
-          "label": 700
+          "label": 600
         },
         "scale": {
           "display": {
@@ -658,7 +788,7 @@ export const nativeTokens = {
       "diffAdded": "#102b17",
       "diffRemoved": "#3b1816",
       "border": "#262626",
-      "input": "#606060",
+      "input": "#696969",
       "ring": "#d4d4d4"
     },
     "light": {
@@ -687,7 +817,7 @@ export const nativeTokens = {
       "diffAdded": "#d9f3dd",
       "diffRemoved": "#ffe4e1",
       "border": "#e5e5e5",
-      "input": "#929292",
+      "input": "#858585",
       "ring": "#0a0a0a"
     }
   },
@@ -718,7 +848,8 @@ export const nativeTokens = {
     "8": 32,
     "10": 40,
     "12": 48,
-    "16": 64
+    "16": 64,
+    "24": 96
   },
   "typography": {
     "fontWeight": {
@@ -792,7 +923,7 @@ export const productThemes = {
         "cardForeground": "#ffffff",
         "popover": "#0c0c0c",
         "popoverForeground": "#ffffff",
-        "primary": "#f46cbf",
+        "primary": "#ffffff",
         "primaryForeground": "#000000",
         "secondary": "#262626",
         "secondaryForeground": "#fafafa",
@@ -821,7 +952,7 @@ export const productThemes = {
         "cardForeground": "#000000",
         "popover": "#fafafa",
         "popoverForeground": "#000000",
-        "primary": "#be148b",
+        "primary": "#000000",
         "primaryForeground": "#ffffff",
         "secondary": "#f5f5f5",
         "secondaryForeground": "#171717",
@@ -858,16 +989,16 @@ export const productThemes = {
     },
     "typography": {
       "fontFamily": {
-        "sans": "Figtree",
-        "display": "Figtree",
+        "sans": "Inter",
+        "display": "Inter",
         "mono": "JetBrains Mono"
       },
       "fontWeight": {
         "heading": 600,
-        "display": 700,
+        "display": 600,
         "body": 400,
         "caption": 500,
-        "label": 700
+        "label": 600
       },
       "scale": {
         "display": {
@@ -949,7 +1080,7 @@ export const productThemes = {
         "diffAdded": "#102b17",
         "diffRemoved": "#3b1816",
         "border": "#262626",
-        "input": "#606060",
+        "input": "#696969",
         "ring": "#d4d4d4"
       },
       "light": {
@@ -978,7 +1109,7 @@ export const productThemes = {
         "diffAdded": "#d9f3dd",
         "diffRemoved": "#ffe4e1",
         "border": "#e5e5e5",
-        "input": "#929292",
+        "input": "#858585",
         "ring": "#0a0a0a"
       }
     },
@@ -1089,7 +1220,7 @@ export const tamaguiTokens = {
     "diffAddedDark": "#102b17",
     "diffRemovedDark": "#3b1816",
     "borderDark": "#262626",
-    "inputDark": "#606060",
+    "inputDark": "#696969",
     "ringDark": "#d4d4d4",
     "backgroundLight": "#ffffff",
     "foregroundLight": "#0a0a0a",
@@ -1116,7 +1247,7 @@ export const tamaguiTokens = {
     "diffAddedLight": "#d9f3dd",
     "diffRemovedLight": "#ffe4e1",
     "borderLight": "#e5e5e5",
-    "inputLight": "#929292",
+    "inputLight": "#858585",
     "ringLight": "#0a0a0a"
   },
   "radius": {
@@ -1139,7 +1270,8 @@ export const tamaguiTokens = {
     "8": 32,
     "10": 40,
     "12": 48,
-    "16": 64
+    "16": 64,
+    "24": 96
   },
   "space": {
     "1": 4,
@@ -1151,7 +1283,8 @@ export const tamaguiTokens = {
     "8": 32,
     "10": 40,
     "12": 48,
-    "16": 64
+    "16": 64,
+    "24": 96
   },
   "zIndex": {
     "0": 0,
@@ -1172,7 +1305,7 @@ export const tamaguiThemes = {
     "cardForeground": "#ffffff",
     "popover": "#0c0c0c",
     "popoverForeground": "#ffffff",
-    "primary": "#f46cbf",
+    "primary": "#ffffff",
     "primaryForeground": "#000000",
     "secondary": "#262626",
     "secondaryForeground": "#fafafa",
@@ -1202,7 +1335,7 @@ export const tamaguiThemes = {
     "cardForeground": "#000000",
     "popover": "#fafafa",
     "popoverForeground": "#000000",
-    "primary": "#be148b",
+    "primary": "#000000",
     "primaryForeground": "#ffffff",
     "secondary": "#f5f5f5",
     "secondaryForeground": "#171717",
@@ -1251,7 +1384,7 @@ export const tamaguiThemes = {
     "diffAdded": "#102b17",
     "diffRemoved": "#3b1816",
     "borderColor": "#262626",
-    "input": "#606060",
+    "input": "#696969",
     "ring": "#d4d4d4",
     "placeholderColor": "#a3a3a3"
   },
@@ -1281,7 +1414,7 @@ export const tamaguiThemes = {
     "diffAdded": "#d9f3dd",
     "diffRemoved": "#ffe4e1",
     "borderColor": "#e5e5e5",
-    "input": "#929292",
+    "input": "#858585",
     "ring": "#0a0a0a",
     "placeholderColor": "#6a6a6a"
   }

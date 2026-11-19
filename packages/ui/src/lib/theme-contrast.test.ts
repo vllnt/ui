@@ -67,6 +67,8 @@ const BOUNDARY_PAIRS: readonly Pair[] = [
   ["ring", "background"],
 ];
 
+const MUTED_BOUNDARY_PAIRS: readonly Pair[] = [["input", "muted"]];
+
 function readTheme(file: string): string {
   return readFileSync(join(THEMES_DIR, file), "utf8");
 }
@@ -196,6 +198,28 @@ const KNOWN_STATUS_GAPS: Readonly<Record<string, readonly Mode[]>> = {
   synthwave: ["light"],
 };
 
+/**
+ * `--input` needs 3:1 on `--muted` too, like on background, card and popover.
+ * The generated themes (default, Maia, PaaS) meet it. Every preset sets its own
+ * `--input` and `--muted` and misses it in both modes, by 2.48:1 to 2.81:1.
+ * Tracked in https://github.com/vllnt/ui/issues/618. Each gap runs under
+ * `it.fails`, so a preset that passes has to leave this list.
+ */
+const KNOWN_MUTED_BOUNDARY_GAPS: Readonly<Record<string, readonly Mode[]>> = {
+  aura: ["dark", "light"],
+  chatgpt: ["dark", "light"],
+  claude: ["dark", "light"],
+  cyberlime: ["dark", "light"],
+  cyberpunk: ["dark", "light"],
+  dracula: ["dark", "light"],
+  dusk: ["dark", "light"],
+  gemini: ["dark", "light"],
+  matrix: ["dark", "light"],
+  nord: ["dark", "light"],
+  synthwave: ["dark", "light"],
+  tron: ["dark", "light"],
+};
+
 function illegibleOnTint(colors: Palette, roles: readonly string[]): string[] {
   return roles.filter((role) => {
     const color = token(colors, role);
@@ -248,6 +272,14 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
 
   it("keeps control boundaries and the focus ring at 3:1", () => {
     expect(failures(colors, BOUNDARY_PAIRS, 3)).toEqual([]);
+  });
+
+  const mutedBoundaryIt = KNOWN_MUTED_BOUNDARY_GAPS[preset]?.includes(mode)
+    ? it.fails
+    : it;
+
+  mutedBoundaryIt("keeps the control boundary at 3:1 on muted", () => {
+    expect(failures(colors, MUTED_BOUNDARY_PAIRS, 3)).toEqual([]);
   });
 });
 

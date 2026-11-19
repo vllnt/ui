@@ -190,9 +190,66 @@
         "$type": "borderRadius"
       }
     },
+    "shadow": {
+      "raised": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "3",
+            "spread": "0",
+            "color": "#0000001A",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#0000000F",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      },
+      "overlay": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "8",
+            "blur": "24",
+            "spread": "0",
+            "color": "#00000024",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      },
+      "floating": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "16",
+            "blur": "40",
+            "spread": "0",
+            "color": "#0000002E",
+            "inset": false
+          }
+        ],
+        "$type": "shadow"
+      }
+    },
     "size": {
       "control-xs": {
         "$value": "32",
+        "$type": "sizing"
+      },
+      "measure-narrow": {
+        "$value": "480",
+        "$type": "sizing"
+      },
+      "page-max": {
+        "$value": "1440",
         "$type": "sizing"
       },
       "target": {
@@ -242,6 +299,22 @@
       "16": {
         "$value": "64",
         "$type": "spacing"
+      },
+      "24": {
+        "$value": "96",
+        "$type": "spacing"
+      },
+      "page-gutter": {
+        "$value": "{spacing.5}",
+        "$type": "spacing"
+      },
+      "page-gutter-tablet": {
+        "$value": "{spacing.12}",
+        "$type": "spacing"
+      },
+      "page-gutter-desktop": {
+        "$value": "{spacing.24}",
+        "$type": "spacing"
       }
     }
   },
@@ -272,7 +345,7 @@
         "$type": "color"
       },
       "primary": {
-        "$value": "#F46CBF",
+        "$value": "#FFFFFF",
         "$type": "color"
       },
       "primary-foreground": {
@@ -374,20 +447,81 @@
         }
       }
     },
+    "shadow": {
+      "raised": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "3",
+            "spread": "0",
+            "color": "#00000066",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#0000003D",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "0",
+            "spread": "0",
+            "color": "#FFFFFF14",
+            "inset": true
+          }
+        ],
+        "$type": "shadow"
+      },
+      "overlay": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "8",
+            "blur": "24",
+            "spread": "0",
+            "color": "#00000080",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "0",
+            "spread": "0",
+            "color": "#FFFFFF1F",
+            "inset": true
+          }
+        ],
+        "$type": "shadow"
+      },
+      "floating": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "16",
+            "blur": "40",
+            "spread": "0",
+            "color": "#00000099",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "0",
+            "spread": "0",
+            "color": "#FFFFFF29",
+            "inset": true
+          }
+        ],
+        "$type": "shadow"
+      }
+    },
     "font": {
       "family": {
-        "sans": {
-          "$value": [
-            "Figtree"
-          ],
-          "$type": "fontFamilies"
-        },
-        "display": {
-          "$value": [
-            "Figtree"
-          ],
-          "$type": "fontFamilies"
-        },
         "mono": {
           "$value": [
             "JetBrains Mono"
@@ -427,7 +561,7 @@
       },
       "weight": {
         "display": {
-          "$value": "700",
+          "$value": "600",
           "$type": "fontWeights"
         },
         "heading": {
@@ -443,7 +577,7 @@
           "$type": "fontWeights"
         },
         "label": {
-          "$value": "700",
+          "$value": "600",
           "$type": "fontWeights"
         }
       }
@@ -494,7 +628,7 @@
         "$type": "color"
       },
       "primary": {
-        "$value": "#BE148B",
+        "$value": "#000000",
         "$type": "color"
       },
       "primary-foreground": {
@@ -598,18 +732,6 @@
     },
     "font": {
       "family": {
-        "sans": {
-          "$value": [
-            "Figtree"
-          ],
-          "$type": "fontFamilies"
-        },
-        "display": {
-          "$value": [
-            "Figtree"
-          ],
-          "$type": "fontFamilies"
-        },
         "mono": {
           "$value": [
             "JetBrains Mono"
@@ -649,7 +771,7 @@
       },
       "weight": {
         "display": {
-          "$value": "700",
+          "$value": "600",
           "$type": "fontWeights"
         },
         "heading": {
@@ -665,7 +787,7 @@
           "$type": "fontWeights"
         },
         "label": {
-          "$value": "700",
+          "$value": "600",
           "$type": "fontWeights"
         }
       }
@@ -792,7 +914,7 @@
         "$type": "color"
       },
       "input": {
-        "$value": "#606060",
+        "$value": "#696969",
         "$type": "color"
       },
       "ring": {
@@ -816,6 +938,79 @@
           "$value": "{color.warning}",
           "$type": "color"
         }
+      }
+    },
+    "shadow": {
+      "raised": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "3",
+            "spread": "0",
+            "color": "#00000066",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "2",
+            "spread": "0",
+            "color": "#0000003D",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "0",
+            "spread": "0",
+            "color": "#FFFFFF14",
+            "inset": true
+          }
+        ],
+        "$type": "shadow"
+      },
+      "overlay": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "8",
+            "blur": "24",
+            "spread": "0",
+            "color": "#00000080",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "0",
+            "spread": "0",
+            "color": "#FFFFFF1F",
+            "inset": true
+          }
+        ],
+        "$type": "shadow"
+      },
+      "floating": {
+        "$value": [
+          {
+            "offsetX": "0",
+            "offsetY": "16",
+            "blur": "40",
+            "spread": "0",
+            "color": "#00000099",
+            "inset": false
+          },
+          {
+            "offsetX": "0",
+            "offsetY": "1",
+            "blur": "0",
+            "spread": "0",
+            "color": "#FFFFFF29",
+            "inset": true
+          }
+        ],
+        "$type": "shadow"
       }
     },
     "font": {
@@ -954,7 +1149,7 @@
         "$type": "color"
       },
       "input": {
-        "$value": "#929292",
+        "$value": "#858585",
         "$type": "color"
       },
       "ring": {
