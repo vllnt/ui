@@ -4495,6 +4495,10 @@
         "name": "Indeterminate"
       },
       {
+        "id": "data-progressbar--blocks",
+        "name": "Blocks"
+      },
+      {
         "id": "data-progressbar--step-label",
         "name": "Step Label"
       },
@@ -5283,6 +5287,10 @@
       {
         "id": "form-select--default",
         "name": "Default"
+      },
+      {
+        "id": "form-select--invalid",
+        "name": "Invalid"
       }
     ],
     "title": "Select"
