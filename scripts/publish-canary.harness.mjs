@@ -4,6 +4,13 @@
 //
 // This file is also the fake tool: the shims in <root>/bin call `node publish-canary.harness.mjs
 // --fake <tool> <args>`.
+//
+// The fake npm has no `dist-tag` and no `whoami`: both paths publish over OIDC only, so any such
+// call is recorded in the call log and then fails as an unsupported command.
+//
+// The fake `sleep` is a shell one-liner that appends the delay it was asked for to a log and returns
+// at once, so a test reads the backoff schedule from `result.sleeps` without waiting for it (and
+// without a node start-up per sleep).
 import { spawnSync } from "node:child_process";
 import {
   chmodSync, copyFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync,
@@ -21,7 +28,6 @@ export const VERSION = `0.1.0-canary.42.sha${SHA.slice(0, 12)}`; // run 42 at SH
 export const BOOTSTRAP = "0.1.0-canary.20260917105553.sha7466647a4ba5";
 export const CORE = "@vllnt/ui-core";
 export const NATIVE = "@vllnt/ui-native";
-const DIST_TAG_TOKEN = "fake-dist-tag-token";
 
 // ---------------------------------------------------------------- fake tools (child process)
 
@@ -34,9 +40,6 @@ function runFake(tool, args) {
   const call = {
     tool, args, viaNpx: process.env.FAKE_VIA_NPX === "1",
     configToken: /_authToken/.test(configText), envToken: process.env.NODE_AUTH_TOKEN ?? null,
-    // Whether the dist-tag secret is readable by this process: under its own name, or under any name.
-    distTokenByName: "NPM_DIST_TAG_TOKEN" in process.env,
-    distTokenByValue: Object.values(process.env).includes(DIST_TAG_TOKEN),
   };
   state.calls.push(call);
   const fail = (code) => { process.stderr.write(`npm error code ${code}\n`); save(); process.exit(1); };
@@ -93,7 +96,6 @@ function runFake(tool, args) {
   }
 
   const [command, ...rest] = args;
-  const dtAuthorised = call.configToken && call.envToken === DIST_TAG_TOKEN;
   if (command === "version") {
     const prefix = rest[rest.indexOf("--prefix") + 1];
     const file = join(resolve(prefix), "package.json");
@@ -102,11 +104,6 @@ function runFake(tool, args) {
     writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
     save();
     process.stdout.write(`v${rest[0]}\n`);
-  } else if (command === "whoami") {
-    injected("whoami");
-    if (!dtAuthorised) fail("E401");
-    save();
-    process.stdout.write("tester\n");
   } else if (command === "view" && rest.includes("dist-tags")) {
     injected("view-tags", rest[0]);
     if (!registry(rest[0])) fail("E404");
@@ -132,23 +129,12 @@ function runFake(tool, args) {
     const entry = (state.registry[manifest.name] ??= { versions: [], tags: {} });
     if (entry.versions.includes(manifest.version)) fail("E403");
     entry.versions.push(manifest.version);
-    entry.tags[tag] = manifest.version;
+    if (state.quirks.publishSkipsTag !== manifest.name) entry.tags[tag] = manifest.version;
     if (!entry.tags.latest) entry.tags.latest = manifest.version; // implicit latest on a first upload
-    if (state.quirks.publishMovesLatest) entry.tags.latest = manifest.version;
+    const movesLatest = state.quirks.publishMovesLatest;
+    if (movesLatest === true || movesLatest === manifest.name) entry.tags.latest = manifest.version;
     if (state.quirks.visibleAfterPolls) state.processing[`${manifest.name}@${manifest.version}`] = state.quirks.visibleAfterPolls;
     state.publishes.push({ name: manifest.name, version: manifest.version, tag, args: rest, manifest });
-    save();
-  } else if (command === "dist-tag" && rest[0] === "add") {
-    const [name, version] = splitSpec(rest[1]);
-    injected("dist-tag-add", name);
-    if (!dtAuthorised) fail("E401");
-    if (!registry(name)?.versions.includes(version)) fail("E404");
-    registry(name).tags[rest[2]] = version;
-    save();
-  } else if (command === "dist-tag" && rest[0] === "rm") {
-    injected("dist-tag-rm", rest[1]);
-    if (!dtAuthorised) fail("E401");
-    delete registry(rest[1])?.tags[rest[2]];
     save();
   } else {
     save();
@@ -187,7 +173,11 @@ export function createHarness({ without = [] } = {}) {
     writeFileSync(join(root, "bin", tool), `#!/bin/sh\nexec env ${via}node "${self}" --fake ${tool} "$@"\n`);
     chmodSync(join(root, "bin", tool), 0o755);
   }
+  writeFileSync(join(root, "bin", "sleep"), '#!/bin/sh\necho "$1" >> "$FAKE_STATE.sleeps"\n');
+  chmodSync(join(root, "bin", "sleep"), 0o755);
   const statePath = join(root, "state.json");
+  const sleepLog = `${statePath}.sleeps`;
+  const readSleeps = () => (existsSync(sleepLog) ? readFileSync(sleepLog, "utf8").split("\n").filter(Boolean).map(Number) : []);
   const state = {
     registry: {
       [CORE]: { versions: [BOOTSTRAP], tags: { latest: BOOTSTRAP } },
@@ -218,13 +208,16 @@ export function createHarness({ without = [] } = {}) {
     setManifest(dir, apply) { manifestEdits.push({ dir, apply }); },
     /**
      * Runs the script as the workflow does. `fail`: [{command, package?, error, skip?, times?}].
-     * `quirks`: `publishMovesLatest`; `visibleAfterPolls: n` hides every uploaded version from
-     * `npm view <name>@<version>` for its next n polls.
+     * `quirks`: `publishMovesLatest: true | <package name>` (an upload also takes `latest`);
+     * `publishSkipsTag: <package name>` (that upload leaves its tag unset); `visibleAfterPolls: n`
+     * hides every uploaded version from `npm view <name>@<version>` for its next n polls.
+     * The workflow step passes no secret: the run env holds only what setup-node leaves behind.
      */
     run(mode, { env = {}, mainShas = [SHA], fail = [], quirks = {} } = {}) {
       resetManifests();
       const next = read();
       Object.assign(next, { calls: [], publishes: [], gitCalls: 0, quirks });
+      rmSync(sleepLog, { force: true });
       next.failures = fail.map((rule) => ({ skip: 0, times: 1, ...rule }));
       write(next);
       writeFileSync(join(root, "npmrc"), "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\nregistry=https://registry.npmjs.org/\n");
@@ -236,14 +229,14 @@ export function createHarness({ without = [] } = {}) {
           GITHUB_REF: "refs/heads/main", GITHUB_SHA: SHA, GITHUB_RUN_NUMBER: "42", GITHUB_RUN_ID: "9001",
           RUNNER_TEMP: join(root, "runner-temp"), CANARY_POLL_SECONDS: "0",
           NPM_CONFIG_USERCONFIG: join(root, "npmrc"), NODE_AUTH_TOKEN: "XXXXX-XXXXX-XXXXX-XXXXX", // as setup-node leaves them
-          NPM_DIST_TAG_TOKEN: DIST_TAG_TOKEN, FAKE_STATE: statePath, FAKE_MAIN_SHAS: mainShas.join(","),
+          FAKE_STATE: statePath, FAKE_MAIN_SHAS: mainShas.join(","),
           ...env,
         },
       });
       const after = read();
       return {
         status: result.status, output: `${result.stdout}${result.stderr}`,
-        calls: after.calls, publishes: after.publishes, registry: after.registry,
+        calls: after.calls, publishes: after.publishes, sleeps: readSleeps(), registry: after.registry,
         userconfig: readFileSync(join(root, "npmrc"), "utf8"),
       };
     },

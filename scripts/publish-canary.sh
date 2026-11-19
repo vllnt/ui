@@ -2,11 +2,12 @@
 # Publishes a canary from main. Run from the repository root, after the build.
 #
 #   scripts/publish-canary.sh core   @vllnt/ui-core alone, straight to the `canary` dist-tag.
-#                                    npm trusted publishing (OIDC) only: no secret needed.
-#   scripts/publish-canary.sh pair   @vllnt/ui-core + @vllnt/ui-native, staged under a run tag and
-#                                    promoted together. Needs NPM_DIST_TAG_TOKEN, because OIDC
-#                                    authenticates `npm publish` only, not `npm dist-tag`. The token
-#                                    is only ever handed to `npm whoami` and `npm dist-tag`.
+#   scripts/publish-canary.sh pair   @vllnt/ui-core, then @vllnt/ui-native, each straight to the
+#                                    `canary` dist-tag.
+#
+# Both paths use npm trusted publishing (OIDC) only. OIDC authenticates `npm publish` and nothing
+# else, so neither path holds a registry token or runs `npm dist-tag` / `npm whoami`: there is no
+# staging tag, no promotion step and no rollback through dist-tags.
 #
 # Rules enforced here and exercised by scripts/release-guard.test.mjs:
 #   - the version only comes from scripts/release-guard.mjs (0.1.0-canary.<run>.sha<12 hex>)
@@ -17,6 +18,10 @@
 #   - a run that is no longer the tip of main publishes nothing
 #   - `pair` reuses a core version that is already on the registry, so it keeps working after a
 #     `core` publish of the same commit, and native always pins the exact core version it ships with
+#   - `pair` uploads core first, then native. If the native upload fails after core went up, the run
+#     fails and core@canary is briefly ahead of native@canary. That is acceptable: the packed
+#     ui-native manifest pins the exact ui-core version it was built with, so no install can resolve
+#     a mismatched pair. The next run uploads native and reuses that core version.
 set -euo pipefail
 
 CORE_DIR="packages/ui-core"
@@ -53,7 +58,7 @@ skip_if_superseded() {
   remote="$(current_main_sha)"
   test -n "$remote"
   if [[ "$remote" != "$GITHUB_SHA" ]]; then
-    echo "::notice::${1:-Skipping superseded canary run for ${GITHUB_SHA}}"
+    echo "::notice::Skipping superseded canary run for ${GITHUB_SHA}"
     exit 0
   fi
 }
@@ -112,14 +117,42 @@ version_state() {
 }
 
 # npm accepts an upload before it serves it ("Your package is being processed and may take a few
-# minutes"), so wait up to CANARY_POLL_ATTEMPTS x CANARY_POLL_SECONDS (default 60 x 5 s, 5 minutes).
+# minutes"), so poll with exponential backoff until it does. The first delay is
+# CANARY_POLL_SECONDS (default 5), doubling after each poll up to CANARY_POLL_MAX_SECONDS (default
+# 30). CANARY_POLL_TIMEOUT_SECONDS (default 360) is the total deadline, measured on the clock and no
+# sleep outlasts it; a version still missing then fails the run. CANARY_POLL_SECONDS=0 polls
+# back to back until the deadline (the harness fakes `sleep`, so its runs stay fast).
+# A registry error during the wait counts as "not served yet": version_state prints it, and the
+# deadline is the only way out, so a flaky poll never ends the wait early.
 wait_until_present() {
   local spec="$1"
-  for _ in $(seq 1 "${CANARY_POLL_ATTEMPTS:-60}"); do
-    [[ "$(version_state "$spec")" = present ]] && break
-    sleep "${CANARY_POLL_SECONDS:-5}"
+  local cap="${CANARY_POLL_MAX_SECONDS:-30}" timeout="${CANARY_POLL_TIMEOUT_SECONDS:-360}"
+  local delay="${CANARY_POLL_SECONDS:-5}" started="$SECONDS" remaining
+  (( delay <= cap )) || delay="$cap"
+  while [[ "$(version_state "$spec")" != present ]]; do
+    remaining=$(( timeout - (SECONDS - started) ))
+    if (( remaining <= 0 )); then
+      echo "::error::${spec} was not visible on npm after $(( SECONDS - started ))s (limit ${timeout}s)" >&2
+      return 1
+    fi
+    sleep "$(( delay < remaining ? delay : remaining ))"
+    delay=$(( delay * 2 < cap ? delay * 2 : cap ))
   done
-  test "$(version_state "$spec")" = present
+}
+
+# Fails the run, naming the package, unless `canary` is the version this run published and `latest`
+# is what it was before the run.
+verify_tags() {
+  local package="$1" latest_before="$2" tags
+  tags="$(read_tags "$package")"
+  if [[ "$(tag_value "$tags" canary)" != "$CANARY_VERSION" ]]; then
+    echo "::error::${package} dist-tag canary is '$(tag_value "$tags" canary)', expected ${CANARY_VERSION}" >&2
+    return 1
+  fi
+  if [[ "$(tag_value "$tags" latest)" != "$latest_before" ]]; then
+    echo "::error::${package} dist-tag latest moved from ${latest_before} to $(tag_value "$tags" latest)" >&2
+    return 1
+  fi
 }
 
 # The package must already exist: a first upload would get an implicit `latest`.
@@ -213,20 +246,12 @@ publish_core() {
 }
 
 publish_pair() {
-  : "${RUNNER_TEMP:?}" "${GITHUB_SHA:?}" "${GITHUB_RUN_ID:?}"
+  : "${RUNNER_TEMP:?}" "${GITHUB_SHA:?}"
   use_oidc_auth
 
   CANARY_VERSION="$(node scripts/release-guard.mjs native-canary)"
   test "$(package_field "$CORE_DIR" name)" = "$CORE_NAME"
   test "$(package_field "$NATIVE_DIR" name)" = "$NATIVE_NAME"
-  if [[ -z "$DIST_TAG_TOKEN" ]]; then
-    echo "::error::NPM_DIST_TAG_TOKEN is required for dist-tag promotion and rollback because npm trusted publishing authenticates publish commands only"
-    exit 1
-  fi
-  DIST_TAG_NPMRC="$RUNNER_TEMP/npm-dist-tag.npmrc"
-  # shellcheck disable=SC2016  # npm expands ${NODE_AUTH_TOKEN} itself
-  printf '//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}\n' >"$DIST_TAG_NPMRC"
-  npm_with_token whoami >/dev/null
 
   local core_base native_base
   core_base="$(package_field "$CORE_DIR" version)"
@@ -236,16 +261,13 @@ publish_pair() {
 
   skip_if_superseded
 
-  STAGING_TAG="run-${GITHUB_RUN_ID}"
-
-  CORE_TAGS_BEFORE="$(read_tags "$CORE_NAME")"
-  NATIVE_TAGS_BEFORE="$(read_tags "$NATIVE_NAME")"
-  require_bootstrapped "$CORE_NAME" "$CORE_TAGS_BEFORE"
-  require_bootstrapped "$NATIVE_NAME" "$NATIVE_TAGS_BEFORE"
-  CORE_LATEST_BEFORE="$(tag_value "$CORE_TAGS_BEFORE" latest)"
-  NATIVE_LATEST_BEFORE="$(tag_value "$NATIVE_TAGS_BEFORE" latest)"
-  CORE_CANARY_BEFORE="$(tag_value "$CORE_TAGS_BEFORE" canary)"
-  NATIVE_CANARY_BEFORE="$(tag_value "$NATIVE_TAGS_BEFORE" canary)"
+  local core_tags_before native_tags_before core_latest_before native_latest_before
+  core_tags_before="$(read_tags "$CORE_NAME")"
+  native_tags_before="$(read_tags "$NATIVE_NAME")"
+  require_bootstrapped "$CORE_NAME" "$core_tags_before"
+  require_bootstrapped "$NATIVE_NAME" "$native_tags_before"
+  core_latest_before="$(tag_value "$core_tags_before" latest)"
+  native_latest_before="$(tag_value "$native_tags_before" latest)"
 
   npm version "$CANARY_VERSION" --prefix "$CORE_DIR" --no-git-tag-version --ignore-scripts
   npm version "$CANARY_VERSION" --prefix "$NATIVE_DIR" --no-git-tag-version --ignore-scripts
@@ -269,121 +291,30 @@ NODE
   test "$(tarball_json "$native_tarball" | jq -r '.["react-native"]')" = "./dist/index.js"
   test "$(tarball_json "$native_tarball" | jq -r '.dependencies["@vllnt/ui-core"]')" = "$CANARY_VERSION"
 
-  PROMOTION_STARTED=false
-  trap on_pair_exit EXIT
-
+  # Straight to the canary dist-tag, core first: one OIDC upload each, no staging and no token.
+  # Once started, the run finishes both uploads even if main advances: stopping between them would
+  # leave core ahead of native and still exit 0. A newer run waits in the same concurrency group
+  # and publishes next.
   local state
   state="$(version_state "${CORE_NAME}@${CANARY_VERSION}")"
   # Present already: the `core` job of this same commit published it. Reuse it.
   if [[ "$state" = absent ]]; then
-    publish_tarball "$core_tarball" "$STAGING_TAG"
+    publish_tarball "$core_tarball" canary
   fi
   wait_until_present "${CORE_NAME}@${CANARY_VERSION}"
 
   state="$(version_state "${NATIVE_NAME}@${CANARY_VERSION}")"
   if [[ "$state" = absent ]]; then
-    publish_tarball "$native_tarball" "$STAGING_TAG"
+    publish_tarball "$native_tarball" canary
   fi
   wait_until_present "${NATIVE_NAME}@${CANARY_VERSION}"
 
-  skip_if_superseded "Skipping canary promotion because main advanced"
-
-  PROMOTION_STARTED=true
-  npm_with_token dist-tag add "${CORE_NAME}@${CANARY_VERSION}" canary
-  npm_with_token dist-tag add "${NATIVE_NAME}@${CANARY_VERSION}" canary
-
-  local core_tags_after native_tags_after
-  core_tags_after="$(read_tags "$CORE_NAME")"
-  native_tags_after="$(read_tags "$NATIVE_NAME")"
-  test "$(tag_value "$core_tags_after" canary)" = "$CANARY_VERSION"
-  test "$(tag_value "$native_tags_after" canary)" = "$CANARY_VERSION"
-  test "$(tag_value "$core_tags_after" latest)" = "$CORE_LATEST_BEFORE"
-  test "$(tag_value "$native_tags_after" latest)" = "$NATIVE_LATEST_BEFORE"
-
-  PROMOTION_STARTED=false
+  verify_tags "$CORE_NAME" "$core_latest_before"
+  verify_tags "$NATIVE_NAME" "$native_latest_before"
   echo "::notice::${CORE_NAME}@${CANARY_VERSION} and ${NATIVE_NAME}@${CANARY_VERSION} are on the canary tag"
 }
 
-# dist-tag commands use their own user config holding the dist-tag token. This is the only place
-# the token leaves the shell variable: pnpm, npx and the OIDC upload never receive it.
-npm_with_token() {
-  NPM_CONFIG_USERCONFIG="$DIST_TAG_NPMRC" NODE_AUTH_TOKEN="$DIST_TAG_TOKEN" npm_pinned "$@"
-}
-
-# Removes `tag` only while it still points at the version this run published.
-remove_owned_tag() {
-  local package="$1"
-  local tag="$2"
-  local expected="$3"
-  local tags current
-  tags="$(read_tags "$package")" || return 1
-  current="$(tag_value "$tags" "$tag")"
-  [[ -n "$current" ]] || return 0
-  if [[ "$current" != "$expected" ]]; then
-    echo "::error::Refusing to remove ${package} tag ${tag}: expected ${expected}, found ${current}"
-    return 1
-  fi
-  npm_with_token dist-tag rm "$package" "$tag" || return 1
-  tags="$(read_tags "$package")" || return 1
-  [[ -z "$(tag_value "$tags" "$tag")" ]]
-}
-
-cleanup_staging() {
-  local failed=0
-  remove_owned_tag "$CORE_NAME" "$STAGING_TAG" "$CANARY_VERSION" || failed=1
-  remove_owned_tag "$NATIVE_NAME" "$STAGING_TAG" "$CANARY_VERSION" || failed=1
-  return "$failed"
-}
-
-# Puts `canary` back to what it was, unless some other writer moved it since.
-restore_tag() {
-  local package="$1"
-  local previous="$2"
-  local tags current
-  tags="$(read_tags "$package")" || return 1
-  current="$(tag_value "$tags" canary)"
-  [[ "$current" = "$previous" ]] && return 0
-  if [[ -n "$current" && "$current" != "$CANARY_VERSION" ]]; then
-    echo "::error::Refusing to overwrite unexpected ${package} canary ${current}"
-    return 1
-  fi
-  if [[ -n "$previous" ]]; then
-    npm_with_token dist-tag add "${package}@${previous}" canary || return 1
-  else
-    remove_owned_tag "$package" canary "$CANARY_VERSION" || return 1
-  fi
-  tags="$(read_tags "$package")" || return 1
-  [[ "$(tag_value "$tags" canary)" = "$previous" ]]
-}
-
-restore_pair() {
-  local failed=0
-  restore_tag "$CORE_NAME" "$CORE_CANARY_BEFORE" || failed=1
-  restore_tag "$NATIVE_NAME" "$NATIVE_CANARY_BEFORE" || failed=1
-  return "$failed"
-}
-
-on_pair_exit() {
-  local status=$?
-  local recovery_failed=0
-  trap - EXIT
-  if [[ $status -ne 0 && "$PROMOTION_STARTED" = true ]]; then
-    restore_pair || recovery_failed=1
-  fi
-  cleanup_staging || recovery_failed=1
-  if [[ $recovery_failed -ne 0 ]]; then
-    echo "::error::Could not fully restore npm dist-tags"
-    [[ $status -ne 0 ]] || status=1
-  fi
-  exit "$status"
-}
-
 main() {
-  # The workflow step exports the secret. Move it into a plain shell variable and drop it from the
-  # environment before anything runs, so child processes cannot read it (see npm_with_token).
-  DIST_TAG_TOKEN="${NPM_DIST_TAG_TOKEN:-}"
-  export -n DIST_TAG_TOKEN
-  unset NPM_DIST_TAG_TOKEN
   case "${1:-}" in
     core) publish_core ;;
     pair) publish_pair ;;

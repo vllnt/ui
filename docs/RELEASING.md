@@ -89,14 +89,14 @@ Rules both paths share:
 - The logic lives in `scripts/publish-canary.sh` (`core` or `pair`). `scripts/release-guard.test.mjs` runs the real script against a fake registry, so no test can publish.
 - Both packages must already exist on npm with a `latest` tag. A first upload gets an implicit `latest`, so the script refuses to publish a package that has none, and fails the run if `latest` moves.
 - A run that is no longer the head of `main` stands down without publishing.
-- After an upload the script waits until npm serves the version, because npm first answers "Your package is being processed and may take a few minutes". It polls `CANARY_POLL_ATTEMPTS` times (default 60), `CANARY_POLL_SECONDS` apart (default 5), so about 5 minutes. A version that never appears fails the run.
-- Both publish jobs share one concurrency group (`native-canary-publish`, no cancel-in-progress), so a pair promotion never overlaps a core publish. GitHub keeps one pending job per group, so a late job can replace a pending one; a replaced job shows as cancelled, not failed, and the next push to `main` publishes again.
+- After an upload the script waits until npm serves the version, because npm first answers "Your package is being processed and may take a few minutes". It polls with exponential backoff: the first delay is `CANARY_POLL_SECONDS` (default 5), doubling up to `CANARY_POLL_MAX_SECONDS` (default 30), with a total deadline of `CANARY_POLL_TIMEOUT_SECONDS` (default 360, 6 minutes). A version still missing at the deadline fails the run, with an error naming it and the time waited.
+- Both publish jobs share one concurrency group (`native-canary-publish`, no cancel-in-progress), so a pair publish never overlaps a core publish. GitHub keeps one pending job per group, so a late job can replace a pending one; a replaced job shows as cancelled, not failed, and the next push to `main` publishes again.
 - The workflow-level `permissions` stay `contents: read`. Only the publish jobs add `id-token: write`, and a test fails if the workflow default is widened.
 - `pnpm-workspace.yaml` supply-chain policy (`minimumReleaseAge`, `trustPolicy`) is not touched by either path.
 
-Core canary path. It installs only `@vllnt/ui-core` and its dependencies (no Expo) and never runs `ci:native` or Expo Doctor, so an Expo gate failure cannot hold it back. It needs no `NPM_DIST_TAG_TOKEN`: it uploads straight to `--tag canary` over OIDC, then checks that `latest` is unchanged and that `canary` points at the new version. A rerun of the same commit does not republish and never moves a newer `canary`.
+Core canary path. It installs only `@vllnt/ui-core` and its dependencies (no Expo) and never runs `ci:native` or Expo Doctor, so an Expo gate failure cannot hold it back. It uploads straight to `--tag canary` over OIDC, then checks that `latest` is unchanged and that `canary` points at the new version. A rerun of the same commit does not republish and never moves a newer `canary`.
 
-Native pair path. It stays behind the native quality gate. Core publishes first under a run-scoped staging tag (`run-<run id>`) unless this commit's core version is already on npm (from the core path), in which case it is reused. Native publishes only after that exact core version is visible, and its tarball pins that exact core version, so the pair keeps working after core-only publishes. Only after both versions are visible are both `canary` tags promoted, with `NPM_DIST_TAG_TOKEN`, because OIDC authenticates uploads only. The script moves the token into a plain shell variable and unsets it from the environment before running anything else, so `pnpm pack`, `npx`, `git` and the OIDC upload never see it; only `npm whoami` and `npm dist-tag` receive it. Ordinary failures restore the prior `canary` tags and clean up the staging tags.
+Native pair path. It stays behind the native quality gate and publishes over OIDC only, straight to `canary`, exactly like the core path: no secret, no staging tag, no `npm dist-tag`. Core goes first, unless this commit's core version is already on npm (from the core path), in which case it is reused. Native goes up only after that exact core version is visible, and its tarball pins that exact core version, so the pair keeps working after core-only publishes. Once both versions are visible, the script checks for both packages that `canary` is the new version and `latest` is unchanged, and fails the run otherwise. If the native upload fails after core went up, the run fails and `@vllnt/ui-core@canary` is briefly ahead of `@vllnt/ui-native@canary`. That is harmless, because the native tarball pins its exact core version, and the next run uploads native.
 
 Owner setup. The workflow does none of this, and nothing publishes until the variables in steps 4 and 5 are set:
 
@@ -104,7 +104,7 @@ Owner setup. The workflow does none of this, and nothing publishes until the var
 2. Create the GitHub environment `npm-native-canary` before the first run (a job that names a missing environment creates it unprotected). Deployment branches: `main` only. Add required reviewers only if you want every canary publish to wait for approval.
 3. On npmjs.com, add a Trusted Publisher to each package: organization `vllnt`, repository `ui`, workflow filename `native-canary.yml`, environment `npm-native-canary`. Both jobs share the file and the environment, so one entry per package covers both paths. Do not rename the workflow file.
 4. Core path: set the repository variable `CORE_CANARY_PUBLISH_ENABLED` to `true` (Settings, Secrets and variables, Actions, Variables).
-5. Pair path, only when you accept it: create the secret `NPM_DIST_TAG_TOKEN` in the `npm-native-canary` environment (scoped to the two packages, expiring; npm has no dist-tag-only permission, so treat it as publish-capable), then set `NATIVE_CANARY_PUBLISH_ENABLED` to `true`. Keep it off until Expo Doctor is green on `main`.
+5. Pair path, only when you accept it: set `NATIVE_CANARY_PUBLISH_ENABLED` to `true`. It needs no secret. Keep it off until Expo Doctor is green on `main`.
 
 To stop publishing, delete or unset the variable. Never commit credentials.
 
@@ -118,7 +118,7 @@ No supported native npm release exists yet. A manually bootstrapped pre-release 
 pnpm add @vllnt/ui-native@canary
 ```
 
-Only after the first synchronized pair is visible, both `canary` tags are promoted, fresh packed-consumer validation passes, and the physical-device/accessibility requirements in the Native changelog are satisfied, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
+Only after the first synchronized pair is visible, both `canary` tags point at it, fresh packed-consumer validation passes, and the physical-device/accessibility requirements in the Native changelog are satisfied, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
 
 A stable native channel requires a separate PR that defines versioning, migration, physical Android/iOS plus VoiceOver/TalkBack validation, observability, and rollback policy. It must not be added to the web package's release matrix.
 
