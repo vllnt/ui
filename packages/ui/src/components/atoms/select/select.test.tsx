@@ -32,3 +32,22 @@ describe("Select", () => {
     expect(screen.queryByText("Apple")).not.toBeInTheDocument();
   });
 });
+
+describe("Select validity", () => {
+  it("marks an invalid trigger with the destructive border and ring, never on words", () => {
+    render(
+      <Select>
+        <SelectTrigger aria-invalid="true" aria-label="Fruit">
+          <SelectValue placeholder="Pick" />
+        </SelectTrigger>
+      </Select>,
+    );
+    const trigger = screen.getByRole("combobox", { name: "Fruit" });
+    expect(trigger).toHaveAttribute("aria-invalid", "true");
+    expect(trigger).toHaveClass(
+      "aria-[invalid=true]:border-destructive",
+      "aria-[invalid=true]:focus:ring-destructive",
+    );
+    expect(trigger.className).not.toMatch(/(?:^|\s)text-destructive(?:\s|$)/);
+  });
+});

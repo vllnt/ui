@@ -40,6 +40,17 @@ import {
 
 <Canvas of={Stories.Default} sourceState="shown" />
 
+## Invalid state
+
+Set `aria-invalid="true"` on `SelectTrigger`. The trigger takes the destructive border and focus ring; the text keeps its colour, so show the error message as text in the foreground colour next to the field.
+
+<Canvas of={Stories.Invalid} sourceState="shown" />
+
+## Accessibility
+
+- Keyboard: Enter or Down Arrow opens the menu. Arrows, Home, End and typing move between items and skip disabled ones. Enter selects, Escape closes without a change, and focus returns to the trigger.
+- The open and close animation stops under `prefers-reduced-motion`.
+
 ## API Reference
 
 <Controls />
