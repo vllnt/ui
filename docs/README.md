@@ -1,6 +1,6 @@
 # Documentation
 
-This folder contains in-repo documentation for `@vllnt/ui` contributors and downstream maintainers. Component-level documentation for users lives at [ui.vllnt.com](https://ui.vllnt.com) and in [Storybook](https://storybook.vllnt.ai).
+This folder contains in-repo documentation for `@vllnt/ui` contributors and downstream maintainers. Component-level documentation for users lives at [ui.vllnt.com](https://ui.vllnt.com) and in [Storybook](https://storybook.vllnt.com).
 
 ## Index
 
@@ -12,7 +12,7 @@ This folder contains in-repo documentation for `@vllnt/ui` contributors and down
 ## External destinations
 
 - **Component docs:** https://ui.vllnt.com
-- **Storybook:** https://storybook.vllnt.ai
+- **Storybook:** https://storybook.vllnt.com
 - **Package on npm:** https://www.npmjs.com/package/@vllnt/ui
 - **Changelog:** [`packages/ui/CHANGELOG.md`](../packages/ui/CHANGELOG.md)
 - **Agent conventions:** [`AGENTS.md`](../AGENTS.md)

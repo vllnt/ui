@@ -121,6 +121,9 @@ export default function middleware(request: NextRequest): NextResponse {
    */
   response.headers.delete("set-cookie");
   response.headers.delete("x-middleware-set-cookie");
+  // A page with a markdown twin answers by Accept, so its HTML says so too:
+  // a shared cache must not hand the HTML to an agent that asked for markdown.
+  if (markdownPathname(pathname)) response.headers.append("Vary", "Accept");
 
   return platformVariant(request, response);
 }

@@ -45,6 +45,10 @@ describe("markdownTarget", () => {
     expect(markdownTarget("/")).toEqual({ kind: "home" });
     expect(markdownTarget("/design")).toEqual({ kind: "design" });
     expect(markdownTarget("/philosophy")).toEqual({ kind: "philosophy" });
+    expect(markdownTarget("/docs")).toEqual({ kind: "docs-index" });
+    expect(markdownTarget("/components")).toEqual({
+      kind: "components-index",
+    });
     expect(markdownTarget("/docs/cli")).toEqual({ kind: "docs", slug: "cli" });
     expect(markdownTarget("/components/button")).toEqual({
       kind: "component",
@@ -56,7 +60,6 @@ describe("markdownTarget", () => {
     expect(markdownTarget("/docs/changelog")).toBeUndefined();
     expect(markdownTarget("/docs/not-a-page")).toBeUndefined();
     expect(markdownTarget("/components/not-a-component")).toBeUndefined();
-    expect(markdownTarget("/components")).toBeUndefined();
     expect(markdownTarget("/templates")).toBeUndefined();
     expect(markdownTarget("/docs/cli/extra")).toBeUndefined();
   });
@@ -66,6 +69,8 @@ describe("markdownPathname", () => {
   it("maps a public pathname to the internal route for its locale", () => {
     expect(markdownPathname("/")).toBe("/md/en");
     expect(markdownPathname("/docs/cli")).toBe("/md/en/docs/cli");
+    expect(markdownPathname("/docs")).toBe("/md/en/docs");
+    expect(markdownPathname("/fr/components")).toBe("/md/fr/components");
     expect(markdownPathname("/fr")).toBe("/md/fr");
     expect(markdownPathname("/fr/components/button")).toBe(
       "/md/fr/components/button",
