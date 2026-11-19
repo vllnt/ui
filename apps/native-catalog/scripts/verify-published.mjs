@@ -31,7 +31,7 @@ import {
 } from "node:fs";
 import { createRequire } from "node:module";
 import { homedir } from "node:os";
-import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const CORE = "@vllnt/ui-core";
@@ -160,11 +160,25 @@ export function scratchWorkspaceYaml({ exclude, minimumReleaseAge }) {
 }
 
 /**
+ * A PATH entry that `pnpm run` adds for the workspace: an absolute path under the workspace root
+ * that sits inside a node_modules. Everything else stays, notably PNPM_HOME, which
+ * pnpm/action-setup puts in a node_modules of its own (/home/runner/setup-pnpm/node_modules/.bin)
+ * outside the workspace. A relative entry is left alone: it resolves in the child's directory.
+ */
+function isWorkspaceBin(entry, workspaceRoot) {
+  if (!isAbsolute(entry)) return false;
+  const resolved = resolve(entry);
+  if (!resolved.split(sep).includes("node_modules")) return false;
+  const inside = relative(workspaceRoot, resolved);
+  return inside !== ".." && !inside.startsWith(`..${sep}`) && !isAbsolute(inside);
+}
+
+/**
  * The environment for child processes. When this script runs under `pnpm run`, pnpm puts the
  * workspace on NODE_PATH and its `.bin` directories on PATH; both would let a scratch project
  * resolve through the workspace, so they are removed.
  */
-export function cleanEnvironment(environment, extra = {}) {
+export function cleanEnvironment(environment, extra = {}, workspaceRoot = repositoryRoot) {
   const cleaned = {};
   for (const [key, value] of Object.entries(environment)) {
     if (value === undefined) continue;
@@ -176,7 +190,7 @@ export function cleanEnvironment(environment, extra = {}) {
   }
   if (cleaned.PATH) {
     cleaned.PATH = cleaned.PATH.split(":")
-      .filter((entry) => !entry.split("/").includes("node_modules"))
+      .filter((entry) => !isWorkspaceBin(entry, workspaceRoot))
       .join(":");
   }
   return { ...cleaned, ...extra };
@@ -384,7 +398,7 @@ export function rewriteSource(ts, { barrel, fileName, resolveReference, text }) 
 /* Run state, steps, table                                                      */
 /* -------------------------------------------------------------------------- */
 
-const rows = [];
+export const rows = [];
 let activeChild;
 
 function record(consumer, step, status, detail = "", ms) {
@@ -405,7 +419,7 @@ function lastLines(file, count = 40) {
   }
 }
 
-function spawnLogged(command, args, { cwd, env, log, timeoutMs }) {
+export function spawnLogged(command, args, { cwd, env, log, timeoutMs }) {
   return new Promise((resolvePromise) => {
     const fd = openSync(log, "a");
     appendFileSync(log, `$ ${command} ${args.join(" ")}\n`);
@@ -416,15 +430,20 @@ function spawnLogged(command, args, { cwd, env, log, timeoutMs }) {
       timedOut = true;
       killGroup(child);
     }, timeoutMs);
-    const finish = (code) => {
+    // A child that cannot start emits "error" and then "close". Settle on the first, so the log
+    // descriptor is closed once: a second close throws EBADF, or closes a descriptor reused since.
+    let settled = false;
+    const finish = (code, spawnError) => {
+      if (settled) return;
+      settled = true;
       clearTimeout(timer);
       closeSync(fd);
       activeChild = undefined;
-      resolvePromise({ code, timedOut });
+      resolvePromise({ code, spawnError, timedOut });
     };
     child.on("error", (error) => {
       appendFileSync(log, `spawn error: ${error.message}\n`);
-      finish(127);
+      finish(127, error.code ?? error.message);
     });
     child.on("close", (code) => finish(code ?? 1));
   });
@@ -439,10 +458,10 @@ function killGroup(child) {
 }
 
 /** Runs one command, records it as a table row, and prints the log tail when it fails. */
-async function step(context, consumer, name, command, args, { cwd, describeFailure, minutes = 20 }) {
+export async function step(context, consumer, name, command, args, { cwd, describeFailure, minutes = 20 }) {
   const log = join(context.logs, `${consumer}-${name.replaceAll(/[^A-Za-z0-9]+/g, "-")}.log`);
   const started = Date.now();
-  const { code, timedOut } = await spawnLogged(command, args, {
+  const { code, spawnError, timedOut } = await spawnLogged(command, args, {
     cwd,
     env: context.environment,
     log,
@@ -453,8 +472,13 @@ async function step(context, consumer, name, command, args, { cwd, describeFailu
     record(consumer, name, "PASS", "", ms);
     return true;
   }
-  const cause = timedOut ? undefined : describeFailure?.(readFileSync(log, "utf8"));
-  record(consumer, name, "FAIL", timedOut ? `timed out after ${minutes} min` : `exit ${code}${cause ? `, ${cause}` : ""}`, ms);
+  const cause = timedOut || spawnError ? undefined : describeFailure?.(readFileSync(log, "utf8"));
+  const detail = timedOut
+    ? `timed out after ${minutes} min`
+    : spawnError
+      ? `spawn error: ${spawnError} (${command})`
+      : `exit ${code}${cause ? `, ${cause}` : ""}`;
+  record(consumer, name, "FAIL", detail, ms);
   console.error(`--- last lines of ${log}\n${lastLines(log)}\n---`);
   return false;
 }

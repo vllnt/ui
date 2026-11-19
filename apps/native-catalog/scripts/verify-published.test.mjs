@@ -2,8 +2,9 @@
 // No install needed for the parser tests; the import-rewrite tests need `typescript` and are
 // skipped (not passed) when the workspace is not installed.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -18,7 +19,10 @@ import {
   readImporterVersions,
   renderTable,
   rewriteSource,
+  rows,
   scratchWorkspaceYaml,
+  spawnLogged,
+  step,
   summarize,
   tscDetail,
 } from "./verify-published.mjs";
@@ -123,9 +127,101 @@ test("cleanEnvironment removes the workspace NODE_PATH, node_modules PATH entrie
       npm_package_name: "catalog",
     },
     { CI: "1" },
+    "/repo",
   );
   assert.deepEqual(cleaned, { CI: "1", HOME: "/home/x", PATH: "/usr/bin:/bin" });
 });
+
+test("cleanEnvironment keeps PNPM_HOME and every PATH entry outside the workspace, even under node_modules", () => {
+  const entries = {
+    runnerPnpm: "/home/runner/setup-pnpm/node_modules/.bin",
+    rootBin: "/repo/node_modules/.bin",
+    catalogBin: "/repo/apps/native-catalog/node_modules/.bin",
+    storeBin: "/repo/node_modules/.pnpm/node_modules/.bin",
+    trailingSlash: "/repo/node_modules/.bin/",
+    dotDot: "/repo/apps/../node_modules/.bin",
+    repoTools: "/repo/tools",
+    system: "/usr/local/bin",
+    siblingWithSamePrefix: "/repo-other/node_modules/.bin",
+    leavesTheRepo: "/repo/../elsewhere/node_modules/.bin",
+    relative: "node_modules/.bin",
+  };
+  const cleaned = cleanEnvironment({ PATH: Object.values(entries).join(":") }, {}, "/repo");
+  assert.deepEqual(cleaned.PATH.split(":"), [
+    entries.runnerPnpm,
+    entries.repoTools,
+    entries.system,
+    entries.siblingWithSamePrefix,
+    entries.leavesTheRepo,
+    entries.relative,
+  ]);
+});
+
+test("cleanEnvironment takes this repository as the workspace by default", () => {
+  const runnerPnpm = "/home/runner/setup-pnpm/node_modules/.bin";
+  const cleaned = cleanEnvironment({
+    PATH: [join(root, "node_modules/.bin"), join(root, "apps/native-catalog/node_modules/.bin"), runnerPnpm, "/usr/bin"].join(":"),
+  });
+  assert.equal(cleaned.PATH, `${runnerPnpm}:/usr/bin`);
+});
+
+const withScratch = (callback) => {
+  const directory = mkdtempSync(join(tmpdir(), "verify-published-test-"));
+  return Promise.resolve(callback(directory)).finally(() => rmSync(directory, { force: true, recursive: true }));
+};
+
+test("spawnLogged settles once when the command cannot start, and the log is closed once", () =>
+  withScratch(async (directory) => {
+    const log = join(directory, "spawn.log");
+    const result = await spawnLogged("verify-published-no-such-command", ["install"], {
+      cwd: directory,
+      env: { PATH: "" },
+      log,
+      timeoutMs: 10_000,
+    });
+    assert.deepEqual(result, { code: 127, spawnError: "ENOENT", timedOut: false });
+    assert.match(readFileSync(log, "utf8"), /spawn error: .*ENOENT/);
+    // A child that never started still emits "close" after "error". A second close of the log
+    // descriptor throws EBADF from that event handler, so give it time to arrive inside this test.
+    await new Promise((done) => setTimeout(done, 100));
+  }));
+
+test("a command that is not on PATH is a FAIL row, not a crash", (t) =>
+  withScratch(async (directory) => {
+    t.mock.method(console, "log", () => {});
+    t.mock.method(console, "error", () => {});
+    rows.length = 0;
+    try {
+      const ok = await step({ environment: { PATH: "" }, logs: directory }, "clean-app", "install", "verify-published-no-such-command", ["install"], {
+        cwd: directory,
+      });
+      assert.equal(ok, false);
+      assert.equal(rows.length, 1);
+      assert.equal(rows[0].status, "FAIL");
+      assert.equal(rows[0].step, "install");
+      assert.match(rows[0].detail, /^spawn error: ENOENT/);
+      await new Promise((done) => setTimeout(done, 100));
+    } finally {
+      rows.length = 0;
+    }
+  }));
+
+test("a command that starts and exits non-zero keeps its exit code row", (t) =>
+  withScratch(async (directory) => {
+    t.mock.method(console, "log", () => {});
+    t.mock.method(console, "error", () => {});
+    rows.length = 0;
+    try {
+      const ok = await step({ environment: { PATH: process.env.PATH }, logs: directory }, "catalog", "typecheck", process.execPath, ["-e", "process.exit(3)"], {
+        cwd: directory,
+      });
+      assert.equal(ok, false);
+      assert.equal(rows[0].status, "FAIL");
+      assert.equal(rows[0].detail, "exit 3");
+    } finally {
+      rows.length = 0;
+    }
+  }));
 
 test("summarize counts results and renderTable aligns columns", () => {
   const rows = [
