@@ -9,8 +9,11 @@ here exist so reviewers can check a theme's values against where they came from.
 | `maia-tokens.penpot.json` | Penpot file `24943321-cd66-804d-8008-e8f386f7e602`, exported 8 Nov 2026 by the maia manager. Multi-set DTCG: sets `Maia/core`, `Maia/dark`, `Maia/light`, plus `$themes` and `$metadata.tokenSetOrder`. |
 
 `themes.maia` in `../tokens.json` carries these values as OKLCH channels. They
-round-trip to the exported hex values exactly; `../scripts/product-themes.test.mjs`
-checks that against this copy. The same file runs the generator in a scratch
+round-trip to the exported hex values exactly, except three things that follow
+the Ink direction (owner decision, 11 Nov 2026) instead of this 8 Nov pink
+export: the primary (the export's `accent`), the sans and display faces
+(Figtree), and the 700 weights. `../scripts/product-themes.test.mjs` checks every
+other value against this copy. The same file runs the generator in a scratch
 copy of the repository with this directory changed, corrupted or removed, and
 asserts the generated outputs stay byte for byte the same.
 

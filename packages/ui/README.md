@@ -189,7 +189,7 @@ All colors are **OKLCH channel** CSS variables (`L C H`), consumed as
   --destructive: 0.55 0.2078 25.326;
   --destructive-foreground: 0.9848 0 0;
   --border: 0.9219 0 0;
-  --input: 0.66 0 0;
+  --input: 0.6167 0 0;
   --ring: 0.1445 0 0;
   --radius: 0.5rem;
   --card: 1 0 0;
@@ -227,16 +227,19 @@ once near the root to restore the saved preset before paint.
 <html data-theme="maia" class="dark">
 ```
 
-- `maia`: pink primary, Figtree and JetBrains Mono, tighter type scale and radius.
-  Its Label step is capitals in the design: add `uppercase` where you use it.
+- `maia` (Ink): no accent; `--primary` is the ink colour (pure black `#000000`
+  in light on purpose, while core keeps `#171717`; white in dark). Core Inter
+  plus JetBrains Mono, weights 400 to 600, tighter type
+  scale and radius. Its Label step is capitals in the design: add `uppercase`
+  where you use it.
 - `paas`: core neutrals and status tones in JetBrains Mono. Dark is the design
   default; light works too.
 
 The package does not ship fonts. Core puts Inter (sans) and JetBrains Mono
-(mono) first, then the system stacks. Load Inter, JetBrains Mono (core, Maia and
-PaaS) and Figtree (Maia) in your app, for example with `next/font` or a font
-`<link>`; without them each stack falls back to the system font stack
-(`system-ui` for core sans and Maia, `ui-monospace` for core mono and PaaS).
+(mono) first, then the system stacks. Load Inter and JetBrains Mono (core, Maia
+and PaaS) in your app, for example with `next/font` or a font `<link>`; without
+them each stack falls back to the system font stack (`system-ui` for core sans
+and Maia, `ui-monospace` for core mono and PaaS).
 
 Both define `success`, `warning`, `info`, `diff-added` and `diff-removed` roles
 (the core theme defines them as well). Web `--radius` carries the theme's

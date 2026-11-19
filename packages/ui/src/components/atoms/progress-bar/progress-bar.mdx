@@ -64,12 +64,24 @@ Use `label` and `valueLabel` for a step label such as `3 / 8`. Both accept any n
 
 <Canvas of={Stories.Indeterminate} />
 
+### Blocks
+
+`blocks` draws the track as ten equal blocks. One block fills for each whole 10% of `value / max`, so a full row means the task reached 100%. A loading bar shows ten empty blocks, and an `indeterminate` bar keeps its continuous animation.
+
+```tsx
+<ProgressBar blocks label="Upload" max={100} value={40} />
+```
+
+<Canvas of={Stories.Blocks} />
+
 ## Accessibility
 
 - The track renders `role="progressbar"` with `aria-valuemin="0"`, `aria-valuemax` set to `max` and `aria-valuenow` set to `value`.
 - The name comes from the visible label (`label`, then `currentLabel`, then "Progress" or "Complete") through `aria-labelledby`. Pass `aria-label` to override it.
 - With `showLabels={false}` or `isLoading` no label is rendered, so the name is `aria-label` or "Progress".
 - `aria-valuenow` is omitted in indeterminate mode and while `isLoading`.
+- With `blocks`, `aria-valuenow` still reports the exact `value`; only the drawing rounds down to whole blocks.
+- The fill, the blocks and the card stop their transitions under `prefers-reduced-motion`.
 
 <Canvas of={Stories.WithoutLabels} />
 
@@ -80,6 +92,7 @@ Use `label` and `valueLabel` for a step label such as `3 / 8`. Both accept any n
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `aria-label` | `string` | No | Accessible name; overrides the visible label as the name |
+| `blocks` | `boolean` | No | Draws ten equal blocks; one fills per whole 10%. Not used by indeterminate bars |
 | `completedLabel` | `string` | No | Text after `value / max` |
 | `currentLabel` | `string` | No | Header label; `label` takes priority |
 | `isComplete` | `boolean` | No | `true` or `false`; success tone and tint, ends indeterminate mode |
@@ -108,5 +121,6 @@ Penpot family `atom / Progress bar` (lock 1.x).
 | `Mode` indeterminate | `mode="indeterminate"` |
 | `Header` layer | Header row: `label`, `valueLabel` |
 | `Track` layer | Track and fill |
+| `Cell 1` to `Cell 10` layers | `blocks`: code draws the ten cells. In Penpot they stay hidden layers that no variant selects |
 
-Not built: the Cell 1 to 10 blocks. They exist in Penpot only as hidden layers that no variant selects. For a segmented bar see `Meter` (`segments`).
+For a segmented value gauge see `Meter` (`segments`).

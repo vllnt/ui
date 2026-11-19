@@ -64,6 +64,10 @@ function useScrollVisibility(reduced: boolean): boolean {
  *
  * Respects `prefers-reduced-motion`: the bar stays visible.
  *
+ * The design library names the site header `Site header`, and its code name is
+ * `NavbarSaas`. A `floating` style will join `NavbarSaas` as an added prop.
+ * Until then, use this component for a floating bar.
+ *
  * @example
  * ```tsx
  * <FloatingNavbar>

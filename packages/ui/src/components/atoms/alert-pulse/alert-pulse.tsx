@@ -7,26 +7,31 @@ import { cn } from "../../../lib/utils";
 /**
  * Severity tone of an alert pulse — drives the ring color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
-export type AlertPulseSeverity = "error" | "info" | "warn";
+export type AlertPulseSeverity = "error" | "info" | "warn" | "warning";
 
 const SEVERITY_STROKE: Record<AlertPulseSeverity, string> = {
   error: "stroke-red-500",
   info: "stroke-blue-500",
   warn: "stroke-amber-500",
+  warning: "stroke-amber-500",
 };
 
 const SEVERITY_FILL: Record<AlertPulseSeverity, string> = {
   error: "fill-red-500/20",
   info: "fill-blue-500/20",
   warn: "fill-amber-500/20",
+  warning: "fill-amber-500/20",
 };
 
 const SEVERITY_LABEL: Record<AlertPulseSeverity, string> = {
   error: "Error",
   info: "Info",
   warn: "Warning",
+  warning: "Warning",
 };
 
 /**
@@ -55,7 +60,7 @@ export type AlertPulseProps = {
   radius?: number;
   /** Disable the pulse animation. Useful for snapshots. Defaults to `false`. */
   reducedMotion?: boolean;
-  /** Severity tone. Defaults to `"warn"`. */
+  /** Severity tone. Defaults to `"warning"`. */
   severity?: AlertPulseSeverity;
 } & ComponentPropsWithoutRef<"svg">;
 
@@ -93,7 +98,7 @@ export const AlertPulse = ({
     labels,
     radius = 36,
     reducedMotion = false,
-    severity = "warn",
+    severity = "warning",
     ...rest
   } = props;
   const r = safeRadius(radius);

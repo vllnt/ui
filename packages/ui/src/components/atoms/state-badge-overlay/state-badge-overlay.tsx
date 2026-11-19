@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -26,24 +27,17 @@ const STATE_LABEL: Record<StateBadgeState, string> = {
   stopped: "Stopped",
 };
 
-const STATE_TONE: Record<StateBadgeState, string> = {
-  complete:
-    "border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
-  failed: "border-red-500/40 bg-red-500/15 text-red-700 dark:text-red-300",
-  idle: "border-border bg-muted/40 text-muted-foreground",
-  queued:
-    "border-amber-500/40 bg-amber-500/15 text-amber-800 dark:text-amber-300",
-  running: "border-blue-500/40 bg-blue-500/15 text-blue-700 dark:text-blue-300",
-  stopped: "border-border bg-background text-foreground",
+const STATE_TONE: Record<StateBadgeState, StatusTone> = {
+  complete: "success",
+  failed: "danger",
+  idle: "neutral",
+  queued: "warning",
+  running: "info",
+  stopped: "neutral",
 };
 
-const STATE_DOT: Record<StateBadgeState, string> = {
-  complete: "bg-emerald-500",
-  failed: "bg-red-500",
-  idle: "bg-muted-foreground",
-  queued: "bg-amber-500",
-  running: "bg-blue-500 animate-pulse motion-reduce:animate-none",
-  stopped: "bg-muted-foreground",
+const STATE_DOT_MOTION: Partial<Record<StateBadgeState, string>> = {
+  running: "animate-pulse motion-reduce:animate-none",
 };
 
 /**
@@ -137,8 +131,7 @@ export const StateBadgeOverlay = ({
     <div
       aria-label={`${resolvedLabels.region}: ${STATE_LABEL[state]}`}
       className={cn(
-        "pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide shadow-sm backdrop-blur",
-        STATE_TONE[state],
+        "pointer-events-none absolute z-20 inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-foreground shadow-sm backdrop-blur",
         className,
       )}
       data-state-anchor={anchor}
@@ -155,7 +148,10 @@ export const StateBadgeOverlay = ({
     >
       <span
         aria-hidden="true"
-        className={cn("size-1.5 rounded-full", STATE_DOT[state])}
+        className={cn(
+          statusDotVariants({ tone: STATE_TONE[state] }),
+          STATE_DOT_MOTION[state],
+        )}
         data-state-badge-dot
       />
       {text}

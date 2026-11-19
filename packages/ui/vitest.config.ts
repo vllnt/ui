@@ -25,7 +25,7 @@ export default defineConfig({
     },
     environment: "jsdom",
     globals: true,
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}", "eslint-rules/**/*.test.js"],
     // Shared dev hosts: keep test parallelism low.
     maxWorkers: 2,
     setupFiles: ["./src/test-setup.ts"],

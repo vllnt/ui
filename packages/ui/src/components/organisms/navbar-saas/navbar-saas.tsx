@@ -31,6 +31,12 @@ function getHrefPathname(href: string): string {
   return href.split(/[#?]/, 1)[0] ?? href;
 }
 
+/**
+ * Site header: the sticky top bar with a brand, links, a sidebar toggle and a
+ * theme toggle. `NavbarSaas` is the one code name for the design library's
+ * `organism / Site header`. A `floating` style will join it as an added prop.
+ * Until then, `FloatingNavbar` stays a separate component.
+ */
 export function NavbarSaas({
   brand,
   closeSidebarLabel = "Close sidebar",

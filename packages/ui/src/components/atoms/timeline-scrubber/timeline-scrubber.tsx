@@ -28,6 +28,8 @@ export type TimelineTick = {
 /**
  * Tone of the scrubber's filled track + handle.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
 export type TimelineScrubberTone =
@@ -35,7 +37,8 @@ export type TimelineScrubberTone =
   | "neutral"
   | "primary"
   | "success"
-  | "warn";
+  | "warn"
+  | "warning";
 
 const TONE_FILL: Record<TimelineScrubberTone, string> = {
   danger: "bg-red-500",
@@ -43,6 +46,7 @@ const TONE_FILL: Record<TimelineScrubberTone, string> = {
   primary: "bg-blue-500",
   success: "bg-emerald-500",
   warn: "bg-amber-500",
+  warning: "bg-amber-500",
 };
 
 /**

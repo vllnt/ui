@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { statusDotVariants, type StatusTone } from "../../../lib/status-dot";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -17,12 +18,10 @@ const ROLE_LABEL: Record<RoutingRole, string> = {
   shadow: "Shadow",
 };
 
-const ROLE_TONE: Record<RoutingRole, string> = {
-  fallback:
-    "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  primary:
-    "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  shadow: "border-border bg-muted/40 text-muted-foreground",
+const ROLE_TONE: Record<RoutingRole, StatusTone> = {
+  fallback: "warning",
+  primary: "success",
+  shadow: "neutral",
 };
 
 /**
@@ -97,11 +96,14 @@ const RowBody = (props: {
           {assignment.agent}
         </span>
         <span
-          className={cn(
-            "rounded-full border px-1.5 py-0.5 text-[10px] uppercase tracking-wide",
-            ROLE_TONE[assignment.role],
-          )}
+          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-foreground"
+          data-routing-role-chip
         >
+          <span
+            aria-hidden="true"
+            className={statusDotVariants({ tone: ROLE_TONE[assignment.role] })}
+            data-routing-role-dot
+          />
           {ROLE_LABEL[assignment.role]}
         </span>
       </span>
