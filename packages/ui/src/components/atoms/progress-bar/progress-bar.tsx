@@ -54,6 +54,19 @@ const progressBarCompleteVariants = cva("", {
 /** Cells in a block-style track. Each one stands for 10% of the range. */
 const BLOCKS = Array.from({ length: 10 }, (_, index) => index + 1);
 
+/**
+ * Blocks that `value / max` fills. It floors the raw ratio instead of the
+ * rounded percentage, so 999 of 1000 fills nine blocks and a complete task
+ * fills all ten. The result stays between zero and the block count.
+ */
+function countFilledBlocks(value: number, max: number): number {
+  if (max <= 0) {
+    return 0;
+  }
+  const filled = Math.floor((value * BLOCKS.length) / max);
+  return Math.min(Math.max(filled, 0), BLOCKS.length);
+}
+
 /** Colour role of the fill. Matches the Penpot `Tone` axis. */
 export type ProgressBarTone = NonNullable<
   VariantProps<typeof progressBarFillVariants>["tone"]
@@ -197,7 +210,7 @@ function ProgressBarTrack({
 }: ProgressBarTrackProps): React.ReactNode {
   const isValueKnown = !isLoading && !isIndeterminate;
   const showBlocks = blocks === true && !isIndeterminate;
-  const filledBlocks = isValueKnown ? Math.floor(percent / 10) : 0;
+  const filledBlocks = isValueKnown ? countFilledBlocks(value, max) : 0;
 
   return (
     <div

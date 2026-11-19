@@ -204,6 +204,38 @@ describe("ProgressBar blocks", () => {
     expect(countFilled(cells, "bg-muted")).toBe(10 - filled);
   });
 
+  it.each([
+    [999, 1000, 9],
+    [1000, 1000, 10],
+    [995, 1000, 9],
+    [3, 10, 3],
+    [7, 10, 7],
+    [29, 100, 2],
+    [1, 3, 3],
+    [2, 3, 6],
+    [0, 3, 0],
+  ])(
+    "a value of %i out of %i fills %i of ten blocks without rounding up first",
+    (value, max, filled) => {
+      render(<ProgressBar blocks max={max} value={value} />);
+      expect(countFilled(getCells(), "bg-primary")).toBe(filled);
+    },
+  );
+
+  it.each([
+    [150, 100, 10],
+    [-20, 100, 0],
+    [5, 0, 0],
+  ])(
+    "clamps a value of %i out of %i to %i filled blocks",
+    (value, max, filled) => {
+      render(<ProgressBar blocks max={max} value={value} />);
+      const cells = getCells();
+      expect(cells).toHaveLength(10);
+      expect(countFilled(cells, "bg-primary")).toBe(filled);
+    },
+  );
+
   it("scales the block count to max", () => {
     render(<ProgressBar blocks max={8} value={4} />);
     expect(countFilled(getCells(), "bg-primary")).toBe(5);
