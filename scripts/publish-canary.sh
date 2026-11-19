@@ -111,9 +111,11 @@ version_state() {
   return 1
 }
 
+# npm accepts an upload before it serves it ("Your package is being processed and may take a few
+# minutes"), so wait up to CANARY_POLL_ATTEMPTS x CANARY_POLL_SECONDS (default 60 x 5 s, 5 minutes).
 wait_until_present() {
   local spec="$1"
-  for _ in $(seq 1 12); do
+  for _ in $(seq 1 "${CANARY_POLL_ATTEMPTS:-60}"); do
     [[ "$(version_state "$spec")" = present ]] && break
     sleep "${CANARY_POLL_SECONDS:-5}"
   done
