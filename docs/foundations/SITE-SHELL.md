@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | Code standard in this PR; Penpot "Templates & Site Shells" pending (see the end) |
 | **Reference** | oss.vllnt.com as it runs: `vllnt/vllnt` `main` @ `bdb5786` (the shell and font files read here have the same blobs as that commit) |
-| **Live audit** | Orbit's six-site audit, 19 Nov 2026 (`/home/ops/goals/font-nav-audit.md` on the worker) |
+| **Live audit** | Orbit's six-site audit of fonts and navbars, 19 Nov 2026 (kept outside the repo) |
 | **Part of** | #555 |
 
 The fonts and the bar differ across the vllnt sites. oss.vllnt.com has the setup Benoît picked as the standard. This page compares oss with `@vllnt/ui` before this PR, line by line, with the file each fact comes from. It ends with the font decision.
