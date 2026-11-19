@@ -7,9 +7,16 @@ import { cn } from "../../../lib/utils";
 /**
  * Tone of the metric — drives the dot color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
-export type StickyMetricTone = "danger" | "neutral" | "success" | "warn";
+export type StickyMetricTone =
+  | "danger"
+  | "neutral"
+  | "success"
+  | "warn"
+  | "warning";
 
 /**
  * Anchor corner relative to the canvas object the metric sticks to.
@@ -27,6 +34,7 @@ const TONE_DOT: Record<StickyMetricTone, string> = {
   neutral: "bg-muted-foreground",
   success: "bg-emerald-500",
   warn: "bg-amber-500",
+  warning: "bg-amber-500",
 };
 
 const ANCHOR_OFFSET: Record<StickyMetricAnchor, { transform: string }> = {

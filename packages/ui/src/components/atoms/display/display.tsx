@@ -26,6 +26,8 @@ const displayBase =
  * reveal runs when the user permits motion; `prefers-reduced-motion` skips it.
  * Polymorphic via `as`; forwards `ref` to the rendered element.
  *
+ * The design library draws this as `atom / Heading` with `Level=display`.
+ *
  * @example
  * <Display as="h1" animated>Ship faster</Display>
  */
