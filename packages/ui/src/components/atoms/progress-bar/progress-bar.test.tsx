@@ -174,6 +174,92 @@ describe("ProgressBar mode", () => {
   });
 });
 
+function getCells(): Element[] {
+  return [...screen.getByRole("progressbar").children];
+}
+
+function countFilled(cells: Element[], toneClass: string): number {
+  return cells.filter((cell) => cell.classList.contains(toneClass)).length;
+}
+
+describe("ProgressBar blocks", () => {
+  it("keeps the continuous bar unless blocks is set", () => {
+    render(<ProgressBar max={100} value={35} />);
+    expect(getCells()).toHaveLength(1);
+    expect(getFill()).toHaveStyle({ width: "35%" });
+  });
+
+  it.each([
+    [0, 0],
+    [9, 0],
+    [10, 1],
+    [35, 3],
+    [99, 9],
+    [100, 10],
+  ])("a value of %i out of 100 fills %i of ten blocks", (value, filled) => {
+    render(<ProgressBar blocks max={100} value={value} />);
+    const cells = getCells();
+    expect(cells).toHaveLength(10);
+    expect(countFilled(cells, "bg-primary")).toBe(filled);
+    expect(countFilled(cells, "bg-muted")).toBe(10 - filled);
+  });
+
+  it("scales the block count to max", () => {
+    render(<ProgressBar blocks max={8} value={4} />);
+    expect(countFilled(getCells(), "bg-primary")).toBe(5);
+  });
+
+  it("fills blocks with the tone", () => {
+    render(<ProgressBar blocks max={10} tone="warning" value={5} />);
+    expect(countFilled(getCells(), "bg-warning")).toBe(5);
+    expect(countFilled(getCells(), "bg-primary")).toBe(0);
+  });
+
+  it("keeps ARIA exact: the blocks round down, the value does not", () => {
+    render(<ProgressBar blocks max={100} value={35} />);
+    const bar = screen.getByRole("progressbar");
+    expect(bar).toHaveAttribute("aria-valuenow", "35");
+    expect(bar).toHaveAttribute("aria-valuemax", "100");
+  });
+
+  it("shows ten empty blocks and no value while loading", () => {
+    render(<ProgressBar blocks isLoading max={100} value={60} />);
+    const cells = getCells();
+    expect(cells).toHaveLength(10);
+    expect(countFilled(cells, "bg-primary")).toBe(0);
+    expect(screen.getByRole("progressbar")).not.toHaveAttribute(
+      "aria-valuenow",
+    );
+  });
+
+  it("falls back to the shimmer bar when the value is unknown", () => {
+    render(<ProgressBar blocks max={100} mode="indeterminate" value={0} />);
+    expect(getCells()).toHaveLength(1);
+    expect(getFill()).toHaveClass("animate-shimmer");
+  });
+});
+
+describe("ProgressBar reduced motion", () => {
+  it("stops the fill, block and card transitions", () => {
+    const { container, rerender } = render(<ProgressBar max={10} value={5} />);
+    expect(getFill()).toHaveClass(
+      "transition-all",
+      "motion-reduce:transition-none",
+    );
+    expect(container.firstChild).toHaveClass(
+      "transition-colors",
+      "motion-reduce:transition-none",
+    );
+
+    rerender(<ProgressBar blocks max={10} value={5} />);
+    expect(
+      getCells().map((cell) =>
+        cell.classList.contains("motion-reduce:transition-none"),
+      ),
+    ).toEqual(Array.from({ length: 10 }, () => true));
+  });
+});
+
 describe("ProgressBar labels", () => {
   it("renders label and valueLabel, including a step label", () => {
     render(<ProgressBar label="Step" max={8} value={3} valueLabel="3 / 8" />);
