@@ -80,7 +80,7 @@ test.describe("SiteHeader on a phone", () => {
     await button.click();
     const menu = page.getByRole("navigation", { name: "Menu" });
     await expect(menu).toBeVisible();
-    await expect(menu.getByRole("link", { name: "Packages" })).toHaveAttribute(
+    await expect(menu.getByRole("link", { exact: true, name: "Packages" })).toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -153,13 +153,13 @@ test.describe("SiteHeader on a tablet", () => {
     await mount(<SiteHeader {...props} />);
 
     const bar = page.getByRole("navigation", { name: "Main" });
-    await expect(bar.getByRole("link", { name: "Packages" })).toBeVisible();
+    await expect(bar.getByRole("link", { exact: true, name: "Packages" })).toBeVisible();
     await expect(bar.getByRole("link", { name: "Convex" })).toBeHidden();
 
     await page.getByRole("button", { name: "Open menu" }).click();
     const menu = page.getByRole("navigation", { name: "Menu" });
     await expect(menu.getByRole("link", { name: "Convex" })).toBeVisible();
-    await expect(menu.getByRole("link", { name: "Packages" })).toHaveCount(0);
+    await expect(menu.getByRole("link", { exact: true, name: "Packages" })).toHaveCount(0);
   });
 });
 
@@ -174,7 +174,7 @@ test.describe("SiteHeader on a desktop", () => {
 
     const bar = page.getByRole("navigation", { name: "Main" });
     for (const name of ["Packages", "Convex", "Contribute"]) {
-      await expect(bar.getByRole("link", { name })).toBeVisible();
+      await expect(bar.getByRole("link", { exact: true, name })).toBeVisible();
     }
     await expect(page.getByRole("button", { name: "Open menu" })).toBeHidden();
     expect(await smallestTarget(page)).toBeGreaterThanOrEqual(24);
