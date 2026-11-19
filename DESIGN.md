@@ -58,7 +58,7 @@ library.
 
 Machine clients use `packages/design/tokens.json`. The JSON schema is
 documented in `packages/design/tokens.schema.json` and groups tokens by color,
-typography, spacing, radius, elevation, motion, and iconography.
+typography, spacing, radius, size, opacity, elevation, motion, and iconography.
 
 ### Semantic tokens (consumer-facing)
 
@@ -85,6 +85,15 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 In dark mode `--destructive` is a light red paired with a dark
 `--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both
 readable text on a near-black surface and a fill behind white text.
+
+### Penpot alias names
+
+The Penpot libraries carry two token groups that name an existing role instead of adding a colour. `tokens.json` and the Penpot token sets keep the names so a Penpot binding resolves; the web has no variable for them, so use the role.
+
+| Penpot token | Resolves to | On the web |
+|--------------|-------------|------------|
+| `color.badge-label.success` / `warning` / `info` / `danger` | `{color.success}` / `{color.warning}` / `{color.info}` / `{color.destructive}` | the `success`, `warning`, `info` or `destructive` role |
+| `brand.status.<status>.light` / `.dark` | `implemented` `{color.success}`, `candidate` `{color.info}`, `planned` `{color.muted-foreground}`, `unsupported` `{color.destructive}`, `deprecated` `{color.warning}` (the same in both modes) | the role in the middle column |
 
 ### Anti-patterns
 - **Never** use `bg-black` / `text-white` / `bg-white`. Use `bg-background` / `bg-foreground` / `text-foreground` so dark mode works.
@@ -126,7 +135,7 @@ foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (da
 
 ### Product themes
 
-A product theme is a named override layer on the core tokens, authored in the `themes` block of `packages/design/tokens.json`. It overrides existing roles (colors per mode, fonts, type steps, `--radius`); it never adds product-specific role names to the core. Apply one with `data-theme` on `<html>`; the `dark` class still picks the mode. `themes/products.css` is generated, so edit `tokens.json` and run `pnpm tokens:generate`.
+A product theme is a named override layer on the core tokens, authored in the `themes` block of `packages/design/tokens.json`. It overrides existing roles (colors per mode, fonts, type steps, `--radius`, `--opacity-grain` and `--opacity-contact`); it never adds product-specific role names to the core. Apply one with `data-theme` on `<html>`; the `dark` class still picks the mode. `themes/products.css` is generated, so edit `tokens.json` and run `pnpm tokens:generate`.
 
 | Theme | `data-theme` | Identity |
 |-------|--------------|----------|
@@ -233,8 +242,12 @@ Product themes override these steps. Maia sets Display 28/700, H5 20/600, H6 15/
 | `radius-lg` | 12px |
 | `radius-xl` | 16px |
 | `radius-full` | 9999px |
+| `radius-control` | 6px (`--radius-control`) |
+| `radius-surface` | 8px (`--radius-surface`) |
 
 Cards, popovers, dialogs use `radius-md`. Pills, avatars use `radius-full`. Long surfaces (panels, sheets) use `radius-lg`.
+
+`radius-control` and `radius-surface` are role names for controls (buttons, inputs) and surfaces (cards, panels). The Penpot libraries use the same two names, but their `md`, `lg` and `xl` are 6, 8 and 12 where the code's are 8, 12 and 16. To get the same pixels in code and in Penpot, use the role names, not the `md` / `lg` / `xl` steps. Themes cannot override the two roles.
 
 ---
 
@@ -250,6 +263,13 @@ Use sparingly. Most components are flat with `border` + `bg-background`.
 | `shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.1)` (popovers, dialogs) |
 
 No coloured shadows. No multi-layered glow effects.
+
+**Grain and contact layers.** Two opacity tokens set how strong a Surface grain or contact-shadow layer is when a component draws one. Nothing draws either unless it opts in.
+
+| Token | Value |
+|-------|-------|
+| `--opacity-grain` | 1 (PaaS theme: 0) |
+| `--opacity-contact` | 1 (PaaS theme: 0) |
 
 ---
 
@@ -322,6 +342,17 @@ No coloured shadows. No multi-layered glow effects.
 - Color is **never** the only signal — pair with icon, text, or pattern.
 - Animations respect `prefers-reduced-motion`.
 - Components shipping a defined ARIA pattern (combobox, dialog, menu, tabs) declare their full keyboard map in `meta.json` per #255.
+
+### Touch targets
+
+| Token | Value | Role |
+|-------|-------|------|
+| `--size-target-min` | 44px | Smallest hit target for a touch pointer |
+| `--size-control-xs` | 32px; 44px under `@media (pointer: coarse)` | Extra-small control height |
+
+`themes/default.css` and `styles.css` declare both. Under `@media (pointer: coarse)` they set `--size-control-xs: var(--size-target-min)` and change nothing else. A component reaches 44px by sizing from these variables; `Button` `lg` is already 44. Each component adopts them in its own change.
+
+The Penpot libraries keep one `size.target.min` and `size.control-xs` per density (compact 24, regular 32, touch 44). Code has one value per name: `size.target.min` is the touch value (44) and `size.control-xs` the regular one (32).
 
 ---
 
