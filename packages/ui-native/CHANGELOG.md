@@ -4,6 +4,10 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Affordance contract (#633): `InteractivePressable` and `interactionStyle` in `src/primitives` give a control one state set (rest, hover, focus, pressed, selected, disabled) from local `interactionTokens`, with a focus ring, a non-colour selected cue and the 44-point floor. `Button`, `Toggle`, `Checkbox`, `RadioGroup` and `SegmentedControl` use it, replacing their literal pressed (0.8) and disabled (0.5) opacities; a ghost `Button` underlines its label on hover, focus and press. Public props and exports are unchanged. A lint rule bans raw `Pressable` in `src/components` outside a shrinking allowlist, and the accessibility contract gains reduced-motion (C1), state-flip (C3) and static-surface (R11) rules.
+
 ## [0.1.0] - Unreleased
 
 ### Added
