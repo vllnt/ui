@@ -24,18 +24,25 @@ These entries ship in 0.4.0, which is not published yet (the latest release is
   (32 px, and 44 px under a coarse pointer), `opacity.grain` and
   `opacity.contact`. Only the radius, size and opacity tokens have CSS
   variables. (#602)
+- **Lock 2 tokens** - `shadow.raised`, `shadow.overlay` and `shadow.floating`
+  (`--shadow-raised`, `--shadow-overlay`, `--shadow-floating`, one list per
+  mode), `spacing.page-gutter`, `spacing.page-gutter-tablet` and
+  `spacing.page-gutter-desktop` (20, 48 and 96 px, as `--spacing-page-gutter*`),
+  `size.page-max` (1440 px) and `size.measure-narrow` (480 px) as
+  `--size-page-max` and `--size-measure-narrow`, and a `spacing.24` step
+  (96 px, no CSS variable). (#614)
 - **Badge v1.3 props** - `tone`, `size`, `border`, `dot` and `variant="soft"`.
   A status tone colours a dot, not the words. Existing props and defaults
   render as before. (#610)
 - **ProgressBar `blocks`** - draws ten blocks and fills one per whole 10% of
   `value / max`; `aria-valuenow` stays exact. (#611)
 - **Lint rule A12** (`vllnt/a12-no-status-text-colour`) - flags a status colour
-  used as text colour in component code. 62 existing files are allowlisted and
+  used as text colour in component code. 56 existing files are allowlisted and
   burn down in #604. (#607)
 - **`warning` tone** - `AlertPulse` (`severity`), `BottomActivityStrip`,
   `HeatOverlay`, `MetricCluster`, `RuntimeOverviewPanel`, `StickyMetric`,
   `ThresholdRing` and `TimelineScrubber` (`tone`) accept `warning`, the name the
-  design library uses.
+  design library uses. (#616)
 
 - **Props types exported from the barrel** - `BreadcrumbProps`,
   `CommandDialogProps`, `SheetContentProps`, `CarouselProps`, `CodeBlockProps`,
@@ -87,6 +94,16 @@ These entries ship in 0.4.0, which is not published yet (the latest release is
 - **Alert destructive** - the title and body use the foreground colour. The
   status colour stays on the border and the glyph. (#607)
 - **Badge status chips** use a status dot. (#610)
+- **Maia is Ink, and `--input` follows the design library** - Maia `--primary`
+  is black in light and white in dark (it was pink), Maia uses the core sans
+  font instead of Figtree, and its display and label weights are 600, not 700.
+  The default theme's `--input` is `0.6167` in light (was `0.66`) and `0.5208`
+  in dark (was `0.49`). (#614)
+- **Theme presets meet the input 3:1 rule on muted** - the 12 runtime presets
+  (aura, chatgpt, claude, cyberlime, cyberpunk, dracula, dusk, gemini, matrix,
+  nord, synthwave and tron) get a new `--input` lightness in light and dark, by
+  0.048 at most, with hue and chroma unchanged. The control border now reaches
+  3:1 on background, card, popover and muted. (#620)
 - **`warn` is deprecated** in the eight components above; pass `warning`. `warn`
   still works and renders the same colour. Removing it would break consumers,
   so that waits for a breaking release. `HeatOverlay` and `AlertPulse` now
