@@ -2,13 +2,13 @@
 
 # @vllnt/ui
 
-**313 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
+**321 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org)
 [![npm](https://img.shields.io/npm/v/@vllnt/ui)](https://www.npmjs.com/package/@vllnt/ui)
 
-[Documentation](https://ui.vllnt.com) · [Storybook](https://storybook.vllnt.ai) · [Registry](https://ui.vllnt.com/components) · [GitHub](https://github.com/vllnt/ui)
+[Documentation](https://ui.vllnt.com) · [Storybook](https://storybook.vllnt.com) · [Registry](https://ui.vllnt.com/components) · [GitHub](https://github.com/vllnt/ui)
 
 </div>
 
@@ -16,7 +16,7 @@
 
 ## Features
 
-- **313 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
+- **321 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
 - **Accessible by default** — Radix UI handles focus, keyboard nav, and ARIA
 - **Tailwind CSS + CVA** — variant-driven styling with full theme override via CSS variables
 - **shadcn-compatible registry** — install individual components with `shadcn add`
@@ -40,7 +40,7 @@ Install individual components with the [shadcn](https://ui.shadcn.com) CLI — n
 pnpm dlx shadcn@latest add https://ui.vllnt.com/r/button.json
 ```
 
-Or by `@vllnt-ui` namespace once it's in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt-ui": "https://ui.vllnt.com/r/{name}.json"` to your `components.json` `registries`):
+Or by the `@vllnt-ui` namespace, which is listed in the [shadcn registry index](https://ui.shadcn.com/r/registries.json) (add `"@vllnt-ui": "https://ui.vllnt.com/r/{name}.json"` to your `components.json` `registries`):
 
 ```bash
 pnpm dlx shadcn@latest add @vllnt-ui/button
@@ -139,7 +139,7 @@ Override CSS variables after importing styles:
 ## Components
 
 <details>
-<summary>All 313 components</summary>
+<summary>All 321 components</summary>
 
 | Category | Components |
 |----------|------------|

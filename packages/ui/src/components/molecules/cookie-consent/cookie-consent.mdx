@@ -22,10 +22,16 @@ import { CookieConsent } from '@vllnt/ui'
 ## Usage
 
 ```tsx
-<CookieConsent>CookieConsent content</CookieConsent>
+<CookieConsent
+  declineText="Decline"
+  onAccept={() => saveConsent(true)}
+  onDecline={() => saveConsent(false)}
+/>
 ```
 
 <Canvas of={Stories.Default} sourceState="shown" />
+
+The component only renders the banner. Storing the choice is the caller's job (`onAccept`, `onDecline`, `onOpenChange`).
 
 ## API Reference
 
@@ -33,14 +39,76 @@ import { CookieConsent } from '@vllnt/ui'
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `acceptText` | `string` | No | - |
-| `declineText` | `string` | No | - |
-| `message` | `string` | No | - |
+| `acceptText` | `string` | No | Accept button text. Defaults to `"Accept"` |
+| `actions` | `"accept-primary" \| "equal"` | No | Button treatment. Defaults to `"accept-primary"` |
+| `declineText` | `string` | No | Decline button text. The button is hidden when not set |
+| `labels` | `{ close?: string; region?: string }` | No | Localizable strings, see [Labels](#labels) |
+| `layout` | `"card" \| "bar"` | No | Defaults to `"card"` |
+| `message` | `string` | No | Banner text |
 | `onAccept` | `() =&gt; void` | No | Callback function |
 | `onDecline` | `() =&gt; void` | No | Callback function |
 | `onOpenChange` | `(open: boolean) =&gt; void` | No | Callback: `(open: boolean) => void` |
 | `open` | `boolean` | No | `true` or `false` |
-| `settingsHref` | `string` | No | - |
-| `settingsText` | `string` | No | - |
+| `position` | `"bottom-left" \| "bottom-center" \| "bottom-right"` | No | Card placement. Defaults to `"bottom-left"`. Ignored by `layout="bar"` |
+| `settingsHref` | `string` | No | URL of the privacy link. The link is hidden when not set |
+| `settingsText` | `string` | No | Privacy link text. Defaults to `"Learn more"` |
 | `showCloseButton` | `boolean` | No | `true` or `false` |
+| `title` | `ReactNode` | No | Heading above the message. Names the dialog when set |
 
+Every new prop is optional and the default render is the floating card, unchanged.
+
+## Labels
+
+The dialog and the close button carry English accessible names by default. Override them for another language.
+
+| Key | Default | Used for |
+| --- | ------- | -------- |
+| `region` | `"Cookie consent"` | `aria-label` of the dialog, only when no `title` is set |
+| `close` | `"Close cookie consent"` | `aria-label` of the close button |
+
+`acceptText`, `declineText`, `message` and `settingsText` are plain props, so every visible string is already localizable.
+
+<Canvas of={Stories.CustomLabels} sourceState="shown" />
+
+## Title
+
+When `title` is set it renders as an `h2` above the message and the dialog is named by it through `aria-labelledby`. `labels.region` is then not used and the dialog has no `aria-label`. An empty `title` (`""`, `null`, `false`) is ignored and the dialog keeps its `labels.region` name.
+
+`title` is the heading, not the native HTML `title` attribute: it is not passed to the DOM.
+
+<Canvas of={Stories.WithTitle} sourceState="shown" />
+
+## Bar layout
+
+`layout="bar"` is a full-width band along the bottom edge, with no rounded floating card. The text and the buttons sit in one row from the `md` breakpoint and stack below it. `position` does not apply.
+
+<Canvas of={Stories.Bar} sourceState="shown" />
+
+## Equal actions
+
+`actions="equal"` renders accept and decline as the same outline button at the same size, and keeps their DOM order (decline, then accept). In the bar layout both buttons are the default 40 px `Button` size. The default `"accept-primary"` keeps a filled accept and a ghost decline.
+
+<Canvas of={Stories.EqualActions} sourceState="shown" />
+
+## Privacy link
+
+`settingsHref` and `settingsText` already render a link, so they are the privacy link: there is no separate `privacyHref` or `privacyText`. Set `settingsText` to the wording you need (for example `"Privacy"`); it defaults to `"Learn more"`.
+
+## Penpot mapping
+
+Penpot part: molecule / Cookie consent. It is product-local in vllnt-site, with no lock 1 family and no Penpot family key (Permission prompt Kind=cookies is a different part). There are no Penpot axes to map; the props follow the vllnt.com banner:
+
+| vllnt.com banner | Prop |
+| ---------------- | ---- |
+| Full-width band | `layout="bar"` |
+| Title ("Audience measurement") | `title` |
+| Two equal-weight 40 px outline buttons | `actions="equal"` (bar buttons use the default size) |
+| Privacy link | `settingsHref` and `settingsText` |
+
+<Canvas of={Stories.BarWithTitleAndEqualActions} sourceState="shown" />
+
+Not built:
+
+- A Penpot library family: the design stays product-local until a second product asks for it.
+- A 44 px touch size (D16): buttons keep the library sizes.
+- Consent storage: the component reports the choice and does not store it.

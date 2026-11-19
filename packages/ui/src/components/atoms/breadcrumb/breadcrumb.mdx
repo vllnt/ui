@@ -46,11 +46,80 @@ const items = [
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `items` | `BreadcrumbItem[]` | Yes | Array of `BreadcrumbItem` objects |
-| `separator` | `"arrow" \| "chevron" \| "slash"` | No | `arrow`, `chevron`, `slash` |
+| `labels` | `BreadcrumbLabels` | No | Localizable strings: `region` (default `"Breadcrumb"`), `more` (default `"More"`) |
+| `linkComponent` | `React.ComponentType<{ children: React.ReactNode; className?: string; href: string }>` | No | Link component for crumbs with an `href`. Defaults to `next/link` |
+| `overflow` | `"collapsed" \| "none"` | No | `none` (default) shows every crumb; `collapsed` keeps the first and the last two crumbs of a trail longer than three |
+| `separator` | `"arrow" \| "chevron" \| "slash"` | No | `arrow`, `chevron` (default), `slash` |
 | `showHomeIcon` | `boolean` | No | `true` or `false` |
-| `variant` | `"default" \| "minimal"` | No | `default`, `minimal` |
+| `variant` | `"default" \| "minimal"` | No | `default` emphasises the current crumb; `minimal` keeps every crumb muted |
+
+## Accessibility
+
+The root is a `<nav>` landmark holding an `<ol>` with one `<li>` per crumb.
+
+- The last item is the current page. It renders as plain text with `aria-current="page"`, even when it carries an `href`. Earlier items with an `href` render as links; earlier items without one render as plain text.
+- Separators are `aria-hidden`.
+- The landmark name is `labels.region` (default `Breadcrumb`). Pass a translated string for non-English pages.
+
+Colour follows the same split: the current crumb uses `text-foreground` with `font-medium`, earlier crumbs use `text-muted-foreground` and links turn `text-foreground` on hover. In the `minimal` variant every crumb stays `text-muted-foreground`.
+
+## Link component
+
+Crumbs with an `href` render through `linkComponent`, which receives `href`, `className` and `children`. The default is `next/link`, so existing usage does not change. Pass a router-aware or locale-aware link to keep navigation client-side or locale-prefixed:
+
+```tsx
+import { Link } from "@/i18n/routing"
+
+<Breadcrumb items={items} linkComponent={Link} />
+```
+
+<Canvas of={Stories.CustomLinkComponent} />
+
+## Localisation
+
+```tsx
+<Breadcrumb
+  items={items}
+  labels={{ more: "Plus", region: "Fil d'Ariane" }}
+/>
+```
+
+<Canvas of={Stories.Localised} />
+
+## Overflow
+
+With `overflow="collapsed"` and more than three items the trail shows the first item, an ellipsis, then the last two items. The hidden crumbs are not rendered. The ellipsis is a decorative `…` (`aria-hidden`) followed by a screen-reader-only word from `labels.more`.
+
+<Canvas of={Stories.Collapsed} />
+
+## Penpot mapping
+
+The Penpot family is `molecule / Breadcrumb` (4 mains) with two axes.
+
+| Penpot axis | Penpot value | Code |
+| ----------- | ------------ | ---- |
+| Overflow | `none` | `overflow="none"` (default) |
+| Overflow | `collapsed` | `overflow="collapsed"` |
+| Separator | `chevron` | `separator="chevron"` (default) |
+| Separator | `slash` | `separator="slash"` |
+
+Penpot has no twin for two code values, which stay code-only: `separator="arrow"` and `variant="minimal"`. Penpot's `Current` layer is the emphasised crumb, matching the current-crumb colour above.
 
 ## Type Definitions
+
+### BreadcrumbLabels
+
+```tsx
+type BreadcrumbLabels = {
+  more?: string
+  region?: string
+}
+```
+
+| Field | Type | Required | Description |
+| ----- | ---- | -------- | ----------- |
+| `more` | `string` | No | Screen-reader word for the collapsed crumbs. Defaults to `"More"` |
+| `region` | `string` | No | Accessible name of the `<nav>` landmark. Defaults to `"Breadcrumb"` |
 
 ### BreadcrumbItem
 
@@ -64,7 +133,7 @@ type BreadcrumbItem = {
 
 | Field | Type | Required | Description |
 | ----- | ---- | -------- | ----------- |
-| `href` | `string` | No | - |
+| `href` | `string` | No | Link target. Ignored on the last item, which is the current page |
 | `icon` | `React.ReactNode` | No | React content (JSX, string, number, etc.) |
 | `label` | `React.ReactNode` | Yes | React content (JSX, string, number, etc.) |
 

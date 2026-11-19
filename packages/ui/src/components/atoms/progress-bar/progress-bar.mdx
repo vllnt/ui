@@ -5,7 +5,7 @@ import * as Stories from './progress-bar.stories'
 
 # Progress Bar
 
-Visual progress indicator with labels and completion state.
+Visual progress indicator with labels, tone, size, an indeterminate mode and completion state. The track exposes `role="progressbar"`.
 
 <Primary />
 
@@ -25,12 +25,53 @@ import { ProgressBar } from '@vllnt/ui'
 
 ```tsx
 <ProgressBar
-  max="0"
-  value="0"
+  max={8}
+  value={3}
 />
 ```
 
 <Canvas of={Stories.Default} sourceState="shown" />
+
+### Tone and size
+
+`tone` picks the fill colour role. It defaults to `primary`, or `success` once `isComplete` is set. `size` sets the track height and defaults to `md`.
+
+```tsx
+<ProgressBar max={100} size="lg" tone="warning" value={80} />
+```
+
+<Canvas of={Stories.Warning} />
+
+<Canvas of={Stories.Large} />
+
+### Step label
+
+Use `label` and `valueLabel` for a step label such as `3 / 8`. Both accept any node. When `valueLabel` is absent, `showValue` shows the percentage; otherwise the header shows `value / max` as before.
+
+```tsx
+<ProgressBar label="Step" max={8} value={3} valueLabel="3 / 8" />
+```
+
+<Canvas of={Stories.StepLabel} />
+
+### Indeterminate
+
+`mode="indeterminate"` shows an animated bar and omits `aria-valuenow`, which is how ARIA reports an unknown value. `value` and `max` are ignored, and the header shows no `value / max` text (a `valueLabel` still shows). With `prefers-reduced-motion` the animation stops and the bar rests at one third. `isComplete` ends the indeterminate state.
+
+```tsx
+<ProgressBar label="Preparing upload" max={100} mode="indeterminate" value={0} />
+```
+
+<Canvas of={Stories.Indeterminate} />
+
+## Accessibility
+
+- The track renders `role="progressbar"` with `aria-valuemin="0"`, `aria-valuemax` set to `max` and `aria-valuenow` set to `value`.
+- The name comes from the visible label (`label`, then `currentLabel`, then "Progress" or "Complete") through `aria-labelledby`. Pass `aria-label` to override it.
+- With `showLabels={false}` or `isLoading` no label is rendered, so the name is `aria-label` or "Progress".
+- `aria-valuenow` is omitted in indeterminate mode and while `isLoading`.
+
+<Canvas of={Stories.WithoutLabels} />
 
 ## API Reference
 
@@ -38,11 +79,34 @@ import { ProgressBar } from '@vllnt/ui'
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
-| `completedLabel` | `string` | No | - |
-| `currentLabel` | `string` | No | - |
-| `isComplete` | `boolean` | No | `true` or `false` |
-| `isLoading` | `boolean` | No | `true` or `false` |
-| `max` | `number` | Yes | - |
-| `showLabels` | `boolean` | No | `true` or `false` |
-| `value` | `number` | Yes | - |
+| `aria-label` | `string` | No | Accessible name; overrides the visible label as the name |
+| `completedLabel` | `string` | No | Text after `value / max` |
+| `currentLabel` | `string` | No | Header label; `label` takes priority |
+| `isComplete` | `boolean` | No | `true` or `false`; success tone and tint, ends indeterminate mode |
+| `isLoading` | `boolean` | No | `true` or `false`; skeleton header, empty bar, no `aria-valuenow` |
+| `label` | `ReactNode` | No | Visible label in the header row |
+| `max` | `number` | Yes | Upper bound; `aria-valuemax` |
+| `mode` | `'determinate' \| 'indeterminate'` | No | Defaults to `determinate` |
+| `showLabels` | `boolean` | No | `true` or `false`; shows the header row |
+| `showValue` | `boolean` | No | Shows the percentage when `valueLabel` is absent |
+| `size` | `'sm' \| 'md' \| 'lg'` | No | Track height `h-1`, `h-2`, `h-3`; defaults to `md` |
+| `tone` | `'neutral' \| 'primary' \| 'success' \| 'info' \| 'warning' \| 'danger'` | No | Fill colour role; defaults to `primary` (`success` when complete) |
+| `value` | `number` | Yes | Current value; `aria-valuenow` |
+| `valueLabel` | `ReactNode` | No | Value text in the header row, for example `3 / 8` |
 
+## Penpot mapping
+
+Penpot family `atom / Progress bar` (lock 1.x).
+
+| Penpot | Code |
+| ------ | ---- |
+| `Label` on / off | `showLabels` |
+| `Tone` danger, info, neutral, primary, success, warning | `tone`: `danger` uses the `destructive` role; the others use the role of the same name |
+| `Size` lg, md, sm | `size` |
+| `Mode` determinate | `mode="determinate"` with `value` and `max` |
+| `Mode` 0% to 100% | Determinate previews: pass `value` at that percentage of `max` |
+| `Mode` indeterminate | `mode="indeterminate"` |
+| `Header` layer | Header row: `label`, `valueLabel` |
+| `Track` layer | Track and fill |
+
+Not built: the Cell 1 to 10 blocks. They exist in Penpot only as hidden layers that no variant selects. For a segmented bar see `Meter` (`segments`).

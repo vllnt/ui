@@ -59,7 +59,7 @@ function TourHeader({
           {stepIndex + 1}/{totalSteps}
         </span>
       </div>
-      <div className="h-1 rounded-full bg-muted">
+      <div className="h-1 rounded-full bg-secondary">
         <div
           className="h-full rounded-full bg-primary transition-all"
           style={{ width: `${progress}%` }}

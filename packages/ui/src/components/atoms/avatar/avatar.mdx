@@ -5,7 +5,7 @@ import * as Stories from './avatar.stories'
 
 # Avatar
 
-Displays a user avatar image with fallback initials.
+Displays a user avatar image with fallback initials. It comes in five sizes and two shapes, and can show a presence marker.
 
 <Primary />
 
@@ -25,7 +25,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@vllnt/ui'
 
 ```tsx
 <Avatar>
-  <Avatar.displayName />
+  <AvatarImage alt="Ada Lovelace" src="/ada.png" />
+  <AvatarFallback>AL</AvatarFallback>
 </Avatar>
 ```
 
@@ -37,3 +38,103 @@ import { Avatar, AvatarFallback, AvatarImage } from '@vllnt/ui'
 
 ### Avatar.displayName
 
+### Avatar props
+
+| Prop | Type | Default | What it does |
+|------|------|---------|--------------|
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `"md"` | Box size and fallback text size. |
+| `shape` | `"circle" \| "square"` | `"circle"` | Outline of the root, the image and the fallback. |
+| `presence` | `"online" \| "away" \| "busy"` | none | Marker at the bottom-right. Leave it out for no marker. |
+| `presenceLabels` | `Partial<Record<AvatarPresence, string>>` | `Online` / `Away` / `Busy` | Visually hidden word for each status. Pass your own for other languages. |
+
+Every prop is optional and the default render is the same 40 px circle as before.
+
+## Size
+
+`md` keeps today's `size-10` (40 px), so no existing avatar changes. The fallback text grows with the size.
+
+| `size` | Box | Pixels | Fallback text |
+|--------|-----|--------|---------------|
+| `xs` | `size-6` | 24 | `text-xs` |
+| `sm` | `size-8` | 32 | `text-sm` |
+| `md` | `size-10` | 40 | inherited from the parent |
+| `lg` | `size-12` | 48 | `text-lg` |
+| `xl` | `size-16` | 64 | `text-2xl` |
+
+`md` leaves the font size to the parent on purpose: `AvatarGroup` sets its own text size on the avatar and relies on it. A `className` such as `size-12` still wins over `size`.
+
+<Canvas of={Stories.Sizes} sourceState="shown" />
+
+## Shape
+
+`square` uses the `rounded-md` radius. The shape is applied to the root, to `AvatarImage` and to `AvatarFallback`, so the picture and the fallback always match the box.
+
+<Canvas of={Stories.Shapes} sourceState="shown" />
+
+## Presence
+
+Each status draws a different marker shape, so colour is never the only signal. A visually hidden word follows each marker for screen readers.
+
+| `presence` | Shape | Colour | Default word |
+|------------|-------|--------|--------------|
+| `online` | filled dot | `success` | Online |
+| `away` | ring | `warning` | Away |
+| `busy` | dot with a bar | `destructive` | Busy |
+
+The marker grows with `size` and sits on the avatar edge. When `presence` is set, the root no longer clips its content, and the image and fallback carry the shape radius themselves. Each marker carries `data-presence` with its status.
+
+<Canvas of={Stories.Presence} sourceState="shown" />
+
+### Presence at every size
+
+<Canvas of={Stories.PresenceSizes} sourceState="shown" />
+
+### Presence on a square avatar
+
+<Canvas of={Stories.PresenceSquare} sourceState="shown" />
+
+### Presence labels
+
+<Canvas of={Stories.PresenceLabels} sourceState="shown" />
+
+## Penpot mapping
+
+Penpot family `atom / Avatar` (lock 1.x, 160 mains) has four axes: Size, Kind, Shape and Presence. The family has no pixel data, so the size scale above is this library's own.
+
+| Penpot axis | Penpot values | In code |
+|-------------|---------------|---------|
+| Size | xs, sm, md, lg, xl | `size` prop, same names |
+| Shape | circle, square | `shape` prop, same names |
+| Presence | none, online, away, busy | `presence` prop. `none` is the default: leave the prop out. |
+| Kind | person, initials, org, agent | Not a prop. Compose the parts, as shown below. |
+
+Penpot layers map as follows: Fallback is `AvatarFallback`, Initials is the text inside it, Presence is the marker, and Status word is the visually hidden word.
+
+### Kind
+
+| Kind | How to build it |
+|------|-----------------|
+| person | `AvatarImage` with an `AvatarFallback` for when the picture is missing |
+| initials | `AvatarFallback` with text |
+| org | `shape="square"` |
+| agent | `AvatarFallback` with an icon |
+
+<Canvas of={Stories.KindPerson} sourceState="shown" />
+
+<Canvas of={Stories.KindInitials} sourceState="shown" />
+
+<Canvas of={Stories.KindOrg} sourceState="shown" />
+
+<Canvas of={Stories.KindAgent} sourceState="shown" />
+
+### Not built
+
+- Penpot `Size` 20 (asked by Maia) has no size here. Snap it to `xs` (24 px) when swapping.
+- Penpot `Kind` is not a prop, by design: the four kinds are compositions, not variants.
+- Penpot's Status word layer is a visually hidden word, not visible text. The marker shape is what sighted users see.
+- Every other Penpot value (5 sizes, 2 shapes, 3 statuses plus none) is built.
+
+## Notes
+
+- `AvatarGroup` and `PresenceStack` are separate components and are unchanged.
+- `size`, `shape` and `presence` are plain props. Set `presence` only for a real, current status.

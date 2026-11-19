@@ -7,14 +7,16 @@ import {
 } from "react";
 
 import { cva, type VariantProps } from "class-variance-authority";
+import { Command } from "lucide-react";
 
 import { cn } from "../../../lib/utils";
 
 const kbdVariants = cva(
-  "inline-flex select-none items-center justify-center rounded border border-border bg-muted font-mono font-medium text-foreground shadow-[0_1px_0_0_oklch(var(--border))] [&>svg]:h-3 [&>svg]:w-3",
+  "inline-flex select-none items-center justify-center font-mono font-medium text-foreground [&>svg]:h-3 [&>svg]:w-3",
   {
     defaultVariants: {
       size: "md",
+      variant: "default",
     },
     variants: {
       size: {
@@ -22,11 +24,19 @@ const kbdVariants = cva(
         md: "h-5 min-w-[1.25rem] px-1.5 text-xs",
         sm: "h-4 min-w-[1rem] px-1 text-[10px]",
       },
+      variant: {
+        bracket: "gap-0.5",
+        default:
+          "rounded border border-border bg-muted shadow-[0_1px_0_0_oklch(var(--border))]",
+      },
     },
   },
 );
 
 const MAC_PLATFORM_PATTERN = /mac|iphone|ipad|ipod/i;
+
+const COMMAND_GLYPH = "⌘";
+const COMMAND_NAME = "Command";
 
 const MODIFIER_LABELS: Record<
   "alt" | "ctrl" | "meta" | "mod" | "shift",
@@ -91,6 +101,40 @@ function formatToken(token: string, mac: boolean): string {
   return token.length === 1 ? token.toUpperCase() : token;
 }
 
+type KbdVariant = VariantProps<typeof kbdVariants>["variant"];
+
+function describeLabel(label: string): string {
+  return label === COMMAND_GLYPH ? COMMAND_NAME : label;
+}
+
+function renderLabel(label: string): ReactNode {
+  if (label !== COMMAND_GLYPH) return label;
+  return <Command aria-label={COMMAND_NAME} role="img" />;
+}
+
+function withBrackets(content: ReactNode, variant: KbdVariant): ReactNode {
+  if (variant !== "bracket") return content;
+  return (
+    <>
+      <span aria-hidden="true" className="text-muted-foreground">
+        [
+      </span>
+      {content}
+      <span aria-hidden="true" className="text-muted-foreground">
+        ]
+      </span>
+    </>
+  );
+}
+
+/**
+ * Platform whose modifier labels a `shortcut` expands to. `auto` follows the
+ * browser user agent.
+ *
+ * @public
+ */
+export type KbdPlatform = "auto" | "mac" | "win";
+
 /**
  * Props for {@link Kbd}.
  *
@@ -100,8 +144,14 @@ export type KbdProps = {
   /** Optional explicit children. Takes precedence over `shortcut`. */
   children?: ReactNode;
   /**
+   * Platform used to expand `shortcut` modifiers: `mac` renders the command
+   * key as a vector icon, `win` renders `Ctrl` / `Win` text, and `auto`
+   * (default) detects it from the user agent. Has no effect on `children`.
+   */
+  platform?: KbdPlatform;
+  /**
    * Shortcut string in the form `"mod+k"` or `"ctrl+shift+p"`. The `mod`
-   * token expands to `⌘` on Mac and `Ctrl` elsewhere.
+   * token expands to the command icon on Mac and `Ctrl` elsewhere.
    */
   shortcut?: string;
 } & ComponentPropsWithoutRef<"kbd"> &
@@ -110,14 +160,18 @@ export type KbdProps = {
 /**
  * Keyboard key indicator. Renders a single key when used with `children`,
  * or expands a shortcut string with platform-aware modifiers when given a
- * `shortcut` prop.
+ * `shortcut` prop. The `bracket` variant drops the key cap and wraps each key
+ * in decorative brackets.
  *
  * @example
  * ```tsx
  * <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd>
  *
- * {/* Renders ⌘+K on Mac, Ctrl+K elsewhere *\/}
+ * {/* Renders the command icon + K on Mac, Ctrl + K elsewhere *\/}
  * <Kbd shortcut="mod+k" />
+ *
+ * {/* Force one platform, bracket style *\/}
+ * <Kbd platform="win" shortcut="mod+k" variant="bracket" />
  * ```
  *
  * @public
@@ -125,17 +179,21 @@ export type KbdProps = {
 export const Kbd = ({
   children,
   className,
+  platform = "auto",
   ref,
   shortcut,
   size,
+  variant,
   ...rest
 }: KbdProps & { ref?: React.Ref<HTMLElement> }) => {
-  const isMac = useIsMac();
+  const detectedMac = useIsMac();
+  const isMac = platform === "auto" ? detectedMac : platform === "mac";
+  const keyClassName = cn(kbdVariants({ size, variant }), className);
 
   if (children !== undefined) {
     return (
-      <kbd className={cn(kbdVariants({ size }), className)} ref={ref} {...rest}>
-        {children}
+      <kbd className={keyClassName} ref={ref} {...rest}>
+        {withBrackets(children, variant)}
       </kbd>
     );
   }
@@ -147,32 +205,31 @@ export const Kbd = ({
       .split(SHORTCUT_SEPARATOR)
       .map((token) => token.trim())
       .filter(Boolean);
-    const ariaLabel = tokens
-      .map((token) => formatToken(token, isMac))
-      .join(" + ");
+    const keys = tokens.map((token) => ({
+      label: formatToken(token, isMac),
+      token,
+    }));
     return (
       <span
-        aria-label={ariaLabel}
+        aria-label={keys.map(({ label }) => describeLabel(label)).join(" + ")}
         className="inline-flex items-center gap-1"
         role="img"
       >
-        {tokens.map((token, index) => (
+        {keys.map(({ label, token }, index) => (
           <kbd
-            className={cn(kbdVariants({ size }), className)}
+            className={keyClassName}
             key={`${token}-${index.toString()}`}
             ref={index === 0 ? ref : undefined}
             {...(index === 0 ? rest : {})}
           >
-            {formatToken(token, isMac)}
+            {withBrackets(renderLabel(label), variant)}
           </kbd>
         ))}
       </span>
     );
   }
 
-  return (
-    <kbd className={cn(kbdVariants({ size }), className)} ref={ref} {...rest} />
-  );
+  return <kbd className={keyClassName} ref={ref} {...rest} />;
 };
 Kbd.displayName = "Kbd";
 

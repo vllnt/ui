@@ -29,7 +29,7 @@ type DayCell = {
 const WEEKDAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const VISIBLE_DAY_LABELS = new Set(["Mon", "Wed", "Fri"]);
 const LEVEL_CLASS_NAMES = [
-  "bg-muted",
+  "bg-secondary",
   "bg-emerald-500/25",
   "bg-emerald-500/45",
   "bg-emerald-500/65",

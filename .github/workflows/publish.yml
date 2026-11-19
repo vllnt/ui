@@ -133,6 +133,22 @@ jobs:
             exit 1
           fi
 
+      - name: Choose npm dist-tag
+        id: dist
+        working-directory: packages/ui
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          # Only a version above the current latest takes latest; an older line gets
+          # release-<major>.<minor>. A failed or empty lookup aborts before any publish.
+          # Anonymous read: the setup-node npmrc expects NODE_AUTH_TOKEN, which this job never sets.
+          NPM_LATEST=$(NPM_CONFIG_USERCONFIG=/dev/null npm view "$(node -p "require('./package.json').name")" dist-tags.latest)
+          export NPM_LATEST
+          DIST_TAG=$(node ../../scripts/release-guard.mjs dist-tag)
+          echo "dist_tag=$DIST_TAG" >> "$GITHUB_OUTPUT"
+          echo "Publishing ${RELEASE_VERSION} under ${DIST_TAG} (npm latest is ${NPM_LATEST})"
+
       - name: Read changelog release notes
         env:
           VERSION: ${{ steps.version.outputs.version }}
@@ -162,6 +178,7 @@ jobs:
         working-directory: packages/ui
         env:
           VERSION: ${{ steps.version.outputs.version }}
+          DIST_TAG: ${{ steps.dist.outputs.dist_tag }}
         run: |
           set -euo pipefail
           sed -i '/_authToken/d' "$NPM_CONFIG_USERCONFIG"
@@ -175,7 +192,7 @@ jobs:
             echo "${PKG}@${VERSION} is already published"
           else
             TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
-            npx --yes npm@11.18.0 publish "$TARBALL" --tag latest --provenance --access public
+            npx --yes npm@11.18.0 publish "$TARBALL" --tag "$DIST_TAG" --provenance --access public
           fi
 
       - name: Create GitHub Release

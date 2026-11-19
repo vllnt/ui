@@ -70,6 +70,7 @@ export default [
       '**/ai-artifact/ai-artifact.tsx',
       '**/bottom-activity-strip/bottom-activity-strip.tsx',
       '**/canvas-view/canvas-view.tsx',
+      '**/code-block/code-block.tsx',
       '**/conversation-thread/conversation-thread.tsx',
       '**/gantt-chart/gantt-chart.tsx',
       '**/parallel-timeline/parallel-timeline.tsx',

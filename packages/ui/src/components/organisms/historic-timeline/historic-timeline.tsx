@@ -40,7 +40,7 @@ const COLOR_PALETTE: Record<
     marker: "border-emerald-500 bg-emerald-500",
   },
   neutral: {
-    band: "bg-muted",
+    band: "bg-secondary",
     chip: "bg-muted text-muted-foreground",
     marker: "border-muted-foreground bg-muted-foreground",
   },

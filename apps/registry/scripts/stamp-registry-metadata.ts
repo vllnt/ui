@@ -90,7 +90,9 @@ if (existsSync(indexPath)) {
     }
   }
   index.version = registry.version;
-  index.generatedAt = registry.generatedAt;
+  // The served index says when this build made it. The committed registry.json
+  // keeps the time its published version last changed, so it does not churn.
+  index.generatedAt = new Date().toISOString();
   writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`);
 }
 

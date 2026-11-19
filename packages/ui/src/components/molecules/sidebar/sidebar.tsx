@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -30,8 +37,30 @@ export type SidebarProps = {
   ariaLabel?: string;
   closeLabel?: string;
   id?: string;
+  /**
+   * Page the sidebar marks as current, matched against item and section hrefs.
+   * Defaults to the router's pathname. Pass it when the URL the visitor sees
+   * differs from the route that renders, such as a prerendered locale or variant route.
+   */
+  pathname?: string;
+  /**
+   * Set to `false` to stop the links from prefetching their pages. Left unset,
+   * each link keeps the router's default prefetching. A long list of links
+   * prefetches every page in view, so a site with dozens of pages may prefer `false`.
+   */
+  prefetch?: boolean;
   sections: SidebarSection[];
 };
+
+/** The `prefetch` prop of the nearest Sidebar, read by every link it renders. */
+const PrefetchContext = createContext<boolean | undefined>(undefined);
+
+/** A `Link` that follows the Sidebar's `prefetch` prop. */
+function SidebarLink(properties: React.ComponentProps<typeof Link>) {
+  const prefetch = useContext(PrefetchContext);
+
+  return <Link prefetch={prefetch} {...properties} />;
+}
 
 const getMobileSnapshot = () =>
   typeof window === "undefined" ? false : window.innerWidth < 1024;
@@ -183,7 +212,7 @@ function FamilyList({
       <div className="space-y-0.5">
         {sections.map((section, index) =>
           section.href ? (
-            <Link
+            <SidebarLink
               className={FAMILY_ROW_CLASS}
               href={section.href}
               key={`${section.title ?? ""}-${index.toString()}`}
@@ -194,7 +223,7 @@ function FamilyList({
               }}
             >
               <FamilyRowLabel section={section} />
-            </Link>
+            </SidebarLink>
           ) : (
             <button
               className={FAMILY_ROW_CLASS}
@@ -257,8 +286,8 @@ function FamilyItems({
       </button>
       <div className="flex items-center justify-between px-3 pb-1">
         {section.href ? (
-          <Link
-            className="text-sm font-semibold hover:underline"
+          <SidebarLink
+            className="inline-flex min-h-6 min-w-6 items-center text-sm font-semibold hover:underline"
             href={section.href}
             onClick={() => {
               if (isMobile) {
@@ -267,7 +296,7 @@ function FamilyItems({
             }}
           >
             {section.title}
-          </Link>
+          </SidebarLink>
         ) : (
           <span className="text-sm font-semibold">{section.title}</span>
         )}
@@ -277,7 +306,7 @@ function FamilyItems({
       </div>
       <div className="space-y-0.5">
         {section.items.map((item) => (
-          <Link
+          <SidebarLink
             aria-current={getAriaCurrent(item, pathname)}
             className={cn(
               "block px-3 py-1.5 rounded-md text-sm transition-colors",
@@ -294,7 +323,7 @@ function FamilyItems({
             }}
           >
             {item.title}
-          </Link>
+          </SidebarLink>
         ))}
       </div>
     </div>
@@ -478,7 +507,7 @@ function SectionLinks({
   return (
     <div className={section.title ? "space-y-0.5" : "space-y-1"}>
       {section.items.map((item) => (
-        <Link
+        <SidebarLink
           aria-current={getAriaCurrent(item, pathname)}
           className={cn(
             section.title
@@ -500,7 +529,7 @@ function SectionLinks({
           }}
         >
           {item.title}
-        </Link>
+        </SidebarLink>
       ))}
     </div>
   );
@@ -659,9 +688,12 @@ export function Sidebar({
   ariaLabel = "Sidebar navigation",
   closeLabel = "Close sidebar",
   id = "site-sidebar",
+  pathname: pathnameOverride,
+  prefetch,
   sections,
 }: SidebarProps) {
-  const pathname = usePathname();
+  const routerPathname = usePathname();
+  const pathname = pathnameOverride ?? routerPathname;
   const { open, setOpen } = useSidebar();
   const isMobile = useMobile(setOpen);
   const mounted = useMounted();
@@ -714,12 +746,14 @@ export function Sidebar({
             ref={scrollContainerReference}
             tabIndex={isMobile && open ? -1 : undefined}
           >
-            <SidebarSections
-              isMobile={isMobile}
-              onNavigate={handleNavigate}
-              pathname={pathname}
-              sections={sections}
-            />
+            <PrefetchContext.Provider value={prefetch}>
+              <SidebarSections
+                isMobile={isMobile}
+                onNavigate={handleNavigate}
+                pathname={pathname}
+                sections={sections}
+              />
+            </PrefetchContext.Provider>
           </nav>
         </div>
       </aside>

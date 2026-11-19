@@ -47,6 +47,8 @@ const sections = [
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `sections` | `SidebarSection[]` | Yes | Array of `SidebarSection` objects |
+| `pathname` | `string` | No | Page marked as current. Defaults to the router pathname (`usePathname()`). Pass it when the visitor's URL differs from the route that renders, for example a prerendered locale or variant route. |
+| `prefetch` | `boolean` | No | Set to `false` to stop the links from prefetching their pages. Left unset, each link keeps the router's default prefetching. |
 
 ## Type Definitions
 

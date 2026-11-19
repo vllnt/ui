@@ -6,6 +6,79 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- **Dark surfaces are pure black** - the default dark theme now renders
+  `--background`, `--muted`, `--card` and `--popover` as `0 0 0` (#000000).
+  Hairline borders separate the surfaces: `--border`, `--secondary` and
+  `--accent` stay `0.2686` (#262626), and `--input` is unchanged. Before,
+  `--muted` was `0.2686` (#262626) and `--card` / `--popover` were `0.1445`
+  (#0a0a0a). A `bg-card` or `bg-popover` surface needs a `border` to show its
+  edge; every shipped one has it, and a test now fails on one that does not.
+  The separators in `DropdownMenu`, `Menubar` and `Select` draw with
+  `bg-border` instead of `bg-muted`, which is the page color now, and a test
+  fails on any one-pixel divider that uses `bg-muted`. Light mode is unchanged.
+  Themes that override these roles (presets, Maia) keep their values; PaaS and
+  any app that reads the dark `--muted`, `--card` or `--popover` directly get
+  black.
+- **Hover, selected and data-state fills use `secondary`** - 32 component files
+  (`Table`, `Tabs` pill, `Toggle`, `Slideshow`, `FilterBar` and others) used
+  `bg-muted` for that feedback, which is now the page color in dark.
+  They use `bg-secondary` with the same opacity. In the default and PaaS themes
+  the fill is the same color as before in light and dark, because `--secondary`
+  equals the old `--muted` there. Theme presets keep a quiet neutral
+  `--secondary` (their `--accent` is a brand color), so text on these fills
+  stays at 6.65 to 12.53:1 in dark. The Maia theme has its own dark `--muted`
+  (`0.2002`) and a core dark `--secondary` (`0.2686`), so its dark hover fills
+  are one step lighter than before.
+  `SegmentedControl`, `ViewSwitcher`, `WorkspaceSwitcher` and the `PricingTable`
+  period toggle draw their track with `bg-secondary` for the same reason: the
+  selected segment is `bg-background` on that track.
+- **Skeletons, tracks and handles use `secondary`** - 29 `bg-muted` fills in 23
+  component files were the whole visual of their element: `Skeleton`, the
+  `ProgressBar`, `Meter`, `Tour`, `Checklist`, `UsageBreakdown` and other
+  progress, meter and usage tracks, the `Drawer` handle, the empty cells of
+  `ActivityHeatmap` and the neutral `GanttChart` bar. They use `bg-secondary`
+  (#262626) with the same opacity, because `bg-muted` is the page color in dark
+  and they would disappear. Chips, code spans and panels keep `bg-muted`: their
+  text and border carry them. A test fails on a `bg-muted` skeleton or bar.
+
+### Added
+
+- **Product themes stylesheet** - `@vllnt/ui/themes/products.css` ships the
+  Maia and PaaS themes as `html[data-theme="maia"]` and
+  `html[data-theme="paas"]`, each with a `.dark` block. It is generated from
+  `packages/design/tokens.json`. Load Figtree (Maia) and JetBrains Mono
+  (Maia, PaaS) in your app; the package does not ship the fonts.
+- **Status and diff colors** - CSS variables `--success`, `--warning`,
+  `--info`, their `-foreground` pairs, `--diff-added` and `--diff-removed` in
+  `themes/default.css` and `styles.css`, and matching Tailwind colors
+  (`success`, `warning`, `info`, `diff.added`, `diff.removed`) in the preset.
+- **Label type step** - `--font-size-label`, `--line-height-label` and
+  `--font-weight-label`.
+- **Sidebar `pathname` prop** - names the page the sidebar marks as current.
+  It defaults to the router's pathname, so existing usage is unchanged. Pass
+  it when the URL the visitor sees differs from the route that renders, such as
+  a prerendered locale or variant route, instead of overriding the router's
+  pathname context.
+- **Sidebar `prefetch` prop** - set it to `false` to stop the sidebar's links
+  from prefetching their pages. Left unset, the links keep the router's default
+  prefetching, so existing usage is unchanged. A sidebar with dozens of links
+  in view otherwise prefetches every one of them on page load.
+
+### Fixed
+
+- **Tap targets** - the NavbarSaas links, the Breadcrumb crumbs, the
+  TableOfContents buttons and the Sidebar family heading link are at least
+  24 px tall (WCAG 2.5.8); they were 20 px.
+
+### Fixed
+
+- **Accordion accessibility** - each trigger now has `aria-controls` pointing
+  at its panel, and each panel is a `region` labelled by its trigger. Closed
+  panels are `inert`, so screen readers no longer read closed answers and Tab
+  skips links inside them. The open and close animation is unchanged.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added

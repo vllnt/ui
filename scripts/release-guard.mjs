@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
-/** Native publication remains locked to the initial canary series. */
+/** Core/Native publication remains locked to the initial canary series. */
 export function assertNativeCanary(version) {
   if (!/^0\.1\.0-canary\.[1-9]\d*\.sha[a-f0-9]{12}$/.test(version ?? "")) {
     throw new Error("Expected 0.1.0-canary.<positive run>.sha<12 lowercase hex>; no stable or custom channel");
@@ -20,12 +20,42 @@ export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
   if (mode === "stable") {
     if (ref !== `refs/tags/v${web}`) throw new Error(`Stable publication requires tag v${web}`);
   } else if (ref !== "refs/heads/main") throw new Error("Publication requires main");
+  if (mode === "core-canary") return coreCanaryVersion({ core, sha, run });
   if (!/^0\.(?:3|4)\.(?:0|[1-9]\d*)$/.test(web)) throw new Error("Unsupported Web release base");
   if (mode === "stable") return web;
   if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
   if (mode === "web-canary") return `${web}-canary.sha${sha.slice(0, 7)}`;
   if (mode !== "native-canary") throw new Error("Unsupported release channel");
   if (core !== "0.1.0" || native !== core) throw new Error("Core/Native must share the 0.1.0 base");
+  if (!/^[1-9]\d*$/.test(run ?? "")) throw new Error("Invalid canary run number");
+  return assertNativeCanary(`${core}-canary.${run}.sha${sha.slice(0, 12)}`);
+}
+
+/**
+ * The npm dist-tag for a stable publish. Only a version above the current `latest` may take
+ * `latest`; an older line (a 0.3.x maintenance release after 0.4.0) goes to `release-<major>.<minor>`
+ * so a tag on an old commit can never move `latest` backwards.
+ */
+export function stableDistTag(version, latest) {
+  const parse = (value, name) => {
+    const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(value ?? "");
+    if (!match) throw new Error(`Expected a stable x.y.z ${name}, got "${value ?? ""}"`);
+    return match.slice(1).map(Number);
+  };
+  const next = parse(version, "release version");
+  const current = parse(latest, "npm latest");
+  const order = next.map((part, index) => part - current[index]).find((diff) => diff !== 0) ?? 0;
+  if (order === 0) throw new Error(`${version} is already the npm latest`);
+  return order > 0 ? "latest" : `release-${next[0]}.${next[1]}`;
+}
+
+/**
+ * ui-core publishes on its own: only its own base is checked, so neither the Web release
+ * base nor the Native base can block it. Same version scheme as the Core/Native pair.
+ */
+function coreCanaryVersion({ core, sha, run }) {
+  if (core !== "0.1.0") throw new Error("Core must be on the 0.1.0 base");
+  if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
   if (!/^[1-9]\d*$/.test(run ?? "")) throw new Error("Invalid canary run number");
   return assertNativeCanary(`${core}-canary.${run}.sha${sha.slice(0, 12)}`);
 }
@@ -52,12 +82,17 @@ export function packageRelease({ ref, versions, changelogs, onMain }) {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const root = fileURLToPath(new URL("..", import.meta.url));
-  const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
-  const version = (name) => JSON.parse(read(`packages/${name}/package.json`)).version;
+  const version = (name) => JSON.parse(readFileSync(new URL(`../packages/${name}/package.json`, import.meta.url), "utf8")).version;
   try {
     if (process.argv.length !== 3) throw new Error("Expected one release mode; no overrides supported");
-    if (process.argv[2] === "package-release") {
+    const mode = process.argv[2];
+    if (mode === "dist-tag") {
+      console.log(stableDistTag(process.env.RELEASE_VERSION, process.env.NPM_LATEST));
+      process.exit(0);
+    }
+    if (mode === "package-release") {
+      const root = fileURLToPath(new URL("..", import.meta.url));
+      const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
       const { GITHUB_REF: ref, GITHUB_SHA: sha } = process.env;
       if (!/^[a-f0-9]{40}$/.test(sha ?? "")) throw new Error("Invalid commit SHA");
       const git = spawnSync("git", ["merge-base", "--is-ancestor", sha, "origin/main"], { cwd: root });
@@ -70,12 +105,15 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       });
       // GITHUB_OUTPUT lines for the workflow.
       console.log(`name=${name}\ndir=packages/${dir}\nversion=${tagged}`);
-    } else {
-      console.log(releaseVersion({
-        mode: process.argv[2], web: version("ui"), core: version("ui-core"), native: version("ui-native"),
-        ref: process.env.GITHUB_REF, sha: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_NUMBER,
-      }));
+      process.exit(0);
     }
+    // core-canary reads ui-core alone: other manifests must not be able to affect it.
+    const bases = mode === "core-canary" ? { core: version("ui-core") }
+      : { web: version("ui"), core: version("ui-core"), native: version("ui-native") };
+    console.log(releaseVersion({
+      mode, ...bases,
+      ref: process.env.GITHUB_REF, sha: process.env.GITHUB_SHA, run: process.env.GITHUB_RUN_NUMBER,
+    }));
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

@@ -48,8 +48,11 @@ import {
 | ---- | ---- | -------- | ----------- |
 | `defaultValue` | `string` | Yes | - |
 | `onValueChange` | `(value: string) =&gt; void` | No | Callback: `(value: string) => void` |
+| `variant` | `"link" \| "pill" \| "underline"` | No | Look of the triggers, shared with `Tabs.List` and `Tabs.Trigger`. Defaults to `underline` |
 
 ### Tabs.List
+
+Reads the `variant` from `Tabs`: only `underline` draws the bottom rule under the list. Outside a `Tabs` it falls back to the `underline` look.
 
 ### Tabs.Trigger
 
@@ -57,9 +60,50 @@ import {
 | ---- | ---- | -------- | ----------- |
 | `value` | `string` | Yes | - |
 
+The trigger is a `role="tab"` button. The selected tab sets `aria-selected="true"` and `data-state="active"`; every other tab sets `aria-selected="false"` and `data-state="inactive"`.
+
 ### Tabs.Content
 
 | Prop | Type | Required | Description |
 | ---- | ---- | -------- | ----------- |
 | `value` | `string` | Yes | - |
+
+## Variants
+
+### variant
+
+| Value | Default |
+| ----- | ------- |
+| `link` | - |
+| `pill` | - |
+| `underline` | Yes |
+
+- `underline`: a bottom border marks the active trigger. This is the look Tabs always had.
+- `pill`: the active trigger gets a filled, rounded `muted` background and no bottom border; inactive triggers are plain text.
+- `link`: text only. The active trigger is `foreground` and underlined; an inactive trigger is underlined on hover.
+
+<Canvas of={Stories.VariantPill} sourceState="shown" />
+
+<Canvas of={Stories.VariantLink} sourceState="shown" />
+
+## Focus
+
+Every trigger draws a `focus-visible` ring (`ring-2 ring-ring`, the Button ring colour and width). The ring is `ring-inset`, with no offset: the list scrolls horizontally (`overflow-x-auto`), which would clip an outer ring.
+
+## Penpot mapping (lock 1.x)
+
+`variant` is the Penpot `Style` axis. The prop is not called `style` because that name is the HTML `style` attribute.
+
+| Penpot family | Axis | Values | In code |
+| ------------- | ---- | ------ | ------- |
+| `atom / Tab item` | Style | `link`, `pill`, `underline` | `variant` on `Tabs` |
+| `atom / Tab item` | Style | `segment` | Not built. It is the `SegmentedControl` component |
+| `atom / Tab item` | Active | `active`, `inactive` | `aria-selected` and `data-state` on the trigger |
+| `atom / Tab item` | State | `rest`, `hover`, `focus` | Built: default, `hover:` and `focus-visible:` classes |
+| `atom / Tab item` | State | `disabled`, `gaze`, `pressed` | Not built: Tabs has no `disabled` prop and no pressed or gaze style |
+| `atom / Tab item` | Depth | `flat`, `raised` | Not built: every variant is flat |
+| `molecule / Tabs` | Style | `link`, `pill`, `underline` | `variant` on `Tabs` |
+| `molecule / Tabs` | State | `rest`, `focus` | Built, as for the Tab item |
+| `molecule / Tabs` | Size | `default`, `lg`, `sm` | Not built: sizes and the 44 px touch size wait for decision D16 |
+| `molecule / Tabs` | Orientation | `horizontal`, `vertical` | Not built: Tabs is horizontal only |
 

@@ -18,7 +18,7 @@ pnpm add @vllnt/ui@canary
 
 `scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Canary modes require `refs/heads/main`. Stable requires the `refs/tags/v{version}` tag push for the exact `packages/ui` version, so a branch run or a mismatched tag can never publish `latest`. Stable accepts Web bases 0.3.x and 0.4.x and rejects prereleases and every newer or unknown base before npm publication; a newer base needs a separately reviewed change to the guard. Core/Native keep the independent 0.1.0 canary base; their stable path is the separate `package-release` mode (see [Native stable release](#native-stable-release-core-and-native)). There is no input or repository-variable override.
 
-Matching main pushes publish Web prereleases under `canary`, never `latest`. Native publication is unconditionally disabled in the workflow until a separately reviewed enabling change (see `PR506_CANARY_GAP_REVIEW.md`). The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Native discovery remains source-only/unavailable.
+Matching main pushes publish Web prereleases under `canary`, never `latest`. Core and Native canaries publish only when the owner sets their repository variables, which are unset by default (see Experimental native canaries and `PR506_CANARY_GAP_REVIEW.md`). The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Native discovery remains source-only/unavailable.
 
 The stable `release` job runs in the protected `npm-release` environment (required reviewer). A tag push therefore waits until a maintainer approves the deployment in the run page; nothing is published before that approval. The environment's deployment rules must allow `v*.*.*` tags, otherwise the tag run is rejected before any step runs.
 
@@ -59,7 +59,8 @@ CI will:
 - Wait for a maintainer to approve the `npm-release` deployment; nothing below runs before that.
 - Verify the tag. `release-guard.mjs stable` requires it to be exactly `v{x.y.z}` for the `packages/ui/package.json` version on a supported base, and the tagged commit must be an ancestor of `origin/main`.
 - Read the `CHANGELOG.md` section headed exactly `## [{x.y.z}]` and use it as the GitHub Release notes. **Fails** if the section is missing.
-- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag latest --provenance --access public`, skipped when that version is already on npm (`scripts/npm-published.sh`: only an exact version answer counts as published and only a registry E404 as unpublished; any other answer fails the run instead of risking a duplicate publish or a missed one). The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
+- The dist-tag comes from `release-guard.mjs dist-tag`: `latest` only when the version is above the current npm `latest`; an older line (for example a 0.3.x maintenance release after 0.4.0) publishes under `release-<major>.<minor>`, so a tag on an old commit can never move `latest` backwards. A failed or empty `latest` lookup stops the run before publishing.
+- `pnpm pack` and `npx --yes npm@11.18.0 publish --tag "$DIST_TAG" --provenance --access public`, skipped when that version is already on npm (`scripts/npm-published.sh`: only an exact version answer counts as published and only a registry E404 as unpublished; any other answer fails the run instead of risking a duplicate publish or a missed one). The pinned npm version avoids known provenance regressions while OIDC trusted publishing signs the attestation.
 - Create the GitHub Release for the tag, skipped when it already exists.
 
 After a transient failure, re-run the failed jobs of the tag run; the publish and release steps skip work that is already done. A tag that failed verification published nothing. Confirm that npm has no such version, then fix `main` through a PR and push a new tag (see [Rollback](#rollback) before deleting any tag).
@@ -75,21 +76,39 @@ The `registry:check` and `registry:integrity` CI guards confirm the regenerated 
 
 ## Experimental native canaries
 
-`@vllnt/ui-core` and `@vllnt/ui-native` have a separate safety boundary in `.github/workflows/native-canary.yml`:
+`@vllnt/ui-core` and `@vllnt/ui-native` have their own workflow, `.github/workflows/native-canary.yml`, with two independent publish paths. Each path has its own repository variable. A variable that is unset (the default) means the job is skipped, not failed, so nothing publishes until the owner turns a path on.
 
-- A push to `main` that changes native/core/token surfaces runs `pnpm ci:native`.
-- The guard permits only matching `0.1.0-canary.<positive run>.sha<12 lowercase hex>` versions, with an exact matching core dependency in the Native tarball.
-- The staged publication implementation below is retained but disabled; it is not approved for bootstrap or recovery.
-- Core publishes first under a run-scoped staging tag; native publishes only after that exact core version is visible.
-- Reruns skip immutable versions already present and reuse the run-scoped tag, allowing recovery from a partial pair.
-- The workflow verifies packed names, versions, the rewritten core dependency, and absence of `workspace:` protocols.
-- Only after both versions are visible does the workflow promote both `canary` tags. Ordinary failures restore the prior pair and clean up staging tags.
-- Publication targets staging, not `latest`. First uploads can nevertheless acquire an implicit `latest`; do not use this workflow to bootstrap unpublished names.
-- This workflow has no workflow dispatch, Git tag, GitHub Release, or stable publication path; stable lives in `native-release.yml`.
+| Path | Repository variable | Publishes | Runs after |
+| --- | --- | --- | --- |
+| Core canary | `CORE_CANARY_PUBLISH_ENABLED=true` | `@vllnt/ui-core` | ui-core lint, typecheck, build, tests and `pack:check` only |
+| Native pair | `NATIVE_CANARY_PUBLISH_ENABLED=true` | `@vllnt/ui-core` and `@vllnt/ui-native` | `pnpm ci:native`, including Expo Doctor |
 
-Native publication is unconditionally disabled (`if: ${{ false }}`); setting `NATIVE_CANARY_PUBLISH_ENABLED` cannot enable it. Quality gates still run. Before a separately reviewed change restores the variable gate, fix the retained publisher's version lookup (registry errors must not be interpreted as absence), verify immutable artifact integrity on recovery, and address bootstrap's implicit `latest` behavior. No temporary first-publish script or test belongs in the repository or CI.
+Rules both paths share:
 
-An authorized npm owner must bootstrap unpublished names separately; an organization does not reserve package names and trusted publishing requires existing packages. Configure trusted-publisher entries and the protected `npm-native-canary` environment with main-only protection and reviewers. A scoped, expiring `NPM_DIST_TAG_TOKEN` is required for tag operations because OIDC authenticates uploads only; npm does not provide a dist-tag-only granular permission, so treat this token as publishing-capable. Never commit credentials.
+- Pushes to `main` only. The same guard, version scheme (`0.1.0-canary.<positive run>.sha<12 lowercase hex>`), `canary` dist-tag (never `latest`), npm provenance and pinned `npm@11.18.0` as the Web publisher. No workflow dispatch, Git tag, GitHub Release or stable path exists.
+- The logic lives in `scripts/publish-canary.sh` (`core` or `pair`). `scripts/release-guard.test.mjs` runs the real script against a fake registry, so no test can publish.
+- Both packages must already exist on npm with a `latest` tag. A first upload gets an implicit `latest`, so the script refuses to publish a package that has none, and fails the run if `latest` moves.
+- A run that is no longer the head of `main` stands down without publishing.
+- After an upload the script waits until npm serves the version, because npm first answers "Your package is being processed and may take a few minutes". It polls with exponential backoff: the first delay is `CANARY_POLL_SECONDS` (default 5), doubling up to `CANARY_POLL_MAX_SECONDS` (default 30), with a total deadline of `CANARY_POLL_TIMEOUT_SECONDS` (default 360, 6 minutes). A version still missing at the deadline fails the run, with an error naming it and the time waited.
+- Both publish jobs share one concurrency group (`native-canary-publish`, no cancel-in-progress), so a pair publish never overlaps a core publish. GitHub keeps one pending job per group, so a late job can replace a pending one; a replaced job shows as cancelled, not failed, and the next push to `main` publishes again.
+- The workflow-level `permissions` stay `contents: read`. Only the publish jobs add `id-token: write`, and a test fails if the workflow default is widened.
+- `pnpm-workspace.yaml` supply-chain policy (`minimumReleaseAge`, `trustPolicy`) is not touched by either path.
+
+Core canary path. It installs only `@vllnt/ui-core` and its dependencies (no Expo) and never runs `ci:native` or Expo Doctor, so an Expo gate failure cannot hold it back. It uploads straight to `--tag canary` over OIDC, then checks that `latest` is unchanged and that `canary` points at the new version. A rerun of the same commit does not republish and never moves a newer `canary`.
+
+Native pair path. It stays behind the native quality gate and publishes over OIDC only, straight to `canary`, exactly like the core path: no secret, no staging tag, no `npm dist-tag`. Core goes first, unless this commit's core version is already on npm (from the core path), in which case it is reused. Native goes up only after that exact core version is visible, and its tarball pins that exact core version, so the pair keeps working after core-only publishes. Once both versions are visible, the script checks for both packages that `canary` is the new version and `latest` is unchanged, and fails the run otherwise. If the native upload fails after core went up, the run fails and `@vllnt/ui-core@canary` is briefly ahead of `@vllnt/ui-native@canary`. That is harmless, because the native tarball pins its exact core version, and the next run uploads native.
+
+Owner setup. The workflow does none of this, and nothing publishes until the variables in steps 4 and 5 are set:
+
+1. Both packages must exist on npm with a `latest` tag. They do today (the bootstrap pre-release below). An authorized npm owner must bootstrap any unpublished name by hand; an organization does not reserve package names and trusted publishing requires existing packages.
+2. Create the GitHub environment `npm-native-canary` before the first run (a job that names a missing environment creates it unprotected). Deployment branches: `main` only. Add required reviewers only if you want every canary publish to wait for approval.
+3. On npmjs.com, add a Trusted Publisher to each package: organization `vllnt`, repository `ui`, workflow filename `native-canary.yml`, environment `npm-native-canary`. Both jobs share the file and the environment, so one entry per package covers both paths. Do not rename the workflow file.
+4. Core path: set the repository variable `CORE_CANARY_PUBLISH_ENABLED` to `true` (Settings, Secrets and variables, Actions, Variables).
+5. Pair path, only when you accept it: set `NATIVE_CANARY_PUBLISH_ENABLED` to `true`. It needs no secret. Keep it off until Expo Doctor is green on `main`.
+
+To stop publishing, delete or unset the variable. Never commit credentials.
+
+Still open before the pair path should be trusted: a rerun that finds a version already on npm reuses it by name without checking its contents, and the physical-device validation hold below.
 
 The catalog now uses Expo `~57.0.31` to resolve the prior Doctor patch mismatch; `pnpm ci:native` must pass on the reviewed commit. The validation hold still requires physical Android/iOS and VoiceOver/TalkBack evidence plus fresh published-consumer checks. An upload alone does not lift this hold.
 
@@ -99,7 +118,7 @@ No supported native npm release exists yet. A manually bootstrapped pre-release 
 pnpm add @vllnt/ui-native@canary
 ```
 
-Only after the first synchronized pair is visible, both `canary` tags are promoted, fresh packed-consumer validation passes, and the physical-device/accessibility requirements in the Native changelog are satisfied, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
+Only after the first synchronized pair is visible, both `canary` tags point at it, fresh packed-consumer validation passes, and the physical-device/accessibility requirements in the Native changelog are satisfied, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
 
 ## Native stable release (core and native)
 
@@ -116,7 +135,7 @@ Order: tag `ui-core-vX.Y.Z`, wait until it is visible on npm, then tag `ui-nativ
 
 Prerequisites (owner actions):
 
-- The owner lifts the native validation hold and approves native publication. The canary hold in `native-canary.yml` is unaffected by this workflow.
+- The owner lifts the native validation hold and approves native publication. The canary variables in `native-canary.yml` do not affect this workflow.
 - A trusted publisher on npm for each package (repository `vllnt/ui`, workflow `native-release.yml`, environment `npm-release`).
 - The `npm-release` environment's deployment rules allow `ui-core-v*.*.*` and `ui-native-v*.*.*`, and a tag ruleset restricts who can create them.
 - A release PR on `main` bumps `packages/<pkg>/package.json` and cuts `## [X.Y.Z]` in `packages/<pkg>/CHANGELOG.md`.
@@ -134,7 +153,7 @@ Tag the merged commit: `git fetch origin && git tag -a ui-core-vX.Y.Z origin/mai
 
 - `CHANGELOG.md` has an `[Unreleased]` section describing user-facing changes. Use `cliff.toml` with git-cliff if you need to regenerate it from Conventional Commits.
 - The canary built from the same commit passes and lists the expected components (check logs for the tarball manifest).
-- Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.com` / `storybook.vllnt.ai`).
+- Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.com` / `storybook.vllnt.com`).
 
 ## Post-release verification
 
