@@ -2048,6 +2048,10 @@
       {
         "id": "overlay-dialog--default",
         "name": "Default"
+      },
+      {
+        "id": "overlay-dialog--no-overlay",
+        "name": "No Overlay"
       }
     ],
     "title": "Dialog"
@@ -5630,6 +5634,10 @@
       {
         "id": "navigation-sidebar--default",
         "name": "Default"
+      },
+      {
+        "id": "navigation-sidebar--with-pathname",
+        "name": "With Pathname"
       }
     ],
     "title": "Sidebar"

@@ -79,6 +79,7 @@ Rules both paths share:
 - The logic lives in `scripts/publish-canary.sh` (`core` or `pair`). `scripts/release-guard.test.mjs` runs the real script against a fake registry, so no test can publish.
 - Both packages must already exist on npm with a `latest` tag. A first upload gets an implicit `latest`, so the script refuses to publish a package that has none, and fails the run if `latest` moves.
 - A run that is no longer the head of `main` stands down without publishing.
+- After an upload the script waits until npm serves the version, because npm first answers "Your package is being processed and may take a few minutes". It polls `CANARY_POLL_ATTEMPTS` times (default 60), `CANARY_POLL_SECONDS` apart (default 5), so about 5 minutes. A version that never appears fails the run.
 - Both publish jobs share one concurrency group (`native-canary-publish`, no cancel-in-progress), so a pair promotion never overlaps a core publish. GitHub keeps one pending job per group, so a late job can replace a pending one; a replaced job shows as cancelled, not failed, and the next push to `main` publishes again.
 - The workflow-level `permissions` stay `contents: read`. Only the publish jobs add `id-token: write`, and a test fails if the workflow default is widened.
 - `pnpm-workspace.yaml` supply-chain policy (`minimumReleaseAge`, `trustPolicy`) is not touched by either path.
@@ -120,7 +121,7 @@ A stable native channel requires a separate PR that defines versioning, migratio
 
 - `CHANGELOG.md` has an `[Unreleased]` section describing user-facing changes. Use `cliff.toml` with git-cliff if you need to regenerate it from Conventional Commits.
 - The canary built from the same commit passes and lists the expected components (check logs for the tarball manifest).
-- Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.com` / `storybook.vllnt.ai`).
+- Docs are in sync: component count in `README.md`, family tables in `packages/ui/README.md`, domain references (`ui.vllnt.com` / `storybook.vllnt.com`).
 
 ## Post-release verification
 

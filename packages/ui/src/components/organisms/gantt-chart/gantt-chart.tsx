@@ -35,7 +35,7 @@ const COLOR_CLASSES: Record<GanttColor, { bar: string; progress: string }> = {
     progress: "bg-emerald-600 dark:bg-emerald-500",
   },
   neutral: {
-    bar: "bg-muted",
+    bar: "bg-secondary",
     progress: "bg-muted-foreground",
   },
   purple: {

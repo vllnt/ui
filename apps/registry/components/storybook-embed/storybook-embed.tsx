@@ -126,7 +126,7 @@ function StorybookIframe({
     <div style={{ minHeight: height, position: "relative" }}>
       {isLoaded ? null : (
         <div
-          className="flex animate-pulse items-center justify-center rounded-b-lg bg-muted motion-reduce:animate-none"
+          className="flex animate-pulse items-center justify-center rounded-b-lg bg-secondary motion-reduce:animate-none"
           style={{ height, inset: 0, position: "absolute", zIndex: 1 }}
         >
           <p className="text-sm text-muted-foreground">{t("loading")}</p>
@@ -222,7 +222,7 @@ export function StorybookEmbed({
           key={iframeSource}
         />
       ) : (
-        <div aria-hidden="true" className="bg-muted" style={{ height }} />
+        <div aria-hidden="true" className="bg-secondary" style={{ height }} />
       )}
     </div>
   );

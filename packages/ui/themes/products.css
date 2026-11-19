@@ -120,15 +120,15 @@ html[data-theme="paas"] {
 html[data-theme="paas"].dark {
   --background: 0 0 0;
   --foreground: 0.9848 0 0;
-  --card: 0.1445 0 0;
+  --card: 0 0 0;
   --card-foreground: 0.9848 0 0;
-  --popover: 0.1445 0 0;
+  --popover: 0 0 0;
   --popover-foreground: 0.9848 0 0;
   --primary: 0.9848 0 0;
   --primary-foreground: 0.2044 0 0;
   --secondary: 0.2686 0 0;
   --secondary-foreground: 0.9848 0 0;
-  --muted: 0.2686 0 0;
+  --muted: 0 0 0;
   --muted-foreground: 0.7153 0 0;
   --accent: 0.2686 0 0;
   --accent-foreground: 0.9848 0 0;

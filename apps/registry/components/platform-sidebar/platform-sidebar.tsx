@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 
 import { Sidebar, type SidebarSection } from "@vllnt/ui";
-import { PathnameContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
 import { useLocale, useTranslations } from "next-intl";
 
 import { useForwardedQuery } from "@/components/forwarded-query";
@@ -77,12 +76,12 @@ export function PlatformSidebar({ platform, sections }: PlatformSidebarProps) {
   }, [forwardedQuery, platform, sections]);
 
   return (
-    <PathnameContext value={publicPathname}>
-      <Sidebar
-        ariaLabel={t("navigationLabel")}
-        closeLabel={t("closeNavigation")}
-        sections={platformSections}
-      />
-    </PathnameContext>
+    <Sidebar
+      ariaLabel={t("navigationLabel")}
+      closeLabel={t("closeNavigation")}
+      pathname={publicPathname}
+      prefetch={false}
+      sections={platformSections}
+    />
   );
 }

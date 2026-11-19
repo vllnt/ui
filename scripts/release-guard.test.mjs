@@ -42,6 +42,10 @@ const harness = (t, options) => {
 };
 const uploads = (result) => result.publishes.map(({ name, version, tag }) => [name, version, tag]);
 const distTags = (result, verb) => result.calls.filter((call) => call.args[0] === "dist-tag" && call.args[1] === verb);
+// How many times the script asked npm whether `name` at VERSION is there.
+const versionPolls = (result, name) => result.calls.filter((call) => call.args[0] === "view" && call.args[1] === `${name}@${VERSION}`).length;
+// npm can take minutes to serve an upload (run 44545188360). 20 is more than the 12 polls the wait once allowed.
+const SLOW_NPM_POLLS = 20;
 
 test("stable rejects newer bases, prereleases and unknown channels", () => {
   for (const web of ["0.5.0", "1.0.0", "0.4.0-canary.1", "0.4.01", "0.2.9"]) {
@@ -255,6 +259,13 @@ test("rerunning a core canary neither republishes nor moves the canary tag", (t)
   assert.deepEqual(again.publishes, []);
   assert.equal(again.registry[CORE].tags.canary, newer);
 });
+test("core canary waits for npm to finish processing the upload", (t) => {
+  const result = harness(t).run("core", { quirks: { visibleAfterPolls: SLOW_NPM_POLLS } });
+  assert.equal(result.status, 0, result.output);
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"]]);
+  assert.ok(versionPolls(result, CORE) >= SLOW_NPM_POLLS, "the version was polled until npm served it");
+  assert.deepEqual(result.registry[CORE].tags, { latest: BOOTSTRAP, canary: VERSION });
+});
 test("core canary refuses to create a package that is not on npm yet", (t) => {
   const h = harness(t);
   h.seed((registry) => { delete registry[CORE]; });
@@ -332,6 +343,15 @@ test("pair stages both packages, pins core exactly and promotes both tags togeth
     assert.equal(call.viaNpx, true, call.args.join(" "));
     assert.equal(call.configToken, call.args[0] !== "publish", call.args.join(" "));
     assert.equal(call.envToken, call.args[0] === "publish" ? null : "fake-dist-tag-token", call.args.join(" "));
+  }
+});
+test("pair waits for npm to finish processing both uploads before promoting", (t) => {
+  const result = harness(t).run("pair", { quirks: { visibleAfterPolls: SLOW_NPM_POLLS } });
+  assert.equal(result.status, 0, result.output);
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "run-9001"], [NATIVE, VERSION, "run-9001"]]);
+  for (const name of [CORE, NATIVE]) {
+    assert.ok(versionPolls(result, name) >= SLOW_NPM_POLLS, `${name} was polled until npm served it`);
+    assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION }, `${name} tags (staging tag removed)`);
   }
 });
 test("the dist-tag token reaches only the dist-tag commands", (t) => {
@@ -431,6 +451,16 @@ test("pair refuses to create packages that are not on npm yet", (t) => {
   const result = h.run("pair");
   assert.notEqual(result.status, 0);
   assert.deepEqual(result.publishes, []);
+});
+test("CANARY_POLL_ATTEMPTS bounds the wait: a version npm does not serve in time fails the run and promotes nothing", (t) => {
+  // 8 polls fit in the default window, not in 3 attempts.
+  const slow = { quirks: { visibleAfterPolls: 8 }, env: { CANARY_POLL_ATTEMPTS: "3" } };
+  const core = harness(t).run("core", slow);
+  assert.notEqual(core.status, 0, core.output);
+  const pair = harness(t).run("pair", slow);
+  assert.notEqual(pair.status, 0, pair.output);
+  assert.deepEqual(distTags(pair, "add"), []);
+  for (const name of [CORE, NATIVE]) assert.deepEqual(pair.registry[name].tags, { latest: BOOTSTRAP }, `${name} staging tag cleared`);
 });
 test("an unknown publish mode is refused", (t) => {
   const result = harness(t).run("latest");
