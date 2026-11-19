@@ -1,12 +1,24 @@
 import { fireEvent, screen } from "@testing-library/react-native";
+import {
+  AccessibilityInfo,
+  Animated,
+  LayoutAnimation,
+  ScrollView,
+  Text as NativeText,
+} from "react-native";
 
 import manifest from "../../registry.json";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../components/atoms/collapsible/collapsible";
 
 import {
   accessibilityFixtureActions,
   accessibilityFixtures,
 } from "./accessibility-fixtures";
-import { renderThemed } from "./test-utils";
+import { flushMicrotasks, reducedMotion, renderThemed } from "./test-utils";
 
 /**
  * Native accessibility contract.
@@ -42,6 +54,16 @@ import { renderThemed } from "./test-utils";
  *   replaces its visible text, so the label, value text or hint repeats every
  *   visible text run (longer than three characters, not a glyph, not a
  *   numeric restatement of a progress value).
+ *
+ * Affordance contract (#633), read from the same host trees:
+ *
+ * - C1 reduced-motion: under the default (reduced) preference no fixture
+ *   starts an `Animated` or `LayoutAnimation` animation, no Modal animates,
+ *   and every scroll is instant. Positive controls prove each check can fail.
+ * - C3 state: pressing a disclosure or selection control flips its
+ *   `expanded`, `selected` or `checked` state.
+ * - R11 static-surfaces: a static surface (card, badge, separator, …) renders
+ *   no pressable host of its own, so nothing that is not a control responds.
  */
 
 type Props = Readonly<Record<string, unknown>>;
@@ -784,3 +806,354 @@ it.each(
   },
   60_000,
 );
+
+const ANIMATION_METHODS = [
+  "delay",
+  "loop",
+  "parallel",
+  "sequence",
+  "spring",
+] as const;
+
+const TIMED_ANIMATION = "Animated.timing ran with a non-zero duration";
+
+type CallLog = {
+  readonly mock: { readonly calls: readonly (readonly unknown[])[] };
+  readonly mockClear: () => unknown;
+};
+
+/** Fixtures that tick text on a timer and start no animation. */
+const TICK_ONLY_FIXTURES = new Set([
+  "countdown-timer",
+  "live-feed",
+  "world-clock-bar",
+]);
+
+function renderFixture(name: string): void {
+  const fixture = accessibilityFixtures[name];
+  if (!fixture) throw new Error(`No accessibility fixture named "${name}"`);
+  renderThemed(fixture());
+}
+
+function allHosts(): HostNode[] {
+  const collect = (node: HostNode): HostNode[] => [
+    node,
+    ...node.children.flatMap((child) =>
+      typeof child === "string" ? [] : collect(child),
+    ),
+  ];
+  return toHostNodes(screen.toJSON()).flatMap(collect);
+}
+
+function pressNamed(control: string): void {
+  const [target] = screen.getAllByRole(PRESSABLE_ROLES, { name: control });
+  if (!target) throw new Error(`No control named "${control}"`);
+  fireEvent.press(target);
+}
+
+/** Gives every host that listens for layout a size, so width-gated effects run. */
+function layOut(): void {
+  const hosts: unknown[] = screen.UNSAFE_root.findAll(
+    (node: unknown) =>
+      isRecord(node) &&
+      typeof node.type === "string" &&
+      isRecord(node.props) &&
+      typeof node.props.onLayout === "function",
+  );
+  for (const host of hosts)
+    fireEvent(host, "layout", {
+      nativeEvent: { layout: { height: 600, width: 320, x: 0, y: 0 } },
+      persist: () => void 0,
+    });
+}
+
+/**
+ * Records every motion API a fixture can start; call `stop` when done. A
+ * zero-duration `Animated.timing` applies its value at once, which is how the
+ * components honour reduced motion, so it does not count as motion.
+ */
+function recordMotion() {
+  const timing = jest.spyOn(Animated, "timing");
+  const animations: readonly (readonly [string, jest.SpyInstance])[] = [
+    ...ANIMATION_METHODS.map(
+      (method) => [`Animated.${method}`, jest.spyOn(Animated, method)] as const,
+    ),
+    [
+      "LayoutAnimation.configureNext",
+      jest.spyOn(LayoutAnimation, "configureNext"),
+    ],
+  ];
+  const scrolls: readonly (readonly [string, CallLog])[] = [
+    ["scrollTo", jest.mocked(ScrollView.prototype.scrollTo)],
+    ["scrollToEnd", jest.mocked(ScrollView.prototype.scrollToEnd)],
+  ];
+  for (const [, spy] of scrolls) spy.mockClear();
+  return {
+    animated: () => [
+      ...animations
+        .filter(([, spy]) => spy.mock.calls.length > 0)
+        .map(([label]) => `${label} was called`),
+      ...timing.mock.calls.flatMap(([, config]) =>
+        isRecord(config) && config.duration === 0 ? [] : [TIMED_ANIMATION],
+      ),
+    ],
+    scrollCalls: () => scrolls.flatMap(([, spy]) => spy.mock.calls),
+    smoothScrolls: () =>
+      scrolls.flatMap(([label, spy]) =>
+        spy.mock.calls
+          .filter(
+            ([options]) => !isRecord(options) || options.animated !== false,
+          )
+          .map(() => `ScrollView.${label} was not called with animated:false`),
+      ),
+    stop: () => {
+      timing.mockRestore();
+      for (const [, spy] of animations) spy.mockRestore();
+    },
+  };
+}
+
+function animatedModals(): string[] {
+  return allHosts()
+    .filter((host) => host.type === "Modal")
+    .flatMap((host) => {
+      const { animationType } = host.props;
+      return animationType === undefined || animationType === "none"
+        ? []
+        : [`Modal animationType "${String(animationType)}"`];
+    });
+}
+
+function allowMotion(): void {
+  jest
+    .mocked(AccessibilityInfo.isReduceMotionEnabled)
+    .mockImplementation(async () => false);
+}
+
+describe("C1 reduced-motion", () => {
+  afterEach(() => {
+    jest
+      .mocked(AccessibilityInfo.isReduceMotionEnabled)
+      .mockImplementation(() => new Promise(() => void 0));
+  });
+
+  it.each(
+    Object.keys(accessibilityFixtures)
+      .filter((name) => !TICK_ONLY_FIXTURES.has(name))
+      .sort(),
+  )(
+    "%s starts no animation under reduced motion",
+    (name) => {
+      const motion = recordMotion();
+      try {
+        renderFixture(name);
+        layOut();
+        for (const control of accessibilityFixtureActions[name] ?? [])
+          pressNamed(control);
+        layOut();
+        expect([
+          ...motion.animated(),
+          ...motion.smoothScrolls(),
+          ...animatedModals(),
+        ]).toEqual([]);
+      } finally {
+        motion.stop();
+      }
+    },
+    60_000,
+  );
+
+  it("fades a Dialog once the user allows motion", async () => {
+    allowMotion();
+    renderFixture("dialog");
+    await flushMicrotasks();
+    expect(animatedModals()).toEqual(['Modal animationType "fade"']);
+  });
+
+  it("animates a Collapsible once the user allows motion", async () => {
+    const motion = recordMotion();
+    try {
+      renderThemed(
+        <Collapsible id="details" reducedMotionService={reducedMotion(false)}>
+          <CollapsibleTrigger label="Toggle details">
+            <NativeText>Toggle details</NativeText>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <NativeText>Body</NativeText>
+          </CollapsibleContent>
+        </Collapsible>,
+      );
+      await flushMicrotasks();
+      fireEvent.press(screen.getByRole("button", { name: "Toggle details" }));
+      expect(motion.animated()).toContain(TIMED_ANIMATION);
+    } finally {
+      motion.stop();
+    }
+  });
+
+  it("scrolls a Carousel instantly under reduced motion", () => {
+    const motion = recordMotion();
+    try {
+      renderFixture("carousel");
+      layOut();
+      expect(motion.scrollCalls().length).toBeGreaterThan(0);
+      expect(motion.smoothScrolls()).toEqual([]);
+    } finally {
+      motion.stop();
+    }
+  });
+
+  it("scrolls a Carousel smoothly once the user allows motion", async () => {
+    const motion = recordMotion();
+    try {
+      allowMotion();
+      renderFixture("carousel");
+      await flushMicrotasks();
+      layOut();
+      fireEvent.press(screen.getByRole("button", { name: "Next item" }));
+      expect(motion.smoothScrolls().length).toBeGreaterThan(0);
+    } finally {
+      motion.stop();
+    }
+  });
+});
+
+type StateKey = "checked" | "expanded" | "selected";
+type StateRow = {
+  /** Fixture that renders the control. */
+  readonly fixture: string;
+  readonly key: StateKey;
+  readonly name: RegExp | string;
+  readonly role: "button" | "checkbox" | "radio" | "tab" | "togglebutton";
+  /** Value of the state before the press; the press must flip it. */
+  readonly start: boolean;
+};
+
+const STATE_ROWS: readonly StateRow[] = [
+  {
+    fixture: "accordion",
+    key: "expanded",
+    name: "Show details",
+    role: "button",
+    start: true,
+  },
+  {
+    fixture: "collapsible",
+    key: "expanded",
+    name: "Toggle details",
+    role: "button",
+    start: true,
+  },
+  {
+    fixture: "faq",
+    key: "expanded",
+    name: /Why\?/,
+    role: "button",
+    start: true,
+  },
+  {
+    fixture: "expandable-cards",
+    key: "expanded",
+    name: /Card/,
+    role: "button",
+    start: false,
+  },
+  {
+    fixture: "reasoning",
+    key: "expanded",
+    name: /(Hide|Show) reasoning/,
+    role: "button",
+    start: true,
+  },
+  {
+    fixture: "tabs",
+    key: "selected",
+    name: "Activity",
+    role: "tab",
+    start: false,
+  },
+  {
+    fixture: "toggle",
+    key: "checked",
+    name: "Bold",
+    role: "togglebutton",
+    start: false,
+  },
+  {
+    fixture: "toggle-group",
+    key: "checked",
+    name: "Center",
+    role: "togglebutton",
+    start: false,
+  },
+  {
+    fixture: "checkbox",
+    key: "checked",
+    name: "Accept terms",
+    role: "checkbox",
+    start: true,
+  },
+  {
+    fixture: "checkbox-group",
+    key: "checked",
+    name: "SMS",
+    role: "checkbox",
+    start: false,
+  },
+  {
+    fixture: "radio-group",
+    key: "checked",
+    name: "Express",
+    role: "radio",
+    start: false,
+  },
+  {
+    fixture: "segmented-control",
+    key: "checked",
+    name: "List",
+    role: "radio",
+    start: false,
+  },
+];
+
+describe("C3 state", () => {
+  it.each(STATE_ROWS)(
+    "$fixture: pressing $name flips $key from $start",
+    ({ fixture, key, name, role, start }) => {
+      renderFixture(fixture);
+      const read = () => {
+        const props: unknown = screen.getByRole(role, { name }).props;
+        return isRecord(props) ? stateOf(props)[key] : undefined;
+      };
+      expect(read()).toBe(start);
+      fireEvent.press(screen.getByRole(role, { name }));
+      expect(read()).toBe(!start);
+    },
+  );
+});
+
+/** Static surfaces and the named controls their fixture embeds on purpose. */
+const STATIC_SURFACES: Readonly<Record<string, readonly string[]>> = {
+  alert: [],
+  avatar: [],
+  badge: [],
+  callout: [],
+  card: ["Open"],
+  panel: [],
+  separator: [],
+  skeleton: [],
+  "stat-card": [],
+};
+
+describe("R11 static-surfaces", () => {
+  it.each(Object.entries(STATIC_SURFACES))(
+    "%s renders no pressable host of its own",
+    (name, embeddedControls) => {
+      renderFixture(name);
+      const pressables = allHosts()
+        .filter(isInteractive)
+        .filter((host) => !embeddedControls.includes(nameOf(host)));
+      expect(pressables.map(summarize)).toEqual([]);
+    },
+  );
+});
