@@ -3,7 +3,6 @@
 import { type Ref, useLayoutEffect, useRef, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -16,6 +15,7 @@ import {
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type {
   FilePickerService,
   PickedFile,
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     justifyContent: "center",
-    minHeight: 44,
   },
   file: {
     alignItems: "center",
@@ -67,8 +66,6 @@ const styles = StyleSheet.create({
   remove: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 function uniqueFiles(files: readonly PickedFile[]): readonly PickedFile[] {
@@ -161,7 +158,7 @@ function FileUpload({
   };
   return (
     <View ref={ref} style={[{ gap: theme.spacing[2] }, style]} {...props}>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={unavailable ? labels.unavailable : labels.choose}
         accessibilityRole="button"
         accessibilityState={{ busy, disabled: disabled || unavailable || busy }}
@@ -176,7 +173,6 @@ function FileUpload({
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.input,
             borderRadius: theme.radius.lg,
-            opacity: disabled || unavailable || busy ? 0.5 : 1,
             padding: theme.spacing[4],
           },
         ]}
@@ -184,7 +180,7 @@ function FileUpload({
         <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
           {unavailable ? labels.unavailable : labels.choose}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       {files.length === 0 ? (
         <NativeText style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.empty}
@@ -211,7 +207,7 @@ function FileUpload({
             >
               {file.name}
             </NativeText>
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={labels.remove(file.name)}
               accessibilityRole="button"
               accessibilityState={{ disabled }}
@@ -227,7 +223,7 @@ function FileUpload({
               <NativeText style={{ color: theme.colors.foreground }}>
                 ×
               </NativeText>
-            </Pressable>
+            </InteractivePressable>
           </View>
         ))
       )}

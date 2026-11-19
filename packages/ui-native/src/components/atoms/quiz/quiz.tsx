@@ -2,19 +2,14 @@
 
 import { type ReactNode, type Ref, useId } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import {
   joinAccessibilityText,
   useAnnounceOnChange,
   useRevealFocus,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -65,10 +60,8 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
-  option: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
+  option: { borderWidth: 1, justifyContent: "center" },
   root: { borderWidth: 1 },
 });
 
@@ -152,7 +145,7 @@ function Quiz({
           const correctAnswer = isSubmitted && option.correct === true;
           const incorrectSelection = isSubmitted && selected && !option.correct;
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityHint={
                 isSubmitted ? option.explanation : labels.options
               }
@@ -166,13 +159,13 @@ function Quiz({
                     ? { text: labels.incorrect }
                     : undefined
               }
-              disabled={isSubmitted}
               key={option.id}
               nativeID={`${generatedId}-option-${option.id}`}
               onPress={() => {
-                setActiveId(option.id);
+                if (!isSubmitted) setActiveId(option.id);
               }}
-              style={({ pressed }) => [
+              selected={selected}
+              style={[
                 styles.option,
                 {
                   backgroundColor: selected
@@ -184,7 +177,6 @@ function Quiz({
                       ? theme.colors.primary
                       : theme.colors.border,
                   borderRadius: theme.radius.md,
-                  opacity: pressed ? 0.8 : 1,
                   padding: theme.spacing[3],
                 },
               ]}
@@ -208,7 +200,7 @@ function Quiz({
                   {option.explanation}
                 </Text>
               ) : null}
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </View>
@@ -235,7 +227,7 @@ function Quiz({
             </Text>
           </View>
         ) : (
-          <Pressable
+          <InteractivePressable
             accessibilityRole="button"
             onPress={() => {
               hintFocus.request();
@@ -246,7 +238,7 @@ function Quiz({
             <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.hint}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         )
       ) : null}
       {isSubmitted ? (
@@ -279,10 +271,11 @@ function Quiz({
           )}
         </View>
       ) : null}
-      <Pressable
+      <InteractivePressable
         accessibilityRole="button"
         accessibilityState={{ disabled: !isSubmitted && !selectedOption }}
         disabled={!isSubmitted && !selectedOption}
+        filled
         onPress={() => {
           if (isSubmitted) reset();
           else {
@@ -290,12 +283,11 @@ function Quiz({
             onAnswer?.(isCorrect, selectedOption);
           }
         }}
-        style={({ pressed }) => [
+        style={[
           styles.action,
           {
             backgroundColor: theme.colors.primary,
             borderRadius: theme.radius.md,
-            opacity: !isSubmitted && !selectedOption ? 0.5 : pressed ? 0.8 : 1,
             paddingHorizontal: theme.spacing[4],
           },
         ]}
@@ -303,7 +295,7 @@ function Quiz({
         <Text style={typeStyle(theme, "bodySmall", "primaryForeground")}>
           {isSubmitted ? labels.tryAgain : labels.checkAnswer}
         </Text>
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
 }

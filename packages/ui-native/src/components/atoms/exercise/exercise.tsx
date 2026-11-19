@@ -1,15 +1,10 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { useRevealFocus } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -55,8 +50,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   header: {
     alignItems: "flex-start",
@@ -70,7 +63,7 @@ function ExerciseAction({
   expanded,
   label,
   onPress,
-  selected = false,
+  selected,
 }: {
   readonly expanded?: boolean;
   readonly label: string;
@@ -79,18 +72,19 @@ function ExerciseAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityRole="button"
       accessibilityState={expanded === undefined ? undefined : { expanded }}
+      filled
       onPress={onPress}
-      style={({ pressed }) => [
+      selected={selected}
+      style={[
         styles.action,
         {
           backgroundColor: selected
             ? theme.colors.primary
             : theme.colors.secondary,
           borderRadius: theme.radius.md,
-          opacity: pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[3],
         },
       ]}
@@ -104,7 +98,7 @@ function ExerciseAction({
       >
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ExerciseAction.displayName = "ExerciseAction";

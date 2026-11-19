@@ -3,19 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { Ref } from "react";
-import {
-  Animated,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { Animated, StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import {
   announce,
   joinAccessibilityText,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -61,8 +55,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   actions: {
     alignItems: "center",
@@ -258,7 +250,7 @@ function AnimatedTestimonials({
         testimonial={active}
       />
       <View style={styles.actions}>
-        <Pressable
+        <InteractivePressable
           accessibilityHint={labels.region}
           accessibilityLabel={labels.previous}
           accessibilityRole="button"
@@ -273,12 +265,12 @@ function AnimatedTestimonials({
           <Text style={{ color: theme.colors.foreground }}>
             {labels.previous}
           </Text>
-        </Pressable>
+        </InteractivePressable>
         <Text style={typeStyle(theme, "caption", "mutedForeground")}>
           {labels.position(selectedIndex + 1, testimonials.length)}
         </Text>
         {autoplay && !reduceMotion && !controlsDisabled ? (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={labels.region}
             accessibilityLabel={autoplayPaused ? labels.resume : labels.pause}
             accessibilityRole="button"
@@ -290,9 +282,9 @@ function AnimatedTestimonials({
             <Text style={{ color: theme.colors.foreground }}>
               {autoplayPaused ? labels.resume : labels.pause}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         ) : null}
-        <Pressable
+        <InteractivePressable
           accessibilityHint={labels.region}
           accessibilityLabel={labels.next}
           accessibilityRole="button"
@@ -305,7 +297,7 @@ function AnimatedTestimonials({
           style={styles.action}
         >
           <Text style={{ color: theme.colors.foreground }}>{labels.next}</Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </View>
   );

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +15,7 @@ import {
   announce,
   joinAccessibilityText,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   actions: {
     alignItems: "center",
@@ -208,7 +206,7 @@ function Carousel({
         </View>
       </ScrollView>
       <View style={[styles.actions, { paddingTop: theme.spacing[2] }]}>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={labels.previous}
           accessibilityRole="button"
           accessibilityState={{ disabled: previousDisabled }}
@@ -221,7 +219,7 @@ function Carousel({
           <Text style={{ color: theme.colors.foreground }}>
             {labels.previous}
           </Text>
-        </Pressable>
+        </InteractivePressable>
         <View
           accessibilityActions={[
             { label: labels.previous, name: "decrement" },
@@ -240,7 +238,7 @@ function Carousel({
             {position}
           </Text>
         </View>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={labels.next}
           accessibilityRole="button"
           accessibilityState={{ disabled: nextDisabled }}
@@ -251,7 +249,7 @@ function Carousel({
           style={styles.action}
         >
           <Text style={{ color: theme.colors.foreground }}>{labels.next}</Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </View>
   );

@@ -3,7 +3,6 @@
 import { type Ref, useCallback, useId, useMemo, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,6 +16,7 @@ import {
   joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { typeStyle } from "../../../primitives/type-style";
 import { useReducedMotion } from "../../../primitives/use-reduced-motion";
@@ -65,13 +65,12 @@ export type ModelSelectorProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  close: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  close: { alignItems: "center", justifyContent: "center" },
   header: { alignItems: "flex-start", flexDirection: "row" },
   headerText: { flex: 1 },
   item: { borderBottomWidth: 1, justifyContent: "center", minHeight: 60 },
   modal: { flex: 1, justifyContent: "center" },
   panel: { borderWidth: 1, maxHeight: "80%", overflow: "hidden" },
-  pressed: { opacity: 0.8 },
   search: { borderWidth: 1, minHeight: 44 },
 });
 
@@ -145,7 +144,7 @@ function ModelRow({
   const unavailable = model.serviceState?.status === "unavailable";
   const price = formatPricing?.(model.pricing);
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={joinAccessibilityText([model.description, price])}
       accessibilityLabel={model.name}
       accessibilityRole="radio"
@@ -165,7 +164,8 @@ function ModelRow({
       onPress={() => {
         onSelect(model.id);
       }}
-      style={({ pressed }) => [
+      selected={selected}
+      style={[
         styles.item,
         {
           backgroundColor: selected
@@ -176,8 +176,6 @@ function ModelRow({
           paddingHorizontal: theme.spacing[3],
           paddingVertical: theme.spacing[2],
         },
-        pressed ? styles.pressed : undefined,
-        unavailable ? { opacity: 0.6 } : undefined,
       ]}
     >
       <Text
@@ -194,7 +192,7 @@ function ModelRow({
         price={price}
         selected={selected}
       />
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ModelRow.displayName = "ModelRow";
@@ -276,23 +274,22 @@ function SelectorHeader({
           {labels.description}
         </Text>
       </View>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.close}
         accessibilityRole="button"
         onPress={onClose}
-        style={({ pressed }) => [
+        style={[
           styles.close,
           {
             borderRadius: theme.radius.md,
             paddingHorizontal: theme.spacing[2],
           },
-          pressed ? styles.pressed : undefined,
         ]}
       >
         <Text style={typeStyle(theme, "caption", "popoverForeground")}>
           {labels.close}
         </Text>
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
 }

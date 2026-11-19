@@ -1,8 +1,9 @@
 "use client";
 
 import type { ReactNode, Ref } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -36,8 +37,6 @@ const styles = StyleSheet.create({
   close: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   content: { flex: 1 },
   horizontal: { height: "100%", width: "82%" },
@@ -126,25 +125,25 @@ function Sheet({
           </Text>
         ) : null}
         {children}
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={closeLabel}
           accessibilityRole="button"
+          filled
           onPress={() => {
             close("requestClose");
           }}
-          style={({ pressed }) => [
+          style={[
             styles.close,
             {
               backgroundColor: theme.colors.secondary,
               borderRadius: theme.radius.md,
-              opacity: pressed ? 0.8 : 1,
             },
           ]}
         >
           <Text style={{ color: theme.colors.secondaryForeground }}>
             {closeLabel}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </ModalLayer>
   );

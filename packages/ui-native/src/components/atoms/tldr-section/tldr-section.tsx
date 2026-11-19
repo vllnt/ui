@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -10,6 +9,7 @@ import {
 } from "react-native";
 
 import { decorativeProps } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    minHeight: 44,
   },
 });
 
@@ -82,17 +81,18 @@ function TLDRSection({
         style,
       ]}
     >
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={label}
         accessibilityRole="button"
         accessibilityState={{ expanded: isExpanded }}
+        filled
         onPress={() => {
           setIsExpanded((current) => !current);
         }}
-        style={({ pressed }) => [
+        style={[
           styles.trigger,
           {
-            backgroundColor: pressed ? theme.colors.accent : theme.colors.muted,
+            backgroundColor: theme.colors.muted,
             paddingHorizontal: theme.spacing[4],
             paddingVertical: theme.spacing[3],
           },
@@ -112,7 +112,7 @@ function TLDRSection({
         >
           {isExpanded ? "−" : "+"}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       {isExpanded ? <TLDRContent>{children}</TLDRContent> : null}
     </View>
   );

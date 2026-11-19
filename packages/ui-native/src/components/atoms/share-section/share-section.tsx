@@ -4,13 +4,13 @@ import { type Ref, useLayoutEffect, useRef, useState } from "react";
 
 import type { ShareContent, ShareOptions } from "react-native";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
   type ViewProps,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultShareService,
   type ShareResult,
@@ -38,7 +38,7 @@ export type ShareSectionProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   root: { borderTopWidth: 1, width: "100%" },
 });
 
@@ -55,21 +55,19 @@ function ShareAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={label}
       accessibilityRole="button"
       accessibilityState={{ busy: sharing, disabled: !available || sharing }}
       disabled={!available || sharing}
+      filled
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.action,
         {
           alignSelf: "flex-start",
-          backgroundColor: pressed
-            ? theme.colors.accent
-            : theme.colors.secondary,
+          backgroundColor: theme.colors.secondary,
           borderRadius: theme.radius.md,
-          opacity: available ? 1 : 0.5,
           paddingHorizontal: theme.spacing[4],
         },
       ]}
@@ -77,7 +75,7 @@ function ShareAction({
       <NativeText style={{ color: theme.colors.secondaryForeground }}>
         {label}
       </NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ShareAction.displayName = "ShareAction";

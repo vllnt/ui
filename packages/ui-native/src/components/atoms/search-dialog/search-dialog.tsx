@@ -10,7 +10,6 @@ import {
 } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,6 +22,7 @@ import {
   focusAccessibility,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -95,12 +95,10 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   backdrop: { flex: 1, justifyContent: "center" },
   input: { borderWidth: 1, flex: 1, minHeight: 44 },
-  result: { borderBottomWidth: 1, justifyContent: "center", minHeight: 44 },
+  result: { borderBottomWidth: 1, justifyContent: "center" },
   row: { alignItems: "center", flexDirection: "row" },
   scopes: { flexDirection: "row" },
   surface: {
@@ -145,15 +143,17 @@ function SearchScopeControl({
       {scopes.map((option) => {
         const selected = option === scope;
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={labels.scope}
             accessibilityLabel={labels.scopeOption[option]}
             accessibilityRole="radio"
             accessibilityState={{ checked: selected }}
+            filled
             key={option}
             onPress={() => {
               onChange(option);
             }}
+            selected={selected}
             style={[
               styles.action,
               {
@@ -176,7 +176,7 @@ function SearchScopeControl({
             >
               {labels.scopeOption[option]}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>
@@ -209,7 +209,7 @@ function SearchResults({
         {heading}
       </Text>
       {items.map((item) => (
-        <Pressable
+        <InteractivePressable
           accessibilityHint={item.snippet ?? item.description}
           accessibilityLabel={labels.result(item)}
           accessibilityRole="button"
@@ -218,12 +218,10 @@ function SearchResults({
           onPress={() => {
             onSelect(item);
           }}
-          style={({ pressed }) => [
+          style={[
             styles.result,
             {
-              backgroundColor: pressed
-                ? theme.colors.muted
-                : theme.colors.background,
+              backgroundColor: theme.colors.background,
               borderBottomColor: theme.colors.border,
               paddingVertical: theme.spacing[2],
             },
@@ -245,7 +243,7 @@ function SearchResults({
               {item.snippet ?? item.description}
             </Text>
           ) : null}
-        </Pressable>
+        </InteractivePressable>
       ))}
     </View>
   );
@@ -432,18 +430,18 @@ function SearchDialog({
 
   return (
     <>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.open}
         accessibilityRole="button"
+        filled
         onPress={() => {
           setVisible(true);
         }}
-        style={({ pressed }) => [
+        style={[
           styles.action,
           {
             backgroundColor: theme.colors.secondary,
             borderRadius: theme.radius.md,
-            opacity: pressed ? 0.8 : 1,
             paddingHorizontal: theme.spacing[4],
           },
         ]}
@@ -451,7 +449,7 @@ function SearchDialog({
         <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
           {labels.open}
         </Text>
-      </Pressable>
+      </InteractivePressable>
       <ModalLayer
         {...presentationProps}
         animationType={
@@ -511,7 +509,7 @@ function SearchDialog({
               value={searchQuery}
             />
             {searchQuery ? (
-              <Pressable
+              <InteractivePressable
                 accessibilityLabel={labels.clear}
                 accessibilityRole="button"
                 onPress={() => {
@@ -525,9 +523,9 @@ function SearchDialog({
                 >
                   ×
                 </Text>
-              </Pressable>
+              </InteractivePressable>
             ) : null}
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={labels.close}
               accessibilityRole="button"
               onPress={() => {
@@ -540,7 +538,7 @@ function SearchDialog({
               >
                 ×
               </Text>
-            </Pressable>
+            </InteractivePressable>
           </View>
           {hardwareKeyboardHint ? (
             <Text style={typeStyle(theme, "caption", "mutedForeground")}>

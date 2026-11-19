@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +11,7 @@ import {
 
 import { joinAccessibilityText } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useControllableState } from "../../../primitives/use-controllable-state";
 import { useFontScaledSize } from "../../../primitives/use-font-scaled-size";
@@ -54,7 +54,7 @@ export type StepperProps = Omit<ViewProps, "children"> & {
 
 const styles = StyleSheet.create({
   marker: { alignItems: "center", justifyContent: "center" },
-  step: { alignItems: "flex-start", minHeight: 44 },
+  step: { alignItems: "flex-start" },
   vertical: { flexDirection: "row" },
 });
 
@@ -117,7 +117,7 @@ function Stepper({
     const state = stateFor(index, activeStep);
     const disabled = groupDisabled || step.disabled === true;
     return (
-      <Pressable
+      <InteractivePressable
         accessibilityHint={joinAccessibilityText([
           step.meta,
           step.description,
@@ -133,16 +133,16 @@ function Stepper({
           setActiveStep(index + 1);
           onStepPress?.(step, index);
         }}
-        style={({ pressed }) => [
+        selected={state === "current"}
+        style={[
           styles.step,
           orientation === "vertical" ? styles.vertical : undefined,
           {
-            backgroundColor: pressed ? theme.colors.muted : theme.colors.card,
+            backgroundColor: theme.colors.card,
             borderRadius: theme.radius.md,
             flex: horizontal ? 1 : undefined,
             gap: theme.spacing[3],
             minWidth: horizontal ? 144 : undefined,
-            opacity: disabled ? 0.5 : 1,
             padding: theme.spacing[2],
           },
         ]}
@@ -197,7 +197,7 @@ function Stepper({
             </Text>
           ) : null}
         </View>
-      </Pressable>
+      </InteractivePressable>
     );
   });
 

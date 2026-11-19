@@ -2,18 +2,13 @@
 
 import { type ReactNode, type Ref, useId } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import {
   joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useControllableState } from "../../../primitives/use-controllable-state";
 import { useTheme } from "../../../theme/theme-provider";
@@ -60,8 +55,6 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   content: { minHeight: 120 },
   dots: { flexDirection: "row" },
@@ -85,17 +78,17 @@ function TourAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       disabled={disabled}
+      filled
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.button,
         {
           backgroundColor: theme.colors.secondary,
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[4],
         },
       ]}
@@ -103,7 +96,7 @@ function TourAction({
       <Text style={typeStyle(theme, "bodySmall", "secondaryForeground")}>
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 TourAction.displayName = "TourAction";
@@ -253,7 +246,7 @@ function Tour({
         />
         <View style={[styles.dots, { gap: theme.spacing[1] }]}>
           {steps.map((item, index) => (
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={labels.goToStep(item, index)}
               accessibilityRole="button"
               accessibilityState={{ selected: index === activeIndex }}
@@ -262,7 +255,8 @@ function Tour({
               onPress={() => {
                 goTo(index);
               }}
-              style={styles.button}
+              selected={index === activeIndex}
+              style={[styles.button, { borderRadius: theme.radius.full }]}
             >
               <View
                 style={{
@@ -275,7 +269,7 @@ function Tour({
                   width: 8,
                 }}
               />
-            </Pressable>
+            </InteractivePressable>
           ))}
         </View>
         <TourAction

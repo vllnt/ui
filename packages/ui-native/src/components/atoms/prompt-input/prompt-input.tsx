@@ -3,7 +3,6 @@
 import { type ReactNode, type Ref, useCallback, useId, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +13,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useFontScaledSize } from "../../../primitives/use-font-scaled-size";
 import { useTheme } from "../../../theme/theme-provider";
@@ -61,13 +61,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   input: { padding: 0, textAlignVertical: "top" },
-  pressed: { opacity: 0.8 },
   root: { borderWidth: 1 },
   submit: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   toolbar: {
     alignItems: "center",
@@ -212,27 +209,26 @@ function PromptAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={label}
       accessibilityRole="button"
       accessibilityState={{ busy: isLoading, disabled: !canSubmit }}
       disabled={!canSubmit}
+      filled
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.submit,
         {
           backgroundColor: theme.colors.primary,
           borderRadius: theme.radius.md,
-          opacity: canSubmit ? 1 : 0.5,
           paddingHorizontal: theme.spacing[3],
         },
-        pressed ? styles.pressed : undefined,
       ]}
     >
       <Text style={typeStyle(theme, "caption", "primaryForeground")}>
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 PromptAction.displayName = "PromptAction";

@@ -1,9 +1,10 @@
 "use client";
 
 import type { Ref } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { useFocusWhenShown } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -43,7 +44,7 @@ export type ContextMenuProps = {
 };
 
 const styles = StyleSheet.create({
-  action: { justifyContent: "center", minHeight: 44 },
+  action: { justifyContent: "center" },
   content: { flex: 1, justifyContent: "flex-end" },
   heading: { paddingHorizontal: 12 },
   surface: { borderTopWidth: 1, maxHeight: "80%", width: "100%" },
@@ -115,7 +116,7 @@ function ContextMenu({
         </Text>
         <ScrollView>
           {items.map((item) => (
-            <Pressable
+            <InteractivePressable
               accessibilityHint={
                 item.destructive ? destructiveLabel : undefined
               }
@@ -128,14 +129,11 @@ function ContextMenu({
                 onSelect?.(item.id);
                 setVisible(false);
               }}
-              style={({ pressed }) => [
+              style={[
                 styles.action,
                 {
-                  backgroundColor: pressed
-                    ? theme.colors.accent
-                    : theme.colors.popover,
+                  backgroundColor: theme.colors.popover,
                   borderRadius: theme.radius.sm,
-                  opacity: item.disabled ? 0.5 : 1,
                   paddingHorizontal: theme.spacing[3],
                 },
               ]}
@@ -149,12 +147,13 @@ function ContextMenu({
               >
                 {item.label}
               </Text>
-            </Pressable>
+            </InteractivePressable>
           ))}
         </ScrollView>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={cancelLabel}
           accessibilityRole="button"
+          filled
           onPress={() => {
             close("requestClose");
           }}
@@ -170,7 +169,7 @@ function ContextMenu({
           <Text style={{ color: theme.colors.secondaryForeground }}>
             {cancelLabel}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </ModalLayer>
   );
