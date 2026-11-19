@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -12,6 +11,7 @@ import {
 
 import { decorativeProps } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -42,16 +42,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 20,
   },
-  root: {
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
-  },
+  root: { alignItems: "center", justifyContent: "center" },
   withLabel: { flexDirection: "row", justifyContent: "flex-start" },
 });
 
-/** Accessible native checkbox with truthful mixed-state exposure. */
+/**
+ * Accessible native checkbox with truthful mixed-state exposure. Its mark
+ * (a check or a dash) is the selection cue that does not rely on colour.
+ */
 function Checkbox({
   accessibilityLabel,
   accessibilityState,
@@ -73,7 +71,7 @@ function Checkbox({
   const selected = current !== false;
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityRole="checkbox"
@@ -91,7 +89,7 @@ function Checkbox({
       style={(state) => [
         styles.root,
         label ? [styles.withLabel, { gap: theme.spacing[2] }] : undefined,
-        { opacity: disabled ? 0.5 : state.pressed ? 0.8 : 1 },
+        { borderRadius: theme.radius.md },
         typeof style === "function" ? style(state) : style,
       ]}
     >
@@ -130,7 +128,7 @@ function Checkbox({
           {label}
         </NativeText>
       ) : null}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 Checkbox.displayName = "Checkbox";
