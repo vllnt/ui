@@ -7,15 +7,23 @@ import { cn } from "../../../lib/utils";
 /**
  * Tone of a single metric line — drives the dot color.
  *
+ * Prefer `"warning"`. The older `"warn"` still renders the same tone.
+ *
  * @public
  */
-export type MetricClusterTone = "danger" | "neutral" | "success" | "warn";
+export type MetricClusterTone =
+  | "danger"
+  | "neutral"
+  | "success"
+  | "warn"
+  | "warning";
 
 const TONE_DOT: Record<MetricClusterTone, string> = {
   danger: "bg-red-500",
   neutral: "bg-muted-foreground",
   success: "bg-emerald-500",
   warn: "bg-amber-500",
+  warning: "bg-amber-500",
 };
 
 /**
