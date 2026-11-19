@@ -15,3 +15,29 @@ The app has two views, chosen with the View buttons. **Highlights** is the repre
 The build exports Android and iOS JavaScript bundles in CI. This validates Expo/Metro workspace resolution without publishing or requiring a simulator. It does not replace physical Android/iOS, VoiceOver, or TalkBack validation.
 
 `@vllnt/ui-native` is not available from npm yet. The catalog consumes repository source and must stay aligned with `packages/ui-native/registry.json` and the generated package barrel.
+
+## Validate a published pair
+
+`scripts/verify-published.mjs` checks the pair that is on npm, not the workspace. Run it for every canary and for the 0.1.0 release candidate:
+
+```bash
+node apps/native-catalog/scripts/verify-published.mjs 0.1.0-canary.20260917105553.sha7466647a4ba5
+node apps/native-catalog/scripts/verify-published.mjs canary    # a dist-tag of @vllnt/ui-native
+node apps/native-catalog/scripts/verify-published.mjs <version> --only catalog --keep
+```
+
+It resolves the version, checks `@vllnt/ui-core` and `@vllnt/ui-native` both exist at that exact version, and that ui-native depends on exactly that ui-core. Then it installs the pair with pnpm into two consumers under `~/.cache/ui/verify-published/` (`$RUNNER_TEMP` in CI), outside the workspace, so nothing resolves through workspace links or hoisting:
+
+| Consumer    | What it is                                                                                  | Steps                                                                |
+| ----------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `clean-app` | A minimal Expo app: `App.tsx` imports `@vllnt/ui-native`, wraps in `ThemeProvider`, renders a few components | install, pair on disk, typecheck, `expo export` iOS and Android      |
+| `catalog`   | A copy of this app plus the fixtures and accessibility tests it imports                      | install, pair on disk, prepare, typecheck, Jest, `expo export` iOS and Android |
+
+- **Pins.** expo, react, react-dom, react-native, react-native-web, jest, `@testing-library/react-native` and typescript (plus expo-status-bar, react-test-renderer, the `@types`, and `@react-native/jest-preset` at the react-native version) are the exact versions `pnpm-lock.yaml` resolves for this app today. The lockfile is only read.
+- **Supply chain.** Each scratch project gets its own `pnpm-workspace.yaml` that copies `minimumReleaseAge` and `minimumReleaseAgeExclude` from the root one at run time, with `@vllnt/*` added to the exclude list. Installs run with `--ignore-scripts`. The root file is only read.
+- **Catalog copy.** Relative imports of package source (`../index`, `../components/...`, `../../packages/ui-native/src/tests/...`, `registry.json`) are rewritten to `@vllnt/ui-native`. Jest runs against the installed package: the copied `jest.config.cjs` is derived from this app's, minus its `moduleNameMapper` to source, and with `@vllnt/ui-core` added next to `@vllnt/ui-native` in `transformIgnorePatterns` (both ship ESM). Resolution of `@vllnt/ui-core` still goes through its own `exports` map; nothing is mapped. The three accessibility tests (`accessibility-contract`, `accessibility-and-interaction`, `accessibility-regressions`) are copied when every name they import is exported by the published package. When a test needs something that is not (a deep component path, `ModalLayer`, a `jest.mock` of an internal), it is listed as `SKIP` with the names, not copied and not counted as a pass. A type the package does not export is replaced by a local `any` alias and reported in the `prepare` row.
+- **Output.** A PASS/FAIL/SKIP table per consumer and step (also written to the job summary in CI). The exit code is non-zero when any step is FAIL. The scratch directory is deleted at the end; `--keep` keeps it when something failed.
+
+`.github/workflows/native-verify-published.yml` runs it after "Core and Native Canary" succeeds on main (for the pair published for that commit; no pair is a no-op), and on `workflow_dispatch` with a `version` input for any other pair such as a release candidate. The catalog sources and tests under test come from the checked-out ref, so dispatch it from the commit or tag the pair was built from.
+
+What it does not cover: physical iOS or Android devices, VoiceOver and TalkBack, and visual review. `expo export` proves the bundles resolve and build, not that they look right. Transitive dependencies are resolved fresh (no lockfile), so a very new patch of a transitive package can differ from what the workspace tests with. Unit tests for the script's parsers and import rewriter: `node --test apps/native-catalog/scripts/verify-published.test.mjs`.
