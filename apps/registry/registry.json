@@ -4752,6 +4752,50 @@
       }
     },
     {
+      "name": "network-menu-list",
+      "type": "registry:component",
+      "title": "Network Menu List",
+      "description": "Grouped list of the sites of a network, with the current site marked; the phone menu and the network switcher panel both show it.",
+      "files": [
+        {
+          "path": "registry/default/network-menu-list/network-menu-list.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "network-switcher",
+      "type": "registry:component",
+      "title": "Network Switcher",
+      "description": "Site-bar button that opens a panel listing the sites of a network, with focus containment and Escape to close.",
+      "files": [
+        {
+          "path": "registry/default/network-switcher/network-switcher.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "newsletter-signup",
       "type": "registry:component",
       "title": "Newsletter Signup",
@@ -6827,6 +6871,28 @@
         "source": "src/components/molecules/sidebar-toggle/sidebar-toggle.tsx",
         "status": "experimental"
       }
+    },
+    {
+      "name": "site-header",
+      "type": "registry:component",
+      "title": "Site Header",
+      "description": "Marketing site bar: brand, network switcher, the site's links, locale link, call to action and an accessible phone menu.",
+      "files": [
+        {
+          "path": "registry/default/site-header/site-header.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "registryDependencies": [],
+      "dependencies": [
+        "@vllnt/ui@^0.3.0"
+      ],
+      "category": "navigation",
+      "version": "0.3.0",
+      "stability": "stable",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "skeleton",

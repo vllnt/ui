@@ -2,7 +2,7 @@
 
 # @vllnt/ui
 
-**321 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
+**324 accessible React components** built on [Radix UI](https://radix-ui.com) primitives, styled with [Tailwind CSS](https://tailwindcss.com), powered by [CVA](https://cva.style).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org)
@@ -16,7 +16,7 @@
 
 ## Features
 
-- **321 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
+- **324 components** — primitives (Button, Input), composites (Command, DataTable, Carousel), and domain families (AI, Financial, Ops, Educational, Billing, Animation, Maps, Canvas, Timelines)
 - **Accessible by default** — Radix UI handles focus, keyboard nav, and ARIA
 - **Tailwind CSS + CVA** — variant-driven styling with full theme override via CSS variables
 - **shadcn-compatible registry** — install individual components with `shadcn add`
@@ -139,7 +139,7 @@ Override CSS variables after importing styles:
 ## Components
 
 <details>
-<summary>All 321 components</summary>
+<summary>All 324 components</summary>
 
 | Category | Components |
 |----------|------------|
@@ -147,7 +147,7 @@ Override CSS variables after importing styles:
 | **Layout** | Card, Carousel, Resizable, Sheet, Drawer, Horizontal Scroll Row, View Switcher |
 | **Forms** | Button, Input, Input OTP, Inline Input, Number Input, Password Input, Textarea, Date Picker, File Upload, Combobox, Command, Rating |
 | **Feedback** | Alert, Badge, Callout, Skeleton, Spinner, Toast, Tour |
-| **Navigation** | Breadcrumb, Pagination, Sidebar, Sidebar Provider, Sidebar Toggle, Search Bar, Search Dialog, Keyboard Shortcuts Help, Floating Action Button, Social FAB |
+| **Navigation** | Site Header, Network Switcher, Network Menu List, Breadcrumb, Pagination, Sidebar, Sidebar Provider, Sidebar Toggle, Search Bar, Search Dialog, Keyboard Shortcuts Help, Floating Action Button, Social FAB |
 | **Data / Charts** | Area Chart, Bar Chart, Line Chart, Candlestick Chart, Sparkline Grid, Market Treemap, Order Book, Ticker Tape, Metric Gauge, Activity Heatmap, Activity Log, Table, Data Table, Data List, Stat Card, Number Ticker |
 | **AI** | AIChatInput, AIMessageBubble, AISourceCitation, AIStreamingText, AIToolCallDisplay, ThinkingBlock |
 | **Financial** | Candlestick Chart, Market Treemap, Order Book, Ticker Tape, Wallet Card, Watchlist, Sparkline Grid |

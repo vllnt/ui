@@ -3845,6 +3845,42 @@
     ],
     "title": "Navigation Menu"
   },
+  "network-menu-list": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-networkmenulist--default",
+    "description": "Grouped list of the sites of a network, with the current site marked; the phone menu and the network switcher panel both show it.",
+    "name": "network-menu-list",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "navigation-networkmenulist--default",
+        "name": "Default"
+      },
+      {
+        "id": "navigation-networkmenulist--untitled",
+        "name": "Untitled"
+      }
+    ],
+    "title": "Network Menu List"
+  },
+  "network-switcher": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-networkswitcher--default",
+    "description": "Site-bar button that opens a panel listing the sites of a network, with focus containment and Escape to close.",
+    "name": "network-switcher",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "navigation-networkswitcher--default",
+        "name": "Default"
+      }
+    ],
+    "title": "Network Switcher"
+  },
   "newsletter-signup": {
     "category": "form",
     "defaultStoryId": "forms-newslettersignup--default",
@@ -5651,6 +5687,30 @@
       }
     ],
     "title": "Sidebar Toggle"
+  },
+  "site-header": {
+    "category": "navigation",
+    "defaultStoryId": "navigation-siteheader--default",
+    "description": "Marketing site bar: brand, network switcher, the site's links, locale link, call to action and an accessible phone menu.",
+    "name": "site-header",
+    "platforms": [
+      "web"
+    ],
+    "stories": [
+      {
+        "id": "navigation-siteheader--default",
+        "name": "Default"
+      },
+      {
+        "id": "navigation-siteheader--with-locale",
+        "name": "With Locale"
+      },
+      {
+        "id": "navigation-siteheader--brand-and-network-only",
+        "name": "Brand And Network Only"
+      }
+    ],
+    "title": "Site Header"
   },
   "skeleton": {
     "category": "core",

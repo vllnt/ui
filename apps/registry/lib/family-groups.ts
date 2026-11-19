@@ -199,6 +199,9 @@ const FAMILY_GROUPS: readonly FamilyGroupSet[] = [
         heading: "Navigation Bars",
         slugs: [
           "navbar-saas",
+          "site-header",
+          "network-switcher",
+          "network-menu-list",
           "navigation-menu",
           "menubar",
           "floating-navbar",
