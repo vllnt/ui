@@ -19,6 +19,8 @@ import {
 import { SegmentedControl } from "../components/atoms/segmented-control/segmented-control";
 import { TagGroup } from "../components/atoms/tag-group/tag-group";
 import { Toggle } from "../components/atoms/toggle/toggle";
+import { FloatingActionButton } from "../components/molecules/floating-action-button/floating-action-button";
+import { Tabs, TabsList, TabsTrigger } from "../components/molecules/tabs/tabs";
 import { interactionTokens } from "../primitives/interaction-state";
 
 import { findHost, frameOf, type LayoutBox, layoutBox } from "./layout-box";
@@ -30,8 +32,9 @@ import { pressIn, reducedMotion, renderThemed, styleOf } from "./test-utils";
  * control's outer box. Phase 1 covered Button, Toggle, Checkbox, RadioGroup
  * and SegmentedControl. Phase 2 moves every other component onto the same
  * primitive; the table also holds one representative of each group that
- * needs its own proof: a list row (ListBox), a calendar day, a tag, and a
- * disclosure trigger.
+ * needs its own proof: a list row (ListBox), a tab, a calendar day, a tag, a
+ * control with an icon and no text (FloatingActionButton) and a disclosure
+ * trigger.
  */
 
 const tokens = interactionTokens(lightTheme);
@@ -43,7 +46,7 @@ type Control = {
   readonly name: string;
   /** Renders the control with one unselected target the tests act on. */
   readonly render: (disabled: boolean) => ReactElement;
-  readonly role: "button" | "checkbox" | "radio" | "togglebutton";
+  readonly role: "button" | "checkbox" | "radio" | "tab" | "togglebutton";
   /** Renders the same control with that target selected; absent when it cannot be. */
   readonly selected?: () => ReactElement;
 };
@@ -127,6 +130,19 @@ function topics(disabled: boolean, selectedId = "beta"): ReactElement {
   );
 }
 
+function views(disabled: boolean, selectedValue = "grid"): ReactElement {
+  return (
+    <Tabs defaultValue={selectedValue}>
+      <TabsList accessibilityLabel="Views">
+        <TabsTrigger disabled={disabled} value="list">
+          List
+        </TabsTrigger>
+        <TabsTrigger value="grid">Grid</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  );
+}
+
 const instantMotion = reducedMotion("pending");
 
 function details(disabled: boolean, open = false): ReactElement {
@@ -180,6 +196,20 @@ const CONTROLS: Readonly<Record<string, Control>> = {
     render: details,
     role: "button",
   },
+  "Icon-only FloatingActionButton": {
+    hover: "dim",
+    name: "Create",
+    render: (disabled) => (
+      <FloatingActionButton
+        accessibilityLabel="Create"
+        disabled={disabled}
+        onPress={noop}
+      >
+        +
+      </FloatingActionButton>
+    ),
+    role: "button",
+  },
   "ListBox option": {
     hover: "tint",
     name: "Apple",
@@ -200,6 +230,13 @@ const CONTROLS: Readonly<Record<string, Control>> = {
     render: segmented,
     role: "radio",
     selected: () => segmented(false, "list"),
+  },
+  "Tabs tab": {
+    hover: "tint",
+    name: "List",
+    render: views,
+    role: "tab",
+    selected: () => views(false, "list"),
   },
   "TagGroup tag": {
     hover: "tint",
@@ -410,9 +447,14 @@ describe("selection frame", () => {
 
 /**
  * Selectable controls whose selection shows by colour alone get the border
- * frame: a list row, a calendar day and a tag.
+ * frame: a list row, a tab, a calendar day and a tag.
  */
-const FRAMED = ["Calendar day", "ListBox option", "TagGroup tag"] as const;
+const FRAMED = [
+  "Calendar day",
+  "ListBox option",
+  "Tabs tab",
+  "TagGroup tag",
+] as const;
 
 describe.each(FRAMED)("%s selection frame", (title) => {
   const control = CONTROLS[title];
