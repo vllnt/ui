@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -90,5 +90,25 @@ describe("Dialog", () => {
       fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
       expect(onOpenChange).toHaveBeenCalledWith(false);
     });
+
+    it.each<"none" | "scrim" | undefined>([undefined, "scrim", "none"])(
+      "locks page scroll while the dialog is open with overlay %s",
+      (overlay) => {
+        renderDialog(overlay);
+        expect(document.body).toHaveAttribute("data-scroll-locked");
+      },
+    );
+
+    it.each<"none" | "scrim">(["scrim", "none"])(
+      "releases the scroll lock when the dialog closes with overlay %s",
+      async (overlay) => {
+        renderDialog(overlay);
+        expect(document.body).toHaveAttribute("data-scroll-locked");
+        fireEvent.click(screen.getByText("Close"));
+        await waitFor(() => {
+          expect(document.body).not.toHaveAttribute("data-scroll-locked");
+        });
+      },
+    );
   });
 });

@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/experimental-ct-react";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "./dialog";
 
+const OVERLAYS = ["scrim", "none"] as const;
+
 // Real-browser check of DialogContent `overlay`: the scrim veil covers the
 // viewport and dims the page, `none` draws no veil, and the dialog stays modal
 // and dismissible with either value. No screenshots, so no baselines.
@@ -83,5 +85,64 @@ for (const viewport of viewports) {
       await expect(page.getByRole("dialog")).toBeHidden();
       expect(problems).toEqual([]);
     });
+
+    for (const overlay of OVERLAYS) {
+      test(`${overlay} locks page scroll until the dialog closes`, async ({
+        mount,
+        page,
+      }) => {
+        const problems: string[] = [];
+        page.on("pageerror", (error) => problems.push(error.message));
+        page.on("console", (message) => {
+          if (message.type() === "error") {
+            problems.push(message.text());
+          }
+        });
+        const readScrollY = (): Promise<number> =>
+          page.evaluate(() => window.scrollY);
+
+        await mount(
+          <div>
+            <div style={{ height: 3000 }}>Page behind</div>
+            <Dialog defaultOpen>
+              <DialogContent overlay={overlay}>
+                <DialogTitle>Title</DialogTitle>
+                <DialogDescription>Description</DialogDescription>
+              </DialogContent>
+            </Dialog>
+          </div>,
+        );
+
+        await expect(page.getByRole("dialog")).toBeVisible();
+        await expect(page.locator("body")).toHaveAttribute(
+          "data-scroll-locked",
+          /\d+/,
+        );
+        const overflow = await page.evaluate(
+          () => getComputedStyle(document.body).overflow,
+        );
+        expect(overflow).toBe("hidden");
+
+        await page.mouse.move(5, 5);
+        await page.mouse.wheel(0, 800);
+        await page.evaluate(
+          () =>
+            new Promise<void>((resolve) => {
+              setTimeout(resolve, 400);
+            }),
+        );
+        expect(await readScrollY()).toBe(0);
+
+        await page.keyboard.press("Escape");
+        await expect(page.getByRole("dialog")).toBeHidden();
+        await expect(page.locator("body")).not.toHaveAttribute(
+          "data-scroll-locked",
+        );
+
+        await page.mouse.wheel(0, 800);
+        await expect.poll(readScrollY).toBeGreaterThan(0);
+        expect(problems).toEqual([]);
+      });
+    }
   });
 }
