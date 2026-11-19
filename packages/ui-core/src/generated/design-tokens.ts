@@ -179,8 +179,8 @@ export const designTokens = {
     "fontFamily": {
       "sans": {
         "cssVariable": "--font-sans",
-        "value": "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        "role": "Body + UI text"
+        "value": "var(--font-inter, Inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "role": "Inter: the Text and Prose primitives, and through --font-display the Heading and Display primitives. An app that loads Inter with next/font sets --font-inter on <html>; without it the stack names Inter, then the system sans"
       },
       "display": {
         "cssVariable": "--font-display",
@@ -189,8 +189,8 @@ export const designTokens = {
       },
       "mono": {
         "cssVariable": "--font-mono",
-        "value": "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-        "role": "Code + tabular"
+        "value": "var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+        "role": "JetBrains Mono: the body face (body is font-mono), so the site bar, navigation and unstyled UI text, plus code and tabular data. An app that loads it with next/font sets --font-jetbrains-mono on <html>; without it the stack names JetBrains Mono, then the system mono"
       }
     },
     "fontWeight": {

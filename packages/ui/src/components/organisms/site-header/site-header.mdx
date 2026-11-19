@@ -1,0 +1,61 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './site-header.stories'
+
+<Meta of={Stories} />
+
+# SiteHeader
+
+The site bar of every vllnt site, taken from oss.vllnt.com: the brand, the network switcher, the site's own links, a locale link, a call to action and a phone menu. The app passes the copy, the links and the network's site list; the header owns the markup. Its text inherits the body face (`--font-mono`, JetBrains Mono).
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/site-header.json
+```
+
+## Import
+
+```tsx
+import { SiteHeader } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<SiteHeader
+  homeHref="/"
+  items={[
+    { bar: 'tablet', href: '/packages', label: 'Packages' },
+    { bar: 'desktop', external: true, href: 'https://github.com/vllnt', label: 'GitHub' },
+  ]}
+  labels={{ close: 'Close menu', external: 'opens in a new tab', home: 'vllnt, home', menu: 'Menu', open: 'Open menu', primary: 'Main' }}
+  network={{ label: 'vllnt network', groups }}
+  cta={{ href: '/packages', label: 'Browse packages' }}
+/>
+```
+
+`groups` is data the app owns, for example built from its site config (`networkSwitcherGroups({ currentSite })` in the vllnt monorepo). The library hardcodes no site.
+
+## Widths
+
+| Width | Bar | Menu |
+|---|---|---|
+| below 768 px | brand, menu button | every link, the titled network list, the locale link and the call to action |
+| 768 to 1199 px | brand, network switcher, `bar: "tablet"` links, call to action, menu button | the links the bar hides |
+| from 1200 px | brand, network switcher, every `bar` link, locale link, call to action | none |
+
+<Canvas of={Stories.WithLocale} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Accessibility
+
+- A `<header>` holds two named navigations: the bar (`labels.primary`) and the menu (`labels.menu`).
+- The current link gets `aria-current="page"` and a heavier weight, so it never relies on colour alone.
+- Every control has a 44 px target on touch; with a fine pointer from 1200 px it is 32 px (WCAG 2.2 SC 2.5.8 asks 24 px).
+- While the menu is open, focus stays inside it; Escape or a press outside closes it and focus returns to the button. A route change closes it too.
+- An external link opens a new tab, shows a ↗ and reads `labels.external` to assistive technology.

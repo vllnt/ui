@@ -41,10 +41,13 @@
     --radius: 0.5rem;
     /* Typography — theme-overridable font tokens (issue #465). Override any of
        these on a theme scope to restyle the Text/Heading/Display/Prose primitives
-       without editing the library. Defaults reproduce the house style (sans, 600). */
-    --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+       without editing the library. Defaults reproduce the house style: the body
+       in JetBrains Mono (--font-mono), Text, Prose, Heading and Display in Inter
+       (--font-sans), headings at 600. An app that loads the faces with next/font
+       sets --font-inter and --font-jetbrains-mono on <html>. */
+    --font-sans: var(--font-inter, Inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --font-display: var(--font-sans);
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-mono: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     --font-weight-heading: 600;
     --font-weight-display: 600;
     --font-weight-label: 600;

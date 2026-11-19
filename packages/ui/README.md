@@ -233,10 +233,14 @@ once near the root to restore the saved preset before paint.
   default; light works too.
 
 The package does not ship fonts. Core puts Inter (sans) and JetBrains Mono
-(mono) first, then the system stacks. Load Inter, JetBrains Mono (core, Maia and
-PaaS) and Figtree (Maia) in your app, for example with `next/font` or a font
-`<link>`; without them each stack falls back to the system font stack
-(`system-ui` for core sans and Maia, `ui-monospace` for core mono and PaaS).
+(mono) first, then the system stacks; the body is JetBrains Mono, and `Text`,
+`Prose`, `Heading` and `Display` are Inter. Load Inter, JetBrains Mono (core,
+Maia and PaaS) and Figtree (Maia) in your app, for example with `next/font` or a
+font `<link>`. With `next/font`, name the variables `--font-inter` and
+`--font-jetbrains-mono` and put them on `<html>`: the core stacks read them
+first, so no remap is needed. Without them each stack falls back to the system
+font stack (`system-ui` for core sans and Maia, `ui-monospace` for core mono
+and PaaS).
 
 Both define `success`, `warning`, `info`, `diff-added` and `diff-removed` roles
 (the core theme defines them as well). Web `--radius` carries the theme's
@@ -376,6 +380,9 @@ import {
 | `ThemeToggle` | `{ ThemeToggle }` | Light/dark mode toggle. Requires `ThemeProvider` |
 | `LangProvider` | `{ LangProvider }` | Language context provider |
 | `NavbarSaas` | `{ NavbarSaas }` | Full-featured SaaS navbar. Requires `next` |
+| `SiteHeader` | `{ SiteHeader }` | Marketing site bar (oss.vllnt.com standard): brand, network switcher, links, locale, CTA, phone menu. Requires `next` |
+| `NetworkSwitcher` | `{ NetworkSwitcher }` | Bar button + panel listing a network's sites (`SiteNetwork` data) |
+| `NetworkMenuList` | `{ NetworkMenuList }` | Grouped list of a network's sites, current one marked |
 | `Sidebar` | `{ Sidebar }` | Collapsible sidebar |
 | `SidebarProvider` | `{ SidebarProvider, useSidebar }` | Sidebar state management |
 | `SidebarToggle` | `{ SidebarToggle }` | Sidebar expand/collapse button |

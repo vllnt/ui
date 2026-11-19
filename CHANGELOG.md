@@ -12,7 +12,15 @@ Release automation can regenerate this file from Conventional Commits with
 
 ### Added
 
-- Total component count: **321** (up from 313).
+- `SiteHeader`, `NetworkSwitcher` and `NetworkMenuList`: the oss.vllnt.com site bar and
+  "vllnt network" switcher as generic components; the app passes the site list.
+- Total component count: **324** (up from 313).
+
+### Changed
+
+- The core `--font-sans` and `--font-mono` stacks read `--font-inter` and
+  `--font-jetbrains-mono` first (the `next/font` variables of oss.vllnt.com), so an
+  app that loads the faces needs no remap. Without them nothing changes.
 
 ## [0.4.0] - 2026-10-31
 

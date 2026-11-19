@@ -208,9 +208,13 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 
 | Family | CSS variable | Default | Role |
 |--------|--------------|---------|------|
-| Sans | `--font-sans` | Inter, then the system sans stack | Body + UI text (`Text`, `Prose`) |
+| Sans | `--font-sans` | `var(--font-inter, Inter)`, then the system sans stack | Inter: the `Text` and `Prose` primitives |
 | Display | `--font-display` | `var(--font-sans)` | Headings + hero (`Heading`, `Display`) — set a serif/display face here for a brand identity |
-| Mono | `--font-mono` | JetBrains Mono, then the system mono stack | Code, tabular |
+| Mono | `--font-mono` | `var(--font-jetbrains-mono, 'JetBrains Mono')`, then the system mono stack | The body face (`body` is `font-mono`): the site bar, navigation and unstyled UI text, plus code and tabular data |
+
+**House style (oss.vllnt.com):** the body, and so the site bar and unstyled UI text, is JetBrains Mono; `Text`, `Prose`, `Heading` and `Display` are Inter. Weights: 400 body, 500 for the medium UI text (captions, the current link, group headings), 600 for headings, display, labels and the wordmark.
+
+**Loading the faces:** the library ships no font files, only these tokens. An app loads Inter (variable, 100–900) and JetBrains Mono (variable, 100–800) with `next/font/local` and puts the two variables on `<html>`: `--font-inter` and `--font-jetbrains-mono` (in the vllnt monorepo, `fontVariables` from `@repo/fonts`). The tokens read them first, so no `--font-sans` / `--font-mono` remap is needed. Without them each stack names the plain face, then the system fallbacks. Penpot and native read the plain face names (`Inter`, `JetBrains Mono`). Don't override `body`'s family in an app: that is what makes the same bar look different across sites.
 
 **Type scale** — each step is a token (`--font-size-*`); heading/display weight is a token too (`--font-weight-heading`, `--font-weight-display`). Overriding any of these restyles the foundation primitives.
 

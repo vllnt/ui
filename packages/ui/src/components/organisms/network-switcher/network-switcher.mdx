@@ -1,0 +1,40 @@
+import { Meta, Primary, Controls } from '@storybook/addon-docs/blocks'
+import * as Stories from './network-switcher.stories'
+
+<Meta of={Stories} />
+
+# NetworkSwitcher
+
+The network button of the site bar ("vllnt network"), from 768 px: it opens a panel listing the sites of a network, grouped, with the current site marked. On a phone it renders nothing visible; `SiteHeader` lists the same sites in its menu.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/network-switcher.json
+```
+
+## Import
+
+```tsx
+import { NetworkSwitcher } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<NetworkSwitcher network={{ label: 'vllnt network', groups }} />
+```
+
+`network` is a `SiteNetwork`: `label`, `groups`, an optional `version`, and any other key of the site config it came from, kept untouched.
+
+## API Reference
+
+<Controls />
+
+## Accessibility
+
+- The button has `aria-expanded` and `aria-controls` pointing at the panel, a `<nav>` named by `network.label`.
+- While open, focus stays inside the panel. Escape, a press outside, or focus leaving the panel closes it; Escape hands focus back to the button.
+- The first render (server and first paint) assumes a phone, so the links sit in the header menu for crawlers; the panel takes them once the width is measured.

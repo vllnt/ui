@@ -1,0 +1,39 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks'
+import * as Stories from './network-menu-list.stories'
+
+<Meta of={Stories} />
+
+# NetworkMenuList
+
+The grouped list of the sites of a network. Every other site is a real link; the current site is text with `aria-current`, marked by the `--secondary` fill and a heavier weight. `SiteHeader` shows it, titled, in the phone menu; `NetworkSwitcher` shows it untitled in its panel.
+
+<Primary />
+
+## Installation
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/network-menu-list.json
+```
+
+## Import
+
+```tsx
+import { NetworkMenuList, type SiteNetwork } from '@vllnt/ui'
+```
+
+## Usage
+
+```tsx
+<NetworkMenuList network={{ label: 'vllnt network', groups }} />
+```
+
+<Canvas of={Stories.Untitled} sourceState="shown" />
+
+## API Reference
+
+<Controls />
+
+## Notes
+
+- A group without `heading` has no heading (the parent site, listed first). A headed group's list is named by its heading.
+- `SiteNetwork`, `NetworkSwitcherGroup` and `NetworkSwitcherItem` accept extra keys, so a site config with a `version` or fields the list does not read passes through unchanged.

@@ -262,13 +262,16 @@ describe("core fonts", () => {
   const uiCoreTokens = readText("../ui-core/tokens.json");
   const uiCoreTs = readText("../ui-core/src/generated/design-tokens.ts");
 
-  it("sets Inter first in the core sans stack, then the system fallbacks", () => {
-    assert.match(fontFamily.sans.value, /^Inter, system-ui, /);
+  it("sets Inter first in the core sans stack, behind the next/font hook, then the system fallbacks", () => {
+    assert.match(fontFamily.sans.value, /^var\(--font-inter, Inter\), system-ui, /);
     assert.match(fontFamily.sans.value, /sans-serif$/);
   });
 
-  it("sets JetBrains Mono first in the core mono stack, then the system fallbacks", () => {
-    assert.match(fontFamily.mono.value, /^'JetBrains Mono', ui-monospace, /);
+  it("sets JetBrains Mono first in the core mono stack, behind the next/font hook, then the system fallbacks", () => {
+    assert.match(
+      fontFamily.mono.value,
+      /^var\(--font-jetbrains-mono, 'JetBrains Mono'\), ui-monospace, /,
+    );
     assert.match(fontFamily.mono.value, /monospace$/);
   });
 
@@ -283,12 +286,12 @@ describe("core fonts", () => {
     ]) {
       assert.match(
         css,
-        /--font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;/,
+        /--font-sans: var\(--font-inter, Inter\), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;/,
         name,
       );
       assert.match(
         css,
-        /--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;/,
+        /--font-mono: var\(--font-jetbrains-mono, "JetBrains Mono"\), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;/,
         name,
       );
       assert.match(css, /--font-display: var\(--font-sans\);/, name);
@@ -299,6 +302,20 @@ describe("core fonts", () => {
     assert.deepEqual(penpot["vllnt/core"].font.family.sans.$value, ["Inter"]);
     assert.deepEqual(penpot["vllnt/core"].font.family.mono.$value, ["JetBrains Mono"]);
     assert.equal(penpot["vllnt/core"].font.family.display.$value, "{font.family.sans}");
+  });
+
+  it("site shell standard: an app that sets the oss next/font variables needs no --font-sans or --font-mono remap", () => {
+    for (const css of [defaultCss, stylesCss]) {
+      assert.match(css, /--font-sans: var\(--font-inter, Inter\)/);
+      assert.match(css, /--font-mono: var\(--font-jetbrains-mono, "JetBrains Mono"\)/);
+    }
+  });
+
+  it("site shell standard: native and Penpot still get the plain face behind the load hook", () => {
+    assert.deepEqual(penpot["vllnt/core"].font.family.sans.$value, ["Inter"]);
+    assert.deepEqual(penpot["vllnt/core"].font.family.mono.$value, ["JetBrains Mono"]);
+    assert.ok(!uiCoreTs.includes('"sans": "var('), "ui-core resolved sans face");
+    assert.ok(!uiCoreTs.includes('"mono": "var('), "ui-core resolved mono face");
   });
 
   it("leaves the product theme stacks unchanged", () => {

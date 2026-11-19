@@ -249,7 +249,10 @@ function renderStylesThemeBlock() {
     1,
     "    /* Typography — theme-overridable font tokens (issue #465). Override any of",
     "       these on a theme scope to restyle the Text/Heading/Display/Prose primitives",
-    "       without editing the library. Defaults reproduce the house style (sans, 600). */",
+    "       without editing the library. Defaults reproduce the house style: the body",
+    "       in JetBrains Mono (--font-mono), Text, Prose, Heading and Display in Inter",
+    "       (--font-sans), headings at 600. An app that loads the faces with next/font",
+    "       sets --font-inter and --font-jetbrains-mono on <html>. */",
   );
 
   return [
@@ -435,11 +438,19 @@ function referencedFamily(stack) {
   return familyByVariable[variable];
 }
 
+/**
+ * A load hook at the head of a stack, `var(--font-inter, Inter)`: the face an
+ * app loads with next/font, falling back to the plain name. Native and design
+ * tools load the plain name.
+ */
+const loadHook = /^var\(--[a-z-]+,\s*([^)]+)\)\s*(?:,|$)/;
+
 /** First face of a font stack: the one name native and design tools can load. */
 function primaryFace(stack, families) {
   const reference = referencedFamily(stack);
   if (reference) return primaryFace(families[reference], families);
-  return stack.split(",")[0].trim().replaceAll(/^['"]|['"]$/g, "");
+  const first = loadHook.exec(stack.trim())?.[1] ?? stack.split(",")[0];
+  return first.trim().replaceAll(/^['"]|['"]$/g, "");
 }
 
 function productThemeTokens() {
