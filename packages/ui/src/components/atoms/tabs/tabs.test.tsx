@@ -384,7 +384,7 @@ describe("Tabs variant", () => {
       expect(tab).not.toHaveClass("-mb-px");
     });
     expect(a).toHaveClass(
-      "data-[state=active]:bg-muted",
+      "data-[state=active]:bg-secondary",
       "data-[state=active]:text-foreground",
     );
     expect(b).toHaveClass("data-[state=inactive]:text-muted-foreground");

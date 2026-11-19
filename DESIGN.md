@@ -68,8 +68,11 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 |-------|------|-------|------|
 | `--background` | Page surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
 | `--foreground` | Primary text | `0.1445 0 0` (#0a0a0a) | `0.9848 0 0` (#fafafa) |
-| `--card` / `--popover` | Contained / floating surface | `1 0 0` (#ffffff) | `0.1445 0 0` (#0a0a0a) |
-| `--muted` | Subtle surface (`--secondary` and `--accent` share it) | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--card` | Raised, contained surface | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
+| `--popover` | Overlay surface: menus, popovers, dialogs | `1 0 0` (#ffffff) | `0 0 0` (#000000) |
+| `--muted` | Sunken bands and quiet fills | `0.9703 0 0` (#f5f5f5) | `0 0 0` (#000000) |
+| `--secondary` | Hover, selected, active and data-state fills; control tracks | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
+| `--accent` | Fills that pair with `--accent-foreground` (menu items, ghost buttons); a brand color in presets | `0.9703 0 0` (#f5f5f5) | `0.2686 0 0` (#262626) |
 | `--muted-foreground` | Secondary text | `0.525 0 0` (#6a6a6a) | `0.7153 0 0` (#a3a3a3) |
 | `--destructive` | Danger fill **and** danger text | `0.55 0.2078 25.326` (#cf1f29) | `0.7 0.18 25.721` (#fa6961) |
 | `--destructive-foreground` | Text on a destructive fill | `0.9848 0 0` (#fafafa) | `0.2044 0 0` (#171717) |
@@ -81,6 +84,43 @@ Values are OKLCH channels; the sRGB hex is what renders on an sRGB display.
 | `--border` | Decorative hairline (cards, separators, tables) | `0.9219 0 0` (#e5e5e5) | `0.2686 0 0` (#262626) |
 | `--input` | Form-control boundary | `0.6167 0 0` (#858585) | `0.5208 0 0` (#696969) |
 | `--ring` | Focus ring | `0.1445 0 0` (#0a0a0a) | `0.8697 0 0` (#d4d4d4) |
+
+**Dark surfaces are pure black.** In dark mode `--background`, `--muted`,
+`--card` and `--popover` are all `0 0 0` (#000000). Hairlines separate the
+surfaces, not lightness:
+
+```
+background = muted = card = popover = #000000
+separated by --border (#262626)
+hover, selected and active fills: --secondary, --accent (#262626)
+```
+
+Grey stays only for `--muted-foreground` text, `--border`, `--input`, the
+hover, selected and active fills (`--secondary`, `--accent`) and structural
+fills (below). So a raised
+surface (card, popover, menu, dialog, panel) draws `border` (the `--border`
+hairline); a `bg-card` or `bg-popover` without one is invisible on the page.
+The hairline is 1.39:1 against black, a depth cue and not a control boundary
+(`--input` carries that). In light mode `--muted`, `--secondary` and `--accent`
+are one value, so the split only shows in dark. Hover, focus, active, selected
+and data-state feedback on an actionable element uses `bg-secondary` (or
+`bg-secondary/50`), never `bg-muted`: in dark, `--muted` is the page color, so
+the fill would not show. Not `bg-accent` either: presets set `--accent` to a
+brand color, while their `--secondary` stays a quiet neutral that keeps the row
+text readable (6.65 to 12.53:1 across the dark presets). Menu items and ghost
+buttons keep `bg-accent` with `text-accent-foreground`.
+`packages/ui/src/components/muted-state-feedback.test.ts` and
+`apps/registry/lib/hover-fills.test.ts` enforce it.
+
+A **structural fill** is a fill that is the whole visual of its element:
+skeletons, progress, meter and usage tracks, the drawer handle, empty heatmap
+cells and the neutral Gantt bar. It uses `bg-secondary` (#262626), at the same
+opacity as before. Chips, code spans and panels keep `bg-muted`: their text and
+border carry them.
+`packages/ui/src/components/black-surface-borders.test.ts` and
+`apps/registry/lib/structural-fills.test.ts` enforce it. Product themes that
+override these roles keep their own values; PaaS has no color overrides, so it
+follows the core theme.
 
 In dark mode `--destructive` is a light red paired with a dark
 `--destructive-foreground` (the shadcn v4 pairing). One dark red cannot be both
@@ -98,7 +138,7 @@ The Penpot libraries carry two token groups that name an existing role instead o
 ### Anti-patterns
 - **Never** use `bg-black` / `text-white` / `bg-white`. Use `bg-background` / `bg-foreground` / `text-foreground` so dark mode works.
 - **Never** use `bg-gray-500` / Tailwind palette literals. Pick a semantic token.
-- **Pure black** (`#000`) is banned for backgrounds — use `--background`.
+- **Hard-coded black** (`#000`, `bg-black`) is banned for backgrounds — use `--background`, which is pure black in dark on web.
 
 ### Contrast
 WCAG 2.2 **AA** minimum: text ≥ **4.5:1** (large text ≥ 3:1), non-text UI such as control boundaries and focus rings ≥ **3:1**.
@@ -119,10 +159,10 @@ themes, which own those roles. Tests enforce it and fail on any regression:
 | Control boundary | `--input` against background, card, popover, muted | 3:1 |
 | Focus ring | `--ring` against background | 3:1 |
 
-Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 6.00 (dark, on muted);
-destructive text 5.41 / 4.96 (light), 7.26 / 5.23 (dark, on background / muted);
-destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light), 3.83 (dark) on background, 3.69 (light), 3.61 (dark) on card and popover, 3.39 (light), 2.76 (dark) on muted (dark muted at #262626 misses 3:1; with muted #000000 it is 3.83);
-success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 8.07 / 8.56 / 6.62 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
+Default theme ratios: muted-foreground 5.41 (light, on background) / 4.96 (light, on muted), 8.33 (dark, on every surface: they are all #000000);
+destructive text 5.41 / 4.96 (light), 7.26 (dark, on every surface);
+destructive-foreground on destructive 5.18 (light), 6.20 (dark); input 3.69 (light, on background, card and popover) / 3.38 (light, on muted), 3.83 (dark, on every surface);
+success / warning / info text on muted 5.22 / 5.60 / 5.57 (light), 11.20 / 11.88 / 9.19 (dark), and on their 10% tint 4.95 / 5.33 / 5.24 (light);
 success / warning / info foreground on its fill 5.46 / 5.85 / 5.82 (light), 9.56 / 10.14 / 7.85 (dark);
 foreground on diff-added / diff-removed 16.80 / 16.44 (light), 14.58 / 15.15 (dark).
 
@@ -398,7 +438,7 @@ The Penpot libraries keep one `size.target.min` and `size.control-xs` per densit
 | `<div>` with `onClick` | Loses keyboard + a11y semantics; use `Button` |
 | Em-dash chains in copy (3+ in a row) | Unreadable |
 | `Submit` / `OK` / `Click here` button labels | Don't name the action |
-| Pure black backgrounds | Eye strain in dark mode |
+| Hard-coded black backgrounds (`#000`, `bg-black`) | Bypasses tokens; dark `--background` is already pure black |
 | Auto-play hero video | Performance + motion sensitivity |
 | Modal on modal | Restructure the flow |
 | `eslint-disable` to bypass a rule | Fix the root cause |

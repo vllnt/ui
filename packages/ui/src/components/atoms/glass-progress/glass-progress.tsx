@@ -38,7 +38,7 @@ export const GlassProgress = ({
       aria-valuemin={0}
       aria-valuenow={clamped}
       className={cn(
-        "relative h-2 w-full overflow-hidden rounded-full border border-border/50 bg-muted/40 backdrop-blur",
+        "relative h-2 w-full overflow-hidden rounded-full border border-border/50 bg-secondary/40 backdrop-blur",
         className,
       )}
       ref={ref}

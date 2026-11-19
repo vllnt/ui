@@ -157,3 +157,40 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
     expect(failures(colors, BOUNDARY_PAIRS, 3)).toEqual([]);
   });
 });
+
+const BLACK_SURFACES = ["background", "muted", "card", "popover"] as const;
+const GREY_FILLS = ["secondary", "accent", "border"] as const;
+
+/** Rendered sRGB of every named token that is not `expected`. */
+function offColor(
+  colors: Palette,
+  names: readonly string[],
+  expected: readonly number[],
+): string[] {
+  return names
+    .filter(
+      (name) =>
+        oklchToRgb(token(colors, name)).join(",") !== expected.join(","),
+    )
+    .map((name) => `${name}: ${oklchToRgb(token(colors, name)).join(",")}`);
+}
+
+describe("default dark theme is pure black with hairline borders", () => {
+  const colors = palette("default", "dark");
+
+  it("renders background, muted, card and popover as #000000", () => {
+    expect(offColor(colors, BLACK_SURFACES, [0, 0, 0])).toEqual([]);
+  });
+
+  it("renders hover, selected and active fills and the border as #262626", () => {
+    expect(offColor(colors, GREY_FILLS, [38, 38, 38])).toEqual([]);
+  });
+
+  it("matches PaaS, which has no color overrides of its own", () => {
+    const paas = palette("paas", "dark");
+    const different = [...BLACK_SURFACES, ...GREY_FILLS, "input"].filter(
+      (name) => token(paas, name) !== token(colors, name),
+    );
+    expect(different).toEqual([]);
+  });
+});

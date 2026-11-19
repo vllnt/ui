@@ -38,6 +38,10 @@ import {
 
 <Canvas of={Stories.Default} sourceState="shown" />
 
+## Notes
+
+The chevron's `rotate-180` relies on Tailwind's transform variables (`--tw-rotate` and the other `--tw-*` transform properties set by Tailwind's base layer), so a host without Tailwind's base layer must define them.
+
 ## API Reference
 
 ### Accordion
