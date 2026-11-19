@@ -68,6 +68,13 @@ function resolveBadgeStyles(
       },
       text: { color: theme.colors.secondaryForeground },
     },
+    soft: {
+      container: {
+        backgroundColor: theme.colors.muted,
+        borderColor: theme.colors.muted,
+      },
+      text: { color: theme.colors.foreground },
+    },
   };
   return variants[variant];
 }

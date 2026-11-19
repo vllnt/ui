@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "../../../lib/utils";
+import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 import { Button } from "../../atoms/button/button";
 import {
   Card,
@@ -61,16 +62,16 @@ function getStatusLabel(status: SubscriptionCardStatus): string {
   }
 }
 
-function getStatusClasses(status: SubscriptionCardStatus): string {
+function getStatusTone(status: SubscriptionCardStatus): BadgeProps["tone"] {
   switch (status) {
     case "active":
-      return "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+      return "success";
     case "canceled":
-      return "bg-muted text-muted-foreground";
+      return "neutral";
     case "past-due":
-      return "bg-amber-500/10 text-amber-700 dark:text-amber-300";
+      return "warning";
     case "trialing":
-      return "bg-sky-500/10 text-sky-700 dark:text-sky-300";
+      return "info";
   }
 }
 
@@ -183,14 +184,13 @@ export const SubscriptionCard = ({
               Billing overview for the current workspace plan.
             </CardDescription>
           </div>
-          <span
-            className={cn(
-              "inline-flex rounded-full px-2.5 py-1 text-xs font-medium",
-              getStatusClasses(status),
-            )}
+          <Badge
+            className="shrink-0 whitespace-nowrap py-1 font-medium hover:bg-secondary"
+            dot
+            tone={getStatusTone(status)}
           >
             {getStatusLabel(status)}
-          </span>
+          </Badge>
         </div>
         <div className="flex items-center justify-between gap-3 rounded-lg border border-border/70 bg-muted/30 px-4 py-3">
           <div>

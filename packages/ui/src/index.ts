@@ -31,6 +31,12 @@ export {
   type ThemePresetName,
 } from "./lib/theme-presets";
 export { formatChange, normalizeDate } from "./lib/format";
+export {
+  isStatusTone,
+  STATUS_TONES,
+  statusDotVariants,
+  type StatusTone,
+} from "./lib/status-dot";
 export { focusCalendarDay } from "./lib/focus-calendar-day";
 export {
   moveRovingFocus,
