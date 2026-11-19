@@ -41,7 +41,14 @@ const harness = (t, options) => {
   return h;
 };
 const uploads = (result) => result.publishes.map(({ name, version, tag }) => [name, version, tag]);
-const distTags = (result, verb) => result.calls.filter((call) => call.args[0] === "dist-tag" && call.args[1] === verb);
+// OIDC authenticates `npm publish` only, so a canary run must never reach for `dist-tag` or a login.
+const distTagCalls = (result) => result.calls.filter((call) => ["dist-tag", "whoami"].includes(call.args[0]));
+/** The script's text without comment lines, so checks do not match its prose. */
+const code = (text) => text.split("\n").filter((line) => !/^\s*#/.test(line)).join("\n");
+// The registry wait: 5 s first, doubling, capped at 30 s, as many sleeps as polls that found nothing.
+const BACKOFF = [5, 10, 20, 30, 30, 30, 30, 30];
+// Env that leaves the wait on its real defaults (the harness otherwise sets CANARY_POLL_SECONDS=0).
+const DEFAULT_WAIT = { CANARY_POLL_SECONDS: undefined };
 // How many times the script asked npm whether `name` at VERSION is there.
 const versionPolls = (result, name) => result.calls.filter((call) => call.args[0] === "view" && call.args[1] === `${name}@${VERSION}`).length;
 // npm can take minutes to serve an upload (run 44545188360). 20 is more than the 12 polls the wait once allowed.
@@ -108,13 +115,13 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.match(web, /publish "\$TARBALL" --tag latest/);
   assert.match(web.slice(web.indexOf("  release:")), /environment: npm-release/);
   assert.ok(publisher.indexOf("release-guard.mjs core-canary") < publisher.indexOf('npm version "$CANARY_VERSION"'));
-  assert.ok(publisher.indexOf("release-guard.mjs native-canary") < publisher.indexOf("npm_with_token whoami"));
-  assert.ok(publisher.indexOf("npm_with_token whoami") < publisher.indexOf('publish_tarball "$core_tarball"'));
-  // Every upload goes to the canary tag (core) or the run-scoped staging tag (pair), never latest.
-  const tags = [...publisher.matchAll(/publish_tarball "[^"]+" (\S+)/g)].map((match) => match[1]);
-  assert.deepEqual(tags.sort(), ['"$STAGING_TAG"', '"$STAGING_TAG"', "canary"]);
-  assert.doesNotMatch(publisher, /--tag latest|dist-tag add [^\n]* latest/);
-  assert.match(publisher, /dist-tag add "\$\{NATIVE_NAME\}@\$\{CANARY_VERSION\}" canary/);
+  assert.ok(publisher.indexOf("release-guard.mjs native-canary") < publisher.lastIndexOf('npm version "$CANARY_VERSION"'));
+  assert.ok(publisher.indexOf("release-guard.mjs native-canary") < publisher.indexOf('publish_tarball "$core_tarball"'));
+  // Every upload, on both paths, goes straight to the canary tag over OIDC: no latest, no staging
+  // tag, no dist-tag command and no token (OIDC authenticates `npm publish` only).
+  const tags = [...code(publisher).matchAll(/publish_tarball "[^"]+" (\S+)/g)].map((match) => match[1]);
+  assert.deepEqual(tags, ["canary", "canary", "canary"]);
+  assert.doesNotMatch(code(publisher), /--tag latest|dist-tag (add|rm|ls)|npm_with_token|whoami|STAGING_TAG|NPM_DIST_TAG_TOKEN/);
   assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary|if: \$\{\{ false \}\}/);
   for (const workflow of [web, native]) assert.match(workflow, /node --test scripts\/release-guard.test.mjs/);
 });
@@ -138,6 +145,9 @@ test("core canary is gated on ui-core alone, and each publish path has its own s
   assert.match(nativePublish, /contains\(fromJSON\('\["success","skipped"\]'\), needs\.core-publish\.result\)/);
   assert.doesNotMatch(nativePublish, /CORE_CANARY_PUBLISH_ENABLED/);
   assert.match(nativePublish, /bash scripts\/publish-canary\.sh pair\n/);
+  // The pair is OIDC-only too: it is handed no secret at all.
+  assert.doesNotMatch(nativePublish, /NPM_DIST_TAG_TOKEN|secrets\.|\n\s+env:\n/);
+  assert.doesNotMatch(job(workflow, "core-publish"), /secrets\.|\n\s+env:\n/);
   // Only the publish jobs get the OIDC token and the environment.
   for (const block of [coreQuality, nativeQuality]) assert.doesNotMatch(block, /id-token|environment:|NPM_DIST_TAG_TOKEN/);
   for (const block of [corePublish, nativePublish]) {
@@ -145,7 +155,7 @@ test("core canary is gated on ui-core alone, and each publish path has its own s
     assert.match(block, /id-token: write/);
     assert.match(block, /cancel-in-progress: false/);
   }
-  // One concurrency group for both publish jobs, so a pair promotion cannot race a core publish.
+  // One concurrency group for both publish jobs, so a pair publish cannot race a core publish.
   const group = (block) => block.match(/\n {6}group: (\S+)\n/)?.[1];
   assert.ok(group(corePublish), "core-publish needs a concurrency group");
   assert.equal(group(nativePublish), group(corePublish));
@@ -222,7 +232,7 @@ test("version_state distinguishes unpublished versions from registry failures", 
 test("core canary goes straight to the canary tag over OIDC and leaves latest alone", (t) => {
   const h = harness(t);
   const before = h.registry();
-  const result = h.run("core", { env: { NPM_DIST_TAG_TOKEN: "" } }); // core needs no dist-tag token
+  const result = h.run("core");
   assert.equal(result.status, 0, result.output);
   assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"]]);
   const args = result.publishes[0].args.join(" ");
@@ -231,7 +241,7 @@ test("core canary goes straight to the canary tag over OIDC and leaves latest al
   assert.equal(result.registry[CORE].tags.canary, VERSION);
   assert.equal(result.registry[CORE].tags.latest, BOOTSTRAP);
   assert.deepEqual(result.registry[NATIVE], before[NATIVE]);
-  assert.deepEqual(result.calls.filter((call) => ["whoami", "dist-tag"].includes(call.args[0])), []);
+  assert.deepEqual(distTagCalls(result), []);
   // The pinned npm uploads without the placeholder token setup-node leaves behind.
   const upload = result.calls.find((call) => call.args[0] === "publish");
   assert.deepEqual([upload.viaNpx, upload.configToken, upload.envToken], [true, false, null]);
@@ -265,6 +275,8 @@ test("core canary waits for npm to finish processing the upload", (t) => {
   assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"]]);
   assert.ok(versionPolls(result, CORE) >= SLOW_NPM_POLLS, "the version was polled until npm served it");
   assert.deepEqual(result.registry[CORE].tags, { latest: BOOTSTRAP, canary: VERSION });
+  // CANARY_POLL_SECONDS=0 keeps the wait instant, so these harness runs stay fast.
+  assert.ok(result.sleeps.length >= SLOW_NPM_POLLS && result.sleeps.every((seconds) => seconds === 0), result.sleeps.join(","));
 });
 test("core canary refuses to create a package that is not on npm yet", (t) => {
   const h = harness(t);
@@ -328,58 +340,79 @@ test("core canary refuses a tarball without its built dist", (t) => {
   assert.deepEqual(result.publishes, []);
 });
 
-test("pair stages both packages, pins core exactly and promotes both tags together", (t) => {
-  const result = harness(t).run("pair");
+// The pair publishes over OIDC only, straight to `canary`, core first. Both packages are checked at
+// the end. If the native upload fails after core went up, the run fails and core@canary is briefly
+// ahead of native@canary: that is acceptable, because the packed ui-native manifest pins the exact
+// ui-core version it was built with, so nobody resolves the pair into a mismatch.
+test("pair publishes core then native straight to canary over OIDC, with no token and no dist-tag", (t) => {
+  const h = harness(t);
+  const before = h.registry();
+  const result = h.run("pair");
   assert.equal(result.status, 0, result.output);
-  assert.deepEqual(uploads(result), [[CORE, VERSION, "run-9001"], [NATIVE, VERSION, "run-9001"]]);
-  assert.equal(result.publishes[1].manifest.dependencies[CORE], VERSION);
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"], [NATIVE, VERSION, "canary"]]);
+  for (const { args } of result.publishes) {
+    const flags = args.join(" ");
+    assert.match(flags, /--tag canary/);
+    assert.match(flags, /--provenance/);
+    assert.match(flags, /--access public/);
+  }
+  assert.equal(result.publishes[1].manifest.dependencies[CORE], VERSION, "native pins the exact core version");
   assert.equal(result.publishes[1].manifest["react-native"], "./dist/index.js");
   for (const name of [CORE, NATIVE]) {
-    assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION }, `${name} tags (staging tag removed)`);
+    assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION }, `${name}: canary moved, latest untouched`);
+    assert.deepEqual(result.registry[name].versions, [...before[name].versions, VERSION], name);
   }
-  assert.deepEqual(distTags(result, "add").map((call) => call.args.slice(2)), [[`${CORE}@${VERSION}`, "canary"], [`${NATIVE}@${VERSION}`, "canary"]]);
-  // OIDC for uploads, the dist-tag token only for dist-tag commands, everything on the pinned npm.
-  for (const call of result.calls.filter((entry) => ["publish", "whoami", "dist-tag"].includes(entry.args[0]))) {
-    assert.equal(call.viaNpx, true, call.args.join(" "));
-    assert.equal(call.configToken, call.args[0] !== "publish", call.args.join(" "));
-    assert.equal(call.envToken, call.args[0] === "publish" ? null : "fake-dist-tag-token", call.args.join(" "));
+  assert.deepEqual(distTagCalls(result), []);
+  // Every upload is on the pinned npm, and the placeholder token setup-node leaves behind is gone.
+  for (const call of result.calls.filter((entry) => entry.args[0] === "publish")) {
+    assert.deepEqual([call.viaNpx, call.configToken, call.envToken], [true, false, null], call.args.join(" "));
   }
+  assert.doesNotMatch(result.userconfig, /_authToken/);
 });
-test("pair waits for npm to finish processing both uploads before promoting", (t) => {
+test("neither path ever runs npm dist-tag or a login, whatever happens", (t) => {
+  const sameCommit = harness(t);
+  sameCommit.run("core");
+  const nativeFails = harness(t);
+  // `uploaded` makes each scenario prove it got as far as the uploads, where dist-tag used to run.
+  const runs = {
+    core: { result: harness(t).run("core"), ok: true, uploaded: 1 },
+    pair: { result: harness(t).run("pair"), ok: true, uploaded: 2 },
+    "pair after a core canary of the same commit": { result: sameCommit.run("pair"), ok: true, uploaded: 1 },
+    "pair when the native upload fails": {
+      result: nativeFails.run("pair", { fail: [{ command: "publish", package: NATIVE, error: "E503" }] }), ok: false, uploaded: 1,
+    },
+    "pair when the core upload fails": {
+      result: harness(t).run("pair", { fail: [{ command: "publish", package: CORE, error: "E503" }] }), ok: false, uploaded: 0,
+    },
+    "pair that moves latest": { result: harness(t).run("pair", { quirks: { publishMovesLatest: true } }), ok: false, uploaded: 2 },
+    "pair when main moved on": { result: harness(t).run("pair", { mainShas: [OTHER_SHA] }), ok: true, uploaded: 0 },
+  };
+  for (const [label, { result, ok, uploaded }] of Object.entries(runs)) {
+    assert.equal(result.status === 0, ok, `${label}: ${result.output}`);
+    assert.equal(result.publishes.length, uploaded, label);
+    assert.deepEqual(distTagCalls(result), [], label);
+  }
+  // A rerun that recovers from the failed native upload stays OIDC-only too.
+  const rerun = nativeFails.run("pair");
+  assert.equal(rerun.status, 0, rerun.output);
+  assert.deepEqual(distTagCalls(rerun), []);
+});
+test("pair waits for npm to serve core before it uploads native, and native before it finishes", (t) => {
   const result = harness(t).run("pair", { quirks: { visibleAfterPolls: SLOW_NPM_POLLS } });
   assert.equal(result.status, 0, result.output);
-  assert.deepEqual(uploads(result), [[CORE, VERSION, "run-9001"], [NATIVE, VERSION, "run-9001"]]);
-  for (const name of [CORE, NATIVE]) {
-    assert.ok(versionPolls(result, name) >= SLOW_NPM_POLLS, `${name} was polled until npm served it`);
-    assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION }, `${name} tags (staging tag removed)`);
-  }
-});
-test("the dist-tag token reaches only the dist-tag commands", (t) => {
-  const tokenCommands = new Set(["whoami", "dist-tag"]);
-  for (const mode of ["core", "pair"]) {
-    // The harness exports NPM_DIST_TAG_TOKEN to the script, as the workflow step env does.
-    const result = harness(t).run(mode);
-    assert.equal(result.status, 0, `${mode}: ${result.output}`);
-    for (const call of result.calls) {
-      const label = `${mode}: ${call.tool} ${call.args.join(" ")}`;
-      assert.equal(call.distTokenByName, false, `${label} must not see NPM_DIST_TAG_TOKEN`);
-      assert.equal(call.distTokenByValue, call.tool === "npm" && tokenCommands.has(call.args[0]), label);
-    }
-  }
-  // The pair run did exercise the processes that must stay blind: pack, npx, the OIDC upload, git.
-  const pair = harness(t).run("pair");
-  const saw = (match) => pair.calls.some(match);
-  assert.ok(saw((call) => call.tool === "pnpm" && call.args.includes("pack")), "pnpm pack observed");
-  assert.ok(saw((call) => call.tool === "npm" && call.args[0] === "publish" && call.viaNpx), "npx upload observed");
-  assert.ok(saw((call) => call.tool === "git"), "git observed");
-  assert.ok(saw((call) => call.args[0] === "dist-tag" && call.distTokenByValue), "dist-tag still gets the token");
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"], [NATIVE, VERSION, "canary"]]);
+  const [coreUpload, nativeUpload] = result.calls.flatMap((call, index) => (call.args[0] === "publish" ? [index] : []));
+  const polls = (name, from, to) => result.calls.slice(from, to).filter((call) => call.args[0] === "view" && call.args[1] === `${name}@${VERSION}`).length;
+  assert.ok(polls(CORE, coreUpload, nativeUpload) >= SLOW_NPM_POLLS, "core polled until npm served it, before native went up");
+  assert.ok(polls(NATIVE, nativeUpload) >= SLOW_NPM_POLLS, "native polled until npm served it");
+  for (const name of [CORE, NATIVE]) assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION }, name);
 });
 test("pair keeps working after a core canary of the same commit", (t) => {
   const h = harness(t);
   assert.equal(h.run("core").status, 0);
   const result = h.run("pair");
   assert.equal(result.status, 0, result.output);
-  assert.deepEqual(uploads(result), [[NATIVE, VERSION, "run-9001"]], "the core version already on npm is reused");
+  assert.deepEqual(uploads(result), [[NATIVE, VERSION, "canary"]], "the core version already on npm is reused");
   assert.equal(result.publishes[0].manifest.dependencies[CORE], VERSION);
   for (const name of [CORE, NATIVE]) assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION });
 });
@@ -395,55 +428,73 @@ test("pair keeps working after core canaries of earlier commits", (t) => {
   });
   const result = h.run("pair");
   assert.equal(result.status, 0, result.output);
-  assert.deepEqual(uploads(result), [[CORE, VERSION, "run-9001"], [NATIVE, VERSION, "run-9001"]]);
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"], [NATIVE, VERSION, "canary"]]);
   assert.equal(result.publishes[1].manifest.dependencies[CORE], VERSION);
   for (const name of [CORE, NATIVE]) assert.equal(result.registry[name].tags.canary, VERSION);
 });
-test("pair puts the previous canary tags back when promotion fails halfway", (t) => {
+test("a native upload that fails after core fails the run: core canary is set, native is untouched", (t) => {
   const h = harness(t);
-  const previous = "0.1.0-canary.5.sha000000000000";
-  h.seed((registry) => {
-    for (const name of [CORE, NATIVE]) { registry[name].versions.push(previous); registry[name].tags.canary = previous; }
-  });
-  const result = h.run("pair", { fail: [{ command: "dist-tag-add", package: NATIVE, error: "E503" }] });
+  const result = h.run("pair", { fail: [{ command: "publish", package: NATIVE, error: "E503" }] });
+  assert.notEqual(result.status, 0, result.output);
+  assert.match(result.output, /E503/);
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"]], "only core went up; the failed native upload is not recorded");
+  // core@canary is briefly ahead of native@canary. Accepted: the ui-native manifest pins its exact
+  // ui-core version, and there is no dist-tag token to roll it back with.
+  assert.deepEqual(result.registry[CORE].tags, { latest: BOOTSTRAP, canary: VERSION });
+  assert.ok(result.registry[CORE].versions.includes(VERSION), "the core upload stays: versions are immutable");
+  assert.deepEqual(result.registry[NATIVE], { versions: [BOOTSTRAP], tags: { latest: BOOTSTRAP } });
+  assert.deepEqual(distTagCalls(result), [], "nothing is rolled back through dist-tag");
+  // The next run catches native up and reuses the core version already on npm.
+  const rerun = h.run("pair");
+  assert.equal(rerun.status, 0, rerun.output);
+  assert.deepEqual(uploads(rerun), [[NATIVE, VERSION, "canary"]]);
+  for (const name of [CORE, NATIVE]) assert.deepEqual(rerun.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION });
+});
+test("a core upload that fails stops the pair before native goes up", (t) => {
+  const result = harness(t).run("pair", { fail: [{ command: "publish", package: CORE, error: "E503" }] });
   assert.notEqual(result.status, 0);
-  for (const name of [CORE, NATIVE]) {
-    assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: previous }, name);
-    assert.ok(result.registry[name].versions.includes(VERSION), "uploaded versions stay: they are immutable");
+  assert.match(result.output, /E503/, "it failed on the upload, not earlier");
+  assert.deepEqual(result.publishes, []);
+  for (const name of [CORE, NATIVE]) assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP }, name);
+});
+test("pair checks latest and canary on both packages and fails loudly", (t) => {
+  // An upload that also takes `latest` on either package, or one whose canary tag does not land.
+  const cases = [
+    { quirks: { publishMovesLatest: CORE }, message: new RegExp(`${CORE} dist-tag latest moved from ${BOOTSTRAP}`) },
+    { quirks: { publishMovesLatest: NATIVE }, message: new RegExp(`${NATIVE} dist-tag latest moved from ${BOOTSTRAP}`) },
+    { quirks: { publishSkipsTag: CORE }, message: new RegExp(`${CORE} dist-tag canary is '', expected `) },
+    { quirks: { publishSkipsTag: NATIVE }, message: new RegExp(`${NATIVE} dist-tag canary is '', expected `) },
+  ];
+  for (const { quirks, message } of cases) {
+    const result = harness(t).run("pair", { quirks });
+    assert.notEqual(result.status, 0, JSON.stringify(quirks));
+    assert.match(result.output, message, JSON.stringify(quirks));
+    assert.match(result.output, /::error::/);
   }
 });
-test("pair leaves canary untouched and clears staging when the native upload fails", (t) => {
-  const result = harness(t).run("pair", { fail: [{ command: "publish", package: NATIVE, error: "E503" }] });
-  assert.notEqual(result.status, 0);
-  assert.deepEqual(result.registry[CORE].tags, { latest: BOOTSTRAP });
-  assert.deepEqual(result.registry[NATIVE].tags, { latest: BOOTSTRAP });
-  assert.deepEqual(distTags(result, "add"), []);
+test("pair stands down without publishing when main has moved on", (t) => {
+  const h = harness(t);
+  const before = h.registry();
+  const result = h.run("pair", { mainShas: [OTHER_SHA] });
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /superseded/);
+  assert.deepEqual(result.publishes, []);
+  assert.deepEqual(result.registry, before);
+  assert.deepEqual(result.calls.filter((call) => call.tool !== "git"), [], "npm is never reached");
 });
-test("pair fails when staging cleanup cannot read the registry instead of assuming the tag is gone", (t) => {
-  // view-tags for core: before (1st), after promotion (2nd), then the staging cleanup (3rd).
-  const result = harness(t).run("pair", { fail: [{ command: "view-tags", package: CORE, error: "ETIMEDOUT", skip: 2 }] });
-  assert.notEqual(result.status, 0, result.output);
-  assert.match(result.output, /Could not fully restore npm dist-tags/);
-  assert.equal(result.registry[CORE].tags["run-9001"], VERSION, "the unread staging tag is left for a person to see");
-  for (const name of [CORE, NATIVE]) assert.equal(result.registry[name].tags.canary, VERSION, "promotion itself had succeeded");
-});
-test("pair stands down without promoting when main advances during the upload", (t) => {
+test("pair that has started uploading finishes both packages even if main advances meanwhile", (t) => {
+  // Stopping between the two uploads would leave core ahead of native and still exit 0. The run
+  // that superseded this one is queued behind it in the same concurrency group and publishes next.
   const result = harness(t).run("pair", { mainShas: [SHA, OTHER_SHA] });
   assert.equal(result.status, 0, result.output);
-  assert.match(result.output, /main advanced/);
-  assert.deepEqual(distTags(result, "add"), []);
-  for (const name of [CORE, NATIVE]) assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP });
+  assert.deepEqual(uploads(result), [[CORE, VERSION, "canary"], [NATIVE, VERSION, "canary"]]);
+  for (const name of [CORE, NATIVE]) assert.equal(result.registry[name].tags.canary, VERSION);
 });
-test("pair needs the dist-tag token and the guard before it touches npm", (t) => {
-  const noToken = harness(t).run("pair", { env: { NPM_DIST_TAG_TOKEN: "" } });
-  assert.notEqual(noToken.status, 0);
-  assert.match(noToken.output, /NPM_DIST_TAG_TOKEN is required/);
+test("pair needs the guard before it touches npm, and no token", (t) => {
   const offMain = harness(t).run("pair", { env: { GITHUB_REF: "refs/heads/feature" } });
   assert.notEqual(offMain.status, 0);
-  for (const result of [noToken, offMain]) {
-    assert.deepEqual(result.calls, []);
-    assert.deepEqual(result.publishes, []);
-  }
+  assert.deepEqual(offMain.calls, []);
+  assert.deepEqual(offMain.publishes, []);
 });
 test("pair refuses to create packages that are not on npm yet", (t) => {
   const h = harness(t);
@@ -451,16 +502,42 @@ test("pair refuses to create packages that are not on npm yet", (t) => {
   const result = h.run("pair");
   assert.notEqual(result.status, 0);
   assert.deepEqual(result.publishes, []);
+  assert.match(result.output, /Bootstrap it by hand/);
 });
-test("CANARY_POLL_ATTEMPTS bounds the wait: a version npm does not serve in time fails the run and promotes nothing", (t) => {
-  // 8 polls fit in the default window, not in 3 attempts.
-  const slow = { quirks: { visibleAfterPolls: 8 }, env: { CANARY_POLL_ATTEMPTS: "3" } };
-  const core = harness(t).run("core", slow);
+test("the registry wait backs off: first CANARY_POLL_SECONDS, doubling, capped, restarting for each package", (t) => {
+  const core = harness(t).run("core", { quirks: { visibleAfterPolls: 8 }, env: DEFAULT_WAIT });
+  assert.equal(core.status, 0, core.output);
+  assert.deepEqual(core.sleeps, BACKOFF, "5 s, doubling, capped at 30 s");
+  const pair = harness(t).run("pair", { quirks: { visibleAfterPolls: 8 }, env: DEFAULT_WAIT });
+  assert.equal(pair.status, 0, pair.output);
+  assert.deepEqual(pair.sleeps, [...BACKOFF, ...BACKOFF], "each package gets its own schedule");
+  const tuned = harness(t).run("core", {
+    quirks: { visibleAfterPolls: 5 }, env: { CANARY_POLL_SECONDS: "2", CANARY_POLL_MAX_SECONDS: "7" },
+  });
+  assert.equal(tuned.status, 0, tuned.output);
+  assert.deepEqual(tuned.sleeps, [2, 4, 7, 7, 7]);
+  const visible = harness(t).run("core", { env: DEFAULT_WAIT });
+  assert.deepEqual(visible.sleeps, [], "an upload npm serves at once costs no wait");
+});
+test("the registry wait has a deadline: a version npm never serves fails the run and names what it waited for", (t) => {
+  // The fake sleep returns at once, so a short deadline is reached by polling alone.
+  const never = (timeout) => ({
+    quirks: { visibleAfterPolls: 1_000_000 }, env: { CANARY_POLL_SECONDS: "10", CANARY_POLL_TIMEOUT_SECONDS: timeout },
+  });
+  const core = harness(t).run("core", never("3"));
   assert.notEqual(core.status, 0, core.output);
-  const pair = harness(t).run("pair", slow);
+  assert.ok(core.output.includes(`::error::${CORE}@${VERSION} was not visible on npm after `), core.output);
+  assert.match(core.output, /after \d+s \(limit 3s\)/);
+  assert.deepEqual(core.registry[CORE].tags.latest, BOOTSTRAP);
+  // The first delay is 10 s, yet no sleep outlasts the 3 s deadline.
+  assert.ok(core.sleeps.length > 0 && core.sleeps.every((seconds) => seconds <= 3), `sleeps: ${core.sleeps}`);
+  // In the pair, a core that npm never serves stops the run before native goes up.
+  const pair = harness(t).run("pair", never("1"));
   assert.notEqual(pair.status, 0, pair.output);
-  assert.deepEqual(distTags(pair, "add"), []);
-  for (const name of [CORE, NATIVE]) assert.deepEqual(pair.registry[name].tags, { latest: BOOTSTRAP }, `${name} staging tag cleared`);
+  assert.ok(pair.output.includes(`${CORE}@${VERSION} was not visible on npm`), pair.output);
+  assert.deepEqual(uploads(pair), [[CORE, VERSION, "canary"]]);
+  assert.deepEqual(pair.registry[NATIVE].tags, { latest: BOOTSTRAP });
+  assert.deepEqual(distTagCalls(pair), []);
 });
 test("an unknown publish mode is refused", (t) => {
   const result = harness(t).run("latest");
