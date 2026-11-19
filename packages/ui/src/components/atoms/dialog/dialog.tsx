@@ -33,16 +33,35 @@ const DialogOverlay = ({
 );
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
+/**
+ * Modal panel of a {@link Dialog}, rendered in a portal above the page.
+ *
+ * @example
+ * ```tsx
+ * <Dialog>
+ *   <DialogTrigger>Open</DialogTrigger>
+ *   <DialogContent overlay="none">...</DialogContent>
+ * </Dialog>
+ * ```
+ */
 const DialogContent = ({
   children,
   className,
+  overlay = "scrim",
   ref: reference,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+  /**
+   * Veil drawn behind the panel. `"scrim"` (default) dims and blurs the page;
+   * `"none"` draws nothing, so the page stays fully visible behind the dialog.
+   * The dialog stays modal either way: it traps focus and hides the page from
+   * assistive technology.
+   */
+  overlay?: "none" | "scrim";
   ref?: React.Ref<React.ComponentRef<typeof DialogPrimitive.Content>>;
 }) => (
   <DialogPortal>
-    <DialogOverlay />
+    {overlay === "scrim" ? <DialogOverlay /> : null}
     <DialogPrimitive.Content
       className={cn(
         "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",

@@ -11,6 +11,8 @@ import {
   DialogTrigger,
 } from "./dialog";
 
+const veil = (): Element | null => document.body.querySelector(".inset-0");
+
 describe("Dialog", () => {
   it("renders the trigger but keeps content closed by default", () => {
     render(
@@ -44,5 +46,49 @@ describe("Dialog", () => {
     expect(screen.getByText("Confirm")).toBeInTheDocument();
     fireEvent.click(screen.getByText("Close"));
     expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  describe("overlay", () => {
+    const renderDialog = (
+      overlay?: "none" | "scrim",
+      onOpenChange?: (open: boolean) => void,
+    ): HTMLElement => {
+      const { container } = render(
+        <div>
+          <p>Page behind</p>
+          <Dialog defaultOpen onOpenChange={onOpenChange}>
+            <DialogContent overlay={overlay}>
+              <DialogTitle>Title</DialogTitle>
+              <DialogDescription>Description</DialogDescription>
+            </DialogContent>
+          </Dialog>
+        </div>,
+      );
+      return container;
+    };
+
+    it("draws the scrim by default", () => {
+      renderDialog();
+      expect(veil()).toBeInTheDocument();
+    });
+
+    it("draws the scrim when overlay is scrim", () => {
+      renderDialog("scrim");
+      expect(veil()).toBeInTheDocument();
+    });
+
+    it("draws no veil when overlay is none, and the dialog stays modal", () => {
+      const container = renderDialog("none");
+      expect(veil()).not.toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+      expect(container).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("still closes on Escape when overlay is none", () => {
+      const onOpenChange = vi.fn();
+      renderDialog("none", onOpenChange);
+      fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
   });
 });
