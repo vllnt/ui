@@ -11,7 +11,7 @@ A compound family:
 
 - `TransactionList` — root container; renders pinned children first, then the transactions array. Falls back to `emptyMessage` when both are empty.
 - `TransactionList.Pinned` — wrapper for the pinned section (typically the active subscription row).
-- `TransactionList.SubscriptionRow` — green-border card with plan name, status badge, amount per interval, and an optional renewal date. Status drives both the badge variant and the border treatment.
+- `TransactionList.SubscriptionRow` — card with plan name, status badge, amount per interval, and an optional renewal date. Status drives the badge tone: the status colour sits on the badge dot and the card stays neutral.
 
 The component also exports two helper functions for callers that want to format amounts / dates outside the component (e.g. inside CSV exports or PDF receipts):
 

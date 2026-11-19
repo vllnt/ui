@@ -170,8 +170,8 @@
     },
     "trustBadges": {
       "mit": "MIT",
-      "rsc": "Compatible RSC",
-      "tailwind": "Pret pour Tailwind v4",
+      "rsc": "Fonctionne avec l'App Router de Next.js",
+      "tailwind": "Tailwind CSS 3.4",
       "typescript": "TypeScript"
     }
   },

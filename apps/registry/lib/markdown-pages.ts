@@ -2,13 +2,14 @@ import type { Locale } from "@/i18n/routing";
 import { getComponentContent } from "@/lib/component-content";
 import { getPageContent } from "@/lib/content";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
+import { DOCS_PAGES } from "@/lib/docs-pages";
 import { buildLlmsTxt } from "@/lib/llms";
 import { stripLeadingMarkdownHeading } from "@/lib/markdown";
 import {
   type MarkdownTarget,
   markdownTarget,
 } from "@/lib/markdown-negotiation";
-import { findComponent } from "@/lib/registry";
+import { findComponent, registry } from "@/lib/registry";
 import { canonical } from "@/lib/seo";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
@@ -49,6 +50,48 @@ async function componentMarkdown(
   ].join("\n\n");
 }
 
+/** The docs index: every docs page with its summary and URL. */
+function docsIndexMarkdown(locale: Locale): string {
+  const pages = DOCS_PAGES.map(
+    (page) =>
+      `- [${page.title}](${canonical(`/docs/${page.slug}`, locale)}): ${page.description}`,
+  ).join("\n");
+
+  return titled(
+    "Docs",
+    "Guides for installing, theming and using VLLNT UI, for people and AI agents.",
+    pages,
+  );
+}
+
+/** The component catalog: every registry item by category, with its summary and URL. */
+function componentsIndexMarkdown(locale: Locale): string {
+  const items = [...registry.items].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
+  const categoryOf = (item: (typeof items)[number]) =>
+    item.category ?? "utility";
+  const sections = [...new Set(items.map(categoryOf))]
+    .sort()
+    .map((category) => {
+      const lines = items
+        .filter((item) => categoryOf(item) === category)
+        .map(
+          (item) =>
+            `- [${item.title}](${canonical(`/components/${item.name}`, locale)}): ${item.description ?? ""} Platforms: ${item.platforms.join(", ")}.`,
+        );
+
+      return `## ${category}\n\n${lines.join("\n")}`;
+    })
+    .join("\n\n");
+
+  return titled(
+    "Components",
+    `${registry.items.length} components. Each one installs with \`pnpm dlx shadcn@latest add ${SITE_URL}/r/<name>.json\`.`,
+    sections,
+  );
+}
+
 async function pageMarkdown(slug: string, locale: Locale): Promise<string> {
   const { content, frontmatter } = await getPageContent(slug, locale);
 
@@ -67,11 +110,17 @@ function targetMarkdown(
     case "component":
       return componentMarkdown(target.slug, locale);
 
+    case "components-index":
+      return componentsIndexMarkdown(locale);
+
     case "design":
       return getDesignGuideMarkdown();
 
     case "docs":
       return pageMarkdown(`docs/${target.slug}`, locale);
+
+    case "docs-index":
+      return docsIndexMarkdown(locale);
 
     case "home":
       return buildLlmsTxt();

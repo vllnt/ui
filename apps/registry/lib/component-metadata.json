@@ -769,6 +769,26 @@
       {
         "id": "core-badge--variant-secondary",
         "name": "Variant Secondary"
+      },
+      {
+        "id": "core-badge--variant-soft",
+        "name": "Variant Soft"
+      },
+      {
+        "id": "core-badge--with-dot",
+        "name": "With Dot"
+      },
+      {
+        "id": "core-badge--tones",
+        "name": "Tones"
+      },
+      {
+        "id": "core-badge--sizes",
+        "name": "Sizes"
+      },
+      {
+        "id": "core-badge--borders",
+        "name": "Borders"
       }
     ],
     "title": "Badge"
@@ -2028,6 +2048,10 @@
       {
         "id": "overlay-dialog--default",
         "name": "Default"
+      },
+      {
+        "id": "overlay-dialog--no-overlay",
+        "name": "No Overlay"
       }
     ],
     "title": "Dialog"
@@ -4495,6 +4519,10 @@
         "name": "Indeterminate"
       },
       {
+        "id": "data-progressbar--blocks",
+        "name": "Blocks"
+      },
+      {
         "id": "data-progressbar--step-label",
         "name": "Step Label"
       },
@@ -5283,6 +5311,10 @@
       {
         "id": "form-select--default",
         "name": "Default"
+      },
+      {
+        "id": "form-select--invalid",
+        "name": "Invalid"
       }
     ],
     "title": "Select"
