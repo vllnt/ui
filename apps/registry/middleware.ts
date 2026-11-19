@@ -3,7 +3,9 @@ import createMiddleware from "next-intl/middleware";
 
 import { routing } from "@/i18n/routing";
 import { legacyHostRedirectUrl } from "@/lib/legacy-host-redirect";
-import { publicVariant, variantPathname } from "@/lib/platform-variant";
+import { markdownPathname, prefersMarkdown } from "@/lib/markdown-negotiation";
+import { publicVariant } from "@/lib/platform-variant";
+import { variantPathname } from "@/lib/platform-variant-rewrite";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -57,6 +59,23 @@ function platformVariant(
   return rewritten;
 }
 
+const VARY_ON_ACCEPT = new Headers([["Vary", "Accept"]]);
+
+/**
+ * A page with a markdown twin answers `Accept: text/markdown` with the twin at
+ * the same URL, and the answer says it varies by `Accept`.
+ */
+function markdownTwin(request: NextRequest): NextResponse | undefined {
+  if (request.method !== "GET" && request.method !== "HEAD") return undefined;
+  if (!prefersMarkdown(request.headers.get("accept"))) return undefined;
+  const target = markdownPathname(request.nextUrl.pathname);
+  if (!target) return undefined;
+
+  return NextResponse.rewrite(new URL(target, request.url), {
+    headers: VARY_ON_ACCEPT,
+  });
+}
+
 export default function middleware(request: NextRequest): NextResponse {
   const canonicalUrl = legacyHostRedirectUrl(
     request.headers.get("x-forwarded-host") ??
@@ -87,8 +106,8 @@ export default function middleware(request: NextRequest): NextResponse {
     return NextResponse.next();
   }
 
-  const redirect = variantRedirect(request);
-  if (redirect) return redirect;
+  const answer = variantRedirect(request) ?? markdownTwin(request);
+  if (answer) return answer;
 
   const response = intlMiddleware(request);
   /**
@@ -109,6 +128,6 @@ export default function middleware(request: NextRequest): NextResponse {
 export const config = {
   matcher: [
     "/design.md",
-    "/((?!api|healthz|_next|_vercel|mcp|embed|r/|atom\\.xml|rss\\.xml|design\\.txt|llms\\.txt|llms-full\\.txt|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|.*\\.[^/]+$).*)",
+    "/((?!api|healthz|_next|_vercel|mcp|embed|r/|\\.well-known/|atom\\.xml|rss\\.xml|design\\.txt|llms\\.txt|llms-full\\.txt|sitemap\\.xml|robots\\.txt|manifest\\.webmanifest|.*\\.[^/]+$).*)",
   ],
 };

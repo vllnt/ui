@@ -70,6 +70,14 @@ const outputPath = join(
   "component-metadata.json",
 );
 
+const componentSlugsPath = join(
+  repoRoot,
+  "apps",
+  "registry",
+  "lib",
+  "component-slugs.json",
+);
+
 const NAMED_EXPORT_PATTERN = /^export\s+const\s+([A-Z][\w$]*)\s*[:=]/gm;
 const TITLE_KEY_PATTERN = /^["']?title["']?\s*:\s*["'`]([^"'`]*)["'`]/;
 const META_OBJECT_PATTERN = /\b(?:const|let|var)\s+meta\b[^=]*=\s*\{/;
@@ -274,6 +282,17 @@ for (const item of registry.items) {
 }
 
 writeFileSync(outputPath, `${JSON.stringify(metadata, undefined, 2)}\n`);
+
+/**
+ * The component slugs the platform-variant middleware may rewrite to a variant
+ * page. The middleware cannot bundle the whole registry, so it reads this list.
+ */
+const componentSlugs = registry.items.map((item) => item.name).sort();
+
+writeFileSync(
+  componentSlugsPath,
+  `${JSON.stringify(componentSlugs, undefined, 2)}\n`,
+);
 
 console.info(
   `Generated metadata for ${Object.keys(metadata).length} components (${withStories} with stories, ${withoutStories} without).`,
