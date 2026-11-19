@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Code standard in this PR; Penpot "Templates & Site Shells" published with `SiteHeader` and `NetworkSwitcher` (see the end) |
+| **Status** | Code standard in this PR; Penpot "Templates & Site Shells" published with `SiteHeader`, `NetworkSwitcher`, `SiteFooter` and `MarketingShell` (see the end) |
 | **Reference** | oss.vllnt.com as it runs: `vllnt/vllnt` `main` @ `bdb5786` (the shell and font files read here have the same blobs as that commit) |
 | **Live audit** | Orbit's six-site audit of fonts and navbars, 19 Nov 2026 (kept outside the repo) |
 | **Part of** | #555 |
@@ -85,18 +85,20 @@ Not moved: `SiteFooter`, `SiteFrame`, `SiteMain`, `ThemeBar`, `networkSwitcherGr
 
 ## 3. Penpot
 
-"Templates & Site Shells" (file `d915705d-…`) is a shared library in the VLLNT UI project, linked to Atoms, Molecules and Organisms. It was first published on 19 Nov with two families. Both are built only from library instances and pass the atomic lint with 0 errors.
+"Templates & Site Shells" (file `d915705d-…`) is a shared library in the VLLNT UI project, linked to Atoms, Molecules and Organisms. It was first published on 19 Nov and holds four families. All are built only from library instances and pass the atomic lint with 0 errors.
 
 | Family | Variants | Built from |
 |---|---|---|
-| `organism / SiteHeader` | `Width` = desktop (1440, 96 px gutters), tablet (1024, 48), phone (375, 20) | `atom / Link` (brand, bar links), `molecule / Switcher trigger`, `atom / Button` (CTA, menu), `atom / Icon`, `atom / Separator` (the hairline) |
+| `organism / SiteHeader` | `Width` = desktop (1440, 96 px gutters), tablet (1024, 48), phone (375, 20); `Menu` = closed, open (phone only) | `atom / Link` (brand, bar links), `molecule / Switcher trigger`, `atom / Button` (CTA, menu / close), `atom / Icon`, `atom / Separator` (the hairline), `molecule / Menu item` (phone menu) |
 | `organism / NetworkSwitcher` | `Open` = closed, open | `molecule / Switcher trigger`, `molecule / Menu item` (headings and rows) in a popover panel |
+| `organism / SiteFooter` | `Width` = desktop, tablet, phone | `atom / Separator`, `atom / Text` (brand, tagline, column headings), `atom / Link` (muted links, `arrow-up-right` icon on other vllnt sites) |
+| `template / MarketingShell` | `Width` = desktop, tablet, phone | `SiteHeader` (`Menu` = closed), a `Content` slot, `SiteFooter`, each at the same width |
 
 - **Mirrors the oss bar.** Same items per width as the code: the bar shows the tablet links from 768 px and every link from 1200 px. The switcher and the call to action appear from 768 px; the menu button disappears from 1200 px.
-- **Type and colour through tokens only.** Every text binds `font.family.mono` (the body face) and every fill binds a colour token. Dark comes from the consumer's theme resolving the same token names: the file carries `vllnt/core` and `vllnt/mode/light` (active) and `vllnt/mode/dark` (inactive), with the canonical values.
+- **SiteSwitcher is the phone menu.** There is no separate `SiteSwitcher` family: the phone menu panel is `SiteHeader` `Width=phone, Menu=open` (close icon, the bar links, the network groups and the call to action).
+- **Mirrors the oss footer.** Brand block 131 px wide on desktop (the tagline wraps), four link columns on desktop and tablet, two on phone; link lists keep the 8 px gap on desktop only.
+- **Type and colour through tokens only.** Every text binds `font.family.mono` (the body face) and every fill binds a colour token. The open panel's shadow binds `shadow.overlay`. Dark comes from the consumer's theme resolving the same token names: the file carries `vllnt/core` and `vllnt/mode/light` (active) and `vllnt/mode/dark` (inactive), with the canonical values.
 - **Differences from the code, on purpose:**
   - The header shows the switcher trigger itself, not a nested `NetworkSwitcher` instance, because the lint forbids an organism inside an organism. The open panel lives in `NetworkSwitcher`.
   - Rows use the library row height (`size.row`, 40 px at regular density). The touch density gives the code's 44 px.
-  - The panel has no shadow token yet.
-
-Still to build: `SiteSwitcher`, `SiteFooter`, `MarketingShell`.
+  - The footer's link data is the oss site's. `SiteFooter` stays in the monorepo as code (section 2); in Penpot, consumers override the labels.
