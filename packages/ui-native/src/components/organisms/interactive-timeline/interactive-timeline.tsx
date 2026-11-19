@@ -4,7 +4,6 @@ import { useCallback, useState } from "react";
 
 import type { Ref } from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +15,7 @@ import {
   joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   isSingleSelected,
   toggleMultipleSelected,
@@ -98,14 +98,10 @@ const styles = StyleSheet.create({
   category: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   categoryRow: { flexDirection: "row" },
   event: {
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
     position: "absolute",
   },
   events: { position: "relative" },
@@ -115,8 +111,6 @@ const styles = StyleSheet.create({
   zoom: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -186,7 +180,7 @@ function TimelineLane({
             (candidate) => candidate.id,
           );
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityHint={event.description}
               accessibilityLabel={joinAccessibilityText(
                 [
@@ -199,11 +193,13 @@ function TimelineLane({
               )}
               accessibilityRole="button"
               accessibilityState={{ selected }}
+              filled
               key={event.id}
               onPress={() => {
                 onSelect(event);
               }}
-              style={({ pressed }) => [
+              selected={selected}
+              style={[
                 styles.event,
                 {
                   backgroundColor: selected
@@ -218,7 +214,6 @@ function TimelineLane({
                     0,
                     Math.min(geometry.left * width, width - eventWidth),
                   ),
-                  opacity: pressed ? 0.8 : 1,
                   paddingHorizontal: theme.spacing[2],
                   top: 0,
                   width: eventWidth,
@@ -235,7 +230,7 @@ function TimelineLane({
               >
                 {event.title}
               </Text>
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </View>
@@ -344,7 +339,7 @@ function InteractiveTimeline({
           { gap: theme.spacing[1], padding: theme.spacing[2] },
         ]}
       >
-        <Pressable
+        <InteractivePressable
           accessibilityHint={labels.region}
           accessibilityLabel={labels.zoomOut}
           accessibilityRole="button"
@@ -356,8 +351,8 @@ function InteractiveTimeline({
           style={styles.zoom}
         >
           <Text style={{ color: theme.colors.foreground }}>−</Text>
-        </Pressable>
-        <Pressable
+        </InteractivePressable>
+        <InteractivePressable
           accessibilityHint={labels.region}
           accessibilityLabel={labels.zoomIn}
           accessibilityRole="button"
@@ -369,7 +364,7 @@ function InteractiveTimeline({
           style={styles.zoom}
         >
           <Text style={{ color: theme.colors.foreground }}>+</Text>
-        </Pressable>
+        </InteractivePressable>
         <ScrollView
           contentContainerStyle={[
             styles.categoryRow,
@@ -381,7 +376,7 @@ function InteractiveTimeline({
           {categories.map((category) => {
             const checked = visible.includes(category.id);
             return (
-              <Pressable
+              <InteractivePressable
                 accessibilityLabel={category.label}
                 accessibilityRole="checkbox"
                 accessibilityState={{ checked }}
@@ -394,6 +389,7 @@ function InteractiveTimeline({
                   );
                   setVisible([...next]);
                 }}
+                selected={checked}
                 style={[
                   styles.category,
                   {
@@ -410,7 +406,7 @@ function InteractiveTimeline({
                 <Text style={typeStyle(theme, "caption", "foreground")}>
                   {category.label}
                 </Text>
-              </Pressable>
+              </InteractivePressable>
             );
           })}
         </ScrollView>

@@ -1,10 +1,11 @@
 import type { Ref } from "react";
-import { Pressable, StyleSheet, View, type ViewProps } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 
 import {
   decorativeProps,
   joinAccessibilityText,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Badge, type BadgeProps } from "../../atoms/badge/badge";
 import { Card } from "../../atoms/card/card";
@@ -54,7 +55,6 @@ type ProgressCardContentProps = {
 
 const styles = StyleSheet.create({
   inline: { alignItems: "center", flexDirection: "row", flexWrap: "wrap" },
-  pressed: { opacity: 0.8 },
 });
 
 function ProgressCardContent({
@@ -191,16 +191,16 @@ function ProgressCard({
     );
   }
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       {...summary}
       accessibilityRole={props.accessibilityRole ?? "button"}
+      filled
       onPress={onPress}
       ref={ref}
-      style={({ pressed }) => (pressed ? styles.pressed : undefined)}
     >
       {content}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ProgressCard.displayName = "ProgressCard";

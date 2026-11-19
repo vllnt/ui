@@ -8,12 +8,6 @@ import { react } from "@vllnt/eslint-config";
  * migrates. Never add one; new components use InteractivePressable.
  */
 const LEGACY_PRESSABLE_FILES = [
-  "src/components/organisms/date-range-picker/date-range-picker.tsx",
-  "src/components/organisms/interactive-timeline/interactive-timeline.tsx",
-  "src/components/organisms/progress-card/progress-card.tsx",
-  "src/components/organisms/progress-tracker/progress-tracker.tsx",
-  "src/components/organisms/time-picker/time-picker.tsx",
-  "src/components/organisms/tree-view/tree-view.tsx",
 ];
 
 export default [
