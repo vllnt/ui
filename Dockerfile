@@ -16,6 +16,10 @@ RUN pnpm install --frozen-lockfile --filter "@vllnt/ui-registry..." --include-wo
 ARG NEXT_PUBLIC_STORYBOOK_URL=https://storybook.vllnt.com
 ENV NEXT_PUBLIC_STORYBOOK_URL=$NEXT_PUBLIC_STORYBOOK_URL
 
+# Cloudflare Web Analytics site token (public, not a secret). Empty = no beacon.
+ARG NEXT_PUBLIC_CF_BEACON_TOKEN=
+ENV NEXT_PUBLIC_CF_BEACON_TOKEN=$NEXT_PUBLIC_CF_BEACON_TOKEN
+
 RUN pnpm --filter @vllnt/ui-registry build
 
 # ---
