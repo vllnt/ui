@@ -113,6 +113,8 @@ html[data-theme="paas"] {
   --font-sans: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-display: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --opacity-grain: 0;
+  --opacity-contact: 0;
 }
 
 html[data-theme="paas"].dark {
