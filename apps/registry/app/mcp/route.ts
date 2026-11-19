@@ -31,6 +31,7 @@ import { NextResponse } from "next/server";
 
 import { nativeRegistry as NATIVE_REGISTRY } from "@/lib/native-registry";
 import { registry as REGISTRY, type RegistryComponent } from "@/lib/registry";
+import { getRegistryGeneratedAt } from "@/lib/stats";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ui.vllnt.com";
 const PROTOCOL_VERSION = "2025-06-18";
@@ -334,7 +335,7 @@ function callTool(
     case "list_categories": {
       const rows = listCategories();
       const lines = [
-        `${REGISTRY.items.length} components across ${rows.length} categories. Library version ${REGISTRY.version ?? "unknown"} (generated ${REGISTRY.generatedAt ?? "?"}).`,
+        `${REGISTRY.items.length} components across ${rows.length} categories. Library version ${REGISTRY.version ?? "unknown"} (generated ${getRegistryGeneratedAt() ?? "?"}).`,
         "",
         ...rows.map(
           (row) => `- ${row.category}: ${row.count} — ${row.pageUrl}`,
@@ -456,7 +457,7 @@ const SERVER_INFO = {
   name: "vllnt-ui",
   protocol: PROTOCOL_VERSION,
   registry: {
-    generatedAt: REGISTRY.generatedAt ?? null,
+    generatedAt: getRegistryGeneratedAt() ?? null,
     itemCount: REGISTRY.items.length,
     version: REGISTRY.version ?? "0.0.0",
   },

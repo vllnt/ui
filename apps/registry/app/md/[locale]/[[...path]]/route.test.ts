@@ -55,6 +55,22 @@ describe("markdown route", () => {
     expect(body).toContain("https://ui.vllnt.com/r/button.json");
   });
 
+  it("serves the docs index with a link to every docs page", async () => {
+    const body = await markdownOf("en", ["docs"]);
+
+    expect(body.startsWith("# Docs")).toBe(true);
+    expect(body).toContain("(https://ui.vllnt.com/docs/installation)");
+    expect(body).toContain("(https://ui.vllnt.com/docs/cli)");
+  });
+
+  it("serves the component catalog grouped by category", async () => {
+    const body = await markdownOf("fr", ["components"]);
+
+    expect(body.startsWith("# Components")).toBe(true);
+    expect(body).toMatch(/^## /m);
+    expect(body).toContain("(https://ui.vllnt.com/fr/components/button)");
+  });
+
   it("points a French page at its French canonical URL", async () => {
     const body = await markdownOf("fr", ["components", "button"]);
 
