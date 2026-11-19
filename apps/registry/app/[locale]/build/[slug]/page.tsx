@@ -17,6 +17,9 @@ type Props = {
   readonly params: Promise<{ locale: Locale; slug: string }>;
 };
 
+/** `generateStaticParams` covers every use case, so an unknown slug is a 404 that no cache stores. */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     USE_CASES.map((useCase) => ({ locale, slug: useCase.slug })),

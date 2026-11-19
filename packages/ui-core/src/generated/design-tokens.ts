@@ -26,7 +26,7 @@ export const designTokens = {
       "card": {
         "cssVariable": "--card",
         "light": "1 0 0",
-        "dark": "0.1445 0 0",
+        "dark": "0 0 0",
         "role": "Card and contained surface"
       },
       "cardForeground": {
@@ -38,7 +38,7 @@ export const designTokens = {
       "popover": {
         "cssVariable": "--popover",
         "light": "1 0 0",
-        "dark": "0.1445 0 0",
+        "dark": "0 0 0",
         "role": "Popover, menu, and floating surface"
       },
       "popoverForeground": {
@@ -74,7 +74,7 @@ export const designTokens = {
       "muted": {
         "cssVariable": "--muted",
         "light": "0.9703 0 0",
-        "dark": "0.2686 0 0",
+        "dark": "0 0 0",
         "role": "Subtle surface"
       },
       "mutedForeground": {
@@ -925,15 +925,15 @@ export const productThemes = {
       "dark": {
         "background": "#000000",
         "foreground": "#fafafa",
-        "card": "#0a0a0a",
+        "card": "#000000",
         "cardForeground": "#fafafa",
-        "popover": "#0a0a0a",
+        "popover": "#000000",
         "popoverForeground": "#fafafa",
         "primary": "#fafafa",
         "primaryForeground": "#171717",
         "secondary": "#262626",
         "secondaryForeground": "#fafafa",
-        "muted": "#262626",
+        "muted": "#000000",
         "mutedForeground": "#a3a3a3",
         "accent": "#262626",
         "accentForeground": "#fafafa",
@@ -1227,15 +1227,15 @@ export const tamaguiThemes = {
   "paas_dark": {
     "background": "#000000",
     "color": "#fafafa",
-    "card": "#0a0a0a",
+    "card": "#000000",
     "cardForeground": "#fafafa",
-    "popover": "#0a0a0a",
+    "popover": "#000000",
     "popoverForeground": "#fafafa",
     "primary": "#fafafa",
     "primaryForeground": "#171717",
     "secondary": "#262626",
     "secondaryForeground": "#fafafa",
-    "muted": "#262626",
+    "muted": "#000000",
     "mutedForeground": "#a3a3a3",
     "accent": "#262626",
     "accentForeground": "#fafafa",

@@ -40,7 +40,7 @@ export const FlowFullscreen = memo(function FlowFullscreen({
       <div className="flex h-12 items-center justify-end border-b border-border px-4">
         <button
           aria-label="Close fullscreen"
-          className="flex size-8 items-center justify-center rounded hover:bg-muted transition-colors"
+          className="flex size-8 items-center justify-center rounded hover:bg-secondary transition-colors"
           onClick={onClose}
           title="Close fullscreen (Esc)"
           type="button"

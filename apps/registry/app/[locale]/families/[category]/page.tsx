@@ -196,7 +196,7 @@ export default async function FamilyPage({ params }: Props) {
                 <ArrowRight className="size-4" />
               </Link>
               <Link
-                className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-muted"
+                className="inline-flex h-11 items-center rounded-md border border-border px-5 text-sm font-medium hover:bg-secondary"
                 href={withPlatformQuery("/docs/agents", query, platform)}
               >
                 {t("agentsDocs")}

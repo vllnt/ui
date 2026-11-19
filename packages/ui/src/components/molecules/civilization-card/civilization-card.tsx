@@ -202,7 +202,7 @@ function EraTimeline({ era, label }: EraTimelineProps): ReactNode {
       <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {eraLabel}
       </span>
-      <div className="relative h-1.5 w-full rounded-full bg-muted">
+      <div className="relative h-1.5 w-full rounded-full bg-secondary">
         <span
           className="absolute h-full rounded-full bg-primary"
           style={{ left: `${left.toString()}%`, width: `${width.toString()}%` }}

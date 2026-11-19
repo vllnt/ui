@@ -25,6 +25,9 @@ type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
+/** `generateStaticParams` covers every component, so an unknown slug is a 404 that no cache stores. */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const slugs = registry.items.map((item) => item.name);
 
@@ -129,7 +132,7 @@ export default async function ComponentPlaygroundPage(props: Props) {
               </p>
             </div>
             <Link
-              className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+              className="inline-flex h-9 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-secondary"
               href={`/components/${component.name}`}
             >
               {t("backToComponent")}

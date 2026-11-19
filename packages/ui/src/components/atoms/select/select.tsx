@@ -163,7 +163,7 @@ const SelectSeparator = ({
   ref?: React.Ref<React.ComponentRef<typeof SelectPrimitive.Separator>>;
 }) => (
   <SelectPrimitive.Separator
-    className={cn("-m-1 h-px bg-muted", className)}
+    className={cn("-m-1 h-px bg-border", className)}
     ref={ref}
     {...props}
   />

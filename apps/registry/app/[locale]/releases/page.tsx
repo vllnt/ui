@@ -70,7 +70,7 @@ async function ReleaseCard({
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <a
-              className="inline-flex"
+              className="inline-flex min-h-6 items-center"
               href={release.url}
               rel="noreferrer"
               target="_blank"
@@ -122,7 +122,7 @@ async function ReleaseCard({
       </dl>
 
       <details className="mt-6">
-        <summary className="cursor-pointer text-sm font-medium">
+        <summary className="min-h-6 cursor-pointer text-sm font-medium">
           {t("fullReleaseNotes")}
         </summary>
         <div className="mt-4">
