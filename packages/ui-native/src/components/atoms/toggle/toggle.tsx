@@ -2,7 +2,6 @@
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   type PressableProps,
   StyleSheet,
   Text as NativeText,
@@ -14,6 +13,7 @@ import {
   type ControlSize,
   controlSizeStyle,
 } from "../../../primitives/control-size";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   controllableOptions,
@@ -39,17 +39,13 @@ export type ToggleProps = Omit<PressableProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  base: {
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
-  },
-  disabled: { opacity: 0.5 },
-  pressed: { opacity: 0.8 },
+  base: { alignItems: "center", justifyContent: "center" },
 });
 
-/** Accessible native toggle button exposing its pressed state as `checked`. */
+/**
+ * Accessible native toggle button exposing its pressed state as `checked`. A
+ * pressed toggle also gets a thicker border, so the state reads without colour.
+ */
 function Toggle({
   accessibilityState,
   children,
@@ -84,7 +80,7 @@ function Toggle({
     );
 
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityRole="togglebutton"
       accessibilityState={{
@@ -98,6 +94,7 @@ function Toggle({
         if (!event?.defaultPrevented) setIsPressed(!isPressed);
       }}
       ref={ref}
+      selected={isPressed}
       style={(state) => [
         styles.base,
         {
@@ -108,13 +105,11 @@ function Toggle({
           ...controlSizeStyle(theme, size),
           paddingVertical: theme.spacing[2],
         },
-        state.pressed ? styles.pressed : undefined,
-        disabled ? styles.disabled : undefined,
         typeof style === "function" ? style(state) : style,
       ]}
     >
       {content}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 Toggle.displayName = "Toggle";

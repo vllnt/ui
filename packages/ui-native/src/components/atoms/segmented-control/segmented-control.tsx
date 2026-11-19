@@ -2,7 +2,6 @@
 
 import type { Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -14,6 +13,7 @@ import {
   type ControlSize,
   controlSizeStyle,
 } from "../../../primitives/control-size";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    minHeight: 44,
   },
   root: { flexDirection: "row", padding: 4 },
 });
 
 /**
  * Native segmented control with radio semantics and 44-point targets. The
+ * selected option gets a thicker border besides its raised surface. The
  * group `label` is each option's hint (VoiceOver ignores labels on
  * non-focusable containers), and option text wraps at large font sizes.
  */
@@ -82,16 +82,18 @@ function SegmentedControl({
         const selected = item.id === selectedId;
         const itemDisabled = disabled || item.disabled === true;
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={label}
             accessibilityLabel={item.label}
             accessibilityRole="radio"
             accessibilityState={{ checked: selected, disabled: itemDisabled }}
             disabled={itemDisabled}
+            filled
             key={item.id}
             onPress={() => {
               setSelectedId(item.id);
             }}
+            selected={selected}
             style={[
               styles.item,
               {
@@ -99,7 +101,6 @@ function SegmentedControl({
                   ? theme.colors.background
                   : theme.colors.muted,
                 borderRadius: theme.radius.md,
-                opacity: itemDisabled ? 0.5 : 1,
                 ...controlSizeStyle(theme, size),
               },
             ]}
@@ -113,7 +114,7 @@ function SegmentedControl({
             >
               {item.label}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>
