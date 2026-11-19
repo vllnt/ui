@@ -1,7 +1,13 @@
 "use client";
 
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import {
+  type ComponentPropsWithoutRef,
+  type KeyboardEvent,
+  type ReactNode,
+  useState,
+} from "react";
 
+import { moveRovingFocus } from "../../../lib/roving-focus";
 import { cn } from "../../../lib/utils";
 
 /**
@@ -51,6 +57,20 @@ const DEFAULT_LABELS = {
   region: "Selection actions",
 } as const satisfies Required<FloatingToolbarLabels>;
 
+const ACTION_SELECTOR = "button[data-action-id]";
+
+function resolveTabStopId(
+  actions: FloatingToolbarAction[],
+  focusedId: string | undefined,
+): string | undefined {
+  const enabledIds = actions
+    .filter((action) => !action.disabled)
+    .map((action) => action.id);
+  return focusedId !== undefined && enabledIds.includes(focusedId)
+    ? focusedId
+    : enabledIds[0];
+}
+
 /**
  * Props for {@link FloatingToolbar}.
  *
@@ -72,6 +92,10 @@ export type FloatingToolbarProps = {
  * {@link SelectionHalo} — surface the toolbar at the halo's top edge so
  * the user sees the available actions for the current selection.
  *
+ * Keyboard: the toolbar is one tab stop. Left and Right Arrow move between
+ * actions and wrap at the ends, Home and End jump to the first and last
+ * action, and the toolbar passes over disabled actions.
+ *
  * @example
  * ```tsx
  * <FloatingToolbar
@@ -91,8 +115,14 @@ export const FloatingToolbar = ({
   ref,
   ...props
 }: FloatingToolbarProps & { ref?: React.Ref<HTMLDivElement> }) => {
-  const { actions, className, labels, x, y, ...rest } = props;
+  const { actions, className, labels, onKeyDown, x, y, ...rest } = props;
+  const [focusedId, setFocusedId] = useState<string | undefined>();
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
+  const tabStopId = resolveTabStopId(actions, focusedId);
+  const handleKeyDownToolbar = (event: KeyboardEvent<HTMLDivElement>): void => {
+    onKeyDown?.(event);
+    moveRovingFocus(event, ACTION_SELECTOR);
+  };
   return (
     <div
       aria-label={resolvedLabels.region}
@@ -105,17 +135,21 @@ export const FloatingToolbar = ({
       role="toolbar"
       style={{ left: `${x.toString()}px`, top: `${y.toString()}px` }}
       {...rest}
+      onKeyDown={handleKeyDownToolbar}
     >
       {actions.map((action) => {
         const variant = action.variant ?? "ghost";
         const handleActivateToolbarAction = (): void => {
           action.onActivate();
         };
+        const handleFocusToolbarAction = (): void => {
+          setFocusedId(action.id);
+        };
         return (
           <button
             aria-label={action.ariaLabel ?? undefined}
             className={cn(
-              "inline-flex h-7 items-center gap-1 rounded-md border px-2 text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "inline-flex h-7 items-center gap-1 rounded-md border px-2 text-xs font-medium transition-colors motion-reduce:transition-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               VARIANT_CLASSES[variant],
               action.disabled ? "cursor-not-allowed opacity-50" : "",
             )}
@@ -124,6 +158,8 @@ export const FloatingToolbar = ({
             disabled={action.disabled}
             key={action.id}
             onClick={handleActivateToolbarAction}
+            onFocus={handleFocusToolbarAction}
+            tabIndex={action.id === tabStopId ? 0 : -1}
             type="button"
           >
             {action.glyph ? (

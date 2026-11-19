@@ -45,6 +45,12 @@ Set `disabled` on the root to disable the full control, or on an individual item
 
 <Canvas of={Stories.Disabled} sourceState="shown" />
 
+## Accessibility
+
+- The control is one tab stop and lands on the selected segment.
+- Arrow keys, Home and End move focus between segments, skip disabled ones and wrap at the ends. Space or Enter selects the focused segment.
+- The selection transition stops under `prefers-reduced-motion`.
+
 ## API Reference
 
 <Controls />
