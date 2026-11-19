@@ -1,6 +1,12 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-
+import {
+  contrast,
+  type Mode,
+  oklchToRgb,
+  type Palette,
+  palette,
+  PRODUCT_THEMES,
+  token,
+} from "./__tests__/theme-colors";
 import { THEME_PRESETS } from "./theme-presets";
 
 /*
@@ -11,13 +17,7 @@ import { THEME_PRESETS } from "./theme-presets";
  * browsers render them on an sRGB display.
  */
 
-type Mode = "dark" | "light";
-type Palette = Readonly<Record<string, string>>;
 type Pair = readonly [string, string];
-
-const THEMES_DIR = join(__dirname, "..", "..", "themes");
-
-const PRODUCT_THEMES: readonly string[] = ["maia", "paas"];
 
 const TEXT_PAIRS: readonly Pair[] = [
   ["foreground", "background"],
@@ -64,104 +64,9 @@ const BOUNDARY_PAIRS: readonly Pair[] = [
   ["input", "background"],
   ["input", "card"],
   ["input", "popover"],
+  ["input", "muted"],
   ["ring", "background"],
 ];
-
-const MUTED_BOUNDARY_PAIRS: readonly Pair[] = [["input", "muted"]];
-
-function readTheme(file: string): string {
-  return readFileSync(join(THEMES_DIR, file), "utf8");
-}
-
-function declarations(body: string): Palette {
-  return Object.fromEntries(
-    [...body.matchAll(/--([\w-]+):\s*([^;]+);/g)].map(
-      ([, name = "", value = ""]) => [name, value.trim()],
-    ),
-  );
-}
-
-function block(css: string, selector: string): Palette {
-  const start = css.indexOf(`${selector} {`);
-  if (start === -1) throw new Error(`Missing CSS block ${selector}`);
-  return declarations(css.slice(start, css.indexOf("}", start)));
-}
-
-/** CodeBlock `--vllnt-code-*` defaults from the shipped styles.css. */
-function codeDefaults(mode: Mode): Palette {
-  const css = readFileSync(join(THEMES_DIR, "..", "styles.css"), "utf8");
-  const selector = mode === "light" ? ":root" : ".dark";
-  const start = css.indexOf(`\n${selector} {\n  --vllnt-code-`);
-  if (start === -1) throw new Error(`Missing CodeBlock tokens for ${mode}`);
-  return declarations(css.slice(start, css.indexOf("}", start)));
-}
-
-/**
- * Resolve the cascade: base mode, then the theme, then the theme's `.dark`.
- * Presets live in presets.css, product themes in the generated products.css.
- */
-function palette(theme: string, mode: Mode): Palette {
-  const base = readTheme("default.css");
-  const own = {
-    ...codeDefaults(mode),
-    ...block(base, mode === "light" ? ":root" : ".dark"),
-  };
-  if (theme === "default") return own;
-  const css = readTheme(
-    PRODUCT_THEMES.includes(theme) ? "products.css" : "presets.css",
-  );
-  const selector = `html[data-theme="${theme}"]`;
-  return {
-    ...own,
-    ...block(css, selector),
-    ...(mode === "dark" ? block(css, `${selector}.dark`) : {}),
-  };
-}
-
-function linearToSrgb(channel: number): number {
-  const encoded =
-    channel <= 0.003_130_8
-      ? 12.92 * channel
-      : 1.055 * channel ** (1 / 2.4) - 0.055;
-  return Math.round(Math.min(1, Math.max(0, encoded)) * 255);
-}
-
-/** OKLCH channels ("L C H") to 8-bit sRGB, clipped to gamut. */
-function oklchToRgb(value: string): number[] {
-  const [lightness = 0, chroma = 0, hue = 0] = value.split(/\s+/).map(Number);
-  const a = chroma * Math.cos((hue * Math.PI) / 180);
-  const b = chroma * Math.sin((hue * Math.PI) / 180);
-  const l = (lightness + 0.396_337_777_4 * a + 0.215_803_757_3 * b) ** 3;
-  const m = (lightness - 0.105_561_345_8 * a - 0.063_854_172_8 * b) ** 3;
-  const s = (lightness - 0.089_484_177_5 * a - 1.291_485_548 * b) ** 3;
-  return [
-    4.076_741_662_1 * l - 3.307_711_591_3 * m + 0.230_969_929_2 * s,
-    -1.268_438_004_6 * l + 2.609_757_401_1 * m - 0.341_319_396_5 * s,
-    -0.004_196_086_3 * l - 0.703_418_614_7 * m + 1.707_614_701 * s,
-  ].map((channel) => linearToSrgb(channel));
-}
-
-function luminance(rgb: readonly number[]): number {
-  const [red = 0, green = 0, blue = 0] = rgb.map((channel) => {
-    const value = channel / 255;
-    return value <= 0.040_45 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
-}
-
-function contrast(first: readonly number[], second: readonly number[]): number {
-  const [light, dark] = [luminance(first), luminance(second)].sort(
-    (x, y) => y - x,
-  );
-  return ((light ?? 0) + 0.05) / ((dark ?? 0) + 0.05);
-}
-
-/** A token's value; throws so a missing token cannot pass as black. */
-function token(colors: Palette, name: string): string {
-  const value = colors[name];
-  if (!value) throw new Error(`Missing --${name}`);
-  return value;
-}
 
 function failures(colors: Palette, pairs: readonly Pair[], minimum: number) {
   return pairs
@@ -196,28 +101,6 @@ const KNOWN_STATUS_GAPS: Readonly<Record<string, readonly Mode[]>> = {
   dusk: ["light"],
   nord: ["dark", "light"],
   synthwave: ["light"],
-};
-
-/**
- * `--input` needs 3:1 on `--muted` too, like on background, card and popover.
- * The generated themes (default, Maia, PaaS) meet it. Every preset sets its own
- * `--input` and `--muted` and misses it in both modes, by 2.48:1 to 2.81:1.
- * Tracked in https://github.com/vllnt/ui/issues/618. Each gap runs under
- * `it.fails`, so a preset that passes has to leave this list.
- */
-const KNOWN_MUTED_BOUNDARY_GAPS: Readonly<Record<string, readonly Mode[]>> = {
-  aura: ["dark", "light"],
-  chatgpt: ["dark", "light"],
-  claude: ["dark", "light"],
-  cyberlime: ["dark", "light"],
-  cyberpunk: ["dark", "light"],
-  dracula: ["dark", "light"],
-  dusk: ["dark", "light"],
-  gemini: ["dark", "light"],
-  matrix: ["dark", "light"],
-  nord: ["dark", "light"],
-  synthwave: ["dark", "light"],
-  tron: ["dark", "light"],
 };
 
 function illegibleOnTint(colors: Palette, roles: readonly string[]): string[] {
@@ -272,13 +155,5 @@ describe.each(CASES)("%s theme (%s) contrast contract", (preset, mode) => {
 
   it("keeps control boundaries and the focus ring at 3:1", () => {
     expect(failures(colors, BOUNDARY_PAIRS, 3)).toEqual([]);
-  });
-
-  const mutedBoundaryIt = KNOWN_MUTED_BOUNDARY_GAPS[preset]?.includes(mode)
-    ? it.fails
-    : it;
-
-  mutedBoundaryIt("keeps the control boundary at 3:1 on muted", () => {
-    expect(failures(colors, MUTED_BOUNDARY_PAIRS, 3)).toEqual([]);
   });
 });
