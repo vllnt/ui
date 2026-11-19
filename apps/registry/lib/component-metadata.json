@@ -2028,6 +2028,10 @@
       {
         "id": "overlay-dialog--default",
         "name": "Default"
+      },
+      {
+        "id": "overlay-dialog--no-overlay",
+        "name": "No Overlay"
       }
     ],
     "title": "Dialog"

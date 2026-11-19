@@ -62,3 +62,38 @@ export const Default: Story = {
     </Dialog>
   ),
 };
+
+/** `overlay="none"` draws no veil: the page stays fully visible behind the dialog, which is still modal. */
+export const NoOverlay: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          className="rounded bg-primary px-4 py-2 text-primary-foreground"
+          type="button"
+        >
+          Open Dialog Without Overlay
+        </button>
+      </DialogTrigger>
+      <DialogContent overlay="none">
+        <DialogHeader>
+          <DialogTitle>No overlay</DialogTitle>
+          <DialogDescription>
+            The page behind is not dimmed or blurred. Focus is still trapped and
+            Escape still closes the dialog.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <button
+              className="rounded bg-secondary px-4 py-2 text-secondary-foreground"
+              type="button"
+            >
+              Close
+            </button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
