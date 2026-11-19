@@ -172,7 +172,7 @@ export default async function DesignPage({ params }: Props) {
               </div>
             </dl>
             <a
-              className="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4"
+              className="mt-4 inline-flex min-h-6 items-center text-sm font-medium text-primary underline underline-offset-4"
               href="/r/design.json"
             >
               {t("viewTokensJson")}

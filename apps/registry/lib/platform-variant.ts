@@ -27,16 +27,6 @@ export function isPlatformVariant(
   return value !== undefined && VARIANT_NAMES.includes(value);
 }
 
-/** Route families whose HTML depends on the platform, and what the clean URL means for each. */
-const VARIANT_ROUTES: readonly {
-  readonly fallback: "all" | ComponentPlatform;
-  readonly pattern: RegExp;
-}[] = [
-  { fallback: "all", pattern: /^\/components(?:\/[^/]+)?$/ },
-  { fallback: "web", pattern: /^\/docs\/installation$/ },
-  { fallback: "web", pattern: /^\/families(?:\/[^/]+)?$/ },
-];
-
 const PRIVATE_PATTERN = new RegExp(
   `^/p/(${PLATFORM_VARIANTS.join("|")})(/.*)$`,
 );
@@ -47,7 +37,15 @@ type SplitPath = {
   readonly prefixed: boolean;
 };
 
-function splitLocale(pathname: string): SplitPath {
+/**
+ * Splits the locale prefix off a public pathname.
+ *
+ * @param pathname - public pathname as received (`/fr/components/button`)
+ * @returns The locale (default when unprefixed) and the pathname without it
+ * @example
+ * splitLocale("/fr/docs/cli"); // { locale: "fr", pathname: "/docs/cli", prefixed: true }
+ */
+export function splitLocale(pathname: string): SplitPath {
   const locale = locales.find(
     (entry) => pathname === `/${entry}` || pathname.startsWith(`/${entry}/`),
   );
@@ -58,33 +56,6 @@ function splitLocale(pathname: string): SplitPath {
     pathname: pathname.slice(locale.length + 1) || "/",
     prefixed: true,
   };
-}
-
-/**
- * Internal route that holds the prerendered copy of a public URL for one
- * platform, or `undefined` when the clean page already is that copy.
- *
- * @param pathname - public pathname as received (`/fr/components/button`)
- * @param platform - raw `platform` query value, if the URL has one
- * @returns Internal pathname such as `/fr/p/native/components/button`
- * @example
- * variantPathname("/components/button", "native"); // "/en/p/native/components/button"
- */
-export function variantPathname(
-  pathname: string,
-  platform: string | undefined,
-): string | undefined {
-  const variant = getPlatform(platform, "all");
-  const path = splitLocale(pathname);
-  const route = VARIANT_ROUTES.find((entry) =>
-    entry.pattern.test(path.pathname),
-  );
-  const defaultPrefix = path.prefixed && path.locale === defaultLocale;
-  if (!variant || !route || route.fallback === variant || defaultPrefix) {
-    return undefined;
-  }
-
-  return `/${path.locale}/p/${variant}${path.pathname}`;
 }
 
 /**

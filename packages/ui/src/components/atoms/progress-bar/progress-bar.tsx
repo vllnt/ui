@@ -6,18 +6,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "../../../lib/utils";
 
-const progressBarTrackVariants = cva("overflow-hidden rounded-full bg-muted", {
-  defaultVariants: {
-    size: "md",
-  },
-  variants: {
-    size: {
-      lg: "h-3",
-      md: "h-2",
-      sm: "h-1",
+const progressBarTrackVariants = cva(
+  "overflow-hidden rounded-full bg-secondary",
+  {
+    defaultVariants: {
+      size: "md",
+    },
+    variants: {
+      size: {
+        lg: "h-3",
+        md: "h-2",
+        sm: "h-1",
+      },
     },
   },
-});
+);
 
 const progressBarFillVariants = cva("h-full", {
   defaultVariants: {
@@ -51,6 +54,22 @@ const progressBarCompleteVariants = cva("", {
   },
 });
 
+/** Cells in a block-style track. Each one stands for 10% of the range. */
+const BLOCKS = Array.from({ length: 10 }, (_, index) => index + 1);
+
+/**
+ * Blocks that `value / max` fills. It floors the raw ratio instead of the
+ * rounded percentage, so 999 of 1000 fills nine blocks and a complete task
+ * fills all ten. The result stays between zero and the block count.
+ */
+function countFilledBlocks(value: number, max: number): number {
+  if (max <= 0) {
+    return 0;
+  }
+  const filled = Math.floor((value * BLOCKS.length) / max);
+  return Math.min(Math.max(filled, 0), BLOCKS.length);
+}
+
 /** Colour role of the fill. Matches the Penpot `Tone` axis. */
 export type ProgressBarTone = NonNullable<
   VariantProps<typeof progressBarFillVariants>["tone"]
@@ -72,6 +91,13 @@ export type ProgressBarProps = {
    * to `"Progress"`.
    */
   "aria-label"?: string;
+  /**
+   * Draws the track as ten equal blocks. One block fills for each whole 10%
+   * of `value / max`, so a full row means the task reached 100%.
+   * `aria-valuenow` still reports the exact value. An `indeterminate` bar
+   * keeps its continuous animation, and a loading bar shows ten empty blocks.
+   */
+  blocks?: boolean;
   className?: string;
   completedLabel?: string;
   currentLabel?: string;
@@ -144,8 +170,8 @@ function ProgressBarHeader(props: ProgressBarHeaderProps): React.ReactNode {
     <div className="flex items-center justify-between mb-2 h-5">
       {props.isLoading ? (
         <>
-          <span className="h-5 w-16 bg-muted rounded animate-pulse motion-reduce:animate-none" />
-          <span className="h-5 w-24 bg-muted rounded animate-pulse motion-reduce:animate-none" />
+          <span className="h-5 w-16 bg-secondary rounded animate-pulse motion-reduce:animate-none" />
+          <span className="h-5 w-24 bg-secondary rounded animate-pulse motion-reduce:animate-none" />
         </>
       ) : (
         <>
@@ -163,7 +189,7 @@ function ProgressBarHeader(props: ProgressBarHeaderProps): React.ReactNode {
 
 type ProgressBarTrackProps = Pick<
   ProgressBarProps,
-  "max" | "size" | "value"
+  "blocks" | "max" | "size" | "value"
 > & {
   ariaLabel?: string;
   isIndeterminate: boolean;
@@ -175,6 +201,7 @@ type ProgressBarTrackProps = Pick<
 
 function ProgressBarTrack({
   ariaLabel,
+  blocks,
   isIndeterminate,
   isLoading,
   labelledBy,
@@ -185,6 +212,8 @@ function ProgressBarTrack({
   value,
 }: ProgressBarTrackProps): React.ReactNode {
   const isValueKnown = !isLoading && !isIndeterminate;
+  const showBlocks = blocks === true && !isIndeterminate;
+  const filledBlocks = isValueKnown ? countFilledBlocks(value, max) : 0;
 
   return (
     <div
@@ -193,19 +222,36 @@ function ProgressBarTrack({
       aria-valuemax={max}
       aria-valuemin={0}
       aria-valuenow={isValueKnown ? value : undefined}
-      className={progressBarTrackVariants({ size })}
+      className={cn(
+        progressBarTrackVariants({ size }),
+        showBlocks && "flex gap-0.5 bg-transparent",
+      )}
       role="progressbar"
     >
-      <div
-        className={cn(
-          progressBarFillVariants({ tone }),
-          isIndeterminate
-            ? "w-full animate-shimmer motion-reduce:w-1/3 motion-reduce:animate-none"
-            : "transition-all duration-300",
-          isLoading && "w-0",
-        )}
-        style={isValueKnown ? { width: `${percent}%` } : undefined}
-      />
+      {showBlocks ? (
+        BLOCKS.map((block) => (
+          <div
+            className={cn(
+              "h-full flex-1 transition-colors duration-300 motion-reduce:transition-none",
+              block <= filledBlocks
+                ? progressBarFillVariants({ tone })
+                : "bg-muted",
+            )}
+            key={block}
+          />
+        ))
+      ) : (
+        <div
+          className={cn(
+            progressBarFillVariants({ tone }),
+            isIndeterminate
+              ? "w-full animate-shimmer motion-reduce:w-1/3 motion-reduce:animate-none"
+              : "transition-all duration-300 motion-reduce:transition-none",
+            isLoading && "w-0",
+          )}
+          style={isValueKnown ? { width: `${percent}%` } : undefined}
+        />
+      )}
     </div>
   );
 }
@@ -222,6 +268,7 @@ function ProgressBarTrack({
  */
 const ProgressBar = ({
   "aria-label": ariaLabel,
+  blocks,
   className,
   completedLabel,
   currentLabel,
@@ -248,7 +295,7 @@ const ProgressBar = ({
   return (
     <div
       className={cn(
-        "border rounded-lg p-4 transition-colors",
+        "border rounded-lg p-4 transition-colors motion-reduce:transition-none",
         !isLoading && isComplete
           ? progressBarCompleteVariants({ tone: resolvedTone })
           : "border-border bg-muted/30",
@@ -274,6 +321,7 @@ const ProgressBar = ({
       ) : null}
       <ProgressBarTrack
         ariaLabel={ariaLabel}
+        blocks={blocks}
         isIndeterminate={isIndeterminate}
         isLoading={isLoading}
         labelledBy={labelledBy}

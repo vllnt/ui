@@ -110,7 +110,7 @@ function UsageBreakdownMeter({
 }) {
   return (
     <div className="space-y-2">
-      <div className="h-2 overflow-hidden rounded-full bg-muted">
+      <div className="h-2 overflow-hidden rounded-full bg-secondary">
         <div
           aria-hidden="true"
           className="h-full rounded-full bg-primary transition-[width]"

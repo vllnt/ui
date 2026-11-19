@@ -88,7 +88,7 @@ function ContentIntroToc({
           return (
             <li key={section.id}>
               <button
-                className="w-full flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-muted/50 transition-colors text-left"
+                className="w-full flex items-center gap-3 p-2 -m-2 rounded-lg hover:bg-secondary/50 transition-colors text-left"
                 onClick={() => {
                   onGoToSection(index);
                 }}
@@ -98,7 +98,7 @@ function ContentIntroToc({
                   className={cn(
                     "flex-shrink-0 size-6 rounded-full flex items-center justify-center text-xs font-medium tabular-nums transition-colors",
                     isLoading &&
-                      "animate-pulse bg-muted motion-reduce:animate-none",
+                      "animate-pulse bg-secondary motion-reduce:animate-none",
                     !isLoading &&
                       isCompleted &&
                       "bg-foreground text-background",

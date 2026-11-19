@@ -26,7 +26,7 @@ export const designTokens = {
       "card": {
         "cssVariable": "--card",
         "light": "1 0 0",
-        "dark": "0.1445 0 0",
+        "dark": "0 0 0",
         "role": "Card and contained surface"
       },
       "cardForeground": {
@@ -38,7 +38,7 @@ export const designTokens = {
       "popover": {
         "cssVariable": "--popover",
         "light": "1 0 0",
-        "dark": "0.1445 0 0",
+        "dark": "0 0 0",
         "role": "Popover, menu, and floating surface"
       },
       "popoverForeground": {
@@ -74,7 +74,7 @@ export const designTokens = {
       "muted": {
         "cssVariable": "--muted",
         "light": "0.9703 0 0",
-        "dark": "0.2686 0 0",
+        "dark": "0 0 0",
         "role": "Subtle surface"
       },
       "mutedForeground": {
@@ -172,6 +172,78 @@ export const designTokens = {
         "light": "0.1445 0 0",
         "dark": "0.8697 0 0",
         "role": "Focus ring"
+      }
+    },
+    "badge-label": {
+      "danger": {
+        "value": "{color.destructive}",
+        "role": "Penpot name for a danger Badge label colour. Web code reads the destructive role directly"
+      },
+      "info": {
+        "value": "{color.info}",
+        "role": "Penpot name for an info Badge label colour. Web code reads the info role directly"
+      },
+      "success": {
+        "value": "{color.success}",
+        "role": "Penpot name for a success Badge label colour. Web code reads the success role directly"
+      },
+      "warning": {
+        "value": "{color.warning}",
+        "role": "Penpot name for a warning Badge label colour. Web code reads the warning role directly"
+      }
+    }
+  },
+  "brand": {
+    "status": {
+      "candidate": {
+        "light": {
+          "value": "{color.info}",
+          "role": "Roadmap status: candidate (light)"
+        },
+        "dark": {
+          "value": "{color.info}",
+          "role": "Roadmap status: candidate (dark)"
+        }
+      },
+      "deprecated": {
+        "light": {
+          "value": "{color.warning}",
+          "role": "Roadmap status: deprecated (light)"
+        },
+        "dark": {
+          "value": "{color.warning}",
+          "role": "Roadmap status: deprecated (dark)"
+        }
+      },
+      "implemented": {
+        "light": {
+          "value": "{color.success}",
+          "role": "Roadmap status: implemented (light)"
+        },
+        "dark": {
+          "value": "{color.success}",
+          "role": "Roadmap status: implemented (dark)"
+        }
+      },
+      "planned": {
+        "light": {
+          "value": "{color.muted-foreground}",
+          "role": "Roadmap status: planned (light)"
+        },
+        "dark": {
+          "value": "{color.muted-foreground}",
+          "role": "Roadmap status: planned (dark)"
+        }
+      },
+      "unsupported": {
+        "light": {
+          "value": "{color.destructive}",
+          "role": "Roadmap status: unsupported (light)"
+        },
+        "dark": {
+          "value": "{color.destructive}",
+          "role": "Roadmap status: unsupported (dark)"
+        }
       }
     }
   },
@@ -312,7 +384,32 @@ export const designTokens = {
     "md": "0.5rem",
     "lg": "0.75rem",
     "xl": "1rem",
-    "full": "9999px"
+    "full": "9999px",
+    "control": "0.375rem",
+    "surface": "0.5rem"
+  },
+  "size": {
+    "control-xs": {
+      "value": "2rem",
+      "coarse": "{size.target.min}",
+      "role": "Extra-small control height (32). Under a coarse pointer it rises to size.target.min"
+    },
+    "target": {
+      "min": {
+        "value": "2.75rem",
+        "role": "Minimum touch target (44). Interactive controls reach it under a coarse pointer"
+      }
+    }
+  },
+  "opacity": {
+    "grain": {
+      "value": "1",
+      "role": "Opacity of a Surface grain layer when grain is on. Grain is opt-in; 0 hides it"
+    },
+    "contact": {
+      "value": "1",
+      "role": "Opacity of a Surface contact-shadow layer. 0 hides it"
+    }
   },
   "elevation": {
     "none": "none",
@@ -449,6 +546,10 @@ export const designTokens = {
       "label": "PaaS",
       "description": "PaaS product theme: core neutral and status colours with JetBrains Mono for every face. Dark is the design default; light stays supported.",
       "defaultMode": "dark",
+      "opacity": {
+        "grain": "0",
+        "contact": "0"
+      },
       "typography": {
         "fontFamily": {
           "sans": "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
@@ -469,7 +570,8 @@ export const componentContracts = {
         "default",
         "destructive",
         "outline",
-        "secondary"
+        "secondary",
+        "soft"
       ]
     },
     "button": {
@@ -602,7 +704,9 @@ export const nativeTokens = {
     "md": 8,
     "lg": 12,
     "xl": 16,
-    "full": 9999
+    "full": 9999,
+    "control": 6,
+    "surface": 8
   },
   "spacing": {
     "1": 4,
@@ -748,7 +852,9 @@ export const productThemes = {
       "md": 8,
       "lg": 12,
       "xl": 16,
-      "full": 9999
+      "full": 9999,
+      "control": 6,
+      "surface": 8
     },
     "typography": {
       "fontFamily": {
@@ -820,15 +926,15 @@ export const productThemes = {
       "dark": {
         "background": "#000000",
         "foreground": "#fafafa",
-        "card": "#0a0a0a",
+        "card": "#000000",
         "cardForeground": "#fafafa",
-        "popover": "#0a0a0a",
+        "popover": "#000000",
         "popoverForeground": "#fafafa",
         "primary": "#fafafa",
         "primaryForeground": "#171717",
         "secondary": "#262626",
         "secondaryForeground": "#fafafa",
-        "muted": "#262626",
+        "muted": "#000000",
         "mutedForeground": "#a3a3a3",
         "accent": "#262626",
         "accentForeground": "#fafafa",
@@ -884,7 +990,9 @@ export const productThemes = {
       "md": 8,
       "lg": 12,
       "xl": 16,
-      "full": 9999
+      "full": 9999,
+      "control": 6,
+      "surface": 8
     },
     "typography": {
       "fontFamily": {
@@ -1017,7 +1125,9 @@ export const tamaguiTokens = {
     "md": 8,
     "lg": 12,
     "xl": 16,
-    "full": 9999
+    "full": 9999,
+    "control": 6,
+    "surface": 8
   },
   "size": {
     "1": 4,
@@ -1118,15 +1228,15 @@ export const tamaguiThemes = {
   "paas_dark": {
     "background": "#000000",
     "color": "#fafafa",
-    "card": "#0a0a0a",
+    "card": "#000000",
     "cardForeground": "#fafafa",
-    "popover": "#0a0a0a",
+    "popover": "#000000",
     "popoverForeground": "#fafafa",
     "primary": "#fafafa",
     "primaryForeground": "#171717",
     "secondary": "#262626",
     "secondaryForeground": "#fafafa",
-    "muted": "#262626",
+    "muted": "#000000",
     "mutedForeground": "#a3a3a3",
     "accent": "#262626",
     "accentForeground": "#fafafa",

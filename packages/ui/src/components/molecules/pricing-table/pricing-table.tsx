@@ -384,7 +384,7 @@ function PeriodToggle({
   return (
     <div
       aria-label="Billing period"
-      className="mx-auto inline-flex items-center gap-2 rounded-full border bg-muted/40 p-1 text-sm"
+      className="mx-auto inline-flex items-center gap-2 rounded-full border bg-secondary/40 p-1 text-sm"
       role="radiogroup"
     >
       <PeriodRadio

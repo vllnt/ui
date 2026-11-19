@@ -3,6 +3,12 @@ import { expect, test, type Page } from "@playwright/test";
 const PRODUCTION_ONLY =
   "Layout shift and hydration of prerendered HTML are only meaningful on a production build; run with PLAYWRIGHT_BASE_URL against `next start`.";
 
+/**
+ * Most fetches a page may make on its way to quiet: header and in-view links
+ * prefetch in two steps (route tree, then data), about 30 on the busiest page.
+ */
+const MAX_SETTLED_FETCHES = 80;
+
 const WIDTHS = [
   { height: 900, name: "desktop", width: 1440 },
   { height: 1194, name: "tablet", width: 834 },
@@ -60,6 +66,50 @@ test.describe("the page shell does not move after load", () => {
         await page.goto(path);
 
         expect(await totalLayoutShift(page)).toBeLessThan(0.01);
+      });
+    }
+  }
+});
+
+test.describe("a loaded page stops requesting", () => {
+  for (const { height, name, width } of WIDTHS) {
+    for (const path of ["/", "/components", "/docs/installation"]) {
+      test(`${path} at ${name} width goes quiet with no failed request`, async ({
+        page,
+      }) => {
+        test.skip(!process.env.PLAYWRIGHT_BASE_URL, PRODUCTION_ONLY);
+        test.setTimeout(60_000);
+        await page.setViewportSize({ height, width });
+        const failed: string[] = [];
+        let fetches = 0;
+        page.on("response", (response) => {
+          if (response.status() >= 400) {
+            failed.push(`${response.status()} ${response.url()}`);
+          }
+        });
+        page.on("request", (request) => {
+          if (
+            request.resourceType() === "fetch" &&
+            request.frame() === page.mainFrame()
+          ) {
+            fetches += 1;
+          }
+        });
+        await page.goto(path);
+
+        await expect
+          .poll(
+            async () => {
+              const before = fetches;
+              await page.waitForTimeout(3000);
+
+              return fetches - before;
+            },
+            { intervals: [0], timeout: 40_000 },
+          )
+          .toBe(0);
+        expect(failed).toEqual([]);
+        expect(fetches).toBeLessThan(MAX_SETTLED_FETCHES);
       });
     }
   }

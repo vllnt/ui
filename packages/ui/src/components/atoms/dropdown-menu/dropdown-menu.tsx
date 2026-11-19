@@ -192,7 +192,7 @@ const DropdownMenuSeparator = ({
   ref?: React.Ref<React.ComponentRef<typeof DropdownMenuPrimitive.Separator>>;
 }) => (
   <DropdownMenuPrimitive.Separator
-    className={cn("-m-1 h-px bg-muted", className)}
+    className={cn("-m-1 h-px bg-border", className)}
     ref={reference}
     {...props}
   />

@@ -35,10 +35,16 @@ const [designTokens, componentContracts] = await Promise.all([
   parseJson(paths.contracts),
 ]);
 
-// Renderer-specific adjustment: DESIGN.md bans pure-black backgrounds on native.
+// Renderer-specific adjustment: the pure-black dark surfaces are web-only for
+// now. The native base palette keeps its #050505 page and the lifted card,
+// popover and muted values, because native components draw tracks and
+// skeletons with `muted` alone and would vanish on a near-black page.
 const nativeColorOverrides = {
   dark: {
     background: "#050505",
+    card: "#0a0a0a",
+    popover: "#0a0a0a",
+    muted: "#262626",
   },
   light: {},
 };
@@ -91,6 +97,27 @@ const mapValues = (object, map) =>
     Object.entries(object).map(([key, value]) => [key, map(value, key)]),
   );
 
+/** Radius role names (D14). Fixed in every theme, so a theme cannot override them. */
+const radiusRoles = ["control", "surface"];
+
+/** Leaves of a nested `{ value, role }` token group as `[path, leaf]` pairs. */
+function tokenLeaves(group, path) {
+  return Object.entries(group).flatMap(([key, node]) =>
+    typeof node.value === "string"
+      ? [[[...path, key], node]]
+      : tokenLeaves(node, [...path, key]),
+  );
+}
+
+/** `--size-target-min` for the path `["size", "target", "min"]`. */
+const pathVariable = (path) => `--${path.join("-")}`;
+
+/** The path inside a `{size.target.min}` reference. */
+const referencePath = (reference) => /^\{([a-z][a-z0-9.-]*)\}$/.exec(reference)?.[1].split(".");
+
+const sizeLeaves = tokenLeaves(designTokens.size, ["size"]);
+const opacityLeaves = tokenLeaves(designTokens.opacity, ["opacity"]);
+
 function validateChannels(label, value) {
   const channels = value.split(/\s+/).map(Number);
   assert(
@@ -136,7 +163,51 @@ function validateThemes() {
     }
     for (const step of Object.keys(theme.radius ?? {})) {
       assert(step in designTokens.radius, `Theme ${name}.radius.${step} is not a core radius.`);
+      assert(!radiusRoles.includes(step), `Theme ${name}.radius.${step} is a fixed radius role.`);
     }
+    for (const [token, value] of Object.entries(theme.opacity ?? {})) {
+      assert(token in designTokens.opacity, `Theme ${name}.opacity.${token} is not a core opacity.`);
+      assert(isOpacity(value), `Theme ${name}.opacity.${token} must be a number from 0 to 1.`);
+    }
+  }
+}
+
+const isOpacity = (value) => /^(?:0(?:\.[0-9]+)?|1(?:\.0+)?)$/.test(value);
+
+/** `{color.<role>}` references must name a semantic color; `{size.<name>}` a size token. */
+function validateTokenGroups(colorRoles) {
+  for (const [group, path] of [
+    [designTokens.color["badge-label"], ["color", "badge-label"]],
+    [designTokens.brand.status, ["brand", "status"]],
+  ]) {
+    for (const [leafPath, leaf] of tokenLeaves(group, path)) {
+      const role = /^\{color\.([a-z-]+)\}$/.exec(leaf.value)?.[1];
+      assert(
+        colorRoles.has(role),
+        `${leafPath.join(".")} must reference a semantic color as {color.<role>}.`,
+      );
+    }
+  }
+
+  const sizeNames = new Set(sizeLeaves.map(([path]) => path.join(".")));
+  for (const [path, leaf] of sizeLeaves) {
+    assert(
+      /^[0-9]+(?:\.[0-9]+)?(?:px|rem)$/.test(leaf.value),
+      `${path.join(".")} must be a px or rem length.`,
+    );
+    if (leaf.coarse !== undefined) {
+      assert(
+        sizeNames.has(referencePath(leaf.coarse)?.join(".")),
+        `${path.join(".")}.coarse must reference a size token.`,
+      );
+    }
+  }
+
+  for (const [path, leaf] of opacityLeaves) {
+    assert(isOpacity(leaf.value), `${path.join(".")} must be a number from 0 to 1.`);
+  }
+  for (const role of radiusRoles) {
+    assert(role in designTokens.radius, `radius.${role} is missing.`);
   }
 }
 
@@ -175,6 +246,9 @@ function validateSource() {
     );
   }
 
+  validateTokenGroups(
+    new Set(colorEntries.map(([, color]) => color.cssVariable.slice(2))),
+  );
   validateThemes();
 
   for (const [component, contract] of Object.entries(
@@ -221,16 +295,48 @@ function typographyLines(indentation) {
   return lines;
 }
 
+/** Radius roles, sizes and opacities the web reads directly. Colour aliases stay out: web code uses the role. */
+function scalarLines(indentation) {
+  return [
+    ...radiusRoles.map(
+      (role) => `${indentation}--radius-${role}: ${designTokens.radius[role]};`,
+    ),
+    ...[...sizeLeaves, ...opacityLeaves].map(
+      ([path, leaf]) => `${indentation}${pathVariable(path)}: ${leaf.value};`,
+    ),
+  ];
+}
+
+/** Under a coarse pointer, each size token with a `coarse` reference takes that token's value. */
+function coarsePointerLines(indentation) {
+  const rules = sizeLeaves
+    .filter(([, leaf]) => leaf.coarse !== undefined)
+    .map(
+      ([path, leaf]) =>
+        `${indentation}    ${pathVariable(path)}: var(${pathVariable(referencePath(leaf.coarse))});`,
+    );
+  if (rules.length === 0) return [];
+  return [
+    `${indentation}@media (pointer: coarse) {`,
+    `${indentation}  :root {`,
+    ...rules,
+    `${indentation}  }`,
+    `${indentation}}`,
+  ];
+}
+
 function renderDefaultTheme() {
   return [
     '/* Default theme variables. Values are OKLCH channels ("L C H"), consumed as oklch(var(--x)). */',
     ":root {",
     ...declarationLines("light", "  "),
     ...typographyLines("  "),
+    ...scalarLines("  "),
     "}",
     ".dark {",
     ...declarationLines("dark", "  "),
     "}",
+    ...coarsePointerLines(""),
     "",
   ].join("\n");
 }
@@ -252,10 +358,12 @@ function renderStylesThemeBlock() {
     "  :root {",
     ...declarationLines("light", "    "),
     ...typography,
+    ...scalarLines("    "),
     "  }",
     "  .dark {",
     ...declarationLines("dark", "    "),
     "  }",
+    ...coarsePointerLines("  "),
     "}",
     "",
     "",
@@ -530,6 +638,13 @@ function themeTypographyLines(theme, indentation) {
   return lines;
 }
 
+/** CSS custom properties for the opacities a theme overrides (nothing it inherits). */
+function themeOpacityLines(theme, indentation) {
+  return Object.entries(theme.opacity ?? {}).map(
+    ([name, value]) => `${indentation}--opacity-${name}: ${value};`,
+  );
+}
+
 function renderProductThemes() {
   const blocks = Object.entries(designTokens.themes).flatMap(([name, theme]) => {
     const resolved = resolveTheme(theme);
@@ -539,6 +654,7 @@ function renderProductThemes() {
       ...paletteLines(resolved.colors.light, "  "),
       `  --radius: ${resolved.radius.md};`,
       ...themeTypographyLines(theme, "  "),
+      ...themeOpacityLines(theme, "  "),
       "}",
       "",
       `${selector}.dark {`,
@@ -576,6 +692,13 @@ function penpotFamily(stack) {
   );
 }
 
+/** A nested `{ value, role }` group as Penpot tokens; `convert` maps each leaf's value. */
+function penpotGroup(group, convert) {
+  return mapValues(group, (node) =>
+    typeof node.value === "string" ? convert(node.value) : penpotGroup(node, convert),
+  );
+}
+
 /** Only what a theme overrides; the core set supplies the rest. */
 function penpotThemeOverrides(theme) {
   const { fontFamily, fontWeight, scale } = theme.typography ?? {};
@@ -591,6 +714,9 @@ function penpotThemeOverrides(theme) {
   };
   return {
     ...(Object.keys(font).length > 0 && { font }),
+    ...(theme.opacity && {
+      opacity: mapValues(theme.opacity, (value) => penpotToken(value, "opacity")),
+    }),
     ...(theme.radius && { radius: mapValues(theme.radius, penpotRadius) }),
   };
 }
@@ -603,14 +729,25 @@ function penpotTokens() {
     ...themeNames.flatMap((name) => modes.map((mode) => `vllnt/${name}/${mode}`)),
   ];
 
+  const colorReference = (value) => penpotToken(value, "color");
+
   const sets = {
     "vllnt/core": {
+      brand: {
+        status: penpotGroup(designTokens.brand.status, colorReference),
+      },
       font: {
         family: mapValues(core.fontFamily, penpotFamily),
         size: mapValues(core.scale, (step) => penpotSize(step.fontSize)),
         weight: mapValues(core.fontWeight, penpotWeight),
       },
+      opacity: penpotGroup(designTokens.opacity, (value) =>
+        penpotToken(value, "opacity"),
+      ),
       radius: mapValues(core.radius, penpotRadius),
+      size: penpotGroup(designTokens.size, (value) =>
+        penpotToken(penpotNumber(value), "sizing"),
+      ),
       spacing: mapValues(designTokens.spacing.scale, (value) =>
         penpotToken(penpotNumber(value), "spacing"),
       ),
@@ -621,15 +758,21 @@ function penpotTokens() {
     const resolved = resolveTheme(theme);
     for (const mode of modes) {
       sets[`vllnt/${name}/${mode}`] = {
-        color: Object.fromEntries(
-          Object.entries(designTokens.color.semantic).map(([role, color]) => [
-            color.cssVariable.slice(2),
-            penpotToken(
-              oklchToHex(resolved.colors[mode][role]).toUpperCase(),
-              "color",
-            ),
-          ]),
-        ),
+        color: {
+          ...Object.fromEntries(
+            Object.entries(designTokens.color.semantic).map(([role, color]) => [
+              color.cssVariable.slice(2),
+              penpotToken(
+                oklchToHex(resolved.colors[mode][role]).toUpperCase(),
+                "color",
+              ),
+            ]),
+          ),
+          "badge-label": penpotGroup(
+            designTokens.color["badge-label"],
+            colorReference,
+          ),
+        },
         ...penpotThemeOverrides(theme),
       };
     }

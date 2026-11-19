@@ -54,6 +54,8 @@ const penpotTypes = [
   "fontFamilies",
   "fontSizes",
   "fontWeights",
+  "opacity",
+  "sizing",
   "spacing",
 ];
 
@@ -125,7 +127,10 @@ describe("penpot-tokens.json", () => {
     const roles = semanticVariables.map((variable) => variable.slice(2)).sort();
     for (const name of themeNames) {
       for (const mode of modes) {
-        const colors = penpot[`vllnt/${name}/${mode}`].color;
+        // `badge-label` is a group of references to these roles, not a role.
+        const { "badge-label": badgeLabel, ...colors } =
+          penpot[`vllnt/${name}/${mode}`].color;
+        assert.ok(badgeLabel);
         assert.deepEqual(Object.keys(colors).sort(), roles);
         for (const token of Object.values(colors)) {
           assert.match(token.$value, /^#[\dA-F]{6}$/);
