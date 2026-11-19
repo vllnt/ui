@@ -3,7 +3,6 @@
 import { type Ref, useId } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -11,6 +10,8 @@ import {
   type ViewProps,
 } from "react-native";
 
+import { interactionTokens } from "../../../primitives/interaction-state";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -51,8 +52,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   input: { borderWidth: 1, minHeight: 44 },
   row: { flexDirection: "row", flexWrap: "wrap" },
@@ -75,14 +74,15 @@ function FilterChoice({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={groupLabel}
       accessibilityLabel={label}
       accessibilityRole={type}
       accessibilityState={{ busy: disabled, checked: selected, disabled }}
       disabled={disabled}
       onPress={onPress}
-      style={({ pressed }) => [
+      selected={selected}
+      style={[
         styles.action,
         {
           backgroundColor: selected
@@ -91,7 +91,6 @@ function FilterChoice({
           borderColor: selected ? theme.colors.primary : theme.colors.border,
           borderRadius: theme.radius.md,
           borderWidth: 1,
-          opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[3],
         },
       ]}
@@ -105,7 +104,7 @@ function FilterChoice({
       >
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 FilterChoice.displayName = "FilterChoice";
@@ -121,17 +120,17 @@ function ClearAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
-      style={[styles.action, { opacity: disabled ? 0.5 : 1 }]}
+      style={styles.action}
     >
       <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ClearAction.displayName = "ClearAction";
@@ -182,7 +181,7 @@ function TutorialFilters({
             borderColor: theme.colors.input,
             borderRadius: theme.radius.md,
             color: theme.colors.foreground,
-            opacity: isPending ? 0.5 : 1,
+            opacity: isPending ? interactionTokens(theme).disabledOpacity : 1,
             paddingHorizontal: theme.spacing[4],
           },
         ]}

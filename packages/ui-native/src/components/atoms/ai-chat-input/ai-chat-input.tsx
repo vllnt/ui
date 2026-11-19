@@ -3,7 +3,6 @@
 import { type ReactNode, type Ref, useCallback, useId, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -17,6 +16,7 @@ import {
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -55,13 +55,10 @@ const styles = StyleSheet.create({
   footer: { alignItems: "flex-end", borderTopWidth: 1, flexDirection: "row" },
   input: { minHeight: 120, padding: 0, textAlignVertical: "top" },
   messages: { flex: 1 },
-  pressed: { opacity: 0.8 },
   root: { borderWidth: 1 },
   submit: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   toolbar: { alignItems: "center", flexDirection: "row", flexWrap: "wrap" },
 });
@@ -173,21 +170,20 @@ function SubmitAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={label}
       accessibilityRole="button"
       accessibilityState={{ busy: isSubmitting, disabled: !canSubmit }}
       disabled={!canSubmit}
+      filled
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.submit,
         {
           backgroundColor: theme.colors.primary,
           borderRadius: theme.radius.full,
-          opacity: canSubmit ? 1 : 0.5,
           paddingHorizontal: theme.spacing[4],
         },
-        pressed ? styles.pressed : undefined,
       ]}
     >
       <Text
@@ -198,7 +194,7 @@ function SubmitAction({
       >
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 SubmitAction.displayName = "SubmitAction";

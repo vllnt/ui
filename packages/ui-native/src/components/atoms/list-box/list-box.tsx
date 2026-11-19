@@ -3,7 +3,6 @@
 import { type Ref, useMemo } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { toggleMultipleSelected } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -35,7 +35,7 @@ export type ListBoxProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  option: { justifyContent: "center", minHeight: 44 },
+  option: { justifyContent: "center" },
   root: { borderWidth: 1, overflow: "hidden" },
 });
 
@@ -78,7 +78,7 @@ function ListBox({
         const selected = selectedIds.has(option.id);
         const optionDisabled = disabled || option.disabled === true;
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityHint={label}
             accessibilityLabel={option.label}
             accessibilityRole={mode === "single" ? "radio" : "checkbox"}
@@ -97,13 +97,13 @@ function ListBox({
                 );
               }
             }}
+            selected={selected}
             style={[
               styles.option,
               {
                 backgroundColor: selected
                   ? theme.colors.accent
                   : theme.colors.background,
-                opacity: optionDisabled ? 0.5 : 1,
                 paddingHorizontal: theme.spacing[3],
               },
             ]}
@@ -112,7 +112,7 @@ function ListBox({
               {selected ? "✓ " : ""}
               {option.label}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>

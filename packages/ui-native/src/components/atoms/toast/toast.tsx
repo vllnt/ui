@@ -2,15 +2,10 @@
 
 import { type Ref, useEffect, useLayoutEffect, useRef } from "react";
 
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { StyleSheet, Text, View, type ViewProps } from "react-native";
 
 import { announce } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { SelectionKey } from "../../../primitives/selection";
 import { typeStyle } from "../../../primitives/type-style";
 import { useScreenReaderEnabled } from "../../../primitives/use-screen-reader-enabled";
@@ -55,11 +50,8 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   body: { flex: 1 },
-  disabled: { opacity: 0.5 },
   root: { width: "100%" },
   toast: {
     alignItems: "center",
@@ -220,16 +212,13 @@ function Toast({
               ) : null}
             </View>
             {toast.actionLabel && toast.onAction ? (
-              <Pressable
+              <InteractivePressable
                 accessibilityLabel={toast.actionLabel}
                 accessibilityRole="button"
                 accessibilityState={{ disabled: toast.actionDisabled === true }}
                 disabled={toast.actionDisabled === true}
                 onPress={toast.onAction}
-                style={[
-                  styles.action,
-                  toast.actionDisabled ? styles.disabled : undefined,
-                ]}
+                style={styles.action}
               >
                 <Text
                   style={{
@@ -240,9 +229,9 @@ function Toast({
                 >
                   {toast.actionLabel}
                 </Text>
-              </Pressable>
+              </InteractivePressable>
             ) : null}
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={closeLabel}
               accessibilityRole="button"
               onPress={() => {
@@ -259,7 +248,7 @@ function Toast({
               >
                 ×
               </Text>
-            </Pressable>
+            </InteractivePressable>
           </View>
         );
       })}

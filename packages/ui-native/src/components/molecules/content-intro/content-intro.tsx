@@ -1,12 +1,12 @@
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
   type ViewProps,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useFontScaledSize } from "../../../primitives/use-font-scaled-size";
 import { useTheme } from "../../../theme/theme-provider";
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   completedTitle: { textDecorationLine: "line-through" },
   marker: { alignItems: "center", justifyContent: "center" },
   root: { width: "100%" },
-  sectionButton: { alignItems: "center", flexDirection: "row", minHeight: 44 },
+  sectionButton: { alignItems: "center", flexDirection: "row" },
 });
 
 type SectionListProps = {
@@ -119,21 +119,18 @@ function ContentIntroSectionRow({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={section.title}
       accessibilityRole="button"
       accessibilityState={{ busy }}
       accessibilityValue={completed ? { text: completedLabel } : undefined}
       onPress={onPress}
-      style={({ pressed }) => [
+      style={[
         styles.sectionButton,
         {
-          backgroundColor: pressed
-            ? theme.colors.accent
-            : theme.colors.background,
+          backgroundColor: theme.colors.background,
           borderRadius: theme.radius.md,
           gap: theme.spacing[3],
-          opacity: pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[2],
         },
       ]}
@@ -151,7 +148,7 @@ function ContentIntroSectionRow({
       >
         {section.title}
       </NativeText>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ContentIntroSectionRow.displayName = "ContentIntroSectionRow";

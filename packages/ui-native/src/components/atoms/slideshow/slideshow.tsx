@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,6 +16,7 @@ import {
   focusAccessibility,
   joinAccessibilityText,
 } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   content: { flex: 1 },
   footer: {
@@ -100,7 +98,6 @@ const styles = StyleSheet.create({
   sectionAction: {
     alignItems: "center",
     flexDirection: "row",
-    minHeight: 44,
     width: "100%",
   },
   surface: { flex: 1 },
@@ -139,7 +136,7 @@ function SlideshowHeader({
         },
       ]}
     >
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={
           sectionsOpen ? labels.closeSections : labels.openSections
         }
@@ -151,7 +148,7 @@ function SlideshowHeader({
         <Text style={{ color: theme.colors.foreground }}>
           {sectionsOpen ? "−" : "+"}
         </Text>
-      </Pressable>
+      </InteractivePressable>
       <View style={[styles.titleBlock, { gap: theme.spacing[1] }]}>
         <Text
           accessibilityRole="header"
@@ -174,14 +171,14 @@ function SlideshowHeader({
       <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {position}
       </Text>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.exit}
         accessibilityRole="button"
         onPress={onExit}
         style={styles.action}
       >
         <Text style={{ color: theme.colors.foreground }}>{labels.exit}</Text>
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
 }
@@ -213,7 +210,7 @@ function SlideshowSections({
         const completed = completedIds.has(section.id);
         const selected = index === currentIndex;
         return (
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={section.title}
             accessibilityRole="button"
             accessibilityState={{ selected }}
@@ -224,6 +221,7 @@ function SlideshowSections({
             onPress={() => {
               onNavigate(section.id);
             }}
+            selected={selected}
             style={[
               styles.sectionAction,
               {
@@ -238,7 +236,7 @@ function SlideshowSections({
             <Text style={typeStyle(theme, "bodySmall", "foreground")}>
               {section.title}
             </Text>
-          </Pressable>
+          </InteractivePressable>
         );
       })}
     </View>
@@ -275,19 +273,19 @@ function SlideshowFooter({
         },
       ]}
     >
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.previous}
         accessibilityRole="button"
         accessibilityState={{ disabled: isFirst }}
         disabled={isFirst}
         onPress={onPrevious}
-        style={[styles.action, { opacity: isFirst ? 0.5 : 1 }]}
+        style={styles.action}
       >
         <Text style={{ color: theme.colors.foreground }}>
           {labels.previous}
         </Text>
-      </Pressable>
-      <Pressable
+      </InteractivePressable>
+      <InteractivePressable
         accessibilityLabel={
           completed ? labels.markIncomplete : labels.markComplete
         }
@@ -298,10 +296,11 @@ function SlideshowFooter({
         <Text style={{ color: theme.colors.foreground }}>
           {completed ? labels.markIncomplete : labels.markComplete}
         </Text>
-      </Pressable>
-      <Pressable
+      </InteractivePressable>
+      <InteractivePressable
         accessibilityLabel={isLast ? labels.finish : labels.next}
         accessibilityRole="button"
+        filled
         onPress={onNext}
         style={[
           styles.action,
@@ -315,7 +314,7 @@ function SlideshowFooter({
         <Text style={{ color: theme.colors.primaryForeground }}>
           {isLast ? labels.finish : labels.next}
         </Text>
-      </Pressable>
+      </InteractivePressable>
     </View>
   );
 }

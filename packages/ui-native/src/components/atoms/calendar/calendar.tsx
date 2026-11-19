@@ -3,7 +3,6 @@
 import { type Ref, useMemo, useState } from "react";
 
 import {
-  Pressable,
   StyleSheet,
   Text as NativeText,
   View,
@@ -12,6 +11,7 @@ import {
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
 import { useControllableState } from "../../../primitives/use-controllable-state";
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     minHeight: 44,
     width: "14.2857%",
   },
-  disabled: { opacity: 0.5 },
   grid: { flexDirection: "row", flexWrap: "wrap" },
   header: {
     alignItems: "center",
@@ -60,8 +59,6 @@ const styles = StyleSheet.create({
   monthAction: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   weekday: {
     alignItems: "center",
@@ -156,7 +153,7 @@ function Calendar({
       {...props}
     >
       <View style={styles.header}>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={labels.previousMonth}
           accessibilityRole="button"
           accessibilityState={{ disabled }}
@@ -164,10 +161,10 @@ function Calendar({
           onPress={() => {
             changeMonth(-1);
           }}
-          style={[styles.monthAction, disabled ? styles.disabled : undefined]}
+          style={styles.monthAction}
         >
           <NativeText style={{ color: theme.colors.foreground }}>‹</NativeText>
-        </Pressable>
+        </InteractivePressable>
         <NativeText
           accessibilityRole="header"
           style={typeStyle(theme, "bodySmall", {
@@ -177,7 +174,7 @@ function Calendar({
         >
           {monthLabel}
         </NativeText>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={labels.nextMonth}
           accessibilityRole="button"
           accessibilityState={{ disabled }}
@@ -185,10 +182,10 @@ function Calendar({
           onPress={() => {
             changeMonth(1);
           }}
-          style={[styles.monthAction, disabled ? styles.disabled : undefined]}
+          style={styles.monthAction}
         >
           <NativeText style={{ color: theme.colors.foreground }}>›</NativeText>
-        </Pressable>
+        </InteractivePressable>
       </View>
       <View style={styles.grid}>
         {Array.from({ length: 7 }, (_unused, weekday) => (
@@ -204,7 +201,7 @@ function Calendar({
           const dateSelected =
             isDateSelected?.(date) ?? sameDay(date, selectedDate);
           return (
-            <Pressable
+            <InteractivePressable
               accessibilityLabel={labels.formatDayAccessibilityLabel(date)}
               accessibilityRole="button"
               accessibilityState={{
@@ -221,6 +218,7 @@ function Calendar({
               onPress={() => {
                 setSelectedDate(date);
               }}
+              selected={dateSelected}
               style={[
                 styles.day,
                 {
@@ -228,7 +226,6 @@ function Calendar({
                     ? theme.colors.primary
                     : theme.colors.background,
                   borderRadius: theme.radius.full,
-                  opacity: dateDisabled ? 0.5 : 1,
                 },
               ]}
             >
@@ -241,7 +238,7 @@ function Calendar({
               >
                 {date.getDate()}
               </NativeText>
-            </Pressable>
+            </InteractivePressable>
           );
         })}
       </View>

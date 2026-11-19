@@ -1,9 +1,10 @@
 "use client";
 
 import type { Ref } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { useFocusWhenShown } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -50,10 +51,10 @@ export type DropdownMenuProps = {
 
 const getItemId = (item: DropdownMenuItem) => item.id;
 const styles = StyleSheet.create({
-  cancel: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  cancel: { alignItems: "center", justifyContent: "center" },
   content: { flex: 1, justifyContent: "center" },
   heading: { paddingHorizontal: 12, paddingTop: 4 },
-  item: { justifyContent: "center", minHeight: 44 },
+  item: { justifyContent: "center" },
   surface: {
     alignSelf: "center",
     borderWidth: 1,
@@ -135,7 +136,7 @@ function DropdownMenu({
           {items.map((item) => {
             const selected = isSingleSelected(selection, item, getItemId);
             return (
-              <Pressable
+              <InteractivePressable
                 accessibilityHint={
                   item.destructive ? destructiveLabel : undefined
                 }
@@ -152,15 +153,14 @@ function DropdownMenu({
                   onSelect?.(item.id);
                   setVisible(false);
                 }}
-                style={({ pressed }) => [
+                selected={selected}
+                style={[
                   styles.item,
                   {
-                    backgroundColor:
-                      selected || pressed
-                        ? theme.colors.accent
-                        : theme.colors.popover,
+                    backgroundColor: selected
+                      ? theme.colors.accent
+                      : theme.colors.popover,
                     borderRadius: theme.radius.sm,
-                    opacity: item.disabled ? 0.5 : 1,
                     paddingHorizontal: theme.spacing[3],
                   },
                 ]}
@@ -177,13 +177,14 @@ function DropdownMenu({
                 >
                   {item.label}
                 </Text>
-              </Pressable>
+              </InteractivePressable>
             );
           })}
         </ScrollView>
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={cancelLabel}
           accessibilityRole="button"
+          filled
           onPress={() => {
             close("requestClose");
           }}
@@ -198,7 +199,7 @@ function DropdownMenu({
           <Text style={{ color: theme.colors.secondaryForeground }}>
             {cancelLabel}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       </View>
     </ModalLayer>
   );

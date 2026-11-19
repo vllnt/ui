@@ -2,7 +2,6 @@
 
 import type { ReactNode, Ref } from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 
 import { decorativeProps } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
   type ModalLayerCloseReason,
@@ -57,8 +57,6 @@ const styles = StyleSheet.create({
   close: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   header: {
     alignItems: "center",
@@ -152,7 +150,7 @@ function KeyboardShortcutsHelp({
           >
             {labels.title}
           </Text>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"
             onPress={() => {
@@ -163,7 +161,7 @@ function KeyboardShortcutsHelp({
             <Text style={{ color: theme.colors.mutedForeground, fontSize: 20 }}>
               ×
             </Text>
-          </Pressable>
+          </InteractivePressable>
         </View>
         <Text style={typeStyle(theme, "bodySmall", "mutedForeground")}>
           {labels.hardwareKeyboardGuidance}

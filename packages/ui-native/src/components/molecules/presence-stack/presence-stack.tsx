@@ -1,7 +1,8 @@
 import type { Ref } from "react";
-import { Pressable, StyleSheet, View, type ViewProps } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 
 import { joinAccessibilityText } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
 
@@ -144,7 +145,7 @@ function PresenceOverflow({
   const overlap = { marginLeft: -theme.spacing[2] };
   if (onPress) {
     return (
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={label}
         accessibilityRole="button"
         hitSlop={overflowHitSlop}
@@ -152,7 +153,7 @@ function PresenceOverflow({
         style={overlap}
       >
         <OverflowContent count={count} />
-      </Pressable>
+      </InteractivePressable>
     );
   }
   return (

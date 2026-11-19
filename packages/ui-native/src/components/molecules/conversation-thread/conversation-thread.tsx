@@ -13,7 +13,6 @@ import {
 import {
   type NativeScrollEvent,
   type NativeSyntheticEvent,
-  Pressable,
   ScrollView,
   StyleSheet,
   type Text as NativeText,
@@ -24,6 +23,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
 import {
@@ -134,8 +134,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   actions: {
     alignItems: "center",
@@ -166,9 +164,6 @@ const styles = StyleSheet.create({
   messageUser: {
     justifyContent: "flex-end",
   },
-  pressed: {
-    opacity: 0.8,
-  },
   root: {
     flex: 1,
     overflow: "hidden",
@@ -178,14 +173,11 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     borderWidth: 1,
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   suggestion: {
     alignItems: "center",
     borderWidth: 1,
     justifyContent: "center",
-    minHeight: 44,
   },
   suggestions: {
     alignItems: "center",
@@ -209,25 +201,25 @@ function MessageAction({
 }) {
   const theme = useTheme();
   return (
-    <Pressable
+    <InteractivePressable
       accessibilityLabel={label}
       accessibilityRole={checked === undefined ? "button" : "togglebutton"}
       accessibilityState={checked === undefined ? undefined : { checked }}
       onPress={onPress}
-      style={({ pressed }) => [
+      selected={checked}
+      style={[
         styles.action,
         {
           backgroundColor: checked ? theme.colors.accent : undefined,
           borderRadius: theme.radius.sm,
           paddingHorizontal: theme.spacing[2],
         },
-        pressed ? styles.pressed : undefined,
       ]}
     >
       <Text style={typeStyle(theme, "caption", "mutedForeground")}>
         {label}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 MessageAction.displayName = "MessageAction";
@@ -554,12 +546,12 @@ function ConversationSuggestions({
       style={[styles.suggestions, { gap: theme.spacing[2] }, style]}
     >
       {suggestions.map((suggestion) => (
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={suggestion.label}
           accessibilityRole="button"
           key={suggestion.id}
           onPress={() => onSend?.(suggestion.value)}
-          style={({ pressed }) => [
+          style={[
             styles.suggestion,
             {
               backgroundColor: theme.colors.background,
@@ -567,13 +559,12 @@ function ConversationSuggestions({
               borderRadius: theme.radius.full,
               paddingHorizontal: theme.spacing[4],
             },
-            pressed ? styles.pressed : undefined,
           ]}
         >
           <Text style={typeStyle(theme, "bodySmall", "foreground")}>
             {suggestion.label}
           </Text>
-        </Pressable>
+        </InteractivePressable>
       ))}
     </View>
   );
@@ -590,7 +581,7 @@ function ConversationScrollButton({
   const { isAtBottom, labels, scrollToBottom } = useConversation();
   if (isAtBottom) return null;
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityLabel={labels.scrollToBottom}
       accessibilityRole="button"
@@ -610,7 +601,7 @@ function ConversationScrollButton({
       <Text style={typeStyle(theme, "caption", "foreground")}>
         {labels.scrollToBottom}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 }
 ConversationScrollButton.displayName = "ConversationScrollButton";

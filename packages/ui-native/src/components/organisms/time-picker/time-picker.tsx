@@ -3,7 +3,6 @@
 import { type Ref, useMemo, useState } from "react";
 
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text as NativeText,
@@ -12,6 +11,7 @@ import {
 } from "react-native";
 
 import { useGroupDisabled } from "../../../primitives/control-group";
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
@@ -43,13 +43,13 @@ export type TimePickerProps = Omit<ViewProps, "children"> & {
 };
 
 const styles = StyleSheet.create({
-  action: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  action: { alignItems: "center", justifyContent: "center" },
   columns: { flexDirection: "row", maxHeight: 360 },
   heading: { marginBottom: 8 },
   modal: { flex: 1, justifyContent: "flex-end" },
-  option: { alignItems: "center", justifyContent: "center", minHeight: 44 },
+  option: { alignItems: "center", justifyContent: "center" },
   panel: { borderTopWidth: 1 },
-  trigger: { borderWidth: 1, justifyContent: "center", minHeight: 44 },
+  trigger: { borderWidth: 1, justifyContent: "center" },
 });
 
 function part(value: number): string {
@@ -107,7 +107,7 @@ function TimePicker({
   ) => (
     <ScrollView style={{ flex: 1 }}>
       {options.map((option) => (
-        <Pressable
+        <InteractivePressable
           accessibilityLabel={
             labels.option?.(label, option) ?? `${label}, ${option}`
           }
@@ -118,6 +118,7 @@ function TimePicker({
           onPress={() => {
             choose(option);
           }}
+          selected={option === selected}
           style={[
             styles.option,
             {
@@ -131,13 +132,13 @@ function TimePicker({
           <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
             {option}
           </NativeText>
-        </Pressable>
+        </InteractivePressable>
       ))}
     </ScrollView>
   );
   return (
     <View ref={ref} style={style} {...props}>
-      <Pressable
+      <InteractivePressable
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}
@@ -152,7 +153,6 @@ function TimePicker({
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.input,
             borderRadius: theme.radius.md,
-            opacity: disabled ? 0.5 : 1,
             paddingHorizontal: theme.spacing[3],
           },
         ]}
@@ -166,7 +166,7 @@ function TimePicker({
         >
           {selectedTime ?? labels.placeholder}
         </NativeText>
-      </Pressable>
+      </InteractivePressable>
       <ModalLayer
         animationType={reducedMotion ? "none" : "fade"}
         contentProps={{ style: styles.modal }}
@@ -205,7 +205,7 @@ function TimePicker({
               commit(hour ?? "", next);
             })}
           </View>
-          <Pressable
+          <InteractivePressable
             accessibilityLabel={labels.close}
             accessibilityRole="button"
             onPress={() => {
@@ -216,7 +216,7 @@ function TimePicker({
             <NativeText style={typeStyle(theme, "bodySmall", "foreground")}>
               {labels.close}
             </NativeText>
-          </Pressable>
+          </InteractivePressable>
         </View>
       </ModalLayer>
     </View>

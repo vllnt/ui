@@ -13,13 +13,13 @@ import {
 
 import {
   Animated,
-  Pressable,
   type PressableProps,
   StyleSheet,
   View,
   type ViewProps,
 } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   controllableOptions,
   useControllableState,
@@ -85,8 +85,6 @@ const styles = StyleSheet.create({
   trigger: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
 });
 
@@ -157,7 +155,7 @@ function CollapsibleTrigger({
     collapsible.toggle();
   };
   return (
-    <Pressable
+    <InteractivePressable
       {...props}
       accessibilityLabel={label}
       accessibilityRole="button"
@@ -172,17 +170,14 @@ function CollapsibleTrigger({
       style={(state) => [
         styles.trigger,
         {
-          backgroundColor: state.pressed
-            ? theme.colors.accent
-            : theme.colors.background,
+          backgroundColor: theme.colors.background,
           borderRadius: theme.radius.md,
-          opacity: disabled ? 0.5 : state.pressed ? 0.8 : 1,
         },
         typeof style === "function" ? style(state) : style,
       ]}
     >
       {children}
-    </Pressable>
+    </InteractivePressable>
   );
 }
 CollapsibleTrigger.displayName = "CollapsibleTrigger";

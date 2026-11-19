@@ -1,12 +1,7 @@
 import type { Ref } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  type ViewProps,
-} from "react-native";
+import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -43,8 +38,6 @@ const styles = StyleSheet.create({
   action: {
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 44,
-    minWidth: 44,
   },
   row: { alignItems: "center", flexDirection: "row", justifyContent: "center" },
 });
@@ -105,7 +98,7 @@ function Pagination({
     disabled: boolean,
     current: boolean,
   ) => (
-    <Pressable
+    <InteractivePressable
       accessibilityHint={resolved.navigation}
       accessibilityLabel={
         content === String(page) ? resolved.page(page) : content
@@ -118,18 +111,16 @@ function Pagination({
       onPress={() => {
         activate(page);
       }}
-      style={({ pressed }) => [
+      selected={current}
+      style={[
         styles.action,
         {
           backgroundColor: current
             ? theme.colors.primary
-            : pressed
-              ? theme.colors.accent
-              : theme.colors.background,
+            : theme.colors.background,
           borderColor: theme.colors.border,
           borderRadius: theme.radius.md,
           borderWidth: 1,
-          opacity: disabled ? 0.5 : pressed ? 0.8 : 1,
           paddingHorizontal: theme.spacing[2],
         },
       ]}
@@ -145,7 +136,7 @@ function Pagination({
       >
         {content}
       </Text>
-    </Pressable>
+    </InteractivePressable>
   );
 
   return (

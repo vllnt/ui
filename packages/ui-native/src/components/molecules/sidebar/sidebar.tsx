@@ -1,12 +1,7 @@
 import type { Ref } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  type ViewProps,
-} from "react-native";
+import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
 
+import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   defaultLinkingService,
   type LinkingService,
@@ -43,7 +38,7 @@ export type SidebarProps = Omit<ViewProps, "children" | "ref"> & {
 };
 
 const styles = StyleSheet.create({
-  item: { justifyContent: "center", minHeight: 44, minWidth: 44 },
+  item: { justifyContent: "center" },
   root: { borderRightWidth: 1, flex: 1 },
 });
 
@@ -105,7 +100,7 @@ function Sidebar({
                 (candidate) => candidate.id,
               );
               return (
-                <Pressable
+                <InteractivePressable
                   accessibilityHint={accessibilityLabel ?? label}
                   accessibilityLabel={item.label}
                   accessibilityRole={item.href ? "link" : "button"}
@@ -125,17 +120,15 @@ function Sidebar({
                         });
                     }
                   }}
-                  style={({ pressed }) => [
+                  selected={current}
+                  style={[
                     styles.item,
                     {
                       alignItems: compact ? "center" : "flex-start",
                       backgroundColor: current
                         ? theme.colors.accent
-                        : pressed
-                          ? theme.colors.muted
-                          : "transparent",
+                        : "transparent",
                       borderRadius: theme.radius.md,
-                      opacity: item.disabled ? 0.5 : pressed ? 0.8 : 1,
                       paddingHorizontal: compact
                         ? theme.spacing[2]
                         : theme.spacing[3],
@@ -150,7 +143,7 @@ function Sidebar({
                   >
                     {compact ? item.label.slice(0, 1) : item.label}
                   </Text>
-                </Pressable>
+                </InteractivePressable>
               );
             })}
           </View>
