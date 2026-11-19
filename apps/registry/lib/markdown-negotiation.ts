@@ -10,8 +10,10 @@ import componentSlugs from "./component-slugs.json";
  */
 export type MarkdownTarget =
   | { readonly kind: "component"; readonly slug: string }
+  | { readonly kind: "components-index" }
   | { readonly kind: "design" }
   | { readonly kind: "docs"; readonly slug: string }
+  | { readonly kind: "docs-index" }
   | { readonly kind: "home" }
   | { readonly kind: "philosophy" };
 
@@ -68,6 +70,8 @@ export function markdownTarget(pathname: string): MarkdownTarget | undefined {
   if (pathname === "/") return { kind: "home" };
   if (pathname === "/design") return { kind: "design" };
   if (pathname === "/philosophy") return { kind: "philosophy" };
+  if (pathname === "/docs") return { kind: "docs-index" };
+  if (pathname === "/components") return { kind: "components-index" };
   const [, section, slug, ...rest] = pathname.split("/");
   if (slug === undefined || rest.length > 0) return undefined;
   if (section === "docs" && MARKDOWN_DOCS.has(slug)) {
@@ -91,6 +95,8 @@ export function markdownPathnames(): string[] {
     "/",
     "/design",
     "/philosophy",
+    "/docs",
+    "/components",
     ...[...MARKDOWN_DOCS].map((slug) => `/docs/${slug}`),
     ...[...MARKDOWN_COMPONENTS].map((slug) => `/components/${slug}`),
   ];
