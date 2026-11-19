@@ -23,6 +23,7 @@ const SURFACE_FILL = /^bg-(?:card|popover)(?:\/\d+)?$/;
 const BORDER_WIDTH = /^border(?:-[belr-txy])?(?:-\d+)?$/;
 const MUTED_FILL = /^bg-muted(?:\/\d+)?$/;
 const SECONDARY_FILL = /^bg-secondary(?:\/\d+)?$/;
+const MUTED_STROKE = /^stroke-muted(?:\/\d+)?$/;
 const HAIRLINE_SIZE = /^[hw]-px$/;
 /** A skeleton pulses; a track or handle is a bar at most 0.5rem tall. */
 const SKELETON_OR_BAR = /^(?:animate-pulse|h-(?:0\.5|1|1\.5|2))$/;
@@ -48,6 +49,9 @@ const DIVIDER_FIX =
   "bg-muted is #000000 in dark, so this divider disappears. Use bg-border.";
 const STRUCTURAL_FIX =
   "bg-muted is #000000 in dark, so a skeleton, track or handle drawn only with this fill disappears. Use bg-secondary (#262626) at the same opacity.";
+
+const STROKE_FIX =
+  "stroke-muted is #000000 in dark, so an SVG ring, arc or track drawn with it disappears. Use stroke-secondary (#262626).";
 
 /** The class name without its variant prefix: `data-[x]:hover:bg-card` is `bg-card`. */
 function baseClass(name: string): string {
@@ -76,6 +80,15 @@ function mutedFills(source: string, shape: RegExp): string[] {
       classes.some((name) => MUTED_FILL.test(name))
     );
   });
+}
+
+/** Lines that stroke an SVG shape with stroke-muted. */
+function mutedStrokes(source: string): string[] {
+  return source
+    .split("\n")
+    .filter((line) =>
+      classesOf(line).some((name) => MUTED_STROKE.test(baseClass(name))),
+    );
 }
 
 /** Lines that give a one-pixel divider a muted fill. */
@@ -147,6 +160,22 @@ describe("one-pixel dividers on a black page", () => {
       mutedDividers(source).map((line) => `${file}: ${line.trim()}`),
     );
     expect(offenders, DIVIDER_FIX).toEqual([]);
+  });
+});
+
+describe("SVG rings, arcs and tracks on a black page", () => {
+  it("flags a muted stroke and passes a secondary one", () => {
+    expect(mutedStrokes('className="stroke-muted"')).toHaveLength(1);
+    expect(mutedStrokes('"dark:stroke-muted/50 fill-none"')).toHaveLength(1);
+    expect(mutedStrokes('className="stroke-secondary"')).toEqual([]);
+    expect(mutedStrokes('"stroke-muted-foreground"')).toEqual([]);
+  });
+
+  it("are stroked with stroke-secondary in every component file", () => {
+    const offenders = sources.flatMap(({ file, source }) =>
+      mutedStrokes(source).map((line) => `${file}: ${line.trim()}`),
+    );
+    expect(offenders, STROKE_FIX).toEqual([]);
   });
 });
 
