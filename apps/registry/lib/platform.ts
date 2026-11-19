@@ -15,6 +15,14 @@ export function getPlatform(
   return fallback === "all" ? undefined : fallback;
 }
 
+/**
+ * The one query a prerendered catalog page knows about: its own platform
+ * variant. Other query parameters never reach server-rendered links.
+ */
+export function variantQuery(platform: PlatformContext): PlatformQuery {
+  return platform ? { platform } : {};
+}
+
 function appendQuery(
   target: URLSearchParams,
   query: PlatformQuery | URLSearchParams,
