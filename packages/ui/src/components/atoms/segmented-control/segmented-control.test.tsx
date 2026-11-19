@@ -77,6 +77,15 @@ describe("SegmentedControl", () => {
     expect(settings).toBeDisabled();
   });
 
+  it("stops the selection transition under reduced motion", () => {
+    renderSegmentedControl({ defaultValue: "overview" });
+
+    expect(screen.getByRole("radio", { name: "Overview" })).toHaveClass(
+      "transition-all",
+      "motion-reduce:transition-none",
+    );
+  });
+
   it("prevents interaction when disabled", () => {
     renderSegmentedControl({ defaultValue: "overview", disabled: true });
 

@@ -1,0 +1,52 @@
+name: Native Health
+
+# Comments once on the web/native lane board (#622) when native work fails on main:
+#   "Core and Native Canary"  the run concluded failure, timed_out or startup_failure
+#   "CI"                      the job "Native Package Gates" failed (matched by name; a missing job
+#                             means native is not affected, so the web lane may split ci.yml freely)
+# The decision and the comment text live in scripts/native-health.mjs (tested by native-health.test.mjs).
+# The comment ends with a hidden marker holding the run id; it is checked first, so re-runs do not
+# double-post.
+
+on:
+  workflow_run:
+    workflows: ["Core and Native Canary", "CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  actions: read
+  issues: write
+  contents: read
+
+jobs:
+  alert:
+    name: Alert native lane
+    # `branches` matches the head branch name only, so a fork PR from a branch called main would pass
+    # it. Pushes to main are the only runs that count.
+    if: ${{ github.event.workflow_run.event == 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # One run id is handled one at a time, so the marker check always sees the earlier comment.
+    concurrency:
+      group: native-health-${{ github.event.workflow_run.id }}
+      cancel-in-progress: false
+    steps:
+      # workflow_run checks out the default branch, never the commit under test.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Comment on the lane board when native failed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LANE_ISSUE: "622"
+          REPO: ${{ github.repository }}
+          WORKFLOW: ${{ github.event.workflow_run.name }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          FINISHED_AT: ${{ github.event.workflow_run.updated_at }}
+        run: node scripts/native-health.mjs
