@@ -14,7 +14,7 @@ const badgeVariants = cva(
       },
       {
         class:
-          "border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/15",
+          "border-destructive/30 bg-destructive/10 text-foreground hover:bg-destructive/15",
         tone: "danger-tint",
       },
       {
@@ -97,8 +97,8 @@ export type BadgeProps = {
   dot?: boolean;
   /**
    * Chip size: `"default"` (12px label), `"header"` (14px, for page headers),
-   * `"inline"` (11px, sits in running text without growing the line) or
-   * `"sm"` (10px, for dense lists and tables).
+   * `"inline"` (10px, sits in running text without growing the line) or
+   * `"sm"` (11px, for dense lists and tables).
    */
   size?: BadgeStyle["size"];
   /**
@@ -111,7 +111,9 @@ export type BadgeProps = {
    * - `"solid"`, `"danger-solid"` and `"danger-tint"` set their own surface
    *   (filled primary, filled destructive, tinted destructive) and override
    *   `variant`. `"danger-tint"` is the single tinted surface; use it when a
-   *   failure has to stand out from a row of neutral chips.
+   *   failure has to stand out from a row of neutral chips. Its label stays
+   *   foreground (status colour never goes on words); the tint, the border and
+   *   the dot carry the colour.
    *
    * Omit `tone` to get the plain `variant` look.
    */
@@ -151,8 +153,9 @@ function Badge({
   variant,
   ...props
 }: BadgeProps & { ref?: React.Ref<HTMLSpanElement> }): React.ReactElement {
-  const dotTone = isStatusTone(tone) ? tone : undefined;
-  const surface = variant ?? (dotTone ? "secondary" : "default");
+  const statusTone = isStatusTone(tone) ? tone : undefined;
+  const surface = variant ?? (statusTone ? "secondary" : "default");
+  const dotTone = tone === "danger-tint" ? "danger" : statusTone;
   return (
     <span
       className={cn(

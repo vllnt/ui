@@ -160,12 +160,28 @@ describe("Badge", () => {
       expect(root).not.toHaveClass("hover:bg-secondary/80");
     });
 
-    it("danger-tint is the one tinted surface", () => {
+    it("danger-tint is the one tinted surface, with a foreground label", () => {
       const { container } = render(<Badge tone="danger-tint">Test</Badge>);
-      expect(getRoot(container)).toHaveClass(
+      const root = getRoot(container);
+      expect(root).toHaveClass(
         "bg-destructive/10",
-        "text-destructive",
+        "text-foreground",
         "border-destructive/30",
+      );
+      expect(root).not.toHaveClass("text-destructive");
+    });
+
+    it("danger-tint keeps the status colour on the dot, not on the label", () => {
+      const { container } = render(
+        <Badge dot tone="danger-tint">
+          Test
+        </Badge>,
+      );
+      const root = getRoot(container);
+      expect(root).toHaveClass("text-foreground");
+      expect(root.querySelector("[data-badge-dot]")).toHaveClass(
+        "bg-current",
+        "text-destructive",
       );
     });
 
