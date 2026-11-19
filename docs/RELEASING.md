@@ -16,7 +16,7 @@ pnpm add @vllnt/ui@canary
 
 ## Release guard
 
-`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Canary modes require `refs/heads/main`. Stable requires the `refs/tags/v{version}` tag push for the exact `packages/ui` version, so a branch run or a mismatched tag can never publish `latest`. Stable accepts Web bases 0.3.x and 0.4.x and rejects prereleases and every newer or unknown base before npm publication; a newer base needs a separately reviewed change to the guard. Core/Native keep the independent 0.1.0 canary base and have no stable mode. There is no input or repository-variable override.
+`scripts/release-guard.mjs` is a checked-in, fail-closed guard used by both publishers. Canary modes require `refs/heads/main`. Stable requires the `refs/tags/v{version}` tag push for the exact `packages/ui` version, so a branch run or a mismatched tag can never publish `latest`. Stable accepts Web bases 0.3.x and 0.4.x and rejects prereleases and every newer or unknown base before npm publication; a newer base needs a separately reviewed change to the guard. Core/Native keep the independent 0.1.0 canary base; their stable path is the separate `package-release` mode (see [Native stable release](#native-stable-release-core-and-native)). There is no input or repository-variable override.
 
 Matching main pushes publish Web prereleases under `canary`, never `latest`. Core and Native canaries publish only when the owner sets their repository variables, which are unset by default (see Experimental native canaries and `PR506_CANARY_GAP_REVIEW.md`). The guard does not grant publication authorization or prevent an npm account owner from publishing outside these workflows. Native discovery remains source-only/unavailable.
 
@@ -120,7 +120,29 @@ pnpm add @vllnt/ui-native@canary
 
 Only after the first synchronized pair is visible, both `canary` tags point at it, fresh packed-consumer validation passes, and the physical-device/accessibility requirements in the Native changelog are satisfied, update the native manifest to `availability: "package"` and `installation.available: true` in a reviewed PR, then verify the website, llms projections, MCP, and fresh-install smoke test together.
 
-A stable native channel requires a separate PR that defines versioning, migration, physical Android/iOS plus VoiceOver/TalkBack validation, observability, and rollback policy. It must not be added to the web package's release matrix.
+## Native stable release (core and native)
+
+`.github/workflows/native-release.yml` publishes `@vllnt/ui-core` and `@vllnt/ui-native` to `latest` from their own tags, separate from Web's `vX.Y.Z`:
+
+| Tag | Publishes |
+| --- | --- |
+| `ui-core-vX.Y.Z` | `@vllnt/ui-core` |
+| `ui-native-vX.Y.Z` | `@vllnt/ui-native` |
+
+Neither pattern matches Web's `v*.*.*` filter, and the Web workflow does not run for them.
+
+Order: tag `ui-core-vX.Y.Z`, wait until it is visible on npm, then tag `ui-native-vX.Y.Z`. Native's `workspace:*` dependency on core is rewritten to the exact `packages/ui-core` version when packed. If that core version is not on npm, the native release fails with "tag ui-core-vX first" and publishes nothing.
+
+Prerequisites (owner actions):
+
+- The owner lifts the native validation hold and approves native publication. The canary variables in `native-canary.yml` do not affect this workflow.
+- A trusted publisher on npm for each package (repository `vllnt/ui`, workflow `native-release.yml`, environment `npm-release`).
+- The `npm-release` environment's deployment rules allow `ui-core-v*.*.*` and `ui-native-v*.*.*`, and a tag ruleset restricts who can create them.
+- A release PR on `main` bumps `packages/<pkg>/package.json` and cuts `## [X.Y.Z] - YYYY-MM-DD` in `packages/<pkg>/CHANGELOG.md`, replacing any `- Unreleased` marker; the guard rejects a heading that still says Unreleased.
+
+Tag the merged commit: `git fetch origin && git tag -a ui-core-vX.Y.Z origin/main -m ui-core-vX.Y.Z && git push origin ui-core-vX.Y.Z`.
+
+`release-guard.mjs package-release` runs before the `npm-release` approval is requested and fails unless the version is stable `X.Y.Z`, equals the package version, the tagged commit is an ancestor of `origin/main`, and the package CHANGELOG has a `## [X.Y.Z]` heading that is not marked Unreleased (`## [X.Y.Z] - YYYY-MM-DD`, or a bare `## [X.Y.Z]`). The release job then packs, checks the manifest (name, version, exact core dependency, no `workspace:`), and runs `npm publish --tag latest --provenance` unless that version is already on npm (`scripts/npm-published.sh`; only a not-found answer counts as unpublished). Re-run failed jobs after a transient failure. The workflow creates no tags or GitHub Release.
 
 ## Versioning policy
 
