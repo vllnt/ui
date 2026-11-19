@@ -212,7 +212,7 @@ export default async function ChangelogPage({
                   ) : null}
                   <Link
                     aria-label={t("permalinkTo", { title: entry.title })}
-                    className="text-sm text-muted-foreground hover:text-foreground"
+                    className="inline-flex min-h-6 items-center text-sm text-muted-foreground hover:text-foreground"
                     href={`/changelog#${entry.anchor}`}
                   >
                     #{entry.anchor}

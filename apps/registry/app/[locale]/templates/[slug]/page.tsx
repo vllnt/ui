@@ -27,6 +27,9 @@ type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
+/** `generateStaticParams` covers every template, so an unknown slug is a 404 that no cache stores. */
+export const dynamicParams = false;
+
 export function generateStaticParams(): { locale: Locale; slug: string }[] {
   return routing.locales.flatMap((locale) =>
     TEMPLATES.map((template) => ({ locale, slug: template.slug })),

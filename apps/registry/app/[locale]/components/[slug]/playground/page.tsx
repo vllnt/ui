@@ -25,6 +25,9 @@ type Props = {
   params: Promise<{ locale: Locale; slug: string }>;
 };
 
+/** `generateStaticParams` covers every component, so an unknown slug is a 404 that no cache stores. */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const slugs = registry.items.map((item) => item.name);
 

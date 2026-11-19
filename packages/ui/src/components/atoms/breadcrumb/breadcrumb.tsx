@@ -67,7 +67,7 @@ const SEPARATOR_CHARS: Record<string, string> = {
   slash: "/",
 };
 
-const crumbVariants = cva("flex items-center gap-1", {
+const crumbVariants = cva("flex min-h-6 items-center gap-1", {
   defaultVariants: {
     tone: "muted",
   },

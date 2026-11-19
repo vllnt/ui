@@ -195,6 +195,7 @@ export function Header({ locale }: HeaderProps) {
                       aria-current={entry === locale ? "page" : undefined}
                       href={preserveQuery(pathname)}
                       locale={entry}
+                      prefetch={false}
                     >
                       {entry.toUpperCase()}
                     </Link>
@@ -215,6 +216,7 @@ export function Header({ locale }: HeaderProps) {
                 href={preserveQuery(pathname)}
                 key={entry}
                 locale={entry}
+                prefetch={false}
               >
                 {entry}
               </Link>

@@ -61,3 +61,11 @@ export const Default: Story = {
     sections: sampleSections,
   },
 };
+
+/** The `pathname` prop sets the current page when the router's pathname is not the URL the visitor sees. */
+export const WithPathname: Story = {
+  args: {
+    pathname: "/installation",
+    sections: sampleSections,
+  },
+};

@@ -56,6 +56,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   (`success`, `warning`, `info`, `diff.added`, `diff.removed`) in the preset.
 - **Label type step** - `--font-size-label`, `--line-height-label` and
   `--font-weight-label`.
+- **Sidebar `pathname` prop** - names the page the sidebar marks as current.
+  It defaults to the router's pathname, so existing usage is unchanged. Pass
+  it when the URL the visitor sees differs from the route that renders, such as
+  a prerendered locale or variant route, instead of overriding the router's
+  pathname context.
+- **Sidebar `prefetch` prop** - set it to `false` to stop the sidebar's links
+  from prefetching their pages. Left unset, the links keep the router's default
+  prefetching, so existing usage is unchanged. A sidebar with dozens of links
+  in view otherwise prefetches every one of them on page load.
+
+### Fixed
+
+- **Tap targets** - the NavbarSaas links, the Breadcrumb crumbs, the
+  TableOfContents buttons and the Sidebar family heading link are at least
+  24 px tall (WCAG 2.5.8); they were 20 px.
+
+### Fixed
+
+- **Accordion accessibility** - each trigger now has `aria-controls` pointing
+  at its panel, and each panel is a `region` labelled by its trigger. Closed
+  panels are `inert`, so screen readers no longer read closed answers and Tab
+  skips links inside them. The open and close animation is unchanged.
 
 ## [0.4.0] - 2026-10-31
 
