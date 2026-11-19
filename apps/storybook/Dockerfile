@@ -18,6 +18,10 @@ COPY apps ./apps
 # Install only what's needed for storybook build (workspace-aware)
 RUN pnpm install --frozen-lockfile --filter @vllnt/ui --filter @vllnt/ui... --include-workspace-root
 
+# Cloudflare Web Analytics site token (public, not a secret). Empty = no beacon.
+ARG NEXT_PUBLIC_CF_BEACON_TOKEN=
+ENV NEXT_PUBLIC_CF_BEACON_TOKEN=$NEXT_PUBLIC_CF_BEACON_TOKEN
+
 # Build storybook → packages/ui/storybook-static
 RUN pnpm --filter @vllnt/ui build-storybook
 
