@@ -14,9 +14,10 @@ export const revalidate = 86_400;
  * platforms x 2 locales x every component up front doubled the page count,
  * the build time and the `.next` size for pages with low traffic.
  *
- * This route keeps `dynamicParams` on, so a made-up slug combined with a
- * platform renders once and keeps its 404 for a day. The clean route has
- * `dynamicParams = false` and answers a made-up slug without a cache entry.
+ * This route keeps `dynamicParams` on, so it would cache a made-up slug's 404.
+ * The middleware rewrites a registry slug here and no other slug; a made-up
+ * slug stays on the clean route, which has `dynamicParams = false` and answers
+ * without a cache entry.
  */
 export function generateStaticParams(): Record<string, string>[] {
   return [];

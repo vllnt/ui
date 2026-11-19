@@ -68,7 +68,7 @@ export async function VersionChannels() {
               {t.rich("stableDescription", { code: codeChunk })}
             </p>
             <Link
-              className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
+              className="mt-4 inline-flex min-h-6 items-center gap-1 text-sm font-medium"
               href="/releases"
             >
               {t("releaseNotes")}
@@ -117,7 +117,7 @@ async function CanaryCard({
         </p>
       )}
       <Link
-        className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
+        className="mt-4 inline-flex min-h-6 items-center gap-1 text-sm font-medium"
         href="/changelog#unreleased"
       >
         {t("viewChangelog")}

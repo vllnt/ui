@@ -411,7 +411,7 @@ export default async function ComponentPage(props: Props) {
                     title={articleTitle}
                   />
                   <Link
-                    className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+                    className="inline-flex min-h-11 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-secondary"
                     href={withPlatformQuery(
                       `/report?component=${component.name}`,
                       query,
@@ -531,7 +531,7 @@ export default async function ComponentPage(props: Props) {
                           <div className="flex flex-wrap gap-2">
                             {meta.stories.map((story) => (
                               <a
-                                className="inline-flex min-h-11 items-center rounded-md border px-3 text-sm transition-colors hover:bg-muted"
+                                className="inline-flex min-h-11 items-center rounded-md border px-3 text-sm transition-colors hover:bg-secondary"
                                 href={`${STORYBOOK_URL}/?path=/story/${story.id}`}
                                 key={story.id}
                                 rel="noopener noreferrer"

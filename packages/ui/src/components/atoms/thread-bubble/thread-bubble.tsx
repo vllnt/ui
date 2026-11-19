@@ -144,7 +144,7 @@ export const ThreadBubble = ({
           )}
           {onResolve ? (
             <button
-              className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               data-thread-bubble-resolve
               onClick={handleResolve}
               type="button"

@@ -71,7 +71,7 @@ const EMPTY_SLIDESHOW_LABELS: SlideshowLabels = {};
 
 function SlideshowProgress({ progress }: { progress: number }) {
   return (
-    <div className="absolute top-0 left-0 right-0 h-1 bg-muted z-10">
+    <div className="absolute top-0 left-0 right-0 h-1 bg-secondary z-10">
       <div
         className="h-full bg-foreground transition-all duration-300 ease-out"
         style={{ width: `${progress}%` }}
@@ -104,7 +104,7 @@ function SlideshowHeader({
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <button
           aria-label={isTocOpen ? labels.closeTocLabel : labels.openTocLabel}
-          className="flex-shrink-0 p-2 rounded-lg hover:bg-muted transition-colors"
+          className="flex-shrink-0 p-2 rounded-lg hover:bg-secondary transition-colors"
           onClick={onToggleToc}
           type="button"
         >
@@ -151,7 +151,7 @@ function SlideshowHeader({
         </span>
         <button
           aria-label={labels.exitLabel}
-          className="p-2 rounded-lg hover:bg-muted transition-colors"
+          className="p-2 rounded-lg hover:bg-secondary transition-colors"
           onClick={onExit}
           type="button"
         >
@@ -238,7 +238,7 @@ function SlideshowToc({
           </SectionsHeading>
           <button
             aria-label={labels.closeLabel}
-            className="p-2 rounded-lg hover:bg-muted transition-colors"
+            className="p-2 rounded-lg hover:bg-secondary transition-colors"
             onClick={onClose}
             type="button"
           >
@@ -266,7 +266,7 @@ function SlideshowToc({
               <button
                 className={cn(
                   "w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors",
-                  isCurrent ? "bg-muted" : "hover:bg-muted/50",
+                  isCurrent ? "bg-secondary" : "hover:bg-secondary/50",
                 )}
                 key={section.id}
                 onClick={() => {
@@ -342,7 +342,7 @@ function SlideshowNav({
   return (
     <div className="relative z-20 flex items-center justify-between p-4 border-t border-border bg-background">
       <button
-        className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md hover:bg-muted transition-colors disabled:opacity-50 disabled:pointer-events-none"
+        className="min-w-[100px] gap-1 inline-flex items-center justify-center px-4 py-2 rounded-md hover:bg-secondary transition-colors disabled:opacity-50 disabled:pointer-events-none"
         disabled={!canGoPrevious}
         onClick={onPrevious}
         type="button"
