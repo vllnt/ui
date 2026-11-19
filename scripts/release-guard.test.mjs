@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
-import { releaseVersion } from "./release-guard.mjs";
+import { releaseVersion, stableDistTag } from "./release-guard.mjs";
 import { BOOTSTRAP, CORE, NATIVE, OTHER_SHA, SHA, VERSION, createHarness } from "./publish-canary.harness.mjs";
 
 const input = { web: "0.4.0", core: "0.1.0", native: "0.1.0", ref: "refs/heads/main", sha: "a".repeat(40), run: "42" };
@@ -105,10 +105,11 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   const web = read(".github/workflows/publish.yml");
   const native = read(".github/workflows/native-canary.yml");
   const publisher = read("scripts/publish-canary.sh");
-  assert.match(web, /release-guard\.mjs stable[\s\S]*--tag latest/);
+  assert.match(web, /release-guard\.mjs stable[\s\S]*release-guard\.mjs dist-tag[\s\S]*--tag "\$DIST_TAG"/);
   assert.ok(web.indexOf("release-guard.mjs web-canary") < web.indexOf('npm version "$CANARY_VERSION"'));
   assert.match(web, /publish "\$TARBALL" --tag canary/);
-  assert.match(web, /publish "\$TARBALL" --tag latest/);
+  assert.match(web, /publish "\$TARBALL" --tag "\$DIST_TAG"/);
+  assert.doesNotMatch(web, /--tag latest/);
   const canary = web.slice(web.indexOf("  canary:"), web.indexOf("  release:"));
   const release = web.slice(web.indexOf("  release:"));
   assert.match(release, /environment: npm-release/);
@@ -129,6 +130,20 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   assert.match(publisher, /dist-tag add "\$\{NATIVE_NAME\}@\$\{CANARY_VERSION\}" canary/);
   assert.doesNotMatch(native, /--tag latest|workflow_dispatch|scripts\/native-canary|if: \$\{\{ false \}\}/);
   for (const workflow of [web, native]) assert.match(workflow, /node --test scripts\/release-guard.test.mjs/);
+});
+test("stable dist-tag: only a version above npm latest takes latest; an older line never moves it", () => {
+  assert.equal(stableDistTag("0.4.0", "0.3.0"), "latest");
+  assert.equal(stableDistTag("0.4.1", "0.4.0"), "latest");
+  assert.equal(stableDistTag("0.10.0", "0.9.9"), "latest");
+  assert.equal(stableDistTag("0.3.1", "0.4.1"), "release-0.3");
+  assert.equal(stableDistTag("0.4.9", "0.4.10"), "release-0.4");
+  assert.throws(() => stableDistTag("0.4.0", "0.4.0"), /already the npm latest/);
+  for (const [version, latest] of [["0.4.0", ""], ["0.4.0", undefined], ["0.4.0-rc.1", "0.3.0"], ["0.4.0", "0.4.0-canary.shaabc"], ["v0.4.0", "0.3.0"]]) {
+    assert.throws(() => stableDistTag(version, latest), /Expected a stable x\.y\.z/);
+  }
+  const cli = (env) => spawnSync(process.execPath, [guard, "dist-tag"], { encoding: "utf8", env: { ...process.env, ...env } });
+  assert.equal(cli({ RELEASE_VERSION: "0.3.1", NPM_LATEST: "0.4.1" }).stdout.trim(), "release-0.3");
+  assert.equal(cli({ RELEASE_VERSION: "0.4.0", NPM_LATEST: "" }).status, 1);
 });
 test("release notes come from the exact CHANGELOG section of the released version", () => {
   const program = read(".github/workflows/publish.yml").match(/awk -v version="\$VERSION" '([^']+)' CHANGELOG\.md/)?.[1];
@@ -159,7 +174,7 @@ test("stable publish step: an exact version skips, E404 publishes, any other loo
     const result = spawnSync("bash", ["-e", "-c", script], {
       cwd: dir,
       encoding: "utf8",
-      env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, VERSION: "0.4.0", NPM_CONFIG_USERCONFIG: join(dir, "npmrc"), GITHUB_WORKSPACE: fileURLToPath(new URL("..", import.meta.url)) },
+      env: { ...process.env, PATH: `${dir}:${process.env.PATH}`, VERSION: "0.4.0", DIST_TAG: "latest", NPM_CONFIG_USERCONFIG: join(dir, "npmrc"), GITHUB_WORKSPACE: fileURLToPath(new URL("..", import.meta.url)) },
     });
     let published = "";
     try { published = readFileSync(join(dir, "published"), "utf8"); } catch {}

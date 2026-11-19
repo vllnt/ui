@@ -31,6 +31,24 @@ export function releaseVersion({ mode, web, core, native, ref, sha, run }) {
 }
 
 /**
+ * The npm dist-tag for a stable publish. Only a version above the current `latest` may take
+ * `latest`; an older line (a 0.3.x maintenance release after 0.4.0) goes to `release-<major>.<minor>`
+ * so a tag on an old commit can never move `latest` backwards.
+ */
+export function stableDistTag(version, latest) {
+  const parse = (value, name) => {
+    const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(value ?? "");
+    if (!match) throw new Error(`Expected a stable x.y.z ${name}, got "${value ?? ""}"`);
+    return match.slice(1).map(Number);
+  };
+  const next = parse(version, "release version");
+  const current = parse(latest, "npm latest");
+  const order = next.map((part, index) => part - current[index]).find((diff) => diff !== 0) ?? 0;
+  if (order === 0) throw new Error(`${version} is already the npm latest`);
+  return order > 0 ? "latest" : `release-${next[0]}.${next[1]}`;
+}
+
+/**
  * ui-core publishes on its own: only its own base is checked, so neither the Web release
  * base nor the Native base can block it. Same version scheme as the Core/Native pair.
  */
@@ -46,6 +64,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   try {
     if (process.argv.length !== 3) throw new Error("Expected one release mode; no overrides supported");
     const mode = process.argv[2];
+    if (mode === "dist-tag") {
+      console.log(stableDistTag(process.env.RELEASE_VERSION, process.env.NPM_LATEST));
+      process.exit(0);
+    }
     // core-canary reads ui-core alone: other manifests must not be able to affect it.
     const bases = mode === "core-canary" ? { core: version("ui-core") }
       : { web: version("ui"), core: version("ui-core"), native: version("ui-native") };
