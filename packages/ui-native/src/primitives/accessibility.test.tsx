@@ -15,6 +15,7 @@ import {
   announce,
   focusAccessibility,
   plainText,
+  requiredHint,
   useAnnounceOnChange,
   useFocusWhenShown,
   useRevealFocus,
@@ -40,6 +41,15 @@ it("treats empty conditional children as empty text", () => {
   expect(plainText(["Total: ", 3])).toBe("Total: 3");
   expect(plainText(["Name", <Text key="x">x</Text>])).toBeUndefined();
   expect(plainText(null)).toBeUndefined();
+});
+
+it("adds the required word to a hint only when the control is required", () => {
+  expect(requiredHint(undefined, true)).toBe("Required");
+  expect(requiredHint("Plan", true)).toBe("Plan. Required");
+  expect(requiredHint("Plan", true, "Obligatoire")).toBe("Plan. Obligatoire");
+  expect(requiredHint("Plan", false)).toBe("Plan");
+  expect(requiredHint("Plan")).toBe("Plan");
+  expect(requiredHint(undefined, false)).toBeUndefined();
 });
 
 it("coalesces announcements queued in one tick and skips empty text", async () => {

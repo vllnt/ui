@@ -9,7 +9,10 @@ import {
   View,
 } from "react-native";
 
-import { decorativeProps } from "../../../primitives/accessibility";
+import {
+  decorativeProps,
+  requiredHint,
+} from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import { typeStyle } from "../../../primitives/type-style";
@@ -33,6 +36,13 @@ export type CheckboxProps = Omit<PressableProps, "children"> & {
   readonly label?: string;
   readonly onCheckedChange?: (checked: CheckboxCheckedState) => void;
   readonly ref?: Ref<NativeView>;
+  /**
+   * Marks the checkbox as required. Screen readers hear it in the hint; web
+   * draws no visible marker for it, so neither does native.
+   */
+  readonly required?: boolean;
+  /** Spoken word for `required`. Defaults to "Required". */
+  readonly requiredLabel?: string;
 };
 
 const styles = StyleSheet.create({
@@ -51,6 +61,7 @@ const styles = StyleSheet.create({
  * (a check or a dash) is the selection cue that does not rely on colour.
  */
 function Checkbox({
+  accessibilityHint,
   accessibilityLabel,
   accessibilityState,
   checked,
@@ -60,6 +71,8 @@ function Checkbox({
   onCheckedChange,
   onPress,
   ref,
+  required,
+  requiredLabel,
   style,
   ...props
 }: CheckboxProps) {
@@ -73,6 +86,11 @@ function Checkbox({
   return (
     <InteractivePressable
       {...props}
+      accessibilityHint={requiredHint(
+        accessibilityHint,
+        required,
+        requiredLabel,
+      )}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityRole="checkbox"
       accessibilityState={{

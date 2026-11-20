@@ -12,6 +12,7 @@ import {
   useState,
 } from "react";
 
+import type { NativeTheme } from "@vllnt/ui-core";
 import {
   type PressableProps,
   ScrollView,
@@ -19,6 +20,7 @@ import {
   StyleSheet,
   View,
   type ViewProps,
+  type ViewStyle,
 } from "react-native";
 
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
@@ -28,6 +30,12 @@ import { useControllableState } from "../../../primitives/use-controllable-state
 import { useTheme } from "../../../theme/theme-provider";
 import { Text } from "../../atoms/text/text";
 
+/**
+ * Look of the tab triggers, as on web: `underline` is the default, `pill` fills
+ * the selected trigger and `link` is plain text with an underlined selection.
+ */
+export type TabsVariant = "link" | "pill" | "underline";
+
 type TabsContextValue = {
   readonly baseId: string;
   readonly onValueChange: (value: string) => void;
@@ -35,6 +43,7 @@ type TabsContextValue = {
   readonly register: (kind: "panels" | "triggers", value: string) => () => void;
   readonly triggers: readonly string[];
   readonly value: string;
+  readonly variant: TabsVariant;
 };
 
 const TabsContext = createContext<TabsContextValue | undefined>(undefined);
@@ -54,6 +63,8 @@ export type TabsProps = Omit<ViewProps, "children" | "ref"> & {
   readonly onValueChange?: (value: string) => void;
   readonly ref?: Ref<View>;
   readonly value?: string;
+  /** Look of the triggers, shared with `TabsList` and `TabsTrigger`. Defaults to `underline`. */
+  readonly variant?: TabsVariant;
 };
 
 /** Props for the horizontally scrollable tab list. */
@@ -83,13 +94,37 @@ export type TabsContentProps = Omit<ViewProps, "children" | "ref"> & {
 };
 
 const styles = StyleSheet.create({
-  list: { borderBottomWidth: 1, flexDirection: "row" },
-  trigger: {
-    alignItems: "center",
-    borderBottomWidth: 2,
-    justifyContent: "center",
-  },
+  list: { flexDirection: "row" },
+  trigger: { alignItems: "center", justifyContent: "center" },
+  underlined: { textDecorationLine: "underline" },
 });
+
+function listStyle(theme: NativeTheme, variant: TabsVariant): ViewStyle {
+  if (variant === "underline")
+    return { borderBottomColor: theme.colors.border, borderBottomWidth: 1 };
+  if (variant === "pill") return { gap: theme.spacing[1] };
+  return {};
+}
+
+function triggerStyle(
+  theme: NativeTheme,
+  variant: TabsVariant,
+  selected: boolean,
+): ViewStyle {
+  const paddingHorizontal = theme.spacing[4];
+  if (variant === "pill")
+    return {
+      backgroundColor: selected ? theme.colors.secondary : "transparent",
+      borderRadius: theme.radius.full,
+      paddingHorizontal,
+    };
+  if (variant === "link") return { paddingHorizontal };
+  return {
+    borderBottomColor: selected ? theme.colors.primary : "transparent",
+    borderBottomWidth: 2,
+    paddingHorizontal,
+  };
+}
 
 /** Native tabs state boundary with stable trigger and panel identifiers. */
 function Tabs({
@@ -100,6 +135,7 @@ function Tabs({
   ref,
   style,
   value,
+  variant = "underline",
   ...props
 }: TabsProps) {
   const generatedId = useId();
@@ -134,8 +170,17 @@ function Tabs({
       onValueChange: setSelectedValue,
       register,
       value: selectedValue,
+      variant,
     }),
-    [generatedId, id, mounted, register, selectedValue, setSelectedValue],
+    [
+      generatedId,
+      id,
+      mounted,
+      register,
+      selectedValue,
+      setSelectedValue,
+      variant,
+    ],
   );
 
   return (
@@ -151,7 +196,7 @@ Tabs.displayName = "Tabs";
 /**
  * Accessible horizontal list of native tab triggers. VoiceOver ignores
  * labels on the non-focusable list, so its `accessibilityLabel` becomes each
- * tab's hint.
+ * tab's hint. Outside `Tabs` it draws the `underline` look.
  */
 function TabsList({
   accessibilityLabel,
@@ -162,13 +207,14 @@ function TabsList({
   ...props
 }: TabsListProps) {
   const theme = useTheme();
+  const variant = use(TabsContext)?.variant ?? "underline";
   return (
     <ScrollView
       {...props}
       accessibilityRole="tablist"
       contentContainerStyle={[
         styles.list,
-        { borderBottomColor: theme.colors.border },
+        listStyle(theme, variant),
         contentContainerStyle,
       ]}
       horizontal
@@ -213,6 +259,7 @@ function TabsTrigger({
       accessibilityRole="tab"
       accessibilityState={{ disabled: disabled ?? undefined, selected }}
       disabled={disabled}
+      filled={tabs.variant === "pill" && selected}
       id={`${tabs.baseId}-tab-${value}`}
       onPress={() => {
         tabs.onValueChange(value);
@@ -221,16 +268,16 @@ function TabsTrigger({
       selected={selected}
       style={(state) => [
         styles.trigger,
-        {
-          borderBottomColor: selected ? theme.colors.primary : "transparent",
-          paddingHorizontal: theme.spacing[4],
-        },
+        triggerStyle(theme, tabs.variant, selected),
         typeof style === "function" ? style(state) : style,
       ]}
     >
       {typeof children === "string" || typeof children === "number" ? (
         <Text
           size="small"
+          style={
+            tabs.variant === "link" && selected ? styles.underlined : undefined
+          }
           tone={selected ? "default" : "muted"}
           weight="medium"
         >

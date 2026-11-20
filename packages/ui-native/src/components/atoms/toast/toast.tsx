@@ -15,6 +15,13 @@ import { useTheme } from "../../../theme/theme-provider";
 export type ToastItem = {
   readonly actionDisabled?: boolean;
   readonly actionLabel?: string;
+  /**
+   * Name of the action for screen readers, like web `ToastAction.altText`.
+   * Use it when the visible `actionLabel` is short ("Undo") and needs more
+   * context ("Undo archive"). It should contain the visible label so voice
+   * control can still say what it sees. Defaults to `actionLabel`.
+   */
+  readonly altText?: string;
   readonly description?: string;
   /** Positive milliseconds; changing this value restarts expiry. Omit or use zero to persist. */
   readonly duration?: number;
@@ -213,7 +220,7 @@ function Toast({
             </View>
             {toast.actionLabel && toast.onAction ? (
               <InteractivePressable
-                accessibilityLabel={toast.actionLabel}
+                accessibilityLabel={toast.altText ?? toast.actionLabel}
                 accessibilityRole="button"
                 accessibilityState={{ disabled: toast.actionDisabled === true }}
                 disabled={toast.actionDisabled === true}

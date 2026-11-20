@@ -159,6 +159,27 @@ function joinAccessibilityText(
   return text.length > 0 ? text : undefined;
 }
 
+/**
+ * Adds the spoken "required" word to a control's accessibility hint. React
+ * Native has no `required` accessibility state and the contract bans
+ * `aria-required`, so screen readers learn it from the hint. Web shows no
+ * visible marker for these controls, so callers decide whether to draw one.
+ *
+ * @param hint - The hint the control already speaks, if any.
+ * @param required - `true` to speak the required word.
+ * @param requiredLabel - The spoken word; defaults to English "Required".
+ * @returns The joined hint, or `undefined` when there is nothing to speak.
+ * @example
+ * requiredHint("Plan", true); // "Plan. Required"
+ */
+function requiredHint(
+  hint: string | undefined,
+  required?: boolean,
+  requiredLabel = "Required",
+): string | undefined {
+  return joinAccessibilityText([hint, required === true && requiredLabel]);
+}
+
 export type { AnnounceOnChangeOptions, AnnounceOptions };
 export {
   announce,
@@ -166,6 +187,7 @@ export {
   focusAccessibility,
   joinAccessibilityText,
   plainText,
+  requiredHint,
   useAnnounceOnChange,
   useFocusWhenShown,
   useRevealFocus,
