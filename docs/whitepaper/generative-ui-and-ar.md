@@ -1,6 +1,6 @@
 # Generative UI, AR and spatial UI: what a foundation library must provide
 
-Draft white paper, 20 November 2026. Status: mixed. Each claim about vllnt/ui is marked as shipped or as roadmap, and section 6 lists the evidence.
+White paper. Version of 20 November 2026. Status: mixed. Each claim about vllnt/ui is marked as shipped or as roadmap, and section 6 lists the evidence.
 
 ## 1. Abstract
 
