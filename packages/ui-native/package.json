@@ -63,6 +63,7 @@
     "boundaries:check": "node --test scripts/check-boundaries.test.mjs && node scripts/check-boundaries.mjs",
     "build": "tsup",
     "check:atomic": "node ../../scripts/check-atomic-levels.mjs src/components --base src/primitives --base src/theme",
+    "check:parity": "node --test scripts/check-parity.test.mjs && node scripts/check-parity.mjs --check",
     "clean": "rm -rf dist node_modules coverage",
     "generate:index": "node scripts/generate-index.mjs",
     "generate:index:check": "node scripts/generate-index.mjs --check",
