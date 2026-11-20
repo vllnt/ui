@@ -92,7 +92,7 @@ function SectionMarker({
       <NativeText
         style={typeStyle(theme, "caption", {
           color: completed ? "primaryForeground" : "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {completed ? "✓" : index + 1}

@@ -71,7 +71,7 @@ function Link({
             fontWeight:
               variant === "muted"
                 ? theme.typography.fontWeight.body
-                : theme.typography.fontWeight.caption,
+                : theme.typography.fontWeight.label,
             textDecorationLine: variant === "underline" ? "underline" : "none",
           },
           textStyle,

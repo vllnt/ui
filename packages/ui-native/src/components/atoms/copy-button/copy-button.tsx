@@ -189,7 +189,7 @@ function CopyButton({
         accessibilityLiveRegion="polite"
         style={typeStyle(theme, "bodySmall", {
           color: "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {currentLabel}

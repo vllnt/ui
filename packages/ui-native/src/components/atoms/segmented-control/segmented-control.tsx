@@ -136,7 +136,7 @@ function Segment({
       <NativeText
         style={typeStyle(theme, "bodySmall", {
           color: selected ? "foreground" : "mutedForeground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
           textAlign: "center",
         })}
       >

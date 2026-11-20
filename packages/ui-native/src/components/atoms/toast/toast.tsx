@@ -201,7 +201,7 @@ function Toast({
                   color: destructive
                     ? "destructiveForeground"
                     : "popoverForeground",
-                  fontWeight: theme.typography.fontWeight.caption,
+                  fontWeight: theme.typography.fontWeight.label,
                 })}
               >
                 {toast.title}

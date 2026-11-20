@@ -50,7 +50,7 @@ function Text({
     small: theme.typography.scale.bodySmall,
   } satisfies Record<TextSize, { fontSize: number; lineHeight: number }>;
   const fontWeight = {
-    medium: theme.typography.fontWeight.caption,
+    medium: theme.typography.fontWeight.label,
     normal: theme.typography.fontWeight.body,
     semibold: theme.typography.fontWeight.heading,
   } satisfies Record<TextWeight, TextStyle["fontWeight"]>;

@@ -186,7 +186,7 @@ function RowLabel({
       style={typeStyle(theme, "bodySmall", {
         color: destructive ? "destructive" : "popoverForeground",
         fontWeight: emphasised
-          ? theme.typography.fontWeight.caption
+          ? theme.typography.fontWeight.label
           : theme.typography.fontWeight.body,
       })}
     >

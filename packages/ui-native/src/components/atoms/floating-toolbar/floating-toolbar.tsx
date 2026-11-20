@@ -129,7 +129,7 @@ function FloatingToolbar({
                 theme.typography.scale.bodySmall,
                 {
                   color: colors.color,
-                  fontWeight: theme.typography.fontWeight.caption,
+                  fontWeight: theme.typography.fontWeight.label,
                 },
               ]}
             >

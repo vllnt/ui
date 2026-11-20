@@ -106,7 +106,7 @@ function TerminalHeader({
       <NativeText
         style={typeStyle(theme, "bodySmall", {
           color: "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {title}

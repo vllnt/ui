@@ -112,7 +112,7 @@ function ThinkingBlock({
         <Text
           style={typeStyle(theme, "caption", {
             color: "mutedForeground",
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
           })}
         >
           {status}

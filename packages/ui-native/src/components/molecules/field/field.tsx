@@ -216,7 +216,7 @@ function FieldError({ children, ref, style, ...props }: FieldErrorProps) {
       style={[
         ...typeStyle(theme, "bodySmall", {
           color: "destructive",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         }),
         style,
       ]}

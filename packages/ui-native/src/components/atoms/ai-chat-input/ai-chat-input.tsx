@@ -189,7 +189,7 @@ function SubmitAction({
       <Text
         style={typeStyle(theme, "bodySmall", {
           color: "primaryForeground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {label}

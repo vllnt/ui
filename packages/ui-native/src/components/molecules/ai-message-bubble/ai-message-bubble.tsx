@@ -97,7 +97,7 @@ function MessageAvatar({
       <NativeText
         style={typeStyle(theme, "caption", {
           color: "mutedForeground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
           textTransform: "uppercase",
         })}
       >

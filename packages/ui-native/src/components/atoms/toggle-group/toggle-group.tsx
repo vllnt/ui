@@ -260,7 +260,7 @@ function ToggleGroupItem({
       <NativeText
         style={typeStyle(theme, "bodySmall", {
           color: selected ? "accentForeground" : "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {children}

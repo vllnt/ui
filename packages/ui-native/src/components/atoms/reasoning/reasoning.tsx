@@ -100,7 +100,7 @@ function ReasoningTrigger({
           styles.triggerLabel,
           ...typeStyle(theme, "bodySmall", {
             color: "mutedForeground",
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
           }),
         ]}
       >

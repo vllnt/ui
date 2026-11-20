@@ -181,7 +181,7 @@ function ModelRow({
       <Text
         style={typeStyle(theme, "bodySmall", {
           color: "popoverForeground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {model.name}
