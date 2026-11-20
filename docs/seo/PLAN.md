@@ -165,8 +165,9 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Titre FR : `Catalogue de composants json-render - le guide | vllnt UI` (57)
 - Meta FR : `Écrire un catalogue de composants json-render pour une bibliothèque React : props zod, descriptions, registre et rendu. Le catalogue VLLNT UI reste à venir.` (156)
 - H1: How to build a json-render component catalog for a React UI library
-- Reader can build: a two-component json-render catalog and registry that render VLLNT UI components from a model-written spec.
-- Internal links: `/docs/agents`, `/docs/vision`, `/components/ai-source-citation`, `/articles/generative-ui-components-react`. One external link to the Maia presentation runtime doc.
+- Reader can build: a three-component json-render catalog and registry that render VLLNT UI components from a JSON spec.
+- Internal links: `/components/ai-source-citation`, `/docs/agents`, `/docs/vision`, `/articles/generative-ui-components-react`, `/articles/ai-sdk-generative-ui-react`. One external link to the Maia presentation runtime doc.
+- API source: the json-render README, checked for versions 0.22 and 0.23. npm lists 0.23.2 on the day of writing. Recheck the code samples when json-render ships a new minor version.
 - Schema: `Article`, `BreadcrumbList`.
 
 **A4. `/articles/streaming-ui-react`** (P2 hub, status `shipped`)
@@ -178,7 +179,7 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Meta FR : `Une UI en streaming avec React, sans décalage de mise en page : réserver l'espace avec Skeleton, diffuser le texte, afficher les appels d'outil. Code à copier.` (159)
 - H1: Streaming UI in React: keep the layout still while content arrives
 - Reader can build: a streamed answer view with reserved space, a polite live region, a reasoning panel and a tool call card that updates in place.
-- Internal links: `/components/ai-streaming-text`, `/components/skeleton`, `/components/reasoning`, `/components/agent-activity`, `/docs/vision`.
+- Internal links: `/components/ai-streaming-text`, `/components/skeleton`, `/components/agent-activity`, `/docs/vision`, `/articles/generative-ui-components-react`.
 - Schema: `Article`, `BreadcrumbList`.
 
 **A5. `/articles/liquid-glass-react-shadcn`** (P3, status `shipped`)
@@ -190,7 +191,7 @@ Status values: `shipped` means everything the page teaches is on `main`. `roadma
 - Meta FR : `Ajouter une surface liquid glass shadcn à une application React en une commande. Fondée sur les tokens du thème, fixe si l'utilisateur réduit les animations.` (157)
 - H1: shadcn liquid glass: a token-based glass surface for React
 - Reader can build: a glass panel over an image or gradient that follows the theme tokens, holds still for reduced motion and keeps text readable.
-- Internal links: `/components/liquid-glass`, `/components/glass-card`, `/components/glass-panel`, `/docs/theming`.
+- Internal links: `/docs/installation`, `/docs/theming`, `/components/glass-card`, `/components/liquid-glass`, `/docs/vision`.
 - Schema: `Article`, `BreadcrumbList`, `SoftwareSourceCode` for `liquid-glass`.
 
 ### Batch 2 (planned)
@@ -333,7 +334,7 @@ Notes for the manager:
 |---|---|---|
 | Every article | `Article` | `headline` (the H1, not the title), `description`, `datePublished` from `date`, `dateModified` from `updated`, `inLanguage`, `author` and `publisher` as the `Organization` VLLNT, `mainEntityOfPage`, `image` (the generated OG image unless `image.src` is set) |
 | Every article | `BreadcrumbList` | Home, Articles, the article H1. Every item has a `name`. This also closes the "Unnamed item" warning seen on `/components/liquid-glass` |
-| Article about one component (A5, B2, B3, B5, C2) | `SoftwareSourceCode` | From the `components` frontmatter: `name`, `description`, `codeRepository` (`https://github.com/vllnt/ui`), `programmingLanguage` TypeScript, `runtimePlatform` React, `license` MIT, `url` of the component page |
+| Article about one component (A5, B2, B3, B5, C2) | `SoftwareSourceCode` | From the `components` frontmatter: `name`, `description`, `codeRepository` (`https://github.com/vllnt/ui`), `programmingLanguage` TypeScript, `runtimePlatform` React, `license` MIT, `url` of the component page. Emit it only when `components` has exactly one entry, so the hub articles that list several components do not get it |
 | Articles index `/articles` | `CollectionPage` with an `ItemList` | One entry per article, in date order |
 | Component pages | Unchanged | They already emit their own schema, with `FAQPage` where FAQ copy exists |
 
@@ -367,7 +368,7 @@ Links into the new articles, **manager ships in PR A or with the article routes*
 
 Links between articles:
 
-- A1 links to A2 and A3. A2 and A3 link back to A1 and to each other once.
+- A1 links to A2 and A3. A2 links back to A1. A3 links back to A1 and to A2.
 - A4 links to A1, and to C3 when C3 ships.
 - A5 links to B1 when B1 ships (glass and depth). B1 links to A5 and `/docs/vision`.
 - B2 and B3 link to each other (both are time-based views).
