@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useMemo, useState } from "react";
+import { type Ref, useMemo } from "react";
 
 import {
   ScrollView,
@@ -12,6 +12,7 @@ import {
 
 import {
   decorativeProps,
+  joinAccessibilityText,
   useAnnounceOnChange,
 } from "../../../primitives/accessibility";
 import { useGroupDisabled } from "../../../primitives/control-group";
@@ -19,7 +20,10 @@ import { InteractivePressable } from "../../../primitives/interactive-pressable"
 import { ModalLayer } from "../../../primitives/modal-layer";
 import { typeStyle } from "../../../primitives/type-style";
 import type { ControllableStateOptions } from "../../../primitives/use-controllable-state";
-import { useControllableState } from "../../../primitives/use-controllable-state";
+import {
+  controllableOptions,
+  useControllableState,
+} from "../../../primitives/use-controllable-state";
 import { useReducedMotion } from "../../../primitives/use-reduced-motion";
 import { useTheme } from "../../../theme/theme-provider";
 
@@ -40,13 +44,25 @@ export type SelectLabels = {
 
 /** Props for a native single-select modal list. */
 export type SelectProps = Omit<ViewProps, "children"> & {
+  /** Starts with the option list open. Ignored when `open` is passed. */
+  readonly defaultOpen?: boolean;
   readonly disabled?: boolean;
   readonly errorText?: string;
   readonly invalid?: boolean;
   readonly labels: SelectLabels;
   readonly onOpenChange?: (open: boolean) => void;
+  /** Controls whether the option list is open. */
+  readonly open?: boolean;
   readonly options: readonly SelectOption[];
   readonly ref?: Ref<View>;
+  /**
+   * Speaks "required" with the trigger's hint. React Native has no `required`
+   * accessibility state, and nothing is validated for you: pass `invalid`
+   * and `errorText` once the user leaves it empty.
+   */
+  readonly required?: boolean;
+  /** The spoken word for `required`; defaults to English "Required". */
+  readonly requiredLabel?: string;
   readonly selection: ControllableStateOptions<string | undefined>;
 };
 
@@ -76,13 +92,17 @@ const styles = StyleSheet.create({
  * its value; the open list is titled by a `labels.options` header.
  */
 function Select({
+  defaultOpen = false,
   disabled: ownDisabled = false,
   errorText,
   invalid = false,
   labels,
   onOpenChange,
+  open: openProperty,
   options,
   ref,
+  required = false,
+  requiredLabel = "Required",
   selection,
   style,
   ...props
@@ -91,22 +111,23 @@ function Select({
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const [selectedId, setSelectedId] = useControllableState(selection);
-  const [open, setOpen] = useState(false);
+  const [open, setModalOpen] = useControllableState(
+    controllableOptions(openProperty, defaultOpen, onOpenChange),
+  );
   const selectedOption = useMemo(
     () => options.find((option) => option.id === selectedId),
     [options, selectedId],
   );
-  const setModalOpen = (nextOpen: boolean) => {
-    setOpen(nextOpen);
-    onOpenChange?.(nextOpen);
-  };
   const error = invalid ? errorText : undefined;
   useAnnounceOnChange(error, { liveRegion: true });
 
   return (
     <View ref={ref} style={style} {...props}>
       <InteractivePressable
-        accessibilityHint={error}
+        accessibilityHint={joinAccessibilityText([
+          error,
+          required && requiredLabel,
+        ])}
         accessibilityLabel={labels.open}
         accessibilityRole="button"
         accessibilityState={{ disabled, expanded: open }}

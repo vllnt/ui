@@ -711,11 +711,11 @@
         "pressed"
       ],
       "source": "src/components/atoms/dialog/dialog.tsx",
-      "propsGap": [
-        "modal",
-        "DialogContent.overlay"
-      ],
-      "note": "Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). The close button carries the states. ModalLayer renders a transparent Modal with no backdrop dim, like web overlay=\"none\"; the veil is the later `scrim` component."
+      "propsGap": [],
+      "note": "Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). The close button carries the states. `modal` (default true) presents a host Modal. `modal={false}` draws the dialog in place over a live page, with no veil: Android back and the accessibility escape gesture still close it, and screen-reader focus moves to the title. `overlay` is \"scrim\" (default, as on web) or \"none\". The scrim is a decorative veil in the background colour at 0.8 opacity that takes no touches, so a modal Dialog now dims the page unless it passes overlay=\"none\".",
+      "propsRenamed": {
+        "DialogContent.overlay": "overlay"
+      }
     },
     {
       "name": "display",
@@ -768,25 +768,11 @@
       ],
       "source": "src/components/atoms/drawer/drawer.tsx",
       "propsGap": [
-        "activeSnapPoint",
-        "setActiveSnapPoint",
-        "snapPoints",
         "fadeFromIndex",
-        "snapToSequentialPoint",
-        "closeThreshold",
-        "dismissible",
-        "handleOnly",
-        "direction",
-        "modal",
         "nested",
-        "fixed",
-        "autoFocus",
-        "onClose",
-        "onDrag",
-        "onRelease",
-        "onAnimationEnd"
+        "fixed"
       ],
-      "note": "Bottom modal only: no drag or snap points. Single component like Dialog. Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale. The close button carries the states."
+      "note": "Single component like Dialog: the caller owns open state, and the close button carries the states. Edge modal with `direction`, `snapPoints` (fractions of the window or \"<n>px\"; invalid entries are ignored, the rest sort smallest first and the drawer opens on the smallest), `activeSnapPoint` and `setActiveSnapPoint`, `snapToSequentialPoint`, `closeThreshold`, `dismissible`, `handleOnly`, `autoFocus`, `modal`, `onClose`, `onDrag`, `onRelease` and `onAnimationEnd`. Dragging uses the core PanResponder: a release flung faster than 0.4 pt/ms goes to the furthest snap point (the next one with snapToSequentialPoint), a slower drag settles on the nearest, and a dismissible drawer closes once the drag covers closeThreshold of its lowest snap point. A swipe-dismiss reports onRequestClose(\"requestClose\"). With more than one snap point the handle is an adjustable control (increment and decrement actions, press to cycle) so snapping has a single-pointer alternative; its value reads as the percentage of the window shown. `dismissible={false}` blocks back, escape and drag-to-close but keeps the close button and snapping. Reduced motion snaps without animation. onAnimationEnd(open) fires after a snap or drag settles, not after the open and close presentation of the host Modal. No native meaning, so not offered: fadeFromIndex (there is no backdrop fade tied to a snap), nested (a nested drawer is a second Drawer) and fixed (no keyboard-driven repositioning of a fixed drawer). Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale."
     },
     {
       "name": "dropdown-menu",
@@ -806,27 +792,26 @@
       "source": "src/components/atoms/dropdown-menu/dropdown-menu.tsx",
       "propsGap": [
         "dir",
-        "modal",
         "DropdownMenuContent.loop",
-        "DropdownMenuContent.side",
-        "DropdownMenuContent.sideOffset",
-        "DropdownMenuContent.align",
-        "DropdownMenuContent.alignOffset",
-        "DropdownMenuItem.inset",
-        "DropdownMenuItem.textValue",
-        "DropdownMenuCheckboxItem.checked",
-        "DropdownMenuCheckboxItem.onCheckedChange",
-        "DropdownMenuRadioGroup.value",
-        "DropdownMenuRadioGroup.onValueChange",
-        "DropdownMenuSub.open",
-        "DropdownMenuSub.defaultOpen",
-        "DropdownMenuSub.onOpenChange"
+        "DropdownMenuItem.textValue"
       ],
       "propsRenamed": {
         "DropdownMenuItem.onSelect": "onSelect",
-        "DropdownMenuItem.disabled": "items[].disabled"
+        "DropdownMenuItem.disabled": "items[].disabled",
+        "DropdownMenuCheckboxItem.checked": "items[].checked",
+        "DropdownMenuCheckboxItem.onCheckedChange": "items[].onCheckedChange",
+        "DropdownMenuRadioGroup.value": "items[].value",
+        "DropdownMenuRadioGroup.onValueChange": "items[].onValueChange",
+        "DropdownMenuSub.open": "items[].open",
+        "DropdownMenuSub.defaultOpen": "items[].defaultOpen",
+        "DropdownMenuSub.onOpenChange": "items[].onOpenChange",
+        "DropdownMenuItem.inset": "items[].inset",
+        "DropdownMenuContent.side": "side",
+        "DropdownMenuContent.sideOffset": "sideOffset",
+        "DropdownMenuContent.align": "align",
+        "DropdownMenuContent.alignOffset": "alignOffset"
       },
-      "note": "Flat modal list with one selected item (selectedId): no groups, separators, shortcuts, checkbox or radio items, or sub-menus. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
+      "note": "Modal list with one selected item (selectedId), as groups of actions, checkboxes, radio groups and sub-menus. No separators, labels or shortcuts as parts. `anchorRef` places the list against an element (the native counterpart of DropdownMenuTrigger): `side`, `align`, `sideOffset` (default 4) and `alignOffset` apply to it, the list stays inside the window with an 8 pt margin, and it never flips to the other side. Without an anchorRef, or when the ref cannot be measured, the list stays centred. `start` and `end` mean left and right (top and bottom for side left or right), with no right-to-left flipping, so `dir` is not offered. `modal={false}` draws the list in place over a live page. Checkbox items and radio groups are controlled like their web parts (`checked`, `onCheckedChange`, `value`, `onValueChange`): the menu closes on press and its rows unmount, so keep the state in the owner. Sub-menus (`open`, `defaultOpen`, `onOpenChange`) open in place below their row and expose `expanded`. `inset` lines a row up with checkbox and radio rows. No native meaning, so not offered: loop (screen-reader order does not wrap) and textValue (there is no type-ahead). Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
     },
     {
       "name": "edge-label",
@@ -1609,14 +1594,14 @@
         "pressed"
       ],
       "source": "src/components/atoms/popover/popover.tsx",
-      "propsGap": [
-        "modal",
-        "PopoverContent.side",
-        "PopoverContent.sideOffset",
-        "PopoverContent.align",
-        "PopoverContent.alignOffset"
-      ],
-      "note": "Centered modal, not anchored to a trigger, and there is no anchor part. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. The close button carries the states."
+      "propsGap": [],
+      "note": "Single component: label, description and cancelLabel replace the Popover parts. The close button carries the states. `anchorRef` is the native counterpart of PopoverAnchor and places the popover against an element: `side`, `align`, `sideOffset` (default 4) and `alignOffset` apply to it, it stays inside the window with an 8 pt margin and never flips. Without an anchorRef, or when the ref cannot be measured, the popover stays centred. `start` and `end` mean left and right with no right-to-left flipping. `modal={false}` draws the popover in place over a live page: Android back and the accessibility escape gesture still close it, and screen-reader focus moves to the title. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed.",
+      "propsRenamed": {
+        "PopoverContent.side": "side",
+        "PopoverContent.sideOffset": "sideOffset",
+        "PopoverContent.align": "align",
+        "PopoverContent.alignOffset": "alignOffset"
+      }
     },
     {
       "name": "presence-stack",
@@ -2004,12 +1989,9 @@
       ],
       "source": "src/components/atoms/select/select.tsx",
       "propsGap": [
-        "open",
-        "defaultOpen",
         "dir",
         "name",
         "autoComplete",
-        "required",
         "form"
       ],
       "propsRenamed": {
@@ -2021,7 +2003,7 @@
         "SelectItem.disabled": "options[].disabled",
         "SelectValue.placeholder": "labels.placeholder"
       },
-      "note": "Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row."
+      "note": "Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row. `open`, `defaultOpen` and `onOpenChange` control the panel. `required` speaks `requiredLabel` (default \"Required\") with the trigger hint: React Native has no required accessibility state and nothing is validated for you, so pass `invalid` and `errorText` once the user leaves it empty. No native meaning, so not offered: dir (no right-to-left flipping), and name, autoComplete and form (there is no form element to submit)."
     },
     {
       "name": "selection-halo",
@@ -2100,14 +2082,12 @@
         "pressed"
       ],
       "source": "src/components/atoms/sheet/sheet.tsx",
-      "propsGap": [
-        "modal"
-      ],
+      "propsGap": [],
       "propsRenamed": {
         "SheetContent.side": "side",
         "SheetContent.labels": "closeLabel"
       },
-      "note": "Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. The close button carries the states."
+      "note": "Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. The close button carries the states. `modal={false}` draws the sheet in place over a live page: Android back and the accessibility escape gesture still close it, and screen-reader focus moves to the title."
     },
     {
       "name": "shimmer-button",
@@ -2659,15 +2639,16 @@
       ],
       "source": "src/components/atoms/tooltip/tooltip.tsx",
       "propsGap": [
-        "delayDuration",
         "disableHoverableContent",
-        "TooltipProvider.skipDelayDuration",
-        "TooltipContent.side",
-        "TooltipContent.sideOffset",
-        "TooltipContent.align",
-        "TooltipContent.alignOffset"
+        "TooltipProvider.skipDelayDuration"
       ],
-      "note": "Press-to-open trigger: hover and focus style it but do not open it, and there is no long-press disclosure. Centered modal, not anchored. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
+      "note": "Press-to-open trigger: hover and focus style it but do not open it, and there is no long-press disclosure. The tooltip is placed against its own trigger: `side` (default top), `align`, `sideOffset` (default 4) and `alignOffset` apply, it stays inside the window with an 8 pt margin and never flips. `delayDuration` is the delay between a press and the tooltip opening (default 0, where web waits 700 ms for hover intent); pressing again before it opens cancels it. No native meaning, so not offered: disableHoverableContent (there is no pointer to leave the trigger) and skipDelayDuration (there is no provider, and a press is deliberate). Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed.",
+      "propsRenamed": {
+        "TooltipContent.side": "side",
+        "TooltipContent.sideOffset": "sideOffset",
+        "TooltipContent.align": "align",
+        "TooltipContent.alignOffset": "alignOffset"
+      }
     },
     {
       "name": "top-bar",

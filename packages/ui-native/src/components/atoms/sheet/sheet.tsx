@@ -3,6 +3,7 @@
 import type { ReactNode, Ref } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+import { useFocusWhenShown } from "../../../primitives/accessibility";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import {
   ModalLayer,
@@ -24,6 +25,8 @@ export type SheetProps = {
   readonly closeLabel: string;
   readonly defaultOpen?: boolean;
   readonly description?: string;
+  /** `false` draws the sheet in place instead of in a host Modal. */
+  readonly modal?: boolean;
   readonly onOpenChange?: (open: boolean) => void;
   readonly onRequestClose?: (reason: ModalLayerCloseReason) => void;
   readonly open?: boolean;
@@ -50,6 +53,7 @@ function Sheet({
   closeLabel,
   defaultOpen = false,
   description,
+  modal = true,
   onOpenChange,
   onRequestClose,
   open,
@@ -63,6 +67,7 @@ function Sheet({
   const [visible, setVisible] = useControllableState(
     controllableOptions(open, defaultOpen, onOpenChange),
   );
+  const titleRef = useFocusWhenShown<Text>(visible && !modal);
   const close = (reason: ModalLayerCloseReason) => {
     onRequestClose?.(reason);
     setVisible(false);
@@ -92,6 +97,7 @@ function Sheet({
         ],
       }}
       keyboardAvoidingViewProps={{ style: styles.content }}
+      modal={modal}
       onClose={close}
       presentationStyle="overFullScreen"
       ref={ref}
@@ -112,6 +118,7 @@ function Sheet({
       >
         <Text
           accessibilityRole="header"
+          ref={titleRef}
           style={typeStyle(theme, "bodyLarge", {
             color: "foreground",
             fontWeight: theme.typography.fontWeight.heading,

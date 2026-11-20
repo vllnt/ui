@@ -11,6 +11,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../components/atoms/collapsible/collapsible";
+import {
+  DropdownMenu,
+  type DropdownMenuItem,
+} from "../components/atoms/dropdown-menu/dropdown-menu";
 import { ListBox } from "../components/atoms/list-box/list-box";
 import {
   RadioGroup,
@@ -46,7 +50,13 @@ type Control = {
   readonly name: string;
   /** Renders the control with one unselected target the tests act on. */
   readonly render: (disabled: boolean) => ReactElement;
-  readonly role: "button" | "checkbox" | "radio" | "tab" | "togglebutton";
+  readonly role:
+    | "button"
+    | "checkbox"
+    | "menuitem"
+    | "radio"
+    | "tab"
+    | "togglebutton";
   /** Renders the same control with that target selected; absent when it cannot be. */
   readonly selected?: () => ReactElement;
 };
@@ -163,6 +173,49 @@ function details(disabled: boolean, open = false): ReactElement {
   );
 }
 
+function menu(item: DropdownMenuItem): ReactElement {
+  return (
+    <DropdownMenu
+      cancelLabel="Close"
+      defaultOpen
+      items={[item]}
+      label="Actions"
+    />
+  );
+}
+
+function gridRow(disabled: boolean, checked = false): ReactElement {
+  return menu({
+    checked,
+    disabled,
+    id: "grid",
+    kind: "checkbox",
+    label: "Show grid",
+  });
+}
+
+function viewRow(disabled: boolean, value = "list"): ReactElement {
+  return menu({
+    id: "view",
+    items: [
+      { id: "list", label: "List" },
+      { disabled, id: "cards", label: "Cards" },
+    ],
+    kind: "radio-group",
+    value,
+  });
+}
+
+function shareRow(disabled: boolean): ReactElement {
+  return menu({
+    disabled,
+    id: "share",
+    items: [{ id: "email", label: "Email" }],
+    kind: "sub",
+    label: "Share",
+  });
+}
+
 const CONTROLS: Readonly<Record<string, Control>> = {
   Button: {
     hover: "dim",
@@ -195,6 +248,26 @@ const CONTROLS: Readonly<Record<string, Control>> = {
     name: "Details",
     render: details,
     role: "button",
+  },
+  "DropdownMenu checkbox row": {
+    hover: "tint",
+    name: "Show grid",
+    render: gridRow,
+    role: "checkbox",
+    selected: () => gridRow(false, true),
+  },
+  "DropdownMenu radio row": {
+    hover: "tint",
+    name: "Cards",
+    render: viewRow,
+    role: "radio",
+    selected: () => viewRow(false, "cards"),
+  },
+  "DropdownMenu sub-menu row": {
+    hover: "tint",
+    name: "Share",
+    render: shareRow,
+    role: "menuitem",
   },
   "Icon-only FloatingActionButton": {
     hover: "dim",
