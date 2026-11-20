@@ -6,8 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-These entries ship in 0.4.0, which is not published yet (the latest release is
-0.3.0). The release cut adds the version heading and its date.
+### Added
+
+- **`@vllnt/ui/package.json` export** - tools can read the package manifest
+  (for example its version) without `ERR_PACKAGE_PATH_NOT_EXPORTED`.
+
+## [0.4.0] - 2026-11-20
 
 ### Added
 
@@ -419,6 +423,7 @@ These entries ship in 0.4.0, which is not published yet (the latest release is
 
 - Initial public publish to the public npm registry.
 
+[0.4.0]: https://github.com/vllnt/ui/releases/tag/v0.4.0
 [0.3.0]: https://github.com/vllnt/ui/releases/tag/v0.3.0
 [0.2.1]: https://github.com/vllnt/ui/releases/tag/v0.2.1
 [0.2.0]: https://github.com/vllnt/ui/releases/tag/v0.2.0
