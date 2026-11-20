@@ -72,7 +72,7 @@ jobs:
     needs: core-quality
     if: ${{ vars.CORE_CANARY_PUBLISH_ENABLED == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     # Same environment as native-publish: one trusted-publisher entry per package covers both jobs.
     environment: npm-native-canary
     # One group for both publish jobs: a pair publish never overlaps a core publish, and publishes
@@ -134,7 +134,7 @@ jobs:
     needs: [native-quality, core-publish]
     if: ${{ !cancelled() && vars.NATIVE_CANARY_PUBLISH_ENABLED == 'true' && needs.native-quality.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.core-publish.result) }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     environment: npm-native-canary
     # Same group as core-publish: do not split it.
     concurrency:
