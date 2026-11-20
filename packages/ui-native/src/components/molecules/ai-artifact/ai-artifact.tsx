@@ -476,7 +476,7 @@ function AIArtifactVersion({
         <NativeText
           style={typeStyle(theme, "caption", {
             color: active ? "primaryForeground" : "foreground",
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
             textAlign: "center",
           })}
         >

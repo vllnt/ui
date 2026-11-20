@@ -168,7 +168,7 @@ function AlertDialog({
                 color: destructive
                   ? "destructiveForeground"
                   : "primaryForeground",
-                fontWeight: theme.typography.fontWeight.caption,
+                fontWeight: theme.typography.fontWeight.label,
               })}
             >
               {actionLabel}

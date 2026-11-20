@@ -280,11 +280,11 @@ export const designTokens = {
         "value": 400
       },
       "caption": {
-        "value": 500
+        "value": 400
       },
       "label": {
         "cssVariable": "--font-weight-label",
-        "value": 600,
+        "value": 500,
         "role": "Label weight — theme-overridable"
       }
     },
@@ -856,8 +856,8 @@ export const nativeTokens = {
       "heading": 600,
       "display": 600,
       "body": 400,
-      "caption": 500,
-      "label": 600
+      "caption": 400,
+      "label": 500
     },
     "scale": {
       "display": {
@@ -1135,8 +1135,8 @@ export const productThemes = {
         "heading": 600,
         "display": 600,
         "body": 400,
-        "caption": 500,
-        "label": 600
+        "caption": 400,
+        "label": 500
       },
       "scale": {
         "display": {

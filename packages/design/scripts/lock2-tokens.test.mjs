@@ -119,6 +119,29 @@ describe("radius roles (D14)", () => {
   });
 });
 
+describe("caption and label weights (D29 Q42)", () => {
+  it("matches the library core: caption 400, label 500", () => {
+    assert.equal(tokens.typography.fontWeight.caption.value, 400);
+    assert.equal(tokens.typography.fontWeight.label.value, 500);
+    assert.equal(penpotToken("vllnt/core", "font.weight.caption").$value, "400");
+    assert.equal(penpotToken("vllnt/core", "font.weight.label").$value, "500");
+  });
+
+  it("keeps the Maia Ink scale: caption 500, label 600", () => {
+    assert.equal(penpotToken("vllnt/maia/dark", "font.weight.caption").$value, "500");
+    assert.equal(penpotToken("vllnt/maia/dark", "font.weight.label").$value, "600");
+  });
+
+  for (const [name, css] of [
+    ["themes/default.css", defaultCss],
+    ["styles.css", stylesCss],
+  ]) {
+    it(`declares --font-weight-label: 500 in ${name}`, () => {
+      assert.match(css, /--font-weight-label: 500;/);
+    });
+  }
+});
+
 describe("touch targets (D16)", () => {
   it("sets size.target.min 44 and size.control-xs 32 in Penpot", () => {
     const core = penpot["vllnt/core"];

@@ -71,7 +71,7 @@ function Toggle({
       <NativeText
         style={typeStyle(theme, "bodySmall", {
           color: isPressed ? "accentForeground" : "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {children}

@@ -90,7 +90,7 @@ function ExpandableCard({
           <Text
             style={typeStyle(theme, "body", {
               color: "cardForeground",
-              fontWeight: theme.typography.fontWeight.caption,
+              fontWeight: theme.typography.fontWeight.label,
             })}
           >
             {card.title}

@@ -192,7 +192,7 @@ function StatusIndicator({
           presentation.text,
           {
             color: presentation.textColor,
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
           },
         ]}
       >

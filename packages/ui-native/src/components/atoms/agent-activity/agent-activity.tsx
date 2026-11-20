@@ -464,7 +464,7 @@ function AgentStepTitle({ ref, style, ...props }: AgentStepTitleProps) {
       style={[
         ...typeStyle(theme, "bodySmall", {
           color: "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         }),
         style,
       ]}

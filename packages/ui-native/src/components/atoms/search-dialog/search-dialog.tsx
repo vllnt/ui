@@ -203,7 +203,7 @@ function SearchResults({
         accessibilityRole="header"
         style={typeStyle(theme, "caption", {
           color: "mutedForeground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         })}
       >
         {heading}
@@ -230,7 +230,7 @@ function SearchResults({
           <Text
             style={typeStyle(theme, "bodySmall", {
               color: "foreground",
-              fontWeight: theme.typography.fontWeight.caption,
+              fontWeight: theme.typography.fontWeight.label,
             })}
           >
             {item.title}

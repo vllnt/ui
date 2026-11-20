@@ -33,7 +33,7 @@ function Label({
       style={[
         ...typeStyle(theme, "bodySmall", {
           color: invalid ? "destructive" : "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
           opacity: disabled ? 0.7 : 1,
         }),
         style,

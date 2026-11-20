@@ -79,7 +79,7 @@ function TextField({
           accessibilityRole="alert"
           style={typeStyle(theme, "bodySmall", {
             color: "destructive",
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
           })}
         >
           {error}

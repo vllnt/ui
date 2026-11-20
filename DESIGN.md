@@ -236,8 +236,8 @@ Other outputs from the same source, drift-checked by `pnpm tokens:check`:
 | Body large | `--font-size-body-lg` | 1.125rem (18px) | 400 | 1.7 |
 | Body | `--font-size-body` | 1rem (16px) | 400 | 1.6 |
 | Body small | `--font-size-body-sm` | 0.875rem (14px) | 400 | 1.5 |
-| Caption | `--font-size-caption` | 0.75rem (12px) | 500 | 1.4 |
-| Label | `--font-size-label` | 0.75rem (12px) | 600 (`--font-weight-label`) | 1.4 |
+| Caption | `--font-size-caption` | 0.75rem (12px) | 400 | 1.4 |
+| Label | `--font-size-label` | 0.75rem (12px) | 500 (`--font-weight-label`) | 1.4 |
 | Code | inherit | inherit | 400 mono | 1.5 |
 
 Product themes override these steps. Maia sets Display 28/600, H5 20/600, H6 15/600, Body 14/400, Body small 13/400, Caption 12/500 and Label 11/600; its Mono 12/400 is `font-mono` at the Caption size with the body weight. No theme uses weight 700. Maia's Label is set in capitals in the design; the tokens carry no text-transform role (a theme cannot add roles), so add `uppercase` where the Label step is used. Steps a theme does not set (H1 to H4, Body large) keep the core size.

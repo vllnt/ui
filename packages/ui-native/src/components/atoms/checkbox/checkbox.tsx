@@ -129,7 +129,7 @@ function Checkbox({
           <NativeText
             style={{
               color: theme.colors.primaryForeground,
-              fontWeight: theme.typography.fontWeight.caption,
+              fontWeight: theme.typography.fontWeight.label,
             }}
           >
             {current === "indeterminate" ? "−" : "✓"}

@@ -137,11 +137,11 @@
           "$type": "fontWeights"
         },
         "caption": {
-          "$value": "500",
+          "$value": "400",
           "$type": "fontWeights"
         },
         "label": {
-          "$value": "600",
+          "$value": "500",
           "$type": "fontWeights"
         }
       }

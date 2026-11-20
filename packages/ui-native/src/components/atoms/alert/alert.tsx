@@ -136,7 +136,7 @@ function AlertTitle({ ref, style, ...props }: AlertTitleProps) {
       style={[
         ...typeStyle(theme, "body", {
           color: "foreground",
-          fontWeight: theme.typography.fontWeight.caption,
+          fontWeight: theme.typography.fontWeight.label,
         }),
         style,
       ]}

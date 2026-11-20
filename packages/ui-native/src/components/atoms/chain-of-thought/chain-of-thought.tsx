@@ -116,7 +116,7 @@ function StepText({
       status === "pending"
         ? theme.colors.mutedForeground
         : theme.colors.foreground,
-    fontWeight: theme.typography.fontWeight.caption,
+    fontWeight: theme.typography.fontWeight.label,
   };
   return (
     <View

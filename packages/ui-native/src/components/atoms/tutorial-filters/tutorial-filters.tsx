@@ -192,7 +192,7 @@ function TutorialFilters({
           accessibilityRole="header"
           style={typeStyle(theme, "bodySmall", {
             color: "foreground",
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
           })}
         >
           {labels.difficultyLabel}
@@ -228,7 +228,7 @@ function TutorialFilters({
               accessibilityRole="header"
               style={typeStyle(theme, "bodySmall", {
                 color: "foreground",
-                fontWeight: theme.typography.fontWeight.caption,
+                fontWeight: theme.typography.fontWeight.label,
               })}
             >
               {labels.tagsLabel}

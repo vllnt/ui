@@ -77,7 +77,7 @@ function FAQRow({
         <Text
           style={typeStyle(theme, "bodySmall", {
             color: "cardForeground",
-            fontWeight: theme.typography.fontWeight.caption,
+            fontWeight: theme.typography.fontWeight.label,
           })}
         >
           {item.question}

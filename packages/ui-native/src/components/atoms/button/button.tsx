@@ -91,7 +91,7 @@ function ButtonFrame({
           style={[
             styles.text,
             theme.typography.scale.bodySmall,
-            { fontWeight: theme.typography.fontWeight.caption },
+            { fontWeight: theme.typography.fontWeight.label },
             resolved.text,
             buttonStateTextStyle(variant, state),
             textStyle,
