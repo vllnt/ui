@@ -12,7 +12,7 @@ og:
 
 VLLNT UI est la couche UI sur laquelle reposent tous les produits vllnt : le web aujourd'hui, React Native en canary, le desktop et le spatial ensuite. L'objectif est d'être le moyen le plus rapide, pour les personnes comme pour les agents IA, de construire des interfaces. La marque vllnt est le thème par défaut, et chaque composant respecte le WCAG 2.2 AA.
 
-Nous pensons que les interfaces changent de deux façons, et nous voulons que VLLNT UI soit la base des deux.
+Nous pensons que les interfaces changent de trois façons, et nous voulons que VLLNT UI soit la base de chacune.
 
 ## Plateformes
 
@@ -26,6 +26,7 @@ VLLNT UI vise tous les types d'interfaces. Voici où en est chaque cible aujourd
 - **Réalité augmentée et spatial, visionOS et WebXR : proposition.** Les fondations spatiales font l'objet d'une RFC ouverte ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631)). Il n'existe pas de moteur de rendu spatial.
 - **Interfaces holographiques interactives : sur la feuille de route.** Les briques de base sont disponibles sur le web : surfaces en verre, jauge circulaire, contrôles de HUD et docks. Les composants holographiques eux-mêmes n'existent pas encore.
 - **UI générée par l'IA et diffusée en continu : en partie disponible.** Les descripteurs, le serveur MCP, les thèmes sous forme de données et les composants de flux continu existent ; les adaptateurs json-render et AI SDK, non ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+- **UI pensée pour la voix : sur la feuille de route.** Aucun composant vocal n'est encore disponible : ni transcription, ni état d'écoute, ni forme d'onde, ni sortie vocale. Le texte diffusé en continu est déjà annoncé par une région live dans `AIStreamingText`.
 
 ## Un socle, un moteur de rendu par plateforme
 
@@ -56,6 +57,21 @@ Pour cela, les briques doivent être :
 - **Sûres en flux continu :** un écran garde sa mise en page pendant que le contenu arrive encore.
 - **Sûres à mettre à jour :** une nouvelle version ne casse pas les écrans déjà construits sur l'ancienne.
 - **Accessibles par défaut :** un écran généré respecte le WCAG 2.2 AA comme un écran fait à la main.
+
+## 3. Les interfaces pensées pour la voix
+
+Les interfaces de nouvelle génération seront générées, et beaucoup seront pensées d'abord pour la voix. L'interface suit la voix : une personne parle, l'interface montre qu'elle écoute et ce qu'elle a compris, répond à voix haute et à l'écran, et peut diffuser en continu une UI générée en réponse.
+
+Pour cela, VLLNT UI doit proposer :
+
+- **Des surfaces conversationnelles** qui réunissent la transcription, la réponse et l'UI générée au même endroit.
+- **Une transcription en direct et des états d'écoute :** le texte provisoire et définitif, et des états clairs : repos, réveil, écoute, réflexion, parole, micro coupé et erreur.
+- **Le push-to-talk et les états de réveil,** utilisables aussi au clavier et par contacteur.
+- **Des formes d'onde et des indicateurs de niveau** qui ne portent jamais de sens par le seul mouvement, et restent immobiles quand le mouvement est réduit.
+- **Un retour vocal doublé d'un équivalent texte :** chaque réponse parlée est aussi un texte visible et sélectionnable.
+- **Une UI diffusée en continu, pilotée par la voix :** un tour de parole alimente l'AI SDK ou une spec json-render, et l'écran se met à jour à mesure que la réponse arrive.
+
+Rien de ceci n'est encore disponible. Le suivi se fait dans [vllnt/ui#683](https://github.com/vllnt/ui/issues/683).
 
 ## Travailler avec la pile IA de Vercel
 
@@ -92,6 +108,11 @@ Chacun de ces chantiers est ouvert et suivi dans son propre ticket. Rien de ceci
 - **Des composants holographiques :** menus radiaux et orbitaux, anneau de données, panneau holographique et un modèle documenté de superposition du verre, construits sur les composants de verre et de HUD existants ([vllnt/ui#679](https://github.com/vllnt/ui/issues/679)).
 - **L'accessibilité des interfaces spatiales et translucides :** mouvement réduit, transparence réduite, contraste sur le verre et tailles de cible spatiales, en plus du WCAG 2.2 AA ([vllnt/ui#681](https://github.com/vllnt/ui/issues/681)).
 - **Des schémas pour que les agents puissent les diffuser :** des entrées de catalogue json-render et des schémas d'outils AI SDK pour ces composants ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+
+### Interfaces pensées pour la voix
+
+- **Des composants vocaux :** une surface conversationnelle, une transcription en direct, un indicateur d'écoute, le push-to-talk, des formes d'onde et des indicateurs de niveau, et un retour vocal doublé d'un équivalent texte ([vllnt/ui#683](https://github.com/vllnt/ui/issues/683)).
+- **Une UI diffusée en continu, pilotée par la voix,** avec l'AI SDK, dont les fonctions de synthèse et de transcription vocales sont encore expérimentales, et avec json-render ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
 - **Un schéma de props complet** pour chaque composant, pour qu'un modèle produise un arbre d'UI valide et qu'un moteur de rendu le vérifie avant de l'afficher.
 - **Un contrat de props partielles,** pour que tout composant puisse s'afficher à partir de données incomplètes, reçues en flux continu.
 - **Des thèmes par utilisateur résolus à l'exécution,** dans les limites accessibles des tokens.
