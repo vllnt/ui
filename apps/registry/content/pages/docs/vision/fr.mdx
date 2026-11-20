@@ -73,6 +73,16 @@ Pour cela, VLLNT UI doit proposer :
 
 Rien de ceci n'est encore disponible. Le suivi se fait dans [vllnt/ui#683](https://github.com/vllnt/ui/issues/683).
 
+## Le verre par défaut
+
+Le verre doit devenir l'apparence par défaut de VLLNT UI partout, y compris le cadre des pages et ce site. Dessous, la base ne change pas : noir et blanc, Inter et JetBrains Mono.
+
+- **La lisibilité d'abord.** Les panneaux qui portent du texte ont assez de flou et de teinte, ou d'opacité, pour respecter le contraste WCAG 2.2 AA.
+- **Opaque quand il le faut.** Une surface opaque remplace automatiquement le verre quand l'utilisateur demande moins de transparence ou plus de contraste, sur les appareils peu puissants et sur les plateformes natives sans flou. Chaque composant en verre propose aussi une variante opaque.
+- **Dans un budget.** Le flou coûte du temps de rendu : le nombre de couches floutées et leur rayon ont un budget de performance.
+
+C'est décidé mais pas encore construit : aujourd'hui, le thème par défaut est opaque. Le passage au verre est suivi dans [vllnt/ui#684](https://github.com/vllnt/ui/issues/684).
+
 ## Travailler avec la pile IA de Vercel
 
 Nous voulons que VLLNT UI fonctionne nativement avec deux outils open source de Vercel :
@@ -113,6 +123,10 @@ Chacun de ces chantiers est ouvert et suivi dans son propre ticket. Rien de ceci
 
 - **Des composants vocaux :** une surface conversationnelle, une transcription en direct, un indicateur d'écoute, le push-to-talk, des formes d'onde et des indicateurs de niveau, et un retour vocal doublé d'un équivalent texte ([vllnt/ui#683](https://github.com/vllnt/ui/issues/683)).
 - **Une UI diffusée en continu, pilotée par la voix,** avec l'AI SDK, dont les fonctions de synthèse et de transcription vocales sont encore expérimentales, et avec json-render ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
+
+### Le verre par défaut
+
+- **Les tokens de verre et le passage par défaut :** des tokens de flou, de teinte et d'opacité, le verre comme thème par défaut, des replis opaques automatiques, des tests de contraste sur le verre et un budget de performance pour `backdrop-filter` ([vllnt/ui#684](https://github.com/vllnt/ui/issues/684)).
 - **Un schéma de props complet** pour chaque composant, pour qu'un modèle produise un arbre d'UI valide et qu'un moteur de rendu le vérifie avant de l'afficher.
 - **Un contrat de props partielles,** pour que tout composant puisse s'afficher à partir de données incomplètes, reçues en flux continu.
 - **Des thèmes par utilisateur résolus à l'exécution,** dans les limites accessibles des tokens.
