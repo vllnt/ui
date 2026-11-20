@@ -52,6 +52,25 @@ current_main_sha() {
   git ls-remote --exit-code origin refs/heads/main | awk '{print $1}'
 }
 
+# The pair's version of skip_if_superseded. Once this commit's core canary is on npm (the
+# core-publish job or an earlier attempt uploaded it), the pair finishes instead of standing down:
+# the commit that superseded this one may be web-only and run no native canary, which would leave
+# core@canary ahead of native@canary with nothing to catch native up.
+skip_pair_if_superseded() {
+  local remote
+  remote="$(current_main_sha)"
+  test -n "$remote"
+  if [[ "$remote" = "$GITHUB_SHA" ]]; then
+    return 0
+  fi
+  if [[ "$(version_state "${CORE_NAME}@${CANARY_VERSION}")" = present ]]; then
+    echo "::notice::${CORE_NAME}@${CANARY_VERSION} is already on npm; finishing the pair for ${GITHUB_SHA} although main moved on"
+    return 0
+  fi
+  echo "::notice::Skipping superseded canary run for ${GITHUB_SHA}"
+  exit 0
+}
+
 # Exits 0 without publishing when a newer commit has landed on main.
 skip_if_superseded() {
   local remote
@@ -119,14 +138,14 @@ version_state() {
 # npm accepts an upload before it serves it ("Your package is being processed and may take a few
 # minutes"), so poll with exponential backoff until it does. The first delay is
 # CANARY_POLL_SECONDS (default 5), doubling after each poll up to CANARY_POLL_MAX_SECONDS (default
-# 30). CANARY_POLL_TIMEOUT_SECONDS (default 360) is the total deadline, measured on the clock and no
+# 30). CANARY_POLL_TIMEOUT_SECONDS (default 600) is the total deadline, measured on the clock and no
 # sleep outlasts it; a version still missing then fails the run. CANARY_POLL_SECONDS=0 polls
 # back to back until the deadline (the harness fakes `sleep`, so its runs stay fast).
 # A registry error during the wait counts as "not served yet": version_state prints it, and the
 # deadline is the only way out, so a flaky poll never ends the wait early.
 wait_until_present() {
   local spec="$1"
-  local cap="${CANARY_POLL_MAX_SECONDS:-30}" timeout="${CANARY_POLL_TIMEOUT_SECONDS:-360}"
+  local cap="${CANARY_POLL_MAX_SECONDS:-30}" timeout="${CANARY_POLL_TIMEOUT_SECONDS:-600}"
   local delay="${CANARY_POLL_SECONDS:-5}" started="$SECONDS" remaining
   (( delay <= cap )) || delay="$cap"
   while [[ "$(version_state "$spec")" != present ]]; do
@@ -259,7 +278,7 @@ publish_pair() {
   test "$core_base" = "$native_base"
   require_stable_base "$CORE_DIR"
 
-  skip_if_superseded
+  skip_pair_if_superseded
 
   local core_tags_before native_tags_before core_latest_before native_latest_before
   core_tags_before="$(read_tags "$CORE_NAME")"

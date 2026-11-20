@@ -752,7 +752,28 @@ test("pair stands down without publishing when main has moved on", (t) => {
   assert.match(result.output, /superseded/);
   assert.deepEqual(result.publishes, []);
   assert.deepEqual(result.registry, before);
-  assert.deepEqual(result.calls.filter((call) => call.tool !== "git"), [], "npm is never reached");
+  // One read of this commit's core version decides it: absent, so nothing of this pair is on npm.
+  assert.deepEqual(
+    result.calls.filter((call) => call.tool !== "git").map((call) => call.args.slice(0, 2)),
+    [["view", `${CORE}@${VERSION}`]],
+    "only the core version is read; nothing is uploaded or tagged",
+  );
+});
+test("pair finishes its commit once that commit's core canary is on npm, even after main moved on", (t) => {
+  // The core-publish job uploads core first, then a later commit lands before the pair job starts.
+  // When that commit is web-only, no native canary runs after it, so standing down would leave
+  // core@canary ahead of native@canary for good (ui-core canary.56 vs ui-native canary.53 on 20 Nov).
+  const h = harness(t);
+  h.seed((registry) => {
+    registry[CORE].versions.push(VERSION);
+    registry[CORE].tags.canary = VERSION;
+  });
+  const result = h.run("pair", { mainShas: [OTHER_SHA] });
+  assert.equal(result.status, 0, result.output);
+  assert.match(result.output, /finishing the pair/);
+  assert.deepEqual(uploads(result), [[NATIVE, VERSION, "canary"]], "core is reused, native catches up");
+  assert.equal(result.publishes[0].manifest.dependencies[CORE], VERSION);
+  for (const name of [CORE, NATIVE]) assert.deepEqual(result.registry[name].tags, { latest: BOOTSTRAP, canary: VERSION });
 });
 test("pair that has started uploading finishes both packages even if main advances meanwhile", (t) => {
   // Stopping between the two uploads would leave core ahead of native and still exit 0. The run
@@ -790,6 +811,15 @@ test("the registry wait backs off: first CANARY_POLL_SECONDS, doubling, capped, 
   assert.deepEqual(tuned.sleeps, [2, 4, 7, 7, 7]);
   const visible = harness(t).run("core", { env: DEFAULT_WAIT });
   assert.deepEqual(visible.sleeps, [], "an upload npm serves at once costs no wait");
+});
+test("the default registry deadline outlasts npm's slow serves and fits the publish jobs", () => {
+  // ui-core canary.57 (run 44823550593) was still not served after 361 s against the old 360 s deadline.
+  const script = read("scripts/publish-canary.sh");
+  assert.match(script, /timeout="\$\{CANARY_POLL_TIMEOUT_SECONDS:-600\}"/);
+  const workflow = read(".github/workflows/native-canary.yml");
+  const minutes = (job) => Number(workflow.slice(workflow.indexOf(`  ${job}:`)).match(/timeout-minutes: (\d+)/)[1]);
+  assert.ok(minutes("core-publish") * 60 >= 600 + 5 * 60, "core-publish fits one wait plus setup");
+  assert.ok(minutes("native-publish") * 60 >= 2 * 600 + 5 * 60, "native-publish fits a wait per package plus setup");
 });
 test("the registry wait has a deadline: a version npm never serves fails the run and names what it waited for", (t) => {
   // The fake sleep returns at once, so a short deadline is reached by polling alone.
