@@ -4,7 +4,11 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-20
+
 ### Added
+
+- Initial platform-neutral token, theme, platform metadata, and portable component contracts.
 
 - `productThemes`: the Maia and PaaS themes (colors per mode, fonts, type
   scale, radius, default mode), generated from `packages/design/tokens.json`.
@@ -16,21 +20,13 @@ All notable changes to `@vllnt/ui-core` are documented in this file.
 
 ### Changed
 
+- README documents the install command.
+
 - The PaaS product theme's dark `card`, `popover` and `muted` are now
   `#000000` (`productThemes.paas` and `tamaguiThemes.paas_dark`), following
   the web's pure-black dark surfaces. `nativeTokens` and `tamaguiTokens` keep
   their dark values (`#050505` page, `#0a0a0a` card and popover, `#262626`
   muted).
-
-## [0.1.0] - Unreleased
-
-### Added
-
-- Initial platform-neutral token, theme, platform metadata, and portable component contracts.
-
-### Changed
-
-- README documents the install command.
 
 ### Fixed
 

@@ -2,19 +2,16 @@
 
 Platform-neutral design tokens and portable component contracts shared by the VLLNT UI web and React Native renderers.
 
-> Experimental and source-only. The first workflow-built synchronized `canary` publication with `@vllnt/ui-native` is planned but is not available yet. A manually bootstrapped pre-release (`0.1.0-canary.20260917105553.sha7466647a4ba5`) exists on npm only to reserve the package name; it has no build provenance, npm's `latest` tag points at it, and it is not a supported install.
-
-The package base is **0.1.0**. Core and Native will use the same `0.1.0-canary.<run>.sha<commit>` prerelease; this base does not establish npm availability. Canary publication from `main` is off until the owner sets `CORE_CANARY_PUBLISH_ENABLED` (core alone) or `NATIVE_CANARY_PUBLISH_ENABLED` (with Native). Stable promotion also requires a separate reviewed change after verification; see [releasing](../../docs/RELEASING.md).
-
-## Planned install
-
-Once the first synchronized canary is published:
+## Install
 
 ```bash
-pnpm add @vllnt/ui-core@canary
+pnpm add @vllnt/ui-core
 ```
 
-Core publishes to the `canary` dist-tag only, together with `@vllnt/ui-native`; no stable channel exists yet. Until a supported release is published, use this package only from the repository workspace.
+- `latest` is the stable release, published from a `ui-core-vX.Y.Z` tag by `native-release.yml` with npm provenance.
+- `canary` is published with `@vllnt/ui-native` from every core or native change on `main`, as `<next>-canary.<run>.sha<commit>`.
+
+React Native apps install it with `@vllnt/ui-native`, which pins the exact core version it was built with. See [releasing](../../docs/RELEASING.md).
 
 ## Use
 
