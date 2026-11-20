@@ -1545,15 +1545,35 @@ const navigation: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   tabs: () => (
-    <Tabs defaultValue="overview" id="account">
-      <TabsList accessibilityLabel="Account sections">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="activity">Activity</TabsTrigger>
-      </TabsList>
-      <TabsContent value="overview">
-        <Text>Overview panel</Text>
-      </TabsContent>
-    </Tabs>
+    <>
+      <Tabs defaultValue="overview" id="account">
+        <TabsList accessibilityLabel="Account sections">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          <Text>Overview panel</Text>
+        </TabsContent>
+      </Tabs>
+      <Tabs defaultValue="plans" id="billing" variant="pill">
+        <TabsList accessibilityLabel="Billing sections">
+          <TabsTrigger value="plans">Plans</TabsTrigger>
+          <TabsTrigger value="invoices">Invoices</TabsTrigger>
+        </TabsList>
+        <TabsContent value="plans">
+          <Text>Plans panel</Text>
+        </TabsContent>
+      </Tabs>
+      <Tabs defaultValue="docs" id="help" variant="link">
+        <TabsList accessibilityLabel="Help sections">
+          <TabsTrigger value="docs">Docs</TabsTrigger>
+          <TabsTrigger value="support">Support</TabsTrigger>
+        </TabsList>
+        <TabsContent value="docs">
+          <Text>Docs panel</Text>
+        </TabsContent>
+      </Tabs>
+    </>
   ),
   "top-bar": () => <TopBar title="Project" />,
   "tree-view": () => (

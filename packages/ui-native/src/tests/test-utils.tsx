@@ -77,12 +77,14 @@ function isStyleProperty(value: unknown): value is StyleProp<TextStyle> {
 
 /**
  * Flattened style of a rendered view or text host, or an empty style when it
- * has none. The node is `unknown` because the test renderer ships no type
- * declarations.
+ * has none. `prop` names another style prop, such as a scroll view's
+ * `contentContainerStyle`. The node is `unknown` because the test renderer
+ * ships no type declarations.
  */
-export function styleOf(node: unknown): TextStyle {
+export function styleOf(node: unknown, property = "style"): TextStyle {
   const style =
-    isRecord(node) && isRecord(node.props) ? node.props.style : undefined;
+    isRecord(node) && isRecord(node.props) ? node.props[property] : undefined;
+  if (style === undefined || style === false) return {};
   return isStyleProperty(style) ? StyleSheet.flatten(style) : {};
 }
 

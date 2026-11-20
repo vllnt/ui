@@ -27,6 +27,8 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `DataListItem`: `density` (`"compact" | "default"`) sets one row's padding and takes the list `density` when left out.
   - `Grid`: `smCols`, `mdCols` and `lgCols` change the column count from 640, 768 and 1024 points of window width, the Tailwind defaults the web components use. Neither `@vllnt/ui-core` nor the web preset defines breakpoint tokens, so `src/primitives/breakpoints` keeps one copy. A breakpoint without a value carries the one below it, as on web.
 
+- Props parity 1, navigation (#655): `variant` (`"link" | "pill" | "underline"`, default `"underline"`) on `Tabs`, shared with `TabsList` and `TabsTrigger` through context, as on web. `underline` keeps the hairline and the bar under the selected tab. `pill` fills the selected tab with the secondary colour, rounds it fully and spaces the tabs. `link` draws plain text and underlines the selected label. Every look keeps the selection frame of the affordance contract, so selection never relies on colour alone. A `TabsList` outside `Tabs` draws the `underline` look.
+
 ### Changed
 
 - `ProgressBar` fills with the `primary` tone by default and `success` when complete, as on web, instead of `foreground` and `primary`. A complete card tints its surface and border with its tone, where it used to switch the border to `primary`. Track height follows the theme spacing scale; the default `md` stays 8 points.
