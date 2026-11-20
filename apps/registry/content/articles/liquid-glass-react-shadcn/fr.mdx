@@ -1,0 +1,172 @@
+---
+title: "Liquid glass pour shadcn - surface React à tokens | vllnt UI"
+description: "Ajouter une surface liquid glass shadcn à une application React en une commande. Fondée sur les tokens du thème, fixe si l'utilisateur réduit les animations."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [liquid-glass, glassmorphism, shadcn, design-tokens]
+status: shipped
+components: [liquid-glass]
+---
+
+# Liquid glass pour shadcn : une surface de verre React fondée sur les tokens
+
+`LiquidGlass` est un composant React qui dessine une surface translucide et floutée, traversée par un reflet lent. Il s'installe avec la CLI shadcn, et chacune de ses couleurs vient des tokens de votre thème.
+
+Après cette page, vous saurez poser un panneau de verre sur une image ou un dégradé, changer ses couleurs sans modifier sa source, et garder lisible le texte qu'il contient.
+
+## Ce que fait le composant
+
+La source tient en 46 lignes. Elle affiche trois couches :
+
+1. Un `div` avec un fond de carte à moitié transparent (`bg-card/50`), une bordure à moitié transparente (`border-border/50`) et un flou d'arrière-plan (`backdrop-blur-md`).
+2. Un `span` décoratif, porteur d'un dégradé en diagonale qui glisse sur la surface dans une boucle de 8 secondes. Il est marqué `aria-hidden` et ignore les événements du pointeur.
+3. Votre contenu, au-dessus des deux.
+
+L'effet repose sur le flou, la translucidité et un dégradé en mouvement, le tout en CSS. Il n'y a ni canvas, ni WebGL, ni boucle d'animation JavaScript.
+
+Une limite à connaître avant l'installation : ce composant ne reproduit pas le matériau Liquid Glass des systèmes d'Apple. Ce matériau courbe et réfracte ce qui se trouve derrière lui. `LiquidGlass` ne déforme pas l'arrière-plan.
+
+## L'installer
+
+Copiez la source dans votre projet avec la CLI shadcn :
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/liquid-glass.json
+```
+
+La CLI écrit `liquid-glass.tsx` dans votre projet et ajoute `@vllnt/ui` aux dépendances, parce que le fichier importe l'utilitaire `cn` depuis ce paquet. Le fichier vous appartient : vous pouvez le modifier.
+
+Vous pouvez aussi installer le paquet et importer le composant depuis celui-ci :
+
+```bash
+pnpm add @vllnt/ui
+```
+
+Deux réglages décident du rendu de la surface. Le [guide d'installation](/docs/installation) détaille les deux.
+
+- **Le preset Tailwind.** `bg-card/50` et `border-border/50` sont résolus par `@vllnt/ui/tailwind-preset`.
+- **L'animation.** Le reflet s'anime grâce à une règle `@keyframes` nommée `vllnt-liquid-shift`, fournie dans `@vllnt/ui/styles.css`. Importez cette feuille de style une fois, ou ajoutez la règle à votre propre CSS :
+
+```css
+@keyframes vllnt-liquid-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+```
+
+Sans cette règle, la surface s'affiche quand même. Le reflet reste immobile.
+
+## L'utiliser
+
+```tsx
+import { LiquidGlass } from "@vllnt/ui";
+
+export function PlanCard() {
+  return (
+    <div className="bg-gradient-to-br from-primary/30 to-accent/30 p-12">
+      <LiquidGlass className="max-w-sm p-6">
+        <h2 className="text-lg font-semibold text-card-foreground">
+          Offre Équipe
+        </h2>
+        <p className="mt-2 text-sm text-card-foreground">
+          Espaces partagés, journal d'audit et authentification unique.
+        </p>
+      </LiquidGlass>
+    </div>
+  );
+}
+```
+
+Si vous avez installé le composant avec la CLI, importez `LiquidGlass` depuis le chemin où la CLI a écrit le fichier.
+
+Trois faits sur l'API :
+
+- Le composant accepte toutes les props d'un `div`, ainsi que `ref`. Il n'a aucune prop propre.
+- Il n'a pas de marge intérieure par défaut. Réglez-la avec `className`.
+- Votre contenu est placé dans un `div` interne. Les classes flex ou grid passées à `className` s'appliquent à la surface et non à vos enfants : placez la mise en page sur un élément à l'intérieur.
+
+## Une construction fondée sur les tokens
+
+Aucune couleur n'est écrite en dur. Chaque partie de la surface lit un token de rôle du thème.
+
+| Partie | Valeur dans la source | Token |
+|---|---|---|
+| Fond | `bg-card/50` | `--card` à 50 % d'opacité |
+| Bordure | `border-border/50` | `--border` à 50 % d'opacité |
+| Reflet, première bande | `oklch(var(--primary) / 0.18)` | `--primary` à 18 % d'opacité |
+| Reflet, seconde bande | `oklch(var(--accent) / 0.18)` | `--accent` à 18 % d'opacité |
+
+Dans le thème VLLNT UI par défaut, `--primary` et `--accent` sont des gris neutres, de chroma 0. Le reflet est donc un miroitement gris. Un thème dont la couleur primaire est teintée donne un reflet teinté.
+
+Pour colorer le verre dans une seule zone, limitez les deux tokens à un conteneur :
+
+```css
+.glass-scope {
+  --primary: 0.55 0.2 264;
+  --accent: 0.75 0.15 195;
+}
+```
+
+Les valeurs sont la clarté, le chroma et la teinte OKLCH, écrites sans la fonction `oklch()`. C'est le format de tous les tokens de couleur de VLLNT UI. Le [guide du theming](/docs/theming) explique le modèle de tokens, le mode sombre et les thèmes produits, qui changent à l'exécution avec `data-theme`.
+
+### Si votre thème stocke les couleurs autrement
+
+Le reflet attend ces triplets nus. Si vos tokens contiennent une couleur complète, par exemple `--primary: oklch(0.2 0 0)`, le dégradé devient un CSS invalide et le navigateur l'ignore. Le fond, la bordure et le flou s'affichent toujours.
+
+Comme le fichier vous appartient, la correction tient en une ligne. Dans votre copie, remplacez les deux arrêts `oklch(var(…) / 0.18)` par `color-mix` :
+
+```tsx
+background:
+  "linear-gradient(120deg, transparent, color-mix(in oklab, var(--primary) 18%, transparent), transparent, color-mix(in oklab, var(--accent) 18%, transparent), transparent)",
+```
+
+## Garder le texte lisible sur du verre
+
+Le WCAG 2.2, niveau AA, demande un contraste de 4,5:1 pour le texte courant et de 3:1 pour le grand texte. Sur du verre, l'arrière-plan de votre texte est ce qui se trouve derrière la surface : le rapport change donc d'un endroit à l'autre.
+
+Quatre règles le maintiennent au-dessus du seuil :
+
+1. **Mesurez sur l'arrière-plan réel, pas sur le token.** Vérifiez le contraste sur la zone la plus claire et sur la zone la plus sombre que la surface peut recouvrir.
+2. **Utilisez `text-card-foreground` pour le texte courant.** `text-muted-foreground` part d'un contraste plus faible, et un fond à 50 % peut le faire passer sous 4,5:1.
+3. **Renforcez le fond quand l'arrière-plan est chargé.** Passez `className="bg-card/80"`. Cette classe remplace le fond à 50 % par défaut.
+4. **Évitez les longs textes sur du verre.** Réservez-le à des libellés courts, un titre ou quelques lignes.
+
+Si la surface est un contrôle, un bouton par exemple, son contour doit atteindre 3:1 par rapport à l'arrière-plan. Passez `className="border-border"` pour obtenir une bordure opaque.
+
+VLLNT UI teste chacune de ses stories avec axe, en thème clair et en thème sombre. Ce test couvre le composant sur l'arrière-plan de sa story. Il ne peut pas couvrir le vôtre.
+
+## Le mouvement
+
+Le reflet boucle toutes les 8 secondes, avec une courbe ease-in-out. Quand `prefers-reduced-motion: reduce` est actif, la classe `motion-reduce:animate-none` l'arrête, et la surface conserve son flou et son fond.
+
+Le flou d'arrière-plan est recalculé quand le contenu situé derrière la surface change. Limitez le nombre de surfaces de verre par écran, et évitez d'en placer une au-dessus d'une vidéo.
+
+## Quel composant de verre choisir
+
+VLLNT UI fournit trois surfaces de verre. Toutes trois acceptent les props d'un `div` et lisent des tokens de rôle du thème.
+
+| Composant | Fond | Flou | Mouvement | Marge intérieure |
+|---|---|---|---|---|
+| `GlassCard` | `bg-card/60` | `backdrop-blur-md` | Aucun | `p-6` |
+| `GlassPanel` | `bg-background/70` | `backdrop-blur-xl` | Aucun | Aucune |
+| `LiquidGlass` | `bg-card/50` | `backdrop-blur-md` | Reflet de 8 secondes | Aucune |
+
+Choisissez [Glass Card](/components/glass-card) pour une carte en glassmorphism statique. Choisissez `GlassPanel` pour une grande surface flottante, avec un flou plus fort et une ombre douce. Choisissez `LiquidGlass` quand la surface doit attirer le regard : un panneau d'en-tête ou une offre mise en avant.
+
+## La place du verre
+
+Le verre est un motif de surface parmi d'autres, construit sur les tokens. VLLNT UI n'a pas de thème « verre », et son site de documentation utilise des surfaces plates et neutres.
+
+Utilisez le verre là où une surface flotte au-dessus d'une image : un panneau d'en-tête, une incrustation sur un média, un contrôle sur une carte ou un canvas. Écartez-le des écrans denses, comme les tableaux de données, les formulaires et les longs textes, où une surface `card` opaque se lit plus vite.
+
+Le verre revient aussi dans les interfaces spatiales, où les surfaces se placent à des profondeurs différentes. VLLNT UI n'a pas de tokens de profondeur aujourd'hui. Ils sont proposés dans une RFC ouverte, décrite sur la [page Vision](/docs/vision).
+
+## Pour aller plus loin
+
+- Ouvrez la [page du composant Liquid Glass](/components/liquid-glass) pour l'aperçu en direct et la source complète.
+- Lisez le [guide du theming](/docs/theming) pour changer les tokens que lit le verre.

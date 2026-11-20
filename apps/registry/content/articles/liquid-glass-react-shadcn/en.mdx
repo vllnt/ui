@@ -1,0 +1,172 @@
+---
+title: "shadcn liquid glass - token-based React surface | vllnt UI"
+description: "Add a shadcn liquid glass surface to a React app with one CLI command. Built on theme tokens, reduced-motion safe, with contrast rules for text on glass."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [liquid-glass, glassmorphism, shadcn, design-tokens]
+status: shipped
+components: [liquid-glass]
+---
+
+# shadcn liquid glass: a token-based glass surface for React
+
+`LiquidGlass` is a React component that draws a translucent, blurred surface with a slow sheen moving across it. It installs with the shadcn CLI, and every color in it comes from your theme tokens.
+
+After this page you can place a glass panel over an image or a gradient, change its colors without editing its source, and keep the text on it readable.
+
+## What the component does
+
+The source is 46 lines. It renders three layers:
+
+1. A `div` with a half-transparent card fill (`bg-card/50`), a half-transparent border (`border-border/50`) and a backdrop blur (`backdrop-blur-md`).
+2. A decorative `span` with a diagonal gradient that drifts across the surface in an 8-second loop. It is `aria-hidden` and ignores pointer events.
+3. Your content, above both.
+
+The effect is blur, translucency and a moving gradient, all in CSS. There is no canvas, no WebGL and no JavaScript animation loop.
+
+One limit to know before you install it: this is not the Liquid Glass material from Apple's operating systems. That material bends and refracts what is behind it. `LiquidGlass` does not distort the backdrop.
+
+## Install it
+
+Copy the source into your project with the shadcn CLI:
+
+```bash
+pnpm dlx shadcn@latest add https://ui.vllnt.com/r/liquid-glass.json
+```
+
+The CLI writes `liquid-glass.tsx` into your project and adds `@vllnt/ui` as a dependency, because the file imports the `cn` helper from it. The file is yours to edit.
+
+Or install the package and import the component from it:
+
+```bash
+pnpm add @vllnt/ui
+```
+
+Two setup points decide whether the surface looks right. The [installation guide](/docs/installation) covers both.
+
+- **The Tailwind preset.** `bg-card/50` and `border-border/50` resolve through `@vllnt/ui/tailwind-preset`.
+- **The keyframe.** The sheen animates with a keyframe named `vllnt-liquid-shift`, which ships in `@vllnt/ui/styles.css`. Import that stylesheet once, or add the keyframe to your own CSS:
+
+```css
+@keyframes vllnt-liquid-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+```
+
+Without the keyframe the surface still renders. The sheen stays still.
+
+## Use it
+
+```tsx
+import { LiquidGlass } from "@vllnt/ui";
+
+export function PlanCard() {
+  return (
+    <div className="bg-gradient-to-br from-primary/30 to-accent/30 p-12">
+      <LiquidGlass className="max-w-sm p-6">
+        <h2 className="text-lg font-semibold text-card-foreground">
+          Team plan
+        </h2>
+        <p className="mt-2 text-sm text-card-foreground">
+          Shared workspaces, an audit log and single sign-on.
+        </p>
+      </LiquidGlass>
+    </div>
+  );
+}
+```
+
+If you installed with the CLI, import `LiquidGlass` from the path where the CLI wrote the file.
+
+Three facts about the API:
+
+- It accepts every `div` prop, plus `ref`. It has no props of its own.
+- Padding is not built in. Set it with `className`.
+- Your content sits in an inner wrapper `div`. Flex or grid classes passed to `className` apply to the surface, not to your children, so put the layout on an element inside.
+
+## How it is built on tokens
+
+No color is hard-coded. Each part of the surface reads a role token from the theme.
+
+| Part | Value in the source | Token |
+|---|---|---|
+| Fill | `bg-card/50` | `--card` at 50% opacity |
+| Border | `border-border/50` | `--border` at 50% opacity |
+| Sheen, first band | `oklch(var(--primary) / 0.18)` | `--primary` at 18% opacity |
+| Sheen, second band | `oklch(var(--accent) / 0.18)` | `--accent` at 18% opacity |
+
+On the default VLLNT UI theme, `--primary` and `--accent` are neutral greys with a chroma of 0. The sheen is a grey shimmer. A theme with a colored primary gives a colored sheen.
+
+To color the glass in one area only, scope the two tokens to a wrapper:
+
+```css
+.glass-scope {
+  --primary: 0.55 0.2 264;
+  --accent: 0.75 0.15 195;
+}
+```
+
+The values are OKLCH lightness, chroma and hue, written without the `oklch()` wrapper. That is the format of every VLLNT UI color token. The [theming guide](/docs/theming) explains the token model, dark mode and the product themes that switch at runtime with `data-theme`.
+
+### If your theme stores colors another way
+
+The sheen expects those bare triplets. If your tokens hold a full color, such as `--primary: oklch(0.2 0 0)`, the gradient becomes invalid CSS and the browser drops it. The fill, border and blur still render.
+
+Because you own the file, the fix is one line. Replace the two `oklch(var(…) / 0.18)` stops in your copy with `color-mix`:
+
+```tsx
+background:
+  "linear-gradient(120deg, transparent, color-mix(in oklab, var(--primary) 18%, transparent), transparent, color-mix(in oklab, var(--accent) 18%, transparent), transparent)",
+```
+
+## Keep text readable on glass
+
+WCAG 2.2 level AA asks for a contrast of 4.5:1 for body text and 3:1 for large text. On glass, the background of your text is whatever sits behind the surface, so the ratio changes from one spot to the next.
+
+Four rules keep it above the line:
+
+1. **Test against the backdrop, not the token.** Measure contrast over the lightest and the darkest area the surface can cover.
+2. **Use `text-card-foreground` for body text.** `text-muted-foreground` starts with less contrast, and a 50% fill can take it under 4.5:1.
+3. **Raise the fill when the backdrop is busy.** Pass `className="bg-card/80"`. The class replaces the default 50% fill.
+4. **Keep long reading off glass.** Use it for short labels, a title or a few lines.
+
+If the surface is a control, such as a button, its edge needs 3:1 against the backdrop. Pass `className="border-border"` for a solid border.
+
+VLLNT UI tests each of its stories with axe in light and dark themes. That test covers the component on its story backdrop. It cannot cover yours.
+
+## Motion
+
+The sheen loops every 8 seconds with an ease-in-out curve. Under `prefers-reduced-motion: reduce`, the class `motion-reduce:animate-none` stops it, and the surface keeps its blur and fill.
+
+Backdrop blur is recomputed when the content behind the surface changes. Keep the number of glass surfaces on a screen low, and avoid placing one over video.
+
+## Which glass component to use
+
+VLLNT UI ships three glass surfaces. All three take `div` props and read role tokens from the theme.
+
+| Component | Fill | Blur | Motion | Built-in padding |
+|---|---|---|---|---|
+| `GlassCard` | `bg-card/60` | `backdrop-blur-md` | None | `p-6` |
+| `GlassPanel` | `bg-background/70` | `backdrop-blur-xl` | None | None |
+| `LiquidGlass` | `bg-card/50` | `backdrop-blur-md` | 8-second sheen | None |
+
+Pick [Glass Card](/components/glass-card) for a static glassmorphism card. Pick `GlassPanel` for a larger floating surface with a stronger blur and a soft shadow. Pick `LiquidGlass` when the surface should draw the eye, such as a hero panel or a featured plan.
+
+## Where glass fits
+
+Glass is one surface pattern built on the tokens. VLLNT UI has no glass theme, and its documentation site uses flat, neutral surfaces.
+
+Use glass where a surface floats over imagery: a hero panel, a media overlay, a control on a map or a canvas. Leave it out of dense screens such as data tables, forms and long text, where a solid `card` surface reads faster.
+
+Glass also comes up in spatial interfaces, where surfaces sit at different depths. VLLNT UI has no depth tokens today. They are proposed in an open RFC, described on the [vision page](/docs/vision).
+
+## Next steps
+
+- Open the [Liquid Glass component page](/components/liquid-glass) for the live preview and the full source.
+- Read the [theming guide](/docs/theming) to change the tokens the glass reads.
