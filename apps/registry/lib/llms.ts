@@ -1,9 +1,18 @@
 import {
   generateLlmsText,
+  type LlmsFullPage,
   type LlmsLink,
   type LlmsSection,
 } from "@vllnt/next-llms";
 
+import { defaultLocale } from "@/i18n/locales";
+import { articleFeedUrl } from "@/lib/article-feed";
+import {
+  type Article,
+  articleBody,
+  articleUrl,
+  getPublishedArticles,
+} from "@/lib/articles";
 import { registry, type RegistryComponent } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "./docs-pages";
@@ -208,17 +217,81 @@ function buildNativeSection(items: readonly RegistryComponent[]): LlmsSection {
 }
 
 /**
- * The site summary for agents: docs, registry endpoints and every component,
- * as markdown. Served as `/llms.txt` and as the home page's markdown twin.
+ * The `Articles` section of `llms.txt`: each article of the default locale with
+ * its title, URL and description, then its feed. Empty when there is no
+ * article, so a site without articles lists nothing. Drafts never reach it,
+ * because {@link getPublishedArticles} does not return them.
  *
+ * @param articles - published articles, every locale
+ * @returns The section, or no section
+ */
+export function buildArticlesSection(
+  articles: readonly Article[],
+): readonly LlmsSection[] {
+  const listed = articles.filter((article) => article.locale === defaultLocale);
+  if (listed.length === 0) return [];
+
+  return [
+    {
+      links: [
+        ...listed.map((article) => ({
+          notes: article.frontmatter.description,
+          title: article.frontmatter.title,
+          url: articleUrl(article),
+        })),
+        {
+          notes: "articles feed for notification and agent polling",
+          title: "Articles RSS feed",
+          url: articleFeedUrl(defaultLocale, "rss"),
+        },
+      ],
+      title: "Articles",
+    },
+  ];
+}
+
+/**
+ * The articles of `llms-full.txt`: the default locale's articles, each with its
+ * description and its markdown body. Drafts never reach it.
+ *
+ * @param articles - published articles, every locale
+ * @returns One page per article, in the order given
+ */
+export function buildArticlePages(
+  articles: readonly Article[],
+): readonly LlmsFullPage[] {
+  return articles
+    .filter((article) => article.locale === defaultLocale)
+    .map((article) => ({
+      content: [
+        article.frontmatter.description,
+        "",
+        articleBody(article).trim(),
+      ].join("\n"),
+      title: article.frontmatter.title,
+      url: articleUrl(article),
+    }));
+}
+
+/**
+ * The site summary for agents: docs, articles, registry endpoints and every
+ * component, as markdown. Served as `/llms.txt` and as the home page's markdown
+ * twin.
+ *
+ * @param articles - published articles; every published article by default
  * @returns The llms.txt document
  */
-export function buildLlmsTxt(): string {
+export async function buildLlmsTxt(
+  articles?: readonly Article[],
+): Promise<string> {
   const items = getRegistryComponents();
+  const published = articles ?? (await getPublishedArticles());
+
   return generateLlmsText({
     details: INSTALL_DETAILS,
     sections: [
       DOCS_SECTION,
+      ...buildArticlesSection(published),
       REGISTRY_SECTION,
       ...buildComponentSections(items),
       buildNativeSection(items),

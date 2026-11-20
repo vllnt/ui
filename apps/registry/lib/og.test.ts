@@ -58,6 +58,50 @@ describe("pageMetadata", () => {
   });
 });
 
+describe("pageMetadata image", () => {
+  it("replaces the generated card with a hosted image on Open Graph and Twitter", () => {
+    const metadata = pageMetadata({
+      image: { alt: "A frosted panel", src: "/cards/panel.png" },
+      locale: "en",
+      og: { description: "Desc", title: "Title", type: "page" },
+      pathname: "/articles/panel",
+    });
+    const hosted = [
+      { alt: "A frosted panel", url: "https://ui.vllnt.com/cards/panel.png" },
+    ];
+
+    expect(metadata.openGraph).toMatchObject({ images: hosted });
+    expect(metadata.twitter).toMatchObject({ images: hosted });
+  });
+
+  it("keeps an https image URL as it is", () => {
+    const metadata = pageMetadata({
+      image: { alt: "Remote", src: "https://cdn.example.com/card.png" },
+      locale: "en",
+      og: { title: "Title", type: "page" },
+      pathname: "/articles/remote",
+    });
+
+    expect(metadata.openGraph).toMatchObject({
+      images: [{ alt: "Remote", url: "https://cdn.example.com/card.png" }],
+    });
+  });
+
+  it("keeps the generated /api/og card when there is no image", () => {
+    const metadata = pageMetadata({
+      locale: "en",
+      og: { title: "Plain", type: "page" },
+      pathname: "/plain",
+    });
+    const images =
+      metadata.twitter && "images" in metadata.twitter
+        ? metadata.twitter.images
+        : undefined;
+
+    expect(images).toEqual([expect.stringContaining("/api/og?title=Plain")]);
+  });
+});
+
 describe("frontmatterPageMetadata", () => {
   it("lets og frontmatter override only the social card", () => {
     const metadata = frontmatterPageMetadata(

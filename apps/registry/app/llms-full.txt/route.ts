@@ -5,9 +5,11 @@ import {
 } from "@vllnt/next-llms";
 
 import { routing } from "@/i18n/routing";
+import { getPublishedArticles } from "@/lib/articles";
 import { getLatestReleaseRecords } from "@/lib/changelog";
 import { getPageContent } from "@/lib/content";
 import { getDesignGuideMarkdown } from "@/lib/design-guide";
+import { buildArticlePages } from "@/lib/llms";
 import { registry, type RegistryComponent } from "@/lib/registry";
 
 import { DOCS_PAGES, getDocsPath } from "../../lib/docs-pages";
@@ -167,15 +169,20 @@ function buildComponentPages(
 
 async function buildLlmsFullTxt(): Promise<string> {
   const items = getRegistryComponents();
-  const [guidePages, designPage, releasePages] = await Promise.all([
+  const [guidePages, designPage, releasePages, articles] = await Promise.all([
     buildGuidePages(),
     buildDesignPage(),
     buildReleasePages(),
+    getPublishedArticles(),
   ]);
   const templatePages = buildTemplatePages();
+  const articlePages = [...buildArticlePages(articles)];
 
   const sections: LlmsFullSection[] = [
     ...(guidePages.length > 0 ? [{ pages: guidePages, title: "Guides" }] : []),
+    ...(articlePages.length > 0
+      ? [{ pages: articlePages, title: "Articles" }]
+      : []),
     { pages: [designPage], title: "Design" },
     ...(releasePages.length > 0
       ? [{ pages: releasePages, title: "Latest Release Notes" }]

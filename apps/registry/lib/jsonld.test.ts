@@ -8,6 +8,8 @@ vi.mock("@/i18n/routing", () => ({
 }));
 
 import {
+  articleLd,
+  breadcrumbLd,
   breadcrumbTrailLd,
   jsonLdScript,
   softwareApplicationLd,
@@ -92,6 +94,115 @@ describe("breadcrumbTrailLd", () => {
     );
     expect(json).toMatch(
       /"item":"https:\/\/[^"]*\/fr\/components\/button","name":"Button","position":3/,
+    );
+  });
+});
+
+/**
+ * Search Console showed "Unnamed item" for a detected BreadcrumbList. The list
+ * now carries the name of the page it describes, and an item without a name
+ * fails the build, so no page can ship a breadcrumb Google cannot label.
+ */
+describe("breadcrumbLd names", () => {
+  it("names the list after its last crumb and every item after its crumb", () => {
+    const node = breadcrumbLd([
+      { name: "Home", url: "https://ui.vllnt.com" },
+      { name: "Articles", url: "https://ui.vllnt.com/articles" },
+    ]);
+
+    expect(node.name).toBe("Articles");
+    expect(node.itemListElement).toEqual([
+      {
+        "@type": "ListItem",
+        item: "https://ui.vllnt.com",
+        name: "Home",
+        position: 1,
+      },
+      {
+        "@type": "ListItem",
+        item: "https://ui.vllnt.com/articles",
+        name: "Articles",
+        position: 2,
+      },
+    ]);
+  });
+
+  it.each(["", "   "])("throws for the item name %j", (name) => {
+    expect(() =>
+      breadcrumbLd([
+        { name: "Home", url: "https://ui.vllnt.com" },
+        { name, url: "https://ui.vllnt.com/articles" },
+      ]),
+    ).toThrow("BreadcrumbList item https://ui.vllnt.com/articles has no name");
+  });
+
+  it("throws through breadcrumbTrailLd for a blank crumb or a blank home name", () => {
+    expect(() =>
+      breadcrumbTrailLd("en", [{ name: "", path: "/docs" }]),
+    ).toThrow("has no name");
+    expect(() =>
+      breadcrumbTrailLd("fr", [{ name: "Docs", path: "/docs" }], ""),
+    ).toThrow("has no name");
+  });
+
+  it("names the list through breadcrumbTrailLd in the active locale", () => {
+    const node = breadcrumbTrailLd(
+      "fr",
+      [{ name: "Articles", path: "/articles" }],
+      "Accueil",
+    );
+
+    expect(node.name).toBe("Articles");
+    expect(JSON.stringify(node)).toContain('"name":"Accueil","position":1');
+  });
+});
+
+describe("articleLd", () => {
+  const input = {
+    dateModified: "2026-11-02",
+    datePublished: "2026-10-05",
+    description: "A description.",
+    image: "https://ui.vllnt.com/api/og?title=A+title",
+    inLanguage: "fr",
+    keywords: ["fixtures", "glass-surfaces"],
+    title: "A headline",
+    url: "https://ui.vllnt.com/fr/articles/a-slug",
+  };
+
+  it("describes an Article with its dates, language, image and page", () => {
+    expect(articleLd(input)).toMatchObject({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      dateModified: "2026-11-02",
+      datePublished: "2026-10-05",
+      description: "A description.",
+      headline: "A headline",
+      image: "https://ui.vllnt.com/api/og?title=A+title",
+      inLanguage: "fr",
+      keywords: "fixtures, glass-surfaces",
+      mainEntityOfPage: {
+        "@id": "https://ui.vllnt.com/fr/articles/a-slug",
+        "@type": "WebPage",
+      },
+      url: "https://ui.vllnt.com/fr/articles/a-slug",
+    });
+  });
+
+  it("names the same Organization as author and publisher", () => {
+    const node = articleLd(input);
+    const organization = {
+      "@type": "Organization",
+      name: "VLLNT",
+      url: SITE_URL,
+    };
+
+    expect(node.author).toEqual(organization);
+    expect(node.publisher).toEqual(organization);
+  });
+
+  it("leaves keywords out when there are none", () => {
+    expect(articleLd({ ...input, keywords: [] })).not.toHaveProperty(
+      "keywords",
     );
   });
 });

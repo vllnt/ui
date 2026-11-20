@@ -120,12 +120,33 @@ export function softwareApplicationLd(
   return node;
 }
 
+/**
+ * A BreadcrumbList whose every item and whose list carry a name.
+ *
+ * Search Console lists a detected BreadcrumbList by its own `name`, and shows
+ * "Unnamed item" when the list has none, so the list takes the name of the page
+ * it describes (the last crumb). An item without a name is a bug at the call
+ * site, so it throws at build time instead of shipping markup Google cannot
+ * label.
+ *
+ * @param trail - crumbs from the site root to the current page
+ * @returns The BreadcrumbList node
+ * @example
+ * breadcrumbLd([{ name: "Home", url: "https://ui.vllnt.com" }]);
+ */
 export function breadcrumbLd(
   trail: readonly {
     readonly name: string;
     readonly url: string;
   }[],
 ): JsonLdNode {
+  const unnamed = trail.find((step) => step.name.trim() === "");
+  if (unnamed) {
+    throw new Error(`BreadcrumbList item ${unnamed.url} has no name`);
+  }
+
+  const current = trail.at(-1);
+
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -135,6 +156,7 @@ export function breadcrumbLd(
       name: step.name,
       position: index + 1,
     })),
+    ...(current ? { name: current.name } : {}),
   };
 }
 
@@ -192,6 +214,10 @@ export function collectionPageLd(page: {
   };
 }
 
+function publisherOrganization(): JsonLdNode {
+  return { "@type": "Organization", name: "VLLNT", url: SITE_URL };
+}
+
 export function techArticleLd(article: {
   readonly dateModified?: string;
   readonly description: string;
@@ -201,7 +227,7 @@ export function techArticleLd(article: {
   readonly title: string;
   readonly url: string;
 }): JsonLdNode {
-  const org = { "@type": "Organization", name: "VLLNT", url: SITE_URL };
+  const org = publisherOrganization();
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -217,6 +243,44 @@ export function techArticleLd(article: {
       : {}),
     mainEntityOfPage: { "@id": article.url, "@type": "WebPage" },
     programmingLanguage: "TypeScript",
+    publisher: org,
+    url: article.url,
+  };
+}
+
+/**
+ * The `Article` node of a page in `/articles`.
+ *
+ * @param article - the page's headline, dates, language, image and URL
+ * @returns The Article node
+ * @example
+ * articleLd({ dateModified: "2026-11-21", datePublished: "2026-11-20", ... });
+ */
+export function articleLd(article: {
+  readonly dateModified: string;
+  readonly datePublished: string;
+  readonly description: string;
+  readonly image: string;
+  readonly inLanguage: string;
+  readonly keywords?: readonly string[];
+  readonly title: string;
+  readonly url: string;
+}): JsonLdNode {
+  const org = publisherOrganization();
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    author: org,
+    dateModified: article.dateModified,
+    datePublished: article.datePublished,
+    description: article.description,
+    headline: article.title,
+    image: article.image,
+    inLanguage: article.inLanguage,
+    ...(article.keywords?.length
+      ? { keywords: article.keywords.join(", ") }
+      : {}),
+    mainEntityOfPage: { "@id": article.url, "@type": "WebPage" },
     publisher: org,
     url: article.url,
   };
