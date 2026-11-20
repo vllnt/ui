@@ -200,6 +200,8 @@ async function assertNodeResolution(manifest, packedDirectory) {
       'if (!entry.endsWith("/dist/index.js")) throw new Error(`Invalid root entry: ${entry}`);',
       'const preset = await import("@vllnt/ui/tailwind-preset");',
       'if (!preset.default) throw new Error("Missing tailwind preset default export.");',
+      'const { default: manifest } = await import("@vllnt/ui/package.json", { with: { type: "json" } });',
+      'if (manifest.name !== "@vllnt/ui") throw new Error(`Invalid package.json export: ${manifest.name}`);',
       "",
     ].join("\n"),
   );

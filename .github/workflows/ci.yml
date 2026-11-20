@@ -83,6 +83,9 @@ jobs:
       - name: Check deep imports in dist resolve under Node ESM
         run: pnpm -F @vllnt/ui check:dist-imports
 
+      - name: Check the packed package resolves its exports
+        run: pnpm -F @vllnt/ui pack:check
+
       - name: Check registry drift
         run: pnpm -F @vllnt/ui-registry registry:check
 
