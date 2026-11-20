@@ -15,6 +15,7 @@ import { InteractivePressable } from "../../../primitives/interactive-pressable"
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
 import { useTheme } from "../../../theme/theme-provider";
+import { monospaceFontFamily } from "../../../primitives/font-family";
 
 /** Caller-localized labels for optional code copying. */
 export type CodeBlockCopyLabels = {
@@ -86,7 +87,7 @@ function CodeBlockHeader({
         <NativeText
           style={typeStyle(theme, "caption", {
             color: "mutedForeground",
-            fontFamily: "monospace",
+            fontFamily: monospaceFontFamily,
           })}
         >
           {language}
@@ -146,7 +147,7 @@ function CodeContent({
           selectable
           style={typeStyle(theme, "bodySmall", {
             color: "foreground",
-            fontFamily: "monospace",
+            fontFamily: monospaceFontFamily,
           })}
         >
           {code}

@@ -9,6 +9,10 @@ import {
 } from "react-native";
 
 import {
+  fontFamilyStyle,
+  type TextFamily,
+} from "../../../primitives/font-family";
+import {
   resolveTextColor,
   TextColorContext,
 } from "../../../primitives/text-color";
@@ -16,6 +20,11 @@ import { useTheme } from "../../../theme/theme-provider";
 
 /** Props for token-driven React Native body text. */
 export type TextProps = NativeTextProps & {
+  /**
+   * `mono` sets the platform monospace face on the same type scale, like web
+   * `family="mono"`. Defaults to `sans`, the platform system face.
+   */
+  readonly family?: TextFamily;
   readonly ref?: Ref<NativeTextInstance>;
   readonly size?: TextSize;
   readonly tone?: TextTone;
@@ -24,6 +33,7 @@ export type TextProps = NativeTextProps & {
 
 /** React Native body text backed by the shared typography contract. */
 function Text({
+  family = "sans",
   ref,
   size = "base",
   style,
@@ -51,6 +61,7 @@ function Text({
       ref={ref}
       style={[
         scale[size],
+        fontFamilyStyle(family),
         {
           color: resolveTextColor(theme, tone, surfaceColor),
           fontWeight: fontWeight[weight],
@@ -63,3 +74,4 @@ function Text({
 Text.displayName = "Text";
 
 export { Text };
+export type { TextFamily } from "../../../primitives/font-family";

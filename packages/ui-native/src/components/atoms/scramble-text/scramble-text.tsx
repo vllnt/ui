@@ -14,6 +14,7 @@ import {
   useReducedMotion,
 } from "../../../primitives/use-reduced-motion";
 import { useTheme } from "../../../theme/theme-provider";
+import { monospaceFontFamily } from "../../../primitives/font-family";
 
 /** Props for deterministic native scrambled text. */
 export type ScrambleTextProps = Omit<TextProps, "children"> & {
@@ -131,7 +132,7 @@ function ScrambleText({
       style={[
         ...typeStyle(theme, "bodySmall", {
           color: "foreground",
-          fontFamily: "monospace",
+          fontFamily: monospaceFontFamily,
         }),
         style,
       ]}
