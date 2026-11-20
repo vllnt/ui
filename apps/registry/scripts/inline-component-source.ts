@@ -46,6 +46,7 @@ import {
   COMPONENT_LEVELS,
   findComponentDirectory,
 } from "../lib/component-directory";
+import { readNativeOnlyNames } from "../lib/native-only";
 import { collectPublicExports } from "../lib/public-exports";
 import type {
   A11ySchema,
@@ -339,8 +340,10 @@ for (const name of RESERVED_REGISTRY_NAMES) {
 }
 
 const registryNames = new Set(registry.items.map((item) => item.name));
+const nativeOnlyNames = readNativeOnlyNames(repoRoot);
 const missingNativeComponents = nativeRegistry.components.filter(
-  (component) => !registryNames.has(component.name),
+  (component) =>
+    !registryNames.has(component.name) && !nativeOnlyNames.has(component.name),
 );
 if (missingNativeComponents.length > 0) {
   console.error(
