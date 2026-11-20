@@ -4,13 +4,13 @@
   "package": "@vllnt/ui-native",
   "channel": "canary",
   "status": "experimental",
-  "availability": "source",
+  "availability": "package",
   "minimumReact": "19.1.0",
   "minimumReactNative": "0.81.0",
   "installation": {
-    "available": false,
+    "available": true,
     "command": "pnpm add @vllnt/ui-native@canary",
-    "reason": "Only a manually bootstrapped pre-release exists on npm; it has no build provenance and is not a supported install. The first workflow-built synchronized canary has not been published."
+    "reason": "Workflow-built core and native canary pairs publish from main with npm provenance, and each pair is validated from the npm tarballs (clean Expo app and catalog copy: install, typecheck, Jest and accessibility suites, iOS and Android export)."
   },
   "peerDependencies": {
     "react": ">=19.1.0 <20",

@@ -2,24 +2,24 @@
 
 Accessible React Native components that share VLLNT UI semantic tokens and portable option names while using a renderer designed specifically for React Native.
 
-> Experimental and source-only. The repository contains the renderer. A manually bootstrapped pre-release (`0.1.0-canary.20260917105553.sha7466647a4ba5`) exists on npm only to reserve the package name; it has no build provenance, npm's `latest` tag points at it, and it is not a supported install. Do not run the planned canary install command until the native manifest reports `installation.available: true`.
+## Install
 
-The package base is **0.1.0**, not a published stable release. Core and Native canaries use the same `0.1.0-canary.<run>.sha<commit>` version and an exact core dependency. Canary publication from `main` is off until the owner sets `NATIVE_CANARY_PUBLISH_ENABLED`; the stable promotion hold also remains. See [releasing](../../docs/RELEASING.md). Neither merge nor passing local tests authorizes enabling Native publication.
+```bash
+pnpm add @vllnt/ui-native@canary @vllnt/ui-core@canary
+```
+
+`@vllnt/ui-native` pins the exact `@vllnt/ui-core` version it was built with. Peers: `react >=19.1.0 <20` and `react-native >=0.81.0 <1`. It works in Expo; the private catalog app in `apps/native-catalog` is the reference consumer.
+
+- `canary` is published from every native change on `main` as `<next>-canary.<run>.sha<commit>`. It is the supported install today.
+- Stable releases are published from `ui-native-vX.Y.Z` tags by `native-release.yml`, with npm provenance, and move `latest`. Until the first one, `latest` points at an old name-reservation build: do not install it.
+
+Every canary pair is validated from the npm tarballs before it counts: a clean Expo app and a copy of the catalog install it (with the 7-day package-age gate), typecheck, run the Jest and accessibility suites, and export for iOS and Android. See [releasing](../../docs/RELEASING.md).
 
 ## Current availability
 
-- 175 native component modules are listed in [`registry.json`](registry.json).
-- `availability` is `source` and `installation.available` is `false`.
-- React 19.1+ and React Native 0.81 or newer are required.
-- CI runs the Android/iOS Metro export of the private Expo catalog. Real-device, VoiceOver, and TalkBack validation remain release gates.
-
-The planned command, once the first synchronized canary is published and the manifest reports `installation.available: true`, is:
-
-```bash
-pnpm add @vllnt/ui-native@canary
-```
-
-Native publishes to the `canary` dist-tag only; no stable channel exists yet. Until a supported release is published, use the repository workspace and private Expo catalog for local evaluation.
+- 175 native component modules are listed in [`registry.json`](registry.json). [`docs/native/PARITY.md`](../../docs/native/PARITY.md) maps every web component to its native status and lists the documented props gaps.
+- Every interactive component uses `InteractivePressable` (rest, hover, focus-visible, pressed, selected and disabled from one state set, a 44-point minimum target, and a non-colour selected border), and every animation respects reduced motion.
+- Validation is Jest plus Metro exports. Real-device, VoiceOver and TalkBack passes are not yet part of the release gate.
 
 ## Local use
 

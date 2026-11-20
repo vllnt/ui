@@ -8,11 +8,11 @@ import { nativeRegistry } from "./native-registry";
 import { registry } from "./registry";
 
 describe("native renderer manifest", () => {
-  it("truthfully reports source-only availability", () => {
+  it("truthfully reports the installable canary package", () => {
     expect(nativeRegistry).toMatchObject({
-      availability: "source",
+      availability: "package",
       channel: "canary",
-      installation: { available: false },
+      installation: { available: true },
       package: "@vllnt/ui-native",
       status: "experimental",
     });

@@ -62,7 +62,7 @@ describe("platform-aware MCP tools", () => {
     expect(getComponent({ name: "button", platform: "native" })).toMatchObject({
       compatibility: "portable-options",
       install: {
-        available: false,
+        available: true,
         command: "pnpm add @vllnt/ui-native@canary",
         kind: "package",
       },
@@ -84,7 +84,7 @@ describe("platform-aware MCP tools", () => {
   it("preserves the legacy combined descriptor when platform is omitted", () => {
     expect(getComponent({ name: "button" })).toMatchObject({
       native: {
-        availability: "source",
+        availability: "package",
         channel: "canary",
         package: "@vllnt/ui-native",
         status: "experimental",

@@ -4,9 +4,25 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-20
+
 ### Added
 
-- `family` (`"sans" | "mono"`, default `"sans"`) on `Text`, matching web `Text` (#666). `mono` sets the platform monospace face on the same body scale: Menlo on iOS, `monospace` on Android. `sans` keeps the system face. A shared `monospaceFontFamily` in `src/primitives/font-family` replaces the literal `"monospace"` in `CodeBlock`, `Terminal` and `ScrambleText`, which iOS does not recognise as a font name.
+- Experimental source-only React Native renderer with 175 component modules spanning foundation, forms, data, content, AI, learning, motion, utilities, controls, overlays, and navigation.
+- Shared light, dark, and system theme support generated from canonical design tokens.
+- Controlled/uncontrolled state, caller-owned selection, reduced-motion observation, native modal layering, safe-area injection, and typed platform-service adapters.
+- Machine-readable availability, compatibility, source, peer dependency, and installation metadata in `registry.json`.
+- Generated barrel/manifest drift checks, native boundary checks, Jest interaction coverage, and packed-package validation.
+- Jest render tests cover the compound parts that no test rendered before (`AgentStepDuration`, `AIArtifactEditButton`, `ConversationHeader`, `ConversationScrollButton`, `ConversationTitle`, `ProgressTrackerBadge`, `ProgressTrackerStat`, `ProgressTrackerStats`, `SimpleTerminal`).
+
+- Props the web components already had, added to the native components with the same names and value sets:
+  - `size` (`"default" | "lg" | "sm"`) on `Toggle`, `ToggleGroup` (also per `ToggleGroupItem`), and `SegmentedControl`; `variant` (`"default" | "outline"`) on `ToggleGroup` (also per `ToggleGroupItem`; as on web, a value set on the group takes precedence over the item). Targets keep the 44-point minimum, so `sm` tightens the padding and `lg` grows to the theme's `spacing[12]` (48 points).
+  - `size` (`"lg" | "md" | "sm"`) on `Rating`, taken from the theme type scale (`h4`, `h5`, `body`). The default stays `lg`, the size native ratings always rendered; web defaults to `md`.
+  - `disabled` on `Textarea`, `DateField`, `TimeField`, and `InputOTP` (their runtime already followed `Input`; `InputOTP` now locks the field), and on `Collapsible`, which disables its trigger.
+  - `onComplete` on `InputOTP`, called with the code when the value changes from incomplete to complete (including a controlled value that becomes complete). `disabled` now also reports the disabled accessibility state even when the caller passes `accessibilityState={{ disabled: false }}`.
+  - Web names for props that native already had under another name; the native name wins when both are passed and stays supported: `orientation` on `ResizablePanelGroup` (`direction`), `onFlipChange` on `Flashcard` (`onFlippedChange`), and `expanded`, `defaultExpanded`, `onExpandedChange`, `selected`, `defaultSelected`, `onSelect` on `TreeView` (`expandedIds`, `defaultExpandedIds`, `onExpandedIdsChange`, `selectedIds`, `defaultSelectedIds`, `onSelectedIdsChange`).
+  - `multiple` on `FileUpload`, the web name for `allowMultiple`; `allowMultiple` wins when both are passed and stays supported. The default stays multi-select.
+
 - Foundation components `Icon`, `Stack`, `Spacer` and `Display` (atoms), the four 0.1.0 foundations the parity matrix listed as missing. `Icon` draws any lucide-compatible component the caller passes (`size` of `"sm" | "md" | "lg"` or points, `tone` as on `Text`) and adds no icon or SVG dependency; it is hidden from screen readers unless `label` makes it an accessible image. `Stack` is a plain `View` with `direction`, `gap`, `align`, `justify` and `wrap`. `Spacer` is a fixed (`size`) or free-space-absorbing (`flex`) gap that screen readers skip. `Display` sets text on the theme display scale with the web `as` and `animated` props: `h1` and `h2` are headers, and the rise-in reveal is skipped under reduced motion. `Text` and `Icon` now share one tone-to-colour helper.
 - Affordance contract (#633): `InteractivePressable` and `interactionStyle` in `src/primitives` give a control one state set (rest, hover, focus, pressed, selected, disabled) from local `interactionTokens`, with a focus ring, a non-colour selected border and the 44-point floor. No state changes a control's size: the focus ring is an outline and a selectable control draws its selected border as a frame inside its box. `Button`, `Toggle`, `Checkbox`, `RadioGroup` and `SegmentedControl` use it, replacing their literal pressed (0.8) and disabled (0.5) opacities; a ghost `Button` underlines its label on hover, focus and press. Public props and exports are unchanged. A lint rule bans raw `Pressable` in `src/components` outside a shrinking allowlist, and the accessibility contract gains reduced-motion (C1), state-flip (C3) and static-surface (R11) rules.
 - Web props on the overlay components, closing their `propsGap` entries in the parity matrix. `Dialog`, `Sheet`, `Drawer`, `Popover` and `DropdownMenu` take `modal` (`false` draws them in place over a live page; Android back and the accessibility escape gesture still close them). `Popover`, `DropdownMenu` and `Tooltip` take `side`, `align`, `sideOffset` and `alignOffset`, and `Popover` and `DropdownMenu` take an `anchorRef` to open against; the panel stays inside the window with an 8 pt margin and never flips. `Tooltip` takes `delayDuration`. `Drawer` takes `direction`, `snapPoints`, `activeSnapPoint`, `setActiveSnapPoint`, `snapToSequentialPoint`, `closeThreshold`, `dismissible`, `handleOnly`, `autoFocus`, `onClose`, `onDrag`, `onRelease` and `onAnimationEnd`; with several snap points its handle is an adjustable control and a drag or fling settles on a point (reduced motion snaps without animation). `DropdownMenu` items can be `checkbox`, `radio-group` or `sub` rows (checked and expanded state exposed) and any row can be `inset`. `Select` takes `open`, `defaultOpen`, `required` and `requiredLabel`. Props with no native meaning stay documented gaps in `docs/native/PARITY.md`.
@@ -31,33 +47,7 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `Grid`: `smCols`, `mdCols` and `lgCols` change the column count from 640, 768 and 1024 points of window width, the Tailwind defaults the web components use. Neither `@vllnt/ui-core` nor the web preset defines breakpoint tokens, so `src/primitives/breakpoints` keeps one copy. A breakpoint without a value carries the one below it, as on web.
 
 - Props parity 1, navigation (#655): `variant` (`"link" | "pill" | "underline"`, default `"underline"`) on `Tabs`, shared with `TabsList` and `TabsTrigger` through context, as on web. `underline` keeps the hairline and the bar under the selected tab. `pill` fills the selected tab with the secondary colour, rounds it fully and spaces the tabs. `link` draws plain text and underlines the selected label. Every look keeps the selection frame of the affordance contract, so selection never relies on colour alone. A `TabsList` outside `Tabs` draws the `underline` look.
-
-### Changed
-
-- `Dialog` now dims the page behind a modal with a decorative, touch-free scrim, as web does by default. Pass `overlay="none"` for the previous transparent presentation.
-- `ProgressBar` fills with the `primary` tone by default and `success` when complete, as on web, instead of `foreground` and `primary`. A complete card tints its surface and border with its tone, where it used to switch the border to `primary`. Track height follows the theme spacing scale; the default `md` stays 8 points.
-- `Badge` lays out in a row so a dot can sit before the label. Its default padding is now `spacing[2] + spacing[1] / 2` horizontally, the web `px-2.5`, where it was `spacing[2]`.
-
-- Affordance contract phase 2 (#633): the other 86 components that pressed through React Native's `Pressable` (53 atoms, 27 molecules, 6 organisms) now use `InteractivePressable`, so every interactive control shares the state set and the 44-point floor, and selectable ones (tabs, list and menu rows, calendar days, tags, segments) draw the non-colour selected border. Their literal pressed and disabled opacities are gone. Public props, exports, roles and accessibility states are unchanged. The lint ban on `Pressable` in `src/components` no longer has an allowlist.
-
-## [0.1.0] - Unreleased
-
-### Added
-
-- Experimental source-only React Native renderer with 175 component modules spanning foundation, forms, data, content, AI, learning, motion, utilities, controls, overlays, and navigation.
-- Shared light, dark, and system theme support generated from canonical design tokens.
-- Controlled/uncontrolled state, caller-owned selection, reduced-motion observation, native modal layering, safe-area injection, and typed platform-service adapters.
-- Machine-readable availability, compatibility, source, peer dependency, and installation metadata in `registry.json`.
-- Generated barrel/manifest drift checks, native boundary checks, Jest interaction coverage, and packed-package validation.
-- Jest render tests cover the compound parts that no test rendered before (`AgentStepDuration`, `AIArtifactEditButton`, `ConversationHeader`, `ConversationScrollButton`, `ConversationTitle`, `ProgressTrackerBadge`, `ProgressTrackerStat`, `ProgressTrackerStats`, `SimpleTerminal`).
-
-- Props the web components already had, added to the native components with the same names and value sets:
-  - `size` (`"default" | "lg" | "sm"`) on `Toggle`, `ToggleGroup` (also per `ToggleGroupItem`), and `SegmentedControl`; `variant` (`"default" | "outline"`) on `ToggleGroup` (also per `ToggleGroupItem`; as on web, a value set on the group takes precedence over the item). Targets keep the 44-point minimum, so `sm` tightens the padding and `lg` grows to the theme's `spacing[12]` (48 points).
-  - `size` (`"lg" | "md" | "sm"`) on `Rating`, taken from the theme type scale (`h4`, `h5`, `body`). The default stays `lg`, the size native ratings always rendered; web defaults to `md`.
-  - `disabled` on `Textarea`, `DateField`, `TimeField`, and `InputOTP` (their runtime already followed `Input`; `InputOTP` now locks the field), and on `Collapsible`, which disables its trigger.
-  - `onComplete` on `InputOTP`, called with the code when the value changes from incomplete to complete (including a controlled value that becomes complete). `disabled` now also reports the disabled accessibility state even when the caller passes `accessibilityState={{ disabled: false }}`.
-  - Web names for props that native already had under another name; the native name wins when both are passed and stays supported: `orientation` on `ResizablePanelGroup` (`direction`), `onFlipChange` on `Flashcard` (`onFlippedChange`), and `expanded`, `defaultExpanded`, `onExpandedChange`, `selected`, `defaultSelected`, `onSelect` on `TreeView` (`expandedIds`, `defaultExpandedIds`, `onExpandedIdsChange`, `selectedIds`, `defaultSelectedIds`, `onSelectedIdsChange`).
-  - `multiple` on `FileUpload`, the web name for `allowMultiple`; `allowMultiple` wins when both are passed and stays supported. The default stays multi-select.
+- `family` (`"sans" | "mono"`, default `"sans"`) on `Text`, matching web `Text` (#666). `mono` sets the platform monospace face on the same body scale: Menlo on iOS, `monospace` on Android. `sans` keeps the system face. A shared `monospaceFontFamily` in `src/primitives/font-family` replaces the literal `"monospace"` in `CodeBlock`, `Terminal` and `ScrambleText`, which iOS does not recognise as a font name.
 
 ### Changed
 
@@ -71,6 +61,12 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - The `react` peer range is now `>=19.1.0 <20` and `minimumReact` in `registry.json` is `19.1.0`. Every `react-native` release in the `>=0.81.0 <1` peer range already requires React 19.1 or newer, so React 19.0 could never satisfy both peers. The `react-native` range is unchanged.
 - README and docs document the install command and the supported React and React Native ranges, and list Android/iOS Metro export as a CI check rather than a remaining gate.
 - The accessibility fixtures in `src/tests` no longer import Testing Library, so the private Expo catalog can render one example of every component in its All components view. Test-only change: nothing in the published package changes.
+
+- `Dialog` now dims the page behind a modal with a decorative, touch-free scrim, as web does by default. Pass `overlay="none"` for the previous transparent presentation.
+- `ProgressBar` fills with the `primary` tone by default and `success` when complete, as on web, instead of `foreground` and `primary`. A complete card tints its surface and border with its tone, where it used to switch the border to `primary`. Track height follows the theme spacing scale; the default `md` stays 8 points.
+- `Badge` lays out in a row so a dot can sit before the label. Its default padding is now `spacing[2] + spacing[1] / 2` horizontally, the web `px-2.5`, where it was `spacing[2]`.
+
+- Affordance contract phase 2 (#633): the other 86 components that pressed through React Native's `Pressable` (53 atoms, 27 molecules, 6 organisms) now use `InteractivePressable`, so every interactive control shares the state set and the 44-point floor, and selectable ones (tabs, list and menu rows, calendar days, tags, segments) draw the non-colour selected border. Their literal pressed and disabled opacities are gone. Public props, exports, roles and accessibility states are unchanged. The lint ban on `Pressable` in `src/components` no longer has an allowlist.
 
 ### Fixed
 
@@ -86,4 +82,3 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
 - Uncontrolled `SidebarProvider` and `ToggleGroup` apply repeated updates made before a re-render from the latest value instead of dropping one; controlled mode still derives each change from the owner value.
 - `Typewriter` and `ScrambleText` step, time, and sample scramble characters by Unicode code point, so emoji and other surrogate pairs are never split.
 - `AnimatedText` no longer constructs `Intl.Segmenter` at module load, so importing it on engines without `Intl.Segmenter` (Hermes) no longer throws; it splits by grapheme when available and by code point otherwise.
-
