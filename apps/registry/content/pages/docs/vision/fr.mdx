@@ -1,66 +1,66 @@
 ---
 title: Vision
-description: Ou va VLLNT UI - la couche UI des interfaces spatiales et des interfaces composees par l'IA, diffusees en continu et adaptees a chaque utilisateur - et ce qui est disponible aujourd'hui.
+description: Où va VLLNT UI. La couche UI des interfaces spatiales et des interfaces composées par l'IA, diffusées en continu et adaptées à chaque utilisateur, et ce qui est disponible aujourd'hui.
 type: docs
 og:
   title: Vision
-  description: Le cap de VLLNT UI - interfaces spatiales et UI dynamique composee par l'IA
+  description: Le cap de VLLNT UI, des interfaces spatiales à l'UI dynamique composée par l'IA
   type: docs
 ---
 
 # Vision
 
-VLLNT UI est la couche UI sur laquelle reposent tous les produits vllnt : web, mobile et desktop aujourd'hui, spatial ensuite. L'objectif est d'etre le moyen le plus rapide, pour les personnes comme pour les agents IA, de construire des interfaces. La marque vllnt est le theme par defaut, et chaque composant respecte le WCAG 2.2 AA.
+VLLNT UI est la couche UI sur laquelle reposent tous les produits vllnt : le web, le mobile et le desktop aujourd'hui, le spatial ensuite. L'objectif est d'être le moyen le plus rapide, pour les personnes comme pour les agents IA, de construire des interfaces. La marque vllnt est le thème par défaut, et chaque composant respecte le WCAG 2.2 AA.
 
-Nous pensons que les interfaces changent de deux facons, et nous voulons que VLLNT UI soit la base des deux.
+Nous pensons que les interfaces changent de deux façons, et nous voulons que VLLNT UI soit la base des deux.
 
 ## 1. Les interfaces spatiales
 
-Les appareils de realite augmentee et spatiaux placent l'interface dans la piece autour de vous, et non sur un ecran plat. Les briques restent les memes : boutons, listes, dialogues, texte. Ce qui change, c'est la profondeur, la facon de designer (main, regard, voix) et la taille qu'une cible doit avoir.
+Les appareils de réalité augmentée et spatiaux placent l'interface dans la pièce autour de vous, et non plus sur un écran plat. Les briques restent les mêmes : boutons, listes, dialogues, texte. Ce qui change, c'est la profondeur, la façon de désigner (main, regard, voix) et la taille qu'une cible doit avoir.
 
-Le but : que les memes composants et les memes tokens s'affichent sur un telephone, sur un ordinateur et dans l'espace, sans kit separe pour chacun.
+Le but : que les mêmes composants et les mêmes tokens s'affichent sur un téléphone, sur un ordinateur et dans l'espace, sans kit séparé pour chacun.
 
-## 2. L'UI dynamique, composee par l'IA
+## 2. L'UI dynamique, composée par l'IA
 
-De plus en plus, une interface ne sera pas concue une fois puis livree a tous a l'identique. Un modele ou un serveur la composera a l'execution a partir de briques connues, l'enverra a l'ecran au fil de sa generation, l'adaptera a la personne qui l'utilise et la mettra a jour sans attendre une nouvelle version de l'application.
+De plus en plus, une interface ne sera plus conçue une fois puis livrée à tous à l'identique. Un modèle ou un serveur la composera à l'exécution à partir de briques connues, l'enverra à l'écran au fil de sa génération, l'adaptera à la personne qui l'utilise et la mettra à jour sans attendre une nouvelle version de l'application.
 
-Pour cela, les briques doivent etre :
+Pour cela, les briques doivent être :
 
-- **Descriptibles :** un agent peut trouver un composant, lire ce qu'il fait et les props qu'il accepte, et l'utiliser correctement.
-- **Pilotees par les donnees :** un composant est entierement defini par ses props, et un theme est une donnee, donc les deux peuvent etre envoyes sur le reseau.
-- **Sures en flux continu :** un ecran garde sa mise en page pendant que le contenu arrive encore.
-- **Sures a mettre a jour :** une nouvelle version ne casse pas les ecrans deja construits sur l'ancienne.
-- **Accessibles par defaut :** un ecran genere respecte le WCAG 2.2 AA comme un ecran fait a la main.
+- **Descriptibles :** un agent peut trouver un composant, lire ce qu'il fait et les props qu'il accepte, et l'utiliser correctement.
+- **Pilotées par les données :** un composant est entièrement défini par ses props, et un thème est une donnée, donc les deux peuvent circuler sur le réseau.
+- **Sûres en flux continu :** un écran garde sa mise en page pendant que le contenu arrive encore.
+- **Sûres à mettre à jour :** une nouvelle version ne casse pas les écrans déjà construits sur l'ancienne.
+- **Accessibles par défaut :** un écran généré respecte le WCAG 2.2 AA comme un écran fait à la main.
 
 ## Travailler avec la pile IA de Vercel
 
-Nous voulons que VLLNT UI fonctionne nativement avec deux outils open source de Vercel :
+Nous voulons que VLLNT UI fonctionne nativement avec deux outils open source de Vercel :
 
-- **[json-render](https://github.com/vercel-labs/json-render) :** vous definissez un catalogue de composants, chacun avec un schema de props zod et une description. Le modele produit une spec JSON (diffusee sous forme de patchs JSON), et un moteur de rendu la transforme en React. Un catalogue VLLNT UI permettrait aux modeles de construire des ecrans avec les composants VLLNT UI.
-- **L'UI generative de l'[AI SDK](https://ai-sdk.dev) :** un appel d'outil arrive dans `useChat` comme une partie de message de type `tool-<name>`, avec un etat (`input-streaming`, `input-available`, `output-available`, `output-error`) qui correspond aux vues de chargement, de resultat et d'erreur. L'AI SDK propose aussi `streamUI` pour les React Server Components, que sa documentation marque comme experimental.
+- **[json-render](https://github.com/vercel-labs/json-render) :** vous définissez un catalogue de composants, chacun avec un schéma de props zod et une description. Le modèle produit une spec JSON (diffusée sous forme de patchs JSON) et un moteur de rendu la transforme en React. Un catalogue VLLNT UI permettrait aux modèles de construire des écrans avec les composants VLLNT UI.
+- **L'UI générative de l'[AI SDK](https://ai-sdk.dev) :** un appel d'outil arrive dans `useChat` sous la forme d'une partie de message de type `tool-<name>`, avec un état (`input-streaming`, `input-available`, `output-available`, `output-error`) qui correspond aux vues de chargement, de résultat et d'erreur. L'AI SDK propose aussi `streamUI` pour les React Server Components, que sa documentation présente comme expérimental.
 
-**Aujourd'hui**, aucun adaptateur n'est disponible. Les composants VLLNT UI sont des composants React simples : vous pouvez deja afficher les parties de message de l'AI SDK avec la famille IA (`AIStreamingText`, `Reasoning`, `AIToolCallDisplay`, `AISourceCitation`, `ApprovalRequest` et d'autres) dans votre propre code. **Ensuite** viennent un catalogue json-render, des schemas de props zod pour chaque composant, et des helpers qui relient les parties d'outil de l'AI SDK aux composants, avec leurs etats de chargement et d'erreur : [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
+**Aujourd'hui**, aucun adaptateur n'est disponible. Les composants VLLNT UI sont de simples composants React : vous pouvez déjà afficher les parties de message de l'AI SDK avec la famille IA (`AIStreamingText`, `Reasoning`, `AIToolCallDisplay`, `AISourceCitation`, `ApprovalRequest` et d'autres) dans votre propre code. **Ensuite** viendront un catalogue json-render, des schémas de props zod pour chaque composant, et des helpers qui relient les parties d'outil de l'AI SDK aux composants, avec leurs états de chargement et d'erreur : [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
 
 ## Ce qui est disponible aujourd'hui
 
-- **Composants descriptibles.** Chaque composant a un descripteur JSON a `/r/<name>.json`, indexe dans `/r/registry.json`. Les agents peuvent aussi utiliser `/llms.txt`, `/llms-full.txt` et le serveur MCP a `/mcp` (`search_components`, `get_component`, `list_categories`). Chaque descripteur indique sa version et sa stabilite ; les definitions de props et les exemples d'usage n'existent encore que pour quelques composants. Voir [Agents](/docs/agents).
-- **Tokens et themes sous forme de donnees.** Une seule source de tokens genere les variables CSS, les themes produits (changes a l'execution avec `data-theme`), les tokens React Native et les bibliotheques Penpot. Voir [Theming](/docs/theming).
-- **Briques pretes pour le flux continu.** `Skeleton` pour les etats de chargement ; `AIStreamingText`, `Reasoning`, `ThinkingBlock` et `AgentActivity` pour un contenu qui arrive par morceaux. Les composants fonctionnent avec les React Server Components, et les composants client sont marques `"use client"`.
-- **Mises a jour sures.** Versionnage semantique, une version canary a chaque changement sur `main`, des versions stables uniquement depuis des tags relus, le tag `latest` ne recule jamais, et chaque version liste ses notes de mise a niveau. Voir [Changelog](/docs/changelog).
-- **Controle d'accessibilite.** Chaque story est testee avec axe selon le WCAG 2.0 a 2.2, niveaux A et AA, en theme clair et sombre. Toute violation fait echouer le build.
-- **Un socle commun a plusieurs moteurs de rendu.** `@vllnt/ui` (web) et `@vllnt/ui-native` (React Native) lisent les memes tokens et les memes contrats de composants depuis `@vllnt/ui-core`. Chaque composant natif interactif partage une meme primitive d'affordance pour ses etats presse, survole, focus et desactive. Voir [Native](/native).
+- **Composants descriptibles.** Chaque composant a un descripteur JSON à `/r/<name>.json`, indexé dans `/r/registry.json`. Les agents peuvent aussi utiliser `/llms.txt`, `/llms-full.txt` et le serveur MCP à `/mcp` (`search_components`, `get_component`, `list_categories`). Chaque descripteur indique sa version et sa stabilité ; les définitions de props et les exemples d'usage n'existent encore que pour quelques composants. Voir [Agents](/docs/agents).
+- **Tokens et thèmes sous forme de données.** Une seule source de tokens génère les variables CSS, les thèmes produits (changés à l'exécution avec `data-theme`), les tokens React Native et les bibliothèques Penpot. Voir [Theming](/docs/theming).
+- **Briques prêtes pour le flux continu.** `Skeleton` pour les états de chargement ; `AIStreamingText`, `Reasoning`, `ThinkingBlock` et `AgentActivity` pour un contenu qui arrive par morceaux. Les composants fonctionnent avec les React Server Components, et les composants client sont marqués `"use client"`.
+- **Mises à jour sûres.** Versionnage sémantique, une version canary à chaque changement sur `main`, des versions stables publiées uniquement depuis des tags relus, un tag `latest` qui ne recule jamais, et des notes de mise à niveau pour chaque version. Voir [Changelog](/docs/changelog).
+- **Contrôle d'accessibilité.** Chaque story est testée avec axe selon le WCAG 2.0 à 2.2, niveaux A et AA, en thème clair et sombre. Toute violation fait échouer le build.
+- **Un socle commun à plusieurs moteurs de rendu.** `@vllnt/ui` (web) et `@vllnt/ui-native` (React Native) lisent les mêmes tokens et les mêmes contrats de composants depuis `@vllnt/ui-core`. Chaque composant natif interactif partage une même primitive d'affordance pour ses états pressé, survolé, focus et désactivé. Voir [Native](/native).
 
 ## Sur la feuille de route
 
-Rien de ceci n'est encore disponible. Ce sont les prochaines etapes vers la vision.
+Rien de ceci n'est encore disponible. Ce sont les prochaines étapes vers la vision.
 
-- **Fondations spatiales** (proposees pour la 0.5.0) : tokens de profondeur, un seul contrat d'affordance pour le pointeur, le tactile et le regard, des tailles de cible qui s'adaptent a l'entree (24 px au pointeur, 44 pt au tactile, 60 pt en spatial), et des tokens de mouvement. La proposition est une RFC ouverte : [vllnt/ui#631](https://github.com/vllnt/ui/issues/631).
-- **Moteurs de rendu spatiaux** comme visionOS ou WebXR, construits sur le meme socle.
-- **Un schema de props complet** pour chaque composant, pour qu'un modele produise un arbre d'UI valide et qu'un moteur de rendu le verifie avant de l'afficher.
-- **Un contrat de props partielles,** pour que tout composant puisse s'afficher a partir de donnees incompletes, recues en flux continu.
-- **Des themes par utilisateur resolus a l'execution,** dans les limites accessibles des tokens.
-- **Des codemods et une periode de depreciation ecrite,** pour que les mises a jour puissent s'appliquer automatiquement.
-- **Des controles d'accessibilite sur les arbres d'UI generes,** executes avant d'afficher un ecran genere.
+- **Fondations spatiales** (proposées pour la 0.5.0) : tokens de profondeur, un seul contrat d'affordance pour le pointeur, le tactile et le regard, des tailles de cible qui s'adaptent à l'entrée (24 px au pointeur, 44 pt au tactile, 60 pt en spatial), et des tokens de mouvement. La proposition est une RFC ouverte : [vllnt/ui#631](https://github.com/vllnt/ui/issues/631).
+- **Moteurs de rendu spatiaux** comme visionOS ou WebXR, construits sur le même socle.
+- **Un schéma de props complet** pour chaque composant, pour qu'un modèle produise un arbre d'UI valide et qu'un moteur de rendu le vérifie avant de l'afficher.
+- **Un contrat de props partielles,** pour que tout composant puisse s'afficher à partir de données incomplètes, reçues en flux continu.
+- **Des thèmes par utilisateur résolus à l'exécution,** dans les limites accessibles des tokens.
+- **Des codemods et une période de dépréciation écrite,** pour que les mises à jour puissent s'appliquer automatiquement.
+- **Des contrôles d'accessibilité sur les arbres d'UI générés,** exécutés avant d'afficher un écran généré.
 - **Un catalogue json-render et des helpers AI SDK** pour VLLNT UI ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
 
 ## Suivre l'avancement
