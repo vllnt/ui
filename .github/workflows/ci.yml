@@ -151,7 +151,7 @@ jobs:
           shared='^(package\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|turbo\.json|\.node-version|\.github/workflows/ci\.yml|packages/design/|packages/ui-core/)'
           core="$shared"
           native="$shared|^(packages/ui-native/|apps/native-catalog/|scripts/check-atomic-levels)"
-          web="$shared|^(packages/ui/|apps/registry/|apps/storybook/|scripts/check-atomic-levels)"
+          web="$shared|^(packages/ui/|apps/registry/|apps/storybook/|scripts/check-atomic-levels|packages/ui-native/(registry|parity)\.json)"
           {
             if grep -qE "$core" <<< "$changed"; then echo "core=true"; else echo "core=false"; fi
             if grep -qE "$native" <<< "$changed"; then echo "native=true"; else echo "native=false"; fi

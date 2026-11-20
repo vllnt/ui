@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { readNativeOnlyNames } from "./native-only";
 import { nativeRegistry } from "./native-registry";
 import { registry } from "./registry";
 
@@ -19,7 +20,11 @@ describe("native renderer manifest", () => {
 
   it("pairs every native source with browser-safe Web catalog metadata", () => {
     const webEntries = new Map(registry.items.map((item) => [item.name, item]));
-    const entriesAreValid = nativeRegistry.components.every((component) => {
+    const nativeOnlyNames = readNativeOnlyNames(resolve("../.."));
+    const pairedComponents = nativeRegistry.components.filter(
+      (component) => !nativeOnlyNames.has(component.name),
+    );
+    const entriesAreValid = pairedComponents.every((component) => {
       const webEntry = webEntries.get(component.name);
 
       return (
