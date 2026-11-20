@@ -15,7 +15,7 @@ import { canonical } from "@/lib/seo";
 
 const KEBAB_CASE = /^[\da-z]+(?:-[\da-z]+)*$/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const SITE_SUFFIX = /\s*\|\s*vllnt UI\s*$/i;
+const SITE_SUFFIX = /\s*\|\s*vllnt ui\s*$/i;
 const REGISTRY_NAMES: ReadonlySet<string> = new Set(
   registry.items.map((item) => item.name),
 );
@@ -33,8 +33,7 @@ function isCalendarDate(value: string): boolean {
  * and a quoted string alike and keeps the `YYYY-MM-DD` form.
  */
 const isoDateSchema = z.preprocess(
-  (value) =>
-    value instanceof Date ? value.toISOString().slice(0, 10) : value,
+  (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value),
   z
     .string()
     .regex(ISO_DATE, "must be an ISO date such as 2026-11-20")
@@ -46,7 +45,7 @@ const sitePathOrHttpsUrl = (value: string): boolean =>
 
 /**
  * Frontmatter of `content/articles/<slug>/<locale>.mdx`. Strict: an unknown key
- * is a typo that would otherwise be dropped without a trace.
+ * is a typo that would otherwise vanish without a trace.
  */
 export const articleFrontmatterSchema = z
   .strictObject({
@@ -72,10 +71,13 @@ export const articleFrontmatterSchema = z
     title: z.string().trim().min(1),
     updated: isoDateSchema.optional(),
   })
-  .refine((value) => value.updated === undefined || value.updated >= value.date, {
-    error: "updated must not be before date",
-    path: ["updated"],
-  })
+  .refine(
+    (value) => value.updated === undefined || value.updated >= value.date,
+    {
+      error: "updated must not be before date",
+      path: ["updated"],
+    },
+  )
   .transform((value) => ({ ...value, updated: value.updated ?? value.date }));
 
 export type ArticleFrontmatter = z.output<typeof articleFrontmatterSchema>;
@@ -253,10 +255,11 @@ function newestFirst(a: Article, b: Article): number {
 /**
  * The articles every public surface may list, in every locale, newest first.
  *
- * A draft (`draft: true`) is not published: it is absent from here, so it is
- * absent from the index, the sitemap, the feeds and `llms.txt`, and it gets no
- * page. Its URL answers 404 in every environment, because the article routes
- * generate only the articles this function returns and refuse any other slug.
+ * A draft (`draft: true`) does not count as published: this list leaves it
+ * out, so the index, the sitemap, the feeds and `llms.txt` leave it out too,
+ * and it gets no page. Its URL answers 404 in every environment, because the
+ * article routes generate the articles this function returns and refuse any
+ * other slug.
  *
  * @param directory - articles directory; {@link articlesDirectory} by default
  * @returns Published articles
@@ -326,7 +329,7 @@ export function articleLocales(
 
 /**
  * Coverage rule for `i18n:check`: a published article exists in every locale
- * (a draft file counts as present), so no locale silently falls back. An
+ * (a draft file counts as present), so no locale falls back to another. An
  * article whose files are all drafts is exempt.
  *
  * @param articles - every article file, drafts included

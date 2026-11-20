@@ -51,10 +51,7 @@ function midnightUtc(date: string): Date {
   return new Date(`${date}T00:00:00.000Z`);
 }
 
-function latestUpdate(
-  articles: readonly Article[],
-  buildDate: Date,
-): Date {
+function latestUpdate(articles: readonly Article[], buildDate: Date): Date {
   const [latest] = articles
     .map((article) => article.frontmatter.updated)
     .sort()
@@ -103,7 +100,7 @@ function atomEntry(article: Article): string {
  *
  * @param locale - locale of the feed
  * @param articles - published articles of that locale, newest first
- * @param channel - feed title, description and the date used when it is empty
+ * @param channel - feed title, description and the date of an empty feed
  * @returns RSS XML
  */
 export function buildArticlesRss(
@@ -134,7 +131,7 @@ export function buildArticlesRss(
  *
  * @param locale - locale of the feed
  * @param articles - published articles of that locale, newest first
- * @param channel - feed title, description and the date used when it is empty
+ * @param channel - feed title, description and the date of an empty feed
  * @returns Atom XML
  */
 export function buildArticlesAtom(

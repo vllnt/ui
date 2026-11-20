@@ -63,9 +63,9 @@ describe("articleMetadata", () => {
       "x-default": `${SITE}/articles/fixture-article`,
     };
 
-    expect(articleMetadata(withImage, ["en", "fr"]).alternates?.languages).toEqual(
-      expected,
-    );
+    expect(
+      articleMetadata(withImage, ["en", "fr"]).alternates?.languages,
+    ).toEqual(expected);
     expect(
       articleMetadata(withImageFr, ["en", "fr"]).alternates?.languages,
     ).toEqual(expected);
@@ -76,9 +76,7 @@ describe("articleMetadata", () => {
       en: `${SITE}/articles/fixture-article`,
       "x-default": `${SITE}/articles/fixture-article`,
     });
-    expect(
-      articleMetadata(withImageFr, ["fr"]).alternates?.languages,
-    ).toEqual({
+    expect(articleMetadata(withImageFr, ["fr"]).alternates?.languages).toEqual({
       fr: `${SITE}/fr/articles/fixture-article`,
       "x-default": `${SITE}/fr/articles/fixture-article`,
     });

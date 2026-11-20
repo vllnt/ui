@@ -167,6 +167,13 @@ function buildComponentPages(
     }));
 }
 
+function optionalSection(
+  title: string,
+  pages: readonly LlmsFullPage[],
+): LlmsFullSection[] {
+  return pages.length > 0 ? [{ pages: [...pages], title }] : [];
+}
+
 async function buildLlmsFullTxt(): Promise<string> {
   const items = getRegistryComponents();
   const [guidePages, designPage, releasePages, articles] = await Promise.all([
@@ -179,17 +186,11 @@ async function buildLlmsFullTxt(): Promise<string> {
   const articlePages = [...buildArticlePages(articles)];
 
   const sections: LlmsFullSection[] = [
-    ...(guidePages.length > 0 ? [{ pages: guidePages, title: "Guides" }] : []),
-    ...(articlePages.length > 0
-      ? [{ pages: articlePages, title: "Articles" }]
-      : []),
+    ...optionalSection("Guides", guidePages),
+    ...optionalSection("Articles", articlePages),
     { pages: [designPage], title: "Design" },
-    ...(releasePages.length > 0
-      ? [{ pages: releasePages, title: "Latest Release Notes" }]
-      : []),
-    ...(templatePages.length > 0
-      ? [{ pages: templatePages, title: "Templates" }]
-      : []),
+    ...optionalSection("Latest Release Notes", releasePages),
+    ...optionalSection("Templates", templatePages),
     { pages: buildComponentPages(items), title: "Components" },
   ];
 

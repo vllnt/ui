@@ -2,8 +2,14 @@ import { fileURLToPath } from "node:url";
 
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
-import { GET as llmsFull } from "@/app/llms-full.txt/route";
+vi.mock("@/i18n/routing", async () => {
+  const { defaultLocale, locales } = await import("@/i18n/locales");
+
+  return { routing: { defaultLocale, locales } };
+});
+
 import { GET as llms } from "@/app/llms.txt/route";
+import { GET as llmsFull } from "@/app/llms-full.txt/route";
 import sitemap from "@/app/sitemap";
 
 import { articleFeedResponse } from "./article-feed-route";
@@ -37,19 +43,27 @@ function surface(name: string): string {
   return text;
 }
 
+async function bodyOf(
+  respond: () => Promise<Response> | Response,
+): Promise<string> {
+  const response = await respond();
+
+  return response.text();
+}
+
 async function feed(
   locale: "en" | "fr",
   format: "atom" | "rss",
 ): Promise<string> {
-  return (await articleFeedResponse(locale, format)).text();
+  return bodyOf(() => articleFeedResponse(locale, format));
 }
 
 /**
  * The white paper lands as `draft: true` and must stay out of every public
- * surface. Each surface is rendered by its real code from the fixture
- * collection, which holds a published article and a draft. The published
- * article is the control: it must appear everywhere the draft must not, so an
- * empty surface cannot pass the test.
+ * surface. The real code of each surface renders the fixture collection,
+ * which holds a published article and a draft. The published article acts as
+ * the control: it must appear everywhere the draft must not, so an empty
+ * surface cannot pass the test.
  */
 beforeAll(async () => {
   vi.stubEnv("ARTICLES_DIR", FIXTURES);
@@ -80,8 +94,8 @@ beforeAll(async () => {
   rendered.set("article RSS (fr)", await feed("fr", "rss"));
   rendered.set("article Atom (en)", await feed("en", "atom"));
   rendered.set("article Atom (fr)", await feed("fr", "atom"));
-  rendered.set("llms.txt", await (await llms()).text());
-  rendered.set("llms-full.txt", await (await llmsFull()).text());
+  rendered.set("llms.txt", await bodyOf(llms));
+  rendered.set("llms-full.txt", await bodyOf(llmsFull));
 });
 
 afterAll(() => {
@@ -95,8 +109,7 @@ describe("a draft article", () => {
 
     expect(
       all.some(
-        (article) =>
-          article.slug === DRAFT_SLUG && article.frontmatter.draft === true,
+        (article) => article.slug === DRAFT_SLUG && article.frontmatter.draft,
       ),
     ).toBe(true);
   });
