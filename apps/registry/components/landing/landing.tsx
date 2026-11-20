@@ -2,6 +2,7 @@ import { Badge } from "@vllnt/ui";
 import {
   ArrowRight,
   Layers,
+  Mic,
   Monitor,
   Smartphone,
   Sparkles,
@@ -118,7 +119,7 @@ async function VisionBand() {
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
           {t("description")}
         </p>
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
+        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <article className="rounded-lg border border-border bg-card p-6">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
@@ -141,6 +142,18 @@ async function VisionBand() {
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
               {t("dynamicDescription")}
+            </p>
+          </article>
+          <article className="rounded-lg border border-border bg-card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Mic aria-hidden="true" className="size-5" />
+                <h3 className="text-xl font-semibold">{t("voiceTitle")}</h3>
+              </div>
+              <Badge variant="outline">{t("roadmap")}</Badge>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("voiceDescription")}
             </p>
           </article>
         </div>
