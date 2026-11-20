@@ -10,7 +10,7 @@ for (const locale of ["en", "fr"]) {
     await expect(page).toHaveTitle(/React Native.*iOS.*Android/);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      /0\.4\.0.*canary/,
+      locale === "en" ? /canary builds only/ : /0\.4\.0.*canary/,
     );
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",

@@ -17,6 +17,8 @@
  * vllnt-distinctive terms (e.g. "react callout", "live cursors").
  */
 
+import { searchCopyFor } from "@/lib/search-copy";
+
 export type ComponentFaq = {
   /** Factual answer, one to three sentences. */
   readonly answer: string;
@@ -368,8 +370,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       'Form is a composable validation wrapper for React built on React Hook Form. It groups a label, control, description, and error message into accessible field units, automatically wiring aria-describedby, aria-invalid, and aria-required and marking error messages with role="alert". Pass a Zod schema for managed validation, or hand it your own useForm instance. Use it whenever you need labelled, validated inputs with consistent error handling across sign-up, settings, or checkout forms.',
   },
   {
-    description:
-      "Plan projects in React with a dependency-free Gantt chart: task bars, milestones, and a today line across day to quarter scales. Install via the shadcn CLI.",
+    ...searchCopyFor("/components/gantt-chart"),
     faqs: [
       {
         answer:
@@ -389,7 +390,6 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["run-timeline", "countdown-timer", "activity-log"],
     slug: "gantt-chart",
-    title: "Gantt Chart — project timeline with task bars in React | VLLNT UI",
     whatItIs:
       "Gantt Chart is a dependency-free, SVG-free React component for project planning. Reach for it to visualize scheduled work as horizontal task bars grouped into phases, with optional progress overlays, milestone diamonds, and a today indicator across day, week, month, or quarter scales. The left column lists group and task names; the right renders the timeline. Drag-to-edit, dependency arrows, and critical-path highlighting are out of scope — you drive data through the groups prop.",
   },
@@ -630,8 +630,7 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
       "Table is a set of unstyled, composable primitives — Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, and TableCaption — that render semantic HTML table markup with consistent styling. Reach for it when you want full control over rows and cells and only need the visual layer, not built-in sorting or pagination. It wraps the table in a horizontally scrollable container and adds hover and selected-row styles you compose yourself.",
   },
   {
-    description:
-      "Scrub through playback in React using a range slider built on a native input, with milestone ticks, tone variants, and value labels. Install via the shadcn CLI.",
+    ...searchCopyFor("/components/timeline-scrubber"),
     faqs: [
       {
         answer:
@@ -651,7 +650,6 @@ export const COMPONENT_SEO: readonly ComponentSeo[] = [
     ],
     related: ["time-field", "date-range-picker", "number-input"],
     slug: "timeline-scrubber",
-    title: "Timeline Scrubber — range slider for playback in React | VLLNT UI",
     whatItIs:
       "Timeline Scrubber is a controlled range slider for scrubbing through canvas or video-style playback in React. Reach for it when you need a thin timeline track with a draggable handle, optional milestone ticks, tone variants, and formatted value labels. It builds on a native input type=range, so keyboard, pointer, and screen-reader support come for free. The host owns the value and drives the playback loop; the component is pure presentation.",
   },

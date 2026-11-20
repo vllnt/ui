@@ -98,7 +98,7 @@ test.describe("platform-aware component discovery", () => {
     );
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      /React Native.*0\.4\.0.*Source-only/,
+      /React Native components for iOS and Android.*canary builds only/,
     );
     const structuredData = (
       await page.locator('script[type="application/ld+json"]').allTextContents()

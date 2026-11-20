@@ -1,4 +1,5 @@
 import { registry } from "@/lib/registry";
+import { searchCopyFor } from "@/lib/search-copy";
 
 /**
  * Single source of truth for the "UI for AI agents" SEO positioning.
@@ -94,10 +95,8 @@ export const AI_SEO: readonly AiComponentSeo[] = [
       "Use AI Streaming Text for any partial assistant output that arrives token-by-token. The live cursor signals 'still generating' and keeps long responses readable as they stream in.",
   },
   {
-    description:
-      "Render an AI agent's tool/function calls in React: name, serialized input, status, and returned output. Built for agentic apps. Install via the shadcn CLI.",
+    ...searchCopyFor("/components/ai-tool-call-display"),
     slug: "ai-tool-call-display",
-    title: "AI Tool Call Display — render agent tool calls in React | VLLNT UI",
     whenToUse:
       "Use AI Tool Call Display whenever an agent invokes tools or functions. It surfaces the call name, arguments, status, and result so users can follow exactly what the agent did.",
   },

@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import type { Locale } from "@/i18n/routing";
 import { ogTypeSchema, type PageFrontmatter } from "@/lib/schemas";
+import { getSearchCopy } from "@/lib/search-copy";
 import {
   absoluteUrl,
   alternateOgLocales,
@@ -110,6 +111,8 @@ type PageMetadataInput = Metadata & {
 /**
  * Page metadata with canonical + hreflang alternates and matching Open Graph
  * and Twitter cards. Any other `Metadata` field passes through unchanged.
+ * A page with a row in `lib/search-copy.ts` gets that row's `<title>` and meta
+ * description on the default locale, whatever title or description it passed.
  */
 export function pageMetadata({
   alternates,
@@ -131,6 +134,7 @@ export function pageMetadata({
     description: og.description,
     title: og.title,
     ...metadata,
+    ...getSearchCopy(pathname, locale),
     alternates: {
       canonical: canonical(canonicalPathname, locale),
       languages: languageAlternates(canonicalPathname),
