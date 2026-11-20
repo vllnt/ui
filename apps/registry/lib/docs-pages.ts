@@ -7,6 +7,12 @@ export type DocsPage = {
 export const DOCS_PAGES: readonly DocsPage[] = [
   {
     description:
+      "Where VLLNT UI is going: the UI layer for spatial interfaces and for streamed, per-user, AI-composed UI, and what ships today.",
+    slug: "vision",
+    title: "Vision",
+  },
+  {
+    description:
       "Install VLLNT UI with pnpm, Tailwind CSS, the shadcn CLI, and your first registry component.",
     slug: "installation",
     title: "Installation",
