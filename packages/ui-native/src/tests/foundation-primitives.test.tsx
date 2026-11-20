@@ -389,3 +389,45 @@ describe("Spacer", () => {
     expect(styleOf(screen.getByTestId("spacer", hidden)).flexBasis).toBe(7);
   });
 });
+
+describe("Text family", () => {
+  it("keeps the system face by default and for sans", () => {
+    renderThemed(
+      <>
+        <Text>Default</Text>
+        <Text family="sans">Sans</Text>
+      </>,
+    );
+    expect(styleOf(screen.getByText("Default")).fontFamily).toBeUndefined();
+    expect(styleOf(screen.getByText("Sans")).fontFamily).toBeUndefined();
+  });
+
+  it("sets the platform monospace face on the same body scale for mono", () => {
+    renderThemed(
+      <>
+        <Text>Body</Text>
+        <Text family="mono">Code</Text>
+        <Text family="mono" size="lead">
+          Lead
+        </Text>
+      </>,
+    );
+    const body = styleOf(screen.getByText("Body"));
+    const mono = styleOf(screen.getByText("Code"));
+    expect(mono.fontFamily).toBe("Menlo");
+    expect(mono.fontSize).toBe(body.fontSize);
+    expect(mono.lineHeight).toBe(body.lineHeight);
+    expect(styleOf(screen.getByText("Lead")).fontSize).toBe(
+      lightTheme.typography.scale.bodyLarge.fontSize,
+    );
+  });
+
+  it("lets a caller style override the family", () => {
+    renderThemed(
+      <Text family="mono" style={{ fontFamily: "Courier" }}>
+        Custom
+      </Text>,
+    );
+    expect(styleOf(screen.getByText("Custom")).fontFamily).toBe("Courier");
+  });
+});

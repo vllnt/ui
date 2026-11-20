@@ -8,6 +8,7 @@ import {
   type TextProps,
 } from "react-native";
 
+import { monospaceFontFamily } from "../../../primitives/font-family";
 import { typeStyle } from "../../../primitives/type-style";
 import {
   type ReducedMotionService,
@@ -131,7 +132,7 @@ function ScrambleText({
       style={[
         ...typeStyle(theme, "bodySmall", {
           color: "foreground",
-          fontFamily: "monospace",
+          fontFamily: monospaceFontFamily,
         }),
         style,
       ]}

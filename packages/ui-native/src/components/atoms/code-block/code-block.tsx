@@ -11,6 +11,7 @@ import {
 } from "react-native";
 
 import { useAnnounceOnChange } from "../../../primitives/accessibility";
+import { monospaceFontFamily } from "../../../primitives/font-family";
 import { InteractivePressable } from "../../../primitives/interactive-pressable";
 import type { ClipboardService } from "../../../primitives/platform-services";
 import { typeStyle } from "../../../primitives/type-style";
@@ -86,7 +87,7 @@ function CodeBlockHeader({
         <NativeText
           style={typeStyle(theme, "caption", {
             color: "mutedForeground",
-            fontFamily: "monospace",
+            fontFamily: monospaceFontFamily,
           })}
         >
           {language}
@@ -146,7 +147,7 @@ function CodeContent({
           selectable
           style={typeStyle(theme, "bodySmall", {
             color: "foreground",
-            fontFamily: "monospace",
+            fontFamily: monospaceFontFamily,
           })}
         >
           {code}
