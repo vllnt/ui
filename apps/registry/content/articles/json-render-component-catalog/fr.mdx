@@ -1,0 +1,219 @@
+---
+title: "Catalogue de composants json-render - le guide | vllnt UI"
+description: "Écrire un catalogue de composants json-render pour une bibliothèque React : props zod, descriptions, registre et rendu. Le catalogue VLLNT UI reste à venir."
+date: 2026-11-20
+updated: 2026-11-20
+tags: [generative-ui, json-render, react, zod]
+status: mixed
+components: [ai-source-citation, ai-tool-call-display]
+---
+
+# Construire un catalogue de composants json-render pour une bibliothèque React
+
+json-render (vercel-labs) permet à un modèle de composer une interface sous forme de JSON. Le modèle ne peut utiliser que les composants que vous listez, et cette liste est le catalogue.
+
+Après cette page, vous saurez écrire un petit catalogue et un registre qui affichent des composants VLLNT UI à partir d'une spec JSON, et vous saurez ce qu'un modèle doit lire avant de pouvoir en remplir une.
+
+## Ce qui est livré et ce qui ne l'est pas
+
+**Livré aujourd'hui :** json-render lui-même, un projet open source tiers sous licence Apache-2.0, avec `@json-render/shadcn` comme catalogue de référence. Les composants VLLNT UI sont du React ordinaire : vous pouvez donc les placer à la main dans un registre json-render.
+
+**Feuille de route :** un catalogue publié par VLLNT UI. Il n'existe pas. Il demande un schéma de props zod pour chaque composant, et ce travail est suivi dans [vllnt/ui#672](https://github.com/vllnt/ui/issues/672).
+
+Le catalogue de cette page est un exemple que vous écrivez et qui vous appartient. VLLNT UI ne le publie pas et ne le teste pas. json-render est en version 0.x et son API change d'une version à l'autre. Les noms ci-dessous correspondent à son [README](https://github.com/vercel-labs/json-render) pour les versions 0.22 et 0.23.
+
+## Les trois pièces
+
+```text
+catalog  --prompt()-->  model  --JSON spec-->  Renderer + registry  -->  React
+```
+
+1. **Le catalogue** nomme chaque composant, lui donne un schéma de props zod et une description d'une phrase. Il définit ce que le modèle a le droit d'utiliser.
+2. **Le registre** associe chaque nom du catalogue à un vrai composant React.
+3. **Le moteur de rendu** reçoit une spec et le registre, et renvoie des éléments React.
+
+Un quatrième appel les relie au modèle : `catalog.prompt()` renvoie le texte qui décrit le catalogue, prêt à servir de prompt système.
+
+## Étape 1 : installer
+
+```bash
+pnpm add @json-render/core @json-render/react zod @vllnt/ui
+```
+
+json-render 0.23 déclare zod 4 et React 19 comme dépendances paires.
+
+## Étape 2 : écrire le catalogue
+
+```ts
+import { defineCatalog } from "@json-render/core";
+import { schema } from "@json-render/react/schema";
+import { z } from "zod";
+
+export const catalog = defineCatalog(schema, {
+  components: {
+    Stack: {
+      props: z.object({}),
+      description: "A vertical list. Put the other components inside it.",
+    },
+    SourceCitation: {
+      props: z.object({
+        href: z.string().describe("Full https URL of the source"),
+        snippet: z.string().nullable().describe("Short excerpt, or null"),
+        source: z.string().describe("Origin label, such as a domain"),
+        title: z.string().describe("Title of the source"),
+      }),
+      description:
+        "A card that cites one source behind an answer. Use one per source.",
+    },
+    ToolCall: {
+      props: z.object({
+        input: z.string().nullable().describe("Serialized tool input"),
+        output: z.string().nullable().describe("Serialized tool output"),
+        status: z.enum(["queued", "running", "complete", "error"]),
+        toolName: z.string(),
+      }),
+      description:
+        "A card that shows one tool call: its name, status, input and output.",
+    },
+  },
+  actions: {},
+});
+```
+
+Les descriptions restent en anglais dans cet exemple. Écrivez-les dans la langue de votre prompt système.
+
+Quatre règles rendent une entrée de catalogue facile à utiliser pour un modèle :
+
+1. **Nommez le rôle.** `SourceCitation` dit à quoi sert le composant. Le nom d'export `AISourceCitation` reste dans le registre.
+2. **Exposez moins de props que le composant n'en a.** Laissez de côté `className`, les refs et les gestionnaires d'événements. Le modèle fixe le contenu, et votre code fixe le style.
+3. **Utilisez des enums pour les ensembles fermés.** `status` a quatre valeurs valides : le schéma les énumère.
+4. **Rédigez la description comme une consigne.** « Use one per source » indique au modèle quand choisir le composant.
+
+Le README de json-render utilise `.nullable()` pour une prop que le modèle peut laisser vide. Ce catalogue fait de même.
+
+## Étape 3 : écrire le registre
+
+```tsx
+import { defineRegistry } from "@json-render/react";
+import { AISourceCitation, AIToolCallDisplay } from "@vllnt/ui";
+
+import { catalog } from "./catalog";
+
+function safeHref(href: string) {
+  return href.startsWith("https://") ? href : undefined;
+}
+
+export const { registry } = defineRegistry(catalog, {
+  components: {
+    Stack: ({ children }) => (
+      <div className="flex flex-col gap-3">{children}</div>
+    ),
+    SourceCitation: ({ props }) => (
+      <AISourceCitation
+        href={safeHref(props.href)}
+        snippet={props.snippet ?? undefined}
+        source={props.source}
+        title={props.title}
+      />
+    ),
+    ToolCall: ({ props }) => (
+      <AIToolCallDisplay
+        input={props.input ?? undefined}
+        output={props.output ?? undefined}
+        status={props.status}
+        toolName={props.toolName}
+      />
+    ),
+  },
+});
+```
+
+Chaque entrée du registre est une petite fonction qui transforme les props du catalogue en props du composant. C'est là que `null` devient `undefined`, et là que vous contrôlez les valeurs.
+
+`safeHref` est l'un de ces contrôles. Le modèle écrit `href`, et [AI Source Citation](/components/ai-source-citation) l'affiche sur un lien. Traitez chaque chaîne venue d'un modèle comme une entrée non fiable, et ne laissez passer que les schémas d'URL que vous acceptez.
+
+## Étape 4 : afficher une spec
+
+Une spec est plate. Elle contient une clé `root` et une table `elements`. Chaque élément a un `type` issu du catalogue, ses `props`, et les clés de ses `children`.
+
+```tsx
+import { Renderer } from "@json-render/react";
+
+import { registry } from "./registry";
+
+const spec = {
+  root: "stack-1",
+  elements: {
+    "stack-1": {
+      type: "Stack",
+      props: {},
+      children: ["tool-1", "citation-1"],
+    },
+    "tool-1": {
+      type: "ToolCall",
+      props: {
+        input: '{"query":"annual report"}',
+        output: "1 document found",
+        status: "complete",
+        toolName: "searchDocuments",
+      },
+      children: [],
+    },
+    "citation-1": {
+      type: "SourceCitation",
+      props: {
+        href: "https://example.com/report",
+        snippet: null,
+        source: "example.com",
+        title: "Annual report",
+      },
+      children: [],
+    },
+  },
+};
+
+export function Answer() {
+  return <Renderer registry={registry} spec={spec} />;
+}
+```
+
+Cette spec est écrite à la main : vous pouvez ainsi vérifier le registre avant de faire intervenir un modèle.
+
+## Étape 5 : donner le catalogue au modèle
+
+Appelez `catalog.prompt()` côté serveur et passez le résultat comme prompt système de votre appel au modèle. Le texte contient les descriptions des composants et leurs schémas de props. Le modèle répond par une spec.
+
+json-render sait aussi afficher une spec pendant qu'elle arrive. La sortie du modèle est compilée morceau par morceau, et chaque appel renvoie la spec dans son état courant :
+
+```ts
+import { createSpecStreamCompiler } from "@json-render/core";
+
+const compiler = createSpecStreamCompiler();
+
+export function onChunk(chunk: string) {
+  const { result } = compiler.push(chunk);
+  return result;
+}
+```
+
+Stockez `result` dans un état et passez-le à `Renderer` comme `spec`. Les composants du registre s'affichent alors à partir de données partielles : chacun a donc besoin d'une mise en page stable avant que son contenu soit complet.
+
+## Ce que demande un catalogue pour toute une bibliothèque
+
+Trois composants ont demandé une trentaine de lignes de schéma. VLLNT UI compte 321 composants, et c'est la raison pour laquelle aucun catalogue officiel n'est encore livré.
+
+- **Chaque composant a besoin d'un schéma de props.** Aujourd'hui, les descripteurs du registre portent des définitions de props pour 2 des 321 composants. L'élément de la feuille de route est un schéma zod pour chacun, qui remplirait aussi le champ `props` de `/r/<name>.json`.
+- **La référence à suivre existe.** `@json-render/shadcn` exporte `shadcnComponentDefinitions` pour le côté catalogue et `shadcnComponents` pour le côté registre. Le catalogue VLLNT UI prévu reprend ce découpage.
+- **La dépendance correspond.** Le dépôt VLLNT UI utilise déjà zod 4, la version que demande json-render.
+
+D'ici là, les descripteurs vous aident à écrire les entrées à la main. Chacun contient une `description` que vous pouvez adapter, et le [guide pour les agents](/docs/agents) montre comment les lire en HTTP ou par le serveur MCP.
+
+## Un runtime qui utilise ce modèle
+
+La documentation de Maia décrit un runtime de présentation qui utilise des catalogues json-render. Cette page ne la reprend pas. Lisez la [documentation du runtime de présentation de Maia](https://maia.vllnt.com/fr/docs/clients/presentation-runtime).
+
+## Pour aller plus loin
+
+- Lisez [les composants d'UI générative en React](/articles/generative-ui-components-react) pour connaître les propriétés qu'un composant doit avoir avant qu'un modèle puisse l'utiliser.
+- Comparez avec l'approche pilotée par les outils dans [l'UI générative avec l'AI SDK](/articles/ai-sdk-generative-ui-react).
+- Voyez où cela s'inscrit dans la [vision de VLLNT UI](/docs/vision).
