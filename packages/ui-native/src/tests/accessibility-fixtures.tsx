@@ -994,6 +994,7 @@ const choiceControls: Readonly<Record<string, AccessibilityFixture>> = {
     <>
       <Checkbox accessibilityLabel="Accept terms" defaultChecked />
       <Checkbox accessibilityLabel="Locked option" disabled />
+      <Checkbox accessibilityLabel="Agree to privacy policy" required />
     </>
   ),
   "checkbox-group": () => (
@@ -1027,13 +1028,25 @@ const choiceControls: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   "radio-group": () => (
-    <RadioGroup accessibilityLabel="Delivery" defaultValue="standard">
-      <RadioGroupItem value="standard">Standard</RadioGroupItem>
-      <RadioGroupItem value="express">Express</RadioGroupItem>
-      <RadioGroupItem disabled value="pickup">
-        Pickup
-      </RadioGroupItem>
-    </RadioGroup>
+    <>
+      <RadioGroup accessibilityLabel="Delivery" defaultValue="standard">
+        <RadioGroupItem value="standard">Standard</RadioGroupItem>
+        <RadioGroupItem value="express">Express</RadioGroupItem>
+        <RadioGroupItem disabled value="pickup">
+          Pickup
+        </RadioGroupItem>
+      </RadioGroup>
+      <RadioGroup accessibilityLabel="Plan" loop={false} required>
+        <RadioGroupItem value="free">Free</RadioGroupItem>
+        <RadioGroupItem value="pro">Pro</RadioGroupItem>
+      </RadioGroup>
+      <RadioGroup accessibilityLabel="Billing">
+        <RadioGroupItem value="monthly">Monthly</RadioGroupItem>
+        <RadioGroupItem required value="yearly">
+          Yearly
+        </RadioGroupItem>
+      </RadioGroup>
+    </>
   ),
   rating: () => (
     <Rating
@@ -1047,23 +1060,59 @@ const choiceControls: Readonly<Record<string, AccessibilityFixture>> = {
     />
   ),
   "segmented-control": () => (
-    <SegmentedControl
-      items={[
-        { id: "grid", label: "Grid" },
-        { id: "list", label: "List" },
-      ]}
-      label="Layout"
-      selection={{ defaultValue: "grid", mode: "uncontrolled" }}
-    />
+    <>
+      <SegmentedControl
+        items={[
+          { id: "grid", label: "Grid" },
+          { id: "list", label: "List" },
+        ]}
+        label="Layout"
+        selection={{ defaultValue: "grid", mode: "uncontrolled" }}
+      />
+      <SegmentedControl
+        items={[
+          { id: "day", label: "Day", size: "lg" },
+          { id: "week", label: "Week" },
+        ]}
+        label="Range"
+        loop={false}
+        orientation="vertical"
+        rovingFocus={false}
+        selection={{ defaultValue: "day", mode: "uncontrolled" }}
+        size="sm"
+      />
+    </>
   ),
   slider: () => (
     <>
       <Slider accessibilityLabel="Zoom" max={20} min={10} value={15} />
       <Slider accessibilityLabel="Locked slider" disabled value={5} />
+      <Slider accessibilityLabel="Reverse zoom" inverted value={40} />
+      <Slider
+        accessibilityLabel="Volume"
+        orientation="vertical"
+        style={{ height: 160 }}
+        value={60}
+      />
+      <Slider
+        accessibilityLabel="Brightness"
+        inverted
+        onValueCommit={noop}
+        orientation="vertical"
+        style={{ height: 160 }}
+        value={30}
+      />
     </>
   ),
   switch: () => (
-    <Switch accessibilityLabel="Notifications" checked onCheckedChange={noop} />
+    <>
+      <Switch
+        accessibilityLabel="Notifications"
+        checked
+        onCheckedChange={noop}
+      />
+      <Switch accessibilityLabel="Auto-update" defaultChecked required />
+    </>
   ),
   "tag-group": () => (
     <TagGroup

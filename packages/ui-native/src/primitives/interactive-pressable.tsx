@@ -3,6 +3,7 @@
 import { type ReactNode, type Ref, useState } from "react";
 
 import {
+  type NativeSyntheticEvent,
   Pressable,
   type PressableProps,
   type StyleProp,
@@ -21,6 +22,13 @@ import {
   selectedFrameStyle,
 } from "./interaction-state";
 
+/**
+ * Key press from a hardware keyboard or D-pad. `key` follows
+ * `KeyboardEvent.key` (`"ArrowRight"`, `"Home"`, ...). React Native's public
+ * typings omit `onKeyDown` on views although the runtime delivers it.
+ */
+export type KeyDownEvent = NativeSyntheticEvent<{ readonly key: string }>;
+
 /** Props for {@link InteractivePressable}. */
 export type InteractivePressableProps = Omit<
   PressableProps,
@@ -30,6 +38,8 @@ export type InteractivePressableProps = Omit<
   readonly children?: ((state: InteractionState) => ReactNode) | ReactNode;
   /** The control paints its own fill, so hover dims it instead of tinting. */
   readonly filled?: boolean;
+  /** Runs when a key goes down while the control has focus. */
+  readonly onKeyDown?: (event: KeyDownEvent) => void;
   readonly ref?: Ref<View>;
   /**
    * Marks a selectable control. Any boolean draws the selection frame, which
