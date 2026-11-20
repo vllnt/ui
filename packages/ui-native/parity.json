@@ -1,0 +1,2882 @@
+{
+  "$schema": "./parity.schema.json",
+  "schemaVersion": "1.0.0",
+  "package": "@vllnt/ui-native",
+  "target": "0.1.0",
+  "components": [
+    {
+      "name": "access-matrix",
+      "level": "organisms",
+      "status": "later",
+      "category": "data",
+      "reason": "Permission matrix for admin screens, as a table or one row per subject.",
+      "target": "0.3.0",
+      "dependency": "native Table (0.2.0)"
+    },
+    {
+      "name": "accordion",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/molecules/accordion/accordion.tsx"
+    },
+    {
+      "name": "activity-heatmap",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Colour-scaled cell grid of activity over time.",
+      "target": "0.2.0",
+      "dependency": "Views grid; react-native-svg optional"
+    },
+    {
+      "name": "activity-log",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/activity-log/activity-log.tsx"
+    },
+    {
+      "name": "agent-activity",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/agent-activity/agent-activity.tsx"
+    },
+    {
+      "name": "ai-artifact",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/molecules/ai-artifact/ai-artifact.tsx"
+    },
+    {
+      "name": "ai-chat-input",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/ai-chat-input/ai-chat-input.tsx"
+    },
+    {
+      "name": "ai-message-bubble",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/molecules/ai-message-bubble/ai-message-bubble.tsx"
+    },
+    {
+      "name": "ai-sidebar",
+      "level": "molecules",
+      "status": "later",
+      "category": "ai",
+      "reason": "Slide-out assistant panel; compose native sheet or sidebar with the existing AI components.",
+      "target": "0.3.0",
+      "dependency": "native sheet, sidebar (exist)"
+    },
+    {
+      "name": "ai-source-citation",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/molecules/ai-source-citation/ai-source-citation.tsx"
+    },
+    {
+      "name": "ai-streaming-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/ai-streaming-text/ai-streaming-text.tsx"
+    },
+    {
+      "name": "ai-tool-call-display",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/molecules/ai-tool-call-display/ai-tool-call-display.tsx"
+    },
+    {
+      "name": "alert",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/alert/alert.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "alert-dialog",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "source": "src/components/atoms/alert-dialog/alert-dialog.tsx"
+    },
+    {
+      "name": "alert-pulse",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "anchor-port",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "animated-beam",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative SVG gradient path linking two DOM elements by their bounding boxes."
+    },
+    {
+      "name": "animated-grid-pattern",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative animated grid background."
+    },
+    {
+      "name": "animated-list",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/animated-list/animated-list.tsx"
+    },
+    {
+      "name": "animated-tabs",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/animated-tabs/animated-tabs.tsx"
+    },
+    {
+      "name": "animated-testimonials",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/animated-testimonials/animated-testimonials.tsx"
+    },
+    {
+      "name": "animated-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/animated-text/animated-text.tsx"
+    },
+    {
+      "name": "animated-tooltip",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "overlays",
+      "reason": "Hover-driven scale-and-fade avatar tooltip.",
+      "nativeEquivalent": [
+        "tooltip"
+      ]
+    },
+    {
+      "name": "annotation",
+      "level": "molecules",
+      "status": "later",
+      "category": "education",
+      "reason": "Inline text highlight with an attached note.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "approval-request",
+      "level": "molecules",
+      "status": "later",
+      "category": "ai",
+      "reason": "Approve or deny one agent action; a common mobile prompt.",
+      "target": "0.2.0"
+    },
+    {
+      "name": "aspect-ratio",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "layout",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/aspect-ratio/aspect-ratio.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "auto-reload",
+      "level": "molecules",
+      "status": "later",
+      "category": "billing",
+      "reason": "Automatic top-up form: toggle, threshold and amount.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "avatar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/avatar/avatar.tsx",
+      "propsGap": [
+        "presence",
+        "presenceLabels",
+        "shape",
+        "AvatarFallback.delayMs",
+        "AvatarImage.onLoadingStatusChange"
+      ],
+      "note": "size is a pixel number (default 40); web takes xs, sm, md, lg or xl."
+    },
+    {
+      "name": "avatar-group",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "source": "src/components/molecules/avatar-group/avatar-group.tsx"
+    },
+    {
+      "name": "badge",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/badge/badge.tsx",
+      "propsGap": [
+        "border",
+        "dot",
+        "size",
+        "tone"
+      ]
+    },
+    {
+      "name": "banner",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/molecules/banner/banner.tsx"
+    },
+    {
+      "name": "bento-grid",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Responsive CSS grid of marketing feature cards.",
+      "nativeEquivalent": [
+        "grid",
+        "card"
+      ]
+    },
+    {
+      "name": "blog-card",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Blog preview card built on next/link for SEO pages.",
+      "nativeEquivalent": [
+        "card",
+        "link"
+      ]
+    },
+    {
+      "name": "blur-reveal",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/blur-reveal/blur-reveal.tsx"
+    },
+    {
+      "name": "border-beam",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative animated border accent."
+    },
+    {
+      "name": "bottom-activity-strip",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "bottom-bar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/atoms/bottom-bar/bottom-bar.tsx"
+    },
+    {
+      "name": "breadcrumb",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/breadcrumb/breadcrumb.tsx"
+    },
+    {
+      "name": "button",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "buttons",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "disabled"
+      ],
+      "source": "src/components/atoms/button/button.tsx",
+      "propsGap": [],
+      "note": "Icon button is size=\"icon\"; its glyph needs the planned Icon primitive."
+    },
+    {
+      "name": "button-group",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "buttons",
+      "source": "src/components/atoms/button-group/button-group.tsx"
+    },
+    {
+      "name": "calendar",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/calendar/calendar.tsx"
+    },
+    {
+      "name": "callout",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/callout/callout.tsx"
+    },
+    {
+      "name": "candlestick-chart",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "OHLC price chart for finance dashboards.",
+      "target": "0.3.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "canvas-shell",
+      "level": "templates",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "canvas-view",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Pan and zoom viewport with keyboard, wheel and overlay support; anchors the canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "card",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/card/card.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "card-flip",
+      "level": "atoms",
+      "status": "later",
+      "category": "motion",
+      "reason": "3D flip between two faces; rotateY with backfaceVisibility works on native.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "carousel",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/carousel/carousel.tsx"
+    },
+    {
+      "name": "category-filter",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/category-filter/category-filter.tsx"
+    },
+    {
+      "name": "chain-of-thought",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/chain-of-thought/chain-of-thought.tsx"
+    },
+    {
+      "name": "chart",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Directory holds area-chart, bar-chart and line-chart (there is no chart.tsx).",
+      "target": "0.2.0",
+      "dependency": "react-native-svg",
+      "note": "react-native-svg arrives with 0.2.0; 0.1.0 adds no vector dependency (Icon takes a component the consumer supplies)."
+    },
+    {
+      "name": "chat-dock-section",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "checkbox",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/atoms/checkbox/checkbox.tsx",
+      "propsGap": [
+        "required"
+      ]
+    },
+    {
+      "name": "checkbox-group",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/checkbox-group/checkbox-group.tsx"
+    },
+    {
+      "name": "checklist",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/checklist/checklist.tsx"
+    },
+    {
+      "name": "choropleth-map",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Region polygons shaded by value with legend and a data-table fallback.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "chronological-timeline",
+      "level": "organisms",
+      "status": "later",
+      "category": "education",
+      "reason": "Scroll-driven media timeline with audio and video. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "civilization-card",
+      "level": "molecules",
+      "status": "later",
+      "category": "education",
+      "reason": "History-education profile card. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "code-block",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/code-block/code-block.tsx"
+    },
+    {
+      "name": "code-playground",
+      "level": "organisms",
+      "status": "later",
+      "category": "content",
+      "reason": "Shows extracted code beside a file tree (no live execution); compose native code-block and tree-view.",
+      "target": "0.3.0",
+      "dependency": "native code-block, tree-view (exist)"
+    },
+    {
+      "name": "collapsible",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/collapsible/collapsible.tsx"
+    },
+    {
+      "name": "color-picker",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/color-picker/color-picker.tsx"
+    },
+    {
+      "name": "combobox",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/combobox/combobox.tsx"
+    },
+    {
+      "name": "command",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "source": "src/components/atoms/command/command.tsx"
+    },
+    {
+      "name": "comment-pin",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "comparison",
+      "level": "atoms",
+      "status": "later",
+      "category": "content",
+      "reason": "Side-by-side feature or content comparison.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "completion-dialog",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/completion-dialog/completion-dialog.tsx"
+    },
+    {
+      "name": "connector-edge",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "content-intro",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/molecules/content-intro/content-intro.tsx"
+    },
+    {
+      "name": "context-lens",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "context-menu",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "source": "src/components/atoms/context-menu/context-menu.tsx"
+    },
+    {
+      "name": "contribution-graph",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Calendar heatmap of daily activity.",
+      "target": "0.2.0",
+      "dependency": "Views grid; react-native-svg optional"
+    },
+    {
+      "name": "conversation-thread",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/molecules/conversation-thread/conversation-thread.tsx"
+    },
+    {
+      "name": "cookie-consent",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Cookie-law (ePrivacy/GDPR) banner for websites; native apps use platform consent flows."
+    },
+    {
+      "name": "copy-button",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "buttons",
+      "source": "src/components/atoms/copy-button/copy-button.tsx"
+    },
+    {
+      "name": "countdown-timer",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/organisms/countdown-timer/countdown-timer.tsx"
+    },
+    {
+      "name": "credit-badge",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "billing",
+      "source": "src/components/molecules/credit-badge/credit-badge.tsx"
+    },
+    {
+      "name": "cta-band",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Marketing call-to-action band for landing pages."
+    },
+    {
+      "name": "curriculum",
+      "level": "atoms",
+      "status": "later",
+      "category": "education",
+      "reason": "Lesson sequence container with progress.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "cursor",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Custom pointer-follower cursor; touch has no cursor."
+    },
+    {
+      "name": "data-list",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/molecules/data-list/data-list.tsx",
+      "propsGap": [
+        "DataListItem.density"
+      ],
+      "propsRenamed": {
+        "children": "items"
+      },
+      "note": "Data-driven: items replace DataListItem, DataListLabel and DataListValue."
+    },
+    {
+      "name": "data-table",
+      "level": "organisms",
+      "status": "later",
+      "category": "data",
+      "reason": "Sortable, filterable, selectable table with pagination.",
+      "target": "0.2.0",
+      "dependency": "native Table (0.2.0); @tanstack/react-table is headless"
+    },
+    {
+      "name": "date-field",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/date-field/date-field.tsx"
+    },
+    {
+      "name": "date-picker",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/date-picker/date-picker.tsx"
+    },
+    {
+      "name": "date-range-picker",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/organisms/date-range-picker/date-range-picker.tsx"
+    },
+    {
+      "name": "dialog",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed"
+      ],
+      "source": "src/components/atoms/dialog/dialog.tsx",
+      "propsGap": [
+        "modal",
+        "DialogContent.overlay"
+      ],
+      "note": "Single component: title, description and closeLabel replace the Dialog parts, and there is no trigger part (the caller owns open state). The close button carries the states. ModalLayer renders a transparent Modal with no backdrop dim, like web overlay=\"none\"; the veil is the later `scrim` component."
+    },
+    {
+      "name": "display",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "typography",
+      "foundation": true,
+      "missing": false,
+      "interactive": false,
+      "source": "src/components/atoms/display/display.tsx",
+      "propsGap": [],
+      "note": "Display text on the theme's display type scale (60 pt in the default native theme, 28 pt in Maia). `as` \"h1\" and \"h2\" set the header role; `animated` plays a rise-in reveal that reduced motion skips."
+    },
+    {
+      "name": "dock",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "macOS-style dock whose icons magnify near the pointer.",
+      "nativeEquivalent": [
+        "bottom-bar"
+      ]
+    },
+    {
+      "name": "document-sibling-nav",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/atoms/document-sibling-nav/document-sibling-nav.tsx"
+    },
+    {
+      "name": "dot-pattern",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative dotted background."
+    },
+    {
+      "name": "drawer",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed"
+      ],
+      "source": "src/components/atoms/drawer/drawer.tsx",
+      "propsGap": [
+        "activeSnapPoint",
+        "setActiveSnapPoint",
+        "snapPoints",
+        "fadeFromIndex",
+        "snapToSequentialPoint",
+        "closeThreshold",
+        "dismissible",
+        "handleOnly",
+        "direction",
+        "modal",
+        "nested",
+        "fixed",
+        "autoFocus",
+        "onClose",
+        "onDrag",
+        "onRelease",
+        "onAnimationEnd"
+      ],
+      "note": "Bottom modal only: no drag or snap points. Single component like Dialog. Web-DOM props not listed: container, noBodyStyles, scrollLockTimeout, disablePreventScroll, preventScrollRestoration, repositionInputs, shouldScaleBackground, setBackgroundColorOnScale. The close button carries the states."
+    },
+    {
+      "name": "dropdown-menu",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/atoms/dropdown-menu/dropdown-menu.tsx",
+      "propsGap": [
+        "dir",
+        "modal",
+        "DropdownMenuContent.loop",
+        "DropdownMenuContent.side",
+        "DropdownMenuContent.sideOffset",
+        "DropdownMenuContent.align",
+        "DropdownMenuContent.alignOffset",
+        "DropdownMenuItem.inset",
+        "DropdownMenuItem.textValue",
+        "DropdownMenuCheckboxItem.checked",
+        "DropdownMenuCheckboxItem.onCheckedChange",
+        "DropdownMenuRadioGroup.value",
+        "DropdownMenuRadioGroup.onValueChange",
+        "DropdownMenuSub.open",
+        "DropdownMenuSub.defaultOpen",
+        "DropdownMenuSub.onOpenChange"
+      ],
+      "propsRenamed": {
+        "DropdownMenuItem.onSelect": "onSelect",
+        "DropdownMenuItem.disabled": "items[].disabled"
+      },
+      "note": "Flat modal list with one selected item (selectedId): no groups, separators, shortcuts, checkbox or radio items, or sub-menus. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
+    },
+    {
+      "name": "edge-label",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "empty-state",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/atoms/empty-state/empty-state.tsx"
+    },
+    {
+      "name": "era-comparison",
+      "level": "atoms",
+      "status": "later",
+      "category": "education",
+      "reason": "Side-by-side comparison of historical eras. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "exercise",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/exercise/exercise.tsx"
+    },
+    {
+      "name": "expandable-cards",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/molecules/expandable-cards/expandable-cards.tsx"
+    },
+    {
+      "name": "faq",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/molecules/faq/faq.tsx"
+    },
+    {
+      "name": "field",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/molecules/field/field.tsx",
+      "propsGap": [],
+      "note": "Static wrapper for label, hint and error; the control inside carries the states."
+    },
+    {
+      "name": "fieldset",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/fieldset/fieldset.tsx"
+    },
+    {
+      "name": "file-upload",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/file-upload/file-upload.tsx"
+    },
+    {
+      "name": "filter-bar",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/filter-bar/filter-bar.tsx"
+    },
+    {
+      "name": "flashcard",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/flashcard/flashcard.tsx"
+    },
+    {
+      "name": "floating-action-button",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "buttons",
+      "source": "src/components/molecules/floating-action-button/floating-action-button.tsx"
+    },
+    {
+      "name": "floating-navbar",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Marketing nav bar that hides on window scroll direction.",
+      "nativeEquivalent": [
+        "top-bar",
+        "bottom-bar"
+      ]
+    },
+    {
+      "name": "floating-toolbar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/atoms/floating-toolbar/floating-toolbar.tsx"
+    },
+    {
+      "name": "flow-diagram",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "charts",
+      "reason": "Built on @xyflow/react, a DOM/SVG node-graph library with no React Native port."
+    },
+    {
+      "name": "follow-mode",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "form",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/form/form.tsx"
+    },
+    {
+      "name": "gantt-chart",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Project timeline with task bars, milestones and a today marker.",
+      "target": "0.3.0",
+      "dependency": "horizontal ScrollView, Views"
+    },
+    {
+      "name": "gauge-chart",
+      "level": "atoms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Semicircular gauge.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "geography-quiz-map",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Identify-the-region map quiz.",
+      "target": "0.4.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "glass-card",
+      "level": "atoms",
+      "status": "later",
+      "category": "utility",
+      "reason": "Frosted card surface; follows glass-panel.",
+      "target": "0.5.0",
+      "dependency": "depth tokens from ui-core (planned for @vllnt/ui 0.5.0)"
+    },
+    {
+      "name": "glass-panel",
+      "level": "atoms",
+      "status": "later",
+      "category": "utility",
+      "reason": "Frosted surface for floating chrome; waits for the depth tokens.",
+      "target": "0.5.0",
+      "dependency": "depth tokens from ui-core (planned for @vllnt/ui 0.5.0)"
+    },
+    {
+      "name": "glass-progress",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/atoms/glass-progress/glass-progress.tsx"
+    },
+    {
+      "name": "globe-3d",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Pseudo-3D orthographic globe with drag, markers and arcs.",
+      "target": "0.4.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "grid",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "layout",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/grid/grid.tsx",
+      "propsGap": [
+        "smCols",
+        "mdCols",
+        "lgCols"
+      ]
+    },
+    {
+      "name": "group-hull",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "handoff-beacon",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "heading",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "typography",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/heading/heading.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "heat-map-overlay",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Radial-gradient heat blobs over a map.",
+      "target": "0.3.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "heat-overlay",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "historic-timeline",
+      "level": "organisms",
+      "status": "later",
+      "category": "education",
+      "reason": "Timeline for events spanning centuries, with BCE/CE markers. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "historical-figure-card",
+      "level": "molecules",
+      "status": "later",
+      "category": "education",
+      "reason": "Profile card for historical figures. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "horizontal-scroll-row",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "layout",
+      "source": "src/components/molecules/horizontal-scroll-row/horizontal-scroll-row.tsx"
+    },
+    {
+      "name": "hover-card",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "overlays",
+      "reason": "Opens on pointer hover only; touch has no hover.",
+      "nativeEquivalent": [
+        "popover",
+        "tooltip"
+      ]
+    },
+    {
+      "name": "infinite-plane",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "inline-input",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/inline-input/inline-input.tsx"
+    },
+    {
+      "name": "input",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "focus-visible",
+        "disabled"
+      ],
+      "source": "src/components/atoms/input/input.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "input-group",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/input-group/input-group.tsx"
+    },
+    {
+      "name": "input-otp",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/input-otp/input-otp.tsx"
+    },
+    {
+      "name": "interactive-timeline",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/organisms/interactive-timeline/interactive-timeline.tsx"
+    },
+    {
+      "name": "item",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/item/item.tsx",
+      "propsGap": [],
+      "note": "Not pressable on native today."
+    },
+    {
+      "name": "jarvis-dock",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Floating quick-action dock with a command-palette trigger; canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "kbd",
+      "level": "atoms",
+      "status": "later",
+      "category": "typography",
+      "reason": "Key-cap chip with platform-aware modifier expansion.",
+      "target": "0.2.0"
+    },
+    {
+      "name": "key-concept",
+      "level": "atoms",
+      "status": "later",
+      "category": "education",
+      "reason": "Highlighted definition block and glossary list.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "keyboard-shortcuts-help",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "source": "src/components/atoms/keyboard-shortcuts-help/keyboard-shortcuts-help.tsx"
+    },
+    {
+      "name": "knowledge-check",
+      "level": "molecules",
+      "status": "later",
+      "category": "education",
+      "reason": "Inline multiple-choice, true/false or fill-in check with a score.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "label",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "typography",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/label/label.tsx",
+      "propsGap": [],
+      "note": "Dims to 0.7 opacity when disabled, but is not itself pressable."
+    },
+    {
+      "name": "lang-provider",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "theme",
+      "reason": "Language context bound to next/navigation routes; native apps use app-level i18n."
+    },
+    {
+      "name": "learning-objectives",
+      "level": "atoms",
+      "status": "later",
+      "category": "education",
+      "reason": "Learning goals list.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "left-rail",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "link",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/atoms/link/link.tsx"
+    },
+    {
+      "name": "liquid-glass",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative liquid gradient sheen using CSS backdrop effects."
+    },
+    {
+      "name": "list-box",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/atoms/list-box/list-box.tsx",
+      "propsGap": [],
+      "propsRenamed": {
+        "selectionMode": "mode",
+        "children": "options",
+        "value": "selection.value",
+        "defaultValue": "selection.defaultValue",
+        "onValueChange": "selection.onChange",
+        "ListBoxItem.value": "options[].id",
+        "ListBoxItem.disabled": "options[].disabled"
+      },
+      "note": "Data-driven: options replace ListBoxItem children. selection holds a ReadonlySet of ids, web value is string[]."
+    },
+    {
+      "name": "live-cursor",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "live-feed",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/live-feed/live-feed.tsx"
+    },
+    {
+      "name": "magnetic",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Pulls content toward the pointer; touch has no pointer proximity."
+    },
+    {
+      "name": "magnetic-button",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Button that drifts toward the pointer; touch has no pointer proximity.",
+      "nativeEquivalent": [
+        "button"
+      ]
+    },
+    {
+      "name": "map-2d",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "SVG map primitive with equirectangular projection, markers, GeoJSON layers and zoom controls.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "map-timeline",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Map with a time slider that reveals era polygons and events.",
+      "target": "0.4.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "market-treemap",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Weighted sector tiles with signed performance colours.",
+      "target": "0.3.0",
+      "dependency": "Views (flex layout)"
+    },
+    {
+      "name": "marquee",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/marquee/marquee.tsx"
+    },
+    {
+      "name": "mdx-content",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Compiles MDX at runtime (@mdx-js/mdx, react-markdown) for web content pipelines. No native markdown renderer is planned."
+    },
+    {
+      "name": "menubar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/menubar/menubar.tsx"
+    },
+    {
+      "name": "meteors",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative falling-streak background."
+    },
+    {
+      "name": "meter",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/atoms/meter/meter.tsx"
+    },
+    {
+      "name": "metric-cluster",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/metric-cluster/metric-cluster.tsx"
+    },
+    {
+      "name": "metric-gauge",
+      "level": "molecules",
+      "status": "later",
+      "category": "charts",
+      "reason": "Arc and dial for monitored percentages.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "mini-map-panel",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "model-comparison",
+      "level": "molecules",
+      "status": "later",
+      "category": "ai",
+      "reason": "Side-by-side model responses with blind mode and a vote bar.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "model-selector",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/model-selector/model-selector.tsx"
+    },
+    {
+      "name": "multi-select",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/multi-select/multi-select.tsx"
+    },
+    {
+      "name": "multi-select-lasso",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "native-select",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/native-select/native-select.tsx"
+    },
+    {
+      "name": "navbar-saas",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "navigation",
+      "reason": "Marketing navbar built on next/link and next/navigation.",
+      "nativeEquivalent": [
+        "top-bar"
+      ]
+    },
+    {
+      "name": "navigation-menu",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/navigation-menu/navigation-menu.tsx"
+    },
+    {
+      "name": "newsletter-signup",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Marketing email-capture form.",
+      "nativeEquivalent": [
+        "field",
+        "input",
+        "button"
+      ]
+    },
+    {
+      "name": "number-input",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/number-input/number-input.tsx"
+    },
+    {
+      "name": "number-ticker",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/number-ticker/number-ticker.tsx"
+    },
+    {
+      "name": "object-card",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "object-handle",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "object-inspector",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "order-book",
+      "level": "atoms",
+      "status": "later",
+      "category": "data",
+      "reason": "Level II bid/ask ladder with cumulative size bars; finance domain.",
+      "target": "0.3.0",
+      "dependency": "Views"
+    },
+    {
+      "name": "order-summary",
+      "level": "organisms",
+      "status": "later",
+      "category": "billing",
+      "reason": "Priced rows, total and optional promo code.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "overview-board",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/overview-board/overview-board.tsx"
+    },
+    {
+      "name": "pagination",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/pagination/pagination.tsx"
+    },
+    {
+      "name": "panel",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "layout",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/panel/panel.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "parallel-timeline",
+      "level": "organisms",
+      "status": "later",
+      "category": "education",
+      "reason": "Multi-track comparative history timeline. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "particles",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative floating particle field."
+    },
+    {
+      "name": "password-input",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/password-input/password-input.tsx"
+    },
+    {
+      "name": "phone-input",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/phone-input/phone-input.tsx"
+    },
+    {
+      "name": "pie-chart",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Pie and donut chart.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "plan-badge",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "billing",
+      "source": "src/components/molecules/plan-badge/plan-badge.tsx"
+    },
+    {
+      "name": "playback-ghost",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "policy-delivery-panel",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "popover",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed"
+      ],
+      "source": "src/components/atoms/popover/popover.tsx",
+      "propsGap": [
+        "modal",
+        "PopoverContent.side",
+        "PopoverContent.sideOffset",
+        "PopoverContent.align",
+        "PopoverContent.alignOffset"
+      ],
+      "note": "Centered modal, not anchored to a trigger, and there is no anchor part. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed. The close button carries the states."
+    },
+    {
+      "name": "presence-stack",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "source": "src/components/molecules/presence-stack/presence-stack.tsx"
+    },
+    {
+      "name": "presence-sync-indicator",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/presence-sync-indicator/presence-sync-indicator.tsx"
+    },
+    {
+      "name": "pricing-table",
+      "level": "molecules",
+      "status": "later",
+      "category": "billing",
+      "reason": "Plan comparison with feature checklist and CTA.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "primary-source-viewer",
+      "level": "organisms",
+      "status": "later",
+      "category": "education",
+      "reason": "Document viewer with zoom, rotate and region annotations. Niche domain component.",
+      "target": "0.4.0"
+    },
+    {
+      "name": "pro-tip",
+      "level": "atoms",
+      "status": "later",
+      "category": "education",
+      "reason": "Highlighted tip block with tip, best-practice and gotcha variants.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "profile-section",
+      "level": "molecules",
+      "status": "later",
+      "category": "education",
+      "reason": "Avatar and details block; the web version uses next/image and next/link.",
+      "target": "0.3.0",
+      "dependency": "native avatar (exists)"
+    },
+    {
+      "name": "progress-bar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/molecules/progress-bar/progress-bar.tsx",
+      "propsGap": [
+        "label",
+        "mode",
+        "showValue",
+        "size",
+        "tone",
+        "valueLabel",
+        "blocks"
+      ]
+    },
+    {
+      "name": "progress-card",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/organisms/progress-card/progress-card.tsx"
+    },
+    {
+      "name": "progress-tracker",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/organisms/progress-tracker/progress-tracker.tsx"
+    },
+    {
+      "name": "progressive-blur",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "CSS backdrop-filter blur with a gradient mask."
+    },
+    {
+      "name": "prompt-input",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/prompt-input/prompt-input.tsx"
+    },
+    {
+      "name": "prompt-templates",
+      "level": "molecules",
+      "status": "later",
+      "category": "ai",
+      "reason": "Searchable prompt template gallery with a variable fill-in form.",
+      "target": "0.3.0",
+      "dependency": "native search-field, form (exist)"
+    },
+    {
+      "name": "property-section",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "prose",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "typography",
+      "reason": "Styles raw HTML descendants through CSS selectors; native has no HTML tree, so compose Heading and Text.",
+      "nativeEquivalent": [
+        "heading",
+        "text"
+      ],
+      "foundation": true,
+      "interactive": false
+    },
+    {
+      "name": "pull-quote",
+      "level": "atoms",
+      "status": "later",
+      "category": "education",
+      "reason": "Highlighted quotation with rule and attribution.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "qr-code",
+      "level": "atoms",
+      "status": "later",
+      "category": "utility",
+      "reason": "QR code from a string.",
+      "target": "0.3.0",
+      "dependency": "react-native-svg, qrcode (pure JS)"
+    },
+    {
+      "name": "quiz",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/quiz/quiz.tsx"
+    },
+    {
+      "name": "radar-chart",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Spider chart on shared axes.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "radio-group",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/atoms/radio-group/radio-group.tsx",
+      "propsGap": [
+        "dir",
+        "loop",
+        "name",
+        "required",
+        "RadioGroupItem.required"
+      ]
+    },
+    {
+      "name": "range-calendar",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/range-calendar/range-calendar.tsx"
+    },
+    {
+      "name": "rating",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/rating/rating.tsx"
+    },
+    {
+      "name": "reasoning",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/reasoning/reasoning.tsx"
+    },
+    {
+      "name": "relationship-inspector",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "resizable",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "layout",
+      "source": "src/components/atoms/resizable/resizable.tsx"
+    },
+    {
+      "name": "reveal-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/reveal-text/reveal-text.tsx"
+    },
+    {
+      "name": "right-dock",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "role-badge",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "source": "src/components/molecules/role-badge/role-badge.tsx"
+    },
+    {
+      "name": "route-map",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Animated route paths and waypoints on a map.",
+      "target": "0.4.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "routing-assignment-panel",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "run-timeline",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Multi-lane execution timeline with an optional cursor.",
+      "target": "0.3.0",
+      "dependency": "horizontal ScrollView, Views"
+    },
+    {
+      "name": "runtime-overview-panel",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "sankey-chart",
+      "level": "organisms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Weighted flow diagram; niche.",
+      "target": "0.3.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "scope-selector",
+      "level": "molecules",
+      "status": "later",
+      "category": "forms",
+      "reason": "Multi-level scope picker for nested environments and targets.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "scramble-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/scramble-text/scramble-text.tsx"
+    },
+    {
+      "name": "scrim",
+      "level": "atoms",
+      "status": "later",
+      "category": "overlays",
+      "reason": "Dims the surface behind a panel, sheet or pane. Native ModalLayer renders a transparent Modal with no backdrop dim.",
+      "target": "0.2.0"
+    },
+    {
+      "name": "scroll-area",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "layout",
+      "reason": "Custom-styled scrollbars over DOM overflow; native scroll containers are platform-drawn.",
+      "nativeEquivalent": [
+        "ScrollView",
+        "FlatList"
+      ]
+    },
+    {
+      "name": "scroll-progress",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/atoms/scroll-progress/scroll-progress.tsx"
+    },
+    {
+      "name": "search-bar",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/search-bar/search-bar.tsx"
+    },
+    {
+      "name": "search-dialog",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "source": "src/components/atoms/search-dialog/search-dialog.tsx"
+    },
+    {
+      "name": "search-field",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/search-field/search-field.tsx"
+    },
+    {
+      "name": "segmented-control",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/atoms/segmented-control/segmented-control.tsx",
+      "propsGap": [
+        "dir",
+        "orientation",
+        "loop",
+        "rovingFocus",
+        "SegmentedControlItem.size"
+      ],
+      "propsRenamed": {
+        "value": "selection.value",
+        "defaultValue": "selection.defaultValue",
+        "onValueChange": "selection.onChange",
+        "SegmentedControlItem.value": "items[].id"
+      },
+      "note": "Data-driven: items replace SegmentedControlItem children, and label is required."
+    },
+    {
+      "name": "select",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/atoms/select/select.tsx",
+      "propsGap": [
+        "open",
+        "defaultOpen",
+        "dir",
+        "name",
+        "autoComplete",
+        "required",
+        "form"
+      ],
+      "propsRenamed": {
+        "children": "options",
+        "value": "selection.value",
+        "defaultValue": "selection.defaultValue",
+        "onValueChange": "selection.onChange",
+        "SelectItem.value": "options[].id",
+        "SelectItem.disabled": "options[].disabled",
+        "SelectValue.placeholder": "labels.placeholder"
+      },
+      "note": "Data-driven: options replace SelectItem, SelectGroup, SelectLabel and SelectSeparator, so no grouping or separators. Opens in a bottom panel, so SelectContent positioning props do not apply. Selected is the option row."
+    },
+    {
+      "name": "selection-halo",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "selection-presence",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "separator",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/separator/separator.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "settings-list",
+      "level": "organisms",
+      "status": "later",
+      "category": "navigation",
+      "reason": "Sectioned settings rows; very common on mobile.",
+      "target": "0.2.0",
+      "dependency": "native item (exists), Stack (planned)"
+    },
+    {
+      "name": "severity-badge",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/atoms/severity-badge/severity-badge.tsx"
+    },
+    {
+      "name": "share-dialog",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "source": "src/components/atoms/share-dialog/share-dialog.tsx"
+    },
+    {
+      "name": "share-dialog-people",
+      "level": "organisms",
+      "status": "later",
+      "category": "overlays",
+      "reason": "People-sharing panel with link, role menus and invite form.",
+      "target": "0.3.0",
+      "dependency": "native share-dialog (exists)"
+    },
+    {
+      "name": "share-section",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/share-section/share-section.tsx"
+    },
+    {
+      "name": "sheet",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed"
+      ],
+      "source": "src/components/atoms/sheet/sheet.tsx",
+      "propsGap": [
+        "modal"
+      ],
+      "propsRenamed": {
+        "SheetContent.side": "side",
+        "SheetContent.labels": "closeLabel"
+      },
+      "note": "Single component: title, description and closeLabel replace the Sheet parts, and there is no trigger part. The close button carries the states."
+    },
+    {
+      "name": "shimmer-button",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Marketing button with a sweeping sheen.",
+      "nativeEquivalent": [
+        "button"
+      ]
+    },
+    {
+      "name": "shimmer-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/shimmer-text/shimmer-text.tsx"
+    },
+    {
+      "name": "shine-border",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative animated gradient border."
+    },
+    {
+      "name": "shiny-button",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Marketing button with a looping glossy sheen.",
+      "nativeEquivalent": [
+        "button"
+      ]
+    },
+    {
+      "name": "sidebar",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/sidebar/sidebar.tsx"
+    },
+    {
+      "name": "sidebar-provider",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/atoms/sidebar-provider/sidebar-provider.tsx"
+    },
+    {
+      "name": "sidebar-toggle",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/sidebar-toggle/sidebar-toggle.tsx"
+    },
+    {
+      "name": "skeleton",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/skeleton/skeleton.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "slider",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "disabled"
+      ],
+      "source": "src/components/atoms/slider/slider.tsx",
+      "propsGap": [
+        "dir",
+        "form",
+        "name",
+        "orientation",
+        "inverted",
+        "minStepsBetweenThumbs",
+        "onValueCommit"
+      ],
+      "note": "Single thumb: value, defaultValue and onValueChange use a number, web uses number[]."
+    },
+    {
+      "name": "slideshow",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/slideshow/slideshow.tsx"
+    },
+    {
+      "name": "snap-guides",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "social-fab",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Hover-driven share menu that opens provider web-share URLs; native uses the platform share sheet.",
+      "nativeEquivalent": [
+        "floating-action-button",
+        "ShareService"
+      ]
+    },
+    {
+      "name": "sparkles",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Decorative twinkling sparkles."
+    },
+    {
+      "name": "sparkline-grid",
+      "level": "atoms",
+      "status": "later",
+      "category": "charts",
+      "reason": "KPI tiles with compact trend lines.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "spinner",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/spinner/spinner.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "spinning-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/spinning-text/spinning-text.tsx"
+    },
+    {
+      "name": "spotlight-card",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "Radial spotlight that follows the pointer.",
+      "nativeEquivalent": [
+        "card"
+      ]
+    },
+    {
+      "name": "stat-card",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "source": "src/components/molecules/stat-card/stat-card.tsx"
+    },
+    {
+      "name": "state-badge-overlay",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "static-code",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "react-syntax-highlighter build for server-rendered code.",
+      "nativeEquivalent": [
+        "code-block"
+      ]
+    },
+    {
+      "name": "status-board",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/status-board/status-board.tsx"
+    },
+    {
+      "name": "status-indicator",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "source": "src/components/atoms/status-indicator/status-indicator.tsx"
+    },
+    {
+      "name": "step-by-step",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/step-by-step/step-by-step.tsx"
+    },
+    {
+      "name": "step-navigation",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/step-navigation/step-navigation.tsx"
+    },
+    {
+      "name": "stepper",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/stepper/stepper.tsx"
+    },
+    {
+      "name": "sticky-metric",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/sticky-metric/sticky-metric.tsx"
+    },
+    {
+      "name": "story-map",
+      "level": "organisms",
+      "status": "later",
+      "category": "maps",
+      "reason": "Scroll-driven narrative map; uses IntersectionObserver on web.",
+      "target": "0.4.0",
+      "dependency": "react-native-svg, map-2d"
+    },
+    {
+      "name": "subscription-card",
+      "level": "organisms",
+      "status": "later",
+      "category": "billing",
+      "reason": "Plan, renewal and usage details.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "switch",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "selected"
+      ],
+      "source": "src/components/atoms/switch/switch.tsx",
+      "propsGap": [
+        "defaultChecked",
+        "required"
+      ],
+      "note": "Pressed and disabled looks are drawn by the platform Switch, not styled by the component."
+    },
+    {
+      "name": "table",
+      "level": "atoms",
+      "status": "later",
+      "category": "data-display",
+      "reason": "Web table is a DOM table element; native needs a grid built on View. data-list and item rows cover tabular data in 0.1.0.",
+      "target": "0.2.0"
+    },
+    {
+      "name": "table-of-contents",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "utility",
+      "reason": "Builds its list from the page's DOM headings."
+    },
+    {
+      "name": "table-of-contents-panel",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "utility",
+      "reason": "Side panel over the DOM-heading table of contents."
+    },
+    {
+      "name": "tabs",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "selected",
+        "disabled"
+      ],
+      "source": "src/components/molecules/tabs/tabs.tsx",
+      "propsGap": [
+        "variant"
+      ]
+    },
+    {
+      "name": "tag-group",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/tag-group/tag-group.tsx"
+    },
+    {
+      "name": "tags-input",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/tags-input/tags-input.tsx"
+    },
+    {
+      "name": "terminal",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/terminal/terminal.tsx"
+    },
+    {
+      "name": "text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "typography",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/atoms/text/text.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "text-animate",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/text-animate/text-animate.tsx"
+    },
+    {
+      "name": "text-field",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/molecules/text-field/text-field.tsx"
+    },
+    {
+      "name": "text-reveal",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/text-reveal/text-reveal.tsx"
+    },
+    {
+      "name": "text-shimmer",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/text-shimmer/text-shimmer.tsx"
+    },
+    {
+      "name": "textarea",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "focus-visible",
+        "disabled"
+      ],
+      "source": "src/components/molecules/textarea/textarea.tsx",
+      "propsGap": [],
+      "note": "Wraps native Input and inherits its states."
+    },
+    {
+      "name": "theme-preset-provider",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "theme",
+      "reason": "Persists web theme presets and injects a no-flash script; native ThemeProvider takes colorScheme and override.",
+      "nativeEquivalent": [
+        "ThemeProvider"
+      ]
+    },
+    {
+      "name": "theme-provider",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "theme",
+      "reason": "next-themes provider for CSS-variable theming; native has its own ThemeProvider.",
+      "nativeEquivalent": [
+        "ThemeProvider"
+      ]
+    },
+    {
+      "name": "theme-switcher",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "theme",
+      "reason": "Swatch row for web CSS theme presets kept in sync across the page.",
+      "nativeEquivalent": [
+        "ThemeProvider"
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "level": "molecules",
+      "status": "later",
+      "category": "utility",
+      "reason": "Light/dark toggle; native would drive ThemeProvider colorScheme.",
+      "target": "0.2.0",
+      "dependency": "ThemeProvider (exists)"
+    },
+    {
+      "name": "thinking-block",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "ai",
+      "source": "src/components/atoms/thinking-block/thinking-block.tsx"
+    },
+    {
+      "name": "thread-bubble",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "threshold-ring",
+      "level": "atoms",
+      "status": "later",
+      "category": "charts",
+      "reason": "Ring gauge showing distance to a threshold.",
+      "target": "0.2.0",
+      "dependency": "react-native-svg"
+    },
+    {
+      "name": "ticker-tape",
+      "level": "molecules",
+      "status": "later",
+      "category": "data",
+      "reason": "Scrolling symbol tape with price and change badges; finance domain.",
+      "target": "0.3.0",
+      "dependency": "native marquee (exists)"
+    },
+    {
+      "name": "tilt-card",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "motion",
+      "reason": "3D tilt toward the pointer.",
+      "nativeEquivalent": [
+        "card"
+      ]
+    },
+    {
+      "name": "time-field",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/organisms/time-field/time-field.tsx"
+    },
+    {
+      "name": "time-picker",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/organisms/time-picker/time-picker.tsx"
+    },
+    {
+      "name": "timeline",
+      "level": "atoms",
+      "status": "later",
+      "category": "content",
+      "reason": "Vertical or horizontal event timeline with status connectors.",
+      "target": "0.2.0"
+    },
+    {
+      "name": "timeline-scrubber",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "forms",
+      "source": "src/components/atoms/timeline-scrubber/timeline-scrubber.tsx"
+    },
+    {
+      "name": "tldr-section",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "content",
+      "source": "src/components/atoms/tldr-section/tldr-section.tsx"
+    },
+    {
+      "name": "toast",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "feedback",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed",
+        "disabled"
+      ],
+      "source": "src/components/atoms/toast/toast.tsx",
+      "propsGap": [
+        "ToastAction.altText"
+      ],
+      "propsRenamed": {
+        "variant": "toasts[].variant"
+      },
+      "note": "Data-driven: a toasts array replaces Toast, ToastTitle, ToastDescription, ToastAction and ToastClose, and duration and action are fields of ToastItem. The action and close buttons carry the states; only the action can be disabled."
+    },
+    {
+      "name": "toggle",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "buttons",
+      "source": "src/components/atoms/toggle/toggle.tsx"
+    },
+    {
+      "name": "toggle-group",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "buttons",
+      "source": "src/components/atoms/toggle-group/toggle-group.tsx"
+    },
+    {
+      "name": "toolbar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/toolbar/toolbar.tsx"
+    },
+    {
+      "name": "tooltip",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "overlays",
+      "foundation": true,
+      "interactive": true,
+      "affordance": [
+        "rest",
+        "hover",
+        "focus-visible",
+        "pressed"
+      ],
+      "source": "src/components/atoms/tooltip/tooltip.tsx",
+      "propsGap": [
+        "delayDuration",
+        "disableHoverableContent",
+        "TooltipProvider.skipDelayDuration",
+        "TooltipContent.side",
+        "TooltipContent.sideOffset",
+        "TooltipContent.align",
+        "TooltipContent.alignOffset"
+      ],
+      "note": "Press-to-open trigger: hover and focus style it but do not open it, and there is no long-press disclosure. Centered modal, not anchored. Radix collision props (arrowPadding, avoidCollisions, collisionBoundary, collisionPadding, sticky, hideWhenDetached, updatePositionStrategy) are not listed."
+    },
+    {
+      "name": "top-bar",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "foundation": true,
+      "interactive": false,
+      "source": "src/components/molecules/top-bar/top-bar.tsx",
+      "propsGap": []
+    },
+    {
+      "name": "tour",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/tour/tour.tsx"
+    },
+    {
+      "name": "transaction-list",
+      "level": "molecules",
+      "status": "later",
+      "category": "billing",
+      "reason": "Credit and debit history with locale-aware currency.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "tree-view",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "data-display",
+      "source": "src/components/organisms/tree-view/tree-view.tsx"
+    },
+    {
+      "name": "truncated-text",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "typography",
+      "source": "src/components/atoms/truncated-text/truncated-text.tsx"
+    },
+    {
+      "name": "tutorial-card",
+      "level": "molecules",
+      "status": "later",
+      "category": "education",
+      "reason": "Tutorial preview card with metadata.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "tutorial-complete",
+      "level": "organisms",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/tutorial-complete/tutorial-complete.tsx"
+    },
+    {
+      "name": "tutorial-filters",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "education",
+      "source": "src/components/atoms/tutorial-filters/tutorial-filters.tsx"
+    },
+    {
+      "name": "tutorial-intro-content",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "Renders markdown through react-markdown, part of the web content pipeline."
+    },
+    {
+      "name": "tutorial-mdx",
+      "level": "organisms",
+      "status": "web-only",
+      "category": "content",
+      "reason": "MDX renderer for tutorial content on the web content pipeline."
+    },
+    {
+      "name": "typewriter",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "motion",
+      "source": "src/components/atoms/typewriter/typewriter.tsx"
+    },
+    {
+      "name": "typography",
+      "level": "atoms",
+      "status": "later",
+      "category": "typography",
+      "reason": "Semantic HTML text elements (h1-h4, p, lead, muted, blockquote, inline code, list). Text, Heading and Label cover 0.1.0; Blockquote, InlineCode and List have no native equivalent yet and come in 0.2.0.",
+      "target": "0.2.0"
+    },
+    {
+      "name": "usage-breakdown",
+      "level": "molecules",
+      "status": "later",
+      "category": "data",
+      "reason": "Ranked resource consumption list with relative share and trend.",
+      "target": "0.3.0",
+      "dependency": "native item (exists)"
+    },
+    {
+      "name": "video-embed",
+      "level": "atoms",
+      "status": "later",
+      "category": "content",
+      "reason": "Provider iframe embed; native needs a WebView or video module.",
+      "target": "0.3.0",
+      "dependency": "react-native-webview or expo-video"
+    },
+    {
+      "name": "view-switcher",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/view-switcher/view-switcher.tsx"
+    },
+    {
+      "name": "viewport-bookmarks",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "wallet-card",
+      "level": "organisms",
+      "status": "later",
+      "category": "billing",
+      "reason": "Credit balance with available and pending amounts.",
+      "target": "0.3.0"
+    },
+    {
+      "name": "watchlist",
+      "level": "atoms",
+      "status": "later",
+      "category": "data",
+      "reason": "Tracked-symbol list with price and change; finance domain.",
+      "target": "0.3.0",
+      "dependency": "native item, data-list (exist)"
+    },
+    {
+      "name": "workspace-switcher",
+      "level": "atoms",
+      "status": "native-0.1.0",
+      "category": "navigation",
+      "source": "src/components/molecules/workspace-switcher/workspace-switcher.tsx"
+    },
+    {
+      "name": "world-breadcrumbs",
+      "level": "atoms",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    },
+    {
+      "name": "world-clock-bar",
+      "level": "molecules",
+      "status": "native-0.1.0",
+      "category": "data",
+      "source": "src/components/molecules/world-clock-bar/world-clock-bar.tsx"
+    },
+    {
+      "name": "zoom-hud",
+      "level": "molecules",
+      "status": "web-only",
+      "category": "canvas",
+      "reason": "Canvas workspace family. Pointer-first canvas: web-only for 0.1.0, revisit with spatial."
+    }
+  ],
+  "nativeOnly": [
+    {
+      "name": "icon",
+      "category": "icons",
+      "foundation": true,
+      "status": "native-0.1.0",
+      "missing": false,
+      "source": "src/components/atoms/icon/icon.tsx",
+      "interactive": false,
+      "reason": "Native has no icon component; web uses lucide-react. Button size=\"icon\" and every glyph-bearing component need one.",
+      "proposedApi": "<Icon icon={LucideLikeComponent} size=\"md\" tone=\"muted\" label=\"Done\" />",
+      "note": "icon takes any lucide-compatible component, so ui-native adds no icon or SVG dependency and the consumer supplies the component. size is \"sm\" | \"md\" | \"lg\" or a number; tone follows the Text tones. The icon is decorative (hidden from screen readers) unless label is set."
+    },
+    {
+      "name": "stack",
+      "category": "layout",
+      "foundation": true,
+      "status": "native-0.1.0",
+      "missing": false,
+      "source": "src/components/atoms/stack/stack.tsx",
+      "interactive": false,
+      "reason": "Native has no layout primitive for rows and columns; every screen re-implements flex rows and gaps.",
+      "proposedApi": "<Stack direction=\"row\" gap={3} align=\"center\" justify=\"space-between\" wrap />",
+      "note": "One Stack, no Box. direction is \"row\" | \"column\"; gap takes spacing tokens; align and justify map to flex alignment and wrap allows flex wrap. Renders a plain View with no accessibility role."
+    },
+    {
+      "name": "spacer",
+      "category": "layout",
+      "foundation": true,
+      "status": "native-0.1.0",
+      "missing": false,
+      "source": "src/components/atoms/spacer/spacer.tsx",
+      "interactive": false,
+      "reason": "Fixed or flexible gap between siblings when Stack gap is not enough.",
+      "proposedApi": "<Spacer size={4} />",
+      "note": "size takes a spacing token for a fixed gap; the flex prop makes it absorb free space instead."
+    }
+  ],
+  "foundationNotes": [
+    "Tabular data in 0.1.0: `data-list` and `item` rows cover it, so `table` is later 0.2.0 and not a foundation component.",
+    "Typography in 0.1.0: `text`, `heading` and `label` cover it; the `typography` extras (Blockquote, InlineCode, List) are later 0.2.0."
+  ]
+}

@@ -93,7 +93,12 @@ jobs:
           CANARY_VERSION=$(node ../../scripts/release-guard.mjs web-canary)
           npm version "$CANARY_VERSION" --no-git-tag-version
           TARBALL=$(pnpm pack --pack-destination /tmp | tail -1)
-          npx --yes npm@11.18.0 publish "$TARBALL" --tag canary --provenance --access public
+          # Publish the unpacked tarball directory, not the .tgz: CI publishes of the .tgz
+          # leave the registry readme empty (lane board #622). Same files either way.
+          PKG_DIR=$(mktemp -d)
+          tar -xzf "$TARBALL" -C "$PKG_DIR"
+          test -f "$PKG_DIR/package/README.md"
+          npx --yes npm@11.18.0 publish "$PKG_DIR/package" --ignore-scripts --tag canary --provenance --access public
 
   release:
     name: Publish Release

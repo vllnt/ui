@@ -5,7 +5,12 @@ import { type StyleProp, StyleSheet, type TextStyle } from "react-native";
 import type { ReducedMotionService } from "../primitives/use-reduced-motion";
 import { ThemeProvider, type ThemeSelection } from "../theme/theme-provider";
 
-export { codePreviewTabs, gridListOptions, searchLabels } from "./fixture-data";
+export {
+  codePreviewTabs,
+  gridListOptions,
+  searchLabels,
+  SquareGlyph,
+} from "./fixture-data";
 
 const ignoreSettlement = () => void 0;
 

@@ -1139,9 +1139,13 @@ const STATIC_SURFACES: Readonly<Record<string, readonly string[]>> = {
   badge: [],
   callout: [],
   card: ["Open"],
+  display: [],
+  icon: [],
   panel: [],
   separator: [],
   skeleton: [],
+  spacer: [],
+  stack: [],
   "stat-card": [],
 };
 

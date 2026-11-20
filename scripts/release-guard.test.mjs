@@ -118,7 +118,7 @@ test("workflow guards precede mutations and channels stay explicit", () => {
   const publisher = read("scripts/publish-canary.sh");
   assert.match(web, /release-guard\.mjs stable[\s\S]*release-guard\.mjs dist-tag[\s\S]*--tag "\$DIST_TAG"/);
   assert.ok(web.indexOf("release-guard.mjs web-canary") < web.indexOf('npm version "$CANARY_VERSION"'));
-  assert.match(web, /publish "\$TARBALL" --tag canary/);
+  assert.match(web, /publish "\$PKG_DIR\/package" --ignore-scripts --tag canary/);
   assert.match(web, /publish "\$TARBALL" --tag "\$DIST_TAG"/);
   assert.doesNotMatch(web, /--tag latest/);
   const canary = web.slice(web.indexOf("  canary:"), web.indexOf("  release:"));
