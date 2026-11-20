@@ -22,7 +22,9 @@ VLLNT UI vise tous les types d'interfaces. Voici où en est chaque cible aujourd
 - **Mobile, React Native (iOS, Android, Expo) : en canary.** `@vllnt/ui-native` ne publie que des versions canary ; il n'existe pas encore de version stable. Chaque canary est installée dans une app Expo vierge et exportée pour iOS et Android avant d'être retenue. Voir [Native](/native).
 - **Desktop, Electron et Tauri : sur la feuille de route.** Rien de spécifique au desktop n'existe encore : ni tests, ni packaging, ni guide.
 - **Desktop, apps macOS natives : sur la feuille de route.** Il n'existe pas de moteur de rendu SwiftUI ou AppKit.
+- **3D, scènes dans la page : sur la feuille de route.** Seules des briques en pseudo-3D sont disponibles aujourd'hui : `Globe3D` (une projection SVG) et `TiltCard` (3D en CSS). Il n'existe pas encore de couche de scène WebGL.
 - **Réalité augmentée et spatial, visionOS et WebXR : proposition.** Les fondations spatiales font l'objet d'une RFC ouverte ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631)). Il n'existe pas de moteur de rendu spatial.
+- **Interfaces holographiques interactives : sur la feuille de route.** Les briques de base sont disponibles sur le web : surfaces en verre, jauge circulaire, contrôles de HUD et docks. Les composants holographiques eux-mêmes n'existent pas encore.
 - **UI générée par l'IA et diffusée en continu : en partie disponible.** Les descripteurs, le serveur MCP, les thèmes sous forme de données et les composants de flux continu existent ; les adaptateurs json-render et AI SDK, non ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
 
 ## Un socle, un moteur de rendu par plateforme
@@ -35,9 +37,11 @@ La règle qui rend cela possible : le socle reste indépendant de toute platef
 
 Aujourd'hui, le paquet natif lit ses tokens et ses contrats depuis `@vllnt/ui-core`, et le paquet web reçoit les mêmes tokens sous forme de CSS générée. Déplacer les schémas de props dans le socle est sur la feuille de route.
 
-## 1. Les interfaces spatiales
+## 1. Les interfaces 3D, spatiales et holographiques
 
-Les appareils de réalité augmentée et spatiaux placent l'interface dans la pièce autour de vous, et non plus sur un écran plat. Les briques restent les mêmes : boutons, listes, dialogues, texte. Ce qui change, c'est la profondeur, la façon de désigner (main, regard, voix) et la taille qu'une cible doit avoir.
+Les appareils de réalité augmentée et spatiaux placent l'interface dans la pièce autour de vous, et non plus sur un écran plat ; les scènes 3D lui donnent de la profondeur sur n'importe quel écran. Les briques restent les mêmes : boutons, listes, dialogues, texte. Ce qui change, c'est la profondeur, la façon de désigner (main, regard, voix) et la taille qu'une cible doit avoir.
+
+Les interfaces holographiques interactives vont plus loin : des panneaux translucides superposés en profondeur, des HUD denses en données, des menus radiaux et orbitaux, une saisie par le geste, le regard et la voix, et des panneaux diffusés en direct ou générés par un agent. Nous voulons les construire avec les mêmes tokens et les mêmes composants, et les mêmes règles d'accessibilité.
 
 Le but : que les mêmes composants et les mêmes tokens s'affichent sur un téléphone, sur un ordinateur et dans l'espace, sans kit séparé pour chacun.
 
@@ -77,6 +81,17 @@ Rien de ceci n'est encore disponible. Ce sont les prochaines étapes vers la vis
 
 - **Fondations spatiales** (proposées pour la 0.5.0) : tokens de profondeur, un seul contrat d'affordance pour le pointeur, le tactile et le regard, des tailles de cible qui s'adaptent à l'entrée (24 px au pointeur, 44 pt au tactile, 60 pt en spatial), et des tokens de mouvement. La proposition est une RFC ouverte : [vllnt/ui#631](https://github.com/vllnt/ui/issues/631).
 - **Moteurs de rendu spatiaux** comme visionOS ou WebXR, construits sur le même socle.
+
+### Interfaces 3D, AR et holographiques
+
+Chacun de ces chantiers est ouvert et suivi dans son propre ticket. Rien de ceci n'est encore disponible.
+
+- **Une couche de scène 3D :** des adaptateurs React Three Fiber et WebXR, en dépendances peer facultatives et jamais dans le socle ([vllnt/ui#678](https://github.com/vllnt/ui/issues/678)).
+- **Des tokens de profondeur et d'élévation,** partagés par la 3D, le spatial et le verre superposé, issus de la RFC spatiale ([vllnt/ui#631](https://github.com/vllnt/ui/issues/631)).
+- **La saisie spatiale :** le geste et la voix, par-dessus le contrat pointeur, tactile et regard, chaque action restant accessible au clavier ([vllnt/ui#680](https://github.com/vllnt/ui/issues/680)).
+- **Des composants holographiques :** menus radiaux et orbitaux, anneau de données, panneau holographique et un modèle documenté de superposition du verre, construits sur les composants de verre et de HUD existants ([vllnt/ui#679](https://github.com/vllnt/ui/issues/679)).
+- **L'accessibilité des interfaces spatiales et translucides :** mouvement réduit, transparence réduite, contraste sur le verre et tailles de cible spatiales, en plus du WCAG 2.2 AA ([vllnt/ui#681](https://github.com/vllnt/ui/issues/681)).
+- **Des schémas pour que les agents puissent les diffuser :** des entrées de catalogue json-render et des schémas d'outils AI SDK pour ces composants ([vllnt/ui#672](https://github.com/vllnt/ui/issues/672)).
 - **Un schéma de props complet** pour chaque composant, pour qu'un modèle produise un arbre d'UI valide et qu'un moteur de rendu le vérifie avant de l'afficher.
 - **Un contrat de props partielles,** pour que tout composant puisse s'afficher à partir de données incomplètes, reçues en flux continu.
 - **Des thèmes par utilisateur résolus à l'exécution,** dans les limites accessibles des tokens.
