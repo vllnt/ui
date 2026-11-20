@@ -8,35 +8,37 @@ import { cn } from "../../../lib/utils";
  * Body-text scale for the {@link Text} primitive. Exposed so consumers can
  * compose the same token-driven styles onto bespoke elements.
  */
-export const textVariants = cva(
-  "font-[family-name:var(--font-sans)] text-foreground",
-  {
-    defaultVariants: {
-      size: "base",
-      tone: "default",
-      weight: "normal",
+export const textVariants = cva("text-foreground", {
+  defaultVariants: {
+    family: "sans",
+    size: "base",
+    tone: "default",
+    weight: "normal",
+  },
+  variants: {
+    family: {
+      mono: "font-[family-name:var(--font-mono)]",
+      sans: "font-[family-name:var(--font-sans)]",
     },
-    variants: {
-      size: {
-        base: "text-[length:var(--font-size-body)] leading-[var(--line-height-body)]",
-        caption:
-          "text-[length:var(--font-size-caption)] leading-[var(--line-height-caption)]",
-        lead: "text-[length:var(--font-size-body-lg)] leading-[var(--line-height-body-lg)]",
-        small:
-          "text-[length:var(--font-size-body-sm)] leading-[var(--line-height-body-sm)]",
-      },
-      tone: {
-        default: "",
-        muted: "text-muted-foreground",
-      },
-      weight: {
-        medium: "font-medium",
-        normal: "font-normal",
-        semibold: "font-semibold",
-      },
+    size: {
+      base: "text-[length:var(--font-size-body)] leading-[var(--line-height-body)]",
+      caption:
+        "text-[length:var(--font-size-caption)] leading-[var(--line-height-caption)]",
+      lead: "text-[length:var(--font-size-body-lg)] leading-[var(--line-height-body-lg)]",
+      small:
+        "text-[length:var(--font-size-body-sm)] leading-[var(--line-height-body-sm)]",
+    },
+    tone: {
+      default: "",
+      muted: "text-muted-foreground",
+    },
+    weight: {
+      medium: "font-medium",
+      normal: "font-normal",
+      semibold: "font-semibold",
     },
   },
-);
+});
 
 /** HTML element the {@link Text} primitive renders as. */
 export type TextElement = "div" | "label" | "p" | "span";
@@ -50,18 +52,23 @@ export type TextProps = React.HTMLAttributes<HTMLElement> &
 
 /**
  * Body text whose family, scale, and weight come from theme-overridable tokens
- * (`--font-sans`, `--font-size-body*`). Polymorphic via `as`. Forwards `ref` to
- * the rendered element.
+ * (`--font-sans` or `--font-mono`, `--font-size-body*`). Polymorphic via `as`.
+ * Forwards `ref` to the rendered element.
+ *
+ * `family="mono"` sets the same scale in the mono family (JetBrains Mono by
+ * default): `size="base"` is 16/1.6 and `size="lead"` 18/1.7.
  *
  * Use `tone="muted"` on the default `background`; on `muted`/`card` surfaces the
  * muted foreground can fall below WCAG AA contrast for body text.
  *
  * @example
  * <Text size="lead" tone="muted">Intro copy</Text>
+ * <Text family="mono" size="lead">Mono intro copy</Text>
  */
 const Text = ({
   as = "p",
   className,
+  family,
   ref,
   size,
   tone,
@@ -69,7 +76,7 @@ const Text = ({
   ...props
 }: TextProps) =>
   createElement(as, {
-    className: cn(textVariants({ size, tone, weight }), className),
+    className: cn(textVariants({ family, size, tone, weight }), className),
     ref,
     ...props,
   });
