@@ -1,23 +1,24 @@
-# Generative UI, AR and spatial UI: what a foundation library must provide
+# Generative UI, voice-first UI and spatial UI: what a foundation library must provide
 
 White paper. Version of 20 November 2026. Status: mixed. Each claim about vllnt/ui is marked as shipped or as roadmap, and section 6 lists the evidence.
 
 ## 1. Abstract
 
-Most interfaces are authored once, compiled, and shipped in the same form to every user. Two changes break that model. A language model or a server can now compose a screen at runtime from known components and stream it while it is still being generated. AR and spatial devices place the same controls in a room, where the inputs are eyes, hands and voice.
+Most interfaces are authored once, compiled, and shipped in the same form to every user. Three changes break that model. A language model or a server can now compose a screen at runtime from known components and stream it while it is still being generated. Voice becomes a primary input, so the interface follows what a person says and answers out loud and on screen. AR, spatial and 3D environments place the same controls in depth, where the inputs are eyes, hands and voice.
 
-This paper states what a UI foundation library must provide for both changes. It names four properties:
+This paper states what a UI foundation library must provide for these changes. It treats generated UI and voice-first UI as the two pillars of next-generation interfaces, and 3D, spatial and holographic rendering as the targets both pillars have to reach. It names five properties:
 
 - serialisable components, described by catalogs and schemas, so a model or a server can stream and assemble screens;
 - themes that are data, resolved per user at runtime;
 - versioning that lets a consumer take an update without breaking, backed by codemods and a deprecation policy;
-- a platform-neutral core, so a spatial renderer can plug in later.
+- voice-first parts: a transcript, listening states, a text equivalent for every spoken output and a keyboard path for every voice action;
+- one platform-neutral core with one renderer per platform, so a 3D or spatial renderer can plug in later.
 
-Two more properties cut across those four: accessibility that holds for the composed screen, and a trust boundary around generated output.
+Two more properties cut across those five: accessibility that holds for the composed screen, and a trust boundary around generated output.
 
-The paper then measures vllnt/ui against the list. Some parts ship today: 321 machine-readable component descriptors, an MCP server, one token source for web, React Native and design files, and an accessibility gate on every Storybook story. Other parts are roadmap. Only 2 of the 321 descriptors carry prop definitions. The json-render and AI SDK adapters are planned and do not exist. Per-user runtime themes and codemods are not built. Spatial foundations are a draft RFC.
+The paper then measures vllnt/ui against the list. Some parts ship today: 321 machine-readable component descriptors, an MCP server, one token source for web, React Native and design files, and an accessibility gate on every Storybook story. Other parts are roadmap. Only 2 of the 321 descriptors carry prop definitions. The json-render and AI SDK adapters are planned and do not exist. Per-user runtime themes and codemods are not built. No voice component exists. Spatial foundations are a draft RFC, and the 3D scene layer and the holographic components are open issues.
 
-After reading, an engineer can do three things: write a component catalog that a model can target, render AI SDK tool parts through their loading, result and error states, and audit any component library against the six requirements in section 3.
+After reading, an engineer can do four things: write a component catalog that a model can target, render AI SDK tool parts through their loading, result and error states, specify the states and text equivalents that a voice-first surface needs, and audit any component library against the seven requirements in section 3.
 
 A note on names. "AI SDK" is an open-source library by Vercel. "json-render" is an open-source project in the vercel-labs organisation on GitHub. This paper names them to identify the software. vllnt has no partnership with either project and neither endorses vllnt/ui.
 
@@ -29,11 +30,11 @@ In the static model a team designs a screen, writes it as source code and ships 
 
 In the generated model the screen is a value produced at runtime. Three producers exist today:
 
-1. **A model selects a component through a tool call.** The AI SDK documentation defines generative user interfaces as "the process of allowing a large language model (LLM) to go beyond text" and connects the results of tool calls to React components [18].
-2. **A model emits a whole tree as data.** json-render describes itself as a framework in which "AI generates interfaces from natural language prompts, constrained to components you define" [22].
+1. **A model selects a component through a tool call.** The AI SDK documentation defines generative user interfaces as "the process of allowing a large language model (LLM) to go beyond text" and connects the results of tool calls to React components [21].
+2. **A model emits a whole tree as data.** json-render describes itself as a framework in which "AI generates interfaces from natural language prompts, constrained to components you define" [25].
 3. **A server composes the tree without a model.** The server picks components per user from rules, entitlements or experiments. This is the older server-driven UI pattern and it has the same technical needs.
 
-Research supports the direction. Leviathan et al. report that human raters "overwhelmingly preferred" interfaces generated by their system over standard markdown output, with generation speed set aside. The same abstract states that the results are "worse than those crafted by human experts" and "at least comparable in 50% of cases" [28]. Chen et al. report that "generative interfaces consistently outperform conversational ones, with up to a 72% improvement in human preference" [29].
+Research supports the direction. Leviathan et al. report that human raters "overwhelmingly preferred" interfaces generated by their system over standard markdown output, with generation speed set aside. The same abstract states that the results are "worse than those crafted by human experts" and "at least comparable in 50% of cases" [34]. Chen et al. report that "generative interfaces consistently outperform conversational ones, with up to a 72% improvement in human preference" [35].
 
 Both results measure preference. Neither abstract reports accessibility conformance, safety or consistency with a design system. Those three concerns are the subject of this paper.
 
@@ -47,9 +48,27 @@ Both results measure preference. Neither abstract reports accessibility conforma
 | Design tokens | Not guaranteed | Guaranteed, because the components own their styles |
 | Accessibility | Depends on what the model writes | Component-level behaviour is inherited. Composition still needs checks |
 
-This paper covers the second column, because that is where a component library does its work. The json-render documentation calls the catalog "the vocabulary for your UI" and says of it: "It's your guardrail" [23].
+This paper covers the second column, because that is where a component library does its work. The json-render documentation calls the catalog "the vocabulary for your UI" and says of it: "It's your guardrail" [26].
 
-### 2.3 What changes for the library
+### 2.3 From screen-first to voice-first
+
+Generated UI changes who composes the screen. Voice-first UI changes what leads the interaction. In a screen-first product a person reads, points and types, and speech is an optional shortcut. In a voice-first product the person speaks and the interface follows the voice. It shows that it is listening, shows what it heard, answers out loud and on screen, and can stream generated UI in reply.
+
+The two pillars meet in one loop:
+
+```
+speech -> transcript (interim, then final) -> model turn
+       -> tool parts or a spec -> components on screen
+       -> spoken reply, with the same text visible
+```
+
+Every arrow in that loop is a stream, so the duties of section 3.2 apply to each one. The transcript arrives in pieces and is revised. The reply arrives in pieces. The generated components arrive in pieces.
+
+Voice also removes two things that a screen provides by default. A screen shows its state at a glance, while a microphone gives no sign of whether it is open. Text on a screen stays, while speech is gone once it has played. A voice-first interface therefore owes the user a visible state for the microphone and a text record of everything spoken. Section 3.7 turns both into requirements.
+
+The AI SDK covers the two ends of the loop. Its documentation describes transcription [31] and speech generation [32], and marks the streaming form of each as experimental.
+
+### 2.4 What changes for the library
 
 In the static model a library has one consumer: an engineer who reads documentation and TypeScript types.
 
@@ -62,6 +81,8 @@ In the generated model it has four more:
 
 Each of the four needs the component contract as data. Documentation written for people does not serve them. The requirements in section 3 follow from that.
 
+Voice adds a demand of another kind: components for states that have no screen equivalent, such as listening and speaking.
+
 ## 3. Technical requirements
 
 ### 3.1 Component catalogs and schemas
@@ -70,7 +91,7 @@ Each of the four needs the component contract as data. Documentation written for
 
 **Props must be serialisable.** A generated tree crosses at least one wire, from model to server to client. Its props are therefore JSON values: strings, numbers, booleans, arrays and plain objects. A function or a React node cannot cross. Behaviour crosses as a named action, and nested content crosses as children or named slots.
 
-**The json-render shape.** A catalog maps each component name to a zod schema and a description. The example below follows the project README [22]:
+**The json-render shape.** A catalog maps each component name to a zod schema and a description. The example below follows the project README [25]:
 
 ```ts
 import { defineCatalog } from "@json-render/core";
@@ -92,9 +113,9 @@ const catalog = defineCatalog(schema, {
 const systemPrompt = catalog.prompt();
 ```
 
-`catalog.prompt()` builds the system prompt from the catalog. `defineRegistry(catalog, { components })` maps each name to a React implementation, and `<Renderer spec={spec} registry={registry} />` renders a spec [22]. The catalog documentation adds optional named slots and describes the description field as text to "Help AI understand when to use it" [23]. The package `@json-render/shadcn` is the reference catalog. Its README entry lists 36 shadcn/ui components [22].
+`catalog.prompt()` builds the system prompt from the catalog. `defineRegistry(catalog, { components })` maps each name to a React implementation, and `<Renderer spec={spec} registry={registry} />` renders a spec [25]. The catalog documentation adds optional named slots and describes the description field as text to "Help AI understand when to use it" [26]. The package `@json-render/shadcn` is the reference catalog. Its README entry lists 36 shadcn/ui components [25].
 
-**The AI SDK shape.** A tool is defined with a description, an input schema and an execute function [18]:
+**The AI SDK shape.** A tool is defined with a description, an input schema and an execute function [21]:
 
 ```ts
 import { tool } from "ai";
@@ -129,7 +150,7 @@ A schema written by hand next to the types drifts from them. A build step that f
 
 Three streaming mechanisms are in use. Each puts a different demand on components.
 
-**1. Tool part states (AI SDK UI).** `useChat` returns messages, and each message carries `parts`. A tool call appears as a part typed `tool-${toolName}`. Tools whose types are unknown at compile time use the generic `dynamic-tool` type [19]. Each tool part has a `state`. The four core states are `input-streaming`, `input-available`, `output-available` and `output-error`. Tools that require approval add `approval-requested`, `approval-responded` and `output-denied`, and the documentation advises handling all of them exhaustively [19].
+**1. Tool part states (AI SDK UI).** `useChat` returns messages, and each message carries `parts`. A tool call appears as a part typed `tool-${toolName}`. Tools whose types are unknown at compile time use the generic `dynamic-tool` type [22]. Each tool part has a `state`. The four core states are `input-streaming`, `input-available`, `output-available` and `output-error`. Tools that require approval add `approval-requested`, `approval-responded` and `output-denied`, and the documentation advises handling all of them exhaustively [22].
 
 The mapping to components is direct. The example below is hand-written application code that uses three vllnt/ui components. It is not an adapter. `WeatherCard` stands for the application's own component.
 
@@ -155,7 +176,7 @@ function WeatherPart({ part }) {
 }
 ```
 
-**2. Spec patches (json-render).** SpecStream is "a JSONL-based streaming format where each line is a JSON patch operation" [24]. The operations are those of RFC 6902 [14]: `add`, `remove`, `replace`, `move`, `copy` and `test`. Three lines from the documentation show the consequence [24]:
+**2. Spec patches (json-render).** SpecStream is "a JSONL-based streaming format where each line is a JSON patch operation" [27]. The operations are those of RFC 6902 [14]: `add`, `remove`, `replace`, `move`, `copy` and `test`. Three lines from the documentation show the consequence [27]:
 
 ```json
 {"op":"add","path":"/root","value":"root"}
@@ -163,9 +184,9 @@ function WeatherPart({ part }) {
 {"op":"add","path":"/elements/metric-1","value":{"type":"Metric","props":{"label":"Revenue"}}}
 ```
 
-The compiler returns a partial result after every chunk (`createSpecStreamCompiler`, then `compiler.push(chunk)`) [22]. After the second line the card names two children that have not arrived. The renderer has to show that card anyway.
+The compiler returns a partial result after every chunk (`createSpecStreamCompiler`, then `compiler.push(chunk)`) [25]. After the second line the card names two children that have not arrived. The renderer has to show that card anyway.
 
-**3. Server streaming (React).** With streaming server rendering, "React sends the shell with the `fallback` first, then streams in each boundary's HTML and swaps out its `fallback` as that content arrives" [26]. The AI SDK also offers `streamUI` and `createStreamableUI` for React Server Components. Its documentation states: "AI SDK RSC is currently experimental. We recommend using AI SDK UI for production." [20, 21]
+**3. Server streaming (React).** With streaming server rendering, "React sends the shell with the `fallback` first, then streams in each boundary's HTML and swaps out its `fallback` as that content arrives" [29]. The AI SDK also offers `streamUI` and `createStreamableUI` for React Server Components. Its documentation states: "AI SDK RSC is currently experimental. We recommend using AI SDK UI for production." [23, 24]
 
 All three mechanisms lead to the same table of duties:
 
@@ -226,9 +247,9 @@ Three layers of enforcement cover these, from cheapest to most complete:
 
 1. **Schema.** Make the accessible name a required prop on every control that has no visible text. The validator rejects the tree before it renders.
 2. **Tree lint.** Check the spec as data: heading levels, a single main landmark, alternative text on images, no interactive element nested in another.
-3. **Rendered check.** Render representative specs in tests and run an automated engine such as axe-core, whose rule tags map to WCAG 2.0, 2.1 and 2.2 at levels A and AA [27].
+3. **Rendered check.** Render representative specs in tests and run an automated engine such as axe-core, whose rule tags map to WCAG 2.0, 2.1 and 2.2 at levels A and AA [30].
 
-Automated checks have limits. The axe-core documentation notes that it "does not test hidden regions, such as inactive menus or modal windows" [27]. A library can say that its components are tested against WCAG 2.2 AA. It cannot certify the screens a model composes from them.
+Automated checks have limits. The axe-core documentation notes that it "does not test hidden regions, such as inactive menus or modal windows" [30]. A library can say that its components are tested against WCAG 2.2 AA. It cannot certify the screens a model composes from them.
 
 ### 3.5 Trust and safety
 
@@ -246,7 +267,7 @@ Five controls follow. A foundation library can make each of them the default.
 2. **Validation before render.** Every element's props are parsed against the schema. On failure the renderer shows a fallback, not a partial element.
 3. **Typed props for risky values.** A URL prop accepts an allow-list of schemes. Style and class names are not model-controlled props. This also keeps generated screens on the design tokens.
 4. **Declared actions.** The model names an action from the catalog and supplies parameters. Application code validates the parameters and runs the handler.
-5. **Human confirmation that the model cannot draw.** The Model Context Protocol specification states that "there SHOULD always be a human in the loop with the ability to deny tool invocations" [16]. The AI SDK models this with the `approval-requested` state and warns that without server-side protection "a modified client could fabricate an approval response" [19]. The confirmation dialog must therefore be an authored component, placed by trusted code and visually distinct from generated content.
+5. **Human confirmation that the model cannot draw.** The Model Context Protocol specification states that "there SHOULD always be a human in the loop with the ability to deny tool invocations" [16]. The AI SDK models this with the `approval-requested` state and warns that without server-side protection "a modified client could fabricate an approval response" [22]. The confirmation dialog must therefore be an authored component, placed by trusted code and visually distinct from generated content.
 
 ### 3.6 Versioning and safe auto-updates
 
@@ -266,9 +287,77 @@ Five controls follow. A foundation library can make each of them the default.
 
 **Auto-updates need a pipeline that fails closed.** The parts are a prerelease channel published from every merge, stable releases cut only from reviewed tags, build provenance, a default tag that cannot move backwards, and a written rollback. With codemods on top, an upgrade becomes a diff that an agent can apply and a person can review.
 
-## 4. AR and spatial UI
+### 3.7 Voice-first interaction
 
-Spatial UI is a target for vllnt/ui. Nothing in this section ships as a spatial renderer. Section 4.3 states exactly what exists.
+**Requirement.** A voice-first surface shows what the system heard and which state it is in, gives every spoken output a text equivalent, gives every voice action a keyboard and pointer path, and shows when the microphone is live.
+
+**Transcript and listening states.** A person who speaks to an interface needs two answers at once: whether it is listening, and what it heard. Two components carry them.
+
+A live transcript shows interim text while the person speaks and final text once the recogniser commits. The AI SDK streaming transcription example handles exactly these parts: `transcript-delta`, `transcript-partial` and `transcript-final` [31]. Interim text changes under the reader, so the component reserves its box and marks interim text as provisional, as section 3.2 requires of any streamed content.
+
+A listening indicator shows one state from a closed set:
+
+| State | Meaning |
+| --- | --- |
+| Idle | The microphone is closed |
+| Wake | A wake word was heard and capture is starting |
+| Listening | Audio is being captured |
+| Thinking | The turn was sent and no reply has started |
+| Speaking | A spoken reply is playing |
+| Muted | The user closed the microphone |
+| Error | Capture, recognition or playback failed |
+
+A closed set matters for the same reason a catalog does. A model, a test and a screen reader can each handle seven named states. None of them can handle an animation.
+
+These states are status messages. WCAG 2.2 criterion 4.1.3 requires that "status messages can be programmatically determined through role or properties such that they can be presented to the user by assistive technologies without receiving focus" [1]. Criterion 1.4.1 rules out colour as the only signal [1]. A waveform that moves for more than five seconds beside other content falls under criterion 2.2.2, which requires "a mechanism for the user to pause, stop, or hide it" unless the movement is essential [1]. In practice the indicator carries a text label, the waveform stays still under reduced motion, and no state is shown by colour or motion alone.
+
+**A text equivalent for speech.** Every spoken reply is also visible, selectable text, shown at the same time. Three sources point the same way:
+
+- WCAG criterion 1.1.1 requires that "All non-text content that is presented to the user has a text alternative that serves the equivalent purpose" [1].
+- WCAG criterion 1.2.4 requires that "Captions are provided for all live audio content in synchronized media" [1].
+- The W3C draft note on natural language interfaces asks that "spoken output of the system is accompanied by a synchronized text transcript" (REQ 7) and that users can "review the entire history of the conversation" (REQ 19c) [18].
+
+The two WCAG criteria were written for media content. The rule this paper draws from them is broader: a voice surface never offers an audio-only path.
+
+A spoken reply also needs a stop control. Criterion 1.4.2 requires a way to pause or stop audio that "plays automatically for more than 3 seconds" [1].
+
+**A keyboard path for every voice action.** Criterion 2.1.1 requires that "All functionality of the content is operable through a keyboard interface" [1]. Voice is an additional path to the same actions. The W3C draft note asks implementers to "Allow the user to decide at any time to switch input methods, even if a spoken dialogue is already in progress" (REQ 13c) [18].
+
+Three consequences follow for components:
+
+1. **Push-to-talk is a button.** It is focusable, it has an accessible name, and Space or Enter operates it in both hold and toggle modes.
+2. **Voice commands resolve to existing actions.** Intents such as activate, dismiss, next and previous map to the component actions that the keyboard already reaches.
+3. **A text input sits beside the microphone.** Any turn can be typed.
+
+**The live-microphone indicator.** An open microphone is a privacy state, and the user has to be able to see it. Browsers carry part of that duty. The Media Capture and Streams specification states: "The User Agent MUST indicate to the user when the value of anyLive changes" [19], where the value covers every live capture device. That indicator sits in the browser chrome. It does not say which surface is listening or why. The application therefore shows its own indicator next to the surface that captures audio, under three rules:
+
+1. It is visible whenever capture is on, including while the system is thinking or speaking if the microphone stays open.
+2. It stops capture in one step.
+3. A wake-word mode says so in text, because a microphone that waits for a wake word is open.
+
+**What the AI SDK provides.** The package `ai` exposes four functions for the two ends of the loop. In version 7.0.173 all four carry an `experimental_` prefix: `experimental_transcribe`, `experimental_streamTranscribe`, `experimental_generateSpeech` and `experimental_streamSpeech` [28]. The current documentation imports `transcribe` and `generateSpeech` without the prefix, which the package exports from version 7.0.178, and states that "Streaming transcription is an experimental feature" [31] and "Streaming speech is an experimental feature" [32].
+
+The example below follows the transcription documentation [31], with the import name of version 7.0.173:
+
+```ts
+import { experimental_transcribe as transcribe } from "ai";
+import { openai } from "@ai-sdk/openai";
+
+const transcript = await transcribe({
+  model: openai.transcription("whisper-1"),
+  audio,
+});
+
+// transcript.text feeds the model turn and the visible transcript.
+```
+
+A library that builds on these functions should treat the whole surface as experimental and keep speech engines behind optional peer dependencies.
+
+**Where voice meets generated UI.** A voice turn ends in the same places as a typed one: tool parts in `useChat`, or a json-render spec. It needs no new rendering path. The timing is what changes. The transcript, the reply text, the audio and the components all stream at once, and the surface has to present them in one order.
+
+## 4. AR, spatial, 3D and holographic interfaces
+
+These are targets for vllnt/ui. No spatial renderer, no 3D scene layer and no holographic component ships. Sections 4.2 to 4.5 each state exactly what exists.
 
 ### 4.1 What changes in space
 
@@ -292,6 +381,8 @@ The third row is a spacing rule, and its unit is an angle, as section 3.3 noted.
 
 **The web path.** The WebXR Device API "describes support for accessing virtual reality (VR) and augmented reality (AR) devices" [5]. Its `immersive-ar` session mode is defined in the WebXR Augmented Reality Module [6]. A WebXR session gives the page a render loop and the page draws each frame, so components written for the DOM do not appear in an immersive session unchanged. A spatial renderer is a separate implementation of the same component contracts.
 
+**Hands and voice.** The WebXR Hand Input Module "expands the WebXR Device API with the functionality to track articulated hand poses" [20], which is the basis for gestures such as a pinch. The W3C note on XR accessibility also asks implementers to "Ensure Navigation and interaction can be controlled by Voice Activation" (REQ 5a) [7]. In space, the voice loop of section 2.3 is one of the main inputs.
+
 ### 4.2 Glassmorphism as a documented, token-based pattern
 
 Glassmorphism is a surface treatment: a translucent fill, a blur of whatever sits behind it, and a hairline border. This paper treats it as a pattern with rules. The chrome of the vllnt site stays neutral and does not use glass as a look.
@@ -311,7 +402,7 @@ Six rules make the pattern safe to hand to a generator:
 
 **What vllnt/ui has today.** Four glass components are in the registry: `GlassCard`, `GlassPanel`, `GlassProgress` and `LiquidGlass`. Their source follows rule 2. The fills and borders are role tokens with an opacity step, for example `bg-card/60`, `bg-background/70` and `border-border/50`, and the `LiquidGlass` sheen reads the `--primary` and `--accent` variables. `LiquidGlass` follows the motion half of rule 4: its animation stops under `prefers-reduced-motion`.
 
-**What is missing.** The blur radius and the opacity steps are utility values inside each component. No material or blur token exists in `tokens.json`. No glass component responds to `prefers-reduced-transparency`. `DESIGN.md` does not yet state the six rules. No open issue plans this work, so it is a gap and not a roadmap item.
+**What is missing.** The blur radius and the opacity steps are utility values inside each component. No material or blur token exists in `tokens.json`. No glass component responds to `prefers-reduced-transparency`. `DESIGN.md` does not yet state the six rules. This work is planned and not shipped: issue [#681](https://github.com/vllnt/ui/issues/681) covers reduced transparency and contrast on glass, issue [#679](https://github.com/vllnt/ui/issues/679) covers a written layering rule, and the RFC in [#631](https://github.com/vllnt/ui/issues/631) proposes the depth and material tokens.
 
 **A naming note.** `LiquidGlass` in vllnt/ui is a CSS surface with an animated gradient. It shares a name with Apple's Liquid Glass material and does not implement it.
 
@@ -328,14 +419,68 @@ The RFC places a spatial renderer out of its own scope. It covers foundations on
 
 Two components carry the word "canvas": `CanvasShell` and `CanvasView`. They are web components for 2D pan-and-zoom workspaces. They do not render in 3D space.
 
+### 4.4 3D scenes
+
+A 3D scene poses the spatial problem on a flat screen: components sit in depth, and the renderer is not the DOM.
+
+On the web a common route is three.js through React Three Fiber. Its documentation states: "React-three-fiber is a React renderer for three.js" [33]. A 3D scene is therefore a second renderer inside the same React application. The rule of section 5 applies to it. Scene primitives read the same tokens and contracts as 2D components, and the 3D engine stays out of the core.
+
+Generated UI reaches 3D through the same mechanism as 2D. The json-render project publishes `@json-render/react-three-fiber`, described as a "React Three Fiber renderer for 3D scenes (20 built-in components, including GaussianSplat)" [25]. A catalog can constrain a generated scene as it constrains a generated page.
+
+Two requirements are specific to 3D:
+
+- **Semantics.** Content drawn into a canvas is pixels, and assistive technology reads the DOM. Every interactive object in a scene needs a counterpart there with a name and a role (criterion 4.1.2 [1]).
+- **Motion.** Auto-rotation and parallax stop under `prefers-reduced-motion` [8]. WCAG criterion 2.3.3, at level AAA, adds that "Motion animation triggered by interaction can be disabled" unless it is essential [1].
+
+**What vllnt/ui has today.** Two components look three-dimensional and neither uses a 3D engine. `Globe3D` is an SVG globe with an orthographic projection. `TiltCard` tilts a card with CSS 3D transforms. No package in the repository depends on three.js, React Three Fiber or a WebXR library.
+
+**What is planned.** Issue [#678](https://github.com/vllnt/ui/issues/678) proposes a separate adapter package with React Three Fiber and WebXR as optional peer dependencies. It is open, and nothing in it ships.
+
+### 4.5 Holographic interfaces
+
+This paper uses "holographic interface" for a way of composing an interface. The term does not refer to a display technology. Five traits define it:
+
+- layered translucent panels in depth;
+- data-dense HUD overlays;
+- radial and orbital menus;
+- input by gesture, gaze and voice;
+- panels that are streamed live or generated by an agent.
+
+The definition combines the rest of this paper. The panels are the glass pattern of section 4.2 at several depth levels. The input is the spatial input of section 4.1 with the voice loop of section 2.3. The live panels are the generated UI of section 3. A holographic interface therefore needs all seven requirements of section 3 at once.
+
+Its risks are the risks of each part, added together:
+
+| Risk | Rule |
+| --- | --- |
+| Stacked translucency lowers contrast | Limit how many translucent layers may stack. Text keeps 4.5:1 against the worst backdrop [1]. A solid fallback exists |
+| Dense overlays hide the content | Glass stays in the layer of controls [12]. Depth communicates hierarchy [11] and is never the only carrier of meaning |
+| Radial and orbital menus assume a pointer | Each is a menu with roving focus that a keyboard and a screen reader can operate, with targets sized for the input (section 4.1) |
+| Gesture and voice are not available to everyone | Every action stays reachable by keyboard [1]. Several input methods work at the same time [7] |
+| Motion and transparency cause discomfort | Reduced motion stops sheens, rotation and parallax. Reduced transparency swaps glass for solid surfaces [8] |
+
+**What vllnt/ui has today.** The building blocks ship on the web as stable components:
+
+- four glass surfaces: `GlassPanel`, `GlassCard`, `GlassProgress` and `LiquidGlass`;
+- a ring gauge, `ThresholdRing`, and a HUD control, `ZoomHud`;
+- docks, including `Dock`, `RightDock` and `ChatDockSection`.
+
+The holographic components themselves do not exist. There is no radial or orbital menu, no multi-series data ring, no panel variant with depth and no written layering rule. Reduced motion is handled unevenly: of the components named in sections 4.4 and 4.5, `LiquidGlass`, `Dock` and `TiltCard` respond to `prefers-reduced-motion`, and `GlassPanel`, `GlassCard`, `GlassProgress`, `ThresholdRing`, `ZoomHud`, `RightDock`, `ChatDockSection` and `Globe3D` contain no such handling. No component handles reduced transparency. The token source holds 2D `elevation` and `shadow` values only, and depth tokens are a proposal in the spatial RFC.
+
+**What is planned.** Four open issues cover the gap: holographic components in [#679](https://github.com/vllnt/ui/issues/679), gesture and voice input intents in [#680](https://github.com/vllnt/ui/issues/680), accessibility rules for 3D, spatial and translucent UI in [#681](https://github.com/vllnt/ui/issues/681), and depth tokens in [#631](https://github.com/vllnt/ui/issues/631).
+
 ## 5. Architecture of a foundation library
 
-The requirements in sections 3 and 4 lead to six layers. Dependencies point downwards only.
+The requirements in sections 3 and 4 lead to one rule and six layers.
+
+**The rule: one platform-neutral core, one renderer per platform.** The core holds what every platform shares: tokens, component contracts and platform rules. Each platform is a renderer on top of it, whether that platform is the DOM, React Native, a desktop shell, a 3D scene or a spatial runtime. Dependencies point one way, from renderer to core, and no renderer imports another. A decision that two platforms share goes into the core first.
+
+The six layers apply that rule. Dependencies point downwards only.
 
 ```
 +---------------------------------------------------------------+
-| 6. Adapters      json-render catalog and registry,            |
-|                  AI SDK tool-part helpers (optional peers)    |
+| 6. Adapters      json-render catalog and registry, AI SDK     |
+|                  helpers, 3D scene and speech adapters        |
+|                  (all optional peers)                         |
 +---------------------------------------------------------------+
 | 5. Distribution  registry JSON, llms.txt, MCP server, npm     |
 +---------------------------------------------------------------+
@@ -343,10 +488,11 @@ The requirements in sections 3 and 4 lead to six layers. Dependencies point down
 |                  a11y notes, examples, version, stability     |
 +---------------------------------------------------------------+
 | 3. Renderers     web (React DOM) | native (React Native)      |
-|                  | spatial (target)                           |
+|                  | desktop, 3D, spatial (targets)             |
 +---------------------------------------------------------------+
-| 2. Core          tokens and contracts as typed data,          |
-|                  platform rules, no renderer imports          |
+| 2. Core          tokens and contracts as typed data, platform |
+|                  rules, input intents. No renderer imports,   |
+|                  no runtime dependencies                      |
 +---------------------------------------------------------------+
 | 1. Source data   tokens.json, component contracts             |
 +---------------------------------------------------------------+
@@ -354,7 +500,7 @@ The requirements in sections 3 and 4 lead to six layers. Dependencies point down
 
 **Layer 1, source data.** One token file and one contract file. Contracts hold what is common to every renderer: component names, variants, sizes and parts.
 
-**Layer 2, core.** A package that exports layer 1 as typed data and adds platform rules: target sizes per input and the interaction state set. It imports no renderer. This is the layer a spatial renderer plugs into.
+**Layer 2, core.** A package that exports layer 1 as typed data and adds platform rules: target sizes per input, the interaction state set and the input intents. It has no runtime dependencies and imports no renderer, no DOM API and no React Native API. This is the layer a desktop, 3D or spatial renderer plugs into.
 
 **Layer 3, renderers.** Each renderer implements the same contracts with its own primitives. Renderers never import each other.
 
@@ -362,12 +508,12 @@ The requirements in sections 3 and 4 lead to six layers. Dependencies point down
 
 **Layer 5, distribution.** The catalog published in the forms its consumers read: JSON over HTTP for tools, text for models, an MCP server for agents and a package for builds.
 
-**Layer 6, adapters.** Thin mappings from the catalog to a third-party runtime. They sit in separate packages or behind optional peer dependencies, so the base library gains no required dependency and a breaking change in a runtime does not force a library release.
+**Layer 6, adapters.** Thin mappings from the catalog to a third-party runtime. They sit in separate packages or behind optional peer dependencies, so the base library gains no required dependency and a breaking change in a runtime does not force a library release. A 3D engine and a speech engine sit in the same place: optional peers of an adapter, never dependencies of the core.
 
 At runtime the application runs a pipeline that the library supports and does not own:
 
 ```
-spec or tool part (untrusted)
+spec or tool part (untrusted), from a typed or a spoken turn
         |
         v
   validate against schema ----fail----> fallback view
@@ -388,12 +534,13 @@ spec or tool part (untrusted)
   validate params -> human confirmation if sensitive -> app handler
 ```
 
-Four design decisions hold the layers together:
+Five design decisions hold the layers together:
 
 1. **One schema per component.** Types, catalog entry, tool schema and descriptor are derived from it.
 2. **The state set is a contract in the core.** Rest, hover or gaze, focus-visible, pressed, selected and disabled mean the same thing in every renderer.
 3. **Theme resolution is a pure function.** The same inputs give the same values on every platform, and a test can check the bounds.
 4. **Every artefact carries a version.** The package, each descriptor, the catalog and each stored spec.
+5. **Input resolves to intents.** A click, a tap, a pinch, a look followed by a tap and a spoken command all resolve to the same named action, so a component is written once for every input.
 
 A product can add its own runtime above layer 6. The Maia documentation describes one built on json-render: [Presentation runtime](https://maia.vllnt.com/en/docs/clients/presentation-runtime).
 
@@ -401,7 +548,28 @@ A product can add its own runtime above layer 6. The Maia documentation describe
 
 "Today" means the code is on the `main` branch of [vllnt/ui](https://github.com/vllnt/ui). "Roadmap" means planned and not shipped.
 
-### 6.1 Shipped today
+### 6.1 Platform status
+
+| Platform | Status | What exists on `main` |
+| --- | --- | --- |
+| Web (React DOM, Next.js) | Shipped | `@vllnt/ui` on npm, with stable releases and a canary from every merge |
+| React Native (iOS, Android, Expo) | Canary, no stable release | `@vllnt/ui-native` and `@vllnt/ui-core` publish canary builds only |
+| Desktop: Electron and Tauri | Roadmap | Nothing desktop-specific: no tests, packaging or guidance |
+| Desktop: native macOS (SwiftUI, AppKit) | Roadmap | No renderer |
+| 3D, in-page scenes | Roadmap | Pseudo-3D only: `Globe3D` in SVG and `TiltCard` in CSS 3D. Scene layer in [#678](https://github.com/vllnt/ui/issues/678) |
+| AR and spatial (visionOS, WebXR) | Draft RFC | [#631](https://github.com/vllnt/ui/issues/631) and [#632](https://github.com/vllnt/ui/pull/632). No renderer |
+| Holographic interactive interfaces | Roadmap | Building blocks on the web (section 4.5). Components in [#679](https://github.com/vllnt/ui/issues/679) |
+| AI-generated, streamed UI | Partly shipped | Descriptors, the MCP server, themes as data and streaming components. Adapters in [#672](https://github.com/vllnt/ui/issues/672) |
+| Voice-first UI | Roadmap | No voice component. Components in [#683](https://github.com/vllnt/ui/issues/683) |
+
+**How the two renderers consume the core today.** The core is `packages/design`, which holds the authored `tokens.json` and the component contracts, plus `@vllnt/ui-core`, the generated and importable form. `@vllnt/ui-core` has no runtime dependencies. The two renderers reach it by different routes:
+
+- `@vllnt/ui-native` imports `@vllnt/ui-core`;
+- `@vllnt/ui` does not import it. The web package gets the same tokens as CSS generated from `packages/design`.
+
+The registry application builds the descriptors. Moving their platform-neutral part, the prop schemas, into the core is roadmap ([#672](https://github.com/vllnt/ui/issues/672)).
+
+### 6.2 Shipped today
 
 | Requirement | What exists | Evidence |
 | --- | --- | --- |
@@ -413,10 +581,13 @@ A product can add its own runtime above layer 6. The Maia documentation describe
 | Accessibility gate | Every Storybook story is tested with axe against WCAG 2.0, 2.1 and 2.2 at levels A and AA, in light and dark. A violation fails the run | [`packages/ui/.storybook/test-runner.js`](https://github.com/vllnt/ui/blob/main/packages/ui/.storybook/test-runner.js) |
 | Tokens as data | One `tokens.json` generates the web CSS variables, the product themes, the React Native tokens and the Penpot token sets. A check fails when an output is stale | [`packages/design`](https://github.com/vllnt/ui/tree/main/packages/design) |
 | Runtime theme switch | Product themes and 12 named presets switch through `data-theme` on the document root | [`packages/ui/themes`](https://github.com/vllnt/ui/tree/main/packages/ui/themes) |
-| Shared core | `@vllnt/ui-core` exports the tokens and the portable contracts of 5 pilot components to web and native | [`packages/ui-core`](https://github.com/vllnt/ui/tree/main/packages/ui-core) |
+| Platform-neutral core | `packages/design` holds `tokens.json` and the portable contracts of 5 pilot components. `@vllnt/ui-core` is the generated form, with no runtime dependencies. The native package imports it. The web package receives the same tokens as generated CSS | [`packages/design`](https://github.com/vllnt/ui/tree/main/packages/design), [`packages/ui-core`](https://github.com/vllnt/ui/tree/main/packages/ui-core) |
 | Streaming parts | `Skeleton`, and 18 components in the `ai` category, including `AIStreamingText`, `Reasoning`, `ThinkingBlock`, `AgentActivity`, `AIToolCallDisplay`, `AISourceCitation` and `ApprovalRequest`. They are plain React components | [`packages/ui/src/components`](https://github.com/vllnt/ui/tree/main/packages/ui/src/components) |
 | Release pipeline | Semantic versions, a canary from every merge to `main`, stable releases only from reviewed tags, npm provenance, a guard that stops `latest` from moving backwards and a written rollback | [`docs/RELEASING.md`](https://github.com/vllnt/ui/blob/main/docs/RELEASING.md) |
 | Glass pattern | 4 components built on role tokens, with the gaps listed in section 4.2 | [`packages/ui/src/components/atoms`](https://github.com/vllnt/ui/tree/main/packages/ui/src/components/atoms) |
+| Holographic building blocks | The 4 glass surfaces, `ThresholdRing`, `ZoomHud` and the docks, on the web. No holographic component | [`apps/registry/registry.json`](https://github.com/vllnt/ui/blob/main/apps/registry/registry.json) |
+| Pseudo-3D | `Globe3D` (SVG projection) and `TiltCard` (CSS 3D). No WebGL and no scene layer | Same file |
+| Voice | Nothing: no microphone capture, transcript, listening state, waveform or speech output. One related piece exists: `AIStreamingText` announces streamed text through a live region, which can carry the text equivalent of a spoken reply | [`packages/ui/src/components`](https://github.com/vllnt/ui/tree/main/packages/ui/src/components) |
 
 Three limits apply to this table:
 
@@ -426,7 +597,7 @@ Three limits apply to this table:
 
 One deprecation has already followed the pattern from section 3.6. The `warn` tone was renamed to `warning` in eight components, and the old value still works until a breaking release ([changelog](https://github.com/vllnt/ui/blob/main/packages/ui/CHANGELOG.md)).
 
-### 6.2 Roadmap, not shipped
+### 6.3 Roadmap, not shipped
 
 | Requirement | Plan | Tracking |
 | --- | --- | --- |
@@ -438,7 +609,15 @@ One deprecation has already followed the pattern from section 3.6. The `warn` to
 | Per-user runtime themes | Themes resolved per person within the accessible token ranges | Vision page |
 | Codemods and a deprecation window | Automated source migrations and a written window | Vision page |
 | Spatial foundations | Depth tokens, the affordance contract, input-agnostic targets, motion tokens | Draft RFC [#631](https://github.com/vllnt/ui/issues/631), [#632](https://github.com/vllnt/ui/pull/632) |
-| Spatial renderers | visionOS or WebXR, on the shared core | No issue yet |
+| Depth tokens | Semantic depth levels for 3D, spatial and layered glass. Only 2D `elevation` and `shadow` tokens exist today | [#631](https://github.com/vllnt/ui/issues/631) |
+| 3D scene layer | A separate adapter with React Three Fiber and WebXR as optional peers | [#678](https://github.com/vllnt/ui/issues/678) |
+| Holographic components | Radial and orbital menus, a data ring, a panel with depth and a written glass layering rule | [#679](https://github.com/vllnt/ui/issues/679) |
+| Gesture and voice input intents | Gesture and voice on top of the pointer, touch and gaze contract, with every action still reachable by keyboard | [#680](https://github.com/vllnt/ui/issues/680) |
+| Accessibility for 3D, spatial and translucent UI | Reduced motion, reduced transparency, contrast on glass and spatial target sizes | [#681](https://github.com/vllnt/ui/issues/681) |
+| Voice-first components | A conversational surface, a live transcript, a listening indicator, push-to-talk, a waveform and level meter, and spoken feedback with a text equivalent | [#683](https://github.com/vllnt/ui/issues/683) |
+| Voice-driven streamed UI | AI SDK examples and json-render specs triggered by a voice turn. No speech engine is bundled | [#683](https://github.com/vllnt/ui/issues/683), [#672](https://github.com/vllnt/ui/issues/672) |
+| Spatial renderers | visionOS or WebXR, on the platform-neutral core. WebXR is an optional peer of the 3D scene layer | [#678](https://github.com/vllnt/ui/issues/678) for WebXR. No issue yet for visionOS |
+| Desktop renderers | Electron and Tauri support, and a native macOS renderer | Vision page |
 
 The adapters do not exist. Until they do, an application maps AI SDK parts to vllnt/ui components by hand, as in the example in section 3.2.
 
@@ -460,14 +639,23 @@ These problems are unsolved in vllnt/ui. The sources read for this paper do not 
 8. **Declarative hover.** A spatial system applies hover effects outside the application's process [10]. Components that compute hover behaviour in code need a declarative form, and that form has to mean the same thing for a mouse.
 9. **DOM components in immersive sessions.** A WebXR session is drawn by the page, frame by frame. Reusing DOM components there needs a second renderer or a platform feature that composites DOM content into the scene. This paper did not evaluate the options.
 10. **Measuring quality.** The studies cited in section 2 measure human preference. A measure of whether a catalog-constrained screen is correct, accessible and on-brand does not appear in them.
+11. **Two voices at once.** A screen reader and a spoken reply share the audio channel. When a live region and speech output carry the same text, the user hears it twice. The sources read for this paper give no rule for which one yields.
+12. **Recognition that fails unevenly.** The W3C draft note asks systems to "estimate the probability that a user's utterance has been recognized correctly" (REQ 13a) [18]. A component library can show that confidence and offer a correction path. It cannot repair the recogniser.
+13. **Interim text that drives UI.** An interim transcript changes until it is final. A system that composes a screen from interim text responds sooner, and it can show a screen for words the user did not say. Where to draw that line is unsettled.
+14. **Semantics for canvas scenes.** A scene drawn to a canvas exposes no roles or names. Mirroring each interactive object into the DOM works for a small scene. This paper found no agreed pattern for a dense, moving one.
+15. **Limits for layered translucency.** How many translucent layers can stack before text drops below 4.5:1 depends on the fills, the blur and the backdrop. Issue [#679](https://github.com/vllnt/ui/issues/679) plans a rule. No source read for this paper gives the number.
 
 ## 8. Conclusion
 
-Generated UI moves the component contract from documentation into data. A library that serves it publishes a schema, a description, a version and a stability level for every component, renders from partial props, treats themes and trees as untrusted input, and keeps old specs working through a deprecation window. Spatial UI moves the same contract away from the DOM, which requires tokens with non-CSS values and a core that no renderer owns.
+Generated UI moves the component contract from documentation into data. A library that serves it publishes a schema, a description, a version and a stability level for every component, renders from partial props, treats themes and trees as untrusted input, and keeps old specs working through a deprecation window.
 
-vllnt/ui has the distribution layer, the token pipeline, the shared core, the accessibility gate and the release pipeline. It does not yet have the complete catalog: 2 of 321 descriptors carry prop definitions. The json-render and AI SDK adapters, per-user themes, codemods and spatial foundations are planned and tracked in the issues linked above.
+Voice-first UI adds duties that a screen never needed: a visible state for the microphone, a transcript of what was heard, text for every spoken word and a keyboard path to every voice action.
 
-The next step in the plan is the prop schema work in [#672](https://github.com/vllnt/ui/issues/672). Section 3 can serve as an audit list for any other library in the meantime.
+3D, spatial and holographic rendering move the same contract away from the DOM. That requires tokens with values that are not CSS, input that resolves to intents, and a core that no renderer owns.
+
+vllnt/ui ships on the web, with React Native at canary. It has the distribution layer, the token pipeline, a platform-neutral core that the native renderer imports, the accessibility gate and the release pipeline. It does not yet have the complete catalog: 2 of 321 descriptors carry prop definitions. It has no voice component, no 3D scene layer, no spatial renderer and no holographic component. The json-render and AI SDK adapters, per-user themes, codemods, spatial foundations and the voice-first set are planned and tracked in the issues linked above.
+
+The next step in the plan is the prop schema work in [#672](https://github.com/vllnt/ui/issues/672), because the adapters, the voice-driven examples and the holographic descriptors all depend on it. Section 3 can serve as an audit list for any other library in the meantime.
 
 ## 9. References
 
@@ -492,27 +680,34 @@ All sources were read on 20 November 2026.
 15. Design Tokens Community Group. Design Tokens Format Module 2025.10. Final Community Group Report, 28 October 2025. https://www.designtokens.org/tr/2025.10/format/
 16. Model Context Protocol. Specification, revision 2025-11-25: Tools. https://modelcontextprotocol.io/specification/2025-11-25/server/tools
 17. OWASP. Top 10 for LLM Applications 2025. https://genai.owasp.org/llm-top-10/
+18. W3C. Natural Language Interface Accessibility User Requirements. W3C Group Draft Note, 3 September 2022. A work in progress, not a W3C standard. https://www.w3.org/TR/naur/
+19. W3C. Media Capture and Streams. W3C Candidate Recommendation Draft. Section 15, Privacy Indicator Requirements. https://www.w3.org/TR/mediacapture-streams/
+20. W3C. WebXR Hand Input Module, Level 1. W3C Working Draft. https://www.w3.org/TR/webxr-hand-input-1/
 
 **Official documentation and packages**
 
-18. AI SDK (by Vercel). AI SDK UI: Generative user interfaces. https://ai-sdk.dev/docs/ai-sdk-ui/generative-user-interfaces
-19. AI SDK (by Vercel). AI SDK UI: Chatbot tool usage. https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-tool-usage
-20. AI SDK (by Vercel). AI SDK RSC: Overview. https://ai-sdk.dev/docs/ai-sdk-rsc/overview
-21. AI SDK (by Vercel). AI SDK RSC reference: streamUI. https://ai-sdk.dev/docs/reference/ai-sdk-rsc/stream-ui
-22. json-render (vercel-labs). Repository and README. https://github.com/vercel-labs/json-render
-23. json-render (vercel-labs). Documentation: Catalog. https://json-render.dev/docs/catalog
-24. json-render (vercel-labs). Documentation: Streaming. https://json-render.dev/docs/streaming
-25. npm. Packages `ai` 7.0.173, `@ai-sdk/react` 4.0.177, `@ai-sdk/rsc` 3.0.173 and `@json-render/core`, `@json-render/react`, `@json-render/shadcn` 0.22.0. https://www.npmjs.com/package/ai, https://www.npmjs.com/package/@ai-sdk/react, https://www.npmjs.com/package/@ai-sdk/rsc, https://www.npmjs.com/package/@json-render/core, https://www.npmjs.com/package/@json-render/react, https://www.npmjs.com/package/@json-render/shadcn
-26. React. Reference: Suspense. https://react.dev/reference/react/Suspense
-27. Deque Systems. axe-core API documentation. https://github.com/dequelabs/axe-core/blob/develop/doc/API.md
+21. AI SDK (by Vercel). AI SDK UI: Generative user interfaces. https://ai-sdk.dev/docs/ai-sdk-ui/generative-user-interfaces
+22. AI SDK (by Vercel). AI SDK UI: Chatbot tool usage. https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-tool-usage
+23. AI SDK (by Vercel). AI SDK RSC: Overview. https://ai-sdk.dev/docs/ai-sdk-rsc/overview
+24. AI SDK (by Vercel). AI SDK RSC reference: streamUI. https://ai-sdk.dev/docs/reference/ai-sdk-rsc/stream-ui
+25. json-render (vercel-labs). Repository and README. https://github.com/vercel-labs/json-render
+26. json-render (vercel-labs). Documentation: Catalog. https://json-render.dev/docs/catalog
+27. json-render (vercel-labs). Documentation: Streaming. https://json-render.dev/docs/streaming
+28. npm. Packages `ai` 7.0.173, `@ai-sdk/react` 4.0.177, `@ai-sdk/rsc` 3.0.173 and `@json-render/core`, `@json-render/react`, `@json-render/shadcn` 0.22.0. The speech and transcription export names of `ai` 7.0.173 and 7.0.178 were read from the published type definitions. https://www.npmjs.com/package/ai, https://www.npmjs.com/package/@ai-sdk/react, https://www.npmjs.com/package/@ai-sdk/rsc, https://www.npmjs.com/package/@json-render/core, https://www.npmjs.com/package/@json-render/react, https://www.npmjs.com/package/@json-render/shadcn
+29. React. Reference: Suspense. https://react.dev/reference/react/Suspense
+30. Deque Systems. axe-core API documentation. https://github.com/dequelabs/axe-core/blob/develop/doc/API.md
+31. AI SDK (by Vercel). AI SDK Core: Transcription. https://ai-sdk.dev/docs/ai-sdk-core/transcription
+32. AI SDK (by Vercel). AI SDK Core: Speech. https://ai-sdk.dev/docs/ai-sdk-core/speech
+33. React Three Fiber. Documentation: Introduction. https://r3f.docs.pmnd.rs/getting-started/introduction
 
 **Papers**
 
-28. Leviathan, Y., Valevski, D., Kalman, M., Lumen, D., Segalis, E., Molad, E., Pasternak, S., Natchu, V., Nygaard, V., Venkatachary, S., Manyika, J. and Matias, Y. Generative UI: LLMs are effective UI generators. arXiv:2604.09577, 2026. https://arxiv.org/abs/2604.09577
-29. Chen, J., Zhang, Y., Zhang, Y., Shao, Y. and Yang, D. Generative interfaces for language models. arXiv:2508.19227, 2025. Findings of ACL 2026. https://arxiv.org/abs/2508.19227
+34. Leviathan, Y., Valevski, D., Kalman, M., Lumen, D., Segalis, E., Molad, E., Pasternak, S., Natchu, V., Nygaard, V., Venkatachary, S., Manyika, J. and Matias, Y. Generative UI: LLMs are effective UI generators. arXiv:2604.09577, 2026. https://arxiv.org/abs/2604.09577
+35. Chen, J., Zhang, Y., Zhang, Y., Shao, Y. and Yang, D. Generative interfaces for language models. arXiv:2508.19227, 2025. Findings of ACL 2026. https://arxiv.org/abs/2508.19227
 
 **vllnt/ui sources**
 
-30. vllnt/ui. RFC: spatial-ready foundations. Issue #631 and draft pull request #632. https://github.com/vllnt/ui/issues/631, https://github.com/vllnt/ui/pull/632
-31. vllnt/ui. json-render catalog and AI SDK generative UI helpers. Issue #672. https://github.com/vllnt/ui/issues/672
-32. vllnt/ui. White paper tracking issue #675. https://github.com/vllnt/ui/issues/675
+36. vllnt/ui. RFC: spatial-ready foundations. Issue #631 and draft pull request #632. https://github.com/vllnt/ui/issues/631, https://github.com/vllnt/ui/pull/632
+37. vllnt/ui. json-render catalog and AI SDK generative UI helpers. Issue #672. https://github.com/vllnt/ui/issues/672
+38. vllnt/ui. White paper tracking issue #675. https://github.com/vllnt/ui/issues/675
+39. vllnt/ui. 3D scene layer, holographic components, spatial input, accessibility rules for 3D, spatial and translucent UI, and voice-first components. Issues #678, #679, #680, #681 and #683. https://github.com/vllnt/ui/issues/678, https://github.com/vllnt/ui/issues/679, https://github.com/vllnt/ui/issues/680, https://github.com/vllnt/ui/issues/681, https://github.com/vllnt/ui/issues/683
