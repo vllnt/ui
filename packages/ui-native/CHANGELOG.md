@@ -15,7 +15,16 @@ All notable changes to `@vllnt/ui-native` are documented in this file.
   - `orientation` (`"horizontal" | "vertical"`), `inverted` and `onValueCommit` on `Slider`. `onValueCommit` runs once when a drag ends on a different value than it started on, and after each screen-reader step that moves the value.
   - Skipped as DOM-only or not meaningful on native: `name` and `dir` (`RadioGroup`), `dir` (`SegmentedControl`), and `minStepsBetweenThumbs` (`Slider`, which has one thumb).
 
+- Props parity 1, feedback (#655): web props added to `Badge`, `ProgressBar` and `Toast` with the same names, value sets and defaults.
+  - `Badge`: `size` (`"default" | "header" | "inline" | "sm"`), `tone` (`"danger" | "danger-solid" | "danger-tint" | "info" | "neutral" | "primary" | "solid" | "success" | "warning"`), `border` (`"none" | "strong"`) and `dot`. A status tone colours a decorative dot and gives the chip the `secondary` surface unless `variant` is set; `solid`, `danger-solid` and `danger-tint` set their own surface and replace the variant, as on web. The theme has no type step below caption, so `inline` and `sm` tighten the padding but share the caption label.
+  - `ProgressBar`: `label`, `valueLabel`, `showValue`, `size` (`"lg" | "md" | "sm"`, default `"md"`), `tone` (`"danger" | "info" | "neutral" | "primary" | "success" | "warning"`), `mode` (`"determinate" | "indeterminate"`) and `blocks`. An indeterminate bar speaks no current value and reports the busy state, sweeps a third-width fill, and rests at that width under reduced motion. `reducedMotionService` is the usual native override for tests and previews.
+  - `Toast`: `altText` on a toast item names its action for screen readers, like web `ToastAction.altText`. It defaults to `actionLabel`.
+  - A `withAlpha` helper in `src/primitives/color-alpha` applies an opacity to a theme colour (`bg-primary/5` on web), and `src/primitives/status-tone` holds the status tones that `Badge` and `ProgressBar` share.
+
 ### Changed
+
+- `ProgressBar` fills with the `primary` tone by default and `success` when complete, as on web, instead of `foreground` and `primary`. A complete card tints its surface and border with its tone, where it used to switch the border to `primary`. Track height follows the theme spacing scale; the default `md` stays 8 points.
+- `Badge` lays out in a row so a dot can sit before the label. Its default padding is now `spacing[2] + spacing[1] / 2` horizontally, the web `px-2.5`, where it was `spacing[2]`.
 
 - Affordance contract phase 2 (#633): the other 86 components that pressed through React Native's `Pressable` (53 atoms, 27 molecules, 6 organisms) now use `InteractivePressable`, so every interactive control shares the state set and the 44-point floor, and selectable ones (tabs, list and menu rows, calendar days, tags, segments) draw the non-colour selected border. Their literal pressed and disabled opacities are gone. Public props, exports, roles and accessibility states are unchanged. The lint ban on `Pressable` in `src/components` no longer has an allowlist.
 

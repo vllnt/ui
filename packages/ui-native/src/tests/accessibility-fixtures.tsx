@@ -380,7 +380,34 @@ const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
       title="Delete workspace?"
     />
   ),
-  badge: () => <Badge variant="secondary">Experimental</Badge>,
+  badge: () => (
+    <>
+      <Badge variant="secondary">Experimental</Badge>
+      <Badge dot size="header" tone="success">
+        Active
+      </Badge>
+      <Badge dot size="sm" tone="warning" variant="outline">
+        Past due
+      </Badge>
+      <Badge border="strong" size="inline" tone="info">
+        Beta
+      </Badge>
+      <Badge border="none" tone="neutral" variant="soft">
+        Draft
+      </Badge>
+      <Badge dot tone="danger">
+        Offline
+      </Badge>
+      <Badge dot tone="danger-tint">
+        Failed
+      </Badge>
+      <Badge tone="danger-solid">Blocked</Badge>
+      <Badge tone="solid">New</Badge>
+      <Badge dot tone="primary">
+        Primary
+      </Badge>
+    </>
+  ),
   banner: () => (
     <>
       <Banner dismissible icon={glyphIcon()} variant="destructive">
@@ -434,7 +461,32 @@ const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
   "presence-sync-indicator": () => (
     <PresenceSyncIndicator state="reconnecting" status="retry 2 of 5" />
   ),
-  "progress-bar": () => <ProgressBar max={10} value={4} />,
+  "progress-bar": () => (
+    <>
+      <ProgressBar max={10} value={4} />
+      <ProgressBar label="Upload" max={8} value={3} valueLabel="3 / 8" />
+      <ProgressBar
+        label="Storage"
+        max={100}
+        showValue
+        size="sm"
+        tone="warning"
+        value={72}
+      />
+      <ProgressBar label="Import" max={100} size="lg" tone="info" value={35} />
+      <ProgressBar blocks label="Steps" max={100} tone="success" value={60} />
+      <ProgressBar label="Syncing" max={10} mode="indeterminate" value={0} />
+      <ProgressBar
+        isComplete
+        label="Backup"
+        max={10}
+        tone="neutral"
+        value={10}
+      />
+      <ProgressBar isComplete label="Deploy" max={10} value={10} />
+      <ProgressBar isLoading label="Report" max={10} value={4} />
+    </>
+  ),
   "role-badge": () => <RoleBadge accountRole="owner" />,
   "scroll-progress": () => (
     <ScrollProgress label="Article progress" value={0.5} />
@@ -452,6 +504,7 @@ const feedbackAndStatus: Readonly<Record<string, AccessibilityFixture>> = {
       toasts={[
         {
           actionLabel: "Undo",
+          altText: "Undo save",
           description: "Your changes are stored.",
           id: "saved",
           onAction: noop,
